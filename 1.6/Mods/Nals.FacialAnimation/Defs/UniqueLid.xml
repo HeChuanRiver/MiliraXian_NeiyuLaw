@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <FacialAnimation.LidTypeDef>
+        <defName>Milira_Lid_Neiyu</defName>
+        <texPath>Things/Pawn/Milira/Lids/NormalD</texPath>
+        <raceName>Milira_Race</raceName>
+        <shader>Map/Transparent</shader>
+        <enableUnisexTexPath>True</enableUnisexTexPath>
+        <probability>0</probability>
+
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Neiyu</forNPC>
+            </li>
+        </modExtensions>
+
+    </FacialAnimation.LidTypeDef>
+</Defs>

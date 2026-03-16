@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- ForFeather法阵：先放大后缩�? -->
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MXNL_ForFeatherCircle</defName>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <fadeInTime>0.03</fadeInTime>
+    <solidTime>0.97</solidTime>
+    <fadeOutTime>0.10</fadeOutTime>
+    <growthRate>0</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>MiliraXianNeiyu/Effect/ForFeather</texPath>
+      <shaderType>Mote</shaderType>
+      <drawSize>(2.2,0.78)</drawSize>
+    </graphicData>
+    <scalers>
+      <li>
+        <curve>
+          <points>
+            <li>(0,0.25)</li>
+            <li>(0.0909,1.2)</li>
+            <li>(0.18,0.98)</li>
+            <li>(0.35,0.80)</li>
+            <li>(0.60,0.62)</li>
+            <li>(0.82,0.46)</li>
+            <li>(1,0.32)</li>
+          </points>
+        </curve>
+        <scaleAmt>1</scaleAmt>
+        <scaleTime>1.1</scaleTime>
+      </li>
+    </scalers>
+  </FleckDef>
+
+  <!-- 施法开始时生成一次法阵，法阵自身负责完整生命周期动画 -->
+  <EffecterDef>
+    <defName>MXNL_ForFeatherCastingCircle</defName>
+    <children>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MXNL_ForFeatherCircle</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1~1</scale>
+        <rotation>0~0</rotation>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+    </children>
+  </EffecterDef>
+
+    <FleckDef ParentName="FleckBase">
+        <defName>MXNL_Skyfall_FlyBegin_G</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0</fadeInTime>
+        <solidTime>0</solidTime>
+        <fadeOutTime>0.62</fadeOutTime>
+        <growthRate>0</growthRate>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/FlyBegin_Ground</texPath>
+            <shaderType>Mote</shaderType>
+            <drawSize>(9.6,3.8)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <EffecterDef>
+        <defName>MXNL_Effecter_Skyfall_FlyBeginGround</defName>
+        <children>
+            <li>
+                <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+                <fleckDef>MXNL_Skyfall_FlyBegin_G</fleckDef>
+                <burstCount>1~1</burstCount>
+                <scale>1~1</scale>
+                <rotation>0~0</rotation>
+                <spawnLocType>OnSource</spawnLocType>
+            </li>
+        </children>
+    </EffecterDef>
+
+    <FleckDef ParentName="FleckBase">
+        <defName>MXNL_Skyfall_FlyBegin_F</defName>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>0</fadeInTime>
+        <solidTime>0</solidTime>
+        <fadeOutTime>0.79</fadeOutTime>
+        <growthRate>0</growthRate>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/FlyBegin_Fly</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.2,20.2)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_NeiyuShield_Hurt_A</defName>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.16</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/Neiyu_Shield/hurt_A</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(3.2,3.2)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_NeiyuShield_Hurt_B</defName>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.16</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/Neiyu_Shield/hurt_B</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(3.2,3.2)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_NeiyuShield_Hurt_C</defName>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.16</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/Neiyu_Shield/hurt_C</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(3.2,3.2)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_NeiyuShield_Hurt_D</defName>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.16</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/Neiyu_Shield/hurt_D</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(3.2,3.2)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_A</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_A</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_B</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_B</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_C</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_C</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_D</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_D</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_E</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_Thrown">
+        <defName>MXNL_Fleck_BladeLight_Neiyu_F</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.12</fadeOutTime>
+        <graphicData>
+            <graphicClass>Graphic_Fleck</graphicClass>
+            <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_F</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(2.8,1.06)</drawSize>
+        </graphicData>
+        <unattachedDrawOffset>(0,0,2.0)</unattachedDrawOffset>
+    </FleckDef>
+
+    <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+        <defName>MXNL_Fleck_NeiyuSlashGhost</defName>
+        <growthRate>1.0</growthRate>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.01</solidTime>
+        <fadeOutTime>0.2</fadeOutTime>
+        <rotateTowardsMoveDirection>true</rotateTowardsMoveDirection>
+        <randomGraphics>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_A</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_B</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_C</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_D</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+            <li>
+                <texPath>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_F</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <graphicClass>Graphic_Fleck</graphicClass>
+            </li>
+        </randomGraphics>
+    </FleckDef>
+
+    <EffecterDef>
+        <defName>MXNL_Effecter_NeiyuSwordSlashGhost</defName>
+        <children>
+            <li>
+                <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+                <fleckDef>MXNL_Fleck_NeiyuSlashGhost</fleckDef>
+                <burstCount>1</burstCount>
+                <color>(1,1,1,0.85)</color>
+                <scale>2.3~3.1</scale>
+                <speed>2</speed>
+                <angle>-20~20</angle>
+                <spawnLocType>OnSource</spawnLocType>
+                <fleckUsesAngleForVelocity>true</fleckUsesAngleForVelocity>
+            </li>
+        </children>
+        <positionRadius>0.1</positionRadius>
+    </EffecterDef>
+</Defs>

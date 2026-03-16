@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_FlowerBlessedThought.stages.0.label>花祈祝福</MX_Neiyu_FlowerBlessedThought.stages.0.label>
+  <MX_Neiyu_FlowerBlessedThought.stages.0.description>沐浴在霓羽花形態留下的溫柔祝福之中。</MX_Neiyu_FlowerBlessedThought.stages.0.description>
+  <MX_Neiyu_FlowerBlessed.label>花祈祝福</MX_Neiyu_FlowerBlessed.label>
+  <MX_Neiyu_FlowerBlessed.description>花形態技能賦予的祝福狀態。</MX_Neiyu_FlowerBlessed.description>
+  <MX_Neiyu_FlowerBlessed.stages.0.label>花祈祝福</MX_Neiyu_FlowerBlessed.stages.0.label>
+  <MX_Neiyu_SwordVulnerability.label>劍勢易傷</MX_Neiyu_SwordVulnerability.label>
+  <MX_Neiyu_SwordVulnerability.description>被劍勢·天墜命中後會更容易承受後續傷害。</MX_Neiyu_SwordVulnerability.description>
+  <MX_Neiyu_SwordVulnerability.stages.0.label>易傷</MX_Neiyu_SwordVulnerability.stages.0.label>
+</LanguageData>

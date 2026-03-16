@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_Form_Flower.label>霓羽·花形</MX_Neiyu_Form_Flower.label>
+  <MX_Neiyu_Form_Flower.description>霓羽常持于手中的花形兵装。看似柔和轻巧，实则是她投影于此界的三种兵装之一；花瓣间流转的辉光并不张扬，却始终带着温柔而稳定的力量。</MX_Neiyu_Form_Flower.description>
+  <MX_Neiyu_Form_Flower.tools.0.label>拂花</MX_Neiyu_Form_Flower.tools.0.label>
+  <MX_Neiyu_Form_Weapon.label>霓羽·剑形</MX_Neiyu_Form_Weapon.label>
+  <MX_Neiyu_Form_Weapon.description>由花形转化而来的剑形兵装。锋芒凝练，气势凌厉，是霓羽在正面斩击与高速突进时最具压迫感的一种姿态。</MX_Neiyu_Form_Weapon.description>
+  <MX_Neiyu_Form_Weapon.tools.0.label>霓刃</MX_Neiyu_Form_Weapon.tools.0.label>
+  <MX_Neiyu_Form_Bow.label>霓羽·弓形</MX_Neiyu_Form_Bow.label>
+  <MX_Neiyu_Form_Bow.description>由花形转化而来的弓形兵装。羽辉聚弦，流矢如雨，更擅长在中远距离维持持续而华丽的压制。</MX_Neiyu_Form_Bow.description>
+  <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
+  <MX_Bullet_BigSplitArrow.description>由霓羽弓形发射的巨型分裂箭，在前进一段距离后会裂解为大量小箭。</MX_Bullet_BigSplitArrow.description>
+  <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
+  <MX_Bullet_HomingShard.description>由主箭分裂出的碎矢，会在裂解后略微修正方向，并继续朝原本的瞄准方向进攻。</MX_Bullet_HomingShard.description>
+  <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>
+  <MX_Bullet_BarrageArrow.description>仅供流羽裂界使用的箭矢，用于在前方区域铺开密集的箭幕压制。</MX_Bullet_BarrageArrow.description>
+</LanguageData>

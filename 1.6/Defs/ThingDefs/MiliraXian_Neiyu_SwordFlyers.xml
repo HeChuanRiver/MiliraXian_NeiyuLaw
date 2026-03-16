@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <ThingDef ParentName="PawnFlyerBase">
+        <defName>MX_Neiyu_SwordSkyfallAscendFlyer</defName>
+        <label>&#38675;&#32701;&#183;&#22825;&#22368;&#21319;&#31354;&#20307;</label>
+        <pawnFlyer>
+            <flightDurationMin>0.22</flightDurationMin>
+            <flightSpeed>120</flightSpeed>
+            <workerClass>MiliraXian.NeiyuLaw.PawnFlyerWorker_NeiyuAscent</workerClass>
+            <heightFactor>22</heightFactor>
+            <progressCurve>
+                <points>
+                    <li>(0, 0)</li>
+                    <li>(0.2, 0.35)</li>
+                    <li>(1, 1)</li>
+                </points>
+            </progressCurve>
+        </pawnFlyer>
+    </ThingDef>
+
+    <ThingDef ParentName="PawnFlyerBase">
+        <defName>MX_Neiyu_SwordSkyfallFlyer</defName>
+        <label>&#38675;&#32701;&#183;&#22825;&#22368;&#33853;&#31354;&#20307;</label>
+        <pawnFlyer>
+            <flightDurationMin>0.36</flightDurationMin>
+            <flightSpeed>140</flightSpeed>
+            <workerClass>MiliraXian.NeiyuLaw.PawnFlyerWorker_NeiyuDescent</workerClass>
+            <heightFactor>22</heightFactor>
+            <progressCurve>
+                <points>
+                    <li>(0, 0)</li>
+                    <li>(1, 1)</li>
+                </points>
+            </progressCurve>
+        </pawnFlyer>
+    </ThingDef>
+
+    <ThingDef ParentName="PawnFlyerBase">
+        <defName>MX_Neiyu_SwordDashFlyer</defName>
+        <label>&#38675;&#32701;&#183;&#31361;&#36827;&#39134;&#34892;&#20307;</label>
+        <pawnFlyer>
+            <flightDurationMin>0.08</flightDurationMin>
+            <flightSpeed>100</flightSpeed>
+            <heightFactor>0.9</heightFactor>
+            <progressCurve>
+                <points>
+                    <li>(0, 0)</li>
+                    <li>(0.25, 0.60)</li>
+                    <li>(1, 1)</li>
+                </points>
+            </progressCurve>
+        </pawnFlyer>
+    </ThingDef>
+
+</Defs>

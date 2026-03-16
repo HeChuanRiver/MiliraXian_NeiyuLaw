@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ScenarioDef ParentName="ScenarioBase">
+    <defName>MXNL_NeiyuProjectionStart</defName>
+    <label>界外羽痕</label>
+    <description><![CDATA[你并不是完整降临于此界的“她”。你只是隔壁成仙米莉拉投下的一道羽影。记忆并不完整，力量也并非本体，但那份轻快、鲜活、坐不住的性子，却一并落了下来。这片边缘世界对你而言既陌生又新鲜。你没有打算摆出什么高高在上的姿态，也没兴趣当一尊被人供起来的影子。既然投影已经落稳，那就先在这里站住脚，给自己搭出一个能继续存在下去的地方。你带着专属武装而来，但除此之外，一切都要从头开始。警告：该剧本可能会使得游戏变得非常简单 不建议新玩家直接游玩~]]></description>
+    <scenario>
+      <summary><![CDATA[一位异界投影霓羽，独自携带专属武装开局。]]></summary>
+      <parts>
+        <li Class="ScenPart_GameStartDialog">
+          <def>GameStartDialog</def>
+          <text><![CDATA[你并不是完整降临于此界的“她”。
+
+你只是仙人米莉拉投下的一道羽影。记忆并不完整，力量也并非本体，但那份轻快、鲜活、坐不住的性子，却一并落了下来。
+
+这片边缘世界对你而言既陌生又新鲜。你没有打算摆出什么高高在上的姿态，也没兴趣当一尊被人供起来的影子。既然投影已经落稳，那就先在这里站住脚，给自己搭出一个能继续存在下去的地方。
+
+你带着专属武装而来，但除此之外，一切都要从头开始.]]></text>
+            
+            
+          <closeSound>GameStartSting</closeSound>
+        </li>
+
+        <li Class="ScenPart_ConfigPage_ConfigureStartingPawns_KindDefs">
+          <def>ConfigurePawnsKindDefs</def>
+          <pawnChoiceCount>1</pawnChoiceCount>
+          <leftBehindPawnKind>MiliraXian_Neiyu</leftBehindPawnKind>
+          <kindCounts>
+            <li>
+              <kindDef>MiliraXian_Neiyu</kindDef>
+              <count>1</count>
+              <requiredAtStart>true</requiredAtStart>
+            </li>
+          </kindCounts>
+        </li>
+
+        <li Class="ScenPart_PlayerPawnsArriveMethod">
+          <def>PlayerPawnsArriveMethod</def>
+          <method>Standing</method>
+          <visible>false</visible>
+        </li>
+
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Silver</thingDef>
+          <count>900</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>MealSurvivalPack</thingDef>
+          <count>22</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>MedicineIndustrial</thingDef>
+          <count>12</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>ComponentIndustrial</thingDef>
+          <count>10</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Steel</thingDef>
+          <count>300</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>WoodLog</thingDef>
+          <count>150</count>
+        </li>
+      </parts>
+    </scenario>
+  </ScenarioDef>
+
+</Defs>

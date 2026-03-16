@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <!-- East -->
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_0</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_1</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_1</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_2</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_2</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_3</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_3</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_4</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_4</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_5</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_5</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_6</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_6</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_7</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyEast_Neiyu_7</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_8</texPath></defaultGraphicData>
+    </GraphicStateDef>
+
+    <!-- North -->
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_0</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_1</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_1</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_2</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_2</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_3</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_3</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_4</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_4</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_5</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_5</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_6</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_6</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_7</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlyNorth_Neiyu_7</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyNorth_8</texPath></defaultGraphicData>
+    </GraphicStateDef>
+
+    <!-- South -->
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_0</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_1</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_1</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_2</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_2</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_3</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_3</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_4</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_4</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_5</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_5</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_6</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_6</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_7</texPath></defaultGraphicData>
+    </GraphicStateDef>
+    <GraphicStateDef>
+        <defName>Milira_FlySouth_Neiyu_7</defName>
+        <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlySouth_8</texPath></defaultGraphicData>
+    </GraphicStateDef>
+
+</Defs>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- Neiyu -->
+    <HeadTypeDef ParentName="AverageBase">
+        <defName>MiliraNeiyuHead</defName>
+        <graphicPath>MiliraXianNeiyu/PawnNeiyu/Head/MiliraHeadNeiyu</graphicPath>
+        <gender>None</gender>
+        <randomChosen>false</randomChosen>
+    </HeadTypeDef>
+</Defs>

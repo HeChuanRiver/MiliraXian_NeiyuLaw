@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <AbilityCategoryDef>
+        <defName>MX_NeiyuSkill</defName>
+        <displayOrder>3000</displayOrder>
+    </AbilityCategoryDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_WarpFeather</defName>
+        <label>折跃引羽</label>
+        <description>短暂蓄力后在脚下闪光，并直接生成84~128个米莉拉之羽。 \n米莉拉之羽的来源霓羽念叨着什么物质法则的呈现、什么你知道现在的羽毛都得五十万白银了吗之类的。令人忍俊不禁。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_WarpFeather</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>100</displayOrder>
+        <cooldownTicksRange>3000</cooldownTicksRange>
+
+        <targetRequired>false</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>false</targetable>
+            <range>0</range>
+            <warmupTime>0.3</warmupTime>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>false</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuWarpFeather">
+                <finishFlashFleckDefName>PsycastSkipFlashExit</finishFlashFleckDefName>
+                <featherThingDef>Milira_Feather</featherThingDef>
+                <featherCountRange>84~128</featherCountRange>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_ThunderMarkedStorm</defName>
+        <label>雷锁印域</label>
+        <description>选定半径3格区域，标记其中敌对目标。数秒后每个被标记者将承受3~5次高伤雷击，并附加EMP伤害。\n "这招其实是有一天发现了一个奇特的种族，他们身上蕴含着满满的死亡的气息，生机活力却不比我曾经修行生命的小辈要差，然后曾经有些古书写着什么雷克邪祟什么的，我就搓了这招"</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>120</displayOrder>
+        <cooldownTicksRange>4800</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.2</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuThunderSigil">
+                <radius>3</radius>
+                <strikeCountRange>3~5</strikeCountRange>
+                <firstDelayTicksRange>120~180</firstDelayTicksRange>
+                <strikeIntervalTicksRange>45~75</strikeIntervalTicksRange>
+                <damageAmount>60</damageAmount>
+                <empDamageAmount>20</empDamageAmount>
+                <markerHediff>MX_Neiyu_ThunderMark</markerHediff>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_Bow_ArrowBarrage</defName>
+        <label>流羽裂界</label>
+        <description>仅在装备弓形态时可用。蓄力5秒后，沿目标方向连续倾泻64发流羽矢，覆盖整幅战场前方区域。\n "曾经喜欢玩一些游戏//"</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>130</displayOrder>
+        <cooldownTicksRange>7200</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>999</range>
+            <warmupTime>5.0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuArrowBarrage">
+                <requiredWeapon>MX_Neiyu_Form_Bow</requiredWeapon>
+                <projectileDef>MX_Bullet_BarrageArrow</projectileDef>
+                <!-- 数值：此处为该技能的释放弹丸数量 -->
+                <shotCount>64</shotCount>
+                <shotIntervalTicks>2</shotIntervalTicks>
+                <maxDistance>999</maxDistance>
+                <lateralSpread>5</lateralSpread>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_Flower_BlessingField</defName>
+        <label>花阵·祈生</label>
+        <description>仅花形态可用。对目标区域施放群体增益，范围内友方获得心情提升、移速提升、承伤降低、免疫速度提升；若存在受伤部位则立即治疗至满。\n "不要... 我不能失去你们..."</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>140</displayOrder>
+        <cooldownTicksRange>5400</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>24</range>
+            <warmupTime>1.1</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuFlowerBless">
+                <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
+                <radius>6</radius>
+                <buffHediff>MX_Neiyu_FlowerBlessed</buffHediff>
+                <moodThought>MX_Neiyu_FlowerBlessedThought</moodThought>
+                <buffDurationTicks>18000</buffDurationTicks>
+                <includeCaster>true</includeCaster>
+                <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
+                <areaFleckDefName>MXNL_ForFeatherCircle</areaFleckDefName>
+                <areaFleckScale>1.0</areaFleckScale>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_Flower_ToxinGarden</defName>
+        <label>花阵·瘴庭</label>
+        <description>仅花形态可用。对大范围目标区域施放敌对效果，范围内敌方将被强制施加重度食物中毒，并有10%概率陷入狂暴。 \n "其实这招的实现效果是先暂停时间然后给他们每个人喂了一口前几天熬的粥，这招在对付起纹境以下的普通米莉拉特别好用// 他们生气和我有什么关系?"</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>150</displayOrder>
+        <cooldownTicksRange>7200</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.5</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuFlowerToxinField">
+                <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
+                <radius>10</radius>
+                <severeFoodPoisoningSeverity>0.25</severeFoodPoisoningSeverity>
+                <berserkChance>0.10</berserkChance>
+                <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
+                <areaFleckDefName>MXNL_ForFeatherCircle</areaFleckDefName>
+                <areaFleckScale>1.0</areaFleckScale>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_Sword_Skyfall</defName>
+        <label>剑势·天坠</label>
+        <description>仅剑形态可用。施放后先于原地直线高速升空至高空，再在目标区域生成落点预警，随后于该区域上空直线高速坠落，造成高额范围伤害并附加易伤。\n "有人说我胖// 我说这不对// 关键是竟然说我...说我那里小... 我靠吃我一坠！！！"</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>160</displayOrder>
+        <cooldownTicksRange>9000</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>35</range>
+            <warmupTime>1.0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuSwordSkyfall">
+                <requiredWeapon>MX_Neiyu_Form_Weapon</requiredWeapon>
+                <ascendFlyerDef>MX_Neiyu_SwordSkyfallAscendFlyer</ascendFlyerDef>
+                <descendFlyerDef>MX_Neiyu_SwordSkyfallFlyer</descendFlyerDef>
+                <impactDamageDef>Bomb</impactDamageDef>
+                <impactRadius>3</impactRadius>
+                <impactDamage>361</impactDamage>
+                <impactArmorPen>999</impactArmorPen>
+                <vulnerabilityHediff>MX_Neiyu_SwordVulnerability</vulnerabilityHediff>
+                <vulnerabilityDurationTicks>9000</vulnerabilityDurationTicks>
+                <ascendVisualTicks>8</ascendVisualTicks>
+                <warningDelayTicks>36</warningDelayTicks>
+                <descendVisualTicks>16</descendVisualTicks>
+                <warningPulseIntervalTicks>2</warningPulseIntervalTicks>
+                <warningEffectDefName>Skip_EntryNoDelay</warningEffectDefName>
+                <warningFleckDefName>PsycastAreaEffect</warningFleckDefName>
+                <warningFleckScale>1.45</warningFleckScale>
+                <effectBDefName>ImpactSmallDustCloud</effectBDefName>
+                <effectCDefName>Skip_ExitNoDelay</effectCDefName>
+                <launchFleckDefName>PsycastSkipFlashEntry</launchFleckDefName>
+                <landFleckDefName>ExplosionFlash</landFleckDefName>
+                <!-- TODO: weapon draw interface tuning -->
+                <launchWeaponScale>2.0</launchWeaponScale>
+                <landWeaponScale>2.6</landWeaponScale>
+                <launchWeaponAngle>90</launchWeaponAngle>
+                <landWeaponAngle>-90</landWeaponAngle>
+                <takeoffGroundEffectDefName>MXNL_Effecter_Skyfall_FlyBeginGround</takeoffGroundEffectDefName>
+                <ascentTrailFleckDefName>MXNL_Skyfall_FlyBegin_F</ascentTrailFleckDefName>
+                <ascentTrailFleckScale>1.15</ascentTrailFleckScale>
+                <ascentTrailOffsetX>0</ascentTrailOffsetX>
+                <ascentTrailOffsetZ>8</ascentTrailOffsetZ>
+                <impactSoundDefName>Thunder_OnMap</impactSoundDefName>
+                <landingScreenShake>0.16</landingScreenShake>
+                <landingScreenShakeTicks>20</landingScreenShakeTicks>
+                <landingDustBurstCount>16</landingDustBurstCount>
+                <landingDustRadius>2.8</landingDustRadius>
+                <landingDustScale>2.2</landingDustScale>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Neiyu_Sword_ExecuteHead</defName>
+        <label>剑势·断首</label>
+        <description>仅剑形态可用。选中单体后先反向后撤，再以极高速度突进至目标附近并执行斩首。\n "教导我这招的老师是舰船上少数的剑法大师，据她所说曾经的大混战中只有她和几位同袍保持着手刃敌人的习惯，老师教导我这招后没几年就去世了，所以我依然记得老师说的：'对敌要稳快准狠'只是小羽愚钝，只得学会其半招。"</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
+
+        <category>MX_NeiyuSkill</category>
+        <displayOrder>170</displayOrder>
+        <cooldownTicksRange>6000</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>28</range>
+            <warmupTime>0.6</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetLocations>false</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuSwordExecution">
+                <requiredWeapon>MX_Neiyu_Form_Weapon</requiredWeapon>
+                <flyerDef>MX_Neiyu_SwordDashFlyer</flyerDef>
+                <backstepCells>2</backstepCells>
+                <dashDamage>991</dashDamage>
+                <!-- TODO: effect A/B/C placeholders -->
+                <effectADefName>Skip_EntryNoDelay</effectADefName>
+                <effectBDefName>ImpactSmallDustCloud</effectBDefName>
+                <effectCDefName>Skip_ExitNoDelay</effectCDefName>
+                <launchFleckDefName>PsycastSkipFlashEntry</launchFleckDefName>
+                <hitFleckDefName>ExplosionFlash</hitFleckDefName>
+                <!-- TODO: weapon draw interface tuning -->
+                <backstepWeaponScale>1.8</backstepWeaponScale>
+                <backstepWeaponAngle>180</backstepWeaponAngle>
+                <dashWeaponScale>2.4</dashWeaponScale>
+                <dashWeaponAngle>0</dashWeaponAngle>
+                <uppercutWeaponScale>2.6</uppercutWeaponScale>
+                <uppercutWeaponAngle>25</uppercutWeaponAngle>
+            </li>
+        </comps>
+    </AbilityDef>
+
+</Defs>

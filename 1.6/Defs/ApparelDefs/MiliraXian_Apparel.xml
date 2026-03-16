@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 父类 -->
+    <ThingDef Name="Milira_OnSkinBase_Neiyu" ParentName="Milira_OnSkinBase" Abstract="True">
+        <smeltable>false</smeltable>
+        <burnableByRecipe>false</burnableByRecipe>
+        <techLevel>Ultra</techLevel>
+        <apparel>
+            <developmentalStageFilter>Adult</developmentalStageFilter>
+            <wearPerDay>0</wearPerDay>
+            <bodyPartGroups>
+                <li>Torso</li>
+                <li>Legs</li>
+                <li>Arms</li>
+                <li>Neck</li>
+                <li>Shoulders</li>
+                <li>Feet</li>
+                <li>Hands</li>
+                <li>Milira_Wings</li>
+            </bodyPartGroups>
+            <layers>
+                <li>Shell</li>
+            </layers>
+            <shellRenderedBehindHead>true</shellRenderedBehindHead>
+        </apparel>
+        <statBases>
+            <DeteriorationRate>0</DeteriorationRate>
+            <Flammability>0</Flammability>
+        </statBases>
+        <useHitPoints>false</useHitPoints>
+    </ThingDef>
+
+    <!-- 常服 -->
+    <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
+        <defName>MiliraXian_NeiyuNormal</defName>
+        <label>霓羽·常服</label>
+        <description>霓羽最常穿的一身衣装。她向来爱惜这套常服，也在漫长经历中不断为其添入稀有而精巧的材料；即使如今显现于此界的只是投影，它依旧兼具轻盈外观与不俗防护。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+    
+        <graphicData>
+            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
+        </graphicData>
+        <statBases>
+            <Mass>1.2</Mass>
+            <WorkToMake>600000</WorkToMake>
+            <ArmorRating_Sharp>2.0</ArmorRating_Sharp>
+            <ArmorRating_Blunt>2.0</ArmorRating_Blunt>
+            <ArmorRating_Heat>2.0</ArmorRating_Heat>
+            <Insulation_Cold>1200</Insulation_Cold>
+            <Insulation_Heat>1200</Insulation_Heat>
+        </statBases>
+        <apparel>
+            <useWornGraphicMask>true</useWornGraphicMask>
+            <developmentalStageFilter>Adult</developmentalStageFilter>
+            <bodyPartGroups>
+                <li>Torso</li>
+                <li>Legs</li>
+                <li>Arms</li>
+                <li>Neck</li>
+                <li>Shoulders</li>
+                <li>Feet</li>
+                <li>Hands</li>
+                <li>Milira_Wings</li>
+            </bodyPartGroups>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
+            <tags>
+                <li>MiliraXian_NeiyuNormal</li>
+            </tags>
+            <layers>
+                <li>Shell</li>
+            </layers>
+            <shellRenderedBehindHead>true</shellRenderedBehindHead>
+        </apparel>
+        <tickerType>Normal</tickerType>
+        <comps>
+            
+        </comps>
+        <equippedStatOffsets>
+            <CarryingCapacity>+65</CarryingCapacity>
+            <MeleeDodgeChance>20.0</MeleeDodgeChance>
+            <MoveSpeed>1.50</MoveSpeed>
+        </equippedStatOffsets>
+    </ThingDef>
+
+    <ThingDef ParentName="Milira_OverheadBase">
+        <defName>MX_Apparel_EarringsZhenzhu</defName>
+        <label>霓羽·珠饰</label>
+        <description>霓羽惯常佩戴的一对珠饰。样式轻巧素净，却与她的整体装束气质极为贴合，也是这道投影中最稳定的点缀之一。</description>
+        <smeltable>false</smeltable>
+        <burnableByRecipe>false</burnableByRecipe>
+        <recipeMaker Inherit="False" IsNull="True" />
+        
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(1,1)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+    
+        <statBases>
+            <!--记得改-->
+            <Mass>0.05</Mass>
+            <MarketValue>120</MarketValue>
+            <MaxHitPoints>80</MaxHitPoints>
+            <Flammability>0</Flammability>
+            <EquipDelay>0</EquipDelay>
+        </statBases>
+        
+        <thingCategories>
+        </thingCategories>
+        
+        <apparel>
+            <bodyPartGroups>
+                <li>UpperHead</li>
+            </bodyPartGroups>
+            
+            <layers>
+                <li>Overhead</li>
+            </layers>
+
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+
+            <renderNodeProperties>
+            </renderNodeProperties>
+        </apparel>
+
+        <comps>
+            
+        </comps>
+        <equippedStatOffsets>
+            <ImmunityGainSpeed>0.45</ImmunityGainSpeed>
+        </equippedStatOffsets>
+        
+    </ThingDef>
+</Defs>

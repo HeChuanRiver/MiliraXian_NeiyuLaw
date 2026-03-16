@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <ThoughtDef>
+        <defName>MX_Neiyu_FlowerBlessedThought</defName>
+        <durationDays>0.5</durationDays>
+        <stackLimit>1</stackLimit>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <stages>
+            <li>
+                <label>flower blessing</label>
+                <description>Bathed in Neiyu's flower blessing.</description>
+                <baseMoodEffect>12</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <HediffDef>
+        <defName>MX_Neiyu_FlowerBlessed</defName>
+        <label>flower blessing</label>
+        <description>Blessed state from flower form skills.</description>
+        <hediffClass>HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <label>flower blessing</label>
+                <statFactors>
+                    <MoveSpeed>1.20</MoveSpeed>
+                    <IncomingDamageFactor>0.90</IncomingDamageFactor>
+                    <ImmunityGainSpeed>1.70</ImmunityGainSpeed>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>18000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Neiyu_SwordVulnerability</defName>
+        <label>sword vulnerability</label>
+        <description>Receives amplified damage after sword skyfall impact.</description>
+        <hediffClass>HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <label>vulnerable</label>
+                <statFactors>
+                    <IncomingDamageFactor>1.25</IncomingDamageFactor>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>9000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

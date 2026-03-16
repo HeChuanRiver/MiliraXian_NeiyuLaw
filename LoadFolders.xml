@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<loadFolders>
+
+    <v1.6>
+        <li>1.6</li>
+        <li>Content</li>
+        <!-- 面部动画 -->
+        <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
+    </v1.6>
+
+</loadFolders>

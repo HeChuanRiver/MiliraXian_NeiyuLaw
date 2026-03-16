@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <QuestScriptDef>
+    <defName>MXNL_NeiyuProjectionRecruitQuest</defName>
+    <autoAccept>false</autoAccept>
+    <defaultHidden>false</defaultHidden>
+    <expireDaysRange>-1~-1</expireDaysRange>
+    <isRootSpecial>true</isRootSpecial>
+    <sendAvailableLetter>true</sendAvailableLetter>
+    <defaultCharity>true</defaultCharity>
+    <endOnColonyMove>false</endOnColonyMove>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->&#24322;&#30028;&#32701;&#24433;</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->&#27542;&#27665;&#22320;&#38468;&#36817;&#20986;&#29616;&#20102;&#19968;&#36947;&#31283;&#23450;&#19979;&#26469;&#30340;&#32701;&#29366;&#25237;&#24433;&#12290;&#26469;&#32773;&#33258;&#31216;&#38675;&#32701;&#65292;&#22905;&#24182;&#38750;&#26412;&#20307;&#65292;&#32780;&#26159;&#19968;&#20301;&#31859;&#33673;&#25289;&#22312;&#27492;&#30028;&#25237;&#19979;&#30340;&#19968;&#36947;&#36731;&#24555;&#20998;&#24433;&#12290;&#22905;&#34920;&#31034;&#33258;&#24049;&#21487;&#20197;&#30041;&#19979;&#65292;&#20063;&#21487;&#20197;&#23601;&#27492;&#25955;&#21435;&#12290;&#36873;&#25321;&#26435;&#22312;&#20320;&#12290;</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="MiliraXian.NeiyuLaw.QuestNode_Root_NeiyuProjectionRecruit_AvailableQuest" />
+  </QuestScriptDef>
+
+</Defs>

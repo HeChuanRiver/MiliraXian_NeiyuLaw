@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <FacialAnimation.EyeballTypeDef>
+        <defName>MiliraXian_Eye_Neiyu</defName>
+        <texPath>MiliraXianNeiyu/PawnNeiyu/EyeNeiyu</texPath>
+        <altMaskPath>Things/Pawn/Milira/Eyes/Common</altMaskPath>
+        <shader>Map/CutoutSkinOverlay</shader>
+        <!-- <enableUnisexTexPath>True</enableUnisexTexPath> -->
+        <raceName>Milira_Race</raceName>
+        <minColor>RGB(255,255,255)</minColor>
+        <maxColor>RGB(255,255,255)</maxColor>
+        <probability>0.0001</probability>
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Neiyu</forNPC>
+            </li>
+        </modExtensions>
+    </FacialAnimation.EyeballTypeDef>
+</Defs>

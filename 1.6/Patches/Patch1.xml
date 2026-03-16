@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation  Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName="Milira_Race"]/alienRace/raceRestriction/apparelList</xpath>
+        <value>
+            <!-- 常服  -->
+            <li>MiliraXian_NeiyuNormal</li>
+            <li>MX_Apparel_EarringsZhenzhu</li>
+        </value>
+    </Operation>
+</Patch>

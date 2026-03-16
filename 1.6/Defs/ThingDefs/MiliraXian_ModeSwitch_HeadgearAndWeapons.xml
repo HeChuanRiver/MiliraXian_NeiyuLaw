@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- ==A. == -->
+    <ThingDef ParentName="BaseMeleeWeapon">
+        <defName>MX_Neiyu_Form_Flower</defName>
+        <label>霓羽·花形</label>
+        <description>霓羽常持于手中的花形兵装。看似柔和轻巧，实则是她投影于此界的三种兵装之一；花瓣间流转的辉光并不张扬，却始终带着温柔而稳定的力量。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+        
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/FlowerStick</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(1,1)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/FlowerStick</uiIconPath>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>Sellable</tradeability>
+
+        <techLevel>Archotech</techLevel>        <!--科技时代-->
+        <smeltable>false</smeltable>    <!--是否可熔炼-->
+
+        <weaponTags>
+            <li>MiliraXian_NeiyuFlower</li>
+        </weaponTags>
+
+        <thingCategories>
+        </thingCategories>
+        <weaponClasses>            <!--武器类别-->
+            <li>Melee</li>
+        </weaponClasses>
+
+        <costList>
+            <Steel>160</Steel>
+            <Jade>25</Jade>
+        </costList>
+        
+        <statBases>
+            <Mass>0.5</Mass>
+            <MarketValue>1400</MarketValue>
+            <MaxHitPoints>120</MaxHitPoints>
+            <!--花低伤害-->
+            <MeleeWeapon_CooldownMultiplier>3.2</MeleeWeapon_CooldownMultiplier>
+            <AccuracyTouch>0.60</AccuracyTouch>
+            <AccuracyShort>0.45</AccuracyShort>
+            <AccuracyMedium>0.30</AccuracyMedium>
+            <AccuracyLong>0.20</AccuracyLong>
+        </statBases>
+        <tools>
+            <li>
+                <label>拂花</label>
+                <capacities>
+                    <li>Blunt</li>
+                </capacities>
+                <power>6</power>
+                <cooldownTime>2.4</cooldownTime>
+            </li>
+        </tools>
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_Neiyu_Form_Flower</li>
+                    <li>MX_Neiyu_Form_Weapon</li>
+                    <li>MX_Neiyu_Form_Bow</li>
+                </formWeaponDefs>
+
+                <formLabels>
+                    <li>花</li>
+                    <li>武器</li>
+                    <li>弓</li>
+                </formLabels>
+
+                <formIconPaths>
+                    <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+                    <li>MiliraXianNeiyu/Items/FlowerStick</li>
+                    <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+                </formIconPaths>
+
+                <commandLabel>切换形态</commandLabel>
+                <commandDesc>点击切换</commandDesc>
+
+                <destroyOldWeapon>true</destroyOldWeapon>
+                <requirePrimary>true</requirePrimary>
+                <cooldownTicks>0</cooldownTicks>
+            </li>
+        </comps>
+    </ThingDef>
+    
+    <ThingDef ParentName="BaseMeleeWeapon">
+        <defName>MX_Neiyu_Form_Weapon</defName>
+        <label>霓羽·剑形</label>
+        <description>由花形转化而来的剑形兵装。锋芒凝练，气势凌厉，是霓羽在正面斩击与高速突进时最具压迫感的一种姿态。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>Sellable</tradeability>
+
+        <techLevel>Archotech</techLevel>        <!--科技时代-->
+        <smeltable>false</smeltable>    <!--是否可熔炼-->
+
+        <thingCategories>
+        </thingCategories>
+        <weaponClasses>            <!--武器类别-->
+            <li>Melee</li>
+        </weaponClasses>
+
+
+        <costList>
+            <Steel>160</Steel>
+            <Jade>25</Jade>
+        </costList>
+
+        <statBases>
+            <MarketValue>3200</MarketValue>
+            <Mass>0.9</Mass>
+            <MeleeWeapon_CooldownMultiplier>0.5</MeleeWeapon_CooldownMultiplier>
+            <AccuracyTouch>0.85</AccuracyTouch>
+            <AccuracyShort>0.70</AccuracyShort>
+            <AccuracyMedium>0.50</AccuracyMedium>
+            <AccuracyLong>0.35</AccuracyLong>
+        </statBases>
+        <tools>
+            <li>
+                <label>霓刃</label>
+                <capacities>
+                    <li>Cut</li>
+                    <li>Stab</li>
+                </capacities>
+                <power>64</power>
+                <armorPenetration>0.28</armorPenetration>
+                <cooldownTime>1.8</cooldownTime>
+            </li>
+        </tools>
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_Neiyu_Form_Flower</li>
+                    <li>MX_Neiyu_Form_Weapon</li>
+                    <li>MX_Neiyu_Form_Bow</li>
+                </formWeaponDefs>
+
+                <formLabels>
+                    <li>花</li>
+                    <li>武器</li>
+                    <li>弓</li>
+                </formLabels>
+
+                <formIconPaths>
+                    <li>MiliraXianNeiyu/Items/FlowerStick</li>
+                    <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+                    <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+                </formIconPaths>
+
+                <commandLabel>切换形态</commandLabel>
+                <commandDesc>点击循环切换：花 → 武器 → 弓 → 花。</commandDesc>
+
+                <destroyOldWeapon>true</destroyOldWeapon>
+                <requirePrimary>true</requirePrimary>
+                <cooldownTicks>0</cooldownTicks>
+            </li>
+
+        </comps>
+        <modExtensions>
+            <li Class="MiliraXian.NeiyuLaw.MXMeleeSlashGhostExtension">
+                <effecterDefName>MXNL_Effecter_NeiyuSwordSlashGhost</effecterDefName>
+                <fallbackFleckDefName>ExplosionFlash</fallbackFleckDefName>
+                <scaleRange>4.6~6.2</scaleRange>
+                <minIntervalTicks>5</minIntervalTicks>
+                <playOnMiss>false</playOnMiss>
+                <cycleFleckDefNames>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_A</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_B</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_C</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_D</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_E</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_F</li>
+                </cycleFleckDefNames>
+            </li>
+        </modExtensions>
+    </ThingDef>
+    
+    <ThingDef ParentName="BaseWeapon">
+        <defName>MX_Neiyu_Form_Bow</defName>
+        <label>霓羽·弓形</label>
+        <description>由花形转化而来的弓形兵装。羽辉聚弦，流矢如雨，更擅长在中远距离维持持续而华丽的压制。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <techLevel>Archotech</techLevel>        <!--科技时代-->
+        <smeltable>false</smeltable>    <!--是否可熔炼-->
+
+        <thingCategories>
+        </thingCategories>
+        <weaponClasses>            <!--武器类别-->
+            <li>Ranged</li>
+        </weaponClasses>
+
+
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/BowForNeiyu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/BowForNeiyu</uiIconPath>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>Sellable</tradeability>
+
+        <costList>
+            <Steel>160</Steel>
+            <Jade>25</Jade>
+        </costList>
+        
+        <statBases>
+            <MarketValue>2400</MarketValue>
+            <Mass>0.9</Mass>
+            <AccuracyTouch>0.75</AccuracyTouch>
+            <AccuracyShort>0.70</AccuracyShort>
+            <AccuracyMedium>0.55</AccuracyMedium>
+            <AccuracyLong>0.35</AccuracyLong>
+        </statBases>
+
+        <verbs>
+            <li>
+                <verbClass>Verb_Shoot</verbClass>
+                <hasStandardCommand>true</hasStandardCommand>
+                <defaultProjectile>MX_Bullet_BigSplitArrow</defaultProjectile>
+                <warmupTime>1.2</warmupTime>
+                <range>30.9</range>
+                <soundCast>Bow_Small</soundCast>
+            </li>
+        </verbs>
+        <comps>
+            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_Neiyu_Form_Flower</li>
+                    <li>MX_Neiyu_Form_Weapon</li>
+                    <li>MX_Neiyu_Form_Bow</li>
+                </formWeaponDefs>
+
+                <formLabels>
+                    <li>花</li>
+                    <li>武器</li>
+                    <li>弓</li>
+                </formLabels>
+
+                <formIconPaths>
+                    <li>MiliraXianNeiyu/Items/FlowerStick</li>
+                    <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+                    <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+                </formIconPaths>
+
+                <commandLabel>切换形态</commandLabel>
+                <commandDesc>点击循环切换：花 → 武器 → 弓 → 花。</commandDesc>
+
+                <destroyOldWeapon>true</destroyOldWeapon>
+                <requirePrimary>true</requirePrimary>
+                <cooldownTicks>0</cooldownTicks>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <!-- 1) 主箭：飞行后分裂 -->
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_BigSplitArrow</defName>
+        <label>霓羽·裂羽主矢</label>
+        <thingClass>MiliraXian.NeiyuLaw.Projectile_BigArrowSplit</thingClass>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/BigArrow</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.45,1.8)</drawSize>
+
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(255,220,160)</color>
+
+        </graphicData>
+        <projectile>
+            <damageDef>Arrow</damageDef>
+            <damageAmountBase>90</damageAmountBase>
+            <speed>45</speed>
+            <arcHeightFactor>0.10</arcHeightFactor>
+        </projectile>
+        <modExtensions>
+            <li Class="MiliraXian.NeiyuLaw.SplitArrowExtension">
+                <splitProjectileDef>MX_Bullet_HomingShard</splitProjectileDef>
+                <splitCount>27</splitCount>
+                <splitDelayTicks>8</splitDelayTicks>
+                <scatterAngle>180</scatterAngle>
+                <scatterDistance>14</scatterDistance>
+            </li>
+        </modExtensions>
+    </ThingDef>
+
+    <!-- 2) 子箭：先散开，再追踪 -->
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_HomingShard</defName>
+        <label>霓羽·追羽碎矢</label>
+        <thingClass>MiliraXian.NeiyuLaw.Projectile_HomingShard</thingClass>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.45,1.62)</drawSize>
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(255,255,255)</color>
+        </graphicData>
+        <projectile>
+            <damageDef>Arrow</damageDef>
+            <damageAmountBase>18</damageAmountBase>
+            <speed>54</speed>
+            <arcHeightFactor>0.45</arcHeightFactor>
+        </projectile>
+        <modExtensions>
+            <li Class="MiliraXian.NeiyuLaw.SplitArrowExtension">
+                <homingStartDelayTicks>10</homingStartDelayTicks>
+                <homingTurnLerp>0.14</homingTurnLerp>
+            </li>
+        </modExtensions>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_BarrageArrow</defName>
+        <label>霓羽·流羽矢</label>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.45,1.62)</drawSize>
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(255,255,255)</color>
+        </graphicData>
+        <projectile>
+            <damageDef>Arrow</damageDef>
+            <damageAmountBase>60</damageAmountBase>
+            <speed>56</speed>
+            <arcHeightFactor>0.20</arcHeightFactor>
+        </projectile>
+    </ThingDef>
+</Defs>
+
+
