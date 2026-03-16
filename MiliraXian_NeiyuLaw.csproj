@@ -28,7 +28,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
+        <OutputPath>.\1.6\Assemblies</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -67,9 +67,7 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
-      <Content Include="1.6\Assemblies\AriandelLibrary.dll" />
       <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.dll" />
-      <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.pdb" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
@@ -250,14 +248,17 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\MX_Neiyu_WarpFeather.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\一矢.png" />
       <Content Include="LoadFolders.xml" />
+      <Content Include="README.md" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
+    <Target Name="AfterBuild" AfterTargets="Build">
+        <ItemGroup>
+            <FilesToKeep Include="
+                $(TargetDir)MiliraXian_NeiyuLaw.dll;
+                $(TargetDir)MiliraXian_NeiyuLaw.pdb"/>
+            <FilesToDelete Include="$(TargetDir)**\*.*" Exclude="@(FilesToKeep)"/>
+        </ItemGroup>
+        
+        <Delete Files="@(FilesToDelete)" TreatErrorsAsWarnings="true"/>
     </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
 </Project>
