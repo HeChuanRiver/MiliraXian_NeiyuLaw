@@ -56,7 +56,7 @@ namespace MiliraXian.NeiyuLaw
         public string absorbFleckDefName = "ExplosionFlash";
         public List<string> hurtFleckDefNames = new List<string>();
         public float absorbFleckScale = 1.2f;
-        public string absorbEffecterDefName = null; // TODO: 你自己的 EffecterDef defName
+        public string absorbEffecterDefName = null; 
 
         // 常态护盾显示：阶段1、阶段2、阶段3前半段显示
         public bool drawActiveShield = true;
@@ -704,8 +704,7 @@ namespace MiliraXian.NeiyuLaw
             {
                 FleckMaker.Static(Pawn.TrueCenter(), Pawn.Map, fleck, Mathf.Max(0.1f, Props.absorbFleckScale));
             }
-
-            // TODO: 你后续可在 XML 填 absorbEffecterDefName，挂自定义材质动画
+            
             if (!Props.absorbEffecterDefName.NullOrEmpty())
             {
                 EffecterDef effecterDef = DefDatabase<EffecterDef>.GetNamedSilentFail(Props.absorbEffecterDefName);
