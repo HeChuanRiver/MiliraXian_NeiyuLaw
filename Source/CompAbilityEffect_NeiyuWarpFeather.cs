@@ -7,13 +7,13 @@ namespace MiliraXian.NeiyuLaw
 {
     public class CompProperties_AbilityNeiyuWarpFeather : CompProperties_AbilityEffect
     {
-        // 兼容旧字段：当前流程不再使用施法法阵特效，仅保留闪光特效
+
         public string effectADefName = "MXNL_ForFeatherCastingCircle";
         public string fallbackEffectDefName = "Skip_EntryNoDelay";
-        // 结束时闪光
+
         public string finishFlashFleckDefName = "PsycastSkipFlashExit";
 
-        // 掉落物
+
         public ThingDef featherThingDef;
         public IntRange featherCountRange = new IntRange(4, 8);
 

@@ -1,13 +1,13 @@
-// MiliraXian.NeiyuLaw - Wing replacement + fly animation selection
-// Put the compiled DLL into: YourMod/1.6/Assemblies/
-// Textures you must prepare for STATIC wings (Graphic_Multi):
-//   Content/Textures/MiliraXian/PawnNeiyu/LeftWingNew_Neiyu/LeftWingFront_[north/east/south/west].png
-//   Content/Textures/MiliraXian/PawnNeiyu/LeftWingNew_Neiyu/LeftWingBehind_[north/east/south/west].png
-//   Content/Textures/MiliraXian/PawnNeiyu/RightWingNew_Neiyu/RightWingFront_[north/east/south/west].png
-//   Content/Textures/MiliraXian/PawnNeiyu/RightWingNew_Neiyu/RightWingBehind_[north/east/south/west].png
-//
-// Fly animation textures/defs are already in your XML (GraphicStateDef + AnimationDef).
-// This DLL only tells the game "use my AnimationDef when THIS pawn is flying".
+
+
+
+
+
+
+
+
+
+
 
 using System;
 using System.Reflection;
@@ -30,10 +30,10 @@ namespace MiliraXian.NeiyuLaw
 
     internal static class MX_Neiyu_Ids
     {
-        // IMPORTANT: change this to your actual PawnKindDef defName if you renamed it
+
         public const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
 
-        // IMPORTANT: these must match your XML <AnimationDef><defName>...</defName>
+
         public const string FlyNorth = "Milira_FlyNorth_Neiyu";
         public const string FlyEast  = "Milira_FlyEast_Neiyu";
         public const string FlySouth = "Milira_FlySouth_Neiyu";
@@ -85,11 +85,11 @@ namespace MiliraXian.NeiyuLaw
 
             try
             {
-                // IMPORTANT: these base paths must match your texture folders (WITHOUT file extension & direction suffix)
+
                 const string leftBase  = "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu";
                 const string rightBase = "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu";
 
-                // Graphic_Multi will automatically pick _north/_east/_south/_west.
+
                 LeftWingFront   = GraphicDatabase.Get<Graphic_Multi>(leftBase + "/LeftWingFront",   ShaderDatabase.Cutout, Vector2.one, Color.white);
                 LeftWingBehind  = GraphicDatabase.Get<Graphic_Multi>(leftBase + "/LeftWingBehind",  ShaderDatabase.Cutout, Vector2.one, Color.white);
                 RightWingFront  = GraphicDatabase.Get<Graphic_Multi>(rightBase + "/RightWingFront", ShaderDatabase.Cutout, Vector2.one, Color.white);
@@ -103,17 +103,17 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // =========================
-    // 1) Replace STATIC wing graphics
-    // =========================
-    //
-    // Milira Race's renderTree has wing nodes with debugLabel:
-    //   "left wing", "left wing behind", "right wing", "right wing behind"
-    //
-    // We override GraphicFor() ONLY when pawn is Neiyu.
-    //
+
+
+
+
+
+
+
+
+
     [HarmonyPatch(typeof(PawnRenderNode), nameof(PawnRenderNode.GraphicFor))]
-    [HarmonyAfter("Ariandel.MiliraImperiumHarmonyPatch")] // If Milira Imperium is installed, let their patch run first.
+    [HarmonyAfter("Ariandel.MiliraImperiumHarmonyPatch")]
     internal static class Patch_PawnRenderNode_GraphicFor_MX_Neiyu
     {
         [HarmonyPostfix]
@@ -124,7 +124,7 @@ namespace MiliraXian.NeiyuLaw
             string label = __instance?.Props?.debugLabel;
             if (label == null) return;
 
-            // Lazy load graphics only when needed
+
             MX_Neiyu_WingGraphics.EnsureLoaded();
 
             switch (label)
@@ -152,9 +152,9 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // =========================
-    // 2) Use Neiyu-specific FLY animation
-    // =========================
+
+
+
 
     [HarmonyPatch(typeof(Pawn_FlightTracker), nameof(Pawn_FlightTracker.GetBestFlyAnimation))]
     [HarmonyAfter("Ariandel.MiliraImperiumHarmonyPatch")]
@@ -168,14 +168,14 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // Milira's ability comp also queries fly animation. Patch via reflection so you don't need a hard compile-time dependency.
+
     [HarmonyPatch]
     [HarmonyAfter("Ariandel.MiliraImperiumHarmonyPatch")]
     internal static class Patch_Milira_CompAbilityEffect_HungerRestCost_GetBestFlyAnimation_MX_Neiyu
     {
         private static MethodBase TargetMethod()
         {
-            // Class name from your earlier stacktrace: Milira.CompAbilityEffect_HungerRestCost
+
             Type t = AccessTools.TypeByName("Milira.CompAbilityEffect_HungerRestCost");
             return t != null ? AccessTools.Method(t, "GetBestFlyAnimation") : null;
         }

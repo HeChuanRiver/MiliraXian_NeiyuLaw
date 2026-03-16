@@ -1,4 +1,4 @@
-﻿// D:/RimWorldModForMe/MiliraXian_NeiyuLaw/Source/CompAbilityEffect_NeiyuThunderAndArrow.cs
+﻿
 using System;
 using System.Collections.Generic;
 using RimWorld;
@@ -412,7 +412,7 @@ namespace MiliraXian.NeiyuLaw
 
                 DamageWorker.DamageResult result = task.target.TakeDamage(main);
 
-                // 兜底：如果这次仍然被完全抵消，再补一发通用伤害
+
                 if (result == null || result.totalDamageDealt <= 0.01f)
                 {
                     DamageInfo fallback = new DamageInfo(DamageDefOf.Bomb, task.damageAmount, 999f, -1f, task.caster);
@@ -640,9 +640,9 @@ namespace MiliraXian.NeiyuLaw
             {
                 return;
             }
-            
+
             map.weatherManager.eventHandler.AddEvent(new WeatherEvent_NeiyuLightningVisual(map, strikeLoc));
-            
+
             SoundDefOf.Thunder_OffMap.PlayOneShotOnCamera(map);
             SoundInfo info = SoundInfo.InMap(new TargetInfo(strikeLoc, map));
             SoundDefOf.Thunder_OnMap.PlayOneShot(info);
@@ -698,7 +698,7 @@ namespace MiliraXian.NeiyuLaw
             return new IntVec3(x, 0, z);
         }
     }
-    
+
     [StaticConstructorOnStartup]
     public class WeatherEvent_NeiyuLightningVisual : WeatherEvent_LightningFlash
     {

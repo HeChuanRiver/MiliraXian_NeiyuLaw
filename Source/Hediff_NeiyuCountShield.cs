@@ -1,4 +1,4 @@
-﻿// File: D:\RimWorldModForMe\MiliraXian_NeiyuLaw\Source\Hediff_NeiyuCountShield.cs
+﻿
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -13,52 +13,52 @@ namespace MiliraXian.NeiyuLaw
 {
     public struct MXNeiyuStage3Profile
     {
-        public float outgoingDamageFactor;        // 近/远程伤害系数
-        public float aimingDelayFactor;           // 瞄准时间系数（<1更快）
-        public float incomingDamageFactor;        // 承伤系数（<1更硬）
-        public float moveSpeedFactor;             // 移速系数
-        public float injuryHealingFactor;         // 愈合速度系数
-        public float meleeDodgeChanceFactor;      // 近战闪避系数
-        public float rangedDodgeBonusPct;         // 远程闪避加成（0.10 = +10%）
-        public float meleeArmorPenetrationFactor; // 近战护甲穿透系数
+        public float outgoingDamageFactor;
+        public float aimingDelayFactor;
+        public float incomingDamageFactor;
+        public float moveSpeedFactor;
+        public float injuryHealingFactor;
+        public float meleeDodgeChanceFactor;
+        public float rangedDodgeBonusPct;
+        public float meleeArmorPenetrationFactor;
     }
 
     public class HediffCompProperties_MXNeiyuCountShield : HediffCompProperties
     {
-        // 二阶段阈值：原版常见子弹伤害多在 6~30，集中约 10~18，默认 18
+
         public float phase2Threshold = 18f;
 
         public int phase2MaxChargesNormal = 1000;
         public int phase2MaxChargesWeak = 250;
 
-        // 二阶段在 12h 内点数不变 -> 回到一阶段
-        public int phase2RecoverTicksNoChange = 30000; // 12h
 
-        // 三阶段：前2h蓄伤（无敌）+后22h增益（可受伤）
-        // 兼容旧配置：保留 stage3DurationTicks 作为兜底。
-        public int stage3AbsorbTicks = 5000;  // 2h
-        public int stage3BuffTicks = 55000;   // 22h
-        public int stage3DurationTicks = 60000; // legacy fallback
-        public int weakDurationTicks = 300000;  // 5 days
+        public int phase2RecoverTicksNoChange = 30000;
 
-        // 三阶段存伤分段
+
+
+        public int stage3AbsorbTicks = 5000;
+        public int stage3BuffTicks = 55000;
+        public int stage3DurationTicks = 60000;
+        public int weakDurationTicks = 300000;
+
+
         public float stage3TierA_MaxDamage = 100f;
         public float stage3TierB_MaxDamage = 500f;
         public float stage3TierC_MaxDamage = 1000f;
-        public float stage3TierD_ExtraStepDamage = 500f; // >1000后每500一档
+        public float stage3TierD_ExtraStepDamage = 500f;
 
-        // 三阶段结束时血液消耗（通过 BloodLoss severity）
+
         public float bloodLossTierB = 0.10f;
         public float bloodLossTierC = 0.30f;
         public float bloodLossTierD = 0.50f;
 
-        // 吸收反馈（可替换为你后续自定义资源）
+
         public string absorbFleckDefName = "ExplosionFlash";
         public List<string> hurtFleckDefNames = new List<string>();
         public float absorbFleckScale = 1.2f;
-        public string absorbEffecterDefName = null; 
+        public string absorbEffecterDefName = null;
 
-        // 常态护盾显示：阶段1、阶段2、阶段3前半段显示
+
         public bool drawActiveShield = true;
         public string activeShieldTexPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
         public Vector2 activeShieldDrawSize = new Vector2(3.6f, 3.6f);
@@ -78,7 +78,7 @@ namespace MiliraXian.NeiyuLaw
 
     public class HediffComp_MXNeiyuCountShield : HediffComp
     {
-        // 1=一阶段，2=二阶段，3=三阶段
+
         private int stage = 1;
 
         private int phase2Charges;
@@ -92,7 +92,7 @@ namespace MiliraXian.NeiyuLaw
         private int weakUntilTick = -1;
         private bool weakWasActive;
 
-        // 二阶段最近5次受击日志（用于Hediff面板展示）
+
         private List<string> phase2RecentHitLogs = new List<string>();
 
         public HediffCompProperties_MXNeiyuCountShield Props => (HediffCompProperties_MXNeiyuCountShield)props;
@@ -183,14 +183,14 @@ namespace MiliraXian.NeiyuLaw
             {
                 if (IsInStage3AbsorbWindow(now))
                 {
-                    // 三阶段前2小时：蓄伤+无敌
+
                     phase3StoredDamage += dinfo.Amount;
                     absorbed = true;
                     PlayAbsorbFx(dinfo);
                     return true;
                 }
 
-                // 三阶段后22小时：仅保留buff，不再蓄伤，不再无敌
+
                 return false;
             }
 
@@ -245,7 +245,7 @@ namespace MiliraXian.NeiyuLaw
                 {
                     if (InWeak)
                     {
-                        // 虚弱期：二阶段耗尽后直接正常受伤
+
                         phase2Charges = 0;
                         phase2LastChargeChangeTick = now;
                         RecordPhase2Hit(dinfo.Amount, before, before, 0);
@@ -278,7 +278,7 @@ namespace MiliraXian.NeiyuLaw
             return false;
         }
 
-        // stage==3 时始终返回 true（A档也返回，只是增益为0）
+
         public bool TryGetStage3Profile(out MXNeiyuStage3Profile profile)
         {
             profile = default(MXNeiyuStage3Profile);
@@ -300,13 +300,13 @@ namespace MiliraXian.NeiyuLaw
 
             float d = phase3StoredDamage;
 
-            // A: 0~100 无增益
+
             if (d <= Props.stage3TierA_MaxDamage)
             {
                 return true;
             }
 
-            // B: 100~500
+
             if (d <= Props.stage3TierB_MaxDamage)
             {
                 profile.outgoingDamageFactor = 1.20f;
@@ -318,7 +318,7 @@ namespace MiliraXian.NeiyuLaw
                 return true;
             }
 
-            // C: 500~1000
+
             if (d <= Props.stage3TierC_MaxDamage)
             {
                 profile.outgoingDamageFactor = 1.35f;
@@ -332,7 +332,7 @@ namespace MiliraXian.NeiyuLaw
                 return true;
             }
 
-            // D: >1000，每多500再叠一档
+
             int stacks = 1 + Mathf.FloorToInt((d - Props.stage3TierC_MaxDamage) / Mathf.Max(1f, Props.stage3TierD_ExtraStepDamage));
             profile.outgoingDamageFactor = 1f + 0.35f * stacks;
             profile.moveSpeedFactor = 1f + 0.10f * stacks;
@@ -341,7 +341,7 @@ namespace MiliraXian.NeiyuLaw
             profile.meleeArmorPenetrationFactor = 1f + 0.10f * stacks;
             profile.meleeDodgeChanceFactor = 1f + 0.10f * stacks;
             profile.rangedDodgeBonusPct = 0.10f * stacks;
-            // D段瞄准保持1（按你当前设定）
+
 
             return true;
         }
@@ -357,10 +357,10 @@ namespace MiliraXian.NeiyuLaw
                 return false;
             }
 
-            // 新增虚弱惩罚：
-            // 1) 移速降低50% => x0.5
-            // 2) 休息值下降速率提高50% => RestFallRateFactor x1.5
-            // 3) 全局工作效率降低80% => WorkSpeedGlobal x0.2
+
+
+
+
             moveSpeedFactor = 0.5f;
             restFallRateFactor = 1.5f;
             workSpeedGlobalFactor = 0.2f;
@@ -547,7 +547,7 @@ namespace MiliraXian.NeiyuLaw
         {
             if (InWeak)
             {
-                // 虚弱期禁止进入三阶段
+
                 return;
             }
 
@@ -578,7 +578,7 @@ namespace MiliraXian.NeiyuLaw
             weakUntilTick = now + Mathf.Max(1, Props.weakDurationTicks);
             weakWasActive = true;
 
-            // 虚弱开始后恢复到一阶段待机；二阶段上限在进入二阶段时限制为250
+
             stage = 1;
             phase2Charges = 0;
             phase2LastChargeChangeTick = now;
@@ -593,7 +593,7 @@ namespace MiliraXian.NeiyuLaw
             bool weakNow = weakUntilTick > now;
             if (weakWasActive && !weakNow)
             {
-                // 虚弱结束，回到一阶段
+
                 EnterStage1(now);
             }
             weakWasActive = weakNow;
@@ -611,15 +611,15 @@ namespace MiliraXian.NeiyuLaw
 
             if (d > Props.stage3TierC_MaxDamage)
             {
-                bloodLoss = Props.bloodLossTierD; // >1000
+                bloodLoss = Props.bloodLossTierD;
             }
             else if (d > Props.stage3TierB_MaxDamage)
             {
-                bloodLoss = Props.bloodLossTierC; // 500~1000
+                bloodLoss = Props.bloodLossTierC;
             }
             else if (d > Props.stage3TierA_MaxDamage)
             {
-                bloodLoss = Props.bloodLossTierB; // 100~500
+                bloodLoss = Props.bloodLossTierB;
             }
 
             if (bloodLoss > 0f)
@@ -649,7 +649,7 @@ namespace MiliraXian.NeiyuLaw
                 return 100;
             }
 
-            // 15倍以上：消耗所有剩余点数
+
             return Mathf.Max(1, phase2Charges);
         }
 
@@ -676,7 +676,7 @@ namespace MiliraXian.NeiyuLaw
                 return false;
             }
 
-            // 此时在 PreApplyDamage 后置阶段，dinfo.Amount 已经过原版前置调整
+
             float projectedSeverity = dinfo.Amount;
 
             bool wouldDie = Pawn.health.WouldDieAfterAddingHediff(incomingHediff, part, projectedSeverity);
@@ -704,7 +704,7 @@ namespace MiliraXian.NeiyuLaw
             {
                 FleckMaker.Static(Pawn.TrueCenter(), Pawn.Map, fleck, Mathf.Max(0.1f, Props.absorbFleckScale));
             }
-            
+
             if (!Props.absorbEffecterDefName.NullOrEmpty())
             {
                 EffecterDef effecterDef = DefDatabase<EffecterDef>.GetNamedSilentFail(Props.absorbEffecterDefName);
@@ -795,7 +795,7 @@ namespace MiliraXian.NeiyuLaw
                 return;
             }
 
-            // 兼容旧存档或异常状态：自动重建阶段3时间窗，避免“蓄伤一直不结束”或“增益不生效”。
+
             if (phase3EndTick <= 0)
             {
                 int absorbTicks = ResolveStage3AbsorbTicks();
@@ -841,7 +841,7 @@ namespace MiliraXian.NeiyuLaw
                 return Props.stage3AbsorbTicks;
             }
 
-            // 旧配置兜底：按24h总时长拆成4h蓄伤+20h增益
+
             int total = Mathf.Max(1, Props.stage3DurationTicks);
             return Mathf.Clamp(total / 6, 1, total);
         }
@@ -853,7 +853,7 @@ namespace MiliraXian.NeiyuLaw
                 return Props.stage3BuffTicks;
             }
 
-            // 旧配置兜底
+
             int total = Mathf.Max(absorbTicks + 1, Props.stage3DurationTicks);
             return Mathf.Max(1, total - absorbTicks);
         }
@@ -1020,7 +1020,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 防御入口：受击前吸收
+
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.PreApplyDamage))]
     public static class Patch_MXNeiyuShield_PreApplyDamage
     {
@@ -1042,7 +1042,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 近战伤害入口：挂在 VerbProperties 的真实近战伤害计算链
+
     [HarmonyPatch(typeof(VerbProperties), nameof(VerbProperties.AdjustedMeleeDamageAmount), new Type[] { typeof(Tool), typeof(Pawn), typeof(Thing), typeof(HediffComp_VerbGiver) })]
     public static class Patch_MXNeiyuShield_MeleeDamage
     {
@@ -1073,7 +1073,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 远程伤害入口：挂在 ProjectileProperties.GetDamageAmount(weapon) 链
+
     [HarmonyPatch(typeof(ProjectileProperties), nameof(ProjectileProperties.GetDamageAmount), new Type[] { typeof(Thing), typeof(StringBuilder) })]
     public static class Patch_MXNeiyuShield_RangedDamage
     {
@@ -1107,7 +1107,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 三阶段动态属性：瞄准、承伤、移速、愈合、近战闪避
+
     [HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
     public static class Patch_MXNeiyuShield_GetStatValue
     {
@@ -1178,7 +1178,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 近战护甲穿透：走 VerbProperties 真实计算链
+
     [HarmonyPatch(typeof(VerbProperties), nameof(VerbProperties.AdjustedArmorPenetration), new Type[] { typeof(Verb), typeof(Pawn) })]
     public static class Patch_MXNeiyuShield_MeleeArmorPen
     {
@@ -1206,7 +1206,7 @@ namespace MiliraXian.NeiyuLaw
         }
     }
 
-    // 远程闪避：在 ShotReport.HitReportFor 生成时，直接压低 target size 命中系数
+
     [HarmonyPatch(typeof(ShotReport), nameof(ShotReport.HitReportFor))]
     public static class Patch_MXNeiyuShield_RangedDodge
     {

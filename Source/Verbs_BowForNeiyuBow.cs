@@ -14,11 +14,11 @@ namespace MiliraXian.NeiyuLaw
         public int homingStartDelayTicks = 10;
         public float homingTurnLerp = 0.18f;
     }
-    
+
     public class Projectile_BigArrowSplit : Bullet
     {
         private bool splitDone;
-        
+
         private int splitTick;
 
         private SplitArrowExtension Ext => def.GetModExtension<SplitArrowExtension>();
@@ -162,7 +162,7 @@ namespace MiliraXian.NeiyuLaw
         }
 
     }
-    
+
     public class Projectile_HomingShard : Bullet
     {
         private int homingStartTick;
@@ -207,7 +207,7 @@ namespace MiliraXian.NeiyuLaw
             }
         }
 
-        
+
         protected override void TickInterval(int delta)
         {
             if (!landed)

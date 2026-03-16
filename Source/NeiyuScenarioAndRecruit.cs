@@ -524,8 +524,8 @@ namespace MiliraXian.NeiyuLaw
 
         private void EnsureAllSpawnedNeiyuLoadouts()
         {
-            // Deprecated on purpose.
-            // Global post-spawn re-equipping caused weapon duplication and clone side effects.
+
+
         }
     }
 

@@ -15,7 +15,7 @@ namespace MiliraXian.NeiyuLaw
 
     public static class NeiyuWeaponVisualHooks
     {
-        // TODO: Bind your future sword textures/animation renderer to this event.
+
         public static event NeiyuSwordVisualPhaseHandler OnSwordVisualPhase;
 
         public static void Notify(Pawn pawn, string phaseId, IntVec3 focusCell, float weaponScale, float angleDeg)
@@ -179,7 +179,7 @@ namespace MiliraXian.NeiyuLaw
 
             return new IntVec3(0, 0, Math.Sign(delta.z));
         }
-        
+
         public static void PlayFleckAt(Map map, Vector3 worldPos, string fleckDefName, float scale = 1f)
         {
             if (map == null || fleckDefName.NullOrEmpty())
@@ -986,9 +986,9 @@ namespace MiliraXian.NeiyuLaw
         public ThingDef flyerDef;
         public int backstepCells = 2;
         public int dashDamage = 320;
-        public string effectADefName = "Skip_EntryNoDelay"; // TODO: Effect A placeholder
-        public string effectBDefName = "ImpactSmallDustCloud"; // TODO: Effect B placeholder
-        public string effectCDefName = "Skip_ExitNoDelay"; // TODO: Effect C placeholder
+        public string effectADefName = "Skip_EntryNoDelay";
+        public string effectBDefName = "ImpactSmallDustCloud";
+        public string effectCDefName = "Skip_ExitNoDelay";
         public string launchFleckDefName = "PsycastSkipFlashEntry";
         public string hitFleckDefName = "ExplosionFlash";
         public float backstepWeaponScale = 1.8f;
