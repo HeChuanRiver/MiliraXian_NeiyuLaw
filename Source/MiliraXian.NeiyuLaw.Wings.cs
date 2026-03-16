@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 using System;
 using System.Reflection;
 using HarmonyLib;
@@ -102,15 +91,6 @@ namespace MiliraXian.NeiyuLaw
             }
         }
     }
-
-
-
-
-
-
-
-
-
 
     [HarmonyPatch(typeof(PawnRenderNode), nameof(PawnRenderNode.GraphicFor))]
     [HarmonyAfter("Ariandel.MiliraImperiumHarmonyPatch")]
