@@ -12,13 +12,14 @@
         <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>E:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_NeiyuLaw\1.6\Assemblies</OutputPath>
+        <OutputPath>.\1.6\Assemblies</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -33,28 +34,21 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony">
-          <HintPath>E:\下载\HarmonyMod\HarmonyMod\1.5\Assemblies\0Harmony.dll</HintPath>
-          <Private>False</Private>
+        <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="AriandelLibrary">
-          <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
+          <HintPath>..\..\Dependencies\AriandelLibrary.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
-        <Reference Include="UnityEngine">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -72,6 +66,7 @@
       <Compile Include="Source\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include=".gitignore" />
       <Content Include="1.6\Assemblies\AriandelLibrary.dll" />
       <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.dll" />
       <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.pdb" />
@@ -266,4 +261,3 @@
     -->
 
 </Project>
-

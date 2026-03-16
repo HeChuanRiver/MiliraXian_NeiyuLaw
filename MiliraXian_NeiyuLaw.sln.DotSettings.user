@@ -7,5 +7,8 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=E_003A_005C_4E0B_8F7D_005CHarmonyMod_005CHarmonyMod_005C1_002E5_005CAssemblies_005C0Harmony_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003APatch_005FPregnancyUtility_005FSpecialCharacter_002Ecs_002Fl_003AC_0021_003FUsers_003Fmache_003FAppData_003FRoaming_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F02c894c487db4d2baa09a1e6a266c7ed8b000_003F12_003F2c6da128_003FPatch_005FPregnancyUtility_005FSpecialCharacter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
-  &lt;Assembly Path="E:\SteamLibrary\steamapps\workshop\content\294100\3588393755\1.6\Assemblies\MiliraImperium.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\Dependencies\AriandelLibrary.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_Characters\packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
