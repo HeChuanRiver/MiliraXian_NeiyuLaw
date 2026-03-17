@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- 霓羽 -->
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Zhaoli</defName>
+        <!-- pawnkind label pawnkind的名字 -->
+        <label>昭离·西娅拉</label>
+        <!-- 设置性别 -->
+        <fixedGender>Female</fixedGender>
+        <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
+        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <xenotypeSet Inherit="False">
+            <xenotypeChances>
+                <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
+            </xenotypeChances>
+        </xenotypeSet>
+        <!-- raid point / combatpower = number of this pawn could spawn in raid 袭击点数/战斗力=袭击来袭时可以生成多少个这个pawn -->
+        <combatPower>0</combatPower>
+        <!-- item quality when spawnd 生成时她的身上全部的带有品质的thing的品质 -->
+        <itemQuality>Excellent</itemQuality>
+        <!-- 是否为战斗人员 -->
+        <isFighter>true</isFighter>
+        <!-- 是否为派系首领 -->
+        <factionLeader>false</factionLeader>
+        <!-- wealth range for random apparel 随机生成装备时，允许的装备财富值范围 -->
+        <apparelMoney>
+            <min>99999</min>
+            <max>99999</max>
+        </apparelMoney>
+
+        <!-- apparel tags for random apparel 用于随机生成装备时，允许的装备tag -->
+        <!-- TODO: 这里记得换昭离的衣服 -->
+        <apparelTags>
+            <li>MiliraXian_NeiyuNormal</li>
+        </apparelTags>
+
+        <specificApparelRequirements>
+            <!--            <li>-->
+            <!--                <bodyPartGroup>FullHead</bodyPartGroup>-->
+            <!--                <requiredTag>Milira_ValkyrHelmet</requiredTag>-->
+            <!--                <apparelLayer>Overhead</apparelLayer>-->
+            <!--                <stuff>Milira_SunPlateSteel</stuff>-->
+            <!--            </li>-->
+        </specificApparelRequirements>
+
+        <!-- apparel you force to spawn 强制要求生成的装备 -->
+        <!-- TODO: 这里记得换昭离所要穿的装备，这里不能放武器 -->
+        <apparelRequired>
+            <li>MiliraXian_NeiyuNormal</li>
+            <li>MX_Apparel_EarringsZhenzhu</li>
+        </apparelRequired>
+        <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
+        <apparelDisallowTags>
+        </apparelDisallowTags>
+        <!-- 允许生成头部装备的概率 -->
+        <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
+
+        <!-- 武器的tag -->
+        <!-- TODO:这里放武器 -->
+        <weaponTags>
+            <li>MiliraXian_NeiyuFlower</li>
+        </weaponTags>
+
+        <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围 -->
+        <weaponMoney>
+            <min>99999</min>
+            <max>99999</max>
+        </weaponMoney>
+
+        <startingHediffs>
+            <li>
+                <def>MXZL_ZhaoliKarma</def>
+            </li>
+        </startingHediffs>
+
+        <!-- 生成时装备的耐久度区间，1-1则为100% -->
+        <gearHealthRange Inherit="False">
+            <min>1</min>
+            <max>1</max>
+        </gearHealthRange>
+        <forceNormalGearQuality>false</forceNormalGearQuality>
+        <minApparelQuality>Excellent</minApparelQuality>
+        <maxApparelQuality>Excellent</maxApparelQuality>
+
+        <!-- backstory for this pawn, using tags here 为这个pawn选择背景故事，这里使用的是tag -->
+        <backstoryFiltersOverride>
+            <li>
+                <!-- 幼年背景故事 -->
+                <categoriesChildhood>
+                    <li>MiliraXian_BackStoryChild_Zhaoli_Tag</li>
+                </categoriesChildhood>
+
+                <!-- 成年背景故事 -->
+                <categoriesAdulthood>
+                    <li>MiliraXian_BackStoryAdult_Zhaoli_Tag</li>
+                </categoriesAdulthood>
+            </li>
+        </backstoryFiltersOverride>
+
+        <!-- work type required, in order to ban some backstory that may disable some kind of works 强制要求的工作类型，用于筛选并且禁止一些可能禁用指定的工作类型的背景故事 -->
+        <requiredWorkTags>
+            <li>Intellectual</li>
+        </requiredWorkTags>
+
+        <!-- use traitdef defname here! 禁止生成的trait，此处使用的是trait defname -->
+        <disallowedTraits>
+<!--            <li>BodyPurist</li>-->
+        </disallowedTraits>
+
+        <!-- use traitdef defname with degree here! 禁止生成的trait，此处使用的是trait defname，里面填写的degree对应一种trait，比如PsychicSensitivity：-2的意思是心灵失聪 -->
+        <disallowedTraitsWithDegree>
+<!--            <PsychicSensitivity>-2</PsychicSensitivity>-->
+        </disallowedTraitsWithDegree>
+
+        <!-- 这个角色的头发RGB -->
+        <forcedHairColor>(255,255,255)</forcedHairColor>
+
+        <!-- 给予这个角色的技能 -->
+        <abilities>
+            <!-- TODO: 这里记得给这里面填昭离技能 -->
+<!--            <li>MX_Neiyu_WarpFeather</li>-->
+<!--            <li>MX_Neiyu_ThunderMarkedStorm</li>-->
+<!--            <li>MX_Neiyu_Bow_ArrowBarrage</li>-->
+<!--            <li>MX_Neiyu_Flower_BlessingField</li>-->
+<!--            <li>MX_Neiyu_Flower_ToxinGarden</li>-->
+<!--            <li>MX_Neiyu_Sword_Skyfall</li>-->
+<!--            <li>MX_Neiyu_Sword_ExecuteHead</li>-->
+            <!-- <li>MI_ShroudPower_Skip</li> -->
+        </abilities>
+
+        <!-- modExtensions是用来使用的非官方类的地方 -->
+        <modExtensions>
+            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
+            <!-- The Following classes must be included!!! ↓↓↓ -->
+            <!-- 以下class必须全部填写，绝对不能漏任何一个 ↓↓↓ -->
+
+            <!-- "FixedIdentityExtension" is a tool for generating a fixed, non-random pawn. "FixedIdentityExtension"是用来生成一个固定的，绝对非随机的pawn的工具。 -->
+            <li Class="AriandelLibrary.FixedIdentityExtension">
+                <!-- Here you write “Key”. Then you need to go to the Language folder, find the Simplified Chinese folder, and open the Keyed folder. Use a translation XML file and enter the display name you want to show in the game for this “Key”. For example, the character name: <MI_Name_Ingefrid_First>Ingifríðr</MI_Name_Ingefrid_First>. 
+                 你在这里写下的是“Key”,然后你需要前去Language文件夹，找到简体中文文件夹，再打开Keyed文件夹，使用一个翻译xml文件，在里面写下这里的“Key”的实际想在游戏中展示的名称，例如这个角色的名：<MI_Name_Ingefrid_First>英芙莉德</MI_Name_Ingefrid_First>。 -->
+                <!-- firstname 姓名中的名，例如：《三体》中的叶文杰，文杰是firstname，叶是lastname。另一个例子：《沙丘》中的保罗厄崔迪，保罗是firstname，厄崔迪是lastname-->
+                <firstNameKey>MX_Name_Zhaoli_First</firstNameKey>
+                <lastNameKey>MX_Name_Zhaoli_Last</lastNameKey>
+                <!-- Nickname is the name you want to display directly to the player in the game. For example, if your character is called "Tynan Sylvester" and you set the nickname to "Tynan", then after this pawn is generated in the game, the name shown under the pawn will be "Tynan".
+                 nickname是你希望在游戏中直接显示给玩家的名称。例如你的角色叫做“泰南·西尔维斯特”，而nickname你写下“泰南”，那么你在游戏中生成这个pawn后，显示在这个pawn下方的名字就是“泰南”。 -->
+                <nickNameKey>MX_Name_Zhaoli_Nick</nickNameKey>
+
+                <!-- The backstory you want to generate, using defname here.
+                 你想要生成的背景故事，这里使用defname。 -->
+                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Zhaoli_BS1</childhoodBackstoryDef>
+                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Zhaoli_BS1</adulthoodBackstoryDef>
+
+                <!-- Biological age 生物年龄 -->
+                <forcedAgeYears>169</forcedAgeYears>
+                <!-- Chronological age 历法年龄 -->
+                <forcedChronologicalAgeYears>16</forcedChronologicalAgeYears>
+
+                <!-- You can use your own texture if you have your owen HeadTypeDef (Without mod Facial Animation).
+                 如果你自己创建了一个HeadTypeDef，那么便可以用来在没有面部动画mod的情况下为头部更换贴图。 -->
+                <!-- TODO: 这里记得换昭离的头 -->
+                <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
+
+                <!-- Disable random spawned trait, use the trait below only. You may write multiple traits here. 
+                 禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
+                <disableRandomTraits>true</disableRandomTraits>
+                <!-- TODO: 记得填昭离的traits -->
+                <extraForcedTraits>
+                    <li><def>MiliraXianNeiyu_Love</def></li>
+                    <li>
+                        <def>Beauty</def>
+                        <degree>2</degree>  <!-- 1 = optimist；2 = sanguine；-1 = pessimist；-2 = depressive -->
+                    </li>
+                </extraForcedTraits>
+
+                <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
+                 生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
+                <!-- TODO: 这里记得写到时候的一些机制hediff相关的东西 -->
+                <extraForcedHediffs>
+                    <li>
+                        <def>MXNL_NeiyuShield</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                </extraForcedHediffs>
+            </li>
+
+            <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
+            “npcTag”是用来给“[NL] Facial Animation - Experimentals”（面部动画）这个mod生成固定面部特征用的。-->
+            <li Class="AriandelLibrary.NPCKindTag">
+                <npcTag>Zhaoli</npcTag>
+            </li>
+
+            <!--            &lt;!&ndash; This class is for adding this pawn to randow recruitment in mod "Milira Faction: Milira Imperium" -->
+            <!--            这个class是用来把这个角色加入到“米莉拉派系扩展：米莉拉帝国”的随机招募中的。&ndash;&gt;-->
+            <!--            <li Class="MiliraImperium.UniqueRecruitExtension" MayRequire="Ariandel.MiliraImperium">-->
+            <!--                &lt;!&ndash; Only can be recruited once. 只可以被招募一次。 &ndash;&gt;-->
+            <!--                <uniqueOnce>true</uniqueOnce>-->
+            <!--                &lt;!&ndash; The higher weight means higher probability to be chose in randow recruitment. 越高的weight代表在随机招募中被抽中的概率越高。 &ndash;&gt;-->
+            <!--                <weight>0</weight>-->
+            <!--            </li>-->
+
+            <!-- "SpecialPawnExtension" is used to adding this pawn into special character manager(SCM). 
+            “SpecialPawnExtension”用于把这个角色加入特殊角色管理器。-->
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
+                这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
+                <uniqueID>Zhaoli</uniqueID>
+
+                <!-- The tab you want to put this pawn in. MI_Milira_Tab is Milira.
+                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 -->
+                <tabDef>MI_Milira_Tab</tabDef>
+
+                <!-- The texture path for character icon in SCM. You may use 256px picture.
+                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 -->
+                <!-- TODO: 记得换昭离的大头照 -->
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+
+                <!-- Key for this pawn's name. 用于写此人的姓名的Key。 -->
+                <labelKey>SpecialPawnZhaoli.label</labelKey>
+                <!-- Key for this pawn's description. 用于写此人描述的Key。 -->
+                <descKey>SpecialPawnZhaoli.desc</descKey>
+
+                <!-- The sorting position of this pawn’s icon within the tab you selected.
+                 这个角色的图标在你所选的分页（Tab）的排序位置 -->
+                <order>14</order>
+            </li>
+
+            <!-- The classes upon must be included!!! ↑↑↑ -->
+            <!-- 以上class必须全部填写，绝对不能漏任何一个 ↑↑↑ -->
+            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
+
+
+            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
+            <!-- These classes are tools for special characters. You can add them selectively based on your needs—and it’s completely fine if you don’t add any of them. ↓↓↓ -->
+            <!-- 以下的class是一些关于特殊角色的工具，你可以根据你的需求选择性的添加。这些class你就算一个都不添加也完全没问题。 ↓↓↓ -->
+
+            <!-- Using Ariandel Library to handle this pawn's death. When this pawn should be dead, it will not really be dead but be recalled to the SCM.
+             将角色转交给角色管理器的死亡管理系统（禁用原版死亡），当该角色被判定应当死亡时，特殊角色管理器将会召回该角色并且进入复活等待。 -->
+            <li Class="AriandelLibrary.AL_Kill_Manager_Extension" />
+
+            <!-- Disable all kinds of mental break, including mental break created by Mods.
+             禁用一切精神崩溃，包括Mod中新创作的精神崩溃。 -->
+            <li Class="AriandelLibrary.AL_RefuseMentalBreak_Extension">
+                <blockMentalBreak>true</blockMentalBreak>
+            </li>
+
+            <!-- Disable options of float menu. 禁用右键菜单中的选项 -->
+            <li Class="AriandelLibrary.AL_FloatMenuBlocker_Extension">
+                <!-- Disable rescue button when this pawn is NOT in player faction.  禁用非玩家派系（NPC状态）时的救援按钮。 -->
+                <blockRescue>true</blockRescue>
+                <!-- Disable capture button.  禁用俘虏按钮。 -->
+                <blockCapture>true</blockCapture>
+                <!-- Disable arrest button.  禁用拘捕按钮。 -->
+                <blockArrest>true</blockArrest>
+            </li>
+
+            <!-- Replace this pawn's pregnancy outcome to the PawnKindDef you write. If you are not using this class, your special character will duplicate itself when it get pregnant. 
+             替换这个角色的怀孕结果为填写的PawnKindDef，如果你不是使用这个class，使用原版怀孕的此角色将会生出复制人。这个功能摘抄自Azzy的Transpiler。-->
+            <li Class="AriandelLibrary.AL_AzzyPregnancy_Extension">
+                <replaceWithKind>Milira_Colonist</replaceWithKind>
+            </li>
+
+            <!-- Disable subcore scan for this pawn. 禁用次核扫描仪 -->
+            <li Class="AriandelLibrary.AL_SubcoreScannerBlocker_Extension" />
+
+            <!-- Disable some surgery from RimWorld Core. 禁用一部分来自环世界原版的手术 -->
+            <li Class="AriandelLibrary.AL_SurgeryBlocker_Extension">
+                <!-- Disable replace bodypart to worse part. 禁用将身体部件替换为更差的部件。 -->
+                <blockLowTech>true</blockLowTech>
+                <!-- Disable organ harvest. 禁用噶腰子。 -->
+                <blockHarvest>true</blockHarvest>
+            </li>
+
+            <!-- Set the minimum Consciousness to 100%. Usually, I don’t recommend adding this class; it’s better suited for a boss character. 
+             最低意识设置为100%。通常来说，我强烈不建议你添加这个class，除非你正在制作一个boss级角色，或者说是已经死掉的灵体角色！ -->
+            <li Class="AriandelLibrary.AL_LockConsciousness_Extension"/>
+
+            <!-- Freeze this pawn's biological age. 锁定这个角色的生理年龄，使生理年龄无增长。 -->
+            <li Class="AriandelLibrary.AL_AgeFreeze_Extension">
+                <freezeBiologicalAge>true</freezeBiologicalAge>
+            </li>
+
+            <!-- Make the trait defname you write here unique to this pawn. If any other pawn with wrong pawnkind gains these traits. These traits will be removed on the wrong pawn. You may write multiple traits here.
+             填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
+            <!-- TODO: 这里记得放专属特质 -->
+            <li Class="AriandelLibrary.AL_TraitLock_Extension">
+                <requiredTraits>
+                    <li>MiliraXianNeiyu_Love</li>
+                </requiredTraits>
+            </li>
+
+            <!-- Disable this special character from being used as a ritual victim.  禁用这个特殊角色作为心灵仪式受害者-->
+            <li Class="AriandelLibrary.Anomaly.AL_RitualRoleRestriction_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+
+            <!-- Disable obelisk duplication for this pawn. 禁止此角色被方尖碑复制。 -->
+            <li Class="AriandelLibrary.Anomaly.AL_ObeliskDuplicationBlocker_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+
+            <!-- Reflect flesh beast lance for this pawn. 反弹血肉突变枪。 -->
+            <li Class="AriandelLibrary.Anomaly.AL_FleshbeastReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+
+            <!-- Reflect psychic slaughter ability for this pawn. 反弹心灵宰杀。 -->
+            <li Class="AriandelLibrary.Anomaly.AL_PsychicSlaughterReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+
+            <!-- Replace this pawn's pregnancy outcome to the PawnKindDef you write. This is for RJW Menstruation. 
+             替换这个角色的怀孕结果为填写的PawnKindDef，这是为RJW月经扩展准备的工具。 -->
+            <li Class="AriandelLibrary.rjw.menstruation.AL_RJW_Menstruation_Pregnancy_Extension" MayRequire="rjw.menstruation">
+                <replaceWithKind>Milira_Colonist</replaceWithKind>
+            </li>
+
+        </modExtensions>
+
+    </PawnKindDef>
+
+
+
+</Defs>
+

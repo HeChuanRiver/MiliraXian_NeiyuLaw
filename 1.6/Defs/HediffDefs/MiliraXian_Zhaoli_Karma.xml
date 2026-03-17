@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliKarma</defName>
+        <label>因果</label>
+        <description>昭离的专属资源。通过告死积累，并用于驱动后续技能与代价判定。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_MiliraXianSpecialResource">
+                <resourceLabel>因果</resourceLabel>
+                <resourceDescription>昭离的专属资源。每次通过告死击杀单位会积累因果；后续主动技能将直接消耗这项资源。</resourceDescription>
+                <initialValue>0</initialValue>
+                <maxValue>100</maxValue>
+                <clampToMax>false</clampToMax>
+                <showGizmo>true</showGizmo>
+                <hideOnHealthTab>true</hideOnHealthTab>
+                <barColorRed>0.56</barColorRed>
+                <barColorGreen>0.09</barColorGreen>
+                <barColorBlue>0.17</barColorBlue>
+                <barColorAlpha>1</barColorAlpha>
+                <barHighlightRed>0.81</barHighlightRed>
+                <barHighlightGreen>0.19</barHighlightGreen>
+                <barHighlightBlue>0.29</barHighlightBlue>
+                <barHighlightAlpha>1</barHighlightAlpha>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>
