@@ -74,24 +74,38 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
+      <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
+      <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
+      <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
+      <Compile Include="Source\QingHe\MX_QHPatches.cs" />
+      <Compile Include="Source\QingHe\MX_QHUtility.cs" />
+      <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
+      <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Zhaoli.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
+      <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_QingheBS1.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStroy_ZhaoliBS1.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
+      <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Zhaoli.xml" />
       <Content Include="1.6\Defs\HeadDefs\HeadTypeDef.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
-      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_Flow.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityTempest.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_PawnResource.xml" />
       <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
@@ -154,6 +168,7 @@
       <Content Include="1.6\Patches\Patch1.xml" />
       <Content Include="1.6\Patches\Patch_Alien_Milira.xml" />
       <Content Include="1.6\Patches\Patch_Neiyu.xml" />
+      <Content Include="1.6\Patches\Patch_Qinghe.xml" />
       <Content Include="1.6\Patches\Patch_Zhaoli.xml" />
       <Content Include="About\About.xml" />
       <Content Include="About\Preview.png" />
@@ -283,6 +298,6 @@
     </Target>
     <Target Name="AfterBuild">
     </Target>
-
+    -->
 </Project>
 

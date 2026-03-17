@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <HediffDef>
+        <defName>MXQH_Tempest</defName>
+        <label>激流</label>
+        <description>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.HediffCompProperties_Tempest">
+                <resourceLabel>激流</resourceLabel>
+                <resourceDescription>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</resourceDescription>
+                <initialValue>0</initialValue>
+                <maxValue>100</maxValue>
+                <clampToMax>true</clampToMax>
+                <showGizmo>true</showGizmo>
+                <hideOnHealthTab>true</hideOnHealthTab>
+                <barColorRed>0.26</barColorRed>
+                <barColorGreen>0.09</barColorGreen>
+                <barColorBlue>0.90</barColorBlue>
+                <barColorAlpha>1</barColorAlpha>
+                <barHighlightRed>0.41</barHighlightRed>
+                <barHighlightGreen>0.19</barHighlightGreen>
+                <barHighlightBlue>1.00</barHighlightBlue>
+                <barHighlightAlpha>1</barHighlightAlpha>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MXQH_Elegance</defName>
+        <label>雅乐</label>
+        <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.HediffCompProperties_Elegance">
+                <resourceLabel>雅乐</resourceLabel>
+                <resourceDescription>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</resourceDescription>
+                <initialValue>0</initialValue>
+                <maxValue>100</maxValue>
+                <clampToMax>true</clampToMax>
+                <showGizmo>true</showGizmo>
+                <hideOnHealthTab>true</hideOnHealthTab>
+                <barColorRed>0.76</barColorRed>
+                <barColorGreen>0.09</barColorGreen>
+                <barColorBlue>0.90</barColorBlue>
+                <barColorAlpha>1</barColorAlpha>
+                <barHighlightRed>0.91</barHighlightRed>
+                <barHighlightGreen>0.19</barHighlightGreen>
+                <barHighlightBlue>1.00</barHighlightBlue>
+                <barHighlightAlpha>1</barHighlightAlpha>
+            </li>
+        </comps>
+    </HediffDef>
+</Defs>

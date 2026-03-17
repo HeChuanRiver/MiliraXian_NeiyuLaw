@@ -2,14 +2,14 @@
 <Defs>
     <HediffDef>
         <defName>MX_SpringFlow</defName>
-        <label>spring flow</label>
+        <label>春泉洗礼</label>
         <description>placeholder desc</description>
         <isBad>false</isBad>
         <hediffClass>MiliraXian.Characters.Qinghe.Hediff_SpringFlow</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
         <initialSeverity>1.0</initialSeverity>
         <minSeverity>0.0</minSeverity>
-        <maxSeverity>1.0</maxSeverity>
+        <maxSeverity>10.0</maxSeverity>
         <alwaysShowSeverity>true</alwaysShowSeverity>
         <stages>
             <li>
@@ -24,8 +24,9 @@
             </li>
         </stages>
         <comps>
-            <li Class="HediffCompProperties_SeverityPerSecond">
-                <severityPerSecond>-0.1</severityPerSecond>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>120</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
             </li>
         </comps>
     </HediffDef>

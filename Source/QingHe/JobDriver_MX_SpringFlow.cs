@@ -8,7 +8,7 @@ namespace MiliraXian.Characters.QingHe
     public class JobDriver_MX_SpringFlow : JobDriver_CastAbility
     {
         private Thing_SpringFlowField spawnedField;
-        private const int lastingTicks = 1800;
+        private const int lastingTicks = 900;
         
         protected override IEnumerable<Toil> MakeNewToils()
         {
@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.QingHe
             t.initAction = delegate
             {
                 pawn.pather.StopDead();
-                CompAbilityEffect_SpringFlow comp = job.ability.CompOfType<CompAbilityEffect_SpringFlow>();
+                var comp = job.ability.CompOfType<CompAbilityEffect_SpringFlow>();
                 if (comp == null || comp.Props.fieldDef == null)
                 {
                     Log.Error("SpringFlow: Cannot find CompAbilityEffect_SpringFlow or Field Def");
@@ -41,9 +41,9 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                Log.Message("Spawning field"); // TODO: remove debug msg
+                //Log.Message("Spawning field");
                 spawnedField = (Thing_SpringFlowField)GenSpawn.Spawn(comp.Props.fieldDef, target, pawn.Map);
-                CompSpringFlowField fieldComp = spawnedField.TryGetComp<CompSpringFlowField>();
+                var fieldComp = spawnedField.TryGetComp<CompSpringFlowField>();
                 if (fieldComp == null)
                 {
                     Log.Error("SpringFlow: Cannot find Spawned Field");
@@ -51,6 +51,16 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
                 fieldComp.Init(pawn);
+            };
+            t.tickAction = delegate
+            {
+                if (pawn.Downed || pawn.Dead) return;
+                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MXQH_Tempest);
+                if (hediff != null)
+                {
+                    var comp = hediff.TryGetComp<HediffComp_Tempest>();
+                    comp?.AddValue(0.04f);
+                }
             };
             t.tickIntervalAction = delegate
             {
@@ -75,7 +85,7 @@ namespace MiliraXian.Characters.QingHe
 
         private void CleanUp()
         {
-            Log.Message("Clearing field"); // TODO: remove debug msg
+            //Log.Message("Clearing field");
             if (spawnedField != null && !spawnedField.Destroyed)
             {
                 spawnedField.Destroy();

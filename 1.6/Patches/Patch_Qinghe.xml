@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+    <!-- Neiyu -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
+        <value>
+            <li>
+                <!-- 改 -->
+                <name>milira halo Qinghe</name>
+                <userCustomizable>false</userCustomizable>
+                <!-- 改 -->
+                <!--TODO: 改清荷的光环 -->
+                <path>MiliraXianNeiyu/PawnNeiyu/Halo/MiliraXianHaloNeiyu</path>
+                <inFrontOfBody>true</inFrontOfBody>
+                <layerInvert>true</layerInvert>
+                <shaderType>MoteGlow</shaderType>
+                <!-- 改 -->
+                <colorChannel>haloQinghe</colorChannel>
+                <defaultOffset>Center</defaultOffset>
+                <drawSize>1</drawSize>
+                <alignWithHead>true</alignWithHead>
+                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
+                <useSkipFlags>
+                    <li>Milira_Halo</li>
+                </useSkipFlags>
+                <conditions>
+                    <BodyPart>
+                        <bodyPart>Milira_Halo</bodyPart>
+                    </BodyPart>
+                    <Posture>
+                        <drawnStanding>true</drawnStanding>
+                        <drawnInBed>true</drawnInBed>
+                        <drawnLaying>true</drawnLaying>
+                    </Posture>
+                    <RotStage>Fresh</RotStage>
+                    <!-- 改 -->
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Qinghe_BS1</backstory>
+                    </Backstory>
+                </conditions>
+                <extendedGraphics>
+                    <Age For="HumanlikeBaby">Milira/Pawn/BodyAddon/HaloChild/MiliraHalo</Age>
+                    <Age For="Milira_HumanlikeChild">Milira/Pawn/BodyAddon/HaloChild/MiliraHalo</Age>
+                    <Age For="Milira_HumanlikePreTeenager">Milira/Pawn/BodyAddon/HaloChild/MiliraHalo</Age>
+                </extendedGraphics>
+                <offsets>
+                    <west>
+                        <bodyTypes>
+                            <Female>(0,-0.06)</Female>
+                            <Baby MayRequire="Ludeon.RimWorld.Biotech">(0,-0.04)</Baby>
+                            <Child MayRequire="Ludeon.RimWorld.Biotech">(0,-0.025)</Child>
+                        </bodyTypes>
+                        <layerOffset>-0.24</layerOffset>
+                    </west>
+                    <south>
+                        <bodyTypes>
+                            <Female>(0,-0.06)</Female>
+                            <Baby MayRequire="Ludeon.RimWorld.Biotech">(0,-0.04)</Baby>
+                            <Child MayRequire="Ludeon.RimWorld.Biotech">(0,-0.025)</Child>
+                        </bodyTypes>
+                        <layerOffset>-0.24</layerOffset>
+                    </south>
+                    <north>
+                        <bodyTypes>
+                            <Female>(0,-0.06)</Female>
+                            <Baby MayRequire="Ludeon.RimWorld.Biotech">(0,-0.04)</Baby>
+                            <Child MayRequire="Ludeon.RimWorld.Biotech">(0,-0.025)</Child>
+                        </bodyTypes>
+                        <layerOffset>-0.24</layerOffset>
+                    </north>
+                    <east>
+                        <bodyTypes>
+                            <Female>(0,-0.06)</Female>
+                            <Baby MayRequire="Ludeon.RimWorld.Biotech">(0,-0.04)</Baby>
+                            <Child MayRequire="Ludeon.RimWorld.Biotech">(0,-0.025)</Child>
+                        </bodyTypes>
+                        <layerOffset>-0.24</layerOffset>
+                    </east>
+                </offsets>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
+        <value>
+            <li>
+                <!-- 改 -->
+                <name>milira hair Qinghe</name>
+                <userCustomizable>false</userCustomizable>
+                <!-- 改 -->
+                <!-- TODO：这里改清荷的毛  -->
+                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHair/MiliraHairNeiyu</path>
+                <inFrontOfBody>true</inFrontOfBody>
+                <layerInvert>false</layerInvert>
+                <colorChannel>hair</colorChannel>
+                <defaultOffset>Center</defaultOffset>
+                <drawSize>1</drawSize>
+                <alignWithHead>true</alignWithHead>
+                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
+                <useSkipFlags>
+                    <li>Ancot_Hair</li>
+                </useSkipFlags>
+                <conditions>
+                    <BodyPart>
+                        <bodyPart>Head</bodyPart>
+                    </BodyPart>
+                    <Posture>
+                        <drawnStanding>true</drawnStanding>
+                        <drawnInBed>true</drawnInBed>
+                        <drawnLaying>true</drawnLaying>
+                    </Posture>
+                    <RotStage>Fresh,Rotting</RotStage>
+                    <!-- 改 -->
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Qinghe_BS1</backstory>
+                    </Backstory>
+                </conditions>
+                <offsets>
+                    <west>
+                        <layerOffset>-0.274</layerOffset>
+                    </west>
+                    <south>
+                        <layerOffset>-0.274</layerOffset>
+                    </south>
+                    <north>
+                        <layerOffset>-0.274</layerOffset>
+                    </north>
+                    <east>
+                        <layerOffset>-0.274</layerOffset>
+                    </east>
+                </offsets>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
+        <value>
+            <li>
+                <!-- 改 -->
+                <name>milira hair BG Qinghe</name>
+                <userCustomizable>false</userCustomizable>
+                <!-- 改 -->
+                <!-- TODO: 这里改清荷的毛BG -->
+                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHairBG/MiliraHairBGNeiyu</path>
+                <inFrontOfBody>false</inFrontOfBody>
+                <layerInvert>false</layerInvert>
+                <colorChannel>hair</colorChannel>
+                <defaultOffset>Center</defaultOffset>
+                <drawSize>1</drawSize>
+                <alignWithHead>true</alignWithHead>
+                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
+                <linkVariantIndexWithPrevious>true</linkVariantIndexWithPrevious>
+                <useSkipFlags>
+                    <li>Ancot_Hair</li>
+                </useSkipFlags>
+                <conditions>
+                    <BodyPart>
+                        <bodyPart>Head</bodyPart>
+                    </BodyPart>
+                    <Posture>
+                        <drawnStanding>true</drawnStanding>
+                        <drawnInBed>false</drawnInBed>
+                        <drawnLaying>true</drawnLaying>
+                    </Posture>
+                    <RotStage>Fresh,Rotting</RotStage>
+                    <!-- 改 -->
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Qinghe_BS1</backstory>
+                    </Backstory>
+                </conditions>
+                <offsets>
+                    <west>
+                        <layerOffset>-0.275</layerOffset>
+                    </west>
+                    <south>
+                        <layerOffset>-0.299</layerOffset>
+                    </south>
+                    <north>
+                        <layerOffset>-0.275</layerOffset>
+                    </north>
+                    <east>
+                        <layerOffset>-0.275</layerOffset>
+                    </east>
+                </offsets>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/colorChannels</xpath>
+        <value>
+            <li>
+                <!-- 改 -->
+                <name>haloDellin</name>
+                <first Class="ColorGenerator_Options">
+                    <options>
+                        <li>
+                            <weight>100</weight>
+                            <!-- 改 -->
+                            <only>RGB(255,255,255)</only>
+                        </li>
+                    </options>
+                </first>
+            </li>
+        </value>
+    </Operation>
+    <!--
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/colorChannels</xpath>
+        <value>
+            <li>
+                <name>mx_zhenzhu</name>
+                <first Class="ColorGenerator_Options">
+                    <options>
+                        <li>
+                            <weight>100</weight>
+                            <only>RGB(255,255,255)</only>
+                        </li>
+                    </options>
+                </first>
+            </li>
+        </value>
+    </Operation>
+
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
+        <value>
+            <li>
+                <name>mx earrings zhenzhu</name>
+                <userCustomizable>false</userCustomizable>
+
+               <path>MiliraXian/PawnNeiyu/Accessories/Zhenzhu/zhenzhu</path>
+
+               <inFrontOfBody>true</inFrontOfBody>
+                <layerInvert>false</layerInvert>
+                
+                <shaderType>Cutout</shaderType>
+                
+                <colorChannel>mx_zhenzhu</colorChannel>
+
+                <defaultOffset>Center</defaultOffset>
+                <drawSize>1</drawSize>
+                
+                <alignWithHead>true</alignWithHead>
+                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
+
+                <conditions>
+                    <BodyPart>
+                        <bodyPart>Head</bodyPart>
+                    </BodyPart>
+                    
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Neiyu_BS1</backstory>
+                    </Backstory>
+
+                    <Posture>
+                        <drawnStanding>true</drawnStanding>
+                        <drawnInBed>true</drawnInBed>
+                        <drawnLaying>true</drawnLaying>
+                    </Posture>
+
+                    <RotStage>Fresh,Rotting</RotStage>
+                </conditions>
+             
+                <offsets>
+                  <south>
+                    <layerOffset>-0.27</layerOffset>
+                  </south>
+                  <north>
+                    <layerOffset>-0.27</layerOffset>
+                  </north>
+                  <east>
+                    <layerOffset>-0.27</layerOffset>
+                  </east>
+                  <west>
+                    <layerOffset>-0.27</layerOffset>
+                  </west>
+                </offsets>
+                
+            </li>
+        </value>
+    </Operation>
+    -->
+</Patch>

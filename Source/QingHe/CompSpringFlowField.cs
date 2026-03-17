@@ -62,9 +62,20 @@ namespace MiliraXian.Characters.QingHe
                 {
                     if (!pawn.Dead && pawn.Faction == caster.Faction)
                     {
-                        Hediff hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
-                        hediff.Severity = 1.0f;
-                        pawn.health.AddHediff(hediff);
+                        
+                        var elegance = PawnSpecialResourceUtility.GetCurrentResource(caster, MX_QHDefOf.MXQH_Elegance);
+                        
+                        if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
+                        {
+                            h.Severity = 1.0f + elegance / 100.0f;
+                            h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
+                        }
+                        else
+                        {
+                            var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
+                            hediff.Severity = 1.0f + elegance / 100.0f;
+                            pawn.health.AddHediff(hediff);
+                        }
                     }
                 }
             }
