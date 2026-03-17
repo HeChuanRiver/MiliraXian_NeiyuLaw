@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef>
+        <defName>SpringFlowField</defName>
+        <label>*SFF placeholder*</label>
+        <thingClass>MiliraXian.Characters.Qinghe.Thing_SpringFlowField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_SpringFlowField">
+                
+            </li>
+        </comps>
+    </ThingDef>
+</Defs>

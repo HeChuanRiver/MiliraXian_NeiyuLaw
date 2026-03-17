@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <JobDef>
+        <defName>CastSpringFlow</defName>
+        <driverClass>MiliraXian.Characters.Qinghe.JobDriver_MX_SpringFlow</driverClass>
+        <reportString>Placeholder</reportString>
+        <abilityCasting>true</abilityCasting>
+        <playerInterruptible>true</playerInterruptible>
+    </JobDef>
+</Defs>

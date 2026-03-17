@@ -11,6 +11,7 @@
         <RootNamespace>MiliraXian_NeiyuLaw</RootNamespace>
         <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
         <FileAlignment>512</FileAlignment>
         <LangVersion>8</LangVersion>
     </PropertyGroup>
@@ -36,9 +37,11 @@
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="AriandelLibrary">
           <HintPath>..\..\Dependencies\AriandelLibrary.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -62,6 +65,12 @@
       <Compile Include="Source\NeiyuLawSettings.cs" />
       <Compile Include="Source\NeiyuScenarioAndRecruit.cs" />
       <Compile Include="Source\NeiyuSpecialPawnIntegration.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
+      <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
+      <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
       <Compile Include="Source\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
     </ItemGroup>
@@ -69,6 +78,7 @@
       <Content Include=".gitignore" />
       <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.dll" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
@@ -78,12 +88,16 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_Flow.xml" />
+      <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
+      <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Qinghe.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />
       <Content Include="1.6\Defs\ScenarioDefs\MiliraXian_Neiyu_Scenarios.xml" />
       <Content Include="1.6\Defs\Storyteller\Incidents_Neiyu.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Neiyu_SwordFlyers.xml" />
+      <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_SkillSpawned.xml" />
       <Content Include="1.6\Defs\TraitDef\Traits_Sample.xml" />
       <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
@@ -258,7 +272,6 @@
                 $(TargetDir)MiliraXian_NeiyuLaw.pdb"/>
             <FilesToDelete Include="$(TargetDir)**\*.*" Exclude="@(FilesToKeep)"/>
         </ItemGroup>
-        
         <Delete Files="@(FilesToDelete)" TreatErrorsAsWarnings="true"/>
     </Target>
 </Project>

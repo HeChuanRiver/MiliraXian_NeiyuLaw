@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <AbilityCategoryDef>
+        <defName>MX_QingheSkill</defName>
+    </AbilityCategoryDef>
+    <!-- 清荷 —— 基础技能 -->
+    <AbilityDef>
+        <defName>MX_Qinghe_SpringFlow</defName>
+        <label>涌泉</label>
+        <description>Placeholder</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
+        <jobDef>CastSpringFlow</jobDef>
+
+        <category>MX_QingheSkill</category>
+        <displayOrder>120</displayOrder>
+        <cooldownTicksRange>480</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <waitForJobEnd>true</waitForJobEnd>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.2</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilitySpringFlow">
+                <fieldDef>SpringFlowField</fieldDef>
+                <previewRadius>6.0</previewRadius>
+            </li>
+        </comps>
+    </AbilityDef>
+</Defs>
