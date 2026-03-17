@@ -6,6 +6,8 @@
             <!-- 常服  -->
             <li>MiliraXian_NeiyuNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
+            
+            <!-- TODO: 昭离在这里的衣服要记得加进去 -->
         </value>
     </Operation>
 </Patch>

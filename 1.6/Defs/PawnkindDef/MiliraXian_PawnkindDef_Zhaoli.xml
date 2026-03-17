@@ -3,9 +3,9 @@
 
     <!-- 霓羽 -->
     <PawnKindDef ParentName="Milira_PawnBase">
-        <defName>MiliraXian_Neiyu</defName>
+        <defName>MiliraXian_Zhaoli</defName>
         <!-- pawnkind label pawnkind的名字 -->
-        <label>霓羽·安吉莉特</label>
+        <label>昭离·西娅拉</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -30,24 +30,25 @@
         </apparelMoney>
 
         <!-- apparel tags for random apparel 用于随机生成装备时，允许的装备tag -->
+        <!-- TODO: 这里记得换昭离的衣服 -->
         <apparelTags>
             <li>MiliraXian_NeiyuNormal</li>
         </apparelTags>
 
         <specificApparelRequirements>
-<!--            <li>-->
-<!--                <bodyPartGroup>FullHead</bodyPartGroup>-->
-<!--                <requiredTag>Milira_ValkyrHelmet</requiredTag>-->
-<!--                <apparelLayer>Overhead</apparelLayer>-->
-<!--                <stuff>Milira_SunPlateSteel</stuff>-->
-<!--            </li>-->
+            <!--            <li>-->
+            <!--                <bodyPartGroup>FullHead</bodyPartGroup>-->
+            <!--                <requiredTag>Milira_ValkyrHelmet</requiredTag>-->
+            <!--                <apparelLayer>Overhead</apparelLayer>-->
+            <!--                <stuff>Milira_SunPlateSteel</stuff>-->
+            <!--            </li>-->
         </specificApparelRequirements>
 
         <!-- apparel you force to spawn 强制要求生成的装备 -->
+        <!-- TODO: 这里记得换昭离所要穿的装备，这里不能放武器 -->
         <apparelRequired>
             <li>MiliraXian_NeiyuNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
-<!--            <li>MX_Neiyu_Form_Flower</li>-->
         </apparelRequired>
         <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
         <apparelDisallowTags>
@@ -56,6 +57,7 @@
         <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
 
         <!-- 武器的tag -->
+        <!-- TODO:这里放武器 -->
         <weaponTags>
             <li>MiliraXian_NeiyuFlower</li>
         </weaponTags>
@@ -80,12 +82,12 @@
             <li>
                 <!-- 幼年背景故事 -->
                 <categoriesChildhood>
-                    <li>MiliraXian_BackStoryChild_Neiyu_Tag</li>
+                    <li>MiliraXian_BackStoryChild_Zhaoli_Tag</li>
                 </categoriesChildhood>
 
                 <!-- 成年背景故事 -->
                 <categoriesAdulthood>
-                    <li>MiliraXian_BackStoryAdult_Neiyu_Tag</li>
+                    <li>MiliraXian_BackStoryAdult_Zhaoli_Tag</li>
                 </categoriesAdulthood>
             </li>
         </backstoryFiltersOverride>
@@ -97,12 +99,12 @@
 
         <!-- use traitdef defname here! 禁止生成的trait，此处使用的是trait defname -->
         <disallowedTraits>
-            <li>BodyPurist</li>
+<!--            <li>BodyPurist</li>-->
         </disallowedTraits>
 
         <!-- use traitdef defname with degree here! 禁止生成的trait，此处使用的是trait defname，里面填写的degree对应一种trait，比如PsychicSensitivity：-2的意思是心灵失聪 -->
         <disallowedTraitsWithDegree>
-            <PsychicSensitivity>-2</PsychicSensitivity>
+<!--            <PsychicSensitivity>-2</PsychicSensitivity>-->
         </disallowedTraitsWithDegree>
 
         <!-- 这个角色的头发RGB -->
@@ -110,14 +112,14 @@
 
         <!-- 给予这个角色的技能 -->
         <abilities>
-            <!-- This is an ability from "Milira Faction: Milira Imperium", so I commented out it. ↓↓↓ 这个技能来自“米莉拉派系扩展：米莉拉帝国”所以我把它注释掉了。↓↓↓-->
-            <li>MX_Neiyu_WarpFeather</li>
-            <li>MX_Neiyu_ThunderMarkedStorm</li>
-            <li>MX_Neiyu_Bow_ArrowBarrage</li>
-            <li>MX_Neiyu_Flower_BlessingField</li>
-            <li>MX_Neiyu_Flower_ToxinGarden</li>
-            <li>MX_Neiyu_Sword_Skyfall</li>
-            <li>MX_Neiyu_Sword_ExecuteHead</li>
+            <!-- TODO: 这里记得给这里面填昭离技能 -->
+<!--            <li>MX_Neiyu_WarpFeather</li>-->
+<!--            <li>MX_Neiyu_ThunderMarkedStorm</li>-->
+<!--            <li>MX_Neiyu_Bow_ArrowBarrage</li>-->
+<!--            <li>MX_Neiyu_Flower_BlessingField</li>-->
+<!--            <li>MX_Neiyu_Flower_ToxinGarden</li>-->
+<!--            <li>MX_Neiyu_Sword_Skyfall</li>-->
+<!--            <li>MX_Neiyu_Sword_ExecuteHead</li>-->
             <!-- <li>MI_ShroudPower_Skip</li> -->
         </abilities>
 
@@ -132,36 +134,33 @@
                 <!-- Here you write “Key”. Then you need to go to the Language folder, find the Simplified Chinese folder, and open the Keyed folder. Use a translation XML file and enter the display name you want to show in the game for this “Key”. For example, the character name: <MI_Name_Ingefrid_First>Ingifríðr</MI_Name_Ingefrid_First>. 
                  你在这里写下的是“Key”,然后你需要前去Language文件夹，找到简体中文文件夹，再打开Keyed文件夹，使用一个翻译xml文件，在里面写下这里的“Key”的实际想在游戏中展示的名称，例如这个角色的名：<MI_Name_Ingefrid_First>英芙莉德</MI_Name_Ingefrid_First>。 -->
                 <!-- firstname 姓名中的名，例如：《三体》中的叶文杰，文杰是firstname，叶是lastname。另一个例子：《沙丘》中的保罗厄崔迪，保罗是firstname，厄崔迪是lastname-->
-                <firstNameKey>MX_Name_Neiyu_First</firstNameKey>
-                <lastNameKey>MX_Name_Neiyu_Last</lastNameKey>
+                <firstNameKey>MX_Name_Zhaoli_First</firstNameKey>
+                <lastNameKey>MX_Name_Zhaoli_Last</lastNameKey>
                 <!-- Nickname is the name you want to display directly to the player in the game. For example, if your character is called "Tynan Sylvester" and you set the nickname to "Tynan", then after this pawn is generated in the game, the name shown under the pawn will be "Tynan".
                  nickname是你希望在游戏中直接显示给玩家的名称。例如你的角色叫做“泰南·西尔维斯特”，而nickname你写下“泰南”，那么你在游戏中生成这个pawn后，显示在这个pawn下方的名字就是“泰南”。 -->
-                <nickNameKey>MX_Name_Neiyu_Nick</nickNameKey>
+                <nickNameKey>MX_Name_Zhaoli_Nick</nickNameKey>
 
                 <!-- The backstory you want to generate, using defname here.
                  你想要生成的背景故事，这里使用defname。 -->
-                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Neiyu_BS1</childhoodBackstoryDef>
-                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Neiyu_BS1</adulthoodBackstoryDef>
+                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Zhaoli_BS1</childhoodBackstoryDef>
+                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Zhaoli_BS1</adulthoodBackstoryDef>
 
                 <!-- Biological age 生物年龄 -->
-                <forcedAgeYears>180</forcedAgeYears>
+                <forcedAgeYears>169</forcedAgeYears>
                 <!-- Chronological age 历法年龄 -->
-                <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
+                <forcedChronologicalAgeYears>16</forcedChronologicalAgeYears>
 
                 <!-- You can use your own texture if you have your owen HeadTypeDef (Without mod Facial Animation).
                  如果你自己创建了一个HeadTypeDef，那么便可以用来在没有面部动画mod的情况下为头部更换贴图。 -->
+                <!-- TODO: 这里记得换昭离的头 -->
                 <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
 
                 <!-- Disable random spawned trait, use the trait below only. You may write multiple traits here. 
                  禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
                 <disableRandomTraits>true</disableRandomTraits>
+                <!-- TODO: 记得填昭离的traits -->
                 <extraForcedTraits>
-                    <!-- bloodlust 嗜血 -->
-<!--                    <li><def>Bloodlust</def></li>-->
-                    <!-- Sample trait 自定义特质案例 -->
-                    <!--<li><def>Milira_Valkyrie_Sample</def></li>-->
                     <li><def>MiliraXianNeiyu_Love</def></li>
-                    <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
                     <li>
                         <def>Beauty</def>
                         <degree>2</degree>  <!-- 1 = optimist；2 = sanguine；-1 = pessimist；-2 = depressive -->
@@ -170,51 +169,37 @@
 
                 <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
                  生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
+                <!-- TODO: 这里记得写到时候的一些机制hediff相关的东西 -->
                 <extraForcedHediffs>
                     <li>
-<!--                        &lt;!&ndash; psylink 启灵神经 &ndash;&gt;-->
-<!--                        <def>PsychicAmplifier</def>-->
-<!--                        &lt;!&ndash; 等级/严重度 &ndash;&gt;-->
-<!--                        <severity>1</severity>-->
-<!--                        &lt;!&ndash; 身体部位 &ndash;&gt;-->
-<!--                        <partDef>Brain</partDef>-->
-<!--                        &lt;!&ndash; 如果当前已经存在，是否要覆盖 &ndash;&gt;-->
-<!--                        <overwriteIfExists>true</overwriteIfExists>-->
                         <def>MXNL_NeiyuShield</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
-
-                    <!-- detoxifier kidney 消毒胃 -->
-                    <!-- <li>
-                      <def>DetoxifierKidney</def>
-                      <partDef>Kidney</partDef>
-                      <overwriteIfExists>true</overwriteIfExists>
-                    </li> -->
                 </extraForcedHediffs>
             </li>
 
             <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
             “npcTag”是用来给“[NL] Facial Animation - Experimentals”（面部动画）这个mod生成固定面部特征用的。-->
             <li Class="AriandelLibrary.NPCKindTag">
-                <npcTag>Neiyu</npcTag>
+                <npcTag>Zhaoli</npcTag>
             </li>
 
-<!--            &lt;!&ndash; This class is for adding this pawn to randow recruitment in mod "Milira Faction: Milira Imperium" -->
-<!--            这个class是用来把这个角色加入到“米莉拉派系扩展：米莉拉帝国”的随机招募中的。&ndash;&gt;-->
-<!--            <li Class="MiliraImperium.UniqueRecruitExtension" MayRequire="Ariandel.MiliraImperium">-->
-<!--                &lt;!&ndash; Only can be recruited once. 只可以被招募一次。 &ndash;&gt;-->
-<!--                <uniqueOnce>true</uniqueOnce>-->
-<!--                &lt;!&ndash; The higher weight means higher probability to be chose in randow recruitment. 越高的weight代表在随机招募中被抽中的概率越高。 &ndash;&gt;-->
-<!--                <weight>0</weight>-->
-<!--            </li>-->
+            <!--            &lt;!&ndash; This class is for adding this pawn to randow recruitment in mod "Milira Faction: Milira Imperium" -->
+            <!--            这个class是用来把这个角色加入到“米莉拉派系扩展：米莉拉帝国”的随机招募中的。&ndash;&gt;-->
+            <!--            <li Class="MiliraImperium.UniqueRecruitExtension" MayRequire="Ariandel.MiliraImperium">-->
+            <!--                &lt;!&ndash; Only can be recruited once. 只可以被招募一次。 &ndash;&gt;-->
+            <!--                <uniqueOnce>true</uniqueOnce>-->
+            <!--                &lt;!&ndash; The higher weight means higher probability to be chose in randow recruitment. 越高的weight代表在随机招募中被抽中的概率越高。 &ndash;&gt;-->
+            <!--                <weight>0</weight>-->
+            <!--            </li>-->
 
             <!-- "SpecialPawnExtension" is used to adding this pawn into special character manager(SCM). 
             “SpecialPawnExtension”用于把这个角色加入特殊角色管理器。-->
             <li Class="AriandelLibrary.SpecialPawnExtension">
                 <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
-                <uniqueID>Neiyu</uniqueID>
+                <uniqueID>Zhaoli</uniqueID>
 
                 <!-- The tab you want to put this pawn in. MI_Milira_Tab is Milira.
                  你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 -->
@@ -222,16 +207,17 @@
 
                 <!-- The texture path for character icon in SCM. You may use 256px picture.
                  这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 -->
+                <!-- TODO: 记得换昭离的大头照 -->
                 <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
 
                 <!-- Key for this pawn's name. 用于写此人的姓名的Key。 -->
-                <labelKey>SpecialPawnNeiyu.label</labelKey>
+                <labelKey>SpecialPawnZhaoli.label</labelKey>
                 <!-- Key for this pawn's description. 用于写此人描述的Key。 -->
-                <descKey>SpecialPawnNeiyu.desc</descKey>
+                <descKey>SpecialPawnZhaoli.desc</descKey>
 
                 <!-- The sorting position of this pawn’s icon within the tab you selected.
                  这个角色的图标在你所选的分页（Tab）的排序位置 -->
-                <order>13</order>
+                <order>14</order>
             </li>
 
             <!-- The classes upon must be included!!! ↑↑↑ -->
@@ -291,6 +277,7 @@
 
             <!-- Make the trait defname you write here unique to this pawn. If any other pawn with wrong pawnkind gains these traits. These traits will be removed on the wrong pawn. You may write multiple traits here.
              填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
+            <!-- TODO: 这里记得放专属特质 -->
             <li Class="AriandelLibrary.AL_TraitLock_Extension">
                 <requiredTraits>
                     <li>MiliraXianNeiyu_Love</li>

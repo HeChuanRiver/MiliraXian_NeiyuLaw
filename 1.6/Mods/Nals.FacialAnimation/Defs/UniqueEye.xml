@@ -16,4 +16,22 @@
             </li>
         </modExtensions>
     </FacialAnimation.EyeballTypeDef>
+
+    <FacialAnimation.EyeballTypeDef>
+        <defName>MiliraXian_Eye_Zhaoli</defName>
+        <!-- TODO:这里记得换昭离的眼睛tex -->
+        <texPath>MiliraXianNeiyu/PawnNeiyu/EyeNeiyu</texPath>
+        <altMaskPath>Things/Pawn/Milira/Eyes/Common</altMaskPath>
+        <shader>Map/CutoutSkinOverlay</shader>
+        <!-- <enableUnisexTexPath>True</enableUnisexTexPath> -->
+        <raceName>Milira_Race</raceName>
+        <minColor>RGB(255,255,255)</minColor>
+        <maxColor>RGB(255,255,255)</maxColor>
+        <probability>0.0001</probability>
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Zhaoli</forNPC>
+            </li>
+        </modExtensions>
+    </FacialAnimation.EyeballTypeDef>
 </Defs>

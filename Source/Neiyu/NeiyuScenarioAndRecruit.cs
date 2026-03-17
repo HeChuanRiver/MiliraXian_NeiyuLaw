@@ -265,7 +265,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            NeiyuEquipmentUtility.EnsureDefaultEarrings(__instance);
+            NeiyuEquipmentUtility.EnsureDefaultLoadout(__instance);
             NeiyuEquipmentUtility.CleanupDroppedEarringsOnMap(__instance);
             Current.Game?.GetComponent<GameComponent_NeiyuProjectionRecruit>()?.RegisterPendingLoadout(__instance);
 
@@ -533,6 +533,7 @@ namespace MiliraXian.Characters.Neiyu
     {
         private const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
         private const string DefaultWeaponDefName = "MX_Neiyu_Form_Flower";
+        private const string DefaultClothingDefName = "MiliraXian_NeiyuNormal";
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
 
@@ -544,6 +545,7 @@ namespace MiliraXian.Characters.Neiyu
         public static void EnsureDefaultLoadout(Pawn pawn)
         {
             EnsureDefaultWeapon(pawn);
+            EnsureDefaultClothing(pawn);
             EnsureDefaultEarrings(pawn);
         }
 
@@ -617,8 +619,10 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            if (pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultEarringDefName))
+            Apparel existing = FindWornApparel(pawn, DefaultEarringDefName);
+            if (existing != null)
             {
+                EnsureForcedApparel(pawn, existing);
                 return;
             }
 
@@ -642,7 +646,45 @@ namespace MiliraXian.Characters.Neiyu
 
             PawnGenerator.PostProcessGeneratedGear(earrings, pawn);
             pawn.apparel.Wear(earrings, dropReplacedApparel: true);
+            EnsureForcedApparel(pawn, earrings);
             CleanupDroppedEarringsOnMap(pawn);
+        }
+
+        public static void EnsureDefaultClothing(Pawn pawn)
+        {
+            if (!IsNeiyu(pawn) || pawn.apparel == null)
+            {
+                return;
+            }
+
+            Apparel existing = FindWornApparel(pawn, DefaultClothingDefName);
+            if (existing != null)
+            {
+                EnsureForcedApparel(pawn, existing);
+                return;
+            }
+
+            ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultClothingDefName);
+            if (apparelDef == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultClothingDefName);
+                return;
+            }
+
+            Apparel clothing = FindDroppedApparelOnMap(pawn, apparelDef);
+            if (clothing == null)
+            {
+                clothing = ThingMaker.MakeThing(apparelDef) as Apparel;
+            }
+            if (clothing == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Default clothing is not Apparel: " + DefaultClothingDefName);
+                return;
+            }
+
+            PawnGenerator.PostProcessGeneratedGear(clothing, pawn);
+            pawn.apparel.Wear(clothing, dropReplacedApparel: true);
+            EnsureForcedApparel(pawn, clothing);
         }
 
         public static bool HasDefaultEarringsEquipped(Pawn pawn)
@@ -650,9 +692,14 @@ namespace MiliraXian.Characters.Neiyu
             return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultEarringDefName);
         }
 
+        public static bool HasDefaultClothingEquipped(Pawn pawn)
+        {
+            return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultClothingDefName);
+        }
+
         public static bool HasInitialLoadoutEquipped(Pawn pawn)
         {
-            return pawn?.equipment?.Primary != null && HasDefaultEarringsEquipped(pawn);
+            return pawn?.equipment?.Primary != null && HasDefaultClothingEquipped(pawn) && HasDefaultEarringsEquipped(pawn);
         }
 
         public static void CleanupDroppedEarringsOnMap(Pawn pawn)
@@ -681,7 +728,7 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
-        private static Apparel FindDroppedEarringsOnMap(Pawn pawn, ThingDef apparelDef)
+        private static Apparel FindDroppedApparelOnMap(Pawn pawn, ThingDef apparelDef)
         {
             if (pawn?.MapHeld == null)
             {
@@ -699,6 +746,48 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             return null;
+        }
+
+        private static void EnsureForcedApparel(Pawn pawn, Apparel apparel)
+        {
+            if (pawn?.apparel == null || apparel == null)
+            {
+                return;
+            }
+
+            if (pawn.apparel.IsLocked(apparel))
+            {
+                pawn.apparel.Unlock(apparel);
+            }
+
+            if (pawn.outfits?.forcedHandler != null)
+            {
+                pawn.outfits.forcedHandler.SetForced(apparel, forced: true);
+            }
+        }
+
+        private static Apparel FindWornApparel(Pawn pawn, string defName)
+        {
+            if (pawn?.apparel == null)
+            {
+                return null;
+            }
+
+            for (int index = 0; index < pawn.apparel.WornApparel.Count; index++)
+            {
+                Apparel apparel = pawn.apparel.WornApparel[index];
+                if (apparel?.def?.defName == defName)
+                {
+                    return apparel;
+                }
+            }
+
+            return null;
+        }
+
+        private static Apparel FindDroppedEarringsOnMap(Pawn pawn, ThingDef apparelDef)
+        {
+            return FindDroppedApparelOnMap(pawn, apparelDef);
         }
     }
 

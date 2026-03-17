@@ -64,7 +64,7 @@
         <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
       <Compile Include="Source\Neiyu\Hediff_NeiyuCountShield.cs" />
       <Compile Include="Source\Neiyu\MeleeSlashGhost_Neiyu.cs" />
-      <Compile Include="Source\Neiyu\MiliraXian.NeiyuLaw.Wings.cs" />
+      <Compile Include="Source\Neiyu\MiliraXianCharactersWings.cs" />
       <Compile Include="Source\Neiyu\NeiyuLawSettings.cs" />
       <Compile Include="Source\Neiyu\LegacyNamespaceCompat.cs" />
       <Compile Include="Source\Neiyu\NeiyuScenarioAndRecruit.cs" />
@@ -78,15 +78,19 @@
       <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.pdb" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
+      <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Zhaoli.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
+      <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStroy_ZhaoliBS1.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
+      <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Zhaoli.xml" />
       <Content Include="1.6\Defs\HeadDefs\HeadTypeDef.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
+      <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />
       <Content Include="1.6\Defs\ScenarioDefs\MiliraXian_Neiyu_Scenarios.xml" />
       <Content Include="1.6\Defs\Storyteller\Incidents_Neiyu.xml" />
@@ -143,6 +147,7 @@
       <Content Include="1.6\Patches\Patch1.xml" />
       <Content Include="1.6\Patches\Patch_Alien_Milira.xml" />
       <Content Include="1.6\Patches\Patch_Neiyu.xml" />
+      <Content Include="1.6\Patches\Patch_Zhaoli.xml" />
       <Content Include="About\About.xml" />
       <Content Include="About\Preview.png" />
       <Content Include="About\PublishedFileId.txt" />

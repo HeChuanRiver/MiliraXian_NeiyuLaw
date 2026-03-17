@@ -30,12 +30,9 @@ namespace MiliraXian.Characters.Neiyu
 
         public int phase2MaxChargesNormal = 1000;
         public int phase2MaxChargesWeak = 250;
-
-
+        
         public int phase2RecoverTicksNoChange = 30000;
-
-
-
+        
         public int stage3AbsorbTicks = 5000;
         public int stage3BuffTicks = 55000;
         public int stage3DurationTicks = 60000;
