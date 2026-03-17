@@ -5,7 +5,7 @@ using RimWorld.QuestGen;
 using RimWorld.Planet;
 using Verse;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     [HarmonyPatch(typeof(TickManager), nameof(TickManager.TicksAbs), MethodType.Getter)]
     internal static class Patch_TickManager_TicksAbs_StartupCompat
@@ -265,7 +265,7 @@ namespace MiliraXian.NeiyuLaw
                 return;
             }
 
-            NeiyuEquipmentUtility.EnsureDefaultEarrings(__instance);
+            NeiyuEquipmentUtility.EnsureDefaultLoadout(__instance);
             NeiyuEquipmentUtility.CleanupDroppedEarringsOnMap(__instance);
             Current.Game?.GetComponent<GameComponent_NeiyuProjectionRecruit>()?.RegisterPendingLoadout(__instance);
 
@@ -431,7 +431,7 @@ namespace MiliraXian.NeiyuLaw
             IncidentDef incident = DefDatabase<IncidentDef>.GetNamedSilentFail(RecruitIncidentDefName);
             if (incident == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing IncidentDef: " + RecruitIncidentDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing IncidentDef: " + RecruitIncidentDefName);
                 eventTriggered = true;
                 return;
             }
@@ -533,6 +533,7 @@ namespace MiliraXian.NeiyuLaw
     {
         private const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
         private const string DefaultWeaponDefName = "MX_Neiyu_Form_Flower";
+        private const string DefaultClothingDefName = "MiliraXian_NeiyuNormal";
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
 
@@ -544,6 +545,7 @@ namespace MiliraXian.NeiyuLaw
         public static void EnsureDefaultLoadout(Pawn pawn)
         {
             EnsureDefaultWeapon(pawn);
+            EnsureDefaultClothing(pawn);
             EnsureDefaultEarrings(pawn);
         }
 
@@ -582,14 +584,14 @@ namespace MiliraXian.NeiyuLaw
             ThingDef weaponDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultWeaponDefName);
             if (weaponDef == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing ThingDef: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultWeaponDefName);
                 return;
             }
 
             ThingWithComps weapon = ThingMaker.MakeThing(weaponDef) as ThingWithComps;
             if (weapon == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Default weapon is not ThingWithComps: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Default weapon is not ThingWithComps: " + DefaultWeaponDefName);
                 return;
             }
 
@@ -617,15 +619,17 @@ namespace MiliraXian.NeiyuLaw
                 return;
             }
 
-            if (pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultEarringDefName))
+            Apparel existing = FindWornApparel(pawn, DefaultEarringDefName);
+            if (existing != null)
             {
+                EnsureForcedApparel(pawn, existing);
                 return;
             }
 
             ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultEarringDefName);
             if (apparelDef == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing ThingDef: " + DefaultEarringDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultEarringDefName);
                 return;
             }
 
@@ -636,13 +640,51 @@ namespace MiliraXian.NeiyuLaw
             }
             if (earrings == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Default earrings are not Apparel: " + DefaultEarringDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Default earrings are not Apparel: " + DefaultEarringDefName);
                 return;
             }
 
             PawnGenerator.PostProcessGeneratedGear(earrings, pawn);
             pawn.apparel.Wear(earrings, dropReplacedApparel: true);
+            EnsureForcedApparel(pawn, earrings);
             CleanupDroppedEarringsOnMap(pawn);
+        }
+
+        public static void EnsureDefaultClothing(Pawn pawn)
+        {
+            if (!IsNeiyu(pawn) || pawn.apparel == null)
+            {
+                return;
+            }
+
+            Apparel existing = FindWornApparel(pawn, DefaultClothingDefName);
+            if (existing != null)
+            {
+                EnsureForcedApparel(pawn, existing);
+                return;
+            }
+
+            ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultClothingDefName);
+            if (apparelDef == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultClothingDefName);
+                return;
+            }
+
+            Apparel clothing = FindDroppedApparelOnMap(pawn, apparelDef);
+            if (clothing == null)
+            {
+                clothing = ThingMaker.MakeThing(apparelDef) as Apparel;
+            }
+            if (clothing == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Default clothing is not Apparel: " + DefaultClothingDefName);
+                return;
+            }
+
+            PawnGenerator.PostProcessGeneratedGear(clothing, pawn);
+            pawn.apparel.Wear(clothing, dropReplacedApparel: true);
+            EnsureForcedApparel(pawn, clothing);
         }
 
         public static bool HasDefaultEarringsEquipped(Pawn pawn)
@@ -650,9 +692,14 @@ namespace MiliraXian.NeiyuLaw
             return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultEarringDefName);
         }
 
+        public static bool HasDefaultClothingEquipped(Pawn pawn)
+        {
+            return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultClothingDefName);
+        }
+
         public static bool HasInitialLoadoutEquipped(Pawn pawn)
         {
-            return pawn?.equipment?.Primary != null && HasDefaultEarringsEquipped(pawn);
+            return pawn?.equipment?.Primary != null && HasDefaultClothingEquipped(pawn) && HasDefaultEarringsEquipped(pawn);
         }
 
         public static void CleanupDroppedEarringsOnMap(Pawn pawn)
@@ -681,7 +728,7 @@ namespace MiliraXian.NeiyuLaw
             }
         }
 
-        private static Apparel FindDroppedEarringsOnMap(Pawn pawn, ThingDef apparelDef)
+        private static Apparel FindDroppedApparelOnMap(Pawn pawn, ThingDef apparelDef)
         {
             if (pawn?.MapHeld == null)
             {
@@ -699,6 +746,48 @@ namespace MiliraXian.NeiyuLaw
             }
 
             return null;
+        }
+
+        private static void EnsureForcedApparel(Pawn pawn, Apparel apparel)
+        {
+            if (pawn?.apparel == null || apparel == null)
+            {
+                return;
+            }
+
+            if (pawn.apparel.IsLocked(apparel))
+            {
+                pawn.apparel.Unlock(apparel);
+            }
+
+            if (pawn.outfits?.forcedHandler != null)
+            {
+                pawn.outfits.forcedHandler.SetForced(apparel, forced: true);
+            }
+        }
+
+        private static Apparel FindWornApparel(Pawn pawn, string defName)
+        {
+            if (pawn?.apparel == null)
+            {
+                return null;
+            }
+
+            for (int index = 0; index < pawn.apparel.WornApparel.Count; index++)
+            {
+                Apparel apparel = pawn.apparel.WornApparel[index];
+                if (apparel?.def?.defName == defName)
+                {
+                    return apparel;
+                }
+            }
+
+            return null;
+        }
+
+        private static Apparel FindDroppedEarringsOnMap(Pawn pawn, ThingDef apparelDef)
+        {
+            return FindDroppedApparelOnMap(pawn, apparelDef);
         }
     }
 
@@ -751,7 +840,7 @@ namespace MiliraXian.NeiyuLaw
             PawnKindDef neiyuKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(NeiyuPawnKindDefName);
             if (neiyuKind == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing PawnKindDef: " + NeiyuPawnKindDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing PawnKindDef: " + NeiyuPawnKindDefName);
                 return null;
             }
 

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Name_Neiyu_First>霓羽</MX_Name_Neiyu_First>
-  <MX_Name_Neiyu_Last>安吉莉特</MX_Name_Neiyu_Last>
-  <MX_Name_Neiyu_Nick>霓羽</MX_Name_Neiyu_Nick>
-  <SpecialPawnNeiyu.label>霓羽·安吉莉特</SpecialPawnNeiyu.label>
-  <SpecialPawnNeiyu.desc>一位出身未知的神秘米莉拉，身上散发着与常人不同的气息。据她所说，这只是她在这个世界上的一道投影而已。\n来自 Mod：米莉拉角色拓展：霓羽</SpecialPawnNeiyu.desc>
+    <MX_Name_Neiyu_First>霓羽</MX_Name_Neiyu_First>
+    <MX_Name_Neiyu_Last>安吉莉特</MX_Name_Neiyu_Last>
+    <MX_Name_Neiyu_Nick>霓羽</MX_Name_Neiyu_Nick>
+    <SpecialPawnNeiyu.label>霓羽·安吉莉特</SpecialPawnNeiyu.label>
+    <SpecialPawnNeiyu.desc>一位出身未知的神秘米莉拉，身上散发着与常人不同的气息。据她所说，这只是她在这个世界上的一道投影而已。\n来自 Mod：米莉拉角色拓展：霓羽</SpecialPawnNeiyu.desc>
+    <MX_Name_Zhaoli_First>昭离</MX_Name_Zhaoli_First>
+    <MX_Name_Zhaoli_Last>西娅拉</MX_Name_Zhaoli_Last>
+    <MX_Name_Zhaoli_Nick>昭离</MX_Name_Zhaoli_Nick>
+    <SpecialPawnZhaoli.label>昭离·西娅拉</SpecialPawnZhaoli.label>
+    <SpecialPawnZhaoli.desc>一位身上散发不详气息的米莉拉，总感觉她在寻找着些什么，还是在悼念什么？\n来自 Mod：米莉拉角色拓展：昭离</SpecialPawnZhaoli.desc>
 </LanguageData>

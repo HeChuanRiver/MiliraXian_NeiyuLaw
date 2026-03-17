@@ -57,7 +57,7 @@
             </li>
         </tools>
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
                 <formWeaponDefs>
                     <li>MX_Neiyu_Form_Flower</li>
                     <li>MX_Neiyu_Form_Weapon</li>
@@ -139,7 +139,7 @@
             </li>
         </tools>
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
                 <formWeaponDefs>
                     <li>MX_Neiyu_Form_Flower</li>
                     <li>MX_Neiyu_Form_Weapon</li>
@@ -168,7 +168,7 @@
 
         </comps>
         <modExtensions>
-            <li Class="MiliraXian.NeiyuLaw.MXMeleeSlashGhostExtension">
+            <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
                 <effecterDefName>MXNL_Effecter_NeiyuSwordSlashGhost</effecterDefName>
                 <fallbackFleckDefName>ExplosionFlash</fallbackFleckDefName>
                 <scaleRange>4.6~6.2</scaleRange>
@@ -237,7 +237,7 @@
             </li>
         </verbs>
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_ModeSwitchWeapon">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
                 <formWeaponDefs>
                     <li>MX_Neiyu_Form_Flower</li>
                     <li>MX_Neiyu_Form_Weapon</li>
@@ -270,7 +270,7 @@
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_BigSplitArrow</defName>
         <label>霓羽·裂羽主矢</label>
-        <thingClass>MiliraXian.NeiyuLaw.Projectile_BigArrowSplit</thingClass>
+        <thingClass>MiliraXian.Characters.Neiyu.Projectile_BigArrowSplit</thingClass>
         <graphicData>
             <texPath>MiliraXianNeiyu/Projectile/BigArrow</texPath>
             <graphicClass>Graphic_Single</graphicClass>
@@ -287,7 +287,7 @@
             <arcHeightFactor>0.10</arcHeightFactor>
         </projectile>
         <modExtensions>
-            <li Class="MiliraXian.NeiyuLaw.SplitArrowExtension">
+            <li Class="MiliraXian.Characters.Neiyu.SplitArrowExtension">
                 <splitProjectileDef>MX_Bullet_HomingShard</splitProjectileDef>
                 <splitCount>27</splitCount>
                 <splitDelayTicks>8</splitDelayTicks>
@@ -301,7 +301,7 @@
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_HomingShard</defName>
         <label>霓羽·追羽碎矢</label>
-        <thingClass>MiliraXian.NeiyuLaw.Projectile_HomingShard</thingClass>
+        <thingClass>MiliraXian.Characters.Neiyu.Projectile_HomingShard</thingClass>
         <graphicData>
             <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
             <graphicClass>Graphic_Single</graphicClass>
@@ -316,7 +316,7 @@
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>
         <modExtensions>
-            <li Class="MiliraXian.NeiyuLaw.SplitArrowExtension">
+            <li Class="MiliraXian.Characters.Neiyu.SplitArrowExtension">
                 <homingStartDelayTicks>10</homingStartDelayTicks>
                 <homingTurnLerp>0.14</homingTurnLerp>
             </li>

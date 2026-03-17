@@ -35,17 +35,6 @@
         </apparelTags>
 
         <specificApparelRequirements>
-            <li>
-                <!-- 身体部位 Torso是躯干 -->
-                <bodyPartGroup>Torso</bodyPartGroup>
-                <!-- tag -->
-                <requiredTag>MiliraXian_NeiyuNormal</requiredTag>
-                <!-- 装备穿着的服装层 OnSkin是贴身 -->
-                <apparelLayer>OnSkin</apparelLayer>
-                <!-- 服装的材质 -->
-                <!--<stuff>Milira_SunPlateSteel</stuff>-->
-            </li>
-            
 <!--            <li>-->
 <!--                <bodyPartGroup>FullHead</bodyPartGroup>-->
 <!--                <requiredTag>Milira_ValkyrHelmet</requiredTag>-->

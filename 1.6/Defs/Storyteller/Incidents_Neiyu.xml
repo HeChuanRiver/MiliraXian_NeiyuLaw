@@ -8,7 +8,7 @@
     <targetTags>
       <li>Map_PlayerHome</li>
     </targetTags>
-    <workerClass>MiliraXian.NeiyuLaw.IncidentWorker_NeiyuProjectionRecruit</workerClass>
+    <workerClass>MiliraXian.Characters.Neiyu.IncidentWorker_NeiyuProjectionRecruit</workerClass>
     <questScriptDef>MXNL_NeiyuProjectionRecruitQuest</questScriptDef>
     <baseChance>1.0</baseChance>
     <letterLabel>异界羽影</letterLabel>

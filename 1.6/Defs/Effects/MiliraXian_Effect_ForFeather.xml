@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- ForFeather法阵：先放大后缩�? -->
+  <!-- ForFeather法阵：先放大后缩 -->
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MXNL_ForFeatherCircle</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>

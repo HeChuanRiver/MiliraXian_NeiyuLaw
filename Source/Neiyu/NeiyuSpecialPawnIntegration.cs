@@ -2,7 +2,7 @@
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     internal static class NeiyuSpecialPawnIntegration
     {
@@ -57,7 +57,7 @@ namespace MiliraXian.NeiyuLaw
 
             if (realID != pawn.ThingID)
             {
-                Log.Warning("[MiliraXian.NeiyuLaw] Special pawn staticID already mapped to another pawn. staticID="
+                Log.Warning("[MiliraXian.Characters.Neiyu] Special pawn staticID already mapped to another pawn. staticID="
                             + staticID + ", existing=" + realID + ", current=" + pawn.ThingID);
             }
         }

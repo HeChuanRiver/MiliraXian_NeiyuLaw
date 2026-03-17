@@ -37,7 +37,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuWarpFeather">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuWarpFeather">
                 <finishFlashFleckDefName>PsycastSkipFlashExit</finishFlashFleckDefName>
                 <featherThingDef>Milira_Feather</featherThingDef>
                 <featherCountRange>84~128</featherCountRange>
@@ -76,7 +76,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuThunderSigil">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuThunderSigil">
                 <radius>3</radius>
                 <strikeCountRange>3~5</strikeCountRange>
                 <firstDelayTicksRange>120~180</firstDelayTicksRange>
@@ -119,7 +119,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuArrowBarrage">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuArrowBarrage">
                 <requiredWeapon>MX_Neiyu_Form_Bow</requiredWeapon>
                 <projectileDef>MX_Bullet_BarrageArrow</projectileDef>
                 <!-- 数值：此处为该技能的释放弹丸数量 -->
@@ -162,7 +162,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuFlowerBless">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuFlowerBless">
                 <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
                 <radius>6</radius>
                 <buffHediff>MX_Neiyu_FlowerBlessed</buffHediff>
@@ -207,7 +207,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuFlowerToxinField">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuFlowerToxinField">
                 <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
                 <radius>10</radius>
                 <severeFoodPoisoningSeverity>0.25</severeFoodPoisoningSeverity>
@@ -250,7 +250,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuSwordSkyfall">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuSwordSkyfall">
                 <requiredWeapon>MX_Neiyu_Form_Weapon</requiredWeapon>
                 <ascendFlyerDef>MX_Neiyu_SwordSkyfallAscendFlyer</ascendFlyerDef>
                 <descendFlyerDef>MX_Neiyu_SwordSkyfallFlyer</descendFlyerDef>
@@ -322,7 +322,7 @@
         </verbProperties>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.CompProperties_AbilityNeiyuSwordExecution">
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuSwordExecution">
                 <requiredWeapon>MX_Neiyu_Form_Weapon</requiredWeapon>
                 <flyerDef>MX_Neiyu_SwordDashFlyer</flyerDef>
                 <backstepCells>2</backstepCells>

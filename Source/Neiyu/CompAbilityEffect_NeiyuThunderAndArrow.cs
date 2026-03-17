@@ -6,7 +6,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     public class CompProperties_AbilityNeiyuThunderSigil : CompProperties_AbilityEffect
     {
