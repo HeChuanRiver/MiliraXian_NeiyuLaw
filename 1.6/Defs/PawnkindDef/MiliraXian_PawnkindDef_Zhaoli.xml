@@ -68,6 +68,12 @@
             <max>99999</max>
         </weaponMoney>
 
+        <startingHediffs>
+            <li>
+                <def>MXZL_ZhaoliKarma</def>
+            </li>
+        </startingHediffs>
+
         <!-- 生成时装备的耐久度区间，1-1则为100% -->
         <gearHealthRange Inherit="False">
             <min>1</min>

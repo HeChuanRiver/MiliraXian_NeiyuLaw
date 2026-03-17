@@ -39,6 +39,7 @@
         </Reference>
         <Reference Include="AriandelLibrary">
           <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -71,11 +72,9 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="1.6\Assemblies\AriandelLibrary.dll" />
-      <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.dll" />
-      <Content Include="1.6\Assemblies\MiliraXian_NeiyuLaw.pdb" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Zhaoli.xml" />
@@ -89,6 +88,7 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />
@@ -261,6 +261,9 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\MX_Neiyu_WarpFeather.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\一矢.png" />
       <Content Include="LoadFolders.xml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Source\Zhaoli\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
