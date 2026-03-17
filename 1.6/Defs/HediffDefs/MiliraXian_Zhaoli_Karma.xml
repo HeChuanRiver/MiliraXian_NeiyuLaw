@@ -12,7 +12,7 @@
         <minSeverity>1</minSeverity>
         <maxSeverity>1</maxSeverity>
         <comps>
-            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_MiliraXianSpecialResource">
+            <li Class="MiliraXian.Characters.HediffCompProperties_PawnSpecialResource">
                 <resourceLabel>因果</resourceLabel>
                 <resourceDescription>昭离的专属资源。每次通过告死击杀单位会积累因果；后续主动技能将直接消耗这项资源。</resourceDescription>
                 <initialValue>0</initialValue>

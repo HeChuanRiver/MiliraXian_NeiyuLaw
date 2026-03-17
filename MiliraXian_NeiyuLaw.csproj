@@ -8,12 +8,10 @@
         <ProjectGuid>{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>MiliraXian.Characters</RootNamespace>
+        <RootNamespace>MiliraXian.Characters.Neiyu</RootNamespace>
         <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
-        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -62,14 +60,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-      <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
-      <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
-      <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
-      <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
-      <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
-      <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
-      <Compile Include="Source\Verbs_BowForNeiyuBow.cs" />
-      <Compile Include="Source\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+        <Compile Include="Source\Common\PawnSpecialResource.cs" />
+        <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
         <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
@@ -285,14 +277,11 @@
       <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <Target Name="AfterBuild" AfterTargets="Build">
-        <ItemGroup>
-            <FilesToKeep Include="
-                $(TargetDir)MiliraXian_NeiyuLaw.dll;
-                $(TargetDir)MiliraXian_NeiyuLaw.pdb"/>
-            <FilesToDelete Include="$(TargetDir)**\*.*" Exclude="@(FilesToKeep)"/>
-        </ItemGroup>
-        <Delete Files="@(FilesToDelete)" TreatErrorsAsWarnings="true"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
     </Target>
 
 </Project>
