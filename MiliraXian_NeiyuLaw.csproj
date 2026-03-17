@@ -65,6 +65,18 @@
       <Compile Include="Source\NeiyuLawSettings.cs" />
       <Compile Include="Source\NeiyuScenarioAndRecruit.cs" />
       <Compile Include="Source\NeiyuSpecialPawnIntegration.cs" />
+      <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
+      <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
+      <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
+      <Compile Include="Source\Neiyu\Hediff_NeiyuCountShield.cs" />
+      <Compile Include="Source\Neiyu\LegacyNamespaceCompat.cs" />
+      <Compile Include="Source\Neiyu\MeleeSlashGhost_Neiyu.cs" />
+      <Compile Include="Source\Neiyu\MiliraXianCharactersWings.cs" />
+      <Compile Include="Source\Neiyu\NeiyuLawSettings.cs" />
+      <Compile Include="Source\Neiyu\NeiyuScenarioAndRecruit.cs" />
+      <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
+      <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
@@ -73,6 +85,7 @@
       <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
       <Compile Include="Source\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />
