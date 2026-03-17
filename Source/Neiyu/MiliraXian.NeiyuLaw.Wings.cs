@@ -5,14 +5,14 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     [StaticConstructorOnStartup]
     public static class MiliraXian_NeiyuLaw_HarmonyBootstrap
     {
         static MiliraXian_NeiyuLaw_HarmonyBootstrap()
         {
-            var harmony = new Harmony("HeChuanRiver.MiliraXian.NeiyuLaw");
+            var harmony = new Harmony("HeChuanRiver.MiliraXian.Characters.Neiyu");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
@@ -87,7 +87,7 @@ namespace MiliraXian.NeiyuLaw
             catch (Exception ex)
             {
                 _failed = true;
-                Log.Error("[MiliraXian.NeiyuLaw] Failed to load Neiyu wing graphics. Check your texture paths & file names.\n" + ex);
+                Log.Error("[MiliraXian.Characters.Neiyu] Failed to load Neiyu wing graphics. Check your texture paths & file names.\n" + ex);
             }
         }
     }

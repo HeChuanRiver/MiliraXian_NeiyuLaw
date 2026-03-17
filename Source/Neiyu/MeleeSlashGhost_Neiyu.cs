@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     public class MXMeleeSlashGhostExtension : DefModExtension
     {

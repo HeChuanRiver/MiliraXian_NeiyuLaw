@@ -7,7 +7,7 @@
         <pawnFlyer>
             <flightDurationMin>0.22</flightDurationMin>
             <flightSpeed>120</flightSpeed>
-            <workerClass>MiliraXian.NeiyuLaw.PawnFlyerWorker_NeiyuAscent</workerClass>
+            <workerClass>MiliraXian.Characters.Neiyu.PawnFlyerWorker_NeiyuAscent</workerClass>
             <heightFactor>22</heightFactor>
             <progressCurve>
                 <points>
@@ -25,7 +25,7 @@
         <pawnFlyer>
             <flightDurationMin>0.36</flightDurationMin>
             <flightSpeed>140</flightSpeed>
-            <workerClass>MiliraXian.NeiyuLaw.PawnFlyerWorker_NeiyuDescent</workerClass>
+            <workerClass>MiliraXian.Characters.Neiyu.PawnFlyerWorker_NeiyuDescent</workerClass>
             <heightFactor>22</heightFactor>
             <progressCurve>
                 <points>

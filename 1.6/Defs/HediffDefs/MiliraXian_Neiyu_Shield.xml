@@ -21,7 +21,7 @@
         </stages>
 
         <comps>
-            <li Class="MiliraXian.NeiyuLaw.HediffCompProperties_MXNeiyuCountShield">
+            <li Class="MiliraXian.Characters.Neiyu.HediffCompProperties_MXNeiyuCountShield">
                 <phase2Threshold>36</phase2Threshold>
 
                 <phase2MaxChargesNormal>108</phase2MaxChargesNormal>

@@ -9,7 +9,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     public struct MXNeiyuStage3Profile
     {

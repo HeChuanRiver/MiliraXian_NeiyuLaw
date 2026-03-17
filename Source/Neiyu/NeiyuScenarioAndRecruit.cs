@@ -5,7 +5,7 @@ using RimWorld.QuestGen;
 using RimWorld.Planet;
 using Verse;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     [HarmonyPatch(typeof(TickManager), nameof(TickManager.TicksAbs), MethodType.Getter)]
     internal static class Patch_TickManager_TicksAbs_StartupCompat
@@ -431,7 +431,7 @@ namespace MiliraXian.NeiyuLaw
             IncidentDef incident = DefDatabase<IncidentDef>.GetNamedSilentFail(RecruitIncidentDefName);
             if (incident == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing IncidentDef: " + RecruitIncidentDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing IncidentDef: " + RecruitIncidentDefName);
                 eventTriggered = true;
                 return;
             }
@@ -582,14 +582,14 @@ namespace MiliraXian.NeiyuLaw
             ThingDef weaponDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultWeaponDefName);
             if (weaponDef == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing ThingDef: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultWeaponDefName);
                 return;
             }
 
             ThingWithComps weapon = ThingMaker.MakeThing(weaponDef) as ThingWithComps;
             if (weapon == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Default weapon is not ThingWithComps: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Default weapon is not ThingWithComps: " + DefaultWeaponDefName);
                 return;
             }
 
@@ -625,7 +625,7 @@ namespace MiliraXian.NeiyuLaw
             ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultEarringDefName);
             if (apparelDef == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing ThingDef: " + DefaultEarringDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultEarringDefName);
                 return;
             }
 
@@ -636,7 +636,7 @@ namespace MiliraXian.NeiyuLaw
             }
             if (earrings == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Default earrings are not Apparel: " + DefaultEarringDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Default earrings are not Apparel: " + DefaultEarringDefName);
                 return;
             }
 
@@ -751,7 +751,7 @@ namespace MiliraXian.NeiyuLaw
             PawnKindDef neiyuKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(NeiyuPawnKindDefName);
             if (neiyuKind == null)
             {
-                Log.Error("[MiliraXian.NeiyuLaw] Missing PawnKindDef: " + NeiyuPawnKindDefName);
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing PawnKindDef: " + NeiyuPawnKindDefName);
                 return null;
             }
 

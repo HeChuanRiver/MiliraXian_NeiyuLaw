@@ -9,7 +9,7 @@ using Verse;
 using Verse.AI;
 using Verse.Sound;
 
-namespace MiliraXian.NeiyuLaw
+namespace MiliraXian.Characters.Neiyu
 {
     public delegate void NeiyuSwordVisualPhaseHandler(Pawn pawn, string phaseId, IntVec3 focusCell, float weaponScale, float angleDeg);
 

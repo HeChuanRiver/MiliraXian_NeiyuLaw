@@ -8,7 +8,7 @@
         <ProjectGuid>{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>MiliraXian_NeiyuLaw</RootNamespace>
+        <RootNamespace>MiliraXian.Characters.Neiyu</RootNamespace>
         <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
         <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
@@ -59,17 +59,18 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Source\CompAbilityEffect_NeiyuWarpFeather.cs" />
-        <Compile Include="Source\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
-        <Compile Include="Source\Comp_ModeSwitchWeapon.cs" />
-      <Compile Include="Source\Hediff_NeiyuCountShield.cs" />
-      <Compile Include="Source\MeleeSlashGhost_Neiyu.cs" />
-      <Compile Include="Source\MiliraXian.NeiyuLaw.Wings.cs" />
-      <Compile Include="Source\NeiyuLawSettings.cs" />
-      <Compile Include="Source\NeiyuScenarioAndRecruit.cs" />
-      <Compile Include="Source\NeiyuSpecialPawnIntegration.cs" />
-      <Compile Include="Source\Verbs_BowForNeiyuBow.cs" />
-      <Compile Include="Source\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+        <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
+        <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
+        <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
+      <Compile Include="Source\Neiyu\Hediff_NeiyuCountShield.cs" />
+      <Compile Include="Source\Neiyu\MeleeSlashGhost_Neiyu.cs" />
+      <Compile Include="Source\Neiyu\MiliraXian.NeiyuLaw.Wings.cs" />
+      <Compile Include="Source\Neiyu\NeiyuLawSettings.cs" />
+      <Compile Include="Source\Neiyu\LegacyNamespaceCompat.cs" />
+      <Compile Include="Source\Neiyu\NeiyuScenarioAndRecruit.cs" />
+      <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
+      <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
+      <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Assemblies\AriandelLibrary.dll" />
