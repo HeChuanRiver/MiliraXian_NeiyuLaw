@@ -33,29 +33,24 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
-          <Private>False</Private>
+        <Reference Include="0Harmony">
+          <HintPath>E:\下载\HarmonyMod\HarmonyMod\1.5\Assemblies\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="AriandelLibrary">
-          <HintPath>..\..\..\..\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-          <HintPath>..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
-          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-          <Private>False</Private>
+          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
