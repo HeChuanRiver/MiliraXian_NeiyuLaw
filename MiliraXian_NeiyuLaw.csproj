@@ -55,6 +55,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Source\Common\PawnSpecialResource.cs" />
+        <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
         <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
