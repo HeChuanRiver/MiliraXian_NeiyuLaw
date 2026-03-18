@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <AbilityCategoryDef>
+        <defName>MX_ZhaoliSkill</defName>
+        <displayOrder>3010</displayOrder>
+    </AbilityCategoryDef>
+
+    <AbilityDef>
+        <defName>MX_Zhaoli_DeathField</defName>
+        <label>告死流场</label>
+        <description>创造一个直径18格的圆形立场。立场内所有单位除昭离自身外均受到20%减速；每3秒形成一次流血；若目标连续15秒未离开立场，则被直接告死并彻底消失。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+
+        <category>MX_ZhaoliSkill</category>
+        <displayOrder>100</displayOrder>
+        <cooldownTicksRange>1200</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <requireLineOfSight>false</requireLineOfSight>
+            <warmupTime>1.0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliDeathField">
+                <fieldHediff>MXZL_ZhaoliDeathFieldActive</fieldHediff>
+                <radius>9</radius>
+            </li>
+        </comps>
+    </AbilityDef>
+
+</Defs>

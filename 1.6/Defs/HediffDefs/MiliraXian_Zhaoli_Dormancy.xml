@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliDormancy</defName>
+        <label>诸事无常·沉眠</label>
+        <description>因果溢出后引发的强制沉眠。昭离会持续陷入沉睡状态，无法正常行动，直到三十日后才会自然苏醒。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <preventsCrawling>true</preventsCrawling>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <painOffset>10</painOffset>
+            </li>
+        </stages>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>1800000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDormancy">
+                <refreshIntervalTicks>60</refreshIntervalTicks>
+                <dropRestToZero>true</dropRestToZero>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

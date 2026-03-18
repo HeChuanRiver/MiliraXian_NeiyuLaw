@@ -112,7 +112,11 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            bool forceDowned = pawn.health.forceDowned;
+            pawn.health.forceDowned = true;
             Hediff hediff = pawn.health.GetOrAddHediff(hediffDef);
+            pawn.health.Notify_HediffChanged(hediff);
+            pawn.health.forceDowned = forceDowned;
             HediffWithComps hediffWithComps = hediff as HediffWithComps;
             hediffWithComps?.GetComp<HediffComp_Disappears>()?.SetDuration(durationTicks);
             hediffWithComps?.GetComp<HediffComp_ZhaoliDormancy>()?.ForceSleepNow();
