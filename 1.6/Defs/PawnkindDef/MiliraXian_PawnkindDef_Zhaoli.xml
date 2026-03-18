@@ -118,15 +118,7 @@
 
         <!-- 给予这个角色的技能 -->
         <abilities>
-            <!-- TODO: 这里记得给这里面填昭离技能 -->
-<!--            <li>MX_Neiyu_WarpFeather</li>-->
-<!--            <li>MX_Neiyu_ThunderMarkedStorm</li>-->
-<!--            <li>MX_Neiyu_Bow_ArrowBarrage</li>-->
-<!--            <li>MX_Neiyu_Flower_BlessingField</li>-->
-<!--            <li>MX_Neiyu_Flower_ToxinGarden</li>-->
-<!--            <li>MX_Neiyu_Sword_Skyfall</li>-->
-<!--            <li>MX_Neiyu_Sword_ExecuteHead</li>-->
-            <!-- <li>MI_ShroudPower_Skip</li> -->
+            <li>MX_Zhaoli_DeathField</li>
         </abilities>
 
         <!-- modExtensions是用来使用的非官方类的地方 -->

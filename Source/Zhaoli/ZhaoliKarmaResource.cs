@@ -10,6 +10,8 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public const string ZhaoliPawnKindDefName = "MiliraXian_Zhaoli";
         public const string KarmaHediffDefName = "MXZL_ZhaoliKarma";
+        public const string DormancyHediffDefName = "MXZL_ZhaoliDormancy";
+        public const int DormancyDurationTicks = 1800000;
 
         public static bool IsZhaoli(Pawn pawn)
         {
@@ -64,13 +66,56 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void AddKarma(Pawn pawn, float value)
         {
-            EnsureKarmaComp(pawn)?.AddValue(value);
+            HediffComp_PawnSpecialResource comp = EnsureKarmaComp(pawn);
+            if (comp == null)
+            {
+                return;
+            }
+
+            comp.AddValue(value);
+            HandleOverflow(pawn, comp);
         }
 
         public static bool TryConsumeKarma(Pawn pawn, float value)
         {
             HediffComp_PawnSpecialResource comp = EnsureKarmaComp(pawn);
             return comp != null && comp.TryConsume(value);
+        }
+
+        public static bool IsDormant(Pawn pawn)
+        {
+            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(DormancyHediffDefName);
+            return hediffDef != null && (pawn?.health?.hediffSet?.HasHediff(hediffDef) ?? false);
+        }
+
+        private static void HandleOverflow(Pawn pawn, HediffComp_PawnSpecialResource comp)
+        {
+            if (pawn == null || comp == null || !comp.IsOverflowing)
+            {
+                return;
+            }
+
+            comp.SetValue(0f);
+            ApplyDormancy(pawn, DormancyDurationTicks);
+        }
+
+        private static void ApplyDormancy(Pawn pawn, int durationTicks)
+        {
+            if (pawn?.health == null)
+            {
+                return;
+            }
+
+            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(DormancyHediffDefName);
+            if (hediffDef == null)
+            {
+                return;
+            }
+
+            Hediff hediff = pawn.health.GetOrAddHediff(hediffDef);
+            HediffWithComps hediffWithComps = hediff as HediffWithComps;
+            hediffWithComps?.GetComp<HediffComp_Disappears>()?.SetDuration(durationTicks);
+            hediffWithComps?.GetComp<HediffComp_ZhaoliDormancy>()?.ForceSleepNow();
         }
     }
 

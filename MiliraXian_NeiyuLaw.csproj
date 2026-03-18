@@ -18,7 +18,7 @@
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>.\1.6\Assemblies</OutputPath>
+        <OutputPath>E:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_NeiyuLaw\1.6\Assemblies</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
+        <OutputPath>E:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_NeiyuLaw\1.6\Assemblies</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -35,12 +35,15 @@
     <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>E:\下载\HarmonyMod\HarmonyMod\1.5\Assemblies\0Harmony.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="AriandelLibrary">
           <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
@@ -48,9 +51,11 @@
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
           <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
           <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <Private>False</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -69,10 +74,13 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Zhaoli.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Zhaoli.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
@@ -85,6 +93,8 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_DeathField.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Dormancy.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
@@ -139,6 +149,9 @@
       <Content Include="1.6\Languages\English\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Languages\English\DefInjected\TraitDef\Traits_Sample.xml" />
       <Content Include="1.6\Languages\English\Keyed\Name.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Defs\TryToDo.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Patches\PatchForMA.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Textures\MiliraCharacterMeleeFix\Weapon\MX_Neiyu_Form_Weapon_OnHand.png" />
       <Content Include="1.6\Mods\Nals.FacialAnimation\Defs\UniqueEye.xml" />
       <Content Include="1.6\Mods\Nals.FacialAnimation\Defs\UniqueLid.xml" />
       <Content Include="1.6\Patches\Patch1.xml" />
@@ -173,6 +186,7 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\BowForNeiyu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\EarringsZhenzhu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\FlowerStick.png" />
+      <Content Include="Content\Textures\MiliraXianNeiyu\Items\MX_Neiyu_Form_Weapon_OnHand.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\SwordForNeiyu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Accessories\Zhenzhu\zhenzhu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Accessories\Zhenzhu\zhenzhu_east.png" />
@@ -261,6 +275,7 @@
       <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="1.6\Mods\co.uk.epicguru.meleeanimation\Assemblies\" />
       <Folder Include="Source\Zhaoli\" />
     </ItemGroup>
     <ItemGroup>
@@ -276,4 +291,3 @@
     -->
 
 </Project>
-

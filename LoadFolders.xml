@@ -6,6 +6,9 @@
         <li>Content</li>
         <!-- 面部动画 -->
         <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
+
+        <li IfModActive="co.uk.epicguru.meleeanimation">1.6/Mods/co.uk.epicguru.meleeanimation</li>
+
     </v1.6>
 
 </loadFolders>

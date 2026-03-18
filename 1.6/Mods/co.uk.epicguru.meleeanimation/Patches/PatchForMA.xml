@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationReplace">
+        <xpath>
+            /Defs/ThingDef[defName="MX_Neiyu_Form_Weapon"]/modExtensions/li[@Class="AncotLibrary.ExtraGraphicData_Extension"]/graphicData/texPath
+        </xpath>
+        <value>
+            <texPath>MiliraCharacterMeleeFix/Weapon/MX_Neiyu_Form_Weapon_OnHand</texPath>
+        </value>
+    </Operation>
+</Patch>
