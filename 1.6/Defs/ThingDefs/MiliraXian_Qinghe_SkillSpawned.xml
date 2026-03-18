@@ -9,9 +9,33 @@
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_SpringFlowField">
-                
-            </li>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_SpringFlowField"/>
         </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="MoteGlowDistorted">
+        <defName>Mote_AquaMirrorExplode</defName>
+        <thingClass>MoteAttached</thingClass>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <mote>
+            <fadeInTime>0.2</fadeInTime>
+            <fadeOutTime>0.3</fadeOutTime>
+            <solidTime>0.5</solidTime>
+            <growthRate>4</growthRate>
+        </mote>
+        <graphicData>
+            <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+            <shaderType>MoteApocritonPulse</shaderType>
+            <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+            <shaderParameters>
+                <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
+                <_distortionIntensity>0.18</_distortionIntensity>
+                <_ScrollSpeed>-0.9</_ScrollSpeed>
+                <_ScrollScale>0.14</_ScrollScale>
+                <_distortionTint>(0.23, 0, 0, 0)</_distortionTint>
+                <_pulseSpeed>2</_pulseSpeed>
+            </shaderParameters>
+            <drawSize>1.5</drawSize>
+        </graphicData>
     </ThingDef>
 </Defs>

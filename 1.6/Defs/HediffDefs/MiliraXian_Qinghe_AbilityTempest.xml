@@ -1,11 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
+    <!-- 伤害类型相关 -->
+    <!-- 脱水伤害 -->
+    <HediffDef>
+        <defName>MX_DehydrateDamage</defName>
+        <label>水循环紊乱</label>
+        <description>内部的部分流体行为被干扰，导致循环系统异常或机械故障。</description>
+        <isBad>true</isBad>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
+        <initialSeverity>0.01</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.9</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.2</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.8</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.4</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.7</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.6</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.6</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.8</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.5</postFactor>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_SeverityPerDay">
+                <severityPerDay>-0.5</severityPerDay>
+                <showHoursToRecover>true</showHoursToRecover>
+            </li>
+        </comps>
+    </HediffDef>
+    
     <HediffDef>
         <defName>MX_SpringFlow</defName>
         <label>春泉洗礼</label>
         <description>placeholder desc</description>
         <isBad>false</isBad>
-        <hediffClass>MiliraXian.Characters.Qinghe.Hediff_SpringFlow</hediffClass>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediff_SpringFlow</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
         <initialSeverity>1.0</initialSeverity>
         <minSeverity>0.0</minSeverity>
@@ -27,6 +95,38 @@
             <li Class="HediffCompProperties_Disappears">
                 <disappearsAfterTicks>120</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+    
+    <HediffDef>
+        <defName>MX_AquaMirror</defName>
+        <label>镜华</label>
+        <description>placeholder desc</description>
+        <isBad>false</isBad>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediff_AquaMirror</hediffClass>
+        <defaultLabelColor>(0.4, 0.4, 1.0)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>10.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>600</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_AquaMirror">
+                <healAmount>10</healAmount>
+                <explosionDamage>10</explosionDamage>
+                <explosionRadius>3</explosionRadius>
+                <shieldAmount>100</shieldAmount>
+                <shieldRadius>1</shieldRadius>
+                <tempestPerMirror>5</tempestPerMirror>
             </li>
         </comps>
     </HediffDef>

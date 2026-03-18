@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <DamageDef>
+        <defName>MX_Dehydrate</defName>
+        <label>脱水</label>
+        <externalViolence>true</externalViolence>
+        <workerClass>MiliraXian.Characters.QingHe.DamageWorker_Dehydrate</workerClass>
+        <deathMessage>{0}死于严重的液体循环崩溃。</deathMessage>
+        <hediff>PsychicInjury</hediff>
+    </DamageDef>
+</Defs>

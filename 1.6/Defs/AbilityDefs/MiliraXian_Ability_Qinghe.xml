@@ -7,7 +7,7 @@
     <AbilityDef>
         <defName>MX_Qinghe_SpringFlow</defName>
         <label>涌泉</label>
-        <description>Placeholder</description>
+        <description>在目标地点创造一股清泉，对6格范围内的己方目标附加*近战伤害系数提升*、*远程伤害系数提升*、*承受伤害降低*和减轻疼痛的效果。\n该技能的*标示效果*可被雅乐的效果强化。\n需要持续引导，引导期间持续积累激流，泉水持续15秒</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
         <jobDef>CastSpringFlow</jobDef>
 
@@ -38,6 +38,41 @@
             <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <previewRadius>6.0</previewRadius>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Qinghe_AquaMirror</defName>
+        <label>水镜</label>
+        <description>为目标地点附近4格内的己方目标附上持续10秒的水镜，水镜可以抵挡一部分伤害。受到攻击耗尽或持续时间结束后消失时，*瞬间治疗目标*，恢复目标所有非永久伤口和缺失身体部件并*对小范围内敌方目标造成伤害*。\n该技能的*标示效果*可被雅乐的效果强化。\n水镜消失时，积累少量激流。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
+
+        <category>MX_QingheSkill</category>
+        <displayOrder>120</displayOrder>
+        <cooldownTicksRange>480</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.2</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityAquaMirror">
+                <previewRadius>4.0</previewRadius>
             </li>
         </comps>
     </AbilityDef>

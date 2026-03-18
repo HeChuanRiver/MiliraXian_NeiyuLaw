@@ -74,10 +74,15 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_AquaMirror.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
+      <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
+      <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
       <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
+      <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
       <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
@@ -96,6 +101,7 @@
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_QingheBS1.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStroy_ZhaoliBS1.xml" />
+      <Content Include="1.6\Defs\DamageDefs\MiliraXian_DamageDefs_Qinghe.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
