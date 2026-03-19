@@ -48,7 +48,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Guiyi</defName>
         <label>诡医</label>
-        <description>消耗1点因果，治愈目标一切疾病与损伤。该效果会恢复缺失肢体，清除成瘾、机械损伤、永久旧伤与其他负面健康状态，但无法对敌对目标使用。</description>
+        <description>消耗1点因果，治愈目标一切疾病与损伤。该效果会恢复缺失肢体，清除成瘾、机械损伤、永久旧伤与其他负面健康状态。诡医无法对昭离自己或敌对目标使用，并会在目标身上建立持续30天的因果链接。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -65,7 +65,7 @@
             <targetable>true</targetable>
             <range>30</range>
             <targetParams>
-                <canTargetSelf>true</canTargetSelf>
+                <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>true</canTargetPawns>
                 <canTargetLocations>false</canTargetLocations>
                 <canTargetBuildings>false</canTargetBuildings>

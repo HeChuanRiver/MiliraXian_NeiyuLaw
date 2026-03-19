@@ -228,9 +228,20 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            DamageDef damageDef = PropsField.bleedDamageDef ?? DamageDefOf.Cut;
-            DamageInfo damageInfo = new DamageInfo(damageDef, PropsField.bleedDamage, PropsField.bleedArmorPenetration, -1f, Pawn);
-            pawn.TakeDamage(damageInfo);
+            BodyPartRecord part = pawn.health?.hediffSet?.GetRandomNotMissingPart(DamageDefOf.Cut, BodyPartHeight.Undefined, BodyPartDepth.Outside);
+            if (part == null)
+            {
+                return;
+            }
+
+            Hediff_Injury injury = HediffMaker.MakeHediff(HediffDefOf.Cut, pawn, part) as Hediff_Injury;
+            if (injury == null)
+            {
+                return;
+            }
+
+            injury.Severity = Mathf.Max(0.1f, PropsField.bleedDamage);
+            pawn.health.AddHediff(injury, part);
         }
 
         private static void ExecutePawn(Pawn pawn)

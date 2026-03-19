@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliKarma</defName>
         <label>因果</label>
-        <description>昭离专属资源。通过告死处决积累，并由后续主动技能进行消耗。</description>
+        <description>昭离专属资源。通过告死处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的因果链接名单。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -14,12 +14,12 @@
         <comps>
             <li Class="MiliraXian.Characters.HediffCompProperties_PawnSpecialResource">
                 <resourceLabel>因果</resourceLabel>
-                <resourceDescription>昭离专属资源。每次成功告死都会增加因果，后续主动技能会消耗因果。</resourceDescription>
+                <resourceDescription>昭离专属资源。每次成功告死都会增加因果，后续主动技能会消耗因果。该资源超过100点时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <clampToMax>false</clampToMax>
                 <showGizmo>true</showGizmo>
-                <hideOnHealthTab>true</hideOnHealthTab>
+                <hideOnHealthTab>false</hideOnHealthTab>
                 <barColorRed>0.78</barColorRed>
                 <barColorGreen>0.10</barColorGreen>
                 <barColorBlue>0.12</barColorBlue>
@@ -28,6 +28,10 @@
                 <barHighlightGreen>0.22</barHighlightGreen>
                 <barHighlightBlue>0.24</barHighlightBlue>
                 <barHighlightAlpha>1</barHighlightAlpha>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliKarmaLinks">
+                <maxLinks>20</maxLinks>
+                <linkDurationTicks>1800000</linkDurationTicks>
             </li>
         </comps>
     </HediffDef>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliKarmaLink</defName>
+        <label>因果相连</label>
+        <description>该目标与昭离建立了因果链接。链接持续30天，在此期间可为昭离承担溢出的因果，或在昭离死亡时替其赴死。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>1800000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliKarmaLinkTarget" />
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliOverflowKarma</defName>
+        <label>代偿因果</label>
+        <description>该目标正在替昭离承担一层溢出的因果。在这层因果消失之前，无法再次替昭离承担新的溢出因果。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+    </HediffDef>
+
+</Defs>

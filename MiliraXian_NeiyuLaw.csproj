@@ -77,6 +77,7 @@
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliKarmaLinks.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -97,6 +98,7 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_DeathField.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Dormancy.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Links.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />

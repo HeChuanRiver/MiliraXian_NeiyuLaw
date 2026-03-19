@@ -166,16 +166,6 @@
                     </li>
                 </extraForcedTraits>
 
-                <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
-                 生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
-                <!-- TODO: 这里记得写到时候的一些机制hediff相关的东西 -->
-                <extraForcedHediffs>
-                    <li>
-                        <def>MXNL_NeiyuShield</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                </extraForcedHediffs>
             </li>
 
             <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
@@ -227,10 +217,6 @@
             <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
             <!-- These classes are tools for special characters. You can add them selectively based on your needs—and it’s completely fine if you don’t add any of them. ↓↓↓ -->
             <!-- 以下的class是一些关于特殊角色的工具，你可以根据你的需求选择性的添加。这些class你就算一个都不添加也完全没问题。 ↓↓↓ -->
-
-            <!-- Using Ariandel Library to handle this pawn's death. When this pawn should be dead, it will not really be dead but be recalled to the SCM.
-             将角色转交给角色管理器的死亡管理系统（禁用原版死亡），当该角色被判定应当死亡时，特殊角色管理器将会召回该角色并且进入复活等待。 -->
-            <li Class="AriandelLibrary.AL_Kill_Manager_Extension" />
 
             <!-- Disable all kinds of mental break, including mental break created by Mods.
              禁用一切精神崩溃，包括Mod中新创作的精神崩溃。 -->

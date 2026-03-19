@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -31,8 +30,29 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
+            if (linkComp == null)
+            {
+                return;
+            }
+
+            if (!linkComp.TryAddOrRefreshLink(targetPawn, out bool createdNewLink, out string failureReason))
+            {
+                if (!failureReason.NullOrEmpty() && caster.Faction == Faction.OfPlayer)
+                {
+                    Messages.Message(failureReason, targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                }
+
+                return;
+            }
+
             if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
             {
+                if (createdNewLink)
+                {
+                    linkComp.BreakLink(targetPawn);
+                }
+
                 if (caster.Faction == Faction.OfPlayer)
                 {
                     Messages.Message("因果不足，无法施放诡医。", caster, MessageTypeDefOf.RejectInput, historical: false);
@@ -48,7 +68,7 @@ namespace MiliraXian.Characters.Zhaoli
                 FleckMaker.AttachedOverlay(targetPawn, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
                 if (targetPawn.Spawned)
                 {
-                    MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "痊愈", 3.65f);
+                    MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "诡医", 3.65f);
                 }
             }
         }
@@ -64,6 +84,16 @@ namespace MiliraXian.Characters.Zhaoli
             Pawn targetPawn = target.Pawn;
             if (caster == null || targetPawn == null || targetPawn.Dead)
             {
+                return false;
+            }
+
+            if (targetPawn == caster)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message("诡医无法对昭离自己使用。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                }
+
                 return false;
             }
 
@@ -97,6 +127,22 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
+            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
+            if (linkComp == null)
+            {
+                return false;
+            }
+
+            if (!linkComp.CanLinkTarget(targetPawn, out string failureReason))
+            {
+                if (throwMessages && !failureReason.NullOrEmpty())
+                {
+                    Messages.Message(failureReason, targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                }
+
+                return false;
+            }
+
             return base.Valid(target, throwMessages);
         }
 
@@ -112,10 +158,9 @@ namespace MiliraXian.Characters.Zhaoli
                 return true;
             }
 
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
+            for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; i++)
             {
-                if (ShouldRemoveHediff(hediffs[i]))
+                if (ShouldRemoveHediff(pawn.health.hediffSet.hediffs[i]))
                 {
                     return true;
                 }
@@ -126,11 +171,10 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static int RestoreMissingParts(Pawn pawn)
         {
-            List<Hediff_MissingPart> missingParts = pawn.health.hediffSet.GetMissingPartsCommonAncestors();
             int restoredParts = 0;
-            for (int i = 0; i < missingParts.Count; i++)
+            for (int i = 0; i < pawn.health.hediffSet.GetMissingPartsCommonAncestors().Count; i++)
             {
-                Hediff_MissingPart missingPart = missingParts[i];
+                Hediff_MissingPart missingPart = pawn.health.hediffSet.GetMissingPartsCommonAncestors()[i];
                 if (missingPart?.Part == null)
                 {
                     continue;
@@ -145,11 +189,10 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static int RemoveNegativeHediffs(Pawn pawn)
         {
-            List<Hediff> hediffsToRemove = new List<Hediff>();
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
+            System.Collections.Generic.List<Hediff> hediffsToRemove = new System.Collections.Generic.List<Hediff>();
+            for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; i++)
             {
-                Hediff hediff = hediffs[i];
+                Hediff hediff = pawn.health.hediffSet.hediffs[i];
                 if (ShouldRemoveHediff(hediff))
                 {
                     hediffsToRemove.Add(hediff);
