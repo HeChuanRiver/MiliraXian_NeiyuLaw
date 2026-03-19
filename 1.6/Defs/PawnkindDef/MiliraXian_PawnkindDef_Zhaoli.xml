@@ -118,15 +118,8 @@
 
         <!-- 给予这个角色的技能 -->
         <abilities>
-            <!-- TODO: 这里记得给这里面填昭离技能 -->
-<!--            <li>MX_Neiyu_WarpFeather</li>-->
-<!--            <li>MX_Neiyu_ThunderMarkedStorm</li>-->
-<!--            <li>MX_Neiyu_Bow_ArrowBarrage</li>-->
-<!--            <li>MX_Neiyu_Flower_BlessingField</li>-->
-<!--            <li>MX_Neiyu_Flower_ToxinGarden</li>-->
-<!--            <li>MX_Neiyu_Sword_Skyfall</li>-->
-<!--            <li>MX_Neiyu_Sword_ExecuteHead</li>-->
-            <!-- <li>MI_ShroudPower_Skip</li> -->
+            <li>MX_Zhaoli_DeathField</li>
+            <li>MX_Zhaoli_Guiyi</li>
         </abilities>
 
         <!-- modExtensions是用来使用的非官方类的地方 -->
@@ -173,16 +166,6 @@
                     </li>
                 </extraForcedTraits>
 
-                <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
-                 生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
-                <!-- TODO: 这里记得写到时候的一些机制hediff相关的东西 -->
-                <extraForcedHediffs>
-                    <li>
-                        <def>MXNL_NeiyuShield</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                </extraForcedHediffs>
             </li>
 
             <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
@@ -206,24 +189,24 @@
                 <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
                 <uniqueID>Zhaoli</uniqueID>
+                <!-- TODO：犯煞笔了，角色做好记得改回来-->
+<!--                &lt;!&ndash; The tab you want to put this pawn in. MI_Milira_Tab is Milira.-->
+<!--                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 &ndash;&gt;-->
+<!--                <tabDef>MI_Milira_Tab</tabDef>-->
 
-                <!-- The tab you want to put this pawn in. MI_Milira_Tab is Milira.
-                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 -->
-                <tabDef>MI_Milira_Tab</tabDef>
+<!--                &lt;!&ndash; The texture path for character icon in SCM. You may use 256px picture.-->
+<!--                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 &ndash;&gt;-->
+<!--                &lt;!&ndash; TODO: 记得换昭离的大头照 &ndash;&gt;-->
+<!--                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>-->
 
-                <!-- The texture path for character icon in SCM. You may use 256px picture.
-                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 -->
-                <!-- TODO: 记得换昭离的大头照 -->
-                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+<!--                &lt;!&ndash; Key for this pawn's name. 用于写此人的姓名的Key。 &ndash;&gt;-->
+<!--                <labelKey>SpecialPawnZhaoli.label</labelKey>-->
+<!--                &lt;!&ndash; Key for this pawn's description. 用于写此人描述的Key。 &ndash;&gt;-->
+<!--                <descKey>SpecialPawnZhaoli.desc</descKey>-->
 
-                <!-- Key for this pawn's name. 用于写此人的姓名的Key。 -->
-                <labelKey>SpecialPawnZhaoli.label</labelKey>
-                <!-- Key for this pawn's description. 用于写此人描述的Key。 -->
-                <descKey>SpecialPawnZhaoli.desc</descKey>
-
-                <!-- The sorting position of this pawn’s icon within the tab you selected.
-                 这个角色的图标在你所选的分页（Tab）的排序位置 -->
-                <order>14</order>
+<!--                &lt;!&ndash; The sorting position of this pawn’s icon within the tab you selected.-->
+<!--                 这个角色的图标在你所选的分页（Tab）的排序位置 &ndash;&gt;-->
+<!--                <order>14</order>-->
             </li>
 
             <!-- The classes upon must be included!!! ↑↑↑ -->
@@ -234,10 +217,6 @@
             <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
             <!-- These classes are tools for special characters. You can add them selectively based on your needs—and it’s completely fine if you don’t add any of them. ↓↓↓ -->
             <!-- 以下的class是一些关于特殊角色的工具，你可以根据你的需求选择性的添加。这些class你就算一个都不添加也完全没问题。 ↓↓↓ -->
-
-            <!-- Using Ariandel Library to handle this pawn's death. When this pawn should be dead, it will not really be dead but be recalled to the SCM.
-             将角色转交给角色管理器的死亡管理系统（禁用原版死亡），当该角色被判定应当死亡时，特殊角色管理器将会召回该角色并且进入复活等待。 -->
-            <li Class="AriandelLibrary.AL_Kill_Manager_Extension" />
 
             <!-- Disable all kinds of mental break, including mental break created by Mods.
              禁用一切精神崩溃，包括Mod中新创作的精神崩溃。 -->

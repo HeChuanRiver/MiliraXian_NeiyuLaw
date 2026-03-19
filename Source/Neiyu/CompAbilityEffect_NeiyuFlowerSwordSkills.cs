@@ -1130,6 +1130,12 @@ namespace MiliraXian.Characters.Neiyu
             NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, hitCell, Props.hitFleckDefName, 1.2f);
             NeiyuWeaponVisualHooks.Notify(caster, "SwordExecute_DashTipForward", hitCell, Props.dashWeaponScale, Props.dashWeaponAngle);
 
+            if (caster.Spawned && victim.Spawned)
+            {
+                caster.rotationTracker?.Face(victim.DrawPos);
+                caster.Drawer.Notify_MeleeAttackOn(victim);
+            }
+
             DecapitateTarget(caster, victim);
 
             NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, hitCell, Props.effectCDefName, 1f);

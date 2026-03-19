@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliDeathFieldActive</defName>
+        <label>告死流场</label>
+        <description>昭离维持中的告死流场，会持续压制范围内除自身外的一切单位。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>900</disappearsAfterTicks>
+                <showRemainingTime>false</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathField">
+                <radius>9</radius>
+                <fieldDurationTicks>900</fieldDurationTicks>
+                <bleedIntervalTicks>180</bleedIntervalTicks>
+                <bleedDamage>3</bleedDamage>
+                <bleedDamageDef>Cut</bleedDamageDef>
+                <executeStayTicks>900</executeStayTicks>
+                <slowHediff>MXZL_ZhaoliDeathFieldSlow</slowHediff>
+                <slowRefreshTicks>90</slowRefreshTicks>
+                <karmaPerExecution>1</karmaPerExecution>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliDeathFieldSlow</defName>
+        <label>告死滞压</label>
+        <description>身处告死流场之中，行动会被明显压制，难以脱离其范围。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <statFactors>
+                    <MoveSpeed>0.80</MoveSpeed>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>90</disappearsAfterTicks>
+                <showRemainingTime>false</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

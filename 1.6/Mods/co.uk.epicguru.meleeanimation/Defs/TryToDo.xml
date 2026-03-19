@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <AM.MeleeAnimationAdjustmentDef>
+        <defName>MXNL_MeleeAnimationAdjustment_Neiyu</defName>
+        <weaponAdjustments>
+            <li>
+                <key>MX_Neiyu_Form_Weapon</key>
+                <value>
+                    <overrideSize>Colossal</overrideSize>
+                </value>
+            </li>
+        </weaponAdjustments>
+    </AM.MeleeAnimationAdjustmentDef>
+
+</Defs>

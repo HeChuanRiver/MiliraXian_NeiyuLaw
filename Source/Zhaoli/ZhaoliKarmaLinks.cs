@@ -1,0 +1,450 @@
+using System.Collections.Generic;
+using System.Text;
+using HarmonyLib;
+using RimWorld;
+using Verse;
+
+namespace MiliraXian.Characters.Zhaoli
+{
+    public class HediffCompProperties_ZhaoliKarmaLinks : HediffCompProperties
+    {
+        public int maxLinks = 20;
+        public int linkDurationTicks = 1800000;
+
+        public HediffCompProperties_ZhaoliKarmaLinks()
+        {
+            compClass = typeof(HediffComp_ZhaoliKarmaLinks);
+        }
+    }
+
+    public class HediffComp_ZhaoliKarmaLinks : HediffComp
+    {
+        private List<Pawn> linkedPawns = new List<Pawn>();
+
+        public HediffCompProperties_ZhaoliKarmaLinks PropsLinks => (HediffCompProperties_ZhaoliKarmaLinks)props;
+
+        public int ActiveLinkCount
+        {
+            get
+            {
+                CleanupInvalidLinks();
+                return linkedPawns.Count;
+            }
+        }
+
+        public override string CompLabelInBracketsExtra => "已链接 " + ActiveLinkCount + "/" + PropsLinks.maxLinks;
+
+        public override string CompTipStringExtra => "当前已链接：" + ActiveLinkCount + "/" + PropsLinks.maxLinks;
+
+        public override string CompDescriptionExtra => BuildLinkSummary();
+
+        public override void CompExposeData()
+        {
+            Scribe_Collections.Look(ref linkedPawns, "linkedPawns", LookMode.Reference);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                CleanupInvalidLinks();
+            }
+        }
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            if (Pawn != null && Pawn.IsHashIntervalTick(250))
+            {
+                CleanupInvalidLinks();
+            }
+        }
+
+        public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
+        {
+            base.Notify_PawnDied(dinfo, culprit);
+        }
+
+        public bool CanLinkTarget(Pawn target, out string failureReason)
+        {
+            failureReason = null;
+            CleanupInvalidLinks();
+            if (target == null || target.Dead || target.Destroyed)
+            {
+                failureReason = "目标无法建立因果链接。";
+                return false;
+            }
+
+            if (target == Pawn)
+            {
+                failureReason = "昭离不能与自己建立因果链接。";
+                return false;
+            }
+
+            HediffComp_ZhaoliKarmaLinkTarget targetComp = ZhaoliKarmaUtility.GetLinkTargetComp(target);
+            if (targetComp != null && targetComp.Zhaoli != null && targetComp.Zhaoli != Pawn)
+            {
+                failureReason = "目标已经与另一名昭离建立了因果链接。";
+                return false;
+            }
+
+            if (targetComp != null && targetComp.Zhaoli == Pawn)
+            {
+                return true;
+            }
+
+            if (linkedPawns.Count >= PropsLinks.maxLinks)
+            {
+                failureReason = "因果链接已达到上限，无法再建立新的链接。";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool TryAddOrRefreshLink(Pawn target, out bool createdNewLink, out string failureReason)
+        {
+            createdNewLink = false;
+            if (!CanLinkTarget(target, out failureReason))
+            {
+                return false;
+            }
+
+            HediffDef linkDef = DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliKarmaUtility.LinkTargetHediffDefName);
+            if (linkDef == null || target?.health == null)
+            {
+                failureReason = "缺少因果链接 Hediff 定义。";
+                return false;
+            }
+
+            Hediff hediff = target.health.GetOrAddHediff(linkDef);
+            HediffWithComps hediffWithComps = hediff as HediffWithComps;
+            if (hediffWithComps == null)
+            {
+                failureReason = "因果链接 Hediff 未能正确实例化。";
+                return false;
+            }
+
+            HediffComp_ZhaoliKarmaLinkTarget linkTargetComp = hediffWithComps.GetComp<HediffComp_ZhaoliKarmaLinkTarget>();
+            if (linkTargetComp == null)
+            {
+                failureReason = "因果链接 Hediff 缺少链接组件。";
+                return false;
+            }
+
+            linkTargetComp.SetZhaoli(Pawn);
+            hediffWithComps.GetComp<HediffComp_Disappears>()?.SetDuration(PropsLinks.linkDurationTicks);
+            target.health.Notify_HediffChanged(hediff);
+
+            if (!linkedPawns.Contains(target))
+            {
+                linkedPawns.Add(target);
+                createdNewLink = true;
+            }
+
+            return true;
+        }
+
+        public void RemoveLinkReference(Pawn target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            linkedPawns.RemoveAll(pawn => pawn == null || pawn == target);
+        }
+
+        public void BreakLink(Pawn target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            RemoveLinkReference(target);
+            ZhaoliKarmaUtility.RemoveTargetLinkHediff(target, Pawn);
+            ZhaoliKarmaUtility.RemoveOverflowBurden(target);
+        }
+
+        public bool TryDistributeOverflow(int overflowCount)
+        {
+            if (overflowCount <= 0)
+            {
+                return true;
+            }
+
+            List<Pawn> eligiblePawns = GetEligibleOverflowPawns();
+            if (eligiblePawns.Count < overflowCount)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < overflowCount; i++)
+            {
+                int index = Rand.Range(0, eligiblePawns.Count);
+                Pawn selectedPawn = eligiblePawns[index];
+                eligiblePawns.RemoveAt(index);
+                ZhaoliKarmaUtility.ApplyOverflowBurden(selectedPawn);
+            }
+
+            return true;
+        }
+
+        public Pawn GetRandomLiveLinkedPawn()
+        {
+            List<Pawn> liveLinkedPawns = new List<Pawn>();
+            CleanupInvalidLinks();
+            for (int i = 0; i < linkedPawns.Count; i++)
+            {
+                Pawn linkedPawn = linkedPawns[i];
+                if (linkedPawn == null || linkedPawn.Dead || linkedPawn.Destroyed)
+                {
+                    continue;
+                }
+
+                liveLinkedPawns.Add(linkedPawn);
+            }
+
+            if (liveLinkedPawns.Count == 0)
+            {
+                return null;
+            }
+
+            return liveLinkedPawns[Rand.Range(0, liveLinkedPawns.Count)];
+        }
+
+        private List<Pawn> GetEligibleOverflowPawns()
+        {
+            List<Pawn> eligiblePawns = new List<Pawn>();
+            CleanupInvalidLinks();
+            for (int i = 0; i < linkedPawns.Count; i++)
+            {
+                Pawn linkedPawn = linkedPawns[i];
+                if (linkedPawn == null || linkedPawn.Dead || linkedPawn.Destroyed)
+                {
+                    continue;
+                }
+
+                if (ZhaoliKarmaUtility.HasOverflowBurden(linkedPawn))
+                {
+                    continue;
+                }
+
+                eligiblePawns.Add(linkedPawn);
+            }
+
+            return eligiblePawns;
+        }
+
+        private void CleanupInvalidLinks()
+        {
+            HashSet<Pawn> seenPawns = new HashSet<Pawn>();
+            for (int i = linkedPawns.Count - 1; i >= 0; i--)
+            {
+                Pawn linkedPawn = linkedPawns[i];
+                if (linkedPawn == null || linkedPawn.Destroyed || !seenPawns.Add(linkedPawn) || !ZhaoliKarmaUtility.HasLinkFrom(linkedPawn, Pawn))
+                {
+                    if (linkedPawn != null && !linkedPawn.Destroyed)
+                    {
+                        ZhaoliKarmaUtility.RemoveOverflowBurden(linkedPawn);
+                    }
+
+                    linkedPawns.RemoveAt(i);
+                }
+            }
+        }
+
+        private string BuildLinkSummary()
+        {
+            CleanupInvalidLinks();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("当前已链接：");
+            stringBuilder.Append(ActiveLinkCount);
+            stringBuilder.Append("/");
+            stringBuilder.Append(PropsLinks.maxLinks);
+            if (linkedPawns.Count == 0)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.Append("链接名单：无");
+                return stringBuilder.ToString();
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("链接名单：");
+            for (int i = 0; i < linkedPawns.Count; i++)
+            {
+                Pawn linkedPawn = linkedPawns[i];
+                if (linkedPawn == null)
+                {
+                    continue;
+                }
+
+                stringBuilder.AppendLine();
+                stringBuilder.Append("  - ");
+                stringBuilder.Append(linkedPawn.LabelShortCap);
+                if (ZhaoliKarmaUtility.HasOverflowBurden(linkedPawn))
+                {
+                    stringBuilder.Append("（代偿因果）");
+                }
+            }
+
+            return stringBuilder.ToString();
+        }
+    }
+
+    public class HediffCompProperties_ZhaoliKarmaLinkTarget : HediffCompProperties
+    {
+        public HediffCompProperties_ZhaoliKarmaLinkTarget()
+        {
+            compClass = typeof(HediffComp_ZhaoliKarmaLinkTarget);
+        }
+    }
+
+    public class HediffComp_ZhaoliKarmaLinkTarget : HediffComp
+    {
+        private Pawn zhaoli;
+
+        public Pawn Zhaoli => zhaoli;
+
+        public override string CompLabelInBracketsExtra => zhaoli?.LabelShortCap;
+
+        public override string CompTipStringExtra
+        {
+            get
+            {
+                if (zhaoli == null)
+                {
+                    return "该目标正与昭离保持因果链接。";
+                }
+
+                return "该目标正与" + zhaoli.LabelShortCap + "保持因果链接。";
+            }
+        }
+
+        public override void CompExposeData()
+        {
+            Scribe_References.Look(ref zhaoli, "zhaoli");
+        }
+
+        public override void CompPostPostRemoved()
+        {
+            ZhaoliKarmaUtility.GetLinkComp(zhaoli)?.RemoveLinkReference(Pawn);
+            ZhaoliKarmaUtility.RemoveOverflowBurden(Pawn);
+        }
+
+        public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
+        {
+            base.Notify_PawnDied(dinfo, culprit);
+            ZhaoliKarmaUtility.GetLinkComp(zhaoli)?.RemoveLinkReference(Pawn);
+        }
+
+        public void SetZhaoli(Pawn pawn)
+        {
+            zhaoli = pawn;
+        }
+    }
+
+    public class GameComponent_ZhaoliKarma : GameComponent
+    {
+        private List<Pawn> pendingResurrectionPawns = new List<Pawn>();
+
+        public GameComponent_ZhaoliKarma(Game game)
+        {
+        }
+
+        public void RegisterPendingResurrection(Pawn pawn)
+        {
+            if (pawn == null || pendingResurrectionPawns.Contains(pawn))
+            {
+                return;
+            }
+
+            pendingResurrectionPawns.Add(pawn);
+        }
+
+        public override void GameComponentTick()
+        {
+            if (Current.ProgramState != ProgramState.Playing || pendingResurrectionPawns.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = pendingResurrectionPawns.Count - 1; i >= 0; i--)
+            {
+                Pawn pawn = pendingResurrectionPawns[i];
+                pendingResurrectionPawns.RemoveAt(i);
+                ProcessPendingResurrection(pawn);
+            }
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Collections.Look(ref pendingResurrectionPawns, "pendingResurrectionPawns", LookMode.Reference);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                pendingResurrectionPawns.RemoveAll(pawn => pawn == null || pawn.Destroyed);
+            }
+        }
+
+        private static void ProcessPendingResurrection(Pawn pawn)
+        {
+            if (pawn == null || pawn.Destroyed || !pawn.Dead)
+            {
+                return;
+            }
+
+            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(pawn);
+            Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
+            if (sacrificePawn == null)
+            {
+                return;
+            }
+
+            linkComp.BreakLink(sacrificePawn);
+            sacrificePawn.Kill(null);
+
+            ResurrectionUtility.TryResurrect(pawn, new ResurrectionParams
+            {
+                gettingScarsChance = 0f,
+                canKidnap = false,
+                canTimeoutOrFlee = false,
+                useAvoidGridSmart = true,
+                canSteal = false,
+                noLord = true,
+                invisibleStun = true,
+                removeDiedThoughts = true
+            });
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
+    public static class Patch_Pawn_Kill_ZhaoliSubstitute
+    {
+        public static void Postfix(Pawn __instance)
+        {
+            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            {
+                return;
+            }
+
+            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
+            Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
+            if (sacrificePawn == null)
+            {
+                return;
+            }
+
+            linkComp.BreakLink(sacrificePawn);
+            sacrificePawn.Kill(null);
+
+            ResurrectionUtility.TryResurrect(__instance, new ResurrectionParams
+            {
+                gettingScarsChance = 0f,
+                canKidnap = false,
+                canTimeoutOrFlee = false,
+                useAvoidGridSmart = true,
+                canSteal = false,
+                noLord = true,
+                invisibleStun = true,
+                removeDiedThoughts = true
+            });
+        }
+    }
+}

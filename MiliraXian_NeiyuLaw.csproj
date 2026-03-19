@@ -92,11 +92,16 @@
       <Compile Include="Source\QingHe\MX_QHPatches.cs" />
       <Compile Include="Source\QingHe\MX_QHUtility.cs" />
       <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliKarmaLinks.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Debug.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Zhaoli.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Qinghe.xml" />
@@ -117,7 +122,10 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityTempest.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_PawnResource.xml" />
       <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_DeathField.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Dormancy.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Links.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Qinghe.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
@@ -173,6 +181,9 @@
       <Content Include="1.6\Languages\English\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Languages\English\DefInjected\TraitDef\Traits_Sample.xml" />
       <Content Include="1.6\Languages\English\Keyed\Name.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Defs\TryToDo.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Patches\PatchForMA.xml" />
+      <Content Include="1.6\Mods\co.uk.epicguru.meleeanimation\Textures\MiliraCharacterMeleeFix\Weapon\MX_Neiyu_Form_Weapon_OnHand.png" />
       <Content Include="1.6\Mods\Nals.FacialAnimation\Defs\UniqueEye.xml" />
       <Content Include="1.6\Mods\Nals.FacialAnimation\Defs\UniqueLid.xml" />
       <Content Include="1.6\Patches\Patch1.xml" />
@@ -208,6 +219,7 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\BowForNeiyu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\EarringsZhenzhu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\FlowerStick.png" />
+      <Content Include="Content\Textures\MiliraXianNeiyu\Items\MX_Neiyu_Form_Weapon_OnHand.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\Items\SwordForNeiyu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Accessories\Zhenzhu\zhenzhu.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Accessories\Zhenzhu\zhenzhu_east.png" />
@@ -296,6 +308,7 @@
       <Content Include="README.md" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="1.6\Mods\co.uk.epicguru.meleeanimation\Assemblies\" />
       <Folder Include="Source\Zhaoli\" />
     </ItemGroup>
     <ItemGroup>
@@ -309,5 +322,6 @@
     <Target Name="AfterBuild">
     </Target>
     -->
+
 </Project>
 

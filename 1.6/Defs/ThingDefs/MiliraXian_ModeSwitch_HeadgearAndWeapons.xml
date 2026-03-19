@@ -184,6 +184,15 @@
                 </cycleFleckDefNames>
             </li>
         </modExtensions>
+        <modExtensions>
+            <li Class="AncotLibrary.ExtraGraphicData_Extension">
+                <graphicData>
+                    <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
+                    <graphicClass>Graphic_Single</graphicClass>
+                    <drawSize>(1.5,4.5)</drawSize>
+                </graphicData>
+            </li>
+        </modExtensions>
     </ThingDef>
     
     <ThingDef ParentName="BaseWeapon">
