@@ -124,9 +124,97 @@
                 <healAmount>10</healAmount>
                 <explosionDamage>10</explosionDamage>
                 <explosionRadius>3</explosionRadius>
-                <shieldAmount>100</shieldAmount>
-                <shieldRadius>1</shieldRadius>
                 <tempestPerMirror>5</tempestPerMirror>
+                <shieldCompProperties>
+                    <startingEnergy>100.0</startingEnergy>
+                    <energyLossPerDamage>1.0</energyLossPerDamage>
+                    <breakOnEmp>false</breakOnEmp>
+                    <playBreakEffects>true</playBreakEffects>
+                    <absorbFleckDefName>ExplosionFlash</absorbFleckDefName>
+                    <hurtFleckDefNames>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_A</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_B</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_C</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_D</li>
+                    </hurtFleckDefNames>
+                    <absorbFleckScale>1.2</absorbFleckScale>
+                    <drawActiveShield>true</drawActiveShield>
+                    <activeShieldTexPath>MiliraXianNeiyu/Effect/Neiyu_Shield/Shield</activeShieldTexPath>
+                    <activeShieldDrawSize>(1.8,1.8)</activeShieldDrawSize>
+                    <activeShieldAlpha>0.35</activeShieldAlpha>
+                    <activeShieldAltitudeOffset>0.0</activeShieldAltitudeOffset>
+                    <activeShieldPulseMin>0.96</activeShieldPulseMin>
+                    <activeShieldPulseMax>1.06</activeShieldPulseMax>
+                    <activeShieldPulseTicks>75</activeShieldPulseTicks>
+                    <minDrawSize>1.0</minDrawSize>
+                    <maxDrawSize>1.15</maxDrawSize>
+                </shieldCompProperties>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Draining</defName>
+        <label>水循环断流</label>
+        <description>内部的液体被强制抽出，若不加以干预将很快因脱水而死亡。</description>
+        <isBad>true</isBad>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.8, 0.6, 1.0)</defaultLabelColor>
+        <initialSeverity>0.01</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.9</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.2</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.7</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.4</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.5</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.6</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.3</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.8</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.1</postFactor>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_SeverityPerDay">
+                <severityPerDay>-0.5</severityPerDay>
+                <showHoursToRecover>true</showHoursToRecover>
             </li>
         </comps>
     </HediffDef>

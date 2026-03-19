@@ -109,6 +109,7 @@
             <!-- TODO: Abilities for QingHe -->
             <!-- This is an ability from "Milira Faction: Milira Imperium", so I commented out it. ↓↓↓ 这个技能来自“米莉拉派系扩展：米莉拉帝国”所以我把它注释掉了。↓↓↓-->
             <li>MX_Qinghe_SpringFlow</li>
+            <li>MX_Qinghe_AquaMirror</li>
             <!-- <li>MI_ShroudPower_Skip</li> -->
         </abilities>
 

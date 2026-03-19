@@ -32,7 +32,13 @@ namespace MiliraXian.Characters.QingHe
             {
                 if (thing is Pawn pawn && !pawn.Dead && pawn.Faction == parent.pawn.Faction)
                 {
+                    var existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
+                    if (existed != null)
+                    {
+                        pawn.health.hediffSet.hediffs.Remove(existed);
+                    }
                     var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
+                    hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
                     var comp = hediff.TryGetComp<HediffComp_AquaMirror>();
                     if (comp == null)
                     {

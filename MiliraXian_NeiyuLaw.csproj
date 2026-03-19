@@ -74,10 +74,12 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_DebugMaxResource.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_AquaMirror.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
       <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
+      <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
@@ -85,6 +87,7 @@
       <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_TempestDrain.cs" />
       <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
       <Compile Include="Source\QingHe\MX_QHPatches.cs" />
       <Compile Include="Source\QingHe\MX_QHUtility.cs" />
@@ -92,6 +95,7 @@
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Debug.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
