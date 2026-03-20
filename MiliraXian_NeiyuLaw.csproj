@@ -81,7 +81,6 @@
       <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
       <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
-      <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
@@ -96,6 +95,14 @@
       <Compile Include="Source\QingHe\MX_QHPatches.cs" />
       <Compile Include="Source\QingHe\MX_QHUtility.cs" />
       <Compile Include="Source\QingHe\Thing_SpawnedField.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_HengZhi.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_DuanHun.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_YangChun.cs" />
+      <Compile Include="Source\QingHe\JobDriver_CastAbility_HengZhi.cs" />
+      <Compile Include="Source\QingHe\JobDriver_CastAbility_DuanHun.cs" />
+      <Compile Include="Source\QingHe\JobDriver_CastAbility_YangChun.cs" />
+      <Compile Include="Source\QingHe\Comp_QingheWeaponAbilityGrant.cs" />
+      <Compile Include="Source\QingHe\CompYangChunField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
@@ -126,6 +133,7 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityTempest.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_PawnResource.xml" />
       <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityElegance.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_DeathField.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Dormancy.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
@@ -137,6 +145,7 @@
       <Content Include="1.6\Defs\ScenarioDefs\MiliraXian_Neiyu_Scenarios.xml" />
       <Content Include="1.6\Defs\Storyteller\Incidents_Neiyu.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
+      <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_ModeSwitch_Weapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Neiyu_SwordFlyers.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_SkillSpawned.xml" />
       <Content Include="1.6\Defs\TraitDef\Traits_Sample.xml" />
@@ -328,4 +337,7 @@
     -->
 
 </Project>
+
+
+
 

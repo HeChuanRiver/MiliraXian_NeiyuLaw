@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.QingHe
                         pawn.health.hediffSet.hediffs.Remove(existed);
                     }
                     var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
-                    hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
+                    hediff.Severity = MX_QHUtility.FactorLinear(1.0f, parent.pawn);
                     var comp = hediff.TryGetComp<HediffComp_AquaMirror>();
                     if (comp == null)
                     {

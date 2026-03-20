@@ -41,7 +41,7 @@ namespace MiliraXian.Characters.QingHe
                 parent = parent.pawn
             };
             newShield.Initialize(Props.shieldCompProperties);
-            newShield.Init(EleganceUtility.FactorLinear(1.0f, caster));
+            newShield.Init(MX_QHUtility.FactorLinear(1.0f, caster));
             newShield.PostPostMake();
             Log.Message("Debug shield amount: " + newShield.Energy);
             parent.pawn.AllComps.Add(newShield);
@@ -61,7 +61,7 @@ namespace MiliraXian.Characters.QingHe
             {
                 if (thing is Pawn pawn && !pawn.Dead && pawn.HostileTo(caster))
                 {
-                    var dinfo = new DamageInfo(MX_QHDefOf.MX_Dehydrate, Props.explosionDamage * EleganceUtility.FactorLinear(1.0f, caster),
+                    var dinfo = new DamageInfo(MX_QHDefOf.MX_Dehydrate, Props.explosionDamage * MX_QHUtility.FactorLinear(1.0f, caster),
                         armorPenetration: 1000.0f, instigator: caster);
                     dinfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Inside);
                     dinfo.SetIgnoreArmor(true);

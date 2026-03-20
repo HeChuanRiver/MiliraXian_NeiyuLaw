@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 清荷三形态武器（先复用现有贴图路径，后续可替换为 MiliraXianQinghe/Items/*） -->
+
+  <!-- 1) 琵琶形：远程 -->
+  <ThingDef ParentName="BaseWeapon">
+    <defName>MX_Qinghe_Form_Pipa</defName>
+    <label>清荷·琵琶形</label>
+    <description>清荷的琵琶形兵装，擅长中距离连发压制。</description>
+    <recipeMaker Inherit="False" IsNull="True" />
+
+    <techLevel>Archotech</techLevel>
+    <smeltable>false</smeltable>
+
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Items/FlowerStick</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.6,1.6)</drawSize>
+    </graphicData>
+    <uiIconPath>MiliraXianNeiyu/Items/FlowerStick</uiIconPath>
+
+    <generateCommonality>0</generateCommonality>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <tradeability>Sellable</tradeability>
+
+    <weaponTags>
+      <li>MiliraXian_QingheInstrument</li>
+    </weaponTags>
+
+    <weaponClasses>
+      <li>Ranged</li>
+    </weaponClasses>
+
+    <statBases>
+      <MarketValue>2600</MarketValue>
+      <Mass>1.0</Mass>
+      <AccuracyTouch>0.72</AccuracyTouch>
+      <AccuracyShort>0.74</AccuracyShort>
+      <AccuracyMedium>0.56</AccuracyMedium>
+      <AccuracyLong>0.30</AccuracyLong>
+    </statBases>
+
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>Bullet_AssaultRifle</defaultProjectile>
+        <warmupTime>0.90</warmupTime>
+        <range>29.9</range>
+        <burstShotCount>2</burstShotCount>
+        <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
+      </li>
+    </verbs>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_QingheWeaponAbilityGrant">
+        <abilityDef>MX_Qinghe_Elegance_HengZhi</abilityDef>
+      </li>
+
+      <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+        <formWeaponDefs>
+          <li>MX_Qinghe_Form_Pipa</li>
+          <li>MX_Qinghe_Form_Zhudi</li>
+          <li>MX_Qinghe_Form_Qin</li>
+        </formWeaponDefs>
+
+        <formLabels>
+          <li>琵琶</li>
+          <li>竹笛</li>
+          <li>琴</li>
+        </formLabels>
+
+        <formIconPaths>
+          <li>MiliraXianNeiyu/Items/FlowerStick</li>
+          <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+          <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+        </formIconPaths>
+
+        <commandLabel>切换形态</commandLabel>
+        <commandDesc>点击切换：琵琶 → 竹笛 → 琴。</commandDesc>
+
+        <destroyOldWeapon>true</destroyOldWeapon>
+        <requirePrimary>true</requirePrimary>
+        <cooldownTicks>0</cooldownTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- 2) 竹笛形：远程 -->
+  <ThingDef ParentName="BaseWeapon">
+    <defName>MX_Qinghe_Form_Zhudi</defName>
+    <label>清荷·竹笛形</label>
+    <description>清荷的竹笛形兵装，擅长远距离精准点射。</description>
+    <recipeMaker Inherit="False" IsNull="True" />
+
+    <techLevel>Archotech</techLevel>
+    <smeltable>false</smeltable>
+
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Items/BowForNeiyu</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.6,1.6)</drawSize>
+    </graphicData>
+    <uiIconPath>MiliraXianNeiyu/Items/BowForNeiyu</uiIconPath>
+
+    <generateCommonality>0</generateCommonality>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <tradeability>Sellable</tradeability>
+
+    <weaponTags>
+      <li>MiliraXian_QingheInstrument</li>
+    </weaponTags>
+
+    <weaponClasses>
+      <li>Ranged</li>
+    </weaponClasses>
+
+    <statBases>
+      <MarketValue>2800</MarketValue>
+      <Mass>0.9</Mass>
+      <AccuracyTouch>0.70</AccuracyTouch>
+      <AccuracyShort>0.78</AccuracyShort>
+      <AccuracyMedium>0.66</AccuracyMedium>
+      <AccuracyLong>0.44</AccuracyLong>
+    </statBases>
+
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>Bullet_SniperRifle</defaultProjectile>
+        <warmupTime>1.45</warmupTime>
+        <range>38.9</range>
+        <burstShotCount>1</burstShotCount>
+      </li>
+    </verbs>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_QingheWeaponAbilityGrant">
+        <abilityDef>MX_Qinghe_Elegance_DuanHun</abilityDef>
+      </li>
+
+      <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+        <formWeaponDefs>
+          <li>MX_Qinghe_Form_Pipa</li>
+          <li>MX_Qinghe_Form_Zhudi</li>
+          <li>MX_Qinghe_Form_Qin</li>
+        </formWeaponDefs>
+
+        <formLabels>
+          <li>琵琶</li>
+          <li>竹笛</li>
+          <li>琴</li>
+        </formLabels>
+
+        <formIconPaths>
+          <li>MiliraXianNeiyu/Items/FlowerStick</li>
+          <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+          <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+        </formIconPaths>
+
+        <commandLabel>切换形态</commandLabel>
+        <commandDesc>点击切换：琵琶 → 竹笛 → 琴。</commandDesc>
+
+        <destroyOldWeapon>true</destroyOldWeapon>
+        <requirePrimary>true</requirePrimary>
+        <cooldownTicks>0</cooldownTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- 3) 琴形：近战 -->
+  <ThingDef ParentName="BaseMeleeWeapon">
+    <defName>MX_Qinghe_Form_Qin</defName>
+    <label>清荷·琴形</label>
+    <description>清荷的琴形兵装，擅长近身斩击。</description>
+    <recipeMaker Inherit="False" IsNull="True" />
+
+    <techLevel>Archotech</techLevel>
+    <smeltable>false</smeltable>
+
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.8,1.8)</drawSize>
+    </graphicData>
+    <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+
+    <generateCommonality>0</generateCommonality>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <tradeability>Sellable</tradeability>
+
+    <weaponTags>
+      <li>MiliraXian_QingheInstrument</li>
+    </weaponTags>
+
+    <weaponClasses>
+      <li>Melee</li>
+    </weaponClasses>
+
+    <statBases>
+      <MarketValue>3000</MarketValue>
+      <Mass>1.2</Mass>
+      <MeleeWeapon_CooldownMultiplier>1.15</MeleeWeapon_CooldownMultiplier>
+      <AccuracyTouch>0.85</AccuracyTouch>
+      <AccuracyShort>0.68</AccuracyShort>
+      <AccuracyMedium>0.40</AccuracyMedium>
+      <AccuracyLong>0.20</AccuracyLong>
+    </statBases>
+
+    <tools>
+      <li>
+        <label>弦刃</label>
+        <capacities>
+          <li>Cut</li>
+          <li>Blunt</li>
+        </capacities>
+        <power>36</power>
+        <armorPenetration>0.25</armorPenetration>
+        <cooldownTime>2.0</cooldownTime>
+      </li>
+    </tools>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_QingheWeaponAbilityGrant">
+        <abilityDef>MX_Qinghe_Elegance_YangChun</abilityDef>
+      </li>
+
+      <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+        <formWeaponDefs>
+          <li>MX_Qinghe_Form_Pipa</li>
+          <li>MX_Qinghe_Form_Zhudi</li>
+          <li>MX_Qinghe_Form_Qin</li>
+        </formWeaponDefs>
+
+        <formLabels>
+          <li>琵琶</li>
+          <li>竹笛</li>
+          <li>琴</li>
+        </formLabels>
+
+        <formIconPaths>
+          <li>MiliraXianNeiyu/Items/FlowerStick</li>
+          <li>MiliraXianNeiyu/Items/BowForNeiyu</li>
+          <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+        </formIconPaths>
+
+        <commandLabel>切换形态</commandLabel>
+        <commandDesc>点击切换：琵琶 → 竹笛 → 琴。</commandDesc>
+
+        <destroyOldWeapon>true</destroyOldWeapon>
+        <requirePrimary>true</requirePrimary>
+        <cooldownTicks>0</cooldownTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

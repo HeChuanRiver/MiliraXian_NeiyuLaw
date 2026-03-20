@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -9,8 +9,13 @@ namespace MiliraXian.Characters.QingHe
     {
         // TODO: Add Periodic Graphic Effect if possible
     }
-    
+
     public class Thing_TempestDrainField : ThingWithComps
+    {
+        // TODO: Add Periodic Graphic Effect if possible
+    }
+
+    public class Thing_YangChunField : ThingWithComps
     {
         // TODO: Add Periodic Graphic Effect if possible
     }

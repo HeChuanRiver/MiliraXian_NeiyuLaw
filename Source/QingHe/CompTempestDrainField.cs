@@ -69,7 +69,7 @@ namespace MiliraXian.Characters.QingHe
                     var edge = Mathf.Clamp01(Props.edgeEffect);
                     var distanceFactor = 1 - d / Props.radius * (1 - edge);
                     var h = HediffMaker.MakeHediff(MX_QHDefOf.MX_Draining, pawn);
-                    h.Severity = Props.severityPerPulse * EleganceUtility.FactorLinear(1.0f, caster) * distanceFactor;
+                    h.Severity = Props.severityPerPulse * MX_QHUtility.FactorLinear(1.0f, caster) * distanceFactor;
                     pawn.health.AddHediff(h);
                     var comp = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_Draining)?.TryGetComp<HediffComp_SeverityPerSecondPausable>();
                     comp?.ResetTimer();

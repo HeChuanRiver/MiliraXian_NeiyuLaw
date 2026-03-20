@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef>
         <defName>SpringFlowField</defName>
@@ -73,4 +73,49 @@
             <drawSize>1.5</drawSize>
         </graphicData>
     </ThingDef>
+
+
+    <ThingDef>
+        <defName>MX_QH_Elegance_YangChunField</defName>
+        <label>*QH YangChun Field*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Thing_YangChunField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(0.55,0.95,0.75,0.45)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>10.0</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_YangChunField">
+                <radius>7.9</radius>
+                <pulseIntervalTicks>30</pulseIntervalTicks>
+
+                <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
+                <enemyDamageAmount>2</enemyDamageAmount>
+                <enemyArmorPenetration>0.15</enemyArmorPenetration>
+                <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
+                <enemyDebuffSeverity>1</enemyDebuffSeverity>
+                <enemyDebuffDurationTicks>300</enemyDebuffDurationTicks>
+
+                <allyBuffHediff>MX_QH_Elegance_YangChunAlly</allyBuffHediff>
+                <allyBuffSeverity>1</allyBuffSeverity>
+                <allyBuffDurationTicks>300</allyBuffDurationTicks>
+                <allyInstantHeal>0.8</allyInstantHeal>
+
+                <eleganceGainFlat>6</eleganceGainFlat>
+                <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
+                <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
+            </li>
+        </comps>
+    </ThingDef>
+
 </Defs>

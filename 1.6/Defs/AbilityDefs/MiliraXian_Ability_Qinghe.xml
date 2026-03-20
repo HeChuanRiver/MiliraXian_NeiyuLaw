@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <AbilityCategoryDef>
         <defName>MX_QingheSkill</defName>
@@ -37,6 +37,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
+                <fieldDurationTicks>900</fieldDurationTicks>
                 <previewRadius>6.0</previewRadius>
             </li>
         </comps>
@@ -111,9 +112,163 @@
         <comps>
             <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityTempestDrain">
                 <fieldDef>TempestDrainField</fieldDef>
+                <minResourceToCast>50</minResourceToCast>
+                <minResourceToMaintain>10</minResourceToMaintain>
+                <channelDurationTicks>999999</channelDurationTicks>
                 <previewRadius>12.0</previewRadius>
             </li>
         </comps>
     </AbilityDef>
+
+<!-- =========================
+       QingHe Elegance 武器技能示例
+       资源：MX_QH_Elegance
+       ========================= -->
+
+  <!-- 横指（琵琶形态）：同一施法 Job 内结算范围冲击+击退 -->
+  <AbilityDef>
+    <defName>MX_Qinghe_Elegance_HengZhi</defName>
+    <label>横指</label>
+    <description>仅琵琶形态可用。对自身周围敌人造成高额冲击并击退，命中目标越多，雅乐（Elegance）增长越快。</description>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <category>MX_QingheSkill</category>
+    <displayOrder>130</displayOrder>
+    <cooldownTicksRange>240</cooldownTicksRange>
+
+    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
+    <jobDef>MX_Qinghe_Elegance_CastAbility_HengZhi</jobDef>
+
+    <targetRequired>false</targetRequired>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <targetable>false</targetable>
+      <range>1.9</range>
+      <warmupTime>0.25</warmupTime>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityHengZhi">
+        <!-- 绑定到当前已存在的近战形态 Def -->
+        <requiredWeapon>MX_Qinghe_Form_Pipa</requiredWeapon>
+
+        <!-- 在同一施法 Job 内，施法完成后额外等待几 tick 再结算（0=立即） -->
+        <postCastDelayTicks>0</postCastDelayTicks>
+
+        <radius>3.9</radius>
+        <damageDef>MX_Dehydrate</damageDef>
+        <damageAmount>24</damageAmount>
+        <armorPenetration>0.55</armorPenetration>
+        <bluntDamageAmount>10</bluntDamageAmount>
+        <bluntArmorPenetration>0.15</bluntArmorPenetration>
+        <knockbackDistance>4</knockbackDistance>
+        <eleganceGainPerTarget>3</eleganceGainPerTarget>
+        <eleganceGainMax>24</eleganceGainMax>
+      </li>
+    </comps>
+  </AbilityDef>
+
+  <!-- 断魂（竹笛形态）：同一施法 Job 内结算目标区控制与破坏 -->
+  <AbilityDef>
+    <defName>MX_Qinghe_Elegance_DuanHun</defName>
+    <label>断魂</label>
+    <description>仅竹笛形态可用。对远处小范围施加断魂音律，造成伤害、眩晕、流血与长时减速，并有低概率直接摧毁大脑。</description>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <category>MX_QingheSkill</category>
+    <displayOrder>131</displayOrder>
+    <cooldownTicksRange>720</cooldownTicksRange>
+
+    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
+    <jobDef>MX_Qinghe_Elegance_CastAbility_DuanHun</jobDef>
+
+    <targetRequired>true</targetRequired>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <targetable>true</targetable>
+      <range>55</range>
+      <warmupTime>1.2</warmupTime>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityDuanHun">
+        <!-- 绑定到当前已存在的远程形态 Def -->
+        <requiredWeapon>MX_Qinghe_Form_Zhudi</requiredWeapon>
+
+        <!-- 在同一施法 Job 内，施法完成后额外等待几 tick 再结算（0=立即） -->
+        <postCastDelayTicks>0</postCastDelayTicks>
+
+        <radius>2.5</radius>
+        <damageDef>Cut</damageDef>
+        <damageAmount>16</damageAmount>
+        <armorPenetration>0.25</armorPenetration>
+        <stunDamageAmount>8</stunDamageAmount>
+        <bleedDamageAmount>5</bleedDamageAmount>
+        <slowHediff>MX_QH_Elegance_DuanHunSlow</slowHediff>
+        <slowSeverity>1</slowSeverity>
+        <slowDurationTicks>1800</slowDurationTicks>
+        <brainDestroyChance>0.08</brainDestroyChance>
+        <eleganceGainOnCast>8</eleganceGainOnCast>
+        <eleganceGainPerTarget>2</eleganceGainPerTarget>
+      </li>
+    </comps>
+  </AbilityDef>
+
+  <!-- 阳春（琴形态）：同一施法 Job 内结算敌伤友疗脉冲 -->
+  <AbilityDef>
+    <defName>MX_Qinghe_Elegance_YangChun</defName>
+    <label>阳春</label>
+    <description>仅琴形态可用。完成施法后，由同一施法 Job 末尾追加和声脉冲：敌方受伤并减速，友方获得治疗和加速增益，同时提升雅乐（Elegance）。</description>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <category>MX_QingheSkill</category>
+    <displayOrder>132</displayOrder>
+    <cooldownTicksRange>90</cooldownTicksRange>
+
+    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
+    <jobDef>MX_Qinghe_Elegance_CastAbility_YangChun</jobDef>
+
+    <targetRequired>false</targetRequired>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+    <waitForJobEnd>true</waitForJobEnd>
+
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <targetable>false</targetable>
+      <range>1.9</range>
+      <warmupTime>0.2</warmupTime>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityYangChun">
+        <!-- Bind to existing support-form weapon Def -->
+        <requiredWeapon>MX_Qinghe_Form_Qin</requiredWeapon>
+
+        <!-- Extra delay ticks before channel starts in same cast job -->
+        <postCastDelayTicks>6</postCastDelayTicks>
+
+        <fieldDef>MX_QH_Elegance_YangChunField</fieldDef>
+        <fieldDurationTicks>9999999</fieldDurationTicks>
+        <previewRadius>7.9</previewRadius>
+      </li>
+    </comps>
+  </AbilityDef>
 
 </Defs>

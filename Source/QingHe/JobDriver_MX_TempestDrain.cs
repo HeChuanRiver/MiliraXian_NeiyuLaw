@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -7,28 +7,33 @@ namespace MiliraXian.Characters.QingHe
     public class JobDriver_MX_TempestDrain : JobDriver_CastAbility
     {
         private Thing_TempestDrainField spawnedField;
-        //private const int lastingTicks = 900;
-        
+
+        private CompProperties_AbilityTempestDrain Props
+        {
+            get
+            {
+                var comp = job?.ability?.CompOfType<CompAbilityEffect_TempestDrain>();
+                return comp?.Props;
+            }
+        }
+
         protected override IEnumerable<Toil> MakeNewToils()
         {
             foreach (var toil in base.MakeNewToils())
             {
                 yield return toil;
             }
-            // Add cleanup action
-            AddFinishAction(delegate
-            {
-                CleanUp();
-            });
+
+            AddFinishAction(delegate { CleanUp(); });
 
             Toil t = ToilMaker.MakeToil();
             t.initAction = delegate
             {
                 pawn.pather.StopDead();
-                var comp = job.ability.CompOfType<CompAbilityEffect_TempestDrain>();
-                if (comp == null || comp.Props.fieldDef == null)
+                var p = Props;
+                if (p == null || p.fieldDef == null)
                 {
-                    Log.Error("SpringFlow: Cannot find CompAbilityEffect_TempestDrain or Field Def");
+                    Log.Error("TempestDrain: Cannot find CompAbilityEffect_TempestDrain or Field Def");
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
@@ -40,20 +45,24 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                //Log.Message("Spawning field");
-                spawnedField = (Thing_TempestDrainField)GenSpawn.Spawn(comp.Props.fieldDef, target, pawn.Map);
+                spawnedField = (Thing_TempestDrainField)GenSpawn.Spawn(p.fieldDef, target, pawn.Map);
                 var fieldComp = spawnedField.TryGetComp<CompTempestDrainField>();
                 if (fieldComp == null)
                 {
-                    Log.Error("SpringFlow: Cannot find Spawned Field");
+                    Log.Error("TempestDrain: Cannot find Spawned Field");
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
+
                 fieldComp.Init(pawn);
             };
             t.tickAction = delegate
             {
-                if (pawn.Downed || pawn.Dead) return;
+                if (pawn.Downed || pawn.Dead)
+                {
+                    return;
+                }
+
                 var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Tempest);
                 if (hediff != null)
                 {
@@ -61,25 +70,14 @@ namespace MiliraXian.Characters.QingHe
                     comp?.AddValue(-0.1f);
                 }
             };
-            t.tickIntervalAction = delegate
-            {
-                pawn.rotationTracker.FaceCell(TargetA.Cell);
-            };
+            t.tickIntervalAction = delegate { pawn.rotationTracker.FaceCell(TargetA.Cell); };
             t.defaultCompleteMode = ToilCompleteMode.Delay;
-            t.defaultDuration = 999999;
+            t.defaultDuration = Props != null ? System.Math.Max(1, Props.channelDurationTicks) : 999999;
             t.handlingFacing = true;
-            t.AddFailCondition(() =>
-            {
-                // TODO: verify fail condition
-                if (PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MX_QH_Tempest) <= 10.0f)
-                {
-                    return true;
-                }
-                return false;
-            });
+            t.AddFailCondition(() => PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MX_QH_Tempest) <= (Props?.minResourceToMaintain ?? 10.0f));
             yield return t;
         }
-        
+
         public override void ExposeData()
         {
             base.ExposeData();
@@ -88,11 +86,11 @@ namespace MiliraXian.Characters.QingHe
 
         private void CleanUp()
         {
-            //Log.Message("Clearing field");
             if (spawnedField != null && !spawnedField.Destroyed)
             {
                 spawnedField.Destroy();
             }
+
             spawnedField = null;
         }
     }
