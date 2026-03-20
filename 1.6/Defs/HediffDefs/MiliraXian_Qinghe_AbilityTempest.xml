@@ -68,6 +68,8 @@
         </comps>
     </HediffDef>
     
+    <!-- 技能相关 -->
+    <!-- 涌泉 -->
     <HediffDef>
         <defName>MX_SpringFlow</defName>
         <label>春泉洗礼</label>
@@ -99,6 +101,7 @@
         </comps>
     </HediffDef>
     
+    <!-- 水镜 -->
     <HediffDef>
         <defName>MX_AquaMirror</defName>
         <label>镜华</label>
@@ -153,6 +156,7 @@
         </comps>
     </HediffDef>
 
+    <!-- 扼流——基础效果 -->
     <HediffDef>
         <defName>MX_Draining</defName>
         <label>水循环断流</label>
@@ -173,6 +177,9 @@
                         <postFactor>0.9</postFactor>
                     </li>
                 </capMods>
+                <statFactors>
+                    <MoveSpeed>0.8</MoveSpeed>
+                </statFactors>
             </li>
             <li>
                 <minSeverity>0.2</minSeverity>
@@ -182,6 +189,9 @@
                         <postFactor>0.7</postFactor>
                     </li>
                 </capMods>
+                <statFactors>
+                    <MoveSpeed>0.6</MoveSpeed>
+                </statFactors>
             </li>
             <li>
                 <minSeverity>0.4</minSeverity>
@@ -200,6 +210,9 @@
                         <postFactor>0.3</postFactor>
                     </li>
                 </capMods>
+                <statFactors>
+                    <MoveSpeed>0.4</MoveSpeed>
+                </statFactors>
             </li>
             <li>
                 <minSeverity>0.8</minSeverity>
@@ -214,6 +227,34 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_SeverityPerSecondPausable">
                 <severityPerSecond>-0.05</severityPerSecond>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DrainAccumulate">
+                <maxTicksToFilth>600</maxTicksToFilth>
+                <minTicksToFilth>200</minTicksToFilth>
+                <filthRadius>2</filthRadius>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <!-- 扼流——尸体效果 -->
+    <HediffDef>
+        <defName>MX_DryCorpse</defName>
+        <label>脱水</label>
+        <description>一具水分被抽干的尸体，永远不会腐烂或风干。似乎受到了什么超自然力量的影响。</description>
+        <isBad>true</isBad>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.6, 0.2, 0.8)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DryCorpseEffect">
+                <corpseColor>(255, 0, 255)</corpseColor>
             </li>
         </comps>
     </HediffDef>

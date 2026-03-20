@@ -51,10 +51,10 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="E:\SteamLibrary\steamapps\workshop\content\294100\3588393755\1.6\Assemblies\MiliraImperium.dll" /&gt;&#xD;
   &lt;Assembly Path="E:\SteamLibrary\steamapps\workshop\content\294100\3588393755\1.6\Mods\co.uk.epicguru.meleeanimation\Assemblies\MiliraImperium.MA.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
   &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\Dependencies\AriandelLibrary.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_Characters\packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String>
-	</wpf:ResourceDictionary>
+&lt;/AssemblyExplorer&gt;

@@ -14,10 +14,11 @@ namespace MiliraXian.Characters.QingHe
         public static DamageDef MX_Dehydrate;
 
         public static HediffDef MX_DehydrateDamage;
-        public static HediffDef MX_Draining;
 
         public static HediffDef MX_SpringFlow;
         public static HediffDef MX_AquaMirror;
+        public static HediffDef MX_Draining;
+        public static HediffDef MX_DryCorpse;
 
         public static HediffDef MX_QH_Tempest;
         public static HediffDef MX_QH_Elegance;

@@ -87,6 +87,7 @@
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
       <Compile Include="Source\QingHe\HediffComp_SeverityPerSecondPausable.cs" />
       <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
+      <Compile Include="Source\QingHe\HediffComp_TempestDrainEffect.cs" />
       <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
