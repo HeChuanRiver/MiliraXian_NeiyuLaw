@@ -6,6 +6,17 @@
         <thingClass>MiliraXian.Characters.Qinghe.Thing_SpringFlowField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(1,0.6,0.8,0.4)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>12.0</drawSize>
+        </graphicData>
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
@@ -19,6 +30,17 @@
         <thingClass>MiliraXian.Characters.Qinghe.Thing_TempestDrainField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(0.5,0.5,0.5,0.6)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>24.0</drawSize>
+        </graphicData>
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>

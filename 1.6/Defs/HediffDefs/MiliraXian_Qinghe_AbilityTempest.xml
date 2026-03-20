@@ -229,9 +229,9 @@
                 <severityPerSecond>-0.05</severityPerSecond>
             </li>
             <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DrainAccumulate">
-                <maxTicksToFilth>600</maxTicksToFilth>
+                <maxTicksToFilth>400</maxTicksToFilth>
                 <minTicksToFilth>200</minTicksToFilth>
-                <filthRadius>2</filthRadius>
+                <filthRadius>1</filthRadius>
             </li>
         </comps>
     </HediffDef>
