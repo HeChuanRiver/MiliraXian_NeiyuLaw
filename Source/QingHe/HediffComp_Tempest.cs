@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe
         {
             base.CompPostTick(ref severityAdjustment);
             var pawn = parent.pawn;
-            if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MXQH_Elegance)?.TryGetComp<HediffComp_Elegance>().ValuePercent > 0.8f)
+            if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Elegance)?.TryGetComp<HediffComp_Elegance>().ValuePercent > 0.8f)
             {
                 AddValue(0.01f);
             }

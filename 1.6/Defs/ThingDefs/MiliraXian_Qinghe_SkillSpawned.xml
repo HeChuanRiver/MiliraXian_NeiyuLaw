@@ -13,6 +13,19 @@
         </comps>
     </ThingDef>
 
+    <ThingDef>
+        <defName>TempestDrainField</defName>
+        <label>*TDF placeholder*</label>
+        <thingClass>MiliraXian.Characters.Qinghe.Thing_TempestDrainField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField"/>
+        </comps>
+    </ThingDef>
+
     <ThingDef ParentName="MoteGlowDistorted">
         <defName>Mote_AquaMirrorExplode</defName>
         <thingClass>MoteAttached</thingClass>

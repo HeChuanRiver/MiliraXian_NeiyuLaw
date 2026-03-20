@@ -212,9 +212,8 @@
             </li>
         </stages>
         <comps>
-            <li Class="HediffCompProperties_SeverityPerDay">
-                <severityPerDay>-0.5</severityPerDay>
-                <showHoursToRecover>true</showHoursToRecover>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_SeverityPerSecondPausable">
+                <severityPerSecond>-0.05</severityPerSecond>
             </li>
         </comps>
     </HediffDef>

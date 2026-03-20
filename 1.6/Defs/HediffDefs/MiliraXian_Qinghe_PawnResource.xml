@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MXQH_Tempest</defName>
+        <defName>MX_QH_Tempest</defName>
         <label>激流</label>
         <description>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -32,7 +32,7 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MXQH_Elegance</defName>
+        <defName>MX_QH_Elegance</defName>
         <label>雅乐</label>
         <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>

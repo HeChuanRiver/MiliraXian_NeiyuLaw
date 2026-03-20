@@ -85,7 +85,7 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
             // 积累激流
-            PawnSpecialResourceUtility.AddResource(caster, MX_QHDefOf.MXQH_Tempest, Props.tempestPerMirror);
+            PawnSpecialResourceUtility.AddResource(caster, MX_QHDefOf.MX_QH_Tempest, Props.tempestPerMirror);
             // 移除护盾
             parent.pawn.AllComps.Remove(shieldInspected);
         }

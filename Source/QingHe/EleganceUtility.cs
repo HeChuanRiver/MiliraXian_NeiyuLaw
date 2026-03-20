@@ -11,8 +11,8 @@ namespace MiliraXian.Characters.QingHe
                 return 1.0f;
             }
 
-            var p = PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MXQH_Elegance) /
-                    PawnSpecialResourceUtility.GetMaxResource(pawn, MX_QHDefOf.MXQH_Elegance);
+            var p = PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MX_QH_Elegance) /
+                    PawnSpecialResourceUtility.GetMaxResource(pawn, MX_QHDefOf.MX_QH_Elegance);
             return 1 + max * p;
         }
     }

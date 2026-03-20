@@ -28,7 +28,7 @@
 
         <comps>
             <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityEffectDebugMaxResource">
-                <resourceHediffDef>MXQH_Tempest</resourceHediffDef>
+                <resourceHediffDef>MX_QH_Tempest</resourceHediffDef>
             </li>
         </comps>
     </AbilityDef>
@@ -61,7 +61,7 @@
 
         <comps>
             <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityEffectDebugMaxResource">
-                <resourceHediffDef>MXQH_Elegance</resourceHediffDef>
+                <resourceHediffDef>MX_QH_Elegance</resourceHediffDef>
             </li>
         </comps>
     </AbilityDef>

@@ -18,8 +18,8 @@ namespace MiliraXian.Characters.QingHe
         {
             if (MX_QHUtility.IsQinghe(__instance))
             {
-                PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MXQH_Tempest);
-                PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MXQH_Elegance);
+                PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Tempest);
+                PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Elegance);
             }
         }
     }

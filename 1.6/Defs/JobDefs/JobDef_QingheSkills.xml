@@ -7,4 +7,11 @@
         <abilityCasting>true</abilityCasting>
         <playerInterruptible>true</playerInterruptible>
     </JobDef>
+    <JobDef>
+        <defName>CastTempestDrain</defName>
+        <driverClass>MiliraXian.Characters.Qinghe.JobDriver_MX_TempestDrain</driverClass>
+        <reportString>Placeholder</reportString>
+        <abilityCasting>true</abilityCasting>
+        <playerInterruptible>false</playerInterruptible>
+    </JobDef>
 </Defs>

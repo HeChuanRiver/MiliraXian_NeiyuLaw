@@ -76,4 +76,44 @@
             </li>
         </comps>
     </AbilityDef>
+
+    <!-- 清荷 —— 激流技能 -->
+    <AbilityDef>
+        <defName>MX_Qinghe_TempestDrain</defName>
+        <label>扼流</label>
+        <description>在目标地点引导一个大范围扼流力场，使进入其中的敌对目标*持续积累水循环断流状态*，附加大量负面效果且积累到最大值时立刻死亡。\n该技能的*标示效果*可被雅乐的效果强化。\n需要至少50点激流，引导时持续消耗激流直到剩余不足10点时自动关闭，该技能不可手动打断。\n目标越靠近力场中心，断流积累的速度越快。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
+        <jobDef>CastTempestDrain</jobDef>
+
+        <category>MX_QingheSkill</category>
+        <displayOrder>120</displayOrder>
+        <cooldownTicksRange>480</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <waitForJobEnd>true</waitForJobEnd>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.2</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityTempestDrain">
+                <fieldDef>TempestDrainField</fieldDef>
+                <previewRadius>12.0</previewRadius>
+            </li>
+        </comps>
+    </AbilityDef>
+
 </Defs>

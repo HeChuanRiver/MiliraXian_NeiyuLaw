@@ -77,12 +77,15 @@
       <Compile Include="Source\QingHe\CompAbilityEffect_DebugMaxResource.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_AquaMirror.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_TempestDrain.cs" />
       <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
+      <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
       <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
+      <Compile Include="Source\QingHe\HediffComp_SeverityPerSecondPausable.cs" />
       <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
       <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
@@ -91,7 +94,7 @@
       <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
       <Compile Include="Source\QingHe\MX_QHPatches.cs" />
       <Compile Include="Source\QingHe\MX_QHUtility.cs" />
-      <Compile Include="Source\QingHe\Thing_SpringFlowField.cs" />
+      <Compile Include="Source\QingHe\Thing_SpawnedField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />

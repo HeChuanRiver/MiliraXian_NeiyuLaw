@@ -55,7 +55,7 @@ namespace MiliraXian.Characters.QingHe
             t.tickAction = delegate
             {
                 if (pawn.Downed || pawn.Dead) return;
-                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MXQH_Tempest);
+                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Tempest);
                 if (hediff != null)
                 {
                     var comp = hediff.TryGetComp<HediffComp_Tempest>();
