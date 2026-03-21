@@ -84,4 +84,89 @@
         </comps>
     </AbilityDef>
 
+    <AbilityDef>
+        <defName>MX_Zhaoli_Minghuo</defName>
+        <label>冥火</label>
+        <description>消耗3点因果，将死者因果附着于昭离当前主武器之上，持续1日。附魔期间，武器伤害、破甲、命中与攻击速度提升至原本的1.5倍，攻击距离额外增加2格，并在每次近战命中时附加一段火焰伤害。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
+
+        <category>MX_ZhaoliSkill</category>
+        <displayOrder>102</displayOrder>
+        <cooldownTicksRange>60000</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>1.9</range>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetLocations>false</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+                <canTargetHumans>true</canTargetHumans>
+                <canTargetAnimals>false</canTargetAnimals>
+                <canTargetMechs>false</canTargetMechs>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliMinghuo">
+                <karmaCost>3</karmaCost>
+                <durationTicks>60000</durationTicks>
+                <overlayScale>1.8</overlayScale>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Zhaoli_Minshen</defName>
+        <label>泯神</label>
+        <description>消耗3点因果，对目标点13x13范围内的敌方单位施加压制。范围内90%的血肉目标会陷入80%减速，剩余10%会陷入失神30秒；同时持续5秒每秒对躯干造成1点生命损耗。机械体不承受失神与减速，改为直接承受EMP冲击。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
+
+        <category>MX_ZhaoliSkill</category>
+        <displayOrder>103</displayOrder>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>1.0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliMinshen">
+                <karmaCost>3</karmaCost>
+                <areaWidth>13</areaWidth>
+                <areaHeight>13</areaHeight>
+                <dazeChance>0.1</dazeChance>
+                <mentalStateDurationTicks>1800</mentalStateDurationTicks>
+                <damageDurationTicks>300</damageDurationTicks>
+                <empDamage>15</empDamage>
+                <slowHediff>MXZL_ZhaoliMinshenSlow</slowHediff>
+                <damageHediff>MXZL_ZhaoliMinshenDamage</damageHediff>
+            </li>
+        </comps>
+    </AbilityDef>
+
 </Defs>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliMinshenSlow</defName>
+        <label>泯神压制</label>
+        <description>昭离的泯神压制了该目标的行动能力，使其移动速度仅剩原本的20%。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <statFactors>
+                    <MoveSpeed>0.20</MoveSpeed>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>1800</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliMinshenDamage</defName>
+        <label>泯神蚀命</label>
+        <description>昭离的泯神持续蚕食目标生命，每秒对其躯干造成1点伤害，持续5秒。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>300</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliMinshenDamage">
+                <damageIntervalTicks>60</damageIntervalTicks>
+                <damagePerTick>1</damagePerTick>
+                <injuryHediff>Bruise</injuryHediff>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

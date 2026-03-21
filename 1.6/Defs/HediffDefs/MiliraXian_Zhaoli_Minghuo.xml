@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliMinghuo</defName>
+        <label>冥火附武</label>
+        <description>死者因果附着于昭离的武器之上。附魔期间，当前绑定武器的伤害、破甲、命中与攻击速度提升至原本的1.5倍，攻击距离增加2格，并在近战命中时额外附带火焰伤害。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>60000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliMinghuo">
+                <damageMultiplier>1.5</damageMultiplier>
+                <armorPenetrationMultiplier>1.5</armorPenetrationMultiplier>
+                <hitChanceMultiplier>1.5</hitChanceMultiplier>
+                <attackSpeedMultiplier>1.5</attackSpeedMultiplier>
+                <rangeOffset>2</rangeOffset>
+                <fireDamageFactor>1</fireDamageFactor>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

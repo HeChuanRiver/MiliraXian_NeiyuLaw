@@ -120,6 +120,8 @@
         <abilities>
             <li>MX_Zhaoli_DeathField</li>
             <li>MX_Zhaoli_Guiyi</li>
+            <li>MX_Zhaoli_Minghuo</li>
+            <li>MX_Zhaoli_Minshen</li>
         </abilities>
 
         <!-- modExtensions是用来使用的非官方类的地方 -->

@@ -3,6 +3,8 @@ using MiliraXian.Characters.Zhaoli;
 using UnityEngine;
 using Verse;
 
+using RimWorld;
+
 namespace MiliraXian.Characters
 {
     public class HediffCompProperties_PawnSpecialResource : HediffCompProperties
@@ -99,6 +101,18 @@ namespace MiliraXian.Characters
             }
 
             yield return new PawnSpecialResourceGizmo(this);
+            if (Prefs.DevMode && ZhaoliKarmaUtility.IsZhaoli(Pawn))
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "DEV: +10因果",
+                    defaultDesc = "开发者测试用：手动为昭离增加10点因果。",
+                    action = delegate
+                    {
+                        ZhaoliKarmaUtility.AddKarma(Pawn, 10f);
+                    }
+                };
+            }
         }
 
         public void SetValue(float value)
