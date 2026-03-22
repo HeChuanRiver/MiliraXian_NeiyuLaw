@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="E:/SteamLibrary/steamapps/workshop/content/294100/3292351432/1.5/Source/Axolotl" vcs="Git" />
+    <mapping directory="E:/SteamLibrary/steamapps/workshop/content/294100/3292351432/1.6/Source/Axolotl" vcs="Git" />
   </component>
 </project>

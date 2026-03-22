@@ -83,6 +83,7 @@
                 <requirePrimary>true</requirePrimary>
                 <cooldownTicks>0</cooldownTicks>
             </li>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
     
@@ -166,6 +167,7 @@
                 <cooldownTicks>0</cooldownTicks>
             </li>
 
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
@@ -272,6 +274,7 @@
                 <requirePrimary>true</requirePrimary>
                 <cooldownTicks>0</cooldownTicks>
             </li>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
 

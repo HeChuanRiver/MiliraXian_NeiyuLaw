@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 namespace MiliraXian.Characters.Zhaoli
@@ -343,6 +344,7 @@ namespace MiliraXian.Characters.Zhaoli
     public class GameComponent_ZhaoliKarma : GameComponent
     {
         private List<Pawn> pendingResurrectionPawns = new List<Pawn>();
+        private List<ZhaoliPendingRebirth> pendingRebirths = new List<ZhaoliPendingRebirth>();
 
         public GameComponent_ZhaoliKarma(Game game)
         {
@@ -350,6 +352,11 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void RegisterPendingResurrection(Pawn pawn)
         {
+            if (pendingResurrectionPawns == null)
+            {
+                pendingResurrectionPawns = new List<Pawn>();
+            }
+
             if (pawn == null || pendingResurrectionPawns.Contains(pawn))
             {
                 return;
@@ -358,11 +365,68 @@ namespace MiliraXian.Characters.Zhaoli
             pendingResurrectionPawns.Add(pawn);
         }
 
-        public override void GameComponentTick()
+        public bool IsPending(Pawn pawn)
         {
-            if (Current.ProgramState != ProgramState.Playing || pendingResurrectionPawns.Count == 0)
+            if (pendingRebirths == null)
+            {
+                return false;
+            }
+
+            if (pawn == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < pendingRebirths.Count; i++)
+            {
+                if (pendingRebirths[i]?.pawn == pawn)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void RegisterPendingRebirth(Pawn pawn, int rebirthTick)
+        {
+            if (pendingRebirths == null)
+            {
+                pendingRebirths = new List<ZhaoliPendingRebirth>();
+            }
+
+            if (pawn == null)
             {
                 return;
+            }
+
+            for (int i = 0; i < pendingRebirths.Count; i++)
+            {
+                if (pendingRebirths[i]?.pawn == pawn)
+                {
+                    pendingRebirths[i].rebirthTick = rebirthTick;
+                    return;
+                }
+            }
+
+            pendingRebirths.Add(new ZhaoliPendingRebirth(pawn, rebirthTick));
+        }
+
+        public override void GameComponentTick()
+        {
+            if (Current.ProgramState != ProgramState.Playing)
+            {
+                return;
+            }
+
+            if (pendingResurrectionPawns == null)
+            {
+                pendingResurrectionPawns = new List<Pawn>();
+            }
+
+            if (pendingRebirths == null)
+            {
+                pendingRebirths = new List<ZhaoliPendingRebirth>();
             }
 
             for (int i = pendingResurrectionPawns.Count - 1; i >= 0; i--)
@@ -371,21 +435,92 @@ namespace MiliraXian.Characters.Zhaoli
                 pendingResurrectionPawns.RemoveAt(i);
                 ProcessPendingResurrection(pawn);
             }
+
+            int currentTick = Find.TickManager.TicksGame;
+            for (int i = pendingRebirths.Count - 1; i >= 0; i--)
+            {
+                ZhaoliPendingRebirth pendingRebirth = pendingRebirths[i];
+                if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Discarded)
+                {
+                    pendingRebirths.RemoveAt(i);
+                    continue;
+                }
+
+                if (!pendingRebirth.pawn.Dead)
+                {
+                    pendingRebirths.RemoveAt(i);
+                    continue;
+                }
+
+                if (currentTick < pendingRebirth.rebirthTick)
+                {
+                    continue;
+                }
+
+                ZhaoliRebirthUtility.PreparePawnForPendingRebirth(pendingRebirth.pawn);
+
+                if (!ZhaoliRebirthUtility.TryFindRebirthLocation(out Map map, out IntVec3 cell))
+                {
+                    continue;
+                }
+
+                if (!ResurrectionUtility.TryResurrect(pendingRebirth.pawn, new ResurrectionParams
+                {
+                    gettingScarsChance = 0f,
+                    canKidnap = false,
+                    canTimeoutOrFlee = false,
+                    sappers = false,
+                    useAvoidGridSmart = true,
+                    canSteal = false,
+                    breachers = false,
+                    canPickUpOpportunisticWeapons = false,
+                    restoreMissingParts = true,
+                    noLord = true,
+                    dontSpawn = true,
+                    invisibleStun = true,
+                    removeDiedThoughts = false
+                }))
+                {
+                    continue;
+                }
+
+                if (pendingRebirth.pawn.IsWorldPawn())
+                {
+                    Find.WorldPawns.RemovePawn(pendingRebirth.pawn);
+                }
+
+                GenSpawn.Spawn(pendingRebirth.pawn, cell, map);
+                ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
+                Messages.Message("昭离已从死亡中归来。", pendingRebirth.pawn, MessageTypeDefOf.PositiveEvent);
+                pendingRebirths.RemoveAt(i);
+            }
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Collections.Look(ref pendingResurrectionPawns, "pendingResurrectionPawns", LookMode.Reference);
+            Scribe_Collections.Look(ref pendingRebirths, "pendingRebirths", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                pendingResurrectionPawns.RemoveAll(pawn => pawn == null || pawn.Destroyed);
+                if (pendingResurrectionPawns == null)
+                {
+                    pendingResurrectionPawns = new List<Pawn>();
+                }
+
+                if (pendingRebirths == null)
+                {
+                    pendingRebirths = new List<ZhaoliPendingRebirth>();
+                }
+
+                pendingResurrectionPawns.RemoveAll(pawn => pawn == null || pawn.Discarded);
+                pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Discarded);
             }
         }
 
         private static void ProcessPendingResurrection(Pawn pawn)
         {
-            if (pawn == null || pawn.Destroyed || !pawn.Dead)
+            if (pawn == null || pawn.Discarded || !pawn.Dead)
             {
                 return;
             }
@@ -426,25 +561,31 @@ namespace MiliraXian.Characters.Zhaoli
 
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
             Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
-            if (sacrificePawn == null)
+            if (sacrificePawn != null)
+            {
+                linkComp.BreakLink(sacrificePawn);
+                sacrificePawn.Kill(null);
+
+                if (ResurrectionUtility.TryResurrect(__instance, new ResurrectionParams
+                {
+                    gettingScarsChance = 0f,
+                    canKidnap = false,
+                    canTimeoutOrFlee = false,
+                    useAvoidGridSmart = true,
+                    canSteal = false,
+                    noLord = true,
+                    invisibleStun = true,
+                    removeDiedThoughts = true
+                }))
+                {
+                    return;
+                }
+            }
+
+            if (!ZhaoliRebirthUtility.TryScheduleRebirth(__instance))
             {
                 return;
             }
-
-            linkComp.BreakLink(sacrificePawn);
-            sacrificePawn.Kill(null);
-
-            ResurrectionUtility.TryResurrect(__instance, new ResurrectionParams
-            {
-                gettingScarsChance = 0f,
-                canKidnap = false,
-                canTimeoutOrFlee = false,
-                useAvoidGridSmart = true,
-                canSteal = false,
-                noLord = true,
-                invisibleStun = true,
-                removeDiedThoughts = true
-            });
         }
     }
 }

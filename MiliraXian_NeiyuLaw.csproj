@@ -60,6 +60,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Source\Common\CompUnbreakableEquipment.cs" />
         <Compile Include="Source\Common\PawnSpecialResource.cs" />
         <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
@@ -81,6 +82,8 @@
       <Compile Include="Source\Zhaoli\ZhaoliMinghuo.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliMinshen.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliRebirth.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliShieldLayers.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
@@ -103,6 +106,8 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Links.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Minghuo.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Minshen.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Rebirth.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Shield.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />

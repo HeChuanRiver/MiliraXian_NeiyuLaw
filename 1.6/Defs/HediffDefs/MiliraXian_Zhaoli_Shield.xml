@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliShieldLayers</defName>
+        <label>讳亡护盾</label>
+        <description>昭离每次通过告死吸纳一个单位，都会获得5层讳亡护盾。护盾可免疫一次伤害，并在命中时消耗1层。持续伤害每次生效也会持续消耗层数。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliShieldLayers">
+                <showGizmo>false</showGizmo>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

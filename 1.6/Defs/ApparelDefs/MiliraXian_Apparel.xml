@@ -73,7 +73,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+65</CarryingCapacity>
@@ -125,7 +125,7 @@
         </apparel>
 
         <comps>
-            
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <ImmunityGainSpeed>0.45</ImmunityGainSpeed>

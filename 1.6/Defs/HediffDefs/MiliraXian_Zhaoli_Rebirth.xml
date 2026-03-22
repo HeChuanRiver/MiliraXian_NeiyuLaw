@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliRebirth</defName>
+        <label>归亡者</label>
+        <description>昭离的死亡将被暂时接纳。死亡后尸体会消失，并在十日后于玩家基地随机位置归来。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliRebirth" />
+        </comps>
+    </HediffDef>
+
+</Defs>

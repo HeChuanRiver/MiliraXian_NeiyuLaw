@@ -184,6 +184,7 @@ namespace MiliraXian.Characters.Zhaoli
                 if (PropsField.executeStayTicks > 0 && ticksPresent >= PropsField.executeStayTicks)
                 {
                     ZhaoliKarmaUtility.AddKarma(Pawn, PropsField.karmaPerExecution);
+                    ZhaoliShieldLayerUtility.AddLayers(Pawn, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
                     ExecutePawn(pawn);
                     stayTicks.Remove(pawn);
                 }
