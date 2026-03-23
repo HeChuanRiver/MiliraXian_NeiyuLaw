@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using RimWorld;
-using RimWorld.Planet;
+﻿using RimWorld;
 using Verse;
-using Verse.AI;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters
 {
     public class CompProperties_AbilityEffectDebugMaxResource : CompProperties_AbilityEffect
     {

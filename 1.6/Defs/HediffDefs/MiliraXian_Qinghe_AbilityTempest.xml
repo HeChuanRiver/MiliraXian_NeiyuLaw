@@ -223,9 +223,21 @@
                     </li>
                 </capMods>
             </li>
+            <li>
+                <minSeverity>0.99</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.1</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <IncomingDamageFactor>2.5</IncomingDamageFactor>
+                </statFactors>
+            </li>
         </stages>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_SeverityPerSecondPausable">
+            <li Class="MiliraXian.Characters.HediffCompProperties_SeverityPerSecondPausable">
                 <severityPerSecond>-0.05</severityPerSecond>
             </li>
             <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DrainAccumulate">

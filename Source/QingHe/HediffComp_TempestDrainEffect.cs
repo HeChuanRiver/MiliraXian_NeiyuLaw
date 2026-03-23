@@ -19,11 +19,9 @@ namespace MiliraXian.Characters.QingHe
     public class HediffComp_DrainAccumulate : HediffComp
     {
         private int nextTickToFilth = 400;
+        private bool dryCorpseApplied;
         
         public HediffCompProperties_DrainAccumulate Props => (HediffCompProperties_DrainAccumulate)props;
-
-        // 1. Remove parent hediff when severity reaches 1
-        public override bool CompShouldRemove => parent.Severity >= 1f;
 
         public override void CompPostMake()
         {
@@ -31,23 +29,36 @@ namespace MiliraXian.Characters.QingHe
             nextTickToFilth = Rand.Range(Props.minTicksToFilth, Props.maxTicksToFilth);
         }
 
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look(ref nextTickToFilth, "mx_qh_drain_nextTickToFilth", 400);
+            Scribe_Values.Look(ref dryCorpseApplied, "mx_qh_drain_dryCorpseApplied", false);
+        }
+
         public override void CompPostPostRemoved()
         {
             base.CompPostPostRemoved();
-            // 2. Kill parent pawn when removed
-            if (!parent.pawn.Dead)
-            {
-                parent.pawn.Kill(null);
-            }
-            // 3. Add DryCorpse hediff when removed
-            var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_DryCorpse, parent.pawn);
-            parent.pawn.health.AddHediff(hediff);
+            TryApplyDryCorpseIfNeeded();
         }
         
-        // 4. Randomly create water filth
+        // Randomly create water filth
         public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
+
+            if (Pawn == null)
+            {
+                return;
+            }
+
+            TryApplyDryCorpseIfNeeded();
+
+            if (Pawn.Dead || Pawn.Map == null)
+            {
+                return;
+            }
+
             if (nextTickToFilth <= 0)
             {
                 var pos = CellFinder.RandomClosewalkCellNearNotForbidden(Pawn, Props.filthRadius);
@@ -55,6 +66,27 @@ namespace MiliraXian.Characters.QingHe
                 nextTickToFilth = Rand.Range(Props.minTicksToFilth, Props.maxTicksToFilth);
             }
             nextTickToFilth -= delta;
+        }
+
+        private bool IsDrainFullyAccumulated()
+        {
+            return parent != null && parent.Severity >= 0.999f;
+        }
+
+        private void TryApplyDryCorpseIfNeeded()
+        {
+            if (dryCorpseApplied || Pawn == null || !Pawn.Dead || !IsDrainFullyAccumulated() || MX_QHDefOf.MX_DryCorpse == null)
+            {
+                return;
+            }
+
+            if (Pawn.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_DryCorpse) == null)
+            {
+                Hediff hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_DryCorpse, Pawn);
+                Pawn.health.AddHediff(hediff);
+            }
+
+            dryCorpseApplied = true;
         }
     }
 

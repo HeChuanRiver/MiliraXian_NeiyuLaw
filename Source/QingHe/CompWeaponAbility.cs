@@ -4,19 +4,19 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public class CompProperties_QingheWeaponAbilityGrant : CompProperties
+    public class CompProperties_WeaponAbility : CompProperties
     {
         public AbilityDef abilityDef;
 
-        public CompProperties_QingheWeaponAbilityGrant()
+        public CompProperties_WeaponAbility()
         {
-            compClass = typeof(Comp_QingheWeaponAbilityGrant);
+            compClass = typeof(CompWeaponAbility);
         }
     }
 
-    public class Comp_QingheWeaponAbilityGrant : ThingComp
+    public class CompWeaponAbility : ThingComp
     {
-        private CompProperties_QingheWeaponAbilityGrant Props => props as CompProperties_QingheWeaponAbilityGrant;
+        private CompProperties_WeaponAbility Props => props as CompProperties_WeaponAbility;
 
         public override void Notify_Equipped(Pawn pawn)
         {

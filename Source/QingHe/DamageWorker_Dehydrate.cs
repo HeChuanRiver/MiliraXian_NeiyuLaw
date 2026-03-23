@@ -12,7 +12,7 @@ namespace MiliraXian.Characters.QingHe
                 hediff.Severity = dinfo.Amount * 0.01f;
                 pawn.health.AddHediff(hediff, dinfo: dinfo);
             }
-            return new DamageResult();
+            return base.Apply(dinfo, thing);
         }
     }
 }

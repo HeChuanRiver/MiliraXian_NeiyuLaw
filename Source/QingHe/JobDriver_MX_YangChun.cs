@@ -6,7 +6,7 @@ using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public class JobDriver_CastAbility_YangChun : JobDriver_CastAbility
+    public class JobDriver_MX_YangChun : JobDriver_CastAbility
     {
         private Thing_YangChunField spawnedField;
 

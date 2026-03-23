@@ -57,11 +57,20 @@
           <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
           <Private>False</Private>
         </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Source\Common\CompAbilityEffect_DebugMaxResource.cs" />
+        <Compile Include="Source\Common\HediffComp_SeverityPerSecondPausable.cs" />
         <Compile Include="Source\Common\PawnSpecialResource.cs" />
         <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
+        <Compile Include="Source\Common\RadialUtility.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
         <Compile Include="Source\Neiyu\Comp_ModeSwitchWeapon.cs" />
@@ -74,19 +83,22 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
-      <Compile Include="Source\QingHe\CompAbilityEffect_DebugMaxResource.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_AquaMirror.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_TempestDrain.cs" />
       <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
       <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
+      <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
       <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
-      <Compile Include="Source\QingHe\HediffComp_SeverityPerSecondPausable.cs" />
       <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
       <Compile Include="Source\QingHe\HediffComp_TempestDrainEffect.cs" />
+      <Compile Include="Source\QingHe\HediffComp_LotusShield.cs" />
+      <Compile Include="Source\QingHe\HediffComp_QingheStatusGizmo.cs" />
+      <Compile Include="Source\QingHe\HediffComp_LongBreathWard.cs" />
+      <Compile Include="Source\QingHe\HediffComp_SpringRegen.cs" />
       <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
@@ -98,11 +110,12 @@
       <Compile Include="Source\QingHe\CompAbilityEffect_HengZhi.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_DuanHun.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_YangChun.cs" />
-      <Compile Include="Source\QingHe\JobDriver_CastAbility_HengZhi.cs" />
-      <Compile Include="Source\QingHe\JobDriver_CastAbility_DuanHun.cs" />
-      <Compile Include="Source\QingHe\JobDriver_CastAbility_YangChun.cs" />
-      <Compile Include="Source\QingHe\Comp_QingheWeaponAbilityGrant.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_HengZhi.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_DuanHun.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_YangChun.cs" />
+      <Compile Include="Source\QingHe\CompWeaponAbility.cs" />
       <Compile Include="Source\QingHe\CompYangChunField.cs" />
+      <Compile Include="Source\QingHe\CompLotusShield.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />

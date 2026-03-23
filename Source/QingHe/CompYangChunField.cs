@@ -115,7 +115,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             float gain = Props.eleganceGainFlat + allyCount * Props.eleganceGainPerAlly + enemyCount * Props.eleganceGainPerEnemy;
-            MX_QHUtility.AddElegance(caster, gain);
+            EleganceUtility.AddElegance(caster, gain);
         }
     }
 }

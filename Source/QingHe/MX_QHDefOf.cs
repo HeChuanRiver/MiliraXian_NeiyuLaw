@@ -7,7 +7,7 @@ namespace MiliraXian.Characters.QingHe
     public static class MX_QHDefOf
     {
         public static JobDef CastSpringFlow;
-        
+
         public static ThingDef SpringFlowField;
         public static ThingDef TempestDrainField;
 
@@ -22,6 +22,14 @@ namespace MiliraXian.Characters.QingHe
 
         public static HediffDef MX_QH_Tempest;
         public static HediffDef MX_QH_Elegance;
+        public static HediffDef MX_QH_LongBreath;
+        public static HediffDef MX_QH_LongBreathDamageImmunity;
+        public static HediffDef MX_QH_SpringRegen;
+        public static HediffDef MX_QH_LotusShield;
+        public static HediffDef MX_QH_QingheStatusGizmo;
+
+        public static TraitDef MX_QH_Trait_LongBreath;
+        public static TraitDef MX_QH_Trait_WaterFairy;
 
         public static ThingDef Mote_AquaMirrorExplode;
     }

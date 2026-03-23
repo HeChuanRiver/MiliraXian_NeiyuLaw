@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using RimWorld;
 using Verse;
 
@@ -13,6 +13,16 @@ namespace MiliraXian.Characters.QingHe
         {
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_PreApplyDamage_Prefix))
+                {
+                    priority = Priority.First
+                },
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_PreApplyDamage_Postfix))
+                {
+                    priority = Priority.Last
+                });
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
@@ -25,7 +35,141 @@ namespace MiliraXian.Characters.QingHe
             PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Tempest);
             PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Elegance);
 
+            EnsureLongBreathState(__instance);
+            EnsureWaterFairyTrait(__instance);
+            EnsureSpringRegenState(__instance);
+            EnsureLotusShieldBinding(__instance);
+            EnsureQingheStatusGizmoState(__instance);
             SyncEleganceAbilityByCurrentWeapon(__instance);
+        }
+
+        public static bool Patch_Pawn_PreApplyDamage_Prefix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        {
+            if (__instance?.health?.hediffSet == null)
+            {
+                return true;
+            }
+
+            if (dinfo.Amount <= 0f)
+            {
+                return true;
+            }
+
+            if (!HasLongBreathDamageImmunity(__instance))
+            {
+                return true;
+            }
+
+            dinfo.SetAmount(0f);
+            absorbed = true;
+            return false;
+        }
+
+        public static void Patch_Pawn_PreApplyDamage_Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        {
+            if (__instance?.health?.hediffSet == null)
+            {
+                return;
+            }
+
+            Hediff longBreath = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath);
+            HediffComp_LongBreathWard longBreathComp = longBreath?.TryGetComp<HediffComp_LongBreathWard>();
+            if (longBreathComp == null)
+            {
+                return;
+            }
+
+            // Lotus shield is processed by pawn ThingComp.PostPreApplyDamage.
+            // LongBreath only checks when damage still reaches the body.
+            if (absorbed)
+            {
+                return;
+            }
+
+            longBreathComp.NotifyDamageNotAbsorbed(ref dinfo);
+
+            if (!longBreathComp.CanTrigger(ref dinfo))
+            {
+                return;
+            }
+
+            longBreathComp.Trigger(ref dinfo, ref absorbed);
+        }
+
+        private static bool HasLongBreathDamageImmunity(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LongBreathDamageImmunity == null)
+            {
+                return false;
+            }
+
+            return pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreathDamageImmunity) != null;
+        }
+
+        private static void EnsureLongBreathState(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_LongBreath != null)
+            {
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath) == null)
+                {
+                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_LongBreath, pawn));
+                }
+            }
+        }
+
+        private static void EnsureWaterFairyTrait(Pawn pawn)
+        {
+            if (pawn?.story?.traits == null || MX_QHDefOf.MX_QH_Trait_WaterFairy == null)
+            {
+                return;
+            }
+
+            Trait oldLongBreathTrait = MX_QHDefOf.MX_QH_Trait_LongBreath != null
+                ? pawn.story.traits.GetTrait(MX_QHDefOf.MX_QH_Trait_LongBreath)
+                : null;
+            if (oldLongBreathTrait != null)
+            {
+                pawn.story.traits.RemoveTrait(oldLongBreathTrait);
+            }
+
+            if (!pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
+            {
+                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_WaterFairy));
+            }
+        }
+
+        private static void EnsureSpringRegenState(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_SpringRegen != null)
+            {
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringRegen) == null)
+                {
+                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringRegen, pawn));
+                }
+            }
+        }
+
+        private static void EnsureLotusShieldBinding(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LotusShield == null)
+            {
+                return;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
+            HediffComp_LotusShield comp = (hediff as HediffWithComps)?.GetComp<HediffComp_LotusShield>();
+            comp?.EnsureShieldBound();
+        }
+
+        private static void EnsureQingheStatusGizmoState(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_QingheStatusGizmo != null)
+            {
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_QingheStatusGizmo) == null)
+                {
+                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_QingheStatusGizmo, pawn));
+                }
+            }
         }
 
         private static void SyncEleganceAbilityByCurrentWeapon(Pawn pawn)

@@ -5,9 +5,9 @@ using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public class JobDriver_CastAbility_HengZhi : JobDriver_CastAbility
+    public class JobDriver_MX_DuanHun : JobDriver_CastAbility
     {
-        private CompProperties_AbilityHengZhi Props
+        private CompProperties_AbilityDuanHun Props
         {
             get
             {
@@ -19,7 +19,7 @@ namespace MiliraXian.Characters.QingHe
 
                 for (int i = 0; i < ability.def.comps.Count; i++)
                 {
-                    CompProperties_AbilityHengZhi p = ability.def.comps[i] as CompProperties_AbilityHengZhi;
+                    CompProperties_AbilityDuanHun p = ability.def.comps[i] as CompProperties_AbilityDuanHun;
                     if (p != null)
                     {
                         return p;
@@ -35,11 +35,11 @@ namespace MiliraXian.Characters.QingHe
         /// </summary>
         public override string GetReport()
         {
-            return "正在引导横指冲击";
+            return "正在引导断魂音律";
         }
 
         /// <summary>
-        /// 复用原版施法流程，并在同一 Job 末尾追加横指结算。
+        /// 复用原版施法流程，并在同一 Job 末尾追加断魂结算。
         /// </summary>
         protected override IEnumerable<Toil> MakeNewToils()
         {
@@ -48,20 +48,20 @@ namespace MiliraXian.Characters.QingHe
                 yield return toil;
             }
 
-            CompProperties_AbilityHengZhi props = Props;
+            CompProperties_AbilityDuanHun props = Props;
             int delay = props != null ? props.postCastDelayTicks : 0;
             if (delay > 0)
             {
-                Toil wait = ToilMaker.MakeToil("QHEleganceHengZhi_PostCastDelay");
+                Toil wait = ToilMaker.MakeToil("QHEleganceDuanHun_PostCastDelay");
                 wait.defaultCompleteMode = ToilCompleteMode.Delay;
                 wait.defaultDuration = delay;
                 yield return wait;
             }
 
-            Toil pulse = ToilMaker.MakeToil("QHEleganceHengZhi_ResolvePulse");
+            Toil pulse = ToilMaker.MakeToil("QHEleganceDuanHun_ResolvePulse");
             pulse.initAction = delegate()
             {
-                CompProperties_AbilityHengZhi p = Props;
+                CompProperties_AbilityDuanHun p = Props;
                 if (p == null)
                 {
                     return;
@@ -72,7 +72,8 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                MX_QHUtility.ExecuteHengZhiPulseByProps(pawn, p);
+                IntVec3 center = (job != null && job.targetA.IsValid) ? job.targetA.Cell : pawn.Position;
+                MX_QHUtility.ExecuteDuanHunPulseByProps(pawn, p, center);
             };
             pulse.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return pulse;

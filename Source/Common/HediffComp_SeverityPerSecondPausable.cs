@@ -1,6 +1,6 @@
 ﻿using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters
 {
     public class HediffCompProperties_SeverityPerSecondPausable : HediffCompProperties
     {

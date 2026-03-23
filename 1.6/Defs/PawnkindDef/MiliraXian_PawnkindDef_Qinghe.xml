@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
     <!-- 清荷 -->
     <PawnKindDef ParentName="Milira_PawnBase">
@@ -110,6 +110,7 @@
             <!-- This is an ability from "Milira Faction: Milira Imperium", so I commented out it. ↓↓↓ 这个技能来自“米莉拉派系扩展：米莉拉帝国”所以我把它注释掉了。↓↓↓-->
             <li>MX_Qinghe_SpringFlow</li>
             <li>MX_Qinghe_AquaMirror</li>
+            <li>MX_Qinghe_TempestDrain</li>
             <!-- <li>MI_ShroudPower_Skip</li> -->
         </abilities>
 
@@ -150,6 +151,7 @@
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>
                     <li><def>MiliraXianNeiyu_Love</def></li>
+                    <li><def>MX_QH_Trait_WaterFairy</def></li>
                     <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
                     <li>
                         <def>Beauty</def>
@@ -166,12 +168,32 @@
 <!--                        <overwriteIfExists>true</overwriteIfExists>-->
 <!--                    </li>-->
                     <li>
-                        <def>MXQH_Tempest</def>
+                        <def>MX_QH_Tempest</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MXQH_Elegance</def>
+                        <def>MX_QH_Elegance</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_QH_LongBreath</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_QH_LotusShield</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_QH_SpringRegen</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_QH_QingheStatusGizmo</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
@@ -280,6 +302,7 @@
             <li Class="AriandelLibrary.AL_TraitLock_Extension">
                 <requiredTraits>
                     <li>MiliraXianNeiyu_Love</li>
+                    <li>MX_QH_Trait_WaterFairy</li>
                 </requiredTraits>
             </li>
 
@@ -308,4 +331,5 @@
 
 
 </Defs>
+
 

@@ -29,109 +29,6 @@ namespace MiliraXian.Characters.QingHe
             return pawn.equipment.Primary.def == requiredWeapon;
         }
 
-        public static List<Pawn> CollectHostilePawns(Map map, IntVec3 center, Pawn caster, float radius)
-        {
-            List<Pawn> result = new List<Pawn>();
-            if (map == null || caster == null)
-            {
-                return result;
-            }
-
-            HashSet<Pawn> unique = new HashSet<Pawn>();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
-            {
-                if (!cell.InBounds(map))
-                {
-                    continue;
-                }
-
-                List<Thing> things = cell.GetThingList(map);
-                for (int i = 0; i < things.Count; i++)
-                {
-                    Pawn pawn = things[i] as Pawn;
-                    if (pawn == null || pawn.Dead || pawn.Destroyed || pawn == caster)
-                    {
-                        continue;
-                    }
-
-                    if (!GenHostility.HostileTo(caster, pawn))
-                    {
-                        continue;
-                    }
-
-                    if (unique.Add(pawn))
-                    {
-                        result.Add(pawn);
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public static List<Pawn> CollectAllPawns(Map map, IntVec3 center, float radius)
-        {
-            List<Pawn> result = new List<Pawn>();
-            if (map == null)
-            {
-                return result;
-            }
-
-            HashSet<Pawn> unique = new HashSet<Pawn>();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
-            {
-                if (!cell.InBounds(map))
-                {
-                    continue;
-                }
-
-                List<Thing> things = cell.GetThingList(map);
-                for (int i = 0; i < things.Count; i++)
-                {
-                    Pawn pawn = things[i] as Pawn;
-                    if (pawn == null || pawn.Dead || pawn.Destroyed)
-                    {
-                        continue;
-                    }
-
-                    if (unique.Add(pawn))
-                    {
-                        result.Add(pawn);
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public static void AddElegance(Pawn caster, float amount)
-        {
-            if (caster == null || amount <= 0f)
-            {
-                return;
-            }
-
-            PawnSpecialResourceUtility.AddResource(caster, MX_QHDefOf.MX_QH_Elegance, amount);
-        }
-
-        public static float FactorLinear(float max, Pawn pawn)
-        {
-            if (pawn == null)
-            {
-                return 1.0f;
-            }
-
-            float current = PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MX_QH_Elegance);
-            float resourceMax = PawnSpecialResourceUtility.GetMaxResource(pawn, MX_QHDefOf.MX_QH_Elegance);
-            if (resourceMax <= 0f)
-            {
-                return 1.0f;
-            }
-
-            float p = current / resourceMax;
-            return 1f + max * p;
-        }
-
         public static void TryApplyOrRefreshHediff(Pawn pawn, HediffDef hediffDef, float severity, int durationTicks)
         {
             if (pawn == null || hediffDef == null || pawn.health == null || pawn.health.hediffSet == null)
@@ -259,7 +156,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             DamageDef firstDamageDef = props.damageDef ?? MX_QHDefOf.MX_Dehydrate ?? DamageDefOf.Blunt;
-            List<Pawn> victims = CollectHostilePawns(map, caster.Position, caster, props.radius);
+            List<Pawn> victims = RadialUtility.CollectHostilePawns(map, caster.Position, caster, props.radius);
 
             int hitCount = 0;
             for (int i = 0; i < victims.Count; i++)
@@ -282,7 +179,7 @@ namespace MiliraXian.Characters.QingHe
             if (hitCount > 0)
             {
                 float gain = Mathf.Min(props.eleganceGainMax, props.eleganceGainPerTarget * hitCount);
-                AddElegance(caster, gain);
+                EleganceUtility.AddElegance(caster, gain);
             }
         }
 
@@ -300,7 +197,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             DamageDef d = props.damageDef ?? DamageDefOf.Cut;
-            List<Pawn> victims = CollectHostilePawns(map, center, caster, props.radius);
+            List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, props.radius);
             int affected = 0;
 
             for (int i = 0; i < victims.Count; i++)
@@ -337,7 +234,7 @@ namespace MiliraXian.Characters.QingHe
                 affected++;
             }
 
-            AddElegance(caster, props.eleganceGainOnCast + props.eleganceGainPerTarget * affected);
+            EleganceUtility.AddElegance(caster, props.eleganceGainOnCast + props.eleganceGainPerTarget * affected);
         }
         
         private static bool ValidKnockbackCell(Map map, IntVec3 cell, Pawn movingPawn)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
   <!-- Qinghe ?? -->
@@ -21,7 +21,7 @@
   <!-- Qinghe Elegance skills -->
   <JobDef>
     <defName>MX_Qinghe_Elegance_CastAbility_HengZhi</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_CastAbility_HengZhi</driverClass>
+    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_HengZhi</driverClass>
     <reportString>施放横指</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
@@ -34,7 +34,7 @@
 
   <JobDef>
     <defName>MX_Qinghe_Elegance_CastAbility_DuanHun</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_CastAbility_DuanHun</driverClass>
+    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_DuanHun</driverClass>
     <reportString>施放断魂</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
@@ -47,7 +47,7 @@
 
   <JobDef>
     <defName>MX_Qinghe_Elegance_CastAbility_YangChun</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_CastAbility_YangChun</driverClass>
+    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_YangChun</driverClass>
     <reportString>施放阳春</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>true</playerInterruptible>
