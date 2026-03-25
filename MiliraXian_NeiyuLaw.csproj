@@ -67,6 +67,8 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Source\Common\CompAbilityEffect_DebugMaxResource.cs" />
+        <Compile Include="Source\Common\CompProjectileHomingCurve.cs" />
+        <Compile Include="Source\Common\CompProjectileContinuousTrail.cs" />
         <Compile Include="Source\Common\HediffComp_SeverityPerSecondPausable.cs" />
         <Compile Include="Source\Common\PawnSpecialResource.cs" />
         <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
@@ -89,6 +91,7 @@
       <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
       <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
+      <Compile Include="Source\QingHe\DamageWorker_Desynced.cs" />
       <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
@@ -114,6 +117,9 @@
       <Compile Include="Source\QingHe\JobDriver_MX_DuanHun.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_YangChun.cs" />
       <Compile Include="Source\QingHe\CompWeaponAbility.cs" />
+      <Compile Include="Source\QingHe\Projectile_Pipa.cs" />
+      <Compile Include="Source\QingHe\Projectile_Zhudi.cs" />
+      <Compile Include="Source\QingHe\CompProjectileEleganceEffect.cs" />
       <Compile Include="Source\QingHe\CompYangChunField.cs" />
       <Compile Include="Source\QingHe\CompLotusShield.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
@@ -144,6 +150,7 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityTempest.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_Damage.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_PawnResource.xml" />
       <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityElegance.xml" />

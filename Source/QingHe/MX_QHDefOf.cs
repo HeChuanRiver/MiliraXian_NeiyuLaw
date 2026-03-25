@@ -19,6 +19,7 @@ namespace MiliraXian.Characters.QingHe
         public static HediffDef MX_AquaMirror;
         public static HediffDef MX_Draining;
         public static HediffDef MX_DryCorpse;
+        public static HediffDef MX_QH_Desynced;
 
         public static HediffDef MX_QH_Tempest;
         public static HediffDef MX_QH_Elegance;
@@ -27,6 +28,7 @@ namespace MiliraXian.Characters.QingHe
         public static HediffDef MX_QH_SpringRegen;
         public static HediffDef MX_QH_LotusShield;
         public static HediffDef MX_QH_QingheStatusGizmo;
+        public static HediffDef MX_QH_Elegance_DuanHunSlow;
 
         public static TraitDef MX_QH_Trait_LongBreath;
         public static TraitDef MX_QH_Trait_WaterFairy;

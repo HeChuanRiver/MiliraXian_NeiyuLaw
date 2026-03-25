@@ -48,6 +48,11 @@
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <clampToMax>true</clampToMax>
+                <inCombatTimerMaxTicks>360</inCombatTimerMaxTicks>
+                <gainPerTickInCombat>0.02</gainPerTickInCombat>
+                <gainPerTickOutOfCombat>-0.03</gainPerTickOutOfCombat>
+                <gainPerTickMeditation>0.04</gainPerTickMeditation>
+                <gainPerTickInstrumentJoy>0.05</gainPerTickInstrumentJoy>
                 <showGizmo>false</showGizmo>
                 <hideOnHealthTab>true</hideOnHealthTab>
                 <barColorRed>0.76</barColorRed>

@@ -1,11 +1,16 @@
 using RimWorld;
 using Verse;
-using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe
 {
     public class HediffCompProperties_Elegance : HediffCompProperties_PawnSpecialResource
     {
+        public int inCombatTimerMaxTicks = 360;
+        public float gainPerTickInCombat = 0.02f;
+        public float gainPerTickOutOfCombat = -0.03f;
+        public float gainPerTickMeditation = 0.04f;
+        public float gainPerTickInstrumentJoy = 0.05f;
+
         public HediffCompProperties_Elegance()
         {
             compClass = typeof(HediffComp_Elegance);
@@ -14,9 +19,24 @@ namespace MiliraXian.Characters.QingHe
 
     public class HediffComp_Elegance : HediffComp_PawnSpecialResource
     {
-        private const int EngageCombatWindowTicks = 360;
+        private int inCombatTimer;
 
         public HediffCompProperties_Elegance Props => (HediffCompProperties_Elegance)props;
+
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look(ref inCombatTimer, "inCombatTimer", 0);
+        }
+
+        public void NotifyCombatEvent()
+        {
+            inCombatTimer = Props?.inCombatTimerMaxTicks ?? 0;
+            if (inCombatTimer < 0)
+            {
+                inCombatTimer = 0;
+            }
+        }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
@@ -28,41 +48,35 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (IsInPreciseCombat(pawn))
+            float delta = inCombatTimer > 0 ? Props.gainPerTickInCombat : Props.gainPerTickOutOfCombat;
+            if (inCombatTimer > 0)
             {
-                AddValue(0.02f);
+                inCombatTimer--;
             }
-            else
+
+            JobDef currentJobDef = pawn.CurJob?.def;
+            if (IsMeditationJob(currentJobDef) && Props.gainPerTickMeditation > delta)
             {
-                AddValue(-0.03f);
+                delta = Props.gainPerTickMeditation;
             }
+
+            if (IsInstrumentJoyJob(currentJobDef) && Props.gainPerTickInstrumentJoy > delta)
+            {
+                delta = Props.gainPerTickInstrumentJoy;
+            }
+
+            AddValue(delta);
         }
 
-        private bool IsInPreciseCombat(Pawn pawn)
+        private static bool IsMeditationJob(JobDef jobDef)
         {
-            if (pawn.InAggroMentalState)
-            {
-                return true;
-            }
+            string defName = jobDef?.defName;
+            return defName == "Meditate" || defName == "MeditatePray";
+        }
 
-            Pawn_MindState mindState = pawn.mindState;
-            Thing enemyTarget = mindState?.enemyTarget;
-            int currentTick = Find.TickManager?.TicksGame ?? 0;
-            bool forcedNormalSpeed = Find.TickManager?.slower?.ForcedNormalSpeed ?? false;
-
-            if (enemyTarget != null && !enemyTarget.Destroyed && enemyTarget.Spawned)
-            {
-                bool hostile = pawn.HostileTo(enemyTarget);
-                bool recentlyEngaged = currentTick - mindState.lastEngageTargetTick <= EngageCombatWindowTicks;
-                bool targetValid = !(enemyTarget is Pawn enemyPawn) || !enemyPawn.Downed;
-                if (hostile && targetValid && (recentlyEngaged || forcedNormalSpeed))
-                {
-                    return true;
-                }
-            }
-
-            // Fallback: hostile nearby in same room/region.
-            return GenAI.InDangerousCombat(pawn);
+        private static bool IsInstrumentJoyJob(JobDef jobDef)
+        {
+            return jobDef?.defName == "Play_MusicalInstrument";
         }
     }
 }

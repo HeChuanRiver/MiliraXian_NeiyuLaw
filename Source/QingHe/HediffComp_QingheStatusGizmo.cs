@@ -295,19 +295,9 @@ namespace MiliraXian.Characters.QingHe
         {
             int tick = Find.TickManager?.TicksGame ?? 0;
             float pulse = 0.5f + 0.5f * Mathf.Sin(tick / 8f);
-            Color bright = Color.Lerp(ShieldBreakDarkColor, ShieldBreakBrightColor, 0.18f + pulse * 0.42f);
-            Color topColor = Color.Lerp(ShieldBreakDarkColor, bright, 0.35f);
-            Color bottomColor = ShieldBreakDarkColor;
-
-            const int steps = 16;
-            float stepH = barRect.height / steps;
-            for (int i = 0; i < steps; i++)
-            {
-                float t = i / (float)(steps - 1);
-                Color rowColor = Color.Lerp(topColor, bottomColor, t);
-                Rect rowRect = new Rect(barRect.x, barRect.y + i * stepH, barRect.width, stepH + 1f);
-                Widgets.DrawBoxSolid(rowRect, rowColor);
-            }
+            float highlight = Mathf.Clamp01(0.32f + pulse * 0.6f);
+            Color bright = Color.Lerp(ShieldBreakDarkColor, ShieldBreakBrightColor, highlight);
+            Widgets.DrawBoxSolid(barRect, bright);
         }
 
         private static Color ResolveShieldBarColor(

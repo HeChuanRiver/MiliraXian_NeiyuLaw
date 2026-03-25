@@ -6,8 +6,8 @@
   <!-- 1) 琵琶形：远程 -->
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_Qinghe_Form_Pipa</defName>
-    <label>清荷·琵琶形</label>
-    <description>清荷的琵琶形兵装，擅长中距离连发压制。</description>
+    <label>荷乐·琵琶</label>
+    <description>清荷的琵琶，擅长中距离连发压制。</description>
     <recipeMaker Inherit="False" IsNull="True" />
 
     <techLevel>Archotech</techLevel>
@@ -45,7 +45,7 @@
       <li>
         <verbClass>Verb_Shoot</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
-        <defaultProjectile>Bullet_AssaultRifle</defaultProjectile>
+        <defaultProjectile>MX_Bullet_Qinghe_PipaNote</defaultProjectile>
         <warmupTime>0.90</warmupTime>
         <range>29.9</range>
         <burstShotCount>2</burstShotCount>
@@ -78,7 +78,7 @@
         </formIconPaths>
 
         <commandLabel>切换形态</commandLabel>
-        <commandDesc>点击切换：琵琶 → 竹笛 → 琴。</commandDesc>
+        <commandDesc>点击切换：</commandDesc>
 
         <destroyOldWeapon>true</destroyOldWeapon>
         <requirePrimary>true</requirePrimary>
@@ -90,7 +90,7 @@
   <!-- 2) 竹笛形：远程 -->
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_Qinghe_Form_Zhudi</defName>
-    <label>清荷·竹笛形</label>
+    <label>荷乐·竹笛</label>
     <description>清荷的竹笛形兵装，擅长远距离精准点射。</description>
     <recipeMaker Inherit="False" IsNull="True" />
 
@@ -129,7 +129,7 @@
       <li>
         <verbClass>Verb_Shoot</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
-        <defaultProjectile>Bullet_SniperRifle</defaultProjectile>
+        <defaultProjectile>MX_Bullet_Qinghe_ZhudiNote</defaultProjectile>
         <warmupTime>1.45</warmupTime>
         <range>38.9</range>
         <burstShotCount>1</burstShotCount>
@@ -252,6 +252,100 @@
         <destroyOldWeapon>true</destroyOldWeapon>
         <requirePrimary>true</requirePrimary>
         <cooldownTicks>0</cooldownTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>MX_Bullet_Qinghe_PipaNote</defName>
+    <label>清荷·琵琶音符</label>
+    <thingClass>MiliraXian.Characters.QingHe.Projectile_Pipa</thingClass>
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.36,1.05)</drawSize>
+      <shaderType>TransparentPostLight</shaderType>
+      <color>(230,195,255)</color>
+    </graphicData>
+    <projectile>
+      <damageDef>MX_Desynced</damageDef>
+      <damageAmountBase>12</damageAmountBase>
+      <armorPenetrationBase>1.10</armorPenetrationBase>
+      <speed>52</speed>
+      <arcHeightFactor>0.10</arcHeightFactor>
+    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+        <enableContinuousTrail>true</enableContinuousTrail>
+        <trailMaxPoints>22</trailMaxPoints>
+        <trailMinPointDistance>0.10</trailMinPointDistance>
+        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+        <trailWidthStart>0.18</trailWidthStart>
+        <trailWidthEnd>0.05</trailWidthEnd>
+        <trailAlpha>0.62</trailAlpha>
+        <trailAltitudeOffset>0.70</trailAltitudeOffset>
+        <useProjectileGraphicColor>true</useProjectileGraphicColor>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+        <enableHoming>true</enableHoming>
+        <homingStartDelayTicks>5</homingStartDelayTicks>
+        <minHomingTicksToImpact>10</minHomingTicksToImpact>
+        <homingTurnLerp>0.13</homingTurnLerp>
+        <curveAmplitudeMin>0.16</curveAmplitudeMin>
+        <curveAmplitudeMax>0.46</curveAmplitudeMax>
+        <curveFrequency>0.21</curveFrequency>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
+        <eleganceGainOnHit>1.4</eleganceGainOnHit>
+        <requireHostileTarget>true</requireHostileTarget>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>MX_Bullet_Qinghe_ZhudiNote</defName>
+    <label>清荷·竹笛音束</label>
+    <thingClass>MiliraXian.Characters.QingHe.Projectile_Zhudi</thingClass>
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Projectile/BigArrow</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.32,1.42)</drawSize>
+      <shaderType>TransparentPostLight</shaderType>
+      <color>(170,240,255)</color>
+    </graphicData>
+    <projectile>
+      <damageDef>MX_Desynced</damageDef>
+      <damageAmountBase>24</damageAmountBase>
+      <armorPenetrationBase>0.40</armorPenetrationBase>
+      <speed>60</speed>
+      <arcHeightFactor>0.04</arcHeightFactor>
+    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+        <enableContinuousTrail>true</enableContinuousTrail>
+        <trailMaxPoints>20</trailMaxPoints>
+        <trailMinPointDistance>0.12</trailMinPointDistance>
+        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+        <trailWidthStart>0.16</trailWidthStart>
+        <trailWidthEnd>0.04</trailWidthEnd>
+        <trailAlpha>0.54</trailAlpha>
+        <trailAltitudeOffset>0.80</trailAltitudeOffset>
+        <useProjectileGraphicColor>true</useProjectileGraphicColor>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+        <enableHoming>true</enableHoming>
+        <homingStartDelayTicks>4</homingStartDelayTicks>
+        <minHomingTicksToImpact>9</minHomingTicksToImpact>
+        <homingTurnLerp>0.17</homingTurnLerp>
+        <curveAmplitudeMin>0.22</curveAmplitudeMin>
+        <curveAmplitudeMax>0.60</curveAmplitudeMax>
+        <curveFrequency>0.24</curveFrequency>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
+        <eleganceGainOnHit>1.0</eleganceGainOnHit>
+        <requireHostileTarget>true</requireHostileTarget>
       </li>
     </comps>
   </ThingDef>

@@ -1,73 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <!-- 伤害类型相关 -->
-    <!-- 脱水伤害 -->
-    <HediffDef>
-        <defName>MX_DehydrateDamage</defName>
-        <label>水循环紊乱</label>
-        <description>内部的部分流体行为被干扰，导致循环系统异常或机械故障。</description>
-        <isBad>true</isBad>
-        <hediffClass>HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
-        <initialSeverity>0.01</initialSeverity>
-        <minSeverity>0.0</minSeverity>
-        <maxSeverity>1.0</maxSeverity>
-        <alwaysShowSeverity>true</alwaysShowSeverity>
-        <stages>
-            <li>
-                <minSeverity>0.0</minSeverity>
-                <capMods>
-                    <li>
-                        <capacity>Consciousness</capacity>
-                        <postFactor>0.9</postFactor>
-                    </li>
-                </capMods>
-            </li>
-            <li>
-                <minSeverity>0.2</minSeverity>
-                <capMods>
-                    <li>
-                        <capacity>Consciousness</capacity>
-                        <postFactor>0.8</postFactor>
-                    </li>
-                </capMods>
-            </li>
-            <li>
-                <minSeverity>0.4</minSeverity>
-                <capMods>
-                    <li>
-                        <capacity>Consciousness</capacity>
-                        <postFactor>0.7</postFactor>
-                    </li>
-                </capMods>
-            </li>
-            <li>
-                <minSeverity>0.6</minSeverity>
-                <capMods>
-                    <li>
-                        <capacity>Consciousness</capacity>
-                        <postFactor>0.6</postFactor>
-                    </li>
-                </capMods>
-            </li>
-            <li>
-                <minSeverity>0.8</minSeverity>
-                <capMods>
-                    <li>
-                        <capacity>Consciousness</capacity>
-                        <postFactor>0.5</postFactor>
-                    </li>
-                </capMods>
-            </li>
-        </stages>
-        <comps>
-            <li Class="HediffCompProperties_SeverityPerDay">
-                <severityPerDay>-0.5</severityPerDay>
-                <showHoursToRecover>true</showHoursToRecover>
-            </li>
-        </comps>
-    </HediffDef>
-    
     <!-- 技能相关 -->
     <!-- 涌泉 -->
     <HediffDef>
@@ -125,6 +57,7 @@
             </li>
             <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_AquaMirror">
                 <healAmount>10</healAmount>
+                <healAmountByEleganceMax>1.0</healAmountByEleganceMax>
                 <explosionDamage>10</explosionDamage>
                 <explosionRadius>3</explosionRadius>
                 <tempestPerMirror>5</tempestPerMirror>

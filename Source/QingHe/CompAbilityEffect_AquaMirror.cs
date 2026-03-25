@@ -27,7 +27,6 @@ namespace MiliraXian.Characters.QingHe
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Apply(target, dest);
-            Log.Message("AquaMirror: Begin cast");
             foreach (var thing in GenRadial.RadialDistinctThingsAround(target.Cell, parent.pawn.Map, Props.previewRadius, true))
             {
                 if (thing is Pawn pawn && !pawn.Dead && pawn.Faction == parent.pawn.Faction)
@@ -35,7 +34,7 @@ namespace MiliraXian.Characters.QingHe
                     var existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
                     if (existed != null)
                     {
-                        pawn.health.hediffSet.hediffs.Remove(existed);
+                        pawn.health.RemoveHediff(existed);
                     }
                     var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
                     hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
