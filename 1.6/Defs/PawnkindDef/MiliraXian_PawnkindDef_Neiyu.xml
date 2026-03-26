@@ -45,6 +45,7 @@
 
         <!-- apparel you force to spawn 强制要求生成的装备 -->
         <apparelRequired>
+            <li>MiliraXian_NeiyuInner</li>
             <li>MiliraXian_NeiyuNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
 <!--            <li>MX_Neiyu_Form_Flower</li>-->
