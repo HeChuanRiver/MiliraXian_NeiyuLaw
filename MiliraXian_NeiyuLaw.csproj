@@ -68,6 +68,7 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Source\Common\CompAbilityEffect_DebugMaxResource.cs" />
         <Compile Include="Source\Common\CompProjectileHomingCurve.cs" />
+        <Compile Include="Source\Common\ProjectileHomingCurveBase.cs" />
         <Compile Include="Source\Common\CompProjectileContinuousTrail.cs" />
         <Compile Include="Source\Common\HediffComp_SeverityPerSecondPausable.cs" />
         <Compile Include="Source\Common\PawnSpecialResource.cs" />
@@ -142,6 +143,7 @@
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStroy_ZhaoliBS1.xml" />
       <Content Include="1.6\Defs\DamageDefs\MiliraXian_DamageDefs_Qinghe.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_QingheProjectileTrail.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Zhaoli.xml" />
@@ -357,6 +359,7 @@
     -->
 
 </Project>
+
 
 
 

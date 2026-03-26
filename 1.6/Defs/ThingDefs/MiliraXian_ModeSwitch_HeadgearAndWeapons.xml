@@ -300,8 +300,13 @@
                 <splitProjectileDef>MX_Bullet_HomingShard</splitProjectileDef>
                 <splitCount>27</splitCount>
                 <splitDelayTicks>8</splitDelayTicks>
-                <scatterAngle>180</scatterAngle>
+                <scatterAngle>120</scatterAngle>
                 <scatterDistance>14</scatterDistance>
+                <enableSplitRetarget>true</enableSplitRetarget>
+                <splitRetargetChance>0.45</splitRetargetChance>
+                <splitRetargetRadius>10</splitRetargetRadius>
+                <splitRetargetPawnWeight>3.5</splitRetargetPawnWeight>
+                <splitRetargetNonPawnWeight>1.0</splitRetargetNonPawnWeight>
             </li>
         </modExtensions>
     </ThingDef>
@@ -324,12 +329,35 @@
             <speed>54</speed>
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.Neiyu.SplitArrowExtension">
-                <homingStartDelayTicks>10</homingStartDelayTicks>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+                <homingStartDelayTicks>0</homingStartDelayTicks>
+                <minHomingTicksToImpact>6</minHomingTicksToImpact>
+                <homingLifetimeFactor>1.2</homingLifetimeFactor>
+                <forceUsedTargetToIntended>false</forceUsedTargetToIntended>
                 <homingTurnLerp>0.14</homingTurnLerp>
+                <terminalSnapDistance>3.0</terminalSnapDistance>
+                <terminalSnapTurnLerp>0.92</terminalSnapTurnLerp>
+                <curveAmplitudeMin>0.00</curveAmplitudeMin>
+                <curveAmplitudeMax>0.00</curveAmplitudeMax>
+                <curveFrequency>0.20</curveFrequency>
+                <curveGuideDistanceFactor>0.35</curveGuideDistanceFactor>
+                <curveGuideDistanceMin>3.5</curveGuideDistanceMin>
+                <curveGuideDistanceMax>7.5</curveGuideDistanceMax>
+                <terminalLockDistance>1.05</terminalLockDistance>
+                <curveWobbleFadeDistance>4.5</curveWobbleFadeDistance>
+                <enableTurnStopWhenLikelyHit>true</enableTurnStopWhenLikelyHit>
+                <turnStopMinTargetRadius>0.42</turnStopMinTargetRadius>
+                <turnStopMargin>0.08</turnStopMargin>
+                <turnStopPredictTicks>3</turnStopPredictTicks>
+                <enableRetargetOnTargetLost>true</enableRetargetOnTargetLost>
+                <retargetMaxCount>2</retargetMaxCount>
+                <retargetRetryIntervalTicks>8</retargetRetryIntervalTicks>
+                <retargetSearchRadius>10</retargetSearchRadius>
+                <retargetPawnWeight>3.5</retargetPawnWeight>
+                <retargetNonPawnWeight>1.0</retargetNonPawnWeight>
             </li>
-        </modExtensions>
+        </comps>
     </ThingDef>
 
     <ThingDef ParentName="BaseBullet">

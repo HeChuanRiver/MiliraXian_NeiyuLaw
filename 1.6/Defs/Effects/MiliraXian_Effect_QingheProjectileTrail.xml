@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- QingHe projectile vanilla scatter trail -->
+  <EffecterDef>
+    <defName>MX_QH_ProjectileScatterTrail</defName>
+    <children>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerChance</subEffecterClass>
+        <moteDef>Mote_SparkThrownFastBright</moteDef>
+        <chancePerTick>0.50</chancePerTick>
+        <spawnLocType>OnSource</spawnLocType>
+        <absoluteAngle>true</absoluteAngle>
+        <angle>0~360</angle>
+        <speed>0.8~1.8</speed>
+        <airTime>0.06~0.14</airTime>
+        <rotationRate>-240~240</rotationRate>
+        <scale>0.12~0.20</scale>
+        <positionRadius>0.05</positionRadius>
+      </li>
+    </children>
+  </EffecterDef>
+
+</Defs>

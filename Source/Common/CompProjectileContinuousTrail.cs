@@ -7,7 +7,6 @@ namespace MiliraXian.Characters
     public class CompProperties_ProjectileContinuousTrail : CompProperties
     {
         public string trailTexPath = "UI/Overlays/ThingLine";
-        public bool enableContinuousTrail = true;
         public int trailMaxPoints = 18;
         public float trailMinPointDistance = 0.10f;
         public int trailSmoothSubdivisions = 3;
@@ -70,7 +69,7 @@ namespace MiliraXian.Characters
         public override void CompTick()
         {
             Projectile projectile = ProjectileParent;
-            if (Props == null || !Props.enableContinuousTrail || projectile == null || !parent.Spawned || parent.Map == null)
+            if (Props == null || projectile == null || !parent.Spawned || parent.Map == null)
             {
                 return;
             }
@@ -96,7 +95,7 @@ namespace MiliraXian.Characters
             base.PostDraw();
 
             Projectile projectile = ProjectileParent;
-            if (Props == null || !Props.enableContinuousTrail || projectile == null || trailPoints.Count < 2)
+            if (Props == null || projectile == null || trailPoints.Count < 2)
             {
                 return;
             }

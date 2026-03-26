@@ -35,10 +35,10 @@
     <statBases>
       <MarketValue>2600</MarketValue>
       <Mass>1.0</Mass>
-      <AccuracyTouch>0.72</AccuracyTouch>
-      <AccuracyShort>0.74</AccuracyShort>
-      <AccuracyMedium>0.56</AccuracyMedium>
-      <AccuracyLong>0.30</AccuracyLong>
+      <AccuracyTouch>1.0</AccuracyTouch>
+      <AccuracyShort>1.0</AccuracyShort>
+      <AccuracyMedium>1.0</AccuracyMedium>
+      <AccuracyLong>1.0</AccuracyLong>
     </statBases>
 
     <verbs>
@@ -48,7 +48,7 @@
         <defaultProjectile>MX_Bullet_Qinghe_PipaNote</defaultProjectile>
         <warmupTime>0.90</warmupTime>
         <range>29.9</range>
-        <burstShotCount>2</burstShotCount>
+        <burstShotCount>4</burstShotCount>
         <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
       </li>
     </verbs>
@@ -269,32 +269,33 @@
     </graphicData>
     <projectile>
       <damageDef>MX_Desynced</damageDef>
-      <damageAmountBase>12</damageAmountBase>
-      <armorPenetrationBase>1.10</armorPenetrationBase>
-      <speed>52</speed>
+      <damageAmountBase>6</damageAmountBase>
+      <armorPenetrationBase>2.10</armorPenetrationBase>
+      <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <enableContinuousTrail>true</enableContinuousTrail>
         <trailMaxPoints>22</trailMaxPoints>
         <trailMinPointDistance>0.10</trailMinPointDistance>
         <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
         <trailWidthStart>0.18</trailWidthStart>
         <trailWidthEnd>0.05</trailWidthEnd>
-        <trailAlpha>0.62</trailAlpha>
+        <trailAlpha>1.00</trailAlpha>
         <trailAltitudeOffset>0.70</trailAltitudeOffset>
         <useProjectileGraphicColor>true</useProjectileGraphicColor>
       </li>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
-        <enableHoming>true</enableHoming>
         <homingStartDelayTicks>5</homingStartDelayTicks>
         <minHomingTicksToImpact>10</minHomingTicksToImpact>
         <homingTurnLerp>0.13</homingTurnLerp>
-        <curveAmplitudeMin>0.16</curveAmplitudeMin>
-        <curveAmplitudeMax>0.46</curveAmplitudeMax>
-        <curveFrequency>0.21</curveFrequency>
+        <curveAmplitudeMin>0.60</curveAmplitudeMin>
+        <curveAmplitudeMax>0.80</curveAmplitudeMax>
+        <curveFrequency>0.12</curveFrequency>
+      </li>
+      <li Class="CompProperties_ProjectileEffecter">
+        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
       <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
         <eleganceGainOnHit>1.4</eleganceGainOnHit>
@@ -324,7 +325,6 @@
     <comps>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <enableContinuousTrail>true</enableContinuousTrail>
         <trailMaxPoints>20</trailMaxPoints>
         <trailMinPointDistance>0.12</trailMinPointDistance>
         <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
@@ -335,13 +335,15 @@
         <useProjectileGraphicColor>true</useProjectileGraphicColor>
       </li>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
-        <enableHoming>true</enableHoming>
         <homingStartDelayTicks>4</homingStartDelayTicks>
         <minHomingTicksToImpact>9</minHomingTicksToImpact>
         <homingTurnLerp>0.17</homingTurnLerp>
         <curveAmplitudeMin>0.22</curveAmplitudeMin>
         <curveAmplitudeMax>0.60</curveAmplitudeMax>
         <curveFrequency>0.24</curveFrequency>
+      </li>
+      <li Class="CompProperties_ProjectileEffecter">
+        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
       <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
         <eleganceGainOnHit>1.0</eleganceGainOnHit>
