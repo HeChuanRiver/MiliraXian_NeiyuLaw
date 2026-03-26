@@ -1,6 +1,7 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -9,14 +10,18 @@ namespace MiliraXian.Characters.Neiyu
         public ThingDef splitProjectileDef;
         public int splitCount = 6;
         public int splitDelayTicks = 8;
-        public float scatterAngle = 180f;
+        public float scatterAngle = 120f;
         public float scatterDistance = 9f;
-        public int homingStartDelayTicks = 10;
-        public float homingTurnLerp = 0.18f;
+        public bool enableSplitRetarget = true;
+        public float splitRetargetChance = 0.45f;
+        public float splitRetargetRadius = 10f;
+        public float splitRetargetPawnWeight = 3.5f;
+        public float splitRetargetNonPawnWeight = 1.0f;
     }
 
     public class Projectile_BigArrowSplit : Bullet
     {
+        private const string DefaultSplitProjectileDefName = "MX_Bullet_HomingShard";
         private bool splitDone;
 
         private int splitTick;
@@ -63,8 +68,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            SplitArrowExtension ext = Ext;
-            if (ext == null || ext.splitProjectileDef == null)
+            if (ResolveSplitProjectileDef() == null)
             {
                 return false;
             }
@@ -80,10 +84,10 @@ namespace MiliraXian.Characters.Neiyu
         private void SplitIntoShards()
         {
             splitDone = true;
-
             SplitArrowExtension ext = Ext;
+            ThingDef splitProjectileDef = ResolveSplitProjectileDef();
             Map map = Map;
-            if (ext == null || ext.splitProjectileDef == null || map == null)
+            if (splitProjectileDef == null || map == null)
             {
                 if (!Destroyed)
                 {
@@ -91,7 +95,6 @@ namespace MiliraXian.Characters.Neiyu
                 }
                 return;
             }
-
             Vector3 forward = (destination - origin).Yto0();
             if (forward.x == 0f && forward.z == 0f)
             {
@@ -99,7 +102,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             forward = forward.normalized;
-            int count = Mathf.Max(1, ext.splitCount);
+            int count = Mathf.Max(1, ext?.splitCount ?? 6);
             Vector3 aimPoint = destination;
             if (intendedTarget.IsValid)
             {
@@ -112,29 +115,30 @@ namespace MiliraXian.Characters.Neiyu
                     aimPoint = intendedTarget.Cell.ToVector3Shifted();
                 }
             }
-
+            
             Vector3 aimVector = (aimPoint - ExactPosition).Yto0();
             if (aimVector.sqrMagnitude > 0.0001f)
             {
                 forward = aimVector.normalized;
             }
 
-            float desiredDistance = Mathf.Max(4f, aimVector.magnitude);
-            float coneAngle = Mathf.Min(90f, Mathf.Abs(ext.scatterAngle));
-            float minScatterDistance = Mathf.Max(6f, desiredDistance * 0.55f + ext.scatterDistance * 0.8f);
-            float maxScatterDistance = Mathf.Max(minScatterDistance + 2f, desiredDistance * 1.45f + ext.scatterDistance * 2.4f);
+            float scatterDistance = ext?.scatterDistance ?? 9f;
+            float totalScatterAngle = Mathf.Clamp(Mathf.Abs(ext?.scatterAngle ?? 120f), 1f, 179f);
+            float halfConeAngle = totalScatterAngle * 0.5f;
+            float minScatterDistance = Mathf.Max(4f, scatterDistance * 0.65f);
+            float maxScatterDistance = Mathf.Max(minScatterDistance + 2f, scatterDistance * 1.35f);
+            maxScatterDistance = Mathf.Min(maxScatterDistance, 18f);
             CellRect mapRect = CellRect.WholeMap(map);
-
             for (int i = 0; i < count; i++)
             {
-                Thing spawned = GenSpawn.Spawn(ext.splitProjectileDef, Position, map);
+                Thing spawned = GenSpawn.Spawn(splitProjectileDef, Position, map);
                 Projectile child = spawned as Projectile;
                 if (child == null)
                 {
                     continue;
                 }
 
-                float angle = Rand.Range(-coneAngle, coneAngle);
+                float angle = Rand.Range(-halfConeAngle, halfConeAngle);
                 Vector3 scatterDir = forward.RotatedBy(angle).normalized;
                 float travelDistance = Rand.Range(minScatterDistance, maxScatterDistance);
                 IntVec3 scatterCell = (ExactPosition + scatterDir * travelDistance).ToIntVec3();
@@ -145,13 +149,29 @@ namespace MiliraXian.Characters.Neiyu
 
                 LocalTargetInfo usedTarget = new LocalTargetInfo(scatterCell);
                 LocalTargetInfo homingTarget = intendedTarget.IsValid ? intendedTarget : usedTarget;
+                if ((ext?.enableSplitRetarget ?? true)
+                    && homingTarget.HasThing
+                    && Rand.Chance(Mathf.Clamp01(ext?.splitRetargetChance ?? 0.45f)))
+                {
+                    Thing altTarget = CompProjectileHomingCurve.TryPickRandomHostileTarget(
+                        map,
+                        aimPoint,
+                        launcher,
+                        ext?.splitRetargetRadius ?? 10f,
+                        ext?.splitRetargetPawnWeight ?? 3.5f,
+                        ext?.splitRetargetNonPawnWeight ?? 1.0f,
+                        homingTarget.Thing);
+                    if (altTarget != null)
+                    {
+                        homingTarget = new LocalTargetInfo(altTarget);
+                    }
+                }
 
                 Projectile_HomingShard shard = child as Projectile_HomingShard;
                 if (shard != null)
                 {
                     shard.SetSequentialDelay(Rand.RangeInclusive(2, 6));
                 }
-
                 child.Launch(launcher, ExactPosition, usedTarget, homingTarget, HitFlags, preventFriendlyFire, equipment, targetCoverDef);
             }
 
@@ -161,21 +181,26 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
+        private ThingDef ResolveSplitProjectileDef()
+        {
+            ThingDef splitDef = Ext?.splitProjectileDef;
+            if (splitDef != null)
+            {
+                return splitDef;
+            }
+
+            return DefDatabase<ThingDef>.GetNamedSilentFail(DefaultSplitProjectileDefName);
+        }
+
     }
 
-    public class Projectile_HomingShard : Bullet
+    public class Projectile_HomingShard : ProjectileHomingCurveBase
     {
-        private int homingStartTick;
-        private bool homingStarted;
         private int sequentialDelayTicks;
-
-        private SplitArrowExtension Ext => def.GetModExtension<SplitArrowExtension>();
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref homingStartTick, "homingStartTick", 0);
-            Scribe_Values.Look(ref homingStarted, "homingStarted", false);
             Scribe_Values.Look(ref sequentialDelayTicks, "sequentialDelayTicks", 0);
         }
 
@@ -195,7 +220,8 @@ namespace MiliraXian.Characters.Neiyu
             ThingDef targetCoverDef = null)
         {
             base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
-            homingStartTick = Find.TickManager.TicksGame + Mathf.Max(1, sequentialDelayTicks);
+            int delay = Mathf.Max(1, sequentialDelayTicks);
+            GetComp<CompProjectileHomingCurve>()?.NotifyLaunch(Find.TickManager.TicksGame + delay);
         }
 
         protected override void Tick()
@@ -204,90 +230,6 @@ namespace MiliraXian.Characters.Neiyu
             if (this.IsHashIntervalTick(2) && Map != null)
             {
                 FleckMaker.ThrowLightningGlow(ExactPosition, Map, 0.2f);
-            }
-        }
-
-
-        protected override void TickInterval(int delta)
-        {
-            if (!landed)
-            {
-                TryStartOrUpdateHoming();
-            }
-
-            base.TickInterval(delta);
-        }
-
-        protected override void ImpactSomething()
-        {
-            if (intendedTarget.HasThing)
-            {
-                Thing targetThing = intendedTarget.Thing;
-                if (targetThing == null || targetThing.Destroyed || !targetThing.Spawned)
-                {
-                    Destroy(DestroyMode.Vanish);
-                    return;
-                }
-
-                Impact(targetThing);
-                return;
-            }
-
-            if (intendedTarget.IsValid)
-            {
-                Impact(null);
-                return;
-            }
-
-            base.ImpactSomething();
-        }
-
-        private void TryStartOrUpdateHoming()
-        {
-            SplitArrowExtension ext = Ext;
-            if (ext == null)
-            {
-                return;
-            }
-
-            Vector3 targetPos;
-            if (intendedTarget.HasThing)
-            {
-                Thing targetThing = intendedTarget.Thing;
-                if (targetThing == null || !targetThing.Spawned || targetThing.Destroyed)
-                {
-                    return;
-                }
-
-                targetPos = targetThing.DrawPos;
-            }
-            else if (intendedTarget.IsValid)
-            {
-                targetPos = intendedTarget.Cell.ToVector3Shifted();
-            }
-            else
-            {
-                return;
-            }
-
-            if (!homingStarted && Find.TickManager.TicksGame >= homingStartTick)
-            {
-                homingStarted = true;
-                origin = ExactPosition;
-                destination = Vector3.Lerp(destination, targetPos, 0.25f);
-                ticksToImpact = Mathf.Max(6, Mathf.CeilToInt(StartingTicksToImpact));
-                lifetime = ticksToImpact;
-            }
-
-            if (homingStarted)
-            {
-                Vector3 delta = targetPos - ExactPosition;
-                float horizontalDist = Mathf.Sqrt(delta.x * delta.x + delta.z * delta.z);
-                float nearFactor = Mathf.InverseLerp(28f, 3f, horizontalDist);
-                float minTurn = Mathf.Clamp01(ext.homingTurnLerp * 0.25f);
-                float maxTurn = Mathf.Clamp01(ext.homingTurnLerp * 0.65f);
-                float t = Mathf.Lerp(minTurn, maxTurn, nearFactor);
-                destination = Vector3.Lerp(destination, targetPos, t);
             }
         }
     }

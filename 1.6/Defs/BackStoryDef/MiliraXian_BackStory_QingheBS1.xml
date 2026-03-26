@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- 仙米BS1 -->
+    <AlienRace.AlienBackstoryDef>
+        <defName>MiliraXian_BackStoryChild_Qinghe_BS1</defName>
+        <title>水仙子</title>
+        <titleShort>水仙子</titleShort>
+        <description>[PAWN_nameDef] 长得有点像绮罗，但是毫无疑问的是，她是一位纯正的米莉拉。\n 在"霁"演化出的六大派系中，她主管生命与平衡。 \n "所以，我选择与流水和音乐作伴。"</description>
+        <slot>Childhood</slot>
+        <skillGains>
+            <Shooting>6</Shooting>
+            <Melee>6</Melee>
+            <Construction>6</Construction>
+            <Mining>6</Mining>
+            <Cooking>-6</Cooking>
+            <Plants>6</Plants>
+            <Animals>6</Animals>
+            <Crafting>6</Crafting>
+            <Artistic>6</Artistic>
+            <Medicine>6</Medicine>
+            <Social>6</Social>
+            <Intellectual>6</Intellectual>
+        </skillGains>
+        <spawnCategories>
+            <li>MiliraXian_BackStoryChild_Qinghe_Tag</li>
+        </spawnCategories>
+        <workDisables>
+        </workDisables>
+        <bodyTypeFemale>Female</bodyTypeFemale>
+        <bodyTypeMale>Female</bodyTypeMale>
+    </AlienRace.AlienBackstoryDef>
+
+    <AlienRace.AlienBackstoryDef>
+        <defName>MiliraXian_BackStoryAdult_Qinghe_BS1</defName>
+        <title>调停者</title>
+        <titleShort>调停者</titleShort>
+        <description>[PAWN_nameDef] 掌管着世间平衡之力。比起使用暴力，她更愿意用水流和乐声支援她的朋友们，但如果有必要的话，她也会毫不犹豫地拿起武器战斗。\n"不好意思，如果这就是你想要的结局的话。"</description>
+        <slot>Adulthood</slot>
+        <skillGains>
+            <Shooting>18</Shooting>
+            <Melee>7</Melee>
+            <Construction>20</Construction>
+            <Mining>14</Mining>
+            <Cooking>12</Cooking>
+            <Plants>20</Plants>
+            <Animals>20</Animals>
+            <Crafting>16</Crafting>
+            <Artistic>20</Artistic>
+            <Medicine>20</Medicine>
+            <Social>11</Social>
+            <Intellectual>20</Intellectual>
+        </skillGains>
+        <spawnCategories>
+            <li>MiliraXian_BackStoryAdult_Qinghe_Tag</li>
+        </spawnCategories>
+        <disallowedTraitsChance>
+        </disallowedTraitsChance>
+        <possessions>
+            <!--这里放默认物品-->
+        </possessions>
+        <bodyTypeFemale>Female</bodyTypeFemale>
+        <bodyTypeMale>Female</bodyTypeMale>
+    </AlienRace.AlienBackstoryDef>
+
+</Defs>

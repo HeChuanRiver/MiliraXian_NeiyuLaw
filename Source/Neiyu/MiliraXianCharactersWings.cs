@@ -126,6 +126,18 @@ namespace MiliraXian.Characters.Neiyu
                         "Milira_FlyEast_Zhaoli",
                         "Milira_FlySouth_Zhaoli",
                         "Milira_FlyWest_Zhaoli")
+                },
+                {
+                    "MiliraXian_Qinghe",
+                    new MiliraXianCharacterWingEntry(
+                        "MiliraXian_Qinghe",
+                        // TODO：这里记得改翅膀贴图 (for 清荷
+                        "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu",
+                        "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu",
+                        "Milira_FlyNorth_Qinghe",
+                        "Milira_FlyEast_Qinghe",
+                        "Milira_FlySouth_Qinghe",
+                        "Milira_FlyWest_Qinghe")
                 }
             };
 
