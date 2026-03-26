@@ -605,7 +605,7 @@ namespace MiliraXian.Characters
             Pawn pawn = candidate as Pawn;
             if (pawn != null)
             {
-                return !pawn.Dead;
+                return !pawn.Dead && !pawn.Downed;
             }
 
             if (candidate.def == null)
