@@ -4,6 +4,7 @@
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName="Milira_Race"]/alienRace/raceRestriction/apparelList</xpath>
         <value>
             <!-- 常服  -->
+            <li>MiliraXian_NeiyuInner</li>
             <li>MiliraXian_NeiyuNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
             

@@ -533,6 +533,7 @@ namespace MiliraXian.Characters.Neiyu
     {
         private const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
         private const string DefaultWeaponDefName = "MX_Neiyu_Form_Flower";
+        private const string DefaultInnerClothingDefName = "MiliraXian_NeiyuInner";
         private const string DefaultClothingDefName = "MiliraXian_NeiyuNormal";
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
@@ -545,6 +546,7 @@ namespace MiliraXian.Characters.Neiyu
         public static void EnsureDefaultLoadout(Pawn pawn)
         {
             EnsureDefaultWeapon(pawn);
+            EnsureDefaultInnerClothing(pawn);
             EnsureDefaultClothing(pawn);
             EnsureDefaultEarrings(pawn);
         }
@@ -687,6 +689,43 @@ namespace MiliraXian.Characters.Neiyu
             EnsureForcedApparel(pawn, clothing);
         }
 
+        public static void EnsureDefaultInnerClothing(Pawn pawn)
+        {
+            if (!IsNeiyu(pawn) || pawn.apparel == null)
+            {
+                return;
+            }
+
+            Apparel existing = FindWornApparel(pawn, DefaultInnerClothingDefName);
+            if (existing != null)
+            {
+                EnsureForcedApparel(pawn, existing);
+                return;
+            }
+
+            ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultInnerClothingDefName);
+            if (apparelDef == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Missing ThingDef: " + DefaultInnerClothingDefName);
+                return;
+            }
+
+            Apparel innerClothing = FindDroppedApparelOnMap(pawn, apparelDef);
+            if (innerClothing == null)
+            {
+                innerClothing = ThingMaker.MakeThing(apparelDef) as Apparel;
+            }
+            if (innerClothing == null)
+            {
+                Log.Error("[MiliraXian.Characters.Neiyu] Default inner clothing is not Apparel: " + DefaultInnerClothingDefName);
+                return;
+            }
+
+            PawnGenerator.PostProcessGeneratedGear(innerClothing, pawn);
+            pawn.apparel.Wear(innerClothing, dropReplacedApparel: true);
+            EnsureForcedApparel(pawn, innerClothing);
+        }
+
         public static bool HasDefaultEarringsEquipped(Pawn pawn)
         {
             return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultEarringDefName);
@@ -697,9 +736,17 @@ namespace MiliraXian.Characters.Neiyu
             return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultClothingDefName);
         }
 
+        public static bool HasDefaultInnerClothingEquipped(Pawn pawn)
+        {
+            return pawn?.apparel != null && pawn.apparel.WornApparel.Any(apparel => apparel?.def?.defName == DefaultInnerClothingDefName);
+        }
+
         public static bool HasInitialLoadoutEquipped(Pawn pawn)
         {
-            return pawn?.equipment?.Primary != null && HasDefaultClothingEquipped(pawn) && HasDefaultEarringsEquipped(pawn);
+            return pawn?.equipment?.Primary != null
+                && HasDefaultInnerClothingEquipped(pawn)
+                && HasDefaultClothingEquipped(pawn)
+                && HasDefaultEarringsEquipped(pawn);
         }
 
         public static void CleanupDroppedEarringsOnMap(Pawn pawn)

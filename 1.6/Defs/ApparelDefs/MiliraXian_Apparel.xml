@@ -82,6 +82,50 @@
         </equippedStatOffsets>
     </ThingDef>
 
+    <!-- 内衬 -->
+    <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
+        <defName>MiliraXian_NeiyuInner</defName>
+        <label>霓羽·内衬</label>
+        <description>霓羽常服内部贴身穿着的一层内衬。它本身并不张扬，却让整套装束在结构与色调上更加完整，也保留了足够轻巧的活动性。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianNeiyu/ApparelNeiyu/NeiyuInner</texPath>
+        </graphicData>
+        <statBases>
+            <Mass>0.35</Mass>
+            <WorkToMake>12000</WorkToMake>
+            <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.2</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.2</ArmorRating_Heat>
+            <Insulation_Cold>8</Insulation_Cold>
+            <Insulation_Heat>8</Insulation_Heat>
+        </statBases>
+        <apparel>
+            <useWornGraphicMask>false</useWornGraphicMask>
+            <developmentalStageFilter>Adult</developmentalStageFilter>
+            <bodyPartGroups Inherit="False">
+                <li>Torso</li>
+                <li>Legs</li>
+                <li>Arms</li>
+                <li>Neck</li>
+                <li>Shoulders</li>
+            </bodyPartGroups>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/NeiyuInner</wornGraphicPath>
+            <tags Inherit="False">
+                <li>MiliraXian_NeiyuInner</li>
+            </tags>
+            <layers Inherit="False">
+                <li>Middle</li>
+            </layers>
+            <shellRenderedBehindHead>true</shellRenderedBehindHead>
+        </apparel>
+        <tickerType>Normal</tickerType>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+    </ThingDef>
+
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Apparel_EarringsZhenzhu</defName>
         <label>霓羽·珠饰</label>
