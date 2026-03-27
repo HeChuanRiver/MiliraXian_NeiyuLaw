@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 技能相关 -->
+    <!-- 涌泉 -->
+    <HediffDef>
+        <defName>MX_SpringFlow</defName>
+        <label>春泉洗礼</label>
+        <description>placeholder desc</description>
+        <isBad>false</isBad>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediff_SpringFlow</hediffClass>
+        <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>10.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+                <multiplyStatChangesBySeverity>true</multiplyStatChangesBySeverity>
+                <painFactor>0.8</painFactor>
+                <statFactors>
+                    <MeleeDamageFactor>1.3</MeleeDamageFactor>
+                    <RangedWeapon_DamageMultiplier>1.3</RangedWeapon_DamageMultiplier>
+                    <IncomingDamageFactor>0.6</IncomingDamageFactor>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>120</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+    
+    <!-- 水镜 -->
+    <HediffDef>
+        <defName>MX_AquaMirror</defName>
+        <label>镜华</label>
+        <description>placeholder desc</description>
+        <isBad>false</isBad>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediff_AquaMirror</hediffClass>
+        <defaultLabelColor>(0.4, 0.4, 1.0)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>10.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>600</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_AquaMirror">
+                <healAmount>10</healAmount>
+                <healAmountByEleganceMax>1.0</healAmountByEleganceMax>
+                <explosionDamage>10</explosionDamage>
+                <explosionRadius>3</explosionRadius>
+                <tempestPerMirror>5</tempestPerMirror>
+                <shieldCompProperties>
+                    <startingEnergy>100.0</startingEnergy>
+                    <energyLossPerDamage>1.0</energyLossPerDamage>
+                    <breakOnEmp>false</breakOnEmp>
+                    <playBreakEffects>true</playBreakEffects>
+                    <absorbFleckDefName>ExplosionFlash</absorbFleckDefName>
+                    <hurtFleckDefNames>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_A</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_B</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_C</li>
+                        <li>MXNL_Fleck_NeiyuShield_Hurt_D</li>
+                    </hurtFleckDefNames>
+                    <absorbFleckScale>1.2</absorbFleckScale>
+                    <drawActiveShield>true</drawActiveShield>
+                    <activeShieldTexPath>MiliraXianNeiyu/Effect/Neiyu_Shield/Shield</activeShieldTexPath>
+                    <activeShieldDrawSize>(1.8,1.8)</activeShieldDrawSize>
+                    <activeShieldAlpha>0.35</activeShieldAlpha>
+                    <activeShieldAltitudeOffset>0.0</activeShieldAltitudeOffset>
+                    <activeShieldPulseMin>0.96</activeShieldPulseMin>
+                    <activeShieldPulseMax>1.06</activeShieldPulseMax>
+                    <activeShieldPulseTicks>75</activeShieldPulseTicks>
+                    <minDrawSize>1.0</minDrawSize>
+                    <maxDrawSize>1.15</maxDrawSize>
+                </shieldCompProperties>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <!-- 扼流——基础效果 -->
+    <HediffDef>
+        <defName>MX_Draining</defName>
+        <label>水循环断流</label>
+        <description>内部的液体被强制抽出，若不加以干预将很快因脱水而死亡。</description>
+        <isBad>true</isBad>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.8, 0.6, 1.0)</defaultLabelColor>
+        <initialSeverity>0.01</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.9</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <MoveSpeed>0.8</MoveSpeed>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>0.2</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.7</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <MoveSpeed>0.6</MoveSpeed>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>0.4</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.5</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.6</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.3</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <MoveSpeed>0.4</MoveSpeed>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>0.8</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.1</postFactor>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <minSeverity>0.99</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>0.1</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <IncomingDamageFactor>2.5</IncomingDamageFactor>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.HediffCompProperties_SeverityPerSecondPausable">
+                <severityPerSecond>-0.05</severityPerSecond>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DrainAccumulate">
+                <maxTicksToFilth>400</maxTicksToFilth>
+                <minTicksToFilth>200</minTicksToFilth>
+                <filthRadius>1</filthRadius>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <!-- 扼流——尸体效果 -->
+    <HediffDef>
+        <defName>MX_DryCorpse</defName>
+        <label>脱水</label>
+        <description>一具水分被抽干的尸体，永远不会腐烂或风干。似乎受到了什么超自然力量的影响。</description>
+        <isBad>true</isBad>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.6, 0.2, 0.8)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>0.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_DryCorpseEffect">
+                <corpseColor>(255, 0, 255)</corpseColor>
+            </li>
+        </comps>
+    </HediffDef>
+</Defs>

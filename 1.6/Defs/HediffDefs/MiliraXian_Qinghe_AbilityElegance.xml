@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- =========================
+       Elegance 技能附属 Hediff
+       （仅供武器技能示例使用）
+       ========================= -->
+
+  <!-- 断魂：长时减速（可刷新） -->
+  <HediffDef>
+    <defName>MX_QH_Elegance_DuanHunSlow</defName>
+    <label>断魂迟滞</label>
+    <description>行动被断魂音律拖滞。</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.78, 0.52, 0.96)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <stages>
+      <li>
+        <statFactors>
+          <MoveSpeed>0.55</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 阳春：友方增益 -->
+  <HediffDef>
+    <defName>MX_QH_Elegance_YangChunAlly</defName>
+    <label>阳春和声</label>
+    <description>沐浴在阳春乐意中，步伐与心境被调谐。</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.82, 0.94)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <stages>
+      <li>
+        <statFactors>
+          <MoveSpeed>1.15</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <!-- 阳春：敌方减益 -->
+  <HediffDef>
+    <defName>MX_QH_Elegance_YangChunEnemy</defName>
+    <label>阳春抑拍</label>
+    <description>被音场压制，行动节奏紊乱。</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.86, 0.62, 0.96)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <stages>
+      <li>
+        <statFactors>
+          <MoveSpeed>0.75</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+
+</Defs>

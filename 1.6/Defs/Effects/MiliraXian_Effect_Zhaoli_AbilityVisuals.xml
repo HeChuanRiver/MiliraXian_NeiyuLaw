@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef>
+    <defName>MXZL_Mote_GuiyiLinkLine</defName>
+    <label>Mote</label>
+    <thingClass>MoteDualAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlowDistorted</shaderType>
+      <texPath>Things/Mote/PsychicLinkLine</texPath>
+      <color>(0.62, 0.95, 0.75, 0.88)</color>
+      <shaderParameters>
+        <_DistortionTex>/Other/Ripples</_DistortionTex>
+        <_distortionIntensity>0.1</_distortionIntensity>
+        <_distortionScale>0.1</_distortionScale>
+        <_wordSpaceDistortionToggle>1</_wordSpaceDistortionToggle>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <fadeOutTime>0.12</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+      <rotateTowardsTarget>true</rotateTowardsTarget>
+      <scaleToConnectTargets>true</scaleToConnectTargets>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_GuiyiLinkPulse</defName>
+    <label>Mote</label>
+    <thingClass>MoteDualAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulseLink</shaderType>
+      <texPath>Things/Mote/PsychicLinkPulse</texPath>
+      <color>(0.55, 1.0, 0.72, 0.95)</color>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <fadeOutTime>0.12</fadeOutTime>
+      <solidTime>0.5</solidTime>
+      <rotateTowardsTarget>true</rotateTowardsTarget>
+      <scaleToConnectTargets>true</scaleToConnectTargets>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_GuiyiLinkStripe</defName>
+    <label>Mote</label>
+    <thingClass>MoteDualAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulseLink</shaderType>
+      <texPath>Things/Mote/PsychicLinkPulse</texPath>
+      <color>(0.88, 0.32, 0.32, 0.8)</color>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <fadeOutTime>0.12</fadeOutTime>
+      <solidTime>0.45</solidTime>
+      <rotateTowardsTarget>true</rotateTowardsTarget>
+      <scaleToConnectTargets>true</scaleToConnectTargets>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_GuiyiHealGlow</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteMultiplyAddCircularGrayscale</shaderType>
+      <texPath>Things/Mote/RadiationDistortion_A</texPath>
+      <color>(0.48, 0.92, 0.58, 0.95)</color>
+      <shaderParameters>
+        <_MultiplyTex>/Things/Mote/RadiationDistortion_B</_MultiplyTex>
+        <_texAScale>0.3</_texAScale>
+        <_texBScale>0.3</_texBScale>
+        <_texAScrollSpeed>1.5</_texAScrollSpeed>
+        <_texBScrollSpeed>-0.8</_texBScrollSpeed>
+        <_Intensity>11</_Intensity>
+      </shaderParameters>
+      <drawSize>(1.5, 1.5)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.05</fadeInTime>
+      <fadeOutTime>0.4</fadeOutTime>
+      <solidTime>0.35</solidTime>
+      <growthRate>2.4</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_DeathFieldArea</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteApocritonPulse</shaderType>
+      <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+      <color>(0.5, 0.12, 0.12, 0.82)</color>
+      <shaderParameters>
+        <_DistortionTex>/Other/Ripples</_DistortionTex>
+        <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
+        <_distortionIntensity>0</_distortionIntensity>
+        <_ScrollSpeed>-0.9</_ScrollSpeed>
+        <_ScrollScale>0.22</_ScrollScale>
+        <_distortionTint>(0.42, 0.03, 0.03, 0)</_distortionTint>
+        <_pulseSpeed>1.55</_pulseSpeed>
+      </shaderParameters>
+      <drawSize>(18, 18)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.2</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_DeathFieldMark</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>Mote</shaderType>
+      <texPath>Things/Mote/HarbingerConsumeRoots</texPath>
+      <color>(0.72, 0.08, 0.08, 0.92)</color>
+      <drawSize>(1.3, 1.3)</drawSize>
+    </graphicData>
+    <altitudeLayer>Pawn</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <fadeOutTime>0.15</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_SoulAbsorbPulse</defName>
+    <label>Mote</label>
+    <thingClass>MoteDualAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulseLink</shaderType>
+      <texPath>Things/Mote/PsychicLinkPulse</texPath>
+      <color>(0.86, 0.24, 0.32, 0.92)</color>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <fadeOutTime>0.16</fadeOutTime>
+      <solidTime>0.55</solidTime>
+      <rotateTowardsTarget>true</rotateTowardsTarget>
+      <scaleToConnectTargets>true</scaleToConnectTargets>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MXZL_Mote_MinshenWarnArea</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteApocritonPulse</shaderType>
+      <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+      <color>(0.4, 0.16, 0.18, 0.8)</color>
+      <shaderParameters>
+        <_DistortionTex>/Other/Ripples</_DistortionTex>
+        <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
+        <_distortionIntensity>0</_distortionIntensity>
+        <_ScrollSpeed>-0.75</_ScrollSpeed>
+        <_ScrollScale>0.2</_ScrollScale>
+        <_distortionTint>(0.32, 0.04, 0.06, 0)</_distortionTint>
+        <_pulseSpeed>2.2</_pulseSpeed>
+      </shaderParameters>
+      <drawSize>(13, 13)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.25</fadeInTime>
+      <fadeOutTime>0.3</fadeOutTime>
+      <solidTime>2.6</solidTime>
+      <needsMaintenance>false</needsMaintenance>
+    </mote>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <AbilityDef>
+        <defName>MX_QingHe_DebugMaxTempest</defName>
+        <label>Max Tempest</label>
+        <description>Get max tempest immediately.</description>
+
+        <targetRequired>false</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <displayOrder>9999</displayOrder>
+
+        <cooldownTicksRange>
+            <min>0</min>
+            <max>0</max>
+        </cooldownTicksRange>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <range>0</range>
+            <warmupTime>0</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_AbilityEffectDebugMaxResource">
+                <resourceHediffDef>MX_QH_Tempest</resourceHediffDef>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QingHe_DebugMaxElegance</defName>
+        <label>Max Elegance</label>
+        <description>Get max elegance immediately.</description>
+
+        <targetRequired>false</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <displayOrder>9998</displayOrder>
+
+        <cooldownTicksRange>
+            <min>0</min>
+            <max>0</max>
+        </cooldownTicksRange>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <range>0</range>
+            <warmupTime>0</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_AbilityEffectDebugMaxResource">
+                <resourceHediffDef>MX_QH_Elegance</resourceHediffDef>
+            </li>
+        </comps>
+    </AbilityDef>
+</Defs>
