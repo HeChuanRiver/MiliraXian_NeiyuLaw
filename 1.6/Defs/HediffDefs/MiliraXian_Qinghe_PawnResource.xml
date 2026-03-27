@@ -5,6 +5,7 @@
         <label>激流</label>
         <description>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.42, 0.38, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
@@ -36,6 +37,7 @@
         <label>雅乐</label>
         <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.92, 0.42, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
@@ -162,6 +164,7 @@
         <label>清荷状态显示</label>
         <description>隐藏Hediff：用于显示清荷状态Gizmo。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediff_QH_StatusGizmo</hediffClass>
+        <defaultLabelColor>(0.70, 0.88, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
