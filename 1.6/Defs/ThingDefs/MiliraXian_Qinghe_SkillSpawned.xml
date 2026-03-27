@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef>
+        <defName>SpringFlowField</defName>
+        <label>*SFF placeholder*</label>
+        <thingClass>MiliraXian.Characters.Qinghe.Thing_SpringFlowField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(1,0.6,0.8,0.4)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>12.0</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_SpringFlowField"/>
+        </comps>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>TempestDrainField</defName>
+        <label>*TDF placeholder*</label>
+        <thingClass>MiliraXian.Characters.Qinghe.Thing_TempestDrainField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(0.5,0.5,0.5,0.6)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>24.0</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField"/>
+        </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="MoteGlowDistorted">
+        <defName>Mote_AquaMirrorExplode</defName>
+        <thingClass>MoteAttached</thingClass>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <mote>
+            <fadeInTime>0.2</fadeInTime>
+            <fadeOutTime>0.3</fadeOutTime>
+            <solidTime>0.5</solidTime>
+            <growthRate>4</growthRate>
+        </mote>
+        <graphicData>
+            <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+            <shaderType>MoteApocritonPulse</shaderType>
+            <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+            <shaderParameters>
+                <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
+                <_distortionIntensity>0.18</_distortionIntensity>
+                <_ScrollSpeed>-0.9</_ScrollSpeed>
+                <_ScrollScale>0.14</_ScrollScale>
+                <_distortionTint>(0.23, 0, 0, 0)</_distortionTint>
+                <_pulseSpeed>2</_pulseSpeed>
+            </shaderParameters>
+            <drawSize>1.5</drawSize>
+        </graphicData>
+    </ThingDef>
+
+
+    <ThingDef>
+        <defName>MX_QH_Elegance_YangChunField</defName>
+        <label>*QH YangChun Field*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Thing_YangChunField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(0.55,0.95,0.75,0.45)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>10.0</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_YangChunField">
+                <radius>7.9</radius>
+                <pulseIntervalTicks>30</pulseIntervalTicks>
+
+                <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
+                <enemyDamageAmount>2</enemyDamageAmount>
+                <enemyArmorPenetration>0.15</enemyArmorPenetration>
+                <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
+                <enemyDebuffSeverity>1</enemyDebuffSeverity>
+                <enemyDebuffDurationTicks>300</enemyDebuffDurationTicks>
+
+                <allyBuffHediff>MX_QH_Elegance_YangChunAlly</allyBuffHediff>
+                <allyBuffSeverity>1</allyBuffSeverity>
+                <allyBuffDurationTicks>300</allyBuffDurationTicks>
+                <allyInstantHeal>0.8</allyInstantHeal>
+
+                <eleganceGainFlat>6</eleganceGainFlat>
+                <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
+                <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
+            </li>
+        </comps>
+    </ThingDef>
+
+</Defs>

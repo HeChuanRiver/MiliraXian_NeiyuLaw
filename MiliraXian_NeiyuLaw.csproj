@@ -18,7 +18,7 @@
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
-        <OutputPath>E:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_NeiyuLaw\1.6\Assemblies</OutputPath>
+        <OutputPath>.\1.6\Assemblies</OutputPath>
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
@@ -27,22 +27,22 @@
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugType>pdbonly</DebugType>
         <Optimize>true</Optimize>
-        <OutputPath>E:\SteamLibrary\steamapps\common\RimWorld\Mods\MiliraXian_NeiyuLaw\1.6\Assemblies</OutputPath>
+        <OutputPath>.\1.6\Assemblies</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony">
-          <HintPath>E:\下载\HarmonyMod\HarmonyMod\1.5\Assemblies\0Harmony.dll</HintPath>
+        <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="AriandelLibrary">
-          <HintPath>E:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
+          <HintPath>..\..\..\..\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+          <HintPath>..\..\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="System"/>
@@ -50,24 +50,30 @@
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
         <Reference Include="UnityEngine">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>E:\SteamLibrary\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
           <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.IMGUIModule">
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.TextRenderingModule">
+          <HintPath>..\..\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Source\Common\CompAbilityEffect_DebugMaxResource.cs" />
-        <Compile Include="Source\Common\CompProjectileContinuousTrail.cs" />
-        <Compile Include="Source\Common\CompProjectileHomingCurve.cs" />
         <Compile Include="Source\Common\CompUnbreakableEquipment.cs" />
+        <Compile Include="Source\Common\CompAbilityEffect_DebugMaxResource.cs" />
+        <Compile Include="Source\Common\CompProjectileHomingCurve.cs" />
+        <Compile Include="Source\Common\ProjectileHomingCurveBase.cs" />
+        <Compile Include="Source\Common\CompProjectileContinuousTrail.cs" />
         <Compile Include="Source\Common\HediffComp_SeverityPerSecondPausable.cs" />
         <Compile Include="Source\Common\PawnSpecialResource.cs" />
         <Compile Include="Source\Common\PawnSpecialResourceUtility.cs" />
-        <Compile Include="Source\Common\ProjectileHomingCurveBase.cs" />
         <Compile Include="Source\Common\RadialUtility.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuWarpFeather.cs" />
         <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuThunderAndArrow.cs" />
@@ -81,6 +87,43 @@
       <Compile Include="Source\Neiyu\NeiyuSpecialPawnIntegration.cs" />
       <Compile Include="Source\Neiyu\Verbs_BowForNeiyuBow.cs" />
       <Compile Include="Source\Neiyu\CompAbilityEffect_NeiyuFlowerSwordSkills.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_AquaMirror.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_TempestDrain.cs" />
+      <Compile Include="Source\QingHe\CompAquaMirrorShield.cs" />
+      <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
+      <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
+      <Compile Include="Source\QingHe\DamageWorker_Desynced.cs" />
+      <Compile Include="Source\QingHe\EleganceUtility.cs" />
+      <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
+      <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
+      <Compile Include="Source\QingHe\CompSpringFlowField.cs" />
+      <Compile Include="Source\QingHe\HediffComp_Tempest.cs" />
+      <Compile Include="Source\QingHe\HediffComp_TempestDrainEffect.cs" />
+      <Compile Include="Source\QingHe\HediffComp_LotusShield.cs" />
+      <Compile Include="Source\QingHe\HediffComp_QingheStatusGizmo.cs" />
+      <Compile Include="Source\QingHe\HediffComp_LongBreathWard.cs" />
+      <Compile Include="Source\QingHe\HediffComp_SpringRegen.cs" />
+      <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
+      <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_TempestDrain.cs" />
+      <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
+      <Compile Include="Source\QingHe\MX_QHPatches.cs" />
+      <Compile Include="Source\QingHe\MX_QHUtility.cs" />
+      <Compile Include="Source\QingHe\Thing_SpawnedField.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_HengZhi.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_DuanHun.cs" />
+      <Compile Include="Source\QingHe\CompAbilityEffect_YangChun.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_HengZhi.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_DuanHun.cs" />
+      <Compile Include="Source\QingHe\JobDriver_MX_YangChun.cs" />
+      <Compile Include="Source\QingHe\CompWeaponAbility.cs" />
+      <Compile Include="Source\QingHe\Projectile_Pipa.cs" />
+      <Compile Include="Source\QingHe\Projectile_Zhudi.cs" />
+      <Compile Include="Source\QingHe\CompProjectileEleganceEffect.cs" />
+      <Compile Include="Source\QingHe\CompYangChunField.cs" />
+      <Compile Include="Source\QingHe\CompLotusShield.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
@@ -93,21 +136,33 @@
       <Compile Include="Source\Zhaoli\ZhaoliShieldLayers.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Debug.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Zhaoli.xml" />
+      <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Qinghe.xml" />
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Zhaoli_Duanzhan.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Neiyu.xml" />
+      <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Qinghe.xml" />
       <Content Include="1.6\Defs\AnimaitionDefs\MiliraXian_Fly_Zhaoli.xml" />
       <Content Include="1.6\Defs\ApparelDefs\MiliraXian_Apparel.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
+      <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStory_QingheBS1.xml" />
       <Content Include="1.6\Defs\BackStoryDef\MiliraXian_BackStroy_ZhaoliBS1.xml" />
+      <Content Include="1.6\Defs\DamageDefs\MiliraXian_DamageDefs_Qinghe.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_QingheProjectileTrail.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
+      <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Zhaoli.xml" />
       <Content Include="1.6\Defs\HeadDefs\HeadTypeDef.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_FlowerSword.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_Shield.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityTempest.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_Damage.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_PawnResource.xml" />
+      <Content Include="1.6\Defs\JobDefs\JobDef_QingheSkills.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Qinghe_AbilityElegance.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_DeathField.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Dormancy.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Karma.xml" />
@@ -117,13 +172,16 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Rebirth.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Shield.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
+      <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Qinghe.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />
       <Content Include="1.6\Defs\ScenarioDefs\MiliraXian_Neiyu_Scenarios.xml" />
       <Content Include="1.6\Defs\Storyteller\Incidents_Neiyu.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Zhaoli_Weapons.xml" />
+      <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_ModeSwitch_Weapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Neiyu_SwordFlyers.xml" />
+      <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_SkillSpawned.xml" />
       <Content Include="1.6\Defs\TraitDef\Traits_Sample.xml" />
       <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
@@ -178,6 +236,7 @@
       <Content Include="1.6\Patches\Patch1.xml" />
       <Content Include="1.6\Patches\Patch_Alien_Milira.xml" />
       <Content Include="1.6\Patches\Patch_Neiyu.xml" />
+      <Content Include="1.6\Patches\Patch_Qinghe.xml" />
       <Content Include="1.6\Patches\Patch_Zhaoli.xml" />
       <Content Include="About\About.xml" />
       <Content Include="About\Preview.png" />

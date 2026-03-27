@@ -28,4 +28,19 @@
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>
+
+    <FacialAnimation.LidTypeDef>
+        <defName>Milira_Lid_Qinghe</defName>
+        <!-- TODO：清荷在这里如果有眼皮之类的要改记得改 -->
+        <texPath>Things/Pawn/Milira/Lids/NormalD</texPath>
+        <raceName>Milira_Race</raceName>
+        <shader>Map/Transparent</shader>
+        <enableUnisexTexPath>True</enableUnisexTexPath>
+        <probability>0</probability>
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Qinghe</forNPC>
+            </li>
+        </modExtensions>
+    </FacialAnimation.LidTypeDef>
 </Defs>
