@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -17,7 +18,56 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect
     {
+        private const string GuiyiLinkLineMoteDefName = "MXZL_Mote_GuiyiLinkLine";
+        private const string GuiyiLinkPulseMoteDefName = "MXZL_Mote_GuiyiLinkPulse";
+        private const string GuiyiLinkStripeMoteDefName = "MXZL_Mote_GuiyiLinkStripe";
+        private const string GuiyiHealGlowMoteDefName = "MXZL_Mote_GuiyiHealGlow";
+
         private new CompProperties_AbilityZhaoliGuiyi Props => (CompProperties_AbilityZhaoliGuiyi)props;
+
+        public override IEnumerable<PreCastAction> GetPreCastActions()
+        {
+            int warmupTicks = GetWarmupTicks();
+            if (warmupTicks <= 0)
+            {
+                yield break;
+            }
+
+            yield return new PreCastAction
+            {
+                ticksAwayFromCast = warmupTicks,
+                action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
+                {
+                    SpawnLinkPulse(target.Pawn, GuiyiLinkStripeMoteDefName);
+                }
+            };
+
+            int halfWarmupTicks = Mathf.Max(1, warmupTicks / 2);
+            if (halfWarmupTicks < warmupTicks)
+            {
+                yield return new PreCastAction
+                {
+                    ticksAwayFromCast = halfWarmupTicks,
+                    action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
+                    {
+                        SpawnLinkPulse(target.Pawn, GuiyiLinkStripeMoteDefName);
+                    }
+                };
+            }
+        }
+
+        public override IEnumerable<Mote> CustomWarmupMotes(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            Pawn targetPawn = target.Pawn;
+            ThingDef lineDef = DefDatabase<ThingDef>.GetNamedSilentFail(GuiyiLinkLineMoteDefName);
+            if (caster == null || targetPawn == null || lineDef == null)
+            {
+                yield break;
+            }
+
+            yield return MoteMaker.MakeInteractionOverlay(lineDef, caster, targetPawn);
+        }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -65,6 +115,15 @@ namespace MiliraXian.Characters.Zhaoli
             int removedHediffs = RemoveNegativeHediffs(targetPawn);
             if (restoredParts + removedHediffs > 0)
             {
+                SpawnLinkPulse(targetPawn, GuiyiLinkPulseMoteDefName);
+
+                if (targetPawn.Spawned)
+                {
+                    FleckMaker.Static(targetPawn.Position, targetPawn.Map, FleckDefOf.PsycastAreaEffect, Mathf.Max(1f, Props.overlayScale));
+                    FleckMaker.AttachedOverlay(targetPawn, FleckDefOf.HealingCross, Vector3.zero, Mathf.Max(1f, Props.overlayScale));
+                }
+
+                SpawnHealGlow(targetPawn);
                 FleckMaker.AttachedOverlay(targetPawn, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
                 if (targetPawn.Spawned)
                 {
@@ -231,6 +290,39 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return hediff.def.isBad;
+        }
+
+        private int GetWarmupTicks()
+        {
+            if (parent?.def?.verbProperties == null)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(0, parent.def.verbProperties.warmupTime.SecondsToTicks());
+        }
+
+        private void SpawnLinkPulse(Pawn targetPawn, string moteDefName)
+        {
+            Pawn caster = parent?.pawn;
+            ThingDef pulseDef = DefDatabase<ThingDef>.GetNamedSilentFail(moteDefName);
+            if (caster == null || targetPawn == null || pulseDef == null || !caster.Spawned || !targetPawn.Spawned || caster.MapHeld != targetPawn.MapHeld)
+            {
+                return;
+            }
+
+            MoteMaker.MakeInteractionOverlay(pulseDef, caster, targetPawn);
+        }
+
+        private void SpawnHealGlow(Pawn targetPawn)
+        {
+            ThingDef glowDef = DefDatabase<ThingDef>.GetNamedSilentFail(GuiyiHealGlowMoteDefName);
+            if (targetPawn == null || glowDef == null || !targetPawn.Spawned)
+            {
+                return;
+            }
+
+            MoteMaker.MakeAttachedOverlay(targetPawn, glowDef, Vector3.zero, Props.overlayScale);
         }
     }
 }

@@ -64,6 +64,7 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
             <range>30</range>
+            <warmupTime>1.5</warmupTime>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>true</canTargetPawns>
@@ -144,7 +145,7 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
             <range>30</range>
-            <warmupTime>1.0</warmupTime>
+            <warmupTime>2.5</warmupTime>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>

@@ -85,6 +85,11 @@ namespace MiliraXian.Characters.Zhaoli
             minghuoComp.BindWeapon(weapon);
             disappearsComp.SetDuration(Props.durationTicks);
             caster.health.Notify_HediffChanged(hediff);
+            if (caster.Spawned)
+            {
+                FleckMaker.Static(caster.Position, caster.Map, FleckDefOf.FireGlow, Mathf.Max(1.5f, Props.overlayScale * 1.3f));
+                FleckMaker.AttachedOverlay(caster, FleckDefOf.MicroSparksFast, Vector3.zero, Mathf.Max(1f, Props.overlayScale * 0.75f));
+            }
 
             FleckMaker.AttachedOverlay(caster, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
             if (caster.Spawned)
@@ -344,6 +349,12 @@ namespace MiliraXian.Characters.Zhaoli
             if (!target.HasThing || target.Thing == null)
             {
                 yield break;
+            }
+
+            if (target.Thing.SpawnedOrAnyParentSpawned && target.Thing.MapHeld != null)
+            {
+                FleckMaker.AttachedOverlay(target.Thing, FleckDefOf.MicroSparksFast, Vector3.zero, 0.9f);
+                FleckMaker.Static(target.Thing.PositionHeld, target.Thing.MapHeld, FleckDefOf.FireGlow, 1.1f);
             }
 
             float fireDamageAmount = comp.GetFireDamageAmount(verb);

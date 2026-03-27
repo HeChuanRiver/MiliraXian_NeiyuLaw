@@ -28,11 +28,45 @@ namespace MiliraXian.Characters.Zhaoli
     public class CompAbilityEffect_ZhaoliMinshen : CompAbilityEffect
     {
         private const string DazedMentalStateDefName = "WanderConfused";
+        private const string MinshenWarnAreaMoteDefName = "MXZL_Mote_MinshenWarnArea";
+        private static readonly Color PreviewColor = new Color(0.44f, 0.12f, 0.16f);
 
         private readonly HashSet<Pawn> tmpTargets = new HashSet<Pawn>();
         private readonly List<IntVec3> tmpPreviewCells = new List<IntVec3>();
 
         private new CompProperties_AbilityZhaoliMinshen Props => (CompProperties_AbilityZhaoliMinshen)props;
+
+        public override IEnumerable<PreCastAction> GetPreCastActions()
+        {
+            int warmupTicks = GetWarmupTicks();
+            if (warmupTicks <= 0)
+            {
+                yield break;
+            }
+
+            yield return new PreCastAction
+            {
+                ticksAwayFromCast = warmupTicks,
+                action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
+                {
+                    Pawn caster = parent?.pawn;
+                    if (caster?.Map == null || !target.IsValid)
+                    {
+                        return;
+                    }
+
+                    ThingDef warnAreaDef = DefDatabase<ThingDef>.GetNamedSilentFail(MinshenWarnAreaMoteDefName);
+                    if (warnAreaDef != null)
+                    {
+                        MoteMaker.MakeStaticMote(target.Cell, caster.Map, warnAreaDef, 1f);
+                    }
+
+                    float areaScale = Mathf.Max(2.2f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.34f);
+                    FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
+                    FleckMaker.Static(caster.Position, caster.Map, FleckDefOf.FeedbackShoot, 1f);
+                }
+            };
+        }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -66,6 +100,13 @@ namespace MiliraXian.Characters.Zhaoli
                         tmpTargets.Add(pawn);
                     }
                 }
+            }
+
+            if (caster.Spawned)
+            {
+                float areaScale = Mathf.Max(2.5f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.35f);
+                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
+                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.ExplosionFlash, 1.8f);
             }
 
             foreach (Pawn pawn in tmpTargets)
@@ -135,7 +176,12 @@ namespace MiliraXian.Characters.Zhaoli
                 tmpPreviewCells.Add(cell);
             }
 
-            GenDraw.DrawFieldEdges(tmpPreviewCells, Color.red);
+            GenDraw.DrawFieldEdges(tmpPreviewCells, PreviewColor);
+        }
+
+        private int GetWarmupTicks()
+        {
+            return parent?.def?.verbProperties != null ? GenTicks.SecondsToTicks(parent.def.verbProperties.warmupTime) : 0;
         }
 
         private void ApplySlow(Pawn pawn)
@@ -150,6 +196,11 @@ namespace MiliraXian.Characters.Zhaoli
             if (hediff != null)
             {
                 pawn.health.Notify_HediffChanged(hediff);
+            }
+
+            if (pawn.Spawned)
+            {
+                FleckMaker.AttachedOverlay(pawn, FleckDefOf.PsycastAreaEffect, Vector3.zero, 1.05f);
             }
         }
 
@@ -167,6 +218,11 @@ namespace MiliraXian.Characters.Zhaoli
             if (hediff != null)
             {
                 pawn.health.Notify_HediffChanged(hediff);
+            }
+
+            if (pawn.Spawned)
+            {
+                FleckMaker.AttachedOverlay(pawn, FleckDefOf.FlashHollow, Vector3.zero, 0.95f);
             }
         }
 
@@ -190,12 +246,22 @@ namespace MiliraXian.Characters.Zhaoli
                 handler.CurState.sourceFaction = caster.Faction;
             }
 
+            if (pawn.Spawned)
+            {
+                FleckMaker.Static(pawn.Position, pawn.Map, FleckDefOf.PsycastAreaEffect, 1f);
+            }
+
             return true;
         }
 
         private void ApplyEmp(Pawn caster, Pawn pawn)
         {
             pawn.TakeDamage(new DamageInfo(DamageDefOf.EMP, Props.empDamage, 2f, -1f, caster));
+            if (pawn.Spawned)
+            {
+                FleckMaker.AttachedOverlay(pawn, FleckDefOf.MicroSparksFast, Vector3.zero, 1.1f);
+                FleckMaker.Static(pawn.Position, pawn.Map, FleckDefOf.ExplosionFlash, 1.1f);
+            }
         }
     }
 

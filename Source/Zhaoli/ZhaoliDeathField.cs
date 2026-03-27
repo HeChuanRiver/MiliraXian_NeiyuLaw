@@ -18,6 +18,8 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliDeathField : CompAbilityEffect
     {
+        private static readonly Color PreviewColor = new Color(0.48f, 0.08f, 0.1f);
+
         private new CompProperties_AbilityZhaoliDeathField Props => (CompProperties_AbilityZhaoliDeathField)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -44,6 +46,11 @@ namespace MiliraXian.Characters.Zhaoli
 
             HediffComp_ZhaoliDeathField comp = field.GetComp<HediffComp_ZhaoliDeathField>();
             comp?.ActivateAt(target.Cell);
+            if (caster.Spawned)
+            {
+                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, Mathf.Max(1.5f, Props.radius * 0.65f));
+                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.ExplosionFlash, 2.4f);
+            }
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
@@ -53,7 +60,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            GenDraw.DrawRadiusRing(target.Cell, Props.radius, Color.red);
+            GenDraw.DrawRadiusRing(target.Cell, Props.radius, PreviewColor);
         }
     }
 
@@ -78,13 +85,21 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliDeathField : HediffComp
     {
+        private const string DeathFieldAreaMoteDefName = "MXZL_Mote_DeathFieldArea";
+        private const string DeathFieldMarkMoteDefName = "MXZL_Mote_DeathFieldMark";
+        private const string SoulAbsorbPulseMoteDefName = "MXZL_Mote_SoulAbsorbPulse";
+        private const string DeathRefusalBubbleFleckDefName = "DeathRefusalBubble";
+
         private Dictionary<Pawn, int> stayTicks = new Dictionary<Pawn, int>();
+        private readonly Dictionary<Pawn, Mote> markedPawns = new Dictionary<Pawn, Mote>();
+        private readonly Dictionary<Pawn, int> lastDisplayedRemainingHits = new Dictionary<Pawn, int>();
         private readonly HashSet<Pawn> pawnsInsideNow = new HashSet<Pawn>();
         private readonly List<Pawn> pawnsToRemove = new List<Pawn>();
 
         private List<Pawn> tmpStayPawns;
         private List<int> tmpStayTicks;
 
+        private Mote fieldAreaMote;
         private int fieldCenterX;
         private int fieldCenterZ;
         private bool active;
@@ -99,6 +114,9 @@ namespace MiliraXian.Characters.Zhaoli
             fieldCenterZ = center.z;
             active = true;
             stayTicks.Clear();
+            markedPawns.Clear();
+            lastDisplayedRemainingHits.Clear();
+            fieldAreaMote = null;
             parent.TryGetComp<HediffComp_Disappears>()?.SetDuration(PropsField.fieldDurationTicks);
         }
 
@@ -146,6 +164,16 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            MaintainFieldArea(map, center);
+            if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
+            {
+                FleckDef deathPulse = DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalPulse");
+                if (deathPulse != null)
+                {
+                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, PropsField.radius * 0.55f));
+                }
+            }
+
             pawnsInsideNow.Clear();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, PropsField.radius, true))
             {
@@ -174,7 +202,9 @@ namespace MiliraXian.Characters.Zhaoli
                 ticksPresent++;
                 stayTicks[pawn] = ticksPresent;
 
+                MaintainFieldMark(pawn);
                 RefreshSlow(pawn);
+                ShowCountdownIfNeeded(pawn, ticksPresent);
 
                 if (PropsField.bleedIntervalTicks > 0 && ticksPresent % PropsField.bleedIntervalTicks == 0)
                 {
@@ -187,6 +217,8 @@ namespace MiliraXian.Characters.Zhaoli
                     ZhaoliShieldLayerUtility.AddLayers(Pawn, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
                     ExecutePawn(pawn);
                     stayTicks.Remove(pawn);
+                    markedPawns.Remove(pawn);
+                    lastDisplayedRemainingHits.Remove(pawn);
                 }
             }
 
@@ -201,7 +233,10 @@ namespace MiliraXian.Characters.Zhaoli
 
             for (int i = 0; i < pawnsToRemove.Count; i++)
             {
-                stayTicks.Remove(pawnsToRemove[i]);
+                Pawn pawn = pawnsToRemove[i];
+                stayTicks.Remove(pawn);
+                markedPawns.Remove(pawn);
+                lastDisplayedRemainingHits.Remove(pawn);
             }
         }
 
@@ -243,13 +278,116 @@ namespace MiliraXian.Characters.Zhaoli
 
             injury.Severity = Mathf.Max(0.1f, PropsField.bleedDamage);
             pawn.health.AddHediff(injury, part);
+            if (pawn.Spawned)
+            {
+                FleckMaker.Static(pawn.Position, pawn.Map, FleckDefOf.FlashHollow, 1.1f);
+                FleckMaker.Static(pawn.Position, pawn.Map, FleckDefOf.PsycastAreaEffect, 0.9f);
+            }
         }
 
-        private static void ExecutePawn(Pawn pawn)
+        private void MaintainFieldArea(Map map, IntVec3 center)
+        {
+            ThingDef areaDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldAreaMoteDefName);
+            if (areaDef == null)
+            {
+                return;
+            }
+
+            if (fieldAreaMote == null || fieldAreaMote.Destroyed)
+            {
+                fieldAreaMote = MoteMaker.MakeStaticMote(center, map, areaDef, 1f);
+            }
+
+            fieldAreaMote?.Maintain();
+        }
+
+        private void MaintainFieldMark(Pawn pawn)
+        {
+            if (pawn == null || !pawn.Spawned)
+            {
+                return;
+            }
+
+            ThingDef markDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldMarkMoteDefName);
+            if (markDef == null)
+            {
+                return;
+            }
+
+            if (!markedPawns.TryGetValue(pawn, out Mote mote) || mote == null || mote.Destroyed)
+            {
+                mote = MoteMaker.MakeAttachedOverlay(pawn, markDef, Vector3.zero, 1f);
+                markedPawns[pawn] = mote;
+            }
+
+            mote.Maintain();
+        }
+
+        private void ShowCountdownIfNeeded(Pawn pawn, int ticksPresent)
+        {
+            if (pawn == null || !pawn.Spawned)
+            {
+                return;
+            }
+
+            int totalHitsRequired = GetTotalBleedHitsRequired();
+            if (totalHitsRequired <= 0)
+            {
+                return;
+            }
+
+            int hitsTaken = PropsField.bleedIntervalTicks > 0 ? ticksPresent / PropsField.bleedIntervalTicks : 0;
+            int remainingHits = Mathf.Clamp(totalHitsRequired - hitsTaken, 1, totalHitsRequired);
+            if (PropsField.executeStayTicks > 0 && ticksPresent >= PropsField.executeStayTicks)
+            {
+                return;
+            }
+
+            if (lastDisplayedRemainingHits.TryGetValue(pawn, out int lastShown) && lastShown == remainingHits)
+            {
+                return;
+            }
+
+            lastDisplayedRemainingHits[pawn] = remainingHits;
+            MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, remainingHits.ToString(), new Color(0.94f, 0.26f, 0.26f), 1.1f);
+        }
+
+        private int GetTotalBleedHitsRequired()
+        {
+            if (PropsField.bleedIntervalTicks <= 0 || PropsField.executeStayTicks <= 0)
+            {
+                return 0;
+            }
+
+            return Mathf.Max(1, Mathf.CeilToInt((float)PropsField.executeStayTicks / PropsField.bleedIntervalTicks));
+        }
+
+        private void ExecutePawn(Pawn pawn)
         {
             if (pawn == null || pawn.Destroyed)
             {
                 return;
+            }
+
+            Map map = pawn.MapHeld;
+            IntVec3 position = pawn.PositionHeld;
+            if (map != null && position.IsValid)
+            {
+                FleckDef soulFleck = DefDatabase<FleckDef>.GetNamedSilentFail(DeathRefusalBubbleFleckDefName);
+                if (soulFleck != null)
+                {
+                    FleckMaker.Static(position, map, soulFleck, 1.6f);
+                }
+
+                FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, 1.6f);
+                FleckMaker.Static(position, map, FleckDefOf.FlashHollow, 1.4f);
+
+                ThingDef soulPulseDef = DefDatabase<ThingDef>.GetNamedSilentFail(SoulAbsorbPulseMoteDefName);
+                if (soulPulseDef != null && Pawn != null && Pawn.Spawned && Pawn.MapHeld == map)
+                {
+                    MoteMaker.MakeInteractionOverlay(soulPulseDef, new TargetInfo(position, map), Pawn);
+                    FleckMaker.Static(Pawn.Position, map, FleckDefOf.PsycastAreaEffect, 1.15f);
+                }
             }
 
             pawn.Destroy(DestroyMode.Vanish);
