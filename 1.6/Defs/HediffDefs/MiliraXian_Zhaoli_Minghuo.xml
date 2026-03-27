@@ -4,8 +4,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinghuo</defName>
         <label>冥火附武</label>
-        <description>死者因果附着于昭离的武器之上。附魔期间，当前绑定武器的伤害、破甲、命中与攻击速度提升至原本的1.5倍，攻击距离增加2格，并在近战命中时额外附带火焰伤害。</description>
+        <description>&lt;color=#A11228&gt;冥火&lt;/color&gt;与死者因果附着于昭离的武器之上。附魔期间，当前绑定武器的伤害、破甲、命中与攻击速度提升至原本的1.5倍，攻击距离增加2格，并在近战命中时额外附带火焰伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.86, 0.24, 0.30)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>

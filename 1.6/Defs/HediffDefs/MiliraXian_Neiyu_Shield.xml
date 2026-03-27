@@ -1,32 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
     <HediffDef>
         <defName>MXNL_NeiyuShield</defName>
         <label>护身</label>
-        <description>霓羽的三阶段护身次数盾。</description>
-
+        <description>&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;护身&lt;/color&gt;次数盾，会随阶段变化展现不同防护能力。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.44, 0.80, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
-
         <initialSeverity>1</initialSeverity>
         <minSeverity>1</minSeverity>
         <maxSeverity>1</maxSeverity>
-
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
             </li>
         </stages>
-
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.HediffCompProperties_MXNeiyuCountShield">
                 <phase2Threshold>36</phase2Threshold>
-
                 <phase2MaxChargesNormal>108</phase2MaxChargesNormal>
                 <phase2MaxChargesWeak>250</phase2MaxChargesWeak>
-
                 <phase2RecoverTicksNoChange>30000</phase2RecoverTicksNoChange>
                 <!-- 第三阶段：前2小时蓄伤(无敌) -->
                 <stage3AbsorbTicks>5000</stage3AbsorbTicks>
@@ -35,17 +30,13 @@
                 <!-- 旧字段，保留做兼容兜底 -->
                 <stage3DurationTicks>60000</stage3DurationTicks>
                 <weakDurationTicks>300000</weakDurationTicks>
-
                 <stage3TierA_MaxDamage>100</stage3TierA_MaxDamage>
                 <stage3TierB_MaxDamage>500</stage3TierB_MaxDamage>
                 <stage3TierC_MaxDamage>1000</stage3TierC_MaxDamage>
                 <stage3TierD_ExtraStepDamage>500</stage3TierD_ExtraStepDamage>
-
                 <bloodLossTierB>0.10</bloodLossTierB>
                 <bloodLossTierC>0.30</bloodLossTierC>
                 <bloodLossTierD>0.50</bloodLossTierD>
-
-                <!-- TODO: 自定义吸收视觉资源 -->
                 <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
                 <hurtFleckDefNames>
                     <li>MXNL_Fleck_NeiyuShield_Hurt_A</li>
@@ -55,7 +46,6 @@
                 </hurtFleckDefNames>
                 <absorbFleckScale>1.2</absorbFleckScale>
                 <absorbEffecterDefName></absorbEffecterDefName>
-
                 <drawActiveShield>true</drawActiveShield>
                 <activeShieldTexPath>MiliraXianNeiyu/Effect/Neiyu_Shield/Shield</activeShieldTexPath>
                 <activeShieldDrawSize>(3.8,3.8)</activeShieldDrawSize>
@@ -64,7 +54,6 @@
                 <activeShieldPulseMin>0.96</activeShieldPulseMin>
                 <activeShieldPulseMax>1.06</activeShieldPulseMax>
                 <activeShieldPulseTicks>75</activeShieldPulseTicks>
-
                 <showDebugLabel>true</showDebugLabel>
             </li>
         </comps>

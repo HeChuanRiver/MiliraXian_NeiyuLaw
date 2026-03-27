@@ -182,6 +182,10 @@ namespace MiliraXian.Characters.Zhaoli
         public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
         {
             base.Notify_PawnDied(dinfo, culprit);
+            if (Patch_Pawn_Kill_ZhaoliSubstitute.HasPendingSubstitute(Pawn))
+            {
+                return;
+            }
             ZhaoliRebirthUtility.TryScheduleRebirth(Pawn);
         }
     }

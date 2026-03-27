@@ -4,8 +4,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliKarma</defName>
         <label>因果</label>
-        <description>昭离专属资源。通过告死处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的因果链接名单。</description>
+        <description>&lt;color=#A11228&gt;昭离&lt;/color&gt;专属资源。通过&lt;color=#6A214A&gt;告死&lt;/color&gt;处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的因果链接名单。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.74, 0.10, 0.18)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
@@ -14,7 +15,7 @@
         <comps>
             <li Class="MiliraXian.Characters.HediffCompProperties_PawnSpecialResource">
                 <resourceLabel>因果</resourceLabel>
-                <resourceDescription>昭离专属资源。每次成功告死都会增加因果，后续主动技能会消耗因果。该资源超过100点时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
+                <resourceDescription>&lt;color=#A11228&gt;昭离&lt;/color&gt;专属资源。每次成功告死都会增加因果，后续主动技能会消耗因果。该资源超过100点时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <clampToMax>false</clampToMax>

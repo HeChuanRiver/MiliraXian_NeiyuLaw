@@ -552,19 +552,49 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
     public static class Patch_Pawn_Kill_ZhaoliSubstitute
     {
-        public static void Postfix(Pawn __instance)
+        private static readonly Dictionary<Pawn, Pawn> pendingSubstitutePawns = new Dictionary<Pawn, Pawn>();
+
+        public static bool HasPendingSubstitute(Pawn pawn)
         {
-            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            return pawn != null && pendingSubstitutePawns.ContainsKey(pawn);
+        }
+
+        public static void Prefix(Pawn __instance)
+        {
+            if (__instance == null || __instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
             {
                 return;
             }
 
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
             Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
-            if (sacrificePawn != null)
+            if (sacrificePawn == null || sacrificePawn.Dead || sacrificePawn.Destroyed)
             {
+                pendingSubstitutePawns.Remove(__instance);
+                return;
+            }
+
+            pendingSubstitutePawns[__instance] = sacrificePawn;
+        }
+
+        public static void Postfix(Pawn __instance)
+        {
+            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            {
+                pendingSubstitutePawns.Remove(__instance);
+                return;
+            }
+
+            if (pendingSubstitutePawns.TryGetValue(__instance, out Pawn sacrificePawn))
+            {
+                pendingSubstitutePawns.Remove(__instance);
+
+                HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
                 linkComp.BreakLink(sacrificePawn);
-                sacrificePawn.Kill(null);
+                if (!sacrificePawn.Dead && !sacrificePawn.Destroyed)
+                {
+                    sacrificePawn.Kill(null);
+                }
 
                 if (ResurrectionUtility.TryResurrect(__instance, new ResurrectionParams
                 {
@@ -580,11 +610,8 @@ namespace MiliraXian.Characters.Zhaoli
                 {
                     return;
                 }
-            }
 
-            if (!ZhaoliRebirthUtility.TryScheduleRebirth(__instance))
-            {
-                return;
+                ZhaoliRebirthUtility.TryScheduleRebirth(__instance);
             }
         }
     }

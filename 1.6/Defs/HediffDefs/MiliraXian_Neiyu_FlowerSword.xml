@@ -8,8 +8,8 @@
         <thoughtClass>Thought_Memory</thoughtClass>
         <stages>
             <li>
-                <label>flower blessing</label>
-                <description>Bathed in Neiyu's flower blessing.</description>
+                <label>花祝福</label>
+                <description>沐浴在&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;之中。</description>
                 <baseMoodEffect>12</baseMoodEffect>
             </li>
         </stages>
@@ -17,9 +17,10 @@
 
     <HediffDef>
         <defName>MX_Neiyu_FlowerBlessed</defName>
-        <label>flower blessing</label>
-        <description>Blessed state from flower form skills.</description>
+        <label>花祝福</label>
+        <description>来自&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;花形态技能的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;，会短时间强化自身状态。</description>
         <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.96, 0.60, 0.92)</defaultLabelColor>
         <isBad>false</isBad>
         <initialSeverity>1</initialSeverity>
         <minSeverity>1</minSeverity>
@@ -27,7 +28,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>flower blessing</label>
+                <label>花祝福</label>
                 <statFactors>
                     <MoveSpeed>1.20</MoveSpeed>
                     <IncomingDamageFactor>0.90</IncomingDamageFactor>
@@ -45,9 +46,10 @@
 
     <HediffDef>
         <defName>MX_Neiyu_SwordVulnerability</defName>
-        <label>sword vulnerability</label>
-        <description>Receives amplified damage after sword skyfall impact.</description>
+        <label>剑坠易伤</label>
+        <description>受到&lt;color=#8BD5FF&gt;剑落冲击&lt;/color&gt;后，短时间内会承受更高伤害。</description>
         <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.86, 0.52, 0.88)</defaultLabelColor>
         <isBad>true</isBad>
         <initialSeverity>1</initialSeverity>
         <minSeverity>1</minSeverity>
@@ -55,7 +57,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>vulnerable</label>
+                <label>易伤</label>
                 <statFactors>
                     <IncomingDamageFactor>1.25</IncomingDamageFactor>
                 </statFactors>

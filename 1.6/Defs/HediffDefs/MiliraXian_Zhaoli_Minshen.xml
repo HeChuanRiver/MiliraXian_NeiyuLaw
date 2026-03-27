@@ -4,8 +4,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinshenSlow</defName>
         <label>泯神压制</label>
-        <description>昭离的泯神压制了该目标的行动能力，使其移动速度仅剩原本的20%。</description>
+        <description>&lt;color=#6A214A&gt;泯神&lt;/color&gt;压制了该目标的行动能力，使其移动速度仅剩原本的20%。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.48, 0.12, 0.38)</defaultLabelColor>
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
@@ -30,8 +31,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinshenDamage</defName>
         <label>泯神蚀命</label>
-        <description>昭离的泯神持续蚕食目标生命，每秒对其躯干造成1点伤害，持续5秒。</description>
+        <description>&lt;color=#A11228&gt;泯神&lt;/color&gt;持续蚕食目标生命，每秒对其躯干造成1点伤害，持续5秒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.74, 0.06, 0.16)</defaultLabelColor>
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>

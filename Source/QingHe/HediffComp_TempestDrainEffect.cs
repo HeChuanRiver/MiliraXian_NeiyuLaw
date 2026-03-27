@@ -102,7 +102,6 @@ namespace MiliraXian.Characters.QingHe
     
     public class HediffComp_DryCorpseEffect : HediffComp
     {
-        private Color prevColor;
         
         public HediffCompProperties_DryCorpseEffect Props => (HediffCompProperties_DryCorpseEffect)props;
 

@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
         <defName>MX_Neiyu_ThunderMark</defName>
         <label>雷锁印记</label>
-        <description>被雷锁印域标记，短时间内将持续遭受雷击。</description>
+        <description>被&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;标记，短时间内将持续遭受雷击。</description>
         <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.56, 0.68, 1.00)</defaultLabelColor>
         <isBad>true</isBad>
         <initialSeverity>0.1</initialSeverity>
         <maxSeverity>1</maxSeverity>

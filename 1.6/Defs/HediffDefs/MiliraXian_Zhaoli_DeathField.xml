@@ -4,8 +4,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
         <label>告死流场</label>
-        <description>昭离维持中的告死流场，会持续压制范围内除自身外的一切单位。</description>
+        <description>昭离维持中的&lt;color=#A11228&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
@@ -33,8 +34,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldSlow</defName>
         <label>告死滞压</label>
-        <description>身处告死流场之中，行动会被明显压制，难以脱离其范围。</description>
+        <description>身处&lt;color=#5E1335&gt;告死流场&lt;/color&gt;之中，行动会被明显压制，难以脱离其范围。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.58, 0.08, 0.16)</defaultLabelColor>
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>

@@ -4,8 +4,9 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDormancy</defName>
         <label>诸事无常·沉眠</label>
-        <description>因果溢出后引发的强制沉眠。昭离会持续陷入沉睡状态，无法正常行动，直到三十日后才会自然苏醒。</description>
+        <description>因果溢出后引发的&lt;color=#6A214A&gt;强制沉眠&lt;/color&gt;。&lt;color=#A11228&gt;昭离&lt;/color&gt;会持续陷入沉睡状态，无法正常行动，直到三十日后才会自然苏醒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.54, 0.24, 0.62)</defaultLabelColor>
         <isBad>true</isBad>
         <preventsCrawling>true</preventsCrawling>
         <scenarioCanAdd>false</scenarioCanAdd>
