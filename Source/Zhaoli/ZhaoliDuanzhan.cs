@@ -29,7 +29,13 @@ namespace MiliraXian.Characters.Zhaoli
         public int postReversePauseTicks;
         public int horizontalMoveTicks;
         public int horizontalHoldTicks;
+        public int thrustChargeTicks;
+        public int thrustChargeHoldTicks;
         public int thrustTicks;
+        public int horizontalMoveEndTick;
+        public int horizontalHoldEndTick;
+        public int thrustChargeEndTick;
+        public int thrustChargeHoldEndTick;
         public int sequenceEndTick;
         public float baseAimAngle;
         public float firstWeaponScale;
@@ -38,6 +44,7 @@ namespace MiliraXian.Characters.Zhaoli
         public float reverseSlashScaleMultiplier;
         public float slashStartAngleOffset;
         public float slashEndAngleOffset;
+        public float thrustChargeDistanceCells;
         public float thrustDistanceCells;
     }
 
@@ -59,6 +66,8 @@ namespace MiliraXian.Characters.Zhaoli
             int postReversePauseTicks,
             int horizontalMoveTicks,
             int horizontalHoldTicks,
+            int thrustChargeTicks,
+            int thrustChargeHoldTicks,
             int thrustTicks,
             float baseAimAngle,
             float firstWeaponScale,
@@ -67,6 +76,7 @@ namespace MiliraXian.Characters.Zhaoli
             float reverseSlashScaleMultiplier,
             float slashStartAngleOffset,
             float slashEndAngleOffset,
+            float thrustChargeDistanceCells,
             float thrustDistanceCells)
         {
             if (pawn == null || weapon == null)
@@ -78,7 +88,11 @@ namespace MiliraXian.Characters.Zhaoli
             int firstSlashStartTick = sequenceStartTick + Mathf.Max(1, thirdScaleDelayTicks) + maxScaleHoldTicks;
             int firstSlashEndTick = firstSlashStartTick + Mathf.Max(1, firstSlashTicks);
             int secondSlashEndTick = firstSlashEndTick + Mathf.Max(0, reversePauseTicks) + Mathf.Max(1, secondSlashTicks);
-            int sequenceEndTick = secondSlashEndTick + Mathf.Max(0, postReversePauseTicks) + Mathf.Max(0, horizontalMoveTicks) + Mathf.Max(0, horizontalHoldTicks) + Mathf.Max(1, thrustTicks);
+            int horizontalMoveEndTick = secondSlashEndTick + Mathf.Max(0, postReversePauseTicks) + Mathf.Max(0, horizontalMoveTicks);
+            int horizontalHoldEndTick = horizontalMoveEndTick + Mathf.Max(0, horizontalHoldTicks);
+            int thrustChargeEndTick = horizontalHoldEndTick + Mathf.Max(0, thrustChargeTicks);
+            int thrustChargeHoldEndTick = thrustChargeEndTick + Mathf.Max(0, thrustChargeHoldTicks);
+            int sequenceEndTick = thrustChargeHoldEndTick + Mathf.Max(1, thrustTicks);
             States[pawn.thingIDNumber] = new DuanzhanVisualState
             {
                 weaponThingId = weapon.thingIDNumber,
@@ -93,7 +107,13 @@ namespace MiliraXian.Characters.Zhaoli
                 postReversePauseTicks = Mathf.Max(0, postReversePauseTicks),
                 horizontalMoveTicks = Mathf.Max(0, horizontalMoveTicks),
                 horizontalHoldTicks = Mathf.Max(0, horizontalHoldTicks),
+                thrustChargeTicks = Mathf.Max(0, thrustChargeTicks),
+                thrustChargeHoldTicks = Mathf.Max(0, thrustChargeHoldTicks),
                 thrustTicks = Mathf.Max(1, thrustTicks),
+                horizontalMoveEndTick = horizontalMoveEndTick,
+                horizontalHoldEndTick = horizontalHoldEndTick,
+                thrustChargeEndTick = thrustChargeEndTick,
+                thrustChargeHoldEndTick = thrustChargeHoldEndTick,
                 sequenceEndTick = sequenceEndTick,
                 baseAimAngle = baseAimAngle,
                 firstWeaponScale = firstWeaponScale,
@@ -102,6 +122,7 @@ namespace MiliraXian.Characters.Zhaoli
                 reverseSlashScaleMultiplier = reverseSlashScaleMultiplier,
                 slashStartAngleOffset = slashStartAngleOffset,
                 slashEndAngleOffset = slashEndAngleOffset,
+                thrustChargeDistanceCells = thrustChargeDistanceCells,
                 thrustDistanceCells = thrustDistanceCells
             };
         }
@@ -145,11 +166,14 @@ namespace MiliraXian.Characters.Zhaoli
             int secondSlashStartTick = firstPauseEndTick;
             int secondSlashEndTick = state.secondSlashEndTick;
             int secondPauseEndTick = secondSlashEndTick + state.postReversePauseTicks;
-            int horizontalMoveEndTick = secondPauseEndTick + state.horizontalMoveTicks;
-            int horizontalHoldEndTick = horizontalMoveEndTick + state.horizontalHoldTicks;
-            int thrustStartTick = horizontalHoldEndTick;
+            int horizontalMoveEndTick = state.horizontalMoveEndTick;
+            int horizontalHoldEndTick = state.horizontalHoldEndTick;
+            int thrustChargeEndTick = state.thrustChargeEndTick;
+            int thrustChargeHoldEndTick = state.thrustChargeHoldEndTick;
+            int thrustStartTick = thrustChargeHoldEndTick;
             int thrustEndTick = state.sequenceEndTick;
             float reverseSlashScale = state.thirdWeaponScale * Mathf.Max(1f, state.reverseSlashScaleMultiplier);
+            Vector3 forward = ForwardFromAimAngle(state.baseAimAngle);
 
             if (now < firstScaleTick)
             {
@@ -224,12 +248,29 @@ namespace MiliraXian.Characters.Zhaoli
                 return true;
             }
 
+            if (now < thrustChargeEndTick)
+            {
+                float progress = Mathf.Clamp01((now - horizontalHoldEndTick) / (float)Mathf.Max(1, thrustChargeEndTick - horizontalHoldEndTick));
+                weaponScale = reverseSlashScale;
+                drawAimAngle = state.baseAimAngle;
+                drawOffset = -forward * (state.thrustChargeDistanceCells * progress);
+                return true;
+            }
+
+            if (now < thrustChargeHoldEndTick)
+            {
+                weaponScale = reverseSlashScale;
+                drawAimAngle = state.baseAimAngle;
+                drawOffset = -forward * state.thrustChargeDistanceCells;
+                return true;
+            }
+
             if (now < thrustEndTick)
             {
                 float progress = Mathf.Clamp01((now - thrustStartTick) / (float)Mathf.Max(1, thrustEndTick - thrustStartTick));
                 weaponScale = reverseSlashScale;
                 drawAimAngle = state.baseAimAngle;
-                drawOffset = ForwardFromAimAngle(state.baseAimAngle) * (state.thrustDistanceCells * progress);
+                drawOffset = -forward * state.thrustChargeDistanceCells + forward * ((state.thrustChargeDistanceCells + state.thrustDistanceCells) * progress);
                 return true;
             }
 
@@ -256,18 +297,21 @@ namespace MiliraXian.Characters.Zhaoli
         public int postMaxHoldTicks = 60;
         public int slashTicks = 54;
         public float firstSlashSpeedMultiplier = 2f;
-        public int reversePauseTicks = 120;
+        public int reversePauseTicks = 24;
         public float secondSlashSpeedMultiplier = 3f;
-        public int postReversePauseTicks = 60;
-        public int horizontalMoveTicks = 15;
-        public int horizontalHoldTicks = 120;
-        public int thrustTicks = 10;
+        public int postReversePauseTicks = 18;
+        public int horizontalMoveTicks = 12;
+        public int horizontalHoldTicks = 12;
+        public int thrustChargeTicks = 18;
+        public int thrustChargeHoldTicks = 18;
+        public int thrustTicks = 8;
         public float firstWeaponScale = 1.2f;
         public float secondWeaponScale = 2f;
         public float thirdWeaponScale = 3.5f;
         public float reverseSlashScaleMultiplier = 1.5f;
         public float slashStartAngleOffset = -90f;
         public float slashEndAngleOffset = 90f;
+        public float thrustChargeDistanceCells = 1.6f;
         public float thrustDistanceCells = 10f;
 
         public CompProperties_AbilityDuanzhan()
@@ -288,6 +332,11 @@ namespace MiliraXian.Characters.Zhaoli
         private int slashEndTick;
         private int sequenceEndTick;
         private bool damageApplied;
+        private bool firstSlashFxPlayed;
+        private bool secondSlashFxPlayed;
+        private bool thrustChargeFxPlayed;
+        private bool thrustLaunchFxPlayed;
+        private bool thrustImpactFxPlayed;
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
@@ -336,8 +385,15 @@ namespace MiliraXian.Characters.Zhaoli
                 + Mathf.Max(0, Props.postReversePauseTicks)
                 + Mathf.Max(0, Props.horizontalMoveTicks)
                 + Mathf.Max(0, Props.horizontalHoldTicks)
+                + Mathf.Max(0, Props.thrustChargeTicks)
+                + Mathf.Max(0, Props.thrustChargeHoldTicks)
                 + Mathf.Max(1, Props.thrustTicks);
             damageApplied = false;
+            firstSlashFxPlayed = false;
+            secondSlashFxPlayed = false;
+            thrustChargeFxPlayed = false;
+            thrustLaunchFxPlayed = false;
+            thrustImpactFxPlayed = false;
             stage = DuanzhanSequenceStage.Charging;
 
             int totalLockTicks = Mathf.Max(1,
@@ -349,6 +405,8 @@ namespace MiliraXian.Characters.Zhaoli
                 + Props.postReversePauseTicks
                 + Props.horizontalMoveTicks
                 + Props.horizontalHoldTicks
+                + Props.thrustChargeTicks
+                + Props.thrustChargeHoldTicks
                 + Props.thrustTicks
                 + Props.backswingTicks);
             if (caster.stances?.stunner != null)
@@ -359,6 +417,7 @@ namespace MiliraXian.Characters.Zhaoli
             caster.rotationTracker?.FaceCell(targetCell);
             RefreshVisualState(caster);
             FleckMaker.Static(originCell, map, FleckDefOf.ExplosionFlash);
+            FleckMaker.Static(originCell, map, FleckDefOf.FeedbackMelee, 1.6f);
         }
 
         public override void CompTick()
@@ -382,9 +441,41 @@ namespace MiliraXian.Characters.Zhaoli
             RefreshVisualState(caster);
 
             int now = Find.TickManager != null ? Find.TickManager.TicksGame : sequenceEndTick;
+            int secondSlashStartTick = slashEndTick + Mathf.Max(0, Props.reversePauseTicks);
+            int secondSlashEndTick = secondSlashStartTick + GetSlashTicks(Props.secondSlashSpeedMultiplier);
+            int horizontalMoveStartTick = secondSlashEndTick + Mathf.Max(0, Props.postReversePauseTicks);
+            int horizontalMoveEndTick = horizontalMoveStartTick + Mathf.Max(0, Props.horizontalMoveTicks);
+            int horizontalHoldEndTick = horizontalMoveEndTick + Mathf.Max(0, Props.horizontalHoldTicks);
+            int thrustChargeStartTick = horizontalHoldEndTick;
+            int thrustChargeEndTick = thrustChargeStartTick + Mathf.Max(0, Props.thrustChargeTicks);
+            int thrustStartTick = thrustChargeEndTick + Mathf.Max(0, Props.thrustChargeHoldTicks);
             if (stage == DuanzhanSequenceStage.Charging && now >= slashStartTick)
             {
                 stage = DuanzhanSequenceStage.Slash;
+            }
+
+            if (!firstSlashFxPlayed && now >= slashStartTick)
+            {
+                PlaySlashStartEffects(map, originCell, 1.2f);
+                firstSlashFxPlayed = true;
+            }
+
+            if (!secondSlashFxPlayed && now >= secondSlashStartTick)
+            {
+                PlaySlashStartEffects(map, originCell, 1f);
+                secondSlashFxPlayed = true;
+            }
+
+            if (!thrustChargeFxPlayed && now >= thrustChargeStartTick)
+            {
+                PlayThrustChargeEffects(map, originCell);
+                thrustChargeFxPlayed = true;
+            }
+
+            if (!thrustLaunchFxPlayed && now >= thrustStartTick)
+            {
+                PlayThrustLaunchEffects(map, originCell);
+                thrustLaunchFxPlayed = true;
             }
 
             if (stage == DuanzhanSequenceStage.Slash && !damageApplied)
@@ -396,6 +487,12 @@ namespace MiliraXian.Characters.Zhaoli
                     damageApplied = true;
                     FleckMaker.Static(originCell, map, FleckDefOf.ExplosionFlash);
                 }
+            }
+
+            if (!thrustImpactFxPlayed && now >= sequenceEndTick)
+            {
+                PlayThrustImpactEffects(map, ComputeForward(originCell, targetCell));
+                thrustImpactFxPlayed = true;
             }
 
             if (now >= sequenceEndTick)
@@ -421,6 +518,11 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref slashEndTick, "mxnl_zhaoli_duanzhan_slashEndTick", -1);
             Scribe_Values.Look(ref sequenceEndTick, "mxnl_zhaoli_duanzhan_sequenceEndTick", -1);
             Scribe_Values.Look(ref damageApplied, "mxnl_zhaoli_duanzhan_damageApplied", false);
+            Scribe_Values.Look(ref firstSlashFxPlayed, "mxnl_zhaoli_duanzhan_firstSlashFxPlayed", false);
+            Scribe_Values.Look(ref secondSlashFxPlayed, "mxnl_zhaoli_duanzhan_secondSlashFxPlayed", false);
+            Scribe_Values.Look(ref thrustChargeFxPlayed, "mxnl_zhaoli_duanzhan_thrustChargeFxPlayed", false);
+            Scribe_Values.Look(ref thrustLaunchFxPlayed, "mxnl_zhaoli_duanzhan_thrustLaunchFxPlayed", false);
+            Scribe_Values.Look(ref thrustImpactFxPlayed, "mxnl_zhaoli_duanzhan_thrustImpactFxPlayed", false);
             stage = (DuanzhanSequenceStage)stageInt;
         }
 
@@ -452,6 +554,8 @@ namespace MiliraXian.Characters.Zhaoli
                 Props.postReversePauseTicks,
                 Props.horizontalMoveTicks,
                 Props.horizontalHoldTicks,
+                Props.thrustChargeTicks,
+                Props.thrustChargeHoldTicks,
                 Props.thrustTicks,
                 ComputeAimAngle(originCell, targetCell),
                 Props.firstWeaponScale,
@@ -460,6 +564,7 @@ namespace MiliraXian.Characters.Zhaoli
                 Props.reverseSlashScaleMultiplier,
                 Props.slashStartAngleOffset,
                 Props.slashEndAngleOffset,
+                Props.thrustChargeDistanceCells,
                 Props.thrustDistanceCells);
         }
 
@@ -467,6 +572,11 @@ namespace MiliraXian.Characters.Zhaoli
         {
             stage = DuanzhanSequenceStage.None;
             damageApplied = false;
+            firstSlashFxPlayed = false;
+            secondSlashFxPlayed = false;
+            thrustChargeFxPlayed = false;
+            thrustLaunchFxPlayed = false;
+            thrustImpactFxPlayed = false;
             DuanzhanVisualTracker.Clear(caster);
         }
 
@@ -487,6 +597,52 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Vector3 forward = ComputeForward(sourceCell, targetCell);
             return Mathf.Atan2(forward.x, forward.z) * 57.29578f;
+        }
+
+        private void PlaySlashStartEffects(Map map, IntVec3 cell, float flashScale)
+        {
+            if (map == null || !cell.IsValid)
+            {
+                return;
+            }
+
+            FleckMaker.Static(cell, map, FleckDefOf.PsycastSkipFlashEntry, flashScale);
+            FleckMaker.Static(cell, map, FleckDefOf.ShotFlash, flashScale);
+        }
+
+        private void PlayThrustChargeEffects(Map map, IntVec3 cell)
+        {
+            if (map == null || !cell.IsValid)
+            {
+                return;
+            }
+
+            FleckMaker.Static(cell, map, FleckDefOf.PsycastSkipInnerExit, 1.15f);
+            FleckMaker.Static(cell, map, FleckDefOf.MicroSparksFast, 1.05f);
+        }
+
+        private void PlayThrustLaunchEffects(Map map, IntVec3 cell)
+        {
+            if (map == null || !cell.IsValid)
+            {
+                return;
+            }
+
+            FleckMaker.Static(cell, map, FleckDefOf.FeedbackShoot, 1.2f);
+            FleckMaker.Static(cell, map, FleckDefOf.ShotFlash, 1.25f);
+        }
+
+        private void PlayThrustImpactEffects(Map map, Vector3 forward)
+        {
+            if (map == null || !originCell.IsValid)
+            {
+                return;
+            }
+
+            Vector3 tipPosition = originCell.ToVector3Shifted() + forward * Props.thrustDistanceCells;
+            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.PsycastSkipFlashEntry, 1.35f);
+            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.ExplosionFlash, 1.35f);
+            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.ShotFlash, 1.1f);
         }
 
         private void DoDuanzhan(Pawn caster, Map map, IntVec3 center, Vector3 forward)
@@ -514,6 +670,7 @@ namespace MiliraXian.Characters.Zhaoli
 
                 ApplyPrimaryDamage(caster, pawn, weapon);
                 ApplyMinghuoDamage(caster, pawn, weapon, minghuoComp);
+                FleckMaker.Static(pawn.Position, map, FleckDefOf.FeedbackMelee, 1.3f);
                 FleckMaker.Static(pawn.Position, map, FleckDefOf.ExplosionFlash);
 
                 if (caster.Spawned && pawn.Spawned)
@@ -566,6 +723,10 @@ namespace MiliraXian.Characters.Zhaoli
             damageInfo.SetIgnoreArmor(true);
             damageInfo.SetBodyRegion(BodyPartHeight.Middle, BodyPartDepth.Outside);
             target.TakeDamage(damageInfo);
+            if (target.Spawned)
+            {
+                FleckMaker.Static(target.Position, target.Map, FleckDefOf.FireGlow, 1.15f);
+            }
         }
 
         private static HediffComp_ZhaoliMinghuo GetActiveMinghuoComp(Pawn caster, ThingWithComps weapon)
@@ -594,7 +755,14 @@ namespace MiliraXian.Characters.Zhaoli
         private const float SlashTextureScaleFactor = 3f;
         private static readonly float[] AfterimageAlphas = { 0.45f, 0.28f, 0.16f };
         private static readonly float[] AfterimageAngleOffsets = { 10f, 22f, 36f };
+        private static readonly Color[] AfterimageColors =
+        {
+            new Color(1f, 0.93f, 0.82f, 1f),
+            new Color(0.98f, 0.48f, 0.32f, 1f),
+            new Color(0.84f, 0.14f, 0.18f, 1f)
+        };
         private static Material slashMaterial;
+        private static Material[] afterimageMaterials;
         private static Vector2 slashBaseDrawSize = Vector2.one;
         private static bool triedLoadSlashMaterial;
 
@@ -618,6 +786,12 @@ namespace MiliraXian.Characters.Zhaoli
                 if (texture != null)
                 {
                     slashMaterial = MaterialPool.MatFrom(texture, ShaderDatabase.Cutout, Color.white);
+                    afterimageMaterials = new Material[AfterimageColors.Length];
+                    for (int i = 0; i < AfterimageColors.Length; i++)
+                    {
+                        afterimageMaterials[i] = MaterialPool.MatFrom(texture, ShaderDatabase.Cutout, AfterimageColors[i]);
+                    }
+
                     slashBaseDrawSize = new Vector2(Mathf.Max(0.01f, texture.width / (float)Mathf.Max(1, texture.height)), 1f);
                 }
             }
@@ -637,10 +811,14 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 for (int i = AfterimageAlphas.Length - 1; i >= 0; i--)
                 {
-                    Material afterimageMaterial = FadedMaterialPool.FadedVersionOf(material, AfterimageAlphas[i]);
-                    float afterimageScale = scaleMultiplier * (1f - 0.08f * (i + 1));
+                    Material baseTrailMaterial = afterimageMaterials != null && i < afterimageMaterials.Length && afterimageMaterials[i] != null
+                        ? afterimageMaterials[i]
+                        : material;
+                    Material afterimageMaterial = FadedMaterialPool.FadedVersionOf(baseTrailMaterial, AfterimageAlphas[i]);
+                    float afterimageScale = scaleMultiplier * (1f + 0.05f * (i + 1));
                     float afterimageAngle = aimAngle - AfterimageAngleOffsets[i];
-                    Vector3 afterimageDrawLoc = drawLoc + new Vector3(0f, 0.01f * (i + 1), 0f);
+                    Vector3 sweepBackOffset = new Vector3(0f, 0.01f * (i + 1), 0f) - AimOffset(afterimageAngle) * (0.08f * (i + 1));
+                    Vector3 afterimageDrawLoc = drawLoc + sweepBackOffset;
                     DrawSlashMesh(afterimageDrawLoc, afterimageAngle, afterimageScale, afterimageMaterial);
                 }
             }
@@ -659,6 +837,12 @@ namespace MiliraXian.Characters.Zhaoli
             Matrix4x4 matrix = Matrix4x4.TRS(meshCenter, quaternion, new Vector3(drawSize.x, 0f, drawSize.y));
             Mesh mesh = MeshPool.plane10;
             Graphics.DrawMesh(mesh, matrix, material, 0);
+        }
+
+        private static Vector3 AimOffset(float aimAngle)
+        {
+            float radians = aimAngle * 0.0174532924f;
+            return new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
         }
     }
 }
