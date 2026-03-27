@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <AbilityDef>
+        <defName>MX_Zhaoli_Duanzhan</defName>
+        <label>断斩</label>
+        <description>原地蓄势，离断三度暴涨，随后自左向右横扫身前大片敌人。</description>
+        <iconPath>MiliraXianNeiyu/Items/SwordForNeiyu</iconPath>
+
+        <category>MX_ZhaoliSkill</category>
+        <displayOrder>104</displayOrder>
+        <cooldownTicksRange>3600</cooldownTicksRange>
+
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>8.9</range>
+            <requireLineOfSight>false</requireLineOfSight>
+            <warmupTime>2.0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityDuanzhan">
+                <impactRadius>3</impactRadius>
+                <damageAmount>500</damageAmount>
+                <armorPenetration>999</armorPenetration>
+                <backswingTicks>180</backswingTicks>
+                <minghuoFlameDamageFactor>0.35</minghuoFlameDamageFactor>
+                <firstScaleDelayTicks>60</firstScaleDelayTicks>
+                <secondScaleDelayTicks>180</secondScaleDelayTicks>
+                <thirdScaleDelayTicks>300</thirdScaleDelayTicks>
+                <postMaxHoldTicks>60</postMaxHoldTicks>
+                <slashTicks>54</slashTicks>
+                <firstSlashSpeedMultiplier>2.0</firstSlashSpeedMultiplier>
+                <reversePauseTicks>120</reversePauseTicks>
+                <secondSlashSpeedMultiplier>3.0</secondSlashSpeedMultiplier>
+                <postReversePauseTicks>60</postReversePauseTicks>
+                <horizontalMoveTicks>15</horizontalMoveTicks>
+                <horizontalHoldTicks>120</horizontalHoldTicks>
+                <thrustTicks>10</thrustTicks>
+                <firstWeaponScale>1.2</firstWeaponScale>
+                <secondWeaponScale>2.0</secondWeaponScale>
+                <thirdWeaponScale>3.5</thirdWeaponScale>
+                <reverseSlashScaleMultiplier>1.5</reverseSlashScaleMultiplier>
+                <slashStartAngleOffset>-90</slashStartAngleOffset>
+                <slashEndAngleOffset>90</slashEndAngleOffset>
+                <thrustDistanceCells>10</thrustDistanceCells>
+            </li>
+        </comps>
+    </AbilityDef>
+
+</Defs>

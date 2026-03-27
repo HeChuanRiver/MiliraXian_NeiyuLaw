@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ThingDef ParentName="BaseMeleeWeapon">
+        <defName>MX_Zhaoli_DuanzhanBlade</defName>
+        <label>离断</label>
+        <description>昭离持有的近战兵装，内置技能“断斩”。挥出时会先跃进切入，再以中段横斩扫开身前大片敌人。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>Sellable</tradeability>
+
+        <techLevel>Archotech</techLevel>
+        <smeltable>false</smeltable>
+
+        <weaponTags>
+            <li>MiliraXian_ZhaoliBlade</li>
+        </weaponTags>
+
+        <thingCategories>
+        </thingCategories>
+        <weaponClasses>
+            <li>Melee</li>
+        </weaponClasses>
+
+        <costList>
+            <Steel>180</Steel>
+            <Jade>40</Jade>
+        </costList>
+
+        <statBases>
+            <Mass>1.2</Mass>
+            <MarketValue>4200</MarketValue>
+            <MaxHitPoints>150</MaxHitPoints>
+            <MeleeWeapon_CooldownMultiplier>1.1</MeleeWeapon_CooldownMultiplier>
+            <AccuracyTouch>0.85</AccuracyTouch>
+            <AccuracyShort>0.60</AccuracyShort>
+            <AccuracyMedium>0.40</AccuracyMedium>
+            <AccuracyLong>0.25</AccuracyLong>
+        </statBases>
+
+        <tools>
+            <li>
+                <label>离断</label>
+                <capacities>
+                    <li>Cut</li>
+                    <li>Stab</li>
+                </capacities>
+                <power>36</power>
+                <armorPenetration>0.32</armorPenetration>
+                <cooldownTime>1.6</cooldownTime>
+            </li>
+        </tools>
+
+        <comps>
+            <li Class="CompProperties_EquippableAbility">
+                <abilityDef>MX_Zhaoli_Duanzhan</abilityDef>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+    </ThingDef>
+
+</Defs>
