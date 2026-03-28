@@ -17,6 +17,8 @@ namespace MiliraXian.Characters.QingHe
         public float knockbackDistance = 4f;
         public float bluntDamageAmount = 10f;
         public float bluntArmorPenetration = 0.15f;
+        public float damageFactorMax = 1f;
+        public float knockbackFactorMax = 0.5f;
 
         public float eleganceGainPerTarget = 3f;
         public float eleganceGainMax = 24f;

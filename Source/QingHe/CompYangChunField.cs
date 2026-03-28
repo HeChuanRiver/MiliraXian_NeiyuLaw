@@ -6,17 +6,20 @@ namespace MiliraXian.Characters.QingHe
     public class CompProperties_YangChunField : CompProperties
     {
         public float radius = 7.9f;
-        public int pulseIntervalTicks = 30;
+        public int pulseIntervalTicks = 180;
 
         public DamageDef enemyDamageDef = null;
         public float enemyDamageAmount = 2f;
         public float enemyArmorPenetration = 0.15f;
         public float enemyDesyncedDamageAmount = 1f;
+        public float damageFactorMax = 0.5f;
 
         public HediffDef allyBuffHediff;
         public float allyBuffSeverity = 1f;
         public int allyBuffDurationTicks = 300;
         public float allyInstantHeal = 0.8f;
+        public float healFactorMax = 1f;
+        public float hediffSeverityFactorMax = 1f;
 
         public HediffDef enemyDebuffHediff;
         public float enemyDebuffSeverity = 1f;
@@ -25,6 +28,9 @@ namespace MiliraXian.Characters.QingHe
         public float eleganceGainFlat = 6f;
         public float eleganceGainPerAlly = 0.8f;
         public float eleganceGainPerEnemy = 1.5f;
+
+        public string pulseFx = "MX_QH_Effecter_YangChunPulse";
+        public float pulseFxScale = 1.45f;
 
         public CompProperties_YangChunField()
         {
@@ -80,75 +86,97 @@ namespace MiliraXian.Characters.QingHe
 
         private void ApplyPulse()
         {
-            int allyCount = 0;
-            int enemyCount = 0;
-            bool shouldRefreshDecayTimer = false;
-            DamageDef resolvedEnemyDamageDef = Props.enemyDamageDef ?? MX_QHDefOf.MX_Dehydrate ?? DamageDefOf.Blunt;
-            DamageDef desyncedDamageDef = MX_QHDefOf.MX_Desynced ?? DamageDefOf.Blunt;
+            GraphicsUtility.Fx(parent.Map, parent.Position, Props.pulseFx, Props.pulseFxScale * Props.radius / 7.9f);
 
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
+            var allyCount = 0;
+            var enemyCount = 0;
+            var refreshDecay = false;
+            var enemyDamageDef = Props.enemyDamageDef ?? MX_QHDefOf.MX_Dehydrate ?? DamageDefOf.Blunt;
+            var desyncedDamageDef = MX_QHDefOf.MX_Desynced ?? DamageDefOf.Blunt;
+            var damageFactor = EleganceUtility.FactorLinear(Props.damageFactorMax, caster);
+            var healFactor = EleganceUtility.FactorLinear(Props.healFactorMax, caster);
+            var severityFactor = EleganceUtility.FactorLinear(Props.hediffSeverityFactorMax, caster);
+
+            foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
             {
-                Pawn pawn = thing as Pawn;
-                if (pawn == null || pawn.Dead || pawn.Destroyed || pawn == caster)
+                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Destroyed || pawn == caster)
                 {
                     continue;
                 }
 
-                bool hostile = GenHostility.HostileTo(caster, pawn);
-                if (hostile)
+                if (GenHostility.HostileTo(caster, pawn))
                 {
+                    if (pawn.Downed)
+                    {
+                        continue;
+                    }
+
+                    var enemyAffected = false;
                     if (Props.enemyDamageAmount > 0f)
                     {
-                        DamageWorker.DamageResult damageResult = pawn.TakeDamage(new DamageInfo(resolvedEnemyDamageDef, Props.enemyDamageAmount, Props.enemyArmorPenetration, -1f, caster));
-                        if (damageResult != null && damageResult.totalDamageDealt > 0f)
+                        var result = pawn.TakeDamage(new DamageInfo(enemyDamageDef, Props.enemyDamageAmount * damageFactor, Props.enemyArmorPenetration, -1f, caster));
+                        if (result != null && result.totalDamageDealt > 0f)
                         {
-                            shouldRefreshDecayTimer = true;
+                            refreshDecay = true;
+                            enemyAffected = true;
                         }
                     }
 
                     if (Props.enemyDesyncedDamageAmount > 0f)
                     {
-                        DamageWorker.DamageResult damageResult = pawn.TakeDamage(new DamageInfo(desyncedDamageDef, Props.enemyDesyncedDamageAmount, Props.enemyArmorPenetration, -1f, caster));
-                        if ((damageResult != null && damageResult.totalDamageDealt > 0f) || desyncedDamageDef == MX_QHDefOf.MX_Desynced)
+                        var result = pawn.TakeDamage(new DamageInfo(desyncedDamageDef, Props.enemyDesyncedDamageAmount * damageFactor, Props.enemyArmorPenetration, -1f, caster));
+                        if ((result != null && result.totalDamageDealt > 0f) || desyncedDamageDef == MX_QHDefOf.MX_Desynced)
                         {
-                            shouldRefreshDecayTimer = true;
+                            refreshDecay = true;
+                            enemyAffected = true;
                         }
                     }
 
-                    MX_QHUtility.TryApplyOrRefreshHediff(pawn, Props.enemyDebuffHediff, Props.enemyDebuffSeverity, Props.enemyDebuffDurationTicks);
-                    enemyCount++;
+                    if (Props.enemyDebuffHediff != null)
+                    {
+                        MX_QHUtility.TryApplyOrRefreshHediff(pawn, Props.enemyDebuffHediff, Props.enemyDebuffSeverity * severityFactor, Props.enemyDebuffDurationTicks);
+                        enemyAffected = true;
+                    }
+
+                    if (enemyAffected)
+                    {
+                        enemyCount++;
+                    }
+
+                    continue;
                 }
-                else
+
+                var allyAffected = false;
+                if (Props.allyInstantHeal > 0f)
                 {
-                    bool allyEffectApplied = false;
-                    if (Props.allyInstantHeal > 0f)
-                    {
-                        MX_QHUtility.HealInjuries(pawn, Props.allyInstantHeal);
-                        allyEffectApplied = true;
-                    }
-
-                    if (Props.allyBuffHediff != null)
-                    {
-                        MX_QHUtility.TryApplyOrRefreshHediff(pawn, Props.allyBuffHediff, Props.allyBuffSeverity, Props.allyBuffDurationTicks);
-                        allyEffectApplied = true;
-                    }
-
-                    if (allyEffectApplied)
-                    {
-                        shouldRefreshDecayTimer = true;
-                    }
-
-                    allyCount++;
+                    MX_QHUtility.HealInjuries(pawn, Props.allyInstantHeal * healFactor);
+                    allyAffected = true;
                 }
+
+                if (Props.allyBuffHediff != null)
+                {
+                    MX_QHUtility.TryApplyOrRefreshHediff(pawn, Props.allyBuffHediff, Props.allyBuffSeverity * severityFactor, Props.allyBuffDurationTicks);
+                    allyAffected = true;
+                }
+
+                if (!allyAffected)
+                {
+                    continue;
+                }
+
+                refreshDecay = true;
+                allyCount++;
             }
 
-            if (shouldRefreshDecayTimer)
+            if (refreshDecay)
             {
                 EleganceUtility.NotifyDecayEvent(caster);
             }
 
-            float gain = Props.eleganceGainFlat + allyCount * Props.eleganceGainPerAlly + enemyCount * Props.eleganceGainPerEnemy;
-            EleganceUtility.AddElegance(caster, gain);
+            if (allyCount > 0 || enemyCount > 0)
+            {
+                EleganceUtility.AddElegance(caster, Props.eleganceGainFlat + allyCount * Props.eleganceGainPerAlly + enemyCount * Props.eleganceGainPerEnemy);
+            }
         }
     }
 }

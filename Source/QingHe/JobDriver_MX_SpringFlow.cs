@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -26,7 +27,7 @@ namespace MiliraXian.Characters.QingHe
 
             AddFinishAction(delegate { CleanUp(); });
 
-            Toil t = ToilMaker.MakeToil();
+            var t = ToilMaker.MakeToil();
             t.initAction = delegate
             {
                 pawn.pather.StopDead();
@@ -38,7 +39,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                IntVec3 target = TargetA.Cell;
+                var target = TargetA.Cell;
                 if (!target.InBounds(pawn.Map))
                 {
                     EndJobWith(JobCondition.Incompletable);
@@ -67,9 +68,10 @@ namespace MiliraXian.Characters.QingHe
             };
             t.tickIntervalAction = delegate { pawn.rotationTracker.FaceCell(TargetA.Cell); };
             t.defaultCompleteMode = ToilCompleteMode.Delay;
-            t.defaultDuration = Props != null ? System.Math.Max(1, Props.fieldDurationTicks) : 900;
+            t.defaultDuration = System.Math.Max(1, Props?.fieldDurationTicks ?? 1);
             t.handlingFacing = true;
             t.AddFailCondition(() => false);
+            t.WithProgressBarToilDelay(TargetIndex.None, false, -0.5f);
             yield return t;
         }
 

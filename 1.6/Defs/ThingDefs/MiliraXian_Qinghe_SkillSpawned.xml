@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef>
         <defName>SpringFlowField</defName>
@@ -98,11 +98,12 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.CompProperties_YangChunField">
                 <radius>7.9</radius>
-                <pulseIntervalTicks>30</pulseIntervalTicks>
+                <pulseIntervalTicks>180</pulseIntervalTicks>
 
                 <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
                 <enemyDamageAmount>2</enemyDamageAmount>
                 <enemyDesyncedDamageAmount>1</enemyDesyncedDamageAmount>
+                <damageFactorMax>0.5</damageFactorMax>
                 <enemyArmorPenetration>0.15</enemyArmorPenetration>
                 <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
                 <enemyDebuffSeverity>1</enemyDebuffSeverity>
@@ -112,10 +113,14 @@
                 <allyBuffSeverity>1</allyBuffSeverity>
                 <allyBuffDurationTicks>300</allyBuffDurationTicks>
                 <allyInstantHeal>0.8</allyInstantHeal>
+                <healFactorMax>1</healFactorMax>
+                <hediffSeverityFactorMax>1</hediffSeverityFactorMax>
 
                 <eleganceGainFlat>6</eleganceGainFlat>
                 <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
                 <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
+                <pulseFx>MX_QH_Effecter_YangChunPulse</pulseFx>
+                <pulseFxScale>1.45</pulseFxScale>
             </li>
         </comps>
     </ThingDef>

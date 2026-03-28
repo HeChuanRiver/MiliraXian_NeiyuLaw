@@ -62,6 +62,8 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 var map = pawn.MapHeld;
+                var damageFactor = EleganceUtility.FactorLinear(p.damageFactorMax, pawn);
+                var knockbackFactor = EleganceUtility.FactorLinear(p.knockbackFactorMax, pawn);
                 GraphicsUtility.Fx(map, pawn.Position, p.releaseFx, 1f);
                 GraphicsUtility.Fleck(map, pawn.Position, p.releaseFleck, Mathf.Max(0.75f, p.radius * 0.42f));
 
@@ -72,11 +74,11 @@ namespace MiliraXian.Characters.QingHe
                 for (var i = 0; i < victims.Count; i++)
                 {
                     var victim = victims[i];
-                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount, p.armorPenetration, -1f, pawn));
+                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount * damageFactor, p.armorPenetration, -1f, pawn));
 
                     if (p.bluntDamageAmount > 0f)
                     {
-                        victim.TakeDamage(new DamageInfo(MX_QHDefOf.MX_Desynced ?? DamageDefOf.Blunt, p.bluntDamageAmount, p.bluntArmorPenetration, -1f, pawn));
+                        victim.TakeDamage(new DamageInfo(MX_QHDefOf.MX_Desynced ?? DamageDefOf.Blunt, p.bluntDamageAmount * damageFactor, p.bluntArmorPenetration, -1f, pawn));
                     }
 
                     var cell = victim.Position;
@@ -86,7 +88,7 @@ namespace MiliraXian.Characters.QingHe
                         GraphicsUtility.Fleck(map, cell, p.hitFleck, 0.62f);
                     }
 
-                    MX_QHUtility.TryKnockback(victim, pawn.Position, p.knockbackDistance);
+                    MX_QHUtility.TryKnockback(victim, pawn.Position, p.knockbackDistance * knockbackFactor);
                     hitCount++;
                 }
 

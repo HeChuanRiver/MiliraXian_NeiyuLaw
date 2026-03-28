@@ -69,6 +69,8 @@ namespace MiliraXian.Characters.QingHe
                     center = pawn.Position;
                 }
 
+                var damageFactor = EleganceUtility.FactorLinear(p.damageFactorMax, pawn);
+                var slowDuration = Mathf.Max(1, Mathf.RoundToInt(p.slowDurationTicks * EleganceUtility.FactorLinear(p.slowDurationFactorMax, pawn)));
                 GraphicsUtility.Fx(map, pawn.Position, p.releaseCasterFx, 1f);
                 GraphicsUtility.Fx(map, center, p.releaseTargetFx, 1f);
                 GraphicsUtility.Fleck(map, center, p.releaseFleck, Mathf.Max(0.85f, p.radius * 0.65f));
@@ -81,7 +83,7 @@ namespace MiliraXian.Characters.QingHe
                 for (var i = 0; i < victims.Count; i++)
                 {
                     var victim = victims[i];
-                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount, p.armorPenetration, -1f, pawn));
+                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount * damageFactor, p.armorPenetration, -1f, pawn));
 
                     if (p.stunDamageAmount > 0f)
                     {
@@ -89,7 +91,7 @@ namespace MiliraXian.Characters.QingHe
                     }
 
                     MX_QHUtility.ApplyBleed(victim, p.bleedDamageAmount);
-                    MX_QHUtility.TryApplyOrRefreshHediff(victim, p.slowHediff, p.slowSeverity, p.slowDurationTicks);
+                    MX_QHUtility.TryApplyOrRefreshHediff(victim, p.slowHediff, p.slowSeverity, slowDuration);
 
                     if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
                     {

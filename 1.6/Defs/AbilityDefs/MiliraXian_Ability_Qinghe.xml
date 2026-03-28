@@ -167,6 +167,8 @@
         <bluntDamageAmount>10</bluntDamageAmount>
         <bluntArmorPenetration>0.15</bluntArmorPenetration>
         <knockbackDistance>4</knockbackDistance>
+        <damageFactorMax>1</damageFactorMax>
+        <knockbackFactorMax>0.5</knockbackFactorMax>
         <eleganceGainPerTarget>3</eleganceGainPerTarget>
         <eleganceGainMax>24</eleganceGainMax>
       </li>
@@ -221,6 +223,8 @@
         <slowHediff>MX_QH_Elegance_DuanHunSlow</slowHediff>
         <slowSeverity>1</slowSeverity>
         <slowDurationTicks>1800</slowDurationTicks>
+        <damageFactorMax>0.75</damageFactorMax>
+        <slowDurationFactorMax>1</slowDurationFactorMax>
         <brainDestroyChance>0.08</brainDestroyChance>
         <eleganceGainOnCast>8</eleganceGainOnCast>
         <eleganceGainPerTarget>2</eleganceGainPerTarget>
@@ -249,7 +253,7 @@
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>132</displayOrder>
-    <cooldownTicksRange>90</cooldownTicksRange>
+    <cooldownTicksRange>600</cooldownTicksRange>
 
     <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
     <jobDef>MX_Qinghe_Elegance_CastAbility_YangChun</jobDef>
