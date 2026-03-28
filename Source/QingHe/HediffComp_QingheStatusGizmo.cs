@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -81,14 +81,14 @@ namespace MiliraXian.Characters.QingHe
 
         private void UpdateTickDeltaIfNeeded()
         {
-            int currentTick = Find.TickManager?.TicksGame ?? -1;
+            var currentTick = Find.TickManager?.TicksGame ?? -1;
             if (currentTick == lastSampleTick)
             {
                 return;
             }
 
-            float currentFirst = FirstComp?.CurrentValue ?? 0f;
-            float currentSecond = SecondComp?.CurrentValue ?? 0f;
+            var currentFirst = FirstComp?.CurrentValue ?? 0f;
+            var currentSecond = SecondComp?.CurrentValue ?? 0f;
 
             if (!trendInitialized)
             {
@@ -129,11 +129,18 @@ namespace MiliraXian.Characters.QingHe
         private const int FirstBarTipSalt = 910101;
         private const int SecondBarTipSalt = 910102;
         private const int ShieldBarTipSalt = 910103;
-
-        private readonly HediffComp_QH_StatusGizmo source;
         private const float DimFactor = 0.55f;
         private const float WhitenFactor = 0.45f;
         private const float ShieldDarkFactor = 0.45f;
+        private const float TrendCycleTicks = 180f;
+        private const float TrendDeadTicks = 60f;
+        private const float TrendWidthPct = 0.18f;
+        private const float TrendMinWidth = 8f;
+        private const float TrendMaxWidth = 20f;
+        private const int TrendSlices = 9;
+        private const float TrendLightAlpha = 0.18f;
+
+        private readonly HediffComp_QH_StatusGizmo source;
 
         private static readonly Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
         private static readonly Color TargetLineColor = new Color(1f, 1f, 1f, 0.85f);
@@ -159,32 +166,32 @@ namespace MiliraXian.Characters.QingHe
 
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
         {
-            Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
-            Rect inner = rect.ContractedBy(6f);
+            var rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
+            var inner = rect.ContractedBy(6f);
             Widgets.DrawWindowBackground(rect);
 
-            HediffComp_PawnSpecialResource first = source.FirstComp;
-            HediffComp_PawnSpecialResource second = source.SecondComp;
-            CompLotusShield lotusShield = source.LotusShieldComp;
-            float eleganceTargetPercent = EleganceUtility.GetTempestRecoverThreshold(source.Pawn);
+            var first = source.FirstComp;
+            var second = source.SecondComp;
+            var lotusShield = source.LotusShieldComp;
+            var eleganceTargetPercent = EleganceUtility.GetTempestRecoverThreshold(source.Pawn);
 
-            Color firstColor = ResolveDisplayColor(FirstBaseColor, source.FirstTickDeltaDirection);
-            Color secondColor = ResolveDisplayColor(SecondBaseColor, source.SecondTickDeltaDirection);
+            var firstColor = ResolveDisplayColor(FirstBaseColor, source.FirstTickDeltaDirection);
+            var secondColor = ResolveDisplayColor(SecondBaseColor, source.SecondTickDeltaDirection);
             if (second != null)
             {
-                float secondMax = Mathf.Max(1f, second.MaxValue);
+                var secondMax = Mathf.Max(1f, second.MaxValue);
                 if (second.CurrentValue <= secondMax * eleganceTargetPercent + 0.0001f)
                 {
                     secondColor = Color.Lerp(secondColor, Color.white, WhitenFactor);
                 }
             }
 
-            Rect firstBarRect = DrawRow(inner, 6f, first, "\u6fc0\u6d41", firstColor);
-            Rect secondBarRect = DrawRow(inner, 38f, second, "\u96c5\u4e50", secondColor, eleganceTargetPercent);
-            Rect shieldBarRect = DrawShieldBar(inner, lotusShield, first, second);
+            var firstBarRect = DrawRow(inner, 6f, first, "激流", firstColor, source.FirstTickDeltaDirection);
+            var secondBarRect = DrawRow(inner, 38f, second, "雅乐", secondColor, source.SecondTickDeltaDirection, eleganceTargetPercent);
+            var shieldBarRect = DrawShieldBar(inner, lotusShield, first, second);
 
-            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "\u6fc0\u6d41"), GetStableTipId(FirstBarTipSalt));
-            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "\u96c5\u4e50", eleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
+            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "激流"), GetStableTipId(FirstBarTipSalt));
+            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "雅乐", eleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
             TooltipHandler.TipRegion(shieldBarRect, () => BuildShieldBarTip(source.LotusShieldComp), GetStableTipId(ShieldBarTipSalt));
             return new GizmoResult(GizmoState.Clear);
         }
@@ -195,20 +202,22 @@ namespace MiliraXian.Characters.QingHe
             HediffComp_PawnSpecialResource comp,
             string fallbackLabel,
             Color fillColor,
+            int trendDirection,
             float? targetPercent = null)
         {
             Text.Font = GameFont.Small;
-            Rect labelRect = new Rect(inner.x, inner.y + offsetY - 1f, 60f, Text.LineHeight + 2f);
+            var labelRect = new Rect(inner.x, inner.y + offsetY - 1f, 60f, Text.LineHeight + 2f);
             Widgets.Label(labelRect, comp?.ResourceLabel ?? fallbackLabel);
 
-            Rect barRect = new Rect(inner.x + 63f, inner.y + offsetY, 100f, 22f);
-            float current = comp?.CurrentValue ?? 0f;
-            float max = Mathf.Max(1f, comp?.MaxValue ?? 100f);
-            float percent = Mathf.Clamp01(current / max);
-            Widgets.FillableBar(barRect, percent, GetFillBarTexture(fillColor), EmptyBarTex, true);
+            var barRect = new Rect(inner.x + 63f, inner.y + offsetY, 100f, 22f);
+            var current = comp?.CurrentValue ?? 0f;
+            var max = Mathf.Max(1f, comp?.MaxValue ?? 100f);
+            var percent = Mathf.Clamp01(current / max);
+            var fillableRect = Widgets.FillableBar(barRect, percent, GetFillBarTexture(fillColor), EmptyBarTex, true);
+            DrawTrendOverlay(fillableRect, percent, trendDirection);
             if (targetPercent.HasValue)
             {
-                DrawTargetValueLine(barRect, targetPercent.Value);
+                DrawTargetValueLine(fillableRect, targetPercent.Value);
             }
             DrawBarHoverHighlight(barRect);
 
@@ -236,8 +245,8 @@ namespace MiliraXian.Characters.QingHe
 
         private static Texture2D GetFillBarTexture(Color color)
         {
-            Color32 key = color;
-            if (!FillBarTexCache.TryGetValue(key, out Texture2D texture))
+            var key = (Color32)color;
+            if (!FillBarTexCache.TryGetValue(key, out var texture))
             {
                 texture = SolidColorMaterials.NewSolidColorTexture(color);
                 FillBarTexCache[key] = texture;
@@ -246,11 +255,70 @@ namespace MiliraXian.Characters.QingHe
             return texture;
         }
 
+        private static void DrawTrendOverlay(Rect contentRect, float percent, int trendDirection)
+        {
+            if (trendDirection <= 0 || percent <= 0.0001f)
+            {
+                return;
+            }
+
+            var bandWidth = Mathf.Clamp(contentRect.width * TrendWidthPct, TrendMinWidth, TrendMaxWidth);
+            if (bandWidth <= 1f)
+            {
+                return;
+            }
+
+            var totalTicks = TrendCycleTicks + TrendDeadTicks;
+            var cycleTick = Mathf.Repeat(Find.TickManager?.TicksGame ?? 0, totalTicks);
+            if (cycleTick >= TrendCycleTicks)
+            {
+                return;
+            }
+
+            var t = cycleTick / TrendCycleTicks;
+            var centerX = contentRect.x + contentRect.width * t;
+            var color = new Color(1f, 1f, 1f, TrendLightAlpha);
+            DrawGradientBand(contentRect, centerX, bandWidth * 0.5f, color);
+        }
+
+        private static void DrawGradientBand(Rect limitRect, float centerX, float halfWidth, Color color)
+        {
+            if (halfWidth <= 0.5f)
+            {
+                return;
+            }
+
+            var left = Mathf.Max(limitRect.x, centerX - halfWidth);
+            var right = Mathf.Min(limitRect.xMax, centerX + halfWidth);
+            var width = right - left;
+            if (width <= 0.5f)
+            {
+                return;
+            }
+
+            var sliceWidth = width / TrendSlices;
+            for (var i = 0; i < TrendSlices; i++)
+            {
+                var x = left + sliceWidth * i;
+                var sliceCenter = x + sliceWidth * 0.5f;
+                var dist = Mathf.Abs(sliceCenter - centerX) / halfWidth;
+                var alpha = Mathf.Clamp01(1f - dist);
+                if (alpha <= 0.001f)
+                {
+                    continue;
+                }
+
+                var c = color;
+                c.a *= alpha * alpha;
+                Widgets.DrawBoxSolid(new Rect(x, limitRect.y, sliceWidth + 0.75f, limitRect.height), c);
+            }
+        }
+
         private static void DrawTargetValueLine(Rect barRect, float targetPercent)
         {
-            float clampedTarget = Mathf.Clamp01(targetPercent);
-            float lineX = barRect.x + barRect.width * clampedTarget - 1f;
-            Rect lineRect = new Rect(Mathf.Clamp(lineX, barRect.x, barRect.xMax - 2f), barRect.y + 1f, 2f, barRect.height - 2f);
+            var clampedTarget = Mathf.Clamp01(targetPercent);
+            var lineX = barRect.x + barRect.width * clampedTarget - 1f;
+            var lineRect = new Rect(Mathf.Clamp(lineX, barRect.x, barRect.xMax - 2f), barRect.y + 1f, 2f, barRect.height - 2f);
             Widgets.DrawBoxSolid(lineRect, TargetLineColor);
         }
 
@@ -260,10 +328,10 @@ namespace MiliraXian.Characters.QingHe
             HediffComp_PawnSpecialResource tempestComp,
             HediffComp_PawnSpecialResource eleganceComp)
         {
-            Rect outerRect = new Rect(inner.x + 170f, inner.y + 6f, 12f, 54f);
+            var outerRect = new Rect(inner.x + 170f, inner.y + 6f, 12f, 54f);
             Widgets.DrawBoxSolid(outerRect, Color.black);
 
-            Rect barRect = outerRect.ContractedBy(1f);
+            var barRect = outerRect.ContractedBy(1f);
             if (shield != null && shield.InBreak)
             {
                 DrawBreakBackground(barRect);
@@ -273,8 +341,8 @@ namespace MiliraXian.Characters.QingHe
                 Widgets.DrawBoxSolid(barRect, ShieldBackgroundColor);
             }
 
-            float fillPercent = 0f;
-            Color fillColor = ResolveShieldBarColor(tempestComp, eleganceComp);
+            var fillPercent = 0f;
+            var fillColor = ResolveShieldBarColor(tempestComp, eleganceComp);
             if (shield != null)
             {
                 fillPercent = shield.MaxEnergy > 0f ? Mathf.Clamp01(shield.Energy / shield.MaxEnergy) : 0f;
@@ -282,8 +350,8 @@ namespace MiliraXian.Characters.QingHe
 
             if (fillPercent > 0.0001f)
             {
-                float fillHeight = barRect.height * fillPercent;
-                Rect fillRect = new Rect(barRect.x, barRect.yMax - fillHeight, barRect.width, fillHeight);
+                var fillHeight = barRect.height * fillPercent;
+                var fillRect = new Rect(barRect.x, barRect.yMax - fillHeight, barRect.width, fillHeight);
                 Widgets.DrawBoxSolid(fillRect, fillColor);
             }
 
@@ -293,10 +361,10 @@ namespace MiliraXian.Characters.QingHe
 
         private static void DrawBreakBackground(Rect barRect)
         {
-            int tick = Find.TickManager?.TicksGame ?? 0;
-            float pulse = 0.5f + 0.5f * Mathf.Sin(tick / 8f);
-            float highlight = Mathf.Clamp01(0.32f + pulse * 0.6f);
-            Color bright = Color.Lerp(ShieldBreakDarkColor, ShieldBreakBrightColor, highlight);
+            var tick = Find.TickManager?.TicksGame ?? 0;
+            var pulse = 0.5f + 0.5f * Mathf.Sin(tick / 8f);
+            var highlight = Mathf.Clamp01(0.32f + pulse * 0.6f);
+            var bright = Color.Lerp(ShieldBreakDarkColor, ShieldBreakBrightColor, highlight);
             Widgets.DrawBoxSolid(barRect, bright);
         }
 
@@ -304,14 +372,14 @@ namespace MiliraXian.Characters.QingHe
             HediffComp_PawnSpecialResource tempestComp,
             HediffComp_PawnSpecialResource eleganceComp)
         {
-            float tempestPercent = GetResourcePercent(tempestComp);
-            float elegancePercent = GetResourcePercent(eleganceComp);
+            var tempestPercent = GetResourcePercent(tempestComp);
+            var elegancePercent = GetResourcePercent(eleganceComp);
 
-            Color darkBase = ScaleColorRgb(ShieldBaseColor, ShieldDarkFactor);
-            Color darkPink = ScaleColorRgb(ShieldPinkColor, ShieldDarkFactor);
+            var darkBase = ScaleColorRgb(ShieldBaseColor, ShieldDarkFactor);
+            var darkPink = ScaleColorRgb(ShieldPinkColor, ShieldDarkFactor);
 
-            Color baseByTempest = Color.Lerp(darkBase, ShieldBaseColor, tempestPercent);
-            Color pinkByTempest = Color.Lerp(darkPink, ShieldPinkColor, tempestPercent);
+            var baseByTempest = Color.Lerp(darkBase, ShieldBaseColor, tempestPercent);
+            var pinkByTempest = Color.Lerp(darkPink, ShieldPinkColor, tempestPercent);
 
             return Color.Lerp(baseByTempest, pinkByTempest, elegancePercent);
         }
@@ -343,19 +411,19 @@ namespace MiliraXian.Characters.QingHe
 
         private int GetStableTipId(int salt)
         {
-            int pawnId = source?.Pawn?.thingIDNumber ?? 0;
+            var pawnId = source?.Pawn?.thingIDNumber ?? 0;
             return Gen.HashCombineInt(pawnId, salt);
         }
 
         private static string BuildResourceBarTip(HediffComp_PawnSpecialResource comp, string fallbackLabel, float? targetPercent = null)
         {
-            string label = comp?.ResourceLabel ?? fallbackLabel;
-            float current = comp?.CurrentValue ?? 0f;
-            float max = Mathf.Max(1f, comp?.MaxValue ?? 100f);
-            string tip = label + ": " + current.ToString("F0") + " / " + max.ToString("F0");
+            var label = comp?.ResourceLabel ?? fallbackLabel;
+            var current = comp?.CurrentValue ?? 0f;
+            var max = Mathf.Max(1f, comp?.MaxValue ?? 100f);
+            var tip = label + ": " + current.ToString("F0") + " / " + max.ToString("F0");
             if (targetPercent.HasValue)
             {
-                tip += "\n\u76ee\u6807\u7ebf: " + targetPercent.Value.ToStringPercent("F0");
+                tip += "\n目标线: " + targetPercent.Value.ToStringPercent("F0");
             }
 
             if (comp != null && !comp.ResourceDescription.NullOrEmpty())
@@ -370,12 +438,16 @@ namespace MiliraXian.Characters.QingHe
         {
             if (shield == null)
             {
-                return "\u62a4\u76fe\u672a\u6fc0\u6d3b";
+                return "护盾未激活";
             }
 
             return shield.BuildShieldTooltip();
         }
     }
 }
+
+
+
+
 
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
             Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
@@ -107,6 +107,7 @@
       <Compile Include="Source\QingHe\HediffComp_QingheStatusGizmo.cs" />
       <Compile Include="Source\QingHe\HediffComp_LongBreathWard.cs" />
       <Compile Include="Source\QingHe\HediffComp_SpringRegen.cs" />
+      <Compile Include="Source\QingHe\HediffComp_SeverityPercent.cs" />
       <Compile Include="Source\QingHe\Hediff_AquaMirror.cs" />
       <Compile Include="Source\QingHe\Hediff_SpringFlow.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_SpringFlow.cs" />
@@ -159,6 +160,7 @@
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_QingheProjectileTrail.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Qinghe_DuanHun.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Qinghe_HengZhi.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Qinghe_Hediff.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Zhaoli_AbilityVisuals.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
@@ -192,36 +194,36 @@
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Neiyu_SwordFlyers.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_SkillSpawned.xml" />
       <Content Include="1.6\Defs\TraitDef\Traits_Sample.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\HediffDef\MiliraXian_Neiyu_FlowerSword.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\HediffDef\MiliraXian_Neiyu_Shield.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\HediffDef\MiliraXian_Neiyu_ThunderMark.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\IncidentDef\Incidents_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\PawnKindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\QuestScriptDef\MiliraXian_Neiyu_QuestScripts.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\ScenarioDef\MiliraXian_Neiyu_Scenarios.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\ThingDef\MiliraXian_Apparel.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\ThingDef\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\ThingDef\MiliraXian_Neiyu_SwordFlyers.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\DefInjected\TraitDef\Traits_Sample.xml" />
-      <Content Include="1.6\Languages\ChineseSimplified (简体中文)\Keyed\Name.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\HediffDef\MiliraXian_Neiyu_FlowerSword.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\HediffDef\MiliraXian_Neiyu_Shield.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\HediffDef\MiliraXian_Neiyu_ThunderMark.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\IncidentDef\Incidents_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\PawnKindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\QuestScriptDef\MiliraXian_Neiyu_QuestScripts.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\ScenarioDef\MiliraXian_Neiyu_Scenarios.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\ThingDef\MiliraXian_Apparel.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\ThingDef\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\ThingDef\MiliraXian_Neiyu_SwordFlyers.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\DefInjected\TraitDef\Traits_Sample.xml" />
-      <Content Include="1.6\Languages\ChineseTraditional (繁體中文)\Keyed\Name.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\HediffDef\MiliraXian_Neiyu_FlowerSword.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\HediffDef\MiliraXian_Neiyu_Shield.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\HediffDef\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\IncidentDef\Incidents_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\PawnKindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\QuestScriptDef\MiliraXian_Neiyu_QuestScripts.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\ScenarioDef\MiliraXian_Neiyu_Scenarios.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\ThingDef\MiliraXian_Apparel.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\ThingDef\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\ThingDef\MiliraXian_Neiyu_SwordFlyers.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\DefInjected\TraitDef\Traits_Sample.xml" />
+      <Content Include="1.6\Languages\ChineseSimplified (绠€浣撲腑鏂?\Keyed\Name.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\HediffDef\MiliraXian_Neiyu_FlowerSword.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\HediffDef\MiliraXian_Neiyu_Shield.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\HediffDef\MiliraXian_Neiyu_ThunderMark.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\IncidentDef\Incidents_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\PawnKindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\QuestScriptDef\MiliraXian_Neiyu_QuestScripts.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\ScenarioDef\MiliraXian_Neiyu_Scenarios.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\ThingDef\MiliraXian_Apparel.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\ThingDef\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\ThingDef\MiliraXian_Neiyu_SwordFlyers.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\ThoughtDef\MiliraXian_Neiyu_FlowerSword.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\DefInjected\TraitDef\Traits_Sample.xml" />
+      <Content Include="1.6\Languages\ChineseTraditional (绻侀珨涓枃)\Keyed\Name.xml" />
       <Content Include="1.6\Languages\English\DefInjected\AbilityDef\MiliraXian_Ability_Neiyu.xml" />
       <Content Include="1.6\Languages\English\DefInjected\BackstoryDef\MiliraXian_BackStory_NeiYuBS1.xml" />
       <Content Include="1.6\Languages\English\DefInjected\HediffDef\MiliraXian_Neiyu_FlowerSword.xml" />
@@ -303,7 +305,7 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Head\MiliraHeadNeiyu_east.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Head\MiliraHeadNeiyu_north.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Head\MiliraHeadNeiyu_south.png" />
-      <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Head\MiliraHeadNeiyu？_south.png" />
+      <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\Head\MiliraHeadNeiyu锛焈south.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\LeftWingNew_Neiyu\LeftWingBehind_east.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\LeftWingNew_Neiyu\LeftWingBehind_north.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\PawnNeiyu\LeftWingNew_Neiyu\LeftWingBehind_south.png" />
@@ -359,7 +361,7 @@
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\MX_Neiyu_Sword_Skyfall.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\MX_Neiyu_ThunderMarkedStorm.png" />
       <Content Include="Content\Textures\MiliraXianNeiyu\UI\MX_Neiyu_WarpFeather.png" />
-      <Content Include="Content\Textures\MiliraXianNeiyu\UI\一矢.png" />
+      <Content Include="Content\Textures\MiliraXianNeiyu\UI\涓€鐭?png" />
       <Content Include="LoadFolders.xml" />
       <Content Include="README.md" />
     </ItemGroup>
@@ -380,3 +382,4 @@
     -->
 
 </Project>
+

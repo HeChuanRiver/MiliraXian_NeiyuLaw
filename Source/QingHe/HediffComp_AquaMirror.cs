@@ -55,6 +55,7 @@ namespace MiliraXian.Characters.QingHe
                 parent = parent.pawn
             };
             newShield.Initialize(Props.shieldCompProperties);
+            newShield.caster = caster;
             newShield.Init(EleganceUtility.FactorLinear(1.0f, caster));
             newShield.PostPostMake();
             Log.Message("Debug shield amount: " + newShield.Energy);

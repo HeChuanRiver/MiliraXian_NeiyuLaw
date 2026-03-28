@@ -28,9 +28,14 @@ namespace MiliraXian.Characters.QingHe
         public float eleganceGainFlat = 6f;
         public float eleganceGainPerAlly = 0.8f;
         public float eleganceGainPerEnemy = 1.5f;
+        public float eleganceGainPerTick = 0.01f;
 
+        public string startFx = "MX_QH_Effecter_YangChunStart";
+        public float startFxScale = 1.2f;
         public string pulseFx = "MX_QH_Effecter_YangChunPulse";
-        public float pulseFxScale = 1.45f;
+        public float pulseFxScale = 1.9f;
+        public string endFx = "MX_QH_Effecter_YangChunEnd";
+        public float endFxScale = 1.05f;
 
         public CompProperties_YangChunField()
         {
@@ -62,6 +67,13 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
+            if (Props.eleganceGainPerTick > 0f)
+            {
+                EleganceUtility.AddElegance(caster, Props.eleganceGainPerTick);
+            }
+
+            EleganceUtility.NotifyDecayEvent(caster);
+
             if (ticksToNextPulse <= 0)
             {
                 ticksToNextPulse = Props.pulseIntervalTicks;
@@ -82,6 +94,16 @@ namespace MiliraXian.Characters.QingHe
         {
             caster = newCaster;
             ticksToNextPulse = 1;
+        }
+
+        public void SpawnFx()
+        {
+            GraphicsUtility.Fx(parent.Map, parent.Position, Props.startFx, Props.startFxScale * Props.radius / 7.9f);
+        }
+
+        public void EndFx()
+        {
+            GraphicsUtility.Fx(parent.Map, parent.Position, Props.endFx, Props.endFxScale * Props.radius / 7.9f);
         }
 
         private void ApplyPulse()

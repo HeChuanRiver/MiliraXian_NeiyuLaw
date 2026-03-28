@@ -30,6 +30,10 @@
                 <disappearsAfterTicks>120</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
+        
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_SpringFlowHediff</stateEffecter>
+            </li>
         </comps>
     </HediffDef>
     
@@ -177,6 +181,10 @@
                 <maxTicksToFilth>400</maxTicksToFilth>
                 <minTicksToFilth>200</minTicksToFilth>
                 <filthRadius>1</filthRadius>
+            </li>
+        
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_DrainHediff</stateEffecter>
             </li>
         </comps>
     </HediffDef>

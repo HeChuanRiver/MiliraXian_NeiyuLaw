@@ -27,7 +27,11 @@
         <disappearsAfterTicks>300</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
-    </comps>
+    
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_DuanHunSlowHediff</stateEffecter>
+            </li>
+        </comps>
   </HediffDef>
 
   <!-- 阳春：友方增益 -->
@@ -51,7 +55,11 @@
         <disappearsAfterTicks>300</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
-    </comps>
+    
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_YangChunHarmonyHediff</stateEffecter>
+            </li>
+        </comps>
   </HediffDef>
 
   <!-- 阳春：敌方减益 -->
@@ -75,7 +83,11 @@
         <disappearsAfterTicks>300</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
-    </comps>
+    
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_YangChunMuteHediff</stateEffecter>
+            </li>
+        </comps>
   </HediffDef>
 
 </Defs>

@@ -44,7 +44,14 @@
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField"/>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField">
+                <pulseIntervalTicks>10</pulseIntervalTicks>
+                <damageEveryPulses>3</damageEveryPulses>
+                <damageDef>MX_Dehydrate</damageDef>
+                <damageAmount>1</damageAmount>
+                <armorPenetration>0.15</armorPenetration>
+                <damageFactorMax>0.5</damageFactorMax>
+            </li>
         </comps>
     </ThingDef>
 
@@ -119,10 +126,14 @@
                 <eleganceGainFlat>6</eleganceGainFlat>
                 <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
                 <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
+                <eleganceGainPerTick>0.01</eleganceGainPerTick>
                 <pulseFx>MX_QH_Effecter_YangChunPulse</pulseFx>
-                <pulseFxScale>1.45</pulseFxScale>
+                <pulseFxScale>1.9</pulseFxScale>
             </li>
         </comps>
     </ThingDef>
 
 </Defs>
+
+
+

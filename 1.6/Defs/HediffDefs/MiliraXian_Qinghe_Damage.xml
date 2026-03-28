@@ -94,6 +94,10 @@
             <li Class="HediffCompProperties_SeverityPerSecond">
                 <severityPerSecond>-0.02</severityPerSecond>
             </li>
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_SeverityPercent" />
         </comps>
     </HediffDef>
 </Defs>
+
+
+

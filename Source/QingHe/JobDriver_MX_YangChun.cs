@@ -14,16 +14,15 @@ namespace MiliraXian.Characters.QingHe
         {
             get
             {
-                Ability ability = job != null ? job.ability : null;
+                var ability = job != null ? job.ability : null;
                 if (ability == null || ability.def == null || ability.def.comps == null)
                 {
                     return null;
                 }
 
-                for (int i = 0; i < ability.def.comps.Count; i++)
+                for (var i = 0; i < ability.def.comps.Count; i++)
                 {
-                    CompProperties_AbilityYangChun p = ability.def.comps[i] as CompProperties_AbilityYangChun;
-                    if (p != null)
+                    if (ability.def.comps[i] is CompProperties_AbilityYangChun p)
                     {
                         return p;
                     }
@@ -33,20 +32,14 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        /// <summary>
-        /// Job report text.
-        /// </summary>
         public override string GetReport()
         {
-            return "施放阳春";
+            return "Casting YangChun";
         }
 
-        /// <summary>
-        /// Spawn field when channel starts and clean it on job finish.
-        /// </summary>
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            foreach (Toil toil in base.MakeNewToils())
+            foreach (var toil in base.MakeNewToils())
             {
                 yield return toil;
             }
@@ -56,10 +49,10 @@ namespace MiliraXian.Characters.QingHe
                 CleanUp();
             });
 
-            Toil channel = ToilMaker.MakeToil("QHEleganceYangChun_Channel");
+            var channel = ToilMaker.MakeToil("QHEleganceYangChun_Channel");
             channel.initAction = delegate
             {
-                CompProperties_AbilityYangChun p = Props;
+                var p = Props;
                 if (p == null)
                 {
                     EndJobWith(JobCondition.Errored);
@@ -80,7 +73,7 @@ namespace MiliraXian.Characters.QingHe
 
                 pawn.pather.StopDead();
 
-                Thing thing = GenSpawn.Spawn(p.fieldDef, pawn.Position, pawn.Map);
+                var thing = GenSpawn.Spawn(p.fieldDef, pawn.Position, pawn.Map);
                 spawnedField = thing as Thing_YangChunField;
                 if (spawnedField == null)
                 {
@@ -90,8 +83,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                CompYangChunField fieldComp = spawnedField.TryGetComp<CompYangChunField>();
-                if (fieldComp == null)
+                if (!(spawnedField.TryGetComp<CompYangChunField>() is CompYangChunField fieldComp))
                 {
                     spawnedField.Destroy();
                     Log.Error("YangChun: Cannot find CompYangChunField on spawned field.");
@@ -100,6 +92,7 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 fieldComp.Init(pawn);
+                fieldComp.SpawnFx();
             };
             channel.defaultCompleteMode = ToilCompleteMode.Delay;
             channel.defaultDuration = Props != null ? Mathf.Max(1, Props.fieldDurationTicks) : 1;
@@ -110,7 +103,7 @@ namespace MiliraXian.Characters.QingHe
             };
             channel.AddFailCondition(delegate
             {
-                CompProperties_AbilityYangChun p = Props;
+                var p = Props;
                 return p == null || !MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon);
             });
             yield return channel;
@@ -126,6 +119,11 @@ namespace MiliraXian.Characters.QingHe
         {
             if (spawnedField != null && !spawnedField.Destroyed)
             {
+                if (spawnedField.TryGetComp<CompYangChunField>() is CompYangChunField fieldComp)
+                {
+                    fieldComp.EndFx();
+                }
+
                 spawnedField.Destroy();
             }
 

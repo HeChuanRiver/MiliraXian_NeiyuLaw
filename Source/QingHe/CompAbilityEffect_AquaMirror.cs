@@ -28,39 +28,47 @@ namespace MiliraXian.Characters.QingHe
         {
             base.Apply(target, dest);
 
-            Map map = parent?.pawn?.Map;
+            var map = parent?.pawn?.Map;
             if (map == null)
             {
                 return;
             }
 
-            FleckDef applySplash = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
-            FleckDef applyRing = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastAreaEffect");
+            var applySplash = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
+            var applyRing = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastAreaEffect");
+            var applied = false;
 
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(target.Cell, map, Props.previewRadius, true))
+            foreach (var thing in GenRadial.RadialDistinctThingsAround(target.Cell, map, Props.previewRadius, true))
             {
-                if (thing is Pawn pawn && !pawn.Dead && pawn.Faction == parent.pawn.Faction)
+                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Faction != parent.pawn.Faction)
                 {
-                    Hediff existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
-                    if (existed != null)
-                    {
-                        pawn.health.RemoveHediff(existed);
-                    }
-
-                    Hediff hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
-                    hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
-                    HediffComp_AquaMirror comp = hediff.TryGetComp<HediffComp_AquaMirror>();
-                    if (comp == null)
-                    {
-                        Log.Error("AquaMirror: Failed to find HediffComp_AquaMirror on " + pawn.LabelCap);
-                        continue;
-                    }
-
-                    comp.caster = parent.pawn;
-                    pawn.health.AddHediff(hediff);
-
-                    PlayApplyVisual(pawn, map, applySplash, applyRing);
+                    continue;
                 }
+
+                var existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
+                if (existed != null)
+                {
+                    pawn.health.RemoveHediff(existed);
+                }
+
+                var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
+                hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
+                var comp = hediff.TryGetComp<HediffComp_AquaMirror>();
+                if (comp == null)
+                {
+                    Log.Error("AquaMirror: Failed to find HediffComp_AquaMirror on " + pawn.LabelCap);
+                    continue;
+                }
+
+                comp.caster = parent.pawn;
+                pawn.health.AddHediff(hediff);
+                PlayApplyVisual(pawn, map, applySplash, applyRing);
+                applied = true;
+            }
+
+            if (applied)
+            {
+                EleganceUtility.NotifyDecayEvent(parent.pawn);
             }
         }
 

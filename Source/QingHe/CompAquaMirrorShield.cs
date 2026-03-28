@@ -52,6 +52,8 @@ namespace MiliraXian.Characters.QingHe
 
         public bool Broken => energy <= 0f;
 
+        public Pawn caster;
+
         private Pawn PawnOwner => parent as Pawn;
 
         private bool ShouldDisplay
@@ -92,6 +94,7 @@ namespace MiliraXian.Characters.QingHe
         {
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "aquaMirrorEnergy", -1f);
+            Scribe_References.Look(ref caster, "caster", false);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit && energy < 0f)
             {
@@ -108,7 +111,7 @@ namespace MiliraXian.Characters.QingHe
         public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
         {
             absorbed = false;
-            Pawn owner = PawnOwner;
+            var owner = PawnOwner;
             if (owner == null || Broken)
             {
                 return;
@@ -182,6 +185,7 @@ namespace MiliraXian.Characters.QingHe
                 Break();
             }
 
+            EleganceUtility.NotifyCombatEvent(caster ?? owner);
             absorbed = true;
         }
 
