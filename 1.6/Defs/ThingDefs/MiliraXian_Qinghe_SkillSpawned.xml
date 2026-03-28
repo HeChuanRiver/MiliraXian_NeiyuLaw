@@ -53,24 +53,25 @@
         <thingClass>MoteAttached</thingClass>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <mote>
-            <fadeInTime>0.2</fadeInTime>
-            <fadeOutTime>0.3</fadeOutTime>
-            <solidTime>0.5</solidTime>
-            <growthRate>4</growthRate>
+            <fadeInTime>0.12</fadeInTime>
+            <fadeOutTime>0.42</fadeOutTime>
+            <solidTime>0.48</solidTime>
+            <growthRate>4.8</growthRate>
         </mote>
         <graphicData>
             <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
             <shaderType>MoteApocritonPulse</shaderType>
             <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+            <color>(0.60, 0.94, 1.00, 0.95)</color>
             <shaderParameters>
                 <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
-                <_distortionIntensity>0.18</_distortionIntensity>
-                <_ScrollSpeed>-0.9</_ScrollSpeed>
-                <_ScrollScale>0.14</_ScrollScale>
-                <_distortionTint>(0.23, 0, 0, 0)</_distortionTint>
-                <_pulseSpeed>2</_pulseSpeed>
+                <_distortionIntensity>0.22</_distortionIntensity>
+                <_ScrollSpeed>-1.05</_ScrollSpeed>
+                <_ScrollScale>0.18</_ScrollScale>
+                <_distortionTint>(0.08, 0.24, 0.26, 0)</_distortionTint>
+                <_pulseSpeed>2.4</_pulseSpeed>
             </shaderParameters>
-            <drawSize>1.5</drawSize>
+            <drawSize>1.7</drawSize>
         </graphicData>
     </ThingDef>
 
@@ -101,6 +102,7 @@
 
                 <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
                 <enemyDamageAmount>2</enemyDamageAmount>
+                <enemyDesyncedDamageAmount>1</enemyDesyncedDamageAmount>
                 <enemyArmorPenetration>0.15</enemyArmorPenetration>
                 <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
                 <enemyDebuffSeverity>1</enemyDebuffSeverity>

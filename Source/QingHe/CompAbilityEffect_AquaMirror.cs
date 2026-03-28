@@ -27,26 +27,58 @@ namespace MiliraXian.Characters.QingHe
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Apply(target, dest);
-            foreach (var thing in GenRadial.RadialDistinctThingsAround(target.Cell, parent.pawn.Map, Props.previewRadius, true))
+
+            Map map = parent?.pawn?.Map;
+            if (map == null)
+            {
+                return;
+            }
+
+            FleckDef applySplash = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
+            FleckDef applyRing = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastAreaEffect");
+
+            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(target.Cell, map, Props.previewRadius, true))
             {
                 if (thing is Pawn pawn && !pawn.Dead && pawn.Faction == parent.pawn.Faction)
                 {
-                    var existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
+                    Hediff existed = pawn.health.hediffSet.GetFirstHediff<Hediff_AquaMirror>();
                     if (existed != null)
                     {
                         pawn.health.RemoveHediff(existed);
                     }
-                    var hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
+
+                    Hediff hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_AquaMirror, pawn);
                     hediff.Severity = EleganceUtility.FactorLinear(1.0f, parent.pawn);
-                    var comp = hediff.TryGetComp<HediffComp_AquaMirror>();
+                    HediffComp_AquaMirror comp = hediff.TryGetComp<HediffComp_AquaMirror>();
                     if (comp == null)
                     {
                         Log.Error("AquaMirror: Failed to find HediffComp_AquaMirror on " + pawn.LabelCap);
                         continue;
                     }
+
                     comp.caster = parent.pawn;
                     pawn.health.AddHediff(hediff);
+
+                    PlayApplyVisual(pawn, map, applySplash, applyRing);
                 }
+            }
+        }
+
+        private static void PlayApplyVisual(Pawn pawn, Map map, FleckDef splashDef, FleckDef ringDef)
+        {
+            if (pawn == null || !pawn.Spawned || pawn.Map != map)
+            {
+                return;
+            }
+
+            if (splashDef != null)
+            {
+                FleckMaker.Static(pawn.Position, map, splashDef, 0.45f);
+            }
+
+            if (ringDef != null)
+            {
+                FleckMaker.Static(pawn.Position, map, ringDef, 0.35f);
             }
         }
     }

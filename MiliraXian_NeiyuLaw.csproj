@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
             Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
@@ -96,6 +96,7 @@
       <Compile Include="Source\QingHe\CompTempestDrainField.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Dehydrate.cs" />
       <Compile Include="Source\QingHe\DamageWorker_Desynced.cs" />
+      <Compile Include="Source\QingHe\GraphicsUtility.cs" />
       <Compile Include="Source\QingHe\EleganceUtility.cs" />
       <Compile Include="Source\QingHe\HediffComp_AquaMirror.cs" />
       <Compile Include="Source\QingHe\HediffComp_Elegance.cs" />
@@ -113,10 +114,13 @@
       <Compile Include="Source\QingHe\MX_QHDefOf.cs" />
       <Compile Include="Source\QingHe\MX_QHPatches.cs" />
       <Compile Include="Source\QingHe\MX_QHUtility.cs" />
+      <Compile Include="Source\QingHe\TempestUtility.cs" />
       <Compile Include="Source\QingHe\Thing_SpawnedField.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_HengZhi.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_DuanHun.cs" />
       <Compile Include="Source\QingHe\CompAbilityEffect_YangChun.cs" />
+      <Compile Include="Source\QingHe\MX_QHRenderStatics.cs" />
+      <Compile Include="Source\QingHe\Mote_QHCurvedDistortionTrail.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_HengZhi.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_DuanHun.cs" />
       <Compile Include="Source\QingHe\JobDriver_MX_YangChun.cs" />
@@ -153,6 +157,9 @@
       <Content Include="1.6\Defs\DamageDefs\MiliraXian_DamageDefs_Qinghe.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_ForFeather.xml" />
       <Content Include="1.6\Defs\Effects\MiliraXian_Effect_QingheProjectileTrail.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Qinghe_DuanHun.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Qinghe_HengZhi.xml" />
+      <Content Include="1.6\Defs\Effects\MiliraXian_Effect_Zhaoli_AbilityVisuals.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Neiyu.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Qinghe.xml" />
       <Content Include="1.6\Defs\GraphicStateDefs\GraphicStates_Zhaoli.xml" />

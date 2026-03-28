@@ -63,18 +63,13 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Tempest);
-                if (hediff != null)
-                {
-                    var comp = hediff.TryGetComp<HediffComp_Tempest>();
-                    comp?.AddValue(-0.1f);
-                }
+                TempestUtility.TryConsume(pawn, 0.1f);
             };
             t.tickIntervalAction = delegate { pawn.rotationTracker.FaceCell(TargetA.Cell); };
             t.defaultCompleteMode = ToilCompleteMode.Delay;
             t.defaultDuration = Props != null ? System.Math.Max(1, Props.channelDurationTicks) : 999999;
             t.handlingFacing = true;
-            t.AddFailCondition(() => PawnSpecialResourceUtility.GetCurrentResource(pawn, MX_QHDefOf.MX_QH_Tempest) <= (Props?.minResourceToMaintain ?? 10.0f));
+            t.AddFailCondition(() => TempestUtility.GetCurrent(pawn) <= (Props?.minResourceToMaintain ?? 10.0f));
             yield return t;
         }
 

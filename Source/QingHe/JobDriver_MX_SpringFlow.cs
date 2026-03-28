@@ -63,12 +63,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                var hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Tempest);
-                if (hediff != null)
-                {
-                    var comp = hediff.TryGetComp<HediffComp_Tempest>();
-                    comp?.AddValue(0.04f);
-                }
+                TempestUtility.AddTempest(pawn, 0.04f);
             };
             t.tickIntervalAction = delegate { pawn.rotationTracker.FaceCell(TargetA.Cell); };
             t.defaultCompleteMode = ToilCompleteMode.Delay;

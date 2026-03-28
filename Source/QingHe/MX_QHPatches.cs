@@ -57,9 +57,15 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            if (dinfo.Def != null)
+            if (dinfo.Def != null && dinfo.Instigator != __instance)
             {
-                NotifyEleganceCombatEvent(__instance);
+                EleganceUtility.NotifyCombatEvent(__instance);
+
+                var attacker = dinfo.Instigator as Pawn;
+                if (attacker != null && attacker != __instance && attacker.HostileTo(__instance))
+                {
+                    EleganceUtility.NotifyCombatEvent(attacker);
+                }
             }
 
             if (dinfo.Amount <= 0f)
@@ -118,6 +124,11 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
+            if (__instance is Verb_CastAbility)
+            {
+                return;
+            }
+
             if (!__instance.verbProps.violent)
             {
                 return;
@@ -135,7 +146,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            NotifyEleganceCombatEvent(caster);
+            EleganceUtility.NotifyCombatEvent(caster);
         }
 
         private static bool HasLongBreathDamageImmunity(Pawn pawn)
@@ -274,16 +285,5 @@ namespace MiliraXian.Characters.QingHe
             pawn.abilities.RemoveAbility(def);
         }
 
-        private static void NotifyEleganceCombatEvent(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_Elegance == null)
-            {
-                return;
-            }
-
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_Elegance);
-            HediffComp_Elegance comp = (hediff as HediffWithComps)?.GetComp<HediffComp_Elegance>();
-            comp?.NotifyCombatEvent();
-        }
     }
 }

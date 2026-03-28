@@ -1,4 +1,5 @@
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -6,6 +7,8 @@ namespace MiliraXian.Characters.QingHe
     public class HediffCompProperties_Elegance : HediffCompProperties_PawnSpecialResource
     {
         public int inCombatTimerMaxTicks = 360;
+        public int decayTimerMaxTicks = 360;
+        public float tempestRecoverThreshold = 0.8f;
         public float gainPerTickInCombat = 0.02f;
         public float gainPerTickOutOfCombat = -0.03f;
         public float gainPerTickMeditation = 0.04f;
@@ -20,47 +23,62 @@ namespace MiliraXian.Characters.QingHe
     public class HediffComp_Elegance : HediffComp_PawnSpecialResource
     {
         private int inCombatTimer;
+        private int decayTimer;
 
         public HediffCompProperties_Elegance Props => (HediffCompProperties_Elegance)props;
+        public float TempestRecoverThreshold => Mathf.Clamp01(Props?.tempestRecoverThreshold ?? 0.8f);
 
         public override void CompExposeData()
         {
             base.CompExposeData();
             Scribe_Values.Look(ref inCombatTimer, "inCombatTimer", 0);
+            Scribe_Values.Look(ref decayTimer, "decayTimer", 0);
         }
 
         public void NotifyCombatEvent()
         {
-            inCombatTimer = Props?.inCombatTimerMaxTicks ?? 0;
-            if (inCombatTimer < 0)
-            {
-                inCombatTimer = 0;
-            }
+            inCombatTimer = Mathf.Max(0, Props?.inCombatTimerMaxTicks ?? 0);
+            decayTimer = Mathf.Max(0, Props?.decayTimerMaxTicks ?? 0);
+        }
+
+        public void NotifyDecayEvent()
+        {
+            decayTimer = Mathf.Max(0, Props?.decayTimerMaxTicks ?? 0);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
 
-            Pawn pawn = parent?.pawn;
+            var pawn = parent?.pawn;
             if (pawn == null || !pawn.Spawned || pawn.Dead)
             {
                 return;
             }
 
-            float delta = inCombatTimer > 0 ? Props.gainPerTickInCombat : Props.gainPerTickOutOfCombat;
+            var delta = 0f;
             if (inCombatTimer > 0)
             {
                 inCombatTimer--;
+                delta = Props.gainPerTickInCombat;
             }
 
-            JobDef currentJobDef = pawn.CurJob?.def;
-            if (IsMeditationJob(currentJobDef) && Props.gainPerTickMeditation > delta)
+            if (decayTimer > 0)
+            {
+                decayTimer--;
+            }
+            else if (Props.gainPerTickOutOfCombat < delta)
+            {
+                delta = Props.gainPerTickOutOfCombat;
+            }
+
+            var jobDef = pawn.CurJob?.def;
+            if (IsMeditationJob(jobDef) && Props.gainPerTickMeditation > delta)
             {
                 delta = Props.gainPerTickMeditation;
             }
 
-            if (IsInstrumentJoyJob(currentJobDef) && Props.gainPerTickInstrumentJoy > delta)
+            if (IsInstrumentJoyJob(jobDef) && Props.gainPerTickInstrumentJoy > delta)
             {
                 delta = Props.gainPerTickInstrumentJoy;
             }
@@ -70,7 +88,7 @@ namespace MiliraXian.Characters.QingHe
 
         private static bool IsMeditationJob(JobDef jobDef)
         {
-            string defName = jobDef?.defName;
+            var defName = jobDef?.defName;
             return defName == "Meditate" || defName == "MeditatePray";
         }
 

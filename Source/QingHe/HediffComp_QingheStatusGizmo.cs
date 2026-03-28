@@ -63,8 +63,8 @@ namespace MiliraXian.Characters.QingHe
         {
             get
             {
-                HediffDef def = Props.firstResourceDef ?? MX_QHDefOf.MX_QH_Tempest;
-                return PawnSpecialResourceUtility.GetSpecialResourceComp(Pawn, def);
+                var def = Props.firstResourceDef ?? MX_QHDefOf.MX_QH_Tempest;
+                return def == MX_QHDefOf.MX_QH_Tempest ? TempestUtility.GetResourceComp(Pawn) : PawnSpecialResourceUtility.GetSpecialResourceComp(Pawn, def);
             }
         }
 
@@ -72,8 +72,8 @@ namespace MiliraXian.Characters.QingHe
         {
             get
             {
-                HediffDef def = Props.secondResourceDef ?? MX_QHDefOf.MX_QH_Elegance;
-                return PawnSpecialResourceUtility.GetSpecialResourceComp(Pawn, def);
+                var def = Props.secondResourceDef ?? MX_QHDefOf.MX_QH_Elegance;
+                return def == MX_QHDefOf.MX_QH_Elegance ? EleganceUtility.GetResourceComp(Pawn) : PawnSpecialResourceUtility.GetSpecialResourceComp(Pawn, def);
             }
         }
 
@@ -131,7 +131,6 @@ namespace MiliraXian.Characters.QingHe
         private const int ShieldBarTipSalt = 910103;
 
         private readonly HediffComp_QH_StatusGizmo source;
-        private const float EleganceTargetPercent = 0.8f;
         private const float DimFactor = 0.55f;
         private const float WhitenFactor = 0.45f;
         private const float ShieldDarkFactor = 0.45f;
@@ -167,24 +166,25 @@ namespace MiliraXian.Characters.QingHe
             HediffComp_PawnSpecialResource first = source.FirstComp;
             HediffComp_PawnSpecialResource second = source.SecondComp;
             CompLotusShield lotusShield = source.LotusShieldComp;
+            float eleganceTargetPercent = EleganceUtility.GetTempestRecoverThreshold(source.Pawn);
 
             Color firstColor = ResolveDisplayColor(FirstBaseColor, source.FirstTickDeltaDirection);
             Color secondColor = ResolveDisplayColor(SecondBaseColor, source.SecondTickDeltaDirection);
             if (second != null)
             {
                 float secondMax = Mathf.Max(1f, second.MaxValue);
-                if (second.CurrentValue <= secondMax * EleganceTargetPercent + 0.0001f)
+                if (second.CurrentValue <= secondMax * eleganceTargetPercent + 0.0001f)
                 {
                     secondColor = Color.Lerp(secondColor, Color.white, WhitenFactor);
                 }
             }
 
-            Rect firstBarRect = DrawRow(inner, 6f, first, "激流", firstColor);
-            Rect secondBarRect = DrawRow(inner, 38f, second, "雅乐", secondColor, EleganceTargetPercent);
+            Rect firstBarRect = DrawRow(inner, 6f, first, "\u6fc0\u6d41", firstColor);
+            Rect secondBarRect = DrawRow(inner, 38f, second, "\u96c5\u4e50", secondColor, eleganceTargetPercent);
             Rect shieldBarRect = DrawShieldBar(inner, lotusShield, first, second);
 
-            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "激流"), GetStableTipId(FirstBarTipSalt));
-            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "雅乐", EleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
+            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "\u6fc0\u6d41"), GetStableTipId(FirstBarTipSalt));
+            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "\u96c5\u4e50", eleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
             TooltipHandler.TipRegion(shieldBarRect, () => BuildShieldBarTip(source.LotusShieldComp), GetStableTipId(ShieldBarTipSalt));
             return new GizmoResult(GizmoState.Clear);
         }
@@ -355,7 +355,7 @@ namespace MiliraXian.Characters.QingHe
             string tip = label + ": " + current.ToString("F0") + " / " + max.ToString("F0");
             if (targetPercent.HasValue)
             {
-                tip += "\n目标线: " + targetPercent.Value.ToStringPercent("F0");
+                tip += "\n\u76ee\u6807\u7ebf: " + targetPercent.Value.ToStringPercent("F0");
             }
 
             if (comp != null && !comp.ResourceDescription.NullOrEmpty())
@@ -370,10 +370,12 @@ namespace MiliraXian.Characters.QingHe
         {
             if (shield == null)
             {
-                return "花神护体";
+                return "\u62a4\u76fe\u672a\u6fc0\u6d3b";
             }
 
             return shield.BuildShieldTooltip();
         }
     }
 }
+
+

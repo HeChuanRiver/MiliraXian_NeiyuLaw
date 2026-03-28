@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <AbilityCategoryDef>
         <defName>MX_QingheSkill</defName>
@@ -213,7 +213,7 @@
         <postCastDelayTicks>0</postCastDelayTicks>
 
         <radius>2.5</radius>
-        <damageDef>Cut</damageDef>
+        <damageDef>MX_Desynced</damageDef>
         <damageAmount>16</damageAmount>
         <armorPenetration>0.25</armorPenetration>
         <stunDamageAmount>8</stunDamageAmount>
@@ -224,6 +224,19 @@
         <brainDestroyChance>0.08</brainDestroyChance>
         <eleganceGainOnCast>8</eleganceGainOnCast>
         <eleganceGainPerTarget>2</eleganceGainPerTarget>
+        <curveMote>MX_QH_Mote_DuanHunCurvedTrail</curveMote>
+        <curveDistortWidth>4.2</curveDistortWidth>
+        <curveDistortAlpha>0.68</curveDistortAlpha>
+        <curveWidth>3.1</curveWidth>
+        <curveDensity>8.8</curveDensity>
+        <curveWaveLen>4.8</curveWaveLen>
+        <curveAlpha>2.1</curveAlpha>
+        <curveAfterLayers>9</curveAfterLayers>
+        <curveAfterGap>1</curveAfterGap>
+        <curveAfterAlpha>0.62</curveAfterAlpha>
+        <curveMinSegs>28</curveMinSegs>
+        <curveMaxSegs>96</curveMaxSegs>
+        <curveDistortStep>3</curveDistortStep>
       </li>
     </comps>
   </AbilityDef>

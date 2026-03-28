@@ -63,7 +63,7 @@ namespace MiliraXian.Characters.QingHe
                     if (!pawn.Dead && pawn.Faction == caster.Faction)
                     {
                         
-                        var elegance = PawnSpecialResourceUtility.GetCurrentResource(caster, MX_QHDefOf.MX_QH_Elegance);
+                        var elegance = EleganceUtility.GetCurrent(caster);
                         
                         if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
                         {

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -11,15 +12,15 @@ namespace MiliraXian.Characters.QingHe
         {
             get
             {
-                Ability ability = job != null ? job.ability : null;
-                if (ability == null || ability.def == null || ability.def.comps == null)
+                var ability = job?.ability;
+                if (ability?.def?.comps == null)
                 {
                     return null;
                 }
 
-                for (int i = 0; i < ability.def.comps.Count; i++)
+                for (var i = 0; i < ability.def.comps.Count; i++)
                 {
-                    CompProperties_AbilityDuanHun p = ability.def.comps[i] as CompProperties_AbilityDuanHun;
+                    var p = ability.def.comps[i] as CompProperties_AbilityDuanHun;
                     if (p != null)
                     {
                         return p;
@@ -30,53 +31,179 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        /// <summary>
-        /// 返回该施法 Job 在检查面板中的行为描述。
-        /// </summary>
         public override string GetReport()
         {
             return "正在引导断魂音律";
         }
 
-        /// <summary>
-        /// 复用原版施法流程，并在同一 Job 末尾追加断魂结算。
-        /// </summary>
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            foreach (Toil toil in base.MakeNewToils())
+            foreach (var toil in base.MakeNewToils())
             {
                 yield return toil;
             }
 
-            CompProperties_AbilityDuanHun props = Props;
-            int delay = props != null ? props.postCastDelayTicks : 0;
+            var props = Props;
+            var delay = props?.postCastDelayTicks ?? 0;
             if (delay > 0)
             {
-                Toil wait = ToilMaker.MakeToil("QHEleganceDuanHun_PostCastDelay");
+                var wait = ToilMaker.MakeToil("QHEleganceDuanHun_PostCastDelay");
                 wait.defaultCompleteMode = ToilCompleteMode.Delay;
                 wait.defaultDuration = delay;
                 yield return wait;
             }
 
-            Toil pulse = ToilMaker.MakeToil("QHEleganceDuanHun_ResolvePulse");
-            pulse.initAction = delegate()
+            var pulse = ToilMaker.MakeToil("QHEleganceDuanHun_ResolvePulse");
+            pulse.initAction = delegate
             {
-                CompProperties_AbilityDuanHun p = Props;
-                if (p == null)
+                var p = Props;
+                if (p == null || !MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon) || pawn?.MapHeld == null)
                 {
                     return;
                 }
 
-                if (!MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon))
+                var map = pawn.MapHeld;
+                var center = job?.targetA.IsValid == true ? job.targetA.Cell : pawn.Position;
+                if (!center.IsValid || !center.InBounds(map))
                 {
-                    return;
+                    center = pawn.Position;
                 }
 
-                IntVec3 center = (job != null && job.targetA.IsValid) ? job.targetA.Cell : pawn.Position;
-                MX_QHUtility.ExecuteDuanHunPulseByProps(pawn, p, center);
+                GraphicsUtility.Fx(map, pawn.Position, p.releaseCasterFx, 1f);
+                GraphicsUtility.Fx(map, center, p.releaseTargetFx, 1f);
+                GraphicsUtility.Fleck(map, center, p.releaseFleck, Mathf.Max(0.85f, p.radius * 0.65f));
+                GraphicsUtility.Fleck(map, center, p.releaseImpactFleck, Mathf.Max(0.45f, p.releaseImpactScale));
+
+                var damageDef = p.damageDef ?? MX_QHDefOf.MX_Desynced ?? DamageDefOf.Cut;
+                var victims = RadialUtility.CollectHostilePawns(map, center, pawn, p.radius);
+                var affected = 0;
+
+                for (var i = 0; i < victims.Count; i++)
+                {
+                    var victim = victims[i];
+                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount, p.armorPenetration, -1f, pawn));
+
+                    if (p.stunDamageAmount > 0f)
+                    {
+                        victim.TakeDamage(new DamageInfo(DamageDefOf.Stun, p.stunDamageAmount, 0f, -1f, pawn));
+                    }
+
+                    MX_QHUtility.ApplyBleed(victim, p.bleedDamageAmount);
+                    MX_QHUtility.TryApplyOrRefreshHediff(victim, p.slowHediff, p.slowSeverity, p.slowDurationTicks);
+
+                    if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
+                    {
+                        GraphicsUtility.Fx(map, victim.Position, p.hitFx, 1f);
+                        GraphicsUtility.Fleck(map, victim.Position, p.hitFleck, 0.72f);
+                        GraphicsUtility.Fleck(map, victim.Position, p.hitBurstFleck, 0.64f);
+                    }
+
+                    if (!victim.Dead && Rand.Value < Mathf.Clamp01(p.brainDestroyChance))
+                    {
+                        BodyPartRecord brain = null;
+                        foreach (var part in victim.health.hediffSet.GetNotMissingParts())
+                        {
+                            if (part.def == DefDatabase<BodyPartDef>.GetNamedSilentFail("Brain"))
+                            {
+                                brain = part;
+                                break;
+                            }
+                        }
+
+                        if (brain != null)
+                        {
+                            victim.health.AddHediff(HediffDefOf.MissingBodyPart, brain);
+                            if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
+                            {
+                                GraphicsUtility.Fx(map, victim.Position, p.brainBreakFx, 1f);
+                            }
+                        }
+                    }
+
+                    affected++;
+                }
+
+                if (affected > 0)
+                {
+                    EleganceUtility.NotifyDecayEvent(pawn);
+                }
+
+                EleganceUtility.AddElegance(pawn, p.eleganceGainOnCast + p.eleganceGainPerTarget * affected);
             };
             pulse.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return pulse;
+
+            var animTicks = props != null ? Mathf.Max(1, props.curveAnimTicks) : 1;
+            var trail = ToilMaker.MakeToil("QHEleganceDuanHun_ReleaseTrailAnim");
+            trail.defaultCompleteMode = ToilCompleteMode.Delay;
+            trail.defaultDuration = animTicks;
+            trail.initAction = delegate
+            {
+                var p = Props;
+                if (p == null || pawn == null || !pawn.Spawned || pawn.MapHeld == null)
+                {
+                    return;
+                }
+
+                var map = pawn.MapHeld;
+                var cell = job?.targetA.IsValid == true ? job.targetA.Cell : pawn.Position;
+                if (!cell.IsValid || !cell.InBounds(map))
+                {
+                    cell = pawn.Position;
+                }
+
+                var moteDef = p.curveMote.NullOrEmpty() ? null : DefDatabase<ThingDef>.GetNamedSilentFail(p.curveMote);
+                if (moteDef == null)
+                {
+                    moteDef = MX_QHDefOf.MX_QH_Mote_DuanHunCurvedTrail;
+                }
+                if (moteDef == null)
+                {
+                    return;
+                }
+
+                var lineFleck = p.curveLineFleck.NullOrEmpty() ? null : DefDatabase<FleckDef>.GetNamedSilentFail(p.curveLineFleck);
+                if (lineFleck == null)
+                {
+                    return;
+                }
+
+                var distortFleck = p.curveDistortFleck.NullOrEmpty() ? null : DefDatabase<FleckDef>.GetNamedSilentFail(p.curveDistortFleck);
+                var mote = ThingMaker.MakeThing(moteDef) as Mote_QHCurvedDistortionTrail;
+                if (mote == null)
+                {
+                    return;
+                }
+
+                mote.Setup(
+                    new TargetInfo(pawn),
+                    new TargetInfo(cell, map),
+                    lineFleck,
+                    distortFleck,
+                    Mathf.Max(0.03f, p.radius * 0.022f),
+                    p.curveDistortWidth,
+                    p.curveDistortAlpha,
+                    p.curveWidth,
+                    p.curveDensity,
+                    p.curveWaveLen,
+                    p.curveAnimTicks,
+                    p.curveGrowTicks,
+                    p.curveAlpha,
+                    p.curveAfterLayers,
+                    p.curveAfterGap,
+                    p.curveAfterAlpha,
+                    p.curveMinSegs,
+                    p.curveMaxSegs,
+                    p.curveDistortStep);
+
+                if (!GraphicsUtility.Mote(map, cell, mote))
+                {
+                    return;
+                }
+
+                mote.exactPosition = cell.ToVector3Shifted();
+            };
+            yield return trail;
         }
     }
 }
