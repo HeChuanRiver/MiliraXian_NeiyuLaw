@@ -28,7 +28,6 @@ namespace MiliraXian.Characters.Zhaoli
     public class CompAbilityEffect_ZhaoliMinshen : CompAbilityEffect
     {
         private const string DazedMentalStateDefName = "WanderConfused";
-        private const string MinshenWarnAreaMoteDefName = "MXZL_Mote_MinshenWarnArea";
         private static readonly Color PreviewColor = new Color(0.44f, 0.12f, 0.16f);
 
         private readonly HashSet<Pawn> tmpTargets = new HashSet<Pawn>();
@@ -55,7 +54,7 @@ namespace MiliraXian.Characters.Zhaoli
                         return;
                     }
 
-                    ThingDef warnAreaDef = DefDatabase<ThingDef>.GetNamedSilentFail(MinshenWarnAreaMoteDefName);
+                    ThingDef warnAreaDef = ZhaoliEffectUtility.MinshenWarnAreaMoteDef;
                     if (warnAreaDef != null)
                     {
                         MoteMaker.MakeStaticMote(target.Cell, caster.Map, warnAreaDef, 1f);

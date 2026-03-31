@@ -127,6 +127,7 @@
       <Compile Include="Source\QingHe\CompYangChunField.cs" />
       <Compile Include="Source\QingHe\CompLotusShield.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDeathField.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliEffectUtility.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliGuiyi.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliDormancy.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaLinks.cs" />
@@ -136,6 +137,7 @@
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliRebirth.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliShieldLayers.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliScenarioAndRaid.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="1.6\Defs\AbilityDefs\MiliraXian_Ability_Debug.xml" />
@@ -172,13 +174,17 @@
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Minghuo.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Minshen.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Rebirth.xml" />
+      <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Scenario.xml" />
       <Content Include="1.6\Defs\HediffDefs\MiliraXian_Zhaoli_Shield.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Neiyu.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Qinghe.xml" />
       <Content Include="1.6\Defs\PawnkindDef\MiliraXian_PawnkindDef_Zhaoli.xml" />
       <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Neiyu_QuestScripts.xml" />
+      <Content Include="1.6\Defs\QuestScriptDefs\MiliraXian_Zhaoli_QuestScripts.xml" />
       <Content Include="1.6\Defs\ScenarioDefs\MiliraXian_Neiyu_Scenarios.xml" />
       <Content Include="1.6\Defs\Storyteller\Incidents_Neiyu.xml" />
+      <Content Include="1.6\Defs\Storyteller\Incidents_Zhaoli.xml" />
+      <Content Include="1.6\Defs\Sites\MiliraXian_Zhaoli_Sites.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_ModeSwitch_HeadgearAndWeapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Zhaoli_Weapons.xml" />
       <Content Include="1.6\Defs\ThingDefs\MiliraXian_Qinghe_ModeSwitch_Weapons.xml" />

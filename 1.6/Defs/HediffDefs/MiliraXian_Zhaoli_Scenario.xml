@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <HediffDef>
+    <defName>MXZL_ZhaoliHideoutState</defName>
+    <label>zhaoli hideout state</label>
+    <description>Temporary scenario state used while Zhaoli waits at the hideout.</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.15, 0.48, 0.76)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>1</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliHideoutState">
+        <immobilizeTickInterval>30</immobilizeTickInterval>
+        <stunTicks>60</stunTicks>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MXZL_ZhaoliRaidState</defName>
+    <label>zhaoli raid state</label>
+    <description>Temporary scenario state used while hostile Zhaoli is raiding the colony.</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>1</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliRaidState">
+                <minPreferredCluster>3</minPreferredCluster>
+      </li>
+    </comps>
+  </HediffDef>
+
+</Defs>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_FlowerBlessed.label>Flower Blessing</MX_Neiyu_FlowerBlessed.label>
-  <MX_Neiyu_FlowerBlessed.description>Blessed by Neiyu's flower-form arts.</MX_Neiyu_FlowerBlessed.description>
-  <MX_Neiyu_FlowerBlessed.stages.0.label>Flower Blessing</MX_Neiyu_FlowerBlessed.stages.0.label>
-  <MX_Neiyu_SwordVulnerability.label>Sword Vulnerability</MX_Neiyu_SwordVulnerability.label>
-  <MX_Neiyu_SwordVulnerability.description>Takes amplified damage after being struck by Skyfall.</MX_Neiyu_SwordVulnerability.description>
-  <MX_Neiyu_SwordVulnerability.stages.0.label>Vulnerable</MX_Neiyu_SwordVulnerability.stages.0.label>
+  <MX_Neiyu_FlowerBlessed.label>&lt;color=#F39AD9&gt;Flower Blessing&lt;/color&gt;</MX_Neiyu_FlowerBlessed.label>
+  <MX_Neiyu_FlowerBlessed.description>Blessed by &lt;color=#79CBFF&gt;Neiyu&lt;/color&gt;'s &lt;color=#F39AD9&gt;flower-form arts&lt;/color&gt;.</MX_Neiyu_FlowerBlessed.description>
+  <MX_Neiyu_FlowerBlessed.stages.0.label>&lt;color=#F39AD9&gt;Flower Blessing&lt;/color&gt;</MX_Neiyu_FlowerBlessed.stages.0.label>
+  <MX_Neiyu_SwordVulnerability.label>&lt;color=#C7A2F8&gt;Sword Vulnerability&lt;/color&gt;</MX_Neiyu_SwordVulnerability.label>
+  <MX_Neiyu_SwordVulnerability.description>Takes amplified damage after being struck by &lt;color=#8BD5FF&gt;Skyfall&lt;/color&gt;.</MX_Neiyu_SwordVulnerability.description>
+  <MX_Neiyu_SwordVulnerability.stages.0.label>&lt;color=#C7A2F8&gt;Vulnerable&lt;/color&gt;</MX_Neiyu_SwordVulnerability.stages.0.label>
 </LanguageData>

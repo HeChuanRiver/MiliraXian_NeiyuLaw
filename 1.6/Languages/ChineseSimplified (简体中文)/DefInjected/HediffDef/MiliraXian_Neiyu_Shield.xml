@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MXNL_NeiyuShield.label>护身</MXNL_NeiyuShield.label>
-  <MXNL_NeiyuShield.description>霓羽常态携带的次数护盾，会在不同阶段以不同方式抵消伤害并转化为后续增益与代价。</MXNL_NeiyuShield.description>
+  <MXNL_NeiyuShield.label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</MXNL_NeiyuShield.label>
+  <MXNL_NeiyuShield.description>&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;护身&lt;/color&gt;次数盾，会随阶段变化展现不同防护能力，并在危急时转入更强的守护形态。</MXNL_NeiyuShield.description>
 </LanguageData>

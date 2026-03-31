@@ -3,7 +3,7 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliKarmaLink</defName>
-        <label>因果相连</label>
+        <label>&lt;color=#A11228&gt;因果相连&lt;/color&gt;</label>
         <description>该目标与&lt;color=#A11228&gt;昭离&lt;/color&gt;建立了&lt;color=#7A2956&gt;因果链接&lt;/color&gt;。链接持续30天，在此期间可为昭离承担溢出的因果，或在昭离死亡时替其赴死。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.84, 0.18, 0.24)</defaultLabelColor>
@@ -20,7 +20,7 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliOverflowKarma</defName>
-        <label>代偿因果</label>
+        <label>&lt;color=#5E1335&gt;代偿因果&lt;/color&gt;</label>
         <description>该目标正在替&lt;color=#A11228&gt;昭离&lt;/color&gt;承担一层溢出的&lt;color=#5E1335&gt;因果&lt;/color&gt;。在这层因果消失之前，无法再次替昭离承担新的溢出因果。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.46, 0.12, 0.26)</defaultLabelColor>

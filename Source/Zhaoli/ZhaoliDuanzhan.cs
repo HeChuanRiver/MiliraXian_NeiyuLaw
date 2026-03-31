@@ -312,7 +312,7 @@ namespace MiliraXian.Characters.Zhaoli
         public float slashStartAngleOffset = -90f;
         public float slashEndAngleOffset = 90f;
         public float thrustChargeDistanceCells = 1.6f;
-        public float thrustDistanceCells = 10f;
+        public float thrustDistanceCells = 50f;
 
         public CompProperties_AbilityDuanzhan()
         {
@@ -491,7 +491,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (!thrustImpactFxPlayed && now >= sequenceEndTick)
             {
-                PlayThrustImpactEffects(map, ComputeForward(originCell, targetCell));
+                PlayThrustImpactEffects(caster, map, ComputeForward(originCell, targetCell));
                 thrustImpactFxPlayed = true;
             }
 
@@ -632,17 +632,24 @@ namespace MiliraXian.Characters.Zhaoli
             FleckMaker.Static(cell, map, FleckDefOf.ShotFlash, 1.25f);
         }
 
-        private void PlayThrustImpactEffects(Map map, Vector3 forward)
+        private void PlayThrustImpactEffects(Pawn caster, Map map, Vector3 forward)
         {
             if (map == null || !originCell.IsValid)
             {
                 return;
             }
 
-            Vector3 tipPosition = originCell.ToVector3Shifted() + forward * Props.thrustDistanceCells;
-            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.PsycastSkipFlashEntry, 1.35f);
-            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.ExplosionFlash, 1.35f);
-            FleckMaker.Static(tipPosition.ToIntVec3(), map, FleckDefOf.ShotFlash, 1.1f);
+            IntVec3 impactCell = GetThrustImpactCell(caster, map, forward, out Thing hitThing);
+            float impactScale = hitThing != null ? 1.8f : 1.35f;
+            FleckMaker.Static(impactCell, map, FleckDefOf.PsycastSkipFlashEntry, impactScale);
+            FleckMaker.Static(impactCell, map, FleckDefOf.ExplosionFlash, impactScale);
+            FleckMaker.Static(impactCell, map, FleckDefOf.ShotFlash, Mathf.Max(1.1f, impactScale * 0.8f));
+
+            if (hitThing != null)
+            {
+                FleckMaker.Static(impactCell, map, FleckDefOf.FeedbackShoot, 1.2f);
+                SpawnGroundCrack(map, impactCell);
+            }
         }
 
         private void DoDuanzhan(Pawn caster, Map map, IntVec3 center, Vector3 forward)
@@ -736,7 +743,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliMinghuoUtility.MinghuoHediffDefName);
+            HediffDef hediffDef = ZhaoliEffectUtility.MinghuoHediffDef;
             if (hediffDef == null)
             {
                 return null;
@@ -746,25 +753,100 @@ namespace MiliraXian.Characters.Zhaoli
             HediffComp_ZhaoliMinghuo comp = hediff?.TryGetComp<HediffComp_ZhaoliMinghuo>();
             return comp != null && comp.IsActiveFor(caster, weapon) ? comp : null;
         }
+
+        private IntVec3 GetThrustImpactCell(Pawn caster, Map map, Vector3 forward, out Thing hitThing)
+        {
+            hitThing = null;
+            HashSet<IntVec3> visitedCells = new HashSet<IntVec3>();
+            Vector3 origin = originCell.ToVector3Shifted();
+            float maxDistance = Mathf.Max(1f, Props.thrustDistanceCells);
+
+            for (float distance = 1f; distance <= maxDistance; distance += 0.5f)
+            {
+                IntVec3 cell = (origin + forward * distance).ToIntVec3();
+                if (!cell.IsValid || !cell.InBounds(map) || !visitedCells.Add(cell))
+                {
+                    continue;
+                }
+
+                List<Thing> things = cell.GetThingList(map);
+                for (int i = 0; i < things.Count; i++)
+                {
+                    Thing thing = things[i];
+                    if (thing == null || thing == caster || thing.Destroyed)
+                    {
+                        continue;
+                    }
+
+                    if (thing is Pawn pawn)
+                    {
+                        if (!pawn.Dead && pawn.Spawned && NeiyuFlowerSwordSkillUtility.IsHostile(caster, pawn))
+                        {
+                            hitThing = pawn;
+                            return cell;
+                        }
+
+                        continue;
+                    }
+
+                    if (thing is Building building && building.Spawned)
+                    {
+                        hitThing = building;
+                        return cell;
+                    }
+                }
+            }
+
+            return (origin + forward * maxDistance).ToIntVec3();
+        }
+
+        private static void SpawnGroundCrack(Map map, IntVec3 cell)
+        {
+            if (map == null || !cell.IsValid || !cell.InBounds(map))
+            {
+                return;
+            }
+
+            ThingDef groundCrackDef = ZhaoliEffectUtility.GroundCrackHugeMoteDef;
+            if (groundCrackDef != null)
+            {
+                MoteMaker.MakeStaticMote(cell, map, groundCrackDef, 1.2f);
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAiming))]
     internal static class Patch_ZhaoliDuanzhan_DrawEquipmentAiming
     {
         private const string SlashTexturePath = "MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand";
+        private const string SlashGlowTexturePath = "MiliraXianNeiyu/Effect/Zhaoli/DuanzhanTrailGlow";
         private const float SlashTextureScaleFactor = 3f;
-        private static readonly float[] AfterimageAlphas = { 0.45f, 0.28f, 0.16f };
-        private static readonly float[] AfterimageAngleOffsets = { 10f, 22f, 36f };
-        private static readonly Color[] AfterimageColors =
+        private const int TrailLifetimeTicks = 18;
+        private const int TrailMaxSamples = 24;
+        private const int TrailInterpolationSubdivisions = 3;
+        private const float TrailMinPointDistance = 0.015f;
+        private const float TrailMinAngleDelta = 2.5f;
+        private const float CurrentGlowAlpha = 0.82f;
+        private const float CurrentGlowScaleMultiplier = 1.08f;
+        private const float TrailGlowScaleStart = 1.12f;
+        private const float TrailGlowScaleStep = 0.045f;
+        private const float TrailGlowBackOffsetStep = 0.05f;
+        private const float TrailGlowAltitudeStep = 0.006f;
+
+        private struct SlashTrailSample
         {
-            new Color(1f, 0.93f, 0.82f, 1f),
-            new Color(0.98f, 0.48f, 0.32f, 1f),
-            new Color(0.84f, 0.14f, 0.18f, 1f)
-        };
+            public Vector3 drawLoc;
+            public float aimAngle;
+            public float scaleMultiplier;
+            public int tick;
+        }
+
+        private static readonly Dictionary<int, List<SlashTrailSample>> TrailSamplesByWeapon = new Dictionary<int, List<SlashTrailSample>>();
         private static Material slashMaterial;
-        private static Material[] afterimageMaterials;
+        private static Material slashGlowMaterial;
         private static Vector2 slashBaseDrawSize = Vector2.one;
-        private static bool triedLoadSlashMaterial;
+        private static Vector2 slashGlowBaseDrawSize = Vector2.one;
+        private static bool triedLoadMaterials;
 
         [HarmonyPrefix]
         private static bool Prefix(Thing eq, Vector3 drawLoc, float aimAngle)
@@ -774,69 +856,184 @@ namespace MiliraXian.Characters.Zhaoli
                 return true;
             }
 
-            return !DrawScaledEquipment(drawLoc + drawOffset, drawAimAngle, weaponScale * SlashTextureScaleFactor, drawAfterimages);
-        }
-
-        private static Material GetSlashMaterial()
-        {
-            if (!triedLoadSlashMaterial)
+            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+            Vector3 weaponDrawLoc = drawLoc + drawOffset;
+            TrimExpiredTrailSamples(eq.thingIDNumber, now);
+            if (drawAfterimages)
             {
-                triedLoadSlashMaterial = true;
-                Texture2D texture = ContentFinder<Texture2D>.Get(SlashTexturePath, reportFailure: false);
-                if (texture != null)
-                {
-                    slashMaterial = MaterialPool.MatFrom(texture, ShaderDatabase.Cutout, Color.white);
-                    afterimageMaterials = new Material[AfterimageColors.Length];
-                    for (int i = 0; i < AfterimageColors.Length; i++)
-                    {
-                        afterimageMaterials[i] = MaterialPool.MatFrom(texture, ShaderDatabase.Cutout, AfterimageColors[i]);
-                    }
-
-                    slashBaseDrawSize = new Vector2(Mathf.Max(0.01f, texture.width / (float)Mathf.Max(1, texture.height)), 1f);
-                }
+                RecordTrailSample(eq.thingIDNumber, weaponDrawLoc, drawAimAngle, weaponScale * SlashTextureScaleFactor, now);
             }
 
-            return slashMaterial;
+            return !DrawScaledEquipment(eq.thingIDNumber, weaponDrawLoc, drawAimAngle, weaponScale * SlashTextureScaleFactor, drawAfterimages, now);
         }
 
-        private static bool DrawScaledEquipment(Vector3 drawLoc, float aimAngle, float scaleMultiplier, bool drawAfterimages)
+        private static void EnsureMaterialsLoaded()
         {
-            Material material = GetSlashMaterial();
-            if (material == null)
+            if (triedLoadMaterials)
+            {
+                return;
+            }
+
+            triedLoadMaterials = true;
+
+            Texture2D slashTexture = ContentFinder<Texture2D>.Get(SlashTexturePath, reportFailure: false);
+            if (slashTexture != null)
+            {
+                slashMaterial = MaterialPool.MatFrom(slashTexture, ShaderDatabase.Cutout, Color.white);
+                slashBaseDrawSize = new Vector2(Mathf.Max(0.01f, slashTexture.width / (float)Mathf.Max(1, slashTexture.height)), 1f);
+            }
+
+            Texture2D glowTexture = ContentFinder<Texture2D>.Get(SlashGlowTexturePath, reportFailure: false);
+            if (glowTexture != null)
+            {
+                slashGlowMaterial = MaterialPool.MatFrom(glowTexture, ShaderDatabase.MoteGlow, Color.white);
+                slashGlowBaseDrawSize = new Vector2(Mathf.Max(0.01f, glowTexture.width / (float)Mathf.Max(1, glowTexture.height)), 1f);
+            }
+        }
+
+        private static bool DrawScaledEquipment(int weaponThingId, Vector3 drawLoc, float aimAngle, float scaleMultiplier, bool drawAfterimages, int now)
+        {
+            EnsureMaterialsLoaded();
+            if (slashMaterial == null)
             {
                 return false;
             }
 
-            if (drawAfterimages)
+            DrawTrailSamples(weaponThingId, now);
+
+            if (drawAfterimages && slashGlowMaterial != null)
             {
-                for (int i = AfterimageAlphas.Length - 1; i >= 0; i--)
-                {
-                    Material baseTrailMaterial = afterimageMaterials != null && i < afterimageMaterials.Length && afterimageMaterials[i] != null
-                        ? afterimageMaterials[i]
-                        : material;
-                    Material afterimageMaterial = FadedMaterialPool.FadedVersionOf(baseTrailMaterial, AfterimageAlphas[i]);
-                    float afterimageScale = scaleMultiplier * (1f + 0.05f * (i + 1));
-                    float afterimageAngle = aimAngle - AfterimageAngleOffsets[i];
-                    Vector3 sweepBackOffset = new Vector3(0f, 0.01f * (i + 1), 0f) - AimOffset(afterimageAngle) * (0.08f * (i + 1));
-                    Vector3 afterimageDrawLoc = drawLoc + sweepBackOffset;
-                    DrawSlashMesh(afterimageDrawLoc, afterimageAngle, afterimageScale, afterimageMaterial);
-                }
+                Material activeGlowMaterial = FadedMaterialPool.FadedVersionOf(slashGlowMaterial, CurrentGlowAlpha);
+                DrawMesh(drawLoc + Altitudes.AltIncVect * 0.015f, aimAngle, scaleMultiplier * CurrentGlowScaleMultiplier, activeGlowMaterial, slashGlowBaseDrawSize);
             }
 
-            DrawSlashMesh(drawLoc, aimAngle, scaleMultiplier, material);
+            DrawMesh(drawLoc, aimAngle, scaleMultiplier, slashMaterial, slashBaseDrawSize);
             return true;
         }
 
-        private static void DrawSlashMesh(Vector3 drawLoc, float aimAngle, float scaleMultiplier, Material material)
+        private static void RecordTrailSample(int weaponThingId, Vector3 drawLoc, float aimAngle, float scaleMultiplier, int now)
         {
+            if (!TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples))
+            {
+                samples = new List<SlashTrailSample>();
+                TrailSamplesByWeapon.Add(weaponThingId, samples);
+            }
+
+            if (samples.Count > 0)
+            {
+                SlashTrailSample last = samples[samples.Count - 1];
+                Vector3 delta = drawLoc - last.drawLoc;
+                float angleDelta = Mathf.Abs(Mathf.DeltaAngle(last.aimAngle, aimAngle));
+                if (delta.sqrMagnitude < TrailMinPointDistance * TrailMinPointDistance && angleDelta < TrailMinAngleDelta)
+                {
+                    return;
+                }
+            }
+
+            samples.Add(new SlashTrailSample
+            {
+                drawLoc = drawLoc,
+                aimAngle = aimAngle,
+                scaleMultiplier = scaleMultiplier,
+                tick = now
+            });
+
+            if (samples.Count > TrailMaxSamples)
+            {
+                samples.RemoveAt(0);
+            }
+        }
+
+        private static void TrimExpiredTrailSamples(int weaponThingId, int now)
+        {
+            if (!TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples))
+            {
+                return;
+            }
+
+            for (int i = samples.Count - 1; i >= 0; i--)
+            {
+                if (now - samples[i].tick > TrailLifetimeTicks)
+                {
+                    samples.RemoveAt(i);
+                }
+            }
+
+            if (samples.Count == 0)
+            {
+                TrailSamplesByWeapon.Remove(weaponThingId);
+            }
+        }
+
+        private static void DrawTrailSamples(int weaponThingId, int now)
+        {
+            if (slashGlowMaterial == null || !TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples) || samples.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < samples.Count; i++)
+            {
+                DrawTrailSample(samples[i], samples.Count - i, now);
+
+                if (i >= samples.Count - 1)
+                {
+                    continue;
+                }
+
+                SlashTrailSample from = samples[i];
+                SlashTrailSample to = samples[i + 1];
+                for (int subdivision = 1; subdivision <= TrailInterpolationSubdivisions; subdivision++)
+                {
+                    float t = subdivision / (float)(TrailInterpolationSubdivisions + 1);
+                    SlashTrailSample interpolated = new SlashTrailSample
+                    {
+                        drawLoc = Vector3.Lerp(from.drawLoc, to.drawLoc, t),
+                        aimAngle = Mathf.LerpAngle(from.aimAngle, to.aimAngle, t),
+                        scaleMultiplier = Mathf.Lerp(from.scaleMultiplier, to.scaleMultiplier, t),
+                        tick = Mathf.RoundToInt(Mathf.Lerp(from.tick, to.tick, t))
+                    };
+                    DrawTrailSample(interpolated, samples.Count - i, now);
+                }
+            }
+        }
+
+        private static void DrawTrailSample(SlashTrailSample sample, int trailIndex, int now)
+        {
+            int ageTicks = now - sample.tick;
+            if (ageTicks < 0 || ageTicks > TrailLifetimeTicks)
+            {
+                return;
+            }
+
+            float ageRatio = ageTicks / (float)Mathf.Max(1, TrailLifetimeTicks);
+            float alpha = Mathf.Lerp(0.78f, 0.05f, ageRatio);
+            if (alpha <= 0.01f)
+            {
+                return;
+            }
+
+            float scale = sample.scaleMultiplier * (TrailGlowScaleStart + TrailGlowScaleStep * trailIndex);
+            Vector3 backOffset = -AimOffset(sample.aimAngle) * (TrailGlowBackOffsetStep * trailIndex);
+            Vector3 altitudeOffset = Altitudes.AltIncVect * (TrailGlowAltitudeStep * trailIndex);
+            Material fadedGlow = FadedMaterialPool.FadedVersionOf(slashGlowMaterial, alpha);
+            DrawMesh(sample.drawLoc + backOffset + altitudeOffset, sample.aimAngle, scale, fadedGlow, slashGlowBaseDrawSize);
+        }
+
+        private static void DrawMesh(Vector3 drawLoc, float aimAngle, float scaleMultiplier, Material material, Vector2 baseDrawSize)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
             float rotation = aimAngle % 360f;
-            Vector2 drawSize = slashBaseDrawSize * Mathf.Max(0.01f, scaleMultiplier);
+            Vector2 drawSize = baseDrawSize * Mathf.Max(0.01f, scaleMultiplier);
             Quaternion quaternion = Quaternion.AngleAxis(rotation, Vector3.up);
             Vector3 pivotToCenter = quaternion * new Vector3(0f, 0f, drawSize.y * 0.5f);
             Vector3 meshCenter = drawLoc + pivotToCenter;
             Matrix4x4 matrix = Matrix4x4.TRS(meshCenter, quaternion, new Vector3(drawSize.x, 0f, drawSize.y));
-            Mesh mesh = MeshPool.plane10;
-            Graphics.DrawMesh(mesh, matrix, material, 0);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
         }
 
         private static Vector3 AimOffset(float aimAngle)

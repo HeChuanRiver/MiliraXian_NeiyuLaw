@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MXNL_NeiyuShield.label>Guarding Ward</MXNL_NeiyuShield.label>
-  <MXNL_NeiyuShield.description>Neiyu's three-phase charge-based protective ward.</MXNL_NeiyuShield.description>
+  <MXNL_NeiyuShield.label>&lt;color=#79CBFF&gt;Guarding Ward&lt;/color&gt;</MXNL_NeiyuShield.label>
+  <MXNL_NeiyuShield.description>&lt;color=#79CBFF&gt;Neiyu&lt;/color&gt;'s &lt;color=#F39AD9&gt;three-phase&lt;/color&gt; charge-based protective ward.</MXNL_NeiyuShield.description>
 </LanguageData>

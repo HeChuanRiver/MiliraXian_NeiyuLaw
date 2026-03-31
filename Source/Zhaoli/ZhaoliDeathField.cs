@@ -46,6 +46,11 @@ namespace MiliraXian.Characters.Zhaoli
 
             HediffComp_ZhaoliDeathField comp = field.GetComp<HediffComp_ZhaoliDeathField>();
             comp?.ActivateAt(target.Cell);
+            if (ZhaoliScenarioUtility.IsRaidState(caster))
+            {
+                ZhaoliKarmaUtility.AddKarma(caster, ZhaoliScenarioUtility.DeathFieldRaidBonusKarma);
+            }
+
             if (caster.Spawned)
             {
                 FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, Mathf.Max(1.5f, Props.radius * 0.65f));
@@ -85,11 +90,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliDeathField : HediffComp
     {
-        private const string DeathFieldAreaMoteDefName = "MXZL_Mote_DeathFieldArea";
-        private const string DeathFieldMarkMoteDefName = "MXZL_Mote_DeathFieldMark";
-        private const string SoulAbsorbPulseMoteDefName = "MXZL_Mote_SoulAbsorbPulse";
-        private const string DeathRefusalBubbleFleckDefName = "DeathRefusalBubble";
-
         private Dictionary<Pawn, int> stayTicks = new Dictionary<Pawn, int>();
         private readonly Dictionary<Pawn, Mote> markedPawns = new Dictionary<Pawn, Mote>();
         private readonly Dictionary<Pawn, int> lastDisplayedRemainingHits = new Dictionary<Pawn, int>();
@@ -167,7 +167,7 @@ namespace MiliraXian.Characters.Zhaoli
             MaintainFieldArea(map, center);
             if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
             {
-                FleckDef deathPulse = DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalPulse");
+                FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
                 if (deathPulse != null)
                 {
                     FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, PropsField.radius * 0.55f));
@@ -175,22 +175,22 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             pawnsInsideNow.Clear();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, PropsField.radius, true))
+            IReadOnlyList<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < allPawnsSpawned.Count; i++)
             {
-                if (!cell.InBounds(map))
+                Pawn pawn = allPawnsSpawned[i];
+                if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead)
                 {
                     continue;
                 }
 
-                List<Thing> things = cell.GetThingList(map);
-                for (int i = 0; i < things.Count; i++)
+                if (!ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, pawn))
                 {
-                    Pawn pawn = things[i] as Pawn;
-                    if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
+                if (pawn.Position.InHorDistOf(center, PropsField.radius))
+                {
                     pawnsInsideNow.Add(pawn);
                 }
             }
@@ -287,7 +287,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void MaintainFieldArea(Map map, IntVec3 center)
         {
-            ThingDef areaDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldAreaMoteDefName);
+            ThingDef areaDef = ZhaoliEffectUtility.DeathFieldAreaMoteDef;
             if (areaDef == null)
             {
                 return;
@@ -308,7 +308,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            ThingDef markDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldMarkMoteDefName);
+            ThingDef markDef = ZhaoliEffectUtility.DeathFieldMarkMoteDef;
             if (markDef == null)
             {
                 return;
@@ -373,7 +373,7 @@ namespace MiliraXian.Characters.Zhaoli
             IntVec3 position = pawn.PositionHeld;
             if (map != null && position.IsValid)
             {
-                FleckDef soulFleck = DefDatabase<FleckDef>.GetNamedSilentFail(DeathRefusalBubbleFleckDefName);
+                FleckDef soulFleck = ZhaoliEffectUtility.DeathRefusalBubbleFleckDef;
                 if (soulFleck != null)
                 {
                     FleckMaker.Static(position, map, soulFleck, 1.6f);
@@ -382,7 +382,7 @@ namespace MiliraXian.Characters.Zhaoli
                 FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, 1.6f);
                 FleckMaker.Static(position, map, FleckDefOf.FlashHollow, 1.4f);
 
-                ThingDef soulPulseDef = DefDatabase<ThingDef>.GetNamedSilentFail(SoulAbsorbPulseMoteDefName);
+                ThingDef soulPulseDef = ZhaoliEffectUtility.SoulAbsorbPulseMoteDef;
                 if (soulPulseDef != null && Pawn != null && Pawn.Spawned && Pawn.MapHeld == map)
                 {
                     MoteMaker.MakeInteractionOverlay(soulPulseDef, new TargetInfo(position, map), Pawn);

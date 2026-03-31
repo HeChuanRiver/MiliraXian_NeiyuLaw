@@ -2,8 +2,8 @@
 <Defs>
     <HediffDef>
         <defName>MX_Neiyu_ThunderMark</defName>
-        <label>雷锁印记</label>
-        <description>被&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;标记，短时间内将持续遭受雷击。</description>
+        <label>&lt;color=#8BD5FF&gt;雷锁印记&lt;/color&gt;</label>
+        <description>被&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;标记，短时间内将持续遭受&lt;color=#C7B8FF&gt;雷击&lt;/color&gt;。</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.56, 0.68, 1.00)</defaultLabelColor>
         <isBad>true</isBad>
@@ -12,7 +12,7 @@
         <stages>
             <li>
                 <minSeverity>0.0</minSeverity>
-                <label>雷锁印记</label>
+                <label>&lt;color=#8BD5FF&gt;雷锁印记&lt;/color&gt;</label>
             </li>
         </stages>
     </HediffDef>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <QuestScriptDef>
+    <defName>MXZL_ZhaoliMurmurQuest</defName>
+    <autoAccept>false</autoAccept>
+    <defaultHidden>false</defaultHidden>
+    <expireDaysRange>-1~-1</expireDaysRange>
+    <isRootSpecial>true</isRootSpecial>
+    <sendAvailableLetter>true</sendAvailableLetter>
+    <defaultCharity>true</defaultCharity>
+    <endOnColonyMove>false</endOnColonyMove>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->&#20129;&#32773;&#35828;</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->&#27542;&#27665;&#22320;&#25104;&#31435;&#21313;&#20116;&#26085;&#21518;&#65292;&#31532;&#19968;&#21517;&#27515;&#32773;&#32456;&#20110;&#25226;&#38376;&#32541;&#25320;&#24320;&#12290;&#26576;&#20010;&#19982;&#29983;&#21629;&#12289;&#23608;&#39592;&#19982;&#22240;&#26524;&#32416;&#32544;&#19981;&#28165;&#30340;&#23384;&#22312;&#20511;&#36825;&#36947;&#35010;&#32541;&#21521;&#20320;&#36882;&#26469;&#19968;&#21477;&#35805;&#12290;&#33509;&#20320;&#24895;&#24847;&#21548;&#19979;&#21435;&#65292;&#19968;&#22788;&#21517;&#20026;&#8220;&#19981;&#23384;&#22312;&#32773;&#34255;&#36523;&#22788;&#8221;&#30340;&#20020;&#26102;&#22320;&#28857;&#20250;&#22312;&#25454;&#28857;&#21608;&#36793;&#20986;&#29616;&#12290;&#26157;&#31163;&#22312;&#37027;&#37324;&#31561;&#24453;&#19968;&#22330;&#20132;&#25509;&#65292;&#19968;&#27425;&#24310;&#21518;&#30340;&#22238;&#31572;&#65292;&#25110;&#19968;&#22330;&#24443;&#24213;&#25749;&#35010;&#30340;&#25298;&#32477;&#12290;</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="MiliraXian.Characters.Zhaoli.QuestNode_Root_ZhaoliMurmur_AvailableQuest" />
+  </QuestScriptDef>
+
+  <QuestScriptDef>
+    <defName>MXZL_ZhaoliReturnQuest</defName>
+    <autoAccept>false</autoAccept>
+    <defaultHidden>false</defaultHidden>
+    <expireDaysRange>-1~-1</expireDaysRange>
+    <isRootSpecial>true</isRootSpecial>
+    <sendAvailableLetter>true</sendAvailableLetter>
+    <defaultCharity>true</defaultCharity>
+    <endOnColonyMove>false</endOnColonyMove>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->&#24402;&#20129;&#32773;</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->&#26157;&#31163;&#24050;&#32463;&#20570;&#20986;&#22238;&#31572;&#12290;&#26080;&#35770;&#37027;&#31572;&#26696;&#26368;&#21021;&#26469;&#33258;&#33609;&#33647;&#12289;&#23608;&#20307;&#65292;&#36824;&#26159;&#19968;&#22330;&#20320;&#19982;&#22905;&#20043;&#38388;&#30340;&#21422;&#26432;&#65292;&#23427;&#26368;&#32456;&#37117;&#27839;&#30528;&#21516;&#19968;&#26465;&#32447;&#22238;&#21040;&#20102;&#36825;&#37324;&#12290;&#33509;&#20320;&#25509;&#32435;&#22905;&#65292;&#26157;&#31163;&#20250;&#22312;&#20170;&#26085;&#20043;&#21518;&#27491;&#24335;&#21152;&#20837;&#27542;&#27665;&#22320;&#12290;</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="MiliraXian.Characters.Zhaoli.QuestNode_Root_ZhaoliReturn_AvailableQuest" />
+  </QuestScriptDef>
+
+</Defs>

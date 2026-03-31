@@ -3,8 +3,8 @@
 
     <AbilityDef>
         <defName>MX_Zhaoli_Duanzhan</defName>
-        <label>断斩</label>
-        <description>原地蓄势，离断三度暴涨，随后自左向右横扫身前大片敌人。</description>
+        <label>&lt;color=#A11228&gt;断斩&lt;/color&gt;</label>
+        <description>原地蓄势，&lt;color=#A11228&gt;离断&lt;/color&gt;三度暴涨，随后自左向右横扫身前大片敌人。</description>
         <iconPath>MiliraXianNeiyu/Items/SwordForNeiyu</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -57,7 +57,7 @@
                 <reverseSlashScaleMultiplier>1.5</reverseSlashScaleMultiplier>
                 <slashStartAngleOffset>-90</slashStartAngleOffset>
                 <slashEndAngleOffset>90</slashEndAngleOffset>
-                <thrustDistanceCells>10</thrustDistanceCells>
+                <thrustDistanceCells>50</thrustDistanceCells>
             </li>
         </comps>
     </AbilityDef>

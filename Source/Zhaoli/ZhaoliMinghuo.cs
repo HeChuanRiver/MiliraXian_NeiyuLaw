@@ -36,8 +36,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliMinghuo : CompAbilityEffect
     {
-        private const string MinghuoHediffDefName = "MXZL_ZhaoliMinghuo";
-
         private new CompProperties_AbilityZhaoliMinghuo Props => (CompProperties_AbilityZhaoliMinghuo)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -66,10 +64,10 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(MinghuoHediffDefName);
+            HediffDef hediffDef = ZhaoliEffectUtility.MinghuoHediffDef;
             if (hediffDef == null)
             {
-                Log.Error("[MiliraXian.Characters.Zhaoli] Missing HediffDef: " + MinghuoHediffDefName);
+                Log.Error("[MiliraXian.Characters.Zhaoli] Missing HediffDef: " + ZhaoliMinghuoUtility.MinghuoHediffDefName);
                 return;
             }
 
@@ -248,7 +246,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(MinghuoHediffDefName);
+            HediffDef hediffDef = ZhaoliEffectUtility.MinghuoHediffDef;
             if (hediffDef == null)
             {
                 return null;
