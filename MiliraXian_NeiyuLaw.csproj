@@ -136,6 +136,7 @@
       <Compile Include="Source\Zhaoli\ZhaoliMinshen.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliKarmaResource.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliRebirth.cs" />
+      <Compile Include="Source\Zhaoli\ZhaoliProgression.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliShieldLayers.cs" />
       <Compile Include="Source\Zhaoli\ZhaoliScenarioAndRaid.cs" />
     </ItemGroup>

@@ -14,16 +14,16 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="Verse.HediffCompProperties_Disappears">
-                <disappearsAfterTicks>900</disappearsAfterTicks>
+                <disappearsAfterTicks>540</disappearsAfterTicks>
                 <showRemainingTime>false</showRemainingTime>
             </li>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathField">
                 <radius>9</radius>
-                <fieldDurationTicks>900</fieldDurationTicks>
-                <bleedIntervalTicks>180</bleedIntervalTicks>
+                <fieldDurationTicks>540</fieldDurationTicks>
+                <bleedIntervalTicks>60</bleedIntervalTicks>
                 <bleedDamage>3</bleedDamage>
                 <bleedDamageDef>Cut</bleedDamageDef>
-                <executeStayTicks>900</executeStayTicks>
+                <executeStayTicks>540</executeStayTicks>
                 <slowHediff>MXZL_ZhaoliDeathFieldSlow</slowHediff>
                 <slowRefreshTicks>90</slowRefreshTicks>
                 <karmaPerExecution>1</karmaPerExecution>

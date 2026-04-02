@@ -9,7 +9,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_DeathField</defName>
         <label>&lt;color=#A11228&gt;告死流场&lt;/color&gt;</label>
-        <description>创造一个直径18格的圆形&lt;color=#2C0F18&gt;立场&lt;/color&gt;。立场内所有单位除&lt;color=#A11228&gt;昭离&lt;/color&gt;自身外均受到&lt;color=#5E1335&gt;20%减速&lt;/color&gt;；每3秒形成一次&lt;color=#A11228&gt;流血&lt;/color&gt;；若目标连续15秒未离开立场，则被直接&lt;color=#A11228&gt;告死&lt;/color&gt;并彻底消失。</description>
+        <description>创造一个直径18格的圆形&lt;color=#2C0F18&gt;立场&lt;/color&gt;。立场内所有单位除&lt;color=#A11228&gt;昭离&lt;/color&gt;自身外均受到&lt;color=#5E1335&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#A11228&gt;流血&lt;/color&gt;并显示&lt;color=#A11228&gt;9→1&lt;/color&gt;倒计时；若目标连续9秒未离开立场，则被直接&lt;color=#A11228&gt;告死&lt;/color&gt;并彻底消失。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_ZhaoliSkill</category>

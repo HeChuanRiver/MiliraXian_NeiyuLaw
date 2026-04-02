@@ -818,8 +818,8 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAiming))]
     internal static class Patch_ZhaoliDuanzhan_DrawEquipmentAiming
     {
-        private const string SlashTexturePath = "MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand";
-        private const string SlashGlowTexturePath = "MiliraXianNeiyu/Effect/Zhaoli/DuanzhanTrailGlow";
+        private const string SlashTexturePath = "MiliraXianNeiyu/Items/Zhaoli_DuanzhanBlade_OnHand";
+        private const string SlashGlowTexturePath = "MiliraXianNeiyu/Effect/Zhaoli/Zhaoli_DuanzhanTrailGlow";
         private const float SlashTextureScaleFactor = 3f;
         private const int TrailLifetimeTicks = 18;
         private const int TrailMaxSamples = 24;

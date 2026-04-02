@@ -8,11 +8,11 @@
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <texPath>MiliraXianNeiyu/Items/Zhaoli_DuanzhanBlade</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <uiIconPath>MiliraXianNeiyu/Items/Zhaoli_DuanzhanBlade</uiIconPath>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>

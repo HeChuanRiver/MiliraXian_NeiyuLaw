@@ -102,16 +102,20 @@ namespace MiliraXian.Characters.Zhaoli
         private Mote fieldAreaMote;
         private int fieldCenterX;
         private int fieldCenterZ;
+        private float activeRadius;
         private bool active;
 
         private HediffCompProperties_ZhaoliDeathField PropsField => (HediffCompProperties_ZhaoliDeathField)props;
 
         private IntVec3 FieldCenter => new IntVec3(fieldCenterX, 0, fieldCenterZ);
+        public float DefaultRadius => PropsField.radius;
+        private float CurrentRadius => activeRadius > 0f ? activeRadius : PropsField.radius;
 
-        public void ActivateAt(IntVec3 center)
+        public void ActivateAt(IntVec3 center, float radiusOverride = -1f)
         {
             fieldCenterX = center.x;
             fieldCenterZ = center.z;
+            activeRadius = radiusOverride > 0f ? radiusOverride : PropsField.radius;
             active = true;
             stayTicks.Clear();
             markedPawns.Clear();
@@ -129,6 +133,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Scribe_Values.Look(ref fieldCenterX, "fieldCenterX", 0);
             Scribe_Values.Look(ref fieldCenterZ, "fieldCenterZ", 0);
+            Scribe_Values.Look(ref activeRadius, "activeRadius", 0f);
             Scribe_Values.Look(ref active, "active", false);
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -170,7 +175,7 @@ namespace MiliraXian.Characters.Zhaoli
                 FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
                 if (deathPulse != null)
                 {
-                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, PropsField.radius * 0.55f));
+                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, CurrentRadius * 0.55f));
                 }
             }
 
@@ -189,7 +194,7 @@ namespace MiliraXian.Characters.Zhaoli
                     continue;
                 }
 
-                if (pawn.Position.InHorDistOf(center, PropsField.radius))
+                if (pawn.Position.InHorDistOf(center, CurrentRadius))
                 {
                     pawnsInsideNow.Add(pawn);
                 }

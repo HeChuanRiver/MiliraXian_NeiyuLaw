@@ -608,6 +608,8 @@ namespace MiliraXian.Characters.Zhaoli
                     removeDiedThoughts = true
                 }))
                 {
+                    ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.NotifySubstituteTriggered();
+                    ZhaoliRebirthUtility.RegisterRecruitGrowthDeath(__instance);
                     return;
                 }
 

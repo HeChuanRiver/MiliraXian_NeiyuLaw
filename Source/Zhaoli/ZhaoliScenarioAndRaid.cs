@@ -27,6 +27,7 @@ namespace MiliraXian.Characters.Zhaoli
         public static WorldObjectDef MXZL_ZhaoliHideoutWorldObject;
         public static HediffDef MXZL_ZhaoliHideoutState;
         public static HediffDef MXZL_ZhaoliRaidState;
+        public static HediffDef MXZL_ZhaoliDeathFieldActive;
         public static ThingDef MX_Zhaoli_DuanzhanBlade;
         public static AbilityDef MX_Zhaoli_DeathField;
         public static AbilityDef MX_Zhaoli_Guiyi;
@@ -239,6 +240,56 @@ namespace MiliraXian.Characters.Zhaoli
             Pawn pawn = PawnGenerator.GeneratePawn(request);
             EnsurePrimaryWeapon(pawn);
             return pawn;
+        }
+
+        public static Pawn GenerateLinkedRelativePawn(Pawn colonist, Map map)
+        {
+            if (colonist == null)
+            {
+                return null;
+            }
+
+            PawnKindDef kindDef = colonist.kindDef ?? colonist.Faction?.def?.basicMemberKind ?? Faction.OfPlayer?.def?.basicMemberKind;
+            Faction faction = ResolveFriendlyFaction() ?? colonist.Faction ?? Faction.OfPlayer;
+            if (kindDef == null || faction == null)
+            {
+                return null;
+            }
+
+            PawnGenerationRequest request = new PawnGenerationRequest(
+                kindDef,
+                faction,
+                PawnGenerationContext.NonPlayer,
+                map?.Tile ?? -1,
+                forceGenerateNewPawn: true,
+                allowDead: false,
+                allowDowned: false,
+                canGeneratePawnRelations: false,
+                mustBeCapableOfViolence: false,
+                colonistRelationChanceFactor: 0f,
+                forceAddFreeWarmLayerIfNeeded: false,
+                allowGay: true,
+                allowPregnant: true,
+                allowFood: true,
+                allowAddictions: true,
+                inhabitant: false,
+                certainlyBeenInCryptosleep: false,
+                forceRedressWorldPawnIfFormerColonist: false,
+                worldPawnFactionDoesntMatter: false);
+
+            Pawn relative = PawnGenerator.GeneratePawn(request);
+            if (relative == null)
+            {
+                return null;
+            }
+
+            if (!relative.relations.DirectRelationExists(PawnRelationDefOf.Kin, colonist))
+            {
+                relative.relations.AddDirectRelation(PawnRelationDefOf.Kin, colonist);
+            }
+
+            Find.WorldPawns?.PassToWorld(relative, PawnDiscardDecideMode.KeepForever);
+            return relative;
         }
 
         public static void EnsurePrimaryWeapon(Pawn pawn)
@@ -686,6 +737,7 @@ namespace MiliraXian.Characters.Zhaoli
         private bool murmurOffered;
         private bool returnOffered;
         private int qualifyingPawnDeathCount;
+        private List<int> qualifyingPawnDeathIds = new List<int>();
         private int scheduledRaidTick = -1;
         private int scheduledReturnTick = -1;
         private Map scenarioHomeMap;
@@ -772,6 +824,11 @@ namespace MiliraXian.Characters.Zhaoli
                 scenarioCompleted = false;
             }
 
+            if (!scenarioCompleted && !murmurOffered && qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            {
+                BackfillTrackedPawnDeaths();
+            }
+
             if (ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName))
             {
                 murmurOffered = true;
@@ -812,12 +869,11 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (Find.TickManager == null || Find.TickManager.TicksGame < ZhaoliScenarioUtility.MurmurTriggerTicks)
+            if (!TryRegisterPawnDeath(pawn))
             {
                 return;
             }
 
-            qualifyingPawnDeathCount++;
             Map homeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(pawn.MapHeld) ?? ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
             if (homeMap != null)
             {
@@ -934,6 +990,7 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref murmurOffered, "murmurOffered", defaultValue: false);
             Scribe_Values.Look(ref returnOffered, "returnOffered", defaultValue: false);
             Scribe_Values.Look(ref qualifyingPawnDeathCount, "qualifyingPawnDeathCount", 0);
+            Scribe_Collections.Look(ref qualifyingPawnDeathIds, "qualifyingPawnDeathIds", LookMode.Value);
             Scribe_Values.Look(ref scheduledRaidTick, "scheduledRaidTick", -1);
             Scribe_Values.Look(ref scheduledReturnTick, "scheduledReturnTick", -1);
             Scribe_References.Look(ref scenarioHomeMap, "scenarioHomeMap");
@@ -941,6 +998,12 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_References.Look(ref currentRaidPawn, "currentRaidPawn");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                if (qualifyingPawnDeathIds == null)
+                {
+                    qualifyingPawnDeathIds = new List<int>();
+                }
+
+                qualifyingPawnDeathCount = Mathf.Max(qualifyingPawnDeathCount, qualifyingPawnDeathIds.Count);
                 if (activeHideoutSite != null && activeHideoutSite.Destroyed)
                 {
                     activeHideoutSite = null;
@@ -949,6 +1012,67 @@ namespace MiliraXian.Characters.Zhaoli
                 if (currentRaidPawn != null && currentRaidPawn.Destroyed)
                 {
                     currentRaidPawn = null;
+                }
+            }
+        }
+
+        private bool TryRegisterPawnDeath(Pawn pawn)
+        {
+            if (pawn == null || qualifyingPawnDeathCount >= ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            {
+                return false;
+            }
+
+            Map deathMap = pawn.MapHeld;
+            if (deathMap == null || !deathMap.IsPlayerHome)
+            {
+                return false;
+            }
+
+            if (qualifyingPawnDeathIds == null)
+            {
+                qualifyingPawnDeathIds = new List<int>();
+            }
+
+            int pawnId = pawn.thingIDNumber;
+            if (qualifyingPawnDeathIds.Contains(pawnId))
+            {
+                return false;
+            }
+
+            qualifyingPawnDeathIds.Add(pawnId);
+            qualifyingPawnDeathCount = Mathf.Max(qualifyingPawnDeathCount, qualifyingPawnDeathIds.Count);
+            return true;
+        }
+
+        private void BackfillTrackedPawnDeaths()
+        {
+            if (qualifyingPawnDeathIds == null)
+            {
+                qualifyingPawnDeathIds = new List<int>();
+            }
+
+            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+            {
+                if (pawn == null || !pawn.Dead)
+                {
+                    continue;
+                }
+
+                if (!TryRegisterPawnDeath(pawn))
+                {
+                    continue;
+                }
+
+                Map homeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(pawn.MapHeld) ?? ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
+                if (homeMap != null)
+                {
+                    scenarioHomeMap = homeMap;
+                }
+
+                if (qualifyingPawnDeathCount >= ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+                {
+                    break;
                 }
             }
         }
@@ -1044,7 +1168,6 @@ namespace MiliraXian.Characters.Zhaoli
 
             PawnsArrivalModeDefOf.EdgeWalkIn.Worker.Arrive(new List<Pawn> { pawn }, parms);
             pawn.SetFaction(faction);
-            LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: false, sappers: false, useAvoidGridSmart: true, canSteal: false, breachers: false, canPickUpOpportunisticWeapons: false), map, new[] { pawn });
             currentRaidPawn = pawn;
             Find.LetterStack.ReceiveLetter(
                 "昭离来袭",
@@ -1347,6 +1470,8 @@ namespace MiliraXian.Characters.Zhaoli
     public class HediffCompProperties_ZhaoliRaidState : HediffCompProperties
     {
         public int minPreferredCluster = 3;
+        public int transitionTicks = ZhaoliProgressionUtility.TransitionDurationTicks;
+        public int teleportIntervalTicks = ZhaoliProgressionUtility.PhaseTeleportIntervalTicks;
 
         public HediffCompProperties_ZhaoliRaidState()
         {
@@ -1362,11 +1487,15 @@ namespace MiliraXian.Characters.Zhaoli
         private Thing currentAttackTarget;
         private int lastTargetSwitchTick = -99999;
         private int ignoreHatredUntilTick = -1;
+        private int substituteDeathsUsed;
+        private int transitionEndTick = -1;
+        private int nextPhaseTeleportTick = -1;
         private bool damageAppliedSinceSwitch;
         private bool raidInitialized;
         private bool linksPrepared;
 
         private HediffCompProperties_ZhaoliRaidState PropsRaid => (HediffCompProperties_ZhaoliRaidState)props;
+        public int SubstituteDeathsUsed => substituteDeathsUsed;
 
         public override bool CompDisallowVisible()
         {
@@ -1381,6 +1510,9 @@ namespace MiliraXian.Characters.Zhaoli
             primaryHatredTarget = null;
             lastTargetSwitchTick = Find.TickManager?.TicksGame ?? 0;
             ignoreHatredUntilTick = -1;
+            substituteDeathsUsed = 0;
+            transitionEndTick = -1;
+            nextPhaseTeleportTick = -1;
             damageAppliedSinceSwitch = false;
             ZhaoliShieldLayerUtility.AddLayers(Pawn, ZhaoliScenarioUtility.RaidStartingShieldLayers);
             ZhaoliKarmaUtility.EnsureKarmaComp(Pawn)?.SetValue(ZhaoliScenarioUtility.RaidStartingKarma);
@@ -1388,6 +1520,27 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 Current.Game?.GetComponent<GameComponent_ZhaoliScenario>()?.MarkMurmurOffered(targetMap);
             }
+        }
+
+        public void NotifySubstituteTriggered()
+        {
+            if (Pawn == null || Pawn.Dead)
+            {
+                return;
+            }
+
+            substituteDeathsUsed = Mathf.Clamp(substituteDeathsUsed + 1, 0, 3);
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            transitionEndTick = currentTick + Mathf.Max(1, PropsRaid.transitionTicks);
+            nextPhaseTeleportTick = transitionEndTick + Mathf.Max(1, PropsRaid.teleportIntervalTicks);
+            damageAppliedSinceSwitch = false;
+            ignoreHatredUntilTick = transitionEndTick;
+            currentAttackTarget = null;
+            primaryHatredTarget = null;
+            Pawn.jobs?.StopAll(false, true);
+            Pawn.pather?.StopDead();
+            Pawn.stances?.stunner?.StunFor(Mathf.Max(60, PropsRaid.transitionTicks), Pawn, addBattleLog: false, showMote: false);
+            ActivateTransitionField();
         }
 
         public void RegisterIncomingAggro(Thing instigator, float rawDamageAmount)
@@ -1433,6 +1586,9 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_References.Look(ref currentAttackTarget, "currentAttackTarget");
             Scribe_Values.Look(ref lastTargetSwitchTick, "lastTargetSwitchTick", -99999);
             Scribe_Values.Look(ref ignoreHatredUntilTick, "ignoreHatredUntilTick", -1);
+            Scribe_Values.Look(ref substituteDeathsUsed, "substituteDeathsUsed", 0);
+            Scribe_Values.Look(ref transitionEndTick, "transitionEndTick", -1);
+            Scribe_Values.Look(ref nextPhaseTeleportTick, "nextPhaseTeleportTick", -1);
             Scribe_Values.Look(ref damageAppliedSinceSwitch, "damageAppliedSinceSwitch", defaultValue: false);
             Scribe_Values.Look(ref raidInitialized, "raidInitialized", defaultValue: false);
             Scribe_Values.Look(ref linksPrepared, "linksPrepared", defaultValue: false);
@@ -1468,12 +1624,88 @@ namespace MiliraXian.Characters.Zhaoli
                 linksPrepared = true;
             }
 
+            MaintainLockedPhaseNeeds();
+
+            if (IsInTransition())
+            {
+                MaintainTransition();
+                return;
+            }
+
             if (!Pawn.IsHashIntervalTick(ZhaoliScenarioUtility.AiTickInterval))
             {
                 return;
             }
 
             RunRaidAi();
+        }
+
+        private bool IsInTransition()
+        {
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            return transitionEndTick >= 0 && currentTick < transitionEndTick;
+        }
+
+        private void MaintainTransition()
+        {
+            if (Pawn == null)
+            {
+                return;
+            }
+
+            if (Pawn.IsHashIntervalTick(30))
+            {
+                Pawn.jobs?.StopAll(false, true);
+                Pawn.pather?.StopDead();
+                Pawn.stances?.stunner?.StunFor(60, Pawn, addBattleLog: false, showMote: false);
+            }
+        }
+
+        private void MaintainLockedPhaseNeeds()
+        {
+            if (substituteDeathsUsed < 3 || Pawn?.needs?.food == null)
+            {
+                return;
+            }
+
+            if (Pawn.IsHashIntervalTick(60))
+            {
+                Pawn.needs.food.CurLevelPercentage = 0.01f;
+            }
+        }
+
+        private void ActivateTransitionField()
+        {
+            if (Pawn?.health == null || MXZL_ZhaoliDefOf.MXZL_ZhaoliDeathFieldActive == null)
+            {
+                return;
+            }
+
+            HediffWithComps field = Pawn.health.hediffSet.GetFirstHediffOfDef(MXZL_ZhaoliDefOf.MXZL_ZhaoliDeathFieldActive) as HediffWithComps;
+            if (field == null)
+            {
+                field = HediffMaker.MakeHediff(MXZL_ZhaoliDefOf.MXZL_ZhaoliDeathFieldActive, Pawn) as HediffWithComps;
+                if (field == null)
+                {
+                    return;
+                }
+
+                Pawn.health.AddHediff(field);
+            }
+
+            HediffComp_ZhaoliDeathField fieldComp = field.GetComp<HediffComp_ZhaoliDeathField>();
+            if (fieldComp == null)
+            {
+                return;
+            }
+
+            float radius = fieldComp.DefaultRadius + ZhaoliProgressionUtility.GetTransitionRadiusBonus(substituteDeathsUsed);
+            fieldComp.ActivateAt(Pawn.Position, radius);
+            if (Pawn.Spawned)
+            {
+                FleckMaker.Static(Pawn.Position, Pawn.MapHeld, FleckDefOf.PsycastAreaEffect, Mathf.Max(1.5f, radius * 0.65f));
+                FleckMaker.Static(Pawn.Position, Pawn.MapHeld, FleckDefOf.ExplosionFlash, 2.8f);
+            }
         }
 
         private void RunRaidAi()
@@ -1484,12 +1716,13 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (IsExecutingAbilityJob())
             {
                 return;
             }
 
-            if (TryCastMinghuo())
+            bool lockToKillOrders = substituteDeathsUsed >= 3;
+            if (!lockToKillOrders && TryCastMinghuo())
             {
                 return;
             }
@@ -1497,7 +1730,7 @@ namespace MiliraXian.Characters.Zhaoli
             int currentTick = Find.TickManager?.TicksGame ?? 0;
             if (currentTick >= ignoreHatredUntilTick)
             {
-                Thing preferredTarget = GetPreferredHatredTarget();
+                Thing preferredTarget = GetPreferredHatredTarget(!lockToKillOrders);
                 if (preferredTarget != null && preferredTarget != currentAttackTarget)
                 {
                     primaryHatredTarget = preferredTarget as Pawn;
@@ -1505,7 +1738,7 @@ namespace MiliraXian.Characters.Zhaoli
                     lastTargetSwitchTick = currentTick;
                     damageAppliedSinceSwitch = false;
                     ignoreHatredUntilTick = -1;
-                    if (TryUseGapCloser(preferredTarget))
+                    if (!lockToKillOrders && TryUseGapCloser(preferredTarget))
                     {
                         return;
                     }
@@ -1518,22 +1751,27 @@ namespace MiliraXian.Characters.Zhaoli
                 if (currentAttackTarget != null && !damageAppliedSinceSwitch && currentTick - lastTargetSwitchTick > ZhaoliScenarioUtility.TargetSwitchGraceTicks)
                 {
                     ignoreHatredUntilTick = currentTick + ZhaoliScenarioUtility.TargetSwitchGraceTicks;
-                    currentAttackTarget = FindNearestTarget();
+                    currentAttackTarget = lockToKillOrders ? (Thing)FindNearestPawnTarget() : FindNearestTarget();
                 }
             }
             else
             {
-                currentAttackTarget = FindNearestTarget();
+                currentAttackTarget = lockToKillOrders ? (Thing)FindNearestPawnTarget() : FindNearestTarget();
             }
 
             if (currentAttackTarget == null)
             {
-                currentAttackTarget = FindNearestTarget();
+                currentAttackTarget = lockToKillOrders ? (Thing)FindNearestPawnTarget() : FindNearestTarget();
+            }
+
+            if (substituteDeathsUsed >= 2 && TryPhaseTeleport(currentTick))
+            {
+                return;
             }
 
             if (currentAttackTarget is Pawn targetPawn)
             {
-                if (TryCastField(targetPawn) || TryCastMinshen(targetPawn) || TryUseGapCloser(targetPawn))
+                if (!lockToKillOrders && (TryCastField(targetPawn) || TryCastMinshen(targetPawn) || TryUseGapCloser(targetPawn)))
                 {
                     return;
                 }
@@ -1588,7 +1826,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            int linkCount = Mathf.Min(Rand.RangeInclusive(1, 3), candidates.Count);
+            int linkCount = Mathf.Min(ZhaoliProgressionUtility.BossLinkCount, candidates.Count);
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(Pawn);
             for (int created = 0; created < linkCount && candidates.Count > 0; created++)
             {
@@ -1600,13 +1838,118 @@ namespace MiliraXian.Characters.Zhaoli
                     continue;
                 }
 
-                if (!Pawn.relations.DirectRelationExists(PawnRelationDefOf.Kin, target))
+                Pawn relative = ZhaoliScenarioUtility.GenerateLinkedRelativePawn(target, Pawn.MapHeld);
+                if (relative == null)
                 {
-                    Pawn.relations.AddDirectRelation(PawnRelationDefOf.Kin, target);
+                    Log.Warning("[MiliraXian.Characters.Zhaoli] Failed to generate linked relative for " + target);
+                    continue;
                 }
 
-                linkComp?.TryAddOrRefreshLink(target, out _, out _);
+                linkComp?.TryAddOrRefreshLink(relative, out _, out _);
             }
+        }
+
+        private bool TryPhaseTeleport(int currentTick)
+        {
+            if (currentTick < nextPhaseTeleportTick)
+            {
+                return false;
+            }
+
+            Pawn targetPawn = GetPriorityTeleportTarget();
+            IntVec3 destination = FindTeleportDestination(targetPawn);
+            if (targetPawn == null || !destination.IsValid || Pawn.MapHeld == null)
+            {
+                nextPhaseTeleportTick = currentTick + Mathf.Max(1, PropsRaid.teleportIntervalTicks);
+                return false;
+            }
+
+            Pawn.jobs?.StopAll(false, true);
+            Pawn.pather?.StopDead();
+            FleckMaker.Static(Pawn.Position, Pawn.MapHeld, FleckDefOf.PsycastSkipInnerExit, 1.15f);
+            Pawn.Position = destination;
+            Pawn.Notify_Teleported();
+            Pawn.rotationTracker?.FaceCell(targetPawn.Position);
+            FleckMaker.Static(destination, Pawn.MapHeld, FleckDefOf.PsycastSkipFlashEntry, 1.2f);
+            currentAttackTarget = targetPawn;
+            primaryHatredTarget = targetPawn;
+            lastTargetSwitchTick = currentTick;
+            damageAppliedSinceSwitch = false;
+            ignoreHatredUntilTick = -1;
+            nextPhaseTeleportTick = currentTick + Mathf.Max(1, PropsRaid.teleportIntervalTicks);
+            return true;
+        }
+
+        private Pawn GetPriorityTeleportTarget()
+        {
+            Pawn hatedTarget = GetPreferredHatredTarget(false) as Pawn;
+            if (IsValidRaidTarget(hatedTarget))
+            {
+                return hatedTarget;
+            }
+
+            if (IsValidRaidTarget(primaryHatredTarget))
+            {
+                return primaryHatredTarget;
+            }
+
+            return FindNearestTarget() as Pawn;
+        }
+
+        private Pawn FindNearestPawnTarget()
+        {
+            Pawn nearest = null;
+            float bestDistance = float.MaxValue;
+            IReadOnlyList<Pawn> pawns = Pawn.MapHeld.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
+            {
+                Pawn candidate = pawns[index];
+                if (!IsValidRaidTarget(candidate))
+                {
+                    continue;
+                }
+
+                float distance = Pawn.Position.DistanceToSquared(candidate.Position);
+                if (distance < bestDistance)
+                {
+                    bestDistance = distance;
+                    nearest = candidate;
+                }
+            }
+
+            return nearest;
+        }
+
+        private IntVec3 FindTeleportDestination(Pawn targetPawn)
+        {
+            Map map = Pawn?.MapHeld;
+            if (targetPawn == null || map == null || !targetPawn.Spawned || targetPawn.MapHeld != map)
+            {
+                return IntVec3.Invalid;
+            }
+
+            IntVec3 preferred = targetPawn.Position + NeiyuFlowerSwordSkillUtility.StepDirectionAwayFrom(targetPawn.Position, Pawn.Position);
+            preferred = NeiyuFlowerSwordSkillUtility.ClampToMap(preferred, map);
+            if (JumpUtility.ValidJumpTarget(Pawn, map, preferred))
+            {
+                return preferred;
+            }
+
+            for (int index = 0; index < GenAdj.AdjacentCellsAround.Length; index++)
+            {
+                IntVec3 candidate = NeiyuFlowerSwordSkillUtility.ClampToMap(targetPawn.Position + GenAdj.AdjacentCellsAround[index], map);
+                if (JumpUtility.ValidJumpTarget(Pawn, map, candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return IntVec3.Invalid;
+        }
+
+        private bool IsExecutingAbilityJob()
+        {
+            return Pawn.CurJobDef == JobDefOf.CastAbilityOnThing;
         }
 
         private void AddHatred(Pawn pawn, float hatred)
@@ -1632,7 +1975,7 @@ namespace MiliraXian.Characters.Zhaoli
             });
         }
 
-        private Thing GetPreferredHatredTarget()
+        private Thing GetPreferredHatredTarget(bool allowBuildings = true)
         {
             Pawn bestPawn = null;
             float bestHatred = float.MinValue;
@@ -1656,7 +1999,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return bestPawn;
             }
 
-            return FindNearestTarget();
+            return allowBuildings ? FindNearestTarget() : FindNearestPawnTarget();
         }
 
         private Thing FindNearestTarget()
@@ -1716,7 +2059,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryCastMinghuo()
         {
-            if (Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (IsExecutingAbilityJob())
             {
                 return false;
             }
@@ -1750,7 +2093,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (IsExecutingAbilityJob())
             {
                 return false;
             }
@@ -1777,7 +2120,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (IsExecutingAbilityJob())
             {
                 return false;
             }
@@ -1798,7 +2141,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryUseGapCloser(Thing target)
         {
-            if (!(target is Pawn targetPawn) || Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (!(target is Pawn targetPawn) || IsExecutingAbilityJob())
             {
                 return false;
             }
@@ -1853,7 +2196,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (Pawn.CurJobDef != null && Pawn.CurJobDef.abilityCasting)
+            if (IsExecutingAbilityJob())
             {
                 return;
             }
