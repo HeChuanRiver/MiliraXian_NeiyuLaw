@@ -19,6 +19,8 @@
                 <maxValue>100</maxValue>
                 <clampToMax>true</clampToMax>
                 <recoverTimerMaxTicks>360</recoverTimerMaxTicks>
+                <baseDecayPerTick>-0.02</baseDecayPerTick>
+                <maxRegenPerTickAtFullElegance>0.05</maxRegenPerTickAtFullElegance>
                 <showGizmo>false</showGizmo>
                 <hideOnHealthTab>true</hideOnHealthTab>
                 <barColorRed>0.26</barColorRed>

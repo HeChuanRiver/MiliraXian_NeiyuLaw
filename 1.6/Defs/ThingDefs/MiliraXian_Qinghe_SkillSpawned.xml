@@ -126,9 +126,16 @@
                 <eleganceGainFlat>6</eleganceGainFlat>
                 <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
                 <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
-                <eleganceGainPerTick>0.01</eleganceGainPerTick>
                 <pulseFx>MX_QH_Effecter_YangChunPulse</pulseFx>
                 <pulseFxScale>1.9</pulseFxScale>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ResourceTick">
+                <entries>
+                    <li>
+                        <resourceDef>MX_QH_Elegance</resourceDef>
+                        <amount>0.01</amount>
+                    </li>
+                </entries>
             </li>
         </comps>
     </ThingDef>

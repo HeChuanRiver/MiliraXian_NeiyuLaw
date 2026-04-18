@@ -99,3 +99,7 @@ The main `.csproj` uses `..\..\..\..\workshop\content\294100\...` relative paths
 - `Source/*/MX_*DefOf.cs` (or equivalent) — static `DefOf` caches per character
 - `Source/*/MX_*Patches.cs` (or equivalent) — Harmony bootstrap per character
 - `1.6/Defs/HediffDefs/MiliraXian_Qinghe_PawnResource.xml` — QingHe Tempest/Elegance defs
+
+## References
+
+若存在 `References.md`，则文档在 `References.md` 所指定的目录中，需要时可以查阅。

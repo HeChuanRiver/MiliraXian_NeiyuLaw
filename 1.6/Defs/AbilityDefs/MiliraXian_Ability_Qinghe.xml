@@ -35,10 +35,18 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilitySpringFlow">
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
                 <previewRadius>6.0</previewRadius>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
+                <perTick>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <amount>0.04</amount>
+                    </li>
+                </perTick>
             </li>
         </comps>
     </AbilityDef>
@@ -110,12 +118,26 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityTempestDrain">
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityTempestDrain">
                 <fieldDef>TempestDrainField</fieldDef>
                 <minResourceToCast>50</minResourceToCast>
                 <minResourceToMaintain>10</minResourceToMaintain>
                 <channelDurationTicks>999999</channelDurationTicks>
                 <previewRadius>12.0</previewRadius>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
+                <perTick>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <amount>-0.1</amount>
+                    </li>
+                </perTick>
+                <failConditions>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <minAmount>10</minAmount>
+                    </li>
+                </failConditions>
             </li>
         </comps>
     </AbilityDef>

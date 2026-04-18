@@ -67,11 +67,6 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (Props.eleganceGainPerTick > 0f)
-            {
-                EleganceUtility.AddElegance(caster, Props.eleganceGainPerTick);
-            }
-
             EleganceUtility.NotifyDecayEvent(caster);
 
             if (ticksToNextPulse <= 0)
@@ -94,6 +89,7 @@ namespace MiliraXian.Characters.QingHe
         {
             caster = newCaster;
             ticksToNextPulse = 1;
+            parent.TryGetComp<CompResourceTick>()?.Init(newCaster);
         }
 
         public void SpawnFx()
