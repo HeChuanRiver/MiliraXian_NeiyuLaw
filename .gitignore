@@ -8,3 +8,5 @@ riderModule.iml
 .vscode/
 .idea/
 *.sln.DotSettings.user
+.claude/
+References.md

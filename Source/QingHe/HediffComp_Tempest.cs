@@ -6,18 +6,17 @@ namespace MiliraXian.Characters.QingHe
     public class HediffCompProperties_Tempest : HediffCompProperties_PawnSpecialResource
     {
         public int recoverTimerMaxTicks = 360;
+        public float baseDecayPerTick = -0.02f;
+        public float maxRegenPerTickAtFullElegance = 0.05f;
 
         public HediffCompProperties_Tempest()
         {
             compClass = typeof(HediffComp_Tempest);
         }
     }
-    
+
     public class HediffComp_Tempest : HediffComp_PawnSpecialResource
     {
-        private const float GainPerTick = 0.01f;
-        private const float LossPerTick = -0.02f;
-
         private int recoverTimer;
 
         public HediffCompProperties_Tempest Props => (HediffCompProperties_Tempest)props;
@@ -32,7 +31,7 @@ namespace MiliraXian.Characters.QingHe
         {
             recoverTimer = Mathf.Max(0, Props?.recoverTimerMaxTicks ?? 0);
         }
-        
+
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
@@ -43,8 +42,20 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
+            var elegancePercent = EleganceUtility.GetPercent(pawn);
             var threshold = EleganceUtility.GetTempestRecoverThreshold(pawn);
-            var delta = EleganceUtility.GetPercent(pawn) > threshold ? GainPerTick : LossPerTick;
+
+            float delta;
+            if (elegancePercent <= threshold)
+            {
+                var t = elegancePercent / threshold;
+                delta = Mathf.Lerp(Props.baseDecayPerTick, 0f, t);
+            }
+            else
+            {
+                var t = (elegancePercent - threshold) / (1f - threshold);
+                delta = Mathf.Lerp(0f, Props.maxRegenPerTickAtFullElegance, t);
+            }
 
             if (recoverTimer > 0)
             {
