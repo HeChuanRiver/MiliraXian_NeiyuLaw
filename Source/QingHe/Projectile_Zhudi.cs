@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe
             Thing resolvedHitThing = ResolveImpactHitThing(hitThing, impactPos, map);
 
             base.Impact(resolvedHitThing, blockedByShield);
-            GetComp<CompProjectileEleganceEffect>()?.NotifyImpact(resolvedHitThing, blockedByShield);
+            GetComp<CompProjectileResourceOnHit>()?.NotifyImpact(resolvedHitThing, blockedByShield);
             TryApplyZhudiHitEffects(resolvedHitThing, blockedByShield);
             if (map != null && !blockedByShield)
             {

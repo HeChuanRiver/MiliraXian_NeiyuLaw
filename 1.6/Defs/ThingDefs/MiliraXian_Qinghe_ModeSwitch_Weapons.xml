@@ -297,9 +297,14 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
-        <eleganceGainOnHit>1.4</eleganceGainOnHit>
-        <requireHostileTarget>true</requireHostileTarget>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileResourceOnHit">
+        <entries>
+          <li>
+            <resourceDef>MX_QH_Elegance</resourceDef>
+            <amount>1.4</amount>
+            <requireHostileTarget>true</requireHostileTarget>
+          </li>
+        </entries>
       </li>
     </comps>
   </ThingDef>
@@ -345,9 +350,14 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.CompProperties_ProjectileEleganceEffect">
-        <eleganceGainOnHit>1.0</eleganceGainOnHit>
-        <requireHostileTarget>true</requireHostileTarget>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileResourceOnHit">
+        <entries>
+          <li>
+            <resourceDef>MX_QH_Elegance</resourceDef>
+            <amount>1.0</amount>
+            <requireHostileTarget>true</requireHostileTarget>
+          </li>
+        </entries>
       </li>
     </comps>
   </ThingDef>
