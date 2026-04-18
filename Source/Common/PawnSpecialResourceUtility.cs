@@ -48,5 +48,10 @@ namespace MiliraXian.Characters
             HediffComp_PawnSpecialResource comp = EnsureSpecialResourceComp(pawn, specialResourceDef);
             return comp != null && comp.TryConsume(value);
         }
+
+        public static float GetResourcePercent(Pawn pawn, HediffDef specialResourceDef)
+        {
+            return GetSpecialResourceComp(pawn, specialResourceDef)?.ValuePercent ?? 0f;
+        }
     }
 }

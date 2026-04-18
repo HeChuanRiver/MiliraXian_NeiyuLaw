@@ -161,6 +161,22 @@
                     <maxDrawScale>1.0</maxDrawScale>
                 </shieldCompProperties>
             </li>
+            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
+                <damagePerShieldPoint>
+                    <baseValue>1</baseValue>
+                    <min>1.0</min>
+                    <max>6.0</max>
+                    <resourceDef>MX_QH_Tempest</resourceDef>
+                    <method>linear</method>
+                </damagePerShieldPoint>
+                <regenPerSecond>
+                    <baseValue>2</baseValue>
+                    <min>1.0</min>
+                    <max>5.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </regenPerSecond>
+            </li>
         </comps>
     </HediffDef>
 

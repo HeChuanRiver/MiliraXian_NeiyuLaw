@@ -69,8 +69,20 @@ namespace MiliraXian.Characters.QingHe
                     center = pawn.Position;
                 }
 
-                var damageFactor = EleganceUtility.FactorLinear(p.damageFactorMax, pawn);
-                var slowDuration = Mathf.Max(1, Mathf.RoundToInt(p.slowDurationTicks * EleganceUtility.FactorLinear(p.slowDurationFactorMax, pawn)));
+                MiliraXian.Characters.CompAbilityEffect_PawnResourceScaling scaler = null;
+                if (job?.ability?.comps != null)
+                {
+                    for (var i = 0; i < job.ability.comps.Count; i++)
+                    {
+                        if (job.ability.comps[i] is MiliraXian.Characters.CompAbilityEffect_PawnResourceScaling s)
+                        {
+                            scaler = s;
+                            break;
+                        }
+                    }
+                }
+                var damageAmount = scaler?.DamageAmount ?? p.damageAmount;
+                var slowDuration = Mathf.Max(1, Mathf.RoundToInt(scaler?.DurationTicks ?? p.slowDurationTicks));
                 GraphicsUtility.Fx(map, pawn.Position, p.releaseCasterFx, 1f);
                 GraphicsUtility.Fx(map, center, p.releaseTargetFx, 1f);
                 GraphicsUtility.Fleck(map, center, p.releaseFleck, Mathf.Max(0.85f, p.radius * 0.65f));
@@ -83,7 +95,7 @@ namespace MiliraXian.Characters.QingHe
                 for (var i = 0; i < victims.Count; i++)
                 {
                     var victim = victims[i];
-                    victim.TakeDamage(new DamageInfo(damageDef, p.damageAmount * damageFactor, p.armorPenetration, -1f, pawn));
+                    victim.TakeDamage(new DamageInfo(damageDef, damageAmount, p.armorPenetration, -1f, pawn));
 
                     if (p.stunDamageAmount > 0f)
                     {

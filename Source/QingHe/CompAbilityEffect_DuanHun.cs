@@ -15,15 +15,12 @@ namespace MiliraXian.Characters.QingHe
         public DamageDef damageDef = null;
         public float damageAmount = 16f;
         public float armorPenetration = 0.25f;
-        public float damageFactorMax = 0.75f;
-
         public float stunDamageAmount = 8f;
         public float bleedDamageAmount = 5f;
 
         public HediffDef slowHediff;
         public float slowSeverity = 1f;
         public int slowDurationTicks = 1800;
-        public float slowDurationFactorMax = 1f;
 
         public float brainDestroyChance = 0.08f;
 

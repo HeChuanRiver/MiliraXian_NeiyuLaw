@@ -344,8 +344,20 @@ namespace MiliraXian.Characters.QingHe
                 1f);
         }
 
+        private MiliraXian.Characters.HediffComp_PawnResourceScaling GetScaler()
+        {
+            var hediff = PawnOwner?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
+            return hediff?.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
+        }
+
         private float ResolveDamagePerShieldPoint()
         {
+            var scaler = GetScaler();
+            if (scaler?.Props.damagePerShieldPoint != null)
+            {
+                return Mathf.Max(0.01f, scaler.DamagePerShieldPoint);
+            }
+
             Pawn owner = PawnOwner;
             float tempest = TempestUtility.GetCurrent(owner);
             float tempestMax = Mathf.Max(1f, TempestUtility.GetMax(owner));
@@ -355,6 +367,12 @@ namespace MiliraXian.Characters.QingHe
 
         private float ResolveRegenPerSecond()
         {
+            var scaler = GetScaler();
+            if (scaler?.Props.regenPerSecond != null)
+            {
+                return Mathf.Max(0f, scaler.RegenPerSecond);
+            }
+
             Pawn owner = PawnOwner;
             float elegance = EleganceUtility.GetCurrent(owner);
             float eleganceMax = Mathf.Max(1f, EleganceUtility.GetMax(owner));
