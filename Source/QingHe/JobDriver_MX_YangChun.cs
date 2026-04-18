@@ -14,15 +14,15 @@ namespace MiliraXian.Characters.QingHe
         {
             get
             {
-                var ability = job != null ? job.ability : null;
-                if (ability == null || ability.def == null || ability.def.comps == null)
+                var ability = job?.ability;
+                if (ability?.def?.comps == null)
                 {
                     return null;
                 }
 
-                for (var i = 0; i < ability.def.comps.Count; i++)
+                foreach (var t in ability.def.comps)
                 {
-                    if (ability.def.comps[i] is CompProperties_AbilityYangChun p)
+                    if (t is CompProperties_AbilityYangChun p)
                     {
                         return p;
                     }
@@ -59,13 +59,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                if (!MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon))
-                {
-                    EndJobWith(JobCondition.Incompletable);
-                    return;
-                }
-
-                if (p.fieldDef == null || pawn.Map == null || !pawn.Spawned)
+                if (!MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon) || p.fieldDef == null || pawn.Map == null || !pawn.Spawned)
                 {
                     EndJobWith(JobCondition.Incompletable);
                     return;
