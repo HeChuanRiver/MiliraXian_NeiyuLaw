@@ -9,4 +9,5 @@ riderModule.iml
 .idea/
 *.sln.DotSettings.user
 .claude/
+.dotnet/
 References.md
