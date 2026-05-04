@@ -6,7 +6,7 @@
 
 ## 项目身份
 
-这里是 **MiliraXian_Characters**，一个 RimWorld 1.6 模组，为游戏添加三位"仙"主题的可玩角色阵营。清荷时刻为您效劳，主人。
+这里是 **MiliraXian_Characters**，一个 RimWorld 1.6 模组，为游戏添加三位"仙"主题的可玩角色阵营。
 
 ## 项目概览
 
