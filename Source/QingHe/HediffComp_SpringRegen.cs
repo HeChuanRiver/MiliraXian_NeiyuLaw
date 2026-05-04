@@ -92,13 +92,20 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
 
-            if (target == null || Props.healAmountPerTrigger <= 0f)
+            float healAmount = Props.healAmountPerTrigger;
+            var scaler = parent.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
+            if (scaler != null)
+            {
+                healAmount = scaler.HealAmount > 0f ? scaler.HealAmount : healAmount;
+            }
+
+            if (target == null || healAmount <= 0f)
             {
                 return 0f;
             }
 
             float before = target.Severity;
-            target.Heal(Props.healAmountPerTrigger);
+            target.Heal(healAmount);
             float healed = before - target.Severity;
             return healed > 0f ? healed : 0f;
         }

@@ -38,7 +38,7 @@
     <HediffDef>
         <defName>MX_QH_Elegance</defName>
         <label>雅乐</label>
-        <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</description>
+        <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使&lt;color=#6B61FF&gt;激流&lt;/color&gt;回复速度提升。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.92, 0.42, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
@@ -77,7 +77,7 @@
     <HediffDef>
         <defName>MX_QH_LongBreath</defName>
         <label>长息</label>
-        <description>受到致命伤害或摧毁身体部件的伤害时，若激流值大于0，抵消此次伤害、修复自身所有损伤并清空激流值，同时获得短暂无敌和心灵隐形。</description>
+        <description>受到致命伤害或摧毁身体部件的伤害时，若&lt;color=#6B61FF&gt;激流&lt;/color&gt;值大于0，抵消此次伤害、修复自身所有损伤并清空&lt;color=#6B61FF&gt;激流&lt;/color&gt;值，同时获得短暂无敌和心灵隐形（若可用）。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
@@ -115,7 +115,7 @@
     <HediffDef>
         <defName>MX_QH_SpringRegen</defName>
         <label>清流</label>
-        <description>每隔一小段时间，自动治愈一定生命值的伤口。</description>
+        <description>每隔3秒，自动治愈2.5点生命值的伤口，包括永久伤口。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.4, 0.6, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -127,13 +127,22 @@
                 <healAmountPerTrigger>2.5</healAmountPerTrigger>
                 <healPermanentInjuries>true</healPermanentInjuries>
             </li>
+            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
+                <healAmount>
+                    <baseValue>2.5</baseValue>
+                    <min>1.0</min>
+                    <max>3.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </healAmount>
+            </li>
         </comps>
     </HediffDef>
 
     <HediffDef>
         <defName>MX_QH_LotusShield</defName>
         <label>花神护体</label>
-        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。自身的激流属性越高，每点护盾的承伤越高；自身的雅乐属性越高，每秒回复的护盾值越多。\n\n护盾被击碎时会失效20秒。</description>
+        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。自身的&lt;color=#6B61FF&gt;激流&lt;/color&gt;属性越高，每点护盾能吸收的伤害越多；自身的&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;属性越高，每秒回复的护盾值越多。\n\n护盾被击碎时会失效20秒。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediff_LotusShield</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>

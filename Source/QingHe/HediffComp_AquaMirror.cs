@@ -50,15 +50,21 @@ namespace MiliraXian.Characters.QingHe
                 parent.pawn.AllComps.Remove(existed);
             }
 
+            float shieldFactor = 1f;
+            var scaler = parent.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
+            if (scaler != null)
+            {
+                shieldFactor = scaler.ShieldValue > 0f ? scaler.ShieldValue / Mathf.Max(1f, Props.shieldCompProperties?.startingEnergy ?? 100f) : shieldFactor;
+            }
+
             CompAquaMirrorShield newShield = new CompAquaMirrorShield
             {
                 parent = parent.pawn
             };
             newShield.Initialize(Props.shieldCompProperties);
             newShield.caster = caster;
-            newShield.Init(EleganceUtility.FactorLinear(1.0f, caster));
+            newShield.Init(shieldFactor);
             newShield.PostPostMake();
-            Log.Message("Debug shield amount: " + newShield.Energy);
             parent.pawn.AllComps.Add(newShield);
             shieldInspected = newShield;
         }
@@ -75,6 +81,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
+            var scaler = parent.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
+
             if (pawn.Spawned && pawn.Map != null)
             {
                 float visualRadius = Mathf.Max(0.8f, Props.explosionRadius);
@@ -87,13 +95,19 @@ namespace MiliraXian.Characters.QingHe
                     hitFlashDef = DefDatabase<FleckDef>.GetNamedSilentFail("ExplosionFlash");
                 }
 
+                float explosionDamage = Props.explosionDamage;
+                if (scaler != null && scaler.DamageAmount > 0f)
+                {
+                    explosionDamage = scaler.DamageAmount;
+                }
+
                 foreach (Thing thing in GenRadial.RadialDistinctThingsAround(pawn.Position, pawn.Map, Props.explosionRadius, true))
                 {
                     if (thing is Pawn target && !target.Dead && target.HostileTo(caster))
                     {
                         DamageInfo dinfo = new DamageInfo(
                             MX_QHDefOf.MX_Dehydrate,
-                            Props.explosionDamage * EleganceUtility.FactorLinear(1.0f, caster),
+                            explosionDamage,
                             armorPenetration: 1000.0f,
                             instigator: caster);
                         dinfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Inside);
@@ -114,11 +128,14 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
 
-            // Heal a fixed amount of injury severity, scaled by caster Elegance.
-            if (Props.healAmount > 0f)
+            // Heal a fixed amount of injury severity, scaled by cached Scaler value.
+            float healAmount = Props.healAmount;
+            if (scaler != null && scaler.HealAmount > 0f)
             {
-                Pawn scalerPawn = caster ?? pawn;
-                float healAmount = Props.healAmount * EleganceUtility.FactorLinear(Props.healAmountByEleganceMax, scalerPawn);
+                healAmount = scaler.HealAmount;
+            }
+            if (healAmount > 0f)
+            {
                 MX_QHUtility.HealInjuries(pawn, healAmount);
             }
 

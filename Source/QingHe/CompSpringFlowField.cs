@@ -64,16 +64,13 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                var elegance = EleganceUtility.GetCurrent(caster);
                 if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
                 {
-                    h.Severity = 1.0f + elegance / 100.0f;
                     h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
                 }
                 else
                 {
                     var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
-                    hediff.Severity = 1.0f + elegance / 100.0f;
                     pawn.health.AddHediff(hediff);
                 }
 

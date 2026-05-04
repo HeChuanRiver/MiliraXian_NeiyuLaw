@@ -5,18 +5,16 @@
     <HediffDef>
         <defName>MX_SpringFlow</defName>
         <label>春泉洗礼</label>
-        <description>placeholder desc</description>
+        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。效果强度受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;影响。</description>
         <isBad>false</isBad>
         <hediffClass>MiliraXian.Characters.QingHe.Hediff_SpringFlow</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
         <initialSeverity>1.0</initialSeverity>
-        <minSeverity>0.0</minSeverity>
-        <maxSeverity>10.0</maxSeverity>
-        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
         <stages>
             <li>
                 <minSeverity>0.0</minSeverity>
-                <multiplyStatChangesBySeverity>true</multiplyStatChangesBySeverity>
                 <painFactor>0.8</painFactor>
                 <statFactors>
                     <MeleeDamageFactor>1.3</MeleeDamageFactor>
@@ -30,7 +28,22 @@
                 <disappearsAfterTicks>120</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
-        
+            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
+                <statFactorMultiplier>
+                    <baseValue>1</baseValue>
+                    <min>1.0</min>
+                    <max>2.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </statFactorMultiplier>
+                <painFactor>
+                    <baseValue>1</baseValue>
+                    <min>0.8</min>
+                    <max>0.5</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </painFactor>
+            </li>
             <li Class="HediffCompProperties_Effecter">
                 <stateEffecter>MX_QH_Effecter_SpringFlowHediff</stateEffecter>
             </li>
@@ -41,14 +54,13 @@
     <HediffDef>
         <defName>MX_AquaMirror</defName>
         <label>镜华</label>
-        <description>placeholder desc</description>
+        <description>水镜护体，可抵挡伤害。护盾破碎或持续时间结束时，&lt;color=#FF69B4&gt;治疗自身伤口并对周围敌方造成伤害&lt;/color&gt;，同时积累&lt;color=#6B61FF&gt;激流&lt;/color&gt;。护盾强度、治疗量和伤害受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;影响。</description>
         <isBad>false</isBad>
         <hediffClass>MiliraXian.Characters.QingHe.Hediff_AquaMirror</hediffClass>
         <defaultLabelColor>(0.4, 0.4, 1.0)</defaultLabelColor>
         <initialSeverity>1.0</initialSeverity>
-        <minSeverity>0.0</minSeverity>
-        <maxSeverity>10.0</maxSeverity>
-        <alwaysShowSeverity>true</alwaysShowSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
         <stages>
             <li>
                 <minSeverity>0.0</minSeverity>
@@ -60,9 +72,6 @@
                 <showRemainingTime>true</showRemainingTime>
             </li>
             <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_AquaMirror">
-                <healAmount>10</healAmount>
-                <healAmountByEleganceMax>1.0</healAmountByEleganceMax>
-                <explosionDamage>10</explosionDamage>
                 <explosionRadius>3</explosionRadius>
                 <tempestPerMirror>5</tempestPerMirror>
                 <shieldCompProperties>
@@ -90,6 +99,29 @@
                     <maxDrawSize>1.15</maxDrawSize>
                 </shieldCompProperties>
             </li>
+            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
+                <shieldValue>
+                    <baseValue>100</baseValue>
+                    <min>1.0</min>
+                    <max>2.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </shieldValue>
+                <healAmount>
+                    <baseValue>10</baseValue>
+                    <min>1.0</min>
+                    <max>2.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </healAmount>
+                <damageAmount>
+                    <baseValue>10</baseValue>
+                    <min>1.0</min>
+                    <max>2.0</max>
+                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <method>linear</method>
+                </damageAmount>
+            </li>
         </comps>
     </HediffDef>
 
@@ -97,7 +129,7 @@
     <HediffDef>
         <defName>MX_Draining</defName>
         <label>水循环断流</label>
-        <description>内部的液体被强制抽出，若不加以干预将很快因脱水而死亡。</description>
+        <description>内部的液体被强制抽出，意识逐渐模糊，行动迟缓。积累至最大值时，受到的伤害将大幅增加。</description>
         <isBad>true</isBad>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.8, 0.6, 1.0)</defaultLabelColor>

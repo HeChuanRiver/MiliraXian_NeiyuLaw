@@ -7,7 +7,7 @@
     <AbilityDef>
         <defName>MX_Qinghe_SpringFlow</defName>
         <label>涌泉</label>
-        <description>在目标地点创造一股清泉，对6格范围内的己方目标附加*近战伤害系数提升*、*远程伤害系数提升*、*承受伤害降低*和减轻疼痛的效果。\n该技能的*标示效果*可被雅乐的效果强化。\n需要持续引导，引导期间持续积累激流，泉水持续15秒</description>
+        <description>在目标地点创造一股清泉，对6格范围内的己方目标附加&lt;color=#FF69B4&gt;近战伤害系数提升、远程伤害系数提升、承受伤害降低和减轻疼痛&lt;/color&gt;的效果。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。\n需要持续引导，引导期间持续积累&lt;color=#6B61FF&gt;激流&lt;/color&gt;，泉水持续15秒</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
         <jobDef>CastSpringFlow</jobDef>
 
@@ -54,7 +54,7 @@
     <AbilityDef>
         <defName>MX_Qinghe_AquaMirror</defName>
         <label>水镜</label>
-        <description>为目标地点附近4格内的己方目标附上持续10秒的水镜，水镜可以抵挡一部分伤害。受到攻击耗尽或持续时间结束后消失时，*瞬间治疗目标*，恢复目标所有非永久伤口和缺失身体部件并*对小范围内敌方目标造成伤害*。\n该技能的*标示效果*可被雅乐的效果强化。\n水镜消失时，积累少量激流。</description>
+        <description>为目标地点附近4格内的己方目标附上持续10秒的水镜，水镜可以抵挡一部分伤害。受到攻击耗尽或持续时间结束后消失时，&lt;color=#FF69B4&gt;瞬间治疗目标一定量的伤口&lt;/color&gt;，并&lt;color=#FF69B4&gt;对小范围内敌方目标造成伤害&lt;/color&gt;。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。\n水镜消失时，积累少量&lt;color=#6B61FF&gt;激流&lt;/color&gt;。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
 
         <category>MX_QingheSkill</category>
@@ -90,7 +90,7 @@
     <AbilityDef>
         <defName>MX_Qinghe_TempestDrain</defName>
         <label>扼流</label>
-        <description>在目标地点引导一个大范围扼流力场，使进入其中的敌对目标*持续积累水循环断流状态*，附加大量负面效果且积累到最大值时立刻死亡。\n该技能的*标示效果*可被雅乐的效果强化。\n需要至少50点激流，引导时持续消耗激流直到剩余不足10点时自动关闭，该技能不可手动打断。\n目标越靠近力场中心，断流积累的速度越快。</description>
+        <description>在目标地点引导一个大范围扼流力场，使进入其中的敌对目标&lt;color=#FF69B4&gt;持续积累水循环断流状态&lt;/color&gt;，附加大量负面效果，积累至最大值时受到的伤害将大幅增加。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。\n需要至少50点&lt;color=#6B61FF&gt;激流&lt;/color&gt;，引导时持续消耗&lt;color=#6B61FF&gt;激流&lt;/color&gt;直到剩余不足10点时自动关闭，该技能不可手动打断。\n目标越靠近力场中心，断流积累的速度越快。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
         <jobDef>CastTempestDrain</jobDef>
 
@@ -151,7 +151,7 @@
   <AbilityDef>
     <defName>MX_Qinghe_Elegance_HengZhi</defName>
     <label>横指</label>
-    <description>仅琵琶形态可用。对自身周围敌人造成高额冲击并击退，命中目标越多，雅乐（Elegance）增长越快。</description>
+    <description>仅琵琶形态可用。对自身周围敌人造成&lt;color=#FF69B4&gt;高额冲击并击退&lt;/color&gt;，命中目标越多，&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增长越快。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>130</displayOrder>
@@ -201,7 +201,7 @@
   <AbilityDef>
     <defName>MX_Qinghe_Elegance_DuanHun</defName>
     <label>断魂</label>
-    <description>仅竹笛形态可用。对远处小范围施加断魂音律，造成伤害、眩晕、流血与长时减速，并有低概率直接摧毁大脑。</description>
+    <description>仅竹笛形态可用。对远处小范围施加断魂音律，造成&lt;color=#FF69B4&gt;伤害、眩晕、流血与长时减速&lt;/color&gt;，并有低概率直接摧毁大脑。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>131</displayOrder>
@@ -285,7 +285,7 @@
   <AbilityDef>
     <defName>MX_Qinghe_Elegance_YangChun</defName>
     <label>阳春</label>
-    <description>仅琴形态可用。完成施法后，由同一施法 Job 末尾追加和声脉冲：敌方受伤并减速，友方获得治疗和加速增益，同时提升雅乐（Elegance）。</description>
+    <description>仅琴形态可用。完成施法后，由同一施法 Job 末尾追加和声脉冲：&lt;color=#FF69B4&gt;敌方受伤并减速，友方获得治疗和加速增益&lt;/color&gt;，同时提升&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;。\n该技能的&lt;color=#FF69B4&gt;粉色效果&lt;/color&gt;受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;增强。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>132</displayOrder>

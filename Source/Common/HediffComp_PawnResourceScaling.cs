@@ -46,31 +46,120 @@ namespace MiliraXian.Characters
         public HediffCompProperties_PawnResourceScaling Props
             => (HediffCompProperties_PawnResourceScaling)props;
 
-        public float PainOffset => Props.painOffset?.GetValue(parent.pawn) ?? 0f;
-        public float PainFactor => Props.painFactor?.GetValue(parent.pawn) ?? 1f;
-        public float BleedRate => Props.bleedRate?.GetValue(parent.pawn) ?? 0f;
+        // Snapshot cache: values are frozen at creation / severity-increase time.
+        private Dictionary<string, float> snapshot;
+        private float lastSeverity = -1f;
 
-        public float StatOffsetMultiplier => Props.statOffsetMultiplier?.GetValue(parent.pawn) ?? 1f;
-        public float StatFactorMultiplier => Props.statFactorMultiplier?.GetValue(parent.pawn) ?? 1f;
+        public void CaptureSnapshot()
+        {
+            if (snapshot == null)
+                snapshot = new Dictionary<string, float>();
 
-        public float DamageAmount => Props.damageAmount?.GetValue(parent.pawn) ?? 0f;
-        public float ArmorPenetration => Props.armorPenetration?.GetValue(parent.pawn) ?? 0f;
-        public float Radius => Props.radius?.GetValue(parent.pawn) ?? 0f;
-        public float KnockbackDistance => Props.knockbackDistance?.GetValue(parent.pawn) ?? 0f;
-        public float DurationTicks => Props.durationTicks?.GetValue(parent.pawn) ?? 0f;
-        public float StunDurationTicks => Props.stunDurationTicks?.GetValue(parent.pawn) ?? 0f;
-        public float CooldownTicks => Props.cooldownTicks?.GetValue(parent.pawn) ?? 0f;
-        public float HealAmount => Props.healAmount?.GetValue(parent.pawn) ?? 0f;
-        public float ShieldValue => Props.shieldValue?.GetValue(parent.pawn) ?? 0f;
-        public float MaxEnergy => Props.maxEnergy?.GetValue(parent.pawn) ?? 0f;
-        public float DamagePerShieldPoint => Props.damagePerShieldPoint?.GetValue(parent.pawn) ?? 0f;
-        public float RegenPerSecond => Props.regenPerSecond?.GetValue(parent.pawn) ?? 0f;
-        public float SlowSeverity => Props.slowSeverity?.GetValue(parent.pawn) ?? 0f;
-        public float BleedSeverity => Props.bleedSeverity?.GetValue(parent.pawn) ?? 0f;
-        public float ResourceGain => Props.resourceGain?.GetValue(parent.pawn) ?? 0f;
-        public float ResourceCost => Props.resourceCost?.GetValue(parent.pawn) ?? 0f;
-        public float SeverityPerPulse => Props.severityPerPulse?.GetValue(parent.pawn) ?? 0f;
-        public float HediffSeverityFactor => Props.hediffSeverityFactor?.GetValue(parent.pawn) ?? 0f;
+            if (Props.painOffset != null)
+                snapshot["painOffset"] = Props.painOffset.GetValue(parent.pawn);
+            if (Props.painFactor != null)
+                snapshot["painFactor"] = Props.painFactor.GetValue(parent.pawn);
+            if (Props.bleedRate != null)
+                snapshot["bleedRate"] = Props.bleedRate.GetValue(parent.pawn);
+            if (Props.statOffsetMultiplier != null)
+                snapshot["statOffsetMultiplier"] = Props.statOffsetMultiplier.GetValue(parent.pawn);
+            if (Props.statFactorMultiplier != null)
+                snapshot["statFactorMultiplier"] = Props.statFactorMultiplier.GetValue(parent.pawn);
+            if (Props.damageAmount != null)
+                snapshot["damageAmount"] = Props.damageAmount.GetValue(parent.pawn);
+            if (Props.armorPenetration != null)
+                snapshot["armorPenetration"] = Props.armorPenetration.GetValue(parent.pawn);
+            if (Props.radius != null)
+                snapshot["radius"] = Props.radius.GetValue(parent.pawn);
+            if (Props.knockbackDistance != null)
+                snapshot["knockbackDistance"] = Props.knockbackDistance.GetValue(parent.pawn);
+            if (Props.durationTicks != null)
+                snapshot["durationTicks"] = Props.durationTicks.GetValue(parent.pawn);
+            if (Props.stunDurationTicks != null)
+                snapshot["stunDurationTicks"] = Props.stunDurationTicks.GetValue(parent.pawn);
+            if (Props.cooldownTicks != null)
+                snapshot["cooldownTicks"] = Props.cooldownTicks.GetValue(parent.pawn);
+            if (Props.healAmount != null)
+                snapshot["healAmount"] = Props.healAmount.GetValue(parent.pawn);
+            if (Props.shieldValue != null)
+                snapshot["shieldValue"] = Props.shieldValue.GetValue(parent.pawn);
+            if (Props.maxEnergy != null)
+                snapshot["maxEnergy"] = Props.maxEnergy.GetValue(parent.pawn);
+            if (Props.damagePerShieldPoint != null)
+                snapshot["damagePerShieldPoint"] = Props.damagePerShieldPoint.GetValue(parent.pawn);
+            if (Props.regenPerSecond != null)
+                snapshot["regenPerSecond"] = Props.regenPerSecond.GetValue(parent.pawn);
+            if (Props.slowSeverity != null)
+                snapshot["slowSeverity"] = Props.slowSeverity.GetValue(parent.pawn);
+            if (Props.bleedSeverity != null)
+                snapshot["bleedSeverity"] = Props.bleedSeverity.GetValue(parent.pawn);
+            if (Props.resourceGain != null)
+                snapshot["resourceGain"] = Props.resourceGain.GetValue(parent.pawn);
+            if (Props.resourceCost != null)
+                snapshot["resourceCost"] = Props.resourceCost.GetValue(parent.pawn);
+            if (Props.severityPerPulse != null)
+                snapshot["severityPerPulse"] = Props.severityPerPulse.GetValue(parent.pawn);
+            if (Props.hediffSeverityFactor != null)
+                snapshot["hediffSeverityFactor"] = Props.hediffSeverityFactor.GetValue(parent.pawn);
+        }
+
+        private float GetSnapshotOrRealtime(string key, float fallback, ScaledValue scaled)
+        {
+            if (snapshot != null && snapshot.TryGetValue(key, out float cached))
+                return cached;
+            return scaled != null ? scaled.GetValue(parent.pawn) : fallback;
+        }
+
+        public float PainOffset => GetSnapshotOrRealtime("painOffset", 0f, Props.painOffset);
+        public float PainFactor => GetSnapshotOrRealtime("painFactor", 1f, Props.painFactor);
+        public float BleedRate => GetSnapshotOrRealtime("bleedRate", 0f, Props.bleedRate);
+
+        public float StatOffsetMultiplier => GetSnapshotOrRealtime("statOffsetMultiplier", 1f, Props.statOffsetMultiplier);
+        public float StatFactorMultiplier => GetSnapshotOrRealtime("statFactorMultiplier", 1f, Props.statFactorMultiplier);
+
+        public float DamageAmount => GetSnapshotOrRealtime("damageAmount", 0f, Props.damageAmount);
+        public float ArmorPenetration => GetSnapshotOrRealtime("armorPenetration", 0f, Props.armorPenetration);
+        public float Radius => GetSnapshotOrRealtime("radius", 0f, Props.radius);
+        public float KnockbackDistance => GetSnapshotOrRealtime("knockbackDistance", 0f, Props.knockbackDistance);
+        public float DurationTicks => GetSnapshotOrRealtime("durationTicks", 0f, Props.durationTicks);
+        public float StunDurationTicks => GetSnapshotOrRealtime("stunDurationTicks", 0f, Props.stunDurationTicks);
+        public float CooldownTicks => GetSnapshotOrRealtime("cooldownTicks", 0f, Props.cooldownTicks);
+        public float HealAmount => GetSnapshotOrRealtime("healAmount", 0f, Props.healAmount);
+        public float ShieldValue => GetSnapshotOrRealtime("shieldValue", 0f, Props.shieldValue);
+        public float MaxEnergy => GetSnapshotOrRealtime("maxEnergy", 0f, Props.maxEnergy);
+        public float DamagePerShieldPoint => GetSnapshotOrRealtime("damagePerShieldPoint", 0f, Props.damagePerShieldPoint);
+        public float RegenPerSecond => GetSnapshotOrRealtime("regenPerSecond", 0f, Props.regenPerSecond);
+        public float SlowSeverity => GetSnapshotOrRealtime("slowSeverity", 0f, Props.slowSeverity);
+        public float BleedSeverity => GetSnapshotOrRealtime("bleedSeverity", 0f, Props.bleedSeverity);
+        public float ResourceGain => GetSnapshotOrRealtime("resourceGain", 0f, Props.resourceGain);
+        public float ResourceCost => GetSnapshotOrRealtime("resourceCost", 0f, Props.resourceCost);
+        public float SeverityPerPulse => GetSnapshotOrRealtime("severityPerPulse", 0f, Props.severityPerPulse);
+        public float HediffSeverityFactor => GetSnapshotOrRealtime("hediffSeverityFactor", 0f, Props.hediffSeverityFactor);
+
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            lastSeverity = parent.Severity;
+            CaptureSnapshot();
+        }
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+            if (parent.Severity > lastSeverity)
+            {
+                CaptureSnapshot();
+            }
+            lastSeverity = parent.Severity;
+        }
+
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look(ref lastSeverity, "lastSeverity", -1f);
+            // snapshot cannot be saved; it will be recaptured on load via CompPostPostAdd
+            // because severity is serialized and re-applied.
+        }
 
         private HediffStage cachedScaledStage;
         private float cachedResourcePercent = -1f;
