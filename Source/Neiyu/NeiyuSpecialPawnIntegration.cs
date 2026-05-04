@@ -1,4 +1,5 @@
 ﻿using AriandelLibrary;
+using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 using RimWorld;
 using Verse;
 
@@ -36,7 +37,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            VoidPawnManager manager = VoidPawnManager.Instance;
+            ALVoidPawnManager manager = ALVoidPawnManager.Instance;
             if (manager == null)
             {
                 return;
