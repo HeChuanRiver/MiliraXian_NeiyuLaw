@@ -32,7 +32,8 @@
         <!-- apparel tags for random apparel 用于随机生成装备时，允许的装备tag -->
         <!-- TODO: 这里记得换昭离的衣服 -->
         <apparelTags>
-            <li>MiliraXian_NeiyuNormal</li>
+            <li>MX_ZhaoliNormal</li>
+            <li>MX_ZhaoliHood</li>
         </apparelTags>
 
         <specificApparelRequirements>
@@ -47,8 +48,8 @@
         <!-- apparel you force to spawn 强制要求生成的装备 -->
         <!-- TODO: 这里记得换昭离所要穿的装备，这里不能放武器 -->
         <apparelRequired>
-            <li>MiliraXian_NeiyuNormal</li>
-            <li>MX_Apparel_EarringsZhenzhu</li>
+            <li>MX_ZhaoliNormal</li>
+            <li>MX_ZhaoliHood</li>
         </apparelRequired>
         <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
         <apparelDisallowTags>
@@ -59,7 +60,7 @@
         <!-- 武器的tag -->
         <!-- TODO:这里放武器 -->
         <weaponTags>
-            <li>MiliraXian_NeiyuFlower</li>
+            <li>MiliraXian_ZhaoliBlade</li>
         </weaponTags>
 
         <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围 -->
@@ -123,6 +124,7 @@
         <abilities>
             <li>MX_Zhaoli_DeathField</li>
             <li>MX_Zhaoli_Guiyi</li>
+            <li>MX_Zhaoli_Dingshu</li>
             <li>MX_Zhaoli_Minghuo</li>
             <li>MX_Zhaoli_Minshen</li>
         </abilities>
@@ -299,4 +301,3 @@
 
 
 </Defs>
-

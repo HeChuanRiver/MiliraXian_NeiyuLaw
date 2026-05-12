@@ -16,4 +16,20 @@
         </comps>
     </HediffDef>
 
+    <HediffDef>
+        <defName>MXZL_ZhaoliDingshuMark</defName>
+        <label>&lt;color=#3A0E16&gt;定数标记&lt;/color&gt;</label>
+        <description>该目标曾经被昭离以&lt;color=#3A0E16&gt;定数&lt;/color&gt;强行拉回生界。标记持续期间若再次死亡，将无法再被复活。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.25, 0.08, 0.12)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>720000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
 </Defs>

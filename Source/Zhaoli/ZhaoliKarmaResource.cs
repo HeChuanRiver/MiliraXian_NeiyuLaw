@@ -267,6 +267,7 @@ namespace MiliraXian.Characters.Zhaoli
             ZhaoliKarmaUtility.EnsureKarmaComp(__instance);
             ZhaoliShieldLayerUtility.EnsureShieldComp(__instance);
             ZhaoliRebirthUtility.EnsureRebirthComp(__instance);
+            ZhaoliDingshuUtility.EnsureDingshuAbility(__instance);
             ZhaoliKarmaUtility.RemoveLegacyShield(__instance);
         }
     }

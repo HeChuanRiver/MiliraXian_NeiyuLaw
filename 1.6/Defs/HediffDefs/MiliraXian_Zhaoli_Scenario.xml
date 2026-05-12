@@ -33,7 +33,7 @@
     <maxSeverity>1</maxSeverity>
     <comps>
       <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliRaidState">
-                <minPreferredCluster>3</minPreferredCluster>
+                <minPreferredCluster>1</minPreferredCluster>
       </li>
     </comps>
   </HediffDef>

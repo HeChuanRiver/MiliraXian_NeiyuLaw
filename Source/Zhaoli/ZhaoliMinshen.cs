@@ -54,17 +54,50 @@ namespace MiliraXian.Characters.Zhaoli
                         return;
                     }
 
-                    ThingDef warnAreaDef = ZhaoliEffectUtility.MinshenWarnAreaMoteDef;
-                    if (warnAreaDef != null)
-                    {
-                        MoteMaker.MakeStaticMote(target.Cell, caster.Map, warnAreaDef, 1f);
-                    }
-
+                    SpawnMinshenAreaPulse(target.Cell, caster.Map);
                     float areaScale = Mathf.Max(2.2f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.34f);
                     FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
                     FleckMaker.Static(caster.Position, caster.Map, FleckDefOf.FeedbackShoot, 1f);
                 }
             };
+
+            int midWarmupTicks = Mathf.Max(1, warmupTicks * 2 / 3);
+            if (midWarmupTicks < warmupTicks)
+            {
+                yield return new PreCastAction
+                {
+                    ticksAwayFromCast = midWarmupTicks,
+                    action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
+                    {
+                        Pawn caster = parent?.pawn;
+                        if (caster?.Map == null || !target.IsValid)
+                        {
+                            return;
+                        }
+
+                        SpawnMinshenAreaPulse(target.Cell, caster.Map);
+                    }
+                };
+            }
+
+            int particleWarmupTicks = Mathf.Max(1, warmupTicks / 3);
+            if (particleWarmupTicks < midWarmupTicks)
+            {
+                yield return new PreCastAction
+                {
+                    ticksAwayFromCast = particleWarmupTicks,
+                    action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
+                    {
+                        Pawn caster = parent?.pawn;
+                        if (caster?.Map == null || !target.IsValid)
+                        {
+                            return;
+                        }
+
+                        SpawnMinshenParticles(target.Cell, caster.Map, 7);
+                    }
+                };
+            }
         }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -106,6 +139,7 @@ namespace MiliraXian.Characters.Zhaoli
                 float areaScale = Mathf.Max(2.5f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.35f);
                 FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
                 FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.ExplosionFlash, 1.8f);
+                SpawnMinshenParticles(target.Cell, caster.Map, 10);
             }
 
             foreach (Pawn pawn in tmpTargets)
@@ -176,6 +210,45 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             GenDraw.DrawFieldEdges(tmpPreviewCells, PreviewColor);
+        }
+
+        private void SpawnMinshenAreaPulse(IntVec3 center, Map map)
+        {
+            if (map == null)
+            {
+                return;
+            }
+
+            ThingDef warnAreaDef = ZhaoliEffectUtility.MinshenWarnAreaMoteDef;
+            if (warnAreaDef != null)
+            {
+                MoteMaker.MakeStaticMote(center, map, warnAreaDef, 1f);
+            }
+        }
+
+        private void SpawnMinshenParticles(IntVec3 center, Map map, int count)
+        {
+            if (map == null || count <= 0)
+            {
+                return;
+            }
+
+            float radius = Mathf.Max(1f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.48f);
+            for (int i = 0; i < count; i++)
+            {
+                ThingDef particleDef = ZhaoliEffectUtility.RandomDeathFieldParticleMoteDef;
+                if (particleDef == null)
+                {
+                    return;
+                }
+
+                Vector3 loc = center.ToVector3Shifted() + Rand.InsideUnitCircleVec3 * radius;
+                Mote mote = MoteMaker.MakeStaticMote(loc, map, particleDef, Rand.Range(0.9f, 1.35f), false, Rand.Range(0f, 360f));
+                if (mote != null)
+                {
+                    mote.rotationRate = Rand.Range(-35f, 35f);
+                }
+            }
         }
 
         private int GetWarmupTicks()

@@ -4,15 +4,15 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Zhaoli_DuanzhanBlade</defName>
         <label>离断</label>
-        <description>昭离持有的近战兵装，内置技能“断斩”。挥出时会先跃进切入，再以中段横斩扫开身前大片敌人。</description>
+        <description>昭离持有的近战兵装，内置技能“断斩”。刀身素白而柄缠紫黑，挥出时会拖出短促的紫白弧光，适合以一次精准横斩清开正面敌人。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/Zhaoli_DuanzhanBlade</texPath>
+            <texPath>MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/Zhaoli_DuanzhanBlade</uiIconPath>
+        <uiIconPath>MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade</uiIconPath>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>

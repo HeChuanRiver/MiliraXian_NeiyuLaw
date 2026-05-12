@@ -10,7 +10,7 @@
         <defName>MX_Zhaoli_DeathField</defName>
         <label>&lt;color=#A11228&gt;告死流场&lt;/color&gt;</label>
         <description>创造一个直径18格的圆形&lt;color=#2C0F18&gt;立场&lt;/color&gt;。立场内所有单位除&lt;color=#A11228&gt;昭离&lt;/color&gt;自身外均受到&lt;color=#5E1335&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#A11228&gt;流血&lt;/color&gt;并显示&lt;color=#A11228&gt;9→1&lt;/color&gt;倒计时；若目标连续9秒未离开立场，则被直接&lt;color=#A11228&gt;告死&lt;/color&gt;并彻底消失。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <iconPath>MiliraXianZhaoli/UI/Zhaoli_DeathField</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>100</displayOrder>
@@ -49,7 +49,7 @@
         <defName>MX_Zhaoli_Guiyi</defName>
         <label>&lt;color=#6A214A&gt;诡医&lt;/color&gt;</label>
         <description>消耗&lt;color=#A11228&gt;1点因果&lt;/color&gt;，治愈目标一切疾病与损伤。该效果会恢复缺失肢体，清除成瘾、机械损伤、永久旧伤与其他负面健康状态。&lt;color=#6A214A&gt;诡医&lt;/color&gt;无法对昭离自己或敌对目标使用，并会在目标身上建立持续30天的&lt;color=#7A2956&gt;因果链接&lt;/color&gt;。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
+        <iconPath>MiliraXianZhaoli/UI/Zhaoli_Guiyi</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>101</displayOrder>
@@ -86,10 +86,58 @@
     </AbilityDef>
 
     <AbilityDef>
+        <defName>MX_Zhaoli_Dingshu</defName>
+        <label>&lt;color=#3A0E16&gt;定数&lt;/color&gt;</label>
+        <description>消耗&lt;color=#A11228&gt;2点因果&lt;/color&gt;，由昭离对尸体持续注入&lt;color=#3A0E16&gt;50分钟&lt;/color&gt;的黑色因果，将其完整复活并治愈所有损伤，不产生复活后遗症。复活目标会与昭离建立因果链接，并获得持续&lt;color=#6A214A&gt;12天&lt;/color&gt;的&lt;color=#3A0E16&gt;定数标记&lt;/color&gt;；若目标在该标记持续期间再次死亡，则无法再被复活。该技能不会在袭击状态下生效。</description>
+        <iconPath>MiliraXianZhaoli/UI/Zhaoli_Dingshu</iconPath>
+
+        <category>MX_ZhaoliSkill</category>
+        <displayOrder>104</displayOrder>
+        <jobDef>MX_Zhaoli_CastAbility_Dingshu</jobDef>
+        <showCastingProgressBar>true</showCastingProgressBar>
+        <waitForJobEnd>true</waitForJobEnd>
+
+        <targetRequired>true</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>false</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+                <canTargetHumans>true</canTargetHumans>
+                <canTargetAnimals>true</canTargetAnimals>
+                <canTargetMechs>true</canTargetMechs>
+                <canTargetCorpses>true</canTargetCorpses>
+                <onlyTargetCorpses>true</onlyTargetCorpses>
+            </targetParams>
+        </verbProperties>
+
+        <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliDingshu">
+                <karmaCost>2</karmaCost>
+                <markDurationTicks>720000</markDurationTicks>
+                <channelDurationTicks>2083</channelDurationTicks>
+                <overlayScale>1.75</overlayScale>
+                <lineMoteIntervalTicks>30</lineMoteIntervalTicks>
+                <pulseMoteIntervalTicks>120</pulseMoteIntervalTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
         <defName>MX_Zhaoli_Minghuo</defName>
         <label>&lt;color=#C33933&gt;冥火&lt;/color&gt;</label>
         <description>消耗&lt;color=#A11228&gt;3点因果&lt;/color&gt;，将死者因果附着于昭离当前主武器之上，持续1日。附魔期间，武器伤害、破甲、命中与攻击速度提升至原本的&lt;color=#C33933&gt;1.5倍&lt;/color&gt;，攻击距离额外增加2格，并在每次近战命中时附加一段&lt;color=#FF7A5C&gt;火焰伤害&lt;/color&gt;。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
+        <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minghuo</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>102</displayOrder>
@@ -130,7 +178,7 @@
         <defName>MX_Zhaoli_Minshen</defName>
         <label>&lt;color=#6A214A&gt;泯神&lt;/color&gt;</label>
         <description>消耗&lt;color=#A11228&gt;3点因果&lt;/color&gt;，对目标点&lt;color=#5E1335&gt;13x13&lt;/color&gt;范围内的敌方单位施加压制。范围内90%的血肉目标会陷入&lt;color=#6A214A&gt;80%减速&lt;/color&gt;，剩余10%会陷入&lt;color=#7A2956&gt;失神30秒&lt;/color&gt;；同时持续5秒每秒对躯干造成1点生命损耗。机械体不承受失神与减速，改为直接承受&lt;color=#A11228&gt;EMP&lt;/color&gt;冲击。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
+        <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minshen</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>103</displayOrder>

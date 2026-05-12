@@ -203,9 +203,27 @@ namespace MiliraXian.Characters.Zhaoli
 
         public int RecruitGrowthDeaths => recruitGrowthDeaths;
 
+        public override string CompLabelInBracketsExtra => "成长 " + recruitGrowthDeaths;
+
         public override bool CompDisallowVisible()
         {
-            return true;
+            return !ZhaoliRebirthUtility.ShouldUseRecruitGrowth(Pawn);
+        }
+
+        public override string CompDescriptionExtra
+        {
+            get
+            {
+                return ZhaoliProgressionUtility.BuildRecruitGrowthSummary(recruitGrowthDeaths);
+            }
+        }
+
+        public override string CompTipStringExtra
+        {
+            get
+            {
+                return "当前成长层数：" + recruitGrowthDeaths;
+            }
         }
 
         public override void CompExposeData()

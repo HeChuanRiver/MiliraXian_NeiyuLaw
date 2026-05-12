@@ -5,6 +5,7 @@ using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using Verse;
+using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -36,7 +37,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            VoidPawnManager manager = VoidPawnManager.Instance;
+            ALVoidPawnManager manager = ALVoidPawnManager.Instance;
             string staticID = SpecialPawnRegistry.GetStaticID(pawn.kindDef);
             if (string.IsNullOrEmpty(staticID))
             {
@@ -102,7 +103,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            return VoidPawnManager.Instance != null;
+            return ALVoidPawnManager.Instance != null;
         }
     }
 

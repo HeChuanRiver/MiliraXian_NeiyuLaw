@@ -1,3 +1,4 @@
+using System.Text;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -48,6 +49,66 @@ namespace MiliraXian.Characters.Zhaoli
                 default:
                     return 0f;
             }
+        }
+
+        public static string BuildRaidBossSummary(int phase)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("当前阶段强化：");
+            if (phase <= 0)
+            {
+                stringBuilder.Append("未触发替死，暂未获得额外强化。");
+                return stringBuilder.ToString();
+            }
+
+            AppendRaidFactorLine(stringBuilder, IncomingDamageFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeArmorPenetrationStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeCooldownFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDamageFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDodgeChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeHitChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, PawnTrapSpringChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, StaggerDurationFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDoorDamageFactorStat, phase);
+            if (phase >= 3)
+            {
+                AppendRaidFactorLine(stringBuilder, MoveSpeedStat, phase);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public static string BuildRecruitGrowthSummary(int deathCount)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("当前养成加成：");
+            AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
+            AppendOffsetLine(stringBuilder, ToxicEnvironmentResistanceStat, RecruitToxicResistanceOffset, usePercent: true);
+            AppendFactorLine(stringBuilder, ImmunityGainSpeedStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, InjuryHealingFactorStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalOperationSpeedStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalSurgerySuccessChanceStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalTendQualityStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, GeneralLaborSpeedStat, RecruitCommonFactor);
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("死亡成长：");
+            if (deathCount <= 0)
+            {
+                stringBuilder.Append("尚未积累成长层数。");
+                return stringBuilder.ToString();
+            }
+
+            AppendRecruitGrowthFactorLine(stringBuilder, IncomingDamageFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeArmorPenetrationStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeCooldownFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDamageFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDodgeChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeHitChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, PawnTrapSpringChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, StaggerDurationFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDoorDamageFactorStat, deathCount);
+            return stringBuilder.ToString();
         }
 
         public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
@@ -230,6 +291,78 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return false;
+        }
+
+        private static void AppendRaidFactorLine(StringBuilder stringBuilder, string statDefName, int phase)
+        {
+            StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(statDefName);
+            if (stat == null)
+            {
+                return;
+            }
+
+            float factor = GetRaidBossFactor(stat, phase);
+            if (Mathf.Abs(factor - 1f) < 0.0001f)
+            {
+                return;
+            }
+
+            AppendFactorLine(stringBuilder, statDefName, factor);
+        }
+
+        private static void AppendRecruitGrowthFactorLine(StringBuilder stringBuilder, string statDefName, int deathCount)
+        {
+            if (deathCount <= 0)
+            {
+                return;
+            }
+
+            StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(statDefName);
+            if (stat == null || !TryGetPhaseOneFactor(stat, out float fullFactor))
+            {
+                return;
+            }
+
+            float factor = Mathf.Max(0f, 1f - (1f - fullFactor) * deathCount * RecruitGrowthStepRatio);
+            AppendFactorLine(stringBuilder, statDefName, factor);
+        }
+
+        private static void AppendFactorLine(StringBuilder stringBuilder, string statDefName, float factor)
+        {
+            if (Mathf.Abs(factor - 1f) < 0.0001f)
+            {
+                return;
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("- ");
+            stringBuilder.Append(GetStatLabel(statDefName));
+            stringBuilder.Append(" x");
+            stringBuilder.Append(factor.ToStringPercent());
+        }
+
+        private static void AppendOffsetLine(StringBuilder stringBuilder, string statDefName, float value, bool usePercent = false)
+        {
+            if (Mathf.Abs(value) < 0.0001f)
+            {
+                return;
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("- ");
+            stringBuilder.Append(GetStatLabel(statDefName));
+            stringBuilder.Append(" ");
+            if (value > 0f)
+            {
+                stringBuilder.Append("+");
+            }
+
+            stringBuilder.Append(usePercent ? value.ToStringPercent() : value.ToString("0.##"));
+        }
+
+        private static string GetStatLabel(string statDefName)
+        {
+            return DefDatabase<StatDef>.GetNamedSilentFail(statDefName)?.LabelCap ?? statDefName;
         }
 
         private static bool IsStat(StatDef stat, string defName)

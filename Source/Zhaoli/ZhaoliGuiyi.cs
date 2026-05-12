@@ -310,13 +310,12 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void SpawnHealGlow(Pawn targetPawn)
         {
-            ThingDef glowDef = ZhaoliEffectUtility.GuiyiHealGlowMoteDef;
-            if (targetPawn == null || glowDef == null || !targetPawn.Spawned)
+            if (targetPawn == null || !targetPawn.Spawned)
             {
                 return;
             }
 
-            MoteMaker.MakeAttachedOverlay(targetPawn, glowDef, Vector3.zero, Props.overlayScale);
+            ZhaoliVisualUtility.QueueGuiyiHealAnimation(targetPawn, Props.overlayScale);
         }
     }
 }

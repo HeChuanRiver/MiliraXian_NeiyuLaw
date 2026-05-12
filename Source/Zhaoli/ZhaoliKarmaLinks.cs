@@ -344,6 +344,7 @@ namespace MiliraXian.Characters.Zhaoli
     public class GameComponent_ZhaoliKarma : GameComponent
     {
         private List<Pawn> pendingResurrectionPawns = new List<Pawn>();
+        private List<ZhaoliPendingDingshuLink> pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
         private List<ZhaoliPendingRebirth> pendingRebirths = new List<ZhaoliPendingRebirth>();
 
         public GameComponent_ZhaoliKarma(Game game)
@@ -363,6 +364,31 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             pendingResurrectionPawns.Add(pawn);
+        }
+
+        public void RegisterPendingDingshuLink(Pawn zhaoli, Pawn targetPawn, int expireTick)
+        {
+            if (pendingDingshuLinks == null)
+            {
+                pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
+            }
+
+            if (zhaoli == null || targetPawn == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < pendingDingshuLinks.Count; i++)
+            {
+                ZhaoliPendingDingshuLink pendingLink = pendingDingshuLinks[i];
+                if (pendingLink?.zhaoli == zhaoli && pendingLink.targetPawn == targetPawn)
+                {
+                    pendingLink.expireTick = expireTick;
+                    return;
+                }
+            }
+
+            pendingDingshuLinks.Add(new ZhaoliPendingDingshuLink(zhaoli, targetPawn, expireTick));
         }
 
         public bool IsPending(Pawn pawn)
@@ -424,6 +450,11 @@ namespace MiliraXian.Characters.Zhaoli
                 pendingResurrectionPawns = new List<Pawn>();
             }
 
+            if (pendingDingshuLinks == null)
+            {
+                pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
+            }
+
             if (pendingRebirths == null)
             {
                 pendingRebirths = new List<ZhaoliPendingRebirth>();
@@ -437,6 +468,37 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             int currentTick = Find.TickManager.TicksGame;
+            for (int i = pendingDingshuLinks.Count - 1; i >= 0; i--)
+            {
+                ZhaoliPendingDingshuLink pendingLink = pendingDingshuLinks[i];
+                if (pendingLink?.zhaoli == null || pendingLink.targetPawn == null || pendingLink.zhaoli.Discarded || pendingLink.targetPawn.Discarded)
+                {
+                    pendingDingshuLinks.RemoveAt(i);
+                    continue;
+                }
+
+                if (currentTick > pendingLink.expireTick)
+                {
+                    pendingDingshuLinks.RemoveAt(i);
+                    continue;
+                }
+
+                if (pendingLink.targetPawn.Dead || pendingLink.targetPawn.Destroyed)
+                {
+                    continue;
+                }
+
+                HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(pendingLink.zhaoli);
+                if (linkComp == null)
+                {
+                    pendingDingshuLinks.RemoveAt(i);
+                    continue;
+                }
+
+                linkComp.TryAddOrRefreshLink(pendingLink.targetPawn, out _, out _);
+                pendingDingshuLinks.RemoveAt(i);
+            }
+
             for (int i = pendingRebirths.Count - 1; i >= 0; i--)
             {
                 ZhaoliPendingRebirth pendingRebirth = pendingRebirths[i];
@@ -500,6 +562,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             base.ExposeData();
             Scribe_Collections.Look(ref pendingResurrectionPawns, "pendingResurrectionPawns", LookMode.Reference);
+            Scribe_Collections.Look(ref pendingDingshuLinks, "pendingDingshuLinks", LookMode.Deep);
             Scribe_Collections.Look(ref pendingRebirths, "pendingRebirths", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -508,12 +571,18 @@ namespace MiliraXian.Characters.Zhaoli
                     pendingResurrectionPawns = new List<Pawn>();
                 }
 
+                if (pendingDingshuLinks == null)
+                {
+                    pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
+                }
+
                 if (pendingRebirths == null)
                 {
                     pendingRebirths = new List<ZhaoliPendingRebirth>();
                 }
 
                 pendingResurrectionPawns.RemoveAll(pawn => pawn == null || pawn.Discarded);
+                pendingDingshuLinks.RemoveAll(entry => entry == null || entry.zhaoli == null || entry.targetPawn == null || entry.zhaoli.Discarded || entry.targetPawn.Discarded);
                 pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Discarded);
             }
         }

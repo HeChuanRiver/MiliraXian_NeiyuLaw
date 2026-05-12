@@ -90,6 +90,9 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliDeathField : HediffComp
     {
+        private const int FieldParticleIntervalTicks = 9;
+        private const float FieldAreaRotationRate = 360f;
+
         private Dictionary<Pawn, int> stayTicks = new Dictionary<Pawn, int>();
         private readonly Dictionary<Pawn, Mote> markedPawns = new Dictionary<Pawn, Mote>();
         private readonly Dictionary<Pawn, int> lastDisplayedRemainingHits = new Dictionary<Pawn, int>();
@@ -170,6 +173,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             MaintainFieldArea(map, center);
+            MaintainFieldParticles(map, center);
             if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
             {
                 FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
@@ -301,9 +305,35 @@ namespace MiliraXian.Characters.Zhaoli
             if (fieldAreaMote == null || fieldAreaMote.Destroyed)
             {
                 fieldAreaMote = MoteMaker.MakeStaticMote(center, map, areaDef, 1f);
+                if (fieldAreaMote != null)
+                {
+                    fieldAreaMote.exactRotation = Rand.Range(0f, 360f);
+                    fieldAreaMote.rotationRate = FieldAreaRotationRate;
+                }
             }
 
             fieldAreaMote?.Maintain();
+        }
+
+        private void MaintainFieldParticles(Map map, IntVec3 center)
+        {
+            if (Find.TickManager == null || Find.TickManager.TicksGame % FieldParticleIntervalTicks != 0)
+            {
+                return;
+            }
+
+            ThingDef particleDef = ZhaoliEffectUtility.RandomDeathFieldParticleMoteDef;
+            if (particleDef == null)
+            {
+                return;
+            }
+
+            Vector3 loc = center.ToVector3Shifted() + Rand.InsideUnitCircleVec3 * Mathf.Max(0.1f, CurrentRadius * 0.92f);
+            Mote mote = MoteMaker.MakeStaticMote(loc, map, particleDef, Rand.Range(0.85f, 1.25f), false, Rand.Range(0f, 360f));
+            if (mote != null)
+            {
+                mote.rotationRate = Rand.Range(-45f, 45f);
+            }
         }
 
         private void MaintainFieldMark(Pawn pawn)

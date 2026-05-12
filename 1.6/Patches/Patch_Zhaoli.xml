@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Patch>
 
-    <!-- Neiyu -->
+    <!-- Zhaoli -->
     <Operation Class="PatchOperationAdd">
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
         <value>
@@ -90,8 +90,7 @@
                 <name>milira hair Zhaoli</name>
                 <userCustomizable>false</userCustomizable>
                 <!-- 改 -->
-                <!-- TODO：这里改昭离的毛  -->
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHair/MiliraHairNeiyu</path>
+                <path>MiliraXianZhaoli/Pawn/MiliraXianHair/MiliraHairZhaoli</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>
@@ -129,60 +128,6 @@
                     </north>
                     <east>
                         <layerOffset>-0.274</layerOffset>
-                    </east>
-                </offsets>
-            </li>
-        </value>
-    </Operation>
-
-    <Operation Class="PatchOperationAdd">
-        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
-        <value>
-            <li>
-                <!-- 改 -->
-                <name>milira hair BG Zhaoli</name>
-                <userCustomizable>false</userCustomizable>
-                <!-- 改 -->
-                <!-- TODO: 这里改昭离的毛BG -->
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHairBG/MiliraHairBGNeiyu</path>
-                <inFrontOfBody>false</inFrontOfBody>
-                <layerInvert>false</layerInvert>
-                <colorChannel>hair</colorChannel>
-                <defaultOffset>Center</defaultOffset>
-                <drawSize>1</drawSize>
-                <alignWithHead>true</alignWithHead>
-                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
-                <linkVariantIndexWithPrevious>true</linkVariantIndexWithPrevious>
-                <useSkipFlags>
-                    <li>Ancot_Hair</li>
-                </useSkipFlags>
-                <conditions>
-                    <BodyPart>
-                        <bodyPart>Head</bodyPart>
-                    </BodyPart>
-                    <Posture>
-                        <drawnStanding>true</drawnStanding>
-                        <drawnInBed>false</drawnInBed>
-                        <drawnLaying>true</drawnLaying>
-                    </Posture>
-                    <RotStage>Fresh,Rotting</RotStage>
-                    <!-- 改 -->
-                    <Backstory>
-                        <backstory>MiliraXian_BackStoryAdult_Zhaoli_BS1</backstory>
-                    </Backstory>
-                </conditions>
-                <offsets>
-                    <west>
-                        <layerOffset>-0.275</layerOffset>
-                    </west>
-                    <south>
-                        <layerOffset>-0.299</layerOffset>
-                    </south>
-                    <north>
-                        <layerOffset>-0.275</layerOffset>
-                    </north>
-                    <east>
-                        <layerOffset>-0.275</layerOffset>
                     </east>
                 </offsets>
             </li>
