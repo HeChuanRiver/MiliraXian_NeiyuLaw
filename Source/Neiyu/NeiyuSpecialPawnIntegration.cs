@@ -3,11 +3,9 @@ using AriandelLibrary;
 using HarmonyLib;
 using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
-﻿using AriandelLibrary;
 using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 using RimWorld;
 using Verse;
-using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -52,7 +50,6 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            ALVoidPawnManager manager = ALVoidPawnManager.Instance;
             string staticID = SpecialPawnRegistry.GetStaticID(pawn.kindDef);
             if (string.IsNullOrEmpty(staticID))
             {
