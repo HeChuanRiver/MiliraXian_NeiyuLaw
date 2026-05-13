@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef>
         <defName>SpringFlowField</defName>
@@ -44,7 +44,14 @@
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField"/>
+            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField">
+                <pulseIntervalTicks>10</pulseIntervalTicks>
+                <damageEveryPulses>3</damageEveryPulses>
+                <damageDef>MX_Dehydrate</damageDef>
+                <damageAmount>1</damageAmount>
+                <armorPenetration>0.15</armorPenetration>
+                <damageFactorMax>0.5</damageFactorMax>
+            </li>
         </comps>
     </ThingDef>
 
@@ -53,24 +60,25 @@
         <thingClass>MoteAttached</thingClass>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <mote>
-            <fadeInTime>0.2</fadeInTime>
-            <fadeOutTime>0.3</fadeOutTime>
-            <solidTime>0.5</solidTime>
-            <growthRate>4</growthRate>
+            <fadeInTime>0.12</fadeInTime>
+            <fadeOutTime>0.42</fadeOutTime>
+            <solidTime>0.48</solidTime>
+            <growthRate>4.8</growthRate>
         </mote>
         <graphicData>
             <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
             <shaderType>MoteApocritonPulse</shaderType>
             <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
+            <color>(0.60, 0.94, 1.00, 0.95)</color>
             <shaderParameters>
                 <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
-                <_distortionIntensity>0.18</_distortionIntensity>
-                <_ScrollSpeed>-0.9</_ScrollSpeed>
-                <_ScrollScale>0.14</_ScrollScale>
-                <_distortionTint>(0.23, 0, 0, 0)</_distortionTint>
-                <_pulseSpeed>2</_pulseSpeed>
+                <_distortionIntensity>0.22</_distortionIntensity>
+                <_ScrollSpeed>-1.05</_ScrollSpeed>
+                <_ScrollScale>0.18</_ScrollScale>
+                <_distortionTint>(0.08, 0.24, 0.26, 0)</_distortionTint>
+                <_pulseSpeed>2.4</_pulseSpeed>
             </shaderParameters>
-            <drawSize>1.5</drawSize>
+            <drawSize>1.7</drawSize>
         </graphicData>
     </ThingDef>
 
@@ -97,10 +105,12 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.CompProperties_YangChunField">
                 <radius>7.9</radius>
-                <pulseIntervalTicks>30</pulseIntervalTicks>
+                <pulseIntervalTicks>180</pulseIntervalTicks>
 
                 <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
                 <enemyDamageAmount>2</enemyDamageAmount>
+                <enemyDesyncedDamageAmount>1</enemyDesyncedDamageAmount>
+                <damageFactorMax>0.5</damageFactorMax>
                 <enemyArmorPenetration>0.15</enemyArmorPenetration>
                 <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
                 <enemyDebuffSeverity>1</enemyDebuffSeverity>
@@ -110,12 +120,27 @@
                 <allyBuffSeverity>1</allyBuffSeverity>
                 <allyBuffDurationTicks>300</allyBuffDurationTicks>
                 <allyInstantHeal>0.8</allyInstantHeal>
+                <healFactorMax>1</healFactorMax>
+                <hediffSeverityFactorMax>1</hediffSeverityFactorMax>
 
                 <eleganceGainFlat>6</eleganceGainFlat>
                 <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
                 <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
+                <pulseFx>MX_QH_Effecter_YangChunPulse</pulseFx>
+                <pulseFxScale>1.9</pulseFxScale>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ResourceTick">
+                <entries>
+                    <li>
+                        <resourceDef>MX_QH_Elegance</resourceDef>
+                        <amount>0.01</amount>
+                    </li>
+                </entries>
             </li>
         </comps>
     </ThingDef>
 
 </Defs>
+
+
+

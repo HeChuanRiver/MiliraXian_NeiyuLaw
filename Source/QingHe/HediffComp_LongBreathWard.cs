@@ -67,7 +67,9 @@ namespace MiliraXian.Characters.QingHe
                 return false;
             }
 
-            float currentResource = PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
+            float currentResource = resourceDef == MX_QHDefOf.MX_QH_Tempest
+                ? TempestUtility.GetCurrent(Pawn)
+                : PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
             if (currentResource < Props.minimumResourceToTrigger)
             {
                 return false;
@@ -89,7 +91,9 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            float currentResource = PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
+            float currentResource = resourceDef == MX_QHDefOf.MX_QH_Tempest
+                ? TempestUtility.GetCurrent(Pawn)
+                : PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
             if (currentResource >= Props.minimumResourceToTrigger)
             {
                 return;
@@ -261,10 +265,19 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            float current = PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
+            float current = resourceDef == MX_QHDefOf.MX_QH_Tempest
+                ? TempestUtility.GetCurrent(Pawn)
+                : PawnSpecialResourceUtility.GetCurrentResource(Pawn, resourceDef);
             if (current > 0f)
             {
-                PawnSpecialResourceUtility.TryConsumeResource(Pawn, resourceDef, current);
+                if (resourceDef == MX_QHDefOf.MX_QH_Tempest)
+                {
+                    TempestUtility.TryConsume(Pawn, current);
+                }
+                else
+                {
+                    PawnSpecialResourceUtility.TryConsumeResource(Pawn, resourceDef, current);
+                }
             }
         }
 

@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.QingHe
         public static ThingDef TempestDrainField;
 
         public static DamageDef MX_Dehydrate;
+        public static DamageDef MX_Desynced;
 
         public static HediffDef MX_DehydrateDamage;
 
@@ -34,5 +35,6 @@ namespace MiliraXian.Characters.QingHe
         public static TraitDef MX_QH_Trait_WaterFairy;
 
         public static ThingDef Mote_AquaMirrorExplode;
+        public static ThingDef MX_QH_Mote_DuanHunCurvedTrail;
     }
 }

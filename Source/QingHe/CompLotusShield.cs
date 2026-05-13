@@ -246,10 +246,10 @@ namespace MiliraXian.Characters.QingHe
             ticksToReset = Mathf.Max(1, Props.breakDisabledTicks);
 
             Pawn owner = PawnOwner;
-            if (owner != null && Props.tempestGainOnBreak > 0f && MX_QHDefOf.MX_QH_Tempest != null)
-            {
-                PawnSpecialResourceUtility.AddResource(owner, MX_QHDefOf.MX_QH_Tempest, Props.tempestGainOnBreak);
-            }
+                if (owner != null && Props.tempestGainOnBreak > 0f && MX_QHDefOf.MX_QH_Tempest != null)
+                {
+                    TempestUtility.AddTempest(owner, Props.tempestGainOnBreak);
+                }
 
             if (owner == null || !owner.Spawned || owner.Map == null)
             {
@@ -329,8 +329,8 @@ namespace MiliraXian.Characters.QingHe
 
         private Color ResolveShieldTintColor()
         {
-            float eleganceFactor = GetResourcePercent(MX_QHDefOf.MX_QH_Elegance);
-            float springFactor = GetResourcePercent(MX_QHDefOf.MX_QH_Tempest);
+            float eleganceFactor = EleganceUtility.GetPercent(PawnOwner);
+            float springFactor = TempestUtility.GetPercent(PawnOwner);
 
             Color baseColor = new Color(0.82f, 0.92f, 1f, 1f);
             Color pinkColor = new Color(1f, 0.66f, 0.88f, 1f);
@@ -344,24 +344,11 @@ namespace MiliraXian.Characters.QingHe
                 1f);
         }
 
-        private float GetResourcePercent(HediffDef resourceDef)
-        {
-            if (resourceDef == null)
-            {
-                return 0f;
-            }
-
-            Pawn owner = PawnOwner;
-            float current = PawnSpecialResourceUtility.GetCurrentResource(owner, resourceDef);
-            float max = Mathf.Max(1f, PawnSpecialResourceUtility.GetMaxResource(owner, resourceDef));
-            return Mathf.Clamp01(current / max);
-        }
-
         private float ResolveDamagePerShieldPoint()
         {
             Pawn owner = PawnOwner;
-            float tempest = PawnSpecialResourceUtility.GetCurrentResource(owner, MX_QHDefOf.MX_QH_Tempest);
-            float tempestMax = Mathf.Max(1f, PawnSpecialResourceUtility.GetMaxResource(owner, MX_QHDefOf.MX_QH_Tempest));
+            float tempest = TempestUtility.GetCurrent(owner);
+            float tempestMax = Mathf.Max(1f, TempestUtility.GetMax(owner));
             float factor = Mathf.Clamp01(tempest / tempestMax);
             return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint + Props.bonusDamagePerShieldPointAtMaxTempest * factor);
         }
@@ -369,8 +356,8 @@ namespace MiliraXian.Characters.QingHe
         private float ResolveRegenPerSecond()
         {
             Pawn owner = PawnOwner;
-            float elegance = PawnSpecialResourceUtility.GetCurrentResource(owner, MX_QHDefOf.MX_QH_Elegance);
-            float eleganceMax = Mathf.Max(1f, PawnSpecialResourceUtility.GetMaxResource(owner, MX_QHDefOf.MX_QH_Elegance));
+            float elegance = EleganceUtility.GetCurrent(owner);
+            float eleganceMax = Mathf.Max(1f, EleganceUtility.GetMax(owner));
             float factor = Mathf.Clamp01(elegance / eleganceMax);
             return Mathf.Max(0f, Props.baseRegenPerSecond + Props.bonusRegenPerSecondAtMaxElegance * factor);
         }

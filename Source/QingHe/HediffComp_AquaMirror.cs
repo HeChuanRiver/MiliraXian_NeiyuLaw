@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -54,6 +55,7 @@ namespace MiliraXian.Characters.QingHe
                 parent = parent.pawn
             };
             newShield.Initialize(Props.shieldCompProperties);
+            newShield.caster = caster;
             newShield.Init(EleganceUtility.FactorLinear(1.0f, caster));
             newShield.PostPostMake();
             Log.Message("Debug shield amount: " + newShield.Energy);
@@ -75,7 +77,15 @@ namespace MiliraXian.Characters.QingHe
 
             if (pawn.Spawned && pawn.Map != null)
             {
-                MoteMaker.MakeStaticMote(pawn.TrueCenter(), pawn.Map, MX_QHDefOf.Mote_AquaMirrorExplode, 2.0f);
+                float visualRadius = Mathf.Max(0.8f, Props.explosionRadius);
+                SpawnAlignedShatterRing(pawn.Map, pawn.Position, visualRadius);
+
+                FleckDef hitSplashDef = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
+                FleckDef hitFlashDef = DefDatabase<FleckDef>.GetNamedSilentFail("FlashHollow");
+                if (hitFlashDef == null)
+                {
+                    hitFlashDef = DefDatabase<FleckDef>.GetNamedSilentFail("ExplosionFlash");
+                }
 
                 foreach (Thing thing in GenRadial.RadialDistinctThingsAround(pawn.Position, pawn.Map, Props.explosionRadius, true))
                 {
@@ -90,6 +100,16 @@ namespace MiliraXian.Characters.QingHe
                         dinfo.SetIgnoreArmor(true);
                         dinfo.SetApplyAllDamage(true);
                         target.TakeDamage(dinfo);
+
+                        if (hitSplashDef != null)
+                        {
+                            FleckMaker.Static(target.Position, pawn.Map, hitSplashDef, 0.52f);
+                        }
+
+                        if (hitFlashDef != null)
+                        {
+                            FleckMaker.Static(target.Position, pawn.Map, hitFlashDef, 0.42f);
+                        }
                     }
                 }
             }
@@ -102,11 +122,58 @@ namespace MiliraXian.Characters.QingHe
                 MX_QHUtility.HealInjuries(pawn, healAmount);
             }
 
-            PawnSpecialResourceUtility.AddResource(caster, MX_QHDefOf.MX_QH_Tempest, Props.tempestPerMirror);
+            TempestUtility.AddTempest(caster, Props.tempestPerMirror);
 
             if (shieldInspected != null)
             {
                 pawn.AllComps.Remove(shieldInspected);
+            }
+        }
+
+        private void SpawnAlignedShatterRing(Map map, IntVec3 center, float radius)
+        {
+            if (map == null || !center.IsValid)
+            {
+                return;
+            }
+
+            FleckDef slowShockwave = DefDatabase<FleckDef>.GetNamedSilentFail("ExpandingDistortionRing");
+            if (slowShockwave == null)
+            {
+                slowShockwave = DefDatabase<FleckDef>.GetNamedSilentFail("ShockwaveFast");
+            }
+
+            FleckDef groundWaterSplash = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
+
+            float inner = Mathf.Max(0f, radius - 0.40f);
+            float outer = radius + 0.05f;
+            int cells = GenRadial.NumCellsInRadius(outer);
+
+            if (slowShockwave != null)
+            {
+                FleckMaker.Static(center, map, slowShockwave, Mathf.Max(0.12f, radius * 0.14f));
+            }
+
+            for (int i = 0; i < cells; i++)
+            {
+                IntVec3 cell = center + GenRadial.RadialPattern[i];
+                if (!cell.InBounds(map))
+                {
+                    continue;
+                }
+
+                float dist = (cell - center).LengthHorizontal;
+                if (dist < inner || dist > outer)
+                {
+                    continue;
+                }
+
+                float t = radius > 0.01f ? Mathf.Clamp01(dist / radius) : 1f;
+
+                if (groundWaterSplash != null && Rand.Value < 0.78f)
+                {
+                    FleckMaker.Static(cell, map, groundWaterSplash, Mathf.Lerp(0.55f, 1.15f, t));
+                }
             }
         }
 

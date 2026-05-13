@@ -1,4 +1,4 @@
-using Verse;
+﻿using Verse;
 
 namespace MiliraXian.Characters.QingHe
 {
@@ -56,29 +56,37 @@ namespace MiliraXian.Characters.QingHe
         
         private void AttachEffect()
         {
+            var applied = false;
             foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
             {
-                if(thing is Pawn pawn)
+                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Faction != caster.Faction)
                 {
-                    if (!pawn.Dead && pawn.Faction == caster.Faction)
-                    {
-                        
-                        var elegance = PawnSpecialResourceUtility.GetCurrentResource(caster, MX_QHDefOf.MX_QH_Elegance);
-                        
-                        if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
-                        {
-                            h.Severity = 1.0f + elegance / 100.0f;
-                            h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
-                        }
-                        else
-                        {
-                            var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
-                            hediff.Severity = 1.0f + elegance / 100.0f;
-                            pawn.health.AddHediff(hediff);
-                        }
-                    }
+                    continue;
                 }
+
+                var elegance = EleganceUtility.GetCurrent(caster);
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
+                {
+                    h.Severity = 1.0f + elegance / 100.0f;
+                    h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
+                }
+                else
+                {
+                    var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
+                    hediff.Severity = 1.0f + elegance / 100.0f;
+                    pawn.health.AddHediff(hediff);
+                }
+
+                applied = true;
             }
+
+            if (!applied)
+            {
+                return;
+            }
+
+            TempestUtility.NotifyRecoverEvent(caster);
+            EleganceUtility.NotifyDecayEvent(caster);
         }
     }
 }

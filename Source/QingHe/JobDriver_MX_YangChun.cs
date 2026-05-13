@@ -1,29 +1,23 @@
-using System.Collections.Generic;
-using RimWorld;
-using UnityEngine;
 using Verse;
 using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public class JobDriver_MX_YangChun : JobDriver_CastAbility
+    public class JobDriver_MX_YangChun : JobDriver_MX_ChannelAbility
     {
-        private Thing_YangChunField spawnedField;
-
         private CompProperties_AbilityYangChun Props
         {
             get
             {
-                Ability ability = job != null ? job.ability : null;
-                if (ability == null || ability.def == null || ability.def.comps == null)
+                var ability = job?.ability;
+                if (ability?.def?.comps == null)
                 {
                     return null;
                 }
 
-                for (int i = 0; i < ability.def.comps.Count; i++)
+                foreach (var t in ability.def.comps)
                 {
-                    CompProperties_AbilityYangChun p = ability.def.comps[i] as CompProperties_AbilityYangChun;
-                    if (p != null)
+                    if (t is CompProperties_AbilityYangChun p)
                     {
                         return p;
                     }
@@ -33,103 +27,48 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        /// <summary>
-        /// Job report text.
-        /// </summary>
-        public override string GetReport()
-        {
-            return "施放阳春";
-        }
+        protected override ThingDef FieldDef => Props?.fieldDef;
+        protected override int DurationTicks => Props?.fieldDurationTicks ?? 1;
+        protected override IntVec3 SpawnPosition => pawn.Position;
+        protected override string ChannelReport => "Casting YangChun";
 
-        /// <summary>
-        /// Spawn field when channel starts and clean it on job finish.
-        /// </summary>
-        protected override IEnumerable<Toil> MakeNewToils()
+        protected override bool ValidateSpawn(out JobCondition failCondition)
         {
-            foreach (Toil toil in base.MakeNewToils())
+            if (Props == null)
             {
-                yield return toil;
+                failCondition = JobCondition.Errored;
+                return false;
             }
 
-            AddFinishAction(delegate
+            if (!MX_QHUtility.HasRequiredWeapon(pawn, Props.requiredWeapon)
+                || Props.fieldDef == null
+                || pawn.Map == null
+                || !pawn.Spawned)
             {
-                CleanUp();
-            });
-
-            Toil channel = ToilMaker.MakeToil("QHEleganceYangChun_Channel");
-            channel.initAction = delegate
-            {
-                CompProperties_AbilityYangChun p = Props;
-                if (p == null)
-                {
-                    EndJobWith(JobCondition.Errored);
-                    return;
-                }
-
-                if (!MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon))
-                {
-                    EndJobWith(JobCondition.Incompletable);
-                    return;
-                }
-
-                if (p.fieldDef == null || pawn.Map == null || !pawn.Spawned)
-                {
-                    EndJobWith(JobCondition.Incompletable);
-                    return;
-                }
-
-                pawn.pather.StopDead();
-
-                Thing thing = GenSpawn.Spawn(p.fieldDef, pawn.Position, pawn.Map);
-                spawnedField = thing as Thing_YangChunField;
-                if (spawnedField == null)
-                {
-                    thing.Destroy();
-                    Log.Error("YangChun: spawned field is not Thing_YangChunField.");
-                    EndJobWith(JobCondition.Errored);
-                    return;
-                }
-
-                CompYangChunField fieldComp = spawnedField.TryGetComp<CompYangChunField>();
-                if (fieldComp == null)
-                {
-                    spawnedField.Destroy();
-                    Log.Error("YangChun: Cannot find CompYangChunField on spawned field.");
-                    EndJobWith(JobCondition.Errored);
-                    return;
-                }
-
-                fieldComp.Init(pawn);
-            };
-            channel.defaultCompleteMode = ToilCompleteMode.Delay;
-            channel.defaultDuration = Props != null ? Mathf.Max(1, Props.fieldDurationTicks) : 1;
-            channel.handlingFacing = true;
-            channel.tickIntervalAction = delegate
-            {
-                pawn.rotationTracker.FaceCell(pawn.Position);
-            };
-            channel.AddFailCondition(delegate
-            {
-                CompProperties_AbilityYangChun p = Props;
-                return p == null || !MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon);
-            });
-            yield return channel;
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_References.Look(ref spawnedField, "spawnedField", false);
-        }
-
-        private void CleanUp()
-        {
-            if (spawnedField != null && !spawnedField.Destroyed)
-            {
-                spawnedField.Destroy();
+                failCondition = JobCondition.Incompletable;
+                return false;
             }
 
-            spawnedField = null;
+            failCondition = JobCondition.Ongoing;
+            return true;
+        }
+
+        protected override void OnFieldSpawned(Thing field)
+        {
+            var comp = field.TryGetComp<CompYangChunField>();
+            comp?.Init(pawn);
+            comp?.SpawnFx();
+        }
+
+        protected override bool CheckFailCondition()
+        {
+            var p = Props;
+            return p == null || !MX_QHUtility.HasRequiredWeapon(pawn, p.requiredWeapon);
+        }
+
+        protected override void OnCleanup()
+        {
+            spawnedField?.TryGetComp<CompYangChunField>()?.EndFx();
         }
     }
 }

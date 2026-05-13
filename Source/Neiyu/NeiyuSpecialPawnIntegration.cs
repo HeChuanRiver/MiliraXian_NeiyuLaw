@@ -3,6 +3,8 @@ using AriandelLibrary;
 using HarmonyLib;
 using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
+﻿using AriandelLibrary;
+using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 using RimWorld;
 using Verse;
 using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
@@ -33,6 +35,19 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             if (!ShouldRunIntegration())
+            if (!ModsConfig.IsActive(AriandelPackageId))
+            {
+                return;
+            }
+
+            if (NeiyuLawMod.Instance != null && NeiyuLawMod.Instance.Settings != null &&
+                !NeiyuLawMod.Instance.Settings.EnableAriandelSpecialPawnIntegration)
+            {
+                return;
+            }
+
+            ALVoidPawnManager manager = ALVoidPawnManager.Instance;
+            if (manager == null)
             {
                 return;
             }

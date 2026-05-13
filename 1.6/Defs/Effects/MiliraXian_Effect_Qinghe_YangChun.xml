@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunStartRing</defName>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.08</solidTime>
+    <fadeOutTime>0.34</fadeOutTime>
+    <growthRate>5.2</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsychicDistortionRing</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.15,1.15)</drawSize>
+      <color>(1.00, 0.84, 0.92, 0.54)</color>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunStartBloom</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.04</solidTime>
+    <fadeOutTime>0.22</fadeOutTime>
+    <growthRate>1.6</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsycastSkipFlash</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.7,1.7)</drawSize>
+      <color>(1.00, 0.92, 0.97, 0.18)</color>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunPulse</defName>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <fadeInTime>0.02</fadeInTime>
+    <solidTime>0.10</solidTime>
+    <fadeOutTime>0.58</fadeOutTime>
+    <growthRate>8.4</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsychicDistortionRing</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.1,1.1)</drawSize>
+      <color>(1.00, 0.82, 0.92, 0.58)</color>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunPulseSpark</defName>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.12</solidTime>
+    <fadeOutTime>0.32</fadeOutTime>
+    <growthRate>1.4</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsycastCast</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(0.85,0.85)</drawSize>
+      <color>(1.00, 0.92, 0.98, 0.42)</color>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunEndRing</defName>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.06</solidTime>
+    <fadeOutTime>0.30</fadeOutTime>
+    <growthRate>2.4</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsychicDistortionRing</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(0.95,0.95)</drawSize>
+      <color>(1.00, 0.86, 0.94, 0.42)</color>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_QH_Fleck_YangChunEndBloom</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.02</solidTime>
+    <fadeOutTime>0.18</fadeOutTime>
+    <growthRate>0.9</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/PsycastCast</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.15,1.15)</drawSize>
+      <color>(1.00, 0.90, 0.97, 0.22)</color>
+    </graphicData>
+  </FleckDef>
+
+  <EffecterDef>
+    <defName>MX_QH_Effecter_YangChunStart</defName>
+    <children>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunStartRing</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1.0~1.0</scale>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunStartBloom</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1.0~1.0</scale>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunPulseSpark</fleckDef>
+        <burstCount>4~7</burstCount>
+        <scale>0.32~0.62</scale>
+        <speed>0.35~0.85</speed>
+        <airTime>0.10~0.20</airTime>
+        <absoluteAngle>true</absoluteAngle>
+        <angle>0~360</angle>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+    </children>
+  </EffecterDef>
+
+  <EffecterDef>
+    <defName>MX_QH_Effecter_YangChunPulse</defName>
+    <children>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunPulse</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1.0~1.0</scale>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunPulseSpark</fleckDef>
+        <burstCount>2~3</burstCount>
+        <scale>0.45~0.75</scale>
+        <speed>0.2~0.6</speed>
+        <airTime>0.10~0.18</airTime>
+        <absoluteAngle>true</absoluteAngle>
+        <angle>0~360</angle>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+    </children>
+  </EffecterDef>
+
+  <EffecterDef>
+    <defName>MX_QH_Effecter_YangChunEnd</defName>
+    <children>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunEndRing</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1.0~1.0</scale>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunEndBloom</fleckDef>
+        <burstCount>1~1</burstCount>
+        <scale>1.0~1.0</scale>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <fleckDef>MX_QH_Fleck_YangChunPulseSpark</fleckDef>
+        <burstCount>3~5</burstCount>
+        <scale>0.24~0.46</scale>
+        <speed>0.12~0.35</speed>
+        <airTime>0.10~0.18</airTime>
+        <absoluteAngle>true</absoluteAngle>
+        <angle>0~360</angle>
+        <spawnLocType>OnSource</spawnLocType>
+      </li>
+    </children>
+  </EffecterDef>
+
+</Defs>

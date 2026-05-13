@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe
         {
             bool disabled = false;
             StringBuilder r = new StringBuilder();
-            if (PawnSpecialResourceUtility.GetCurrentResource(parent.pawn, MX_QHDefOf.MX_QH_Tempest) < Props.minResourceToCast)
+            if (TempestUtility.GetCurrent(parent.pawn) < Props.minResourceToCast)
             {
                 r.AppendLine("MiliraXian.QingHe.Ability_TempestDrain.Disabled".Translate());
                 disabled = true;

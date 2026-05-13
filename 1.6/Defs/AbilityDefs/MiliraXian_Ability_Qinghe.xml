@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <AbilityCategoryDef>
         <defName>MX_QingheSkill</defName>
@@ -35,10 +35,18 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilitySpringFlow">
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
                 <previewRadius>6.0</previewRadius>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
+                <perTick>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <amount>0.04</amount>
+                    </li>
+                </perTick>
             </li>
         </comps>
     </AbilityDef>
@@ -110,12 +118,26 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityTempestDrain">
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityTempestDrain">
                 <fieldDef>TempestDrainField</fieldDef>
                 <minResourceToCast>50</minResourceToCast>
                 <minResourceToMaintain>10</minResourceToMaintain>
                 <channelDurationTicks>999999</channelDurationTicks>
                 <previewRadius>12.0</previewRadius>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
+                <perTick>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <amount>-0.1</amount>
+                    </li>
+                </perTick>
+                <failConditions>
+                    <li>
+                        <resourceDef>MX_QH_Tempest</resourceDef>
+                        <minAmount>10</minAmount>
+                    </li>
+                </failConditions>
             </li>
         </comps>
     </AbilityDef>
@@ -167,6 +189,8 @@
         <bluntDamageAmount>10</bluntDamageAmount>
         <bluntArmorPenetration>0.15</bluntArmorPenetration>
         <knockbackDistance>4</knockbackDistance>
+        <damageFactorMax>1</damageFactorMax>
+        <knockbackFactorMax>0.5</knockbackFactorMax>
         <eleganceGainPerTarget>3</eleganceGainPerTarget>
         <eleganceGainMax>24</eleganceGainMax>
       </li>
@@ -213,7 +237,7 @@
         <postCastDelayTicks>0</postCastDelayTicks>
 
         <radius>2.5</radius>
-        <damageDef>Cut</damageDef>
+        <damageDef>MX_Desynced</damageDef>
         <damageAmount>16</damageAmount>
         <armorPenetration>0.25</armorPenetration>
         <stunDamageAmount>8</stunDamageAmount>
@@ -221,9 +245,24 @@
         <slowHediff>MX_QH_Elegance_DuanHunSlow</slowHediff>
         <slowSeverity>1</slowSeverity>
         <slowDurationTicks>1800</slowDurationTicks>
+        <damageFactorMax>0.75</damageFactorMax>
+        <slowDurationFactorMax>1</slowDurationFactorMax>
         <brainDestroyChance>0.08</brainDestroyChance>
         <eleganceGainOnCast>8</eleganceGainOnCast>
         <eleganceGainPerTarget>2</eleganceGainPerTarget>
+        <curveMote>MX_QH_Mote_DuanHunCurvedTrail</curveMote>
+        <curveDistortWidth>4.2</curveDistortWidth>
+        <curveDistortAlpha>0.68</curveDistortAlpha>
+        <curveWidth>3.1</curveWidth>
+        <curveDensity>8.8</curveDensity>
+        <curveWaveLen>4.8</curveWaveLen>
+        <curveAlpha>2.1</curveAlpha>
+        <curveAfterLayers>9</curveAfterLayers>
+        <curveAfterGap>1</curveAfterGap>
+        <curveAfterAlpha>0.62</curveAfterAlpha>
+        <curveMinSegs>28</curveMinSegs>
+        <curveMaxSegs>96</curveMaxSegs>
+        <curveDistortStep>3</curveDistortStep>
       </li>
     </comps>
   </AbilityDef>
@@ -236,7 +275,7 @@
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>132</displayOrder>
-    <cooldownTicksRange>90</cooldownTicksRange>
+    <cooldownTicksRange>600</cooldownTicksRange>
 
     <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
     <jobDef>MX_Qinghe_Elegance_CastAbility_YangChun</jobDef>
