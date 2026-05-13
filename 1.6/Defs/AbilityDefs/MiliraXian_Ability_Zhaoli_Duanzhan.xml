@@ -3,8 +3,8 @@
 
     <AbilityDef>
         <defName>MX_Zhaoli_Duanzhan</defName>
-        <label>&lt;color=#A11228&gt;断斩&lt;/color&gt;</label>
-        <description>短暂压低刀锋后挥出一记&lt;color=#A11228&gt;离断弧光&lt;/color&gt;，以紫白刀光扫过前方敌人。正面中线会承受更重的切割，若&lt;color=#C33933&gt;冥火&lt;/color&gt;仍附着于武器，则追加少量火焰伤害。</description>
+        <label>&lt;color=#E85A7A&gt;断斩&lt;/color&gt;</label>
+        <description>短暂压低刀锋后挥出一记&lt;color=#E85A7A&gt;离断弧光&lt;/color&gt;，以紫白刀光扫过前方敌人。正面中线会承受更重的切割，若&lt;color=#FF6A6A&gt;冥火&lt;/color&gt;仍附着于武器，则追加少量火焰伤害。</description>
         <iconPath>MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade</iconPath>
 
         <category>MX_ZhaoliSkill</category>

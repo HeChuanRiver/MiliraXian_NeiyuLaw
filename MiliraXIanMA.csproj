@@ -53,8 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\Compat\MeleeAnimation\MABootstrap.cs" />
-    <Compile Include="Source\Compat\MeleeAnimation\Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Compat\MeleeAnimation\**\*.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

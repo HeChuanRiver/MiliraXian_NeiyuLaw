@@ -60,8 +60,9 @@ namespace MiliraXian.Characters.Zhaoli
         public const int TargetSwitchGraceTicks = 240;
         public const int AiTickInterval = 15;
         private const string WrongNeiyuInnerClothingDefName = "MiliraXian_NeiyuInner";
+        private const string WrongNeiyuEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private const string DefaultClothingDefName = "MX_ZhaoliNormal";
-        private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
+        private const string DefaultHoodDefName = "MX_ZhaoliHood";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
 
         public static bool QuestExists(string questDefName)
@@ -259,7 +260,7 @@ namespace MiliraXian.Characters.Zhaoli
             EnsurePrimaryWeapon(pawn);
             RemoveWrongDefaultApparel(pawn);
             EnsureDefaultClothing(pawn);
-            EnsureDefaultEarrings(pawn);
+            EnsureDefaultHood(pawn);
         }
 
         public static void EnsureZhaoliBodyType(Pawn pawn)
@@ -406,9 +407,9 @@ namespace MiliraXian.Characters.Zhaoli
             EnsureDefaultApparel(pawn, DefaultClothingDefName, "Default clothing");
         }
 
-        public static void EnsureDefaultEarrings(Pawn pawn)
+        public static void EnsureDefaultHood(Pawn pawn)
         {
-            EnsureDefaultApparel(pawn, DefaultEarringDefName, "Default earrings");
+            EnsureDefaultApparel(pawn, DefaultHoodDefName, "Default hood");
         }
 
         private static void RemoveWrongDefaultApparel(Pawn pawn)
@@ -418,16 +419,22 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            Apparel wrongInner = FindWornApparel(pawn, WrongNeiyuInnerClothingDefName);
-            if (wrongInner == null)
+            RemoveWornApparel(pawn, WrongNeiyuInnerClothingDefName);
+            RemoveWornApparel(pawn, WrongNeiyuEarringDefName);
+        }
+
+        private static void RemoveWornApparel(Pawn pawn, string defName)
+        {
+            Apparel wrongApparel = FindWornApparel(pawn, defName);
+            if (wrongApparel == null)
             {
                 return;
             }
 
-            pawn.apparel.Remove(wrongInner);
-            if (!wrongInner.Destroyed)
+            pawn.apparel.Remove(wrongApparel);
+            if (!wrongApparel.Destroyed)
             {
-                wrongInner.Destroy(DestroyMode.Vanish);
+                wrongApparel.Destroy(DestroyMode.Vanish);
             }
         }
 
@@ -435,7 +442,8 @@ namespace MiliraXian.Characters.Zhaoli
         {
             return pawn?.equipment?.Primary?.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade
                    && HasWornApparel(pawn, DefaultClothingDefName)
-                   && HasWornApparel(pawn, DefaultEarringDefName);
+                   && HasWornApparel(pawn, DefaultHoodDefName)
+                   && !HasWornApparel(pawn, WrongNeiyuEarringDefName);
         }
 
         private static void EnsureDefaultApparel(Pawn pawn, string defName, string missingLabel)

@@ -3,8 +3,8 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliKarma</defName>
-        <label>&lt;color=#A11228&gt;因果&lt;/color&gt;</label>
-        <description>&lt;color=#A11228&gt;昭离&lt;/color&gt;专属资源。通过&lt;color=#6A214A&gt;告死&lt;/color&gt;处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的&lt;color=#7A2956&gt;因果链接&lt;/color&gt;名单。</description>
+        <label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</label>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;专属资源。通过&lt;color=#C77DFF&gt;告死&lt;/color&gt;处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的&lt;color=#D66BFF&gt;因果链接&lt;/color&gt;名单。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.74, 0.10, 0.18)</defaultLabelColor>
         <isBad>false</isBad>
@@ -14,8 +14,8 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.HediffCompProperties_PawnSpecialResource">
-                <resourceLabel>&lt;color=#A11228&gt;因果&lt;/color&gt;</resourceLabel>
-                <resourceDescription>&lt;color=#A11228&gt;昭离&lt;/color&gt;专属资源。每次成功&lt;color=#6A214A&gt;告死&lt;/color&gt;都会增加因果，后续主动技能会消耗因果。该资源超过&lt;color=#A11228&gt;100点&lt;/color&gt;时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
+                <resourceLabel>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</resourceLabel>
+                <resourceDescription>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;专属资源。每次成功&lt;color=#C77DFF&gt;告死&lt;/color&gt;都会增加因果，后续主动技能会消耗因果。该资源超过&lt;color=#E85A7A&gt;100点&lt;/color&gt;时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <clampToMax>false</clampToMax>

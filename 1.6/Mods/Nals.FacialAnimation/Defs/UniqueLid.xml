@@ -16,15 +16,14 @@
 
     <FacialAnimation.LidTypeDef>
         <defName>Milira_Lid_Zhaoli</defName>
-        <!-- TODO：昭离在这里如果有眼皮之类的要改记得改 -->
-        <texPath>Things/Pawn/Milira/Lids/NormalD</texPath>
+        <texPath>MiliraXianZhaoli/Pawn/LidZhaoli</texPath>
         <raceName>Milira_Race</raceName>
         <shader>Map/Transparent</shader>
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
             <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Neiyu</forNPC>
+                <forNPC>Zhaoli</forNPC>
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>

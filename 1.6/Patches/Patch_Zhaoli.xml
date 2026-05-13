@@ -10,8 +10,7 @@
                 <name>milira halo Zhaoli</name>
                 <userCustomizable>false</userCustomizable>
                 <!-- 改 -->
-                <!--TODO: 改昭离的光环 -->
-                <path>MiliraXianNeiyu/PawnNeiyu/Halo/MiliraXianHaloNeiyu</path>
+                <path>MiliraXianZhaoli/Pawn/Halo/MiliraXianHaloZhaoli</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>true</layerInvert>
                 <shaderType>MoteGlow</shaderType>
@@ -139,7 +138,7 @@
         <value>
             <li>
                 <!-- 改 -->
-                <name>haloDellin</name>
+                <name>haloZhaoli</name>
                 <first Class="ColorGenerator_Options">
                     <options>
                         <li>
