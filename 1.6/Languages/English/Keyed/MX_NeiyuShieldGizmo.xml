@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <MX_NL_ShieldStage1>◆ Shield · Stage I</MX_NL_ShieldStage1>
+    <MX_NL_ShieldStage2>◆ Shield · Stage II</MX_NL_ShieldStage2>
+    <MX_NL_ShieldStage3>◆ Shield · Stage III</MX_NL_ShieldStage3>
+    <MX_NL_ShieldStage3Absorb>◆ Shield · Stage III · Absorb</MX_NL_ShieldStage3Absorb>
+    <MX_NL_ShieldStage3Buff>◆ Shield · Stage III · Buff</MX_NL_ShieldStage3Buff>
+    <MX_NL_ShieldStage1Short>I</MX_NL_ShieldStage1Short>
+    <MX_NL_ShieldStage2Short>II</MX_NL_ShieldStage2Short>
+    <MX_NL_ShieldStage3Short>III</MX_NL_ShieldStage3Short>
+    <MX_NL_ShieldReady>Ready</MX_NL_ShieldReady>
+    <MX_NL_ShieldStage1Hint>Next hit triggers shield</MX_NL_ShieldStage1Hint>
+    <MX_NL_ShieldStage2Hint>Dmg &lt; {0} costs 0 charges</MX_NL_ShieldStage2Hint>
+    <MX_NL_ShieldWeakSuffix>  ·  Weakened</MX_NL_ShieldWeakSuffix>
+    <MX_NL_ShieldAbsorbInfo>Stored {0} · {1} left</MX_NL_ShieldAbsorbInfo>
+    <MX_NL_ShieldInvincible>Invincible</MX_NL_ShieldInvincible>
+    <MX_NL_ShieldBuffInfo>Tier {0} · {1} left</MX_NL_ShieldBuffInfo>
+    <MX_NL_ShieldBuffExpired>Buff expired</MX_NL_ShieldBuffExpired>
+    <MX_NL_ShieldStage3Expiring>Ending...</MX_NL_ShieldStage3Expiring>
+    <MX_NL_BuffDamage>Dmg +{0}%</MX_NL_BuffDamage>
+    <MX_NL_BuffIncoming>  Taken -{0}%</MX_NL_BuffIncoming>
+    <MX_NL_BuffMoveSpeed>  Move +{0}%</MX_NL_BuffMoveSpeed>
+    <MX_NL_BuffHeal>  Heal +{0}%</MX_NL_BuffHeal>
+    <MX_NL_TooltipStage>Shield · {0}</MX_NL_TooltipStage>
+    <MX_NL_TooltipWeak> (Weakened)</MX_NL_TooltipWeak>
+    <MX_NL_WeakBadgeTip>Weakened · {0} left
+Move -50%  Rest +50%  Work -80%</MX_NL_WeakBadgeTip>
+    <MX_NL_ShieldWeakExhausted>[{0}] Shield exhausted! Damage will now bypass the shield.</MX_NL_ShieldWeakExhausted>
+</LanguageData>
