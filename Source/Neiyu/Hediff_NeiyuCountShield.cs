@@ -85,6 +85,9 @@ namespace MiliraXian.Characters.Neiyu
         private int phase3AbsorbUntilTick = -1;
         private int phase3EndTick = -1;
         private bool stage3BuffPhaseAnnounced;
+        private bool weakShieldExhaustedAnnounced;
+        private int lastAbsorbTick = -1;
+        private int lastPenetrateTick = -1;
 
         private int weakUntilTick = -1;
         private bool weakWasActive;
@@ -96,7 +99,49 @@ namespace MiliraXian.Characters.Neiyu
 
         private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
-        private bool InWeak => weakUntilTick > CurrentTick;
+        public bool InWeak => weakUntilTick > CurrentTick;
+
+        // 基础属性（供 Gizmo 使用）
+        public int Stage => stage;
+        public int Phase2Charges => phase2Charges;
+        public int Phase2MaxCharges => InWeak ? Props.phase2MaxChargesWeak : Props.phase2MaxChargesNormal;
+        public float Phase3StoredDamage => phase3StoredDamage;
+        public int Phase3EndTick => phase3EndTick;
+        public int Phase3AbsorbUntilTick => phase3AbsorbUntilTick;
+        public int WeakUntilTick => weakUntilTick;
+        public int CurrentTickForDisplay => CurrentTick;
+        public int LastAbsorbTick => lastAbsorbTick;
+        public int LastPenetrateTick => lastPenetrateTick;
+
+        // 三阶蓄伤阶段已过比例 0~1
+        public float Stage3AbsorbProgress
+        {
+            get
+            {
+                if (stage != 3 || phase3AbsorbUntilTick <= 0) return 0f;
+                int now = CurrentTick;
+                if (now >= phase3AbsorbUntilTick) return 1f;
+                int startTick = phase3AbsorbUntilTick - ResolveStage3AbsorbTicks();
+                if (startTick <= 0) return 0f;
+                return Mathf.Clamp01((float)(now - startTick) / (phase3AbsorbUntilTick - startTick));
+            }
+        }
+
+        // 三阶增益阶段已过比例 0~1
+        public float Stage3BuffProgress
+        {
+            get
+            {
+                if (stage != 3 || phase3EndTick <= 0 || phase3AbsorbUntilTick <= 0) return 0f;
+                int now = CurrentTick;
+                if (now < phase3AbsorbUntilTick) return 0f;
+                if (now >= phase3EndTick) return 1f;
+                return Mathf.Clamp01((float)(now - phase3AbsorbUntilTick) / (phase3EndTick - phase3AbsorbUntilTick));
+            }
+        }
+
+        // 二阶命中日志（用于 tooltip）
+        public List<string> Phase2RecentHitLogs => phase2RecentHitLogs;
 
         public override void CompPostMake()
         {
@@ -108,6 +153,7 @@ namespace MiliraXian.Characters.Neiyu
             phase3AbsorbUntilTick = -1;
             phase3EndTick = -1;
             stage3BuffPhaseAnnounced = false;
+            weakShieldExhaustedAnnounced = false;
             weakUntilTick = -1;
             weakWasActive = false;
             EnsureRecentLogs();
@@ -149,6 +195,7 @@ namespace MiliraXian.Characters.Neiyu
                 if (!stage3BuffPhaseAnnounced && IsInStage3BuffWindow(now))
                 {
                     stage3BuffPhaseAnnounced = true;
+                    PlayShieldBreakFx();
                     if (Pawn != null)
                     {
                         Messages.Message("[" + Pawn.LabelShort + "] 护身进入增益阶段：不再蓄伤、也不再无敌。", Pawn, MessageTypeDefOf.NeutralEvent);
@@ -229,6 +276,12 @@ namespace MiliraXian.Characters.Neiyu
                 {
                     if (InWeak)
                     {
+                        if (!weakShieldExhaustedAnnounced)
+                        {
+                            weakShieldExhaustedAnnounced = true;
+                            Messages.Message("MX_NL_ShieldWeakExhausted".Translate(Pawn.LabelShort), Pawn, MessageTypeDefOf.ThreatBig);
+                        }
+                        PlayShieldBreakFx();
                         return false;
                     }
 
@@ -242,10 +295,16 @@ namespace MiliraXian.Characters.Neiyu
                 {
                     if (InWeak)
                     {
+                        if (!weakShieldExhaustedAnnounced)
+                        {
+                            weakShieldExhaustedAnnounced = true;
+                            Messages.Message("MX_NL_ShieldWeakExhausted".Translate(Pawn.LabelShort), Pawn, MessageTypeDefOf.ThreatBig);
+                        }
 
                         phase2Charges = 0;
                         phase2LastChargeChangeTick = now;
                         RecordPhase2Hit(dinfo.Amount, before, before, 0);
+                        PlayShieldBreakFx();
                         return false;
                     }
 
@@ -253,6 +312,7 @@ namespace MiliraXian.Characters.Neiyu
                     PlayAbsorbFx(dinfo);
                     phase2Charges = 0;
                     phase2LastChargeChangeTick = now;
+                    lastPenetrateTick = now;
                     RecordPhase2Hit(dinfo.Amount, before, before, 0);
                     EnterStage3(now);
                     return true;
@@ -260,6 +320,7 @@ namespace MiliraXian.Characters.Neiyu
 
                 phase2Charges = before - cost;
                 phase2LastChargeChangeTick = now;
+                lastPenetrateTick = now;
                 absorbed = true;
                 PlayAbsorbFx(dinfo);
                 RecordPhase2Hit(dinfo.Amount, cost, before, phase2Charges);
@@ -375,6 +436,8 @@ namespace MiliraXian.Characters.Neiyu
 
                 int now = CurrentTick;
                 NormalizeStage3Ticks(now);
+                if (stage == 2 && InWeak && phase2Charges <= 0)
+                    return false;
                 return stage == 2 || IsInStage3AbsorbWindow(now);
             }
         }
@@ -590,6 +653,7 @@ namespace MiliraXian.Characters.Neiyu
             bool weakNow = weakUntilTick > now;
             if (weakWasActive && !weakNow)
             {
+                weakShieldExhaustedAnnounced = false;
 
                 EnterStage1(now);
             }
@@ -629,7 +693,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             float t = Mathf.Max(0.1f, Props.phase2Threshold);
 
-            if (damageAmount < t * (2f / 3f))
+            if (damageAmount < t)
             {
                 return 0;
             }
@@ -686,8 +750,22 @@ namespace MiliraXian.Characters.Neiyu
             return wouldDown;
         }
 
+
+        private void PlayShieldBreakFx()
+        {
+            if (Pawn == null || !Pawn.Spawned || Pawn.Map == null)
+            {
+                return;
+            }
+
+            float scale = (Props.activeShieldDrawSize.x + Props.activeShieldDrawSize.y) * 0.25f;
+            EffecterDefOf.Shield_Break.SpawnAttached(Pawn, Pawn.Map, scale);
+            FleckMaker.Static(Pawn.TrueCenter(), Pawn.Map, FleckDefOf.ExplosionFlash, 6f);
+        }
+
         private void PlayAbsorbFx(DamageInfo dinfo)
         {
+            lastAbsorbTick = CurrentTick;
             if (Pawn == null || !Pawn.Spawned || Pawn.Map == null)
             {
                 return;
@@ -774,7 +852,7 @@ namespace MiliraXian.Characters.Neiyu
             Messages.Message(text, Pawn, MessageTypeDefOf.NeutralEvent);
         }
 
-        private string GetStage3TierLabel()
+        public string GetStage3TierLabel()
         {
             float d = phase3StoredDamage;
             if (d <= Props.stage3TierA_MaxDamage) return "A";
