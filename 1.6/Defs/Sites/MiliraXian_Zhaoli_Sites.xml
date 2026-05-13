@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <WorldObjectDef ParentName="Site">
+    <defName>MXZL_ZhaoliHideoutWorldObject</defName>
+    <label>&#19981;&#23384;&#22312;&#32773;&#34255;&#36523;&#22788;</label>
+    <comps>
+      <li Class="MiliraXian.Characters.Zhaoli.WorldObjectCompProperties_ZhaoliHideout" />
+    </comps>
+  </WorldObjectDef>
+
+  <SitePartDef>
+    <defName>MXZL_ZhaoliHideoutSitePart</defName>
+    <label>&#19981;&#23384;&#22312;&#32773;&#34255;&#36523;&#22788;</label>
+    <description>&#19968;&#22788;&#20174;&#29616;&#23454;&#32541;&#38553;&#37324;&#26242;&#26102;&#28014;&#20986;&#30340;&#34255;&#36523;&#20043;&#25152;&#12290;&#26157;&#31163;&#22312;&#37027;&#37324;&#31561;&#24453;&#36828;&#24449;&#38431;&#30340;&#31572;&#22797;&#12290;</description>
+    <workerClass>MiliraXian.Characters.Zhaoli.SitePartWorker_ZhaoliHideout</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/DownedRefugee</expandingIconTexture>
+    <disallowsAutomaticDetectionTimerStart>true</disallowsAutomaticDetectionTimerStart>
+    <approachOrderString>&#21069;&#24448; {0}</approachOrderString>
+    <approachingReportString>&#27491;&#22312;&#21069;&#24448; {0}&#12290;</approachingReportString>
+    <arrivedLetter>&#26157;&#31163;&#23601;&#22312;&#36825;&#24352;&#22320;&#22270;&#20013;&#22830;&#12290;&#22905;&#26082;&#19981;&#20250;&#31227;&#21160;&#65292;&#20063;&#19981;&#20250;&#34987;&#20260;&#23475;&#65292;&#20294;&#22905;&#20250;&#35760;&#20303;&#20320;&#22312;&#36825;&#37324;&#20570;&#20986;&#30340;&#36873;&#25321;&#12290;</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <forceExitAndRemoveMapCountdownDurationDays>3</forceExitAndRemoveMapCountdownDurationDays>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <increasesPopulation>false</increasesPopulation>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+  </SitePartDef>
+
+</Defs>

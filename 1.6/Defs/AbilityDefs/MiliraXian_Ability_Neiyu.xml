@@ -8,8 +8,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_WarpFeather</defName>
-        <label>折跃引羽</label>
-        <description>短暂蓄力后在脚下闪光，并直接生成84~128个米莉拉之羽。 \n米莉拉之羽的来源霓羽念叨着什么物质法则的呈现、什么你知道现在的羽毛都得五十万白银了吗之类的。令人忍俊不禁。</description>
+        <label>&lt;color=#79CBFF&gt;折跃引羽&lt;/color&gt;</label>
+        <description>短暂蓄力后在脚下闪光，并直接生成84~128个&lt;color=#79CBFF&gt;米莉拉之羽&lt;/color&gt;。 \n米莉拉之羽的来源霓羽念叨着什么物质法则的呈现、什么你知道现在的羽毛都得五十万白银了吗之类的。令人忍俊不禁。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_WarpFeather</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -47,8 +47,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_ThunderMarkedStorm</defName>
-        <label>雷锁印域</label>
-        <description>选定半径3格区域，标记其中敌对目标。数秒后每个被标记者将承受3~5次高伤雷击，并附加EMP伤害。\n "这招其实是有一天发现了一个奇特的种族，他们身上蕴含着满满的死亡的气息，生机活力却不比我曾经修行生命的小辈要差，然后曾经有些古书写着什么雷克邪祟什么的，我就搓了这招"</description>
+        <label>&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;</label>
+        <description>选定半径3格区域，标记其中敌对目标。数秒后每个被&lt;color=#8BD5FF&gt;雷锁印记&lt;/color&gt;标记者将承受3~5次高伤&lt;color=#C7B8FF&gt;雷击&lt;/color&gt;，并附加&lt;color=#79CBFF&gt;EMP&lt;/color&gt;伤害。\n "这招其实是有一天发现了一个奇特的种族，他们身上蕴含着满满的死亡的气息，生机活力却不比我曾经修行生命的小辈要差，然后曾经有些古书写着什么雷克邪祟什么的，我就搓了这招"</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -90,8 +90,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Bow_ArrowBarrage</defName>
-        <label>流羽裂界</label>
-        <description>仅在装备弓形态时可用。蓄力5秒后，沿目标方向连续倾泻64发流羽矢，覆盖整幅战场前方区域。\n "曾经喜欢玩一些游戏//"</description>
+        <label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</label>
+        <description>仅在装备&lt;color=#79CBFF&gt;弓形态&lt;/color&gt;时可用。蓄力5秒后，沿目标方向连续倾泻64发&lt;color=#8BD5FF&gt;流羽矢&lt;/color&gt;，覆盖整幅战场前方区域。\n "曾经喜欢玩一些游戏//"</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -133,8 +133,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_BlessingField</defName>
-        <label>花阵·祈生</label>
-        <description>仅花形态可用。对目标区域施放群体增益，范围内友方获得心情提升、移速提升、承伤降低、免疫速度提升；若存在受伤部位则立即治疗至满。\n "不要... 我不能失去你们..."</description>
+        <label>&lt;color=#F39AD9&gt;花阵·祈生&lt;/color&gt;</label>
+        <description>仅&lt;color=#F39AD9&gt;花形态&lt;/color&gt;可用。对目标区域施放群体增益，范围内友方获得&lt;color=#F39AD9&gt;心情提升&lt;/color&gt;、&lt;color=#79CBFF&gt;移速提升&lt;/color&gt;、&lt;color=#8BD5FF&gt;承伤降低&lt;/color&gt;、&lt;color=#F39AD9&gt;免疫速度提升&lt;/color&gt;；若存在受伤部位则立即治疗至满。\n "不要... 我不能失去你们..."</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -178,8 +178,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_ToxinGarden</defName>
-        <label>花阵·瘴庭</label>
-        <description>仅花形态可用。对大范围目标区域施放敌对效果，范围内敌方将被强制施加重度食物中毒，并有10%概率陷入狂暴。 \n "其实这招的实现效果是先暂停时间然后给他们每个人喂了一口前几天熬的粥，这招在对付起纹境以下的普通米莉拉特别好用// 他们生气和我有什么关系?"</description>
+        <label>&lt;color=#D786E8&gt;花阵·瘴庭&lt;/color&gt;</label>
+        <description>仅&lt;color=#F39AD9&gt;花形态&lt;/color&gt;可用。对大范围目标区域施放敌对效果，范围内敌方将被强制施加&lt;color=#D786E8&gt;重度食物中毒&lt;/color&gt;，并有10%概率陷入&lt;color=#F39AD9&gt;狂暴&lt;/color&gt;。 \n "其实这招的实现效果是先暂停时间然后给他们每个人喂了一口前几天熬的粥，这招在对付起纹境以下的普通米莉拉特别好用// 他们生气和我有什么关系?"</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -221,8 +221,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_Skyfall</defName>
-        <label>剑势·天坠</label>
-        <description>仅剑形态可用。施放后先于原地直线高速升空至高空，再在目标区域生成落点预警，随后于该区域上空直线高速坠落，造成高额范围伤害并附加易伤。\n "有人说我胖// 我说这不对// 关键是竟然说我...说我那里小... 我靠吃我一坠！！！"</description>
+        <label>&lt;color=#8BD5FF&gt;剑势·天坠&lt;/color&gt;</label>
+        <description>仅&lt;color=#8BD5FF&gt;剑形态&lt;/color&gt;可用。施放后先于原地直线高速升空至高空，再在目标区域生成落点预警，随后于该区域上空直线高速坠落，造成高额范围伤害并附加&lt;color=#C7A2F8&gt;易伤&lt;/color&gt;。\n "有人说我胖// 我说这不对// 关键是竟然说我...说我那里小... 我靠吃我一坠！！！"</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -293,8 +293,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_ExecuteHead</defName>
-        <label>剑势·断首</label>
-        <description>仅剑形态可用。选中单体后先反向后撤，再以极高速度突进至目标附近并执行斩首。\n "教导我这招的老师是舰船上少数的剑法大师，据她所说曾经的大混战中只有她和几位同袍保持着手刃敌人的习惯，老师教导我这招后没几年就去世了，所以我依然记得老师说的：'对敌要稳快准狠'只是小羽愚钝，只得学会其半招。"</description>
+        <label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</label>
+        <description>仅&lt;color=#8BD5FF&gt;剑形态&lt;/color&gt;可用。选中单体后先反向后撤，再以极高速度突进至目标附近并执行&lt;color=#F39AD9&gt;斩首&lt;/color&gt;。\n "教导我这招的老师是舰船上少数的剑法大师，据她所说曾经的大混战中只有她和几位同袍保持着手刃敌人的习惯，老师教导我这招后没几年就去世了，所以我依然记得老师说的：'对敌要稳快准狠'只是小羽愚钝，只得学会其半招。"</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
 
         <category>MX_NeiyuSkill</category>

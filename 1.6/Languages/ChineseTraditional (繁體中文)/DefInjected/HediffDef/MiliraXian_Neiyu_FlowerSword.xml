@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_FlowerBlessedThought.stages.0.label>花祈祝福</MX_Neiyu_FlowerBlessedThought.stages.0.label>
-  <MX_Neiyu_FlowerBlessedThought.stages.0.description>沐浴在霓羽花形態留下的溫柔祝福之中。</MX_Neiyu_FlowerBlessedThought.stages.0.description>
-  <MX_Neiyu_FlowerBlessed.label>花祈祝福</MX_Neiyu_FlowerBlessed.label>
-  <MX_Neiyu_FlowerBlessed.description>花形態技能賦予的祝福狀態。</MX_Neiyu_FlowerBlessed.description>
-  <MX_Neiyu_FlowerBlessed.stages.0.label>花祈祝福</MX_Neiyu_FlowerBlessed.stages.0.label>
-  <MX_Neiyu_SwordVulnerability.label>劍勢易傷</MX_Neiyu_SwordVulnerability.label>
-  <MX_Neiyu_SwordVulnerability.description>被劍勢·天墜命中後會更容易承受後續傷害。</MX_Neiyu_SwordVulnerability.description>
-  <MX_Neiyu_SwordVulnerability.stages.0.label>易傷</MX_Neiyu_SwordVulnerability.stages.0.label>
+  <MX_Neiyu_FlowerBlessedThought.stages.0.label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</MX_Neiyu_FlowerBlessedThought.stages.0.label>
+  <MX_Neiyu_FlowerBlessedThought.stages.0.description>沐浴在&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;之中。</MX_Neiyu_FlowerBlessedThought.stages.0.description>
+  <MX_Neiyu_FlowerBlessed.label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</MX_Neiyu_FlowerBlessed.label>
+  <MX_Neiyu_FlowerBlessed.description>來自&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;&lt;color=#F39AD9&gt;花形態&lt;/color&gt;技能的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;，會在短時間內強化自身狀態。</MX_Neiyu_FlowerBlessed.description>
+  <MX_Neiyu_FlowerBlessed.stages.0.label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</MX_Neiyu_FlowerBlessed.stages.0.label>
+  <MX_Neiyu_SwordVulnerability.label>&lt;color=#C7A2F8&gt;劍墜易傷&lt;/color&gt;</MX_Neiyu_SwordVulnerability.label>
+  <MX_Neiyu_SwordVulnerability.description>受到&lt;color=#8BD5FF&gt;劍落衝擊&lt;/color&gt;後，短時間內會承受更高傷害，並被&lt;color=#C7A2F8&gt;易傷&lt;/color&gt;餘波纏繞。</MX_Neiyu_SwordVulnerability.description>
+  <MX_Neiyu_SwordVulnerability.stages.0.label>&lt;color=#C7A2F8&gt;易傷&lt;/color&gt;</MX_Neiyu_SwordVulnerability.stages.0.label>
 </LanguageData>

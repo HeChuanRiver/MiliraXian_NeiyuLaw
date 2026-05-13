@@ -18,11 +18,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect
     {
-        private const string GuiyiLinkLineMoteDefName = "MXZL_Mote_GuiyiLinkLine";
-        private const string GuiyiLinkPulseMoteDefName = "MXZL_Mote_GuiyiLinkPulse";
-        private const string GuiyiLinkStripeMoteDefName = "MXZL_Mote_GuiyiLinkStripe";
-        private const string GuiyiHealGlowMoteDefName = "MXZL_Mote_GuiyiHealGlow";
-
         private new CompProperties_AbilityZhaoliGuiyi Props => (CompProperties_AbilityZhaoliGuiyi)props;
 
         public override IEnumerable<PreCastAction> GetPreCastActions()
@@ -38,7 +33,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ticksAwayFromCast = warmupTicks,
                 action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
                 {
-                    SpawnLinkPulse(target.Pawn, GuiyiLinkStripeMoteDefName);
+                    SpawnLinkPulse(target.Pawn, ZhaoliEffectUtility.GuiyiLinkStripeMoteDef);
                 }
             };
 
@@ -50,7 +45,7 @@ namespace MiliraXian.Characters.Zhaoli
                     ticksAwayFromCast = halfWarmupTicks,
                     action = delegate(LocalTargetInfo target, LocalTargetInfo dest)
                     {
-                        SpawnLinkPulse(target.Pawn, GuiyiLinkStripeMoteDefName);
+                        SpawnLinkPulse(target.Pawn, ZhaoliEffectUtility.GuiyiLinkStripeMoteDef);
                     }
                 };
             }
@@ -60,7 +55,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Pawn caster = parent?.pawn;
             Pawn targetPawn = target.Pawn;
-            ThingDef lineDef = DefDatabase<ThingDef>.GetNamedSilentFail(GuiyiLinkLineMoteDefName);
+            ThingDef lineDef = ZhaoliEffectUtility.GuiyiLinkLineMoteDef;
             if (caster == null || targetPawn == null || lineDef == null)
             {
                 yield break;
@@ -115,7 +110,7 @@ namespace MiliraXian.Characters.Zhaoli
             int removedHediffs = RemoveNegativeHediffs(targetPawn);
             if (restoredParts + removedHediffs > 0)
             {
-                SpawnLinkPulse(targetPawn, GuiyiLinkPulseMoteDefName);
+                SpawnLinkPulse(targetPawn, ZhaoliEffectUtility.GuiyiLinkPulseMoteDef);
 
                 if (targetPawn.Spawned)
                 {
@@ -279,7 +274,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (hediff.def == DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliKarmaUtility.DormancyHediffDefName))
+            if (hediff.def == ZhaoliEffectUtility.DormancyHediffDef)
             {
                 return false;
             }
@@ -302,10 +297,9 @@ namespace MiliraXian.Characters.Zhaoli
             return Mathf.Max(0, parent.def.verbProperties.warmupTime.SecondsToTicks());
         }
 
-        private void SpawnLinkPulse(Pawn targetPawn, string moteDefName)
+        private void SpawnLinkPulse(Pawn targetPawn, ThingDef pulseDef)
         {
             Pawn caster = parent?.pawn;
-            ThingDef pulseDef = DefDatabase<ThingDef>.GetNamedSilentFail(moteDefName);
             if (caster == null || targetPawn == null || pulseDef == null || !caster.Spawned || !targetPawn.Spawned || caster.MapHeld != targetPawn.MapHeld)
             {
                 return;
@@ -316,13 +310,12 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void SpawnHealGlow(Pawn targetPawn)
         {
-            ThingDef glowDef = DefDatabase<ThingDef>.GetNamedSilentFail(GuiyiHealGlowMoteDefName);
-            if (targetPawn == null || glowDef == null || !targetPawn.Spawned)
+            if (targetPawn == null || !targetPawn.Spawned)
             {
                 return;
             }
 
-            MoteMaker.MakeAttachedOverlay(targetPawn, glowDef, Vector3.zero, Props.overlayScale);
+            ZhaoliVisualUtility.QueueGuiyiHealAnimation(targetPawn, Props.overlayScale);
         }
     }
 }

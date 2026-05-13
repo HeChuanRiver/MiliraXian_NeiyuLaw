@@ -31,27 +31,28 @@
 
         <!-- apparel tags for random apparel 用于随机生成装备时，允许的装备tag -->
         <!-- TODO: 这里记得换昭离的衣服 -->
-        <apparelTags>
-            <li>MiliraXian_NeiyuNormal</li>
+        <apparelTags Inherit="False">
+            <li>MX_ZhaoliNormal</li>
+            <li>MX_ZhaoliHood</li>
         </apparelTags>
 
-        <specificApparelRequirements>
-            <!--            <li>-->
-            <!--                <bodyPartGroup>FullHead</bodyPartGroup>-->
-            <!--                <requiredTag>Milira_ValkyrHelmet</requiredTag>-->
-            <!--                <apparelLayer>Overhead</apparelLayer>-->
-            <!--                <stuff>Milira_SunPlateSteel</stuff>-->
-            <!--            </li>-->
+        <specificApparelRequirements Inherit="False">
+            <li>
+                <bodyPartGroup>FullHead</bodyPartGroup>
+                <requiredTag>MX_ZhaoliHood</requiredTag>
+                <apparelLayer>Overhead</apparelLayer>
+                <apparelDef>MX_ZhaoliHood</apparelDef>
+            </li>
         </specificApparelRequirements>
 
         <!-- apparel you force to spawn 强制要求生成的装备 -->
         <!-- TODO: 这里记得换昭离所要穿的装备，这里不能放武器 -->
-        <apparelRequired>
-            <li>MiliraXian_NeiyuNormal</li>
-            <li>MX_Apparel_EarringsZhenzhu</li>
+        <apparelRequired Inherit="False">
+            <li>MX_ZhaoliNormal</li>
+            <li>MX_ZhaoliHood</li>
         </apparelRequired>
         <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
-        <apparelDisallowTags>
+        <apparelDisallowTags Inherit="False">
         </apparelDisallowTags>
         <!-- 允许生成头部装备的概率 -->
         <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
@@ -59,7 +60,7 @@
         <!-- 武器的tag -->
         <!-- TODO:这里放武器 -->
         <weaponTags>
-            <li>MiliraXian_NeiyuFlower</li>
+            <li>MiliraXian_ZhaoliBlade</li>
         </weaponTags>
 
         <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围 -->
@@ -123,6 +124,7 @@
         <abilities>
             <li>MX_Zhaoli_DeathField</li>
             <li>MX_Zhaoli_Guiyi</li>
+            <li>MX_Zhaoli_Dingshu</li>
             <li>MX_Zhaoli_Minghuo</li>
             <li>MX_Zhaoli_Minshen</li>
         </abilities>
@@ -156,8 +158,7 @@
 
                 <!-- You can use your own texture if you have your owen HeadTypeDef (Without mod Facial Animation).
                  如果你自己创建了一个HeadTypeDef，那么便可以用来在没有面部动画mod的情况下为头部更换贴图。 -->
-                <!-- TODO: 这里记得换昭离的头 -->
-                <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
+                <forcedHeadTypeDef>MiliraZhaoliHead</forcedHeadTypeDef>
 
                 <!-- Disable random spawned trait, use the trait below only. You may write multiple traits here. 
                  禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
@@ -299,4 +300,3 @@
 
 
 </Defs>
-

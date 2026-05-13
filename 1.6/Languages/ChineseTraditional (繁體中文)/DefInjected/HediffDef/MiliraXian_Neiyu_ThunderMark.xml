@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_ThunderMark.label>雷鎖印記</MX_Neiyu_ThunderMark.label>
-  <MX_Neiyu_ThunderMark.description>被霓羽鎖定的目標將很快引來數次雷擊。</MX_Neiyu_ThunderMark.description>
+  <MX_Neiyu_ThunderMark.label>&lt;color=#8BD5FF&gt;雷鎖印記&lt;/color&gt;</MX_Neiyu_ThunderMark.label>
+  <MX_Neiyu_ThunderMark.description>被&lt;color=#8BD5FF&gt;雷鎖印域&lt;/color&gt;標記，短時間內將持續遭受&lt;color=#C7B8FF&gt;雷擊&lt;/color&gt;。</MX_Neiyu_ThunderMark.description>
 </LanguageData>

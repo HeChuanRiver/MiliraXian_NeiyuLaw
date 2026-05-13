@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <JobDef>
+    <defName>MX_Zhaoli_CastAbility_Dingshu</defName>
+    <driverClass>MiliraXian.Characters.Zhaoli.JobDriver_MX_Dingshu</driverClass>
+    <reportString>施放定数</reportString>
+    <abilityCasting>true</abilityCasting>
+    <playerInterruptible>false</playerInterruptible>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+    <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+    <neverShowWeapon>true</neverShowWeapon>
+  </JobDef>
+
+</Defs>

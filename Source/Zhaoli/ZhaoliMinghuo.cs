@@ -36,8 +36,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliMinghuo : CompAbilityEffect
     {
-        private const string MinghuoHediffDefName = "MXZL_ZhaoliMinghuo";
-
         private new CompProperties_AbilityZhaoliMinghuo Props => (CompProperties_AbilityZhaoliMinghuo)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -66,10 +64,10 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(MinghuoHediffDefName);
+            HediffDef hediffDef = ZhaoliEffectUtility.MinghuoHediffDef;
             if (hediffDef == null)
             {
-                Log.Error("[MiliraXian.Characters.Zhaoli] Missing HediffDef: " + MinghuoHediffDefName);
+                Log.Error("[MiliraXian.Characters.Zhaoli] Missing HediffDef: " + ZhaoliMinghuoUtility.MinghuoHediffDefName);
                 return;
             }
 
@@ -89,6 +87,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 FleckMaker.Static(caster.Position, caster.Map, FleckDefOf.FireGlow, Mathf.Max(1.5f, Props.overlayScale * 1.3f));
                 FleckMaker.AttachedOverlay(caster, FleckDefOf.MicroSparksFast, Vector3.zero, Mathf.Max(1f, Props.overlayScale * 0.75f));
+                ZhaoliVisualUtility.SpawnMinghuoAuraFrame(caster, 0, Props.overlayScale);
             }
 
             FleckMaker.AttachedOverlay(caster, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
@@ -153,6 +152,9 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliMinghuo : HediffComp
     {
+        private const int AuraFrameCount = 3;
+        private const int AuraFrameIntervalTicks = 6;
+
         private ThingWithComps boundWeapon;
 
         public HediffCompProperties_ZhaoliMinghuo PropsMinghuo => (HediffCompProperties_ZhaoliMinghuo)props;
@@ -192,6 +194,23 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return Mathf.Max(1f, baseDamage * PropsMinghuo.fireDamageFactor);
+        }
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            if (boundWeapon == null || Pawn == null || Pawn.Dead || !Pawn.Spawned || Find.TickManager == null)
+            {
+                return;
+            }
+
+            int ticksGame = Find.TickManager.TicksGame;
+            if (ticksGame % AuraFrameIntervalTicks != 0)
+            {
+                return;
+            }
+
+            int frameIndex = (ticksGame / AuraFrameIntervalTicks) % AuraFrameCount;
+            ZhaoliVisualUtility.SpawnMinghuoAuraFrame(Pawn, frameIndex, 1f);
         }
 
         public override string CompTipStringExtra
@@ -248,7 +267,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(MinghuoHediffDefName);
+            HediffDef hediffDef = ZhaoliEffectUtility.MinghuoHediffDef;
             if (hediffDef == null)
             {
                 return null;

@@ -7,4 +7,12 @@
         <gender>None</gender>
         <randomChosen>false</randomChosen>
     </HeadTypeDef>
+
+    <!-- Zhaoli -->
+    <HeadTypeDef ParentName="AverageBase">
+        <defName>MiliraZhaoliHead</defName>
+        <graphicPath>MiliraXianZhaoli/Pawn/Head/MiliraHeadZhaoli</graphicPath>
+        <gender>None</gender>
+        <randomChosen>false</randomChosen>
+    </HeadTypeDef>
 </Defs>

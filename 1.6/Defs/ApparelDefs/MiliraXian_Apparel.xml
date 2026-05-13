@@ -82,6 +82,122 @@
         </equippedStatOffsets>
     </ThingDef>
 
+    <!-- 昭离常服 -->
+    <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
+        <defName>MX_ZhaoliNormal</defName>
+        <label>昭离·常服</label>
+        <description>昭离惯常穿着的紫黑衣装。外摆压暗，内层带有细碎的紫白纹路，与离断刀柄和昭离的因果术式相互呼应。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianZhaoli/Apparel/Zhaoli/Naked</texPath>
+        </graphicData>
+        <statBases>
+            <Mass>1.1</Mass>
+            <WorkToMake>600000</WorkToMake>
+            <ArmorRating_Sharp>1.65</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.35</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.6</ArmorRating_Heat>
+            <Insulation_Cold>900</Insulation_Cold>
+            <Insulation_Heat>900</Insulation_Heat>
+        </statBases>
+        <apparel>
+            <useWornGraphicMask>false</useWornGraphicMask>
+            <developmentalStageFilter>Child, Adult</developmentalStageFilter>
+            <bodyPartGroups>
+                <li>Torso</li>
+                <li>Legs</li>
+                <li>Arms</li>
+                <li>Neck</li>
+                <li>Shoulders</li>
+                <li>Feet</li>
+                <li>Hands</li>
+                <li>Milira_Wings</li>
+            </bodyPartGroups>
+            <wornGraphicPath>MiliraXianZhaoli/Apparel/Zhaoli/Naked</wornGraphicPath>
+            <tags>
+                <li>MX_ZhaoliNormal</li>
+            </tags>
+            <layers>
+                <li>Shell</li>
+            </layers>
+            <shellRenderedBehindHead>true</shellRenderedBehindHead>
+        </apparel>
+        <tickerType>Normal</tickerType>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+        <equippedStatOffsets>
+            <CarryingCapacity>+45</CarryingCapacity>
+            <MeleeDodgeChance>12.0</MeleeDodgeChance>
+            <MoveSpeed>0.80</MoveSpeed>
+        </equippedStatOffsets>
+    </ThingDef>
+
+    <!-- 昭离兜帽 -->
+    <ThingDef ParentName="Milira_OverheadBase">
+        <defName>MX_ZhaoliHood</defName>
+        <label>昭离·兜帽</label>
+        <description>昭离外出时披戴的深色兜帽。兜帽边缘带有紫色纹饰，能够遮住昭离头顶的光环，使她在地面行动时不那么显眼。</description>
+        <smeltable>false</smeltable>
+        <burnableByRecipe>false</burnableByRecipe>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianZhaoli/Apparel/Hood/ZhaoliHood</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>1.0</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianZhaoli/Apparel/Hood/ZhaoliHood</uiIconPath>
+
+        <statBases>
+            <Mass>0.5</Mass>
+            <MaxHitPoints>300</MaxHitPoints>
+            <Flammability>0</Flammability>
+            <DeteriorationRate>0</DeteriorationRate>
+            <Beauty>1</Beauty>
+            <EquipDelay>0.5</EquipDelay>
+            <WorkToMake>12000</WorkToMake>
+            <ArmorRating_Sharp>0.40</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.40</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.20</ArmorRating_Heat>
+        </statBases>
+
+        <apparel>
+            <useWornGraphicMask>false</useWornGraphicMask>
+            <developmentalStageFilter>Child, Adult</developmentalStageFilter>
+            <bodyPartGroups Inherit="False">
+                <li>FullHead</li>
+            </bodyPartGroups>
+            <renderSkipFlags>
+                <li>Milira_Halo</li>
+                <li>Ancot_HairAhoge</li>
+            </renderSkipFlags>
+            <wornGraphicPath>MiliraXianZhaoli/Apparel/Hood/ZhaoliHood</wornGraphicPath>
+            <tags>
+                <li>MX_ZhaoliHood</li>
+            </tags>
+            <renderNodeProperties>
+                <li>
+                    <debugLabel>MX_ZhaoliHood BG</debugLabel>
+                    <nodeClass>AncotLibrary.PawnRenderNode_ApparelAddition</nodeClass>
+                    <workerClass>PawnRenderNodeWorker_Apparel_Head</workerClass>
+                    <pawnType>Any</pawnType>
+                    <texPath>MiliraXianZhaoli/Apparel/ApparelBackGround/Hood/ZhaoliHoodBG</texPath>
+                    <baseLayer>-10</baseLayer>
+                    <parentTagDef>ApparelHead</parentTagDef>
+                </li>
+            </renderNodeProperties>
+        </apparel>
+
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+        <equippedStatOffsets>
+            <MentalBreakThreshold>-0.15</MentalBreakThreshold>
+        </equippedStatOffsets>
+    </ThingDef>
+
     <!-- 内衬 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MiliraXian_NeiyuInner</defName>

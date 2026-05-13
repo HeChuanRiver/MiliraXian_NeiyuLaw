@@ -3,8 +3,8 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
-        <label>告死流场</label>
-        <description>昭离维持中的&lt;color=#A11228&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。</description>
+        <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
@@ -14,16 +14,16 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="Verse.HediffCompProperties_Disappears">
-                <disappearsAfterTicks>900</disappearsAfterTicks>
+                <disappearsAfterTicks>540</disappearsAfterTicks>
                 <showRemainingTime>false</showRemainingTime>
             </li>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathField">
                 <radius>9</radius>
-                <fieldDurationTicks>900</fieldDurationTicks>
-                <bleedIntervalTicks>180</bleedIntervalTicks>
+                <fieldDurationTicks>540</fieldDurationTicks>
+                <bleedIntervalTicks>60</bleedIntervalTicks>
                 <bleedDamage>3</bleedDamage>
                 <bleedDamageDef>Cut</bleedDamageDef>
-                <executeStayTicks>900</executeStayTicks>
+                <executeStayTicks>540</executeStayTicks>
                 <slowHediff>MXZL_ZhaoliDeathFieldSlow</slowHediff>
                 <slowRefreshTicks>90</slowRefreshTicks>
                 <karmaPerExecution>1</karmaPerExecution>
@@ -33,8 +33,8 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldSlow</defName>
-        <label>告死滞压</label>
-        <description>身处&lt;color=#5E1335&gt;告死流场&lt;/color&gt;之中，行动会被明显压制，难以脱离其范围。</description>
+        <label>&lt;color=#B86CFF&gt;告死滞压&lt;/color&gt;</label>
+        <description>身处&lt;color=#B86CFF&gt;告死流场&lt;/color&gt;之中，行动会被明显压制，难以脱离这片&lt;color=#C9A2FF&gt;黑红领域&lt;/color&gt;。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.58, 0.08, 0.16)</defaultLabelColor>
         <isBad>true</isBad>

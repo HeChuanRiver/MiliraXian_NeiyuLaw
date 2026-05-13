@@ -3,8 +3,8 @@
 
     <HediffDef>
         <defName>MXNL_NeiyuShield</defName>
-        <label>护身</label>
-        <description>&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;护身&lt;/color&gt;次数盾，会随阶段变化展现不同防护能力。</description>
+        <label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</label>
+        <description>&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;护身&lt;/color&gt;次数盾，会随阶段变化展现不同防护能力，并在危急时转入更强的守护形态。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.44, 0.80, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
