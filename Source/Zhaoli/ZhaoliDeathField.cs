@@ -46,6 +46,11 @@ namespace MiliraXian.Characters.Zhaoli
 
             HediffComp_ZhaoliDeathField comp = field.GetComp<HediffComp_ZhaoliDeathField>();
             comp?.ActivateAt(target.Cell);
+            if (ZhaoliScenarioUtility.IsRaidState(caster))
+            {
+                ZhaoliKarmaUtility.AddKarma(caster, ZhaoliScenarioUtility.DeathFieldRaidBonusKarma);
+            }
+
             if (caster.Spawned)
             {
                 FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, Mathf.Max(1.5f, Props.radius * 0.65f));
@@ -85,10 +90,8 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliDeathField : HediffComp
     {
-        private const string DeathFieldAreaMoteDefName = "MXZL_Mote_DeathFieldArea";
-        private const string DeathFieldMarkMoteDefName = "MXZL_Mote_DeathFieldMark";
-        private const string SoulAbsorbPulseMoteDefName = "MXZL_Mote_SoulAbsorbPulse";
-        private const string DeathRefusalBubbleFleckDefName = "DeathRefusalBubble";
+        private const int FieldParticleIntervalTicks = 9;
+        private const float FieldAreaRotationRate = 360f;
 
         private Dictionary<Pawn, int> stayTicks = new Dictionary<Pawn, int>();
         private readonly Dictionary<Pawn, Mote> markedPawns = new Dictionary<Pawn, Mote>();
@@ -102,16 +105,20 @@ namespace MiliraXian.Characters.Zhaoli
         private Mote fieldAreaMote;
         private int fieldCenterX;
         private int fieldCenterZ;
+        private float activeRadius;
         private bool active;
 
         private HediffCompProperties_ZhaoliDeathField PropsField => (HediffCompProperties_ZhaoliDeathField)props;
 
         private IntVec3 FieldCenter => new IntVec3(fieldCenterX, 0, fieldCenterZ);
+        public float DefaultRadius => PropsField.radius;
+        private float CurrentRadius => activeRadius > 0f ? activeRadius : PropsField.radius;
 
-        public void ActivateAt(IntVec3 center)
+        public void ActivateAt(IntVec3 center, float radiusOverride = -1f)
         {
             fieldCenterX = center.x;
             fieldCenterZ = center.z;
+            activeRadius = radiusOverride > 0f ? radiusOverride : PropsField.radius;
             active = true;
             stayTicks.Clear();
             markedPawns.Clear();
@@ -129,6 +136,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Scribe_Values.Look(ref fieldCenterX, "fieldCenterX", 0);
             Scribe_Values.Look(ref fieldCenterZ, "fieldCenterZ", 0);
+            Scribe_Values.Look(ref activeRadius, "activeRadius", 0f);
             Scribe_Values.Look(ref active, "active", false);
             if (Scribe.mode == LoadSaveMode.Saving)
             {
@@ -165,32 +173,33 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             MaintainFieldArea(map, center);
+            MaintainFieldParticles(map, center);
             if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
             {
-                FleckDef deathPulse = DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalPulse");
+                FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
                 if (deathPulse != null)
                 {
-                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, PropsField.radius * 0.55f));
+                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, CurrentRadius * 0.55f));
                 }
             }
 
             pawnsInsideNow.Clear();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, PropsField.radius, true))
+            IReadOnlyList<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < allPawnsSpawned.Count; i++)
             {
-                if (!cell.InBounds(map))
+                Pawn pawn = allPawnsSpawned[i];
+                if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead)
                 {
                     continue;
                 }
 
-                List<Thing> things = cell.GetThingList(map);
-                for (int i = 0; i < things.Count; i++)
+                if (!ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, pawn))
                 {
-                    Pawn pawn = things[i] as Pawn;
-                    if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
+                if (pawn.Position.InHorDistOf(center, CurrentRadius))
+                {
                     pawnsInsideNow.Add(pawn);
                 }
             }
@@ -287,7 +296,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void MaintainFieldArea(Map map, IntVec3 center)
         {
-            ThingDef areaDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldAreaMoteDefName);
+            ThingDef areaDef = ZhaoliEffectUtility.DeathFieldAreaMoteDef;
             if (areaDef == null)
             {
                 return;
@@ -296,9 +305,35 @@ namespace MiliraXian.Characters.Zhaoli
             if (fieldAreaMote == null || fieldAreaMote.Destroyed)
             {
                 fieldAreaMote = MoteMaker.MakeStaticMote(center, map, areaDef, 1f);
+                if (fieldAreaMote != null)
+                {
+                    fieldAreaMote.exactRotation = Rand.Range(0f, 360f);
+                    fieldAreaMote.rotationRate = FieldAreaRotationRate;
+                }
             }
 
             fieldAreaMote?.Maintain();
+        }
+
+        private void MaintainFieldParticles(Map map, IntVec3 center)
+        {
+            if (Find.TickManager == null || Find.TickManager.TicksGame % FieldParticleIntervalTicks != 0)
+            {
+                return;
+            }
+
+            ThingDef particleDef = ZhaoliEffectUtility.RandomDeathFieldParticleMoteDef;
+            if (particleDef == null)
+            {
+                return;
+            }
+
+            Vector3 loc = center.ToVector3Shifted() + Rand.InsideUnitCircleVec3 * Mathf.Max(0.1f, CurrentRadius * 0.92f);
+            Mote mote = MoteMaker.MakeStaticMote(loc, map, particleDef, Rand.Range(0.85f, 1.25f), false, Rand.Range(0f, 360f));
+            if (mote != null)
+            {
+                mote.rotationRate = Rand.Range(-45f, 45f);
+            }
         }
 
         private void MaintainFieldMark(Pawn pawn)
@@ -308,7 +343,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            ThingDef markDef = DefDatabase<ThingDef>.GetNamedSilentFail(DeathFieldMarkMoteDefName);
+            ThingDef markDef = ZhaoliEffectUtility.DeathFieldMarkMoteDef;
             if (markDef == null)
             {
                 return;
@@ -373,7 +408,7 @@ namespace MiliraXian.Characters.Zhaoli
             IntVec3 position = pawn.PositionHeld;
             if (map != null && position.IsValid)
             {
-                FleckDef soulFleck = DefDatabase<FleckDef>.GetNamedSilentFail(DeathRefusalBubbleFleckDefName);
+                FleckDef soulFleck = ZhaoliEffectUtility.DeathRefusalBubbleFleckDef;
                 if (soulFleck != null)
                 {
                     FleckMaker.Static(position, map, soulFleck, 1.6f);
@@ -382,7 +417,7 @@ namespace MiliraXian.Characters.Zhaoli
                 FleckMaker.Static(position, map, FleckDefOf.ExplosionFlash, 1.6f);
                 FleckMaker.Static(position, map, FleckDefOf.FlashHollow, 1.4f);
 
-                ThingDef soulPulseDef = DefDatabase<ThingDef>.GetNamedSilentFail(SoulAbsorbPulseMoteDefName);
+                ThingDef soulPulseDef = ZhaoliEffectUtility.SoulAbsorbPulseMoteDef;
                 if (soulPulseDef != null && Pawn != null && Pawn.Spawned && Pawn.MapHeld == map)
                 {
                     MoteMaker.MakeInteractionOverlay(soulPulseDef, new TargetInfo(position, map), Pawn);

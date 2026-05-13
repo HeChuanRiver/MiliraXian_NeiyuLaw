@@ -37,9 +37,9 @@ namespace MiliraXian.Characters.Neiyu
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
             listing.CheckboxLabeled(
-                "启用霓羽接入特殊角色管理器",
+                "启用角色接入特殊角色管理器",
                 ref Settings.EnableAriandelSpecialPawnIntegration,
-                "启用后，通过霓羽自己的剧本、任务或其他玩家派系生成路径加入殖民地的霓羽，会被注册进 Ariandel 的特殊角色管理器。");
+                "启用后，霓羽、昭离、清荷在加入玩家派系或读档巡检时，会被注册进 Ariandel 的特殊角色管理器，避免因未注册而被唯一角色限制器清理。");
             listing.End();
         }
     }

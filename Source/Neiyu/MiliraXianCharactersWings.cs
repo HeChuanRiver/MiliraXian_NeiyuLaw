@@ -119,9 +119,8 @@ namespace MiliraXian.Characters.Neiyu
                     "MiliraXian_Zhaoli",
                     new MiliraXianCharacterWingEntry(
                         "MiliraXian_Zhaoli",
-                        // TODO：这里记得改翅膀贴图 
-                        "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu",
-                        "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu",
+                        "MiliraXianZhaoli/Pawn/Wings/LeftWingNew",
+                        "MiliraXianZhaoli/Pawn/Wings/RightWingNew",
                         "Milira_FlyNorth_Zhaoli",
                         "Milira_FlyEast_Zhaoli",
                         "Milira_FlySouth_Zhaoli",

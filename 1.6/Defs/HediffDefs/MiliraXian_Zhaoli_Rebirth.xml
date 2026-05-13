@@ -3,8 +3,8 @@
 
     <HediffDef>
         <defName>MXZL_ZhaoliRebirth</defName>
-        <label>归亡者</label>
-        <description>&lt;color=#A11228&gt;昭离&lt;/color&gt;的死亡将被暂时接纳。死亡后尸体会消失，并在&lt;color=#6A214A&gt;十日后&lt;/color&gt;于玩家基地随机位置归来。</description>
+        <label>&lt;color=#D9574E&gt;归亡者&lt;/color&gt;</label>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;的死亡将被暂时接纳。死亡后尸体会消失，并在&lt;color=#C77DFF&gt;十日后&lt;/color&gt;于玩家基地随机位置归来。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.96, 0.36, 0.32)</defaultLabelColor>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -13,6 +13,22 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliRebirth" />
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MXZL_ZhaoliDingshuMark</defName>
+        <label>&lt;color=#C9A2FF&gt;定数标记&lt;/color&gt;</label>
+        <description>该目标曾经被昭离以&lt;color=#C9A2FF&gt;定数&lt;/color&gt;强行拉回生界。标记持续期间若再次死亡，将无法再被复活。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.25, 0.08, 0.12)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <comps>
+            <li Class="Verse.HediffCompProperties_Disappears">
+                <disappearsAfterTicks>720000</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
         </comps>
     </HediffDef>
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <IncidentDef>
+    <defName>MXZL_ZhaoliMurmur</defName>
+    <label>&#20129;&#32773;&#35828;</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>MiliraXian.Characters.Zhaoli.IncidentWorker_ZhaoliMurmur</workerClass>
+    <questScriptDef>MXZL_ZhaoliMurmurQuest</questScriptDef>
+    <baseChance>1.0</baseChance>
+    <letterLabel>&#20129;&#32773;&#35828;</letterLabel>
+    <letterText>&#27515;&#32773;&#30340;&#20313;&#28201;&#23578;&#26410;&#25955;&#23613;&#65292;&#26576;&#31181;&#19981;&#23646;&#20110;&#27492;&#19990;&#30340;&#20302;&#35821;&#20415;&#24050;&#24490;&#30528;&#23608;&#39592;&#19982;&#35760;&#24518;&#25269;&#36798;&#20320;&#30340;&#27542;&#27665;&#22320;&#12290;&#23427;&#26082;&#19981;&#20687;&#21696;&#24764;&#65292;&#20063;&#19981;&#20687;&#31048;&#27714;&#65292;&#26356;&#20687;&#26159;&#22312;&#26367;&#26576;&#20301;&#19982;&#29983;&#27515;&#32416;&#32544;&#22826;&#28145;&#30340;&#20154;&#20256;&#35805;&#12290;</letterText>
+  </IncidentDef>
+
+  <IncidentDef>
+    <defName>MXZL_ZhaoliReturn</defName>
+    <label>&#24402;&#20129;&#32773;</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>MiliraXian.Characters.Zhaoli.IncidentWorker_ZhaoliReturn</workerClass>
+    <questScriptDef>MXZL_ZhaoliReturnQuest</questScriptDef>
+    <baseChance>1.0</baseChance>
+    <letterLabel>&#24402;&#20129;&#32773;</letterLabel>
+    <letterText>&#20320;&#20197;&#33609;&#33647;&#25442;&#26469;&#30340;&#27785;&#40664;&#65292;&#25110;&#26159;&#20320;&#20146;&#25163;&#32456;&#32467;&#30340;&#25932;&#24847;&#65292;&#37117;&#22312;&#19968;&#22812;&#20043;&#21518;&#27785;&#28096;&#25104;&#20102;&#21516;&#19968;&#20010;&#31572;&#26696;&#12290;&#26157;&#31163;&#23558;&#20877;&#27425;&#26469;&#21040;&#36825;&#37324;&#65292;&#36825;&#19968;&#27425;&#65292;&#22905;&#20250;&#30041;&#19979;&#12290;</letterText>
+  </IncidentDef>
+
+</Defs>

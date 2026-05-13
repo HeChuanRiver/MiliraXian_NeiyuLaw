@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_WarpFeather.label>折躍引羽</MX_Neiyu_WarpFeather.label>
-  <MX_Neiyu_WarpFeather.description>短暫蓄力後在腳下閃光，並直接生成84~128個米莉拉之羽。\n至於米莉拉之羽的來源，霓羽總會念叨些什麼物質法則的呈現、什麼你知道現在的羽毛都得五十萬白銀了嗎之類的話，令人忍俊不禁。</MX_Neiyu_WarpFeather.description>
-  <MX_Neiyu_ThunderMarkedStorm.label>雷鎖印域</MX_Neiyu_ThunderMarkedStorm.label>
-  <MX_Neiyu_ThunderMarkedStorm.description>選定半徑3格區域，標記其中敵對目標。數秒後每個被標記者將承受3~5次高傷雷擊，並附加EMP傷害。\n"這招其實是有一天發現了一個奇特的種族，他們身上蘊含著滿滿的死亡氣息，生機活力卻不比我曾經修行生命的小輩要差，然後曾經有些古書寫著什麼雷剋邪祟什麼的，我就搓了這招"</MX_Neiyu_ThunderMarkedStorm.description>
-  <MX_Neiyu_Bow_ArrowBarrage.label>流羽裂界</MX_Neiyu_Bow_ArrowBarrage.label>
-  <MX_Neiyu_Bow_ArrowBarrage.description>僅在裝備弓形態時可用。蓄力5秒後，沿目標方向連續傾瀉64發流羽矢，覆蓋整幅戰場前方區域。\n"曾經喜歡玩一些遊戲//"</MX_Neiyu_Bow_ArrowBarrage.description>
-  <MX_Neiyu_Flower_BlessingField.label>花陣·祈生</MX_Neiyu_Flower_BlessingField.label>
-  <MX_Neiyu_Flower_BlessingField.description>僅花形態可用。對目標區域施放群體增益，範圍內友方獲得心情提升、移速提升、承傷降低、免疫速度提升；若存在受傷部位則立即治療至滿。\n"不要... 我不能失去你們..."</MX_Neiyu_Flower_BlessingField.description>
-  <MX_Neiyu_Flower_ToxinGarden.label>花陣·瘴庭</MX_Neiyu_Flower_ToxinGarden.label>
-  <MX_Neiyu_Flower_ToxinGarden.description>僅花形態可用。對大範圍目標區域施放敵對效果，範圍內敵方將被強制施加重度食物中毒，並有10%機率陷入狂暴。\n"其實這招的實現效果是先暫停時間，然後給他們每個人餵了一口前幾天熬的粥，這招在對付起紋境以下的普通米莉拉特別好用// 他們生氣和我有什麼關係?"</MX_Neiyu_Flower_ToxinGarden.description>
-  <MX_Neiyu_Sword_Skyfall.label>劍勢·天墜</MX_Neiyu_Sword_Skyfall.label>
-  <MX_Neiyu_Sword_Skyfall.description>僅劍形態可用。施放後先於原地直線高速升空至高空，再在目標區域生成落點預警，隨後於該區域上空直線高速墜落，造成高額範圍傷害並附加易傷。\n"有人說我胖// 我說這不對// 關鍵是竟然說我...說我那裡小... 我靠吃我一墜！！！"</MX_Neiyu_Sword_Skyfall.description>
-  <MX_Neiyu_Sword_ExecuteHead.label>劍勢·斷首</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>僅劍形態可用。選中單體後先反向後撤，再以極高速度突進至目標附近並執行斬首。\n"教導我這招的老師是艦船上少數的劍法大師，據她所說，曾經的大混戰中只有她和幾位同袍保持著手刃敵人的習慣，老師教導我這招後沒幾年就去世了，所以我依然記得老師說的：'對敵要穩快準狠'，只是小羽愚鈍，只得學會其半招。"</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_WarpFeather.label>&lt;color=#79CBFF&gt;折躍引羽&lt;/color&gt;</MX_Neiyu_WarpFeather.label>
+  <MX_Neiyu_WarpFeather.description>短暫蓄力後在腳下閃光，並直接生成84~128個&lt;color=#79CBFF&gt;米莉拉之羽&lt;/color&gt;。\n至於米莉拉之羽的來源，霓羽總會念叨些什麼物質法則的呈現、什麼你知道現在的羽毛都得五十萬白銀了嗎之類的話，令人忍俊不禁。</MX_Neiyu_WarpFeather.description>
+  <MX_Neiyu_ThunderMarkedStorm.label>&lt;color=#8BD5FF&gt;雷鎖印域&lt;/color&gt;</MX_Neiyu_ThunderMarkedStorm.label>
+  <MX_Neiyu_ThunderMarkedStorm.description>選定半徑3格區域，標記其中敵對目標。數秒後每個被&lt;color=#8BD5FF&gt;雷鎖印記&lt;/color&gt;標記者將承受3~5次高傷&lt;color=#C7B8FF&gt;雷擊&lt;/color&gt;，並附加&lt;color=#79CBFF&gt;EMP&lt;/color&gt;傷害。\n"這招其實是有一天發現了一個奇特的種族，他們身上蘊含著滿滿的死亡氣息，生機活力卻不比我曾經修行生命的小輩要差，然後曾經有些古書寫著什麼雷剋邪祟什麼的，我就搓了這招"</MX_Neiyu_ThunderMarkedStorm.description>
+  <MX_Neiyu_Bow_ArrowBarrage.label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</MX_Neiyu_Bow_ArrowBarrage.label>
+  <MX_Neiyu_Bow_ArrowBarrage.description>僅在裝備&lt;color=#79CBFF&gt;弓形態&lt;/color&gt;時可用。蓄力5秒後，沿目標方向連續傾瀉64發&lt;color=#8BD5FF&gt;流羽矢&lt;/color&gt;，覆蓋整幅戰場前方區域。\n"曾經喜歡玩一些遊戲//"</MX_Neiyu_Bow_ArrowBarrage.description>
+  <MX_Neiyu_Flower_BlessingField.label>&lt;color=#F39AD9&gt;花陣·祈生&lt;/color&gt;</MX_Neiyu_Flower_BlessingField.label>
+  <MX_Neiyu_Flower_BlessingField.description>僅&lt;color=#F39AD9&gt;花形態&lt;/color&gt;可用。對目標區域施放群體增益，範圍內友方獲得&lt;color=#F39AD9&gt;心情提升&lt;/color&gt;、&lt;color=#79CBFF&gt;移速提升&lt;/color&gt;、&lt;color=#8BD5FF&gt;承傷降低&lt;/color&gt;、&lt;color=#F39AD9&gt;免疫速度提升&lt;/color&gt;；若存在受傷部位則立即治療至滿。\n"不要... 我不能失去你們..."</MX_Neiyu_Flower_BlessingField.description>
+  <MX_Neiyu_Flower_ToxinGarden.label>&lt;color=#D786E8&gt;花陣·瘴庭&lt;/color&gt;</MX_Neiyu_Flower_ToxinGarden.label>
+  <MX_Neiyu_Flower_ToxinGarden.description>僅&lt;color=#F39AD9&gt;花形態&lt;/color&gt;可用。對大範圍目標區域施放敵對效果，範圍內敵方將被強制施加&lt;color=#D786E8&gt;重度食物中毒&lt;/color&gt;，並有10%機率陷入&lt;color=#F39AD9&gt;狂暴&lt;/color&gt;。\n"其實這招的實現效果是先暫停時間，然後給他們每個人餵了一口前幾天熬的粥，這招在對付起紋境以下的普通米莉拉特別好用// 他們生氣和我有什麼關係?"</MX_Neiyu_Flower_ToxinGarden.description>
+  <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;劍勢·天墜&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
+  <MX_Neiyu_Sword_Skyfall.description>僅&lt;color=#8BD5FF&gt;劍形態&lt;/color&gt;可用。施放後先於原地直線高速升空至高空，再在目標區域生成落點預警，隨後於該區域上空直線高速墜落，造成高額範圍傷害並附加&lt;color=#C7A2F8&gt;易傷&lt;/color&gt;。\n"有人說我胖// 我說這不對// 關鍵是竟然說我...說我那裡小... 我靠吃我一墜！！！"</MX_Neiyu_Sword_Skyfall.description>
+  <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;劍勢·斷首&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
+  <MX_Neiyu_Sword_ExecuteHead.description>僅&lt;color=#8BD5FF&gt;劍形態&lt;/color&gt;可用。選中單體後先反向後撤，再以極高速度突進至目標附近並執行&lt;color=#F39AD9&gt;斬首&lt;/color&gt;。\n"教導我這招的老師是艦船上少數的劍法大師，據她所說，曾經的大混戰中只有她和幾位同袍保持著手刃敵人的習慣，老師教導我這招後沒幾年就去世了，所以我依然記得老師說的：'對敵要穩快準狠'，只是小羽愚鈍，只得學會其半招。"</MX_Neiyu_Sword_ExecuteHead.description>
 </LanguageData>

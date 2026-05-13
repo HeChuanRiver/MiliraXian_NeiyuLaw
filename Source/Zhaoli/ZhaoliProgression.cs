@@ -1,0 +1,388 @@
+using System.Text;
+using HarmonyLib;
+using RimWorld;
+using UnityEngine;
+using Verse;
+
+namespace MiliraXian.Characters.Zhaoli
+{
+    internal static class ZhaoliProgressionUtility
+    {
+        public const int BossLinkCount = 3;
+        public const int TransitionDurationTicks = 540;
+        public const int PhaseTeleportIntervalTicks = 900;
+
+        private const float RecruitGrowthStepRatio = 0.1f;
+        private const float RecruitCarryOffset = 6f;
+        private const float RecruitToxicResistanceOffset = 0.15f;
+        private const float RecruitCommonFactor = 1.05f;
+
+        private const string IncomingDamageFactorStat = "IncomingDamageFactor";
+        private const string MeleeArmorPenetrationStat = "MeleeArmorPenetration";
+        private const string MeleeCooldownFactorStat = "MeleeCooldownFactor";
+        private const string MeleeDamageFactorStat = "MeleeDamageFactor";
+        private const string MeleeDodgeChanceStat = "MeleeDodgeChance";
+        private const string MeleeHitChanceStat = "MeleeHitChance";
+        private const string PawnTrapSpringChanceStat = "PawnTrapSpringChance";
+        private const string StaggerDurationFactorStat = "StaggerDurationFactor";
+        private const string MeleeDoorDamageFactorStat = "MeleeDoorDamageFactor";
+        private const string MoveSpeedStat = "MoveSpeed";
+        private const string CarryingCapacityStat = "CarryingCapacity";
+        private const string ImmunityGainSpeedStat = "ImmunityGainSpeed";
+        private const string InjuryHealingFactorStat = "InjuryHealingFactor";
+        private const string ToxicEnvironmentResistanceStat = "ToxicEnvironmentResistance";
+        private const string MedicalOperationSpeedStat = "MedicalOperationSpeed";
+        private const string MedicalSurgerySuccessChanceStat = "MedicalSurgerySuccessChance";
+        private const string MedicalTendQualityStat = "MedicalTendQuality";
+        private const string GeneralLaborSpeedStat = "GeneralLaborSpeed";
+
+        public static float GetTransitionRadiusBonus(int phase)
+        {
+            switch (Mathf.Clamp(phase, 0, 3))
+            {
+                case 1:
+                    return 5f;
+                case 2:
+                    return 10f;
+                case 3:
+                    return 20f;
+                default:
+                    return 0f;
+            }
+        }
+
+        public static string BuildRaidBossSummary(int phase)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("当前阶段强化：");
+            if (phase <= 0)
+            {
+                stringBuilder.Append("未触发替死，暂未获得额外强化。");
+                return stringBuilder.ToString();
+            }
+
+            AppendRaidFactorLine(stringBuilder, IncomingDamageFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeArmorPenetrationStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeCooldownFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDamageFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDodgeChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeHitChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, PawnTrapSpringChanceStat, phase);
+            AppendRaidFactorLine(stringBuilder, StaggerDurationFactorStat, phase);
+            AppendRaidFactorLine(stringBuilder, MeleeDoorDamageFactorStat, phase);
+            if (phase >= 3)
+            {
+                AppendRaidFactorLine(stringBuilder, MoveSpeedStat, phase);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public static string BuildRecruitGrowthSummary(int deathCount)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("当前养成加成：");
+            AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
+            AppendOffsetLine(stringBuilder, ToxicEnvironmentResistanceStat, RecruitToxicResistanceOffset, usePercent: true);
+            AppendFactorLine(stringBuilder, ImmunityGainSpeedStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, InjuryHealingFactorStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalOperationSpeedStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalSurgerySuccessChanceStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, MedicalTendQualityStat, RecruitCommonFactor);
+            AppendFactorLine(stringBuilder, GeneralLaborSpeedStat, RecruitCommonFactor);
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("死亡成长：");
+            if (deathCount <= 0)
+            {
+                stringBuilder.Append("尚未积累成长层数。");
+                return stringBuilder.ToString();
+            }
+
+            AppendRecruitGrowthFactorLine(stringBuilder, IncomingDamageFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeArmorPenetrationStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeCooldownFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDamageFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDodgeChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeHitChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, PawnTrapSpringChanceStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, StaggerDurationFactorStat, deathCount);
+            AppendRecruitGrowthFactorLine(stringBuilder, MeleeDoorDamageFactorStat, deathCount);
+            return stringBuilder.ToString();
+        }
+
+        public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
+        {
+            if (pawn == null || stat == null || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+            {
+                return;
+            }
+
+            ApplyRaidBossModifiers(pawn, stat, ref result);
+            ApplyRecruitGrowthModifiers(pawn, stat, ref result);
+        }
+
+        private static void ApplyRaidBossModifiers(Pawn pawn, StatDef stat, ref float result)
+        {
+            HediffComp_ZhaoliRaidState raidComp = ZhaoliScenarioUtility.GetRaidStateComp(pawn);
+            int phase = raidComp?.SubstituteDeathsUsed ?? 0;
+            if (phase <= 0)
+            {
+                return;
+            }
+
+            float factor = GetRaidBossFactor(stat, phase);
+            if (Mathf.Abs(factor - 1f) > 0.0001f)
+            {
+                result *= factor;
+            }
+        }
+
+        private static void ApplyRecruitGrowthModifiers(Pawn pawn, StatDef stat, ref float result)
+        {
+            if (!ZhaoliRebirthUtility.ShouldUseRecruitGrowth(pawn))
+            {
+                return;
+            }
+
+            ApplyRecruitBaseBonuses(stat, ref result);
+
+            int deathCount = ZhaoliRebirthUtility.GetRebirthComp(pawn)?.RecruitGrowthDeaths ?? 0;
+            if (deathCount <= 0 || !TryGetPhaseOneFactor(stat, out float fullFactor))
+            {
+                return;
+            }
+
+            result *= Mathf.Max(0f, 1f - (1f - fullFactor) * deathCount * RecruitGrowthStepRatio);
+        }
+
+        private static void ApplyRecruitBaseBonuses(StatDef stat, ref float result)
+        {
+            if (IsStat(stat, CarryingCapacityStat))
+            {
+                result += RecruitCarryOffset;
+                return;
+            }
+
+            if (IsStat(stat, ToxicEnvironmentResistanceStat))
+            {
+                result += RecruitToxicResistanceOffset;
+                return;
+            }
+
+            if (IsStat(stat, ImmunityGainSpeedStat)
+                || IsStat(stat, InjuryHealingFactorStat)
+                || IsStat(stat, MedicalOperationSpeedStat)
+                || IsStat(stat, MedicalSurgerySuccessChanceStat)
+                || IsStat(stat, MedicalTendQualityStat)
+                || IsStat(stat, GeneralLaborSpeedStat))
+            {
+                result *= RecruitCommonFactor;
+            }
+        }
+
+        private static float GetRaidBossFactor(StatDef stat, int phase)
+        {
+            if (phase <= 0)
+            {
+                return 1f;
+            }
+
+            float magnitudeScale = phase == 1 ? 1f : 0.8f;
+            if (phase >= 3)
+            {
+                if (IsStat(stat, MoveSpeedStat))
+                {
+                    return 0.99f;
+                }
+
+                if (IsStat(stat, StaggerDurationFactorStat))
+                {
+                    return 1.25f;
+                }
+            }
+
+            if (IsStat(stat, IncomingDamageFactorStat))
+            {
+                return 1f - 0.5f * magnitudeScale;
+            }
+
+            if (IsStat(stat, MeleeArmorPenetrationStat))
+            {
+                return 1f + 0.66f * magnitudeScale;
+            }
+
+            if (IsStat(stat, MeleeCooldownFactorStat))
+            {
+                return 1f - 0.33f * magnitudeScale;
+            }
+
+            if (IsStat(stat, MeleeDamageFactorStat) || IsStat(stat, MeleeDodgeChanceStat) || IsStat(stat, MeleeHitChanceStat))
+            {
+                return 1f + 0.33f * magnitudeScale;
+            }
+
+            if (IsStat(stat, PawnTrapSpringChanceStat))
+            {
+                return Mathf.Max(0f, 1f - 1f * magnitudeScale);
+            }
+
+            if (IsStat(stat, StaggerDurationFactorStat))
+            {
+                return 1f - 0.6f * magnitudeScale;
+            }
+
+            if (ModsConfig.BiotechActive && IsStat(stat, MeleeDoorDamageFactorStat))
+            {
+                return 1f + 15f * magnitudeScale;
+            }
+
+            return 1f;
+        }
+
+        private static bool TryGetPhaseOneFactor(StatDef stat, out float factor)
+        {
+            factor = 1f;
+            if (stat == null)
+            {
+                return false;
+            }
+
+            if (IsStat(stat, IncomingDamageFactorStat))
+            {
+                factor = 0.5f;
+                return true;
+            }
+
+            if (IsStat(stat, MeleeArmorPenetrationStat))
+            {
+                factor = 1.66f;
+                return true;
+            }
+
+            if (IsStat(stat, MeleeCooldownFactorStat))
+            {
+                factor = 0.67f;
+                return true;
+            }
+
+            if (IsStat(stat, MeleeDamageFactorStat) || IsStat(stat, MeleeDodgeChanceStat) || IsStat(stat, MeleeHitChanceStat))
+            {
+                factor = 1.33f;
+                return true;
+            }
+
+            if (IsStat(stat, PawnTrapSpringChanceStat))
+            {
+                factor = 0f;
+                return true;
+            }
+
+            if (IsStat(stat, StaggerDurationFactorStat))
+            {
+                factor = 0.4f;
+                return true;
+            }
+
+            if (ModsConfig.BiotechActive && IsStat(stat, MeleeDoorDamageFactorStat))
+            {
+                factor = 16f;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void AppendRaidFactorLine(StringBuilder stringBuilder, string statDefName, int phase)
+        {
+            StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(statDefName);
+            if (stat == null)
+            {
+                return;
+            }
+
+            float factor = GetRaidBossFactor(stat, phase);
+            if (Mathf.Abs(factor - 1f) < 0.0001f)
+            {
+                return;
+            }
+
+            AppendFactorLine(stringBuilder, statDefName, factor);
+        }
+
+        private static void AppendRecruitGrowthFactorLine(StringBuilder stringBuilder, string statDefName, int deathCount)
+        {
+            if (deathCount <= 0)
+            {
+                return;
+            }
+
+            StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(statDefName);
+            if (stat == null || !TryGetPhaseOneFactor(stat, out float fullFactor))
+            {
+                return;
+            }
+
+            float factor = Mathf.Max(0f, 1f - (1f - fullFactor) * deathCount * RecruitGrowthStepRatio);
+            AppendFactorLine(stringBuilder, statDefName, factor);
+        }
+
+        private static void AppendFactorLine(StringBuilder stringBuilder, string statDefName, float factor)
+        {
+            if (Mathf.Abs(factor - 1f) < 0.0001f)
+            {
+                return;
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("- ");
+            stringBuilder.Append(GetStatLabel(statDefName));
+            stringBuilder.Append(" x");
+            stringBuilder.Append(factor.ToStringPercent());
+        }
+
+        private static void AppendOffsetLine(StringBuilder stringBuilder, string statDefName, float value, bool usePercent = false)
+        {
+            if (Mathf.Abs(value) < 0.0001f)
+            {
+                return;
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.Append("- ");
+            stringBuilder.Append(GetStatLabel(statDefName));
+            stringBuilder.Append(" ");
+            if (value > 0f)
+            {
+                stringBuilder.Append("+");
+            }
+
+            stringBuilder.Append(usePercent ? value.ToStringPercent() : value.ToString("0.##"));
+        }
+
+        private static string GetStatLabel(string statDefName)
+        {
+            return DefDatabase<StatDef>.GetNamedSilentFail(statDefName)?.LabelCap ?? statDefName;
+        }
+
+        private static bool IsStat(StatDef stat, string defName)
+        {
+            return stat != null && stat.defName == defName;
+        }
+    }
+
+    [HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
+    internal static class Patch_ZhaoliProgression_GetStatValue
+    {
+        [HarmonyPostfix]
+        public static void Postfix(Thing thing, StatDef stat, bool applyPostProcess, int cacheStaleAfterTicks, ref float __result)
+        {
+            if (!(thing is Pawn pawn))
+            {
+                return;
+            }
+
+            ZhaoliProgressionUtility.ApplyStatModifiers(pawn, stat, ref __result);
+        }
+    }
+}

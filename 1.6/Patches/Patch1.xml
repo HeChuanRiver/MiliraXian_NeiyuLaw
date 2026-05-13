@@ -6,9 +6,9 @@
             <!-- 常服  -->
             <li>MiliraXian_NeiyuInner</li>
             <li>MiliraXian_NeiyuNormal</li>
+            <li>MX_ZhaoliNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
-            
-            <!-- TODO: 昭离在这里的衣服要记得加进去 -->
+            <li>MX_ZhaoliHood</li>
         </value>
     </Operation>
 </Patch>

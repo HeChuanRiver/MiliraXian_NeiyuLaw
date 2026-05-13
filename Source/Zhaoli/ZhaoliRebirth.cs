@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using RimWorld;
 using RimWorld.Planet;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.Zhaoli
@@ -46,9 +47,32 @@ namespace MiliraXian.Characters.Zhaoli
             return (hediff as HediffWithComps)?.GetComp<HediffComp_ZhaoliRebirth>();
         }
 
+        public static bool ShouldUseRecruitGrowth(Pawn pawn)
+        {
+            return pawn != null
+                   && pawn.Faction == Faction.OfPlayer
+                   && !ZhaoliScenarioUtility.IsRaidState(pawn)
+                   && !ZhaoliScenarioUtility.IsHideoutState(pawn);
+        }
+
+        public static void RegisterRecruitGrowthDeath(Pawn pawn)
+        {
+            if (!ShouldUseRecruitGrowth(pawn))
+            {
+                return;
+            }
+
+            EnsureRebirthComp(pawn)?.RegisterRecruitGrowthDeath();
+        }
+
         public static bool TryScheduleRebirth(Pawn pawn)
         {
             if (pawn == null || pawn.Discarded || !pawn.Dead || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+            {
+                return false;
+            }
+
+            if (ZhaoliScenarioUtility.IsRaidState(pawn))
             {
                 return false;
             }
@@ -59,6 +83,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
+            RegisterRecruitGrowthDeath(pawn);
             PreparePawnForPendingRebirth(pawn);
             rebirthComponent.RegisterPendingRebirth(pawn, Find.TickManager.TicksGame + RebirthDelayTicks);
             Messages.Message("昭离被死亡接纳，十日后将于玩家基地归来。", pawn, MessageTypeDefOf.PawnDeath);
@@ -174,9 +199,42 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliRebirth : HediffComp
     {
+        private int recruitGrowthDeaths;
+
+        public int RecruitGrowthDeaths => recruitGrowthDeaths;
+
+        public override string CompLabelInBracketsExtra => "成长 " + recruitGrowthDeaths;
+
         public override bool CompDisallowVisible()
         {
-            return true;
+            return !ZhaoliRebirthUtility.ShouldUseRecruitGrowth(Pawn);
+        }
+
+        public override string CompDescriptionExtra
+        {
+            get
+            {
+                return ZhaoliProgressionUtility.BuildRecruitGrowthSummary(recruitGrowthDeaths);
+            }
+        }
+
+        public override string CompTipStringExtra
+        {
+            get
+            {
+                return "当前成长层数：" + recruitGrowthDeaths;
+            }
+        }
+
+        public override void CompExposeData()
+        {
+            base.CompExposeData();
+            Scribe_Values.Look(ref recruitGrowthDeaths, "recruitGrowthDeaths", 0);
+        }
+
+        public void RegisterRecruitGrowthDeath()
+        {
+            recruitGrowthDeaths = Mathf.Max(0, recruitGrowthDeaths + 1);
         }
 
         public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)

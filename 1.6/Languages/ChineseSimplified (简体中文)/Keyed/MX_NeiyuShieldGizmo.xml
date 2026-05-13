@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <MX_NL_ShieldStage1>◆ 护身 · 一阶</MX_NL_ShieldStage1>
+    <MX_NL_ShieldStage2>◆ 护身 · 二阶</MX_NL_ShieldStage2>
+    <MX_NL_ShieldStage3>◆ 护身 · 三阶</MX_NL_ShieldStage3>
+    <MX_NL_ShieldStage3Absorb>◆ 护身 · 三阶 · 蓄伤</MX_NL_ShieldStage3Absorb>
+    <MX_NL_ShieldStage3Buff>◆ 护身 · 三阶 · 增益</MX_NL_ShieldStage3Buff>
+    <MX_NL_ShieldStage1Short>一阶</MX_NL_ShieldStage1Short>
+    <MX_NL_ShieldStage2Short>二阶</MX_NL_ShieldStage2Short>
+    <MX_NL_ShieldStage3Short>三阶</MX_NL_ShieldStage3Short>
+    <MX_NL_ShieldReady>就绪</MX_NL_ShieldReady>
+    <MX_NL_ShieldStage1Hint>下次受击触发护身效果</MX_NL_ShieldStage1Hint>
+    <MX_NL_ShieldStage2Hint>伤害 &lt; {0} 不消耗次数</MX_NL_ShieldStage2Hint>
+    <MX_NL_ShieldWeakSuffix>  ·  虚弱中</MX_NL_ShieldWeakSuffix>
+    <MX_NL_ShieldAbsorbInfo>蓄伤 {0} · 剩 {1}</MX_NL_ShieldAbsorbInfo>
+    <MX_NL_ShieldInvincible>无敌</MX_NL_ShieldInvincible>
+    <MX_NL_ShieldBuffInfo>档位 {0} · 剩 {1}</MX_NL_ShieldBuffInfo>
+    <MX_NL_ShieldBuffExpired>增益已结束</MX_NL_ShieldBuffExpired>
+    <MX_NL_ShieldStage3Expiring>即将结束...</MX_NL_ShieldStage3Expiring>
+    <MX_NL_BuffDamage>伤害+{0}%</MX_NL_BuffDamage>
+    <MX_NL_BuffIncoming>  承伤-{0}%</MX_NL_BuffIncoming>
+    <MX_NL_BuffMoveSpeed>  移速+{0}%</MX_NL_BuffMoveSpeed>
+    <MX_NL_BuffHeal>  愈合+{0}%</MX_NL_BuffHeal>
+    <MX_NL_TooltipStage>护身 · {0}</MX_NL_TooltipStage>
+    <MX_NL_TooltipWeak> (虚弱中)</MX_NL_TooltipWeak>
+    <MX_NL_WeakBadgeTip>虚弱 · 剩余 {0}
+移速-50%  休息下降+50%  工作速度-80%</MX_NL_WeakBadgeTip>
+    <MX_NL_ShieldWeakExhausted>[{0}] 护盾能量耗尽！伤害将直接穿透护盾。</MX_NL_ShieldWeakExhausted>
+</LanguageData>

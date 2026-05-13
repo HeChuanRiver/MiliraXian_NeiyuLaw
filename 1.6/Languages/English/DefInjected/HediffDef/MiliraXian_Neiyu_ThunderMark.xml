@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_ThunderMark.label>Thunderseal Mark</MX_Neiyu_ThunderMark.label>
-  <MX_Neiyu_ThunderMark.description>Marked by Thunderseal Domain and will continue to suffer lightning strikes for a short time.</MX_Neiyu_ThunderMark.description>
-  <MX_Neiyu_ThunderMark.stages.0.label>Thunderseal Mark</MX_Neiyu_ThunderMark.stages.0.label>
+  <MX_Neiyu_ThunderMark.label>&lt;color=#8BD5FF&gt;Thunderseal Mark&lt;/color&gt;</MX_Neiyu_ThunderMark.label>
+  <MX_Neiyu_ThunderMark.description>Marked by &lt;color=#8BD5FF&gt;Thunderseal Domain&lt;/color&gt; and will continue to suffer &lt;color=#C7B8FF&gt;lightning strikes&lt;/color&gt; for a short time.</MX_Neiyu_ThunderMark.description>
+  <MX_Neiyu_ThunderMark.stages.0.label>&lt;color=#8BD5FF&gt;Thunderseal Mark&lt;/color&gt;</MX_Neiyu_ThunderMark.stages.0.label>
 </LanguageData>
