@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThingDef ParentName="BaseWeapon">
+    <defName>MX_QH_Weapon_FlowerBell</defName>
+    <label>四时花信铃</label>
+    <description>清荷以花神之力凝聚的铃形兵装，所发出的音击随四时共鸣切换效果。</description>
+    <recipeMaker Inherit="False" IsNull="True" />
+    <techLevel>Archotech</techLevel>
+    <smeltable>false</smeltable>
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Items/FlowerStick</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.6,1.6)</drawSize>
+    </graphicData>
+    <uiIconPath>MiliraXianNeiyu/Items/FlowerStick</uiIconPath>
+    <generateCommonality>0</generateCommonality>
+    <scatterableOnMapGen>false</scatterableOnMapGen>
+    <tradeability>Sellable</tradeability>
+    <weaponTags>
+      <li>MiliraXian_QingheInstrument</li>
+    </weaponTags>
+    <weaponClasses>
+      <li>Ranged</li>
+    </weaponClasses>
+    <statBases>
+      <MarketValue>2600</MarketValue>
+      <Mass>1.0</Mass>
+      <AccuracyTouch>1.0</AccuracyTouch>
+      <AccuracyShort>1.0</AccuracyShort>
+      <AccuracyMedium>1.0</AccuracyMedium>
+      <AccuracyLong>1.0</AccuracyLong>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>MX_Bullet_Qinghe_FlowerBell</defaultProjectile>
+        <warmupTime>0.90</warmupTime>
+        <range>29.9</range>
+        <burstShotCount>4</burstShotCount>
+        <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell</defName>
+    <label>花信铃音</label>
+    <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerBell</thingClass>
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.36,1.05)</drawSize>
+      <shaderType>TransparentPostLight</shaderType>
+      <color>(230,195,255)</color>
+    </graphicData>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact</damageDef>
+      <damageAmountBase>6</damageAmountBase>
+      <armorPenetrationBase>2.10</armorPenetrationBase>
+      <speed>30</speed>
+      <arcHeightFactor>0.10</arcHeightFactor>
+    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+        <trailMaxPoints>22</trailMaxPoints>
+        <trailMinPointDistance>0.10</trailMinPointDistance>
+        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+        <trailWidthStart>0.18</trailWidthStart>
+        <trailWidthEnd>0.05</trailWidthEnd>
+        <trailAlpha>1.00</trailAlpha>
+        <trailAltitudeOffset>0.70</trailAltitudeOffset>
+        <useProjectileGraphicColor>true</useProjectileGraphicColor>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+        <homingStartDelayTicks>5</homingStartDelayTicks>
+        <minHomingTicksToImpact>10</minHomingTicksToImpact>
+        <homingTurnLerp>0.13</homingTurnLerp>
+        <curveAmplitudeMin>0.60</curveAmplitudeMin>
+        <curveAmplitudeMax>0.80</curveAmplitudeMax>
+        <curveFrequency>0.12</curveFrequency>
+      </li>
+      <li Class="CompProperties_ProjectileEffecter">
+        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileResourceOnHit">
+        <entries>
+          <li>
+            <resourceDef>MX_QH_FlowerTidings</resourceDef>
+            <amount>1.4</amount>
+            <requireHostileTarget>true</requireHostileTarget>
+          </li>
+        </entries>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>
+

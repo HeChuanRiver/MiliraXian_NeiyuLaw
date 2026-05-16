@@ -171,6 +171,13 @@ namespace MiliraXian.Characters
             return value;
         }
     }
+
+    public interface ISpecialResourceAddHandler
+    {
+        void AddResourceValue(float value);
+
+        bool TryConsumeResourceValue(float value);
+    }
     
     [StaticConstructorOnStartup]
     public class PawnSpecialResourceGizmo : Gizmo_Slider

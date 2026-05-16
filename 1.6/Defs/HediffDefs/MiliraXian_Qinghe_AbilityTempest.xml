@@ -5,9 +5,9 @@
     <HediffDef>
         <defName>MX_SpringFlow</defName>
         <label>春泉洗礼</label>
-        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。效果强度受&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;影响。</description>
+        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。效果强度受&lt;color=#7ACF6D&gt;花信&lt;/color&gt;影响。</description>
         <isBad>false</isBad>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediff_SpringFlow</hediffClass>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_SpringFlow</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
         <initialSeverity>1.0</initialSeverity>
         <minSeverity>1.0</minSeverity>
@@ -28,19 +28,31 @@
                 <disappearsAfterTicks>120</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SpringRegen">
+                <healIntervalTicks>60</healIntervalTicks>
+                <healAmountPerTrigger>1.0</healAmountPerTrigger>
+                <healPermanentInjuries>false</healPermanentInjuries>
+            </li>
             <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
+                <healAmount>
+                    <baseValue>1.0</baseValue>
+                    <min>1.0</min>
+                    <max>2.0</max>
+                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
+                    <method>linear</method>
+                </healAmount>
                 <statFactorMultiplier>
                     <baseValue>1</baseValue>
                     <min>1.0</min>
                     <max>2.0</max>
-                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
                     <method>linear</method>
                 </statFactorMultiplier>
                 <painFactor>
                     <baseValue>1</baseValue>
                     <min>0.8</min>
                     <max>0.5</max>
-                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
                     <method>linear</method>
                 </painFactor>
             </li>

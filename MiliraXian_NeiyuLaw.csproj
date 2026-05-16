@@ -38,7 +38,7 @@
           <Private>False</Private>
         </Reference>
         <Reference Include="AriandelLibrary">
-          <HintPath>..\..\..\..\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
+          <HintPath>D:\SteamLibrary\steamapps\workshop\content\294100\3665997350\1.6\Assemblies\AriandelLibrary.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">

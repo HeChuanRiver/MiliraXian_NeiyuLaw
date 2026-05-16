@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-    <name>米莉拉角色拓展Dev</name>
+    <name>米莉拉角色拓展</name>
     <author>HeChuanRiver</author>
     <supportedVersions>
         <li>1.6</li>
     </supportedVersions>
     <description>一个依赖于Ariandel Library的独立角色Mod，加入了一位独特的角色，一个全新的剧本和一个常规的招募事件。\n 霓羽会携带一把三形态武器，角色本体与武器会有七个全新的技能。\n 警告：本mod所添加角色的数值较高，希望各位可以自行抉择是否启用。</description>
-    <packageId>HeChuanRiver.MiliraXian.NeiyuLawDev</packageId>
+    <packageId>HeChuanRiver.MiliraXian.NeiyuLaw</packageId>
     <modDependencies>
         <li>
             <packageId>Ancot.MiliraRace</packageId>

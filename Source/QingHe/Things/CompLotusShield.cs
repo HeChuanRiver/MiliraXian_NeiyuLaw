@@ -1,0 +1,443 @@
+using System.Collections.Generic;
+using RimWorld;
+using UnityEngine;
+using Verse;
+using Verse.Sound;
+using MiliraXian.Characters.QingHe.Hediffs;
+
+namespace MiliraXian.Characters.QingHe.Things
+{
+    public class CompProperties_LotusShield : CompProperties
+    {
+        public float maxEnergy = 100f;
+
+        // Damage absorbed per one shield point.
+        public float baseDamagePerShieldPoint = 0.6f;
+        public float bonusDamagePerShieldPointAtMaxFlowerTidings = 1.4f;
+
+        // Shield regeneration per second.
+        public float baseRegenPerSecond = 0.8f;
+        public float bonusRegenPerSecondAtMaxFlowerTidings = 4.2f;
+
+        // After breaking, shield is disabled for these ticks.
+        public int breakDisabledTicks = 600;
+        public bool breakOnEmp = true;
+        public float flowerTidingsGainOnBreak = 20f;
+
+        // Shield hit VFX settings aligned with Neiyu shield implementation.
+        public string absorbFleckDefName = "ExplosionFlash";
+        public List<string> hurtFleckDefNames = new List<string>();
+        public float absorbFleckScale = 1.2f;
+        public string absorbEffecterDefName = null;
+
+        // Visual display rule:
+        // - Show while shield is not full.
+        // - After shield becomes full, keep showing and fade out across these ticks.
+        public int fullEnergyFadeOutTicks = 90;
+        public string activeShieldTexPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
+        public Vector2 activeShieldDrawSize = new Vector2(1.9f, 1.9f);
+        public float activeShieldAlpha = 0.45f;
+        public float activeShieldAltitudeOffset = 0f;
+
+        public float minDrawScale = 1.0f;
+        public float maxDrawScale = 1.2f;
+
+        public CompProperties_LotusShield()
+        {
+            compClass = typeof(CompLotusShield);
+        }
+    }
+
+    /// <summary>
+    /// Recoverable Lotus Shield for QingHe.
+    /// </summary>
+    public class CompLotusShield : ThingComp
+    {
+        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
+
+        private float energy = 100f;
+        private int ticksToReset = -1;
+
+        private int fullEnergyAccumulatedTicks = 0;
+        // Record the tick when damage was last absorbed, used for Gizmo hit-flash.
+        private int lastAbsorbTick = -1;
+
+        public CompProperties_LotusShield Props => (CompProperties_LotusShield)props;
+
+        private Pawn PawnOwner => parent as Pawn;
+
+        private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+
+        public float MaxEnergy => Mathf.Max(1f, Props.maxEnergy);
+
+        public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
+
+        public bool InBreak => ticksToReset > 0;
+
+        public int BreakTicksLeft => Mathf.Max(0, ticksToReset);
+
+        public float CurrentDamagePerShieldPoint => ResolveDamagePerShieldPoint();
+
+        public float CurrentRegenPerSecond => ResolveRegenPerSecond();
+
+        /// <summary>
+        /// Flash intensity for the shield bar, decaying from 1 to 0 over ~40 ticks after absorbing damage.
+        /// </summary>
+        public float AbsorbFlashPercent
+        {
+            get
+            {
+                if (lastAbsorbTick < 0) return 0f;
+                int elapsed = CurrentTick - lastAbsorbTick;
+                const float decayTicks = 40f;
+                return Mathf.Clamp01(1f - elapsed / decayTicks);
+            }
+        }
+
+        private bool ShouldDisplayFx
+        {
+            get
+            {
+                Pawn pawn = PawnOwner;
+                return pawn != null
+                       && pawn.Spawned
+                       && !pawn.Dead
+                       && !InBreak
+                       && (Energy < MaxEnergy - 0.0001f || fullEnergyAccumulatedTicks < Mathf.Max(1, Props.fullEnergyFadeOutTicks));
+            }
+        }
+
+        public override void PostPostMake()
+        {
+            base.PostPostMake();
+            energy = MaxEnergy;
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
+            Scribe_Values.Look(ref ticksToReset, "mx_qh_lotus_ticksToReset", -1);
+            Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
+            Scribe_Values.Look(ref lastAbsorbTick, "mx_qh_lotus_lastAbsorbTick", -1);
+        }
+
+        public override void CompTick()
+        {
+            base.CompTick();
+
+            if (PawnOwner == null)
+            {
+                energy = 0f;
+                return;
+            }
+
+            if (ticksToReset > 0)
+            {
+                ticksToReset--;
+                fullEnergyAccumulatedTicks = 0;
+                return;
+            }
+
+            float gain = ResolveRegenPerSecond() / 60f;
+            if (gain > 0f)
+            {
+                energy = Mathf.Min(MaxEnergy, energy + gain);
+            }
+
+            if (Energy < MaxEnergy - 0.0001f)
+            {
+                fullEnergyAccumulatedTicks = 0;
+            }
+            else
+            {
+                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + 1, 1000000);
+            }
+        }
+
+        public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
+        {
+            absorbed = false;
+
+            Pawn owner = PawnOwner;
+            if (owner == null || owner.Dead)
+            {
+                return;
+            }
+
+            if (dinfo.Amount <= 0f)
+            {
+                return;
+            }
+
+            if (InBreak)
+            {
+                return;
+            }
+
+            if (dinfo.Def == DamageDefOf.EMP && Props.breakOnEmp)
+            {
+                Break();
+                return;
+            }
+
+            if (dinfo.Def.ignoreShields)
+            {
+                return;
+            }
+
+            float dpsp = ResolveDamagePerShieldPoint();
+            if (dpsp <= 0f || energy <= 0f)
+            {
+                return;
+            }
+
+            float incoming = Mathf.Max(0f, dinfo.Amount);
+            if (incoming <= 0f)
+            {
+                return;
+            }
+
+            float shieldCost = incoming / dpsp;
+            if (shieldCost >= energy - 0.0001f)
+            {
+                energy = 0f;
+            }
+            else
+            {
+                energy -= shieldCost;
+            }
+
+            OnAbsorbedDamage();
+            dinfo.SetAmount(0f);
+            absorbed = true;
+
+            if (energy <= 0.0001f)
+            {
+                Break();
+            }
+        }
+
+        public override void PostDraw()
+        {
+            base.PostDraw();
+            DrawShield();
+        }
+
+        public override bool CompAllowVerbCast(Verb verb)
+        {
+            return true;
+        }
+
+        private void OnAbsorbedDamage()
+        {
+            lastAbsorbTick = CurrentTick;
+            Pawn owner = PawnOwner;
+            if (owner == null || !owner.Spawned || owner.Map == null)
+            {
+                return;
+            }
+
+            SoundDefOf.EnergyShield_AbsorbDamage.PlayOneShot(new TargetInfo(owner.Position, owner.Map));
+
+            FleckDef fleck = ResolveAbsorbFleck();
+            if (fleck != null)
+            {
+                FleckMaker.Static(owner.TrueCenter(), owner.Map, fleck, Mathf.Max(0.1f, Props.absorbFleckScale));
+            }
+
+            if (!Props.absorbEffecterDefName.NullOrEmpty())
+            {
+                EffecterDef effecterDef = DefDatabase<EffecterDef>.GetNamedSilentFail(Props.absorbEffecterDefName);
+                if (effecterDef != null)
+                {
+                    Effecter effecter = effecterDef.Spawn(owner.Position, owner.Map);
+                    TargetInfo t = new TargetInfo(owner.Position, owner.Map);
+                    effecter.EffectTick(t, t);
+                    effecter.Cleanup();
+                }
+            }
+        }
+
+        private void Break()
+        {
+            energy = 0f;
+            ticksToReset = Mathf.Max(1, Props.breakDisabledTicks);
+
+            Pawn owner = PawnOwner;
+            if (owner != null && Props.flowerTidingsGainOnBreak > 0f && MX_QHDefOf.MX_QH_FlowerTidings != null)
+            {
+                PawnSpecialResourceUtility.AddResource(owner, MX_QHDefOf.MX_QH_FlowerTidings, Props.flowerTidingsGainOnBreak);
+            }
+
+            if (owner == null || !owner.Spawned || owner.Map == null)
+            {
+                return;
+            }
+
+            float ratio = Mathf.Clamp01(Energy / MaxEnergy);
+            float scale = Mathf.Lerp(Props.minDrawScale, Props.maxDrawScale, ratio);
+            EffecterDefOf.Shield_Break.SpawnAttached(parent, parent.MapHeld, scale);
+            FleckMaker.Static(owner.TrueCenter(), owner.Map, FleckDefOf.ExplosionFlash, 8f);
+        }
+
+        private void DrawShield()
+        {
+            Pawn owner = PawnOwner;
+            if (owner == null || !ShouldDisplayFx)
+            {
+                return;
+            }
+
+            Material shieldMat = GetShieldMaterial(Props.activeShieldTexPath, ResolveDrawAlpha(), ResolveShieldTintColor());
+            if (shieldMat == null)
+            {
+                return;
+            }
+
+            Vector3 pos = owner.Drawer.DrawPos;
+            pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+            pos += Altitudes.AltIncVect * Props.activeShieldAltitudeOffset;
+            
+            Vector2 drawSize = Props.activeShieldDrawSize;
+            Matrix4x4 matrix = Matrix4x4.TRS(
+                pos,
+                Quaternion.identity,
+                new Vector3(drawSize.x, 1f, drawSize.y));
+
+            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
+        }
+
+        private float ResolveDrawAlpha()
+        {
+            float shieldFactor = Mathf.Clamp01(Energy / MaxEnergy);
+            float fullFadeFactor = 1f;
+            if (Energy >= MaxEnergy - 0.0001f)
+            {
+                int fadeTicks = Mathf.Max(1, Props.fullEnergyFadeOutTicks);
+                fullFadeFactor = Mathf.Clamp01(1f - fullEnergyAccumulatedTicks / (float)fadeTicks);
+            }
+
+            return Mathf.Clamp01(Props.activeShieldAlpha * (0.35f + 0.65f * shieldFactor) * fullFadeFactor);
+        }
+
+        private Material GetShieldMaterial(string texPath, float alpha, Color tintColor)
+        {
+            if (texPath.NullOrEmpty())
+            {
+                return null;
+            }
+
+            float finalAlpha = Mathf.Clamp01(alpha);
+            Color finalColor = tintColor;
+            finalColor.a = finalAlpha;
+
+            string key = texPath
+                         + "|" + finalColor.r.ToString("F2")
+                         + "|" + finalColor.g.ToString("F2")
+                         + "|" + finalColor.b.ToString("F2")
+                         + "|" + finalColor.a.ToString("F2");
+            if (!ShieldMaterialByPath.TryGetValue(key, out Material shieldMat))
+            {
+                shieldMat = MaterialPool.MatFrom(texPath, ShaderDatabase.Transparent, finalColor);
+                ShieldMaterialByPath[key] = shieldMat;
+            }
+
+            return shieldMat;
+        }
+
+        private Color ResolveShieldTintColor()
+        {
+            float flowerTidingsFactor = PawnSpecialResourceUtility.GetResourcePercent(PawnOwner, MX_QHDefOf.MX_QH_FlowerTidings);
+
+
+
+
+            Color baseColor = new Color(0.82f, 0.92f, 1f, 1f);
+            Color flowerColor = new Color(0.72f, 1f, 0.76f, 1f);
+            Color hue = Color.Lerp(baseColor, flowerColor, flowerTidingsFactor);
+
+            float brightness = Mathf.Lerp(0.68f, 1f, flowerTidingsFactor);
+            return new Color(
+                Mathf.Clamp01(hue.r * brightness),
+                Mathf.Clamp01(hue.g * brightness),
+                Mathf.Clamp01(hue.b * brightness),
+                1f);
+        }
+
+        private MiliraXian.Characters.HediffComp_PawnResourceScaling GetScaler()
+        {
+            var hediff = PawnOwner?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
+            return hediff?.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
+        }
+
+        private float ResolveDamagePerShieldPoint()
+        {
+            var scaler = GetScaler();
+            if (scaler?.Props.damagePerShieldPoint != null)
+            {
+                return Mathf.Max(0.01f, scaler.Props.damagePerShieldPoint.GetValue(PawnOwner));
+            }
+
+            Pawn owner = PawnOwner;
+            float factor = PawnSpecialResourceUtility.GetResourcePercent(owner, MX_QHDefOf.MX_QH_FlowerTidings);
+            return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint + Props.bonusDamagePerShieldPointAtMaxFlowerTidings * factor);
+        }
+
+        private float ResolveRegenPerSecond()
+        {
+            var scaler = GetScaler();
+            if (scaler?.Props.regenPerSecond != null)
+            {
+                return Mathf.Max(0f, scaler.Props.regenPerSecond.GetValue(PawnOwner));
+            }
+
+            Pawn owner = PawnOwner;
+            float factor = PawnSpecialResourceUtility.GetResourcePercent(owner, MX_QHDefOf.MX_QH_FlowerTidings);
+            return Mathf.Max(0f, Props.baseRegenPerSecond + Props.bonusRegenPerSecondAtMaxFlowerTidings * factor);
+        }
+
+        public string BuildShieldTooltip()
+        {
+            float flowerTidingsPercent = PawnSpecialResourceUtility.GetResourcePercent(PawnOwner, MX_QHDefOf.MX_QH_FlowerTidings);
+            string status = InBreak
+                ? "状态：破碎（剩余 " + Mathf.CeilToInt(BreakTicksLeft / 60f) + " 秒）"
+                : "状态：生效中";
+
+            return "花神护体\n\n"
+                   + status + "\n"
+                   + "护盾值：" + Energy.ToString("F0") + " / " + MaxEnergy.ToString("F0") + "\n"
+                   + "花信加成：" + flowerTidingsPercent.ToStringPercent("F0") + "\n"
+                   + "每点护盾承伤：" + CurrentDamagePerShieldPoint.ToString("F2") + "\n"
+                   + "护盾回复：" + CurrentRegenPerSecond.ToString("F2") + " /秒";
+        }
+
+        private FleckDef ResolveAbsorbFleck()
+        {
+            if (Props.hurtFleckDefNames != null && Props.hurtFleckDefNames.Count > 0)
+            {
+                int index = Rand.RangeInclusive(0, Props.hurtFleckDefNames.Count - 1);
+                string fleckName = Props.hurtFleckDefNames[index];
+                if (!fleckName.NullOrEmpty())
+                {
+                    FleckDef hurtFleck = DefDatabase<FleckDef>.GetNamedSilentFail(fleckName);
+                    if (hurtFleck != null)
+                    {
+                        return hurtFleck;
+                    }
+                }
+            }
+
+            if (!Props.absorbFleckDefName.NullOrEmpty())
+            {
+                FleckDef customFleck = DefDatabase<FleckDef>.GetNamedSilentFail(Props.absorbFleckDefName);
+                if (customFleck != null)
+                {
+                    return customFleck;
+                }
+            }
+
+            return FleckDefOf.ExplosionFlash;
+        }
+    }
+}

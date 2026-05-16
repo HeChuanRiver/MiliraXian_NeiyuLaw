@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/ThoughtDef[defName="SoakingWet"]</xpath>
+        <value>
+            <nullifyingTraits>
+                <li>MX_QH_FlowerWord_Narcissus</li>
+            </nullifyingTraits>
+        </value>
+    </Operation>
+</Patch>

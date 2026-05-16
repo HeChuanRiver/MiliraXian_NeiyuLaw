@@ -18,38 +18,6 @@
   </FleckDef>
 
   <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_YangChunHarmonyHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.24</fadeOutTime>
-    <growthRate>0.35</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsycastCast</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.58,0.58)</drawSize>
-      <color>(1.00, 0.88, 0.96, 0.28)</color>
-    </graphicData>
-  </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_YangChunMuteHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.26</fadeOutTime>
-    <growthRate>0.45</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsychicDistortionRing</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.68,0.68)</drawSize>
-      <color>(0.98, 0.66, 0.90, 0.34)</color>
-    </graphicData>
-  </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_DrainHediff</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>
     <fadeInTime>0.02</fadeInTime>
@@ -62,22 +30,6 @@
       <shaderType>MoteGlow</shaderType>
       <drawSize>(0.72,0.72)</drawSize>
       <color>(0.74, 0.72, 1.00, 0.38)</color>
-    </graphicData>
-  </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_DuanHunSlowHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.26</fadeOutTime>
-    <growthRate>0.40</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsycastCast</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.54,0.54)</drawSize>
-      <color>(0.94, 0.70, 0.98, 0.30)</color>
     </graphicData>
   </FleckDef>
 
@@ -105,52 +57,6 @@
   </EffecterDef>
 
   <EffecterDef>
-    <defName>MX_QH_Effecter_YangChunHarmonyHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_YangChunHarmonyHediff</fleckDef>
-        <ticksBetweenMotes>24</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.45)</positionOffset>
-        <scale>0.9</scale>
-        <rotation>-3~3</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
-  <EffecterDef>
-    <defName>MX_QH_Effecter_YangChunMuteHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_YangChunMuteHediff</fleckDef>
-        <ticksBetweenMotes>22</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.38)</positionOffset>
-        <scale>0.9</scale>
-        <rotation>0~0</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
-  <EffecterDef>
     <defName>MX_QH_Effecter_DrainHediff</defName>
     <offsetMode>Free</offsetMode>
     <children>
@@ -164,29 +70,6 @@
         <positionOffset>(0, 0, 0.24)</positionOffset>
         <scale>1.0</scale>
         <rotation>0~0</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
-  <EffecterDef>
-    <defName>MX_QH_Effecter_DuanHunSlowHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_DuanHunSlowHediff</fleckDef>
-        <ticksBetweenMotes>20</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.42)</positionOffset>
-        <scale>0.95</scale>
-        <rotation>-2~2</rotation>
         <rotationRate>0</rotationRate>
         <absoluteAngle>true</absoluteAngle>
         <angle>0</angle>

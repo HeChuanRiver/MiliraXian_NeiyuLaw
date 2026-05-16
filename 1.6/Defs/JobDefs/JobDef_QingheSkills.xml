@@ -1,61 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-
-  <!-- Qinghe ?? -->
-  <JobDef>
-    <defName>CastSpringFlow</defName>
-    <driverClass>MiliraXian.Characters.Qinghe.JobDriver_MX_SpringFlow</driverClass>
-    <reportString>Placeholder</reportString>
-    <abilityCasting>true</abilityCasting>
-    <playerInterruptible>true</playerInterruptible>
-  </JobDef>
-
   <JobDef>
     <defName>CastTempestDrain</defName>
-    <driverClass>MiliraXian.Characters.Qinghe.JobDriver_MX_TempestDrain</driverClass>
+    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_TempestDrain</driverClass>
     <reportString>Placeholder</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
   </JobDef>
-
   <!-- Qinghe Elegance skills -->
-  <JobDef>
-    <defName>MX_Qinghe_Elegance_CastAbility_HengZhi</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_HengZhi</driverClass>
-    <reportString>施放横指</reportString>
-    <abilityCasting>true</abilityCasting>
-    <playerInterruptible>false</playerInterruptible>
-    <casualInterruptible>false</casualInterruptible>
-    <collideWithPawns>true</collideWithPawns>
-    <neverShowWeapon>true</neverShowWeapon>
-    <tryStartFlying>true</tryStartFlying>
-    <overrideFlyChance>1</overrideFlyChance>
-  </JobDef>
-
-  <JobDef>
-    <defName>MX_Qinghe_Elegance_CastAbility_DuanHun</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_DuanHun</driverClass>
-    <reportString>施放断魂</reportString>
-    <abilityCasting>true</abilityCasting>
-    <playerInterruptible>false</playerInterruptible>
-    <casualInterruptible>false</casualInterruptible>
-    <collideWithPawns>true</collideWithPawns>
-    <neverShowWeapon>true</neverShowWeapon>
-    <tryStartFlying>true</tryStartFlying>
-    <overrideFlyChance>1</overrideFlyChance>
-  </JobDef>
-
-  <JobDef>
-    <defName>MX_Qinghe_Elegance_CastAbility_YangChun</defName>
-    <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_YangChun</driverClass>
-    <reportString>施放阳春</reportString>
-    <abilityCasting>true</abilityCasting>
-    <playerInterruptible>true</playerInterruptible>
-    <casualInterruptible>true</casualInterruptible>
-    <collideWithPawns>true</collideWithPawns>
-    <neverShowWeapon>true</neverShowWeapon>
-    <tryStartFlying>true</tryStartFlying>
-    <overrideFlyChance>1</overrideFlyChance>
-  </JobDef>
-
 </Defs>

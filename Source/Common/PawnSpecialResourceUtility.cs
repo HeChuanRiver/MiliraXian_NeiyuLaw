@@ -40,12 +40,24 @@ namespace MiliraXian.Characters
 
         public static void AddResource(Pawn pawn, HediffDef specialResourceDef, float value)
         {
-            EnsureSpecialResourceComp(pawn, specialResourceDef)?.AddValue(value);
+            HediffComp_PawnSpecialResource comp = EnsureSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceAddHandler addHandler)
+            {
+                addHandler.AddResourceValue(value);
+                return;
+            }
+
+            comp?.AddValue(value);
         }
 
         public static bool TryConsumeResource(Pawn pawn, HediffDef specialResourceDef, float value)
         {
             HediffComp_PawnSpecialResource comp = EnsureSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceAddHandler addHandler)
+            {
+                return addHandler.TryConsumeResourceValue(value);
+            }
+
             return comp != null && comp.TryConsume(value);
         }
 

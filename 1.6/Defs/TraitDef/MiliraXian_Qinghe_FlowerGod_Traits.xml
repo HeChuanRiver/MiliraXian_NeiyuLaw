@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <TraitDef>
+        <defName>MX_QH_FlowerWord_Peony</defName>
+        <commonality>0.000001</commonality>
+        <degreeDatas>
+            <li>
+                <label>花语·牡丹</label>
+                <description>春季花语。清荷与牡丹共鸣时，更擅长安抚伤痛与人心，医疗、社交、魅力和社交影响力都会提升。</description>
+                <skillGains>
+                    <Medicine>4</Medicine>
+                    <Social>4</Social>
+                </skillGains>
+                <statOffsets>
+                    <PawnBeauty>1</PawnBeauty>
+                </statOffsets>
+                <statFactors>
+                    <MedicalTendQuality>1.12</MedicalTendQuality>
+                    <MedicalTendSpeed>1.15</MedicalTendSpeed>
+                    <SocialImpact>1.15</SocialImpact>
+                </statFactors>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+
+    <TraitDef>
+        <defName>MX_QH_FlowerWord_JadeHairpin</defName>
+        <commonality>0.000001</commonality>
+        <degreeDatas>
+            <li>
+                <label>花语·玉簪</label>
+                <description>夏季花语。清荷与玉簪共鸣时，手工和艺术能力提升，也更容易在专注劳作中触发工作狂热或艺术灵感。</description>
+                <skillGains>
+                    <Crafting>4</Crafting>
+                    <Artistic>4</Artistic>
+                </skillGains>
+                <statFactors>
+                    <GeneralLaborSpeed>1.1</GeneralLaborSpeed>
+                    <WorkSpeedGlobal>1.08</WorkSpeedGlobal>
+                </statFactors>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+
+    <TraitDef>
+        <defName>MX_QH_FlowerWord_Osmanthus</defName>
+        <commonality>0.000001</commonality>
+        <degreeDatas>
+            <li>
+                <label>花语·月桂</label>
+                <description>秋季花语。清荷与月桂共鸣时，智识和射击能力提升，暗黑调查更高效，射击也更精准。</description>
+                <skillGains>
+                    <Intellectual>4</Intellectual>
+                    <Shooting>4</Shooting>
+                </skillGains>
+                <statFactors>
+                    <EntityStudyRate MayRequire="Ludeon.RimWorld.Anomaly">1.2</EntityStudyRate>
+                    <StudyEfficiency MayRequire="Ludeon.RimWorld.Anomaly">1.15</StudyEfficiency>
+                    <ShootingAccuracyPawn>1.12</ShootingAccuracyPawn>
+                    <AimingDelayFactor>0.92</AimingDelayFactor>
+                </statFactors>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+
+    <TraitDef>
+        <defName>MX_QH_FlowerWord_Narcissus</defName>
+        <commonality>0.000001</commonality>
+        <degreeDatas>
+            <li>
+                <label>花语·水仙</label>
+                <description>冬季花语。清荷与水仙共鸣时，烹饪和建造能力提升，不会在烹饪时做出有毒餐食，也不会因浑身湿透而心情低落。</description>
+                <skillGains>
+                    <Cooking>4</Cooking>
+                    <Construction>4</Construction>
+                </skillGains>
+                <statFactors>
+                    <CookSpeed>1.12</CookSpeed>
+                    <ConstructionSpeed>1.12</ConstructionSpeed>
+                    <FoodPoisonChance>0</FoodPoisonChance>
+                </statFactors>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+</Defs>

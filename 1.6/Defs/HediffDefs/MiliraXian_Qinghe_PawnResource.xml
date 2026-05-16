@@ -12,7 +12,7 @@
         <minSeverity>1</minSeverity>
         <maxSeverity>1</maxSeverity>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.HediffCompProperties_Tempest">
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_Tempest">
                 <resourceLabel>激流</resourceLabel>
                 <resourceDescription>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</resourceDescription>
                 <initialValue>0</initialValue>
@@ -47,7 +47,7 @@
         <minSeverity>1</minSeverity>
         <maxSeverity>1</maxSeverity>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.HediffCompProperties_Elegance">
+            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_Elegance">
                 <resourceLabel>雅乐</resourceLabel>
                 <resourceDescription>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</resourceDescription>
                 <initialValue>0</initialValue>
@@ -77,21 +77,21 @@
     <HediffDef>
         <defName>MX_QH_LongBreath</defName>
         <label>长息</label>
-        <description>受到致命伤害或摧毁身体部件的伤害时，若&lt;color=#6B61FF&gt;激流&lt;/color&gt;值大于0，抵消此次伤害、修复自身所有损伤并清空&lt;color=#6B61FF&gt;激流&lt;/color&gt;值，同时获得短暂无敌和心灵隐形（若可用）。</description>
+        <description>受到致命伤害或摧毁身体部件的伤害时，若长息不在冷却中，抵消此次伤害、修复自身所有损伤，同时获得3秒无敌和10秒心灵隐形（若可用）。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_LongBreathWard">
-                <resourceDef>MX_QH_Tempest</resourceDef>
-                <minimumResourceToTrigger>0.1</minimumResourceToTrigger>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LongBreathWard">
                 <lethalTriggerHealthPercent>0.12</lethalTriggerHealthPercent>
                 <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
-                <invisibilityDurationTicks>900</invisibilityDurationTicks>
+                <invisibilityDurationTicks>600</invisibilityDurationTicks>
+                <damageImmunityDurationTicks>180</damageImmunityDurationTicks>
                 <damageImmunityHediffDef>MX_QH_LongBreathDamageImmunity</damageImmunityHediffDef>
-                <retriggerCooldownTicks>0</retriggerCooldownTicks>
+                <retriggerCooldownTicks>3600</retriggerCooldownTicks>
+                <cooldownWarningCooldownTicks>600</cooldownWarningCooldownTicks>
             </li>
         </comps>
     </HediffDef>
@@ -107,7 +107,7 @@
         <everCurableByItem>false</everCurableByItem>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>900</disappearsAfterTicks>
+                <disappearsAfterTicks>180</disappearsAfterTicks>
             </li>
         </comps>
     </HediffDef>
@@ -122,7 +122,7 @@
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_SpringRegen">
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SpringRegen">
                 <healIntervalTicks>180</healIntervalTicks>
                 <healAmountPerTrigger>2.5</healAmountPerTrigger>
                 <healPermanentInjuries>true</healPermanentInjuries>
@@ -142,23 +142,23 @@
     <HediffDef>
         <defName>MX_QH_LotusShield</defName>
         <label>花神护体</label>
-        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。自身的&lt;color=#6B61FF&gt;激流&lt;/color&gt;属性越高，每点护盾能吸收的伤害越多；自身的&lt;color=#EB6BFF&gt;雅乐&lt;/color&gt;属性越高，每秒回复的护盾值越多。\n\n护盾被击碎时会失效20秒。</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediff_LotusShield</hediffClass>
+        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。自身的&lt;color=#7ACF6D&gt;花信&lt;/color&gt;越高，每点护盾能吸收的伤害越多，护盾回复也越快。\n\n护盾被击碎时会失效20秒。</description>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_LotusShield</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_LotusShield">
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LotusShield">
                 <shieldCompProperties>
                     <maxEnergy>100</maxEnergy>
                     <baseDamagePerShieldPoint>1</baseDamagePerShieldPoint>
-                    <bonusDamagePerShieldPointAtMaxTempest>5</bonusDamagePerShieldPointAtMaxTempest>
+                    <bonusDamagePerShieldPointAtMaxFlowerTidings>5</bonusDamagePerShieldPointAtMaxFlowerTidings>
                     <baseRegenPerSecond>2</baseRegenPerSecond>
-                    <bonusRegenPerSecondAtMaxElegance>8</bonusRegenPerSecondAtMaxElegance>
+                    <bonusRegenPerSecondAtMaxFlowerTidings>8</bonusRegenPerSecondAtMaxFlowerTidings>
                     <breakDisabledTicks>1200</breakDisabledTicks>
                     <breakOnEmp>false</breakOnEmp>
-                    <tempestGainOnBreak>10</tempestGainOnBreak>
+                    <flowerTidingsGainOnBreak>10</flowerTidingsGainOnBreak>
                     <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
                     <absorbFleckScale>0.6</absorbFleckScale>
                     <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
@@ -175,14 +175,14 @@
                     <baseValue>1</baseValue>
                     <min>1.0</min>
                     <max>6.0</max>
-                    <resourceDef>MX_QH_Tempest</resourceDef>
+                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
                     <method>linear</method>
                 </damagePerShieldPoint>
                 <regenPerSecond>
                     <baseValue>2</baseValue>
                     <min>1.0</min>
                     <max>5.0</max>
-                    <resourceDef>MX_QH_Elegance</resourceDef>
+                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
                     <method>linear</method>
                 </regenPerSecond>
             </li>

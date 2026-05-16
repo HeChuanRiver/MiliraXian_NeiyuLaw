@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ColorDef>
+        <defName>MX_QH_FlowerPink</defName>
+        <label>淡粉色</label>
+        <color>(255,205,225)</color>
+        <colorType>Misc</colorType>
+        <randomlyPickable>false</randomlyPickable>
+    </ColorDef>
+</Defs>

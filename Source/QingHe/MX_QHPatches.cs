@@ -1,5 +1,9 @@
 using HarmonyLib;
+using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
+using System.Reflection;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -11,6 +15,12 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
+            patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnGenerator_GeneratePawn_Postfix)));
+
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix)));
 
@@ -30,6 +40,34 @@ namespace MiliraXian.Characters.QingHe
                     nameof(Verb.TryStartCastOn),
                     new[] { typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(bool), typeof(bool), typeof(bool), typeof(bool) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Verb_TryStartCastOn_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(InspirationWorker), nameof(InspirationWorker.CommonalityFor)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_InspirationWorker_CommonalityFor_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Projectile), "CheckForFreeInterceptBetween", new[] { typeof(Vector3), typeof(Vector3) }),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Projectile_CheckForFreeInterceptBetween_Prefix)));
+        }
+
+        public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
+        {
+            if (!QingheEquipmentUtility.IsQinghe(__result))
+            {
+                return;
+            }
+
+            QingheEquipmentUtility.MarkForLoadoutStabilization(__result);
+            QingheEquipmentUtility.EnsureDefaultLoadout(__result);
+        }
+
+        public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
+        {
+            if (!QingheEquipmentUtility.IsQinghe(__result))
+            {
+                return;
+            }
+
+            QingheEquipmentUtility.EnsureDefaultLoadout(__result);
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
@@ -39,15 +77,13 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Tempest);
-            PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Elegance);
-
-            EnsureLongBreathState(__instance);
-            EnsureWaterFairyTrait(__instance);
-            EnsureSpringRegenState(__instance);
-            EnsureLotusShieldBinding(__instance);
-            EnsureQingheStatusGizmoState(__instance);
-            SyncEleganceAbilityByCurrentWeapon(__instance);
+            EnsureQingheCoreTraits(__instance);
+            FlowerCourtUtility.EnsureFlowerCourtSystems(__instance);
+            if (QingheEquipmentUtility.ShouldFinalizeLoadout(__instance))
+            {
+                QingheEquipmentUtility.EnsureDefaultLoadout(__instance);
+                QingheEquipmentUtility.ClearLoadoutStabilization(__instance);
+            }
         }
 
         public static bool Patch_Pawn_PreApplyDamage_Prefix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
@@ -149,6 +185,50 @@ namespace MiliraXian.Characters.QingHe
             EleganceUtility.NotifyCombatEvent(caster);
         }
 
+        public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)
+        {
+            if (pawn?.story?.traits == null || __instance?.def == null)
+            {
+                return;
+            }
+
+            if (MX_QHDefOf.MX_QH_FlowerWord_JadeHairpin == null
+                || !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_FlowerWord_JadeHairpin))
+            {
+                return;
+            }
+
+            if (__instance.def == MX_QHDefOf.Frenzy_Work || __instance.def == MX_QHDefOf.Inspired_Creativity)
+            {
+                __result *= 2f;
+            }
+        }
+
+        public static bool Patch_Projectile_CheckForFreeInterceptBetween_Prefix(
+            Projectile __instance,
+            Vector3 lastExactPos,
+            Vector3 newExactPos,
+            ref bool __result)
+        {
+            if (__instance?.Map == null || __instance.Destroyed || MX_QHDefOf.MX_QH_FlowerMandate_Wintersweet == null)
+            {
+                return true;
+            }
+
+            var shields = __instance.Map.listerThings.ThingsOfDef(MX_QHDefOf.MX_QH_FlowerMandate_Wintersweet);
+            for (int i = 0; i < shields.Count; i++)
+            {
+                if (shields[i]?.TryGetComp<CompFlowerMandate_WintersweetShield>()?.TryInterceptProjectile(__instance, lastExactPos, newExactPos) == true)
+                {
+                    ImpactBlockedByShield(__instance);
+                    __result = true;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private static bool HasLongBreathDamageImmunity(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LongBreathDamageImmunity == null)
@@ -159,130 +239,34 @@ namespace MiliraXian.Characters.QingHe
             return pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreathDamageImmunity) != null;
         }
 
-        private static void EnsureLongBreathState(Pawn pawn)
+        private static void EnsureQingheCoreTraits(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_LongBreath != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_LongBreath, pawn));
-                }
-            }
-        }
-
-        private static void EnsureWaterFairyTrait(Pawn pawn)
-        {
-            if (pawn?.story?.traits == null || MX_QHDefOf.MX_QH_Trait_WaterFairy == null)
+            if (pawn?.story?.traits == null)
             {
                 return;
             }
 
-            Trait oldLongBreathTrait = MX_QHDefOf.MX_QH_Trait_LongBreath != null
-                ? pawn.story.traits.GetTrait(MX_QHDefOf.MX_QH_Trait_LongBreath)
-                : null;
-            if (oldLongBreathTrait != null)
+            if (MX_QHDefOf.MX_QH_Trait_LongBreath != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_LongBreath))
             {
-                pawn.story.traits.RemoveTrait(oldLongBreathTrait);
+                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_LongBreath));
             }
 
-            if (!pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
+            if (MX_QHDefOf.MX_QH_Trait_WaterFairy != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
             {
                 pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_WaterFairy));
             }
         }
 
-        private static void EnsureSpringRegenState(Pawn pawn)
+        private static readonly MethodInfo ProjectileImpactMethod =
+            AccessTools.Method(typeof(Projectile), "Impact", new[] { typeof(Thing), typeof(bool) });
+
+        private static void ImpactBlockedByShield(Projectile projectile)
         {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_SpringRegen != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringRegen) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringRegen, pawn));
-                }
-            }
-        }
-
-        private static void EnsureLotusShieldBinding(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LotusShield == null)
-            {
-                return;
-            }
-
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
-            HediffComp_LotusShield comp = (hediff as HediffWithComps)?.GetComp<HediffComp_LotusShield>();
-            comp?.EnsureShieldBound();
-        }
-
-        private static void EnsureQingheStatusGizmoState(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_QingheStatusGizmo != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_QingheStatusGizmo) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_QingheStatusGizmo, pawn));
-                }
-            }
-        }
-
-        private static void SyncEleganceAbilityByCurrentWeapon(Pawn pawn)
-        {
-            if (pawn?.abilities == null)
-            {
-                return;
-            }
-
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_HengZhi");
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_DuanHun");
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_YangChun");
-
-            ThingDef primaryDef = pawn.equipment?.Primary?.def;
-            if (primaryDef == null)
-            {
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Pipa")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_HengZhi");
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Zhudi")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_DuanHun");
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Qin")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_YangChun");
-            }
-        }
-
-        private static void EnsureAbility(Pawn pawn, string abilityDefName)
-        {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
-            if (def == null)
-            {
-                return;
-            }
-
-            if (pawn.abilities.GetAbility(def, includeTemporary: false) == null)
-            {
-                pawn.abilities.GainAbility(def);
-            }
-        }
-
-        private static void RemoveAbility(Pawn pawn, string abilityDefName)
-        {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
-            if (def == null)
-            {
-                return;
-            }
-
-            pawn.abilities.RemoveAbility(def);
+            MethodInfo impactMethod = AccessTools.Method(projectile.GetType(), "Impact", new[] { typeof(Thing), typeof(bool) })
+                ?? ProjectileImpactMethod;
+            impactMethod?.Invoke(projectile, new object[] { null, true });
         }
 
     }

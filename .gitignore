@@ -10,4 +10,5 @@ riderModule.iml
 *.sln.DotSettings.user
 .claude/
 .dotnet/
+.modpack/
 References.md

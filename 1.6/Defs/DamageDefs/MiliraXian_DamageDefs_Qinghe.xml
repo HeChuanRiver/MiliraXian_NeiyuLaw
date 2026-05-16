@@ -9,13 +9,13 @@
         <hediff>PsychicInjury</hediff>
     </DamageDef>
     <DamageDef>
-        <defName>MX_Desynced</defName>
-        <label>离弦</label>
+        <defName>MX_QH_NoteImpact</defName>
+        <label>音击</label>
         <externalViolence>true</externalViolence>
         <armorCategory>Sharp</armorCategory>
         <isRanged>true</isRanged>
-        <workerClass>MiliraXian.Characters.QingHe.DamageWorker_Desynced</workerClass>
-        <deathMessage>{0}被吵死了。</deathMessage>
+        <workerClass>MiliraXian.Characters.QingHe.DamageWorker_NoteImpact</workerClass>
+        <deathMessage>{0}被花信铃音击倒了。</deathMessage>
         <hediff>PsychicInjury</hediff>
     </DamageDef>
 </Defs>

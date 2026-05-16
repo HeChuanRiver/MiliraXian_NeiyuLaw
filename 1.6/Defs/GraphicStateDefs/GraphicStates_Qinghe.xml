@@ -2,7 +2,6 @@
 <Defs>
 
     <!-- East -->
-    <!-- TODO: 下面这些答辩都要换成清荷的，所有的 -->
     <GraphicStateDef>
         <defName>Milira_FlyEast_Qinghe_0</defName>
         <defaultGraphicData><graphicClass>Graphic_Single</graphicClass><drawSize>(2.5,2.5)</drawSize><color>(1,1,1,1)</color><texPath>MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/Milira_FlyEast_1</texPath></defaultGraphicData>

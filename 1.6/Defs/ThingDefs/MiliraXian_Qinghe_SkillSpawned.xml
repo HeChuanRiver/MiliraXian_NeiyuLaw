@@ -3,7 +3,7 @@
     <ThingDef>
         <defName>SpringFlowField</defName>
         <label>*SFF placeholder*</label>
-        <thingClass>MiliraXian.Characters.Qinghe.Thing_SpringFlowField</thingClass>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_SpringFlowField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
         <altitudeLayer>MoteLow</altitudeLayer>
@@ -12,6 +12,7 @@
             <shaderType>MoteGlowDistorted</shaderType>
             <shaderParameters>
                 <_DistortionTex>/Other/Ripples</_DistortionTex>
+                <_ScrollSpeed>-0.35</_ScrollSpeed>
             </shaderParameters>
             <color>(1,0.6,0.8,0.4)</color>
             <texPath>Things/Mote/PsycastCast</texPath>
@@ -20,14 +21,289 @@
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_SpringFlowField"/>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_SpringFlowField">
+                <radius>6.0</radius>
+                <pulseIntervalTicks>10</pulseIntervalTicks>
+                <attunementRadiusBonusAtMax>2.0</attunementRadiusBonusAtMax>
+                <flowerTidingsGainOnPulse>3.0</flowerTidingsGainOnPulse>
+                <fadeInTicks>30</fadeInTicks>
+                <fadeOutTicks>45</fadeOutTicks>
+                <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
+                <ambientVisualFlecksPerBurst>2</ambientVisualFlecksPerBurst>
+                <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
+                <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <FleckDef>
+        <defName>MX_QH_GroundWaterSplash_Pink</defName>
+        <fleckSystemClass>FleckSystemThrown</fleckSystemClass>
+        <altitudeLayer>MoteOverhead</altitudeLayer>
+        <randomGraphics>
+            <li>
+                <graphicClass>Graphic_FleckPulse</graphicClass>
+                <shaderType>Mote</shaderType>
+                <texPath>Things/Mote/GroundSplash/GroundSplashA</texPath>
+                <drawSize>(1,1)</drawSize>
+                <color>(1.0, 0.62, 0.78, 0.34)</color>
+            </li>
+            <li>
+                <graphicClass>Graphic_FleckPulse</graphicClass>
+                <shaderType>Mote</shaderType>
+                <texPath>Things/Mote/GroundSplash/GroundSplashB</texPath>
+                <drawSize>(1,1)</drawSize>
+                <color>(1.0, 0.62, 0.78, 0.34)</color>
+            </li>
+        </randomGraphics>
+        <unattachedDrawOffset>(0, 0, 0)</unattachedDrawOffset>
+        <fadeInTime>0</fadeInTime>
+        <solidTime>.3</solidTime>
+        <fadeOutTime>.35</fadeOutTime>
+        <archHeight>0</archHeight>
+        <growthRate>1</growthRate>
+        <scalingAnchor>(.5, .2, 0)</scalingAnchor>
+        <scalers>
+            <li>
+                <scaleAmt>1</scaleAmt>
+                <scaleTime>.65</scaleTime>
+                <axisMask>(1, 0, 0)</axisMask>
+                <curve>
+                    <points>
+                        <li>(0,0.5)</li>
+                        <li>(0.16,0.2971286)</li>
+                        <li>(0.32,0.2082831)</li>
+                        <li>(0.48,0.3066487)</li>
+                        <li>(0.64,0.4985328)</li>
+                        <li>(0.8,0.7313842)</li>
+                        <li>(1,1)</li>
+                    </points>
+                </curve>
+            </li>
+            <li>
+                <scaleAmt>1</scaleAmt>
+                <scaleTime>.65</scaleTime>
+                <axisMask>(0, 0, 1)</axisMask>
+                <curve>
+                    <points>
+                        <li>(0,0)</li>
+                        <li>(0.16,0.3361711)</li>
+                        <li>(0.32,0.5945203)</li>
+                        <li>(0.48,0.7089323)</li>
+                        <li>(0.64,0.683339)</li>
+                        <li>(0.8,0.5272376)</li>
+                        <li>(1,0)</li>
+                    </points>
+                </curve>
+            </li>
+        </scalers>
+    </FleckDef>
+
+    <ThingDef ParentName="MoteGlowDistorted">
+        <defName>Mote_QH_SpringFlowField</defName>
+        <thingClass>MoteAttached</thingClass>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <drawOffscreen>true</drawOffscreen>
+        <mote>
+            <fadeInTime>0.5</fadeInTime>
+            <solidTime>9999</solidTime>
+            <fadeOutTime>0.75</fadeOutTime>
+            <needsMaintenance>true</needsMaintenance>
+            <fadeOutUnmaintained>true</fadeOutUnmaintained>
+        </mote>
+        <graphicData>
+            <graphicClass>Graphic_Mote</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(1,0.6,0.8,0.4)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>12.0</drawSize>
+        </graphicData>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_QH_FlowerMandate_Pomegranate</defName>
+        <label>*summoned flower placeholder*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_FlowerMandate_Pomegranate</thingClass>
+        <category>Building</category>
+        <tickerType>Normal</tickerType>
+        <drawerType>MapMeshAndRealTime</drawerType>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>PassThroughOnly</passability>
+        <pathCost>30</pathCost>
+        <fillPercent>0.25</fillPercent>
+        <size>(1,1)</size>
+        <selectable>true</selectable>
+        <useHitPoints>true</useHitPoints>
+        <hasTooltip>true</hasTooltip>
+        <drawOffscreen>true</drawOffscreen>
+        <statBases>
+            <MaxHitPoints>90</MaxHitPoints>
+            <Flammability>0.3</Flammability>
+            <Mass>0</Mass>
+            <Beauty>0</Beauty>
+            <ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+        </statBases>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>Transparent</shaderType>
+            <color>(1,0.55,0.78,0.20)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>2.0</drawSize>
+        </graphicData>
+        <building>
+            <combatPower>35</combatPower>
+            <ai_combatDangerous>true</ai_combatDangerous>
+            <quickTargetable>true</quickTargetable>
+            <claimable>false</claimable>
+            <isInert>false</isInert>
+        </building>
+        <comps>
+            <li Class="CompProperties_TurretGun">
+                <turretDef>MX_QH_FlowerMandate_Pomegranate_Gun</turretDef>
+                <autoAttack>true</autoAttack>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerMandate_PomegranateLifetime">
+                <durationTicks>900</durationTicks>
+                <fadeOutTicks>45</fadeOutTicks>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseWeapon">
+        <defName>MX_QH_FlowerMandate_Pomegranate_Gun</defName>
+        <label>*summoned flower hidden gun*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_FlowerMandate_PomegranateGun</thingClass>
+        <recipeMaker Inherit="False" IsNull="True" />
+        <techLevel>Archotech</techLevel>
+        <smeltable>false</smeltable>
+        <destroyOnDrop>true</destroyOnDrop>
+        <graphicData>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(1,1)</drawSize>
+        </graphicData>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>None</tradeability>
+        <weaponClasses>
+            <li>Ranged</li>
+        </weaponClasses>
+        <statBases>
+            <MarketValue>0</MarketValue>
+            <Mass>0</Mass>
+            <AccuracyTouch>1.0</AccuracyTouch>
+            <AccuracyShort>1.0</AccuracyShort>
+            <AccuracyMedium>1.0</AccuracyMedium>
+            <AccuracyLong>1.0</AccuracyLong>
+        </statBases>
+        <verbs>
+            <li>
+                <verbClass>Verb_Shoot</verbClass>
+                <hasStandardCommand>false</hasStandardCommand>
+                <defaultProjectile>MX_Bullet_QH_FlowerMandate_Pomegranate</defaultProjectile>
+                <warmupTime>0.25</warmupTime>
+                <range>18</range>
+                <burstShotCount>1</burstShotCount>
+                <ticksBetweenBurstShots>1</ticksBetweenBurstShots>
+                <defaultCooldownTime>1.25</defaultCooldownTime>
+            </li>
+        </verbs>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_QH_FlowerMandate_Pomegranate</defName>
+        <label>*summoned flower shot*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerMandate_Pomegranate</thingClass>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.30,0.86)</drawSize>
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(255,176,218)</color>
+        </graphicData>
+        <projectile>
+            <damageDef>MX_QH_NoteImpact</damageDef>
+            <damageAmountBase>5</damageAmountBase>
+            <armorPenetrationBase>1.50</armorPenetrationBase>
+            <speed>28</speed>
+            <arcHeightFactor>0.05</arcHeightFactor>
+        </projectile>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+                <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+                <trailMaxPoints>18</trailMaxPoints>
+                <trailMinPointDistance>0.10</trailMinPointDistance>
+                <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+                <trailWidthStart>0.14</trailWidthStart>
+                <trailWidthEnd>0.04</trailWidthEnd>
+                <trailAlpha>0.75</trailAlpha>
+                <trailAltitudeOffset>0.65</trailAltitudeOffset>
+                <useProjectileGraphicColor>true</useProjectileGraphicColor>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+                <homingStartDelayTicks>4</homingStartDelayTicks>
+                <minHomingTicksToImpact>8</minHomingTicksToImpact>
+                <homingTurnLerp>0.12</homingTurnLerp>
+                <curveAmplitudeMin>0.35</curveAmplitudeMin>
+                <curveAmplitudeMax>0.55</curveAmplitudeMax>
+                <curveFrequency>0.10</curveFrequency>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_QH_FlowerMandate_Wintersweet</defName>
+        <label>*wintersweet shield placeholder*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_FlowerMandate_Wintersweet</thingClass>
+        <category>None</category>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <passability>Standable</passability>
+        <fillPercent>0</fillPercent>
+        <size>(1,1)</size>
+        <selectable>false</selectable>
+        <useHitPoints>false</useHitPoints>
+        <hasTooltip>false</hasTooltip>
+        <drawOffscreen>true</drawOffscreen>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>Transparent</shaderType>
+            <color>(0.70,0.90,1.00,0.18)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>1.6</drawSize>
+        </graphicData>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerMandate_WintersweetShield">
+                <radius>4.0</radius>
+                <startingEnergy>160</startingEnergy>
+                <energyLossPerDamage>1.0</energyLossPerDamage>
+                <durationTicks>900</durationTicks>
+                <fadeInTicks>30</fadeInTicks>
+                <fadeOutTicks>45</fadeOutTicks>
+                <breakOnEmp>true</breakOnEmp>
+                <interceptGroundProjectiles>true</interceptGroundProjectiles>
+                <interceptAirProjectiles>true</interceptAirProjectiles>
+                <interceptOutgoingProjectiles>false</interceptOutgoingProjectiles>
+                <shieldTexPath>MiliraXianNeiyu/Effect/Neiyu_Shield/Shield</shieldTexPath>
+                <shieldDrawSizeFactor>1.1601562</shieldDrawSizeFactor>
+                <shieldAlpha>0.34</shieldAlpha>
+                <shieldColor>(0.70,0.90,1.00,1.00)</shieldColor>
+                <absorbFleckDefName>ExplosionFlash</absorbFleckDefName>
+                <absorbFleckScale>1.0</absorbFleckScale>
+                <breakEffectScale>3.6</breakEffectScale>
+                <breakFlashScale>8.0</breakFlashScale>
+            </li>
         </comps>
     </ThingDef>
 
     <ThingDef>
         <defName>TempestDrainField</defName>
         <label>*TDF placeholder*</label>
-        <thingClass>MiliraXian.Characters.Qinghe.Thing_TempestDrainField</thingClass>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_TempestDrainField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
         <altitudeLayer>MoteLow</altitudeLayer>
@@ -44,7 +320,7 @@
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_TempestDrainField">
+            <li Class="MiliraXian.Characters.QingHe.CompProperties_TempestDrainField">
                 <pulseIntervalTicks>10</pulseIntervalTicks>
                 <damageEveryPulses>3</damageEveryPulses>
                 <damageDef>MX_Dehydrate</damageDef>
@@ -80,64 +356,6 @@
             </shaderParameters>
             <drawSize>1.7</drawSize>
         </graphicData>
-    </ThingDef>
-
-
-    <ThingDef>
-        <defName>MX_QH_Elegance_YangChunField</defName>
-        <label>*QH YangChun Field*</label>
-        <thingClass>MiliraXian.Characters.QingHe.Thing_YangChunField</thingClass>
-        <tickerType>Normal</tickerType>
-        <drawerType>RealtimeOnly</drawerType>
-        <altitudeLayer>MoteLow</altitudeLayer>
-        <graphicData>
-            <graphicClass>Graphic_Single</graphicClass>
-            <shaderType>MoteGlowDistorted</shaderType>
-            <shaderParameters>
-                <_DistortionTex>/Other/Ripples</_DistortionTex>
-            </shaderParameters>
-            <color>(0.55,0.95,0.75,0.45)</color>
-            <texPath>Things/Mote/PsycastCast</texPath>
-            <drawSize>10.0</drawSize>
-        </graphicData>
-        <drawOffscreen>true</drawOffscreen>
-        <useHitPoints>false</useHitPoints>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.CompProperties_YangChunField">
-                <radius>7.9</radius>
-                <pulseIntervalTicks>180</pulseIntervalTicks>
-
-                <enemyDamageDef>MX_Dehydrate</enemyDamageDef>
-                <enemyDamageAmount>2</enemyDamageAmount>
-                <enemyDesyncedDamageAmount>1</enemyDesyncedDamageAmount>
-                <damageFactorMax>0.5</damageFactorMax>
-                <enemyArmorPenetration>0.15</enemyArmorPenetration>
-                <enemyDebuffHediff>MX_QH_Elegance_YangChunEnemy</enemyDebuffHediff>
-                <enemyDebuffSeverity>1</enemyDebuffSeverity>
-                <enemyDebuffDurationTicks>300</enemyDebuffDurationTicks>
-
-                <allyBuffHediff>MX_QH_Elegance_YangChunAlly</allyBuffHediff>
-                <allyBuffSeverity>1</allyBuffSeverity>
-                <allyBuffDurationTicks>300</allyBuffDurationTicks>
-                <allyInstantHeal>0.8</allyInstantHeal>
-                <healFactorMax>1</healFactorMax>
-                <hediffSeverityFactorMax>1</hediffSeverityFactorMax>
-
-                <eleganceGainFlat>6</eleganceGainFlat>
-                <eleganceGainPerAlly>0.8</eleganceGainPerAlly>
-                <eleganceGainPerEnemy>1.5</eleganceGainPerEnemy>
-                <pulseFx>MX_QH_Effecter_YangChunPulse</pulseFx>
-                <pulseFxScale>1.9</pulseFxScale>
-            </li>
-            <li Class="MiliraXian.Characters.CompProperties_ResourceTick">
-                <entries>
-                    <li>
-                        <resourceDef>MX_QH_Elegance</resourceDef>
-                        <amount>0.01</amount>
-                    </li>
-                </entries>
-            </li>
-        </comps>
     </ThingDef>
 
 </Defs>

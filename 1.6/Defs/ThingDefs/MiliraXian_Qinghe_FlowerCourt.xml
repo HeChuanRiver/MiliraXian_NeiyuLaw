@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef ParentName="BuildingBase">
+        <defName>MX_QH_LotusPond</defName>
+        <label>荷池</label>
+        <description>清荷用于调谐四时共鸣的花神庭核心。清荷本人可以在这里与四时花神建立当前共鸣。</description>
+        <category>Building</category>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Building_LotusPond</thingClass>
+        <forceDebugSpawnable>true</forceDebugSpawnable>
+        <selectable>true</selectable>
+        <drawerType>MapMeshOnly</drawerType>
+        <graphicData>
+            <texPath>Things/Building/Misc/Ideogram/IconChristian/IconChristianA</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(3,3)</drawSize>
+        </graphicData>
+        <designationCategory>Misc</designationCategory>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>Standable</passability>
+        <pathCost>20</pathCost>
+        <fillPercent>0.2</fillPercent>
+        <rotatable>false</rotatable>
+        <size>(3,3)</size>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <useHitPoints>true</useHitPoints>
+        <isAltar>true</isAltar>
+        <hasInteractionCell>true</hasInteractionCell>
+        <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+        <ritualFocus>
+            <spectateDistance>2</spectateDistance>
+            <allowedSpectateSides>Down</allowedSpectateSides>
+        </ritualFocus>
+        <placeWorkers>
+            <li>PlaceWorker_RitualFocusNoArrow</li>
+            <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+        </placeWorkers>
+        <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+        <statBases>
+            <MaxHitPoints>180</MaxHitPoints>
+            <WorkToBuild>900</WorkToBuild>
+            <Flammability>0.2</Flammability>
+            <Beauty>8</Beauty>
+        </statBases>
+        <costList>
+            <WoodLog>60</WoodLog>
+            <Steel>40</Steel>
+        </costList>
+        <building>
+            <isInert>true</isInert>
+            <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
+            <buildingTags>
+                <li>RitualFocus</li>
+            </buildingTags>
+        </building>
+    </ThingDef>
+</Defs>

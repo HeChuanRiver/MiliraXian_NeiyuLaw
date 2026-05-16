@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RimWorld;
+using MiliraXian.Characters.QingHe.Things;
 using UnityEngine;
 using Verse;
 
@@ -45,18 +46,8 @@ namespace MiliraXian.Characters.QingHe
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            if (Pawn == null || Pawn.Dead)
-            {
-                yield break;
-            }
-
-            if (Props.onlyWhenSelected && Find.Selector.SingleSelectedThing != Pawn)
-            {
-                yield break;
-            }
-
-            UpdateTickDeltaIfNeeded();
-            yield return new Gizmo_QH_StatusGizmo(this);
+            // Replaced by the flower court resonance resource panel.
+            yield break;
         }
 
         public HediffComp_PawnSpecialResource FirstComp
