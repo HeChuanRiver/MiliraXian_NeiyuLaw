@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe
         {
             if (!MX_QHUtility.HasRequiredWeapon(parent?.pawn, Props.requiredWeapon))
             {
-                reason = "需要对应武器";
+                reason = "MX_QH_NeedRequiredWeapon".Translate().ToString();
                 return true;
             }
 

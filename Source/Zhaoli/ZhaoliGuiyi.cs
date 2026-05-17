@@ -100,7 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
 
                 if (caster.Faction == Faction.OfPlayer)
                 {
-                    Messages.Message("因果不足，无法施放诡医。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaGuiyi".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return;
@@ -122,7 +122,7 @@ namespace MiliraXian.Characters.Zhaoli
                 FleckMaker.AttachedOverlay(targetPawn, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
                 if (targetPawn.Spawned)
                 {
-                    MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "诡医", 3.65f);
+                    MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "MX_ZL_GuiyiMote".Translate().ToString(), 3.65f);
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("诡医无法对昭离自己使用。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_GuiyiCannotTargetSelf".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -155,7 +155,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("诡医无法对敌对目标使用。", targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_GuiyiCannotTargetHostile".Translate(), targetPawn, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -165,7 +165,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("因果不足，无法施放诡医。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaGuiyi".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -175,7 +175,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("目标没有需要诡医处理的伤病。", targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_GuiyiNoTreatableInjuries".Translate(), targetPawn, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;

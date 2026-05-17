@@ -33,7 +33,7 @@ namespace MiliraXian.Characters.QingHe
 
         public override string GetReport()
         {
-            return "正在引导断魂音律";
+            return "MX_QH_ReportDuanHun".Translate().ToString();
         }
 
         protected override IEnumerable<Toil> MakeNewToils()

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MiliraXian_NeiyuInner.label>霓羽·內襯</MiliraXian_NeiyuInner.label>
+  <MiliraXian_NeiyuInner.description>霓羽常服內部貼身穿著的一層內襯。它本身並不張揚，卻讓整套裝束在結構與色調上更加完整，也保留了足夠輕巧的活動性。</MiliraXian_NeiyuInner.description>
+
+  <MX_Neiyu_Form_Flower.comps.0.commandLabel>切換形態</MX_Neiyu_Form_Flower.comps.0.commandLabel>
+  <MX_Neiyu_Form_Flower.comps.0.commandDesc>點擊切換</MX_Neiyu_Form_Flower.comps.0.commandDesc>
+  <MX_Neiyu_Form_Weapon.comps.0.commandLabel>切換形態</MX_Neiyu_Form_Weapon.comps.0.commandLabel>
+  <MX_Neiyu_Form_Weapon.comps.0.commandDesc>點擊循環切換：花 → 劍 → 弓 → 花。</MX_Neiyu_Form_Weapon.comps.0.commandDesc>
+  <MX_Neiyu_Form_Bow.comps.0.commandLabel>切換形態</MX_Neiyu_Form_Bow.comps.0.commandLabel>
+  <MX_Neiyu_Form_Bow.comps.0.commandDesc>點擊循環切換：花 → 劍 → 弓 → 花。</MX_Neiyu_Form_Bow.comps.0.commandDesc>
+
+  <MX_Qinghe_Form_Pipa.comps.1.commandLabel>切換形態</MX_Qinghe_Form_Pipa.comps.1.commandLabel>
+  <MX_Qinghe_Form_Pipa.comps.1.commandDesc>點擊切換：</MX_Qinghe_Form_Pipa.comps.1.commandDesc>
+  <MX_Qinghe_Form_Zhudi.comps.1.commandLabel>切換形態</MX_Qinghe_Form_Zhudi.comps.1.commandLabel>
+  <MX_Qinghe_Form_Zhudi.comps.1.commandDesc>點擊切換：琵琶 → 竹笛 → 琴。</MX_Qinghe_Form_Zhudi.comps.1.commandDesc>
+  <MX_Qinghe_Form_Qin.comps.1.commandLabel>切換形態</MX_Qinghe_Form_Qin.comps.1.commandLabel>
+  <MX_Qinghe_Form_Qin.comps.1.commandDesc>點擊切換：琵琶 → 竹笛 → 琴。</MX_Qinghe_Form_Qin.comps.1.commandDesc>
+
+  <MX_QH_Mote_DuanHunCurvedTrail.label>Mote</MX_QH_Mote_DuanHunCurvedTrail.label>
+  <MXZL_Mote_GuiyiLinkLine.label>Mote</MXZL_Mote_GuiyiLinkLine.label>
+  <MXZL_Mote_GuiyiLinkPulse.label>Mote</MXZL_Mote_GuiyiLinkPulse.label>
+  <MXZL_Mote_GuiyiLinkStripe.label>Mote</MXZL_Mote_GuiyiLinkStripe.label>
+  <MXZL_Mote_GuiyiHealGlow.label>Mote</MXZL_Mote_GuiyiHealGlow.label>
+  <MXZL_Mote_GuiyiHealFrameA.label>Mote</MXZL_Mote_GuiyiHealFrameA.label>
+  <MXZL_Mote_GuiyiHealFrameB.label>Mote</MXZL_Mote_GuiyiHealFrameB.label>
+  <MXZL_Mote_GuiyiHealFrameC.label>Mote</MXZL_Mote_GuiyiHealFrameC.label>
+  <MXZL_Mote_DingshuLinkLine.label>Mote</MXZL_Mote_DingshuLinkLine.label>
+  <MXZL_Mote_DingshuLinkPulse.label>Mote</MXZL_Mote_DingshuLinkPulse.label>
+  <MXZL_Mote_DingshuLinkStripe.label>Mote</MXZL_Mote_DingshuLinkStripe.label>
+  <MXZL_Mote_DingshuReviveGlow.label>Mote</MXZL_Mote_DingshuReviveGlow.label>
+  <MXZL_Mote_DeathFieldArea.label>Mote</MXZL_Mote_DeathFieldArea.label>
+  <MXZL_Mote_DeathFieldMark.label>Mote</MXZL_Mote_DeathFieldMark.label>
+  <MXZL_Mote_DeathFieldParticleA.label>Mote</MXZL_Mote_DeathFieldParticleA.label>
+  <MXZL_Mote_DeathFieldParticleB.label>Mote</MXZL_Mote_DeathFieldParticleB.label>
+  <MXZL_Mote_DeathFieldParticleC.label>Mote</MXZL_Mote_DeathFieldParticleC.label>
+  <MXZL_Mote_SoulAbsorbPulse.label>Mote</MXZL_Mote_SoulAbsorbPulse.label>
+  <MXZL_Mote_MinshenWarnArea.label>Mote</MXZL_Mote_MinshenWarnArea.label>
+  <MXZL_Mote_MinghuoAuraFrameA.label>Mote</MXZL_Mote_MinghuoAuraFrameA.label>
+  <MXZL_Mote_MinghuoAuraFrameB.label>Mote</MXZL_Mote_MinghuoAuraFrameB.label>
+  <MXZL_Mote_MinghuoAuraFrameC.label>Mote</MXZL_Mote_MinghuoAuraFrameC.label>
+</LanguageData>

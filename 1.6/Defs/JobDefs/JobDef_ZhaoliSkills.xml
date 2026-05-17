@@ -2,6 +2,21 @@
 <Defs>
 
   <JobDef>
+    <defName>MX_Zhaoli_CastAbility_Uninterruptible</defName>
+    <driverClass>JobDriver_CastAbility</driverClass>
+    <reportString>施放昭离技能</reportString>
+    <abilityCasting>true</abilityCasting>
+    <playerInterruptible>false</playerInterruptible>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+    <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+    <collideWithPawns>true</collideWithPawns>
+    <tryStartFlying>true</tryStartFlying>
+    <overrideFlyChance>1</overrideFlyChance>
+  </JobDef>
+
+  <JobDef>
     <defName>MX_Zhaoli_CastAbility_Dingshu</defName>
     <driverClass>MiliraXian.Characters.Zhaoli.JobDriver_MX_Dingshu</driverClass>
     <reportString>施放定数</reportString>

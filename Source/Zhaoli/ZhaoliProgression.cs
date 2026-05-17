@@ -54,10 +54,10 @@ namespace MiliraXian.Characters.Zhaoli
         public static string BuildRaidBossSummary(int phase)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("当前阶段强化：");
+            stringBuilder.Append("MX_ZL_CurrentPhaseBonuses".Translate().ToString());
             if (phase <= 0)
             {
-                stringBuilder.Append("未触发替死，暂未获得额外强化。");
+                stringBuilder.Append("MX_ZL_NoSubstituteBonus".Translate().ToString());
                 return stringBuilder.ToString();
             }
 
@@ -81,7 +81,7 @@ namespace MiliraXian.Characters.Zhaoli
         public static string BuildRecruitGrowthSummary(int deathCount)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("当前养成加成：");
+            stringBuilder.Append("MX_ZL_CurrentGrowthBonuses".Translate().ToString());
             AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
             AppendOffsetLine(stringBuilder, ToxicEnvironmentResistanceStat, RecruitToxicResistanceOffset, usePercent: true);
             AppendFactorLine(stringBuilder, ImmunityGainSpeedStat, RecruitCommonFactor);
@@ -92,10 +92,10 @@ namespace MiliraXian.Characters.Zhaoli
             AppendFactorLine(stringBuilder, GeneralLaborSpeedStat, RecruitCommonFactor);
 
             stringBuilder.AppendLine();
-            stringBuilder.Append("死亡成长：");
+            stringBuilder.Append("MX_ZL_DeathGrowth".Translate().ToString());
             if (deathCount <= 0)
             {
-                stringBuilder.Append("尚未积累成长层数。");
+                stringBuilder.Append("MX_ZL_NoGrowthStacks".Translate().ToString());
                 return stringBuilder.ToString();
             }
 

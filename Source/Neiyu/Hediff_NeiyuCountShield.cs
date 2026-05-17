@@ -198,7 +198,7 @@ namespace MiliraXian.Characters.Neiyu
                     PlayShieldBreakFx();
                     if (Pawn != null)
                     {
-                        Messages.Message("[" + Pawn.LabelShort + "] 护身进入增益阶段：不再蓄伤、也不再无敌。", Pawn, MessageTypeDefOf.NeutralEvent);
+                        Messages.Message("MX_NL_ShieldStage3BuffStarted".Translate(Pawn.LabelShort), Pawn, MessageTypeDefOf.NeutralEvent);
                     }
                 }
             }
@@ -464,7 +464,7 @@ namespace MiliraXian.Characters.Neiyu
                     return null;
                 }
 
-                string txt = "护身";
+                string txt = "MX_NL_ShieldDebugName".Translate().ToString();
                 if (stage == 1)
                 {
                     txt += " I";
@@ -479,21 +479,23 @@ namespace MiliraXian.Characters.Neiyu
                     if (IsInStage3AbsorbWindow(now))
                     {
                         int remainAbsorb = Math.Max(0, phase3AbsorbUntilTick - now);
-                        txt += " III-蓄伤 蓄伤:" + phase3StoredDamage.ToString("F0")
-                            + " 剩余:" + (remainAbsorb / 2500f).ToString("F1") + "h";
+                        txt += " " + "MX_NL_ShieldDebugStage3AbsorbLabel".Translate(
+                            phase3StoredDamage.ToString("F0"),
+                            (remainAbsorb / 2500f).ToString("F1")).ToString();
                     }
                     else
                     {
                         int remainBuff = Math.Max(0, phase3EndTick - now);
-                        txt += " III-增益 档位:" + GetStage3TierLabel()
-                            + " 剩余:" + (remainBuff / 2500f).ToString("F1") + "h";
+                        txt += " " + "MX_NL_ShieldDebugStage3BuffLabel".Translate(
+                            GetStage3TierLabel(),
+                            (remainBuff / 2500f).ToString("F1")).ToString();
                     }
                 }
 
                 if (InWeak)
                 {
                     int weakRemain = Math.Max(0, weakUntilTick - CurrentTick);
-                    txt += " [虚弱 " + (weakRemain / 2500f).ToString("F1") + "h]";
+                    txt += " " + "MX_NL_ShieldDebugWeakLabel".Translate((weakRemain / 2500f).ToString("F1")).ToString();
                 }
 
                 return txt;
@@ -505,17 +507,17 @@ namespace MiliraXian.Characters.Neiyu
             get
             {
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("阶段: " + stage + (InWeak ? " (虚弱中)" : ""));
+                sb.AppendLine("MX_NL_ShieldTipStage".Translate(stage, InWeak ? "MX_NL_ShieldTipWeakSuffix".Translate().ToString() : "").ToString());
 
                 if (stage == 2)
                 {
-                    sb.AppendLine("二阶段次数: " + phase2Charges + "/" + (InWeak ? Props.phase2MaxChargesWeak : Props.phase2MaxChargesNormal));
-                    sb.AppendLine("阈值: " + Props.phase2Threshold.ToString("F1"));
-                    sb.AppendLine("最近5次受击(伤害 -> 消耗次数):");
+                    sb.AppendLine("MX_NL_ShieldTipStage2Charges".Translate(phase2Charges, InWeak ? Props.phase2MaxChargesWeak : Props.phase2MaxChargesNormal).ToString());
+                    sb.AppendLine("MX_NL_ShieldTipThreshold".Translate(Props.phase2Threshold.ToString("F1")).ToString());
+                    sb.AppendLine("MX_NL_ShieldTipRecentHits".Translate().ToString());
                     EnsureRecentLogs();
                     if (phase2RecentHitLogs.Count == 0)
                     {
-                        sb.AppendLine("无");
+                        sb.AppendLine("MX_Common_None".Translate().ToString());
                     }
                     else
                     {
@@ -531,27 +533,27 @@ namespace MiliraXian.Characters.Neiyu
                     if (IsInStage3AbsorbWindow(now))
                     {
                         int remainAbsorb = Math.Max(0, phase3AbsorbUntilTick - now);
-                        sb.AppendLine("阶段3-蓄伤(无敌)");
-                        sb.AppendLine("蓄伤剩余: " + (remainAbsorb / 2500f).ToString("F1") + "h");
-                        sb.AppendLine("当前蓄伤: " + phase3StoredDamage.ToString("F1"));
-                        sb.AppendLine("增益将于蓄伤结束后开启。");
+                        sb.AppendLine("MX_NL_ShieldTipStage3Absorb".Translate().ToString());
+                        sb.AppendLine("MX_NL_ShieldTipAbsorbRemaining".Translate((remainAbsorb / 2500f).ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipStoredDamage".Translate(phase3StoredDamage.ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipBuffAfterAbsorb".Translate().ToString());
                     }
                     else
                     {
                         int remainBuff = Math.Max(0, phase3EndTick - now);
-                        sb.AppendLine("阶段3-增益(可受伤)");
-                        sb.AppendLine("增益剩余: " + (remainBuff / 2500f).ToString("F1") + "h");
-                        sb.AppendLine("锁定蓄伤: " + phase3StoredDamage.ToString("F1"));
-                        sb.AppendLine("当前档位: " + GetStage3TierLabel());
+                        sb.AppendLine("MX_NL_ShieldTipStage3Buff".Translate().ToString());
+                        sb.AppendLine("MX_NL_ShieldTipBuffRemaining".Translate((remainBuff / 2500f).ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipLockedDamage".Translate(phase3StoredDamage.ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipCurrentTier".Translate(GetStage3TierLabel()).ToString());
 
                         MXNeiyuStage3Profile profile;
                         if (TryGetStage3Profile(out profile))
                         {
                             string buffs = BuildStage3BuffLines(profile);
-                            sb.AppendLine("当前增益:");
+                            sb.AppendLine("MX_NL_ShieldTipCurrentBuffs".Translate().ToString());
                             if (buffs.NullOrEmpty())
                             {
-                                sb.AppendLine("无");
+                                sb.AppendLine("MX_Common_None".Translate().ToString());
                             }
                             else
                             {
@@ -564,8 +566,8 @@ namespace MiliraXian.Characters.Neiyu
                 if (InWeak)
                 {
                     int weakRemain = Math.Max(0, weakUntilTick - CurrentTick);
-                    sb.AppendLine("虚弱剩余: " + (weakRemain / 2500f).ToString("F1") + "h");
-                    sb.AppendLine("虚弱惩罚: 移速-50%，休息下降+50%，全局工作效率-80%");
+                    sb.AppendLine("MX_NL_ShieldTipWeakRemaining".Translate((weakRemain / 2500f).ToString("F1")).ToString());
+                    sb.AppendLine("MX_NL_ShieldTipWeakPenalty".Translate().ToString());
                 }
 
                 return sb.ToString().TrimEnd();
@@ -629,7 +631,7 @@ namespace MiliraXian.Characters.Neiyu
             EnterWeak(now);
             if (Pawn != null)
             {
-                Messages.Message("[" + Pawn.LabelShort + "] 护身第三阶段结束，进入虚弱。", Pawn, MessageTypeDefOf.CautionInput);
+                Messages.Message("MX_NL_ShieldStage3Ended".Translate(Pawn.LabelShort), Pawn, MessageTypeDefOf.CautionInput);
             }
         }
 
@@ -847,8 +849,8 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            string damageType = lethalOrDowning ? "致命/倒地" : "非致命";
-            string text = "[" + Pawn.LabelShort + "] 护身触发：判定为" + damageType + "伤害，进入第" + targetStage + "阶段。";
+            string damageType = lethalOrDowning ? "MX_NL_ShieldDamageTypeLethal".Translate().ToString() : "MX_NL_ShieldDamageTypeNonLethal".Translate().ToString();
+            string text = "MX_NL_ShieldTriggered".Translate(Pawn.LabelShort, damageType, targetStage).ToString();
             Messages.Message(text, Pawn, MessageTypeDefOf.NeutralEvent);
         }
 
@@ -940,49 +942,49 @@ namespace MiliraXian.Characters.Neiyu
             float outgoing = (profile.outgoingDamageFactor - 1f) * 100f;
             if (Mathf.Abs(outgoing) > 0.01f)
             {
-                sb.AppendLine("近战/远程伤害 +" + outgoing.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffOutgoingDamage".Translate(outgoing.ToString("F0")).ToString());
             }
 
             float aimReduce = (1f - profile.aimingDelayFactor) * 100f;
             if (Mathf.Abs(aimReduce) > 0.01f)
             {
-                sb.AppendLine("瞄准时间 " + (aimReduce >= 0f ? "-" : "+") + Mathf.Abs(aimReduce).ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffAimingTime".Translate(aimReduce >= 0f ? "-" : "+", Mathf.Abs(aimReduce).ToString("F0")).ToString());
             }
 
             float incomingReduce = (1f - profile.incomingDamageFactor) * 100f;
             if (Mathf.Abs(incomingReduce) > 0.01f)
             {
-                sb.AppendLine("承伤系数 " + (incomingReduce >= 0f ? "-" : "+") + Mathf.Abs(incomingReduce).ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffIncomingDamage".Translate(incomingReduce >= 0f ? "-" : "+", Mathf.Abs(incomingReduce).ToString("F0")).ToString());
             }
 
             float move = (profile.moveSpeedFactor - 1f) * 100f;
             if (Mathf.Abs(move) > 0.01f)
             {
-                sb.AppendLine("移速 +" + move.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffMoveSpeed".Translate(move.ToString("F0")).ToString());
             }
 
             float heal = (profile.injuryHealingFactor - 1f) * 100f;
             if (Mathf.Abs(heal) > 0.01f)
             {
-                sb.AppendLine("愈合速度 +" + heal.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffHealing".Translate(heal.ToString("F0")).ToString());
             }
 
             float armorPen = (profile.meleeArmorPenetrationFactor - 1f) * 100f;
             if (Mathf.Abs(armorPen) > 0.01f)
             {
-                sb.AppendLine("近战护甲穿透 +" + armorPen.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffMeleeArmorPen".Translate(armorPen.ToString("F0")).ToString());
             }
 
             float meleeDodge = (profile.meleeDodgeChanceFactor - 1f) * 100f;
             if (Mathf.Abs(meleeDodge) > 0.01f)
             {
-                sb.AppendLine("近战闪避 +" + meleeDodge.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffMeleeDodge".Translate(meleeDodge.ToString("F0")).ToString());
             }
 
             float rangedDodge = profile.rangedDodgeBonusPct * 100f;
             if (Mathf.Abs(rangedDodge) > 0.01f)
             {
-                sb.AppendLine("远程闪避 +" + rangedDodge.ToString("F0") + "%");
+                sb.AppendLine("MX_NL_ShieldBuffRangedDodge".Translate(rangedDodge.ToString("F0")).ToString());
             }
 
             return sb.ToString().TrimEnd();

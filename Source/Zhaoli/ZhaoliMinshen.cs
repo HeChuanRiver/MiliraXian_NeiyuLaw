@@ -114,7 +114,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (caster.Faction == Faction.OfPlayer)
                 {
-                    Messages.Message("因果不足，无法施放泯神。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaMinshen".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return;
@@ -155,7 +155,7 @@ namespace MiliraXian.Characters.Zhaoli
                     continue;
                 }
 
-                ApplyLifeLoss(pawn);
+                ApplyLifeLoss(caster, pawn);
 
                 bool applyDazed = !pawn.Downed && pawn.Awake() && Rand.Chance(Props.dazeChance);
                 if (applyDazed && TryApplyDazed(caster, pawn))
@@ -168,7 +168,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (caster.Spawned)
             {
-                MoteMaker.ThrowText(caster.DrawPos, caster.Map, "泯神", 3.65f);
+                MoteMaker.ThrowText(caster.DrawPos, caster.Map, "MX_ZL_MinshenMote".Translate().ToString(), 3.65f);
             }
         }
 
@@ -184,7 +184,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("因果不足，无法施放泯神。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaMinshen".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -276,7 +276,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
         }
 
-        private void ApplyLifeLoss(Pawn pawn)
+        private void ApplyLifeLoss(Pawn caster, Pawn pawn)
         {
             if (Props.damageHediff == null)
             {
@@ -286,6 +286,7 @@ namespace MiliraXian.Characters.Zhaoli
             Hediff hediff = pawn.health.GetOrAddHediff(Props.damageHediff);
             hediff?.TryGetComp<HediffComp_Disappears>()?.SetDuration(Props.damageDurationTicks);
             HediffComp_ZhaoliMinshenDamage damageComp = hediff?.TryGetComp<HediffComp_ZhaoliMinshenDamage>();
+            damageComp?.SetCaster(caster);
             damageComp?.ResetTimer();
             if (hediff != null)
             {
@@ -307,7 +308,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (!handler.TryStartMentalState(stateDef, "昭离的泯神使其失神。", forced: true, forceWake: true, causedByMood: false, otherPawn: caster, transitionSilently: false, causedByDamage: false, causedByPsycast: false))
+            if (!handler.TryStartMentalState(stateDef, "MX_ZL_MinshenMentalStateReason".Translate().ToString(), forced: true, forceWake: true, causedByMood: false, otherPawn: caster, transitionSilently: false, causedByDamage: false, causedByPsycast: false))
             {
                 return false;
             }
@@ -351,6 +352,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliMinshenDamage : HediffComp
     {
+        private Pawn caster;
         private int ticksUntilDamage;
 
         private HediffCompProperties_ZhaoliMinshenDamage PropsDamage => (HediffCompProperties_ZhaoliMinshenDamage)props;
@@ -363,6 +365,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompExposeData()
         {
+            Scribe_References.Look(ref caster, "caster");
             Scribe_Values.Look(ref ticksUntilDamage, "ticksUntilDamage", 0);
         }
 
@@ -388,6 +391,11 @@ namespace MiliraXian.Characters.Zhaoli
             ticksUntilDamage = PropsDamage.damageIntervalTicks;
         }
 
+        public void SetCaster(Pawn pawn)
+        {
+            caster = pawn;
+        }
+
         private void ApplyTorsoDamage()
         {
             if (PropsDamage.injuryHediff == null || Pawn?.health?.hediffSet == null)
@@ -401,14 +409,9 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            Hediff_Injury injury = HediffMaker.MakeHediff(PropsDamage.injuryHediff, Pawn, torso) as Hediff_Injury;
-            if (injury == null)
-            {
-                return;
-            }
-
-            injury.Severity = PropsDamage.damagePerTick;
-            Pawn.health.AddHediff(injury, torso);
+            DamageInfo dinfo = new DamageInfo(DamageDefOf.Blunt, PropsDamage.damagePerTick, 999f, -1f, caster, torso, null, DamageInfo.SourceCategory.ThingOrUnknown, Pawn, instigatorGuilty: false, spawnFilth: false);
+            dinfo.SetIgnoreArmor(true);
+            Pawn.TakeDamage(dinfo);
         }
 
         private static BodyPartRecord GetTorsoPart(Pawn pawn)

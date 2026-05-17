@@ -186,12 +186,12 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
 
-            var firstBarRect = DrawRow(inner, 6f, first, "激流", firstColor, source.FirstTickDeltaDirection);
-            var secondBarRect = DrawRow(inner, 38f, second, "雅乐", secondColor, source.SecondTickDeltaDirection, eleganceTargetPercent);
+            var firstBarRect = DrawRow(inner, 6f, first, "MX_QH_TempestFallbackLabel".Translate().ToString(), firstColor, source.FirstTickDeltaDirection);
+            var secondBarRect = DrawRow(inner, 38f, second, "MX_QH_EleganceFallbackLabel".Translate().ToString(), secondColor, source.SecondTickDeltaDirection, eleganceTargetPercent);
             var shieldBarRect = DrawShieldBar(inner, lotusShield, first, second);
 
-            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "激流"), GetStableTipId(FirstBarTipSalt));
-            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "雅乐", eleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
+            TooltipHandler.TipRegion(firstBarRect, () => BuildResourceBarTip(source.FirstComp, "MX_QH_TempestFallbackLabel".Translate().ToString()), GetStableTipId(FirstBarTipSalt));
+            TooltipHandler.TipRegion(secondBarRect, () => BuildResourceBarTip(source.SecondComp, "MX_QH_EleganceFallbackLabel".Translate().ToString(), eleganceTargetPercent), GetStableTipId(SecondBarTipSalt));
             TooltipHandler.TipRegion(shieldBarRect, () => BuildShieldBarTip(source.LotusShieldComp), GetStableTipId(ShieldBarTipSalt));
             return new GizmoResult(GizmoState.Clear);
         }
@@ -423,7 +423,7 @@ namespace MiliraXian.Characters.QingHe
             var tip = label + ": " + current.ToString("F0") + " / " + max.ToString("F0");
             if (targetPercent.HasValue)
             {
-                tip += "\n目标线: " + targetPercent.Value.ToStringPercent("F0");
+                tip += "\n" + "MX_QH_TargetLine".Translate(targetPercent.Value.ToStringPercent("F0"));
             }
 
             if (comp != null && !comp.ResourceDescription.NullOrEmpty())
@@ -438,7 +438,7 @@ namespace MiliraXian.Characters.QingHe
         {
             if (shield == null)
             {
-                return "护盾未激活";
+                return "MX_QH_ShieldInactive".Translate().ToString();
             }
 
             return shield.BuildShieldTooltip();

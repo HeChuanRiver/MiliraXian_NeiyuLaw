@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.Neiyu
             Text.Anchor = TextAnchor.MiddleCenter;
             var prev = GUI.color;
             GUI.color = new Color(1f, 0.6f, 0.6f, 0.9f + pulse * 0.1f);
-            Widgets.Label(badgeRect, "虚");
+            Widgets.Label(badgeRect, "MX_NL_WeakBadge".Translate());
             GUI.color = prev;
             Text.Anchor = TextAnchor.UpperLeft;
         }

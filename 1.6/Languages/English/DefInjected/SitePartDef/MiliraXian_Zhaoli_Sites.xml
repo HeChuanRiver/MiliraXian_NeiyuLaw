@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MXZL_ZhaoliHideoutSitePart.label>Hideout of the Nonexistent</MXZL_ZhaoliHideoutSitePart.label>
+  <MXZL_ZhaoliHideoutSitePart.description>A temporary refuge surfaced from a gap in reality. Zhaoli waits there for the caravan's answer.</MXZL_ZhaoliHideoutSitePart.description>
+  <MXZL_ZhaoliHideoutSitePart.approachOrderString>Travel to {0}</MXZL_ZhaoliHideoutSitePart.approachOrderString>
+  <MXZL_ZhaoliHideoutSitePart.approachingReportString>Traveling to {0}.</MXZL_ZhaoliHideoutSitePart.approachingReportString>
+  <MXZL_ZhaoliHideoutSitePart.arrivedLetter>Zhaoli is at the center of this map. She will not move and cannot be harmed, but she will remember the choice you make here.</MXZL_ZhaoliHideoutSitePart.arrivedLetter>
+</LanguageData>
