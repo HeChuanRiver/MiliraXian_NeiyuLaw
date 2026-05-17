@@ -171,4 +171,5 @@
   <MX_ZL_RaidCurrentPhase>Current phase:</MX_ZL_RaidCurrentPhase>
   <MX_ZL_RaidTransitionRemaining>Phase transition remaining:</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>Next warp:</MX_ZL_RaidNextWarp>
+  <MX_ZL_RaidPhaseTransitionStarted>{0} is shifting into phase {1}! She is invulnerable during the transition and gains {2} layers of Deathward Shield.</MX_ZL_RaidPhaseTransitionStarted>
 </LanguageData>

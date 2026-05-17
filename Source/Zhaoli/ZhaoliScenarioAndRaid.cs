@@ -407,6 +407,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (pawn.equipment.Primary != null && pawn.equipment.Primary.def == weaponDef)
             {
+                ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(pawn.equipment.Primary);
                 return;
             }
 
@@ -437,6 +438,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             pawn.equipment.AddEquipment(weapon);
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(weapon);
         }
 
         public static void EnsureDefaultClothing(Pawn pawn)
@@ -1978,8 +1980,20 @@ namespace MiliraXian.Characters.Zhaoli
             Pawn.jobs?.StopAll(false, true);
             Pawn.pather?.StopDead();
             Pawn.stances?.stunner?.StunFor(Mathf.Max(60, PropsRaid.transitionTicks), Pawn, addBattleLog: false, showMote: false);
+            NotifyPhaseTransitionStarted(shieldLayers);
             ActivateTransitionField();
             ZhaoliRaidDebugUtility.Log(Pawn, "TransitionShield", "phase=" + substituteDeathsUsed + " addedLayers=" + shieldLayers);
+        }
+
+        private void NotifyPhaseTransitionStarted(int shieldLayers)
+        {
+            if (Pawn == null)
+            {
+                return;
+            }
+
+            int displayPhase = Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1;
+            Messages.Message("MX_ZL_RaidPhaseTransitionStarted".Translate(Pawn.LabelShortCap, displayPhase, shieldLayers), Pawn, MessageTypeDefOf.ThreatBig, historical: true);
         }
 
         public void RegisterIncomingAggro(Thing instigator, float rawDamageAmount)
@@ -3462,6 +3476,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(__state);
             __instance.equipment.AddEquipment(__state);
         }
     }
