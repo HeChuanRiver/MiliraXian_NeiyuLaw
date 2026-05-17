@@ -171,4 +171,5 @@
   <MX_ZL_RaidCurrentPhase>当前阶段：</MX_ZL_RaidCurrentPhase>
   <MX_ZL_RaidTransitionRemaining>转阶段剩余：</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>下次跃迁：</MX_ZL_RaidNextWarp>
+  <MX_ZL_RaidPhaseTransitionStarted>{0}正在转入第{1}阶段！转阶段期间处于无敌状态，并获得{2}层讳亡护盾。</MX_ZL_RaidPhaseTransitionStarted>
 </LanguageData>
