@@ -139,6 +139,77 @@ namespace MiliraXian.Characters.Neiyu
         }
     }
 
+    [HarmonyPatch(typeof(Quest), nameof(Quest.Notify_SignalReceived))]
+    internal static class Patch_Quest_NotifySignalReceived_NeiyuRecruitFallback
+    {
+        private const string RecruitQuestDefName = "MXNL_NeiyuProjectionRecruitQuest";
+
+        public static void Prefix(Quest __instance, Signal signal)
+        {
+            if (__instance?.root?.defName != RecruitQuestDefName || signal.tag != __instance.InitiateSignal)
+            {
+                return;
+            }
+
+            RepairMissingRecruitPawn(__instance);
+        }
+
+        private static void RepairMissingRecruitPawn(Quest quest)
+        {
+            QuestPart_PawnsArrive arrivePart = null;
+            QuestPart_SetFaction setFactionPart = null;
+            List<QuestPart> parts = quest.PartsListForReading;
+            for (int index = 0; index < parts.Count; index++)
+            {
+                if (parts[index] is QuestPart_PawnsArrive pawnsArrive)
+                {
+                    arrivePart = pawnsArrive;
+                }
+                else if (parts[index] is QuestPart_SetFaction setFaction && setFaction.faction == Faction.OfPlayer)
+                {
+                    setFactionPart = setFaction;
+                }
+            }
+
+            if (arrivePart == null)
+            {
+                return;
+            }
+
+            arrivePart.pawns.RemoveAll(candidate => candidate == null || candidate.Destroyed);
+            if (arrivePart.pawns.Count > 0)
+            {
+                NeiyuRecruitUtility.EnsureRecruitPawnPersisted(arrivePart.pawns[0]);
+                EnsureSetFactionIncludesPawn(setFactionPart, arrivePart.pawns[0]);
+                return;
+            }
+
+            if (NeiyuRecruitUtility.NeiyuExistsAnywhere())
+            {
+                return;
+            }
+
+            Pawn pawn = NeiyuRecruitUtility.GenerateRecruitPawn();
+            if (pawn == null)
+            {
+                Log.Warning("[MiliraXian.Characters.Neiyu] Failed to repair Neiyu projection recruit quest because pawn generation returned null.");
+                return;
+            }
+
+            arrivePart.pawns.Add(pawn);
+            EnsureSetFactionIncludesPawn(setFactionPart, pawn);
+            Log.Message("[MiliraXian.Characters.Neiyu] Repaired a Neiyu projection recruit quest with a missing saved pawn before acceptance.");
+        }
+
+        private static void EnsureSetFactionIncludesPawn(QuestPart_SetFaction setFactionPart, Pawn pawn)
+        {
+            if (setFactionPart != null && pawn != null && !setFactionPart.things.Contains(pawn))
+            {
+                setFactionPart.things.Add(pawn);
+            }
+        }
+    }
+
     public class IncidentWorker_NeiyuProjectionRecruit : IncidentWorker
     {
         private const int MinDaysPassed = 8;
@@ -916,7 +987,26 @@ namespace MiliraXian.Characters.Neiyu
             Pawn pawn = PawnGenerator.GeneratePawn(request);
             NeiyuEquipmentUtility.EnsureDefaultLoadout(pawn);
             NeiyuEquipmentUtility.MarkForLoadoutStabilization(pawn);
+            EnsureRecruitPawnPersisted(pawn);
             return pawn;
+        }
+
+        public static void EnsureRecruitPawnPersisted(Pawn pawn)
+        {
+            if (pawn == null)
+            {
+                return;
+            }
+
+            if (QuestGen.Working)
+            {
+                QuestGen.AddToGeneratedPawns(pawn);
+            }
+
+            if (!pawn.Spawned && !pawn.IsWorldPawn())
+            {
+                Find.WorldPawns.PassToWorld(pawn);
+            }
         }
 
         private static Faction ResolveAncientsFaction()

@@ -1674,8 +1674,83 @@ namespace MiliraXian.Characters.Zhaoli
 
             Hediff hediff = hideoutPawn.health.GetOrAddHediff(MXZL_ZhaoliDefOf.MXZL_ZhaoliHideoutState);
             hideoutPawn.health.Notify_HediffChanged(hediff);
-            IntVec3 spawnCell = CellFinder.RandomClosewalkCellNear(map.Center, map, 8);
+            if (!TryResolveHideoutSpawnCell(map, out IntVec3 spawnCell))
+            {
+                Log.Error("[MiliraXian.Characters.Zhaoli] Failed to find a valid spawn cell for Zhaoli hideout on map " + map);
+                return;
+            }
+
             GenSpawn.Spawn(hideoutPawn, spawnCell, map);
+        }
+
+        private static bool TryResolveHideoutSpawnCell(Map map, out IntVec3 spawnCell)
+        {
+            spawnCell = IntVec3.Invalid;
+            if (map == null)
+            {
+                return false;
+            }
+
+            IntVec3 root = map.Center;
+            if (IsValidHideoutSpawnCell(root, map, requireMapEdgeReachable: true))
+            {
+                spawnCell = root;
+                return true;
+            }
+
+            int[] radii = { 8, 16, 32, 48, 64 };
+            for (int i = 0; i < radii.Length; i++)
+            {
+                if (CellFinder.TryRandomClosewalkCellNear(root, map, radii[i], out spawnCell, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: true)))
+                {
+                    return true;
+                }
+            }
+
+            if (TryFindNearestHideoutSpawnCell(map, root, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: true), out spawnCell))
+            {
+                return true;
+            }
+
+            return TryFindNearestHideoutSpawnCell(map, root, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: false), out spawnCell);
+        }
+
+        private static bool TryFindNearestHideoutSpawnCell(Map map, IntVec3 root, Predicate<IntVec3> validator, out IntVec3 result)
+        {
+            result = IntVec3.Invalid;
+            int bestDistance = int.MaxValue;
+            for (int x = 0; x < map.Size.x; x++)
+            {
+                for (int z = 0; z < map.Size.z; z++)
+                {
+                    IntVec3 cell = new IntVec3(x, 0, z);
+                    if (!validator(cell))
+                    {
+                        continue;
+                    }
+
+                    int distance = (cell - root).LengthHorizontalSquared;
+                    if (distance >= bestDistance)
+                    {
+                        continue;
+                    }
+
+                    bestDistance = distance;
+                    result = cell;
+                }
+            }
+
+            return result.IsValid;
+        }
+
+        private static bool IsValidHideoutSpawnCell(IntVec3 cell, Map map, bool requireMapEdgeReachable)
+        {
+            if (!cell.IsValid || !cell.InBounds(map) || !cell.Standable(map) || map.thingGrid.CellContains(cell, ThingCategory.Pawn))
+            {
+                return false;
+            }
+
+            return !requireMapEdgeReachable || map.reachability.CanReachMapEdge(cell, TraverseParms.For(TraverseMode.PassDoors));
         }
 
         public bool TryDeliverHerbs(Pawn interactor)
