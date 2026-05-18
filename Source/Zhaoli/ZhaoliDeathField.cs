@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -21,6 +22,7 @@ namespace MiliraXian.Characters.Zhaoli
         private static readonly Color PreviewColor = new Color(0.48f, 0.08f, 0.1f);
 
         private new CompProperties_AbilityZhaoliDeathField Props => (CompProperties_AbilityZhaoliDeathField)props;
+        public float PropsRadius => Props.radius;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -85,6 +87,36 @@ namespace MiliraXian.Characters.Zhaoli
         public HediffCompProperties_ZhaoliDeathField()
         {
             compClass = typeof(HediffComp_ZhaoliDeathField);
+        }
+    }
+
+    [HarmonyPatch(typeof(Stance_Warmup), nameof(Stance_Warmup.StanceDraw))]
+    internal static class Patch_ZhaoliDeathFieldWarmup_StanceDraw
+    {
+        private const float WarningPulseCyclesPerSecond = 2f;
+        private static readonly Color WarningColorDim = new Color(0.25f, 0f, 0.1f);
+        private static readonly Color WarningColorBright = new Color(0.46f, 0.04f, 0.04f);
+
+        private static void Postfix(Stance_Warmup __instance)
+        {
+            Verb_CastAbility verb = __instance?.verb as Verb_CastAbility;
+            Ability ability = verb?.Ability;
+            Pawn caster = verb?.CasterPawn;
+            if (ability?.def != MXZL_ZhaoliDefOf.MX_Zhaoli_DeathField || caster == null || caster.Faction == Faction.OfPlayer)
+            {
+                return;
+            }
+
+            LocalTargetInfo target = __instance.focusTarg;
+            if (!target.IsValid)
+            {
+                return;
+            }
+
+            float radius = ability.CompOfType<CompAbilityEffect_ZhaoliDeathField>()?.PropsRadius ?? ZhaoliScenarioUtility.DeathFieldEvaluationRadius;
+            float phase = Find.TickManager.TicksGame / (float)GenTicks.TicksPerRealSecond * WarningPulseCyclesPerSecond * Mathf.PI * 2f;
+            float pulse = (Mathf.Sin(phase) + 1f) * 0.5f;
+            GenDraw.DrawRadiusRing(target.Cell, radius, Color.Lerp(WarningColorDim, WarningColorBright, pulse));
         }
     }
 
