@@ -21,6 +21,27 @@ namespace MiliraXian.Characters.Zhaoli
             return pawn?.kindDef?.defName == ZhaoliPawnKindDefName;
         }
 
+        public static void ResetNoCooldownAbilityLocks(Pawn pawn)
+        {
+            if (pawn?.abilities == null)
+            {
+                return;
+            }
+
+            ResetNoCooldownAbilityLock(pawn, "MX_Zhaoli_Guiyi");
+            ResetNoCooldownAbilityLock(pawn, "MX_Zhaoli_Minshen");
+        }
+
+        private static void ResetNoCooldownAbilityLock(Pawn pawn, string abilityDefName)
+        {
+            AbilityDef abilityDef = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
+            Ability ability = abilityDef == null ? null : pawn.abilities.GetAbility(abilityDef, includeTemporary: true);
+            if (ability != null && !ability.HasCooldown)
+            {
+                ability.ResetCooldown();
+            }
+        }
+
         public static HediffComp_PawnSpecialResource GetKarmaComp(Pawn pawn)
         {
             return GetKarmaHediff(pawn)?.GetComp<HediffComp_PawnSpecialResource>();
@@ -268,6 +289,7 @@ namespace MiliraXian.Characters.Zhaoli
             ZhaoliShieldLayerUtility.EnsureShieldComp(__instance);
             ZhaoliRebirthUtility.EnsureRebirthComp(__instance);
             ZhaoliDingshuUtility.EnsureDingshuAbility(__instance);
+            ZhaoliKarmaUtility.ResetNoCooldownAbilityLocks(__instance);
             ZhaoliKarmaUtility.RemoveLegacyShield(__instance);
         }
     }
