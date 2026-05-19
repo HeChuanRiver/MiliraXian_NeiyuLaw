@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.QingHe
         protected override ThingDef FieldDef => Props?.fieldDef;
         protected override int DurationTicks => Props?.fieldDurationTicks ?? 1;
         protected override IntVec3 SpawnPosition => pawn.Position;
-        protected override string ChannelReport => "Casting YangChun";
+        protected override string ChannelReport => "MX_QH_ReportYangChun".Translate().ToString();
 
         protected override bool ValidateSpawn(out JobCondition failCondition)
         {

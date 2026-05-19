@@ -31,7 +31,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinshenDamage</defName>
         <label>&lt;color=#E85A7A&gt;泯神蚀命&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;泯神&lt;/color&gt;持续蚕食目标生命，每秒对其躯干造成1点伤害，持续5秒。</description>
+        <description>&lt;color=#E85A7A&gt;泯神&lt;/color&gt;持续蚕食目标生命，每秒对其躯干造成1点无视护甲的钝击伤害，持续5秒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.74, 0.06, 0.16)</defaultLabelColor>
         <isBad>true</isBad>

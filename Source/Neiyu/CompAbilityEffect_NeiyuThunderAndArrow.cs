@@ -51,7 +51,7 @@ namespace MiliraXian.Characters.Neiyu
             int marked = component.ScheduleThunderMarks(caster, target.Cell, Props);
             if (marked <= 0)
             {
-                Messages.Message("[Neiyu] 范围内没有可标记目标。", caster, MessageTypeDefOf.RejectInput);
+                Messages.Message("MX_NL_NoMarkTargetsInRange".Translate(), caster, MessageTypeDefOf.RejectInput);
             }
         }
 
@@ -111,13 +111,13 @@ namespace MiliraXian.Characters.Neiyu
         {
             if (!HasRequiredWeapon(parent != null ? parent.pawn : null))
             {
-                reason = "[Neiyu] 需要装备弓形态。";
+                reason = "MX_NL_NeedBowForm".Translate().ToString();
                 return true;
             }
 
             if (Props.projectileDef == null)
             {
-                reason = "[Neiyu] projectileDef 未配置。";
+                reason = "MX_NL_ProjectileDefMissing".Translate().ToString();
                 return true;
             }
 
@@ -132,7 +132,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] 需要装备弓形态。", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_NeedBowForm".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }
@@ -141,7 +141,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] 需要选择一个目标地点。", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_NeedTargetCell".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }

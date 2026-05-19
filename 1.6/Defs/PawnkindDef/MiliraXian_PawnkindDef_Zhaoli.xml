@@ -9,7 +9,7 @@
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
-        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <defaultFactionType>Ancients</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -17,6 +17,8 @@
         </xenotypeSet>
         <!-- raid point / combatpower = number of this pawn could spawn in raid 袭击点数/战斗力=袭击来袭时可以生成多少个这个pawn -->
         <combatPower>0</combatPower>
+        <appearsRandomlyInCombatGroups>false</appearsRandomlyInCombatGroups>
+        <maxPerGroup>0</maxPerGroup>
         <!-- item quality when spawnd 生成时她的身上全部的带有品质的thing的品质 -->
         <itemQuality>Excellent</itemQuality>
         <!-- 是否为战斗人员 -->

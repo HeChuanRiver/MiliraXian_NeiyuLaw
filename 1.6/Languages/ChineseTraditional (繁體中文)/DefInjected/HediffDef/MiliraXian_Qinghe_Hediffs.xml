@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Tempest.label>激流</MX_QH_Tempest.label>
+  <MX_QH_Tempest.description>清荷的專屬資源。透過使用技能積累，可用於抵消傷害或發動強力技能。</MX_QH_Tempest.description>
+  <MX_QH_Tempest.comps.0.resourceLabel>激流</MX_QH_Tempest.comps.0.resourceLabel>
+  <MX_QH_Tempest.comps.0.resourceDescription>清荷的專屬資源。透過使用技能積累，可用於抵消傷害或發動強力技能。</MX_QH_Tempest.comps.0.resourceDescription>
+  <MX_QH_Elegance.label>雅樂</MX_QH_Elegance.label>
+  <MX_QH_Elegance.description>清荷的專屬資源。透過戰鬥和使用技能積累，可用於強化自身技能並使激流回復速度提升。</MX_QH_Elegance.description>
+  <MX_QH_Elegance.comps.0.resourceLabel>雅樂</MX_QH_Elegance.comps.0.resourceLabel>
+  <MX_QH_Elegance.comps.0.resourceDescription>清荷的專屬資源。透過戰鬥和使用技能積累，可用於強化自身技能並使激流回復速度提升。</MX_QH_Elegance.comps.0.resourceDescription>
+  <MX_QH_LongBreath.label>長息</MX_QH_LongBreath.label>
+  <MX_QH_LongBreath.description>受到致命傷害或摧毀身體部件的傷害時，若激流值大於0，抵消此次傷害、修復自身所有損傷並清空激流值，同時獲得短暫無敵和心靈隱形。</MX_QH_LongBreath.description>
+  <MX_QH_LongBreathDamageImmunity.label>長息湧流</MX_QH_LongBreathDamageImmunity.label>
+  <MX_QH_LongBreathDamageImmunity.description>長息觸發後獲得的短暫免疫傷害效果。</MX_QH_LongBreathDamageImmunity.description>
+  <MX_QH_SpringRegen.label>清流</MX_QH_SpringRegen.label>
+  <MX_QH_SpringRegen.description>每隔一小段時間，自動治癒一定生命值的傷口。</MX_QH_SpringRegen.description>
+  <MX_QH_LotusShield.label>花神護體</MX_QH_LotusShield.label>
+  <MX_QH_LotusShield.description>清荷受到十二花神的眷顧，能在身邊自然產生護盾。自身的激流屬性越高，每點護盾的承傷越高；自身的雅樂屬性越高，每秒回復的護盾值越多。\n\n護盾被擊碎時會失效20秒。</MX_QH_LotusShield.description>
+  <MX_QH_QingheStatusGizmo.label>清荷狀態顯示</MX_QH_QingheStatusGizmo.label>
+  <MX_QH_QingheStatusGizmo.description>隱藏 Hediff：用於顯示清荷狀態 Gizmo。</MX_QH_QingheStatusGizmo.description>
+  <MX_QH_Elegance_DuanHunSlow.label>斷魂遲滯</MX_QH_Elegance_DuanHunSlow.label>
+  <MX_QH_Elegance_DuanHunSlow.description>行動被斷魂音律拖滯。</MX_QH_Elegance_DuanHunSlow.description>
+  <MX_QH_Elegance_YangChunAlly.label>陽春和聲</MX_QH_Elegance_YangChunAlly.label>
+  <MX_QH_Elegance_YangChunAlly.description>沐浴在陽春樂意中，步伐與心境被調諧。</MX_QH_Elegance_YangChunAlly.description>
+  <MX_QH_Elegance_YangChunEnemy.label>陽春抑拍</MX_QH_Elegance_YangChunEnemy.label>
+  <MX_QH_Elegance_YangChunEnemy.description>被音場壓制，行動節奏紊亂。</MX_QH_Elegance_YangChunEnemy.description>
+  <MX_SpringFlow.label>春泉洗禮</MX_SpringFlow.label>
+  <MX_SpringFlow.description>受到清荷湧泉的洗禮，獲得攻防強化與疼痛緩解。</MX_SpringFlow.description>
+  <MX_AquaMirror.label>鏡華</MX_AquaMirror.label>
+  <MX_AquaMirror.description>受到水鏡庇護。水鏡消失時，會治療攜帶者並反擊附近敵人。</MX_AquaMirror.description>
+  <MX_Draining.label>水循環斷流</MX_Draining.label>
+  <MX_Draining.description>內部的液體被強制抽出，若不加以干預將很快因脫水而死亡。</MX_Draining.description>
+  <MX_DryCorpse.label>脫水</MX_DryCorpse.label>
+  <MX_DryCorpse.description>一具水分被抽乾的屍體，永遠不會腐爛或風乾。似乎受到了某種超自然力量的影響。</MX_DryCorpse.description>
+  <MX_DehydrateDamage.label>水循環紊亂</MX_DehydrateDamage.label>
+  <MX_DehydrateDamage.description>內部的部分流體行為被干擾，導致循環系統異常或機械故障。</MX_DehydrateDamage.description>
+  <MX_QH_Desynced.label>離弦</MX_QH_Desynced.label>
+  <MX_QH_Desynced.description>受到清荷所持樂器產生的共振擾亂，行動節奏與瞄準節奏被打亂，移動速度和射擊精準度顯著下降。</MX_QH_Desynced.description>
+</LanguageData>

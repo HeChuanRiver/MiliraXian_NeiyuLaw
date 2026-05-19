@@ -29,7 +29,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public override string SettingsCategory()
         {
-            return "米莉拉角色拓展";
+            return "MX_NL_ModSettingsTitle".Translate().ToString();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -37,9 +37,9 @@ namespace MiliraXian.Characters.Neiyu
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(inRect);
             listing.CheckboxLabeled(
-                "启用角色接入特殊角色管理器",
+                "MX_NL_EnableSpecialPawnIntegrationLabel".Translate().ToString(),
                 ref Settings.EnableAriandelSpecialPawnIntegration,
-                "启用后，霓羽、昭离、清荷在加入玩家派系或读档巡检时，会被注册进 Ariandel 的特殊角色管理器，避免因未注册而被唯一角色限制器清理。");
+                "MX_NL_EnableSpecialPawnIntegrationDesc".Translate().ToString());
             listing.End();
         }
     }

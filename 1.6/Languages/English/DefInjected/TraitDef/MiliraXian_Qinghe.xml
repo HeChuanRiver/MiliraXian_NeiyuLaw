@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.label>Long Breath</MX_QH_Trait_LongBreath.degreeDatas.0.label>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.description>When taking lethal damage or damage that would destroy a body part, if Tempest is above 0, negate the damage, repair all injuries, empty Tempest, and gain brief psychic invisibility.</MX_QH_Trait_LongBreath.degreeDatas.0.description>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>Water Fairy</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>Qinghe's innate water-spirit protection. Includes Long Breath, Clear Flow, and Lotus Guardian: Long Breath triggers against lethal or part-destroying damage, negating the hit and repairing all injuries; Clear Flow automatically heals 2.5 HP of wounds every 180 ticks; Lotus Guardian provides a regenerating shield whose damage capacity scales with Tempest and whose regeneration scales with Elegance. The shield is disabled for 10 seconds after breaking.</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+</LanguageData>

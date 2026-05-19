@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MXZL_ZhaoliDeathFieldActive.label>&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;</MXZL_ZhaoliDeathFieldActive.label>
+  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;維持中的&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;，會持續壓制範圍內除自身外的一切單位。目標離開範圍後，告死倒計時會立即清零。</MXZL_ZhaoliDeathFieldActive.description>
+  <MXZL_ZhaoliDeathFieldSlow.label>&lt;color=#B86CFF&gt;告死滯壓&lt;/color&gt;</MXZL_ZhaoliDeathFieldSlow.label>
+  <MXZL_ZhaoliDeathFieldSlow.description>身處&lt;color=#B86CFF&gt;告死流場&lt;/color&gt;之中，行動會被明顯壓制，難以脫離這片&lt;color=#C9A2FF&gt;黑紅領域&lt;/color&gt;。</MXZL_ZhaoliDeathFieldSlow.description>
+  <MXZL_ZhaoliDormancy.label>&lt;color=#C77DFF&gt;諸事無常·沉眠&lt;/color&gt;</MXZL_ZhaoliDormancy.label>
+  <MXZL_ZhaoliDormancy.description>因果溢出後引發的&lt;color=#C77DFF&gt;強制沉眠&lt;/color&gt;。&lt;color=#E85A7A&gt;昭離&lt;/color&gt;會持續陷入沉睡狀態，無法正常行動，直到三十日後才會自然甦醒。</MXZL_ZhaoliDormancy.description>
+  <MXZL_ZhaoliKarma.label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</MXZL_ZhaoliKarma.label>
+  <MXZL_ZhaoliKarma.description>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;專屬資源。透過&lt;color=#C77DFF&gt;告死&lt;/color&gt;處決積累，並由後續主動技能進行消耗。該 Hediff 還會記錄當前已經建立的&lt;color=#D66BFF&gt;因果連結&lt;/color&gt;名單。</MXZL_ZhaoliKarma.description>
+  <MXZL_ZhaoliKarma.comps.0.resourceLabel>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</MXZL_ZhaoliKarma.comps.0.resourceLabel>
+  <MXZL_ZhaoliKarma.comps.0.resourceDescription>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;專屬資源。每次成功&lt;color=#C77DFF&gt;告死&lt;/color&gt;都會增加因果，後續主動技能會消耗因果。該資源超過&lt;color=#E85A7A&gt;100點&lt;/color&gt;時，會優先嘗試把溢出的因果分攤給已連結者。</MXZL_ZhaoliKarma.comps.0.resourceDescription>
+  <MXZL_ZhaoliKarmaLink.label>&lt;color=#E85A7A&gt;因果相連&lt;/color&gt;</MXZL_ZhaoliKarmaLink.label>
+  <MXZL_ZhaoliKarmaLink.description>該目標與&lt;color=#E85A7A&gt;昭離&lt;/color&gt;建立了&lt;color=#D66BFF&gt;因果連結&lt;/color&gt;。連結持續30天，在此期間可為昭離承擔溢出的因果，或在昭離死亡時替其赴死。</MXZL_ZhaoliKarmaLink.description>
+  <MXZL_ZhaoliOverflowKarma.label>&lt;color=#B86CFF&gt;代償因果&lt;/color&gt;</MXZL_ZhaoliOverflowKarma.label>
+  <MXZL_ZhaoliOverflowKarma.description>該目標正在替&lt;color=#E85A7A&gt;昭離&lt;/color&gt;承擔一層溢出的&lt;color=#B86CFF&gt;因果&lt;/color&gt;。在這層因果消失之前，無法再次替昭離承擔新的溢出因果。</MXZL_ZhaoliOverflowKarma.description>
+  <MXZL_ZhaoliMinghuo.label>&lt;color=#FF6A6A&gt;冥火附武&lt;/color&gt;</MXZL_ZhaoliMinghuo.label>
+  <MXZL_ZhaoliMinghuo.description>&lt;color=#E85A7A&gt;冥火&lt;/color&gt;與死者因果附著於昭離的武器之上。附魔期間，當前綁定武器的傷害、破甲、命中與攻擊速度提升至原本的&lt;color=#FF6A6A&gt;1.5倍&lt;/color&gt;，攻擊距離增加2格，並在近戰命中時額外附帶&lt;color=#FF8A66&gt;火焰傷害&lt;/color&gt;。</MXZL_ZhaoliMinghuo.description>
+  <MXZL_ZhaoliMinshenSlow.label>&lt;color=#C77DFF&gt;泯神壓制&lt;/color&gt;</MXZL_ZhaoliMinshenSlow.label>
+  <MXZL_ZhaoliMinshenSlow.description>&lt;color=#C77DFF&gt;泯神&lt;/color&gt;壓制了該目標的行動能力，使其移動速度僅剩原本的20%。</MXZL_ZhaoliMinshenSlow.description>
+  <MXZL_ZhaoliMinshenDamage.label>&lt;color=#E85A7A&gt;泯神蝕命&lt;/color&gt;</MXZL_ZhaoliMinshenDamage.label>
+  <MXZL_ZhaoliMinshenDamage.description>&lt;color=#E85A7A&gt;泯神&lt;/color&gt;持續蠶食目標生命，每秒對其軀幹造成1點無視護甲的鈍擊傷害，持續5秒。</MXZL_ZhaoliMinshenDamage.description>
+  <MXZL_ZhaoliRebirth.label>&lt;color=#D9574E&gt;歸亡者&lt;/color&gt;</MXZL_ZhaoliRebirth.label>
+  <MXZL_ZhaoliRebirth.description>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;的死亡將被暫時接納。死亡後屍體會消失，並在&lt;color=#C77DFF&gt;十日後&lt;/color&gt;於玩家基地隨機位置歸來。</MXZL_ZhaoliRebirth.description>
+  <MXZL_ZhaoliDingshuMark.label>&lt;color=#C9A2FF&gt;定數標記&lt;/color&gt;</MXZL_ZhaoliDingshuMark.label>
+  <MXZL_ZhaoliDingshuMark.description>該目標曾經被昭離以&lt;color=#C9A2FF&gt;定數&lt;/color&gt;強行拉回生界。標記持續期間若再次死亡，將無法再被復活。</MXZL_ZhaoliDingshuMark.description>
+  <MXZL_ZhaoliHideoutState.label>昭離藏身狀態</MXZL_ZhaoliHideoutState.label>
+  <MXZL_ZhaoliHideoutState.description>昭離劇情藏身點使用的臨時狀態，使其停留在原地等待互動。</MXZL_ZhaoliHideoutState.description>
+  <MXZL_ZhaoliRaidState.label>昭離襲擊狀態</MXZL_ZhaoliRaidState.label>
+  <MXZL_ZhaoliRaidState.description>敵對昭離襲擊殖民地時使用的臨時狀態，記錄階段、仇恨、轉階段和襲擊行為。</MXZL_ZhaoliRaidState.description>
+  <MXZL_ZhaoliShieldLayers.label>&lt;color=#D66BFF&gt;諱亡護盾&lt;/color&gt;</MXZL_ZhaoliShieldLayers.label>
+  <MXZL_ZhaoliShieldLayers.description>昭離每次透過&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸納一個單位，都會獲得5層&lt;color=#B86CFF&gt;諱亡護盾&lt;/color&gt;。護盾可免疫一次傷害，並在命中時消耗1層。持續傷害每次生效也會持續消耗層數。</MXZL_ZhaoliShieldLayers.description>
+</LanguageData>

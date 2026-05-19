@@ -223,23 +223,23 @@
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
                 <uniqueID>Qinghe</uniqueID>
 
-                <!-- The tab you want to put this pawn in. MI_Milira_Tab is Milira.
-                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 -->
-                <tabDef>MI_Milira_Tab</tabDef>
+<!--                &lt;!&ndash; The tab you want to put this pawn in. MI_Milira_Tab is Milira.-->
+<!--                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 &ndash;&gt;-->
+<!--                <tabDef>MI_Milira_Tab</tabDef>-->
 
-                <!-- The texture path for character icon in SCM. You may use 256px picture.
-                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 -->
-                <!-- TODO: Replace for QingHe's Portrait -->
-                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+<!--                &lt;!&ndash; The texture path for character icon in SCM. You may use 256px picture.-->
+<!--                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 &ndash;&gt;-->
+<!--                &lt;!&ndash; TODO: Replace for QingHe's Portrait &ndash;&gt;-->
+<!--                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>-->
 
-                <!-- Key for this pawn's name. 用于写此人的姓名的Key。 -->
-                <labelKey>SpecialPawnQinghe.label</labelKey>
-                <!-- Key for this pawn's description. 用于写此人描述的Key。 -->
-                <descKey>SpecialPawnQinghe.desc</descKey>
+<!--                &lt;!&ndash; Key for this pawn's name. 用于写此人的姓名的Key。 &ndash;&gt;-->
+<!--                <labelKey>SpecialPawnQinghe.label</labelKey>-->
+<!--                &lt;!&ndash; Key for this pawn's description. 用于写此人描述的Key。 &ndash;&gt;-->
+<!--                <descKey>SpecialPawnQinghe.desc</descKey>-->
 
-                <!-- The sorting position of this pawn’s icon within the tab you selected.
-                 这个角色的图标在你所选的分页（Tab）的排序位置 -->
-                <order>13</order>
+<!--                &lt;!&ndash; The sorting position of this pawn’s icon within the tab you selected.-->
+<!--                 这个角色的图标在你所选的分页（Tab）的排序位置 &ndash;&gt;-->
+<!--                <order>13</order>-->
             </li>
 
             <!-- The classes upon must be included!!! ↑↑↑ -->

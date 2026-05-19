@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.label>长息</MX_QH_Trait_LongBreath.degreeDatas.0.label>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.description>受到致命伤害或摧毁身体部件的伤害时，若激流值大于0，抵消此次伤害、修复自身所有损伤并清空激流值，同时获得短暂心灵隐形。</MX_QH_Trait_LongBreath.degreeDatas.0.description>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>水中仙</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>清荷与生俱来的水灵加护。自带“长息”“清流”与“花神护体”效果：长息会在遭受致命伤害或将摧毁部位的伤害时触发，抵消伤害并修复全身损伤；清流每180 ticks自动治愈2.5生命值伤口；花神护体提供可回复护盾，激流越高单点护盾承伤越高，雅乐越高护盾回复越快，护盾被击碎后会失效10秒。</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+</LanguageData>

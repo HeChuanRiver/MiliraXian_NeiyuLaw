@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Common_None>none</MX_Common_None>
+  <MX_Common_ResourceNotEnough>Not enough resource.</MX_Common_ResourceNotEnough>
+  <MX_Common_ResourceOverflowing>The current value is above its maximum.</MX_Common_ResourceOverflowing>
+  <MX_Common_Unknown>unknown</MX_Common_Unknown>
+  <MX_Common_UnknownTarget>unknown target</MX_Common_UnknownTarget>
+
+  <MX_ModeSwitch_CommandLabel>Switch form</MX_ModeSwitch_CommandLabel>
+  <MX_ModeSwitch_CommandDesc>Switch to another form.</MX_ModeSwitch_CommandDesc>
+  <MX_ModeSwitch_CommandLabelWithForm>{0}: {1}</MX_ModeSwitch_CommandLabelWithForm>
+  <MX_ModeSwitch_CommandFullDesc>{0}&#10;&#10;Current: {1}&#10;Click to choose the target form.</MX_ModeSwitch_CommandFullDesc>
+  <MX_ModeSwitch_Cooldown>On cooldown: {0}s</MX_ModeSwitch_Cooldown>
+  <MX_ModeSwitch_NoTargetForm>No target form is available.</MX_ModeSwitch_NoTargetForm>
+  <MX_ModeSwitch_TargetFormMissing>Target form is not configured.</MX_ModeSwitch_TargetFormMissing>
+  <MX_ModeSwitch_TargetFormInvalidThing>Target form is not a valid thing: {0}</MX_ModeSwitch_TargetFormInvalidThing>
+  <MX_ModeSwitch_NoEquipmentTracker>This pawn has no equipment tracker.</MX_ModeSwitch_NoEquipmentTracker>
+  <MX_ModeSwitch_NoInventoryTracker>This pawn has no inventory tracker.</MX_ModeSwitch_NoInventoryTracker>
+
+  <MX_NL_ModSettingsTitle>Milira Character Expansion</MX_NL_ModSettingsTitle>
+  <MX_NL_EnableSpecialPawnIntegrationLabel>Register characters with the special pawn manager</MX_NL_EnableSpecialPawnIntegrationLabel>
+  <MX_NL_EnableSpecialPawnIntegrationDesc>When enabled, Neiyu, Zhaoli, and Qinghe are registered with Ariandel's special pawn manager when they join the player faction or during save-load checks, preventing the unique character limiter from removing them because they were not registered.</MX_NL_EnableSpecialPawnIntegrationDesc>
+  <MX_NL_NeedFlowerForm>Requires flower form.</MX_NL_NeedFlowerForm>
+  <MX_NL_NeedSwordForm>Requires sword form.</MX_NL_NeedSwordForm>
+  <MX_NL_NeedBowForm>Requires bow form.</MX_NL_NeedBowForm>
+  <MX_NL_ProjectileDefMissing>projectileDef is not configured.</MX_NL_ProjectileDefMissing>
+  <MX_NL_NeedTargetCell>Select a target location.</MX_NL_NeedTargetCell>
+  <MX_NL_NoMarkTargetsInRange>No markable targets in range.</MX_NL_NoMarkTargetsInRange>
+  <MX_NL_NoValidAllyInRange>No valid allied target in range.</MX_NL_NoValidAllyInRange>
+  <MX_NL_NoHostileInRange>No hostile target in range.</MX_NL_NoHostileInRange>
+  <MX_NL_SkyfallInProgress>Skyfall is already in progress.</MX_NL_SkyfallInProgress>
+  <MX_NL_MustTargetPawn>You must target a pawn.</MX_NL_MustTargetPawn>
+  <MX_NL_TargetMustBeHostile>The target must be hostile.</MX_NL_TargetMustBeHostile>
+  <MX_NL_FlowerToxinMentalStateReason>Neiyu's flower miasma drove them into a frenzy.</MX_NL_FlowerToxinMentalStateReason>
+  <MX_NL_RecruitLetterTitle>Otherworldly Feather Shadow</MX_NL_RecruitLetterTitle>
+  <MX_NL_RecruitLetterText>A stable feather-shaped projection has appeared near the colony. The newcomer calls herself Neiyu. She is not the original, but a lively shadow cast into this world by a Milira. Rather than some lofty divine fragment, she feels more like a laughing breeze that wandered in. She says she can stay, or fade away here. The choice is yours.</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitAccept>Accept Neiyu</MX_NL_RecruitAccept>
+  <MX_NL_RecruitReject>Not now</MX_NL_RecruitReject>
+  <MX_NL_NoPlayerHomeMap>No player home map is available.</MX_NL_NoPlayerHomeMap>
+  <MX_NL_RecruitJoined>Neiyu has decided to remain in this world and has joined your colony.</MX_NL_RecruitJoined>
+  <MX_NL_RecruitDeferred>The feather shadow fades for now. If the connection remains, she may appear again later.</MX_NL_RecruitDeferred>
+  <MX_NL_WeakBadge>W</MX_NL_WeakBadge>
+  <MX_NL_ShieldStage3BuffStarted>[{0}] Shield has entered its buff phase: it no longer stores damage and is no longer invincible.</MX_NL_ShieldStage3BuffStarted>
+  <MX_NL_ShieldStage3Ended>[{0}] Shield stage III has ended. Weakened state begins.</MX_NL_ShieldStage3Ended>
+  <MX_NL_ShieldTriggered>[{0}] Shield triggered: treated as {1} damage and entered stage {2}.</MX_NL_ShieldTriggered>
+  <MX_NL_ShieldDamageTypeLethal>lethal/downing</MX_NL_ShieldDamageTypeLethal>
+  <MX_NL_ShieldDamageTypeNonLethal>non-lethal</MX_NL_ShieldDamageTypeNonLethal>
+  <MX_NL_ShieldDebugName>Shield</MX_NL_ShieldDebugName>
+  <MX_NL_ShieldDebugStage3AbsorbLabel>III-absorb stored:{0} left:{1}h</MX_NL_ShieldDebugStage3AbsorbLabel>
+  <MX_NL_ShieldDebugStage3BuffLabel>III-buff tier:{0} left:{1}h</MX_NL_ShieldDebugStage3BuffLabel>
+  <MX_NL_ShieldDebugWeakLabel>[weakened {0}h]</MX_NL_ShieldDebugWeakLabel>
+  <MX_NL_ShieldTipStage>Stage: {0}{1}</MX_NL_ShieldTipStage>
+  <MX_NL_ShieldTipWeakSuffix> (weakened)</MX_NL_ShieldTipWeakSuffix>
+  <MX_NL_ShieldTipStage2Charges>Stage II charges: {0}/{1}</MX_NL_ShieldTipStage2Charges>
+  <MX_NL_ShieldTipThreshold>Threshold: {0}</MX_NL_ShieldTipThreshold>
+  <MX_NL_ShieldTipRecentHits>Last 5 hits (damage -&gt; charges spent):</MX_NL_ShieldTipRecentHits>
+  <MX_NL_ShieldTipStage3Absorb>Stage III - absorb (invincible)</MX_NL_ShieldTipStage3Absorb>
+  <MX_NL_ShieldTipAbsorbRemaining>Absorb remaining: {0}h</MX_NL_ShieldTipAbsorbRemaining>
+  <MX_NL_ShieldTipStoredDamage>Current stored damage: {0}</MX_NL_ShieldTipStoredDamage>
+  <MX_NL_ShieldTipBuffAfterAbsorb>The buff will begin after the absorb window ends.</MX_NL_ShieldTipBuffAfterAbsorb>
+  <MX_NL_ShieldTipStage3Buff>Stage III - buff (vulnerable)</MX_NL_ShieldTipStage3Buff>
+  <MX_NL_ShieldTipBuffRemaining>Buff remaining: {0}h</MX_NL_ShieldTipBuffRemaining>
+  <MX_NL_ShieldTipLockedDamage>Locked stored damage: {0}</MX_NL_ShieldTipLockedDamage>
+  <MX_NL_ShieldTipCurrentTier>Current tier: {0}</MX_NL_ShieldTipCurrentTier>
+  <MX_NL_ShieldTipCurrentBuffs>Current buffs:</MX_NL_ShieldTipCurrentBuffs>
+  <MX_NL_ShieldTipWeakRemaining>Weakened remaining: {0}h</MX_NL_ShieldTipWeakRemaining>
+  <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -50%, rest fall rate +50%, global work speed -80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldBuffOutgoingDamage>Melee/ranged damage +{0}%</MX_NL_ShieldBuffOutgoingDamage>
+  <MX_NL_ShieldBuffAimingTime>Aiming time {0}{1}%</MX_NL_ShieldBuffAimingTime>
+  <MX_NL_ShieldBuffIncomingDamage>Incoming damage factor {0}{1}%</MX_NL_ShieldBuffIncomingDamage>
+  <MX_NL_ShieldBuffMoveSpeed>Move speed +{0}%</MX_NL_ShieldBuffMoveSpeed>
+  <MX_NL_ShieldBuffHealing>Healing speed +{0}%</MX_NL_ShieldBuffHealing>
+  <MX_NL_ShieldBuffMeleeArmorPen>Melee armor penetration +{0}%</MX_NL_ShieldBuffMeleeArmorPen>
+  <MX_NL_ShieldBuffMeleeDodge>Melee dodge +{0}%</MX_NL_ShieldBuffMeleeDodge>
+  <MX_NL_ShieldBuffRangedDodge>Ranged dodge +{0}%</MX_NL_ShieldBuffRangedDodge>
+
+  <MX_QH_TempestFallbackLabel>Tempest</MX_QH_TempestFallbackLabel>
+  <MX_QH_EleganceFallbackLabel>Elegance</MX_QH_EleganceFallbackLabel>
+  <MX_QH_TargetLine>Target line: {0}</MX_QH_TargetLine>
+  <MX_QH_ShieldInactive>Shield inactive</MX_QH_ShieldInactive>
+  <MX_QH_LotusShieldStatusActive>Status: active</MX_QH_LotusShieldStatusActive>
+  <MX_QH_LotusShieldStatusDown>Status: down ({0}s left)</MX_QH_LotusShieldStatusDown>
+  <MX_QH_LotusShieldDamagePerPoint>Damage per shield point: {0}</MX_QH_LotusShieldDamagePerPoint>
+  <MX_QH_LotusShieldRegen>Shield regen: {0} /s</MX_QH_LotusShieldRegen>
+  <MX_QH_NeedPipaForm>Requires pipa form.</MX_QH_NeedPipaForm>
+  <MX_QH_NeedZhudiForm>Requires bamboo flute form.</MX_QH_NeedZhudiForm>
+  <MX_QH_NeedRequiredWeapon>Requires the matching weapon.</MX_QH_NeedRequiredWeapon>
+  <MX_QH_LongBreathLowResourceWarning>Long Breath warning: Tempest is too low, so the current damage cannot trigger Long Breath.</MX_QH_LongBreathLowResourceWarning>
+  <MX_QH_LongBreathTriggered>Long Breath triggered: lethal damage was negated, all injuries were repaired, and Tempest was emptied.</MX_QH_LongBreathTriggered>
+  <MX_QH_ReportDuanHun>channeling Soulbreak melody</MX_QH_ReportDuanHun>
+  <MX_QH_ReportHengZhi>channeling Cross-Pluck impact</MX_QH_ReportHengZhi>
+  <MX_QH_ReportYangChun>channeling Yangchun harmony</MX_QH_ReportYangChun>
+  <MiliraXian.QingHe.Ability_TempestDrain.Disabled>Not enough Tempest to maintain Tempest Drain.</MiliraXian.QingHe.Ability_TempestDrain.Disabled>
+
+  <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
+  <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>
+  <MX_ZL_ListSeparator>, </MX_ZL_ListSeparator>
+  <MX_ZL_LinkTargetInvalid>Target cannot form a karmic link.</MX_ZL_LinkTargetInvalid>
+  <MX_ZL_LinkCannotTargetSelf>Zhaoli cannot form a karmic link with herself.</MX_ZL_LinkCannotTargetSelf>
+  <MX_ZL_LinkTargetAlreadyLinkedOther>Target already has a karmic link with another Zhaoli.</MX_ZL_LinkTargetAlreadyLinkedOther>
+  <MX_ZL_LinkLimitReached>Karmic link limit reached. No more links can be formed.</MX_ZL_LinkLimitReached>
+  <MX_ZL_LinkHediffDefMissing>Missing karmic link Hediff definition.</MX_ZL_LinkHediffDefMissing>
+  <MX_ZL_LinkHediffCreateFailed>Karmic link Hediff could not be instantiated correctly.</MX_ZL_LinkHediffCreateFailed>
+  <MX_ZL_LinkHediffCompMissing>Karmic link Hediff is missing its link component.</MX_ZL_LinkHediffCompMissing>
+  <MX_ZL_LinkLabelExtra>linked {0}/{1}</MX_ZL_LinkLabelExtra>
+  <MX_ZL_LinkTipExtra>Current links: {0}/{1}</MX_ZL_LinkTipExtra>
+  <MX_ZL_LinkListNone>Linked pawns: none</MX_ZL_LinkListNone>
+  <MX_ZL_LinkListHeader>Linked pawns:</MX_ZL_LinkListHeader>
+  <MX_ZL_LinkOverflowBurdenSuffix> (overflow karma)</MX_ZL_LinkOverflowBurdenSuffix>
+  <MX_ZL_LinkTargetTipGeneric>This target is maintaining a karmic link with Zhaoli.</MX_ZL_LinkTargetTipGeneric>
+  <MX_ZL_LinkTargetTipNamed>This target is maintaining a karmic link with {0}.</MX_ZL_LinkTargetTipNamed>
+  <MX_ZL_DingshuCannotTargetSelf>Fixed Fate cannot be used on Zhaoli herself.</MX_ZL_DingshuCannotTargetSelf>
+  <MX_ZL_DingshuCannotUseDuringRaid>Fixed Fate cannot be used during a raid state.</MX_ZL_DingshuCannotUseDuringRaid>
+  <MX_ZL_NotEnoughKarmaDingshu>Not enough Karma to cast Fixed Fate.</MX_ZL_NotEnoughKarmaDingshu>
+  <MX_ZL_DingshuMarkedTargetCannotRevive>The target died while marked by Fixed Fate and cannot be resurrected again.</MX_ZL_DingshuMarkedTargetCannotRevive>
+  <MX_ZL_DingshuReviveFailed>Fixed Fate failed to complete the resurrection.</MX_ZL_DingshuReviveFailed>
+  <MX_ZL_DingshuMote>Fixed Fate</MX_ZL_DingshuMote>
+  <MX_ZL_DingshuRevived>{0} has been resurrected by Fixed Fate.</MX_ZL_DingshuRevived>
+  <MX_ZL_DingshuRevivedAndHealed>{0} has been resurrected by Fixed Fate, and all injuries and illnesses were removed.</MX_ZL_DingshuRevivedAndHealed>
+  <MX_ZL_ReportDingshu>casting Fixed Fate</MX_ZL_ReportDingshu>
+  <MX_ZL_DuanzhanInvalidTargetCell>Severing Slash target location is invalid.</MX_ZL_DuanzhanInvalidTargetCell>
+  <MX_ZL_DuanzhanNeedWeapon>Severing Slash can only be cast by Zhaoli while Severance is equipped.</MX_ZL_DuanzhanNeedWeapon>
+  <MX_ZL_NotEnoughKarmaGuiyi>Not enough Karma to cast Strange Medicine.</MX_ZL_NotEnoughKarmaGuiyi>
+  <MX_ZL_GuiyiMote>Strange Medicine</MX_ZL_GuiyiMote>
+  <MX_ZL_GuiyiCannotTargetSelf>Strange Medicine cannot be used on Zhaoli herself.</MX_ZL_GuiyiCannotTargetSelf>
+  <MX_ZL_GuiyiCannotTargetHostile>Strange Medicine cannot be used on hostile targets.</MX_ZL_GuiyiCannotTargetHostile>
+  <MX_ZL_GuiyiNoTreatableInjuries>The target has no injuries or conditions for Strange Medicine to treat.</MX_ZL_GuiyiNoTreatableInjuries>
+  <MX_ZL_NotEnoughKarmaMinghuo>Not enough Karma to cast Netherfire.</MX_ZL_NotEnoughKarmaMinghuo>
+  <MX_ZL_MinghuoMote>Netherfire</MX_ZL_MinghuoMote>
+  <MX_ZL_MinghuoAttached>Netherfire has attached to the current primary weapon: damage, armor penetration, hit chance, and attack speed x1.5, range +2, and extra fire damage enabled.</MX_ZL_MinghuoAttached>
+  <MX_ZL_MinghuoSelfOnly>Netherfire can only be cast by Zhaoli on herself.</MX_ZL_MinghuoSelfOnly>
+  <MX_ZL_MinghuoNoPrimaryWeapon>Zhaoli has no primary weapon equipped and cannot cast Netherfire.</MX_ZL_MinghuoNoPrimaryWeapon>
+  <MX_ZL_MinghuoNoBoundWeapon>Netherfire is not bound to a weapon.</MX_ZL_MinghuoNoBoundWeapon>
+  <MX_ZL_MinghuoBoundWeapon>Bound weapon: {0}</MX_ZL_MinghuoBoundWeapon>
+  <MX_ZL_MinghuoDamageMultiplier>Damage: x{0}</MX_ZL_MinghuoDamageMultiplier>
+  <MX_ZL_MinghuoArmorPenMultiplier>Armor penetration: x{0}</MX_ZL_MinghuoArmorPenMultiplier>
+  <MX_ZL_MinghuoHitChanceMultiplier>Hit chance: x{0}</MX_ZL_MinghuoHitChanceMultiplier>
+  <MX_ZL_MinghuoAttackSpeedMultiplier>Attack speed: x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
+  <MX_ZL_MinghuoRangeOffset>Attack range: +{0}</MX_ZL_MinghuoRangeOffset>
+  <MX_ZL_MinghuoExtraFireDamageEnabled>Extra fire damage: enabled</MX_ZL_MinghuoExtraFireDamageEnabled>
+  <MX_ZL_NotEnoughKarmaMinshen>Not enough Karma to cast Mindbreak.</MX_ZL_NotEnoughKarmaMinshen>
+  <MX_ZL_MinshenMote>Mindbreak</MX_ZL_MinshenMote>
+  <MX_ZL_MinshenMentalStateReason>Zhaoli's Mindbreak left them dazed.</MX_ZL_MinshenMentalStateReason>
+  <MX_ZL_RebirthAccepted>Zhaoli has been accepted by death. She will return to a player base in ten days.</MX_ZL_RebirthAccepted>
+  <MX_ZL_RebirthReturned>Zhaoli has returned from death.</MX_ZL_RebirthReturned>
+  <MX_ZL_RebirthGrowthLabel>growth {0}</MX_ZL_RebirthGrowthLabel>
+  <MX_ZL_RebirthGrowthTip>Current growth stacks: {0}</MX_ZL_RebirthGrowthTip>
+  <MX_ZL_CurrentPhaseBonuses>Current phase bonuses:</MX_ZL_CurrentPhaseBonuses>
+  <MX_ZL_NoSubstituteBonus>No death substitution has triggered yet, so no extra bonuses are active.</MX_ZL_NoSubstituteBonus>
+  <MX_ZL_CurrentGrowthBonuses>Current growth bonuses:</MX_ZL_CurrentGrowthBonuses>
+  <MX_ZL_DeathGrowth>Death growth:</MX_ZL_DeathGrowth>
+  <MX_ZL_NoGrowthStacks>No growth stacks accumulated yet.</MX_ZL_NoGrowthStacks>
+  <MX_ZL_ShieldLayersLabel>{0} layers</MX_ZL_ShieldLayersLabel>
+  <MX_ZL_ShieldLayersTip>Current layers: {0}. Each unit absorbed through Death Sentence grants 5 layers of Death-Taboo Shield. The shield negates one instance of damage and consumes 1 layer when hit. Damage over time also consumes layers each time it applies.</MX_ZL_ShieldLayersTip>
+  <MX_ZL_DeathFieldExecuted>Death Field executed {0} targets: {1}.</MX_ZL_DeathFieldExecuted>
+  <MX_ZL_HideoutSiteCustomLabel>Hidden Place of the Nonexistent</MX_ZL_HideoutSiteCustomLabel>
+  <MX_ZL_RaidLetterLabel>Zhaoli attacks</MX_ZL_RaidLetterLabel>
+  <MX_ZL_RaidLetterText>Zhaoli appears at the edge of the colony. She does not stop, negotiate, or retreat. This battle will end only in the death of every living thing, or in her own complete destruction.</MX_ZL_RaidLetterText>
+  <MX_ZL_HideoutInspectExpired>Zhaoli's trace has faded.</MX_ZL_HideoutInspectExpired>
+  <MX_ZL_HideoutInspectWaiting>Zhaoli is waiting here for an exchange priced in life and death.</MX_ZL_HideoutInspectWaiting>
+  <MX_ZL_HideoutOptionGiveMedicine>Give 5 herbal medicine</MX_ZL_HideoutOptionGiveMedicine>
+  <MX_ZL_HideoutNoMedicine>The caravan does not have 5 herbal medicine. Zhaoli remains where she is, waiting for another answer.</MX_ZL_HideoutNoMedicine>
+  <MX_ZL_HideoutMedicineAccepted>Zhaoli accepts the medicine, then dissolves into a cold trace of light. The echo she leaves says she will return tomorrow.</MX_ZL_HideoutMedicineAccepted>
+  <MX_ZL_HideoutOptionDelay>Delay handoff</MX_ZL_HideoutOptionDelay>
+  <MX_ZL_HideoutDelayed>Zhaoli does not press further. She simply keeps waiting. You can still return within three days.</MX_ZL_HideoutDelayed>
+  <MX_ZL_HideoutOptionReject>Reject Zhaoli</MX_ZL_HideoutOptionReject>
+  <MX_ZL_HideoutRejected>Zhaoli accepts the refusal and vanishes with a distorted low hum. A large amount of human meat appears near the caravan, and something worse will arrive tomorrow.</MX_ZL_HideoutRejected>
+  <MX_ZL_RaidPhaseLabel>phase {0}</MX_ZL_RaidPhaseLabel>
+  <MX_ZL_RaidSubstituteTriggered>Death substitution triggered:</MX_ZL_RaidSubstituteTriggered>
+  <MX_ZL_RaidRemainingLinks>Remaining karmic links:</MX_ZL_RaidRemainingLinks>
+  <MX_ZL_RaidCurrentPhase>Current phase:</MX_ZL_RaidCurrentPhase>
+  <MX_ZL_RaidTransitionRemaining>Phase transition remaining:</MX_ZL_RaidTransitionRemaining>
+  <MX_ZL_RaidNextWarp>Next warp:</MX_ZL_RaidNextWarp>
+  <MX_ZL_RaidPhaseTransitionStarted>{0} is shifting into phase {1}! She is invulnerable during the transition and gains {2} layers of Deathward Shield.</MX_ZL_RaidPhaseTransitionStarted>
+</LanguageData>

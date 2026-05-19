@@ -9,7 +9,7 @@
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
-        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <defaultFactionType>Ancients</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -323,4 +323,3 @@
 
 
 </Defs>
-

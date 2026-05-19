@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Dehydrate.label>水毒</MX_Dehydrate.label>
+  <MX_Dehydrate.deathMessage>{0}死於嚴重的液體循環崩潰。</MX_Dehydrate.deathMessage>
+  <MX_Desynced.label>離弦</MX_Desynced.label>
+  <MX_Desynced.deathMessage>{0}被吵死了。</MX_Desynced.deathMessage>
+</LanguageData>

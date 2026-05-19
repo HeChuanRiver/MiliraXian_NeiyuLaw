@@ -105,8 +105,8 @@ namespace MiliraXian.Characters
             {
                 yield return new Command_Action
                 {
-                    defaultLabel = "DEV: +10因果",
-                    defaultDesc = "开发者测试用：手动为昭离增加10点因果。",
+                    defaultLabel = "MX_ZL_DebugAddKarmaLabel".Translate().ToString(),
+                    defaultDesc = "MX_ZL_DebugAddKarmaDesc".Translate().ToString(),
                     action = delegate
                     {
                         ZhaoliKarmaUtility.AddKarma(Pawn, 10f);
@@ -228,7 +228,7 @@ namespace MiliraXian.Characters
 
             if (resource.IsOverflowing)
             {
-                text += "\n\n当前数值已超过上限。";
+                text += "\n\n" + "MX_Common_ResourceOverflowing".Translate();
             }
 
             return text;

@@ -3,8 +3,8 @@
 
   <HediffDef>
     <defName>MXZL_ZhaoliHideoutState</defName>
-    <label>zhaoli hideout state</label>
-    <description>Temporary scenario state used while Zhaoli waits at the hideout.</description>
+    <label>昭离藏身状态</label>
+    <description>昭离剧情藏身点使用的临时状态，使其停留在原地等待交互。</description>
     <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(0.15, 0.48, 0.76)</defaultLabelColor>
     <isBad>false</isBad>
@@ -22,8 +22,8 @@
 
   <HediffDef>
     <defName>MXZL_ZhaoliRaidState</defName>
-    <label>zhaoli raid state</label>
-    <description>Temporary scenario state used while hostile Zhaoli is raiding the colony.</description>
+    <label>昭离袭击状态</label>
+    <description>敌对昭离袭击殖民地时使用的临时状态，记录阶段、仇恨、转阶段和袭击行为。</description>
     <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
     <isBad>false</isBad>

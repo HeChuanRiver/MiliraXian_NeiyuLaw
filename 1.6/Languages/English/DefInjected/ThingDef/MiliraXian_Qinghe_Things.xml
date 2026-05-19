@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Qinghe_Form_Pipa.label>Lotus Music: Pipa</MX_Qinghe_Form_Pipa.label>
+  <MX_Qinghe_Form_Pipa.description>Qinghe's pipa, suited for mid-range sustained suppression.</MX_Qinghe_Form_Pipa.description>
+  <MX_Qinghe_Form_Zhudi.label>Lotus Music: Bamboo Flute</MX_Qinghe_Form_Zhudi.label>
+  <MX_Qinghe_Form_Zhudi.description>Qinghe's bamboo-flute armament, suited for precise long-range shots.</MX_Qinghe_Form_Zhudi.description>
+  <MX_Qinghe_Form_Qin.label>Qinghe: Qin Form</MX_Qinghe_Form_Qin.label>
+  <MX_Qinghe_Form_Qin.description>Qinghe's qin-form armament, suited for close-range slashes.</MX_Qinghe_Form_Qin.description>
+  <MX_Qinghe_Form_Qin.tools.0.label>string blade</MX_Qinghe_Form_Qin.tools.0.label>
+  <MX_Bullet_Qinghe_PipaNote.label>Qinghe pipa note</MX_Bullet_Qinghe_PipaNote.label>
+  <MX_Bullet_Qinghe_ZhudiNote.label>Qinghe bamboo-flute note</MX_Bullet_Qinghe_ZhudiNote.label>
+  <SpringFlowField.label>spring flow field</SpringFlowField.label>
+  <TempestDrainField.label>tempest drain field</TempestDrainField.label>
+  <MX_QH_Elegance_YangChunField.label>yangchun field</MX_QH_Elegance_YangChunField.label>
+</LanguageData>

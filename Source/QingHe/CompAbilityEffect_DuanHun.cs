@@ -87,7 +87,7 @@ namespace MiliraXian.Characters.QingHe
         {
             if (!MX_QHUtility.HasRequiredWeapon(parent != null ? parent.pawn : null, Props.requiredWeapon))
             {
-                reason = "需要装备竹笛形态。";
+                reason = "MX_QH_NeedZhudiForm".Translate().ToString();
                 return true;
             }
 

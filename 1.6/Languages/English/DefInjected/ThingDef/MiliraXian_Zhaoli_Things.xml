@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_ZhaoliNormal.label>Zhaoli's daily wear</MX_ZhaoliNormal.label>
+  <MX_ZhaoliNormal.description>A violet-black outfit Zhaoli habitually wears. Its outer hem is darkened, while the inner layer carries fine violet-white patterns that echo Severance's hilt and Zhaoli's karmic arts.</MX_ZhaoliNormal.description>
+  <MX_ZhaoliHood.label>Zhaoli's hood</MX_ZhaoliHood.label>
+  <MX_ZhaoliHood.description>A dark hood Zhaoli wears when traveling outside. Violet patterns line its edge, and it can cover the halo above her head, making her less conspicuous on the ground.</MX_ZhaoliHood.description>
+  <MX_Zhaoli_DuanzhanBlade.label>Severance</MX_Zhaoli_DuanzhanBlade.label>
+  <MX_Zhaoli_DuanzhanBlade.description>Zhaoli's melee armament, with the built-in ability Severing Slash. Its blade is plain white and its hilt is wrapped in violet-black. When swung, it leaves a brief violet-white arc, suited for clearing enemies ahead with a precise horizontal cut.</MX_Zhaoli_DuanzhanBlade.description>
+  <MX_Zhaoli_DuanzhanBlade.tools.0.label>Severance</MX_Zhaoli_DuanzhanBlade.tools.0.label>
+</LanguageData>
