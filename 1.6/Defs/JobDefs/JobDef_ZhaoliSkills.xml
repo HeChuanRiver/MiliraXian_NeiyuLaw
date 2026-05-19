@@ -3,7 +3,7 @@
 
   <JobDef>
     <defName>MX_Zhaoli_CastAbility_Uninterruptible</defName>
-    <driverClass>JobDriver_CastAbility</driverClass>
+    <driverClass>MiliraXian.Characters.Zhaoli.JobDriver_MX_ZhaoliCastAbility</driverClass>
     <reportString>施放昭离技能</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
