@@ -3246,6 +3246,7 @@ namespace MiliraXian.Characters.Zhaoli
         private bool TryCastMinshen(Pawn target, int currentTick)
         {
             Ability ability = Pawn.abilities?.GetAbility(MXZL_ZhaoliDefOf.MX_Zhaoli_Minshen, includeTemporary: true);
+            ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(ability);
             if (ability == null || !ability.CanCast || target == null)
             {
                 return false;

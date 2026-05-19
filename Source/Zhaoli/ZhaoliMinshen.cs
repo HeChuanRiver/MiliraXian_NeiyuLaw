@@ -35,6 +35,13 @@ namespace MiliraXian.Characters.Zhaoli
 
         private new CompProperties_AbilityZhaoliMinshen Props => (CompProperties_AbilityZhaoliMinshen)props;
 
+        public override bool GizmoDisabled(out string reason)
+        {
+            ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
+            reason = null;
+            return false;
+        }
+
         public override IEnumerable<PreCastAction> GetPreCastActions()
         {
             int warmupTicks = GetWarmupTicks();

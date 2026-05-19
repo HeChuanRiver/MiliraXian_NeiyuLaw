@@ -17,10 +17,18 @@ namespace MiliraXian.Characters.Zhaoli
 
             AddFinishAction(delegate
             {
-                if (job?.ability != null && job.def.abilityCasting && job.ability.HasCooldown)
+                if (job?.ability == null || !job.def.abilityCasting)
+                {
+                    return;
+                }
+
+                if (job.ability.HasCooldown)
                 {
                     job.ability.StartCooldown(job.ability.def.cooldownTicksRange.RandomInRange);
+                    return;
                 }
+
+                ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(job.ability);
             });
 
             Toil stopMoving = ToilMaker.MakeToil("ZhaoliCastAbility_StopMoving");
