@@ -1108,6 +1108,11 @@ namespace MiliraXian.Characters.Zhaoli
         private Map scenarioHomeMap;
         private Site activeHideoutSite;
         private Pawn currentRaidPawn;
+        private int nextScenarioStateCheckTick = -1;
+        private bool cachedPlayerHasZhaoli;
+        private bool cachedMurmurQuestExists;
+        private bool cachedReturnQuestExists;
+        private bool cachedMurmurQuestWasNeverAccepted;
         private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new List<PendingLoadoutFinalize>();
 
         private class PendingLoadoutFinalize
@@ -1146,12 +1151,17 @@ namespace MiliraXian.Characters.Zhaoli
 
         public bool CanOfferMurmur(Map map)
         {
+            return CanOfferMurmur(map, useCachedScenarioState: false);
+        }
+
+        private bool CanOfferMurmur(Map map, bool useCachedScenarioState)
+        {
             if (scenarioCompleted || murmurOffered || returnOffered || activeHideoutSite != null || currentRaidPawn != null)
             {
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.PlayerHasZhaoli())
+            if (useCachedScenarioState ? cachedPlayerHasZhaoli : ZhaoliScenarioUtility.PlayerHasZhaoli())
             {
                 return false;
             }
@@ -1171,10 +1181,15 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            return !ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName);
+            return !(useCachedScenarioState ? cachedMurmurQuestExists : ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName));
         }
 
         public bool CanOfferReturn(Map map)
+        {
+            return CanOfferReturn(map, useCachedScenarioState: false);
+        }
+
+        private bool CanOfferReturn(Map map, bool useCachedScenarioState)
         {
             if (scenarioCompleted || returnOffered || currentRaidPawn != null || scheduledReturnTick < 0)
             {
@@ -1186,12 +1201,12 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.PlayerHasZhaoli())
+            if (useCachedScenarioState ? cachedPlayerHasZhaoli : ZhaoliScenarioUtility.PlayerHasZhaoli())
             {
                 return false;
             }
 
-            return map != null && map.IsPlayerHome && !ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName);
+            return map != null && map.IsPlayerHome && !(useCachedScenarioState ? cachedReturnQuestExists : ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName));
         }
 
         public override void GameComponentTick()
@@ -1213,58 +1228,85 @@ namespace MiliraXian.Characters.Zhaoli
                 currentRaidPawn = null;
             }
 
-            if (!scenarioCompleted && ZhaoliScenarioUtility.PlayerHasZhaoli())
+            int currentTick = Find.TickManager.TicksGame;
+            bool shouldRefreshScenarioState = nextScenarioStateCheckTick < 0 || currentTick >= nextScenarioStateCheckTick;
+            if (shouldRefreshScenarioState)
             {
-                scenarioCompleted = true;
-            }
-            else if (scenarioCompleted && !ZhaoliScenarioUtility.PlayerHasZhaoli() && (activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0))
-            {
-                scenarioCompleted = false;
+                RefreshScenarioStateCache(currentTick);
+                ApplyScenarioStateCache();
             }
 
-            if (!scenarioCompleted && !murmurOffered && qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            if (shouldRefreshScenarioState && !scenarioCompleted && !murmurOffered && qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
             {
                 BackfillTrackedPawnDeaths();
             }
 
-            if (ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName))
+            if (shouldRefreshScenarioState)
             {
-                murmurOffered = true;
+                CleanupUnacceptedMurmurSideEffects(cachedMurmurQuestWasNeverAccepted);
             }
 
-            if (ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName))
+            if (shouldRefreshScenarioState && scheduledRaidTick >= 0 && currentTick >= scheduledRaidTick)
             {
-                returnOffered = true;
-            }
-
-            CleanupUnacceptedMurmurSideEffects();
-
-            int currentTick = Find.TickManager.TicksGame;
-            if (scheduledRaidTick >= 0 && currentTick >= scheduledRaidTick)
-            {
-                if (TryExecuteScheduledRaid())
+                if (TryExecuteScheduledRaid(useCachedScenarioState: true))
                 {
                     scheduledRaidTick = -1;
                 }
             }
 
-            if (scheduledReturnTick >= 0 && currentTick >= scheduledReturnTick)
+            if (shouldRefreshScenarioState && scheduledReturnTick >= 0 && currentTick >= scheduledReturnTick)
             {
-                if (TryExecuteScheduledReturn())
+                if (TryExecuteScheduledReturn(useCachedScenarioState: true))
                 {
                     scheduledReturnTick = -1;
                 }
             }
 
-            if (!scenarioCompleted && !murmurOffered && currentTick % TickCheckInterval == 0)
+            if (shouldRefreshScenarioState && !scenarioCompleted && !murmurOffered)
             {
-                TryExecuteMurmur();
+                TryExecuteMurmur(useCachedScenarioState: true);
+            }
+        }
+
+        private void RefreshScenarioStateCache(int currentTick)
+        {
+            cachedPlayerHasZhaoli = ZhaoliScenarioUtility.PlayerHasZhaoli();
+            cachedMurmurQuestExists = ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName);
+            cachedReturnQuestExists = ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName);
+            cachedMurmurQuestWasNeverAccepted = ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName);
+            nextScenarioStateCheckTick = currentTick + TickCheckInterval;
+        }
+
+        private void ApplyScenarioStateCache()
+        {
+            if (!scenarioCompleted && cachedPlayerHasZhaoli)
+            {
+                scenarioCompleted = true;
+            }
+            else if (scenarioCompleted && !cachedPlayerHasZhaoli && (activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0))
+            {
+                scenarioCompleted = false;
+            }
+
+            if (cachedMurmurQuestExists)
+            {
+                murmurOffered = true;
+            }
+
+            if (cachedReturnQuestExists)
+            {
+                returnOffered = true;
             }
         }
 
         private void CleanupUnacceptedMurmurSideEffects()
         {
-            if (!ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
+            CleanupUnacceptedMurmurSideEffects(ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName));
+        }
+
+        private void CleanupUnacceptedMurmurSideEffects(bool questWasNeverAccepted)
+        {
+            if (!questWasNeverAccepted)
             {
                 return;
             }
@@ -1563,10 +1605,10 @@ namespace MiliraXian.Characters.Zhaoli
             scheduledReturnTick = (Find.TickManager?.TicksGame ?? 0) + Mathf.Max(0, delayTicks);
         }
 
-        private void TryExecuteMurmur()
+        private void TryExecuteMurmur(bool useCachedScenarioState = false)
         {
             Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
-            if (map == null || !CanOfferMurmur(map))
+            if (map == null || !CanOfferMurmur(map, useCachedScenarioState))
             {
                 return;
             }
@@ -1589,9 +1631,9 @@ namespace MiliraXian.Characters.Zhaoli
             }
         }
 
-        private bool TryExecuteScheduledRaid()
+        private bool TryExecuteScheduledRaid(bool useCachedScenarioState = false)
         {
-            if (ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
+            if (useCachedScenarioState ? cachedMurmurQuestWasNeverAccepted : ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
             {
                 scheduledRaidTick = -1;
                 return true;
@@ -1653,10 +1695,10 @@ namespace MiliraXian.Characters.Zhaoli
             return true;
         }
 
-        private bool TryExecuteScheduledReturn()
+        private bool TryExecuteScheduledReturn(bool useCachedScenarioState = false)
         {
             Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
-            if (map == null || !CanOfferReturn(map))
+            if (map == null || !CanOfferReturn(map, useCachedScenarioState))
             {
                 return false;
             }
