@@ -10,7 +10,6 @@ namespace MiliraXian.Characters.QingHe.Ability
     {
         public ThingDef fieldDef = MX_QHDefOf.SpringFlowField;
         public int fieldDurationTicks = 900;
-        public float previewRadius = 6.0f;
         public HediffDef resourceCostDef;
         public float resourceCost = 0f;
         public string missingResourceMessage = "花令不足。";
@@ -53,16 +52,16 @@ namespace MiliraXian.Characters.QingHe.Ability
 
             var field = GenSpawn.Spawn(Props.fieldDef, cell, map);
             field.TryGetComp<CompSpringFlowField>()?.Init(parent.pawn, Props.fieldDurationTicks);
-            PlaySummonVisual(map, cell, ResolvePreviewRadius());
+            PlaySummonVisual(map, cell, ResolveRadius());
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             base.DrawEffectPreview(target);
-            GenDraw.DrawRadiusRing(target.Cell, ResolvePreviewRadius(), Color.magenta);
+            GenDraw.DrawRadiusRing(target.Cell, ResolveRadius(), Color.magenta);
         }
 
-        private float ResolvePreviewRadius()
+        private float ResolveRadius()
         {
             if (Props.fieldDef != null && Props.fieldDef.comps != null)
             {
@@ -75,7 +74,7 @@ namespace MiliraXian.Characters.QingHe.Ability
                 }
             }
 
-            return Props.previewRadius;
+            return 6f;
         }
 
         private static void PlaySummonVisual(Map map, IntVec3 cell, float radius)

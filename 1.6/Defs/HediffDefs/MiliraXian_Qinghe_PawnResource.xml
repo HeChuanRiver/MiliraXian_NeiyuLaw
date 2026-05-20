@@ -1,80 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MX_QH_Tempest</defName>
-        <label>激流</label>
-        <description>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.42, 0.38, 1.00)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <initialSeverity>1</initialSeverity>
-        <minSeverity>1</minSeverity>
-        <maxSeverity>1</maxSeverity>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_Tempest">
-                <resourceLabel>激流</resourceLabel>
-                <resourceDescription>清荷的专属资源。通过使用技能积累，可用于抵消伤害或发动强力技能。</resourceDescription>
-                <initialValue>0</initialValue>
-                <maxValue>100</maxValue>
-                <clampToMax>true</clampToMax>
-                <recoverTimerMaxTicks>360</recoverTimerMaxTicks>
-                <baseDecayPerTick>-0.02</baseDecayPerTick>
-                <maxRegenPerTickAtFullElegance>0.05</maxRegenPerTickAtFullElegance>
-                <showGizmo>false</showGizmo>
-                <hideOnHealthTab>true</hideOnHealthTab>
-                <barColorRed>0.26</barColorRed>
-                <barColorGreen>0.09</barColorGreen>
-                <barColorBlue>0.90</barColorBlue>
-                <barColorAlpha>1</barColorAlpha>
-                <barHighlightRed>0.41</barHighlightRed>
-                <barHighlightGreen>0.19</barHighlightGreen>
-                <barHighlightBlue>1.00</barHighlightBlue>
-                <barHighlightAlpha>1</barHighlightAlpha>
-            </li>
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
-        <defName>MX_QH_Elegance</defName>
-        <label>雅乐</label>
-        <description>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使&lt;color=#6B61FF&gt;激流&lt;/color&gt;回复速度提升。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.92, 0.42, 1.00)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <initialSeverity>1</initialSeverity>
-        <minSeverity>1</minSeverity>
-        <maxSeverity>1</maxSeverity>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_Elegance">
-                <resourceLabel>雅乐</resourceLabel>
-                <resourceDescription>清荷的专属资源。通过战斗和使用技能积累，可用于增强自身技能并使激流回复速度提升。</resourceDescription>
-                <initialValue>0</initialValue>
-                <maxValue>100</maxValue>
-                <clampToMax>true</clampToMax>
-                <tempestRecoverThreshold>0.8</tempestRecoverThreshold>
-                <inCombatTimerMaxTicks>360</inCombatTimerMaxTicks>
-                <decayTimerMaxTicks>360</decayTimerMaxTicks>
-                <gainPerTickInCombat>0.02</gainPerTickInCombat>
-                <gainPerTickOutOfCombat>-0.03</gainPerTickOutOfCombat>
-                <gainPerTickMeditation>0.04</gainPerTickMeditation>
-                <gainPerTickInstrumentJoy>0.05</gainPerTickInstrumentJoy>
-                <showGizmo>false</showGizmo>
-                <hideOnHealthTab>true</hideOnHealthTab>
-                <barColorRed>0.76</barColorRed>
-                <barColorGreen>0.09</barColorGreen>
-                <barColorBlue>0.90</barColorBlue>
-                <barColorAlpha>1</barColorAlpha>
-                <barHighlightRed>0.91</barHighlightRed>
-                <barHighlightGreen>0.19</barHighlightGreen>
-                <barHighlightBlue>1.00</barHighlightBlue>
-                <barHighlightAlpha>1</barHighlightAlpha>
-            </li>
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
         <defName>MX_QH_LongBreath</defName>
         <label>长息</label>
         <description>受到致命伤害或摧毁身体部件的伤害时，若长息不在冷却中，抵消此次伤害、修复自身所有损伤，同时获得3秒无敌和10秒心灵隐形（若可用）。</description>
@@ -113,36 +39,9 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_SpringRegen</defName>
-        <label>清流</label>
-        <description>每隔3秒，自动治愈2.5点生命值的伤口，包括永久伤口。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.4, 0.6, 1.0)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SpringRegen">
-                <healIntervalTicks>180</healIntervalTicks>
-                <healAmountPerTrigger>2.5</healAmountPerTrigger>
-                <healPermanentInjuries>true</healPermanentInjuries>
-            </li>
-            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
-                <healAmount>
-                    <baseValue>2.5</baseValue>
-                    <min>1.0</min>
-                    <max>3.0</max>
-                    <resourceDef>MX_QH_Elegance</resourceDef>
-                    <method>linear</method>
-                </healAmount>
-            </li>
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
         <defName>MX_QH_LotusShield</defName>
         <label>花神护体</label>
-        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。自身的&lt;color=#7ACF6D&gt;花信&lt;/color&gt;越高，每点护盾能吸收的伤害越多，护盾回复也越快。\n\n护盾被击碎时会失效20秒。</description>
+        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。\n\n护盾被击碎时会失效20秒。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_LotusShield</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -153,12 +52,9 @@
                 <shieldCompProperties>
                     <maxEnergy>100</maxEnergy>
                     <baseDamagePerShieldPoint>1</baseDamagePerShieldPoint>
-                    <bonusDamagePerShieldPointAtMaxFlowerTidings>5</bonusDamagePerShieldPointAtMaxFlowerTidings>
                     <baseRegenPerSecond>2</baseRegenPerSecond>
-                    <bonusRegenPerSecondAtMaxFlowerTidings>8</bonusRegenPerSecondAtMaxFlowerTidings>
                     <breakDisabledTicks>1200</breakDisabledTicks>
                     <breakOnEmp>false</breakOnEmp>
-                    <flowerTidingsGainOnBreak>10</flowerTidingsGainOnBreak>
                     <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
                     <absorbFleckScale>0.6</absorbFleckScale>
                     <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
@@ -169,40 +65,6 @@
                     <minDrawScale>1.0</minDrawScale>
                     <maxDrawScale>1.0</maxDrawScale>
                 </shieldCompProperties>
-            </li>
-            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
-                <damagePerShieldPoint>
-                    <baseValue>1</baseValue>
-                    <min>1.0</min>
-                    <max>6.0</max>
-                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
-                    <method>linear</method>
-                </damagePerShieldPoint>
-                <regenPerSecond>
-                    <baseValue>2</baseValue>
-                    <min>1.0</min>
-                    <max>5.0</max>
-                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
-                    <method>linear</method>
-                </regenPerSecond>
-            </li>
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
-        <defName>MX_QH_QingheStatusGizmo</defName>
-        <label>清荷状态显示</label>
-        <description>隐藏Hediff：用于显示清荷状态Gizmo。</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediff_QH_StatusGizmo</hediffClass>
-        <defaultLabelColor>(0.70, 0.88, 1.00)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.HediffCompProperties_QH_StatusGizmo">
-                <firstResourceDef>MX_QH_Tempest</firstResourceDef>
-                <secondResourceDef>MX_QH_Elegance</secondResourceDef>
-                <onlyWhenSelected>true</onlyWhenSelected>
             </li>
         </comps>
     </HediffDef>

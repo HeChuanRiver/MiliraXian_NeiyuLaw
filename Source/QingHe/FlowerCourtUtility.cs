@@ -22,9 +22,24 @@ namespace MiliraXian.Characters.QingHe
             return (hediff as HediffWithComps)?.GetComp<HediffComp_SeasonResonance>();
         }
 
+        public static HediffComp_FlowerGodDescent GetFlowerGodDescent(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SeasonResonance == null)
+            {
+                return null;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SeasonResonance);
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerGodDescent>();
+        }
+
+        public static HediffComp_FlowerGodDescent EnsureFlowerGodDescent(Pawn pawn)
+        {
+            return EnsureSeasonResonance(pawn)?.FlowerGodDescent;
+        }
+
         public static void EnsureFlowerResources(Pawn pawn)
         {
-            PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerTidings);
             PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree);
         }
 

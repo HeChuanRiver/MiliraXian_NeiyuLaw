@@ -224,11 +224,6 @@
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_FlowerTidings</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
                         <def>MX_QH_FlowerDecree</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>

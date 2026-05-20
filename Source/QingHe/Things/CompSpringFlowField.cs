@@ -9,10 +9,8 @@ namespace MiliraXian.Characters.QingHe.Things
 {
     public class CompProperties_SpringFlowField : CompProperties
     {
-        public float radius = 6.0f;
+        public float radius = 4.0f;
         public int pulseIntervalTicks = 10;
-        public float attunementRadiusBonusAtMax = 2.0f;
-        public float flowerTidingsGainOnPulse = 3.0f;
         public int fadeInTicks = 30;
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
@@ -30,14 +28,13 @@ namespace MiliraXian.Characters.QingHe.Things
     {
         private Pawn caster;
         private int ticksToNextEffect;
-        private float radiusBonus;
         private int lifetimeTicks;
         private int ageTicks;
         private int ticksToNextAmbientVisual;
         private Mote fieldMote;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
-        public float CurrentRadius => Props.radius + radiusBonus;
+        public float CurrentRadius => Props.radius;
         public float VisualAlpha
         {
             get
@@ -98,7 +95,6 @@ namespace MiliraXian.Characters.QingHe.Things
             base.PostExposeData();
             Scribe_References.Look<Pawn>(ref caster, "caster", false);
             Scribe_Values.Look<int>(ref ticksToNextEffect, "ticksToNextEffect", 0, false);
-            Scribe_Values.Look<float>(ref radiusBonus, "radiusBonus", 0f, false);
             Scribe_Values.Look<int>(ref lifetimeTicks, "lifetimeTicks", 0, false);
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
@@ -109,7 +105,6 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             caster = newCaster;
             ticksToNextEffect = 1;
-            radiusBonus = ResolveRadiusBonus(newCaster);
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
@@ -120,7 +115,6 @@ namespace MiliraXian.Characters.QingHe.Things
             caster = newCaster;
             lifetimeTicks = durationTicks;
             ticksToNextEffect = 1;
-            radiusBonus = ResolveRadiusBonus(newCaster);
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
@@ -149,7 +143,6 @@ namespace MiliraXian.Characters.QingHe.Things
                 {
                     var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
                     pawn.health.AddHediff(hediff);
-                    hediff.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>()?.CaptureSnapshot();
                 }
 
                 applied = true;
@@ -158,11 +151,6 @@ namespace MiliraXian.Characters.QingHe.Things
             if (!applied)
             {
                 return;
-            }
-
-            if (Props.flowerTidingsGainOnPulse > 0f)
-            {
-                MiliraXian.Characters.PawnSpecialResourceUtility.AddResource(caster, MX_QHDefOf.MX_QH_FlowerTidings, Props.flowerTidingsGainOnPulse);
             }
         }
 
@@ -223,18 +211,6 @@ namespace MiliraXian.Characters.QingHe.Things
 
             fieldMote = MoteMaker.MakeAttachedOverlay(parent, Props.fieldMoteDef, Vector3.zero, 1f, -1f);
             fieldMote?.Maintain();
-        }
-
-        private float ResolveRadiusBonus(Pawn pawn)
-        {
-            HediffComp_SeasonResonance resonance = FlowerCourtUtility.EnsureSeasonResonance(pawn);
-            if (resonance == null || resonance.MaxAttunement <= 0f)
-            {
-                return 0f;
-            }
-
-            float factor = resonance.SpringAttunement / resonance.MaxAttunement;
-            return Props.attunementRadiusBonusAtMax * Mathf.Clamp01(factor);
         }
     }
 }

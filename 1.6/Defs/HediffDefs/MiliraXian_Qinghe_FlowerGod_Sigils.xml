@@ -3,7 +3,7 @@
     <HediffDef>
         <defName>MX_QH_FlowerGodSigil_RedApricot</defName>
         <label>花神签·红杏</label>
-        <description>春季共鸣被动。花神红杏护持清荷，周期性修复最严重的伤口，包括永久伤口；恢复量会随花信提高。</description>
+        <description>春季共鸣被动。花神红杏护持清荷，周期性修复最严重的伤口，包括永久伤口。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.92, 0.48, 0.50)</defaultLabelColor>
         <isBad>false</isBad>
@@ -14,15 +14,6 @@
                 <healIntervalTicks>180</healIntervalTicks>
                 <healAmountPerTrigger>2.5</healAmountPerTrigger>
                 <healPermanentInjuries>true</healPermanentInjuries>
-            </li>
-            <li Class="MiliraXian.Characters.HediffCompProperties_PawnResourceScaling">
-                <healAmount>
-                    <baseValue>2.5</baseValue>
-                    <min>1.0</min>
-                    <max>3.0</max>
-                    <resourceDef>MX_QH_FlowerTidings</resourceDef>
-                    <method>linear</method>
-                </healAmount>
             </li>
         </comps>
     </HediffDef>

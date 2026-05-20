@@ -13,16 +13,13 @@ namespace MiliraXian.Characters.QingHe.Things
 
         // Damage absorbed per one shield point.
         public float baseDamagePerShieldPoint = 0.6f;
-        public float bonusDamagePerShieldPointAtMaxFlowerTidings = 1.4f;
 
         // Shield regeneration per second.
         public float baseRegenPerSecond = 0.8f;
-        public float bonusRegenPerSecondAtMaxFlowerTidings = 4.2f;
 
         // After breaking, shield is disabled for these ticks.
         public int breakDisabledTicks = 600;
         public bool breakOnEmp = true;
-        public float flowerTidingsGainOnBreak = 20f;
 
         // Shield hit VFX settings aligned with Neiyu shield implementation.
         public string absorbFleckDefName = "ExplosionFlash";
@@ -265,11 +262,6 @@ namespace MiliraXian.Characters.QingHe.Things
             ticksToReset = Mathf.Max(1, Props.breakDisabledTicks);
 
             Pawn owner = PawnOwner;
-            if (owner != null && Props.flowerTidingsGainOnBreak > 0f && MX_QHDefOf.MX_QH_FlowerTidings != null)
-            {
-                PawnSpecialResourceUtility.AddResource(owner, MX_QHDefOf.MX_QH_FlowerTidings, Props.flowerTidingsGainOnBreak);
-            }
-
             if (owner == null || !owner.Spawned || owner.Map == null)
             {
                 return;
@@ -348,58 +340,26 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private Color ResolveShieldTintColor()
         {
-            float flowerTidingsFactor = PawnSpecialResourceUtility.GetResourcePercent(PawnOwner, MX_QHDefOf.MX_QH_FlowerTidings);
-
-
-
-
             Color baseColor = new Color(0.82f, 0.92f, 1f, 1f);
-            Color flowerColor = new Color(0.72f, 1f, 0.76f, 1f);
-            Color hue = Color.Lerp(baseColor, flowerColor, flowerTidingsFactor);
-
-            float brightness = Mathf.Lerp(0.68f, 1f, flowerTidingsFactor);
             return new Color(
-                Mathf.Clamp01(hue.r * brightness),
-                Mathf.Clamp01(hue.g * brightness),
-                Mathf.Clamp01(hue.b * brightness),
+                Mathf.Clamp01(baseColor.r),
+                Mathf.Clamp01(baseColor.g),
+                Mathf.Clamp01(baseColor.b),
                 1f);
-        }
-
-        private MiliraXian.Characters.HediffComp_PawnResourceScaling GetScaler()
-        {
-            var hediff = PawnOwner?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
-            return hediff?.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
         }
 
         private float ResolveDamagePerShieldPoint()
         {
-            var scaler = GetScaler();
-            if (scaler?.Props.damagePerShieldPoint != null)
-            {
-                return Mathf.Max(0.01f, scaler.Props.damagePerShieldPoint.GetValue(PawnOwner));
-            }
-
-            Pawn owner = PawnOwner;
-            float factor = PawnSpecialResourceUtility.GetResourcePercent(owner, MX_QHDefOf.MX_QH_FlowerTidings);
-            return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint + Props.bonusDamagePerShieldPointAtMaxFlowerTidings * factor);
+            return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint);
         }
 
         private float ResolveRegenPerSecond()
         {
-            var scaler = GetScaler();
-            if (scaler?.Props.regenPerSecond != null)
-            {
-                return Mathf.Max(0f, scaler.Props.regenPerSecond.GetValue(PawnOwner));
-            }
-
-            Pawn owner = PawnOwner;
-            float factor = PawnSpecialResourceUtility.GetResourcePercent(owner, MX_QHDefOf.MX_QH_FlowerTidings);
-            return Mathf.Max(0f, Props.baseRegenPerSecond + Props.bonusRegenPerSecondAtMaxFlowerTidings * factor);
+            return Mathf.Max(0f, Props.baseRegenPerSecond);
         }
 
         public string BuildShieldTooltip()
         {
-            float flowerTidingsPercent = PawnSpecialResourceUtility.GetResourcePercent(PawnOwner, MX_QHDefOf.MX_QH_FlowerTidings);
             string status = InBreak
                 ? "状态：破碎（剩余 " + Mathf.CeilToInt(BreakTicksLeft / 60f) + " 秒）"
                 : "状态：生效中";
@@ -407,7 +367,6 @@ namespace MiliraXian.Characters.QingHe.Things
             return "花神护体\n\n"
                    + status + "\n"
                    + "护盾值：" + Energy.ToString("F0") + " / " + MaxEnergy.ToString("F0") + "\n"
-                   + "花信加成：" + flowerTidingsPercent.ToStringPercent("F0") + "\n"
                    + "每点护盾承伤：" + CurrentDamagePerShieldPoint.ToString("F2") + "\n"
                    + "护盾回复：" + CurrentRegenPerSecond.ToString("F2") + " /秒";
         }

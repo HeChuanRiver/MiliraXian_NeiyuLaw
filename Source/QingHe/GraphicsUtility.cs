@@ -13,7 +13,8 @@ namespace MiliraXian.Characters.QingHe
         private static readonly List<IntVec3> ringDrawCells = new List<IntVec3>();
         private static readonly List<Matrix4x4> instancingMatrices = new List<Matrix4x4>();
         private static readonly bool[] rotNeeded = new bool[4];
-        private static Material fieldEdgeMaterial;
+        private static readonly Dictionary<int, Material> fieldEdgeMaterialsByColor = new Dictionary<int, Material>();
+        private static Texture fieldEdgeTexture;
         private static BoolGrid fieldGrid;
         private static bool maxRadiusMessaged;
 
@@ -85,7 +86,9 @@ namespace MiliraXian.Characters.QingHe
 
         public static Material FieldEdgeMaterial(Color color, int renderQueue = 2900)
         {
-            if (fieldEdgeMaterial == null)
+            color.a = Mathf.Round(Mathf.Clamp01(color.a) * 31f) / 31f;
+
+            if (fieldEdgeTexture == null)
             {
                 var baseMaterial = MatLoader.LoadMat(FieldEdgeTexPath, renderQueue);
                 if (baseMaterial == null)
@@ -93,19 +96,29 @@ namespace MiliraXian.Characters.QingHe
                     return null;
                 }
 
-                fieldEdgeMaterial = new Material(ShaderDatabase.Transparent);
-                fieldEdgeMaterial.mainTexture = baseMaterial.mainTexture;
-                Texture mainTexture = fieldEdgeMaterial.GetTexture(MainTex);
-                if (mainTexture != null)
-                {
-                    mainTexture.wrapMode = TextureWrapMode.Clamp;
-                }
-                fieldEdgeMaterial.enableInstancing = true;
+                fieldEdgeTexture = baseMaterial.mainTexture;
+                fieldEdgeTexture.wrapMode = TextureWrapMode.Clamp;
             }
 
-            fieldEdgeMaterial.color = color;
-            fieldEdgeMaterial.renderQueue = renderQueue;
-            return fieldEdgeMaterial;
+            Color32 color32 = color;
+            int key = Gen.HashCombineInt(renderQueue, color32.r);
+            key = Gen.HashCombineInt(key, color32.g);
+            key = Gen.HashCombineInt(key, color32.b);
+            key = Gen.HashCombineInt(key, color32.a);
+
+            if (!fieldEdgeMaterialsByColor.TryGetValue(key, out Material material))
+            {
+                material = new Material(ShaderDatabase.Transparent)
+                {
+                    mainTexture = fieldEdgeTexture,
+                    color = color32,
+                    renderQueue = renderQueue,
+                    enableInstancing = true
+                };
+                fieldEdgeMaterialsByColor[key] = material;
+            }
+
+            return material;
         }
 
         public static void DrawRadiusRingWithMaterial(

@@ -11,7 +11,6 @@ namespace MiliraXian.Characters.QingHe.Ability
         public HediffDef resourceCostDef;
         public float resourceCost = 1f;
         public int durationTicks = 900;
-        public float previewRadius = 18f;
         public int maxActiveSummons = 3;
         public string summonEffecterDefName = "MXNL_ForFeatherCastingCircle";
         public float summonEffectScale = 1f;
@@ -104,7 +103,30 @@ namespace MiliraXian.Characters.QingHe.Ability
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             base.DrawEffectPreview(target);
-            GenDraw.DrawRadiusRing(target.Cell, Props.previewRadius, new Color(1f, 0.55f, 0.78f, 0.35f));
+            GenDraw.DrawRadiusRing(target.Cell, ResolveAttackRange(), new Color(1f, 0.55f, 0.78f, 0.35f));
+        }
+
+        private float ResolveAttackRange()
+        {
+            ThingDef turretDef = null;
+            if (Props.summonDef?.comps != null)
+            {
+                for (int i = 0; i < Props.summonDef.comps.Count; i++)
+                {
+                    if (Props.summonDef.comps[i] is CompProperties_TurretGun turretGunProps)
+                    {
+                        turretDef = turretGunProps.turretDef;
+                        break;
+                    }
+                }
+            }
+
+            if (turretDef?.Verbs != null && turretDef.Verbs.Count > 0)
+            {
+                return turretDef.Verbs[0].range;
+            }
+
+            return 18f;
         }
 
         private static void PlaySummonVisual(Map map, IntVec3 cell, string effecterDefName, string fallbackFleckDefName, float scale)

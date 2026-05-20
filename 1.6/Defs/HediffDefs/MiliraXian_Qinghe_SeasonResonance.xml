@@ -22,6 +22,16 @@
                 <defaultFlowerMandateDesc>清荷尚未调谐四时共鸣，暂时无法回应花神。</defaultFlowerMandateDesc>
                 <defaultFlowerMandateDisabledReason>尚未调谐四时共鸣。</defaultFlowerMandateDisabledReason>
             </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerGodDescent">
+                <activeDurationTicks>600</activeDurationTicks>
+                <cooldownTicks>3600</cooldownTicks>
+                <startReady>true</startReady>
+                <activeLabel>花神降临</activeLabel>
+                <noResonanceReason>尚未调谐四时共鸣。</noResonanceReason>
+                <alreadyActiveReason>花神已经降临。</alreadyActiveReason>
+                <cooldownReason>花神降临仍在冷却中。</cooldownReason>
+                <activatedMessage>花神降临。</activatedMessage>
+            </li>
         </comps>
     </HediffDef>
 </Defs>

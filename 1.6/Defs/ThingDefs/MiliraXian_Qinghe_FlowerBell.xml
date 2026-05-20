@@ -84,15 +84,6 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileResourceOnHit">
-        <entries>
-          <li>
-            <resourceDef>MX_QH_FlowerTidings</resourceDef>
-            <amount>1.4</amount>
-            <requireHostileTarget>true</requireHostileTarget>
-          </li>
-        </entries>
-      </li>
     </comps>
   </ThingDef>
 </Defs>

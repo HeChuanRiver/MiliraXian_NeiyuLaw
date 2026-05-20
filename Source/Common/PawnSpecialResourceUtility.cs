@@ -30,12 +30,24 @@ namespace MiliraXian.Characters
         
         public static float GetCurrentResource(Pawn pawn, HediffDef specialResourceDef)
         {
-            return GetSpecialResourceComp(pawn, specialResourceDef)?.CurrentValue ?? 0f;
+            HediffComp_PawnSpecialResource comp = GetSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceValueAdapter valueAdapter)
+            {
+                return valueAdapter.CurrentResourceValue;
+            }
+
+            return comp?.CurrentValue ?? 0f;
         }
 
         public static float GetMaxResource(Pawn pawn, HediffDef specialResourceDef)
         {
-            return GetSpecialResourceComp(pawn, specialResourceDef)?.MaxValue ?? 0f;
+            HediffComp_PawnSpecialResource comp = GetSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceValueAdapter valueAdapter)
+            {
+                return valueAdapter.MaxResourceValue;
+            }
+
+            return comp?.MaxValue ?? 0f;
         }
 
         public static void AddResource(Pawn pawn, HediffDef specialResourceDef, float value)

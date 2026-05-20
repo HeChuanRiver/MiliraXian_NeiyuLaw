@@ -178,6 +178,13 @@ namespace MiliraXian.Characters
 
         bool TryConsumeResourceValue(float value);
     }
+
+    public interface ISpecialResourceValueAdapter
+    {
+        float CurrentResourceValue { get; }
+
+        float MaxResourceValue { get; }
+    }
     
     [StaticConstructorOnStartup]
     public class PawnSpecialResourceGizmo : Gizmo_Slider

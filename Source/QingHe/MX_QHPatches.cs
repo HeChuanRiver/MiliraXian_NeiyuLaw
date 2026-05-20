@@ -34,13 +34,6 @@ namespace MiliraXian.Characters.QingHe
                     priority = Priority.Last
                 });
 
-            patcher.Patch(
-                AccessTools.Method(
-                    typeof(Verb),
-                    nameof(Verb.TryStartCastOn),
-                    new[] { typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(bool), typeof(bool), typeof(bool), typeof(bool) }),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Verb_TryStartCastOn_Postfix)));
-
             patcher.Patch(AccessTools.Method(typeof(InspirationWorker), nameof(InspirationWorker.CommonalityFor)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_InspirationWorker_CommonalityFor_Postfix)));
 
@@ -93,17 +86,6 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            if (dinfo.Def != null && dinfo.Instigator != __instance)
-            {
-                EleganceUtility.NotifyCombatEvent(__instance);
-
-                var attacker = dinfo.Instigator as Pawn;
-                if (attacker != null && attacker != __instance && attacker.HostileTo(__instance))
-                {
-                    EleganceUtility.NotifyCombatEvent(attacker);
-                }
-            }
-
             if (dinfo.Amount <= 0f)
             {
                 return true;
@@ -148,41 +130,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             longBreathComp.Trigger(ref dinfo, ref absorbed);
-        }
-
-        public static void Patch_Verb_TryStartCastOn_Postfix(
-            Verb __instance,
-            LocalTargetInfo castTarg,
-            bool __result)
-        {
-            if (!__result || __instance?.verbProps == null)
-            {
-                return;
-            }
-
-            if (__instance is Verb_CastAbility)
-            {
-                return;
-            }
-
-            if (!__instance.verbProps.violent)
-            {
-                return;
-            }
-
-            if (!__instance.verbProps.IsMeleeAttack && !__instance.verbProps.Ranged)
-            {
-                return;
-            }
-
-            Pawn caster = __instance.CasterPawn;
-            Thing targetThing = castTarg.HasThing ? castTarg.Thing : null;
-            if (caster == null || targetThing == null || !caster.HostileTo(targetThing))
-            {
-                return;
-            }
-
-            EleganceUtility.NotifyCombatEvent(caster);
         }
 
         public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)

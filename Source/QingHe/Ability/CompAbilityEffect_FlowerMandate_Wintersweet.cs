@@ -11,7 +11,6 @@ namespace MiliraXian.Characters.QingHe.Ability
         public HediffDef resourceCostDef;
         public float resourceCost = 1f;
         public int durationTicks = 900;
-        public float previewRadius = 4f;
         public string summonEffecterDefName = "MXNL_ForFeatherCastingCircle";
         public float summonEffectScale = 1f;
         public string fallbackSummonFleckDefName = "PsycastAreaEffect";
@@ -72,7 +71,23 @@ namespace MiliraXian.Characters.QingHe.Ability
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             base.DrawEffectPreview(target);
-            GenDraw.DrawRadiusRing(target.Cell, Props.previewRadius, new Color(0.62f, 0.88f, 1f, 0.30f));
+            GenDraw.DrawRadiusRing(target.Cell, ResolveShieldRadius(), new Color(0.62f, 0.88f, 1f, 0.30f));
+        }
+
+        private float ResolveShieldRadius()
+        {
+            if (Props.shieldDef?.comps != null)
+            {
+                for (int i = 0; i < Props.shieldDef.comps.Count; i++)
+                {
+                    if (Props.shieldDef.comps[i] is CompProperties_FlowerMandate_WintersweetShield shieldProps)
+                    {
+                        return shieldProps.radius;
+                    }
+                }
+            }
+
+            return 4f;
         }
 
         private static void PlaySummonVisual(Map map, IntVec3 cell, string effecterDefName, string fallbackFleckDefName, float scale)

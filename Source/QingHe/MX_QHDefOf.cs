@@ -8,33 +8,22 @@ namespace MiliraXian.Characters.QingHe
     {
         public static JobDef MX_QH_AttuneSeasonResonance;
         public static JobDef MX_QH_MeditateAtFlowerCourt;
+        public static JobDef MX_QH_FlowerGodDescent;
 
         public static ThingDef SpringFlowField;
         public static ThingDef MX_QH_FlowerMandate_Pomegranate;
         public static ThingDef MX_QH_FlowerMandate_Pomegranate_Gun;
         public static ThingDef MX_Bullet_QH_FlowerMandate_Pomegranate;
         public static ThingDef MX_QH_FlowerMandate_Wintersweet;
-        public static ThingDef TempestDrainField;
         public static ThingDef MX_QH_LotusPond;
 
-        public static DamageDef MX_Dehydrate;
         public static DamageDef MX_QH_NoteImpact;
 
-        public static HediffDef MX_DehydrateDamage;
-
         public static HediffDef MX_SpringFlow;
-        public static HediffDef MX_AquaMirror;
-        public static HediffDef MX_Draining;
-        public static HediffDef MX_DryCorpse;
-        public static HediffDef MX_QH_Tempest;
-        public static HediffDef MX_QH_Elegance;
         public static HediffDef MX_QH_LongBreath;
         public static HediffDef MX_QH_LongBreathDamageImmunity;
-        public static HediffDef MX_QH_SpringRegen;
         public static HediffDef MX_QH_LotusShield;
-        public static HediffDef MX_QH_QingheStatusGizmo;
         public static HediffDef MX_QH_SeasonResonance;
-        public static HediffDef MX_QH_FlowerTidings;
         public static HediffDef MX_QH_FlowerDecree;
 
         public static TraitDef MX_QH_Trait_LongBreath;
@@ -45,7 +34,6 @@ namespace MiliraXian.Characters.QingHe
         public static InspirationDef Frenzy_Work;
         public static InspirationDef Inspired_Creativity;
 
-        public static ThingDef Mote_AquaMirrorExplode;
         public static ThingDef MX_QH_Weapon_FlowerBell;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell;
     }

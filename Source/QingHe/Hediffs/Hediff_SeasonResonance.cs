@@ -96,6 +96,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float MaxAttunement => Props?.maxAttunement > 0f ? Props.maxAttunement : 100f;
 
+        public HediffComp_FlowerGodDescent FlowerGodDescent => parent?.GetComp<HediffComp_FlowerGodDescent>();
+
         public override bool CompDisallowVisible()
         {
             return true;

@@ -24,13 +24,11 @@ namespace MiliraXian.Characters.QingHe.UI
             return new Command_Action
             {
                 defaultLabel = "DEV: 资源调试",
-                defaultDesc = "开发者测试用：调整清荷的花信、花令与花令恢复进度。",
+                defaultDesc = "开发者测试用：调整清荷的花令与花令恢复进度。",
                 action = delegate
                 {
                     Find.WindowStack.Add(new FloatMenu(new List<FloatMenuOption>
                     {
-                        BuildResourceOption("花信 +25", delegate { PawnSpecialResourceUtility.AddResource(resonance.Pawn, MX_QHDefOf.MX_QH_FlowerTidings, 25f); }),
-                        BuildResourceOption("花信 -25", delegate { PawnSpecialResourceUtility.TryConsumeResource(resonance.Pawn, MX_QHDefOf.MX_QH_FlowerTidings, 25f); }),
                         BuildResourceOption("花令 +1", delegate { PawnSpecialResourceUtility.AddResource(resonance.Pawn, MX_QHDefOf.MX_QH_FlowerDecree, 1f); }),
                         BuildResourceOption("花令 -1", delegate { PawnSpecialResourceUtility.TryConsumeResource(resonance.Pawn, MX_QHDefOf.MX_QH_FlowerDecree, 1f); }),
                         BuildResourceOption("花令进度 +25", delegate { FlowerCourtUtility.AddFlowerDecreeRecoveryProgress(resonance.Pawn, 25f); }),

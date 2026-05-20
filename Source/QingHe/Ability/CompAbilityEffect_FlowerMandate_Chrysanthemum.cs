@@ -7,11 +7,9 @@ namespace MiliraXian.Characters.QingHe
 {
     public class CompProperties_AbilityFlowerMandate_Chrysanthemum : CompProperties_AbilityEffect
     {
-        public ThingDef requiredWeapon;
         public HediffDef resourceCostDef;
         public float resourceCost = 0f;
         public string missingResourceMessage = "花令不足。";
-        public int postCastDelayTicks = 0;
 
         public float radius = 2.5f;
 
@@ -27,9 +25,6 @@ namespace MiliraXian.Characters.QingHe
         public int slowDurationTicks = 1800;
 
         public float brainDestroyChance = 0.08f;
-
-        public float eleganceGainOnCast = 8f;
-        public float eleganceGainPerTarget = 2f;
 
         public string warmupCasterFx = "MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupCaster";
         public string warmupTargetFx = "MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupTarget";
@@ -72,17 +67,9 @@ namespace MiliraXian.Characters.QingHe
     {
         public new CompProperties_AbilityFlowerMandate_Chrysanthemum Props => (CompProperties_AbilityFlowerMandate_Chrysanthemum)props;
 
-        public override bool ShouldHideGizmo => Props.requiredWeapon != null && !MX_QHUtility.HasRequiredWeapon(parent?.pawn, Props.requiredWeapon);
-
         public override bool GizmoDisabled(out string reason)
         {
             Pawn pawn = parent?.pawn;
-            if (Props.requiredWeapon != null && !MX_QHUtility.HasRequiredWeapon(pawn, Props.requiredWeapon))
-            {
-                reason = "需要装备竹笛形态。";
-                return true;
-            }
-
             if (NeedsResource(pawn))
             {
                 reason = Props.missingResourceMessage;
@@ -120,6 +107,9 @@ namespace MiliraXian.Characters.QingHe
             {
                 PawnSpecialResourceUtility.TryConsumeResource(pawn, Props.resourceCostDef, Props.resourceCost);
             }
+
+            ResolvePulse(target);
+            SpawnTrail(target);
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
@@ -168,6 +158,142 @@ namespace MiliraXian.Characters.QingHe
             return Props.resourceCostDef != null
                 && Props.resourceCost > 0f
                 && PawnSpecialResourceUtility.GetCurrentResource(pawn, Props.resourceCostDef) < Props.resourceCost;
+        }
+
+        private void ResolvePulse(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            if (caster?.MapHeld == null)
+            {
+                return;
+            }
+
+            Map map = caster.MapHeld;
+            IntVec3 center = target.IsValid ? target.Cell : caster.Position;
+            if (!center.IsValid || !center.InBounds(map))
+            {
+                center = caster.Position;
+            }
+
+            GraphicsUtility.Fx(map, caster.Position, Props.releaseCasterFx, 1f);
+            GraphicsUtility.Fx(map, center, Props.releaseTargetFx, 1f);
+            GraphicsUtility.Fleck(map, center, Props.releaseFleck, Mathf.Max(0.85f, Props.radius * 0.65f));
+            GraphicsUtility.Fleck(map, center, Props.releaseImpactFleck, Mathf.Max(0.45f, Props.releaseImpactScale));
+
+            DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Cut;
+            List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, Props.radius);
+            for (int i = 0; i < victims.Count; i++)
+            {
+                Pawn victim = victims[i];
+                victim.TakeDamage(new DamageInfo(damageDef, Props.damageAmount, Props.armorPenetration, -1f, caster));
+
+                if (Props.stunDamageAmount > 0f)
+                {
+                    victim.TakeDamage(new DamageInfo(DamageDefOf.Stun, Props.stunDamageAmount, 0f, -1f, caster));
+                }
+
+                MX_QHUtility.ApplyBleed(victim, Props.bleedDamageAmount);
+                MX_QHUtility.TryApplyOrRefreshHediff(victim, Props.slowHediff, Props.slowSeverity, Props.slowDurationTicks);
+
+                if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
+                {
+                    GraphicsUtility.Fx(map, victim.Position, Props.hitFx, 1f);
+                    GraphicsUtility.Fleck(map, victim.Position, Props.hitFleck, 0.72f);
+                    GraphicsUtility.Fleck(map, victim.Position, Props.hitBurstFleck, 0.64f);
+                }
+
+                TryBreakBrain(victim, map);
+            }
+        }
+
+        private void TryBreakBrain(Pawn victim, Map map)
+        {
+            if (victim == null || victim.Dead || Rand.Value >= Mathf.Clamp01(Props.brainDestroyChance))
+            {
+                return;
+            }
+
+            BodyPartRecord brain = null;
+            foreach (BodyPartRecord part in victim.health.hediffSet.GetNotMissingParts())
+            {
+                if (part.def == DefDatabase<BodyPartDef>.GetNamedSilentFail("Brain"))
+                {
+                    brain = part;
+                    break;
+                }
+            }
+
+            if (brain == null)
+            {
+                return;
+            }
+
+            victim.health.AddHediff(HediffDefOf.MissingBodyPart, brain);
+            if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
+            {
+                GraphicsUtility.Fx(map, victim.Position, Props.brainBreakFx, 1f);
+            }
+        }
+
+        private void SpawnTrail(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            if (caster == null || !caster.Spawned || caster.MapHeld == null)
+            {
+                return;
+            }
+
+            Map map = caster.MapHeld;
+            IntVec3 cell = target.IsValid ? target.Cell : caster.Position;
+            if (!cell.IsValid || !cell.InBounds(map))
+            {
+                cell = caster.Position;
+            }
+
+            ThingDef moteDef = Props.curveMote.NullOrEmpty() ? null : DefDatabase<ThingDef>.GetNamedSilentFail(Props.curveMote);
+            if (moteDef == null)
+            {
+                return;
+            }
+
+            FleckDef lineFleck = Props.curveLineFleck.NullOrEmpty() ? null : DefDatabase<FleckDef>.GetNamedSilentFail(Props.curveLineFleck);
+            if (lineFleck == null)
+            {
+                return;
+            }
+
+            FleckDef distortFleck = Props.curveDistortFleck.NullOrEmpty() ? null : DefDatabase<FleckDef>.GetNamedSilentFail(Props.curveDistortFleck);
+            Mote_FlowerMandate_ChrysanthemumCurvedTrail mote = ThingMaker.MakeThing(moteDef) as Mote_FlowerMandate_ChrysanthemumCurvedTrail;
+            if (mote == null)
+            {
+                return;
+            }
+
+            mote.Setup(
+                new TargetInfo(caster),
+                new TargetInfo(cell, map),
+                lineFleck,
+                distortFleck,
+                Mathf.Max(0.03f, Props.radius * 0.022f),
+                Props.curveDistortWidth,
+                Props.curveDistortAlpha,
+                Props.curveWidth,
+                Props.curveDensity,
+                Props.curveWaveLen,
+                Props.curveAnimTicks,
+                Props.curveGrowTicks,
+                Props.curveAlpha,
+                Props.curveAfterLayers,
+                Props.curveAfterGap,
+                Props.curveAfterAlpha,
+                Props.curveMinSegs,
+                Props.curveMaxSegs,
+                Props.curveDistortStep);
+
+            if (GraphicsUtility.Mote(map, cell, mote))
+            {
+                mote.exactPosition = cell.ToVector3Shifted();
+            }
         }
 
         private void SpawnWarmupVisual(LocalTargetInfo target, float intensity)

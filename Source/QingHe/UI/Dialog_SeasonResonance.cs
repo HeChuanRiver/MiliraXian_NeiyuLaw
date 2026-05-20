@@ -150,9 +150,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private string BuildResourceSummary()
         {
-            return BuildResourceLine(MX_QHDefOf.MX_QH_FlowerTidings, "花信")
-                + "\n"
-                + BuildResourceLine(MX_QHDefOf.MX_QH_FlowerDecree, "花令");
+            return BuildResourceLine(MX_QHDefOf.MX_QH_FlowerDecree, "花令");
         }
 
         private string BuildResourceLine(HediffDef resourceDef, string fallbackLabel)

@@ -24,8 +24,6 @@
             <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_SpringFlowField">
                 <radius>6.0</radius>
                 <pulseIntervalTicks>10</pulseIntervalTicks>
-                <attunementRadiusBonusAtMax>2.0</attunementRadiusBonusAtMax>
-                <flowerTidingsGainOnPulse>3.0</flowerTidingsGainOnPulse>
                 <fadeInTicks>30</fadeInTicks>
                 <fadeOutTicks>45</fadeOutTicks>
                 <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
@@ -298,64 +296,6 @@
                 <breakFlashScale>8.0</breakFlashScale>
             </li>
         </comps>
-    </ThingDef>
-
-    <ThingDef>
-        <defName>TempestDrainField</defName>
-        <label>*TDF placeholder*</label>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_TempestDrainField</thingClass>
-        <tickerType>Normal</tickerType>
-        <drawerType>RealtimeOnly</drawerType>
-        <altitudeLayer>MoteLow</altitudeLayer>
-        <graphicData>
-            <graphicClass>Graphic_Single</graphicClass>
-            <shaderType>MoteGlowDistorted</shaderType>
-            <shaderParameters>
-                <_DistortionTex>/Other/Ripples</_DistortionTex>
-            </shaderParameters>
-            <color>(0.5,0.5,0.5,0.6)</color>
-            <texPath>Things/Mote/PsycastCast</texPath>
-            <drawSize>24.0</drawSize>
-        </graphicData>
-        <drawOffscreen>true</drawOffscreen>
-        <useHitPoints>false</useHitPoints>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.CompProperties_TempestDrainField">
-                <pulseIntervalTicks>10</pulseIntervalTicks>
-                <damageEveryPulses>3</damageEveryPulses>
-                <damageDef>MX_Dehydrate</damageDef>
-                <damageAmount>1</damageAmount>
-                <armorPenetration>0.15</armorPenetration>
-                <damageFactorMax>0.5</damageFactorMax>
-            </li>
-        </comps>
-    </ThingDef>
-
-    <ThingDef ParentName="MoteGlowDistorted">
-        <defName>Mote_AquaMirrorExplode</defName>
-        <thingClass>MoteAttached</thingClass>
-        <altitudeLayer>MoteOverhead</altitudeLayer>
-        <mote>
-            <fadeInTime>0.12</fadeInTime>
-            <fadeOutTime>0.42</fadeOutTime>
-            <solidTime>0.48</solidTime>
-            <growthRate>4.8</growthRate>
-        </mote>
-        <graphicData>
-            <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
-            <shaderType>MoteApocritonPulse</shaderType>
-            <texPath>Things/Mote/PsychicDistortionApocriton</texPath>
-            <color>(0.60, 0.94, 1.00, 0.95)</color>
-            <shaderParameters>
-                <_PulseTex>/Things/Mote/ApocritonWaves</_PulseTex>
-                <_distortionIntensity>0.22</_distortionIntensity>
-                <_ScrollSpeed>-1.05</_ScrollSpeed>
-                <_ScrollScale>0.18</_ScrollScale>
-                <_distortionTint>(0.08, 0.24, 0.26, 0)</_distortionTint>
-                <_pulseSpeed>2.4</_pulseSpeed>
-            </shaderParameters>
-            <drawSize>1.7</drawSize>
-        </graphicData>
     </ThingDef>
 
 </Defs>

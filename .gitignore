@@ -12,3 +12,4 @@ riderModule.iml
 .dotnet/
 .modpack/
 References.md
+Directory.Build.local.props

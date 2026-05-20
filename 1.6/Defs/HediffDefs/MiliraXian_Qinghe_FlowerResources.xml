@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MX_QH_FlowerTidings</defName>
-        <label>花信</label>
-        <description>清荷的积累型战斗资源，用于表现当前战斗活跃程度，并影响飞花令、花神签与决战技的效果。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.78, 0.92, 0.72)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <initialSeverity>1</initialSeverity>
-        <minSeverity>1</minSeverity>
-        <maxSeverity>1</maxSeverity>
-        <comps>
-            <li Class="MiliraXian.Characters.HediffCompProperties_PawnSpecialResource">
-                <resourceLabel>花信</resourceLabel>
-                <resourceDescription>清荷的积累型战斗资源，用于表现当前战斗活跃程度。</resourceDescription>
-                <initialValue>0</initialValue>
-                <maxValue>100</maxValue>
-                <clampToMax>true</clampToMax>
-                <showGizmo>false</showGizmo>
-                <hideOnHealthTab>true</hideOnHealthTab>
-                <barColorRed>0.38</barColorRed>
-                <barColorGreen>0.70</barColorGreen>
-                <barColorBlue>0.42</barColorBlue>
-                <barColorAlpha>1</barColorAlpha>
-                <barHighlightRed>0.62</barHighlightRed>
-                <barHighlightGreen>0.92</barHighlightGreen>
-                <barHighlightBlue>0.58</barHighlightBlue>
-                <barHighlightAlpha>1</barHighlightAlpha>
-            </li>
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
         <defName>MX_QH_FlowerDecree</defName>
         <label>花令</label>
         <description>清荷的充能型层数资源，用于释放四时飞花令。</description>
@@ -50,10 +17,9 @@
                 <resourceLabel>花令</resourceLabel>
                 <resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</resourceDescription>
                 <initialValue>0</initialValue>
-                <maxValue>5</maxValue>
-                <recoveryProgressMax>100</recoveryProgressMax>
+                <maxValue>500</maxValue>
                 <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
-                <flowerTidingsRecoverySpeedBonusAtMax>1.0</flowerTidingsRecoverySpeedBonusAtMax>
+                <valuePerDecree>100</valuePerDecree>
                 <highlightTicks>90</highlightTicks>
                 <clampToMax>true</clampToMax>
                 <showGizmo>false</showGizmo>

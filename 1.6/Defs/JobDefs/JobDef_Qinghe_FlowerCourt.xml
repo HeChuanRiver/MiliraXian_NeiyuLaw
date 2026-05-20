@@ -17,14 +17,13 @@
     </JobDef>
 
     <JobDef>
-        <defName>MX_QH_CastAbility_FlowerMandate_Chrysanthemum</defName>
-        <driverClass>MiliraXian.Characters.QingHe.JobDriver_MX_FlowerMandate_Chrysanthemum</driverClass>
-        <reportString>施放飞花令·雏菊。</reportString>
-        <abilityCasting>true</abilityCasting>
+        <defName>MX_QH_FlowerGodDescent</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_FlowerGodDescent</driverClass>
+        <reportString>呼唤花神降临。</reportString>
         <playerInterruptible>false</playerInterruptible>
         <casualInterruptible>false</casualInterruptible>
-        <collideWithPawns>true</collideWithPawns>
-        <neverShowWeapon>true</neverShowWeapon>
+        <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
+
 </Defs>
 
