@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -71,8 +72,15 @@ namespace MiliraXian.Characters.Zhaoli
         {
             return pawn != null
                    && pawn.Faction == Faction.OfPlayer
-                   && !ZhaoliScenarioUtility.IsRaidState(pawn)
+                   && !ShouldBlockTenDayRebirth(pawn)
                    && !ZhaoliScenarioUtility.IsHideoutState(pawn);
+        }
+
+        public static bool ShouldBlockTenDayRebirth(Pawn pawn)
+        {
+            return pawn != null
+                   && ZhaoliScenarioUtility.IsRaidState(pawn)
+                   && pawn.Faction != Faction.OfPlayer;
         }
 
         public static void RegisterRecruitGrowthDeath(Pawn pawn)
@@ -92,7 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.IsRaidState(pawn))
+            if (ShouldBlockTenDayRebirth(pawn))
             {
                 return false;
             }
@@ -288,6 +296,26 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
             ZhaoliRebirthUtility.TryScheduleRebirth(Pawn);
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
+    internal static class Patch_Pawn_Kill_ZhaoliRebirthFallback
+    {
+        [HarmonyPriority(Priority.Last)]
+        public static void Postfix(Pawn __instance)
+        {
+            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            {
+                return;
+            }
+
+            if (ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(__instance) || ZhaoliScenarioUtility.IsHideoutState(__instance))
+            {
+                return;
+            }
+
+            ZhaoliRebirthUtility.TryScheduleRebirth(__instance);
         }
     }
 

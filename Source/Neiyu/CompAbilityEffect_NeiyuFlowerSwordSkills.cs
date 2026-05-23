@@ -408,6 +408,11 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
+                if (IsMechanoid(pawn))
+                {
+                    continue;
+                }
+
                 ApplyBlessToPawn(caster, pawn);
                 affected++;
             }
@@ -435,6 +440,11 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            if (IsMechanoid(pawn))
+            {
+                return;
+            }
+
             if (Props.buffHediff != null)
             {
                 Hediff buff = pawn.health.hediffSet.GetFirstHediffOfDef(Props.buffHediff);
@@ -453,6 +463,11 @@ namespace MiliraXian.Characters.Neiyu
             {
                 pawn.needs.mood.thoughts.memories.TryGainMemoryFast(Props.moodThought);
             }
+        }
+
+        private static bool IsMechanoid(Pawn pawn)
+        {
+            return pawn?.RaceProps?.IsMechanoid == true;
         }
     }
 

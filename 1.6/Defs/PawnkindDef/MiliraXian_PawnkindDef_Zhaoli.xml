@@ -197,24 +197,23 @@
                 <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
                 <uniqueID>Zhaoli</uniqueID>
-                <!-- TODO：犯煞笔了，角色做好记得改回来-->
-<!--                &lt;!&ndash; The tab you want to put this pawn in. MI_Milira_Tab is Milira.-->
-<!--                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 &ndash;&gt;-->
-<!--                <tabDef>MI_Milira_Tab</tabDef>-->
 
-<!--                &lt;!&ndash; The texture path for character icon in SCM. You may use 256px picture.-->
-<!--                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 &ndash;&gt;-->
-<!--                &lt;!&ndash; TODO: 记得换昭离的大头照 &ndash;&gt;-->
-<!--                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>-->
+                <!-- The tab you want to put this pawn in. MI_Milira_Tab is Milira.
+                 你想要把这个角色放入的顶部分页。MI_Milira_Tab是米莉拉 -->
+                <tabDef>MI_Milira_Tab</tabDef>
 
-<!--                &lt;!&ndash; Key for this pawn's name. 用于写此人的姓名的Key。 &ndash;&gt;-->
-<!--                <labelKey>SpecialPawnZhaoli.label</labelKey>-->
-<!--                &lt;!&ndash; Key for this pawn's description. 用于写此人描述的Key。 &ndash;&gt;-->
-<!--                <descKey>SpecialPawnZhaoli.desc</descKey>-->
+                <!-- The texture path for character icon in SCM. You may use 256px picture.
+                 这个角色在特殊角色管理器中的头像的图片路径，请使用256x256像素的图片。 -->
+                <iconPathRecruited>MiliraXianZhaoli/Icon/ZhaoliAG</iconPathRecruited>
 
-<!--                &lt;!&ndash; The sorting position of this pawn’s icon within the tab you selected.-->
-<!--                 这个角色的图标在你所选的分页（Tab）的排序位置 &ndash;&gt;-->
-<!--                <order>14</order>-->
+                <!-- Key for this pawn's name. 用于写此人的姓名的Key。 -->
+                <labelKey>SpecialPawnZhaoli.label</labelKey>
+                <!-- Key for this pawn's description. 用于写此人描述的Key。 -->
+                <descKey>SpecialPawnZhaoli.desc</descKey>
+
+                <!-- The sorting position of this pawn’s icon within the tab you selected.
+                 这个角色的图标在你所选的分页（Tab）的排序位置 -->
+                <order>14</order>
             </li>
 
             <!-- The classes upon must be included!!! ↑↑↑ -->
@@ -258,10 +257,6 @@
                 <!-- Disable organ harvest. 禁用噶腰子。 -->
                 <blockHarvest>true</blockHarvest>
             </li>
-
-            <!-- Set the minimum Consciousness to 100%. Usually, I don’t recommend adding this class; it’s better suited for a boss character. 
-             最低意识设置为100%。通常来说，我强烈不建议你添加这个class，除非你正在制作一个boss级角色，或者说是已经死掉的灵体角色！ -->
-            <li Class="AriandelLibrary.AL_LockConsciousness_Extension"/>
 
             <!-- Freeze this pawn's biological age. 锁定这个角色的生理年龄，使生理年龄无增长。 -->
             <li Class="AriandelLibrary.AL_AgeFreeze_Extension">

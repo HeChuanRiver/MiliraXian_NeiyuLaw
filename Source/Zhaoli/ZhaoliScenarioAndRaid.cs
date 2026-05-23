@@ -3695,33 +3695,114 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.DropAndForbidEverything))]
     internal static class Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon
     {
-        public static void Prefix(Pawn __instance, out ThingWithComps __state)
+        public sealed class ZhaoliWeaponDropState
         {
-            __state = null;
-            if (__instance?.health?.isBeingKilled != true || !ZhaoliKarmaUtility.IsZhaoli(__instance) || __instance.equipment?.Primary == null)
-            {
-                return;
-            }
-
-            ThingWithComps primary = __instance.equipment.Primary;
-            if (primary.def != MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
-            {
-                return;
-            }
-
-            __instance.equipment.Remove(primary);
-            __state = primary;
+            public ThingWithComps weapon;
+            public bool stashInInventory;
         }
 
-        public static void Postfix(Pawn __instance, ThingWithComps __state)
+        public static void Prefix(Pawn __instance, out ZhaoliWeaponDropState __state)
         {
-            if (__state == null || __state.Destroyed || __instance?.equipment == null || __instance.equipment.Primary != null)
+            __state = null;
+            if (!ZhaoliKarmaUtility.IsZhaoli(__instance))
             {
                 return;
             }
 
-            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(__state);
-            __instance.equipment.AddEquipment(__state);
+            bool isBeingKilled = __instance.health?.isBeingKilled == true;
+            bool isDownedDrop = !isBeingKilled && __instance.Downed;
+            if (!isBeingKilled && !isDownedDrop)
+            {
+                return;
+            }
+
+            ThingWithComps primary = __instance.equipment?.Primary;
+            if (primary != null && primary.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
+            {
+                __instance.equipment.Remove(primary);
+                __state = new ZhaoliWeaponDropState
+                {
+                    weapon = primary,
+                    stashInInventory = isDownedDrop
+                };
+                return;
+            }
+
+            if (isBeingKilled && TryRemoveStoredZhaoliWeaponFromInventory(__instance, out ThingWithComps storedWeapon))
+            {
+                __state = new ZhaoliWeaponDropState
+                {
+                    weapon = storedWeapon,
+                    stashInInventory = false
+                };
+            }
+        }
+
+        public static void Postfix(Pawn __instance, ZhaoliWeaponDropState __state)
+        {
+            if (__state?.weapon == null || __state.weapon.Destroyed || __instance == null || __instance.Destroyed)
+            {
+                return;
+            }
+
+            if (__state.stashInInventory && __instance.inventory?.innerContainer != null && !__instance.Dead)
+            {
+                __instance.mindState.droppedWeapon = null;
+                if (__instance.inventory.innerContainer.TryAdd(__state.weapon, canMergeWithExistingStacks: false))
+                {
+                    return;
+                }
+            }
+
+            if (__instance.equipment == null || __instance.equipment.Primary != null)
+            {
+                return;
+            }
+
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(__state.weapon);
+            __instance.equipment.AddEquipment(__state.weapon);
+        }
+
+        internal static void TryReequipStoredZhaoliWeapon(Pawn pawn)
+        {
+            if (pawn == null || pawn.Destroyed || pawn.Dead || pawn.Downed || !ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.equipment == null || pawn.equipment.Primary != null)
+            {
+                return;
+            }
+
+            if (!TryRemoveStoredZhaoliWeaponFromInventory(pawn, out ThingWithComps weapon))
+            {
+                return;
+            }
+
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(weapon);
+            pawn.equipment.AddEquipment(weapon);
+        }
+
+        private static bool TryRemoveStoredZhaoliWeaponFromInventory(Pawn pawn, out ThingWithComps weapon)
+        {
+            weapon = null;
+            if (pawn?.inventory?.innerContainer == null)
+            {
+                return false;
+            }
+
+            foreach (Thing thing in pawn.inventory.innerContainer)
+            {
+                if (thing is ThingWithComps thingWithComps && thingWithComps.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
+                {
+                    weapon = thingWithComps;
+                    break;
+                }
+            }
+
+            if (weapon == null)
+            {
+                return false;
+            }
+
+            pawn.inventory.innerContainer.Remove(weapon);
+            return true;
         }
     }
 
@@ -3752,6 +3833,15 @@ namespace MiliraXian.Characters.Zhaoli
             ZhaoliRaidDebugUtility.Log(___pawn, "NoDowned", "prevented MakeDowned and forced death instead");
             ___pawn.Kill(dinfo, hediff);
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn_HealthTracker), "MakeUndowned")]
+    internal static class Patch_Pawn_HealthTracker_MakeUndowned_ZhaoliWeapon
+    {
+        public static void Postfix(Pawn ___pawn)
+        {
+            Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon.TryReequipStoredZhaoliWeapon(___pawn);
         }
     }
 
@@ -3833,7 +3923,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public static bool Prefix(Pawn pawn, float value)
         {
-            if (!ZhaoliScenarioUtility.IsRaidState(pawn))
+            if (!ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(pawn))
             {
                 return true;
             }
