@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
+using LudeonTK;
 using MiliraXian.Characters;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.QingHe;
@@ -45,7 +46,6 @@ namespace MiliraXian.Characters.Zhaoli
     internal static class ZhaoliScenarioUtility
     {
         public const string ZhaoliPawnKindDefName = "MiliraXian_Zhaoli";
-        public const string MiliraFactionDefName = "Milira_Faction";
         public const string MurmurQuestDefName = "MXZL_ZhaoliMurmurQuest";
         public const string ReturnQuestDefName = "MXZL_ZhaoliReturnQuest";
         public const int MurmurTriggerTicks = 15 * GenDate.TicksPerDay;
@@ -55,14 +55,24 @@ namespace MiliraXian.Characters.Zhaoli
         public const int RaidStartingShieldLayers = 500;
         public const float RaidStartingKarma = 25f;
         public const float DeathFieldRaidBonusKarma = 20f;
+        public const int RaidTransitionBaseShieldLayers = 120;
+        public const int RaidTransitionShieldLayersPerPhase = 40;
         public const float HatredPerTenDamage = 1f;
         public const int HatredPerHit = 3;
-        public const int TargetSwitchGraceTicks = 240;
+        public const int TargetSwitchGraceTicks = 900;
+        public const int TargetLockTicks = 1800;
+        public const int RaidSkillWeaveTicks = 300;
+        public const int RaidOpeningAttackTicks = 240;
+        public const int DeathFieldDenseLivingThreshold = 5;
+        public const int DeathFieldSingleHumanlikeDelayTicks = 360;
+        public const int DeathFieldRecastGuardTicks = 900;
+        public const float DeathFieldEvaluationRadius = 9f;
         public const int AiTickInterval = 15;
         private const string WrongNeiyuInnerClothingDefName = "MiliraXian_NeiyuInner";
         private const string WrongNeiyuEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private const string DefaultClothingDefName = "MX_ZhaoliNormal";
         private const string DefaultHoodDefName = "MX_ZhaoliHood";
+        private const string HostileAncientsFactionDefName = "AncientsHostile";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
 
         public static bool QuestExists(string questDefName)
@@ -76,10 +86,99 @@ namespace MiliraXian.Characters.Zhaoli
             for (int index = 0; index < quests.Count; index++)
             {
                 Quest quest = quests[index];
-                if (quest?.root?.defName == questDefName)
+                if (quest?.root?.defName == questDefName && QuestBlocksNewOffer(quest))
                 {
                     return true;
                 }
+            }
+
+            return false;
+        }
+
+        public static Quest FindActiveQuest(string questDefName)
+        {
+            if (Find.QuestManager == null)
+            {
+                return null;
+            }
+
+            List<Quest> quests = Find.QuestManager.QuestsListForReading;
+            for (int index = 0; index < quests.Count; index++)
+            {
+                Quest quest = quests[index];
+                if (quest?.root?.defName == questDefName && QuestBlocksNewOffer(quest))
+                {
+                    return quest;
+                }
+            }
+
+            return null;
+        }
+
+        public static bool QuestBlocksNewOffer(Quest quest)
+        {
+            if (quest == null)
+            {
+                return false;
+            }
+
+            QuestState state = quest.State;
+            return state == QuestState.NotYetAccepted || state == QuestState.Ongoing;
+        }
+
+        public static bool QuestWasNeverAccepted(string questDefName)
+        {
+            if (Find.QuestManager == null)
+            {
+                return false;
+            }
+
+            bool foundNotYetAccepted = false;
+            bool foundNeverAcceptedEnded = false;
+            bool foundAcceptedEnded = false;
+            List<Quest> quests = Find.QuestManager.QuestsListForReading;
+            for (int index = 0; index < quests.Count; index++)
+            {
+                Quest quest = quests[index];
+                if (quest?.root?.defName != questDefName)
+                {
+                    continue;
+                }
+
+                QuestState state = quest.State;
+                if (state == QuestState.Ongoing)
+                {
+                    return false;
+                }
+
+                if (state == QuestState.NotYetAccepted)
+                {
+                    foundNotYetAccepted = true;
+                    continue;
+                }
+
+                if (state == QuestState.EndedOfferExpired || state == QuestState.EndedInvalid)
+                {
+                    foundNeverAcceptedEnded = true;
+                    continue;
+                }
+
+                foundAcceptedEnded = true;
+            }
+
+            if (foundNotYetAccepted)
+            {
+                return true;
+            }
+
+            if (foundAcceptedEnded)
+            {
+                return false;
+            }
+
+            if (foundNeverAcceptedEnded)
+            {
+                return true;
             }
 
             return false;
@@ -155,13 +254,41 @@ namespace MiliraXian.Characters.Zhaoli
             return GetRaidStateComp(pawn) != null;
         }
 
+        public static Faction ResolveAncientsFaction()
+        {
+            FactionManager factionManager = Find.FactionManager;
+            if (factionManager == null)
+            {
+                return null;
+            }
+
+            return factionManager.OfAncients ?? factionManager.FirstFactionOfDef(FactionDefOf.Ancients);
+        }
+
+        public static Faction ResolveHostileAncientsFaction()
+        {
+            FactionManager factionManager = Find.FactionManager;
+            if (factionManager == null)
+            {
+                return null;
+            }
+
+            Faction hostileAncients = factionManager.OfAncientsHostile;
+            if (hostileAncients != null)
+            {
+                return hostileAncients;
+            }
+
+            FactionDef hostileAncientsDef = DefDatabase<FactionDef>.GetNamedSilentFail(HostileAncientsFactionDefName);
+            return hostileAncientsDef != null ? factionManager.FirstFactionOfDef(hostileAncientsDef) : null;
+        }
+
         public static Faction ResolveFriendlyFaction()
         {
-            FactionDef miliraFactionDef = DefDatabase<FactionDef>.GetNamedSilentFail(MiliraFactionDefName);
-            Faction miliraFaction = miliraFactionDef != null ? Find.FactionManager.FirstFactionOfDef(miliraFactionDef) : null;
-            if (miliraFaction != null && !miliraFaction.IsPlayer && !miliraFaction.HostileTo(Faction.OfPlayer))
+            Faction ancientsFaction = ResolveAncientsFaction();
+            if (ancientsFaction != null && !ancientsFaction.IsPlayer)
             {
-                return miliraFaction;
+                return ancientsFaction;
             }
 
             List<Faction> factions = Find.FactionManager.AllFactionsListForReading;
@@ -200,21 +327,21 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static Faction ResolveHostileFaction()
         {
-            FactionDef miliraFactionDef = DefDatabase<FactionDef>.GetNamedSilentFail(MiliraFactionDefName);
-            Faction miliraFaction = miliraFactionDef != null ? Find.FactionManager.FirstFactionOfDef(miliraFactionDef) : null;
-            if (miliraFaction != null && miliraFaction.HostileTo(Faction.OfPlayer))
+            Faction hostileAncients = ResolveHostileAncientsFaction();
+            if (hostileAncients != null && hostileAncients.HostileTo(Faction.OfPlayer))
             {
-                return miliraFaction;
+                return hostileAncients;
             }
 
             return Find.FactionManager.RandomEnemyFaction(allowHidden: false, allowDefeated: false, allowNonHumanlike: false)
                    ?? Find.FactionManager.OfPirates
-                   ?? Find.FactionManager.OfAncientsHostile
+                   ?? hostileAncients
                    ?? Find.FactionManager.OfMechanoids;
         }
 
         public static Pawn GenerateZhaoliPawn(Faction faction)
         {
+            faction = faction ?? ResolveAncientsFaction();
             PawnKindDef zhaoliKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(ZhaoliPawnKindDefName);
             if (zhaoliKind == null)
             {
@@ -370,6 +497,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (pawn.equipment.Primary != null && pawn.equipment.Primary.def == weaponDef)
             {
+                ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(pawn.equipment.Primary);
                 return;
             }
 
@@ -400,6 +528,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             pawn.equipment.AddEquipment(weapon);
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(weapon);
         }
 
         public static void EnsureDefaultClothing(Pawn pawn)
@@ -799,16 +928,10 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             quest.AcceptanceRequirementNotSpace(map.Parent);
-            quest.Signal(quest.InitiateSignal, delegate
+            quest.AddPart(new QuestPart_ZhaoliStartHideoutOnAccept
             {
-                GameComponent_ZhaoliScenario component = Current.Game?.GetComponent<GameComponent_ZhaoliScenario>();
-                if (component == null || !component.StartHideout(map))
-                {
-                    QuestGen_End.End(quest, QuestEndOutcome.Fail);
-                    return;
-                }
-
-                QuestGen_End.End(quest, QuestEndOutcome.Success);
+                inSignal = quest.InitiateSignal,
+                mapParent = map.Parent
             });
         }
 
@@ -820,6 +943,64 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return Find.AnyPlayerHomeMap != null;
+        }
+    }
+
+    public class QuestPart_ZhaoliStartHideoutOnAccept : QuestPart
+    {
+        public string inSignal;
+        public MapParent mapParent;
+        public Site hideoutSite;
+
+        public override IEnumerable<GlobalTargetInfo> QuestLookTargets
+        {
+            get
+            {
+                foreach (GlobalTargetInfo target in base.QuestLookTargets)
+                {
+                    yield return target;
+                }
+
+                if (hideoutSite != null && !hideoutSite.Destroyed)
+                {
+                    yield return hideoutSite;
+                }
+                else if (mapParent != null)
+                {
+                    yield return mapParent;
+                }
+            }
+        }
+
+        public override void Notify_QuestSignalReceived(Signal signal)
+        {
+            base.Notify_QuestSignalReceived(signal);
+            if (signal.tag != inSignal)
+            {
+                return;
+            }
+
+            Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(mapParent?.Map);
+            GameComponent_ZhaoliScenario component = Current.Game?.GetComponent<GameComponent_ZhaoliScenario>();
+            if (map == null || component == null)
+            {
+                quest.End(QuestEndOutcome.Fail, sendLetter: false, playSound: false);
+                return;
+            }
+
+            if (!component.TryStartHideout(map, out hideoutSite))
+            {
+                Log.Warning("[MiliraXian.Characters.Zhaoli] Failed to start Zhaoli hideout immediately after quest acceptance. The scenario component will retry instead of failing the quest.");
+                return;
+            }
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref inSignal, "inSignal");
+            Scribe_References.Look(ref mapParent, "mapParent");
+            Scribe_References.Look(ref hideoutSite, "hideoutSite");
         }
     }
 
@@ -1001,6 +1182,11 @@ namespace MiliraXian.Characters.Zhaoli
         private Map scenarioHomeMap;
         private Site activeHideoutSite;
         private Pawn currentRaidPawn;
+        private int nextScenarioStateCheckTick = -1;
+        private bool cachedPlayerHasZhaoli;
+        private bool cachedMurmurQuestExists;
+        private bool cachedReturnQuestExists;
+        private bool cachedMurmurQuestWasNeverAccepted;
         private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new List<PendingLoadoutFinalize>();
 
         private class PendingLoadoutFinalize
@@ -1039,12 +1225,17 @@ namespace MiliraXian.Characters.Zhaoli
 
         public bool CanOfferMurmur(Map map)
         {
-            if (scenarioCompleted || murmurOffered || returnOffered || activeHideoutSite != null || currentRaidPawn != null)
+            return CanOfferMurmur(map, useCachedScenarioState: false);
+        }
+
+        private bool CanOfferMurmur(Map map, bool useCachedScenarioState)
+        {
+            if (scenarioCompleted || murmurOffered || returnOffered || activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0)
             {
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.PlayerHasZhaoli())
+            if (useCachedScenarioState ? cachedPlayerHasZhaoli : ZhaoliScenarioUtility.PlayerHasZhaoli())
             {
                 return false;
             }
@@ -1064,10 +1255,15 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            return !ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName);
+            return !(useCachedScenarioState ? cachedMurmurQuestExists : ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName));
         }
 
         public bool CanOfferReturn(Map map)
+        {
+            return CanOfferReturn(map, useCachedScenarioState: false);
+        }
+
+        private bool CanOfferReturn(Map map, bool useCachedScenarioState)
         {
             if (scenarioCompleted || returnOffered || currentRaidPawn != null || scheduledReturnTick < 0)
             {
@@ -1079,12 +1275,12 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.PlayerHasZhaoli())
+            if (useCachedScenarioState ? cachedPlayerHasZhaoli : ZhaoliScenarioUtility.PlayerHasZhaoli())
             {
                 return false;
             }
 
-            return map != null && map.IsPlayerHome && !ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName);
+            return map != null && map.IsPlayerHome && !(useCachedScenarioState ? cachedReturnQuestExists : ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName));
         }
 
         public override void GameComponentTick()
@@ -1106,51 +1302,121 @@ namespace MiliraXian.Characters.Zhaoli
                 currentRaidPawn = null;
             }
 
-            if (!scenarioCompleted && ZhaoliScenarioUtility.PlayerHasZhaoli())
+            int currentTick = Find.TickManager.TicksGame;
+            bool shouldRefreshScenarioState = nextScenarioStateCheckTick < 0 || currentTick >= nextScenarioStateCheckTick;
+            if (shouldRefreshScenarioState)
             {
-                scenarioCompleted = true;
-            }
-            else if (scenarioCompleted && !ZhaoliScenarioUtility.PlayerHasZhaoli() && (activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0))
-            {
-                scenarioCompleted = false;
+                RefreshScenarioStateCache(currentTick);
+                ApplyScenarioStateCache();
             }
 
-            if (!scenarioCompleted && !murmurOffered && qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            if (shouldRefreshScenarioState && !scenarioCompleted && !murmurOffered && qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
             {
                 BackfillTrackedPawnDeaths();
             }
 
-            if (ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName))
+            if (shouldRefreshScenarioState)
             {
-                murmurOffered = true;
+                CleanupUnacceptedMurmurSideEffects(cachedMurmurQuestWasNeverAccepted);
+                EnsureAcceptedMurmurQuestStarted();
             }
 
-            if (ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName))
+            if (shouldRefreshScenarioState && scheduledRaidTick >= 0 && currentTick >= scheduledRaidTick)
             {
-                returnOffered = true;
-            }
-
-            int currentTick = Find.TickManager.TicksGame;
-            if (scheduledRaidTick >= 0 && currentTick >= scheduledRaidTick)
-            {
-                if (TryExecuteScheduledRaid())
+                if (TryExecuteScheduledRaid(useCachedScenarioState: true))
                 {
                     scheduledRaidTick = -1;
                 }
             }
 
-            if (scheduledReturnTick >= 0 && currentTick >= scheduledReturnTick)
+            if (shouldRefreshScenarioState && scheduledReturnTick >= 0 && currentTick >= scheduledReturnTick)
             {
-                if (TryExecuteScheduledReturn())
+                if (TryExecuteScheduledReturn(useCachedScenarioState: true))
                 {
                     scheduledReturnTick = -1;
                 }
             }
 
-            if (!scenarioCompleted && !murmurOffered && currentTick % TickCheckInterval == 0)
+            if (shouldRefreshScenarioState && !scenarioCompleted && !murmurOffered)
             {
-                TryExecuteMurmur();
+                TryExecuteMurmur(useCachedScenarioState: true);
             }
+        }
+
+        private void RefreshScenarioStateCache(int currentTick)
+        {
+            cachedPlayerHasZhaoli = ZhaoliScenarioUtility.PlayerHasZhaoli();
+            cachedMurmurQuestExists = ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.MurmurQuestDefName);
+            cachedReturnQuestExists = ZhaoliScenarioUtility.QuestExists(ZhaoliScenarioUtility.ReturnQuestDefName);
+            cachedMurmurQuestWasNeverAccepted = ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName);
+            nextScenarioStateCheckTick = currentTick + TickCheckInterval;
+        }
+
+        private void ApplyScenarioStateCache()
+        {
+            if (!scenarioCompleted && cachedPlayerHasZhaoli)
+            {
+                scenarioCompleted = true;
+            }
+            else if (scenarioCompleted && !cachedPlayerHasZhaoli && (activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0))
+            {
+                scenarioCompleted = false;
+            }
+
+            if (cachedMurmurQuestExists)
+            {
+                murmurOffered = true;
+            }
+            else if (murmurOffered && CanReleaseMurmurOfferLock())
+            {
+                murmurOffered = false;
+            }
+
+            if (cachedReturnQuestExists)
+            {
+                returnOffered = true;
+            }
+        }
+
+        private bool CanReleaseMurmurOfferLock()
+        {
+            return !scenarioCompleted
+                && !returnOffered
+                && activeHideoutSite == null
+                && currentRaidPawn == null
+                && scheduledRaidTick < 0
+                && scheduledReturnTick < 0;
+        }
+
+        private void CleanupUnacceptedMurmurSideEffects()
+        {
+            CleanupUnacceptedMurmurSideEffects(ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName));
+        }
+
+        private void CleanupUnacceptedMurmurSideEffects(bool questWasNeverAccepted)
+        {
+            if (!questWasNeverAccepted)
+            {
+                return;
+            }
+
+            scheduledRaidTick = -1;
+            if (activeHideoutSite == null)
+            {
+                return;
+            }
+
+            WorldObjectComp_ZhaoliHideout hideoutComp = activeHideoutSite.GetComponent<WorldObjectComp_ZhaoliHideout>();
+            if (hideoutComp != null)
+            {
+                hideoutComp.CancelWithoutConsequence();
+            }
+            else if (!activeHideoutSite.Destroyed)
+            {
+                activeHideoutSite.Destroy();
+            }
+
+            activeHideoutSite = null;
         }
 
         private void ProcessPendingLoadoutFinalizations()
@@ -1226,27 +1492,26 @@ namespace MiliraXian.Characters.Zhaoli
 
         public bool StartHideout(Map homeMap)
         {
+            return TryStartHideout(homeMap, out _);
+        }
+
+        public bool TryStartHideout(Map homeMap, out Site site)
+        {
+            site = null;
             homeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(homeMap);
-            if (homeMap == null || activeHideoutSite != null)
+            if (homeMap == null)
             {
                 return false;
             }
 
-            if (!TileFinder.TryFindPassableTileWithTraversalDistance(
-                    homeMap.Tile,
-                    1,
-                    3,
-                    out PlanetTile siteTile,
-                    tile => !Find.WorldObjects.AnyWorldObjectAt(tile),
-                    ignoreFirstTilePassability: false,
-                    tileFinderMode: TileFinderMode.Random,
-                    canTraverseImpassable: false,
-                    exitOnFirstTileFound: false))
+            ClearExistingHideoutWithoutConsequence();
+
+            if (!TryFindHideoutSiteTile(homeMap.Tile, out PlanetTile siteTile))
             {
                 return false;
             }
 
-            Site site = SiteMaker.MakeSite(
+            site = SiteMaker.MakeSite(
                 MXZL_ZhaoliDefOf.MXZL_ZhaoliHideoutSitePart,
                 siteTile,
                 ZhaoliScenarioUtility.ResolveFriendlyFaction(),
@@ -1258,13 +1523,92 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            site.customLabel = "不存在者藏身处";
+            site.customLabel = "MX_ZL_HideoutSiteCustomLabel".Translate().ToString();
             Find.WorldObjects.Add(site);
             site.GetComponent<TimeoutComp>()?.StartTimeout(ZhaoliScenarioUtility.HideoutLifetimeTicks);
             site.GetComponent<WorldObjectComp_ZhaoliHideout>()?.InitializeHomeMap(homeMap);
             activeHideoutSite = site;
             scenarioHomeMap = homeMap;
+            SendHideoutStartedLetter(site);
             return true;
+        }
+
+        private void EnsureAcceptedMurmurQuestStarted()
+        {
+            if (scenarioCompleted || activeHideoutSite != null || currentRaidPawn != null || scheduledRaidTick >= 0 || scheduledReturnTick >= 0)
+            {
+                return;
+            }
+
+            Quest quest = ZhaoliScenarioUtility.FindActiveQuest(ZhaoliScenarioUtility.MurmurQuestDefName);
+            if (quest == null || quest.State != QuestState.Ongoing)
+            {
+                return;
+            }
+
+            Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
+            if (map == null || !TryStartHideout(map, out _))
+            {
+                return;
+            }
+        }
+
+        private void SendHideoutStartedLetter(Site site)
+        {
+            if (site == null || site.Destroyed)
+            {
+                return;
+            }
+
+            Find.LetterStack.ReceiveLetter(
+                "MX_ZL_HideoutStartedLetterLabel".Translate(),
+                "MX_ZL_HideoutStartedLetterText".Translate(),
+                LetterDefOf.NeutralEvent,
+                site);
+        }
+
+        private void ClearExistingHideoutWithoutConsequence()
+        {
+            if (activeHideoutSite == null)
+            {
+                return;
+            }
+
+            WorldObjectComp_ZhaoliHideout hideoutComp = activeHideoutSite.GetComponent<WorldObjectComp_ZhaoliHideout>();
+            if (hideoutComp != null)
+            {
+                hideoutComp.CancelWithoutConsequence();
+            }
+            else if (!activeHideoutSite.Destroyed)
+            {
+                activeHideoutSite.Destroy();
+            }
+
+            activeHideoutSite = null;
+        }
+
+        private static bool TryFindHideoutSiteTile(PlanetTile homeTile, out PlanetTile siteTile)
+        {
+            int[] maxDistances = { 3, 5, 8 };
+            for (int index = 0; index < maxDistances.Length; index++)
+            {
+                if (TileFinder.TryFindPassableTileWithTraversalDistance(
+                        homeTile,
+                        1,
+                        maxDistances[index],
+                        out siteTile,
+                        tile => !Find.WorldObjects.AnyWorldObjectAt(tile),
+                        ignoreFirstTilePassability: false,
+                        tileFinderMode: TileFinderMode.Random,
+                        canTraverseImpassable: false,
+                        exitOnFirstTileFound: false))
+                {
+                    return true;
+                }
+            }
+
+            siteTile = PlanetTile.Invalid;
+            return false;
         }
 
         public void NotifyHideoutMedicineAccepted(Map homeMap)
@@ -1272,6 +1616,7 @@ namespace MiliraXian.Characters.Zhaoli
             scenarioCompleted = false;
             scenarioHomeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(homeMap);
             activeHideoutSite = null;
+            EndActiveMurmurQuest(QuestEndOutcome.Success);
             ScheduleReturn(scenarioHomeMap, ZhaoliScenarioUtility.NextDayDelayTicks);
         }
 
@@ -1280,15 +1625,30 @@ namespace MiliraXian.Characters.Zhaoli
             scenarioCompleted = false;
             scenarioHomeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(homeMap);
             activeHideoutSite = null;
+            EndActiveMurmurQuest(QuestEndOutcome.Success);
             ScheduleRaid(scenarioHomeMap, ZhaoliScenarioUtility.NextDayDelayTicks);
         }
 
         public void NotifyHideoutExpired(Map homeMap)
         {
+            if (ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
+            {
+                scheduledRaidTick = -1;
+                activeHideoutSite = null;
+                return;
+            }
+
             scenarioCompleted = false;
             scenarioHomeMap = ZhaoliScenarioUtility.ResolveBestHomeMap(homeMap);
             activeHideoutSite = null;
+            EndActiveMurmurQuest(QuestEndOutcome.Fail);
             ScheduleRaid(scenarioHomeMap, 0);
+        }
+
+        private static void EndActiveMurmurQuest(QuestEndOutcome outcome)
+        {
+            Quest quest = ZhaoliScenarioUtility.FindActiveQuest(ZhaoliScenarioUtility.MurmurQuestDefName);
+            quest?.End(outcome, sendLetter: false, playSound: false);
         }
 
         public void NotifyRaidZhaoliDefeated(Pawn pawn)
@@ -1401,7 +1761,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void ScheduleRaid(Map homeMap, int delayTicks)
         {
-            if (scenarioCompleted)
+            if (scenarioCompleted || ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
             {
                 return;
             }
@@ -1421,12 +1781,148 @@ namespace MiliraXian.Characters.Zhaoli
             scheduledReturnTick = (Find.TickManager?.TicksGame ?? 0) + Mathf.Max(0, delayTicks);
         }
 
-        private void TryExecuteMurmur()
+        public bool DebugTryOfferMurmurQuest(Map preferredMap, out string reason)
+        {
+            reason = null;
+            Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(preferredMap);
+            if (map == null || !map.IsPlayerHome)
+            {
+                reason = "No player home map.";
+                return false;
+            }
+
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            RefreshScenarioStateCache(currentTick);
+            ApplyScenarioStateCache();
+            CleanupUnacceptedMurmurSideEffects(cachedMurmurQuestWasNeverAccepted);
+
+            if (cachedPlayerHasZhaoli)
+            {
+                reason = "Player already has Zhaoli.";
+                return false;
+            }
+
+            Site existingHideout = ResolveActiveHideoutSite();
+            if (existingHideout != null)
+            {
+                SendHideoutStartedLetter(existingHideout);
+                reason = "Zhaoli hideout already exists. A reveal letter was sent.";
+                return false;
+            }
+
+            if (currentRaidPawn != null)
+            {
+                reason = "Zhaoli raid is already active.";
+                return false;
+            }
+
+            if (scheduledRaidTick >= 0)
+            {
+                reason = "Zhaoli raid is already scheduled.";
+                return false;
+            }
+
+            if (scheduledReturnTick >= 0 || returnOffered || cachedReturnQuestExists)
+            {
+                reason = "Zhaoli return flow is already active or completed.";
+                return false;
+            }
+
+            if (cachedMurmurQuestExists)
+            {
+                reason = "Zhaoli murmur quest already exists.";
+                return false;
+            }
+
+            if (scenarioCompleted)
+            {
+                scenarioCompleted = false;
+            }
+
+            if (murmurOffered)
+            {
+                murmurOffered = false;
+            }
+
+            scenarioHomeMap = map;
+            if (qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            {
+                BackfillTrackedPawnDeaths();
+            }
+
+            if (Find.TickManager == null || Find.TickManager.TicksGame < ZhaoliScenarioUtility.MurmurTriggerTicks)
+            {
+                reason = "Colony age is below the Zhaoli murmur threshold.";
+                return false;
+            }
+
+            if (qualifyingPawnDeathCount < ZhaoliScenarioUtility.MurmurRequiredPawnDeaths)
+            {
+                reason = "Tracked qualifying pawn deaths: " + qualifyingPawnDeathCount + "/" + ZhaoliScenarioUtility.MurmurRequiredPawnDeaths + ".";
+                return false;
+            }
+
+            if (!CanOfferMurmur(map, useCachedScenarioState: false))
+            {
+                reason = "Current scenario state still blocks the murmur quest.";
+                return false;
+            }
+
+            if (!TryExecuteMurmur(useCachedScenarioState: false))
+            {
+                reason = "Incident worker failed to create the murmur quest.";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool DebugRevealActiveHideout(out string reason)
+        {
+            reason = null;
+            Site site = ResolveActiveHideoutSite();
+            if (site == null)
+            {
+                reason = "No active Zhaoli hideout found.";
+                return false;
+            }
+
+            SendHideoutStartedLetter(site);
+            return true;
+        }
+
+        private Site ResolveActiveHideoutSite()
+        {
+            if (activeHideoutSite != null && !activeHideoutSite.Destroyed)
+            {
+                return activeHideoutSite;
+            }
+
+            activeHideoutSite = null;
+            List<WorldObject> worldObjects = Find.WorldObjects?.AllWorldObjects;
+            if (worldObjects == null)
+            {
+                return null;
+            }
+
+            for (int index = 0; index < worldObjects.Count; index++)
+            {
+                if (worldObjects[index] is Site site && site.def == MXZL_ZhaoliDefOf.MXZL_ZhaoliHideoutWorldObject && !site.Destroyed)
+                {
+                    activeHideoutSite = site;
+                    return site;
+                }
+            }
+
+            return null;
+        }
+
+        private bool TryExecuteMurmur(bool useCachedScenarioState = false)
         {
             Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
-            if (map == null || !CanOfferMurmur(map))
+            if (map == null || !CanOfferMurmur(map, useCachedScenarioState))
             {
-                return;
+                return false;
             }
 
             IncidentDef incident = MXZL_ZhaoliDefOf.MXZL_ZhaoliMurmur;
@@ -1434,7 +1930,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 Log.Error("[MiliraXian.Characters.Zhaoli] Missing IncidentDef: MXZL_ZhaoliMurmur");
                 murmurOffered = true;
-                return;
+                return false;
             }
 
             IncidentParms parms = StorytellerUtility.DefaultParmsNow(incident.category, map);
@@ -1444,11 +1940,20 @@ namespace MiliraXian.Characters.Zhaoli
             if (incident.Worker.TryExecute(parms))
             {
                 murmurOffered = true;
+                return true;
             }
+
+            return false;
         }
 
-        private bool TryExecuteScheduledRaid()
+        private bool TryExecuteScheduledRaid(bool useCachedScenarioState = false)
         {
+            if (useCachedScenarioState ? cachedMurmurQuestWasNeverAccepted : ZhaoliScenarioUtility.QuestWasNeverAccepted(ZhaoliScenarioUtility.MurmurQuestDefName))
+            {
+                scheduledRaidTick = -1;
+                return true;
+            }
+
             if (currentRaidPawn != null && !currentRaidPawn.Dead && !currentRaidPawn.Destroyed)
             {
                 return true;
@@ -1498,17 +2003,17 @@ namespace MiliraXian.Characters.Zhaoli
                 raidPawns);
             currentRaidPawn = pawn;
             Find.LetterStack.ReceiveLetter(
-                "昭离来袭",
-                "昭离的身影自殖民地边缘现身。她没有停驻、没有谈判，也不会撤退。此战只会以所有生灵的死亡，或她自己的彻底终结告终。",
+                "MX_ZL_RaidLetterLabel".Translate(),
+                "MX_ZL_RaidLetterText".Translate(),
                 LetterDefOf.ThreatBig,
                 pawn);
             return true;
         }
 
-        private bool TryExecuteScheduledReturn()
+        private bool TryExecuteScheduledReturn(bool useCachedScenarioState = false)
         {
             Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(scenarioHomeMap);
-            if (map == null || !CanOfferReturn(map))
+            if (map == null || !CanOfferReturn(map, useCachedScenarioState))
             {
                 return false;
             }
@@ -1532,6 +2037,86 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return false;
+        }
+    }
+
+    internal static class ZhaoliDebugActions
+    {
+        [DebugAction("Milira Xian - Zhaoli", "Force friendly dead Zhaoli return now", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        private static void ForceFriendlyDeadZhaoliReturnNow()
+        {
+            GameComponent_ZhaoliKarma component = Current.Game?.GetComponent<GameComponent_ZhaoliKarma>();
+            if (component == null || Find.TickManager == null)
+            {
+                Messages.Message("Zhaoli rebirth component is not available.", MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
+            int count = 0;
+            int currentTick = Find.TickManager.TicksGame;
+            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead.ToList())
+            {
+                if (pawn == null || pawn.Discarded || !pawn.Dead || pawn.Faction != Faction.OfPlayer || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+                {
+                    continue;
+                }
+
+                if (ZhaoliScenarioUtility.IsHideoutState(pawn) || ZhaoliScenarioUtility.IsRaidState(pawn))
+                {
+                    continue;
+                }
+
+                ZhaoliRebirthUtility.PreparePawnForPendingRebirth(pawn);
+                component.RegisterPendingRebirth(pawn, currentTick);
+                count++;
+            }
+
+            if (count <= 0)
+            {
+                Messages.Message("No dead friendly Zhaoli found.", MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
+            Messages.Message("Queued immediate Zhaoli rebirths: " + count + ".", MessageTypeDefOf.PositiveEvent, false);
+        }
+
+        [DebugAction("Milira Xian - Zhaoli", "Retry Zhaoli murmur quest check", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        private static void RetryZhaoliMurmurQuestCheck()
+        {
+            GameComponent_ZhaoliScenario component = Current.Game?.GetComponent<GameComponent_ZhaoliScenario>();
+            if (component == null)
+            {
+                Messages.Message("Zhaoli scenario component is not available.", MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
+            Map map = ZhaoliScenarioUtility.ResolveBestHomeMap(Find.CurrentMap);
+            if (component.DebugTryOfferMurmurQuest(map, out string reason))
+            {
+                Messages.Message("Zhaoli murmur quest triggered.", MessageTypeDefOf.PositiveEvent, false);
+                return;
+            }
+
+            Messages.Message("Zhaoli murmur quest was not triggered: " + reason, MessageTypeDefOf.RejectInput, false);
+        }
+
+        [DebugAction("Milira Xian - Zhaoli", "Reveal active Zhaoli hideout", false, false, false, false, false, 0, false, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        private static void RevealActiveZhaoliHideout()
+        {
+            GameComponent_ZhaoliScenario component = Current.Game?.GetComponent<GameComponent_ZhaoliScenario>();
+            if (component == null)
+            {
+                Messages.Message("Zhaoli scenario component is not available.", MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
+            if (component.DebugRevealActiveHideout(out string reason))
+            {
+                Messages.Message("Zhaoli hideout reveal letter sent.", MessageTypeDefOf.PositiveEvent, false);
+                return;
+            }
+
+            Messages.Message("Zhaoli hideout was not revealed: " + reason, MessageTypeDefOf.RejectInput, false);
         }
     }
 
@@ -1600,10 +2185,10 @@ namespace MiliraXian.Characters.Zhaoli
         {
             if (resolved)
             {
-                return "昭离的痕迹已经散去。";
+                return "MX_ZL_HideoutInspectExpired".Translate().ToString();
             }
 
-            return "昭离在此等待一场以生死为价的交接。";
+            return "MX_ZL_HideoutInspectWaiting".Translate().ToString();
         }
 
         public override void PostExposeData()
@@ -1613,6 +2198,23 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_References.Look(ref hideoutPawn, "hideoutPawn");
             Scribe_Values.Look(ref resolved, "resolved", defaultValue: false);
             Scribe_Values.Look(ref consequenceQueued, "consequenceQueued", defaultValue: false);
+        }
+
+        public void CancelWithoutConsequence()
+        {
+            resolved = true;
+            consequenceQueued = true;
+            parent.GetComponent<TimeoutComp>()?.StopTimeout();
+            if (hideoutPawn != null)
+            {
+                ZhaoliScenarioUtility.DestroyHideoutPawn(hideoutPawn);
+                hideoutPawn = null;
+            }
+
+            if (!parent.Destroyed)
+            {
+                parent.Destroy();
+            }
         }
 
         public void EnsurePawnSpawned(Map map)
@@ -1635,8 +2237,83 @@ namespace MiliraXian.Characters.Zhaoli
 
             Hediff hediff = hideoutPawn.health.GetOrAddHediff(MXZL_ZhaoliDefOf.MXZL_ZhaoliHideoutState);
             hideoutPawn.health.Notify_HediffChanged(hediff);
-            IntVec3 spawnCell = CellFinder.RandomClosewalkCellNear(map.Center, map, 8);
+            if (!TryResolveHideoutSpawnCell(map, out IntVec3 spawnCell))
+            {
+                Log.Error("[MiliraXian.Characters.Zhaoli] Failed to find a valid spawn cell for Zhaoli hideout on map " + map);
+                return;
+            }
+
             GenSpawn.Spawn(hideoutPawn, spawnCell, map);
+        }
+
+        private static bool TryResolveHideoutSpawnCell(Map map, out IntVec3 spawnCell)
+        {
+            spawnCell = IntVec3.Invalid;
+            if (map == null)
+            {
+                return false;
+            }
+
+            IntVec3 root = map.Center;
+            if (IsValidHideoutSpawnCell(root, map, requireMapEdgeReachable: true))
+            {
+                spawnCell = root;
+                return true;
+            }
+
+            int[] radii = { 8, 16, 32, 48, 64 };
+            for (int i = 0; i < radii.Length; i++)
+            {
+                if (CellFinder.TryRandomClosewalkCellNear(root, map, radii[i], out spawnCell, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: true)))
+                {
+                    return true;
+                }
+            }
+
+            if (TryFindNearestHideoutSpawnCell(map, root, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: true), out spawnCell))
+            {
+                return true;
+            }
+
+            return TryFindNearestHideoutSpawnCell(map, root, cell => IsValidHideoutSpawnCell(cell, map, requireMapEdgeReachable: false), out spawnCell);
+        }
+
+        private static bool TryFindNearestHideoutSpawnCell(Map map, IntVec3 root, Predicate<IntVec3> validator, out IntVec3 result)
+        {
+            result = IntVec3.Invalid;
+            int bestDistance = int.MaxValue;
+            for (int x = 0; x < map.Size.x; x++)
+            {
+                for (int z = 0; z < map.Size.z; z++)
+                {
+                    IntVec3 cell = new IntVec3(x, 0, z);
+                    if (!validator(cell))
+                    {
+                        continue;
+                    }
+
+                    int distance = (cell - root).LengthHorizontalSquared;
+                    if (distance >= bestDistance)
+                    {
+                        continue;
+                    }
+
+                    bestDistance = distance;
+                    result = cell;
+                }
+            }
+
+            return result.IsValid;
+        }
+
+        private static bool IsValidHideoutSpawnCell(IntVec3 cell, Map map, bool requireMapEdgeReachable)
+        {
+            if (!cell.IsValid || !cell.InBounds(map) || !cell.Standable(map) || map.thingGrid.CellContains(cell, ThingCategory.Pawn))
+            {
+                return false;
+            }
+
+            return !requireMapEdgeReachable || map.reachability.CanReachMapEdge(cell, TraverseParms.For(TraverseMode.PassDoors));
         }
 
         public bool TryDeliverHerbs(Pawn interactor)
@@ -1733,29 +2410,29 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             yield return new FloatMenuOption(
-                "交付 5 份草药",
+                "MX_ZL_HideoutOptionGiveMedicine".Translate().ToString(),
                 delegate
                 {
                     if (!hideoutComp.TryDeliverHerbs(interactor))
                     {
-                        Messages.Message("远征队现在拿不出 5 份草药，昭离仍停留在原地，等待下一次答复。", interactor, MessageTypeDefOf.RejectInput, historical: false);
+                        Messages.Message("MX_ZL_HideoutNoMedicine".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);
                         return;
                     }
 
-                    Messages.Message("昭离收下草药后，于原地化作一束冰冷的光痕散去。她留下的回声说明日仍会归来。", interactor, MessageTypeDefOf.PositiveEvent, historical: true);
+                    Messages.Message("MX_ZL_HideoutMedicineAccepted".Translate(), interactor, MessageTypeDefOf.PositiveEvent, historical: true);
                 });
             yield return new FloatMenuOption(
-                "暂缓交付",
+                "MX_ZL_HideoutOptionDelay".Translate().ToString(),
                 delegate
                 {
-                    Messages.Message("昭离没有追问，只是继续在原地等待。三日之内，你仍可回来交接。", interactor, MessageTypeDefOf.NeutralEvent, historical: false);
+                    Messages.Message("MX_ZL_HideoutDelayed".Translate(), interactor, MessageTypeDefOf.NeutralEvent, historical: false);
                 });
             yield return new FloatMenuOption(
-                "拒绝昭离",
+                "MX_ZL_HideoutOptionReject".Translate().ToString(),
                 delegate
                 {
                     hideoutComp.Reject(interactor);
-                    Messages.Message("昭离收下拒绝，伴随着一阵失真的低鸣消失。远征队身边多出了大量人肉，而更坏的东西将于明日抵达。", interactor, MessageTypeDefOf.ThreatBig, historical: true);
+                    Messages.Message("MX_ZL_HideoutRejected".Translate(), interactor, MessageTypeDefOf.ThreatBig, historical: true);
                 });
         }
     }
@@ -1818,6 +2495,8 @@ namespace MiliraXian.Characters.Zhaoli
         private int substituteDeathsUsed;
         private int transitionEndTick = -1;
         private int nextPhaseTeleportTick = -1;
+        private int lastRaidSkillTick = -99999;
+        private int lastDeathFieldTick = -99999;
         private bool damageAppliedSinceSwitch;
         private bool raidInitialized;
         private bool linksPrepared;
@@ -1825,7 +2504,15 @@ namespace MiliraXian.Characters.Zhaoli
         private HediffCompProperties_ZhaoliRaidState PropsRaid => (HediffCompProperties_ZhaoliRaidState)props;
         public int SubstituteDeathsUsed => substituteDeathsUsed;
 
-        public override string CompLabelInBracketsExtra => "阶段 " + (Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1);
+        private struct DeathFieldClusterInfo
+        {
+            public int validTargets;
+            public int livingTargets;
+            public int humanlikeTargets;
+            public bool containsCurrentTarget;
+        }
+
+        public override string CompLabelInBracketsExtra => "MX_ZL_RaidPhaseLabel".Translate(Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1).ToString();
 
         public override bool CompDisallowVisible()
         {
@@ -1837,7 +2524,7 @@ namespace MiliraXian.Characters.Zhaoli
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("替死已触发：");
+                stringBuilder.Append("MX_ZL_RaidSubstituteTriggered".Translate().ToString());
                 stringBuilder.Append(substituteDeathsUsed);
                 stringBuilder.Append("/3");
 
@@ -1845,7 +2532,7 @@ namespace MiliraXian.Characters.Zhaoli
                 if (linkComp != null)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.Append("剩余因果链接：");
+                    stringBuilder.Append("MX_ZL_RaidRemainingLinks".Translate().ToString());
                     stringBuilder.Append(linkComp.ActiveLinkCount);
                     stringBuilder.Append("/");
                     stringBuilder.Append(ZhaoliProgressionUtility.BossLinkCount);
@@ -1862,7 +2549,7 @@ namespace MiliraXian.Characters.Zhaoli
             get
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("当前阶段：");
+                stringBuilder.Append("MX_ZL_RaidCurrentPhase".Translate().ToString());
                 stringBuilder.Append(Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1);
                 stringBuilder.Append("/4");
 
@@ -1870,14 +2557,14 @@ namespace MiliraXian.Characters.Zhaoli
                 if (currentTick >= 0 && transitionEndTick > currentTick)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.Append("转阶段剩余：");
+                    stringBuilder.Append("MX_ZL_RaidTransitionRemaining".Translate().ToString());
                     stringBuilder.Append((transitionEndTick - currentTick).ToStringTicksToPeriod());
                 }
 
                 if (substituteDeathsUsed >= 2 && currentTick >= 0 && nextPhaseTeleportTick > currentTick)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.Append("下次跃迁：");
+                    stringBuilder.Append("MX_ZL_RaidNextWarp".Translate().ToString());
                     stringBuilder.Append((nextPhaseTeleportTick - currentTick).ToStringTicksToPeriod());
                 }
 
@@ -1896,7 +2583,10 @@ namespace MiliraXian.Characters.Zhaoli
             substituteDeathsUsed = 0;
             transitionEndTick = -1;
             nextPhaseTeleportTick = -1;
+            lastRaidSkillTick = -99999;
+            lastDeathFieldTick = -99999;
             damageAppliedSinceSwitch = false;
+            ZhaoliRebirthUtility.RemoveRebirthHediff(Pawn);
             ZhaoliShieldLayerUtility.AddLayers(Pawn, ZhaoliScenarioUtility.RaidStartingShieldLayers);
             ZhaoliKarmaUtility.EnsureKarmaComp(Pawn)?.SetValue(ZhaoliScenarioUtility.RaidStartingKarma);
             EnsurePassiveRaidLord();
@@ -1916,6 +2606,9 @@ namespace MiliraXian.Characters.Zhaoli
 
             substituteDeathsUsed = Mathf.Clamp(substituteDeathsUsed + 1, 0, 3);
             int currentTick = Find.TickManager?.TicksGame ?? 0;
+            int shieldLayers = ZhaoliScenarioUtility.RaidTransitionBaseShieldLayers + ZhaoliScenarioUtility.RaidTransitionShieldLayersPerPhase * substituteDeathsUsed;
+            ZhaoliRebirthUtility.RemoveRebirthHediff(Pawn);
+            ZhaoliShieldLayerUtility.AddLayers(Pawn, shieldLayers);
             transitionEndTick = currentTick + Mathf.Max(1, PropsRaid.transitionTicks);
             nextPhaseTeleportTick = transitionEndTick + Mathf.Max(1, PropsRaid.teleportIntervalTicks);
             damageAppliedSinceSwitch = false;
@@ -1925,7 +2618,20 @@ namespace MiliraXian.Characters.Zhaoli
             Pawn.jobs?.StopAll(false, true);
             Pawn.pather?.StopDead();
             Pawn.stances?.stunner?.StunFor(Mathf.Max(60, PropsRaid.transitionTicks), Pawn, addBattleLog: false, showMote: false);
+            NotifyPhaseTransitionStarted(shieldLayers);
             ActivateTransitionField();
+            ZhaoliRaidDebugUtility.Log(Pawn, "TransitionShield", "phase=" + substituteDeathsUsed + " addedLayers=" + shieldLayers);
+        }
+
+        private void NotifyPhaseTransitionStarted(int shieldLayers)
+        {
+            if (Pawn == null)
+            {
+                return;
+            }
+
+            int displayPhase = Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1;
+            Messages.Message("MX_ZL_RaidPhaseTransitionStarted".Translate(Pawn.LabelShortCap, displayPhase, shieldLayers), Pawn, MessageTypeDefOf.ThreatBig, historical: true);
         }
 
         public void RegisterIncomingAggro(Thing instigator, float rawDamageAmount)
@@ -1973,6 +2679,8 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref substituteDeathsUsed, "substituteDeathsUsed", 0);
             Scribe_Values.Look(ref transitionEndTick, "transitionEndTick", -1);
             Scribe_Values.Look(ref nextPhaseTeleportTick, "nextPhaseTeleportTick", -1);
+            Scribe_Values.Look(ref lastRaidSkillTick, "lastRaidSkillTick", -99999);
+            Scribe_Values.Look(ref lastDeathFieldTick, "lastDeathFieldTick", -99999);
             Scribe_Values.Look(ref damageAppliedSinceSwitch, "damageAppliedSinceSwitch", defaultValue: false);
             Scribe_Values.Look(ref raidInitialized, "raidInitialized", defaultValue: false);
             Scribe_Values.Look(ref linksPrepared, "linksPrepared", defaultValue: false);
@@ -2002,6 +2710,8 @@ namespace MiliraXian.Characters.Zhaoli
                 InitializeRaid(Pawn.MapHeld);
             }
 
+            EnsureHostileRaidFaction();
+
             if (!linksPrepared)
             {
                 PrepareInitialLinks();
@@ -2028,6 +2738,29 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             RunRaidAi();
+        }
+
+        private void EnsureHostileRaidFaction()
+        {
+            if (Pawn == null || Pawn.Dead || !Pawn.Spawned || Faction.OfPlayer == null)
+            {
+                return;
+            }
+
+            if (Pawn.Faction != null && Pawn.Faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+
+            Faction hostileFaction = ZhaoliScenarioUtility.ResolveHostileFaction();
+            if (hostileFaction == null || hostileFaction == Pawn.Faction)
+            {
+                return;
+            }
+
+            ZhaoliRaidDebugUtility.Log(Pawn, "FactionFix", "changing raid faction from=" + (Pawn.Faction?.def?.defName ?? "null") + " to=" + hostileFaction.def.defName);
+            Pawn.SetFaction(hostileFaction);
+            EnsurePassiveRaidLord();
         }
 
         private void EnsurePassiveRaidLord()
@@ -2065,6 +2798,11 @@ namespace MiliraXian.Characters.Zhaoli
         {
             int currentTick = Find.TickManager?.TicksGame ?? 0;
             return transitionEndTick >= 0 && currentTick < transitionEndTick;
+        }
+
+        public bool IsTransitionInvulnerable()
+        {
+            return IsInTransition();
         }
 
         private void MaintainTransition()
@@ -2143,40 +2881,54 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             bool lockToKillOrders = substituteDeathsUsed >= 3;
-            if (!lockToKillOrders && TryCastMinghuo())
-            {
-                return;
-            }
-
             int currentTick = Find.TickManager?.TicksGame ?? 0;
             Thing desiredTarget = ResolveDesiredAttackTarget(lockToKillOrders, currentTick);
             if (desiredTarget != currentAttackTarget)
             {
                 SetCurrentAttackTarget(desiredTarget, currentTick);
-                if (!lockToKillOrders && desiredTarget != null && TryUseGapCloser(desiredTarget))
-                {
-                    return;
-                }
             }
 
             SyncForcedEnemyTarget();
+            if (currentAttackTarget == null)
+            {
+                return;
+            }
 
             if (substituteDeathsUsed >= 2 && TryPhaseTeleport(currentTick))
             {
                 return;
             }
 
+            if (!lockToKillOrders && TryCastMinghuo(currentTick))
+            {
+                return;
+            }
+
             if (currentAttackTarget is Pawn targetPawn)
             {
-                if (!lockToKillOrders && (TryCastField(targetPawn) || TryCastMinshen(targetPawn) || TryUseGapCloser(targetPawn)))
+                bool shouldPressAttackFirst = ShouldPressAttackBeforeSkill(targetPawn, currentTick);
+                if (!shouldPressAttackFirst && !lockToKillOrders && TryCastField(targetPawn, currentTick))
                 {
                     return;
                 }
+
+                if (!shouldPressAttackFirst && !lockToKillOrders && TryCastMinshen(targetPawn, currentTick))
+                {
+                    return;
+                }
+
+                if (!shouldPressAttackFirst && TryUseGapCloser(targetPawn, currentTick))
+                {
+                    return;
+                }
+
+                OrderAttack(targetPawn);
                 return;
             }
 
             if (currentAttackTarget is Building targetBuilding)
             {
+                OrderAttack(targetBuilding);
                 return;
             }
         }
@@ -2264,7 +3016,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            Pawn targetPawn = GetPriorityTeleportTarget();
+            Pawn targetPawn = GetPriorityTeleportTarget(currentTick);
             IntVec3 destination = FindTeleportDestination(targetPawn);
             if (targetPawn == null || !destination.IsValid || Pawn.MapHeld == null)
             {
@@ -2284,12 +3036,12 @@ namespace MiliraXian.Characters.Zhaoli
             return true;
         }
 
-        private Pawn GetPriorityTeleportTarget()
+        private Pawn GetPriorityTeleportTarget(int currentTick)
         {
             if (currentAttackTarget is Pawn currentPawn && IsValidRaidTarget(currentPawn))
             {
                 Pawn higherHatredPawn = GetHigherHatredPawn(currentPawn);
-                return IsValidRaidTarget(higherHatredPawn) ? higherHatredPawn : currentPawn;
+                return ShouldSwitchToHigherHatred(currentPawn, higherHatredPawn, currentTick) ? higherHatredPawn : currentPawn;
             }
 
             if (IsValidRaidTarget(primaryHatredTarget))
@@ -2359,7 +3111,18 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool IsExecutingAbilityJob()
         {
-            return Pawn?.CurJobDef?.abilityCasting == true;
+            Job currentJob = Pawn?.CurJob;
+            if (currentJob?.ability != null || currentJob?.verbToUse is Verb_CastAbility)
+            {
+                return true;
+            }
+
+            if (Pawn?.CurJobDef?.abilityCasting == true)
+            {
+                return true;
+            }
+
+            return Pawn?.stances?.curStance is Stance_Warmup warmup && warmup.verb is Verb_CastAbility;
         }
 
         private void SetCurrentAttackTarget(Thing target, int currentTick)
@@ -2408,23 +3171,23 @@ namespace MiliraXian.Characters.Zhaoli
         private Thing ResolveDesiredAttackTarget(bool lockToKillOrders, int currentTick)
         {
             Thing fallbackTarget = GetFallbackAttackTarget(lockToKillOrders);
-            Pawn nearestHatredPawn = GetNearestHatredPawn();
+            Pawn strongestHatredPawn = GetStrongestHatredPawn();
             if (!IsValidRaidAttackTarget(currentAttackTarget, lockToKillOrders))
             {
-                return nearestHatredPawn ?? fallbackTarget;
+                return strongestHatredPawn ?? fallbackTarget;
             }
 
             if (currentAttackTarget is Pawn currentPawn)
             {
                 Pawn higherHatredPawn = GetHigherHatredPawn(currentPawn);
-                if (higherHatredPawn != null && higherHatredPawn != currentPawn)
-                {
-                    return higherHatredPawn;
-                }
-
                 if (currentTick < ignoreHatredUntilTick)
                 {
                     return currentAttackTarget;
+                }
+
+                if (ShouldSwitchToHigherHatred(currentPawn, higherHatredPawn, currentTick))
+                {
+                    return higherHatredPawn;
                 }
 
                 if (GetHatredValue(currentPawn) > 0f)
@@ -2432,30 +3195,53 @@ namespace MiliraXian.Characters.Zhaoli
                     return currentAttackTarget;
                 }
 
-                if (nearestHatredPawn != null && nearestHatredPawn != currentPawn)
+                if (currentTick - lastTargetSwitchTick < ZhaoliScenarioUtility.TargetLockTicks)
                 {
-                    return nearestHatredPawn;
+                    return currentAttackTarget;
+                }
+
+                if (strongestHatredPawn != null && strongestHatredPawn != currentPawn && ShouldSwitchToHigherHatred(currentPawn, strongestHatredPawn, currentTick))
+                {
+                    return strongestHatredPawn;
                 }
             }
             else if (currentAttackTarget is Building)
             {
-                if (nearestHatredPawn != null)
-                {
-                    return nearestHatredPawn;
-                }
-
                 if (currentTick < ignoreHatredUntilTick)
                 {
                     return currentAttackTarget;
                 }
+
+                if (strongestHatredPawn != null && currentTick - lastTargetSwitchTick >= ZhaoliScenarioUtility.TargetLockTicks)
+                {
+                    return strongestHatredPawn;
+                }
             }
 
-            if (!damageAppliedSinceSwitch && fallbackTarget != null && fallbackTarget != currentAttackTarget)
+            if (currentTick - lastTargetSwitchTick >= ZhaoliScenarioUtility.TargetLockTicks && fallbackTarget != null && fallbackTarget != currentAttackTarget)
             {
                 return fallbackTarget;
             }
 
-            return currentAttackTarget ?? nearestHatredPawn ?? fallbackTarget;
+            return currentAttackTarget ?? strongestHatredPawn ?? fallbackTarget;
+        }
+
+        private bool ShouldSwitchToHigherHatred(Pawn currentPawn, Pawn candidate, int currentTick)
+        {
+            if (!IsValidRaidTarget(candidate) || candidate == currentPawn)
+            {
+                return false;
+            }
+
+            if (currentTick - lastTargetSwitchTick < ZhaoliScenarioUtility.TargetLockTicks)
+            {
+                return false;
+            }
+
+            float currentHatred = Mathf.Max(0f, GetHatredValue(currentPawn));
+            float candidateHatred = Mathf.Max(0f, GetHatredValue(candidate));
+            float requiredHatred = Mathf.Max(currentHatred + ZhaoliScenarioUtility.HatredPerHit * 2f, currentHatred * 1.6f);
+            return candidateHatred >= requiredHatred;
         }
 
         private Thing GetFallbackAttackTarget(bool lockToKillOrders)
@@ -2639,7 +3425,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            return building.Faction != Pawn.Faction;
+            return building.Faction != null && building.HostileTo(Pawn);
         }
 
         private bool IsValidRaidTarget(Pawn candidate)
@@ -2649,7 +3435,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (candidate.Faction == Pawn.Faction)
+            if (!candidate.HostileTo(Pawn))
             {
                 return false;
             }
@@ -2667,7 +3453,181 @@ namespace MiliraXian.Characters.Zhaoli
             return !lockToKillOrders && target is Building building && IsValidRetaliatoryBuilding(building);
         }
 
-        private bool TryCastMinghuo()
+        private bool ShouldPressAttackBeforeSkill(Pawn target, int currentTick)
+        {
+            if (!IsValidRaidTarget(target) || damageAppliedSinceSwitch)
+            {
+                return false;
+            }
+
+            if (currentTick - lastTargetSwitchTick >= ZhaoliScenarioUtility.RaidOpeningAttackTicks)
+            {
+                return false;
+            }
+
+            if (Pawn.Position.DistanceToSquared(target.Position) > 64f)
+            {
+                return false;
+            }
+
+            DeathFieldClusterInfo clusterInfo = AnalyzeDeathFieldCluster(target.Position, target);
+            return !IsHighValueDeathFieldCluster(clusterInfo);
+        }
+
+        private bool CanUseRaidSkill(int currentTick)
+        {
+            if (IsExecutingAbilityJob())
+            {
+                return false;
+            }
+
+            return currentTick - lastRaidSkillTick >= ZhaoliScenarioUtility.RaidSkillWeaveTicks;
+        }
+
+        private void MarkRaidSkillUsed(int currentTick)
+        {
+            lastRaidSkillTick = currentTick;
+        }
+
+        private IntVec3 FindBestDeathFieldCenter(Pawn preferredTarget, Ability ability, out DeathFieldClusterInfo bestInfo)
+        {
+            bestInfo = new DeathFieldClusterInfo();
+            IntVec3 bestCenter = IntVec3.Invalid;
+            int bestScore = int.MinValue;
+            if (Pawn?.MapHeld == null || ability == null)
+            {
+                return bestCenter;
+            }
+
+            TryConsiderDeathFieldCenter(preferredTarget.Position, preferredTarget, ability, ref bestCenter, ref bestInfo, ref bestScore);
+            IReadOnlyList<Pawn> pawns = Pawn.MapHeld.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
+            {
+                Pawn candidate = pawns[index];
+                if (!IsValidRaidTarget(candidate))
+                {
+                    continue;
+                }
+
+                TryConsiderDeathFieldCenter(candidate.Position, preferredTarget, ability, ref bestCenter, ref bestInfo, ref bestScore);
+            }
+
+            return bestCenter;
+        }
+
+        private void TryConsiderDeathFieldCenter(IntVec3 center, Pawn preferredTarget, Ability ability, ref IntVec3 bestCenter, ref DeathFieldClusterInfo bestInfo, ref int bestScore)
+        {
+            if (!center.IsValid)
+            {
+                return;
+            }
+
+            LocalTargetInfo targetInfo = new LocalTargetInfo(center);
+            if (!ability.CanApplyOn(targetInfo))
+            {
+                return;
+            }
+
+            DeathFieldClusterInfo clusterInfo = AnalyzeDeathFieldCluster(center, preferredTarget);
+            if (clusterInfo.validTargets <= 0)
+            {
+                return;
+            }
+
+            int score = ScoreDeathFieldCluster(center, clusterInfo);
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestCenter = center;
+                bestInfo = clusterInfo;
+            }
+        }
+
+        private DeathFieldClusterInfo AnalyzeDeathFieldCluster(IntVec3 center, Pawn preferredTarget)
+        {
+            DeathFieldClusterInfo info = new DeathFieldClusterInfo();
+            if (Pawn?.MapHeld == null || !center.IsValid)
+            {
+                return info;
+            }
+
+            IReadOnlyList<Pawn> pawns = Pawn.MapHeld.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
+            {
+                Pawn candidate = pawns[index];
+                if (!IsValidDeathFieldVictim(candidate, center, ZhaoliScenarioUtility.DeathFieldEvaluationRadius))
+                {
+                    continue;
+                }
+
+                info.validTargets++;
+                if (candidate.RaceProps.IsFlesh)
+                {
+                    info.livingTargets++;
+                }
+
+                if (candidate.RaceProps.Humanlike)
+                {
+                    info.humanlikeTargets++;
+                }
+
+                if (candidate == preferredTarget)
+                {
+                    info.containsCurrentTarget = true;
+                }
+            }
+
+            return info;
+        }
+
+        private bool IsValidDeathFieldVictim(Pawn candidate, IntVec3 center, float radius)
+        {
+            if (!IsValidRaidTarget(candidate) || !candidate.Position.InHorDistOf(center, radius))
+            {
+                return false;
+            }
+
+            return ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, candidate);
+        }
+
+        private int ScoreDeathFieldCluster(IntVec3 center, DeathFieldClusterInfo info)
+        {
+            int score = info.validTargets * 3 + info.livingTargets * 8 + info.humanlikeTargets * 16;
+            if (info.containsCurrentTarget)
+            {
+                score += 12;
+            }
+
+            score -= Mathf.RoundToInt(Pawn.Position.DistanceToSquared(center) * 0.05f);
+            return score;
+        }
+
+        private bool ShouldUseDeathField(DeathFieldClusterInfo info, int currentTick)
+        {
+            if (IsHighValueDeathFieldCluster(info))
+            {
+                return true;
+            }
+
+            if (info.humanlikeTargets > 0)
+            {
+                return true;
+            }
+
+            if (info.validTargets >= Mathf.Max(3, PropsRaid.minPreferredCluster))
+            {
+                return true;
+            }
+
+            return info.containsCurrentTarget && damageAppliedSinceSwitch && currentTick - lastTargetSwitchTick >= ZhaoliScenarioUtility.DeathFieldSingleHumanlikeDelayTicks;
+        }
+
+        private bool IsHighValueDeathFieldCluster(DeathFieldClusterInfo info)
+        {
+            return info.livingTargets > ZhaoliScenarioUtility.DeathFieldDenseLivingThreshold;
+        }
+
+        private bool TryCastMinghuo(int currentTick)
         {
             if (IsExecutingAbilityJob())
             {
@@ -2687,15 +3647,10 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             LocalTargetInfo self = new LocalTargetInfo(Pawn);
-            if (!ability.CanApplyOn(self))
-            {
-                return false;
-            }
-
-            return TryStartRaidJob(ability.GetJob(self, LocalTargetInfo.Invalid), "Minghuo");
+            return TryStartRaidAbilityJob(ability, self, "Minghuo", currentTick);
         }
 
-        private bool TryCastField(Pawn target)
+        private bool TryCastField(Pawn target, int currentTick)
         {
             Ability ability = Pawn.abilities?.GetAbility(MXZL_ZhaoliDefOf.MX_Zhaoli_DeathField, includeTemporary: true);
             if (ability == null || !ability.CanCast || target == null)
@@ -2703,56 +3658,55 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (IsExecutingAbilityJob())
+            if (!CanUseRaidSkill(currentTick) || currentTick - lastDeathFieldTick < ZhaoliScenarioUtility.DeathFieldRecastGuardTicks)
             {
                 return false;
             }
 
-            LocalTargetInfo targetInfo = new LocalTargetInfo(target.Position);
-            if (!ability.CanApplyOn(targetInfo))
+            DeathFieldClusterInfo clusterInfo;
+            IntVec3 bestCenter = FindBestDeathFieldCenter(target, ability, out clusterInfo);
+            if (!bestCenter.IsValid || !ShouldUseDeathField(clusterInfo, currentTick))
             {
                 return false;
             }
 
-            int requiredVictims = Mathf.Max(1, PropsRaid.minPreferredCluster);
-            if (CountRegularVictimsAround(target.Position, 9f) < requiredVictims)
+            LocalTargetInfo targetInfo = new LocalTargetInfo(bestCenter);
+            if (!TryStartRaidAbilityJob(ability, targetInfo, "DeathField", currentTick))
             {
                 return false;
             }
 
-            return TryStartRaidJob(ability.GetJob(targetInfo, LocalTargetInfo.Invalid), "DeathField");
+            lastDeathFieldTick = currentTick;
+            return true;
         }
 
-        private bool TryCastMinshen(Pawn target)
+        private bool TryCastMinshen(Pawn target, int currentTick)
         {
             Ability ability = Pawn.abilities?.GetAbility(MXZL_ZhaoliDefOf.MX_Zhaoli_Minshen, includeTemporary: true);
+            ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(ability);
             if (ability == null || !ability.CanCast || target == null)
             {
                 return false;
             }
 
-            if (IsExecutingAbilityJob())
+            if (!CanUseRaidSkill(currentTick))
             {
                 return false;
             }
 
             LocalTargetInfo targetInfo = new LocalTargetInfo(target.Position);
-            if (!ability.CanApplyOn(targetInfo))
+            int nearbyHostiles = CountHostilePawnsAround(target.Position, 6.5f);
+            if (nearbyHostiles < 2 && !target.RaceProps.Humanlike)
             {
                 return false;
             }
 
-            if (CountRegularVictimsAround(target.Position, 6.5f) < 2)
-            {
-                return false;
-            }
-
-            return TryStartRaidJob(ability.GetJob(targetInfo, LocalTargetInfo.Invalid), "Minshen");
+            return TryStartRaidAbilityJob(ability, targetInfo, "Minshen", currentTick);
         }
 
-        private bool TryUseGapCloser(Thing target)
+        private bool TryUseGapCloser(Thing target, int currentTick)
         {
-            if (!(target is Pawn targetPawn) || IsExecutingAbilityJob())
+            if (!(target is Pawn targetPawn) || !CanUseRaidSkill(currentTick))
             {
                 return false;
             }
@@ -2764,7 +3718,10 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             CompProperties_AbilityDuanzhan duanzhanProps = ability.def?.comps?.OfType<CompProperties_AbilityDuanzhan>().FirstOrDefault();
-            float maxEffectiveDistance = Mathf.Max(1f, duanzhanProps?.impactRadius ?? 3f) + 0.75f;
+            float maxEffectiveDistance = Mathf.Max(
+                ability.verb?.EffectiveRange ?? 0f,
+                duanzhanProps?.lineLengthCells ?? 0f,
+                duanzhanProps?.impactRadius ?? 0f) + 0.5f;
             if (Pawn.Position.DistanceTo(targetPawn.Position) > maxEffectiveDistance)
             {
                 ZhaoliRaidDebugUtility.Log(Pawn, "DuanzhanSkip", "target too far distance=" + Pawn.Position.DistanceTo(targetPawn.Position).ToString("0.##") + " max=" + maxEffectiveDistance.ToString("0.##"));
@@ -2772,12 +3729,48 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             LocalTargetInfo targetInfo = new LocalTargetInfo(targetPawn.Position);
-            if (!ability.CanApplyOn(targetInfo))
+            return TryStartRaidAbilityJob(ability, targetInfo, "Duanzhan", currentTick);
+        }
+
+        private bool TryStartRaidAbilityJob(Ability ability, LocalTargetInfo targetInfo, string source, int currentTick)
+        {
+            if (!CanStartRaidAbilityJob(ability, targetInfo, source))
             {
                 return false;
             }
 
-            return TryStartRaidJob(ability.GetJob(targetInfo, LocalTargetInfo.Invalid), "Duanzhan");
+            Job job = ability.GetJob(targetInfo, targetInfo);
+            job.playerForced = true;
+            if (!TryStartRaidJob(job, source))
+            {
+                return false;
+            }
+
+            MarkRaidSkillUsed(currentTick);
+            return true;
+        }
+
+        private bool CanStartRaidAbilityJob(Ability ability, LocalTargetInfo targetInfo, string source)
+        {
+            if (ability == null || !ability.CanCast || !targetInfo.IsValid)
+            {
+                return false;
+            }
+
+            if (!ability.CanApplyOn(targetInfo))
+            {
+                ZhaoliRaidDebugUtility.Log(Pawn, "RaidAbilitySkip", "source=" + source + " rejected by CanApplyOn target=" + targetInfo.Cell);
+                return false;
+            }
+
+            Verb verb = ability.verb;
+            if (verb == null || !verb.ValidateTarget(targetInfo, showMessages: false))
+            {
+                ZhaoliRaidDebugUtility.Log(Pawn, "RaidAbilitySkip", "source=" + source + " rejected by ValidateTarget target=" + targetInfo.Cell);
+                return false;
+            }
+
+            return true;
         }
 
         private int CountRegularVictimsAround(IntVec3 center, float radius)
@@ -2793,6 +3786,24 @@ namespace MiliraXian.Characters.Zhaoli
                 }
 
                 if (!ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, candidate))
+                {
+                    continue;
+                }
+
+                count++;
+            }
+
+            return count;
+        }
+
+        private int CountHostilePawnsAround(IntVec3 center, float radius)
+        {
+            int count = 0;
+            IReadOnlyList<Pawn> pawns = Pawn.MapHeld.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
+            {
+                Pawn candidate = pawns[index];
+                if (!IsValidRaidTarget(candidate) || !candidate.Position.InHorDistOf(center, radius))
                 {
                     continue;
                 }
@@ -3040,21 +4051,153 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.PreApplyDamage))]
     internal static class Patch_Pawn_PreApplyDamage_ZhaoliScenario
     {
-        public static void Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        [HarmonyPriority(Priority.First)]
+        public static bool Prefix(Pawn __instance, ref bool absorbed)
         {
             if (__instance == null)
             {
-                return;
+                return true;
             }
 
             if (ZhaoliScenarioUtility.IsHideoutState(__instance))
             {
                 absorbed = true;
+                return false;
+            }
+
+            HediffComp_ZhaoliRaidState raidComp = ZhaoliScenarioUtility.GetRaidStateComp(__instance);
+            if (raidComp != null && raidComp.IsTransitionInvulnerable())
+            {
+                absorbed = true;
+                return false;
+            }
+
+            return true;
+        }
+
+        public static void Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        {
+            if (__instance == null || absorbed)
+            {
                 return;
             }
 
             HediffComp_ZhaoliRaidState raidComp = ZhaoliScenarioUtility.GetRaidStateComp(__instance);
             raidComp?.RegisterIncomingAggro(dinfo.Instigator, dinfo.Amount);
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.DropAndForbidEverything))]
+    internal static class Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon
+    {
+        public sealed class ZhaoliWeaponDropState
+        {
+            public ThingWithComps weapon;
+            public bool stashInInventory;
+        }
+
+        public static void Prefix(Pawn __instance, out ZhaoliWeaponDropState __state)
+        {
+            __state = null;
+            if (!ZhaoliKarmaUtility.IsZhaoli(__instance))
+            {
+                return;
+            }
+
+            bool isBeingKilled = __instance.health?.isBeingKilled == true;
+            bool isDownedDrop = !isBeingKilled && __instance.Downed;
+            if (!isBeingKilled && !isDownedDrop)
+            {
+                return;
+            }
+
+            ThingWithComps primary = __instance.equipment?.Primary;
+            if (primary != null && primary.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
+            {
+                __instance.equipment.Remove(primary);
+                __state = new ZhaoliWeaponDropState
+                {
+                    weapon = primary,
+                    stashInInventory = isDownedDrop
+                };
+                return;
+            }
+
+            if (isBeingKilled && TryRemoveStoredZhaoliWeaponFromInventory(__instance, out ThingWithComps storedWeapon))
+            {
+                __state = new ZhaoliWeaponDropState
+                {
+                    weapon = storedWeapon,
+                    stashInInventory = false
+                };
+            }
+        }
+
+        public static void Postfix(Pawn __instance, ZhaoliWeaponDropState __state)
+        {
+            if (__state?.weapon == null || __state.weapon.Destroyed || __instance == null || __instance.Destroyed)
+            {
+                return;
+            }
+
+            if (__state.stashInInventory && __instance.inventory?.innerContainer != null && !__instance.Dead)
+            {
+                __instance.mindState.droppedWeapon = null;
+                if (__instance.inventory.innerContainer.TryAdd(__state.weapon, canMergeWithExistingStacks: false))
+                {
+                    return;
+                }
+            }
+
+            if (__instance.equipment == null || __instance.equipment.Primary != null)
+            {
+                return;
+            }
+
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(__state.weapon);
+            __instance.equipment.AddEquipment(__state.weapon);
+        }
+
+        internal static void TryReequipStoredZhaoliWeapon(Pawn pawn)
+        {
+            if (pawn == null || pawn.Destroyed || pawn.Dead || pawn.Downed || !ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.equipment == null || pawn.equipment.Primary != null)
+            {
+                return;
+            }
+
+            if (!TryRemoveStoredZhaoliWeaponFromInventory(pawn, out ThingWithComps weapon))
+            {
+                return;
+            }
+
+            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(weapon);
+            pawn.equipment.AddEquipment(weapon);
+        }
+
+        private static bool TryRemoveStoredZhaoliWeaponFromInventory(Pawn pawn, out ThingWithComps weapon)
+        {
+            weapon = null;
+            if (pawn?.inventory?.innerContainer == null)
+            {
+                return false;
+            }
+
+            foreach (Thing thing in pawn.inventory.innerContainer)
+            {
+                if (thing is ThingWithComps thingWithComps && thingWithComps.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
+                {
+                    weapon = thingWithComps;
+                    break;
+                }
+            }
+
+            if (weapon == null)
+            {
+                return false;
+            }
+
+            pawn.inventory.innerContainer.Remove(weapon);
+            return true;
         }
     }
 
@@ -3085,6 +4228,15 @@ namespace MiliraXian.Characters.Zhaoli
             ZhaoliRaidDebugUtility.Log(___pawn, "NoDowned", "prevented MakeDowned and forced death instead");
             ___pawn.Kill(dinfo, hediff);
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn_HealthTracker), "MakeUndowned")]
+    internal static class Patch_Pawn_HealthTracker_MakeUndowned_ZhaoliWeapon
+    {
+        public static void Postfix(Pawn ___pawn)
+        {
+            Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon.TryReequipStoredZhaoliWeapon(___pawn);
         }
     }
 
@@ -3166,7 +4318,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public static bool Prefix(Pawn pawn, float value)
         {
-            if (!ZhaoliScenarioUtility.IsRaidState(pawn))
+            if (!ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(pawn))
             {
                 return true;
             }

@@ -103,7 +103,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Pawn.Faction == Faction.OfPlayer)
             {
-                Messages.Message("长息预警：长息仍在冷却中，当前伤害无法触发长息。", Pawn, MessageTypeDefOf.CautionInput);
+                Messages.Message("MX_QH_LongBreathLowResourceWarning".Translate(), Pawn, MessageTypeDefOf.CautionInput);
             }
 
             int maxTicks = Props.cooldownWarningCooldownTicks > 0 ? Props.cooldownWarningCooldownTicks : 600;
@@ -129,7 +129,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Pawn.Faction == Faction.OfPlayer)
             {
-                Messages.Message("【长息】已触发：抵消致命伤害并修复全部损伤。", Pawn, MessageTypeDefOf.PositiveEvent);
+                Messages.Message("MX_QH_LongBreathTriggered".Translate(), Pawn, MessageTypeDefOf.PositiveEvent);
             }
         }
 

@@ -10,9 +10,12 @@
         <category>MX_ZhaoliSkill</category>
         <displayOrder>104</displayOrder>
         <cooldownTicksRange>2400</cooldownTicksRange>
+        <jobDef>MX_Zhaoli_CastAbility_Uninterruptible</jobDef>
 
         <targetRequired>true</targetRequired>
         <hostile>true</hostile>
+        <aiCanUse>true</aiCanUse>
+        <ai_IsOffensive>true</ai_IsOffensive>
         <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>

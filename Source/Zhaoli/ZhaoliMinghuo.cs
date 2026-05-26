@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (caster.Faction == Faction.OfPlayer)
                 {
-                    Messages.Message("因果不足，无法施放冥火。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaMinghuo".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return;
@@ -76,7 +76,7 @@ namespace MiliraXian.Characters.Zhaoli
             HediffComp_Disappears disappearsComp = hediff?.TryGetComp<HediffComp_Disappears>();
             if (minghuoComp == null || disappearsComp == null)
             {
-                Log.Error("[MiliraXian.Characters.Zhaoli] 冥火 Hediff 缺少必要 comp。");
+                Log.Error("[MiliraXian.Characters.Zhaoli] Minghuo Hediff is missing required comps.");
                 return;
             }
 
@@ -93,13 +93,13 @@ namespace MiliraXian.Characters.Zhaoli
             FleckMaker.AttachedOverlay(caster, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
             if (caster.Spawned)
             {
-                MoteMaker.ThrowText(caster.DrawPos, caster.Map, "冥火", 3.65f);
+                MoteMaker.ThrowText(caster.DrawPos, caster.Map, "MX_ZL_MinghuoMote".Translate().ToString(), 3.65f);
             }
 
             if (caster.Faction == Faction.OfPlayer)
             {
                 Messages.Message(
-                    "冥火已附着于当前主武器：伤害/破甲/命中/攻速 x1.5，攻击距离 +2，并附加额外火焰伤害。",
+                    "MX_ZL_MinghuoAttached".Translate(),
                     caster,
                     MessageTypeDefOf.PositiveEvent,
                     historical: false);
@@ -119,7 +119,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("冥火只能由昭离对自己施放。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_MinghuoSelfOnly".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -130,7 +130,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("昭离当前未装备主武器，无法施放冥火。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_MinghuoNoPrimaryWeapon".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -140,7 +140,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("因果不足，无法施放冥火。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaMinghuo".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -227,7 +227,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (boundWeapon == null)
                 {
-                    return "冥火尚未绑定到武器。";
+                    return "MX_ZL_MinghuoNoBoundWeapon".Translate().ToString();
                 }
 
                 return GetPanelSummary();
@@ -243,13 +243,13 @@ namespace MiliraXian.Characters.Zhaoli
         {
             return string.Join("\n", new[]
             {
-                "当前附着武器：" + boundWeapon.LabelCap,
-                "伤害：x" + PropsMinghuo.damageMultiplier.ToString("0.##"),
-                "破甲：x" + PropsMinghuo.armorPenetrationMultiplier.ToString("0.##"),
-                "命中：x" + PropsMinghuo.hitChanceMultiplier.ToString("0.##"),
-                "攻速：x" + PropsMinghuo.attackSpeedMultiplier.ToString("0.##"),
-                "攻击距离：+" + PropsMinghuo.rangeOffset.ToString("0.##"),
-                "额外火焰伤害：已启用"
+                "MX_ZL_MinghuoBoundWeapon".Translate(boundWeapon.LabelCap).ToString(),
+                "MX_ZL_MinghuoDamageMultiplier".Translate(PropsMinghuo.damageMultiplier.ToString("0.##")).ToString(),
+                "MX_ZL_MinghuoArmorPenMultiplier".Translate(PropsMinghuo.armorPenetrationMultiplier.ToString("0.##")).ToString(),
+                "MX_ZL_MinghuoHitChanceMultiplier".Translate(PropsMinghuo.hitChanceMultiplier.ToString("0.##")).ToString(),
+                "MX_ZL_MinghuoAttackSpeedMultiplier".Translate(PropsMinghuo.attackSpeedMultiplier.ToString("0.##")).ToString(),
+                "MX_ZL_MinghuoRangeOffset".Translate(PropsMinghuo.rangeOffset.ToString("0.##")).ToString(),
+                "MX_ZL_MinghuoExtraFireDamageEnabled".Translate().ToString()
             });
         }
     }

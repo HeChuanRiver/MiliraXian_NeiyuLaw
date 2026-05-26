@@ -33,9 +33,9 @@ namespace MiliraXian.Characters.Zhaoli
             }
         }
 
-        public override string CompLabelInBracketsExtra => "已链接 " + ActiveLinkCount + "/" + PropsLinks.maxLinks;
+        public override string CompLabelInBracketsExtra => "MX_ZL_LinkLabelExtra".Translate(ActiveLinkCount, PropsLinks.maxLinks).ToString();
 
-        public override string CompTipStringExtra => "当前已链接：" + ActiveLinkCount + "/" + PropsLinks.maxLinks;
+        public override string CompTipStringExtra => "MX_ZL_LinkTipExtra".Translate(ActiveLinkCount, PropsLinks.maxLinks).ToString();
 
         public override string CompDescriptionExtra => BuildLinkSummary();
 
@@ -67,20 +67,20 @@ namespace MiliraXian.Characters.Zhaoli
             CleanupInvalidLinks();
             if (target == null || target.Dead || target.Destroyed)
             {
-                failureReason = "目标无法建立因果链接。";
+                failureReason = "MX_ZL_LinkTargetInvalid".Translate().ToString();
                 return false;
             }
 
             if (target == Pawn)
             {
-                failureReason = "昭离不能与自己建立因果链接。";
+                failureReason = "MX_ZL_LinkCannotTargetSelf".Translate().ToString();
                 return false;
             }
 
             HediffComp_ZhaoliKarmaLinkTarget targetComp = ZhaoliKarmaUtility.GetLinkTargetComp(target);
             if (targetComp != null && targetComp.Zhaoli != null && targetComp.Zhaoli != Pawn)
             {
-                failureReason = "目标已经与另一名昭离建立了因果链接。";
+                failureReason = "MX_ZL_LinkTargetAlreadyLinkedOther".Translate().ToString();
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (linkedPawns.Count >= PropsLinks.maxLinks)
             {
-                failureReason = "因果链接已达到上限，无法再建立新的链接。";
+                failureReason = "MX_ZL_LinkLimitReached".Translate().ToString();
                 return false;
             }
 
@@ -109,7 +109,7 @@ namespace MiliraXian.Characters.Zhaoli
             HediffDef linkDef = DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliKarmaUtility.LinkTargetHediffDefName);
             if (linkDef == null || target?.health == null)
             {
-                failureReason = "缺少因果链接 Hediff 定义。";
+                failureReason = "MX_ZL_LinkHediffDefMissing".Translate().ToString();
                 return false;
             }
 
@@ -117,14 +117,14 @@ namespace MiliraXian.Characters.Zhaoli
             HediffWithComps hediffWithComps = hediff as HediffWithComps;
             if (hediffWithComps == null)
             {
-                failureReason = "因果链接 Hediff 未能正确实例化。";
+                failureReason = "MX_ZL_LinkHediffCreateFailed".Translate().ToString();
                 return false;
             }
 
             HediffComp_ZhaoliKarmaLinkTarget linkTargetComp = hediffWithComps.GetComp<HediffComp_ZhaoliKarmaLinkTarget>();
             if (linkTargetComp == null)
             {
-                failureReason = "因果链接 Hediff 缺少链接组件。";
+                failureReason = "MX_ZL_LinkHediffCompMissing".Translate().ToString();
                 return false;
             }
 
@@ -255,19 +255,16 @@ namespace MiliraXian.Characters.Zhaoli
         {
             CleanupInvalidLinks();
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("当前已链接：");
-            stringBuilder.Append(ActiveLinkCount);
-            stringBuilder.Append("/");
-            stringBuilder.Append(PropsLinks.maxLinks);
+            stringBuilder.Append("MX_ZL_LinkTipExtra".Translate(ActiveLinkCount, PropsLinks.maxLinks).ToString());
             if (linkedPawns.Count == 0)
             {
                 stringBuilder.AppendLine();
-                stringBuilder.Append("链接名单：无");
+                stringBuilder.Append("MX_ZL_LinkListNone".Translate().ToString());
                 return stringBuilder.ToString();
             }
 
             stringBuilder.AppendLine();
-            stringBuilder.Append("链接名单：");
+            stringBuilder.Append("MX_ZL_LinkListHeader".Translate().ToString());
             for (int i = 0; i < linkedPawns.Count; i++)
             {
                 Pawn linkedPawn = linkedPawns[i];
@@ -281,7 +278,7 @@ namespace MiliraXian.Characters.Zhaoli
                 stringBuilder.Append(linkedPawn.LabelShortCap);
                 if (ZhaoliKarmaUtility.HasOverflowBurden(linkedPawn))
                 {
-                    stringBuilder.Append("（代偿因果）");
+                    stringBuilder.Append("MX_ZL_LinkOverflowBurdenSuffix".Translate().ToString());
                 }
             }
 
@@ -311,10 +308,10 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (zhaoli == null)
                 {
-                    return "该目标正与昭离保持因果链接。";
+                    return "MX_ZL_LinkTargetTipGeneric".Translate().ToString();
                 }
 
-                return "该目标正与" + zhaoli.LabelShortCap + "保持因果链接。";
+                return "MX_ZL_LinkTargetTipNamed".Translate(zhaoli.LabelShortCap).ToString();
             }
         }
 
@@ -552,8 +549,9 @@ namespace MiliraXian.Characters.Zhaoli
                 }
 
                 GenSpawn.Spawn(pendingRebirth.pawn, cell, map);
+                ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
-                Messages.Message("昭离已从死亡中归来。", pendingRebirth.pawn, MessageTypeDefOf.PositiveEvent);
+                Messages.Message("MX_ZL_RebirthReturned".Translate(), pendingRebirth.pawn, MessageTypeDefOf.PositiveEvent);
                 pendingRebirths.RemoveAt(i);
             }
         }
@@ -604,7 +602,7 @@ namespace MiliraXian.Characters.Zhaoli
             linkComp.BreakLink(sacrificePawn);
             sacrificePawn.Kill(null);
 
-            ResurrectionUtility.TryResurrect(pawn, new ResurrectionParams
+            if (ResurrectionUtility.TryResurrect(pawn, new ResurrectionParams
             {
                 gettingScarsChance = 0f,
                 canKidnap = false,
@@ -614,7 +612,11 @@ namespace MiliraXian.Characters.Zhaoli
                 noLord = true,
                 invisibleStun = true,
                 removeDiedThoughts = true
-            });
+            }))
+            {
+                ZhaoliScenarioUtility.EnsureDefaultLoadout(pawn);
+                ZhaoliRebirthUtility.NotifyApparelResurrected(pawn);
+            }
         }
     }
 
@@ -657,6 +659,7 @@ namespace MiliraXian.Characters.Zhaoli
             if (pendingSubstitutePawns.TryGetValue(__instance, out Pawn sacrificePawn))
             {
                 pendingSubstitutePawns.Remove(__instance);
+                bool isRaidState = ZhaoliScenarioUtility.IsRaidState(__instance);
 
                 HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
                 linkComp.BreakLink(sacrificePawn);
@@ -677,8 +680,21 @@ namespace MiliraXian.Characters.Zhaoli
                     removeDiedThoughts = true
                 }))
                 {
-                    ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.NotifySubstituteTriggered();
+                    ZhaoliScenarioUtility.EnsureDefaultLoadout(__instance);
+                    ZhaoliRebirthUtility.NotifyApparelResurrected(__instance);
+                    if (isRaidState)
+                    {
+                        ZhaoliRebirthUtility.RemoveRebirthHediff(__instance);
+                        ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.NotifySubstituteTriggered();
+                        return;
+                    }
+
                     ZhaoliRebirthUtility.RegisterRecruitGrowthDeath(__instance);
+                    return;
+                }
+
+                if (isRaidState)
+                {
                     return;
                 }
 

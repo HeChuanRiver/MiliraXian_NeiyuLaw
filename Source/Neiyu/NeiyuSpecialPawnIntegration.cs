@@ -33,13 +33,6 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             if (!ShouldRunIntegration())
-            if (!ModsConfig.IsActive(AriandelPackageId))
-            {
-                return;
-            }
-
-            if (NeiyuLawMod.Instance != null && NeiyuLawMod.Instance.Settings != null &&
-                !NeiyuLawMod.Instance.Settings.EnableAriandelSpecialPawnIntegration)
             {
                 return;
             }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Zhaoli_DeathField.label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</MX_Zhaoli_DeathField.label>
+  <MX_Zhaoli_DeathField.description>创造一个直径18格的圆形&lt;color=#C9A2FF&gt;力场&lt;/color&gt;。力场内除&lt;color=#E85A7A&gt;昭离&lt;/color&gt;自身外的单位会受到&lt;color=#B86CFF&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;并推进&lt;color=#E85A7A&gt;9→1&lt;/color&gt;倒计时。目标只要离开范围，倒计时立即清零；若连续停留9秒，则会被&lt;color=#E85A7A&gt;告死&lt;/color&gt;。</MX_Zhaoli_DeathField.description>
+  <MX_Zhaoli_Guiyi.label>&lt;color=#C77DFF&gt;诡医&lt;/color&gt;</MX_Zhaoli_Guiyi.label>
+  <MX_Zhaoli_Guiyi.description>消耗&lt;color=#E85A7A&gt;1点因果&lt;/color&gt;，治愈目标一切疾病与损伤。该效果会恢复缺失肢体，清除成瘾、机械损伤、永久旧伤与其他负面健康状态。&lt;color=#C77DFF&gt;诡医&lt;/color&gt;无法对昭离自己或敌对目标使用，并会在目标身上建立持续30天的&lt;color=#D66BFF&gt;因果链接&lt;/color&gt;。</MX_Zhaoli_Guiyi.description>
+  <MX_Zhaoli_Dingshu.label>&lt;color=#C9A2FF&gt;定数&lt;/color&gt;</MX_Zhaoli_Dingshu.label>
+  <MX_Zhaoli_Dingshu.description>消耗&lt;color=#E85A7A&gt;2点因果&lt;/color&gt;，由昭离对尸体持续注入&lt;color=#C9A2FF&gt;50分钟&lt;/color&gt;的黑色因果，将其完整复活并治愈所有损伤，不产生复活后遗症。复活目标会与昭离建立因果链接，并获得持续&lt;color=#C77DFF&gt;12天&lt;/color&gt;的&lt;color=#C9A2FF&gt;定数标记&lt;/color&gt;；若目标在该标记持续期间再次死亡，则无法再被复活。该技能不会在袭击状态下生效。</MX_Zhaoli_Dingshu.description>
+  <MX_Zhaoli_Minghuo.label>&lt;color=#FF6A6A&gt;冥火&lt;/color&gt;</MX_Zhaoli_Minghuo.label>
+  <MX_Zhaoli_Minghuo.description>消耗&lt;color=#E85A7A&gt;3点因果&lt;/color&gt;，将死者因果附着于昭离当前主武器之上，持续1日。附魔期间，武器伤害、破甲、命中与攻击速度提升至原本的&lt;color=#FF6A6A&gt;1.5倍&lt;/color&gt;，攻击距离额外增加2格，并在每次近战命中时附加一段&lt;color=#FF8A66&gt;火焰伤害&lt;/color&gt;。</MX_Zhaoli_Minghuo.description>
+  <MX_Zhaoli_Minshen.label>&lt;color=#C77DFF&gt;泯神&lt;/color&gt;</MX_Zhaoli_Minshen.label>
+  <MX_Zhaoli_Minshen.description>消耗&lt;color=#E85A7A&gt;3点因果&lt;/color&gt;，对目标点&lt;color=#B86CFF&gt;13x13&lt;/color&gt;范围内的敌方单位施加压制。血肉目标会受到持续5秒的蚀命，每秒对躯干造成1点无视护甲的钝击伤害；其中90%还会陷入&lt;color=#C77DFF&gt;80%减速&lt;/color&gt;，10%会陷入&lt;color=#D66BFF&gt;失神30秒&lt;/color&gt;。机械体不承受失神与减速，改为直接承受&lt;color=#E85A7A&gt;EMP&lt;/color&gt;冲击。</MX_Zhaoli_Minshen.description>
+  <MX_Zhaoli_Duanzhan.label>&lt;color=#E85A7A&gt;断斩&lt;/color&gt;</MX_Zhaoli_Duanzhan.label>
+  <MX_Zhaoli_Duanzhan.description>短暂压低刀锋后挥出一记&lt;color=#E85A7A&gt;离断弧光&lt;/color&gt;，以紫白刀光扫过前方敌人。正面中线会承受更重的切割，若&lt;color=#FF6A6A&gt;冥火&lt;/color&gt;仍附着于武器，则追加少量火焰伤害。</MX_Zhaoli_Duanzhan.description>
+</LanguageData>

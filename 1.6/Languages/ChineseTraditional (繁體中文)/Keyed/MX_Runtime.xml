@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Common_None>無</MX_Common_None>
+  <MX_Common_ResourceNotEnough>資源不足</MX_Common_ResourceNotEnough>
+  <MX_Common_ResourceOverflowing>目前數值已超過上限。</MX_Common_ResourceOverflowing>
+  <MX_Common_Unknown>未知</MX_Common_Unknown>
+  <MX_Common_UnknownTarget>未知目標</MX_Common_UnknownTarget>
+
+  <MX_ModeSwitch_CommandLabel>切換形態</MX_ModeSwitch_CommandLabel>
+  <MX_ModeSwitch_CommandDesc>切換為其他形態</MX_ModeSwitch_CommandDesc>
+  <MX_ModeSwitch_CommandLabelWithForm>{0}：{1}</MX_ModeSwitch_CommandLabelWithForm>
+  <MX_ModeSwitch_CommandFullDesc>{0}&#10;&#10;目前：{1}&#10;點擊後選擇目標形態。</MX_ModeSwitch_CommandFullDesc>
+  <MX_ModeSwitch_Cooldown>冷卻中：{0}s</MX_ModeSwitch_Cooldown>
+  <MX_ModeSwitch_NoTargetForm>沒有可切換的目標形態。</MX_ModeSwitch_NoTargetForm>
+  <MX_ModeSwitch_TargetFormMissing>目標形態未配置。</MX_ModeSwitch_TargetFormMissing>
+  <MX_ModeSwitch_TargetFormInvalidThing>目標形態不是有效物品：{0}</MX_ModeSwitch_TargetFormInvalidThing>
+  <MX_ModeSwitch_NoEquipmentTracker>該角色沒有裝備欄。</MX_ModeSwitch_NoEquipmentTracker>
+  <MX_ModeSwitch_NoInventoryTracker>該角色沒有物品欄。</MX_ModeSwitch_NoInventoryTracker>
+
+  <MX_NL_ModSettingsTitle>米莉拉角色拓展</MX_NL_ModSettingsTitle>
+  <MX_NL_EnableSpecialPawnIntegrationLabel>啟用角色接入特殊角色管理器</MX_NL_EnableSpecialPawnIntegrationLabel>
+  <MX_NL_EnableSpecialPawnIntegrationDesc>啟用後，特殊角色在加入玩家派系或讀檔巡檢時，會被註冊進 Ariandel 的特殊角色管理器，避免因未註冊而被唯一角色限制器清理。</MX_NL_EnableSpecialPawnIntegrationDesc>
+  <MX_NL_EnableUpdateLogLettersLabel>推送更新日誌信件</MX_NL_EnableUpdateLogLettersLabel>
+  <MX_NL_EnableUpdateLogLettersDesc>啟用後，當前存檔第一次執行新版本時，只會收到最新版本的更新日誌信件一次。關閉後，該版本會被記錄為已檢查，不會補發舊日誌。</MX_NL_EnableUpdateLogLettersDesc>
+  <MX_NL_ViewUpdateLogsButton>查看所有更新日誌</MX_NL_ViewUpdateLogsButton>
+  <MX_NL_UpdateLogDialogTitle>米莉拉角色拓展 更新日誌</MX_NL_UpdateLogDialogTitle>
+  <MX_NL_UpdateLogLetterLabel>米莉拉角色拓展更新日誌 {0}</MX_NL_UpdateLogLetterLabel>
+  <MX_NL_UpdateLog_v1_1_010_Body>大家好，本次是 &lt;color=#79CBFF&gt;v1.1.010&lt;/color&gt; 更新，修復了一些已知問題，具體如下：&#10;&#10;1. 修復了&lt;color=#E85A7A&gt;昭離任務因為一些已知問題導致接取後秒過期&lt;/color&gt;的問題。如果您的存檔遇到了該問題，可以在下方找到可能的解決方案。&#10;2. 修復了&lt;color=#E85A7A&gt;導致昭離不復活&lt;/color&gt;的可能原因。如果您的存檔遇到了該問題，可以在下方找到可能的解決方案。&#10;3. 添加了一些&lt;color=#79CBFF&gt;開發者按鈕&lt;/color&gt;。如果您的存檔遇到了第 1 個問題，可以打開開發者工具，找到 &lt;color=#C77DFF&gt;Milira Xian - Zhaoli -&gt; Retry Zhaoli murmur quest check&lt;/color&gt;。該選項會在您的存檔滿足昭離任務條件的情況下主動再次觸發昭離任務。請注意，如果您的殖民地已經存在昭離，該按鈕應該會失效。&#10;如果遇到了第 2 個問題，請同樣打開開發者工具，找到 &lt;color=#C77DFF&gt;Milira Xian - Zhaoli -&gt; Force friendly dead Zhaoli return now&lt;/color&gt; 來強制回歸昭離。如果該按鈕失效，那麼昭離失效很可能來自不同 Mod 衝突，很抱歉可能無法定位。</MX_NL_UpdateLog_v1_1_010_Body>
+  <MX_NL_UpdateLog_v1_1_001_Body>大家好，本次更新引入了&lt;color=#79CBFF&gt;更新日誌&lt;/color&gt;，如果您覺得更新日誌會有打擾，請前往 Mod 設定中找到米莉拉角色拓展中的&lt;color=#79CBFF&gt;是否推送更新日誌&lt;/color&gt;，關閉即可！以下是正文：&#10;&#10;1. 修復了&lt;color=#E85A7A&gt;昭離因果滿了之後倒地會鎖1%飢餓度&lt;/color&gt;導致一直被餵食的情況。&#10;2. 添加了&lt;color=#79CBFF&gt;是否鎖意識&lt;/color&gt;的可選項，目前可以為昭離和霓羽選擇100%、35%和不鎖定意識的選項！&lt;color=#FFB86C&gt;請注意！&lt;/color&gt;這裡的鎖定也會影響昭離的敵對情況是否鎖定意識，如果選擇了不鎖定意識和35%鎖定會相應降低敵對難度，您可以自行選擇。&#10;3. 修復了昭離倒地會掉落武器的問題，防止在您的存檔出現&lt;color=#FF6A6A&gt;114514把離斷&lt;/color&gt;~&#10;4. &lt;color=#C77DFF&gt;昭離目前已接入 SCM&lt;/color&gt;，經過本地測試應當沒有問題~&#10;5. 修復了&lt;color=#E85A7A&gt;昭離的任務會佔用過大導致 TPS 驟降&lt;/color&gt;的問題。&#10;&#10;如果遇到問題請及時向 Steam 評論區回報！謝謝~&#10;&lt;color=#FFB86C&gt;請注意！&lt;/color&gt;如果您的 Mod 中存在影響投射物相關的 Mod，可能會導致霓羽弓形態的箭矢異常！</MX_NL_UpdateLog_v1_1_001_Body>
+  <MX_NL_SpecialPawnConsciousnessLockLabel>特殊角色意識鎖定</MX_NL_SpecialPawnConsciousnessLockLabel>
+  <MX_NL_SpecialPawnConsciousnessLock100Label>鎖定為100%</MX_NL_SpecialPawnConsciousnessLock100Label>
+  <MX_NL_SpecialPawnConsciousnessLock100Desc>特殊角色的意識最低保持為100%。</MX_NL_SpecialPawnConsciousnessLock100Desc>
+  <MX_NL_SpecialPawnConsciousnessLock35Label>鎖定為35%</MX_NL_SpecialPawnConsciousnessLock35Label>
+  <MX_NL_SpecialPawnConsciousnessLock35Desc>特殊角色的意識最低保持為35%。</MX_NL_SpecialPawnConsciousnessLock35Desc>
+  <MX_NL_SpecialPawnConsciousnessLockNoneLabel>不鎖定</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
+  <MX_NL_SpecialPawnConsciousnessLockNoneDesc>特殊角色的意識會按傷病、狀態和其他 Mod 的效果正常變化。</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
+  <MX_NL_NeedFlowerForm>需要裝備花形態。</MX_NL_NeedFlowerForm>
+  <MX_NL_NeedSwordForm>需要裝備劍形態。</MX_NL_NeedSwordForm>
+  <MX_NL_NeedBowForm>需要裝備弓形態。</MX_NL_NeedBowForm>
+  <MX_NL_ProjectileDefMissing>projectileDef 未配置。</MX_NL_ProjectileDefMissing>
+  <MX_NL_NeedTargetCell>需要選擇一個目標地點。</MX_NL_NeedTargetCell>
+  <MX_NL_NoMarkTargetsInRange>範圍內沒有可標記目標。</MX_NL_NoMarkTargetsInRange>
+  <MX_NL_NoValidAllyInRange>範圍內沒有有效友方目標。</MX_NL_NoValidAllyInRange>
+  <MX_NL_NoHostileInRange>範圍內沒有敵對目標。</MX_NL_NoHostileInRange>
+  <MX_NL_SkyfallInProgress>天墜正在進行中。</MX_NL_SkyfallInProgress>
+  <MX_NL_MustTargetPawn>必須選擇一個角色作為目標。</MX_NL_MustTargetPawn>
+  <MX_NL_TargetMustBeHostile>目標必須為敵對單位。</MX_NL_TargetMustBeHostile>
+  <MX_NL_FlowerToxinMentalStateReason>霓羽的花瘴使其陷入狂亂。</MX_NL_FlowerToxinMentalStateReason>
+  <MX_NL_RecruitLetterTitle>異界羽影</MX_NL_RecruitLetterTitle>
+  <MX_NL_RecruitLetterText>殖民地附近出現了一道穩定下來的羽狀投影。來者自稱霓羽，她並非本體，而是一位米莉拉在此界投下的一道輕快分影。與其說她像某種高高在上的神性殘片，不如說更像一陣帶著笑意闖進來的風。她表示自己可以留下，也可以就此散去。選擇權在你。</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitAccept>接納霓羽</MX_NL_RecruitAccept>
+  <MX_NL_RecruitReject>暫不接納</MX_NL_RecruitReject>
+  <MX_NL_NoPlayerHomeMap>沒有可用的玩家基地地圖。</MX_NL_NoPlayerHomeMap>
+  <MX_NL_RecruitJoined>霓羽決定在此界停留，並正式加入了你的殖民地。</MX_NL_RecruitJoined>
+  <MX_NL_RecruitDeferred>羽影暫時散去。若緣分未盡，她之後仍可能再次出現。</MX_NL_RecruitDeferred>
+  <MX_NL_WeakBadge>虛</MX_NL_WeakBadge>
+  <MX_NL_ShieldStage3BuffStarted>[{0}] 護身進入增益階段：不再蓄傷，也不再無敵。</MX_NL_ShieldStage3BuffStarted>
+  <MX_NL_ShieldStage3Ended>[{0}] 護身第三階段結束，進入虛弱。</MX_NL_ShieldStage3Ended>
+  <MX_NL_ShieldTriggered>[{0}] 護身觸發：判定為{1}傷害，進入第{2}階段。</MX_NL_ShieldTriggered>
+  <MX_NL_ShieldDamageTypeLethal>致命/倒地</MX_NL_ShieldDamageTypeLethal>
+  <MX_NL_ShieldDamageTypeNonLethal>非致命</MX_NL_ShieldDamageTypeNonLethal>
+  <MX_NL_ShieldDebugName>護身</MX_NL_ShieldDebugName>
+  <MX_NL_ShieldDebugStage3AbsorbLabel>III-蓄傷 蓄傷:{0} 剩餘:{1}h</MX_NL_ShieldDebugStage3AbsorbLabel>
+  <MX_NL_ShieldDebugStage3BuffLabel>III-增益 檔位:{0} 剩餘:{1}h</MX_NL_ShieldDebugStage3BuffLabel>
+  <MX_NL_ShieldDebugWeakLabel>[虛弱 {0}h]</MX_NL_ShieldDebugWeakLabel>
+  <MX_NL_ShieldTipStage>階段: {0}{1}</MX_NL_ShieldTipStage>
+  <MX_NL_ShieldTipWeakSuffix> (虛弱中)</MX_NL_ShieldTipWeakSuffix>
+  <MX_NL_ShieldTipStage2Charges>二階段次數: {0}/{1}</MX_NL_ShieldTipStage2Charges>
+  <MX_NL_ShieldTipThreshold>閾值: {0}</MX_NL_ShieldTipThreshold>
+  <MX_NL_ShieldTipRecentHits>最近5次受擊(傷害 -&gt; 消耗次數):</MX_NL_ShieldTipRecentHits>
+  <MX_NL_ShieldTipStage3Absorb>階段3-蓄傷(無敵)</MX_NL_ShieldTipStage3Absorb>
+  <MX_NL_ShieldTipAbsorbRemaining>蓄傷剩餘: {0}h</MX_NL_ShieldTipAbsorbRemaining>
+  <MX_NL_ShieldTipStoredDamage>目前蓄傷: {0}</MX_NL_ShieldTipStoredDamage>
+  <MX_NL_ShieldTipBuffAfterAbsorb>增益將於蓄傷結束後開啟。</MX_NL_ShieldTipBuffAfterAbsorb>
+  <MX_NL_ShieldTipStage3Buff>階段3-增益(可受傷)</MX_NL_ShieldTipStage3Buff>
+  <MX_NL_ShieldTipBuffRemaining>增益剩餘: {0}h</MX_NL_ShieldTipBuffRemaining>
+  <MX_NL_ShieldTipLockedDamage>鎖定蓄傷: {0}</MX_NL_ShieldTipLockedDamage>
+  <MX_NL_ShieldTipCurrentTier>目前檔位: {0}</MX_NL_ShieldTipCurrentTier>
+  <MX_NL_ShieldTipCurrentBuffs>目前增益:</MX_NL_ShieldTipCurrentBuffs>
+  <MX_NL_ShieldTipWeakRemaining>虛弱剩餘: {0}h</MX_NL_ShieldTipWeakRemaining>
+  <MX_NL_ShieldTipWeakPenalty>虛弱懲罰: 移速-50%，休息下降+50%，全域工作效率-80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldBuffOutgoingDamage>近戰/遠程傷害 +{0}%</MX_NL_ShieldBuffOutgoingDamage>
+  <MX_NL_ShieldBuffAimingTime>瞄準時間 {0}{1}%</MX_NL_ShieldBuffAimingTime>
+  <MX_NL_ShieldBuffIncomingDamage>承傷係數 {0}{1}%</MX_NL_ShieldBuffIncomingDamage>
+  <MX_NL_ShieldBuffMoveSpeed>移速 +{0}%</MX_NL_ShieldBuffMoveSpeed>
+  <MX_NL_ShieldBuffHealing>癒合速度 +{0}%</MX_NL_ShieldBuffHealing>
+  <MX_NL_ShieldBuffMeleeArmorPen>近戰護甲穿透 +{0}%</MX_NL_ShieldBuffMeleeArmorPen>
+  <MX_NL_ShieldBuffMeleeDodge>近戰閃避 +{0}%</MX_NL_ShieldBuffMeleeDodge>
+  <MX_NL_ShieldBuffRangedDodge>遠程閃避 +{0}%</MX_NL_ShieldBuffRangedDodge>
+
+  <MX_QH_TempestFallbackLabel>激流</MX_QH_TempestFallbackLabel>
+  <MX_QH_EleganceFallbackLabel>雅樂</MX_QH_EleganceFallbackLabel>
+  <MX_QH_TargetLine>目標線: {0}</MX_QH_TargetLine>
+  <MX_QH_ShieldInactive>護盾未激活</MX_QH_ShieldInactive>
+  <MX_QH_LotusShieldStatusActive>狀態：已激活</MX_QH_LotusShieldStatusActive>
+  <MX_QH_LotusShieldStatusDown>狀態：停擺（剩餘 {0}s）</MX_QH_LotusShieldStatusDown>
+  <MX_QH_LotusShieldDamagePerPoint>每點護盾承傷：{0}</MX_QH_LotusShieldDamagePerPoint>
+  <MX_QH_LotusShieldRegen>護盾回復速率：{0} /s</MX_QH_LotusShieldRegen>
+  <MX_QH_NeedPipaForm>需要裝備琵琶形態。</MX_QH_NeedPipaForm>
+  <MX_QH_NeedZhudiForm>需要裝備竹笛形態。</MX_QH_NeedZhudiForm>
+  <MX_QH_NeedRequiredWeapon>需要對應武器。</MX_QH_NeedRequiredWeapon>
+  <MX_QH_LongBreathLowResourceWarning>長息預警：激流不足，當前傷害無法觸發長息。</MX_QH_LongBreathLowResourceWarning>
+  <MX_QH_LongBreathTriggered>【長息】已觸發：抵消致命傷害並修復全部損傷，激流已清空。</MX_QH_LongBreathTriggered>
+  <MX_QH_ReportDuanHun>正在引導斷魂音律</MX_QH_ReportDuanHun>
+  <MX_QH_ReportHengZhi>正在引導橫指衝擊</MX_QH_ReportHengZhi>
+  <MX_QH_ReportYangChun>正在引導陽春和聲</MX_QH_ReportYangChun>
+  <MiliraXian.QingHe.Ability_TempestDrain.Disabled>激流不足，無法維持扼流。</MiliraXian.QingHe.Ability_TempestDrain.Disabled>
+
+  <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
+  <MX_ZL_DebugAddKarmaDesc>開發者測試用：手動為昭離增加10點因果。</MX_ZL_DebugAddKarmaDesc>
+  <MX_ZL_ListSeparator>、</MX_ZL_ListSeparator>
+  <MX_ZL_LinkTargetInvalid>目標無法建立因果連結。</MX_ZL_LinkTargetInvalid>
+  <MX_ZL_LinkCannotTargetSelf>昭離不能與自己建立因果連結。</MX_ZL_LinkCannotTargetSelf>
+  <MX_ZL_LinkTargetAlreadyLinkedOther>目標已經與另一名昭離建立了因果連結。</MX_ZL_LinkTargetAlreadyLinkedOther>
+  <MX_ZL_LinkLimitReached>因果連結已達到上限，無法再建立新的連結。</MX_ZL_LinkLimitReached>
+  <MX_ZL_LinkHediffDefMissing>缺少因果連結 Hediff 定義。</MX_ZL_LinkHediffDefMissing>
+  <MX_ZL_LinkHediffCreateFailed>因果連結 Hediff 未能正確實例化。</MX_ZL_LinkHediffCreateFailed>
+  <MX_ZL_LinkHediffCompMissing>因果連結 Hediff 缺少連結組件。</MX_ZL_LinkHediffCompMissing>
+  <MX_ZL_LinkLabelExtra>已連結 {0}/{1}</MX_ZL_LinkLabelExtra>
+  <MX_ZL_LinkTipExtra>目前已連結：{0}/{1}</MX_ZL_LinkTipExtra>
+  <MX_ZL_LinkListNone>連結名單：無</MX_ZL_LinkListNone>
+  <MX_ZL_LinkListHeader>連結名單：</MX_ZL_LinkListHeader>
+  <MX_ZL_LinkOverflowBurdenSuffix>（代償因果）</MX_ZL_LinkOverflowBurdenSuffix>
+  <MX_ZL_LinkTargetTipGeneric>該目標正與昭離保持因果連結。</MX_ZL_LinkTargetTipGeneric>
+  <MX_ZL_LinkTargetTipNamed>該目標正與{0}保持因果連結。</MX_ZL_LinkTargetTipNamed>
+  <MX_ZL_DingshuCannotTargetSelf>定數無法對昭離自己使用。</MX_ZL_DingshuCannotTargetSelf>
+  <MX_ZL_DingshuCannotUseDuringRaid>定數無法在襲擊狀態下使用。</MX_ZL_DingshuCannotUseDuringRaid>
+  <MX_ZL_NotEnoughKarmaDingshu>因果不足，無法施放定數。</MX_ZL_NotEnoughKarmaDingshu>
+  <MX_ZL_DingshuMarkedTargetCannotRevive>目標在定數標記期間死亡，無法再次被復活。</MX_ZL_DingshuMarkedTargetCannotRevive>
+  <MX_ZL_DingshuReviveFailed>定數未能完成復活。</MX_ZL_DingshuReviveFailed>
+  <MX_ZL_DingshuMote>定數</MX_ZL_DingshuMote>
+  <MX_ZL_DingshuRevived>{0}已被定數復活。</MX_ZL_DingshuRevived>
+  <MX_ZL_DingshuRevivedAndHealed>{0}已被定數復活，所有傷病已清除。</MX_ZL_DingshuRevivedAndHealed>
+  <MX_ZL_ReportDingshu>施放定數</MX_ZL_ReportDingshu>
+  <MX_ZL_DuanzhanInvalidTargetCell>斷斬的目標位置無效。</MX_ZL_DuanzhanInvalidTargetCell>
+  <MX_ZL_DuanzhanNeedWeapon>斷斬只能由昭離裝備離斷時施放。</MX_ZL_DuanzhanNeedWeapon>
+  <MX_ZL_NotEnoughKarmaGuiyi>因果不足，無法施放詭醫。</MX_ZL_NotEnoughKarmaGuiyi>
+  <MX_ZL_GuiyiMote>詭醫</MX_ZL_GuiyiMote>
+  <MX_ZL_GuiyiCannotTargetSelf>詭醫無法對昭離自己使用。</MX_ZL_GuiyiCannotTargetSelf>
+  <MX_ZL_GuiyiCannotTargetHostile>詭醫無法對敵對目標使用。</MX_ZL_GuiyiCannotTargetHostile>
+  <MX_ZL_GuiyiNoTreatableInjuries>目標沒有需要詭醫處理的傷病。</MX_ZL_GuiyiNoTreatableInjuries>
+  <MX_ZL_NotEnoughKarmaMinghuo>因果不足，無法施放冥火。</MX_ZL_NotEnoughKarmaMinghuo>
+  <MX_ZL_MinghuoMote>冥火</MX_ZL_MinghuoMote>
+  <MX_ZL_MinghuoAttached>冥火已附著於當前主武器：傷害/破甲/命中/攻速 x1.5，攻擊距離 +2，並附加額外火焰傷害。</MX_ZL_MinghuoAttached>
+  <MX_ZL_MinghuoSelfOnly>冥火只能由昭離對自己施放。</MX_ZL_MinghuoSelfOnly>
+  <MX_ZL_MinghuoNoPrimaryWeapon>昭離當前未裝備主武器，無法施放冥火。</MX_ZL_MinghuoNoPrimaryWeapon>
+  <MX_ZL_MinghuoNoBoundWeapon>冥火尚未綁定到武器。</MX_ZL_MinghuoNoBoundWeapon>
+  <MX_ZL_MinghuoBoundWeapon>當前附著武器：{0}</MX_ZL_MinghuoBoundWeapon>
+  <MX_ZL_MinghuoDamageMultiplier>傷害：x{0}</MX_ZL_MinghuoDamageMultiplier>
+  <MX_ZL_MinghuoArmorPenMultiplier>破甲：x{0}</MX_ZL_MinghuoArmorPenMultiplier>
+  <MX_ZL_MinghuoHitChanceMultiplier>命中：x{0}</MX_ZL_MinghuoHitChanceMultiplier>
+  <MX_ZL_MinghuoAttackSpeedMultiplier>攻速：x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
+  <MX_ZL_MinghuoRangeOffset>攻擊距離：+{0}</MX_ZL_MinghuoRangeOffset>
+  <MX_ZL_MinghuoExtraFireDamageEnabled>額外火焰傷害：已啟用</MX_ZL_MinghuoExtraFireDamageEnabled>
+  <MX_ZL_NotEnoughKarmaMinshen>因果不足，無法施放泯神。</MX_ZL_NotEnoughKarmaMinshen>
+  <MX_ZL_MinshenMote>泯神</MX_ZL_MinshenMote>
+  <MX_ZL_MinshenMentalStateReason>昭離的泯神使其失神。</MX_ZL_MinshenMentalStateReason>
+  <MX_ZL_RebirthAccepted>昭離被死亡接納，十日後將於玩家基地歸來。</MX_ZL_RebirthAccepted>
+  <MX_ZL_RebirthReturned>昭離已從死亡中歸來。</MX_ZL_RebirthReturned>
+  <MX_ZL_RebirthGrowthLabel>成長 {0}</MX_ZL_RebirthGrowthLabel>
+  <MX_ZL_RebirthGrowthTip>目前成長層數：{0}</MX_ZL_RebirthGrowthTip>
+  <MX_ZL_CurrentPhaseBonuses>目前階段強化：</MX_ZL_CurrentPhaseBonuses>
+  <MX_ZL_NoSubstituteBonus>未觸發替死，暫未獲得額外強化。</MX_ZL_NoSubstituteBonus>
+  <MX_ZL_CurrentGrowthBonuses>目前養成加成：</MX_ZL_CurrentGrowthBonuses>
+  <MX_ZL_DeathGrowth>死亡成長：</MX_ZL_DeathGrowth>
+  <MX_ZL_NoGrowthStacks>尚未積累成長層數。</MX_ZL_NoGrowthStacks>
+  <MX_ZL_ShieldLayersLabel>{0}層</MX_ZL_ShieldLayersLabel>
+  <MX_ZL_ShieldLayersTip>目前層數：{0}。每通過告死吸納一個單位，獲得5層諱亡護盾。護盾會免疫一次傷害，並在命中時消耗1層。持續傷害每次生效也會持續消耗層數。</MX_ZL_ShieldLayersTip>
+  <MX_ZL_DeathFieldExecuted>告死流場已處決 {0} 個目標：{1}。</MX_ZL_DeathFieldExecuted>
+  <MX_ZL_HideoutSiteCustomLabel>不存在者藏身處</MX_ZL_HideoutSiteCustomLabel>
+  <MX_ZL_HideoutStartedLetterLabel>不存在者藏身處已顯現</MX_ZL_HideoutStartedLetterLabel>
+  <MX_ZL_HideoutStartedLetterText>昭離的藏身處已經在殖民地附近顯現。請在三日內派遣遠征隊抵達並處理交接。若放任不管，昭離將會直接襲擊殖民地。</MX_ZL_HideoutStartedLetterText>
+  <MX_ZL_RaidLetterLabel>昭離來襲</MX_ZL_RaidLetterLabel>
+  <MX_ZL_RaidLetterText>昭離的身影自殖民地邊緣現身。她沒有停駐、沒有談判，也不會撤退。此戰只會以所有生靈的死亡，或她自己的徹底終結告終。</MX_ZL_RaidLetterText>
+  <MX_ZL_HideoutInspectExpired>昭離的痕跡已經散去。</MX_ZL_HideoutInspectExpired>
+  <MX_ZL_HideoutInspectWaiting>昭離在此等待一場以生死為價的交接。</MX_ZL_HideoutInspectWaiting>
+  <MX_ZL_HideoutOptionGiveMedicine>交付 5 份草藥</MX_ZL_HideoutOptionGiveMedicine>
+  <MX_ZL_HideoutNoMedicine>遠征隊現在拿不出 5 份草藥，昭離仍停留在原地，等待下一次答覆。</MX_ZL_HideoutNoMedicine>
+  <MX_ZL_HideoutMedicineAccepted>昭離收下草藥後，於原地化作一束冰冷的光痕散去。她留下的回聲說明日仍會歸來。</MX_ZL_HideoutMedicineAccepted>
+  <MX_ZL_HideoutOptionDelay>暫緩交付</MX_ZL_HideoutOptionDelay>
+  <MX_ZL_HideoutDelayed>昭離沒有追問，只是繼續在原地等待。三日之內，你仍可回來交接。</MX_ZL_HideoutDelayed>
+  <MX_ZL_HideoutOptionReject>拒絕昭離</MX_ZL_HideoutOptionReject>
+  <MX_ZL_HideoutRejected>昭離收下拒絕，伴隨著一陣失真的低鳴消失。遠征隊身邊多出了大量人肉，而更壞的東西將於明日抵達。</MX_ZL_HideoutRejected>
+  <MX_ZL_RaidPhaseLabel>階段 {0}</MX_ZL_RaidPhaseLabel>
+  <MX_ZL_RaidSubstituteTriggered>替死已觸發：</MX_ZL_RaidSubstituteTriggered>
+  <MX_ZL_RaidRemainingLinks>剩餘因果連結：</MX_ZL_RaidRemainingLinks>
+  <MX_ZL_RaidCurrentPhase>目前階段：</MX_ZL_RaidCurrentPhase>
+  <MX_ZL_RaidTransitionRemaining>轉階段剩餘：</MX_ZL_RaidTransitionRemaining>
+  <MX_ZL_RaidNextWarp>下次躍遷：</MX_ZL_RaidNextWarp>
+  <MX_ZL_RaidPhaseTransitionStarted>{0}正在轉入第{1}階段！轉階段期間處於無敵狀態，並獲得{2}層諱亡護盾。</MX_ZL_RaidPhaseTransitionStarted>
+</LanguageData>

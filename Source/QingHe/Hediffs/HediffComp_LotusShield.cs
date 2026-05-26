@@ -37,8 +37,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                     return null;
                 }
 
-                return "当前每点护盾承伤: " + shield.CurrentDamagePerShieldPoint.ToString("F2")
-                       + "\n当前护盾回复速率: " + shield.CurrentRegenPerSecond.ToString("F2") + " /s";
+                return "MX_QH_LotusShieldDamagePerPoint".Translate(shield.CurrentDamagePerShieldPoint.ToString("F2")).ToString()
+                       + "\n" + "MX_QH_LotusShieldRegen".Translate(shield.CurrentRegenPerSecond.ToString("F2"));
             }
         }
 

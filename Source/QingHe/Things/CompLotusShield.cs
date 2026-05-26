@@ -361,8 +361,8 @@ namespace MiliraXian.Characters.QingHe.Things
         public string BuildShieldTooltip()
         {
             string status = InBreak
-                ? "状态：破碎（剩余 " + Mathf.CeilToInt(BreakTicksLeft / 60f) + " 秒）"
-                : "状态：生效中";
+                ? "MX_QH_LotusShieldStatusDown".Translate(Mathf.CeilToInt(BreakTicksLeft / 60f)).ToString()
+                : "MX_QH_LotusShieldStatusActive".Translate().ToString();
 
             return "花神护体\n\n"
                    + status + "\n"

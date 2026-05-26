@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Qinghe_Form_Pipa.label>荷乐·琵琶</MX_Qinghe_Form_Pipa.label>
+  <MX_Qinghe_Form_Pipa.description>清荷的琵琶，擅长中距离连发压制。</MX_Qinghe_Form_Pipa.description>
+  <MX_Qinghe_Form_Zhudi.label>荷乐·竹笛</MX_Qinghe_Form_Zhudi.label>
+  <MX_Qinghe_Form_Zhudi.description>清荷的竹笛形兵装，擅长远距离精准点射。</MX_Qinghe_Form_Zhudi.description>
+  <MX_Qinghe_Form_Qin.label>清荷·琴形</MX_Qinghe_Form_Qin.label>
+  <MX_Qinghe_Form_Qin.description>清荷的琴形兵装，擅长近身斩击。</MX_Qinghe_Form_Qin.description>
+  <MX_Qinghe_Form_Qin.tools.0.label>弦刃</MX_Qinghe_Form_Qin.tools.0.label>
+  <MX_Bullet_Qinghe_PipaNote.label>清荷·琵琶音符</MX_Bullet_Qinghe_PipaNote.label>
+  <MX_Bullet_Qinghe_ZhudiNote.label>清荷·竹笛音束</MX_Bullet_Qinghe_ZhudiNote.label>
+  <SpringFlowField.label>涌泉力场</SpringFlowField.label>
+  <TempestDrainField.label>扼流力场</TempestDrainField.label>
+  <MX_QH_Elegance_YangChunField.label>阳春音场</MX_QH_Elegance_YangChunField.label>
+</LanguageData>

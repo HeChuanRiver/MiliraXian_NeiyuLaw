@@ -80,8 +80,8 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void SendLetter_NewTemp(Quest quest, Pawn pawn, Map map)
         {
-            TaggedString title = "异界羽影";
-            TaggedString letterText = "殖民地附近出现了一道稳定下来的羽状投影。来者自称霓羽，她并非本体，而是一位米莉拉在此界投下的一道轻快分影。与其说她像某种高高在上的神性残片，不如说更像一阵带着笑意闯进来的风。她表示自己可以留下，也可以就此散去。选择权在你�?";
+            TaggedString title = "MX_NL_RecruitLetterTitle".Translate();
+            TaggedString letterText = "MX_NL_RecruitLetterText".Translate();
             QuestNode_Root_WandererJoin_WalkIn.AppendCharityInfoToLetter("JoinerCharityInfo".Translate(pawn), ref letterText);
             PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref letterText, ref title, pawn);
             QuestNode_Root_WandererJoin_WalkIn.ApplyBestSkillInfoToLetter(ref letterText, pawn);
@@ -136,6 +136,77 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             return Find.AnyPlayerHomeMap != null;
+        }
+    }
+
+    [HarmonyPatch(typeof(Quest), nameof(Quest.Notify_SignalReceived))]
+    internal static class Patch_Quest_NotifySignalReceived_NeiyuRecruitFallback
+    {
+        private const string RecruitQuestDefName = "MXNL_NeiyuProjectionRecruitQuest";
+
+        public static void Prefix(Quest __instance, Signal signal)
+        {
+            if (__instance?.root?.defName != RecruitQuestDefName || signal.tag != __instance.InitiateSignal)
+            {
+                return;
+            }
+
+            RepairMissingRecruitPawn(__instance);
+        }
+
+        private static void RepairMissingRecruitPawn(Quest quest)
+        {
+            QuestPart_PawnsArrive arrivePart = null;
+            QuestPart_SetFaction setFactionPart = null;
+            List<QuestPart> parts = quest.PartsListForReading;
+            for (int index = 0; index < parts.Count; index++)
+            {
+                if (parts[index] is QuestPart_PawnsArrive pawnsArrive)
+                {
+                    arrivePart = pawnsArrive;
+                }
+                else if (parts[index] is QuestPart_SetFaction setFaction && setFaction.faction == Faction.OfPlayer)
+                {
+                    setFactionPart = setFaction;
+                }
+            }
+
+            if (arrivePart == null)
+            {
+                return;
+            }
+
+            arrivePart.pawns.RemoveAll(candidate => candidate == null || candidate.Destroyed);
+            if (arrivePart.pawns.Count > 0)
+            {
+                NeiyuRecruitUtility.EnsureRecruitPawnPersisted(arrivePart.pawns[0]);
+                EnsureSetFactionIncludesPawn(setFactionPart, arrivePart.pawns[0]);
+                return;
+            }
+
+            if (NeiyuRecruitUtility.NeiyuExistsAnywhere())
+            {
+                return;
+            }
+
+            Pawn pawn = NeiyuRecruitUtility.GenerateRecruitPawn();
+            if (pawn == null)
+            {
+                Log.Warning("[MiliraXian.Characters.Neiyu] Failed to repair Neiyu projection recruit quest because pawn generation returned null.");
+                return;
+            }
+
+            arrivePart.pawns.Add(pawn);
+            EnsureSetFactionIncludesPawn(setFactionPart, pawn);
+            Log.Message("[MiliraXian.Characters.Neiyu] Repaired a Neiyu projection recruit quest with a missing saved pawn before acceptance.");
+        }
+
+        private static void EnsureSetFactionIncludesPawn(QuestPart_SetFaction setFactionPart, Pawn pawn)
+        {
+            if (setFactionPart != null && pawn != null && !setFactionPart.things.Contains(pawn))
+            {
+                setFactionPart.things.Add(pawn);
+            }
         }
     }
 
@@ -291,12 +362,12 @@ namespace MiliraXian.Characters.Neiyu
                     yield break;
                 }
 
-                DiaOption accept = new DiaOption("接纳�?");
+                DiaOption accept = new DiaOption("MX_NL_RecruitAccept".Translate().ToString());
                 accept.resolveTree = true;
                 Map map = targetMap ?? Find.AnyPlayerHomeMap;
                 if (map == null)
                 {
-                    accept.Disable("没有可用的玩家基地地图�?");
+                    accept.Disable("MX_NL_NoPlayerHomeMap".Translate().ToString());
                 }
                 accept.action = delegate
                 {
@@ -324,12 +395,12 @@ namespace MiliraXian.Characters.Neiyu
                     }
 
                     GenSpawn.Spawn(pawn, cell, spawnMap);
-                    Messages.Message("霓羽决定在此界停留，并正式加入了你的殖民地�?", pawn, MessageTypeDefOf.PositiveEvent, true);
+                    Messages.Message("MX_NL_RecruitJoined".Translate(), pawn, MessageTypeDefOf.PositiveEvent, true);
                     Find.LetterStack.RemoveLetter(this);
                 };
                 yield return accept;
 
-                DiaOption reject = new DiaOption("暂不接纳");
+                DiaOption reject = new DiaOption("MX_NL_RecruitReject".Translate().ToString());
                 reject.resolveTree = true;
                 reject.action = delegate
                 {
@@ -345,7 +416,7 @@ namespace MiliraXian.Characters.Neiyu
                         }
                     }
 
-                    Messages.Message("羽影暂时散去。若缘分未尽，她之后仍可能再次出现�?", MessageTypeDefOf.NeutralEvent, false);
+                    Messages.Message("MX_NL_RecruitDeferred".Translate(), MessageTypeDefOf.NeutralEvent, false);
                     Find.LetterStack.RemoveLetter(this);
                 };
                 yield return reject;
@@ -841,7 +912,6 @@ namespace MiliraXian.Characters.Neiyu
     internal static class NeiyuRecruitUtility
     {
         private const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
-        private const string MiliraFactionDefName = "Milira_Faction";
 
         public static bool NeiyuExistsAnywhere()
         {
@@ -891,16 +961,11 @@ namespace MiliraXian.Characters.Neiyu
                 return null;
             }
 
-            Faction miliraFaction = null;
-            FactionDef miliraFactionDef = DefDatabase<FactionDef>.GetNamedSilentFail(MiliraFactionDefName);
-            if (miliraFactionDef != null)
-            {
-                miliraFaction = Find.FactionManager.FirstFactionOfDef(miliraFactionDef);
-            }
+            Faction ancientsFaction = ResolveAncientsFaction();
 
             PawnGenerationRequest request = new PawnGenerationRequest(
                 neiyuKind,
-                miliraFaction,
+                ancientsFaction,
                 PawnGenerationContext.NonPlayer,
                 -1,
                 forceGenerateNewPawn: true,
@@ -922,7 +987,37 @@ namespace MiliraXian.Characters.Neiyu
             Pawn pawn = PawnGenerator.GeneratePawn(request);
             NeiyuEquipmentUtility.EnsureDefaultLoadout(pawn);
             NeiyuEquipmentUtility.MarkForLoadoutStabilization(pawn);
+            EnsureRecruitPawnPersisted(pawn);
             return pawn;
+        }
+
+        public static void EnsureRecruitPawnPersisted(Pawn pawn)
+        {
+            if (pawn == null)
+            {
+                return;
+            }
+
+            if (QuestGen.Working)
+            {
+                QuestGen.AddToGeneratedPawns(pawn);
+            }
+
+            if (!pawn.Spawned && !pawn.IsWorldPawn())
+            {
+                Find.WorldPawns.PassToWorld(pawn);
+            }
+        }
+
+        private static Faction ResolveAncientsFaction()
+        {
+            FactionManager factionManager = Find.FactionManager;
+            if (factionManager == null)
+            {
+                return null;
+            }
+
+            return factionManager.OfAncients ?? factionManager.FirstFactionOfDef(FactionDefOf.Ancients);
         }
     }
 }

@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。</description>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。目标离开范围后，告死倒计时会立即清零。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>

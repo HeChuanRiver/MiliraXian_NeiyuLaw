@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_ZhaoliNormal.label>昭離·常服</MX_ZhaoliNormal.label>
+  <MX_ZhaoliNormal.description>昭離慣常穿著的紫黑衣裝。外擺壓暗，內層帶有細碎的紫白紋路，與離斷刀柄和昭離的因果術式相互呼應。</MX_ZhaoliNormal.description>
+  <MX_ZhaoliHood.label>昭離·兜帽</MX_ZhaoliHood.label>
+  <MX_ZhaoliHood.description>昭離外出時披戴的深色兜帽。兜帽邊緣帶有紫色紋飾，能夠遮住昭離頭頂的光環，使她在地面行動時不那麼顯眼。</MX_ZhaoliHood.description>
+  <MX_Zhaoli_DuanzhanBlade.label>離斷</MX_Zhaoli_DuanzhanBlade.label>
+  <MX_Zhaoli_DuanzhanBlade.description>昭離持有的近戰兵裝，內置技能「斷斬」。刀身素白而柄纏紫黑，揮出時會拖出短促的紫白弧光，適合以一次精準橫斬清開正面敵人。</MX_Zhaoli_DuanzhanBlade.description>
+  <MX_Zhaoli_DuanzhanBlade.tools.0.label>離斷</MX_Zhaoli_DuanzhanBlade.tools.0.label>
+</LanguageData>

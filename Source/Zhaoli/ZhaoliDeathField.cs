@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -21,6 +22,7 @@ namespace MiliraXian.Characters.Zhaoli
         private static readonly Color PreviewColor = new Color(0.48f, 0.08f, 0.1f);
 
         private new CompProperties_AbilityZhaoliDeathField Props => (CompProperties_AbilityZhaoliDeathField)props;
+        public float PropsRadius => Props.radius;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -88,25 +90,61 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
+    [HarmonyPatch(typeof(Stance_Warmup), nameof(Stance_Warmup.StanceDraw))]
+    internal static class Patch_ZhaoliDeathFieldWarmup_StanceDraw
+    {
+        private const float WarningPulseCyclesPerSecond = 2f;
+        private static readonly Color WarningColorDim = new Color(0.25f, 0f, 0.1f);
+        private static readonly Color WarningColorBright = new Color(0.46f, 0.04f, 0.04f);
+
+        private static void Postfix(Stance_Warmup __instance)
+        {
+            Verb_CastAbility verb = __instance?.verb as Verb_CastAbility;
+            Ability ability = verb?.Ability;
+            Pawn caster = verb?.CasterPawn;
+            if (ability?.def != MXZL_ZhaoliDefOf.MX_Zhaoli_DeathField || caster == null || caster.Faction == Faction.OfPlayer)
+            {
+                return;
+            }
+
+            LocalTargetInfo target = __instance.focusTarg;
+            if (!target.IsValid)
+            {
+                return;
+            }
+
+            float radius = ability.CompOfType<CompAbilityEffect_ZhaoliDeathField>()?.PropsRadius ?? ZhaoliScenarioUtility.DeathFieldEvaluationRadius;
+            float phase = Find.TickManager.TicksGame / (float)GenTicks.TicksPerRealSecond * WarningPulseCyclesPerSecond * Mathf.PI * 2f;
+            float pulse = (Mathf.Sin(phase) + 1f) * 0.5f;
+            GenDraw.DrawRadiusRing(target.Cell, radius, Color.Lerp(WarningColorDim, WarningColorBright, pulse));
+        }
+    }
+
     public class HediffComp_ZhaoliDeathField : HediffComp
     {
         private const int FieldParticleIntervalTicks = 9;
         private const float FieldAreaRotationRate = 360f;
 
         private Dictionary<Pawn, int> stayTicks = new Dictionary<Pawn, int>();
+        private Dictionary<Pawn, int> lastInsideTicks = new Dictionary<Pawn, int>();
         private readonly Dictionary<Pawn, Mote> markedPawns = new Dictionary<Pawn, Mote>();
         private readonly Dictionary<Pawn, int> lastDisplayedRemainingHits = new Dictionary<Pawn, int>();
         private readonly HashSet<Pawn> pawnsInsideNow = new HashSet<Pawn>();
         private readonly List<Pawn> pawnsToRemove = new List<Pawn>();
+        private List<string> executedPawnLabels = new List<string>();
 
         private List<Pawn> tmpStayPawns;
         private List<int> tmpStayTicks;
+        private List<Pawn> tmpLastInsidePawns;
+        private List<int> tmpLastInsideTicks;
 
         private Mote fieldAreaMote;
         private int fieldCenterX;
         private int fieldCenterZ;
         private float activeRadius;
         private bool active;
+        private int executionCount;
+        private bool executionSummaryShown;
 
         private HediffCompProperties_ZhaoliDeathField PropsField => (HediffCompProperties_ZhaoliDeathField)props;
 
@@ -121,8 +159,12 @@ namespace MiliraXian.Characters.Zhaoli
             activeRadius = radiusOverride > 0f ? radiusOverride : PropsField.radius;
             active = true;
             stayTicks.Clear();
+            lastInsideTicks.Clear();
             markedPawns.Clear();
             lastDisplayedRemainingHits.Clear();
+            executedPawnLabels.Clear();
+            executionCount = 0;
+            executionSummaryShown = false;
             fieldAreaMote = null;
             parent.TryGetComp<HediffComp_Disappears>()?.SetDuration(PropsField.fieldDurationTicks);
         }
@@ -138,6 +180,8 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref fieldCenterZ, "fieldCenterZ", 0);
             Scribe_Values.Look(ref activeRadius, "activeRadius", 0f);
             Scribe_Values.Look(ref active, "active", false);
+            Scribe_Values.Look(ref executionCount, "executionCount", 0);
+            Scribe_Values.Look(ref executionSummaryShown, "executionSummaryShown", false);
             if (Scribe.mode == LoadSaveMode.Saving)
             {
                 pawnsToRemove.Clear();
@@ -152,10 +196,30 @@ namespace MiliraXian.Characters.Zhaoli
                 for (int i = 0; i < pawnsToRemove.Count; i++)
                 {
                     stayTicks.Remove(pawnsToRemove[i]);
+                    lastInsideTicks.Remove(pawnsToRemove[i]);
                 }
             }
 
             Scribe_Collections.Look(ref stayTicks, "stayTicks", LookMode.Reference, LookMode.Value, ref tmpStayPawns, ref tmpStayTicks);
+            Scribe_Collections.Look(ref lastInsideTicks, "lastInsideTicks", LookMode.Reference, LookMode.Value, ref tmpLastInsidePawns, ref tmpLastInsideTicks);
+            Scribe_Collections.Look(ref executedPawnLabels, "executedPawnLabels", LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (stayTicks == null)
+                {
+                    stayTicks = new Dictionary<Pawn, int>();
+                }
+
+                if (lastInsideTicks == null)
+                {
+                    lastInsideTicks = new Dictionary<Pawn, int>();
+                }
+
+                if (executedPawnLabels == null)
+                {
+                    executedPawnLabels = new List<string>();
+                }
+            }
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -183,6 +247,7 @@ namespace MiliraXian.Characters.Zhaoli
                 }
             }
 
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
             pawnsInsideNow.Clear();
             IReadOnlyList<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
             for (int i = 0; i < allPawnsSpawned.Count; i++)
@@ -208,8 +273,15 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 int ticksPresent = 0;
                 stayTicks.TryGetValue(pawn, out ticksPresent);
+                if (!lastInsideTicks.TryGetValue(pawn, out int lastInsideTick) || lastInsideTick < currentTick - 1)
+                {
+                    ticksPresent = 0;
+                    lastDisplayedRemainingHits.Remove(pawn);
+                }
+
                 ticksPresent++;
                 stayTicks[pawn] = ticksPresent;
+                lastInsideTicks[pawn] = currentTick;
 
                 MaintainFieldMark(pawn);
                 RefreshSlow(pawn);
@@ -226,6 +298,7 @@ namespace MiliraXian.Characters.Zhaoli
                     ZhaoliShieldLayerUtility.AddLayers(Pawn, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
                     ExecutePawn(pawn);
                     stayTicks.Remove(pawn);
+                    lastInsideTicks.Remove(pawn);
                     markedPawns.Remove(pawn);
                     lastDisplayedRemainingHits.Remove(pawn);
                 }
@@ -244,9 +317,16 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 Pawn pawn = pawnsToRemove[i];
                 stayTicks.Remove(pawn);
+                lastInsideTicks.Remove(pawn);
                 markedPawns.Remove(pawn);
                 lastDisplayedRemainingHits.Remove(pawn);
             }
+        }
+
+        public override void CompPostPostRemoved()
+        {
+            base.CompPostPostRemoved();
+            ShowExecutionSummary();
         }
 
         private void RefreshSlow(Pawn pawn)
@@ -404,6 +484,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            string pawnLabel = pawn.LabelShortCap;
             Map map = pawn.MapHeld;
             IntVec3 position = pawn.PositionHeld;
             if (map != null && position.IsValid)
@@ -425,7 +506,72 @@ namespace MiliraXian.Characters.Zhaoli
                 }
             }
 
-            pawn.Destroy(DestroyMode.Vanish);
+            DamageInfo dinfo = new DamageInfo(
+                DamageDefOf.ExecutionCut,
+                99999f,
+                999f,
+                -1f,
+                Pawn,
+                null,
+                Pawn?.equipment?.Primary?.def,
+                DamageInfo.SourceCategory.ThingOrUnknown,
+                pawn,
+                instigatorGuilty: false,
+                spawnFilth: false,
+                checkForJobOverride: false);
+            dinfo.SetIgnoreArmor(true);
+            dinfo.SetIgnoreInstantKillProtection(true);
+            pawn.Kill(dinfo);
+            DiscardExecutedPawn(pawn);
+            RecordExecution(pawnLabel);
+        }
+
+        private static void DiscardExecutedPawn(Pawn pawn)
+        {
+            if (pawn == null)
+            {
+                return;
+            }
+
+            Corpse corpse = pawn.Corpse;
+            if (corpse != null && !corpse.Destroyed)
+            {
+                corpse.InnerPawn = null;
+                corpse.Destroy(DestroyMode.Vanish);
+            }
+
+            if (Find.WorldPawns != null && Find.WorldPawns.Contains(pawn))
+            {
+                Find.WorldPawns.RemoveAndDiscardPawnViaGC(pawn);
+            }
+            else if (pawn.Destroyed && !pawn.Discarded)
+            {
+                pawn.Discard(silentlyRemoveReferences: true);
+            }
+        }
+
+        private void RecordExecution(string pawnLabel)
+        {
+            if (executedPawnLabels == null)
+            {
+                executedPawnLabels = new List<string>();
+            }
+
+            executedPawnLabels.Add(pawnLabel.NullOrEmpty() ? "MX_Common_UnknownTarget".Translate().ToString() : pawnLabel);
+            executionCount = executedPawnLabels.Count;
+        }
+
+        private void ShowExecutionSummary()
+        {
+            if (executionSummaryShown || executionCount <= 0 || Pawn == null)
+            {
+                return;
+            }
+
+            executionSummaryShown = true;
+            string names = executedPawnLabels.NullOrEmpty() ? "MX_Common_None".Translate().ToString() : string.Join("MX_ZL_ListSeparator".Translate().ToString(), executedPawnLabels);
+            MessageTypeDef messageType = Pawn.Faction == Faction.OfPlayer ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.ThreatSmall;
+            Messages.Message("MX_ZL_DeathFieldExecuted".Translate(executionCount, names), Pawn, messageType);
         }
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            <li Class="PatchOperationTest">
+                <xpath>/Defs/*[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira highlight']/conditions</xpath>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>/Defs/*[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira highlight']/conditions</xpath>
+                <value>
+                    <Not>
+                        <Or>
+                            <Backstory>
+                                <backstory>MiliraXian_BackStoryAdult_Zhaoli_BS1</backstory>
+                            </Backstory>
+                        </Or>
+                    </Not>
+                </value>
+            </li>
+        </operations>
+    </Operation>
+</Patch>

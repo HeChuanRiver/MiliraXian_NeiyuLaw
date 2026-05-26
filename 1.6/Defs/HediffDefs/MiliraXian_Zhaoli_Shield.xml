@@ -15,6 +15,15 @@
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliShieldLayers">
                 <showGizmo>false</showGizmo>
+                <drawActiveShield>true</drawActiveShield>
+                <activeShieldTexPath>MiliraXianZhaoli/Effect/Zhaoli_Shield/Shield</activeShieldTexPath>
+                <activeShieldDrawSize>(1.55,1.55)</activeShieldDrawSize>
+                <activeShieldAlpha>0.62</activeShieldAlpha>
+                <activeShieldAltitudeOffset>0.5</activeShieldAltitudeOffset>
+                <activeShieldPulseMin>0.98</activeShieldPulseMin>
+                <activeShieldPulseMax>1.03</activeShieldPulseMax>
+                <activeShieldPulseTicks>90</activeShieldPulseTicks>
+                <activeShieldRotationDegreesPerTick>0.15</activeShieldRotationDegreesPerTick>
             </li>
         </comps>
     </HediffDef>

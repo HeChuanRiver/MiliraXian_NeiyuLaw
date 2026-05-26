@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Tempest.label>Tempest</MX_QH_Tempest.label>
+  <MX_QH_Tempest.description>Qinghe's special resource. It is accumulated by using skills and can be spent to offset damage or unleash powerful abilities.</MX_QH_Tempest.description>
+  <MX_QH_Tempest.comps.0.resourceLabel>Tempest</MX_QH_Tempest.comps.0.resourceLabel>
+  <MX_QH_Tempest.comps.0.resourceDescription>Qinghe's special resource. It is accumulated by using skills and can be spent to offset damage or unleash powerful abilities.</MX_QH_Tempest.comps.0.resourceDescription>
+  <MX_QH_Elegance.label>Elegance</MX_QH_Elegance.label>
+  <MX_QH_Elegance.description>Qinghe's special resource. It is accumulated through combat and skill use, empowering her abilities and increasing Tempest recovery.</MX_QH_Elegance.description>
+  <MX_QH_Elegance.comps.0.resourceLabel>Elegance</MX_QH_Elegance.comps.0.resourceLabel>
+  <MX_QH_Elegance.comps.0.resourceDescription>Qinghe's special resource. It is accumulated through combat and skill use, empowering her abilities and increasing Tempest recovery.</MX_QH_Elegance.comps.0.resourceDescription>
+  <MX_QH_LongBreath.label>Long Breath</MX_QH_LongBreath.label>
+  <MX_QH_LongBreath.description>When Qinghe would take fatal damage or body-part-destroying damage, if she has any Tempest, that damage is negated, all injuries are repaired, Tempest is cleared, and she gains brief invulnerability and psychic invisibility.</MX_QH_LongBreath.description>
+  <MX_QH_LongBreathDamageImmunity.label>Long Breath Surge</MX_QH_LongBreathDamageImmunity.label>
+  <MX_QH_LongBreathDamageImmunity.description>A brief damage immunity granted after Long Breath triggers.</MX_QH_LongBreathDamageImmunity.description>
+  <MX_QH_SpringRegen.label>Clear Flow</MX_QH_SpringRegen.label>
+  <MX_QH_SpringRegen.description>Automatically heals a small amount of injury every short interval.</MX_QH_SpringRegen.description>
+  <MX_QH_LotusShield.label>Flower-God Ward</MX_QH_LotusShield.label>
+  <MX_QH_LotusShield.description>Qinghe is blessed by the Twelve Flower Gods and naturally generates a shield around herself. Higher Tempest increases damage absorbed per shield point; higher Elegance increases shield regeneration per second.\n\nWhen the shield breaks, it is disabled for 20 seconds.</MX_QH_LotusShield.description>
+  <MX_QH_QingheStatusGizmo.label>Qinghe Status Display</MX_QH_QingheStatusGizmo.label>
+  <MX_QH_QingheStatusGizmo.description>Hidden hediff used to display Qinghe's status gizmo.</MX_QH_QingheStatusGizmo.description>
+  <MX_QH_Elegance_DuanHunSlow.label>Soulbreak Drag</MX_QH_Elegance_DuanHunSlow.label>
+  <MX_QH_Elegance_DuanHunSlow.description>Movement is dragged down by the Soulbreak melody.</MX_QH_Elegance_DuanHunSlow.description>
+  <MX_QH_Elegance_YangChunAlly.label>Yangchun Harmony</MX_QH_Elegance_YangChunAlly.label>
+  <MX_QH_Elegance_YangChunAlly.description>Bathed in Yangchun's musical intent, steps and mind are tuned into harmony.</MX_QH_Elegance_YangChunAlly.description>
+  <MX_QH_Elegance_YangChunEnemy.label>Yangchun Suppression</MX_QH_Elegance_YangChunEnemy.label>
+  <MX_QH_Elegance_YangChunEnemy.description>Suppressed by the sound field; action rhythm is thrown into disorder.</MX_QH_Elegance_YangChunEnemy.description>
+  <MX_SpringFlow.label>Spring Flow Baptism</MX_SpringFlow.label>
+  <MX_SpringFlow.description>Blessed by Qinghe's Spring Flow, gaining improved offense, protection, and pain relief.</MX_SpringFlow.description>
+  <MX_AquaMirror.label>Mirror Bloom</MX_AquaMirror.label>
+  <MX_AquaMirror.description>Protected by Aqua Mirror. When the mirror disappears, it heals the bearer and retaliates against nearby enemies.</MX_AquaMirror.description>
+  <MX_Draining.label>Waterflow Severance</MX_Draining.label>
+  <MX_Draining.description>Internal fluids are forcibly drawn out. Without intervention, death by dehydration will soon follow.</MX_Draining.description>
+  <MX_DryCorpse.label>Dehydrated</MX_DryCorpse.label>
+  <MX_DryCorpse.description>A corpse drained of moisture. It will never rot or desiccate further, as if touched by some supernatural force.</MX_DryCorpse.description>
+  <MX_DehydrateDamage.label>Fluid Cycle Disorder</MX_DehydrateDamage.label>
+  <MX_DehydrateDamage.description>Some internal fluid behavior has been disrupted, causing circulatory failure or mechanical malfunction.</MX_DehydrateDamage.description>
+  <MX_QH_Desynced.label>Desynced</MX_QH_Desynced.label>
+  <MX_QH_Desynced.description>Resonance from Qinghe's instrument disrupts movement and aiming rhythm, greatly reducing movement speed and shooting accuracy.</MX_QH_Desynced.description>
+</LanguageData>

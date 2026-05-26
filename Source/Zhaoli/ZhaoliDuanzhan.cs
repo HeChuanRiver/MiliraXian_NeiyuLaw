@@ -210,7 +210,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("断斩的目标位置无效。", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_ZL_DuanzhanInvalidTargetCell".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
 
                 return false;
@@ -221,7 +221,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("断斩只能由昭离装备离断时施放。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_DuanzhanNeedWeapon".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
