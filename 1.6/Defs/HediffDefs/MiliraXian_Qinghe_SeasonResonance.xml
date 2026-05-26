@@ -3,7 +3,7 @@
     <HediffDef>
         <defName>MX_QH_SeasonResonance</defName>
         <label>四时共鸣</label>
-        <description>隐藏 Hediff：保存清荷当前调谐的四时共鸣与各时节调谐度。</description>
+        <description>隐藏 Hediff：保存清荷当前调谐的四时共鸣与总调谐度。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_SeasonResonance</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
@@ -12,10 +12,7 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SeasonResonance">
                 <initialAttunedSeason>None</initialAttunedSeason>
-                <initialSpringAttunement>0</initialSpringAttunement>
-                <initialSummerAttunement>0</initialSummerAttunement>
-                <initialAutumnAttunement>0</initialAutumnAttunement>
-                <initialWinterAttunement>0</initialWinterAttunement>
+                <initialAttunement>0</initialAttunement>
                 <maxAttunement>100</maxAttunement>
                 <onlyWhenSelected>true</onlyWhenSelected>
                 <defaultFlowerMandateLabel>飞花令</defaultFlowerMandateLabel>

@@ -47,8 +47,7 @@ namespace MiliraXian.Characters.QingHe.Job
     {
         private const TargetIndex PondIndex = TargetIndex.A;
         private const int MeditationTicks = 2500;
-        private const float FocusedAttunementGain = 8f;
-        private const float SecondaryAttunementGain = 2f;
+        private const float AttunementGain = 8f;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -85,7 +84,7 @@ namespace MiliraXian.Characters.QingHe.Job
                     return;
                 }
 
-                resonance.MeditateAtFlowerCourt(FocusedAttunementGain, SecondaryAttunementGain);
+                resonance.MeditateAtFlowerCourt(AttunementGain);
                 Messages.Message("清荷在荷池旁完成冥想，四时共鸣更加清晰。", pawn, MessageTypeDefOf.PositiveEvent, historical: false);
             };
             finish.defaultCompleteMode = ToilCompleteMode.Instant;

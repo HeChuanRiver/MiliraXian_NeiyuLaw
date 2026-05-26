@@ -22,10 +22,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     public class HediffCompProperties_SeasonResonance : HediffCompProperties
     {
         public AttunedSeason initialAttunedSeason = AttunedSeason.None;
-        public float initialSpringAttunement;
-        public float initialSummerAttunement;
-        public float initialAutumnAttunement;
-        public float initialWinterAttunement;
+        public float initialAttunement;
         public float maxAttunement = 100f;
         public bool onlyWhenSelected = true;
         public string defaultFlowerMandateLabel = "飞花令";
@@ -42,10 +39,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         private bool initialized;
         private AttunedSeason currentAttunedSeason;
-        private float springAttunement;
-        private float summerAttunement;
-        private float autumnAttunement;
-        private float winterAttunement;
+        private float attunement;
 
         public HediffCompProperties_SeasonResonance Props => (HediffCompProperties_SeasonResonance)props;
 
@@ -58,39 +52,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        public float SpringAttunement
+        public float Attunement
         {
             get
             {
                 EnsureInitialized();
-                return springAttunement;
-            }
-        }
-
-        public float SummerAttunement
-        {
-            get
-            {
-                EnsureInitialized();
-                return summerAttunement;
-            }
-        }
-
-        public float AutumnAttunement
-        {
-            get
-            {
-                EnsureInitialized();
-                return autumnAttunement;
-            }
-        }
-
-        public float WinterAttunement
-        {
-            get
-            {
-                EnsureInitialized();
-                return winterAttunement;
+                return attunement;
             }
         }
 
@@ -112,10 +79,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             Scribe_Values.Look(ref initialized, "initialized", false);
             Scribe_Values.Look(ref currentAttunedSeason, "currentAttunedSeason", AttunedSeason.None);
-            Scribe_Values.Look(ref springAttunement, "springAttunement", 0f);
-            Scribe_Values.Look(ref summerAttunement, "summerAttunement", 0f);
-            Scribe_Values.Look(ref autumnAttunement, "autumnAttunement", 0f);
-            Scribe_Values.Look(ref winterAttunement, "winterAttunement", 0f);
+            Scribe_Values.Look(ref attunement, "attunement", 0f);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -153,28 +117,13 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             SyncFlowerGodFramework();
         }
 
-        public void SetAttunement(AttunedSeason season, float value)
+        public void SetAttunement(float value)
         {
             EnsureInitialized();
-            value = ClampAttunement(value);
-            switch (season)
-            {
-                case AttunedSeason.Spring:
-                    springAttunement = value;
-                    break;
-                case AttunedSeason.Summer:
-                    summerAttunement = value;
-                    break;
-                case AttunedSeason.Autumn:
-                    autumnAttunement = value;
-                    break;
-                case AttunedSeason.Winter:
-                    winterAttunement = value;
-                    break;
-            }
+            attunement = ClampAttunement(value);
         }
 
-        public void MeditateAtFlowerCourt(float focusedGain, float secondaryGain)
+        public void MeditateAtFlowerCourt(float gain)
         {
             EnsureInitialized();
             if (CurrentAttunedSeason == AttunedSeason.None)
@@ -182,29 +131,17 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            AddAttunement(CurrentAttunedSeason, focusedGain);
-            AddSecondaryAttunement(AttunedSeason.Spring, secondaryGain);
-            AddSecondaryAttunement(AttunedSeason.Summer, secondaryGain);
-            AddSecondaryAttunement(AttunedSeason.Autumn, secondaryGain);
-            AddSecondaryAttunement(AttunedSeason.Winter, secondaryGain);
+            AddAttunement(gain);
         }
 
-        public float GetAttunement(AttunedSeason season)
+        public void AddAttunement(float value)
         {
-            EnsureInitialized();
-            switch (season)
+            if (Mathf.Approximately(value, 0f))
             {
-                case AttunedSeason.Spring:
-                    return springAttunement;
-                case AttunedSeason.Summer:
-                    return summerAttunement;
-                case AttunedSeason.Autumn:
-                    return autumnAttunement;
-                case AttunedSeason.Winter:
-                    return winterAttunement;
-                default:
-                    return 0f;
+                return;
             }
+
+            SetAttunement(Attunement + value);
         }
 
         private void EnsureInitialized()
@@ -215,29 +152,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             currentAttunedSeason = Props?.initialAttunedSeason ?? AttunedSeason.None;
-            springAttunement = ClampAttunement(Props?.initialSpringAttunement ?? 0f);
-            summerAttunement = ClampAttunement(Props?.initialSummerAttunement ?? 0f);
-            autumnAttunement = ClampAttunement(Props?.initialAutumnAttunement ?? 0f);
-            winterAttunement = ClampAttunement(Props?.initialWinterAttunement ?? 0f);
+            attunement = ClampAttunement(Props?.initialAttunement ?? 0f);
             initialized = true;
-        }
-
-        private void AddSecondaryAttunement(AttunedSeason season, float value)
-        {
-            if (season != CurrentAttunedSeason)
-            {
-                AddAttunement(season, value);
-            }
-        }
-
-        public void AddAttunement(AttunedSeason season, float value)
-        {
-            if (Mathf.Approximately(value, 0f) || season == AttunedSeason.None)
-            {
-                return;
-            }
-
-            SetAttunement(season, GetAttunement(season) + value);
         }
 
         private float ClampAttunement(float value)

@@ -43,19 +43,13 @@ namespace MiliraXian.Characters.QingHe.UI
             return new Command_Action
             {
                 defaultLabel = "DEV: 调谐度",
-                defaultDesc = "开发者测试用：调整四季调谐度。",
+                defaultDesc = "开发者测试用：调整总调谐度。",
                 action = delegate
                 {
                     Find.WindowStack.Add(new FloatMenu(new List<FloatMenuOption>
                     {
-                        BuildAttunementOption(resonance, AttunedSeason.Spring, 10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Spring, -10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Summer, 10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Summer, -10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Autumn, 10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Autumn, -10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Winter, 10f),
-                        BuildAttunementOption(resonance, AttunedSeason.Winter, -10f)
+                        BuildAttunementOption(resonance, 10f),
+                        BuildAttunementOption(resonance, -10f)
                     }));
                 }
             };
@@ -66,12 +60,12 @@ namespace MiliraXian.Characters.QingHe.UI
             return new FloatMenuOption(label, action);
         }
 
-        private static FloatMenuOption BuildAttunementOption(HediffComp_SeasonResonance resonance, AttunedSeason season, float delta)
+        private static FloatMenuOption BuildAttunementOption(HediffComp_SeasonResonance resonance, float delta)
         {
             string sign = delta > 0f ? "+" : string.Empty;
-            return new FloatMenuOption(GetSeasonLabel(season) + " " + sign + delta.ToString("F0"), delegate
+            return new FloatMenuOption("总调谐度 " + sign + delta.ToString("F0"), delegate
             {
-                resonance.AddAttunement(season, delta);
+                resonance.AddAttunement(delta);
             });
         }
 
