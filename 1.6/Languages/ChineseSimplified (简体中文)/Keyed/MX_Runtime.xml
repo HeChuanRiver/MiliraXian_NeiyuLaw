@@ -16,6 +16,7 @@
   <MX_ModeSwitch_TargetFormInvalidThing>目标形态不是有效物品：{0}</MX_ModeSwitch_TargetFormInvalidThing>
   <MX_ModeSwitch_NoEquipmentTracker>该角色没有装备栏。</MX_ModeSwitch_NoEquipmentTracker>
   <MX_ModeSwitch_NoInventoryTracker>该角色没有物品栏。</MX_ModeSwitch_NoInventoryTracker>
+  <MX_ModeSwitch_DisabledWhileHunting>正在狩猎时不能切换形态，请先取消狩猎。</MX_ModeSwitch_DisabledWhileHunting>
 
   <MX_NL_ModSettingsTitle>米莉拉角色拓展</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>启用角色接入特殊角色管理器</MX_NL_EnableSpecialPawnIntegrationLabel>

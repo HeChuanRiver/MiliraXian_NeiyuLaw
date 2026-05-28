@@ -171,6 +171,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             bool onCooldown = Props.cooldownTicks > 0 && Find.TickManager.TicksGame - lastToggleTick < Props.cooldownTicks;
+            bool disabledWhileHunting = IsPrimaryWeaponLockedByHunting(context);
 
             string commandLabel = ResolveText(Props.commandLabel, "MX_ModeSwitch_CommandLabel");
             string commandDesc = ResolveText(Props.commandDesc, "MX_ModeSwitch_CommandDesc");
@@ -181,10 +182,14 @@ namespace MiliraXian.Characters.Neiyu
                 defaultLabel = "MX_ModeSwitch_CommandLabelWithForm".Translate(commandLabel, currentFormLabel).ToString(),
                 defaultDesc = "MX_ModeSwitch_CommandFullDesc".Translate(commandDesc, currentFormLabel).ToString(),
                 icon = GetFormIcon(previewIndex) ?? GetFormIcon(context.CurrentIndex) ?? TexCommand.Attack,
-                Disabled = onCooldown
+                Disabled = onCooldown || disabledWhileHunting
             };
 
-            if (onCooldown)
+            if (disabledWhileHunting)
+            {
+                cmd.disabledReason = "MX_ModeSwitch_DisabledWhileHunting".Translate().ToString();
+            }
+            else if (onCooldown)
             {
                 int ticksLeft = Props.cooldownTicks - (Find.TickManager.TicksGame - lastToggleTick);
                 cmd.disabledReason = "MX_ModeSwitch_Cooldown".Translate((ticksLeft / 60f).ToString("F1")).ToString();
@@ -336,6 +341,12 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            if (IsPrimaryWeaponLockedByHunting(context))
+            {
+                Messages.Message("MX_ModeSwitch_DisabledWhileHunting".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
             ThingDef targetDef = Props.formWeaponDefs[targetIndex];
             if (targetDef == null)
             {
@@ -410,6 +421,12 @@ namespace MiliraXian.Characters.Neiyu
             {
                 newComp.lastToggleTick = tick;
             }
+        }
+
+        private static bool IsPrimaryWeaponLockedByHunting(SwitchContext context)
+        {
+            return context.Location == HeldLocation.EquipmentPrimary
+                && context.Pawn?.jobs?.curJob?.def == JobDefOf.Hunt;
         }
 
         private static void AddToInventoryOrDrop(Pawn pawn, ThingWithComps thing)
