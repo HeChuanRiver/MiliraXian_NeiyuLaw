@@ -16,6 +16,7 @@
   <MX_ModeSwitch_TargetFormInvalidThing>目標形態不是有效物品：{0}</MX_ModeSwitch_TargetFormInvalidThing>
   <MX_ModeSwitch_NoEquipmentTracker>該角色沒有裝備欄。</MX_ModeSwitch_NoEquipmentTracker>
   <MX_ModeSwitch_NoInventoryTracker>該角色沒有物品欄。</MX_ModeSwitch_NoInventoryTracker>
+  <MX_ModeSwitch_DisabledWhileHunting>正在狩獵時不能切換形態，請先取消狩獵。</MX_ModeSwitch_DisabledWhileHunting>
 
   <MX_NL_ModSettingsTitle>米莉拉角色拓展</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>啟用角色接入特殊角色管理器</MX_NL_EnableSpecialPawnIntegrationLabel>
