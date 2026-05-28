@@ -549,6 +549,7 @@ namespace MiliraXian.Characters.Zhaoli
                 }
 
                 GenSpawn.Spawn(pendingRebirth.pawn, cell, map);
+                ZhaoliRebirthUtility.FinalizeReturnedPawn(pendingRebirth.pawn);
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 Messages.Message("MX_ZL_RebirthReturned".Translate(), pendingRebirth.pawn, MessageTypeDefOf.PositiveEvent);
@@ -614,6 +615,7 @@ namespace MiliraXian.Characters.Zhaoli
                 removeDiedThoughts = true
             }))
             {
+                ZhaoliRebirthUtility.FinalizeReturnedPawn(pawn);
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pawn);
             }
