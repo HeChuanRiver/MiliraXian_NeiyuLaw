@@ -1,18 +1,37 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
+using System.Collections.Generic;
 
 namespace MiliraXian.Characters
 {
     public abstract class ProjectileHomingCurveBase : Bullet, IProjectileHomingCurveHost
     {
         private static readonly CompProperties_ProjectileHomingCurve FallbackHomingSettings = new CompProperties_ProjectileHomingCurve();
+        private static readonly List<IntVec3> ManualCheckedCells = new List<IntVec3>();
 
         private Vector3 visualMoveDirection = Vector3.forward;
         private bool hasVisualMoveDirection;
         private bool hasSegmentImpactPosition;
         private Vector3 segmentImpactPosition;
         private float closestIntendedDistanceSqr = float.MaxValue;
+        private bool manualHomingActive;
+        private Vector3 manualGroundPosition;
+        private Vector3 manualMoveDirection = Vector3.forward;
+        private int manualTicksLeft;
+
+        public override Vector3 ExactPosition
+        {
+            get
+            {
+                if (manualHomingActive)
+                {
+                    return manualGroundPosition.Yto0() + Vector3.up * def.Altitude;
+                }
+
+                return base.ExactPosition;
+            }
+        }
 
         public override void Launch(
             Thing launcher,
@@ -34,12 +53,20 @@ namespace MiliraXian.Characters
             base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
             hasSegmentImpactPosition = false;
             closestIntendedDistanceSqr = float.MaxValue;
+            manualHomingActive = false;
+            manualTicksLeft = 0;
             GetComp<CompProjectileHomingCurve>()?.NotifyLaunch(Find.TickManager.TicksGame);
             InitializeVisualMoveDirection();
         }
 
         protected override void TickInterval(int delta)
         {
+            if (manualHomingActive)
+            {
+                TickManualHoming(delta);
+                return;
+            }
+
             Vector3 before = ExactPosition;
             base.TickInterval(delta);
             if (Destroyed)
@@ -50,6 +77,15 @@ namespace MiliraXian.Characters
             Vector3 after = ExactPosition;
             UpdateVisualMoveDirection(after - before);
             TryImpactIntendedTargetBySegment(before, after);
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref manualHomingActive, "manualHomingActive", false);
+            Scribe_Values.Look(ref manualGroundPosition, "manualGroundPosition", default(Vector3));
+            Scribe_Values.Look(ref manualMoveDirection, "manualMoveDirection", Vector3.forward);
+            Scribe_Values.Look(ref manualTicksLeft, "manualTicksLeft", 0);
         }
 
         public bool AllowHomingUpdate => !landed;
@@ -70,9 +106,15 @@ namespace MiliraXian.Characters
         public void BeginHoming(int minTicksToImpact)
         {
             CompProperties_ProjectileHomingCurve settings = GetHomingSettings();
-            origin = ExactPosition;
-            lifetime = Mathf.Max(1, minTicksToImpact) + Mathf.Max(0, settings.extraHomingTicks);
-            ticksToImpact = lifetime;
+            Vector3 currentPos = ExactPosition;
+            manualHomingActive = true;
+            manualGroundPosition = currentPos.Yto0();
+            manualMoveDirection = GetHomingStartDirection(currentPos);
+            manualTicksLeft = Mathf.Max(1, minTicksToImpact) + Mathf.Max(0, settings.extraHomingTicks);
+            origin = currentPos;
+            destination = currentPos + manualMoveDirection * Mathf.Max(def.projectile.SpeedTilesPerTick, 0.001f) * manualTicksLeft;
+            lifetime = manualTicksLeft;
+            ticksToImpact = manualTicksLeft;
         }
 
         public void LerpHomingDestination(Vector3 desired, float lerp)
@@ -81,7 +123,8 @@ namespace MiliraXian.Characters
             Vector3 steeringDirection = ResolveSteeringDirection(currentPos, desired, lerp);
 
             float speedPerTick = Mathf.Max(def.projectile.SpeedTilesPerTick, 0.001f);
-            int remainingTicks = Mathf.Max(1, lifetime);
+            int remainingTicks = Mathf.Max(1, manualHomingActive ? manualTicksLeft : lifetime);
+            manualMoveDirection = steeringDirection;
             ticksToImpact = remainingTicks;
             float remainingDistance = speedPerTick * remainingTicks;
 
@@ -136,7 +179,12 @@ namespace MiliraXian.Characters
 
         protected virtual Vector3 ResolveSteeringDirection(Vector3 currentPos, Vector3 desired, float lerp)
         {
-            Vector3 currentDirection = (destination - currentPos).Yto0();
+            Vector3 currentDirection = manualHomingActive ? manualMoveDirection.Yto0() : Vector3.zero;
+            if (currentDirection.sqrMagnitude < 0.0001f)
+            {
+                currentDirection = (destination - currentPos).Yto0();
+            }
+
             if (currentDirection.sqrMagnitude < 0.0001f)
             {
                 currentDirection = (destination - origin).Yto0();
@@ -175,8 +223,35 @@ namespace MiliraXian.Characters
             return blendedDirection.normalized;
         }
 
+        private Vector3 GetHomingStartDirection(Vector3 currentPos)
+        {
+            if (hasVisualMoveDirection && visualMoveDirection.sqrMagnitude > 0.0001f)
+            {
+                return visualMoveDirection.normalized;
+            }
+
+            Vector3 direction = (destination - currentPos).Yto0();
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                return direction.normalized;
+            }
+
+            direction = (destination - origin).Yto0();
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                return direction.normalized;
+            }
+
+            return Vector3.forward;
+        }
+
         private Vector3 GetCurrentDirection()
         {
+            if (manualHomingActive && manualMoveDirection.sqrMagnitude > 0.0001f)
+            {
+                return manualMoveDirection.normalized;
+            }
+
             Vector3 direction = (destination - ExactPosition).Yto0();
             if (direction.sqrMagnitude < 0.0001f)
             {
@@ -194,6 +269,205 @@ namespace MiliraXian.Characters
             }
 
             return direction.normalized;
+        }
+
+        private void TickManualHoming(int delta)
+        {
+            foreach (ThingComp comp in AllComps)
+            {
+                comp.CompTickInterval(delta);
+            }
+
+            lifetime -= delta;
+            manualTicksLeft -= delta;
+            ticksToImpact = Mathf.Max(0, manualTicksLeft);
+            if (landed)
+            {
+                return;
+            }
+
+            Vector3 before = ExactPosition;
+            Vector3 direction = manualMoveDirection.Yto0();
+            if (direction.sqrMagnitude < 0.0001f)
+            {
+                direction = GetCurrentDirection();
+            }
+
+            direction = direction.normalized;
+            float distance = Mathf.Max(0.001f, def.projectile.SpeedTilesPerTick) * Mathf.Max(1, delta);
+            manualGroundPosition = (manualGroundPosition + direction * distance).Yto0();
+            Vector3 after = ExactPosition;
+            UpdateVisualMoveDirection(after - before);
+
+            Map map = Map;
+            if (map == null || !after.InBounds(map))
+            {
+                Position = after.ToIntVec3();
+                Destroy(DestroyMode.Vanish);
+                return;
+            }
+
+            Position = after.ToIntVec3();
+            if (CheckManualFreeInterceptBetween(before, after))
+            {
+                return;
+            }
+
+            TryImpactIntendedTargetBySegment(before, after);
+            if (Destroyed)
+            {
+                return;
+            }
+
+            if (manualTicksLeft <= 0)
+            {
+                if (Position.InBounds(map))
+                {
+                    ImpactSomething();
+                }
+                else
+                {
+                    Destroy(DestroyMode.Vanish);
+                }
+            }
+        }
+
+        private bool CheckManualFreeInterceptBetween(Vector3 lastExactPos, Vector3 newExactPos)
+        {
+            if (lastExactPos == newExactPos)
+            {
+                return false;
+            }
+
+            Map map = Map;
+            if (map == null)
+            {
+                return false;
+            }
+
+            List<Thing> interceptors = map.listerThings.ThingsInGroup(ThingRequestGroup.ProjectileInterceptor);
+            for (int i = 0; i < interceptors.Count; i++)
+            {
+                CompProjectileInterceptor interceptor = interceptors[i].TryGetComp<CompProjectileInterceptor>();
+                if (interceptor != null && interceptor.CheckIntercept(this, lastExactPos, newExactPos))
+                {
+                    Impact(null, true);
+                    return true;
+                }
+            }
+
+            IntVec3 fromCell = lastExactPos.ToIntVec3();
+            IntVec3 toCell = newExactPos.ToIntVec3();
+            if (toCell == fromCell || !fromCell.InBounds(map) || !toCell.InBounds(map))
+            {
+                return false;
+            }
+
+            if (toCell.AdjacentToCardinal(fromCell))
+            {
+                return CheckManualFreeIntercept(toCell);
+            }
+
+            if (VerbUtility.InterceptChanceFactorFromDistance(origin, toCell) <= 0f)
+            {
+                return false;
+            }
+
+            Vector3 current = lastExactPos;
+            Vector3 move = newExactPos - lastExactPos;
+            Vector3 step = move.normalized * 0.2f;
+            int maxSteps = (int)(move.MagnitudeHorizontal() / 0.2f);
+            ManualCheckedCells.Clear();
+            int steps = 0;
+            while (true)
+            {
+                current += step;
+                IntVec3 cell = current.ToIntVec3();
+                if (!ManualCheckedCells.Contains(cell))
+                {
+                    if (CheckManualFreeIntercept(cell))
+                    {
+                        return true;
+                    }
+
+                    ManualCheckedCells.Add(cell);
+                }
+
+                steps++;
+                if (steps > maxSteps || cell == toCell)
+                {
+                    return false;
+                }
+            }
+        }
+
+        private bool CheckManualFreeIntercept(IntVec3 cell)
+        {
+            Map map = Map;
+            if (map == null || !cell.InBounds(map))
+            {
+                return false;
+            }
+
+            List<Thing> thingList = cell.GetThingList(map);
+            for (int i = 0; i < thingList.Count; i++)
+            {
+                Thing thing = thingList[i];
+                if (!CanHit(thing))
+                {
+                    continue;
+                }
+
+                Pawn pawn = thing as Pawn;
+                if (thing.def.Fillage == FillCategory.Full)
+                {
+                    Building_Door door = thing as Building_Door;
+                    if (door == null || !door.Open)
+                    {
+                        Position = cell;
+                        Impact(thing, false);
+                        return true;
+                    }
+                }
+
+                float chance = 0f;
+                if (pawn != null)
+                {
+                    chance = 0.4f * Mathf.Clamp(pawn.BodySize, 0.1f, 2f);
+                    if (pawn.GetPosture() != PawnPosture.Standing)
+                    {
+                        chance *= 0.1f;
+                    }
+
+                    if (launcher != null && pawn.Faction != null && launcher.Faction != null && !pawn.Faction.HostileTo(launcher.Faction))
+                    {
+                        if (preventFriendlyFire)
+                        {
+                            chance = 0f;
+                        }
+                        else
+                        {
+                            chance *= Find.Storyteller.difficulty.friendlyFireChanceFactor;
+                        }
+                    }
+                }
+                else if (thing.def.fillPercent > 0.2f)
+                {
+                    chance = DestinationCell.AdjacentTo8Way(cell)
+                        ? thing.def.fillPercent
+                        : thing.def.fillPercent * 0.15f;
+                }
+
+                chance *= VerbUtility.InterceptChanceFactorFromDistance(origin, cell);
+                if (chance > 0.00001f && Rand.Chance(chance))
+                {
+                    Position = cell;
+                    Impact(thing, false);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void InitializeVisualMoveDirection()
