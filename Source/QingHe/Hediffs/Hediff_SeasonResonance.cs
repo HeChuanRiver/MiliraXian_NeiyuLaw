@@ -1,5 +1,5 @@
-using System.Collections.Generic;
-using MiliraXian.Characters.QingHe.Ability;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.UI;
 using UnityEngine;
 using Verse;
@@ -63,7 +63,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float MaxAttunement => Props?.maxAttunement > 0f ? Props.maxAttunement : 100f;
 
-        public HediffComp_FlowerGodDescent FlowerGodDescent => parent?.GetComp<HediffComp_FlowerGodDescent>();
+        public HediffComp_FlowerDivination FlowerDivination => parent?.GetComp<HediffComp_FlowerDivination>();
 
         public override bool CompDisallowVisible()
         {
@@ -114,7 +114,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             EnsureInitialized();
             currentAttunedSeason = season;
-            SyncFlowerGodFramework();
+            SyncFlowerMandateFramework();
         }
 
         public void SetAttunement(float value)
@@ -161,9 +161,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return value < 0f ? 0f : value > MaxAttunement ? MaxAttunement : value;
         }
 
-        public void SyncFlowerGodFramework()
+        public void SyncFlowerMandateFramework()
         {
-            FlowerGodFrameworkUtility.SyncSeason(Pawn, CurrentAttunedSeason);
+            FlowerMandateFrameworkUtility.SyncSeason(Pawn, CurrentAttunedSeason);
         }
     }
 }

@@ -5,11 +5,13 @@ riderModule.iml
 /_ReSharper.Caches/
 1.6/Assemblies/*
 !1.6/Assemblies/MiliraXian_NeiyuLaw.dll
+.cache/
 .vscode/
 .idea/
 *.sln.DotSettings.user
 .claude/
 .dotnet/
 .modpack/
+.tools/
 References.md
 Directory.Build.local.props

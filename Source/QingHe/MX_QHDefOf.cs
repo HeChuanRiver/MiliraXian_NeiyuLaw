@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -8,9 +8,10 @@ namespace MiliraXian.Characters.QingHe
     {
         public static JobDef MX_QH_AttuneSeasonResonance;
         public static JobDef MX_QH_MeditateAtFlowerCourt;
-        public static JobDef MX_QH_FlowerGodDescent;
+        public static JobDef MX_QH_FlowerDivination;
 
         public static ThingDef SpringFlowField;
+        public static ThingDef MX_QH_FlowerDivinationSlashKnockbackFlyer;
         public static ThingDef MX_QH_FlowerMandate_Pomegranate;
         public static ThingDef MX_QH_FlowerMandate_Pomegranate_Gun;
         public static ThingDef MX_Bullet_QH_FlowerMandate_Pomegranate;
@@ -25,6 +26,8 @@ namespace MiliraXian.Characters.QingHe
         public static HediffDef MX_QH_LotusShield;
         public static HediffDef MX_QH_SeasonResonance;
         public static HediffDef MX_QH_FlowerDecree;
+        public static HediffDef MX_QH_FlowerBellCold;
+        public static HediffDef MX_QH_FlowerBellFrozen;
 
         public static TraitDef MX_QH_Trait_LongBreath;
         public static TraitDef MX_QH_Trait_WaterFairy;
@@ -36,5 +39,9 @@ namespace MiliraXian.Characters.QingHe
 
         public static ThingDef MX_QH_Weapon_FlowerBell;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell;
+        public static ThingDef MX_Bullet_Qinghe_FlowerBell_Winter;
+        public static ThingDef MX_QH_Mote_FlowerBellFreeze_A;
+        public static ThingDef MX_QH_Mote_FlowerBellFreeze_B;
+        public static ThingDef MX_QH_Mote_FlowerBellColdBar;
     }
 }

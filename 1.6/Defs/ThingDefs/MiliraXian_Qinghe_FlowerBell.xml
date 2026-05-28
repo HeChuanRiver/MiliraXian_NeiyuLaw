@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
@@ -32,7 +32,7 @@
     </statBases>
     <verbs>
       <li>
-        <verbClass>Verb_Shoot</verbClass>
+        <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
         <defaultProjectile>MX_Bullet_Qinghe_FlowerBell</defaultProjectile>
         <warmupTime>0.90</warmupTime>
@@ -86,5 +86,55 @@
       </li>
     </comps>
   </ThingDef>
-</Defs>
 
+  <ThingDef ParentName="BaseBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Winter</defName>
+    <label>寒铃音</label>
+    <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerBell</thingClass>
+    <graphicData>
+      <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.36,1.05)</drawSize>
+      <shaderType>TransparentPostLight</shaderType>
+      <color>(170,225,255)</color>
+    </graphicData>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact</damageDef>
+      <damageAmountBase>1</damageAmountBase>
+      <armorPenetrationBase>2.10</armorPenetrationBase>
+      <speed>30</speed>
+      <arcHeightFactor>0.10</arcHeightFactor>
+      <extraDamages>
+        <li>
+          <def>MX_QH_FlowerBellColdAccumulation</def>
+          <amount>0.25</amount>
+          <armorPenetration>2.10</armorPenetration>
+        </li>
+      </extraDamages>
+    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+        <trailMaxPoints>22</trailMaxPoints>
+        <trailMinPointDistance>0.10</trailMinPointDistance>
+        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+        <trailWidthStart>0.18</trailWidthStart>
+        <trailWidthEnd>0.05</trailWidthEnd>
+        <trailAlpha>1.00</trailAlpha>
+        <trailAltitudeOffset>0.70</trailAltitudeOffset>
+        <useProjectileGraphicColor>true</useProjectileGraphicColor>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+        <homingStartDelayTicks>5</homingStartDelayTicks>
+        <minHomingTicksToImpact>10</minHomingTicksToImpact>
+        <homingTurnLerp>0.13</homingTurnLerp>
+        <curveAmplitudeMin>0.60</curveAmplitudeMin>
+        <curveAmplitudeMax>0.80</curveAmplitudeMax>
+        <curveFrequency>0.12</curveFrequency>
+      </li>
+      <li Class="CompProperties_ProjectileEffecter">
+        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <DamageDef>
         <defName>MX_QH_NoteImpact</defName>
@@ -6,8 +6,24 @@
         <externalViolence>true</externalViolence>
         <armorCategory>Sharp</armorCategory>
         <isRanged>true</isRanged>
-        <workerClass>MiliraXian.Characters.QingHe.DamageWorker_NoteImpact</workerClass>
+        <workerClass>DamageWorker_AddInjury</workerClass>
         <deathMessage>{0}被花信铃音击倒了。</deathMessage>
         <hediff>PsychicInjury</hediff>
+    </DamageDef>
+    <DamageDef>
+        <defName>MX_QH_FlowerBellColdAccumulation</defName>
+        <label>cold accumulation</label>
+        <externalViolence>true</externalViolence>
+        <armorCategory>Sharp</armorCategory>
+        <isRanged>true</isRanged>
+        <harmsHealth>false</harmsHealth>
+        <makesBlood>false</makesBlood>
+        <workerClass>MiliraXian.Characters.DamageWorker_Accumulation</workerClass>
+        <impactSoundType>Bullet</impactSoundType>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.MX_AccumulationDamageProperties">
+                <accumulationHediff>MX_QH_FlowerBellCold</accumulationHediff>
+            </li>
+        </modExtensions>
     </DamageDef>
 </Defs>

@@ -44,23 +44,23 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
         {
-            if (!QingheEquipmentUtility.IsQinghe(__result))
+            if (!MX_QHUtility.IsQinghe(__result))
             {
                 return;
             }
 
-            QingheEquipmentUtility.MarkForLoadoutStabilization(__result);
-            QingheEquipmentUtility.EnsureDefaultLoadout(__result);
+            MX_QHUtility.MarkForLoadoutStabilization(__result);
+            MX_QHUtility.EnsureDefaultLoadout(__result);
         }
 
         public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
         {
-            if (!QingheEquipmentUtility.IsQinghe(__result))
+            if (!MX_QHUtility.IsQinghe(__result))
             {
                 return;
             }
 
-            QingheEquipmentUtility.EnsureDefaultLoadout(__result);
+            MX_QHUtility.EnsureDefaultLoadout(__result);
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
@@ -72,10 +72,10 @@ namespace MiliraXian.Characters.QingHe
 
             EnsureQingheCoreTraits(__instance);
             FlowerCourtUtility.EnsureFlowerCourtSystems(__instance);
-            if (QingheEquipmentUtility.ShouldFinalizeLoadout(__instance))
+            if (MX_QHUtility.ShouldFinalizeLoadout(__instance))
             {
-                QingheEquipmentUtility.EnsureDefaultLoadout(__instance);
-                QingheEquipmentUtility.ClearLoadoutStabilization(__instance);
+                MX_QHUtility.EnsureDefaultLoadout(__instance);
+                MX_QHUtility.ClearLoadoutStabilization(__instance);
             }
         }
 

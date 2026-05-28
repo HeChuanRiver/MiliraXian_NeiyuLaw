@@ -3,7 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Ability
+namespace MiliraXian.Characters.QingHe.Abilities
 {
     public class CompProperties_AbilityFlowerMandate_Pomegranate : CompProperties_AbilityEffect
     {

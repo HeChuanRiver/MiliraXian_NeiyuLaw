@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MX_QH_FlowerGodSigil_RedApricot</defName>
+        <defName>MX_QH_FlowerSigil_RedApricot</defName>
         <label>花神签·红杏</label>
         <description>春季共鸣被动。花神红杏护持清荷，周期性修复最严重的伤口，包括永久伤口。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -19,7 +19,7 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_FlowerGodSigil_Lotus</defName>
+        <defName>MX_QH_FlowerSigil_Lotus</defName>
         <label>花神签·荷花</label>
         <description>夏季共鸣被动占位：闪避、疾病/毒素/污染免疫框架。具体效果尚未实现。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -30,7 +30,7 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_FlowerGodSigil_Magnolia</defName>
+        <defName>MX_QH_FlowerSigil_Magnolia</defName>
         <label>花神签·玉兰</label>
         <description>秋季共鸣被动占位：心灵隐形、心灵敏感度和熵消散框架。具体效果尚未实现。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -41,7 +41,7 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_FlowerGodSigil_RedPlum</defName>
+        <defName>MX_QH_FlowerSigil_RedPlum</defName>
         <label>花神签·红梅</label>
         <description>冬季共鸣被动占位：低温耐性和冻结累积框架。具体效果尚未实现。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>

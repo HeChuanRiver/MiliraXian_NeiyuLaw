@@ -1,17 +1,18 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Ability
+namespace MiliraXian.Characters.QingHe.Abilities
 {
-    public static class FlowerGodFrameworkUtility
+    public static class FlowerMandateFrameworkUtility
     {
         private const string DefaultFlowerMandateAbilityDefName = "MX_QH_FlowerMandate";
+        private const string FlowerDivinationSlashAbilityDefName = "MX_QH_FlowerDivinationSlash";
 
-        private struct SeasonFlowerGodSet
+        private struct SeasonFlowerMandateSet
         {
-            public SeasonFlowerGodSet(string abilityDefName, string hediffDefName, string traitDefName)
+            public SeasonFlowerMandateSet(string abilityDefName, string hediffDefName, string traitDefName)
             {
                 AbilityDefName = abilityDefName;
                 HediffDefName = hediffDefName;
@@ -23,13 +24,13 @@ namespace MiliraXian.Characters.QingHe.Ability
             public string TraitDefName { get; }
         }
 
-        private static readonly Dictionary<AttunedSeason, SeasonFlowerGodSet> SetsBySeason =
-            new Dictionary<AttunedSeason, SeasonFlowerGodSet>
+        private static readonly Dictionary<AttunedSeason, SeasonFlowerMandateSet> SetsBySeason =
+            new Dictionary<AttunedSeason, SeasonFlowerMandateSet>
             {
-                { AttunedSeason.Spring, new SeasonFlowerGodSet("MX_QH_FlowerMandate_Peach", "MX_QH_FlowerGodSigil_RedApricot", "MX_QH_FlowerWord_Peony") },
-                { AttunedSeason.Summer, new SeasonFlowerGodSet("MX_QH_FlowerMandate_Pomegranate", "MX_QH_FlowerGodSigil_Lotus", "MX_QH_FlowerWord_JadeHairpin") },
-                { AttunedSeason.Autumn, new SeasonFlowerGodSet("MX_QH_FlowerMandate_Chrysanthemum", "MX_QH_FlowerGodSigil_Magnolia", "MX_QH_FlowerWord_Osmanthus") },
-                { AttunedSeason.Winter, new SeasonFlowerGodSet("MX_QH_FlowerMandate_Wintersweet", "MX_QH_FlowerGodSigil_RedPlum", "MX_QH_FlowerWord_Narcissus") }
+                { AttunedSeason.Spring, new SeasonFlowerMandateSet("MX_QH_FlowerMandate_Peach", "MX_QH_FlowerSigil_RedApricot", "MX_QH_FlowerWord_Peony") },
+                { AttunedSeason.Summer, new SeasonFlowerMandateSet("MX_QH_FlowerMandate_Pomegranate", "MX_QH_FlowerSigil_Lotus", "MX_QH_FlowerWord_JadeHairpin") },
+                { AttunedSeason.Autumn, new SeasonFlowerMandateSet("MX_QH_FlowerMandate_Chrysanthemum", "MX_QH_FlowerSigil_Magnolia", "MX_QH_FlowerWord_Osmanthus") },
+                { AttunedSeason.Winter, new SeasonFlowerMandateSet("MX_QH_FlowerMandate_Wintersweet", "MX_QH_FlowerSigil_RedPlum", "MX_QH_FlowerWord_Narcissus") }
             };
 
         public static void SyncSeason(Pawn pawn, AttunedSeason season)
@@ -40,8 +41,9 @@ namespace MiliraXian.Characters.QingHe.Ability
             }
 
             RemoveAllSeasonalFramework(pawn);
+            EnsureAbility(pawn, FlowerDivinationSlashAbilityDefName);
 
-            if (!SetsBySeason.TryGetValue(season, out SeasonFlowerGodSet set))
+            if (!SetsBySeason.TryGetValue(season, out SeasonFlowerMandateSet set))
             {
                 EnsureAbility(pawn, DefaultFlowerMandateAbilityDefName);
                 return;
@@ -55,7 +57,7 @@ namespace MiliraXian.Characters.QingHe.Ability
 
         private static void RemoveAllSeasonalFramework(Pawn pawn)
         {
-            foreach (SeasonFlowerGodSet set in SetsBySeason.Values)
+            foreach (SeasonFlowerMandateSet set in SetsBySeason.Values)
             {
                 RemoveAbility(pawn, set.AbilityDefName);
                 RemoveHediff(pawn, set.HediffDefName);

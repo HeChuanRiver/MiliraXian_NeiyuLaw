@@ -1,5 +1,206 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerBellColdBar</defName>
+    <label>Mote</label>
+    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
+    <graphicData>
+      <texPath>Things/Mote/Transparent</texPath>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <fadeOutTime>0.18</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
+        <backgroundShaderType>MetaOverlay</backgroundShaderType>
+        <fillShaderType>MetaOverlay</fillShaderType>
+        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
+        <fillColor>(0.56, 0.88, 1.00, 0.58)</fillColor>
+        <iconTexPath>MiliraXianQinghe/Effect/freeze_1</iconTexPath>
+        <iconShaderType>MoteGlow</iconShaderType>
+        <iconColor>(0.72, 0.90, 1.00, 0.90)</iconColor>
+        <size>(1.04, 0.09)</size>
+        <margin>0.035</margin>
+        <offsetZ>-0.55</offsetZ>
+        <stackSpacing>0.13</stackSpacing>
+        <stackDownward>true</stackDownward>
+        <iconSize>0.18</iconSize>
+        <iconGap>0.04</iconGap>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerBellFreeze_A</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>MiliraXianQinghe/Effect/freeze_1</texPath>
+      <drawSize>(1.6, 1.6)</drawSize>
+      <color>(0.72, 0.90, 1.00, 0.82)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerBellFreeze_B</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>MiliraXianQinghe/Effect/freeze_2</texPath>
+      <drawSize>(1.6, 1.6)</drawSize>
+      <color>(0.72, 0.90, 1.00, 0.82)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerDivinationBurst</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteMultiplyAddCircularGrayscale</shaderType>
+      <texPath>Things/Mote/RadiationDistortion_A</texPath>
+      <color>(1.00, 0.76, 0.92, 1.00)</color>
+      <shaderParameters>
+        <_MultiplyTex>/Things/Mote/RadiationDistortion_B</_MultiplyTex>
+        <_texAScale>0.3</_texAScale>
+        <_texBScale>0.3</_texBScale>
+        <_texAScrollSpeed>1.5</_texAScrollSpeed>
+        <_texBScrollSpeed>-0.8</_texBScrollSpeed>
+        <_Intensity>11</_Intensity>
+      </shaderParameters>
+      <drawSize>(2.2, 2.2)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.05</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>0.15</solidTime>
+      <growthRate>2.0</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>MX_QH_Mote_FlowerDivinationBokeh</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>Things/Mote/RitualEffects/Bokeh</texPath>
+      <drawSize>(2.4, 2.4)</drawSize>
+      <color>(1.00, 0.82, 0.96, 0.72)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.22</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+    </mote>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerDivinationFootRing</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>Things/Mote/PsychicDistortionRing</texPath>
+      <drawSize>(2.8, 2.8)</drawSize>
+      <color>(1.00, 0.72, 0.92, 0.72)</color>
+      <shaderParameters>
+        <_Interval>0.75</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.25</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+    </mote>
+  </ThingDef>
+
+  <EffecterDef>
+    <defName>MX_QH_Effecter_FlowerDivinationActive</defName>
+    <offsetMode>Free</offsetMode>
+    <children>
+      <li MayRequire="Ludeon.RimWorld.Ideology">
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <moteDef>MX_QH_Mote_FlowerDivinationBokeh</moteDef>
+        <spawnLocType>OnSource</spawnLocType>
+        <attachToSpawnThing>true</attachToSpawnThing>
+        <destroyMoteOnCleanup>true</destroyMoteOnCleanup>
+        <positionOffset>(0, 0, 0)</positionOffset>
+        <scale>1</scale>
+        <rotation>0~0</rotation>
+        <rotationRate>0</rotationRate>
+        <absoluteAngle>true</absoluteAngle>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <moteDef>MX_QH_Mote_FlowerDivinationFootRing</moteDef>
+        <spawnLocType>OnSource</spawnLocType>
+        <attachToSpawnThing>true</attachToSpawnThing>
+        <destroyMoteOnCleanup>true</destroyMoteOnCleanup>
+        <positionOffset>(0, 0, -0.08)</positionOffset>
+        <scale>1</scale>
+        <rotation>0~0</rotation>
+        <rotationRate>0</rotationRate>
+        <absoluteAngle>true</absoluteAngle>
+      </li>
+    </children>
+  </EffecterDef>
 
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_SpringFlowHediff</defName>

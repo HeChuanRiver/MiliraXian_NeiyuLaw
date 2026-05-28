@@ -1,4 +1,4 @@
-using MiliraXian.Characters.QingHe.Hediffs;
+﻿using MiliraXian.Characters.QingHe.Hediffs;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe
             return (hediff as HediffWithComps)?.GetComp<HediffComp_SeasonResonance>();
         }
 
-        public static HediffComp_FlowerGodDescent GetFlowerGodDescent(Pawn pawn)
+        public static HediffComp_FlowerDivination GetFlowerDivination(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SeasonResonance == null)
             {
@@ -30,12 +30,12 @@ namespace MiliraXian.Characters.QingHe
             }
 
             Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SeasonResonance);
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerGodDescent>();
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerDivination>();
         }
 
-        public static HediffComp_FlowerGodDescent EnsureFlowerGodDescent(Pawn pawn)
+        public static HediffComp_FlowerDivination EnsureFlowerDivination(Pawn pawn)
         {
-            return EnsureSeasonResonance(pawn)?.FlowerGodDescent;
+            return EnsureSeasonResonance(pawn)?.FlowerDivination;
         }
 
         public static void EnsureFlowerResources(Pawn pawn)
@@ -63,7 +63,7 @@ namespace MiliraXian.Characters.QingHe
 
             EnsureCoreHediffs(pawn);
             HediffComp_SeasonResonance resonance = EnsureSeasonResonance(pawn);
-            resonance?.SyncFlowerGodFramework();
+            resonance?.SyncFlowerMandateFramework();
             EnsureFlowerResources(pawn);
         }
 

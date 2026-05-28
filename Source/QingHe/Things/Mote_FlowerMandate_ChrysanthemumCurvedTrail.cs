@@ -30,6 +30,9 @@ namespace MiliraXian.Characters.QingHe
         private int minSegs = 28;
         private int maxSegs = 96;
         private float rnd;
+        private Vector3 fixedStart;
+        private Vector3 fixedEnd;
+        private bool hasFixedEndpoints;
 
         protected override bool EndOfLife
         {
@@ -62,6 +65,9 @@ namespace MiliraXian.Characters.QingHe
             int distortStride)
         {
             Attach(source, target);
+            fixedStart = source.CenterVector3;
+            fixedEnd = target.CenterVector3;
+            hasFixedEndpoints = source.IsValid && target.IsValid;
             lineDef = line;
             distortDef = distort;
             width = Mathf.Max(0.02f, lineWidth);
@@ -105,14 +111,27 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
 
-            UpdatePositionAndRotation();
-            if (!link1.Linked || !link2.Linked)
+            if (!hasFixedEndpoints && (!link1.Linked || !link2.Linked))
             {
                 return;
             }
 
-            Vector3 start = link1.LastDrawPos;
-            Vector3 end = link2.LastDrawPos;
+            Vector3 start;
+            Vector3 end;
+            if (hasFixedEndpoints)
+            {
+                start = fixedStart;
+                end = fixedEnd;
+                exactPosition = (start + end) * 0.5f;
+                exactPosition.y = def.altitudeLayer.AltitudeFor();
+            }
+            else
+            {
+                UpdatePositionAndRotation();
+                start = link1.LastDrawPos;
+                end = link2.LastDrawPos;
+            }
+
             float dist = (end - start).MagnitudeHorizontal();
             if (dist < MinDrawDist)
             {

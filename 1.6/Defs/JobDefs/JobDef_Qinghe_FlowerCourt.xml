@@ -17,8 +17,8 @@
     </JobDef>
 
     <JobDef>
-        <defName>MX_QH_FlowerGodDescent</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_FlowerGodDescent</driverClass>
+        <defName>MX_QH_FlowerDivination</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_FlowerDivination</driverClass>
         <reportString>呼唤花神降临。</reportString>
         <playerInterruptible>false</playerInterruptible>
         <casualInterruptible>false</casualInterruptible>

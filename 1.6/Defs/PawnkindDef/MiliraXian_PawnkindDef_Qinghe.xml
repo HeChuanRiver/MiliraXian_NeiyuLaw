@@ -108,6 +108,7 @@
         <!-- 给予这个角色的技能 -->
         <abilities>
             <li>MX_QH_FlowerMandate</li>
+            <li>MX_QH_FlowerDivinationSlash</li>
         </abilities>
 
         <skills>

@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellCold</defName>
+    <label>寒冷累积</label>
+    <description>花信铃冬季共鸣留下的寒意。持续命中会累积寒冷，达到上限后转为冻结。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(0.56, 0.82, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellColdBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellFrozen</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellFreezeResistance</resistanceHediff>
+        <effectDurationTicks>300</effectDurationTicks>
+        <fullAccumulationText>冻结</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(0.56, 0.88, 1.00)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellColdScale">
+        <comfyTemperatureScaleStart>0</comfyTemperatureScaleStart>
+        <comfyTemperatureScaleZero>-100</comfyTemperatureScaleZero>
+        <mechSeverityMultiplier>0.4</mechSeverityMultiplier>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAccumulated">
+        <addHediff>Hypothermia</addHediff>
+        <addHediffSeverityPerAccumulation>0.08</addHediffSeverityPerAccumulation>
+        <addHediffFleshOnly>true</addHediffFleshOnly>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MX_QH_FlowerBellFrozen</defName>
+    <label>冻结</label>
+    <description>目标被花信铃冬季共鸣冻结，短时间内无法行动。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellFrozen</hediffClass>
+    <defaultLabelColor>(0.70, 0.90, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellCold</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>Hypothermia</addHediff>
+        <severityPerTick>0.00012</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MX_QH_FlowerBellFreezeResistance</defName>
+    <label>冻结抗性</label>
+    <description>目标近期承受冻结后产生的短暂适应，会降低同类异常积累速度。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AccumulationResistance</hediffClass>
+    <defaultLabelColor>(0.70, 0.90, 1.00)</defaultLabelColor>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationResistance">
+        <maxStage>5</maxStage>
+        <accumulationMultipliers>
+          <li>0.8</li>
+          <li>0.6</li>
+          <li>0.4</li>
+          <li>0.2</li>
+          <li>0</li>
+        </accumulationMultipliers>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>

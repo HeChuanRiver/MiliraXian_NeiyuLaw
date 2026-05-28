@@ -22,7 +22,7 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Ability.CompProperties_FlowerGodPlaceholder">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_FlowerMandatePlaceholder">
                 <alwaysDisabled>true</alwaysDisabled>
                 <disabledReason>尚未调谐四时共鸣。</disabledReason>
                 <placeholderMessage>清荷尚未调谐四时共鸣，暂时无法回应花神。</placeholderMessage>
@@ -56,7 +56,7 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Ability.CompProperties_AbilityFlowerMandate_Peach">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Peach">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
@@ -92,7 +92,7 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Ability.CompProperties_AbilityFlowerMandate_Pomegranate">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Pomegranate">
                 <summonDef>MX_QH_FlowerMandate_Pomegranate</summonDef>
                 <durationTicks>900</durationTicks>
                 <maxActiveSummons>3</maxActiveSummons>
@@ -190,13 +190,57 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Ability.CompProperties_AbilityFlowerMandate_Wintersweet">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Wintersweet">
                 <shieldDef>MX_QH_FlowerMandate_Wintersweet</shieldDef>
                 <durationTicks>900</durationTicks>
                 <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
                 <resourceCost>1</resourceCost>
                 <missingResourceMessage>花令不足，无法施放飞花令·腊梅。</missingResourceMessage>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QH_FlowerDivinationSlash</defName>
+        <label>花神闪</label>
+        <description>花神降临期间开放的决战技。先选择清荷视线内的闪现落点，再选择落点可见的打击方向；清荷闪现到落点后，对指定方向扇形范围内的敌人造成伤害、短暂眩晕并击退。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>230</displayOrder>
+        <cooldownTicksRange>360</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerDivinationSlash</gizmoClass>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>22</range>
+            <warmupTime>0.35</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerDivinationSlash">
+                <flyerDef>MX_QH_FlowerDivinationSlashFlyer</flyerDef>
+                <knockbackFlyerDef>MX_QH_FlowerDivinationSlashKnockbackFlyer</knockbackFlyerDef>
+                <range>22</range>
+                <coneRadius>5.5</coneRadius>
+                <coneAngleDegrees>80</coneAngleDegrees>
+                <damageDef>MX_QH_NoteImpact</damageDef>
+                <damageAmount>32</damageAmount>
+                <armorPenetration>0.35</armorPenetration>
+                <stunTicks>60</stunTicks>
+                <knockbackDistance>3</knockbackDistance>
+                <divinationTicksCost>180</divinationTicksCost>
             </li>
         </comps>
     </AbilityDef>
