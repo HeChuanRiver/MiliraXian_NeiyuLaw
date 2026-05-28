@@ -16,6 +16,7 @@
   <MX_ModeSwitch_TargetFormInvalidThing>Target form is not a valid thing: {0}</MX_ModeSwitch_TargetFormInvalidThing>
   <MX_ModeSwitch_NoEquipmentTracker>This pawn has no equipment tracker.</MX_ModeSwitch_NoEquipmentTracker>
   <MX_ModeSwitch_NoInventoryTracker>This pawn has no inventory tracker.</MX_ModeSwitch_NoInventoryTracker>
+  <MX_ModeSwitch_DisabledWhileHunting>Cannot switch forms while hunting. Cancel the hunt first.</MX_ModeSwitch_DisabledWhileHunting>
 
   <MX_NL_ModSettingsTitle>Milira Character Expansion</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>Register characters with the special pawn manager</MX_NL_EnableSpecialPawnIntegrationLabel>
