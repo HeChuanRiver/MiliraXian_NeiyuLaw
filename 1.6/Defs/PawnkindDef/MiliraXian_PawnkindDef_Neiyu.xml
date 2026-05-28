@@ -281,10 +281,6 @@
                 <blockHarvest>true</blockHarvest>
             </li>
 
-            <!-- Set the minimum Consciousness to 100%. Usually, I don’t recommend adding this class; it’s better suited for a boss character. 
-             最低意识设置为100%。通常来说，我强烈不建议你添加这个class，除非你正在制作一个boss级角色，或者说是已经死掉的灵体角色！ -->
-            <li Class="AriandelLibrary.AL_LockConsciousness_Extension"/>
-
             <!-- Freeze this pawn's biological age. 锁定这个角色的生理年龄，使生理年龄无增长。 -->
             <li Class="AriandelLibrary.AL_AgeFreeze_Extension">
                 <freezeBiologicalAge>true</freezeBiologicalAge>

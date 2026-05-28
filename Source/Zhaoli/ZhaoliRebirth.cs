@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -71,8 +72,15 @@ namespace MiliraXian.Characters.Zhaoli
         {
             return pawn != null
                    && pawn.Faction == Faction.OfPlayer
-                   && !ZhaoliScenarioUtility.IsRaidState(pawn)
+                   && !ShouldBlockTenDayRebirth(pawn)
                    && !ZhaoliScenarioUtility.IsHideoutState(pawn);
+        }
+
+        public static bool ShouldBlockTenDayRebirth(Pawn pawn)
+        {
+            return pawn != null
+                   && ZhaoliScenarioUtility.IsRaidState(pawn)
+                   && pawn.Faction != Faction.OfPlayer;
         }
 
         public static void RegisterRecruitGrowthDeath(Pawn pawn)
@@ -92,7 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (ZhaoliScenarioUtility.IsRaidState(pawn))
+            if (ShouldBlockTenDayRebirth(pawn))
             {
                 return false;
             }
@@ -165,6 +173,64 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
             }
+        }
+
+        public static bool EnsureValidHealthContainers(Pawn pawn, bool logRepair = false)
+        {
+            if (pawn == null || pawn.Destroyed || pawn.Discarded)
+            {
+                return false;
+            }
+
+            bool repaired = false;
+            if (pawn.health == null)
+            {
+                pawn.health = new Pawn_HealthTracker(pawn);
+                repaired = true;
+            }
+
+            if (pawn.health.hediffSet == null)
+            {
+                pawn.health.hediffSet = new HediffSet(pawn);
+                repaired = true;
+            }
+
+            pawn.health.hediffSet.pawn = pawn;
+            if (pawn.health.hediffSet.hediffs == null)
+            {
+                pawn.health.hediffSet.hediffs = new List<Hediff>();
+                repaired = true;
+            }
+
+            int removed = pawn.health.hediffSet.hediffs.RemoveAll(hediff => hediff == null || hediff.def == null);
+            if (removed > 0)
+            {
+                repaired = true;
+            }
+
+            for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; i++)
+            {
+                pawn.health.hediffSet.hediffs[i].pawn = pawn;
+            }
+
+            if (repaired && logRepair)
+            {
+                Log.Warning("[MiliraXian.Characters.Zhaoli] Repaired invalid health data on returned Zhaoli pawn: " + pawn.ToStringSafe());
+            }
+
+            return true;
+        }
+
+        public static void FinalizeReturnedPawn(Pawn pawn)
+        {
+            if (!EnsureValidHealthContainers(pawn, logRepair: true))
+            {
+                return;
+            }
+
+            pawn.health.forceDowned = false;
+            pawn.health.Notify_HediffChanged(null);
+            pawn.needs?.AddOrRemoveNeedsAsAppropriate();
         }
 
         public static void NotifyApparelResurrected(Pawn pawn)
@@ -288,6 +354,26 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
             ZhaoliRebirthUtility.TryScheduleRebirth(Pawn);
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
+    internal static class Patch_Pawn_Kill_ZhaoliRebirthFallback
+    {
+        [HarmonyPriority(Priority.Last)]
+        public static void Postfix(Pawn __instance)
+        {
+            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            {
+                return;
+            }
+
+            if (ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(__instance) || ZhaoliScenarioUtility.IsHideoutState(__instance))
+            {
+                return;
+            }
+
+            ZhaoliRebirthUtility.TryScheduleRebirth(__instance);
         }
     }
 
@@ -419,6 +505,7 @@ namespace MiliraXian.Characters.Zhaoli
                 }
 
                 GenSpawn.Spawn(pendingRebirth.pawn, cell, map);
+                ZhaoliRebirthUtility.FinalizeReturnedPawn(pendingRebirth.pawn);
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 pendingRebirths.RemoveAt(i);
@@ -433,6 +520,26 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Destroyed);
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(PawnUtility), nameof(PawnUtility.GetPsylinkLevel))]
+    internal static class Patch_PawnUtility_GetPsylinkLevel_NullSafeForInvalidPawns
+    {
+        private static bool Prefix(Pawn pawn, ref int __result)
+        {
+            if (pawn?.health?.hediffSet?.hediffs != null)
+            {
+                return true;
+            }
+
+            if (pawn != null && ZhaoliKarmaUtility.IsZhaoli(pawn))
+            {
+                ZhaoliRebirthUtility.EnsureValidHealthContainers(pawn, logRepair: true);
+            }
+
+            __result = 0;
+            return false;
         }
     }
 }

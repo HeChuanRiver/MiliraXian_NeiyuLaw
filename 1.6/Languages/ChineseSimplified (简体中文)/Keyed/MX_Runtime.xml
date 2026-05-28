@@ -19,7 +19,21 @@
 
   <MX_NL_ModSettingsTitle>米莉拉角色拓展</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>启用角色接入特殊角色管理器</MX_NL_EnableSpecialPawnIntegrationLabel>
-  <MX_NL_EnableSpecialPawnIntegrationDesc>启用后，霓羽、昭离、清荷在加入玩家派系或读档巡检时，会被注册进 Ariandel 的特殊角色管理器，避免因未注册而被唯一角色限制器清理。</MX_NL_EnableSpecialPawnIntegrationDesc>
+  <MX_NL_EnableSpecialPawnIntegrationDesc>启用后，特殊角色在加入玩家派系或读档巡检时，会被注册进 Ariandel 的特殊角色管理器，避免因未注册而被唯一角色限制器清理。</MX_NL_EnableSpecialPawnIntegrationDesc>
+  <MX_NL_EnableUpdateLogLettersLabel>推送更新日志信件</MX_NL_EnableUpdateLogLettersLabel>
+  <MX_NL_EnableUpdateLogLettersDesc>启用后，当前存档第一次运行新版本时，只会收到最新版本的更新日志信件一次。关闭后，该版本会被记录为已检查，不会补发旧日志。</MX_NL_EnableUpdateLogLettersDesc>
+  <MX_NL_ViewUpdateLogsButton>查看所有更新日志</MX_NL_ViewUpdateLogsButton>
+  <MX_NL_UpdateLogDialogTitle>米莉拉角色拓展 更新日志</MX_NL_UpdateLogDialogTitle>
+  <MX_NL_UpdateLogLetterLabel>米莉拉角色拓展更新日志 {0}</MX_NL_UpdateLogLetterLabel>
+  <MX_NL_UpdateLog_v1_1_010_Body>大家好，本次是 &lt;color=#79CBFF&gt;v1.1.010&lt;/color&gt; 更新，修复了一些已知问题，具体如下：&#10;&#10;1. 修复了&lt;color=#E85A7A&gt;昭离任务因为一些已知问题导致接取后秒过期&lt;/color&gt;的问题。如果您的存档遇到了该问题，可以在下方找到可能的解决方案。&#10;2. 修复了&lt;color=#E85A7A&gt;导致昭离不复活&lt;/color&gt;的可能原因。如果您的存档遇到了该问题，可以在下方找到可能的解决方案。&#10;3. 添加了一些&lt;color=#79CBFF&gt;开发者按钮&lt;/color&gt;。如果您的存档遇到了第 1 个问题，可以打开开发者工具，找到 &lt;color=#C77DFF&gt;Milira Xian - Zhaoli -&gt; Retry Zhaoli murmur quest check&lt;/color&gt;。该选项会在您的存档满足昭离任务条件的情况下主动再次触发昭离任务。请注意，如果您的殖民地已经存在昭离，该按钮应该会失效。&#10;如果遇到了第 2 个问题，请同样打开开发者工具，找到 &lt;color=#C77DFF&gt;Milira Xian - Zhaoli -&gt; Force friendly dead Zhaoli return now&lt;/color&gt; 来强制回归昭离。如果该按钮失效，那么昭离失效很可能来自不同 Mod 冲突，很抱歉可能无法定位。</MX_NL_UpdateLog_v1_1_010_Body>
+  <MX_NL_UpdateLog_v1_1_001_Body>大家好，本次更新引入了&lt;color=#79CBFF&gt;更新日志&lt;/color&gt;，如果您觉得更新日志会有打扰，请前往 Mod 设置中找到米莉拉角色拓展中的&lt;color=#79CBFF&gt;是否推送更新日志&lt;/color&gt;，关闭即可！以下是正文：&#10;&#10;1. 修复了&lt;color=#E85A7A&gt;昭离因果满了之后倒地会锁1%饥饿度&lt;/color&gt;导致一直被喂食的情况。&#10;2. 添加了&lt;color=#79CBFF&gt;是否锁意识&lt;/color&gt;的可选项，目前可以为昭离和霓羽选择100%、35%和不锁定意识的选项！&lt;color=#FFB86C&gt;请注意！&lt;/color&gt;这里的锁定也会影响昭离的敌对情况是否锁定意识，如果选择了不锁定意识和35%锁定会相应降低敌对难度，您可以自行选择。&#10;3. 修复了昭离倒地会掉落武器的问题，防止在您的存档出现&lt;color=#FF6A6A&gt;114514把离断&lt;/color&gt;~&#10;4. &lt;color=#C77DFF&gt;昭离目前已接入 SCM&lt;/color&gt;，经过本地测试应当没有问题~&#10;5. 修复了&lt;color=#E85A7A&gt;昭离的任务会占用过大导致 TPS 骤降&lt;/color&gt;的问题。&#10;&#10;如果遇到问题请及时向 Steam 评论区反馈！谢谢~&#10;&lt;color=#FFB86C&gt;请注意！&lt;/color&gt;如果您的 Mod 中存在影响投射物相关的 Mod，可能会导致霓羽弓形态的箭矢异常！</MX_NL_UpdateLog_v1_1_001_Body>
+  <MX_NL_SpecialPawnConsciousnessLockLabel>特殊角色意识锁定</MX_NL_SpecialPawnConsciousnessLockLabel>
+  <MX_NL_SpecialPawnConsciousnessLock100Label>锁定为100%</MX_NL_SpecialPawnConsciousnessLock100Label>
+  <MX_NL_SpecialPawnConsciousnessLock100Desc>特殊角色的意识最低保持为100%。</MX_NL_SpecialPawnConsciousnessLock100Desc>
+  <MX_NL_SpecialPawnConsciousnessLock35Label>锁定为35%</MX_NL_SpecialPawnConsciousnessLock35Label>
+  <MX_NL_SpecialPawnConsciousnessLock35Desc>特殊角色的意识最低保持为35%。</MX_NL_SpecialPawnConsciousnessLock35Desc>
+  <MX_NL_SpecialPawnConsciousnessLockNoneLabel>不锁定</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
+  <MX_NL_SpecialPawnConsciousnessLockNoneDesc>特殊角色的意识会按伤病、状态和其他 Mod 的效果正常变化。</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
   <MX_NL_NeedFlowerForm>需要装备花形态。</MX_NL_NeedFlowerForm>
   <MX_NL_NeedSwordForm>需要装备剑形态。</MX_NL_NeedSwordForm>
   <MX_NL_NeedBowForm>需要装备弓形态。</MX_NL_NeedBowForm>
@@ -154,6 +168,8 @@
   <MX_ZL_ShieldLayersTip>当前层数：{0}。每通过告死吸纳一个单位，获得5层讳亡护盾。护盾会免疫一次伤害，并在命中时消耗1层。持续伤害每次生效也会持续消耗层数。</MX_ZL_ShieldLayersTip>
   <MX_ZL_DeathFieldExecuted>告死流场已处决 {0} 个目标：{1}。</MX_ZL_DeathFieldExecuted>
   <MX_ZL_HideoutSiteCustomLabel>不存在者藏身处</MX_ZL_HideoutSiteCustomLabel>
+  <MX_ZL_HideoutStartedLetterLabel>不存在者藏身处已显现</MX_ZL_HideoutStartedLetterLabel>
+  <MX_ZL_HideoutStartedLetterText>昭离的藏身处已经在殖民地附近显现。请在三日内派遣远征队抵达并处理交接。若放任不管，昭离将会直接袭击殖民地。</MX_ZL_HideoutStartedLetterText>
   <MX_ZL_RaidLetterLabel>昭离来袭</MX_ZL_RaidLetterLabel>
   <MX_ZL_RaidLetterText>昭离的身影自殖民地边缘现身。她没有停驻、没有谈判，也不会撤退。此战只会以所有生灵的死亡，或她自己的彻底终结告终。</MX_ZL_RaidLetterText>
   <MX_ZL_HideoutInspectExpired>昭离的痕迹已经散去。</MX_ZL_HideoutInspectExpired>

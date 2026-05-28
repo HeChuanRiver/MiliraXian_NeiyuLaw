@@ -6,8 +6,9 @@ namespace MiliraXian.Characters.Zhaoli
 {
     public class HediffCompProperties_ZhaoliDormancy : HediffCompProperties
     {
-        public int refreshIntervalTicks = 60;
-        public bool dropRestToZero = true;
+        public int refreshIntervalTicks = 1000;
+        public bool dropRestToZero = false;
+        public float lockedFoodLevelPercentage = 0.5f;
 
         public HediffCompProperties_ZhaoliDormancy()
         {
@@ -38,7 +39,7 @@ namespace MiliraXian.Characters.Zhaoli
                 intervalTicks = 1;
             }
 
-            if (Find.TickManager.TicksGame % intervalTicks != 0)
+            if (!pawn.IsHashIntervalTick(intervalTicks))
             {
                 return;
             }
@@ -76,7 +77,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (pawn.needs?.food != null)
             {
-                pawn.needs.food.CurLevelPercentage = 0.01f;
+                pawn.needs.food.CurLevelPercentage = PropsDormancy.lockedFoodLevelPercentage;
             }
 
             if (pawn.Downed)
