@@ -129,11 +129,12 @@ namespace MiliraXian.Characters.Neiyu
 
     internal static class NeiyuLawUpdateLogUtility
     {
-        public const string CurrentVersion = "v1.1.010";
+        public const string CurrentVersion = "v1.1.103";
 
         private static readonly List<NeiyuLawUpdateLogEntry> Entries = new List<NeiyuLawUpdateLogEntry>
         {
-            new NeiyuLawUpdateLogEntry(CurrentVersion, "MX_NL_UpdateLog_v1_1_010_Body", true),
+            new NeiyuLawUpdateLogEntry(CurrentVersion, "MX_NL_UpdateLog_v1_1_103_Body", true),
+            new NeiyuLawUpdateLogEntry("v1.1.010", "MX_NL_UpdateLog_v1_1_010_Body", true),
             new NeiyuLawUpdateLogEntry("v1.1.001", "MX_NL_UpdateLog_v1_1_001_Body", true)
         };
 
