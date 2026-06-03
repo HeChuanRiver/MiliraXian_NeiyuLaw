@@ -137,6 +137,17 @@ namespace MiliraXian.Characters.Neiyu
                         "Milira_FlyEast_Qinghe",
                         "Milira_FlySouth_Qinghe",
                         "Milira_FlyWest_Qinghe")
+                },
+                {
+                    "MiliraXian_Mingyuan",
+                    new MiliraXianCharacterWingEntry(
+                        "MiliraXian_Mingyuan",
+                        "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu",
+                        "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu",
+                        "Milira_FlyNorth_Mingyuan",
+                        "Milira_FlyEast_Mingyuan",
+                        "Milira_FlySouth_Mingyuan",
+                        "Milira_FlyWest_Mingyuan")
                 }
             };
 

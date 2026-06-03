@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <AlienRace.AlienBackstoryDef>
+        <defName>MiliraXian_BackStoryChild_Mingyuan_BS1</defName>
+        <title>Milira Elite Noble</title>
+        <titleShort>Elite Noble</titleShort>
+        <description>[PAWN_nameDef] was born on a long-settled Milira colony world into an elite noble family. Her childhood education covered knowledge, combat, etiquette, administration, and survival.</description>
+        <slot>Childhood</slot>
+        <skillGains>
+            <Shooting>5</Shooting>
+            <Melee>5</Melee>
+            <Construction>5</Construction>
+            <Mining>5</Mining>
+            <Cooking>5</Cooking>
+            <Plants>5</Plants>
+            <Animals>5</Animals>
+            <Crafting>5</Crafting>
+            <Artistic>5</Artistic>
+            <Medicine>5</Medicine>
+            <Social>5</Social>
+            <Intellectual>5</Intellectual>
+        </skillGains>
+        <spawnCategories>
+            <li>MiliraXian_BackStoryChild_Mingyuan_Tag</li>
+        </spawnCategories>
+        <workDisables>
+        </workDisables>
+        <bodyTypeFemale>Female</bodyTypeFemale>
+        <bodyTypeMale>Female</bodyTypeMale>
+    </AlienRace.AlienBackstoryDef>
+
+    <AlienRace.AlienBackstoryDef>
+        <defName>MiliraXian_BackStoryAdult_Mingyuan_BS1</defName>
+        <title>Milira Otherworld Survivor</title>
+        <titleShort>Otherworld Survivor</titleShort>
+        <description>[PAWN_nameDef] survived an otherworld war by burning her material body to release life energy. She returned changed, calm in daily life but relentless in battle.</description>
+        <slot>Adulthood</slot>
+        <skillGains>
+            <Shooting>30</Shooting>
+            <Melee>30</Melee>
+            <Construction>10</Construction>
+            <Mining>10</Mining>
+            <Cooking>10</Cooking>
+            <Plants>10</Plants>
+            <Animals>10</Animals>
+            <Crafting>10</Crafting>
+            <Artistic>10</Artistic>
+            <Medicine>10</Medicine>
+            <Social>10</Social>
+            <Intellectual>10</Intellectual>
+        </skillGains>
+        <spawnCategories>
+            <li>MiliraXian_BackStoryAdult_Mingyuan_Tag</li>
+        </spawnCategories>
+        <disallowedTraitsChance>
+        </disallowedTraitsChance>
+        <possessions>
+        </possessions>
+        <bodyTypeFemale>Female</bodyTypeFemale>
+        <bodyTypeMale>Female</bodyTypeMale>
+    </AlienRace.AlienBackstoryDef>
+
+</Defs>

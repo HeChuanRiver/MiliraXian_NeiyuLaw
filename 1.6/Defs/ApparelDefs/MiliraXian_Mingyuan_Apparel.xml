@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
+        <defName>MX_Mingyuan_InfernoArmor</defName>
+        <label>Molten Inferno Armor</label>
+        <description>Mingyuan's full-coverage inferno armor. Texture paths temporarily reuse Neiyu assets.</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <!-- TODO: Replace with MiliraXianMingyuan/Apparel/InfernoArmor. -->
+            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
+        </graphicData>
+        <statBases>
+            <Mass>2.0</Mass>
+            <MarketValue>18000</MarketValue>
+            <MaxHitPoints>40000</MaxHitPoints>
+            <WorkToMake>600000</WorkToMake>
+            <ArmorRating_Sharp>4.0</ArmorRating_Sharp>
+            <ArmorRating_Blunt>4.0</ArmorRating_Blunt>
+            <ArmorRating_Heat>4.0</ArmorRating_Heat>
+            <Insulation_Cold>1000</Insulation_Cold>
+            <Insulation_Heat>1000</Insulation_Heat>
+            <Flammability>0</Flammability>
+            <DeteriorationRate>0</DeteriorationRate>
+        </statBases>
+        <apparel>
+            <useWornGraphicMask>true</useWornGraphicMask>
+            <developmentalStageFilter>Adult</developmentalStageFilter>
+            <bodyPartGroups Inherit="False">
+                <li>Torso</li>
+                <li>Legs</li>
+                <li>Arms</li>
+                <li>Neck</li>
+                <li>Shoulders</li>
+                <li>Feet</li>
+                <li>Hands</li>
+                <li>Milira_Wings</li>
+            </bodyPartGroups>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
+            <tags Inherit="False">
+                <li>MX_MingyuanArmor</li>
+            </tags>
+            <layers Inherit="False">
+                <li>Shell</li>
+            </layers>
+            <shellRenderedBehindHead>true</shellRenderedBehindHead>
+        </apparel>
+        <tickerType>Normal</tickerType>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+        <equippedStatOffsets>
+            <CarryingCapacity>+100</CarryingCapacity>
+            <MeleeDodgeChance>20.0</MeleeDodgeChance>
+            <MoveSpeed>1.00</MoveSpeed>
+        </equippedStatOffsets>
+    </ThingDef>
+
+    <ThingDef ParentName="Milira_OverheadBase">
+        <defName>MX_Mingyuan_BurningFeatherCrown</defName>
+        <label>Turbid Burning Feather Crown</label>
+        <description>Mingyuan's feather crown. Texture paths temporarily reuse Neiyu assets.</description>
+        <smeltable>false</smeltable>
+        <burnableByRecipe>false</burnableByRecipe>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <!-- TODO: Replace with MiliraXianMingyuan/Apparel/BurningFeatherCrown. -->
+            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>1.0</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+
+        <statBases>
+            <Mass>0.5</Mass>
+            <MarketValue>12000</MarketValue>
+            <MaxHitPoints>40000</MaxHitPoints>
+            <Flammability>0</Flammability>
+            <DeteriorationRate>0</DeteriorationRate>
+            <Beauty>2</Beauty>
+            <EquipDelay>0.5</EquipDelay>
+            <WorkToMake>120000</WorkToMake>
+            <ArmorRating_Sharp>4.0</ArmorRating_Sharp>
+            <ArmorRating_Blunt>4.0</ArmorRating_Blunt>
+            <ArmorRating_Heat>4.0</ArmorRating_Heat>
+        </statBases>
+
+        <apparel>
+            <useWornGraphicMask>false</useWornGraphicMask>
+            <developmentalStageFilter>Adult</developmentalStageFilter>
+            <bodyPartGroups Inherit="False">
+                <li>UpperHead</li>
+            </bodyPartGroups>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+            <tags Inherit="False">
+                <li>MX_MingyuanCrown</li>
+            </tags>
+            <layers Inherit="False">
+                <li>Overhead</li>
+            </layers>
+        </apparel>
+
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+        <equippedStatOffsets>
+            <MeleeDodgeChance>20.0</MeleeDodgeChance>
+        </equippedStatOffsets>
+    </ThingDef>
+
+</Defs>

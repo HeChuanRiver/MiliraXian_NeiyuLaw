@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <TraitDef>
+        <defName>MX_Mingyuan_Trait</defName>
+        <commonality>0.000001</commonality>
+        <degreeDatas>
+            <li>
+                <label>Extradimensional Burner</label>
+                <description>Mingyuan's independent psychic power. She burns her material body to accelerate life energy release.</description>
+                <statOffsets>
+                </statOffsets>
+                <statFactors>
+                </statFactors>
+            </li>
+        </degreeDatas>
+    </TraitDef>
+
+</Defs>

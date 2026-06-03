@@ -42,4 +42,18 @@
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>
+
+    <FacialAnimation.LidTypeDef>
+        <defName>Milira_Lid_Mingyuan</defName>
+        <texPath>Things/Pawn/Milira/Lids/NormalD</texPath>
+        <raceName>Milira_Race</raceName>
+        <shader>Map/Transparent</shader>
+        <enableUnisexTexPath>True</enableUnisexTexPath>
+        <probability>0</probability>
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Mingyuan</forNPC>
+            </li>
+        </modExtensions>
+    </FacialAnimation.LidTypeDef>
 </Defs>

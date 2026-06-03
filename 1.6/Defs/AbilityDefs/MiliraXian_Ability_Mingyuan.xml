@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <AbilityCategoryDef>
+        <defName>MX_MingyuanSkill</defName>
+        <label>Mingyuan</label>
+        <displayOrder>3100</displayOrder>
+    </AbilityCategoryDef>
+
+    <AbilityDef>
+        <defName>MX_Mingyuan_AscendantFlameDash</defName>
+        <label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</label>
+        <description>Dash up to 150 cells through terrain, burning hostile pawns on the path.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
+        <category>MX_MingyuanSkill</category>
+        <displayOrder>100</displayOrder>
+        <cooldownTicksRange>180</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>150</range>
+            <warmupTime>0</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAscendantFlameDash">
+                <maxDistance>150</maxDistance>
+                <pathDamage>10</pathDamage>
+                <lifeBurnLayers>100</lifeBurnLayers>
+                <selfLifeBurnLayers>30</selfLifeBurnLayers>
+                <stunTicks>180</stunTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Mingyuan_InstantCombustion</defName>
+        <label>&lt;color=#FFD37A&gt;Instant Combustion&lt;/color&gt;</label>
+        <description>Burn the eyes and brain of hostile pawns within 30 cells, double Life Burn layers, and stun them.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_MingyuanSkill</category>
+        <displayOrder>110</displayOrder>
+        <cooldownTicksRange>45000</cooldownTicksRange>
+        <targetRequired>false</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>false</targetable>
+            <range>30</range>
+            <warmupTime>3</warmupTime>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanInstantCombustion">
+                <radius>30</radius>
+                <partDamage>10</partDamage>
+                <stunTicks>720</stunTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Mingyuan_BurningPillar</defName>
+        <label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</label>
+        <description>Create a long-lasting pillar of fire that burns hostile pawns and deconstructs buildings.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
+        <category>MX_MingyuanSkill</category>
+        <displayOrder>120</displayOrder>
+        <cooldownTicksRange>60000</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>50</range>
+            <warmupTime>5</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>true</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanBurningPillar">
+                <fieldDef>MX_Mingyuan_BurningPillarField</fieldDef>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Mingyuan_TimeBurn</defName>
+        <label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</label>
+        <description>Stop a pawn's ticks for 24 hours or deconstruct a targeted building.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_MingyuanSkill</category>
+        <displayOrder>130</displayOrder>
+        <cooldownTicksRange>120000</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <hostile>true</hostile>
+        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>40</range>
+            <warmupTime>8</warmupTime>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetLocations>false</canTargetLocations>
+                <canTargetBuildings>true</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanTimeBurn">
+                <durationTicks>60000</durationTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_Mingyuan_AshesOfSelf</defName>
+        <label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</label>
+        <description>Spend shield energy or blood to gain Self Burn and create a 5x5 burning field.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
+        <category>MX_MingyuanSkill</category>
+        <displayOrder>140</displayOrder>
+        <cooldownTicksRange>900</cooldownTicksRange>
+        <targetRequired>false</targetRequired>
+        <hostile>false</hostile>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>false</targetable>
+            <range>0</range>
+            <warmupTime>0.5</warmupTime>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAshesOfSelf">
+                <fieldDef>MX_Mingyuan_AshesField</fieldDef>
+                <selfBurnLayers>100</selfBurnLayers>
+                <shieldEnergyCost>40</shieldEnergyCost>
+                <healthCostFraction>0.2</healthCostFraction>
+                <fieldDurationTicks>900</fieldDurationTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+</Defs>

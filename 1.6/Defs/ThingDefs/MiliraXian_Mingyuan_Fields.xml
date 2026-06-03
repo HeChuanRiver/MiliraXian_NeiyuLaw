@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <ThingDef>
+        <defName>MX_Mingyuan_BurningPillarField</defName>
+        <label>Mingyuan burning pillar field</label>
+        <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanBurningPillarField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(1.00,0.28,0.08,0.55)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>30</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
+                <radius>15</radius>
+                <durationTicks>10000</durationTicks>
+                <pulseIntervalTicks>15</pulseIntervalTicks>
+                <damageAmount>100</damageAmount>
+                <armorPenetration>999</armorPenetration>
+                <lifeBurnLayers>100</lifeBurnLayers>
+                <destroyBuildings>true</destroyBuildings>
+                <destroyAnimals>true</destroyAnimals>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_Mingyuan_AshesField</defName>
+        <label>Mingyuan ashes field</label>
+        <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanAshesField</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <altitudeLayer>MoteLow</altitudeLayer>
+        <graphicData>
+            <graphicClass>Graphic_Single</graphicClass>
+            <shaderType>MoteGlowDistorted</shaderType>
+            <shaderParameters>
+                <_DistortionTex>/Other/Ripples</_DistortionTex>
+            </shaderParameters>
+            <color>(1.00,0.55,0.18,0.45)</color>
+            <texPath>Things/Mote/PsycastCast</texPath>
+            <drawSize>5</drawSize>
+        </graphicData>
+        <drawOffscreen>true</drawOffscreen>
+        <useHitPoints>false</useHitPoints>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
+                <radius>2.4</radius>
+                <durationTicks>900</durationTicks>
+                <pulseIntervalTicks>30</pulseIntervalTicks>
+                <damageAmount>20</damageAmount>
+                <armorPenetration>999</armorPenetration>
+                <lifeBurnLayers>20</lifeBurnLayers>
+                <scalesWithSelfBurn>true</scalesWithSelfBurn>
+                <selfBurnLifeBurnPer100>20</selfBurnLifeBurnPer100>
+                <selfBurnDamagePerLayer>0.01</selfBurnDamagePerLayer>
+            </li>
+        </comps>
+    </ThingDef>
+
+</Defs>

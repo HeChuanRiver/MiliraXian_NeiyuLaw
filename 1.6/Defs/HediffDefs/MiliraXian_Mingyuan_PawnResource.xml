@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_LifeBurn</defName>
+        <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
+        <description>Hostile burn inflicted by Mingyuan. It drains needs and age, deals true damage, weakens stats, and spreads on death.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <maxSeverity>999999</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanLifeBurn">
+                <tickInterval>120</tickInterval>
+                <baseDamage>2</baseDamage>
+                <damagePer100Layers>1</damagePer100Layers>
+                <needDrainPer100Layers>0.01</needDrainPer100Layers>
+                <ageTicksPerLayer>60</ageTicksPerLayer>
+                <transferRadius>30</transferRadius>
+                <transferFraction>0.5</transferFraction>
+                <executeHealthScaleMultiplier>100</executeHealthScaleMultiplier>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_SelfBurn</defName>
+        <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
+        <description>Beneficial burn counter. It boosts damage, movement, attack speed, work speed, shield regeneration, and Life Burn stacking.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <maxSeverity>999999</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanSelfBurn">
+                <decayIntervalTicks>120</decayIntervalTicks>
+                <decayLayers>10</decayLayers>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_BurningBody</defName>
+        <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
+        <description>Mingyuan's otherworld-forged body: extreme part health, consciousness, heat and blast conversion, counterburn, repair, and short invulnerability after taking damage.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0</minSeverity>
+                <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>1.0</offset>
+                    </li>
+                </capMods>
+                <disablesNeeds>
+                    <li>Food</li>
+                    <li>Rest</li>
+                    <li>Joy</li>
+                    <li>Beauty</li>
+                    <li>Comfort</li>
+                    <li>Indoors</li>
+                    <li>Outdoors</li>
+                    <li>RoomSize</li>
+                </disablesNeeds>
+            </li>
+        </stages>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanBurningBody">
+                <restoreIntervalTicks>1800</restoreIntervalTicks>
+                <invulnerableTicks>90</invulnerableTicks>
+                <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
+                <selfBurnOnHit>2</selfBurnOnHit>
+                <heatShieldEnergyFactor>0.25</heatShieldEnergyFactor>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
+        <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
+        <description>Flame shield with 200 energy. It absorbs small, large, and lethal hits, regenerates, rebuilds after breaking, and clears hostile control states on hit.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanProtectiveFlameShield">
+                <maxEnergy>200</maxEnergy>
+                <regenPerSecond>2</regenPerSecond>
+                <lowIgnoreDamage>20</lowIgnoreDamage>
+                <highIgnoreDamage>100</highIgnoreDamage>
+                <breakRecoverTicks>480</breakRecoverTicks>
+                <hitEnergyCost>1</hitEnergyCost>
+                <selfBurnNoCostThreshold>300</selfBurnNoCostThreshold>
+                <selfBurnOnNoCostHit>10</selfBurnOnNoCostHit>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_RebirthFlame</defName>
+        <label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</label>
+        <description>Death hook that detonates, resurrects Mingyuan, and locks her in Eternal Burning for 30 seconds.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.36, 0.24)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanRebirthFlame"/>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_EternalBurning</defName>
+        <label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</label>
+        <description>Temporary rebirth lock. Damage and ticking are blocked until the GameComponent removes it.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.00, 0.18, 0.12)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_Mingyuan_TimeBurnFrozen</defName>
+        <label>&lt;color=#C95CFF&gt;Time Burn Frozen&lt;/color&gt;</label>
+        <description>Marker hediff used by Time Burn while a pawn's ticks are stopped.</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.79, 0.36, 1.00)</defaultLabelColor>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+    </HediffDef>
+
+</Defs>

@@ -15,4 +15,12 @@
         <gender>None</gender>
         <randomChosen>false</randomChosen>
     </HeadTypeDef>
+
+    <!-- Mingyuan: use Neiyu head texture temporarily. -->
+    <HeadTypeDef ParentName="AverageBase">
+        <defName>MiliraMingyuanHead</defName>
+        <graphicPath>MiliraXianNeiyu/PawnNeiyu/Head/MiliraHeadNeiyu</graphicPath>
+        <gender>None</gender>
+        <randomChosen>false</randomChosen>
+    </HeadTypeDef>
 </Defs>

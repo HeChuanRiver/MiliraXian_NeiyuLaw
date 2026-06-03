@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- 明渊 -->
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Mingyuan</defName>
+        <label>明渊</label>
+        <fixedGender>Female</fixedGender>
+        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <xenotypeSet Inherit="False">
+            <xenotypeChances>
+                <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
+            </xenotypeChances>
+        </xenotypeSet>
+        <combatPower>0</combatPower>
+        <itemQuality>Excellent</itemQuality>
+        <isFighter>true</isFighter>
+        <factionLeader>false</factionLeader>
+
+        <apparelMoney>
+            <min>99999</min>
+            <max>99999</max>
+        </apparelMoney>
+
+        <apparelTags Inherit="False">
+            <li>MX_MingyuanArmor</li>
+            <li>MX_MingyuanCrown</li>
+        </apparelTags>
+
+        <specificApparelRequirements Inherit="False">
+        </specificApparelRequirements>
+
+        <apparelRequired Inherit="False">
+            <li>MX_Mingyuan_InfernoArmor</li>
+            <li>MX_Mingyuan_BurningFeatherCrown</li>
+        </apparelRequired>
+
+        <apparelDisallowTags Inherit="False">
+        </apparelDisallowTags>
+        <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
+
+        <weaponTags Inherit="False">
+            <!-- TODO: If Mingyuan needs both weapons at once, add a dedicated spawn/equipment extension. -->
+            <li>MX_Mingyuan_CinderSword</li>
+            <li>MX_Mingyuan_RainbowBow</li>
+        </weaponTags>
+
+        <weaponMoney>
+            <min>99999</min>
+            <max>99999</max>
+        </weaponMoney>
+
+        <gearHealthRange Inherit="False">
+            <min>1</min>
+            <max>1</max>
+        </gearHealthRange>
+        <forceNormalGearQuality>false</forceNormalGearQuality>
+        <minApparelQuality>Excellent</minApparelQuality>
+        <maxApparelQuality>Excellent</maxApparelQuality>
+
+        <backstoryFiltersOverride>
+            <li>
+                <categoriesChildhood>
+                    <li>MiliraXian_BackStoryChild_Mingyuan_Tag</li>
+                </categoriesChildhood>
+                <categoriesAdulthood>
+                    <li>MiliraXian_BackStoryAdult_Mingyuan_Tag</li>
+                </categoriesAdulthood>
+            </li>
+        </backstoryFiltersOverride>
+
+        <requiredWorkTags>
+            <li>Intellectual</li>
+        </requiredWorkTags>
+
+        <disallowedTraits>
+            <li>BodyPurist</li>
+        </disallowedTraits>
+
+        <disallowedTraitsWithDegree>
+            <PsychicSensitivity>-2</PsychicSensitivity>
+        </disallowedTraitsWithDegree>
+
+        <forcedHairColor>(255,225,150)</forcedHairColor>
+
+        <abilities>
+            <li>MX_Mingyuan_AscendantFlameDash</li>
+            <li>MX_Mingyuan_InstantCombustion</li>
+            <li>MX_Mingyuan_BurningPillar</li>
+            <li>MX_Mingyuan_TimeBurn</li>
+            <li>MX_Mingyuan_AshesOfSelf</li>
+        </abilities>
+
+        <modExtensions>
+            <li Class="AriandelLibrary.FixedIdentityExtension">
+                <firstNameKey>MX_Name_Mingyuan_First</firstNameKey>
+                <lastNameKey>MX_Name_Mingyuan_Last</lastNameKey>
+                <nickNameKey>MX_Name_Mingyuan_Nick</nickNameKey>
+
+                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Mingyuan_BS1</childhoodBackstoryDef>
+                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Mingyuan_BS1</adulthoodBackstoryDef>
+
+                <forcedAgeYears>180</forcedAgeYears>
+                <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
+
+                <!-- Uses Neiyu head texture temporarily through MiliraMingyuanHead. -->
+                <forcedHeadTypeDef>MiliraMingyuanHead</forcedHeadTypeDef>
+
+                <disableRandomTraits>true</disableRandomTraits>
+                <extraForcedTraits>
+                    <li><def>MX_Mingyuan_Trait</def></li>
+                    <li>
+                        <def>Beauty</def>
+                        <degree>2</degree>
+                    </li>
+                </extraForcedTraits>
+
+                <extraForcedHediffs>
+                    <li>
+                        <def>MX_Mingyuan_BurningBody</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_Mingyuan_RebirthFlame</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                    <li>
+                        <def>MX_Mingyuan_ProtectiveFlameShield</def>
+                        <severity>1</severity>
+                        <overwriteIfExists>true</overwriteIfExists>
+                    </li>
+                </extraForcedHediffs>
+            </li>
+
+            <li Class="AriandelLibrary.NPCKindTag">
+                <npcTag>Mingyuan</npcTag>
+            </li>
+
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <uniqueID>Mingyuan</uniqueID>
+                <tabDef>MI_Milira_Tab</tabDef>
+                <!-- TODO: Replace with MiliraXianMingyuan/Icon/Mingyuan after portrait art is ready. -->
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+                <labelKey>SpecialPawnMingyuan.label</labelKey>
+                <descKey>SpecialPawnMingyuan.desc</descKey>
+                <order>15</order>
+            </li>
+
+            <li Class="AriandelLibrary.AL_Kill_Manager_Extension" />
+
+            <li Class="AriandelLibrary.AL_RefuseMentalBreak_Extension">
+                <blockMentalBreak>true</blockMentalBreak>
+            </li>
+
+            <li Class="AriandelLibrary.AL_FloatMenuBlocker_Extension">
+                <blockRescue>true</blockRescue>
+                <blockCapture>true</blockCapture>
+                <blockArrest>true</blockArrest>
+            </li>
+
+            <li Class="AriandelLibrary.AL_AzzyPregnancy_Extension">
+                <replaceWithKind>Milira_Colonist</replaceWithKind>
+            </li>
+
+            <li Class="AriandelLibrary.AL_SubcoreScannerBlocker_Extension" />
+
+            <li Class="AriandelLibrary.AL_SurgeryBlocker_Extension">
+                <blockLowTech>true</blockLowTech>
+                <blockHarvest>true</blockHarvest>
+            </li>
+
+            <li Class="AriandelLibrary.AL_AgeFreeze_Extension">
+                <freezeBiologicalAge>true</freezeBiologicalAge>
+            </li>
+
+            <li Class="AriandelLibrary.AL_TraitLock_Extension">
+                <requiredTraits>
+                    <li>MX_Mingyuan_Trait</li>
+                </requiredTraits>
+            </li>
+
+            <li Class="AriandelLibrary.Anomaly.AL_RitualRoleRestriction_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+            <li Class="AriandelLibrary.Anomaly.AL_ObeliskDuplicationBlocker_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+            <li Class="AriandelLibrary.Anomaly.AL_FleshbeastReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+            <li Class="AriandelLibrary.Anomaly.AL_PsychicSlaughterReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
+
+            <li Class="AriandelLibrary.rjw.menstruation.AL_RJW_Menstruation_Pregnancy_Extension" MayRequire="rjw.menstruation">
+                <replaceWithKind>Milira_Colonist</replaceWithKind>
+            </li>
+        </modExtensions>
+
+    </PawnKindDef>
+
+</Defs>

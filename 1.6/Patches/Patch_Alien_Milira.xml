@@ -148,4 +148,54 @@
             </Not>
         </value>
     </Operation>
+
+    <!-- 明渊部分 -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira halo']/conditions</xpath>
+        <value>
+            <Not>
+                <Or>
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                    </Backstory>
+                </Or>
+            </Not>
+        </value>
+    </Operation>
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira ahoge']/conditions</xpath>
+        <value>
+            <Not>
+                <Or>
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                    </Backstory>
+                </Or>
+            </Not>
+        </value>
+    </Operation>
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira hair']/conditions</xpath>
+        <value>
+            <Not>
+                <Or>
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                    </Backstory>
+                </Or>
+            </Not>
+        </value>
+    </Operation>
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira hair BG']/conditions</xpath>
+        <value>
+            <Not>
+                <Or>
+                    <Backstory>
+                        <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                    </Backstory>
+                </Or>
+            </Not>
+        </value>
+    </Operation>
 </Patch>
