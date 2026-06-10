@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_LifeBurnMark</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+      <color>(1.00, 0.88, 0.54, 0.70)</color>
+      <drawSize>(1.42, 1.42)</drawSize>
+      <shaderParameters>
+        <_Interval>0.72</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.12</fadeInTime>
+      <solidTime>999999</solidTime>
+      <fadeOutTime>0.22</fadeOutTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_LifeBurnBurst</defName>
+    <label>Mote</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnBurst</texPath>
+      <color>(1.00, 0.55, 0.24, 0.96)</color>
+      <drawSize>(3.35, 3.35)</drawSize>
+      <shaderParameters>
+        <_Interval>0.06</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <solidTime>0.18</solidTime>
+      <fadeOutTime>0.36</fadeOutTime>
+      <growthRate>1.6</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_LifeBurnTransferTrail</defName>
+    <label>Mote</label>
+    <thingClass>MiliraXian.Characters.QingHe.Mote_QHCurvedDistortionTrail</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlowDistorted</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnTransferLine</texPath>
+      <color>(1.00, 0.66, 0.30, 1.00)</color>
+      <drawSize>(1.18, 1.18)</drawSize>
+      <shaderParameters>
+        <_DistortionTex>/Other/Ripples</_DistortionTex>
+        <_distortionIntensity>0.08</_distortionIntensity>
+        <_distortionScale>0.10</_distortionScale>
+        <_wordSpaceDistortionToggle>1</_wordSpaceDistortionToggle>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.00</fadeInTime>
+      <solidTime>1.0</solidTime>
+      <fadeOutTime>0.20</fadeOutTime>
+    </mote>
+  </ThingDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_Mingyuan_Fleck_LifeBurnTransferLine</defName>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.20</solidTime>
+    <fadeOutTime>0.12</fadeOutTime>
+    <graphicData>
+      <graphicClass>Graphic_Fleck</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnTransferLine</texPath>
+      <color>(1.00, 0.66, 0.30, 1.00)</color>
+      <drawSize>(1.18, 1.18)</drawSize>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>MX_Mingyuan_Fleck_LifeBurnTransferDistort</defName>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <fadeInTime>0.00</fadeInTime>
+    <solidTime>0.20</solidTime>
+    <fadeOutTime>0.16</fadeOutTime>
+    <graphicData>
+      <graphicClass>Graphic_Fleck</graphicClass>
+      <shaderType>MoteLargeDistortionWave</shaderType>
+      <texPath>Things/Mote/Black</texPath>
+      <color>(1.00, 1.00, 1.00, 1.00)</color>
+      <drawSize>(1.0, 1.0)</drawSize>
+      <shaderParameters>
+        <_DistortionTex>/Things/Mote/PsychicDistortionCurrents</_DistortionTex>
+        <_NoiseTex>/Things/Mote/PsycastNoise</_NoiseTex>
+        <_distortionIntensity>0.05</_distortionIntensity>
+        <_brightnessMultiplier>1.25</_brightnessMultiplier>
+        <_noiseIntensity>0.85</_noiseIntensity>
+        <_ageToNoiseRatio>7.5</_ageToNoiseRatio>
+      </shaderParameters>
+    </graphicData>
+  </FleckDef>
+
+</Defs>
