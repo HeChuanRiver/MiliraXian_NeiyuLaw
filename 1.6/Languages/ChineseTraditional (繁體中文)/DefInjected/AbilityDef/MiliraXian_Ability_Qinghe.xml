@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QingHe_DebugMaxTempest.label>最大激流</MX_QingHe_DebugMaxTempest.label>
+  <MX_QingHe_DebugMaxTempest.description>立即獲得最大激流。</MX_QingHe_DebugMaxTempest.description>
+  <MX_QingHe_DebugMaxElegance.label>最大雅樂</MX_QingHe_DebugMaxElegance.label>
+  <MX_QingHe_DebugMaxElegance.description>立即獲得最大雅樂。</MX_QingHe_DebugMaxElegance.description>
+  <MX_Qinghe_SpringFlow.label>湧泉</MX_Qinghe_SpringFlow.label>
+  <MX_Qinghe_SpringFlow.description>在目標地點創造一股清泉，對6格範圍內的友方目標附加近戰傷害提升、遠程傷害提升、承受傷害降低和減輕疼痛的效果。\n該技能的標示效果可被雅樂強化。\n需要持續引導，引導期間持續積累激流，泉水持續15秒。</MX_Qinghe_SpringFlow.description>
+  <MX_Qinghe_AquaMirror.label>水鏡</MX_Qinghe_AquaMirror.label>
+  <MX_Qinghe_AquaMirror.description>為目標地點附近4格內的友方目標附上持續10秒的水鏡。水鏡可以抵擋一部分傷害；受到攻擊耗盡或持續時間結束而消失時，會瞬間治療目標，恢復所有非永久傷口和缺失身體部件，並對小範圍內敵方目標造成傷害。\n該技能的標示效果可被雅樂強化。\n水鏡消失時會積累少量激流。</MX_Qinghe_AquaMirror.description>
+  <MX_Qinghe_TempestDrain.label>扼流</MX_Qinghe_TempestDrain.label>
+  <MX_Qinghe_TempestDrain.description>在目標地點引導一個大範圍扼流力場，使進入其中的敵對目標持續積累水循環斷流狀態，附加大量負面效果，並在積累到最大值時立刻死亡。\n該技能的標示效果可被雅樂強化。\n需要至少50點激流；引導時持續消耗激流，直到剩餘不足10點時自動關閉。該技能不可手動打斷。\n目標越靠近力場中心，斷流積累速度越快。</MX_Qinghe_TempestDrain.description>
+  <MX_Qinghe_Elegance_HengZhi.label>橫指</MX_Qinghe_Elegance_HengZhi.label>
+  <MX_Qinghe_Elegance_HengZhi.description>僅琵琶形態可用。對自身周圍敵人造成高額衝擊並擊退，命中目標越多，雅樂增長越快。</MX_Qinghe_Elegance_HengZhi.description>
+  <MX_Qinghe_Elegance_DuanHun.label>斷魂</MX_Qinghe_Elegance_DuanHun.label>
+  <MX_Qinghe_Elegance_DuanHun.description>僅竹笛形態可用。對遠處小範圍施加斷魂音律，造成傷害、眩暈、流血與長時減速，並有低概率直接摧毀大腦。</MX_Qinghe_Elegance_DuanHun.description>
+  <MX_Qinghe_Elegance_YangChun.label>陽春</MX_Qinghe_Elegance_YangChun.label>
+  <MX_Qinghe_Elegance_YangChun.description>僅琴形態可用。完成施法後，由同一施法 Job 末尾追加和聲脈衝：敵方受傷並減速，友方獲得治療和加速增益，同時提升雅樂。</MX_Qinghe_Elegance_YangChun.description>
+</LanguageData>

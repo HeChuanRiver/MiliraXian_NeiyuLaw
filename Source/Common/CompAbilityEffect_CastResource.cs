@@ -27,7 +27,7 @@ namespace MiliraXian.Characters
                 {
                     if (!ResourceTransactionUtility.HasEnough(parent.pawn, req.resourceDef, req.minAmount))
                     {
-                        reason = req.disabledReasonKey?.Translate() ?? "资源不足";
+                        reason = req.disabledReasonKey?.Translate().ToString() ?? "MX_Common_ResourceNotEnough".Translate().ToString();
                         return true;
                     }
                 }

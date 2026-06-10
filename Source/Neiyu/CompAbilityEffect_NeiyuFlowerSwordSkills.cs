@@ -371,7 +371,7 @@ namespace MiliraXian.Characters.Neiyu
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
-                reason = "[Neiyu] Need flower form weapon.";
+                reason = "MX_NL_NeedFlowerForm".Translate().ToString();
                 return true;
             }
 
@@ -408,13 +408,18 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
+                if (IsMechanoid(pawn))
+                {
+                    continue;
+                }
+
                 ApplyBlessToPawn(caster, pawn);
                 affected++;
             }
 
             if (affected <= 0)
             {
-                Messages.Message("[Neiyu] No valid ally in range.", caster, MessageTypeDefOf.RejectInput);
+                Messages.Message("MX_NL_NoValidAllyInRange".Translate(), caster, MessageTypeDefOf.RejectInput);
             }
         }
 
@@ -431,6 +436,11 @@ namespace MiliraXian.Characters.Neiyu
         private void ApplyBlessToPawn(Pawn caster, Pawn pawn)
         {
             if (pawn == null || pawn.health == null)
+            {
+                return;
+            }
+
+            if (IsMechanoid(pawn))
             {
                 return;
             }
@@ -453,6 +463,11 @@ namespace MiliraXian.Characters.Neiyu
             {
                 pawn.needs.mood.thoughts.memories.TryGainMemoryFast(Props.moodThought);
             }
+        }
+
+        private static bool IsMechanoid(Pawn pawn)
+        {
+            return pawn?.RaceProps?.IsMechanoid == true;
         }
     }
 
@@ -490,7 +505,7 @@ namespace MiliraXian.Characters.Neiyu
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
-                reason = "[Neiyu] Need flower form weapon.";
+                reason = "MX_NL_NeedFlowerForm".Translate().ToString();
                 return true;
             }
 
@@ -525,7 +540,7 @@ namespace MiliraXian.Characters.Neiyu
                 ApplyFoodPoisoningSevere(pawn, Props.severeFoodPoisoningSeverity);
                 if (pawn.mindState != null && pawn.mindState.mentalStateHandler != null && Rand.Chance(Props.berserkChance))
                 {
-                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "Neiyu flower toxin", false, false, false, null, false, false, false);
+                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "MX_NL_FlowerToxinMentalStateReason".Translate().ToString(), false, false, false, null, false, false, false);
                 }
 
                 affected++;
@@ -533,7 +548,7 @@ namespace MiliraXian.Characters.Neiyu
 
             if (affected <= 0)
             {
-                Messages.Message("[Neiyu] No hostile target in range.", caster, MessageTypeDefOf.RejectInput);
+                Messages.Message("MX_NL_NoHostileInRange".Translate(), caster, MessageTypeDefOf.RejectInput);
             }
         }
 
@@ -649,13 +664,13 @@ namespace MiliraXian.Characters.Neiyu
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
-                reason = "[Neiyu] Need sword form weapon.";
+                reason = "MX_NL_NeedSwordForm".Translate().ToString();
                 return true;
             }
 
             if (stage != SkyfallStage.None)
             {
-                reason = "[Neiyu] Skyfall is already in progress.";
+                reason = "MX_NL_SkyfallInProgress".Translate().ToString();
                 return true;
             }
 
@@ -670,7 +685,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] Need sword form weapon.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_NeedSwordForm".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }
@@ -679,7 +694,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] Skyfall is already in progress.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_SkyfallInProgress".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }
@@ -1022,7 +1037,7 @@ namespace MiliraXian.Characters.Neiyu
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
-                reason = "[Neiyu] Need sword form weapon.";
+                reason = "MX_NL_NeedSwordForm".Translate().ToString();
                 return true;
             }
 
@@ -1037,7 +1052,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] Need sword form weapon.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_NeedSwordForm".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }
@@ -1047,7 +1062,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] Must target a pawn.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_MustTargetPawn".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }
@@ -1056,7 +1071,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (throwMessages)
                 {
-                    Messages.Message("[Neiyu] Target must be hostile.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_NL_TargetMustBeHostile".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
                 return false;
             }

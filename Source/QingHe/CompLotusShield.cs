@@ -365,13 +365,13 @@ namespace MiliraXian.Characters.QingHe
         public string BuildShieldTooltip()
         {
             string status = InBreak
-                ? "Status: down (" + Mathf.CeilToInt(BreakTicksLeft / 60f) + "s left)"
-                : "Status: active";
+                ? "MX_QH_LotusShieldStatusDown".Translate(Mathf.CeilToInt(BreakTicksLeft / 60f)).ToString()
+                : "MX_QH_LotusShieldStatusActive".Translate().ToString();
 
             return "ShieldPersonalTip".Translate().Resolve() + "\n\n"
                    + status + "\n"
-                   + "Damage per shield point: " + CurrentDamagePerShieldPoint.ToString("F2") + "\n"
-                   + "Shield regen: " + CurrentRegenPerSecond.ToString("F2") + " /s";
+                   + "MX_QH_LotusShieldDamagePerPoint".Translate(CurrentDamagePerShieldPoint.ToString("F2")) + "\n"
+                   + "MX_QH_LotusShieldRegen".Translate(CurrentRegenPerSecond.ToString("F2"));
         }
 
         private FleckDef ResolveAbsorbFleck()

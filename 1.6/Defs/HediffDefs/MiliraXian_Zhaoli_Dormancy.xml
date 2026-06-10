@@ -24,8 +24,9 @@
                 <showRemainingTime>true</showRemainingTime>
             </li>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDormancy">
-                <refreshIntervalTicks>60</refreshIntervalTicks>
-                <dropRestToZero>true</dropRestToZero>
+                <refreshIntervalTicks>1000</refreshIntervalTicks>
+                <dropRestToZero>false</dropRestToZero>
+                <lockedFoodLevelPercentage>0.5</lockedFoodLevelPercentage>
             </li>
         </comps>
     </HediffDef>

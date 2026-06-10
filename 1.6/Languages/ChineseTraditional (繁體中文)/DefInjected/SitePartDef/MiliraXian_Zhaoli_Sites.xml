@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MXZL_ZhaoliHideoutSitePart.label>不存在者藏身處</MXZL_ZhaoliHideoutSitePart.label>
+  <MXZL_ZhaoliHideoutSitePart.description>一處從現實縫隙裡暫時浮出的藏身之所。昭離在那裡等待遠征隊的答覆。</MXZL_ZhaoliHideoutSitePart.description>
+  <MXZL_ZhaoliHideoutSitePart.approachOrderString>前往 {0}</MXZL_ZhaoliHideoutSitePart.approachOrderString>
+  <MXZL_ZhaoliHideoutSitePart.approachingReportString>正在前往 {0}。</MXZL_ZhaoliHideoutSitePart.approachingReportString>
+  <MXZL_ZhaoliHideoutSitePart.arrivedLetter>昭離就在這張地圖中央。她既不會移動，也不會被傷害，但她會記住你在這裡做出的選擇。</MXZL_ZhaoliHideoutSitePart.arrivedLetter>
+</LanguageData>

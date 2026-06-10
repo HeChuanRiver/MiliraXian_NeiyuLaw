@@ -55,20 +55,20 @@ namespace MiliraXian.Characters.Zhaoli
             failureReason = null;
             if (caster == null || target == null || target.health == null || linkComp == null)
             {
-                failureReason = "目标无法建立因果链接。";
+                failureReason = "MX_ZL_LinkTargetInvalid".Translate().ToString();
                 return false;
             }
 
             if (target == caster)
             {
-                failureReason = "定数无法对昭离自己使用。";
+                failureReason = "MX_ZL_DingshuCannotTargetSelf".Translate().ToString();
                 return false;
             }
 
             HediffComp_ZhaoliKarmaLinkTarget targetComp = ZhaoliKarmaUtility.GetLinkTargetComp(target);
             if (targetComp != null && targetComp.Zhaoli != null && targetComp.Zhaoli != caster)
             {
-                failureReason = "目标已经与另一名昭离建立了因果链接。";
+                failureReason = "MX_ZL_LinkTargetAlreadyLinkedOther".Translate().ToString();
                 return false;
             }
 
@@ -79,7 +79,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (linkComp.ActiveLinkCount >= linkComp.PropsLinks.maxLinks)
             {
-                failureReason = "因果链接已达到上限，无法再建立新的链接。";
+                failureReason = "MX_ZL_LinkLimitReached".Translate().ToString();
                 return false;
             }
 
@@ -91,7 +91,7 @@ namespace MiliraXian.Characters.Zhaoli
             failureReason = null;
             if (caster == null || target == null || linkComp == null)
             {
-                failureReason = "鐩爣鏃犳硶寤虹珛鍥犳灉閾炬帴銆?";
+                failureReason = "MX_ZL_LinkTargetInvalid".Translate().ToString();
                 return false;
             }
 
@@ -103,7 +103,7 @@ namespace MiliraXian.Characters.Zhaoli
             GameComponent_ZhaoliKarma karmaComponent = Current.Game?.GetComponent<GameComponent_ZhaoliKarma>();
             if (karmaComponent == null)
             {
-                failureReason = "鐩爣鏃犳硶寤虹珛鍥犳灉閾炬帴銆?";
+                failureReason = "MX_ZL_LinkTargetInvalid".Translate().ToString();
                 return false;
             }
 
@@ -255,7 +255,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("定数无法在袭击状态下使用。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_DingshuCannotUseDuringRaid".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -265,7 +265,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("因果不足，无法施放定数。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaDingshu".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -275,7 +275,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (throwMessages)
                 {
-                    Messages.Message("目标在定数标记期间死亡，无法再次被复活。", corpse, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_DingshuMarkedTargetCannotRevive".Translate(), corpse, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -327,7 +327,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (caster.Faction == Faction.OfPlayer)
                 {
-                    Messages.Message("因果不足，无法施放定数。", caster, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_NotEnoughKarmaDingshu".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return;
@@ -351,13 +351,18 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 if (caster.Faction == Faction.OfPlayer)
                 {
-                    Messages.Message("定数未能完成复活。", corpse, MessageTypeDefOf.RejectInput, historical: false);
+                    Messages.Message("MX_ZL_DingshuReviveFailed".Translate(), corpse, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return;
             }
 
             ZhaoliDingshuUtility.RestorePawnCompletely(targetPawn, out int restoredParts, out int removedHediffs);
+            if (ZhaoliKarmaUtility.IsZhaoli(targetPawn))
+            {
+                ZhaoliRebirthUtility.NotifyApparelResurrected(targetPawn);
+            }
+
             ZhaoliDingshuUtility.ApplyRevivalLock(targetPawn, Props.markDurationTicks);
             if (!ZhaoliDingshuUtility.TryFinalizeRevivalLink(caster, targetPawn, linkComp, out string failureReason) && caster.Faction == Faction.OfPlayer && !failureReason.NullOrEmpty())
             {
@@ -369,13 +374,13 @@ namespace MiliraXian.Characters.Zhaoli
             if (targetPawn.Spawned)
             {
                 FleckMaker.AttachedOverlay(targetPawn, FleckDefOf.FlashHollow, Vector3.zero, Props.overlayScale);
-                MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "定数", 3.65f);
+                MoteMaker.ThrowText(targetPawn.DrawPos, targetPawn.Map, "MX_ZL_DingshuMote".Translate().ToString(), 3.65f);
             }
 
             if (caster.Faction == Faction.OfPlayer)
             {
-                string suffix = restoredParts + removedHediffs > 0 ? "，所有伤病已清除。" : "。";
-                Messages.Message(targetPawn.LabelShortCap + " 已被定数复活" + suffix, targetPawn, MessageTypeDefOf.PositiveEvent);
+                string messageKey = restoredParts + removedHediffs > 0 ? "MX_ZL_DingshuRevivedAndHealed" : "MX_ZL_DingshuRevived";
+                Messages.Message(messageKey.Translate(targetPawn.LabelShortCap), targetPawn, MessageTypeDefOf.PositiveEvent);
             }
         }
     }
@@ -413,7 +418,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override string GetReport()
         {
-            return "施放定数";
+            return "MX_ZL_ReportDingshu".Translate().ToString();
         }
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)

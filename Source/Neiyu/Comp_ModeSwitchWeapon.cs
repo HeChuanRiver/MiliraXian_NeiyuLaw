@@ -14,8 +14,8 @@ namespace MiliraXian.Characters.Neiyu
         public List<string> formLabels;
         public List<string> formIconPaths;
 
-        public string commandLabel = "切换形态";
-        public string commandDesc = "切换为其他形态";
+        public string commandLabel = "MX_ModeSwitch_CommandLabel";
+        public string commandDesc = "MX_ModeSwitch_CommandDesc";
 
         public bool destroyOldWeapon = true;
         public bool requirePrimary = true;
@@ -171,19 +171,28 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             bool onCooldown = Props.cooldownTicks > 0 && Find.TickManager.TicksGame - lastToggleTick < Props.cooldownTicks;
+            bool disabledWhileHunting = IsPrimaryWeaponLockedByHunting(context);
+
+            string commandLabel = ResolveText(Props.commandLabel, "MX_ModeSwitch_CommandLabel");
+            string commandDesc = ResolveText(Props.commandDesc, "MX_ModeSwitch_CommandDesc");
+            string currentFormLabel = GetFormLabel(context.CurrentIndex);
 
             Command_Action cmd = new Command_Action
             {
-                defaultLabel = Props.commandLabel + "：" + GetFormLabel(context.CurrentIndex),
-                defaultDesc = Props.commandDesc + "\n\n当前：" + GetFormLabel(context.CurrentIndex) + "\n点击后选择目标形态。",
+                defaultLabel = "MX_ModeSwitch_CommandLabelWithForm".Translate(commandLabel, currentFormLabel).ToString(),
+                defaultDesc = "MX_ModeSwitch_CommandFullDesc".Translate(commandDesc, currentFormLabel).ToString(),
                 icon = GetFormIcon(previewIndex) ?? GetFormIcon(context.CurrentIndex) ?? TexCommand.Attack,
-                Disabled = onCooldown
+                Disabled = onCooldown || disabledWhileHunting
             };
 
-            if (onCooldown)
+            if (disabledWhileHunting)
+            {
+                cmd.disabledReason = "MX_ModeSwitch_DisabledWhileHunting".Translate().ToString();
+            }
+            else if (onCooldown)
             {
                 int ticksLeft = Props.cooldownTicks - (Find.TickManager.TicksGame - lastToggleTick);
-                cmd.disabledReason = "冷却中：" + (ticksLeft / 60f).ToString("F1") + "s";
+                cmd.disabledReason = "MX_ModeSwitch_Cooldown".Translate((ticksLeft / 60f).ToString("F1")).ToString();
             }
 
             cmd.action = delegate
@@ -225,11 +234,22 @@ namespace MiliraXian.Characters.Neiyu
 
             if (options.Count == 0)
             {
-                Messages.Message("没有可切换的目标形态。", context.Pawn, MessageTypeDefOf.RejectInput, false);
+                Messages.Message("MX_ModeSwitch_NoTargetForm".Translate(), context.Pawn, MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
             Find.WindowStack.Add(new FloatMenu(options));
+        }
+
+        private static string ResolveText(string text, string fallbackKey)
+        {
+            string value = text.NullOrEmpty() ? fallbackKey : text;
+            if (LanguageDatabase.activeLanguage != null
+                && (value.StartsWith("MX_") || value.StartsWith("MiliraXian.")))
+            {
+                return value.Translate().ToString();
+            }
+            return value;
         }
 
         private int GetCurrentFormIndex(Thing sourceThing)
@@ -263,7 +283,7 @@ namespace MiliraXian.Characters.Neiyu
             ThingDef def = Props?.formWeaponDefs != null && index >= 0 && index < Props.formWeaponDefs.Count
                 ? Props.formWeaponDefs[index]
                 : null;
-            return def != null ? def.label.CapitalizeFirst() : "未知";
+            return def != null ? def.label.CapitalizeFirst() : "MX_Common_Unknown".Translate().ToString();
         }
 
         private void EnsureIconsLoaded()
@@ -321,10 +341,16 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            if (IsPrimaryWeaponLockedByHunting(context))
+            {
+                Messages.Message("MX_ModeSwitch_DisabledWhileHunting".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
             ThingDef targetDef = Props.formWeaponDefs[targetIndex];
             if (targetDef == null)
             {
-                Messages.Message("目标形态未配置。", pawn, MessageTypeDefOf.RejectInput, false);
+                Messages.Message("MX_ModeSwitch_TargetFormMissing".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
@@ -332,7 +358,7 @@ namespace MiliraXian.Characters.Neiyu
             ThingWithComps newThing = ThingMaker.MakeThing(targetDef, stuff) as ThingWithComps;
             if (newThing == null)
             {
-                Messages.Message("目标形态不是有效物品：" + targetDef.defName, pawn, MessageTypeDefOf.RejectInput, false);
+                Messages.Message("MX_ModeSwitch_TargetFormInvalidThing".Translate(targetDef.defName), pawn, MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
@@ -349,7 +375,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (pawn.equipment == null)
                 {
-                    Messages.Message("该角色没有装备栏。", pawn, MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_ModeSwitch_NoEquipmentTracker".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
                     newThing.Destroy(DestroyMode.Vanish);
                     return;
                 }
@@ -374,7 +400,7 @@ namespace MiliraXian.Characters.Neiyu
                 ThingOwner inventory = pawn.inventory?.innerContainer;
                 if (inventory == null)
                 {
-                    Messages.Message("该角色没有物品栏。", pawn, MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("MX_ModeSwitch_NoInventoryTracker".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
                     newThing.Destroy(DestroyMode.Vanish);
                     return;
                 }
@@ -395,6 +421,12 @@ namespace MiliraXian.Characters.Neiyu
             {
                 newComp.lastToggleTick = tick;
             }
+        }
+
+        private static bool IsPrimaryWeaponLockedByHunting(SwitchContext context)
+        {
+            return context.Location == HeldLocation.EquipmentPrimary
+                && context.Pawn?.jobs?.curJob?.def == JobDefOf.Hunt;
         }
 
         private static void AddToInventoryOrDrop(Pawn pawn, ThingWithComps thing)
