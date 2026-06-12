@@ -20,13 +20,19 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanLifeBurn">
                 <tickInterval>120</tickInterval>
-                <baseDamage>2</baseDamage>
-                <damagePer100Layers>1</damagePer100Layers>
+                <baseDamage>0.5</baseDamage>
+                <damagePer100Layers>0.25</damagePer100Layers>
                 <needDrainPer100Layers>0.01</needDrainPer100Layers>
                 <ageTicksPerLayer>60</ageTicksPerLayer>
                 <transferRadius>30</transferRadius>
                 <transferFraction>0.5</transferFraction>
-                <executeHealthScaleMultiplier>100</executeHealthScaleMultiplier>
+                <executeHealthScaleMultiplier>10</executeHealthScaleMultiplier>
+                <burstDamageMultiplier>1</burstDamageMultiplier>
+                <burnSelfStackFraction>0.05</burnSelfStackFraction>
+                <decayDelayTicks>1800</decayDelayTicks>
+                <decayFraction>0.1</decayFraction>
+                <removeBelowLayers>0.5</removeBelowLayers>
+                <transferVisualLimit>8</transferVisualLimit>
             </li>
         </comps>
     </HediffDef>

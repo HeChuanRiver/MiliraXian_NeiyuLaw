@@ -69,6 +69,7 @@
     <ItemGroup>
       <Compile Include="Properties\AssemblyInfo.cs" />
       <Compile Include="Source\Common\**\*.cs" />
+      <Compile Include="Source\Mingyuan\**\*.cs" />
       <Compile Include="Source\Neiyu\**\*.cs" />
       <Compile Include="Source\QingHe\**\*.cs" />
       <Compile Include="Source\Zhaoli\**\*.cs" />

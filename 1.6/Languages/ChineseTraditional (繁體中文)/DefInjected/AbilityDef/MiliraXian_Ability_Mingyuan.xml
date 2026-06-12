@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_AscendantFlameDash.label>&lt;color=#FFB25C&gt;升焰疾行&lt;/color&gt;</MX_Mingyuan_AscendantFlameDash.label>
+  <MX_Mingyuan_AscendantFlameDash.description>飛向最多 150 格內的可站立目標格，留下 3 格寬、持續 15 秒的灼痕，並灼燒路徑上的敵對角色。</MX_Mingyuan_AscendantFlameDash.description>
+  <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;瞬時燃燒&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
+  <MX_Mingyuan_InstantCombustion.description>灼燒 30 格內敵對角色的眼睛與大腦，使生命燃燒層數翻倍，並令其眩暈。</MX_Mingyuan_InstantCombustion.description>
+  <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;燃燒火柱&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
+  <MX_Mingyuan_BurningPillar.description>創造一片持續存在的火柱，灼燒敵對角色並拆解建築。</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;時間燃燒&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
+  <MX_Mingyuan_TimeBurn.description>停止一名角色的時間流動 24 小時，或拆解目標建築。</MX_Mingyuan_TimeBurn.description>
+  <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;自身餘燼&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>
+  <MX_Mingyuan_AshesOfSelf.description>消耗護盾能量或血液以獲得自我燃燒，並創造一片 5x5 的燃燒場。</MX_Mingyuan_AshesOfSelf.description>
+</LanguageData>

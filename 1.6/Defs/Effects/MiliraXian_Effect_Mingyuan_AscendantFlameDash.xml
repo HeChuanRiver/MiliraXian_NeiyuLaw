@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef ParentName="PawnFlyerBase">
+    <defName>MX_Mingyuan_AscendantFlameDashFlyer</defName>
+    <label>Mingyuan ascendant flame dash flyer</label>
+    <pawnFlyer>
+      <flightDurationMin>0.10</flightDurationMin>
+      <flightSpeed>160</flightSpeed>
+      <heightFactor>0.85</heightFactor>
+      <progressCurve>
+        <points>
+          <li>(0, 0)</li>
+          <li>(0.18, 0.45)</li>
+          <li>(1, 1)</li>
+        </points>
+      </progressCurve>
+    </pawnFlyer>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_AscendantFlameScorch</defName>
+    <label>Mote</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>MiliraXian.Characters.Mingyuan.Graphic_MingyuanScorchFlicker</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/AscendantFlameScorch</texPath>
+      <drawSize>(1.18, 1.18)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>false</drawOffscreen>
+    <mote>
+      <fadeInTime>0.25</fadeInTime>
+      <solidTime>13.75</solidTime>
+      <fadeOutTime>1.0</fadeOutTime>
+    </mote>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_AscendantFlameDash.label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</MX_Mingyuan_AscendantFlameDash.label>
+  <MX_Mingyuan_AscendantFlameDash.description>Fly up to 150 cells to a standable target cell, leaving a 3-cell-wide burning trail for 15 seconds and burning hostile pawns on the path.</MX_Mingyuan_AscendantFlameDash.description>
+  <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;Instant Combustion&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
+  <MX_Mingyuan_InstantCombustion.description>Burn the eyes and brain of hostile pawns within 30 cells, double Life Burn layers, and stun them.</MX_Mingyuan_InstantCombustion.description>
+  <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
+  <MX_Mingyuan_BurningPillar.description>Create a long-lasting pillar of fire that burns hostile pawns and deconstructs buildings.</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
+  <MX_Mingyuan_TimeBurn.description>Stop a pawn's ticks for 24 hours or deconstruct a targeted building.</MX_Mingyuan_TimeBurn.description>
+  <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>
+  <MX_Mingyuan_AshesOfSelf.description>Spend shield energy or blood to gain Self Burn and create a 5x5 burning field.</MX_Mingyuan_AshesOfSelf.description>
+</LanguageData>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_LifeBurn_TipCurrentLayers>Current layers: {0}</MX_Mingyuan_LifeBurn_TipCurrentLayers>
+  <MX_Mingyuan_LifeBurn_TipExecuteThreshold>Burst threshold: {0}</MX_Mingyuan_LifeBurn_TipExecuteThreshold>
+  <MX_Mingyuan_LifeBurn_TipRemaining>Layers remaining: {0}</MX_Mingyuan_LifeBurn_TipRemaining>
+  <MX_Mingyuan_LifeBurn_TipProgress>Burst progress: {0}</MX_Mingyuan_LifeBurn_TipProgress>
+  <MX_Mingyuan_LifeBurn_TipBurstDamage>Burst hit: {0} true burn damage</MX_Mingyuan_LifeBurn_TipBurstDamage>
+  <MX_Mingyuan_LifeBurn_TipPeriodicDamage>Every 2s: {0} true burn damage</MX_Mingyuan_LifeBurn_TipPeriodicDamage>
+  <MX_Mingyuan_LifeBurn_TipSelfStack>Every 2s: Life Burn self-stack +{0}</MX_Mingyuan_LifeBurn_TipSelfStack>
+  <MX_Mingyuan_LifeBurn_TipDecay>After {0}s without external stacks: -{1} layers every 2s</MX_Mingyuan_LifeBurn_TipDecay>
+  <MX_Mingyuan_LifeBurn_TipDebuffDown>Reduced: move speed, melee hit chance, shooting accuracy, global work speed, melee damage, ranged damage -{0}</MX_Mingyuan_LifeBurn_TipDebuffDown>
+  <MX_Mingyuan_LifeBurn_TipDebuffUp>Increased: melee cooldown, ranged cooldown, incoming damage +{0}</MX_Mingyuan_LifeBurn_TipDebuffUp>
+  <MX_Mingyuan_LifeBurn_TipNeedsAgeGear>Every 2s: needs -{0}, biological age +{1} ticks, equipment durability -{2}</MX_Mingyuan_LifeBurn_TipNeedsAgeGear>
+  <MX_Mingyuan_LifeBurn_TipTransfer>On death: transfers {0} layers to hostile pawns within {1} cells, with up to {2} transfer trails.</MX_Mingyuan_LifeBurn_TipTransfer>
+</LanguageData>

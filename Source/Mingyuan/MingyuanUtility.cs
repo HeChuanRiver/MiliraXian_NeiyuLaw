@@ -60,7 +60,7 @@ namespace MiliraXian.Characters.Mingyuan
             return hediff;
         }
 
-        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers)
+        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true)
         {
             if (target == null || layers <= 0f || target.Dead)
             {
@@ -69,7 +69,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             Hediff hediff = EnsureHediff(target, LifeBurnDef, layers);
             HediffComp_MingyuanLifeBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
-            comp?.SetInstigator(instigator);
+            comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
         }
 
         public static void AddSelfBurn(Pawn pawn, float layers)

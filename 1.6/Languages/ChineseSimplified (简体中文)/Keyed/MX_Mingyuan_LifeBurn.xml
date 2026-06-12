@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_LifeBurn_TipCurrentLayers>当前层数：{0}</MX_Mingyuan_LifeBurn_TipCurrentLayers>
+  <MX_Mingyuan_LifeBurn_TipExecuteThreshold>爆条阈值：{0}</MX_Mingyuan_LifeBurn_TipExecuteThreshold>
+  <MX_Mingyuan_LifeBurn_TipRemaining>距离爆条还需：{0} 层</MX_Mingyuan_LifeBurn_TipRemaining>
+  <MX_Mingyuan_LifeBurn_TipProgress>爆条进度：{0}</MX_Mingyuan_LifeBurn_TipProgress>
+  <MX_Mingyuan_LifeBurn_TipBurstDamage>爆条命中：{0} 点真实灼烧伤害</MX_Mingyuan_LifeBurn_TipBurstDamage>
+  <MX_Mingyuan_LifeBurn_TipPeriodicDamage>每 2 秒：{0} 点真实灼烧伤害</MX_Mingyuan_LifeBurn_TipPeriodicDamage>
+  <MX_Mingyuan_LifeBurn_TipSelfStack>每 2 秒：生命燃烧自增 +{0} 层</MX_Mingyuan_LifeBurn_TipSelfStack>
+  <MX_Mingyuan_LifeBurn_TipDecay>{0} 秒内未受到外部叠层后：每 2 秒衰减 {1} 层数</MX_Mingyuan_LifeBurn_TipDecay>
+  <MX_Mingyuan_LifeBurn_TipDebuffDown>降低：移速、近战命中、射击精度、全局工作速度、近战伤害、远程伤害 -{0}</MX_Mingyuan_LifeBurn_TipDebuffDown>
+  <MX_Mingyuan_LifeBurn_TipDebuffUp>提高：近战冷却、远程冷却、承受伤害 +{0}</MX_Mingyuan_LifeBurn_TipDebuffUp>
+  <MX_Mingyuan_LifeBurn_TipNeedsAgeGear>每 2 秒：需求 -{0}，生物年龄 +{1} tick，装备耐久 -{2}</MX_Mingyuan_LifeBurn_TipNeedsAgeGear>
+  <MX_Mingyuan_LifeBurn_TipTransfer>死亡时：将 {0} 层数转移给 {1} 格内敌对单位，最多显示 {2} 条迁移曲线。</MX_Mingyuan_LifeBurn_TipTransfer>
+</LanguageData>

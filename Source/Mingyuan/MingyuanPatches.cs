@@ -64,6 +64,9 @@ namespace MiliraXian.Characters.Mingyuan
     [HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
     public static class Patch_Mingyuan_OnHitLifeBurn
     {
+        private const float MeleeLifeBurnLayers = 420f;
+        private const float RangedLifeBurnLayers = 140f;
+
         [HarmonyPostfix]
         public static void Postfix(Thing __instance, DamageInfo dinfo, DamageWorker.DamageResult __result)
         {
@@ -84,8 +87,9 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             float step = MingyuanUtility.GetLifeBurnBonusStep(instigator);
-            bool ranged = dinfo.Def?.defName == "Arrow";
-            float layers = ranged ? 2f + step * 2f : 10f + step * 10f;
+            bool ranged = dinfo.Weapon?.IsRangedWeapon == true;
+            float baseLayers = ranged ? RangedLifeBurnLayers : MeleeLifeBurnLayers;
+            float layers = baseLayers * (1f + step);
             MingyuanUtility.AddLifeBurn(target, instigator, layers);
         }
     }
@@ -126,6 +130,24 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
+    internal static class MingyuanLifeBurnPatchUtility
+    {
+        public static float PenaltyFactor(float lifeBurn)
+        {
+            if (lifeBurn <= 0f)
+            {
+                return 1f;
+            }
+
+            return Mathf.Max(0.05f, 1f - (lifeBurn / 100f) * 0.01f);
+        }
+
+        public static HediffComp_MingyuanLifeBurn GetLifeBurnComp(Pawn pawn)
+        {
+            return (pawn?.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.LifeBurnDef) as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
+        }
+    }
+
     [HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
     public static class Patch_Mingyuan_StatEffects
     {
@@ -142,9 +164,13 @@ namespace MiliraXian.Characters.Mingyuan
             if (lifeBurn > 0f)
             {
                 float per100 = lifeBurn / 100f;
-                if (stat == StatDefOf.MoveSpeed || stat == StatDefOf.ShootingAccuracyPawn || stat == StatDefOf.WorkSpeedGlobal || stat == StatDefOf.RangedWeapon_DamageMultiplier)
+                if (stat == StatDefOf.MoveSpeed
+                    || stat == StatDefOf.MeleeHitChance
+                    || stat == StatDefOf.ShootingAccuracyPawn
+                    || stat == StatDefOf.WorkSpeedGlobal
+                    || stat == StatDefOf.RangedWeapon_DamageMultiplier)
                 {
-                    __result *= Mathf.Max(0.05f, 1f - per100 * 0.01f);
+                    __result *= MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn);
                 }
                 else if (stat == StatDefOf.IncomingDamageFactor || stat == StatDefOf.MeleeCooldownFactor || stat == StatDefOf.RangedCooldownFactor)
                 {
@@ -179,6 +205,12 @@ namespace MiliraXian.Characters.Mingyuan
         [HarmonyPostfix]
         public static void Postfix(Pawn attacker, ref float __result)
         {
+            float lifeBurn = MingyuanUtility.GetLifeBurnLayers(attacker);
+            if (lifeBurn > 0f)
+            {
+                __result *= MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn);
+            }
+
             float selfBurn = MingyuanUtility.GetSelfBurnLayers(attacker);
             if (selfBurn > 0f)
             {
@@ -208,11 +240,69 @@ namespace MiliraXian.Characters.Mingyuan
         public static void Postfix(Thing weapon, ref int __result)
         {
             Pawn ownerPawn = MXNeiyuShieldUtility.TryGetEquipmentOwnerPawn(weapon);
+            float lifeBurn = MingyuanUtility.GetLifeBurnLayers(ownerPawn);
+            if (lifeBurn > 0f)
+            {
+                __result = Mathf.Max(1, Mathf.RoundToInt(__result * MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn)));
+            }
+
             float selfBurn = MingyuanUtility.GetSelfBurnLayers(ownerPawn);
             if (selfBurn > 0f)
             {
                 __result = Mathf.Max(1, Mathf.RoundToInt(__result * (1f + selfBurn * 0.01f)));
             }
+        }
+    }
+
+    [StaticConstructorOnStartup]
+    [HarmonyPatch(typeof(PawnRenderer), nameof(PawnRenderer.RenderPawnAt))]
+    public static class Patch_Mingyuan_LifeBurnProgressBar
+    {
+        private static readonly AccessTools.FieldRef<PawnRenderer, Pawn> PawnRef = AccessTools.FieldRefAccess<PawnRenderer, Pawn>("pawn");
+        private static readonly Material BarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(1f, 0.56f, 0.22f, 0.92f));
+        private static readonly Material BarCriticalMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(1f, 0.78f, 0.28f, 0.98f));
+        private static readonly Material BarEmptyMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.16f, 0.04f, 0.025f, 0.82f));
+
+        [HarmonyPostfix]
+        public static void Postfix(PawnRenderer __instance, Vector3 drawLoc, Rot4? rotOverride = null, bool neverAimWeapon = false)
+        {
+            if (__instance == null)
+            {
+                return;
+            }
+
+            Pawn pawn = PawnRef(__instance);
+            if (pawn == null || pawn.Dead || !pawn.Spawned)
+            {
+                return;
+            }
+
+            HediffComp_MingyuanLifeBurn comp = MingyuanLifeBurnPatchUtility.GetLifeBurnComp(pawn);
+            if (comp == null)
+            {
+                return;
+            }
+
+            float layers = comp.CurrentLayers;
+            float threshold = comp.ExecuteThreshold;
+            if (layers <= 0f || threshold <= 0f)
+            {
+                return;
+            }
+
+            float rawProgress = Mathf.Clamp01(layers / threshold);
+            float displayProgress = Mathf.Max(rawProgress, 0.035f);
+            Vector3 center = new Vector3(drawLoc.x, AltitudeLayer.MetaOverlays.AltitudeFor(), drawLoc.z - 0.58f);
+            GenDraw.DrawFillableBar(new GenDraw.FillableBarRequest
+            {
+                center = center,
+                size = new Vector2(0.95f, 0.09f),
+                fillPercent = displayProgress,
+                filledMat = rawProgress >= 0.9f ? BarCriticalMat : BarFilledMat,
+                unfilledMat = BarEmptyMat,
+                margin = 0.012f,
+                rotation = Rot4.North
+            });
         }
     }
 }

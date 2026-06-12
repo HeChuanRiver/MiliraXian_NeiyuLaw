@@ -16,5 +16,13 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static ThingDef MX_Mingyuan_BurningPillarField;
         public static ThingDef MX_Mingyuan_AshesField;
+        public static ThingDef MX_Mingyuan_AscendantFlameDashFlyer;
+        public static ThingDef MX_Mingyuan_Mote_AscendantFlameScorch;
+        public static ThingDef MX_Mingyuan_Mote_LifeBurnMark;
+        public static ThingDef MX_Mingyuan_Mote_LifeBurnBurst;
+        public static ThingDef MX_Mingyuan_Mote_LifeBurnTransferTrail;
+
+        public static FleckDef MX_Mingyuan_Fleck_LifeBurnTransferLine;
+        public static FleckDef MX_Mingyuan_Fleck_LifeBurnTransferDistort;
     }
 }

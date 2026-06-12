@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_CinderSword.label>燼灰</MX_Mingyuan_CinderSword.label>
+  <MX_Mingyuan_CinderSword.description>明淵的長劍。命中時由明淵的全域命中邏輯施加生命燃燒。</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.tools.0.label>燼灰</MX_Mingyuan_CinderSword.tools.0.label>
+  <MX_Mingyuan_RainbowBow.label>長虹</MX_Mingyuan_RainbowBow.label>
+  <MX_Mingyuan_RainbowBow.description>明淵的長弓。遠程命中會透過明淵的全域命中邏輯施加生命燃燒。</MX_Mingyuan_RainbowBow.description>
+  <MX_Bullet_Mingyuan_RainbowArrow.label>長虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
+  <MX_Mingyuan_BurningPillarField.label>明淵燃燒火柱場</MX_Mingyuan_BurningPillarField.label>
+  <MX_Mingyuan_AshesField.label>明淵餘燼場</MX_Mingyuan_AshesField.label>
+  <MX_Mingyuan_InfernoArmor.label>熔獄戰甲</MX_Mingyuan_InfernoArmor.label>
+  <MX_Mingyuan_InfernoArmor.description>明淵的全覆式熔獄戰甲。</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_BurningFeatherCrown.label>濁燃羽冠</MX_Mingyuan_BurningFeatherCrown.label>
+  <MX_Mingyuan_BurningFeatherCrown.description>明淵的羽冠。</MX_Mingyuan_BurningFeatherCrown.description>
+</LanguageData>

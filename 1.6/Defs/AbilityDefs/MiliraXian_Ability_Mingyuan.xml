@@ -10,7 +10,7 @@
     <AbilityDef>
         <defName>MX_Mingyuan_AscendantFlameDash</defName>
         <label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</label>
-        <description>Dash up to 150 cells through terrain, burning hostile pawns on the path.</description>
+        <description>Fly up to 150 cells to a standable target cell, leaving a 3-cell-wide burning trail for 15 seconds and burning hostile pawns on the path.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>100</displayOrder>
@@ -24,7 +24,10 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
             <range>150</range>
+            <requireLineOfSight>false</requireLineOfSight>
             <warmupTime>0</warmupTime>
+            <soundCast>FireSpew_Resolve</soundCast>
+            <soundLanding>Longjump_Land</soundLanding>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -36,10 +39,15 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAscendantFlameDash">
                 <maxDistance>150</maxDistance>
+                <pathWidth>3</pathWidth>
                 <pathDamage>10</pathDamage>
                 <lifeBurnLayers>100</lifeBurnLayers>
                 <selfLifeBurnLayers>30</selfLifeBurnLayers>
                 <stunTicks>180</stunTicks>
+                <flyerDef>MX_Mingyuan_AscendantFlameDashFlyer</flyerDef>
+                <scorchMoteDef>MX_Mingyuan_Mote_AscendantFlameScorch</scorchMoteDef>
+                <scorchMoteScale>1</scorchMoteScale>
+                <maxScorchMotes>225</maxScorchMotes>
             </li>
         </comps>
     </AbilityDef>

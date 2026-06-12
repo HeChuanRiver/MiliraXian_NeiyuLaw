@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_LifeBurn.label>&lt;color=#FF7A45&gt;生命燃燒&lt;/color&gt;</MX_Mingyuan_LifeBurn.label>
+  <MX_Mingyuan_LifeBurn.description>明淵施加的敵對燃燒。它會消耗需求、加速年齡增長、造成真實傷害並削弱屬性；爆條時造成一次大量灼燒傷害，若目標死亡則向周圍敵人擴散。</MX_Mingyuan_LifeBurn.description>
+  <MX_Mingyuan_LifeBurn.stages.0.label>&lt;color=#FF7A45&gt;生命燃燒&lt;/color&gt;</MX_Mingyuan_LifeBurn.stages.0.label>
+  <MX_Mingyuan_SelfBurn.label>&lt;color=#FFB25C&gt;自我燃燒&lt;/color&gt;</MX_Mingyuan_SelfBurn.label>
+  <MX_Mingyuan_SelfBurn.description>明淵主動燃燒自身獲得的增益計數。它提升傷害、移動、攻擊速度、工作速度、護盾恢復與生命燃燒疊層效率。</MX_Mingyuan_SelfBurn.description>
+  <MX_Mingyuan_SelfBurn.stages.0.label>&lt;color=#FFB25C&gt;自我燃燒&lt;/color&gt;</MX_Mingyuan_SelfBurn.stages.0.label>
+  <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;燃燒之軀&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
+  <MX_Mingyuan_BurningBody.description>明淵在異空間戰鬥中形成的軀體狀態：極高部位生命、意識提升、熱能與爆炸轉化、受擊反燃、週期修復，以及受傷後的短暫無敵。</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.stages.0.label>&lt;color=#FFD37A&gt;燃燒之軀&lt;/color&gt;</MX_Mingyuan_BurningBody.stages.0.label>
+  <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;護身火盾&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
+  <MX_Mingyuan_ProtectiveFlameShield.description>擁有 200 點能量的火焰護盾。它會吸收過小、過大與致命傷害，自動恢復，破碎後重組，並在受擊時清除部分敵對控制狀態。</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;重生之焰&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
+  <MX_Mingyuan_RebirthFlame.description>明淵的死亡重生邏輯。死亡時引發爆炸，隨後復活並進入 30 秒永恆燃燒狀態。</MX_Mingyuan_RebirthFlame.description>
+  <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;永恆燃燒&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>
+  <MX_Mingyuan_EternalBurning.description>重生之焰觸發後的臨時鎖定狀態。期間阻止傷害與 tick，直到重生流程結束。</MX_Mingyuan_EternalBurning.description>
+  <MX_Mingyuan_TimeBurnFrozen.label>&lt;color=#C95CFF&gt;時間燃燒凍結&lt;/color&gt;</MX_Mingyuan_TimeBurnFrozen.label>
+  <MX_Mingyuan_TimeBurnFrozen.description>時間燃燒停止目標 tick 時使用的標記狀態。</MX_Mingyuan_TimeBurnFrozen.description>
+</LanguageData>

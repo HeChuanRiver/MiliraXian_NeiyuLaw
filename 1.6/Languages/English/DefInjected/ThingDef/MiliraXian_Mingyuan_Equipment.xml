@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_CinderSword.label>Cinder Ash</MX_Mingyuan_CinderSword.label>
+  <MX_Mingyuan_CinderSword.description>Mingyuan's longsword. Life Burn on hit is handled globally by Mingyuan's hit logic.</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.tools.0.label>Cinder Ash</MX_Mingyuan_CinderSword.tools.0.label>
+  <MX_Mingyuan_RainbowBow.label>Long Rainbow</MX_Mingyuan_RainbowBow.label>
+  <MX_Mingyuan_RainbowBow.description>Mingyuan's longbow. Ranged hits apply Life Burn through Mingyuan's global hit logic.</MX_Mingyuan_RainbowBow.description>
+  <MX_Bullet_Mingyuan_RainbowArrow.label>Long Rainbow Arrow</MX_Bullet_Mingyuan_RainbowArrow.label>
+  <MX_Mingyuan_BurningPillarField.label>Mingyuan burning pillar field</MX_Mingyuan_BurningPillarField.label>
+  <MX_Mingyuan_AshesField.label>Mingyuan ashes field</MX_Mingyuan_AshesField.label>
+  <MX_Mingyuan_InfernoArmor.label>Molten Inferno Armor</MX_Mingyuan_InfernoArmor.label>
+  <MX_Mingyuan_InfernoArmor.description>Mingyuan's full-coverage inferno armor.</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_BurningFeatherCrown.label>Turbid Burning Feather Crown</MX_Mingyuan_BurningFeatherCrown.label>
+  <MX_Mingyuan_BurningFeatherCrown.description>Mingyuan's feather crown.</MX_Mingyuan_BurningFeatherCrown.description>
+</LanguageData>
