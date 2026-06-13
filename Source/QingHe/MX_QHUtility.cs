@@ -13,6 +13,7 @@ namespace MiliraXian.Characters.QingHe
         private const string DefaultHeaddressDefName = "MX_QingheHeaddress";
 
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
+        private static NeedDef mechEnergyNeedDef;
 
         public static bool IsQinghe(Pawn pawn)
         {
@@ -149,6 +150,23 @@ namespace MiliraXian.Characters.QingHe
             pawn.health.AddHediff(injury, part);
         }
 
+        public static void ReduceMechEnergyNeed(Pawn pawn, float percent)
+        {
+            if (pawn?.needs == null || percent <= 0f)
+            {
+                return;
+            }
+
+            NeedDef needDef = MechEnergyNeedDef;
+            Need need = needDef != null ? pawn.needs.TryGetNeed(needDef) : null;
+            if (need == null)
+            {
+                return;
+            }
+
+            need.CurLevelPercentage = Mathf.Max(0f, need.CurLevelPercentage - percent);
+        }
+
         public static void HealInjuries(Pawn pawn, float totalHeal)
         {
             if (pawn?.health?.hediffSet == null || totalHeal <= 0f)
@@ -169,6 +187,19 @@ namespace MiliraXian.Characters.QingHe
                 var heal = Mathf.Min(remain, injury.Severity);
                 injury.Heal(heal);
                 remain -= heal;
+            }
+        }
+
+        private static NeedDef MechEnergyNeedDef
+        {
+            get
+            {
+                if (mechEnergyNeedDef == null)
+                {
+                    mechEnergyNeedDef = DefDatabase<NeedDef>.GetNamedSilentFail("MechEnergy");
+                }
+
+                return mechEnergyNeedDef;
             }
         }
 

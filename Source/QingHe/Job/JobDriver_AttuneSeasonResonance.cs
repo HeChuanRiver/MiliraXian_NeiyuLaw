@@ -6,7 +6,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace MiliraXian.Characters.QingHe.Job
+namespace MiliraXian.Characters.QingHe.Jobs
 {
     public class JobDriver_AttuneSeasonResonance : JobDriver
     {

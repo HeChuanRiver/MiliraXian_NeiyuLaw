@@ -5,7 +5,7 @@
     <label>寒冷累积</label>
     <description>花信铃冬季共鸣留下的寒意。持续命中会累积寒冷，达到上限后转为冻结。</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
-    <defaultLabelColor>(0.56, 0.82, 1.00)</defaultLabelColor>
+    <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
@@ -26,7 +26,15 @@
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellColdScale">
         <comfyTemperatureScaleStart>0</comfyTemperatureScaleStart>
         <comfyTemperatureScaleZero>-100</comfyTemperatureScaleZero>
-        <mechSeverityMultiplier>0.4</mechSeverityMultiplier>
+        <mechSeverityMultiplier>0.3</mechSeverityMultiplier>
+        <mechBodySizeResistanceCurve>
+          <points>
+            <li>(1.0, 0.0)</li>
+            <li>(2.0, 0.20)</li>
+            <li>(4.0, 0.55)</li>
+          </points>
+        </mechBodySizeResistanceCurve>
+        <mechMaxBodySizeResistance>0.90</mechMaxBodySizeResistance>
       </li>
       <li Class="MiliraXian.Characters.HediffCompProperties_OnAccumulated">
         <addHediff>Hypothermia</addHediff>
@@ -41,7 +49,7 @@
     <label>冻结</label>
     <description>目标被花信铃冬季共鸣冻结，短时间内无法行动。</description>
     <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellFrozen</hediffClass>
-    <defaultLabelColor>(0.70, 0.90, 1.00)</defaultLabelColor>
+    <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
@@ -66,7 +74,7 @@
     <label>冻结抗性</label>
     <description>目标近期承受冻结后产生的短暂适应，会降低同类异常积累速度。</description>
     <hediffClass>MiliraXian.Characters.Hediff_AccumulationResistance</hediffClass>
-    <defaultLabelColor>(0.70, 0.90, 1.00)</defaultLabelColor>
+    <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
     <comps>

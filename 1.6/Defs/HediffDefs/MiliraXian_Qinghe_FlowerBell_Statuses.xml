@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Spring: bleed / electric leak -->
+  <HediffDef>
+    <defName>MX_QH_FlowerBellBleed</defName>
+    <label>流血累积</label>
+    <description>花信铃春季共鸣留下的血气扰动。持续命中会累积流血，达到上限后转为流血效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellBleedBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellBleeding</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellBleedResistance</resistanceHediff>
+        <effectDurationTicks>1200</effectDurationTicks>
+        <fullAccumulationText>流血</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(1.00, 0.36, 0.42)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAccumulated">
+        <addHediff>BloodLoss</addHediff>
+        <addHediffSeverityPerAccumulation>0.035</addHediffSeverityPerAccumulation>
+        <addHediffFleshOnly>true</addHediffFleshOnly>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellBleedScale">
+        <sharpArmorResistanceCurve>
+          <points>
+            <li>(0.00, 0.00)</li>
+            <li>(0.30, 0.10)</li>
+            <li>(0.60, 0.25)</li>
+            <li>(1.00, 0.45)</li>
+            <li>(1.50, 0.65)</li>
+            <li>(2.00, 0.80)</li>
+            <li>(10.00, 0.80)</li>
+          </points>
+        </sharpArmorResistanceCurve>
+        <smallBodySizeMultiplierCurve>
+          <points>
+            <li>(0.20, 0.55)</li>
+            <li>(0.50, 0.80)</li>
+            <li>(1.00, 1.00)</li>
+          </points>
+        </smallBodySizeMultiplierCurve>
+        <nonFleshMultiplier>0</nonFleshMultiplier>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellElectricLeak</defName>
+    <label>漏电累积</label>
+    <description>花信铃春季共鸣扰动机械结构。持续命中会累积漏电，达到上限后转为短路效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellElectricLeakBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellShortCircuit</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellElectricLeakResistance</resistanceHediff>
+        <effectDurationTicks>600</effectDurationTicks>
+        <fullAccumulationText>短路</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(1.00, 0.86, 0.28)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellElectricLeak">
+        <energyLossPercentPerAccumulation>0.08</energyLossPercentPerAccumulation>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellElectricLeakScale">
+        <bodySizeResistanceCurve>
+          <points>
+            <li>(1.0, 0.0)</li>
+            <li>(2.0, 0.35)</li>
+            <li>(4.0, 0.90)</li>
+          </points>
+        </bodySizeResistanceCurve>
+        <maxResistance>0.90</maxResistance>
+        <milianResistance>0.70</milianResistance>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellBleeding</defName>
+    <label>流血</label>
+    <description>目标受到花信铃春季共鸣引发的流血效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <painOffset>0.20</painOffset>
+        <statFactors>
+          <MoveSpeed>0.70</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellBleed</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>1200</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellBleeding">
+        <woundCount>2</woundCount>
+        <woundSeverity>3</woundSeverity>
+        <bloodFilthDef>Filth_Blood</bloodFilthDef>
+        <bloodFilthCount>3</bloodFilthCount>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>BloodLoss</addHediff>
+        <severityPerTick>0.00008</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellShortCircuit</defName>
+    <label>短路</label>
+    <description>机械体受到花信铃春季共鸣引发的短路效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellElectricLeak</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellShortCircuit">
+        <explosionDamageDef>Bomb</explosionDamageDef>
+        <explosionRadius>1.5</explosionRadius>
+        <explosionRadiusMultiplierByBodySize>
+          <points>
+            <li>(0.50, 1.00)</li>
+            <li>(1.00, 1.00)</li>
+            <li>(2.00, 1.35)</li>
+            <li>(4.00, 1.80)</li>
+          </points>
+        </explosionRadiusMultiplierByBodySize>
+        <explosionDamageAmount>8</explosionDamageAmount>
+        <explosionArmorPenetration>0</explosionArmorPenetration>
+        <stunTicks>180</stunTicks>
+        <interruptCooldownTicks>30</interruptCooldownTicks>
+        <energyLossPercent>0.20</energyLossPercent>
+        <steamFleckDef>Steam</steamFleckDef>
+        <steamIntervalTicks>35~80</steamIntervalTicks>
+        <steamScaleRange>0.45~0.75</steamScaleRange>
+        <steamPositionJitter>0.28</steamPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Summer: toxin / corrosion -->
+  <HediffDef>
+    <defName>MX_QH_FlowerBellToxin</defName>
+    <label>毒素积累</label>
+    <description>花信铃夏季共鸣留下的毒性。持续命中会积累毒素，达到上限后转为猛毒效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellToxinBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellVenom</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellToxinResistance</resistanceHediff>
+        <effectDurationTicks>2400</effectDurationTicks>
+        <fullAccumulationText>猛毒</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(0.62, 0.95, 0.42)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAccumulated">
+        <addHediff>ToxicBuildup</addHediff>
+        <addHediffSeverityPerAccumulation>0.06</addHediffSeverityPerAccumulation>
+        <addHediffFleshOnly>true</addHediffFleshOnly>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellToxinScale">
+        <useToxicResistance>true</useToxicResistance>
+        <useToxicEnvironmentResistance>true</useToxicEnvironmentResistance>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellCorrosion</defName>
+    <label>腐蚀累积</label>
+    <description>花信铃夏季共鸣腐蚀机械结构。持续命中会累积腐蚀，达到上限后转为腐蚀效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellCorrosionBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellCorroded</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellCorrosionResistance</resistanceHediff>
+        <effectDurationTicks>2500</effectDurationTicks>
+        <fullAccumulationText>腐蚀</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(0.66, 0.90, 0.58)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellCorrosionScale">
+        <bodySizeResistanceCurve>
+          <points>
+            <li>(1.0, 0.0)</li>
+            <li>(2.0, 0.20)</li>
+            <li>(4.0, 0.55)</li>
+          </points>
+        </bodySizeResistanceCurve>
+        <maxResistance>0.90</maxResistance>
+        <apparelResistance>0.20</apparelResistance>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellVenom</defName>
+    <label>猛毒</label>
+    <description>目标受到花信铃夏季共鸣引发的猛毒效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <vomitMtbDays>0.25</vomitMtbDays>
+      </li>
+    </stages>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellToxin</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2400</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>ToxicBuildup</addHediff>
+        <severityPerTick>0.00010</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellVenom">
+        <damageDef>MX_QH_FlowerBellVenomDamage</damageDef>
+        <damageIntervalTicks>120</damageIntervalTicks>
+        <damageAmount>4</damageAmount>
+        <armorPenetration>0</armorPenetration>
+        <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
+        <poisonFleckIntervalTicks>30~70</poisonFleckIntervalTicks>
+        <poisonFleckScaleRange>0.55~0.95</poisonFleckScaleRange>
+        <poisonFleckPositionJitter>0.35</poisonFleckPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellCorroded</defName>
+    <label>腐蚀</label>
+    <description>机械体受到花信铃夏季共鸣引发的腐蚀效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellCorrosion</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellCorroded">
+        <armorMultiplier>0.70</armorMultiplier>
+        <damageDef>MX_QH_FlowerBellVenomDamage</damageDef>
+        <damageIntervalTicks>240</damageIntervalTicks>
+        <damageAmount>2</damageAmount>
+        <armorPenetration>0</armorPenetration>
+        <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
+        <poisonFleckIntervalTicks>35~80</poisonFleckIntervalTicks>
+        <poisonFleckScaleRange>0.45~0.75</poisonFleckScaleRange>
+        <poisonFleckPositionJitter>0.35</poisonFleckPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Autumn: fear / overload -->
+  <MentalStateDef ParentName="BaseMentalState">
+    <defName>MX_QH_FlowerBellFearedMentalState</defName>
+    <label>恐惧</label>
+    <stateClass>MiliraXian.Characters.QingHe.MentalStates.MentalState_FlowerBellFeared</stateClass>
+    <category>Misc</category>
+    <nameColor>(0.92, 0.74, 1.00)</nameColor>
+    <blockNormalThoughts>true</blockNormalThoughts>
+    <minTicksBeforeRecovery>600</minTicksBeforeRecovery>
+    <maxTicksBeforeRecovery>600</maxTicksBeforeRecovery>
+    <baseInspectLine>恐惧中</baseInspectLine>
+  </MentalStateDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellFear</defName>
+    <label>恐惧累积</label>
+    <description>花信铃秋季共鸣扰动心神。持续命中会累积恐惧，达到上限后转为恐惧效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellFearBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellFeared</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellFearResistance</resistanceHediff>
+        <effectDurationTicks>600</effectDurationTicks>
+        <fullAccumulationText>恐惧</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(0.92, 0.74, 1.00)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellPsychicScale">
+        <psychicSensitivityMultiplierCurve>
+          <points>
+            <li>(0.0, 0.0)</li>
+            <li>(1.0, 1.0)</li>
+            <li>(2.0, 1.5)</li>
+            <li>(3.0, 2.0)</li>
+          </points>
+        </psychicSensitivityMultiplierCurve>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellOverload</defName>
+    <label>过载累积</label>
+    <description>花信铃秋季共鸣压迫机械控制核心。持续命中会累积过载，达到上限后转为过载效果。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_Accumulation">
+        <maxSeverity>1</maxSeverity>
+        <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+        <severityDecayPerTick>0.001</severityDecayPerTick>
+        <progressBarMoteDef>MX_QH_Mote_FlowerBellOverloadBar</progressBarMoteDef>
+        <effectHediff>MX_QH_FlowerBellOverloaded</effectHediff>
+        <resistanceHediff>MX_QH_FlowerBellOverloadResistance</resistanceHediff>
+        <effectDurationTicks>600</effectDurationTicks>
+        <fullAccumulationText>过载</fullAccumulationText>
+        <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
+        <fullAccumulationTextColor>(0.92, 0.74, 1.00)</fullAccumulationTextColor>
+        <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellPsychicScale">
+        <psychicSensitivityMultiplierCurve>
+          <points>
+            <li>(0.0, 0.0)</li>
+            <li>(1.0, 1.0)</li>
+            <li>(2.0, 1.5)</li>
+            <li>(3.0, 2.0)</li>
+          </points>
+        </psychicSensitivityMultiplierCurve>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellFeared</defName>
+    <label>恐惧</label>
+    <description>目标受到花信铃秋季共鸣引发的恐惧效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellFear</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellFeared">
+        <mentalStateDef>MX_QH_FlowerBellFearedMentalState</mentalStateDef>
+        <mentalStateDurationTicks>600</mentalStateDurationTicks>
+        <forced>true</forced>
+        <forceWake>true</forceWake>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AttachedMote">
+        <moteDef>MX_QH_Mote_FlowerBellFearedIcon</moteDef>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_FlowerBellOverloaded</defName>
+    <label>过载</label>
+    <description>机械体受到花信铃秋季共鸣引发的过载效果。具体效果逻辑待实现。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerBellPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationEffect">
+        <sourceAccumulationHediff>MX_QH_FlowerBellOverload</sourceAccumulationHediff>
+      </li>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerBellOverloaded">
+        <mentalStateDef>BerserkMechanoid</mentalStateDef>
+        <mentalStateDurationTicks>600</mentalStateDurationTicks>
+        <forced>true</forced>
+        <forceWake>true</forceWake>
+      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AttachedMote">
+        <moteDef>MX_QH_Mote_FlowerBellOverloadedIcon</moteDef>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Shared resistances -->
+  <HediffDef Name="MX_QH_FlowerBellBaseResistance" Abstract="True">
+    <hediffClass>MiliraXian.Characters.Hediff_AccumulationResistance</hediffClass>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AccumulationResistance">
+        <maxStage>5</maxStage>
+        <accumulationMultipliers>
+          <li>0.8</li>
+          <li>0.6</li>
+          <li>0.4</li>
+          <li>0.2</li>
+          <li>0</li>
+        </accumulationMultipliers>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellBleedResistance</defName>
+    <label>流血抗性</label>
+    <description>目标近期承受流血后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellElectricLeakResistance</defName>
+    <label>漏电抗性</label>
+    <description>目标近期承受短路后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellToxinResistance</defName>
+    <label>毒素抗性</label>
+    <description>目标近期承受猛毒后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellCorrosionResistance</defName>
+    <label>腐蚀抗性</label>
+    <description>目标近期承受腐蚀后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>5000</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellFearResistance</defName>
+    <label>恐惧抗性</label>
+    <description>目标近期承受恐惧后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef ParentName="MX_QH_FlowerBellBaseResistance">
+    <defName>MX_QH_FlowerBellOverloadResistance</defName>
+    <label>过载抗性</label>
+    <description>目标近期承受过载后产生的短暂适应，会降低同类异常积累速度。</description>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>

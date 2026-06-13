@@ -29,74 +29,61 @@
       <AccuracyShort>1.0</AccuracyShort>
       <AccuracyMedium>1.0</AccuracyMedium>
       <AccuracyLong>1.0</AccuracyLong>
+      <RangedWeapon_Cooldown>1.5</RangedWeapon_Cooldown>
     </statBases>
     <verbs>
-      <li>
+      <li Class="MiliraXian.Characters.QingHe.Verbs.VerbProperties_FlowerBell">
         <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
         <defaultProjectile>MX_Bullet_Qinghe_FlowerBell</defaultProjectile>
         <warmupTime>0.90</warmupTime>
         <range>29.9</range>
-        <burstShotCount>4</burstShotCount>
+        <burstShotCount>3</burstShotCount>
         <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
+        <defaultCooldownTime>1.5</defaultCooldownTime>
+        <seasonSettings>
+          <li>
+            <season>None</season>
+            <projectile>MX_Bullet_Qinghe_FlowerBell</projectile>
+            <burstShotCount>3</burstShotCount>
+            <cooldownTime>1.5</cooldownTime>
+          </li>
+          <li>
+            <season>Spring</season>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
+            <burstShotCount>5</burstShotCount>
+            <cooldownTime>2.2</cooldownTime>
+          </li>
+          <li>
+            <season>Summer</season>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
+            <burstShotCount>4</burstShotCount>
+            <cooldownTime>1.7</cooldownTime>
+          </li>
+          <li>
+            <season>Autumn</season>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
+            <burstShotCount>1</burstShotCount>
+            <cooldownTime>2.8</cooldownTime>
+          </li>
+          <li>
+            <season>Winter</season>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
+            <burstShotCount>2</burstShotCount>
+            <cooldownTime>1.2</cooldownTime>
+          </li>
+        </seasonSettings>
       </li>
     </verbs>
   </ThingDef>
 
-  <ThingDef ParentName="BaseBullet">
-    <defName>MX_Bullet_Qinghe_FlowerBell</defName>
-    <label>花信铃音</label>
+  <ThingDef ParentName="BaseBullet" Name="MX_QH_BaseFlowerBellBullet" Abstract="True">
     <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerBell</thingClass>
     <graphicData>
       <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(0.36,1.05)</drawSize>
       <shaderType>TransparentPostLight</shaderType>
-      <color>(230,195,255)</color>
-    </graphicData>
-    <projectile>
-      <damageDef>MX_QH_NoteImpact</damageDef>
-      <damageAmountBase>6</damageAmountBase>
-      <armorPenetrationBase>2.10</armorPenetrationBase>
-      <speed>30</speed>
-      <arcHeightFactor>0.10</arcHeightFactor>
-    </projectile>
-    <comps>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
-        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <trailMaxPoints>22</trailMaxPoints>
-        <trailMinPointDistance>0.10</trailMinPointDistance>
-        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
-        <trailWidthStart>0.18</trailWidthStart>
-        <trailWidthEnd>0.05</trailWidthEnd>
-        <trailAlpha>1.00</trailAlpha>
-        <trailAltitudeOffset>0.70</trailAltitudeOffset>
-        <useProjectileGraphicColor>true</useProjectileGraphicColor>
-      </li>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
-        <homingStartDelayTicks>5</homingStartDelayTicks>
-        <minHomingTicksToImpact>10</minHomingTicksToImpact>
-        <homingTurnLerp>0.13</homingTurnLerp>
-        <curveAmplitudeMin>0.60</curveAmplitudeMin>
-        <curveAmplitudeMax>0.80</curveAmplitudeMax>
-        <curveFrequency>0.12</curveFrequency>
-      </li>
-      <li Class="CompProperties_ProjectileEffecter">
-        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
-      </li>
-    </comps>
-  </ThingDef>
-
-  <ThingDef ParentName="BaseBullet">
-    <defName>MX_Bullet_Qinghe_FlowerBell_Winter</defName>
-    <label>寒铃音</label>
-    <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerBell</thingClass>
-    <graphicData>
-      <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>(0.36,1.05)</drawSize>
-      <shaderType>TransparentPostLight</shaderType>
-      <color>(170,225,255)</color>
     </graphicData>
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
@@ -104,13 +91,6 @@
       <armorPenetrationBase>2.10</armorPenetrationBase>
       <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
-      <extraDamages>
-        <li>
-          <def>MX_QH_FlowerBellColdAccumulation</def>
-          <amount>0.25</amount>
-          <armorPenetration>2.10</armorPenetration>
-        </li>
-      </extraDamages>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
@@ -136,5 +116,108 @@
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
     </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell</defName>
+    <label>花信铃音</label>
+    <graphicData>
+      <color>(230,195,255)</color>
+    </graphicData>
+    <projectile>
+      <damageAmountBase>6</damageAmountBase>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Spring</defName>
+    <label>血铃音</label>
+    <graphicData>
+      <color>(255,130,150)</color>
+    </graphicData>
+    <projectile>
+      <extraDamages>
+        <li>
+          <def>MX_QH_FlowerBellBleedAccumulation</def>
+          <amount>0.08</amount>
+          <armorPenetration>2.10</armorPenetration>
+        </li>
+      </extraDamages>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Summer</defName>
+    <label>毒铃音</label>
+    <graphicData>
+      <color>(160,245,110)</color>
+    </graphicData>
+    <projectile>
+      <extraDamages>
+        <li>
+          <def>MX_QH_FlowerBellToxinAccumulation</def>
+          <amount>0.05</amount>
+          <armorPenetration>2.10</armorPenetration>
+        </li>
+      </extraDamages>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Autumn</defName>
+    <label>惧铃音</label>
+    <graphicData>
+      <color>(230,185,255)</color>
+    </graphicData>
+    <projectile>
+      <extraDamages>
+        <li>
+          <def>MX_QH_FlowerBellFearAccumulation</def>
+          <amount>0.25</amount>
+          <armorPenetration>2.10</armorPenetration>
+        </li>
+      </extraDamages>
+    </projectile>
+    <comps Inherit="False">
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+        <trailMaxPoints>22</trailMaxPoints>
+        <trailMinPointDistance>0.10</trailMinPointDistance>
+        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+        <trailWidthStart>0.18</trailWidthStart>
+        <trailWidthEnd>0.05</trailWidthEnd>
+        <trailAlpha>1.00</trailAlpha>
+        <trailAltitudeOffset>0.70</trailAltitudeOffset>
+        <useProjectileGraphicColor>true</useProjectileGraphicColor>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+        <homingStartDelayTicks>5</homingStartDelayTicks>
+        <minHomingTicksToImpact>10</minHomingTicksToImpact>
+        <homingTurnLerp>0.13</homingTurnLerp>
+        <curveAmplitudeMin>0.08</curveAmplitudeMin>
+        <curveAmplitudeMax>0.16</curveAmplitudeMax>
+        <curveFrequency>0.08</curveFrequency>
+      </li>
+      <li Class="CompProperties_ProjectileEffecter">
+        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Winter</defName>
+    <label>寒铃音</label>
+    <graphicData>
+      <color>(170,225,255)</color>
+    </graphicData>
+    <projectile>
+      <extraDamages>
+        <li>
+          <def>MX_QH_FlowerBellColdAccumulation</def>
+          <amount>0.08</amount>
+          <armorPenetration>2.10</armorPenetration>
+        </li>
+      </extraDamages>
+    </projectile>
   </ThingDef>
 </Defs>

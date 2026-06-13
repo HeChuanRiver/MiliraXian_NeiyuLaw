@@ -26,6 +26,7 @@ namespace MiliraXian.Characters
             request.center = exactPosition;
             request.center.x += props.offsetX;
             request.center.z += props.offsetZ + GetStackIndex(props) * props.stackSpacing;
+            request.center.y += props.altitudeOffset;
             request.size = props.size;
             request.fillPercent = Mathf.Clamp01(Progress);
             request.filledMat = BuildMat(props.fillTexPath, props.fillShaderType, props.fillColor);

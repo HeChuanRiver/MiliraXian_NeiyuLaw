@@ -18,6 +18,7 @@ namespace MiliraXian.Characters
         public float margin = 0.05f;
         public float offsetX;
         public float offsetZ = -0.55f;
+        public float altitudeOffset = 0.06f;
         public float stackSpacing = 0.16f;
         public bool stackDownward = true;
         public float iconSize = 0.16f;

@@ -2,7 +2,7 @@
 <Defs>
     <JobDef>
         <defName>MX_QH_AttuneSeasonResonance</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_AttuneSeasonResonance</driverClass>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_AttuneSeasonResonance</driverClass>
         <reportString>在荷池旁调谐四时共鸣。</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
@@ -10,7 +10,7 @@
 
     <JobDef>
         <defName>MX_QH_MeditateAtFlowerCourt</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_MeditateAtFlowerCourt</driverClass>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_MeditateAtFlowerCourt</driverClass>
         <reportString>在荷池旁冥想。</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
@@ -18,7 +18,7 @@
 
     <JobDef>
         <defName>MX_QH_FlowerDivination</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Job.JobDriver_FlowerDivination</driverClass>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_FlowerDivination</driverClass>
         <reportString>呼唤花神降临。</reportString>
         <playerInterruptible>false</playerInterruptible>
         <casualInterruptible>false</casualInterruptible>

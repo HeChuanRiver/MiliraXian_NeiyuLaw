@@ -8,7 +8,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public float comfyTemperatureScaleStart;
         public float comfyTemperatureScaleZero = -100f;
-        public float mechSeverityMultiplier = 0.4f;
+        public float mechSeverityMultiplier = 0.3f;
+        public SimpleCurve mechBodySizeResistanceCurve;
+        public float mechMaxBodySizeResistance = 0.9f;
 
         public HediffCompProperties_FlowerBellColdScale()
         {
@@ -29,7 +31,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Pawn.RaceProps?.IsMechanoid == true)
             {
-                return severityOffset * Mathf.Clamp01(PropsCold.mechSeverityMultiplier);
+                float bodySizeResistance = MechBodySizeResistance(Pawn);
+                return severityOffset * Mathf.Clamp01(PropsCold.mechSeverityMultiplier) * Mathf.Clamp01(1f - bodySizeResistance);
             }
 
             return severityOffset * TemperatureMultiplier(
@@ -71,6 +74,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             return Mathf.Clamp01(Mathf.InverseLerp(zeroTemp, startTemp, comfyTemperatureMin));
+        }
+
+        private float MechBodySizeResistance(Pawn pawn)
+        {
+            SimpleCurve curve = PropsCold.mechBodySizeResistanceCurve;
+            if (curve == null)
+            {
+                return 0f;
+            }
+
+            float bodySize = Mathf.Max(0f, pawn.BodySize);
+            float resistance = curve.Evaluate(bodySize);
+            return Mathf.Clamp(resistance, 0f, Mathf.Clamp01(PropsCold.mechMaxBodySizeResistance));
         }
     }
 }

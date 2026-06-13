@@ -1,7 +1,9 @@
 using HarmonyLib;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Stats;
 using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -15,6 +17,9 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
+            RegisterFlowerBellCorrosionArmorStatParts();
+            RegisterFlowerBellCooldownStatPart();
+
             patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
 
@@ -204,6 +209,66 @@ namespace MiliraXian.Characters.QingHe
             {
                 pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_WaterFairy));
             }
+        }
+
+        private static void RegisterFlowerBellCorrosionArmorStatParts()
+        {
+            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Sharp);
+            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Blunt);
+            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Heat);
+        }
+
+        private static void RegisterFlowerBellCorrosionArmorStatPart(StatDef stat)
+        {
+            if (stat == null)
+            {
+                return;
+            }
+
+            if (stat.parts == null)
+            {
+                stat.parts = new List<StatPart>();
+            }
+
+            for (int i = 0; i < stat.parts.Count; i++)
+            {
+                if (stat.parts[i] is StatPart_FlowerBellCorrosionArmor)
+                {
+                    return;
+                }
+            }
+
+            stat.parts.Add(new StatPart_FlowerBellCorrosionArmor
+            {
+                parentStat = stat
+            });
+        }
+
+        private static void RegisterFlowerBellCooldownStatPart()
+        {
+            StatDef stat = StatDefOf.RangedWeapon_Cooldown;
+            if (stat == null)
+            {
+                return;
+            }
+
+            if (stat.parts == null)
+            {
+                stat.parts = new List<StatPart>();
+            }
+
+            for (int i = 0; i < stat.parts.Count; i++)
+            {
+                if (stat.parts[i] is StatPart_FlowerBellCooldown)
+                {
+                    return;
+                }
+            }
+
+            stat.parts.Add(new StatPart_FlowerBellCooldown
+            {
+                parentStat = stat
+            });
         }
 
         private static readonly MethodInfo ProjectileImpactMethod =

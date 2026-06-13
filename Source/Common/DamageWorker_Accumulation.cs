@@ -15,7 +15,13 @@ namespace MiliraXian.Characters
             }
 
             MX_AccumulationDamageProperties props = def.GetModExtension<MX_AccumulationDamageProperties>();
-            if (props == null || props.accumulationHediff == null)
+            if (props == null)
+            {
+                return result;
+            }
+
+            HediffDef accumulationHediff = ResolveAccumulationHediff(pawn, props);
+            if (accumulationHediff == null)
             {
                 return result;
             }
@@ -57,12 +63,22 @@ namespace MiliraXian.Characters
             }
 
             Pawn caster = dinfo.Instigator as Pawn;
-            if (AccumulationUtility.TryApplyAccumulation(caster, pawn, props.accumulationHediff, severityOffset, out float finalSeverityOffset, out Hediff appliedHediff))
+            if (AccumulationUtility.TryApplyAccumulation(caster, pawn, accumulationHediff, severityOffset, out float finalSeverityOffset, out Hediff appliedHediff))
             {
                 NotifyAccumulationApplied(caster, appliedHediff, finalSeverityOffset);
             }
 
             return result;
+        }
+
+        private static HediffDef ResolveAccumulationHediff(Pawn pawn, MX_AccumulationDamageProperties props)
+        {
+            if (pawn?.RaceProps?.IsMechanoid == true)
+            {
+                return props.mechAccumulationHediff ?? props.accumulationHediff;
+            }
+
+            return props.accumulationHediff;
         }
 
         protected virtual void NotifyAccumulationApplied(Pawn caster, Hediff appliedHediff, float finalSeverityOffset)
