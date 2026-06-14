@@ -86,11 +86,11 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_QingheNormal</defName>
         <label>清荷·常服</label>
-        <description>清荷日常穿着的常服。印有四时花卉图案，散发着淡淡的花香，材质和工艺都专为与花神共鸣而设计。</description>
+        <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
+            <texPath>MiliraXianQinghe/Apparel/apparel_qinghe_normal_Female_south</texPath>
         </graphicData>
         <statBases>
             <Mass>1.2</Mass>
@@ -114,7 +114,7 @@
                 <li>Hands</li>
                 <li>Milira_Wings</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianQinghe/Apparel/apparel_qinghe_normal</wornGraphicPath>
             <tags>
                 <li>MX_QingheNormal</li>
             </tags>

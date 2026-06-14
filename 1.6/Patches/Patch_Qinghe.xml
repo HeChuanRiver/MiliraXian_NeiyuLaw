@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Patch>
 
-    <!-- Neiyu -->
+    <!-- Qinghe -->
     <Operation Class="PatchOperationAdd">
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
         <value>
@@ -91,7 +91,7 @@
                 <userCustomizable>false</userCustomizable>
                 <!-- 改 -->
                 <!-- TODO：这里改清荷的毛  -->
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHair/MiliraHairNeiyu</path>
+                <path>MiliraXianQinghe/Pawn/Hair/hair_qinghe_normal</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>
@@ -144,7 +144,7 @@
                 <userCustomizable>false</userCustomizable>
                 <!-- 改 -->
                 <!-- TODO: 这里改清荷的毛BG -->
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHairBG/MiliraHairBGNeiyu</path>
+                <path>MiliraXianQinghe/Pawn/Hair/hair_bg_qinghe_normal</path>
                 <inFrontOfBody>false</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>
