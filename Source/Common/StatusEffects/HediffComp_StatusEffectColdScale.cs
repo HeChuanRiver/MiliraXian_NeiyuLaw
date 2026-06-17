@@ -2,9 +2,9 @@
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellColdScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectColdScale : HediffCompProperties_AccumulationScaling
     {
         public float comfyTemperatureScaleStart;
         public float comfyTemperatureScaleZero = -100f;
@@ -12,15 +12,15 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public SimpleCurve mechBodySizeResistanceCurve;
         public float mechMaxBodySizeResistance = 0.9f;
 
-        public HediffCompProperties_FlowerBellColdScale()
+        public HediffCompProperties_StatusEffectColdScale()
         {
-            compClass = typeof(HediffComp_FlowerBellColdScale);
+            compClass = typeof(HediffComp_StatusEffectColdScale);
         }
     }
 
-    public class HediffComp_FlowerBellColdScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectColdScale : HediffComp_AccumulationScaling
     {
-        private HediffCompProperties_FlowerBellColdScale PropsCold => (HediffCompProperties_FlowerBellColdScale)props;
+        private HediffCompProperties_StatusEffectColdScale PropsCold => (HediffCompProperties_StatusEffectColdScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

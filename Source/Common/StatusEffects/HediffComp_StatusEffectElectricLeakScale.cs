@@ -1,27 +1,27 @@
-using System;
+﻿using System;
 using HarmonyLib;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellElectricLeakScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectElectricLeakScale : HediffCompProperties_AccumulationScaling
     {
         public SimpleCurve bodySizeResistanceCurve;
         public float maxResistance = 0.9f;
         public float milianResistance = 0.7f;
 
-        public HediffCompProperties_FlowerBellElectricLeakScale()
+        public HediffCompProperties_StatusEffectElectricLeakScale()
         {
-            compClass = typeof(HediffComp_FlowerBellElectricLeakScale);
+            compClass = typeof(HediffComp_StatusEffectElectricLeakScale);
         }
     }
 
-    public class HediffComp_FlowerBellElectricLeakScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectElectricLeakScale : HediffComp_AccumulationScaling
     {
         private static readonly Func<Pawn, bool> isMilian = CreateIsMilianDelegate();
 
-        private HediffCompProperties_FlowerBellElectricLeakScale PropsElectricLeakScale => (HediffCompProperties_FlowerBellElectricLeakScale)props;
+        private HediffCompProperties_StatusEffectElectricLeakScale PropsElectricLeakScale => (HediffCompProperties_StatusEffectElectricLeakScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

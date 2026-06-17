@@ -1,26 +1,26 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellFeared : HediffCompProperties
+    public class HediffCompProperties_StatusEffectFeared : HediffCompProperties
     {
         public MentalStateDef mentalStateDef;
         public int mentalStateDurationTicks = 600;
         public bool forced = true;
         public bool forceWake = true;
 
-        public HediffCompProperties_FlowerBellFeared()
+        public HediffCompProperties_StatusEffectFeared()
         {
-            compClass = typeof(HediffComp_FlowerBellFeared);
+            compClass = typeof(HediffComp_StatusEffectFeared);
         }
     }
 
-    public class HediffComp_FlowerBellFeared : HediffComp
+    public class HediffComp_StatusEffectFeared : HediffComp
     {
         private bool startedMentalState;
 
-        private HediffCompProperties_FlowerBellFeared PropsFeared => (HediffCompProperties_FlowerBellFeared)props;
+        private HediffCompProperties_StatusEffectFeared PropsFeared => (HediffCompProperties_StatusEffectFeared)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef ?? MX_QHDefOf.MX_QH_FlowerBellFearedMentalState;
+            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef;
             if (mentalStateDef == null)
             {
                 return;
@@ -78,7 +78,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void RecoverStartedMentalState()
         {
-            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef ?? MX_QHDefOf.MX_QH_FlowerBellFearedMentalState;
+            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef;
             if (!startedMentalState || Pawn == null || Pawn.Dead || Pawn.MentalStateDef != mentalStateDef)
             {
                 return;

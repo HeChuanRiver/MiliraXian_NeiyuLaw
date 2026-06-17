@@ -1,23 +1,23 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellToxinScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectToxinScale : HediffCompProperties_AccumulationScaling
     {
         public bool useToxicResistance = true;
         public bool useToxicEnvironmentResistance = true;
 
-        public HediffCompProperties_FlowerBellToxinScale()
+        public HediffCompProperties_StatusEffectToxinScale()
         {
-            compClass = typeof(HediffComp_FlowerBellToxinScale);
+            compClass = typeof(HediffComp_StatusEffectToxinScale);
         }
     }
 
-    public class HediffComp_FlowerBellToxinScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectToxinScale : HediffComp_AccumulationScaling
     {
-        private HediffCompProperties_FlowerBellToxinScale PropsToxinScale => (HediffCompProperties_FlowerBellToxinScale)props;
+        private HediffCompProperties_StatusEffectToxinScale PropsToxinScale => (HediffCompProperties_StatusEffectToxinScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

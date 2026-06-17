@@ -1,32 +1,35 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellVenom : HediffCompProperties
+    public class HediffCompProperties_StatusEffectCorroded : HediffCompProperties
     {
+        public float armorMultiplier = 0.7f;
         public DamageDef damageDef;
-        public int damageIntervalTicks = 120;
-        public float damageAmount = 4f;
+        public int damageIntervalTicks = 240;
+        public float damageAmount = 2f;
         public float armorPenetration = 0f;
         public FleckDef poisonFleckDef;
-        public IntRange poisonFleckIntervalTicks = new IntRange(30, 70);
-        public FloatRange poisonFleckScaleRange = new FloatRange(0.55f, 0.95f);
+        public IntRange poisonFleckIntervalTicks = new IntRange(35, 80);
+        public FloatRange poisonFleckScaleRange = new FloatRange(0.45f, 0.75f);
         public float poisonFleckPositionJitter = 0.35f;
 
-        public HediffCompProperties_FlowerBellVenom()
+        public HediffCompProperties_StatusEffectCorroded()
         {
-            compClass = typeof(HediffComp_FlowerBellVenom);
+            compClass = typeof(HediffComp_StatusEffectCorroded);
         }
     }
 
-    public class HediffComp_FlowerBellVenom : HediffComp
+    public class HediffComp_StatusEffectCorroded : HediffComp
     {
         private int nextDamageTick;
         private int nextPoisonFleckTick;
 
-        private HediffCompProperties_FlowerBellVenom PropsVenom => (HediffCompProperties_FlowerBellVenom)props;
+        private HediffCompProperties_StatusEffectCorroded PropsCorroded => (HediffCompProperties_StatusEffectCorroded)props;
+
+        public float ArmorMultiplier => PropsCorroded.armorMultiplier;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -58,7 +61,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
             else if (now >= nextDamageTick)
             {
-                ApplyPoisonDamage();
+                ApplyCorrosionDamage();
                 ScheduleNextDamage(now);
             }
 
@@ -76,23 +79,23 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        private void ApplyPoisonDamage()
+        private void ApplyCorrosionDamage()
         {
-            if (PropsVenom.damageDef == null || PropsVenom.damageAmount <= 0f || Pawn.RaceProps?.IsFlesh != true)
+            if (PropsCorroded.damageDef == null || PropsCorroded.damageAmount <= 0f)
             {
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(PropsVenom.damageDef, PropsVenom.damageAmount, PropsVenom.armorPenetration);
+            DamageInfo dinfo = new DamageInfo(PropsCorroded.damageDef, PropsCorroded.damageAmount, PropsCorroded.armorPenetration);
             dinfo.SetAllowDamagePropagation(false);
             Pawn.TakeDamage(dinfo);
         }
 
         private void ThrowPoisonFleck()
         {
-            FleckDef fleckDef = PropsVenom.poisonFleckDef ?? DefDatabase<FleckDef>.GetNamedSilentFail("Fleck_ToxGasSmall") ?? FleckDefOf.Smoke;
+            FleckDef fleckDef = PropsCorroded.poisonFleckDef ?? DefDatabase<FleckDef>.GetNamedSilentFail("Fleck_ToxGasSmall") ?? FleckDefOf.Smoke;
             Vector3 drawPos = Pawn.DrawPos;
-            float jitter = Mathf.Max(0f, PropsVenom.poisonFleckPositionJitter);
+            float jitter = Mathf.Max(0f, PropsCorroded.poisonFleckPositionJitter);
             drawPos.x += Rand.Range(-jitter, jitter);
             drawPos.z += Rand.Range(-jitter, jitter);
             if (!drawPos.ShouldSpawnMotesAt(Pawn.MapHeld))
@@ -100,21 +103,21 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            FleckCreationData data = FleckMaker.GetDataStatic(drawPos, Pawn.MapHeld, fleckDef, PropsVenom.poisonFleckScaleRange.RandomInRange);
+            FleckCreationData data = FleckMaker.GetDataStatic(drawPos, Pawn.MapHeld, fleckDef, PropsCorroded.poisonFleckScaleRange.RandomInRange);
             data.rotationRate = Rand.Range(-25f, 25f);
             data.velocityAngle = Rand.Range(35f, 145f);
-            data.velocitySpeed = Rand.Range(0.12f, 0.28f);
+            data.velocitySpeed = Rand.Range(0.10f, 0.24f);
             Pawn.MapHeld.flecks.CreateFleck(data);
         }
 
         private void ScheduleNextDamage(int now)
         {
-            nextDamageTick = now + Mathf.Max(1, PropsVenom.damageIntervalTicks);
+            nextDamageTick = now + Mathf.Max(1, PropsCorroded.damageIntervalTicks);
         }
 
         private void ScheduleNextPoisonFleck(int now)
         {
-            nextPoisonFleckTick = now + Mathf.Max(1, PropsVenom.poisonFleckIntervalTicks.RandomInRange);
+            nextPoisonFleckTick = now + Mathf.Max(1, PropsCorroded.poisonFleckIntervalTicks.RandomInRange);
         }
     }
 }

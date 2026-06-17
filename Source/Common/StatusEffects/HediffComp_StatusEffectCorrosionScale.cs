@@ -1,23 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellCorrosionScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectCorrosionScale : HediffCompProperties_AccumulationScaling
     {
         public SimpleCurve bodySizeResistanceCurve;
         public float maxResistance = 0.9f;
         public float apparelResistance = 0.2f;
 
-        public HediffCompProperties_FlowerBellCorrosionScale()
+        public HediffCompProperties_StatusEffectCorrosionScale()
         {
-            compClass = typeof(HediffComp_FlowerBellCorrosionScale);
+            compClass = typeof(HediffComp_StatusEffectCorrosionScale);
         }
     }
 
-    public class HediffComp_FlowerBellCorrosionScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectCorrosionScale : HediffComp_AccumulationScaling
     {
-        private HediffCompProperties_FlowerBellCorrosionScale PropsCorrosionScale => (HediffCompProperties_FlowerBellCorrosionScale)props;
+        private HediffCompProperties_StatusEffectCorrosionScale PropsCorrosionScale => (HediffCompProperties_StatusEffectCorrosionScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

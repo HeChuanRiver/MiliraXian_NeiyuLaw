@@ -137,7 +137,7 @@
     <projectile>
       <extraDamages>
         <li>
-          <def>MX_QH_FlowerBellBleedAccumulation</def>
+          <def>MX_StatusEffectBleedAccumulation</def>
           <amount>0.08</amount>
           <armorPenetration>2.10</armorPenetration>
         </li>
@@ -154,7 +154,7 @@
     <projectile>
       <extraDamages>
         <li>
-          <def>MX_QH_FlowerBellToxinAccumulation</def>
+          <def>MX_StatusEffectToxinAccumulation</def>
           <amount>0.05</amount>
           <armorPenetration>2.10</armorPenetration>
         </li>
@@ -171,7 +171,7 @@
     <projectile>
       <extraDamages>
         <li>
-          <def>MX_QH_FlowerBellFearAccumulation</def>
+          <def>MX_StatusEffectFearAccumulation</def>
           <amount>0.25</amount>
           <armorPenetration>2.10</armorPenetration>
         </li>
@@ -212,7 +212,7 @@
     <projectile>
       <extraDamages>
         <li>
-          <def>MX_QH_FlowerBellColdAccumulation</def>
+          <def>MX_StatusEffectColdAccumulation</def>
           <amount>0.08</amount>
           <armorPenetration>2.10</armorPenetration>
         </li>

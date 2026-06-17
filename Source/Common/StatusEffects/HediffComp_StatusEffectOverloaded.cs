@@ -1,26 +1,26 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellOverloaded : HediffCompProperties
+    public class HediffCompProperties_StatusEffectOverloaded : HediffCompProperties
     {
         public MentalStateDef mentalStateDef;
         public int mentalStateDurationTicks = 600;
         public bool forced = true;
         public bool forceWake = true;
 
-        public HediffCompProperties_FlowerBellOverloaded()
+        public HediffCompProperties_StatusEffectOverloaded()
         {
-            compClass = typeof(HediffComp_FlowerBellOverloaded);
+            compClass = typeof(HediffComp_StatusEffectOverloaded);
         }
     }
 
-    public class HediffComp_FlowerBellOverloaded : HediffComp
+    public class HediffComp_StatusEffectOverloaded : HediffComp
     {
         private bool startedMentalState;
 
-        private HediffCompProperties_FlowerBellOverloaded PropsOverloaded => (HediffCompProperties_FlowerBellOverloaded)props;
+        private HediffCompProperties_StatusEffectOverloaded PropsOverloaded => (HediffCompProperties_StatusEffectOverloaded)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {

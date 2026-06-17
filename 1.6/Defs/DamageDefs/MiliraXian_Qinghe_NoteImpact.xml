@@ -1,97 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <DamageDef>
-        <defName>MX_QH_NoteImpact</defName>
-        <label>音击</label>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <workerClass>DamageWorker_AddInjury</workerClass>
-        <deathMessage>{0}被花信铃音击倒了。</deathMessage>
-        <hediff>PsychicInjury</hediff>
-    </DamageDef>
-    <DamageDef>
-        <defName>MX_QH_FlowerBellBleedAccumulation</defName>
-        <label>bleed accumulation</label>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <harmsHealth>false</harmsHealth>
-        <makesBlood>false</makesBlood>
-        <workerClass>MiliraXian.Characters.DamageWorker_Accumulation</workerClass>
-        <impactSoundType>Bullet</impactSoundType>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.MX_AccumulationDamageProperties">
-                <accumulationHediff>MX_QH_FlowerBellBleed</accumulationHediff>
-                <mechAccumulationHediff>MX_QH_FlowerBellElectricLeak</mechAccumulationHediff>
-            </li>
-        </modExtensions>
-    </DamageDef>
-    <DamageDef>
-        <defName>MX_QH_FlowerBellToxinAccumulation</defName>
-        <label>toxin accumulation</label>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <harmsHealth>false</harmsHealth>
-        <makesBlood>false</makesBlood>
-        <workerClass>MiliraXian.Characters.DamageWorker_Accumulation</workerClass>
-        <impactSoundType>Bullet</impactSoundType>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.MX_AccumulationDamageProperties">
-                <accumulationHediff>MX_QH_FlowerBellToxin</accumulationHediff>
-                <mechAccumulationHediff>MX_QH_FlowerBellCorrosion</mechAccumulationHediff>
-            </li>
-        </modExtensions>
-    </DamageDef>
-    <DamageDef>
-        <defName>MX_QH_FlowerBellVenomDamage</defName>
-        <label>venom corrosion</label>
-        <workerClass>DamageWorker_AddInjury</workerClass>
-        <hasForcefulImpact>false</hasForcefulImpact>
-        <makesBlood>false</makesBlood>
-        <canInterruptJobs>false</canInterruptJobs>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <hediff>AcidBurn</hediff>
-        <impactSoundType>Toxic</impactSoundType>
-        <damageEffecter>Impact_Toxic</damageEffecter>
-        <defaultDamage>4</defaultDamage>
-        <defaultArmorPenetration>0</defaultArmorPenetration>
-        <deathMessage>{0} succumbed to flower bell venom.</deathMessage>
-    </DamageDef>
-    <DamageDef>
-        <defName>MX_QH_FlowerBellFearAccumulation</defName>
-        <label>fear accumulation</label>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <harmsHealth>false</harmsHealth>
-        <makesBlood>false</makesBlood>
-        <workerClass>MiliraXian.Characters.DamageWorker_Accumulation</workerClass>
-        <impactSoundType>Bullet</impactSoundType>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.MX_AccumulationDamageProperties">
-                <accumulationHediff>MX_QH_FlowerBellFear</accumulationHediff>
-                <mechAccumulationHediff>MX_QH_FlowerBellOverload</mechAccumulationHediff>
-            </li>
-        </modExtensions>
-    </DamageDef>
-    <DamageDef>
-        <defName>MX_QH_FlowerBellColdAccumulation</defName>
-        <label>cold accumulation</label>
-        <externalViolence>true</externalViolence>
-        <armorCategory>Sharp</armorCategory>
-        <isRanged>true</isRanged>
-        <harmsHealth>false</harmsHealth>
-        <makesBlood>false</makesBlood>
-        <workerClass>MiliraXian.Characters.DamageWorker_Accumulation</workerClass>
-        <impactSoundType>Bullet</impactSoundType>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.MX_AccumulationDamageProperties">
-                <accumulationHediff>MX_QH_FlowerBellCold</accumulationHediff>
-            </li>
-        </modExtensions>
-    </DamageDef>
+  <DamageDef>
+    <defName>MX_QH_NoteImpact</defName>
+    <label>音击</label>
+    <externalViolence>true</externalViolence>
+    <armorCategory>Sharp</armorCategory>
+    <isRanged>true</isRanged>
+    <workerClass>DamageWorker_AddInjury</workerClass>
+    <deathMessage>{0}被花信铃音击倒了。</deathMessage>
+    <hediff>PsychicInjury</hediff>
+  </DamageDef>
 </Defs>

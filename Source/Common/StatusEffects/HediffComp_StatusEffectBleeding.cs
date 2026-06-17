@@ -1,26 +1,26 @@
-using Verse;
+﻿using Verse;
 using RimWorld;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellBleeding : HediffCompProperties
+    public class HediffCompProperties_StatusEffectBleeding : HediffCompProperties
     {
         public int woundCount = 2;
         public float woundSeverity = 3f;
         public ThingDef bloodFilthDef = ThingDefOf.Filth_Blood;
         public int bloodFilthCount = 3;
 
-        public HediffCompProperties_FlowerBellBleeding()
+        public HediffCompProperties_StatusEffectBleeding()
         {
-            compClass = typeof(HediffComp_FlowerBellBleeding);
+            compClass = typeof(HediffComp_StatusEffectBleeding);
         }
     }
 
-    public class HediffComp_FlowerBellBleeding : HediffComp
+    public class HediffComp_StatusEffectBleeding : HediffComp
     {
         private bool appliedWounds;
 
-        private HediffCompProperties_FlowerBellBleeding PropsBleeding => (HediffCompProperties_FlowerBellBleeding)props;
+        private HediffCompProperties_StatusEffectBleeding PropsBleeding => (HediffCompProperties_StatusEffectBleeding)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -44,7 +44,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             appliedWounds = true;
             for (int i = 0; i < PropsBleeding.woundCount; i++)
             {
-                MX_QHUtility.ApplyBleed(Pawn, PropsBleeding.woundSeverity);
+                StatusEffectUtility.ApplyBleed(Pawn, PropsBleeding.woundSeverity);
             }
 
             MakeBloodFilth();

@@ -2,10 +2,13 @@
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class Hediff_FlowerBellFrozen : HediffWithComps
+    public class Hediff_StatusEffectFrozen : HediffWithComps
     {
+        private const string FreezeMoteDefNameA = "MX_Mote_StatusEffectFreeze_A";
+        private const string FreezeMoteDefNameB = "MX_Mote_StatusEffectFreeze_B";
+
         private Mote freezeMote;
         private bool interruptedOnAdd;
 
@@ -66,7 +69,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            ThingDef moteDef = Rand.Chance(0.5f) ? MX_QHDefOf.MX_QH_Mote_FlowerBellFreeze_A : MX_QHDefOf.MX_QH_Mote_FlowerBellFreeze_B;
+            ThingDef moteDef = DefDatabase<ThingDef>.GetNamedSilentFail(Rand.Chance(0.5f) ? FreezeMoteDefNameA : FreezeMoteDefNameB);
             if (moteDef == null)
             {
                 return;

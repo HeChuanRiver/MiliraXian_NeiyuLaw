@@ -1,24 +1,24 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellBleedScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectBleedScale : HediffCompProperties_AccumulationScaling
     {
         public SimpleCurve sharpArmorResistanceCurve;
         public SimpleCurve smallBodySizeMultiplierCurve;
         public float nonFleshMultiplier = 0f;
 
-        public HediffCompProperties_FlowerBellBleedScale()
+        public HediffCompProperties_StatusEffectBleedScale()
         {
-            compClass = typeof(HediffComp_FlowerBellBleedScale);
+            compClass = typeof(HediffComp_StatusEffectBleedScale);
         }
     }
 
-    public class HediffComp_FlowerBellBleedScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectBleedScale : HediffComp_AccumulationScaling
     {
-        private HediffCompProperties_FlowerBellBleedScale PropsBleedScale => (HediffCompProperties_FlowerBellBleedScale)props;
+        private HediffCompProperties_StatusEffectBleedScale PropsBleedScale => (HediffCompProperties_StatusEffectBleedScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

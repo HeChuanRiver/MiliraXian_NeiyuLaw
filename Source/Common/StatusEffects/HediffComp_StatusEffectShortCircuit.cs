@@ -1,10 +1,10 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellShortCircuit : HediffCompProperties
+    public class HediffCompProperties_StatusEffectShortCircuit : HediffCompProperties
     {
         public DamageDef explosionDamageDef;
         public float explosionRadius = 1.5f;
@@ -19,18 +19,18 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public FloatRange steamScaleRange = new FloatRange(0.55f, 0.9f);
         public float steamPositionJitter = 0.28f;
 
-        public HediffCompProperties_FlowerBellShortCircuit()
+        public HediffCompProperties_StatusEffectShortCircuit()
         {
-            compClass = typeof(HediffComp_FlowerBellShortCircuit);
+            compClass = typeof(HediffComp_StatusEffectShortCircuit);
         }
     }
 
-    public class HediffComp_FlowerBellShortCircuit : HediffComp
+    public class HediffComp_StatusEffectShortCircuit : HediffComp
     {
         private bool triggered;
         private int nextSteamTick;
 
-        private HediffCompProperties_FlowerBellShortCircuit PropsShortCircuit => (HediffCompProperties_FlowerBellShortCircuit)props;
+        private HediffCompProperties_StatusEffectShortCircuit PropsShortCircuit => (HediffCompProperties_StatusEffectShortCircuit)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -82,7 +82,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 Pawn.stances?.stunner?.StunFor(PropsShortCircuit.stunTicks, instigator, addBattleLog: true, showMote: true, disableRotation: true);
             }
 
-            MX_QHUtility.ReduceMechEnergyNeed(Pawn, PropsShortCircuit.energyLossPercent);
+            StatusEffectUtility.ReduceMechEnergyNeed(Pawn, PropsShortCircuit.energyLossPercent);
         }
 
         private void InterruptPawnAction()

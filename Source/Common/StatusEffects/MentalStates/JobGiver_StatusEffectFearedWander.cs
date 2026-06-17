@@ -1,12 +1,12 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace MiliraXian.Characters.QingHe.MentalStates
+namespace MiliraXian.Characters
 {
-    public class JobGiver_FlowerBellFearedWander : JobGiver_Wander
+    public class JobGiver_StatusEffectFearedWander : JobGiver_Wander
     {
-        public JobGiver_FlowerBellFearedWander()
+        public JobGiver_StatusEffectFearedWander()
         {
             wanderRadius = 6f;
             locomotionUrgency = LocomotionUrgency.Jog;
@@ -17,7 +17,7 @@ namespace MiliraXian.Characters.QingHe.MentalStates
 
         protected override IntVec3 GetWanderRoot(Pawn pawn)
         {
-            MentalState_FlowerBellFeared mentalState = pawn.MentalState as MentalState_FlowerBellFeared;
+            MentalState_StatusEffectFeared mentalState = pawn.MentalState as MentalState_StatusEffectFeared;
             if (mentalState?.wanderRoot.IsValid == true)
             {
                 return mentalState.wanderRoot;

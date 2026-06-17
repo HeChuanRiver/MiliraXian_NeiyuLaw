@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Patch>
   <Operation Class="PatchOperationAdd">
     <xpath>/Defs/ThinkTreeDef[defName="MentalStateNonCritical"]/thinkRoot/subNodes</xpath>
     <value>
       <li Class="ThinkNode_ConditionalMentalState">
-        <state>MX_QH_FlowerBellFearedMentalState</state>
+        <state>MX_StatusEffectFearedMentalState</state>
         <subNodes>
-          <li Class="MiliraXian.Characters.QingHe.MentalStates.JobGiver_FlowerBellFearedWander" />
+          <li Class="MiliraXian.Characters.JobGiver_StatusEffectFearedWander" />
         </subNodes>
       </li>
     </value>

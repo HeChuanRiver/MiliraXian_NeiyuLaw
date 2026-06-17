@@ -1,20 +1,20 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Hediffs
+namespace MiliraXian.Characters
 {
-    public class HediffCompProperties_FlowerBellPsychicScale : HediffCompProperties_AccumulationScaling
+    public class HediffCompProperties_StatusEffectPsychicScale : HediffCompProperties_AccumulationScaling
     {
         public SimpleCurve psychicSensitivityMultiplierCurve;
 
-        public HediffCompProperties_FlowerBellPsychicScale()
+        public HediffCompProperties_StatusEffectPsychicScale()
         {
-            compClass = typeof(HediffComp_FlowerBellPsychicScale);
+            compClass = typeof(HediffComp_StatusEffectPsychicScale);
         }
     }
 
-    public class HediffComp_FlowerBellPsychicScale : HediffComp_AccumulationScaling
+    public class HediffComp_StatusEffectPsychicScale : HediffComp_AccumulationScaling
     {
         private static readonly SimpleCurve DefaultPsychicSensitivityMultiplierCurve = new SimpleCurve
         {
@@ -24,7 +24,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             new CurvePoint(3f, 2f)
         };
 
-        private HediffCompProperties_FlowerBellPsychicScale PropsPsychicScale => (HediffCompProperties_FlowerBellPsychicScale)props;
+        private HediffCompProperties_StatusEffectPsychicScale PropsPsychicScale => (HediffCompProperties_StatusEffectPsychicScale)props;
 
         public override float Scaled(Pawn caster, float severityOffset)
         {

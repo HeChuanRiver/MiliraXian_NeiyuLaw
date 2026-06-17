@@ -1,388 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellColdBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(0.56, 0.88, 1.00, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_freeze</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(0.72, 0.90, 1.00, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellBleedBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(1.00, 0.36, 0.42, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_bleed</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(1.00, 0.48, 0.52, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellElectricLeakBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(1.00, 0.86, 0.28, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_leakage</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(1.00, 0.86, 0.28, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellToxinBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(0.62, 0.95, 0.42, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_toxic</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(0.72, 1.00, 0.52, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellCorrosionBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(0.66, 0.90, 0.58, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_toxic</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(0.66, 0.90, 0.58, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellFearBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(0.92, 0.74, 1.00, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(0.98, 0.82, 1.00, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellOverloadBar</defName>
-    <label>Mote</label>
-    <thingClass>MiliraXian.Characters.Mote_AccumulationBar</thingClass>
-    <graphicData>
-      <texPath>Things/Mote/Transparent</texPath>
-    </graphicData>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.04</fadeInTime>
-      <fadeOutTime>0.18</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-    <modExtensions>
-      <li Class="MiliraXian.Characters.MX_AccumulationBarProperties">
-        <backgroundShaderType>MetaOverlay</backgroundShaderType>
-        <fillShaderType>MetaOverlay</fillShaderType>
-        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
-        <fillColor>(0.92, 0.74, 1.00, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_overclocked</iconTexPath>
-        <iconShaderType>MoteGlow</iconShaderType>
-        <iconColor>(0.98, 0.82, 1.00, 0.90)</iconColor>
-        <size>(1.04, 0.09)</size>
-        <margin>0.035</margin>
-        <offsetZ>-0.85</offsetZ>
-        <altitudeOffset>0.08</altitudeOffset>
-        <stackSpacing>0.22</stackSpacing>
-        <stackDownward>true</stackDownward>
-        <iconSize>0.18</iconSize>
-        <iconGap>0.04</iconGap>
-      </li>
-    </modExtensions>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellFreeze_A</defName>
-    <label>Mote</label>
-    <thingClass>MoteAttached</thingClass>
-    <graphicData>
-      <graphicClass>Graphic_Mote</graphicClass>
-      <shaderType>MoteGlow</shaderType>
-      <texPath>MiliraXianQinghe/Effect/freeze_1</texPath>
-      <drawSize>(1.6, 1.6)</drawSize>
-      <color>(0.72, 0.90, 1.00, 0.82)</color>
-    </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.08</fadeInTime>
-      <fadeOutTime>0.35</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellFearedIcon</defName>
-    <label>Mote</label>
-    <thingClass>MoteAttached</thingClass>
-    <graphicData>
-      <graphicClass>Graphic_Mote</graphicClass>
-      <shaderType>MoteGlow</shaderType>
-      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
-      <drawSize>(0.42, 0.42)</drawSize>
-      <color>(0.92, 0.74, 1.00, 0.90)</color>
-    </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.08</fadeInTime>
-      <fadeOutTime>0.20</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-      <attachedDrawOffset>(0, 0, 1.08)</attachedDrawOffset>
-    </mote>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellOverloadedIcon</defName>
-    <label>Mote</label>
-    <thingClass>MoteAttached</thingClass>
-    <graphicData>
-      <graphicClass>Graphic_Mote</graphicClass>
-      <shaderType>MoteGlow</shaderType>
-      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_overclocked</texPath>
-      <drawSize>(0.42, 0.42)</drawSize>
-      <color>(0.92, 0.74, 1.00, 0.90)</color>
-    </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.08</fadeInTime>
-      <fadeOutTime>0.20</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-      <attachedDrawOffset>(0, 0, 1.08)</attachedDrawOffset>
-    </mote>
-  </ThingDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_QH_Mote_FlowerBellFreeze_B</defName>
-    <label>Mote</label>
-    <thingClass>MoteAttached</thingClass>
-    <graphicData>
-      <graphicClass>Graphic_Mote</graphicClass>
-      <shaderType>MoteGlow</shaderType>
-      <texPath>MiliraXianQinghe/Effect/freeze_2</texPath>
-      <drawSize>(1.6, 1.6)</drawSize>
-      <color>(0.72, 0.90, 1.00, 0.82)</color>
-    </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <mote>
-      <fadeInTime>0.08</fadeInTime>
-      <fadeOutTime>0.35</fadeOutTime>
-      <solidTime>999999</solidTime>
-      <needsMaintenance>true</needsMaintenance>
-      <fadeOutUnmaintained>true</fadeOutUnmaintained>
-    </mote>
-  </ThingDef>
-
   <ThingDef ParentName="MoteBase">
     <defName>MX_QH_Mote_FlowerDivinationBurst</defName>
     <label>Mote</label>
@@ -414,7 +31,6 @@
       <growthRate>2.0</growthRate>
     </mote>
   </ThingDef>
-
   <ThingDef ParentName="MoteBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>MX_QH_Mote_FlowerDivinationBokeh</defName>
     <label>Mote</label>
@@ -437,7 +53,6 @@
       <solidTime>999999</solidTime>
     </mote>
   </ThingDef>
-
   <ThingDef ParentName="MoteBase">
     <defName>MX_QH_Mote_FlowerDivinationFootRing</defName>
     <label>Mote</label>
@@ -463,7 +78,6 @@
       <solidTime>999999</solidTime>
     </mote>
   </ThingDef>
-
   <EffecterDef>
     <defName>MX_QH_Effecter_FlowerDivinationActive</defName>
     <offsetMode>Free</offsetMode>
@@ -494,7 +108,6 @@
       </li>
     </children>
   </EffecterDef>
-
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_SpringFlowHediff</defName>
     <altitudeLayer>MoteLow</altitudeLayer>
@@ -510,7 +123,6 @@
       <color>(0.70, 0.95, 1.00, 0.34)</color>
     </graphicData>
   </FleckDef>
-
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_DrainHediff</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>
@@ -526,7 +138,6 @@
       <color>(0.74, 0.72, 1.00, 0.38)</color>
     </graphicData>
   </FleckDef>
-
   <EffecterDef>
     <defName>MX_QH_Effecter_SpringFlowHediff</defName>
     <offsetMode>Free</offsetMode>
@@ -549,7 +160,6 @@
       </li>
     </children>
   </EffecterDef>
-
   <EffecterDef>
     <defName>MX_QH_Effecter_DrainHediff</defName>
     <offsetMode>Free</offsetMode>
@@ -572,5 +182,4 @@
       </li>
     </children>
   </EffecterDef>
-
 </Defs>

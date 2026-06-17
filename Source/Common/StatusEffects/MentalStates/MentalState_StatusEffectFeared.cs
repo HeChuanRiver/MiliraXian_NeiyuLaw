@@ -1,10 +1,10 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace MiliraXian.Characters.QingHe.MentalStates
+namespace MiliraXian.Characters
 {
-    public class MentalState_FlowerBellFeared : MentalState
+    public class MentalState_StatusEffectFeared : MentalState
     {
         public IntVec3 wanderRoot = IntVec3.Invalid;
 
