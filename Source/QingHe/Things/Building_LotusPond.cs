@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
 using Verse.AI;
 using Verse;
@@ -35,12 +36,12 @@ namespace MiliraXian.Characters.QingHe.Things
 
             if (!MX_QHUtility.IsQinghe(interactor))
             {
-                yield return new FloatMenuOption("调谐四时共鸣（需要清荷本人）", null);
+                yield return new FloatMenuOption("打开花神庭（需要清荷本人）", null);
                 yield break;
             }
 
             yield return new FloatMenuOption(
-                "调谐四时共鸣",
+                "打开花神庭",
                 delegate
                 {
                     if (!interactor.CanReserveAndReach(clickedThing, PathEndMode.InteractionCell, Danger.Deadly))
@@ -49,18 +50,25 @@ namespace MiliraXian.Characters.QingHe.Things
                         return;
                     }
 
-                    Verse.AI.Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_AttuneSeasonResonance, clickedThing);
-                    interactor.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+                    HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
+                    FlowerCourtUtility.EnsureFlowerResources(interactor);
+                    if (state == null)
+                    {
+                        Messages.Message("清荷尚未建立花神庭。", interactor, MessageTypeDefOf.RejectInput, historical: false);
+                        return;
+                    }
+
+                    Find.WindowStack.Add(new Dialog_QingheSkillTree(interactor, state));
                 });
 
             yield return new FloatMenuOption(
-                "冥想调谐当前共鸣",
+                "在荷池旁冥想",
                 delegate
                 {
-                    HediffComp_SeasonResonance resonance = FlowerCourtUtility.EnsureSeasonResonance(interactor);
-                    if (resonance == null || resonance.CurrentAttunedSeason == AttunedSeason.None)
+                    HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
+                    if (state == null)
                     {
-                        Messages.Message("清荷尚未选择四时共鸣。", interactor, MessageTypeDefOf.RejectInput, historical: false);
+                        Messages.Message("清荷尚未建立花神庭。", interactor, MessageTypeDefOf.RejectInput, historical: false);
                         return;
                     }
 

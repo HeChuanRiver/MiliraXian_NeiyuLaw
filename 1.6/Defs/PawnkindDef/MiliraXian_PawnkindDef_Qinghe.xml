@@ -106,11 +106,6 @@
         <favoriteColor>MX_QH_FlowerPink</favoriteColor>
 
         <!-- 给予这个角色的技能 -->
-        <abilities>
-            <li>MX_QH_FlowerMandate</li>
-            <li>MX_QH_FlowerDivinationSlash</li>
-        </abilities>
-
         <skills>
             <li>
                 <skill>Shooting</skill>
@@ -220,7 +215,7 @@
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_SeasonResonance</def>
+                        <def>MX_QH_SkillTreeState</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>

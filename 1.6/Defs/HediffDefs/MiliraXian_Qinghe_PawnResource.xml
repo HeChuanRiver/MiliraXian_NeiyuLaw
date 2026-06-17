@@ -2,8 +2,8 @@
 <Defs>
     <HediffDef>
         <defName>MX_QH_LongBreath</defName>
-        <label>长息</label>
-        <description>受到致命伤害或摧毁身体部件的伤害时，若长息不在冷却中，抵消此次伤害、修复自身所有损伤，同时获得3秒无敌和10秒心灵隐形（若可用）。</description>
+        <label>花神之垂怜</label>
+        <description>受到致命伤害或可能摧毁身体部件的伤害时，若不在冷却中，抵消此次伤害、修复自身所有损伤，同时获得持续3秒的无敌和10秒的心灵隐形。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
@@ -25,7 +25,7 @@
     <HediffDef>
         <defName>MX_QH_LongBreathDamageImmunity</defName>
         <label>长息涌流</label>
-        <description>长息触发后获得的短暂免疫伤害效果。</description>
+        <description>受到花神的垂怜，0、短时间内免疫所有伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -40,8 +40,8 @@
 
     <HediffDef>
         <defName>MX_QH_LotusShield</defName>
-        <label>花神护体</label>
-        <description>清荷受到十二花神的眷顾，能在身边自然产生护盾。\n\n护盾被击碎时会失效20秒。</description>
+        <label>花神之眷顾</label>
+        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效20秒。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_LotusShield</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -58,16 +58,16 @@
                     <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
                     <absorbFleckScale>0.6</absorbFleckScale>
                     <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
-                    <activeShieldTexPath>MiliraXianNeiyu/Effect/Neiyu_Shield/Shield</activeShieldTexPath>
-                    <activeShieldDrawSize>(1.9,1.9)</activeShieldDrawSize>
-                    <activeShieldAlpha>0.45</activeShieldAlpha>
+                    <activeShieldTexPath>MiliraXianQinghe/Effect/lotus_shield</activeShieldTexPath>
+                    <activeShieldDrawSize>(2.5,2.5)</activeShieldDrawSize>
+                    <activeShieldAlpha>0.8</activeShieldAlpha>
                     <activeShieldAltitudeOffset>0</activeShieldAltitudeOffset>
-                    <minDrawScale>1.0</minDrawScale>
-                    <maxDrawScale>1.0</maxDrawScale>
+                    <activeShieldDrawOffsetZ>-0.25</activeShieldDrawOffsetZ>
+                    <minDrawScale>1.3</minDrawScale>
+                    <maxDrawScale>1.3</maxDrawScale>
                 </shieldCompProperties>
             </li>
         </comps>
     </HediffDef>
 
 </Defs>
-

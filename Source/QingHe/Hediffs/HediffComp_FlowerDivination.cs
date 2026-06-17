@@ -27,7 +27,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public EffecterDef activeEffecter;
         public bool startReady = true;
         public string activeLabel = "花神降临";
-        public string noResonanceReason = "尚未调谐四时共鸣。";
+        public string noResonanceReason = "尚未习得花之舞。";
         public string alreadyActiveReason = "花神已经降临。";
         public string cooldownReason = "花神降临仍在冷却中。";
         public string activatedMessage = "花神降临。";
@@ -187,10 +187,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return false;
             }
 
-            HediffComp_SeasonResonance resonance = parent?.GetComp<HediffComp_SeasonResonance>();
-            if (resonance == null || resonance.CurrentAttunedSeason == AttunedSeason.None)
+            HediffComp_QingheSkillTreeState skillTree = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            if (skillTree == null || !skillTree.HasNode(QingheSkillTreeSystem.NodeFlowerDance))
             {
-                reason = Props?.noResonanceReason ?? "尚未调谐四时共鸣。";
+                reason = Props?.noResonanceReason ?? "尚未习得花之舞。";
                 return false;
             }
 

@@ -6,8 +6,8 @@ namespace MiliraXian.Characters.QingHe
     [DefOf]
     public static class MX_QHDefOf
     {
-        public static JobDef MX_QH_AttuneSeasonResonance;
         public static JobDef MX_QH_MeditateAtFlowerCourt;
+        public static JobDef MX_QH_StudyMusicScoreAtLotusPond;
         public static JobDef MX_QH_FlowerDivination;
 
         public static ThingDef SpringFlowField;
@@ -17,6 +17,9 @@ namespace MiliraXian.Characters.QingHe
         public static ThingDef MX_Bullet_QH_FlowerMandate_Pomegranate;
         public static ThingDef MX_QH_FlowerMandate_Wintersweet;
         public static ThingDef MX_QH_LotusPond;
+        public static ThingDef MX_QH_Score_Luoshenfu;
+        public static ThingDef MX_QH_Score_Yangchun;
+        public static ThingDef MX_QH_Score_Yingyue;
 
         public static DamageDef MX_QH_NoteImpact;
 
@@ -24,7 +27,7 @@ namespace MiliraXian.Characters.QingHe
         public static HediffDef MX_QH_LongBreath;
         public static HediffDef MX_QH_LongBreathDamageImmunity;
         public static HediffDef MX_QH_LotusShield;
-        public static HediffDef MX_QH_SeasonResonance;
+        public static HediffDef MX_QH_SkillTreeState;
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_FlowerBellCold;
         public static HediffDef MX_QH_FlowerBellFrozen;

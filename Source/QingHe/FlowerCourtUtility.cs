@@ -5,37 +5,37 @@ namespace MiliraXian.Characters.QingHe
 {
     public static class FlowerCourtUtility
     {
-        public static HediffComp_SeasonResonance EnsureSeasonResonance(Pawn pawn)
+        public static HediffComp_QingheSkillTreeState EnsureSkillTreeState(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SeasonResonance == null)
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SkillTreeState == null)
             {
                 return null;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SeasonResonance);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SkillTreeState);
             if (hediff == null)
             {
-                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SeasonResonance, pawn);
+                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SkillTreeState, pawn);
                 pawn.health.AddHediff(hediff);
             }
 
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_SeasonResonance>();
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_QingheSkillTreeState>();
         }
 
         public static HediffComp_FlowerDivination GetFlowerDivination(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SeasonResonance == null)
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SkillTreeState == null)
             {
                 return null;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SeasonResonance);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SkillTreeState);
             return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerDivination>();
         }
 
         public static HediffComp_FlowerDivination EnsureFlowerDivination(Pawn pawn)
         {
-            return EnsureSeasonResonance(pawn)?.FlowerDivination;
+            return EnsureSkillTreeState(pawn)?.parent?.GetComp<HediffComp_FlowerDivination>();
         }
 
         public static void EnsureFlowerResources(Pawn pawn)
@@ -62,8 +62,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             EnsureCoreHediffs(pawn);
-            HediffComp_SeasonResonance resonance = EnsureSeasonResonance(pawn);
-            resonance?.SyncFlowerMandateFramework();
+            QingheSkillTreeSystem.SyncChoices(pawn);
             EnsureFlowerResources(pawn);
         }
 

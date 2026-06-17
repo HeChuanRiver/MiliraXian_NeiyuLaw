@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <JobDef>
-        <defName>MX_QH_AttuneSeasonResonance</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_AttuneSeasonResonance</driverClass>
-        <reportString>在荷池旁调谐四时共鸣。</reportString>
+        <defName>MX_QH_MeditateAtFlowerCourt</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_MeditateAtFlowerCourt</driverClass>
+        <reportString>在荷池旁冥想。</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
 
     <JobDef>
-        <defName>MX_QH_MeditateAtFlowerCourt</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_MeditateAtFlowerCourt</driverClass>
-        <reportString>在荷池旁冥想。</reportString>
+        <defName>MX_QH_StudyMusicScoreAtLotusPond</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_StudyMusicScoreAtLotusPond</driverClass>
+        <reportString>在荷池旁研读曲谱。</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>

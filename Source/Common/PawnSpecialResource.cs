@@ -51,18 +51,7 @@ namespace MiliraXian.Characters
 
         public bool IsOverflowing => MaxValue > 0f && CurrentValue > MaxValue;
 
-        public float ValuePercent
-        {
-            get
-            {
-                if (MaxValue <= 0f)
-                {
-                    return 0f;
-                }
-
-                return Mathf.Clamp01(CurrentValue / MaxValue);
-            }
-        }
+        public float ValuePercent => MaxValue <= 0f ? 0f : Mathf.Clamp01(CurrentValue / MaxValue);
 
         public string ResourceLabel => PropsResource.resourceLabel;
 
@@ -194,10 +183,7 @@ namespace MiliraXian.Characters
 
         protected override float Target
         {
-            get
-            {
-                return resource.ValuePercent;
-            }
+            get => resource.ValuePercent;
             set
             {
             }
@@ -217,14 +203,8 @@ namespace MiliraXian.Characters
 
         protected override bool DraggingBar
         {
-            get
-            {
-                return draggingBar;
-            }
-            set
-            {
-                draggingBar = value;
-            }
+            get => draggingBar;
+            set => draggingBar = value;
         }
 
         public PawnSpecialResourceGizmo(HediffComp_PawnSpecialResource resource)

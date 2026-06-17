@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MX_QH_SeasonResonance</defName>
-        <label>四时共鸣</label>
-        <description>隐藏 Hediff：保存清荷当前调谐的四时共鸣与总调谐度。</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_SeasonResonance</hediffClass>
+        <defName>MX_QH_SkillTreeState</defName>
+        <label>清荷技能树</label>
+        <description>隐藏 Hediff：保存清荷技能树原型状态。</description>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheSkillTreeState</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -13,15 +13,10 @@
         <minSeverity>1.0</minSeverity>
         <maxSeverity>1.0</maxSeverity>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SeasonResonance">
-                <initialAttunedSeason>None</initialAttunedSeason>
-                <initialAttunement>0</initialAttunement>
-                <maxAttunement>100</maxAttunement>
-                <onlyWhenSelected>true</onlyWhenSelected>
-                <defaultFlowerMandateLabel>飞花令</defaultFlowerMandateLabel>
-                <defaultFlowerMandateDesc>清荷尚未调谐四时共鸣，暂时无法回应花神。</defaultFlowerMandateDesc>
-                <defaultFlowerMandateDisabledReason>尚未调谐四时共鸣。</defaultFlowerMandateDisabledReason>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheSkillTreeState">
+                <initialSkillPoints>1</initialSkillPoints>
             </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheSkillTreeGizmos" />
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDivination">
                 <activeDurationTicks>3600</activeDurationTicks>
                 <cooldownTicks>3600</cooldownTicks>
@@ -36,7 +31,7 @@
                 <activeEffecter>MX_QH_Effecter_FlowerDivinationActive</activeEffecter>
                 <startReady>true</startReady>
                 <activeLabel>花神降临</activeLabel>
-                <noResonanceReason>尚未调谐四时共鸣。</noResonanceReason>
+                <noResonanceReason>尚未习得花之舞。</noResonanceReason>
                 <alreadyActiveReason>花神已经降临。</alreadyActiveReason>
                 <cooldownReason>花神降临仍在冷却中。</cooldownReason>
                 <activatedMessage>花神降临。</activatedMessage>

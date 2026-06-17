@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef>
+        <defName>MX_QH_Score_Luoshenfu</defName>
+        <label>曲谱集：洛神赋</label>
+        <description>清荷遗落的曲谱之一，记录着花语与花神庭非战斗修行的曲意。清荷可以将它带到荷池旁研读。</description>
+        <thingClass>ThingWithComps</thingClass>
+        <category>Item</category>
+        <selectable>true</selectable>
+        <rotatable>true</rotatable>
+        <drawerType>MapMeshOnly</drawerType>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>true</alwaysHaulable>
+        <useHitPoints>true</useHitPoints>
+        <drawGUIOverlay>true</drawGUIOverlay>
+        <stackLimit>1</stackLimit>
+        <tradeNeverStack>true</tradeNeverStack>
+        <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
+        <graphicData>
+            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>0.8</drawSize>
+        </graphicData>
+        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
+        <thingCategories>
+            <li>Books</li>
+        </thingCategories>
+        <comps>
+            <li Class="CompProperties_Forbiddable" />
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
+                <score>MX_QH_ScoreDef_Luoshenfu</score>
+            </li>
+        </comps>
+        <statBases>
+            <MaxHitPoints>60</MaxHitPoints>
+            <DeteriorationRate>5</DeteriorationRate>
+            <Mass>0.50</Mass>
+            <Flammability>1</Flammability>
+            <MarketValue>600</MarketValue>
+        </statBases>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_QH_Score_Yangchun</defName>
+        <label>曲谱集：阳春</label>
+        <description>清荷遗落的曲谱之一，记录着花神签与护体之法的曲意。清荷可以将它带到荷池旁研读。</description>
+        <thingClass>ThingWithComps</thingClass>
+        <category>Item</category>
+        <selectable>true</selectable>
+        <rotatable>true</rotatable>
+        <drawerType>MapMeshOnly</drawerType>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>true</alwaysHaulable>
+        <useHitPoints>true</useHitPoints>
+        <drawGUIOverlay>true</drawGUIOverlay>
+        <stackLimit>1</stackLimit>
+        <tradeNeverStack>true</tradeNeverStack>
+        <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
+        <graphicData>
+            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>0.8</drawSize>
+        </graphicData>
+        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
+        <thingCategories>
+            <li>Books</li>
+        </thingCategories>
+        <comps>
+            <li Class="CompProperties_Forbiddable" />
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
+                <score>MX_QH_ScoreDef_Yangchun</score>
+            </li>
+        </comps>
+        <statBases>
+            <MaxHitPoints>60</MaxHitPoints>
+            <DeteriorationRate>5</DeteriorationRate>
+            <Mass>0.50</Mass>
+            <Flammability>1</Flammability>
+            <MarketValue>600</MarketValue>
+        </statBases>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_QH_Score_Yingyue</defName>
+        <label>曲谱集：映月</label>
+        <description>清荷遗落的曲谱之一，记录着花神降临与决战技的曲意。清荷可以将它带到荷池旁研读。</description>
+        <thingClass>ThingWithComps</thingClass>
+        <category>Item</category>
+        <selectable>true</selectable>
+        <rotatable>true</rotatable>
+        <drawerType>MapMeshOnly</drawerType>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>true</alwaysHaulable>
+        <useHitPoints>true</useHitPoints>
+        <drawGUIOverlay>true</drawGUIOverlay>
+        <stackLimit>1</stackLimit>
+        <tradeNeverStack>true</tradeNeverStack>
+        <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
+        <graphicData>
+            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>0.8</drawSize>
+        </graphicData>
+        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
+        <thingCategories>
+            <li>Books</li>
+        </thingCategories>
+        <comps>
+            <li Class="CompProperties_Forbiddable" />
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
+                <score>MX_QH_ScoreDef_Yingyue</score>
+            </li>
+        </comps>
+        <statBases>
+            <MaxHitPoints>60</MaxHitPoints>
+            <DeteriorationRate>5</DeteriorationRate>
+            <Mass>0.50</Mass>
+            <Flammability>1</Flammability>
+            <MarketValue>900</MarketValue>
+        </statBases>
+    </ThingDef>
+</Defs>

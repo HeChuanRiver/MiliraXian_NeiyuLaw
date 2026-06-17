@@ -13,6 +13,86 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             return new Gizmo_QH_FlowerResources(pawn);
         }
+
+        public static Gizmo BuildFlowerDivinationGizmo(Pawn pawn)
+        {
+            HediffComp_FlowerDivination divination = FlowerCourtUtility.EnsureFlowerDivination(pawn);
+            Command_Action command = new Command_Action
+            {
+                defaultLabel = divination?.Label ?? "花神降临",
+                defaultDesc = BuildDivinationTip(divination),
+                icon = TexCommand.DesirePower,
+                action = delegate
+                {
+                    TryStartDivination(pawn, divination);
+                }
+            };
+
+            if (divination == null)
+            {
+                command.Disable("清荷尚未建立花神庭。");
+            }
+            else if (!divination.CanStartDivination(out string reason))
+            {
+                command.Disable(reason);
+            }
+
+            return command;
+        }
+
+        private static void TryStartDivination(Pawn pawn, HediffComp_FlowerDivination divination)
+        {
+            if (divination == null)
+            {
+                Messages.Message("清荷尚未建立花神庭。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            if (!divination.CanStartDivination(out string reason))
+            {
+                Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            if (MX_QHDefOf.MX_QH_FlowerDivination == null || pawn?.jobs == null)
+            {
+                Messages.Message("花神降临尚未准备好。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_FlowerDivination);
+            pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+        }
+
+        private static string BuildDivinationTip(HediffComp_FlowerDivination divination)
+        {
+            if (divination == null)
+            {
+                return "花神降临\n\n清荷尚未建立花神庭。";
+            }
+
+            string tip = divination.Label;
+            if (divination.Active)
+            {
+                tip += "\n\n当前状态: 降临中"
+                       + "\n剩余时间: " + divination.ActiveTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
+                return tip;
+            }
+
+            if (divination.OnCooldown)
+            {
+                tip += "\n\n当前状态: 冷却中"
+                       + "\n剩余时间: " + divination.CooldownTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
+                return tip;
+            }
+
+            if (divination.CanStartDivination(out string reason))
+            {
+                return tip + "\n\n当前状态: 可用";
+            }
+
+            return tip + "\n\n" + reason;
+        }
     }
 
     [StaticConstructorOnStartup]
@@ -20,16 +100,14 @@ namespace MiliraXian.Characters.QingHe.UI
     {
         private const int FlowerDecreeTipSalt = 910202;
         private const int ShieldTipSalt = 910203;
-        private const int DivinationTipSalt = 910204;
         private const float BarLeftPadding = 10f;
         private const float BarRightPadding = 8f;
-        private const float ResourceBarWidth = 100f;
+        private const float ResourceBarWidth = 150f;
         private const float FlowerDecreeOffsetY = 8f;
         private const float FlowerDecreeHeight = 12f;
         private const float ShieldOffsetY = 36f;
         private const float ShieldHeight = 12f;
         private const float FlowerDecreeSegmentGap = 2f;
-        private const float DivinationGap = 10f;
 
         private readonly Pawn pawn;
 
@@ -59,24 +137,18 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.DrawWindowBackground(rect);
 
             HediffComp_FlowerDecree flowerDecree = PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
-            HediffComp_SeasonResonance resonance = FlowerCourtUtility.EnsureSeasonResonance(pawn);
-            HediffComp_FlowerDivination divination = resonance?.FlowerDivination;
             CompLotusShield lotusShield = pawn?.GetComp<CompLotusShield>();
-            AttunedSeason attunedSeason = resonance?.CurrentAttunedSeason ?? AttunedSeason.None;
-            Color seasonColor = ResolveSeasonColor(attunedSeason);
+            Color accentColor = new Color(0.72f, 0.86f, 0.76f, 1f);
 
-            Rect decreeRect = DrawFlowerDecreeRow(inner, FlowerDecreeOffsetY, flowerDecree, attunedSeason);
-            Rect shieldRect = DrawShieldBar(inner, ShieldOffsetY, lotusShield, seasonColor);
-            Rect divinationRect = DrawDivinationButton(inner, attunedSeason, divination);
-            HandleDivinationInput(divinationRect, divination);
+            Rect decreeRect = DrawFlowerDecreeRow(inner, FlowerDecreeOffsetY, flowerDecree);
+            Rect shieldRect = DrawShieldBar(inner, ShieldOffsetY, lotusShield, accentColor);
 
             TooltipHandler.TipRegion(decreeRect, () => BuildFlowerDecreeTip(flowerDecree), GetStableTipId(FlowerDecreeTipSalt));
             TooltipHandler.TipRegion(shieldRect, () => BuildShieldBarTip(lotusShield), GetStableTipId(ShieldTipSalt));
-            TooltipHandler.TipRegion(divinationRect, () => BuildDivinationTip(divination), GetStableTipId(DivinationTipSalt));
             return new GizmoResult(GizmoState.Clear);
         }
 
-        private static Rect DrawFlowerDecreeRow(Rect inner, float offsetY, HediffComp_FlowerDecree comp, AttunedSeason season)
+        private static Rect DrawFlowerDecreeRow(Rect inner, float offsetY, HediffComp_FlowerDecree comp)
         {
             var barRect = GetResourceBarRect(inner, offsetY, FlowerDecreeHeight);
             float valuePerDecree = Mathf.Max(1f, comp?.ValuePerDecree ?? 100f);
@@ -87,7 +159,7 @@ namespace MiliraXian.Characters.QingHe.UI
             float gap = FlowerDecreeSegmentGap;
             float segmentWidth = (barRect.width - gap * (max - 1)) / max;
             float highlight = comp?.HighlightPercent ?? 0f;
-            Color decreeColor = ResolveDecreeColor(season);
+            Color decreeColor = FlowerDecreeBaseColor;
             int highlightedSegment = highlight > 0.0001f ? Mathf.Clamp(fullSegments - 1, -1, max - 1) : -1;
             for (int i = 0; i < max; i++)
             {
@@ -160,66 +232,6 @@ namespace MiliraXian.Characters.QingHe.UI
             return outerRect;
         }
 
-        private static Rect DrawDivinationButton(Rect inner, AttunedSeason season, HediffComp_FlowerDivination divination)
-        {
-            float iconTop = inner.y + FlowerDecreeOffsetY;
-            float iconHeight = ShieldOffsetY + ShieldHeight - FlowerDecreeOffsetY;
-            var rect = new Rect(inner.xMax - iconHeight - 1f, iconTop, iconHeight, iconHeight);
-            Color background = ResolveDivinationColor(season);
-            if (divination == null || !divination.CanStartDivination(out _))
-            {
-                background = Color.Lerp(background, Color.black, 0.45f);
-            }
-
-            if (divination?.Active == true)
-            {
-                float pulse = 0.5f + 0.5f * Mathf.Sin((Find.TickManager?.TicksGame ?? 0) / 7f);
-                background = Color.Lerp(background, Color.white, 0.18f + pulse * 0.18f);
-            }
-
-            Widgets.DrawBoxSolid(rect, background);
-            if (Mouse.IsOver(rect))
-            {
-                Widgets.DrawHighlight(rect, 0.35f);
-            }
-
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Text.Font = GameFont.Tiny;
-            Widgets.Label(rect, ResolveDivinationLabel(divination));
-            Text.Font = GameFont.Small;
-            Text.Anchor = TextAnchor.UpperLeft;
-            return rect;
-        }
-
-        private void HandleDivinationInput(Rect rect, HediffComp_FlowerDivination divination)
-        {
-            if (!Widgets.ButtonInvisible(rect, false))
-            {
-                return;
-            }
-
-            if (divination == null)
-            {
-                Messages.Message("清荷尚未建立四时共鸣。", pawn, MessageTypeDefOf.RejectInput, historical: false);
-                return;
-            }
-
-            if (!divination.CanStartDivination(out string reason))
-            {
-                Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
-                return;
-            }
-
-            if (MX_QHDefOf.MX_QH_FlowerDivination == null || pawn?.jobs == null)
-            {
-                Messages.Message("花神降临尚未准备好。", pawn, MessageTypeDefOf.RejectInput, historical: false);
-                return;
-            }
-
-            Verse.AI.Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_FlowerDivination);
-            pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-        }
-
         private static void DrawBreakBackground(Rect barRect)
         {
             int tick = Find.TickManager?.TicksGame ?? 0;
@@ -235,54 +247,9 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private static Rect GetResourceBarRect(Rect inner, float offsetY, float height)
         {
-            float iconHeight = ShieldOffsetY + ShieldHeight - FlowerDecreeOffsetY;
-            float availableWidth = inner.width - iconHeight - DivinationGap - BarLeftPadding - BarRightPadding;
+            float availableWidth = inner.width - BarLeftPadding - BarRightPadding;
             float width = Mathf.Min(ResourceBarWidth, availableWidth);
             return new Rect(inner.x + BarLeftPadding, inner.y + offsetY, width, height);
-        }
-
-        private static Color ResolveSeasonColor(AttunedSeason season)
-        {
-            switch (season)
-            {
-                case AttunedSeason.Spring:
-                    return new Color(0.58f, 0.88f, 0.56f, 1f);
-                case AttunedSeason.Summer:
-                    return new Color(1.00f, 0.48f, 0.72f, 1f);
-                case AttunedSeason.Autumn:
-                    return new Color(0.82f, 0.62f, 0.28f, 1f);
-                case AttunedSeason.Winter:
-                    return new Color(0.42f, 0.66f, 0.86f, 1f);
-                default:
-                    return new Color(0.72f, 0.86f, 0.76f, 1f);
-            }
-        }
-
-        private static Color ResolveDecreeColor(AttunedSeason season)
-        {
-            if (season == AttunedSeason.None)
-            {
-                return FlowerDecreeBaseColor;
-            }
-
-            return Color.Lerp(FlowerDecreeBaseColor, ResolveSeasonColor(season), 0.65f);
-        }
-
-        private static Color ResolveDivinationColor(AttunedSeason season)
-        {
-            switch (season)
-            {
-                case AttunedSeason.Spring:
-                    return new Color(0.58f, 0.24f, 0.34f, 1f);
-                case AttunedSeason.Summer:
-                    return new Color(0.58f, 0.20f, 0.15f, 1f);
-                case AttunedSeason.Autumn:
-                    return new Color(0.45f, 0.34f, 0.16f, 1f);
-                case AttunedSeason.Winter:
-                    return new Color(0.22f, 0.34f, 0.46f, 1f);
-                default:
-                    return new Color(0.24f, 0.34f, 0.28f, 1f);
-            }
         }
 
         private int GetStableTipId(int salt)
@@ -318,54 +285,5 @@ namespace MiliraXian.Characters.QingHe.UI
             return shield == null ? "护盾未激活" : shield.BuildShieldTooltip();
         }
 
-        private static string ResolveDivinationLabel(HediffComp_FlowerDivination divination)
-        {
-            if (divination == null)
-            {
-                return "花神\n降临";
-            }
-
-            if (divination.Active)
-            {
-                return "降临\n" + divination.ActiveTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
-            }
-
-            if (divination.OnCooldown)
-            {
-                return "冷却\n" + divination.CooldownTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
-            }
-
-            return "花神\n降临";
-        }
-
-        private static string BuildDivinationTip(HediffComp_FlowerDivination divination)
-        {
-            if (divination == null)
-            {
-                return "花神降临\n\n清荷尚未建立四时共鸣。";
-            }
-
-            string tip = divination.Label;
-            if (divination.Active)
-            {
-                tip += "\n\n当前状态: 降临中"
-                       + "\n剩余时间: " + divination.ActiveTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
-                return tip;
-            }
-
-            if (divination.OnCooldown)
-            {
-                tip += "\n\n当前状态: 冷却中"
-                       + "\n剩余时间: " + divination.CooldownTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
-                return tip;
-            }
-
-            if (divination.CanStartDivination(out string reason))
-            {
-                return tip + "\n\n当前状态: 可用";
-            }
-
-            return tip + "\n\n" + reason;
-        }
     }
 }

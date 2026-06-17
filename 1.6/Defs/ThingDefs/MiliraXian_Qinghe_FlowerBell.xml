@@ -3,7 +3,7 @@
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
     <label>四时花信铃</label>
-    <description>清荷以花神之力凝聚的铃形兵装，所发出的音击随四时共鸣切换效果。</description>
+    <description>清荷以花神之力凝聚的铃形兵装，所发出的音击随当前飞花令切换效果。</description>
     <recipeMaker Inherit="False" IsNull="True" />
     <techLevel>Archotech</techLevel>
     <smeltable>false</smeltable>
@@ -41,38 +41,37 @@
         <burstShotCount>3</burstShotCount>
         <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
         <defaultCooldownTime>1.5</defaultCooldownTime>
-        <seasonSettings>
+        <mandateSettings>
           <li>
-            <season>None</season>
             <projectile>MX_Bullet_Qinghe_FlowerBell</projectile>
             <burstShotCount>3</burstShotCount>
             <cooldownTime>1.5</cooldownTime>
           </li>
           <li>
-            <season>Spring</season>
+            <flowerMandate>MX_QH_FlowerMandate_Peach</flowerMandate>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
             <burstShotCount>5</burstShotCount>
             <cooldownTime>2.2</cooldownTime>
           </li>
           <li>
-            <season>Summer</season>
+            <flowerMandate>MX_QH_FlowerMandate_Pomegranate</flowerMandate>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
             <burstShotCount>4</burstShotCount>
             <cooldownTime>1.7</cooldownTime>
           </li>
           <li>
-            <season>Autumn</season>
+            <flowerMandate>MX_QH_FlowerMandate_Chrysanthemum</flowerMandate>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
             <burstShotCount>1</burstShotCount>
             <cooldownTime>2.8</cooldownTime>
           </li>
           <li>
-            <season>Winter</season>
+            <flowerMandate>MX_QH_FlowerMandate_Wintersweet</flowerMandate>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
             <burstShotCount>2</burstShotCount>
             <cooldownTime>1.2</cooldownTime>
           </li>
-        </seasonSettings>
+        </mandateSettings>
       </li>
     </verbs>
   </ThingDef>

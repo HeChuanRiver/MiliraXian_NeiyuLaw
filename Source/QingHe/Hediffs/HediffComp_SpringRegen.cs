@@ -33,10 +33,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// </summary>
     public class HediffComp_SpringRegen : HediffComp
     {
-        public HediffCompProperties_SpringRegen Props
-        {
-            get { return (HediffCompProperties_SpringRegen)props; }
-        }
+        public HediffCompProperties_SpringRegen Props => (HediffCompProperties_SpringRegen)props;
 
         public override void CompPostTick(ref float severityAdjustment)
         {

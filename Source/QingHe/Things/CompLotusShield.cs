@@ -35,6 +35,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public Vector2 activeShieldDrawSize = new Vector2(1.9f, 1.9f);
         public float activeShieldAlpha = 0.45f;
         public float activeShieldAltitudeOffset = 0f;
+        public float activeShieldDrawOffsetZ = 0f;
 
         public float minDrawScale = 1.0f;
         public float maxDrawScale = 1.2f;
@@ -289,6 +290,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
             Vector3 pos = owner.Drawer.DrawPos;
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+            pos.z += Props.activeShieldDrawOffsetZ;
             pos += Altitudes.AltIncVect * Props.activeShieldAltitudeOffset;
             
             Vector2 drawSize = Props.activeShieldDrawSize;

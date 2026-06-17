@@ -6,9 +6,9 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Verbs
 {
-    public class FlowerBellSeasonVerbProperties
+    public class FlowerBellMandateVerbProperties
     {
-        public AttunedSeason season = AttunedSeason.None;
+        public AbilityDef flowerMandate;
         public ThingDef projectile;
         public int burstShotCount = -1;
         public float cooldownTime = -1f;
@@ -16,26 +16,20 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
     public class VerbProperties_FlowerBell : VerbProperties
     {
-        public List<FlowerBellSeasonVerbProperties> seasonSettings;
+        public List<FlowerBellMandateVerbProperties> mandateSettings;
     }
 
     public class Verb_ShootFlowerBell : Verb_Shoot
     {
         private VerbProperties_FlowerBell FlowerBellProps => verbProps as VerbProperties_FlowerBell;
 
-        public override ThingDef Projectile
-        {
-            get
-            {
-                return CurrentSettings()?.projectile ?? base.Projectile;
-            }
-        }
+        public override ThingDef Projectile => CurrentSettings()?.projectile ?? base.Projectile;
 
         protected override int ShotsPerBurst
         {
             get
             {
-                FlowerBellSeasonVerbProperties settings = CurrentSettings();
+                FlowerBellMandateVerbProperties settings = CurrentSettings();
                 if (settings != null && settings.burstShotCount > 0)
                 {
                     return Mathf.Max(1, settings.burstShotCount);
@@ -45,57 +39,46 @@ namespace MiliraXian.Characters.QingHe.Verbs
             }
         }
 
-        public FlowerBellSeasonVerbProperties CurrentSettings()
+        public FlowerBellMandateVerbProperties CurrentSettings()
         {
-            return ResolveSettings(CurrentSeason());
+            return ResolveSettings(CurrentFlowerMandateDefName());
         }
 
-        public FlowerBellSeasonVerbProperties ResolveSettings(AttunedSeason season)
+        public FlowerBellMandateVerbProperties ResolveSettings(string flowerMandateDefName)
         {
-            var settings = FlowerBellProps?.seasonSettings;
+            var settings = FlowerBellProps?.mandateSettings;
             if (settings.NullOrEmpty())
             {
                 return null;
             }
 
-            FlowerBellSeasonVerbProperties fallback = null;
+            FlowerBellMandateVerbProperties fallback = null;
             for (int i = 0; i < settings.Count; i++)
             {
-                FlowerBellSeasonVerbProperties entry = settings[i];
+                FlowerBellMandateVerbProperties entry = settings[i];
                 if (entry == null)
                 {
                     continue;
                 }
 
-                if (entry.season == season)
+                if (entry.flowerMandate == null)
+                {
+                    fallback = entry;
+                    continue;
+                }
+
+                if (entry.flowerMandate.defName == flowerMandateDefName)
                 {
                     return entry;
                 }
-
-                if (entry.season == AttunedSeason.None)
-                {
-                    fallback = entry;
-                }
             }
 
-            return season == AttunedSeason.None ? fallback : null;
+            return fallback;
         }
 
-        public AttunedSeason CurrentSeason()
+        private string CurrentFlowerMandateDefName()
         {
-            HediffComp_SeasonResonance resonance = GetSeasonResonance(CasterPawn);
-            return resonance?.CurrentAttunedSeason ?? AttunedSeason.None;
-        }
-
-        private static HediffComp_SeasonResonance GetSeasonResonance(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SeasonResonance == null)
-            {
-                return null;
-            }
-
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SeasonResonance);
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_SeasonResonance>();
+            return FlowerCourtUtility.EnsureSkillTreeState(CasterPawn)?.SelectedFlowerMandateDefName;
         }
     }
 }

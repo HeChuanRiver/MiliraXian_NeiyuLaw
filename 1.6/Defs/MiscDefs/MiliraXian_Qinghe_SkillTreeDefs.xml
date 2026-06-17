@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+        <defName>MX_QH_Tree_FlowerMandate</defName>
+        <label>飞花令</label>
+        <description>清荷最初获得的曲谱集，记录飞花令与花信铃的基础战斗曲意。</description>
+        <displayOrder>0</displayOrder>
+        <initiallyUnlocked>true</initiallyUnlocked>
+    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+        <defName>MX_QH_Tree_Luoshen</defName>
+        <label>洛神赋</label>
+        <description>与花语、洛神契和非战斗修行相关的曲谱集。</description>
+        <displayOrder>1</displayOrder>
+    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+        <defName>MX_QH_Tree_Yangchun</defName>
+        <label>阳春</label>
+        <description>与花神签、护体和寄时飞花令相关的曲谱集。</description>
+        <displayOrder>2</displayOrder>
+    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+        <defName>MX_QH_Tree_Yingyue</defName>
+        <label>映月</label>
+        <description>与花神降临和决战技相关的曲谱集。</description>
+        <displayOrder>3</displayOrder>
+    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_FlowerMandate</defName>
+        <label>飞花令</label>
+        <description>开启飞花令技能选择和对应 Ability。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>0</column>
+        <y>160</y>
+        <cost>0</cost>
+        <important>true</important>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Gong</defName>
+        <label>音律：宫</label>
+        <description>花信铃攻击伤害提高25%，并开启《洛神赋》和《阳春》的获取任务。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>1</column>
+        <y>160</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_FlowerMandate</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Liushui</defName>
+        <label>流水</label>
+        <description>移动速度提升15%，闪避率提升25%。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>2</column>
+        <y>60</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Shang</defName>
+        <label>音律：商</label>
+        <description>花神护体的护盾承伤量提高100%。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>2</column>
+        <y>240</y>
+        <cost>2</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Qingjue</defName>
+        <label>音律：清角</label>
+        <description>开启花信铃强化形态，并使花信铃攻击伤害提高25%。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>3</column>
+        <y>240</y>
+        <cost>2</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Shang</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Gaoshan</defName>
+        <label>高山</label>
+        <description>花令积累上限+1；花神护体受到高于40点的单次伤害时降为40点。</description>
+        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <column>4</column>
+        <y>240</y>
+        <cost>5</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Shang</li>
+            <li>MX_QH_Node_Qingjue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_ChunquanYingxue</defName>
+        <label>春泉映雪</label>
+        <description>全局工作速度提升20%。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>0</column>
+        <y>160</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Jue</defName>
+        <label>音律：角</label>
+        <description>增加50%花信铃命中目标的抑止时间。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>1</column>
+        <y>60</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_ChunquanYingxue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_FlowerWord</defName>
+        <label>花语</label>
+        <description>开启花语特性选择和对应 Trait。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>1</column>
+        <y>250</y>
+        <cost>1</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_ChunquanYingxue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Luoyu</defName>
+        <label>落玉</label>
+        <description>花令积累上限+1；手工、艺术和建造作业品质等级偏移+2。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>2</column>
+        <y>60</y>
+        <cost>5</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Jue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Luoshenfu</defName>
+        <label>洛神赋</label>
+        <description>魅力+1，解锁“洛神契”特性。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>2</column>
+        <y>250</y>
+        <cost>1</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_FlowerWord</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Queqiaoxian</defName>
+        <label>鹊桥仙</label>
+        <description>手工和艺术工作速度提升50%，允许在荷池进行七夕乞巧仪式。</description>
+        <tree>MX_QH_Tree_Luoshen</tree>
+        <column>3</column>
+        <y>250</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Luoshenfu</li>
+            <li>MX_QH_Node_FlowerWord</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Zhi</defName>
+        <label>音律：徵</label>
+        <description>花神护体的护盾回复速度提升200%。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>0</column>
+        <y>70</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_FlowerSigil</defName>
+        <label>花神御签</label>
+        <description>开启花神签被动效果选择和对应 Hediff。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>0</column>
+        <y>250</y>
+        <cost>2</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Baixue</defName>
+        <label>白雪</label>
+        <description>体重-50%，饥饿需求增长-50%，移动速度提升15%。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>1</column>
+        <y>160</y>
+        <cost>1</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Zhi</li>
+            <li>MX_QH_Node_FlowerSigil</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Biangong</defName>
+        <label>音律：变宫</label>
+        <description>飞花令、寄时和决战技的伤害、持续时间、护盾吸收伤害提升50%。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>2</column>
+        <y>70</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Baixue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Yangchun</defName>
+        <label>阳春</label>
+        <description>清荷附加的所有异常状态积累值提升50%。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>2</column>
+        <y>250</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_Baixue</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_SishiLiuzhuan</defName>
+        <label>四时流转</label>
+        <description>花令积累上限+1；解锁飞花令·寄时技能和选择 Gizmo。</description>
+        <tree>MX_QH_Tree_Yangchun</tree>
+        <column>3</column>
+        <y>160</y>
+        <cost>5</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Biangong</li>
+            <li>MX_QH_Node_Yangchun</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_FlowerDance</defName>
+        <label>花之舞</label>
+        <description>开启花神降临技能，以及降临状态的决战技“花神闪”。</description>
+        <tree>MX_QH_Tree_Yingyue</tree>
+        <column>0</column>
+        <y>160</y>
+        <cost>1</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Gong</li>
+            <li>MX_QH_Node_Shang</li>
+            <li>MX_QH_Node_Jue</li>
+            <li>MX_QH_Node_Zhi</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Yu</defName>
+        <label>音律：羽</label>
+        <description>花神降临时，花神护体受到的伤害不能超过10点，并使失效延迟缩短至2秒。</description>
+        <tree>MX_QH_Tree_Yingyue</tree>
+        <column>1</column>
+        <y>60</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_FlowerDance</li>
+            <li>MX_QH_Node_Gaoshan</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Bianzhi</defName>
+        <label>音律：变徵</label>
+        <description>花神降临时，花信铃攻击变为范围伤害。</description>
+        <tree>MX_QH_Tree_Yingyue</tree>
+        <column>1</column>
+        <y>160</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_FlowerDance</li>
+            <li>MX_QH_Node_Luoyu</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Run</defName>
+        <label>音律：闰</label>
+        <description>花神降临时，使主飞花令技能变为强化版本，不包含飞花令·寄时。</description>
+        <tree>MX_QH_Tree_Yingyue</tree>
+        <column>1</column>
+        <y>260</y>
+        <cost>3</cost>
+        <prerequisites>
+            <li>MX_QH_Node_FlowerDance</li>
+            <li>MX_QH_Node_SishiLiuzhuan</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+        <defName>MX_QH_Node_Yingyue</defName>
+        <label>映月</label>
+        <description>开启降临状态下的决战技“水天一色”，长息触发次数充能+1。</description>
+        <tree>MX_QH_Tree_Yingyue</tree>
+        <column>2</column>
+        <y>160</y>
+        <cost>5</cost>
+        <important>true</important>
+        <prerequisites>
+            <li>MX_QH_Node_Yu</li>
+            <li>MX_QH_Node_Bianzhi</li>
+            <li>MX_QH_Node_Run</li>
+        </prerequisites>
+    </MiliraXian.Characters.QingHe.QingheSkillNodeDef>
+
+    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+        <defName>MX_QH_ScoreDef_Luoshenfu</defName>
+        <label>曲谱集：洛神赋</label>
+        <description>解锁《洛神赋》技能树。</description>
+        <unlocksTree>MX_QH_Tree_Luoshen</unlocksTree>
+        <experienceGain>30</experienceGain>
+    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+
+    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+        <defName>MX_QH_ScoreDef_Yangchun</defName>
+        <label>曲谱集：阳春</label>
+        <description>解锁《阳春》技能树。</description>
+        <unlocksTree>MX_QH_Tree_Yangchun</unlocksTree>
+        <experienceGain>30</experienceGain>
+    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+
+    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+        <defName>MX_QH_ScoreDef_Yingyue</defName>
+        <label>曲谱集：映月</label>
+        <description>解锁《映月》技能树。</description>
+        <unlocksTree>MX_QH_Tree_Yingyue</unlocksTree>
+        <experienceGain>50</experienceGain>
+    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+</Defs>
