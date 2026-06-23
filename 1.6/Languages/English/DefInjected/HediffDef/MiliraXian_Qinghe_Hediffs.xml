@@ -15,7 +15,7 @@
   <MX_QH_SpringRegen.label>Clear Flow</MX_QH_SpringRegen.label>
   <MX_QH_SpringRegen.description>Automatically heals a small amount of injury every short interval.</MX_QH_SpringRegen.description>
   <MX_QH_LotusShield.label>Flower-God Ward</MX_QH_LotusShield.label>
-  <MX_QH_LotusShield.description>Qinghe is blessed by the Twelve Flower Gods and naturally generates a shield around herself. Higher Tempest increases damage absorbed per shield point; higher Elegance increases shield regeneration per second.\n\nWhen the shield breaks, it is disabled for 20 seconds.</MX_QH_LotusShield.description>
+  <MX_QH_LotusShield.description>Qinghe is blessed by the Twelve Flower Gods and naturally generates a recoverable shield around herself. Learned score nodes can increase its capacity, speed up regeneration, or add steadfast damage caps.\n\nOutside Flower Divination, taking shield damage briefly delays regeneration; during Flower Divination, the shield can regenerate immediately after taking damage. When the shield breaks, it is temporarily disabled.</MX_QH_LotusShield.description>
   <MX_QH_QingheStatusGizmo.label>Qinghe Status Display</MX_QH_QingheStatusGizmo.label>
   <MX_QH_QingheStatusGizmo.description>Hidden hediff used to display Qinghe's status gizmo.</MX_QH_QingheStatusGizmo.description>
   <MX_QH_Elegance_DuanHunSlow.label>Soulbreak Drag</MX_QH_Elegance_DuanHunSlow.label>

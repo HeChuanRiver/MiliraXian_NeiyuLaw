@@ -51,18 +51,47 @@
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LotusShield">
                 <shieldCompProperties>
                     <maxEnergy>100</maxEnergy>
-                    <baseDamagePerShieldPoint>1</baseDamagePerShieldPoint>
                     <baseRegenPerSecond>2</baseRegenPerSecond>
+                    <shangMaxEnergyMultiplier>2</shangMaxEnergyMultiplier>
+                    <zhiRegenMultiplier>3</zhiRegenMultiplier>
+                    <hitRegenDelayTicks>120</hitRegenDelayTicks>
+                    <gaoshanDamageCap>40</gaoshanDamageCap>
+                    <yuDamageCap>10</yuDamageCap>
+                    <yuBreakDisabledTicks>120</yuBreakDisabledTicks>
                     <breakDisabledTicks>1200</breakDisabledTicks>
                     <breakOnEmp>false</breakOnEmp>
                     <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
                     <absorbFleckScale>0.6</absorbFleckScale>
                     <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
                     <activeShieldTexPath>MiliraXianQinghe/Effect/lotus_shield</activeShieldTexPath>
+                    <activeShieldShaderType>MX_QH_LotusShieldDistortion</activeShieldShaderType>
+                    <activeShieldShaderParameters>
+                        <_FlowMap>/MiliraXianQinghe/Effect/lotus_shield_flowmap</_FlowMap>
+                        <_BaseLayerAlpha>1.0</_BaseLayerAlpha>
+                        <_AdditiveGlowColor>(1,0.45,0.43,1)</_AdditiveGlowColor>
+                        <_AdditiveGlowAlpha>1.0</_AdditiveGlowAlpha>
+                        <_AdditiveGlowBreathAmplitude>0.9</_AdditiveGlowBreathAmplitude>
+                        <_AdditiveGlowBreathSpeed>0.21</_AdditiveGlowBreathSpeed>
+                        <_AdditiveGlowMinMask>0</_AdditiveGlowMinMask>
+                        <_SwayStrength>0.015</_SwayStrength>
+                        <_SwaySpeed>1.13</_SwaySpeed>
+                    </activeShieldShaderParameters>
                     <activeShieldDrawSize>(2.5,2.5)</activeShieldDrawSize>
                     <activeShieldAlpha>0.8</activeShieldAlpha>
+                    <activeShieldFarGlowTexPath>Things/Mote/FireGlow</activeShieldFarGlowTexPath>
+                    <activeShieldFarGlowColor>(1,0.81,0.93,1)</activeShieldFarGlowColor>
+                    <activeShieldFarGlowAlpha>1.0</activeShieldFarGlowAlpha>
+                    <activeShieldFarGlowSizeMultiplier>2.8</activeShieldFarGlowSizeMultiplier>
+                    <activeShieldFarGlowBreathAmplitude>0.6</activeShieldFarGlowBreathAmplitude>
+                    <activeShieldFarGlowBreathSpeed>0.21</activeShieldFarGlowBreathSpeed>
+                    <activeShieldRingGlowTexPath>Things/Mote/PsychicDistortionRing</activeShieldRingGlowTexPath>
+                    <activeShieldRingGlowColor>(1,0.72,0.92,1)</activeShieldRingGlowColor>
+                    <activeShieldRingGlowAlpha>0.85</activeShieldRingGlowAlpha>
+                    <activeShieldRingGlowSizeMultiplier>0.9</activeShieldRingGlowSizeMultiplier>
+                    <activeShieldRingGlowDurationTicks>120</activeShieldRingGlowDurationTicks>
+                    <activeShieldRingGlowDrawOffsetZ>0.2</activeShieldRingGlowDrawOffsetZ>
                     <activeShieldAltitudeOffset>0</activeShieldAltitudeOffset>
-                    <activeShieldDrawOffsetZ>-0.25</activeShieldDrawOffsetZ>
+                    <activeShieldDrawOffsetZ>-0.23</activeShieldDrawOffsetZ>
                     <minDrawScale>1.3</minDrawScale>
                     <maxDrawScale>1.3</maxDrawScale>
                 </shieldCompProperties>

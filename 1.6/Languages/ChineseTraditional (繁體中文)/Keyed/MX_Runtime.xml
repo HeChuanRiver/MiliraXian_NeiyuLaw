@@ -94,7 +94,7 @@
   <MX_QH_ShieldInactive>護盾未激活</MX_QH_ShieldInactive>
   <MX_QH_LotusShieldStatusActive>狀態：已激活</MX_QH_LotusShieldStatusActive>
   <MX_QH_LotusShieldStatusDown>狀態：停擺（剩餘 {0}s）</MX_QH_LotusShieldStatusDown>
-  <MX_QH_LotusShieldDamagePerPoint>每點護盾承傷：{0}</MX_QH_LotusShieldDamagePerPoint>
+  <MX_QH_LotusShieldCapacity>護盾容量：{0}</MX_QH_LotusShieldCapacity>
   <MX_QH_LotusShieldRegen>護盾回復速率：{0} /s</MX_QH_LotusShieldRegen>
   <MX_QH_NeedPipaForm>需要裝備琵琶形態。</MX_QH_NeedPipaForm>
   <MX_QH_NeedZhudiForm>需要裝備竹笛形態。</MX_QH_NeedZhudiForm>

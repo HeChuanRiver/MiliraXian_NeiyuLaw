@@ -4,10 +4,11 @@ using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI
 {
-    public class Dialog_QingheSkillTree : Window
+    public class Dialog_QH_SkillTree : Window
     {
         private const float WindowWidth = 980f;
         private const float WindowHeight = 640f;
@@ -37,7 +38,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
 
-        public Dialog_QingheSkillTree(Pawn pawn, HediffComp_QingheSkillTreeState state)
+        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_QingheSkillTreeState state)
         {
             this.pawn = pawn;
             this.state = state;

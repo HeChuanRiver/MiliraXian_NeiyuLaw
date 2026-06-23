@@ -94,7 +94,7 @@
   <MX_QH_ShieldInactive>Shield inactive</MX_QH_ShieldInactive>
   <MX_QH_LotusShieldStatusActive>Status: active</MX_QH_LotusShieldStatusActive>
   <MX_QH_LotusShieldStatusDown>Status: down ({0}s left)</MX_QH_LotusShieldStatusDown>
-  <MX_QH_LotusShieldDamagePerPoint>Damage per shield point: {0}</MX_QH_LotusShieldDamagePerPoint>
+  <MX_QH_LotusShieldCapacity>Shield capacity: {0}</MX_QH_LotusShieldCapacity>
   <MX_QH_LotusShieldRegen>Shield regen: {0} /s</MX_QH_LotusShieldRegen>
   <MX_QH_NeedPipaForm>Requires pipa form.</MX_QH_NeedPipaForm>
   <MX_QH_NeedZhudiForm>Requires bamboo flute form.</MX_QH_NeedZhudiForm>

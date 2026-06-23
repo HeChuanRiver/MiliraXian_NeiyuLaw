@@ -15,7 +15,7 @@
   <MX_QH_SpringRegen.label>清流</MX_QH_SpringRegen.label>
   <MX_QH_SpringRegen.description>每隔一小段時間，自動治癒一定生命值的傷口。</MX_QH_SpringRegen.description>
   <MX_QH_LotusShield.label>花神護體</MX_QH_LotusShield.label>
-  <MX_QH_LotusShield.description>清荷受到十二花神的眷顧，能在身邊自然產生護盾。自身的激流屬性越高，每點護盾的承傷越高；自身的雅樂屬性越高，每秒回復的護盾值越多。\n\n護盾被擊碎時會失效20秒。</MX_QH_LotusShield.description>
+  <MX_QH_LotusShield.description>清荷受到十二花神的眷顧，能在身邊自然產生可回復的護盾。習得對應曲譜節點後，花神護體會獲得更高容量、更快回復，或剛毅限傷效果。\n\n未處於花神降臨時，護盾承傷後會短暫停止回復；花神降臨期間可立即回復。護盾被擊碎時會暫時失效。</MX_QH_LotusShield.description>
   <MX_QH_QingheStatusGizmo.label>清荷狀態顯示</MX_QH_QingheStatusGizmo.label>
   <MX_QH_QingheStatusGizmo.description>隱藏 Hediff：用於顯示清荷狀態 Gizmo。</MX_QH_QingheStatusGizmo.description>
   <MX_QH_Elegance_DuanHunSlow.label>斷魂遲滯</MX_QH_Elegance_DuanHunSlow.label>

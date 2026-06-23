@@ -112,6 +112,11 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
+        public static bool IsFlowerWordTraitDefName(string defName)
+        {
+            return !defName.NullOrEmpty() && FlowerWordTraitDefNames.Contains(defName);
+        }
+
         public static string LabelForDefName(string defName)
         {
             if (defName.NullOrEmpty())
@@ -134,10 +139,28 @@ namespace MiliraXian.Characters.QingHe
             TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
             if (traitDef != null)
             {
-                return traitDef.LabelCap;
+                return LabelForTraitDef(traitDef);
             }
 
             return defName;
+        }
+
+        private static string LabelForTraitDef(TraitDef traitDef)
+        {
+            if (traitDef?.degreeDatas != null && traitDef.degreeDatas.Count > 0)
+            {
+                for (int i = 0; i < traitDef.degreeDatas.Count; i++)
+                {
+                    if (traitDef.degreeDatas[i]?.degree == 0)
+                    {
+                        return traitDef.degreeDatas[i].LabelCap;
+                    }
+                }
+
+                return traitDef.degreeDatas[0].LabelCap;
+            }
+
+            return traitDef?.LabelCap ?? string.Empty;
         }
 
         public static string ShortLabelForDefName(string defName)

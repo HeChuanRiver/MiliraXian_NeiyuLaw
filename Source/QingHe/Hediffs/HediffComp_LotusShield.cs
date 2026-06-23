@@ -37,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                     return null;
                 }
 
-                return "MX_QH_LotusShieldDamagePerPoint".Translate(shield.CurrentDamagePerShieldPoint.ToString("F2")).ToString()
+                return "MX_QH_LotusShieldCapacity".Translate(shield.MaxEnergy.ToString("F0")).ToString()
                        + "\n" + "MX_QH_LotusShieldRegen".Translate(shield.CurrentRegenPerSecond.ToString("F2"));
             }
         }

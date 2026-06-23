@@ -45,6 +45,12 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(
                 AccessTools.Method(typeof(Projectile), "CheckForFreeInterceptBetween", new[] { typeof(Vector3), typeof(Vector3) }),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Projectile_CheckForFreeInterceptBetween_Prefix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.AddDirectRelation)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_AddDirectRelation_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.TryRemoveDirectRelation)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix)));
         }
 
         public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
@@ -181,6 +187,35 @@ namespace MiliraXian.Characters.QingHe
             return true;
         }
 
+        public static void Patch_PawnRelationsTracker_AddDirectRelation_Postfix(
+            Pawn_RelationsTracker __instance,
+            PawnRelationDef def,
+            Pawn otherPawn)
+        {
+            if (def != PawnRelationDefOf.Spouse)
+            {
+                return;
+            }
+
+            Pawn pawn = RelationsTrackerPawnField.GetValue(__instance) as Pawn;
+            QingheLuoshenContractUtility.NotifySpouseRelationAdded(pawn, otherPawn);
+        }
+
+        public static void Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix(
+            Pawn_RelationsTracker __instance,
+            PawnRelationDef def,
+            Pawn otherPawn,
+            bool __result)
+        {
+            if (!__result || def != PawnRelationDefOf.Spouse)
+            {
+                return;
+            }
+
+            Pawn pawn = RelationsTrackerPawnField.GetValue(__instance) as Pawn;
+            QingheLuoshenContractUtility.NotifySpouseRelationRemoved(pawn, otherPawn);
+        }
+
         private static bool HasLongBreathDamageImmunity(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LongBreathDamageImmunity == null)
@@ -273,6 +308,9 @@ namespace MiliraXian.Characters.QingHe
 
         private static readonly MethodInfo ProjectileImpactMethod =
             AccessTools.Method(typeof(Projectile), "Impact", new[] { typeof(Thing), typeof(bool) });
+
+        private static readonly FieldInfo RelationsTrackerPawnField =
+            AccessTools.Field(typeof(Pawn_RelationsTracker), "pawn");
 
         private static void ImpactBlockedByShield(Projectile projectile)
         {

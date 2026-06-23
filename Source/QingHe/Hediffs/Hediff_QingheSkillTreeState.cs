@@ -59,6 +59,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             InitializeNewState();
+            ApplyChoicesToPawn();
         }
 
         public override void CompExposeData()
@@ -72,6 +73,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             Scribe_Values.Look(ref selectedFlowerSigilDefName, "mx_qh_skillTree_selectedFlowerSigilDefName");
             Scribe_Values.Look(ref selectedFlowerWordDefName, "mx_qh_skillTree_selectedFlowerWordDefName");
 
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                InitializeNewState();
+                ApplyChoicesToPawn();
+            }
         }
 
         public bool IsTreeUnlocked(string treeKey)
@@ -156,6 +162,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             QingheSkillNodeDef node = DefDatabase<QingheSkillNodeDef>.GetNamedSilentFail(nodeDefName);
             skillPoints -= node.cost;
             learnedNodes.Add(nodeDefName);
+            ApplyChoicesToPawn();
             reason = null;
             return true;
         }
@@ -173,16 +180,29 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public void SetFlowerMandate(string abilityDefName)
         {
             selectedFlowerMandateDefName = abilityDefName;
+            ApplyChoicesToPawn();
         }
 
         public void SetFlowerSigil(string hediffDefName)
         {
             selectedFlowerSigilDefName = hediffDefName;
+            ApplyChoicesToPawn();
         }
 
         public void SetFlowerWord(string traitDefName)
         {
             selectedFlowerWordDefName = traitDefName;
+            ApplyChoicesToPawn();
+        }
+
+        public void ApplyChoicesToPawn()
+        {
+            if (Pawn == null || Pawn.Dead)
+            {
+                return;
+            }
+
+            QingheSkillTreeSystem.SyncChoices(Pawn, this);
         }
 
         private void InitializeNewState()

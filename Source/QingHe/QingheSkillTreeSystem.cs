@@ -13,10 +13,22 @@ namespace MiliraXian.Characters.QingHe
         public const string NodeFlowerWord = "MX_QH_Node_FlowerWord";
         public const string NodeFlowerSigil = "MX_QH_Node_FlowerSigil";
         public const string NodeFlowerDance = "MX_QH_Node_FlowerDance";
+        public const string NodeShang = "MX_QH_Node_Shang";
+        public const string NodeGaoshan = "MX_QH_Node_Gaoshan";
+        public const string NodeZhi = "MX_QH_Node_Zhi";
+        public const string NodeYu = "MX_QH_Node_Yu";
+        public const string NodeLuoyu = "MX_QH_Node_Luoyu";
+        public const string NodeSishiLiuzhuan = "MX_QH_Node_SishiLiuzhuan";
+        public const string NodeLuoshenfu = "MX_QH_Node_Luoshenfu";
 
         public static void SyncChoices(Pawn pawn)
         {
             HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            SyncChoices(pawn, state);
+        }
+
+        public static void SyncChoices(Pawn pawn, HediffComp_QingheSkillTreeState state)
+        {
             if (state == null)
             {
                 return;
@@ -25,6 +37,7 @@ namespace MiliraXian.Characters.QingHe
             QingheFlowerChoiceUtility.SyncFlowerMandate(pawn, state.HasNode(NodeFlowerMandate) ? state.SelectedFlowerMandateDefName : null);
             QingheFlowerChoiceUtility.SyncFlowerSigil(pawn, state.HasNode(NodeFlowerSigil) ? state.SelectedFlowerSigilDefName : null);
             QingheFlowerChoiceUtility.SyncFlowerWord(pawn, state.HasNode(NodeFlowerWord) ? state.SelectedFlowerWordDefName : null);
+            QingheLuoshenContractUtility.SyncForQinghe(pawn, state);
             QingheFlowerChoiceUtility.SyncFlowerDivinationSlash(pawn, state.HasNode(NodeFlowerDance));
         }
 
@@ -37,7 +50,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             state.SetFlowerMandate(abilityDefName);
-            SyncChoices(state.Pawn);
             reason = null;
             return true;
         }
@@ -57,7 +69,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             state.SetFlowerSigil(hediffDefName);
-            SyncChoices(state.Pawn);
             reason = null;
             return true;
         }
@@ -77,7 +88,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             state.SetFlowerWord(traitDefName);
-            SyncChoices(state.Pawn);
             reason = null;
             return true;
         }
@@ -95,18 +105,18 @@ namespace MiliraXian.Characters.QingHe
                 defaultDesc = "打开清荷的技能树界面。",
                 action = delegate
                 {
-                    Find.WindowStack.Add(new Dialog_QingheSkillTree(pawn, state));
+                    Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state));
                 }
             };
 
             if (state.HasNode(NodeFlowerMandate))
             {
-                yield return FlowerResourceGizmoFactory.BuildResourceStatusGizmo(pawn);
+                yield return new Gizmo_QH_FlowerDecree(pawn);
             }
 
             if (state.HasNode(NodeFlowerDance))
             {
-                yield return FlowerResourceGizmoFactory.BuildFlowerDivinationGizmo(pawn);
+                yield return new Gizmo_QH_FlowerDivination(pawn);
             }
 
             if (!Prefs.DevMode)

@@ -69,7 +69,7 @@
     <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
         <defName>MX_QH_Node_Shang</defName>
         <label>音律：商</label>
-        <description>花神护体的护盾承伤量提高100%。</description>
+        <description>花神护体的护盾容量提高100%。</description>
         <tree>MX_QH_Tree_FlowerMandate</tree>
         <column>2</column>
         <y>240</y>
@@ -234,7 +234,7 @@
     <MiliraXian.Characters.QingHe.QingheSkillNodeDef>
         <defName>MX_QH_Node_Biangong</defName>
         <label>音律：变宫</label>
-        <description>飞花令、寄时和决战技的伤害、持续时间、护盾吸收伤害提升50%。</description>
+        <description>飞花令、寄时和决战技的伤害、持续时间提升50%。</description>
         <tree>MX_QH_Tree_Yangchun</tree>
         <column>2</column>
         <y>70</y>

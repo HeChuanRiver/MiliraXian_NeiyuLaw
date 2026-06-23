@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.Things
                         return;
                     }
 
-                    Find.WindowStack.Add(new Dialog_QingheSkillTree(interactor, state));
+                    Find.WindowStack.Add(new Dialog_QH_SkillTree(interactor, state));
                 });
 
             yield return new FloatMenuOption(

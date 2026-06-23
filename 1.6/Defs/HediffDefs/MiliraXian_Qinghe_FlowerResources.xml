@@ -17,9 +17,11 @@
                 <resourceLabel>花令</resourceLabel>
                 <resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</resourceDescription>
                 <initialValue>0</initialValue>
-                <maxValue>500</maxValue>
+                <maxValue>300</maxValue>
                 <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
                 <valuePerDecree>100</valuePerDecree>
+                <maxResourceBonusPerSkillNode>1</maxResourceBonusPerSkillNode>
+                <flowerDivinationRecoveryFactor>5</flowerDivinationRecoveryFactor>
                 <highlightTicks>90</highlightTicks>
                 <clampToMax>true</clampToMax>
                 <showGizmo>false</showGizmo>

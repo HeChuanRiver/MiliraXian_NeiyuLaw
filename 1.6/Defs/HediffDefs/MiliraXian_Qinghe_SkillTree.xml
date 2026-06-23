@@ -38,4 +38,18 @@
             </li>
         </comps>
     </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_LuoshenContract</defName>
+        <label>洛神契</label>
+        <description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</description>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediff_QingheLuoshenContract</hediffClass>
+        <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+    </HediffDef>
 </Defs>

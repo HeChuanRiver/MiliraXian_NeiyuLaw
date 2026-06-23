@@ -11,11 +11,15 @@ namespace MiliraXian.Characters.QingHe.Things
     {
         public float maxEnergy = 100f;
 
-        // Damage absorbed per one shield point.
-        public float baseDamagePerShieldPoint = 0.6f;
-
         // Shield regeneration per second.
         public float baseRegenPerSecond = 0.8f;
+
+        public float shangMaxEnergyMultiplier = 2f;
+        public float zhiRegenMultiplier = 3f;
+        public int hitRegenDelayTicks = 120;
+        public float gaoshanDamageCap = 40f;
+        public float yuDamageCap = 10f;
+        public int yuBreakDisabledTicks = 120;
 
         // After breaking, shield is disabled for these ticks.
         public int breakDisabledTicks = 600;
@@ -32,8 +36,22 @@ namespace MiliraXian.Characters.QingHe.Things
         // - After shield becomes full, keep showing and fade out across these ticks.
         public int fullEnergyFadeOutTicks = 90;
         public string activeShieldTexPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
+        public ShaderTypeDef activeShieldShaderType = ShaderTypeDefOf.Transparent;
+        public List<ShaderParameter> activeShieldShaderParameters;
         public Vector2 activeShieldDrawSize = new Vector2(1.9f, 1.9f);
         public float activeShieldAlpha = 0.45f;
+        public string activeShieldFarGlowTexPath = "Things/Mote/FireGlow";
+        public Color activeShieldFarGlowColor = new Color(1f, 0.8117647f, 0.9294118f, 1f);
+        public float activeShieldFarGlowAlpha = 0.45f;
+        public float activeShieldFarGlowSizeMultiplier = 2.8f;
+        public float activeShieldFarGlowBreathAmplitude = 0.25f;
+        public float activeShieldFarGlowBreathSpeed = 1f;
+        public string activeShieldRingGlowTexPath = "Things/Mote/PsychicDistortionRing";
+        public Color activeShieldRingGlowColor = new Color(1f, 0.72f, 0.92f, 1f);
+        public float activeShieldRingGlowAlpha = 0.45f;
+        public float activeShieldRingGlowSizeMultiplier = 1.12f;
+        public int activeShieldRingGlowDurationTicks = 60;
+        public float activeShieldRingGlowDrawOffsetZ = -0.08f;
         public float activeShieldAltitudeOffset = 0f;
         public float activeShieldDrawOffsetZ = 0f;
 
@@ -51,14 +69,15 @@ namespace MiliraXian.Characters.QingHe.Things
     /// </summary>
     public class CompLotusShield : ThingComp
     {
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
-
         private float energy = 100f;
         private int ticksToReset = -1;
+        private int ticksToRegen = 0;
 
         private int fullEnergyAccumulatedTicks = 0;
         // Record the tick when damage was last absorbed, used for Gizmo hit-flash.
         private int lastAbsorbTick = -1;
+        private bool shieldFxVisibleLastFrame = false;
+        private float shieldFxStartRealTime = 0f;
 
         public CompProperties_LotusShield Props => (CompProperties_LotusShield)props;
 
@@ -66,7 +85,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
-        public float MaxEnergy => Mathf.Max(1f, Props.maxEnergy);
+        public float MaxEnergy => Mathf.Max(1f, Props.maxEnergy * ResolveMaxEnergyMultiplier());
 
         public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
 
@@ -74,7 +93,9 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public int BreakTicksLeft => Mathf.Max(0, ticksToReset);
 
-        public float CurrentDamagePerShieldPoint => ResolveDamagePerShieldPoint();
+        public bool InRegenDelay => ticksToRegen > 0;
+
+        public int RegenDelayTicksLeft => Mathf.Max(0, ticksToRegen);
 
         public float CurrentRegenPerSecond => ResolveRegenPerSecond();
 
@@ -116,6 +137,7 @@ namespace MiliraXian.Characters.QingHe.Things
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
             Scribe_Values.Look(ref ticksToReset, "mx_qh_lotus_ticksToReset", -1);
+            Scribe_Values.Look(ref ticksToRegen, "mx_qh_lotus_ticksToRegen", 0);
             Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
             Scribe_Values.Look(ref lastAbsorbTick, "mx_qh_lotus_lastAbsorbTick", -1);
         }
@@ -130,9 +152,18 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
+            energy = Mathf.Min(energy, MaxEnergy);
+
             if (ticksToReset > 0)
             {
                 ticksToReset--;
+                fullEnergyAccumulatedTicks = 0;
+                return;
+            }
+
+            if (ticksToRegen > 0)
+            {
+                ticksToRegen--;
                 fullEnergyAccumulatedTicks = 0;
                 return;
             }
@@ -184,26 +215,24 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            float dpsp = ResolveDamagePerShieldPoint();
-            if (dpsp <= 0f || energy <= 0f)
+            if (energy <= 0f)
             {
                 return;
             }
 
-            float incoming = Mathf.Max(0f, dinfo.Amount);
-            if (incoming <= 0f)
+            float shieldDamage = ResolveShieldDamage(dinfo.Amount);
+            if (shieldDamage <= 0f)
             {
                 return;
             }
 
-            float shieldCost = incoming / dpsp;
-            if (shieldCost >= energy - 0.0001f)
+            if (shieldDamage >= energy - 0.0001f)
             {
                 energy = 0f;
             }
             else
             {
-                energy -= shieldCost;
+                energy -= shieldDamage;
             }
 
             OnAbsorbedDamage();
@@ -230,6 +259,15 @@ namespace MiliraXian.Characters.QingHe.Things
         private void OnAbsorbedDamage()
         {
             lastAbsorbTick = CurrentTick;
+            if (FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true)
+            {
+                ticksToRegen = 0;
+            }
+            else
+            {
+                ticksToRegen = Mathf.Max(0, Props.hitRegenDelayTicks);
+            }
+
             Pawn owner = PawnOwner;
             if (owner == null || !owner.Spawned || owner.Map == null)
             {
@@ -260,7 +298,8 @@ namespace MiliraXian.Characters.QingHe.Things
         private void Break()
         {
             energy = 0f;
-            ticksToReset = Mathf.Max(1, Props.breakDisabledTicks);
+            ticksToRegen = 0;
+            ticksToReset = Mathf.Max(1, ResolveBreakDisabledTicks());
 
             Pawn owner = PawnOwner;
             if (owner == null || !owner.Spawned || owner.Map == null)
@@ -279,14 +318,24 @@ namespace MiliraXian.Characters.QingHe.Things
             Pawn owner = PawnOwner;
             if (owner == null || !ShouldDisplayFx)
             {
+                shieldFxVisibleLastFrame = false;
                 return;
             }
 
-            Material shieldMat = GetShieldMaterial(Props.activeShieldTexPath, ResolveDrawAlpha(), ResolveShieldTintColor());
+            if (!shieldFxVisibleLastFrame)
+            {
+                shieldFxStartRealTime = Time.realtimeSinceStartup;
+                shieldFxVisibleLastFrame = true;
+            }
+
+            float drawAlpha = ResolveDrawAlpha();
+            Material shieldMat = GetShieldMaterial(Props.activeShieldTexPath, drawAlpha, ResolveShieldTintColor());
             if (shieldMat == null)
             {
                 return;
             }
+            float effectTime = Mathf.Max(0f, Time.realtimeSinceStartup - shieldFxStartRealTime);
+            shieldMat.SetFloat("_EffectTime", effectTime);
 
             Vector3 pos = owner.Drawer.DrawPos;
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
@@ -299,7 +348,16 @@ namespace MiliraXian.Characters.QingHe.Things
                 Quaternion.identity,
                 new Vector3(drawSize.x, 1f, drawSize.y));
 
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
+            DrawShieldFarGlow(pos, drawSize, drawAlpha, effectTime);
+            DrawShieldRingGlow(pos, drawSize, drawAlpha, effectTime);
+
+            MaterialPropertyBlock propertyBlock = MX_QHRenderStatics.SharedPropertyBlock;
+            propertyBlock.Clear();
+            ApplyShieldShaderParameters(propertyBlock);
+            propertyBlock.SetFloat("_EffectTime", effectTime);
+
+            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0, null, 0, propertyBlock);
+            propertyBlock.Clear();
         }
 
         private float ResolveDrawAlpha()
@@ -317,6 +375,11 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private Material GetShieldMaterial(string texPath, float alpha, Color tintColor)
         {
+            return GetShieldMaterial(texPath, alpha, tintColor, Props.activeShieldShaderParameters);
+        }
+
+        private Material GetShieldMaterial(string texPath, float alpha, Color tintColor, List<ShaderParameter> shaderParameters)
+        {
             if (texPath.NullOrEmpty())
             {
                 return null;
@@ -326,18 +389,128 @@ namespace MiliraXian.Characters.QingHe.Things
             Color finalColor = tintColor;
             finalColor.a = finalAlpha;
 
-            string key = texPath
-                         + "|" + finalColor.r.ToString("F2")
-                         + "|" + finalColor.g.ToString("F2")
-                         + "|" + finalColor.b.ToString("F2")
-                         + "|" + finalColor.a.ToString("F2");
-            if (!ShieldMaterialByPath.TryGetValue(key, out Material shieldMat))
+            ShaderTypeDef shaderType = Props.activeShieldShaderType ?? ShaderTypeDefOf.Transparent;
+            Shader shieldShader = shaderType.Shader;
+
+            MaterialRequest request = new MaterialRequest(ContentFinder<Texture2D>.Get(texPath), shieldShader, finalColor)
             {
-                shieldMat = MaterialPool.MatFrom(texPath, ShaderDatabase.Transparent, finalColor);
-                ShieldMaterialByPath[key] = shieldMat;
+                shaderParameters = shaderParameters
+            };
+            return MaterialPool.MatFrom(request);
+        }
+
+        private void DrawShieldFarGlow(Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime)
+        {
+            if (Props.activeShieldFarGlowTexPath.NullOrEmpty() || shieldAlpha <= 0.001f || Props.activeShieldFarGlowAlpha <= 0.001f)
+            {
+                return;
             }
 
-            return shieldMat;
+            Texture2D texture = ContentFinder<Texture2D>.Get(Props.activeShieldFarGlowTexPath, reportFailure: false);
+            if (texture == null)
+            {
+                return;
+            }
+
+            Color glowColor = Props.activeShieldFarGlowColor;
+            glowColor.a = Mathf.Clamp01(shieldAlpha * Props.activeShieldFarGlowAlpha * ResolveGlowBreath(effectTime));
+            Material glowMat = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, glowColor);
+            if (glowMat == null)
+            {
+                return;
+            }
+
+            float sizeMultiplier = Mathf.Max(0.01f, Props.activeShieldFarGlowSizeMultiplier);
+            Vector2 drawSize = shieldDrawSize * sizeMultiplier;
+            Matrix4x4 matrix = Matrix4x4.TRS(
+                pos,
+                Quaternion.identity,
+                new Vector3(drawSize.x, 1f, drawSize.y));
+
+            Graphics.DrawMesh(MeshPool.plane10, matrix, glowMat, 0);
+        }
+
+        private void DrawShieldRingGlow(Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime)
+        {
+            float hitGlowFactor = ResolveHitGlowFactor();
+            if (hitGlowFactor <= 0.001f || Props.activeShieldRingGlowTexPath.NullOrEmpty() || shieldAlpha <= 0.001f || Props.activeShieldRingGlowAlpha <= 0.001f)
+            {
+                return;
+            }
+
+            Texture2D texture = ContentFinder<Texture2D>.Get(Props.activeShieldRingGlowTexPath, reportFailure: false);
+            if (texture == null)
+            {
+                return;
+            }
+
+            Color glowColor = Props.activeShieldRingGlowColor;
+            glowColor.a = Mathf.Clamp01(shieldAlpha * Props.activeShieldRingGlowAlpha * hitGlowFactor);
+            Material glowMat = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, glowColor);
+            if (glowMat == null)
+            {
+                return;
+            }
+
+            float sizeMultiplier = Mathf.Max(0.01f, Props.activeShieldRingGlowSizeMultiplier);
+            Vector2 drawSize = shieldDrawSize * sizeMultiplier;
+            Vector3 drawPos = pos;
+            drawPos.z += Props.activeShieldRingGlowDrawOffsetZ;
+            Matrix4x4 matrix = Matrix4x4.TRS(
+                drawPos,
+                Quaternion.identity,
+                new Vector3(drawSize.x, 1f, drawSize.y));
+
+            Graphics.DrawMesh(MeshPool.plane10, matrix, glowMat, 0);
+        }
+
+        private float ResolveHitGlowFactor()
+        {
+            if (lastAbsorbTick < 0)
+            {
+                return 0f;
+            }
+
+            int durationTicks = Mathf.Max(1, Props.activeShieldRingGlowDurationTicks);
+            int elapsedTicks = CurrentTick - lastAbsorbTick;
+            if (elapsedTicks < 0 || elapsedTicks >= durationTicks)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp01(1f - elapsedTicks / (float)durationTicks);
+        }
+
+        private float ResolveGlowBreath(float effectTime)
+        {
+            return ResolveGlowBreath(effectTime, Props.activeShieldFarGlowBreathAmplitude, Props.activeShieldFarGlowBreathSpeed);
+        }
+
+        private static float ResolveGlowBreath(float effectTime, float amplitude, float speed)
+        {
+            float breath = 0.5f - 0.5f * Mathf.Cos(Mathf.Max(0f, effectTime) * Mathf.Max(0f, speed) * 6.2831855f);
+            return Mathf.Lerp(
+                1f - Mathf.Clamp01(amplitude),
+                1f + Mathf.Clamp01(amplitude),
+                breath);
+        }
+
+        private void ApplyShieldShaderParameters(MaterialPropertyBlock propertyBlock)
+        {
+            ApplyShieldShaderParameters(propertyBlock, Props.activeShieldShaderParameters);
+        }
+
+        private void ApplyShieldShaderParameters(MaterialPropertyBlock propertyBlock, List<ShaderParameter> shaderParameters)
+        {
+            if (propertyBlock == null || shaderParameters.NullOrEmpty())
+            {
+                return;
+            }
+
+            for (int i = 0; i < shaderParameters.Count; i++)
+            {
+                shaderParameters[i].Apply(propertyBlock);
+            }
         }
 
         private Color ResolveShieldTintColor()
@@ -350,14 +523,47 @@ namespace MiliraXian.Characters.QingHe.Things
                 1f);
         }
 
-        private float ResolveDamagePerShieldPoint()
+        private float ResolveMaxEnergyMultiplier()
         {
-            return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint);
+            return HasSkillNode(QingheSkillTreeSystem.NodeShang) ? Mathf.Max(0.01f, Props.shangMaxEnergyMultiplier) : 1f;
         }
 
         private float ResolveRegenPerSecond()
         {
-            return Mathf.Max(0f, Props.baseRegenPerSecond);
+            float multiplier = HasSkillNode(QingheSkillTreeSystem.NodeZhi) ? Mathf.Max(0f, Props.zhiRegenMultiplier) : 1f;
+            return Mathf.Max(0f, Props.baseRegenPerSecond * multiplier);
+        }
+
+        private float ResolveShieldDamage(float incomingDamage)
+        {
+            float damage = Mathf.Max(0f, incomingDamage);
+            float cap = ResolveDamageCap();
+            return cap > 0f ? Mathf.Min(damage, cap) : damage;
+        }
+
+        private float ResolveDamageCap()
+        {
+            if (FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(QingheSkillTreeSystem.NodeYu))
+            {
+                return Mathf.Max(0f, Props.yuDamageCap);
+            }
+
+            return HasSkillNode(QingheSkillTreeSystem.NodeGaoshan) ? Mathf.Max(0f, Props.gaoshanDamageCap) : 0f;
+        }
+
+        private int ResolveBreakDisabledTicks()
+        {
+            if (FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(QingheSkillTreeSystem.NodeYu))
+            {
+                return Mathf.Max(1, Props.yuBreakDisabledTicks);
+            }
+
+            return Mathf.Max(1, Props.breakDisabledTicks);
+        }
+
+        private bool HasSkillNode(string nodeDefName)
+        {
+            return FlowerCourtUtility.EnsureSkillTreeState(PawnOwner)?.HasNode(nodeDefName) == true;
         }
 
         public string BuildShieldTooltip()
@@ -369,8 +575,8 @@ namespace MiliraXian.Characters.QingHe.Things
             return "花神护体\n\n"
                    + status + "\n"
                    + "护盾值：" + Energy.ToString("F0") + " / " + MaxEnergy.ToString("F0") + "\n"
-                   + "每点护盾承伤：" + CurrentDamagePerShieldPoint.ToString("F2") + "\n"
-                   + "护盾回复：" + CurrentRegenPerSecond.ToString("F2") + " /秒";
+                   + "护盾回复：" + CurrentRegenPerSecond.ToString("F2") + " /秒"
+                   + (InRegenDelay ? "\n回复延迟：" + Mathf.CeilToInt(RegenDelayTicksLeft / 60f) + "秒" : "");
         }
 
         private FleckDef ResolveAbsorbFleck()

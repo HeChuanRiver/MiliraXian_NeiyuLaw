@@ -47,7 +47,7 @@ namespace MiliraXian.Characters
             }
         }
 
-        public float MaxValue => PropsResource.maxValue;
+        public virtual float MaxValue => PropsResource.maxValue;
 
         public bool IsOverflowing => MaxValue > 0f && CurrentValue > MaxValue;
 

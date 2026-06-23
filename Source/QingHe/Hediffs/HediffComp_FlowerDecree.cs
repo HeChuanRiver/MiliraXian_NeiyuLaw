@@ -7,6 +7,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public int baseRecoveryTicksPerDecree = 1200;
         public float valuePerDecree = 100f;
+        public float maxResourceBonusPerSkillNode = 1f;
+        public float flowerDivinationRecoveryFactor = 5f;
         public int highlightTicks = 90;
 
         public HediffCompProperties_FlowerDecree()
@@ -23,9 +25,15 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float ValuePerDecree => Mathf.Max(1f, PropsDecree.valuePerDecree);
 
+        public override float MaxValue => (PropsResource.maxValue / ValuePerDecree + SkillTreeMaxResourceBonus) * ValuePerDecree;
+
         public float CurrentResourceValue => CurrentValue / ValuePerDecree;
 
         public float MaxResourceValue => MaxValue / ValuePerDecree;
+
+        public float SkillTreeMaxResourceBonus => ResolveSkillTreeMaxResourceBonus();
+
+        public float CurrentRecoveryFactor => ResolveRecoveryFactor();
 
         public float RecoveryProgress
         {
@@ -128,7 +136,42 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private float ResolveRecoveryValuePerTick()
         {
             int baseTicks = Mathf.Max(1, PropsDecree.baseRecoveryTicksPerDecree);
-            return ValuePerDecree / baseTicks;
+            return ValuePerDecree / baseTicks * ResolveRecoveryFactor();
+        }
+
+        private float ResolveSkillTreeMaxResourceBonus()
+        {
+            HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            if (state == null)
+            {
+                return 0f;
+            }
+
+            float bonus = 0f;
+            if (state.HasNode(QingheSkillTreeSystem.NodeGaoshan))
+            {
+                bonus += PropsDecree.maxResourceBonusPerSkillNode;
+            }
+            if (state.HasNode(QingheSkillTreeSystem.NodeLuoyu))
+            {
+                bonus += PropsDecree.maxResourceBonusPerSkillNode;
+            }
+            if (state.HasNode(QingheSkillTreeSystem.NodeSishiLiuzhuan))
+            {
+                bonus += PropsDecree.maxResourceBonusPerSkillNode;
+            }
+
+            return Mathf.Max(0f, bonus);
+        }
+
+        private float ResolveRecoveryFactor()
+        {
+            if (FlowerCourtUtility.GetFlowerDivination(Pawn)?.Active == true)
+            {
+                return Mathf.Max(0f, PropsDecree.flowerDivinationRecoveryFactor);
+            }
+
+            return 1f;
         }
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenContractMaintained</defName>
+        <workerClass>MiliraXian.Characters.QingHe.ThoughtWorker_QingheLuoshenContractMaintained</workerClass>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <stages>
+            <li>
+                <label>洛神契：相守</label>
+                <description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</description>
+                <baseMoodEffect>16</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenContractBroken</defName>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>10</durationDays>
+        <stackLimit>1</stackLimit>
+        <stages>
+            <li>
+                <label>洛神契破碎 ({0})</label>
+                <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的花语只余空响。</description>
+                <baseMoodEffect>-24</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+</Defs>
