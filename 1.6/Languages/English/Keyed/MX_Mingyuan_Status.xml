@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_Enabled>enabled</MX_Mingyuan_Enabled>
+  <MX_Mingyuan_Disabled>disabled</MX_Mingyuan_Disabled>
+  <MX_Mingyuan_SelfBurn_LabelExtra>{0} layers</MX_Mingyuan_SelfBurn_LabelExtra>
+  <MX_Mingyuan_SelfBurn_TipCurrentLayers>Current Self Burn: {0} layers</MX_Mingyuan_SelfBurn_TipCurrentLayers>
+  <MX_Mingyuan_SelfBurn_TipEffectiveLayers>Effective bonus layers: {0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
+  <MX_Mingyuan_SelfBurn_TipBonuses>Bonuses from effective layers: damage +{0}, movement +{1}, attack speed +{2}, global work speed +{3}, shield regeneration +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>Otherworld Burner bonus: melee Life Burn +{0} layers, ranged Life Burn +{1} layers</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
+  <MX_Mingyuan_SelfBurn_TipDecay>Natural decay: every {0} ticks, -{1} layers. Next decay in {2} ticks.</MX_Mingyuan_SelfBurn_TipDecay>
+  <MX_Mingyuan_Shield_TipStatus>Shield energy: {0}/{1}</MX_Mingyuan_Shield_TipStatus>
+  <MX_Mingyuan_Shield_TipRegen>Pending 10-second regeneration: +{0}; next settlement in {1}s</MX_Mingyuan_Shield_TipRegen>
+  <MX_Mingyuan_Shield_TipAbsorb>Absorbs hits &lt;= {0}, &gt;= {1}, and lethal hits. Energy cost per absorbed hit: {2}.</MX_Mingyuan_Shield_TipAbsorb>
+  <MX_Mingyuan_Shield_TipReady>Shield ready.</MX_Mingyuan_Shield_TipReady>
+  <MX_Mingyuan_Shield_TipBroken>Shield broken; rebuilds in {0}s.</MX_Mingyuan_Shield_TipBroken>
+  <MX_Mingyuan_Shield_TipNoCost>No-cost absorption at {0} effective Self Burn: {1}</MX_Mingyuan_Shield_TipNoCost>
+  <MX_Mingyuan_BurningPillar_Inspect>Radius: {0}
+Core stability: {1}/{2}
+Remaining: {3}s
+Control: {4}
+Buildings: 33% max HP per pulse</MX_Mingyuan_BurningPillar_Inspect>
+  <MX_Mingyuan_BurningPillar_ControlLocked>locked</MX_Mingyuan_BurningPillar_ControlLocked>
+  <MX_Mingyuan_BurningPillar_ControlStopped>stopped</MX_Mingyuan_BurningPillar_ControlStopped>
+  <MX_Mingyuan_BurningPillar_ControlMoving>moving to {0}</MX_Mingyuan_BurningPillar_ControlMoving>
+  <MX_Mingyuan_BurningPillar_MoveLabel>Move</MX_Mingyuan_BurningPillar_MoveLabel>
+  <MX_Mingyuan_BurningPillar_MoveDesc>Choose a destination. The burning core moves in a straight line and stops if blocked by terrain or buildings.</MX_Mingyuan_BurningPillar_MoveDesc>
+  <MX_Mingyuan_BurningPillar_StopLabel>Stop</MX_Mingyuan_BurningPillar_StopLabel>
+  <MX_Mingyuan_BurningPillar_StopDesc>Stop the burning core at its current position.</MX_Mingyuan_BurningPillar_StopDesc>
+  <MX_Mingyuan_BurningPillar_InvalidDestination>Invalid burning pillar destination.</MX_Mingyuan_BurningPillar_InvalidDestination>
+  <MX_Mingyuan_BurningPillar_NoValidCell>No valid cell for Burning Pillar.</MX_Mingyuan_BurningPillar_NoValidCell>
+  <MX_Mingyuan_AshesOfSelf_InsufficientCost>Mingyuan lacks shield energy or safe blood to ignite Ashes of Self.</MX_Mingyuan_AshesOfSelf_InsufficientCost>
+  <MX_Mingyuan_AshesField_Inspect>Ashes field: radius {0}, burn damage {1}, Life Burn +{2}, remaining {3}s</MX_Mingyuan_AshesField_Inspect>
+</LanguageData>

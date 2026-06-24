@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_Enabled>已启用</MX_Mingyuan_Enabled>
+  <MX_Mingyuan_Disabled>未启用</MX_Mingyuan_Disabled>
+  <MX_Mingyuan_SelfBurn_LabelExtra>{0} 层</MX_Mingyuan_SelfBurn_LabelExtra>
+  <MX_Mingyuan_SelfBurn_TipCurrentLayers>当前自我燃烧：{0} 层</MX_Mingyuan_SelfBurn_TipCurrentLayers>
+  <MX_Mingyuan_SelfBurn_TipEffectiveLayers>有效加成层数：{0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
+  <MX_Mingyuan_SelfBurn_TipBonuses>有效层数加成：伤害 +{0}，移速 +{1}，攻速 +{2}，全局工作速度 +{3}，护盾回复 +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>异空间燃烧者加成：近战生命燃烧 +{0} 层，远程生命燃烧 +{1} 层</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
+  <MX_Mingyuan_SelfBurn_TipDecay>自然衰减：每 {0} tick -{1} 层；下次衰减剩余 {2} tick。</MX_Mingyuan_SelfBurn_TipDecay>
+  <MX_Mingyuan_Shield_TipStatus>护盾能量：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
+  <MX_Mingyuan_Shield_TipRegen>待结算 10 秒回复：+{0}；下次结算 {1} 秒后</MX_Mingyuan_Shield_TipRegen>
+  <MX_Mingyuan_Shield_TipAbsorb>吸收 &lt;= {0}、&gt;= {1} 与致命打击。每次吸收耗能：{2}。</MX_Mingyuan_Shield_TipAbsorb>
+  <MX_Mingyuan_Shield_TipReady>护盾就绪。</MX_Mingyuan_Shield_TipReady>
+  <MX_Mingyuan_Shield_TipBroken>护盾破碎；{0} 秒后重组。</MX_Mingyuan_Shield_TipBroken>
+  <MX_Mingyuan_Shield_TipNoCost>{0} 有效自我燃烧后免耗吸收：{1}</MX_Mingyuan_Shield_TipNoCost>
+  <MX_Mingyuan_BurningPillar_Inspect>半径：{0}
+核心稳定：{1}/{2}
+剩余：{3} 秒
+控制：{4}
+建筑：每次脉冲造成最大生命 33%</MX_Mingyuan_BurningPillar_Inspect>
+  <MX_Mingyuan_BurningPillar_ControlLocked>未解锁</MX_Mingyuan_BurningPillar_ControlLocked>
+  <MX_Mingyuan_BurningPillar_ControlStopped>停止</MX_Mingyuan_BurningPillar_ControlStopped>
+  <MX_Mingyuan_BurningPillar_ControlMoving>移动至 {0}</MX_Mingyuan_BurningPillar_ControlMoving>
+  <MX_Mingyuan_BurningPillar_MoveLabel>移动</MX_Mingyuan_BurningPillar_MoveLabel>
+  <MX_Mingyuan_BurningPillar_MoveDesc>选择目的地。燃烧核心直线移动，遇到不可通行地形或建筑会停止。</MX_Mingyuan_BurningPillar_MoveDesc>
+  <MX_Mingyuan_BurningPillar_StopLabel>停止</MX_Mingyuan_BurningPillar_StopLabel>
+  <MX_Mingyuan_BurningPillar_StopDesc>让燃烧核心停在当前位置。</MX_Mingyuan_BurningPillar_StopDesc>
+  <MX_Mingyuan_BurningPillar_InvalidDestination>燃烧之柱目的地无效。</MX_Mingyuan_BurningPillar_InvalidDestination>
+  <MX_Mingyuan_BurningPillar_NoValidCell>燃烧之柱没有可用放置格。</MX_Mingyuan_BurningPillar_NoValidCell>
+  <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊没有足够护盾能量，或剩余血液不足以安全点燃焚我余烬。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
+  <MX_Mingyuan_AshesField_Inspect>余烬领域：半径 {0}，灼伤 {1}，生命燃烧 +{2}，剩余 {3} 秒</MX_Mingyuan_AshesField_Inspect>
+</LanguageData>
