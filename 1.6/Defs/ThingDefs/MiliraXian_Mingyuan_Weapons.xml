@@ -4,16 +4,15 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Mingyuan_CinderSword</defName>
         <label>Cinder Ash</label>
-        <description>Mingyuan's longsword. Life Burn on hit is handled globally by Source/Mingyuan/MingyuanPatches.cs.</description>
+        <description>Mingyuan's pale cinder blade. It strikes for 44 cut damage with 150% armor penetration, attacks twice in roughly 3 seconds through a 0.5 melee cooldown multiplier, and Mingyuan's flame adds Life Burn on each hit.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <!-- TODO: Replace with MiliraXianMingyuan/Items/CinderSword. -->
-            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <texPath>MiliraXianMingyuan/Items/CinderSword</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <uiIconPath>MiliraXianMingyuan/Items/CinderSword</uiIconPath>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>
@@ -47,6 +46,10 @@
             <AccuracyMedium>1.00</AccuracyMedium>
             <AccuracyLong>1.00</AccuracyLong>
         </statBases>
+        <equippedStatOffsets>
+            <MeleeDodgeChance>0.20</MeleeDodgeChance>
+            <MeleeWeapon_DamageMultiplier>1.00</MeleeWeapon_DamageMultiplier>
+        </equippedStatOffsets>
 
         <tools>
             <li>
@@ -69,19 +72,18 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>Long Rainbow</label>
-        <description>Mingyuan's longbow. Ranged hits apply Life Burn through Mingyuan's global hit logic.</description>
+        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds, fires 4 high-arc arrows at any map-range target, and each arrow deals 25 damage with a 2-cell burst. Mingyuan's flame adds Life Burn on hit.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
         <smeltable>false</smeltable>
 
         <graphicData>
-            <!-- TODO: Replace with MiliraXianMingyuan/Items/RainbowBow. -->
-            <texPath>MiliraXianNeiyu/Items/BowForNeiyu</texPath>
+            <texPath>MiliraXianMingyuan/Items/RainbowBow</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/BowForNeiyu</uiIconPath>
+        <uiIconPath>MiliraXianMingyuan/Items/RainbowBow</uiIconPath>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>
@@ -110,6 +112,7 @@
             <AccuracyShort>1.00</AccuracyShort>
             <AccuracyMedium>1.00</AccuracyMedium>
             <AccuracyLong>1.00</AccuracyLong>
+            <RangedWeapon_Cooldown>2.00</RangedWeapon_Cooldown>
         </statBases>
 
         <verbs>
@@ -134,8 +137,7 @@
         <defName>MX_Bullet_Mingyuan_RainbowArrow</defName>
         <label>Long Rainbow Arrow</label>
         <graphicData>
-            <!-- TODO: Replace with MiliraXianMingyuan/Projectile/RainbowArrow. -->
-            <texPath>MiliraXianNeiyu/Projectile/BigArrow</texPath>
+            <texPath>MiliraXianMingyuan/Projectile/RainbowArrow</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(0.45,1.8)</drawSize>
             <shaderType>TransparentPostLight</shaderType>
@@ -143,8 +145,9 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>1</damageAmountBase>
+            <damageAmountBase>25</damageAmountBase>
             <armorPenetrationBase>1.00</armorPenetrationBase>
+            <explosionRadius>2</explosionRadius>
             <speed>45</speed>
             <arcHeightFactor>0.90</arcHeightFactor>
         </projectile>

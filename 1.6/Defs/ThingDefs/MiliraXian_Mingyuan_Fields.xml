@@ -3,40 +3,73 @@
 
     <ThingDef>
         <defName>MX_Mingyuan_BurningPillarField</defName>
-        <label>Mingyuan burning pillar field</label>
+        <label>burning pillar core</label>
         <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanBurningPillarField</thingClass>
+        <category>Building</category>
+        <selectable>true</selectable>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
         <altitudeLayer>MoteLow</altitudeLayer>
+        <passability>Standable</passability>
+        <fillPercent>0</fillPercent>
+        <rotatable>false</rotatable>
         <graphicData>
-            <graphicClass>Graphic_Single</graphicClass>
+            <graphicClass>MiliraXian.Characters.Mingyuan.Graphic_MingyuanBurningPillarTornado</graphicClass>
             <shaderType>MoteGlowDistorted</shaderType>
             <shaderParameters>
                 <_DistortionTex>/Other/Ripples</_DistortionTex>
+                <_distortionIntensity>0.04</_distortionIntensity>
+                <_distortionScale>0.16</_distortionScale>
             </shaderParameters>
-            <color>(1.00,0.28,0.08,0.55)</color>
-            <texPath>Things/Mote/PsycastCast</texPath>
-            <drawSize>30</drawSize>
+            <color>(1.00,0.78,0.36,0.42)</color>
+            <texPath>MiliraXianMingyuan/Effect/BurningPillarTornado</texPath>
+            <drawSize>(30,30)</drawSize>
         </graphicData>
         <drawOffscreen>true</drawOffscreen>
-        <useHitPoints>false</useHitPoints>
+        <useHitPoints>true</useHitPoints>
+        <statBases>
+            <MaxHitPoints>2000</MaxHitPoints>
+            <Flammability>0</Flammability>
+        </statBases>
+        <building>
+            <isEdifice>false</isEdifice>
+            <canBeDamagedByAttacks>true</canBeDamagedByAttacks>
+            <quickTargetable>true</quickTargetable>
+            <isTargetable>true</isTargetable>
+            <neverBuildable>true</neverBuildable>
+            <combatPower>100</combatPower>
+            <displayAttackToDestroyOnInspectPane>false</displayAttackToDestroyOnInspectPane>
+        </building>
         <comps>
-            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
-                <radius>15</radius>
-                <durationTicks>10000</durationTicks>
-                <pulseIntervalTicks>15</pulseIntervalTicks>
-                <damageAmount>100</damageAmount>
-                <armorPenetration>999</armorPenetration>
-                <lifeBurnLayers>100</lifeBurnLayers>
-                <destroyBuildings>true</destroyBuildings>
-                <destroyAnimals>true</destroyAnimals>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningPillarTornado">
+                <startRadius>1</startRadius>
+                <maxRadius>15</maxRadius>
+                <durationTicks>7500</durationTicks>
+                <radiusGrowTicks>417</radiusGrowTicks>
+                <controlUnlockTicks>417</controlUnlockTicks>
+                <coreGrowTicks>417</coreGrowTicks>
+                <pulseIntervalTicks>60</pulseIntervalTicks>
+                <moveIntervalTicks>60</moveIntervalTicks>
+                <initialHitPoints>500</initialHitPoints>
+                <maxHitPoints>2000</maxHitPoints>
+                <centerBurnDamage>30</centerBurnDamage>
+                <edgeBurnDamage>5</edgeBurnDamage>
+                <centerCutDamage>5</centerCutDamage>
+                <edgeCutDamage>30</edgeCutDamage>
+                <lifeBurnLayersPerBurnDamage>1</lifeBurnLayersPerBurnDamage>
+                <buildingDamageFraction>0.33</buildingDamageFraction>
+                <targetPriorityFactor>0.65</targetPriorityFactor>
+                <visualRotationDegreesPerTick>2.25</visualRotationDegreesPerTick>
+                <visualFadeTicks>120</visualFadeTicks>
+                <coreMoteDef>MX_Mingyuan_Mote_BurningPillarCore</coreMoteDef>
+                <coreMoteScale>1</coreMoteScale>
             </li>
         </comps>
     </ThingDef>
 
     <ThingDef>
         <defName>MX_Mingyuan_AshesField</defName>
-        <label>Mingyuan ashes field</label>
+        <label>ashes of self field</label>
         <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanAshesField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
@@ -46,10 +79,12 @@
             <shaderType>MoteGlowDistorted</shaderType>
             <shaderParameters>
                 <_DistortionTex>/Other/Ripples</_DistortionTex>
+                <_distortionIntensity>0.035</_distortionIntensity>
+                <_distortionScale>0.16</_distortionScale>
             </shaderParameters>
-            <color>(1.00,0.55,0.18,0.45)</color>
-            <texPath>Things/Mote/PsycastCast</texPath>
-            <drawSize>5</drawSize>
+            <color>(1.00,0.74,0.34,0.52)</color>
+            <texPath>MiliraXianMingyuan/Effect/AshesFieldRange</texPath>
+            <drawSize>(5,5)</drawSize>
         </graphicData>
         <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
@@ -58,12 +93,21 @@
                 <radius>2.4</radius>
                 <durationTicks>900</durationTicks>
                 <pulseIntervalTicks>30</pulseIntervalTicks>
-                <damageAmount>20</damageAmount>
+                <damageAmount>1</damageAmount>
                 <armorPenetration>999</armorPenetration>
                 <lifeBurnLayers>20</lifeBurnLayers>
                 <scalesWithSelfBurn>true</scalesWithSelfBurn>
                 <selfBurnLifeBurnPer100>20</selfBurnLifeBurnPer100>
-                <selfBurnDamagePerLayer>0.01</selfBurnDamagePerLayer>
+                <selfHealAmount>1</selfHealAmount>
+                <maxSelfBurnGainPerPulse>20</maxSelfBurnGainPerPulse>
+                <pulseMoteDef>MX_Mingyuan_Mote_AshesPulse</pulseMoteDef>
+                <hitMoteDef>MX_Mingyuan_Mote_AshesHit</hitMoteDef>
+                <selfHealMoteDef>MX_Mingyuan_Mote_SelfBurnGain</selfHealMoteDef>
+                <pulseMoteScale>1</pulseMoteScale>
+                <hitMoteScale>0.85</hitMoteScale>
+                <selfHealMoteScale>1</selfHealMoteScale>
+                <maxHitMotesPerPulse>12</maxHitMotesPerPulse>
+                <previewRingColor>(1.00,0.75,0.34,0.64)</previewRingColor>
             </li>
         </comps>
     </ThingDef>

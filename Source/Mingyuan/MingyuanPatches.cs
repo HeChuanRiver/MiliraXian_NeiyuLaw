@@ -64,8 +64,10 @@ namespace MiliraXian.Characters.Mingyuan
     [HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
     public static class Patch_Mingyuan_OnHitLifeBurn
     {
-        private const float MeleeLifeBurnLayers = 420f;
-        private const float RangedLifeBurnLayers = 140f;
+        private const float MeleeLifeBurnLayers = 10f;
+        private const float RangedLifeBurnLayers = 2f;
+        private const float MeleeSelfBurnBonusPer100 = 10f;
+        private const float RangedSelfBurnBonusPer100 = 2f;
 
         [HarmonyPostfix]
         public static void Postfix(Thing __instance, DamageInfo dinfo, DamageWorker.DamageResult __result)
@@ -89,7 +91,8 @@ namespace MiliraXian.Characters.Mingyuan
             float step = MingyuanUtility.GetLifeBurnBonusStep(instigator);
             bool ranged = dinfo.Weapon?.IsRangedWeapon == true;
             float baseLayers = ranged ? RangedLifeBurnLayers : MeleeLifeBurnLayers;
-            float layers = baseLayers * (1f + step);
+            float bonusLayers = step * (ranged ? RangedSelfBurnBonusPer100 : MeleeSelfBurnBonusPer100);
+            float layers = baseLayers + bonusLayers;
             MingyuanUtility.AddLifeBurn(target, instigator, layers);
         }
     }
@@ -144,6 +147,11 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static HediffComp_MingyuanLifeBurn GetLifeBurnComp(Pawn pawn)
         {
+            if (MingyuanUtility.IsLifeBurnImmunePawn(pawn))
+            {
+                return null;
+            }
+
             return (pawn?.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.LifeBurnDef) as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
         }
     }
@@ -178,7 +186,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
             }
 
-            float selfBurn = MingyuanUtility.GetSelfBurnLayers(pawn);
+            float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(pawn);
             if (selfBurn <= 0f)
             {
                 return;
@@ -211,7 +219,7 @@ namespace MiliraXian.Characters.Mingyuan
                 __result *= MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn);
             }
 
-            float selfBurn = MingyuanUtility.GetSelfBurnLayers(attacker);
+            float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(attacker);
             if (selfBurn > 0f)
             {
                 __result *= 1f + selfBurn * 0.01f;
@@ -225,7 +233,7 @@ namespace MiliraXian.Characters.Mingyuan
         [HarmonyPostfix]
         public static void Postfix(Pawn attacker, ref float __result)
         {
-            float selfBurn = MingyuanUtility.GetSelfBurnLayers(attacker);
+            float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(attacker);
             if (selfBurn > 0f)
             {
                 __result /= 1f + selfBurn * 0.01f;
@@ -246,7 +254,7 @@ namespace MiliraXian.Characters.Mingyuan
                 __result = Mathf.Max(1, Mathf.RoundToInt(__result * MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn)));
             }
 
-            float selfBurn = MingyuanUtility.GetSelfBurnLayers(ownerPawn);
+            float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(ownerPawn);
             if (selfBurn > 0f)
             {
                 __result = Mathf.Max(1, Mathf.RoundToInt(__result * (1f + selfBurn * 0.01f)));

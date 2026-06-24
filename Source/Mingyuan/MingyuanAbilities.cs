@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace MiliraXian.Characters.Mingyuan
 {
@@ -128,7 +129,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            MingyuanUtility.AddLifeBurn(caster, caster, Props.selfLifeBurnLayers);
+            MingyuanUtility.AddSelfBurn(caster, Props.selfLifeBurnLayers);
         }
 
         private bool TryBuildDashPath(Pawn caster, IntVec3 targetCell, List<IntVec3> outCells, out IntVec3 destination)
@@ -214,7 +215,7 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.pathDamage, caster);
+                MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.pathDamage, caster, scaleWithSelfBurn: true);
                 MingyuanUtility.AddLifeBurn(pawn, caster, Props.lifeBurnLayers);
                 if (!pawn.Dead && pawn.Spawned)
                 {
@@ -279,7 +280,12 @@ namespace MiliraXian.Characters.Mingyuan
                         continue;
                     }
 
-                    MoteMaker.MakeStaticMote(cell.ToVector3Shifted(), map, scorchDef, Mathf.Max(0.1f, Props.scorchMoteScale), true, Rand.Range(0f, 360f));
+                    Thing thing = GenSpawn.Spawn(scorchDef, cell, map, WipeMode.Vanish);
+                    Thing_MingyuanAscendantFlameScorch scorch = thing as Thing_MingyuanAscendantFlameScorch;
+                    if (scorch != null)
+                    {
+                        scorch.Init(caster, Mathf.Max(0.1f, Props.scorchMoteScale), Rand.Range(0f, 360f));
+                    }
                 }
             }
 
@@ -334,20 +340,210 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
+    public class Thing_MingyuanAscendantFlameScorch : ThingWithComps
+    {
+        private CompMingyuanAscendantFlameScorch ScorchComp => GetComp<CompMingyuanAscendantFlameScorch>();
+
+        public float VisualAlpha => ScorchComp?.VisualAlpha ?? 1f;
+
+        public float VisualScale => ScorchComp?.VisualScale ?? 1f;
+
+        public float VisualRotation => ScorchComp?.VisualRotation ?? 0f;
+
+        public void Init(Pawn caster, float scale, float rotation)
+        {
+            ScorchComp?.Init(caster, scale, rotation);
+        }
+    }
+
+    public class CompProperties_MingyuanAscendantFlameScorch : CompProperties
+    {
+        public int durationTicks = 900;
+        public int pulseIntervalTicks = 60;
+        public float lifeBurnLayers = 20f;
+        public int fadeInTicks = 15;
+        public int fadeOutTicks = 60;
+
+        public CompProperties_MingyuanAscendantFlameScorch()
+        {
+            compClass = typeof(CompMingyuanAscendantFlameScorch);
+        }
+    }
+
+    public class CompMingyuanAscendantFlameScorch : ThingComp
+    {
+        private Pawn caster;
+        private int spawnTick;
+        private int expireTick;
+        private int ticksToPulse;
+        private float visualScale = 1f;
+        private float visualRotation;
+
+        public CompProperties_MingyuanAscendantFlameScorch PropsScorch => (CompProperties_MingyuanAscendantFlameScorch)props;
+
+        public float VisualScale => Mathf.Max(0.1f, visualScale);
+
+        public float VisualRotation => visualRotation;
+
+        public float VisualAlpha
+        {
+            get
+            {
+                EnsureInitialized();
+                int currentTick = Find.TickManager.TicksGame;
+                float alpha = 1f;
+                int fadeInTicks = Mathf.Max(0, PropsScorch.fadeInTicks);
+                if (fadeInTicks > 0)
+                {
+                    alpha = Mathf.Min(alpha, Mathf.Clamp01((currentTick - spawnTick) / (float)fadeInTicks));
+                }
+
+                int fadeOutTicks = Mathf.Max(0, PropsScorch.fadeOutTicks);
+                if (fadeOutTicks > 0)
+                {
+                    alpha = Mathf.Min(alpha, Mathf.Clamp01((expireTick - currentTick) / (float)fadeOutTicks));
+                }
+
+                return alpha;
+            }
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_References.Look(ref caster, "caster", false);
+            Scribe_Values.Look(ref spawnTick, "spawnTick", 0);
+            Scribe_Values.Look(ref expireTick, "expireTick", 0);
+            Scribe_Values.Look(ref ticksToPulse, "ticksToPulse", 0);
+            Scribe_Values.Look(ref visualScale, "visualScale", 1f);
+            Scribe_Values.Look(ref visualRotation, "visualRotation", 0f);
+        }
+
+        public void Init(Pawn newCaster, float scale, float rotation)
+        {
+            caster = newCaster;
+            spawnTick = Find.TickManager.TicksGame;
+            expireTick = spawnTick + Mathf.Max(1, PropsScorch.durationTicks);
+            ticksToPulse = Rand.RangeInclusive(1, Mathf.Max(1, PropsScorch.pulseIntervalTicks));
+            visualScale = Mathf.Max(0.1f, scale);
+            visualRotation = rotation;
+        }
+
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (parent.Destroyed || parent.Map == null)
+            {
+                return;
+            }
+
+            EnsureInitialized();
+            int currentTick = Find.TickManager.TicksGame;
+            if (currentTick >= expireTick)
+            {
+                parent.Destroy(DestroyMode.Vanish);
+                return;
+            }
+
+            ticksToPulse--;
+            if (ticksToPulse > 0)
+            {
+                return;
+            }
+
+            ticksToPulse = Mathf.Max(1, PropsScorch.pulseIntervalTicks);
+            PulseStandingPawns();
+        }
+
+        private void EnsureInitialized()
+        {
+            int currentTick = Find.TickManager.TicksGame;
+            if (spawnTick <= 0)
+            {
+                spawnTick = parent.TickSpawned > 0 ? parent.TickSpawned : currentTick;
+            }
+
+            if (expireTick <= 0)
+            {
+                expireTick = spawnTick + Mathf.Max(1, PropsScorch.durationTicks);
+            }
+
+            if (ticksToPulse <= 0)
+            {
+                ticksToPulse = Rand.RangeInclusive(1, Mathf.Max(1, PropsScorch.pulseIntervalTicks));
+            }
+
+            if (visualScale <= 0f)
+            {
+                visualScale = 1f;
+            }
+        }
+
+        private void PulseStandingPawns()
+        {
+            if (caster == null || caster.Destroyed || caster.Dead || parent.Map == null || PropsScorch.lifeBurnLayers <= 0f)
+            {
+                return;
+            }
+
+            List<Thing> things = parent.Position.GetThingList(parent.Map);
+            for (int i = 0; i < things.Count; i++)
+            {
+                Pawn pawn;
+                if (MingyuanUtility.IsHostilePawn(things[i], caster, out pawn))
+                {
+                    MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers);
+                }
+            }
+        }
+    }
+
     public class Graphic_MingyuanScorchFlicker : Graphic_MoteRandom
     {
         private const int TicksPerFrameChange = 15;
+        private static readonly MaterialPropertyBlock ScorchPropertyBlock = new MaterialPropertyBlock();
 
         public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
         {
-            if (!(thing is Mote mote) || subGraphics == null || subGraphics.Length == 0)
+            if (subGraphics == null || subGraphics.Length == 0)
             {
                 base.DrawWorker(loc, rot, thingDef, thing, extraRotation);
                 return;
             }
 
-            int frame = Mathf.Abs((Find.TickManager.TicksGame + mote.offsetRandom) / TicksPerFrameChange) % subGraphics.Length;
-            Graphic_Mote.DrawMote(data, subGraphics[frame].MatSingle, base.Color, loc, rot, thingDef, thing, 0, ForcePropertyBlock);
+            Mote mote = thing as Mote;
+            int offset = mote != null ? mote.offsetRandom : thing?.HashOffset() ?? 0;
+            int frame = Mathf.Abs((Find.TickManager.TicksGame + offset) / TicksPerFrameChange) % subGraphics.Length;
+            Material material = subGraphics[frame].MatSingle;
+            if (mote != null)
+            {
+                Graphic_Mote.DrawMote(data, material, base.Color, loc, rot, thingDef, thing, 0, ForcePropertyBlock);
+                return;
+            }
+
+            Thing_MingyuanAscendantFlameScorch scorch = thing as Thing_MingyuanAscendantFlameScorch;
+            float alpha = scorch?.VisualAlpha ?? 1f;
+            if (alpha <= 0.001f)
+            {
+                return;
+            }
+
+            float scale = scorch?.VisualScale ?? 1f;
+            float drawRotation = scorch?.VisualRotation ?? extraRotation;
+            Vector3 drawScale = new Vector3(data.drawSize.x * scale, 1f, data.drawSize.y * scale);
+            Color drawColor = base.Color;
+            drawColor.a *= alpha;
+
+            Matrix4x4 matrix = default(Matrix4x4);
+            matrix.SetTRS(loc, Quaternion.AngleAxis(drawRotation, Vector3.up), drawScale);
+            if (!ForcePropertyBlock && drawColor.IndistinguishableFrom(material.color))
+            {
+                Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
+                return;
+            }
+
+            ScorchPropertyBlock.SetColor(ShaderPropertyIDs.Color, drawColor);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, ScorchPropertyBlock);
         }
 
         public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
@@ -366,6 +562,12 @@ namespace MiliraXian.Characters.Mingyuan
         public float radius = 30f;
         public float partDamage = 10f;
         public int stunTicks = 720;
+        public ThingDef flashMoteDef;
+        public ThingDef targetMoteDef;
+        public float flashMoteScale = 1f;
+        public float targetMoteScale = 1f;
+        public int maxTargetMotes = 48;
+        public float minimumLifeBurnLayers = 1f;
 
         public CompProperties_AbilityMingyuanInstantCombustion()
         {
@@ -386,6 +588,9 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
+            SpawnFlashMote(caster);
+            int spawnedTargetMotes = 0;
+            int maxTargetMotes = Mathf.Max(0, Props.maxTargetMotes);
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(caster.Position, caster.Map, Props.radius, true))
             {
                 Pawn pawn;
@@ -396,9 +601,61 @@ namespace MiliraXian.Characters.Mingyuan
 
                 DamageBrainAndEyes(pawn, caster);
                 float currentLayers = MingyuanUtility.GetLifeBurnLayers(pawn);
-                MingyuanUtility.AddLifeBurn(pawn, caster, Mathf.Max(1f, currentLayers));
+                float layersToAdd = Mathf.Max(Props.minimumLifeBurnLayers, currentLayers);
+                if (layersToAdd > 0f)
+                {
+                    MingyuanUtility.AddLifeBurn(pawn, caster, layersToAdd);
+                }
+
                 pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
+                if (spawnedTargetMotes < maxTargetMotes && SpawnTargetMote(pawn))
+                {
+                    spawnedTargetMotes++;
+                }
             }
+        }
+
+        private void SpawnFlashMote(Pawn caster)
+        {
+            ThingDef flashDef = Props.flashMoteDef
+                                ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_InstantCombustionFlash
+                                ?? DefDatabase<ThingDef>.GetNamedSilentFail("MX_Mingyuan_Mote_InstantCombustionFlash");
+            if (caster?.Map == null || flashDef == null)
+            {
+                return;
+            }
+
+            Mote mote = MoteMaker.MakeStaticMote(
+                caster.DrawPos,
+                caster.Map,
+                flashDef,
+                Mathf.Max(0.1f, Props.flashMoteScale),
+                false,
+                Rand.Range(0f, 360f));
+            if (mote != null)
+            {
+                mote.exactPosition = caster.DrawPos;
+            }
+        }
+
+        private bool SpawnTargetMote(Pawn pawn)
+        {
+            ThingDef targetDef = Props.targetMoteDef
+                                 ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_InstantCombustionMark
+                                 ?? DefDatabase<ThingDef>.GetNamedSilentFail("MX_Mingyuan_Mote_InstantCombustionMark");
+            if (pawn == null || !pawn.Spawned || pawn.MapHeld == null || targetDef == null)
+            {
+                return false;
+            }
+
+            Mote mote = MoteMaker.MakeAttachedOverlay(pawn, targetDef, Vector3.zero, Mathf.Max(0.1f, Props.targetMoteScale));
+            if (mote != null)
+            {
+                mote.exactRotation = Rand.Range(0f, 360f);
+                return true;
+            }
+
+            return false;
         }
 
         private void DamageBrainAndEyes(Pawn pawn, Pawn caster)
@@ -442,15 +699,65 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
+            IntVec3 spawnCell;
+            if (!TryFindBurningPillarSpawnCell(target.Cell, caster.Map, out spawnCell))
+            {
+                Messages.Message("MX_Mingyuan_BurningPillar_NoValidCell".Translate(), MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
             Thing field = ThingMaker.MakeThing(Props.fieldDef);
-            GenSpawn.Spawn(field, target.Cell, caster.Map);
+            if (field.def.CanHaveFaction && caster.Faction != null)
+            {
+                field.SetFactionDirect(caster.Faction);
+            }
+
+            GenSpawn.Spawn(field, spawnCell, caster.Map);
+            field.TryGetComp<CompMingyuanBurningPillarTornado>()?.Init(caster);
             field.TryGetComp<CompMingyuanBurningField>()?.Init(caster);
+        }
+
+        private static bool TryFindBurningPillarSpawnCell(IntVec3 center, Map map, out IntVec3 result)
+        {
+            if (CanSpawnBurningPillarAt(center, map))
+            {
+                result = center;
+                return true;
+            }
+
+            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, 6f, false))
+            {
+                if (CanSpawnBurningPillarAt(cell, map))
+                {
+                    result = cell;
+                    return true;
+                }
+            }
+
+            result = IntVec3.Invalid;
+            return false;
+        }
+
+        private static bool CanSpawnBurningPillarAt(IntVec3 cell, Map map)
+        {
+            return map != null && cell.InBounds(map) && cell.Standable(map) && cell.GetFirstBuilding(map) == null;
         }
     }
 
     public class CompProperties_AbilityMingyuanTimeBurn : CompProperties_AbilityEffect
     {
-        public int durationTicks = 60000;
+        public int durationTicks = MingyuanUtility.TicksPerHour;
+        public int tickIntervalTicks = 60;
+        public int moteIntervalTicks = 120;
+        public ThingDef startMoteDef;
+        public ThingDef targetMoteDef;
+        public ThingDef collapseMoteDef;
+        public SoundDef effectSoundDef;
+        public float startMoteScale = 2.2f;
+        public float targetMoteScale = 1.15f;
+        public float collapseMoteScale = 2.4f;
+        public int mechSteelCount = 75;
+        public int mechPlasteelCount = 25;
 
         public CompProperties_AbilityMingyuanTimeBurn()
         {
@@ -474,20 +781,16 @@ namespace MiliraXian.Characters.Mingyuan
             Pawn targetPawn = target.Pawn;
             if (targetPawn != null && !targetPawn.Dead)
             {
-                MingyuanUtility.EnsureHediff(targetPawn, MingyuanUtility.TimeBurnFrozenDef);
-                if (targetPawn.ageTracker != null)
-                {
-                    targetPawn.ageTracker.AgeBiologicalTicks = 0;
-                }
-
-                MingyuanTimeLockUtility.RegisterLock(targetPawn, Props.durationTicks, MingyuanUtility.TimeBurnFrozenDef, false);
+                MingyuanTimeBurnUtility.PlayEffectSound(Props.effectSoundDef, targetPawn.PositionHeld, targetPawn.MapHeld);
+                MingyuanTimeBurnUtility.TryMakeStaticMote(targetPawn.PositionHeld, targetPawn.MapHeld, Props.startMoteDef, Props.startMoteScale);
+                MingyuanTimeBurnUtility.Register(targetPawn, caster, Props);
                 return;
             }
 
             Thing targetThing = target.Thing;
             if (targetThing != null && targetThing.def.category == ThingCategory.Building)
             {
-                targetThing.Destroy(DestroyMode.Deconstruct);
+                MingyuanTimeBurnUtility.DissolveBuilding(targetThing, caster, Props);
             }
         }
     }
@@ -496,9 +799,12 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public ThingDef fieldDef;
         public float selfBurnLayers = 100f;
-        public float shieldEnergyCost = 40f;
-        public float healthCostFraction = 0.2f;
+        public float bloodLossCost = 0.5f;
         public int fieldDurationTicks = 900;
+        public float fieldPreviewRadius = 2.4f;
+        public ThingDef castMoteDef;
+        public float castMoteScale = 1f;
+        public SoundDef effectSoundDef;
 
         public CompProperties_AbilityMingyuanAshesOfSelf()
         {
@@ -509,6 +815,17 @@ namespace MiliraXian.Characters.Mingyuan
     public class CompAbilityEffect_MingyuanAshesOfSelf : CompAbilityEffect
     {
         public new CompProperties_AbilityMingyuanAshesOfSelf Props => (CompProperties_AbilityMingyuanAshesOfSelf)props;
+
+        public override void DrawEffectPreview(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            if (caster?.MapHeld == null)
+            {
+                return;
+            }
+
+            GenDraw.DrawRadiusRing(caster.Position, Mathf.Max(0.1f, Props.fieldPreviewRadius), new Color(1f, 0.74f, 0.34f, 0.72f));
+        }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -521,11 +838,12 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (!ConsumeCost(caster))
             {
-                Messages.Message("Mingyuan has insufficient shield energy or blood to ignite Ashes of Self.", caster, MessageTypeDefOf.RejectInput, false);
+                Messages.Message("MX_Mingyuan_AshesOfSelf_InsufficientCost".Translate(), caster, MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
             MingyuanUtility.AddSelfBurn(caster, Props.selfBurnLayers);
+            PlayCastVisuals(caster);
 
             if (Props.fieldDef == null)
             {
@@ -540,14 +858,30 @@ namespace MiliraXian.Characters.Mingyuan
         private bool ConsumeCost(Pawn caster)
         {
             HediffComp_MingyuanProtectiveFlameShield shield = (caster.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)?.GetComp<HediffComp_MingyuanProtectiveFlameShield>();
-            if (shield != null && shield.TryConsumeEnergy(Props.shieldEnergyCost))
+            if (shield != null && shield.TryConsumeAllEnergy())
             {
                 return true;
             }
 
-            float damage = Mathf.Max(1f, caster.health.LethalDamageThreshold * Props.healthCostFraction);
-            DamageWorker.DamageResult result = MingyuanUtility.ApplyTrueDamage(caster, DamageDefOf.Cut, damage, caster);
-            return result != null;
+            if (caster.RaceProps?.IsFlesh != true || caster.WouldDieFromAdditionalBloodLoss(Props.bloodLossCost))
+            {
+                return false;
+            }
+
+            HealthUtility.AdjustSeverity(caster, HediffDefOf.BloodLoss, Mathf.Max(0f, Props.bloodLossCost));
+            return true;
+        }
+
+        private void PlayCastVisuals(Pawn caster)
+        {
+            if (caster?.Map == null)
+            {
+                return;
+            }
+
+            Props.effectSoundDef?.PlayOneShot(new TargetInfo(caster.Position, caster.Map));
+            ThingDef moteDef = Props.castMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_AshesCast;
+            MingyuanUtility.TryMakeStaticMote(caster.Position, caster.Map, moteDef, Props.castMoteScale);
         }
     }
 }

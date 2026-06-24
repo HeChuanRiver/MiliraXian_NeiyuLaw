@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_LifeBurn</defName>
         <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
-        <description>Hostile burn inflicted by Mingyuan. It drains needs and age, deals true damage, weakens stats, and spreads on death.</description>
+        <description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and spills part of itself to nearby enemies when the host dies.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
         <isBad>true</isBad>
@@ -40,13 +40,13 @@
     <HediffDef>
         <defName>MX_Mingyuan_SelfBurn</defName>
         <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
-        <description>Beneficial burn counter. It boosts damage, movement, attack speed, work speed, shield regeneration, and Life Burn stacking.</description>
+        <description>Mingyuan turns the burning inside herself into momentum. Stored layers can rise above the bonus limit as a buffer, but damage, movement, attack speed, work speed, shield regeneration, and Life Burn bonuses only count up to 300 effective layers.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <initialSeverity>1</initialSeverity>
-        <maxSeverity>999999</maxSeverity>
+        <maxSeverity>500</maxSeverity>
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
@@ -55,8 +55,12 @@
         </stages>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanSelfBurn">
-                <decayIntervalTicks>120</decayIntervalTicks>
+                <decayIntervalTicks>500</decayIntervalTicks>
                 <decayLayers>10</decayLayers>
+                <gainMoteDef>MX_Mingyuan_Mote_SelfBurnGain</gainMoteDef>
+                <gainMoteScale>1</gainMoteScale>
+                <gainMoteCooldownTicks>60</gainMoteCooldownTicks>
+                <effectiveBonusCap>300</effectiveBonusCap>
             </li>
         </comps>
     </HediffDef>
@@ -64,7 +68,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>Mingyuan's otherworld-forged body: extreme part health, consciousness, heat and blast conversion, counterburn, repair, and short invulnerability after taking damage.</description>
+        <description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and brief invulnerability follows real wounds.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -109,7 +113,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
         <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
-        <description>Flame shield with 200 energy. It absorbs small, large, and lethal hits, regenerates, rebuilds after breaking, and clears hostile control states on hit.</description>
+        <description>A 200-energy pale flame shield. It absorbs very small hits, overwhelming hits, and lethal strikes, spends 10 energy per absorbed hit, batches regeneration every 10 seconds, rebuilds after breaking, and clears hostile control when struck. At 300 effective Self Burn layers, absorbed hits cost no energy and add more Self Burn.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>
@@ -122,12 +126,16 @@
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanProtectiveFlameShield">
                 <maxEnergy>200</maxEnergy>
                 <regenPerSecond>2</regenPerSecond>
+                <regenIntervalTicks>600</regenIntervalTicks>
                 <lowIgnoreDamage>20</lowIgnoreDamage>
                 <highIgnoreDamage>100</highIgnoreDamage>
                 <breakRecoverTicks>480</breakRecoverTicks>
-                <hitEnergyCost>1</hitEnergyCost>
+                <hitEnergyCost>10</hitEnergyCost>
                 <selfBurnNoCostThreshold>300</selfBurnNoCostThreshold>
                 <selfBurnOnNoCostHit>10</selfBurnOnNoCostHit>
+                <shieldSelfBurnMoteDef>MX_Mingyuan_Mote_ShieldSelfBurnLink</shieldSelfBurnMoteDef>
+                <shieldSelfBurnMoteScale>1</shieldSelfBurnMoteScale>
+                <shieldSelfBurnMoteCooldownTicks>60</shieldSelfBurnMoteCooldownTicks>
             </li>
         </comps>
     </HediffDef>
@@ -135,7 +143,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_RebirthFlame</defName>
         <label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</label>
-        <description>Death hook that detonates, resurrects Mingyuan, and locks her in Eternal Burning for 30 seconds.</description>
+        <description>When Mingyuan falls, the flame buried in her body detonates and begins shaping her back from the ashes.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.36, 0.24)</defaultLabelColor>
         <isBad>false</isBad>
@@ -152,7 +160,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_EternalBurning</defName>
         <label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</label>
-        <description>Temporary rebirth lock. Damage and ticking are blocked until the GameComponent removes it.</description>
+        <description>Mingyuan is enclosed in the fire that rebuilds her. While this flame lasts, outside blows cannot decide her death.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.18, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
@@ -162,8 +170,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_TimeBurnFrozen</defName>
-        <label>&lt;color=#C95CFF&gt;Time Burn Frozen&lt;/color&gt;</label>
-        <description>Marker hediff used by Time Burn while a pawn's ticks are stopped.</description>
+        <label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</label>
+        <description>The target's lifetime is being burned away. When the remaining biological age reaches zero, the flame claims the body.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.79, 0.36, 1.00)</defaultLabelColor>
         <isBad>true</isBad>

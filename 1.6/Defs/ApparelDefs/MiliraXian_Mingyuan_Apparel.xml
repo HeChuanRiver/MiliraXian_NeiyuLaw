@@ -4,12 +4,11 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_Mingyuan_InfernoArmor</defName>
         <label>Molten Inferno Armor</label>
-        <description>Mingyuan's full-coverage inferno armor. Texture paths temporarily reuse Neiyu assets.</description>
+        <description>Armor cooled from Mingyuan's pale inferno. It covers the body and wings, resists all common damage types, grants extreme heat insulation, adds carrying capacity, improves movement and dodge, and reduces incoming damage while remaining unbreakable.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <!-- TODO: Replace with MiliraXianMingyuan/Apparel/InfernoArmor. -->
-            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
+            <texPath>MiliraXianMingyuan/Apparel/InfernoArmor</texPath>
         </graphicData>
         <statBases>
             <Mass>2.0</Mass>
@@ -37,7 +36,7 @@
                 <li>Hands</li>
                 <li>Milira_Wings</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianMingyuan/Apparel/InfernoArmor</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanArmor</li>
             </tags>
@@ -52,26 +51,26 @@
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+100</CarryingCapacity>
-            <MeleeDodgeChance>20.0</MeleeDodgeChance>
+            <MeleeDodgeChance>0.20</MeleeDodgeChance>
             <MoveSpeed>1.00</MoveSpeed>
+            <IncomingDamageFactor>-0.50</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Mingyuan_BurningFeatherCrown</defName>
         <label>Turbid Burning Feather Crown</label>
-        <description>Mingyuan's feather crown. Texture paths temporarily reuse Neiyu assets.</description>
+        <description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and turns part of incoming harm aside.</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <!-- TODO: Replace with MiliraXianMingyuan/Apparel/BurningFeatherCrown. -->
-            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <texPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>1.0</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+        <uiIconPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</uiIconPath>
 
         <statBases>
             <Mass>0.5</Mass>
@@ -93,7 +92,7 @@
             <bodyPartGroups Inherit="False">
                 <li>UpperHead</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanCrown</li>
             </tags>
@@ -106,7 +105,10 @@
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
-            <MeleeDodgeChance>20.0</MeleeDodgeChance>
+            <MeleeDodgeChance>0.20</MeleeDodgeChance>
+            <AimingDelayFactor>-0.50</AimingDelayFactor>
+            <RangedCooldownFactor>-0.50</RangedCooldownFactor>
+            <IncomingDamageFactor>-0.44</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 

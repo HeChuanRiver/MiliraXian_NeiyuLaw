@@ -40,7 +40,6 @@
         <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
 
         <weaponTags Inherit="False">
-            <!-- TODO: If Mingyuan needs both weapons at once, add a dedicated spawn/equipment extension. -->
             <li>MX_Mingyuan_CinderSword</li>
             <li>MX_Mingyuan_RainbowBow</li>
         </weaponTags>
@@ -103,7 +102,6 @@
                 <forcedAgeYears>180</forcedAgeYears>
                 <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
 
-                <!-- Uses Neiyu head texture temporarily through MiliraMingyuanHead. -->
                 <forcedHeadTypeDef>MiliraMingyuanHead</forcedHeadTypeDef>
 
                 <disableRandomTraits>true</disableRandomTraits>
@@ -141,8 +139,7 @@
             <li Class="AriandelLibrary.SpecialPawnExtension">
                 <uniqueID>Mingyuan</uniqueID>
                 <tabDef>MI_Milira_Tab</tabDef>
-                <!-- TODO: Replace with MiliraXianMingyuan/Icon/Mingyuan after portrait art is ready. -->
-                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+                <iconPathRecruited>MiliraXianMingyuan/Icon/Mingyuan</iconPathRecruited>
                 <labelKey>SpecialPawnMingyuan.label</labelKey>
                 <descKey>SpecialPawnMingyuan.desc</descKey>
                 <order>15</order>

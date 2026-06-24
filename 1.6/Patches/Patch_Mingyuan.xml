@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Patch>
 
-    <!-- Mingyuan body addons: names/keys are Mingyuan-specific, texture paths temporarily reuse Neiyu assets. -->
+    <!-- Mingyuan body addons -->
     <Operation Class="PatchOperationAdd">
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
         <value>
             <li>
                 <name>milira halo Mingyuan</name>
                 <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/Halo/MiliraXianHaloNeiyu</path>
+                <path>MiliraXianMingyuan/PawnMingyuan/Halo/MiliraXianHaloMingyuan</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>true</layerInvert>
                 <shaderType>MoteGlow</shaderType>
@@ -83,7 +83,7 @@
             <li>
                 <name>milira hair Mingyuan</name>
                 <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHair/MiliraHairNeiyu</path>
+                <path>MiliraXianMingyuan/PawnMingyuan/Hair/MiliraHairMingyuan</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>
@@ -132,7 +132,7 @@
             <li>
                 <name>milira hair BG Mingyuan</name>
                 <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHairBG/MiliraHairBGNeiyu</path>
+                <path>MiliraXianMingyuan/PawnMingyuan/HairBG/MiliraHairBGMingyuan</path>
                 <inFrontOfBody>false</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>

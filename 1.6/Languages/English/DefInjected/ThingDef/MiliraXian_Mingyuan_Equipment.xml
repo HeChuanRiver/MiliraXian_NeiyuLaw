@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_CinderSword.label>Cinder Ash</MX_Mingyuan_CinderSword.label>
-  <MX_Mingyuan_CinderSword.description>Mingyuan's longsword. Life Burn on hit is handled globally by Mingyuan's hit logic.</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.description>Mingyuan's pale cinder blade. It strikes for 44 cut damage with 150% armor penetration, attacks twice in roughly 3 seconds through a 0.5 melee cooldown multiplier, and Mingyuan's flame adds Life Burn on each hit.</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>Cinder Ash</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>Long Rainbow</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>Mingyuan's longbow. Ranged hits apply Life Burn through Mingyuan's global hit logic.</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds, fires 4 high-arc arrows at any map-range target, and each arrow deals 25 damage with a 2-cell burst. Mingyuan's flame adds Life Burn on hit.</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>Long Rainbow Arrow</MX_Bullet_Mingyuan_RainbowArrow.label>
-  <MX_Mingyuan_BurningPillarField.label>Mingyuan burning pillar field</MX_Mingyuan_BurningPillarField.label>
-  <MX_Mingyuan_AshesField.label>Mingyuan ashes field</MX_Mingyuan_AshesField.label>
+  <MX_Mingyuan_BurningPillarField.label>burning pillar core</MX_Mingyuan_BurningPillarField.label>
+  <MX_Mingyuan_AshesField.label>ashes of self field</MX_Mingyuan_AshesField.label>
   <MX_Mingyuan_InfernoArmor.label>Molten Inferno Armor</MX_Mingyuan_InfernoArmor.label>
-  <MX_Mingyuan_InfernoArmor.description>Mingyuan's full-coverage inferno armor.</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_InfernoArmor.description>Armor cooled from Mingyuan's pale inferno. It covers the body and wings, resists all common damage types, grants extreme heat insulation, adds carrying capacity, improves movement and dodge, and reduces incoming damage while remaining unbreakable.</MX_Mingyuan_InfernoArmor.description>
   <MX_Mingyuan_BurningFeatherCrown.label>Turbid Burning Feather Crown</MX_Mingyuan_BurningFeatherCrown.label>
-  <MX_Mingyuan_BurningFeatherCrown.description>Mingyuan's feather crown.</MX_Mingyuan_BurningFeatherCrown.description>
+  <MX_Mingyuan_BurningFeatherCrown.description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and turns part of incoming harm aside.</MX_Mingyuan_BurningFeatherCrown.description>
 </LanguageData>

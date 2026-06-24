@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_TimeBurnStart</defName>
+    <label>Mote</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnStart</texPath>
+      <color>(0.88, 0.64, 1.00, 0.74)</color>
+      <drawSize>(2.8, 2.8)</drawSize>
+      <shaderParameters>
+        <_Interval>0.16</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>0.14</solidTime>
+      <fadeOutTime>0.58</fadeOutTime>
+      <growthRate>1.2</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_TimeBurnMark</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnMark</texPath>
+      <color>(0.92, 0.70, 1.00, 0.64)</color>
+      <drawSize>(1.45, 1.45)</drawSize>
+      <shaderParameters>
+        <_Interval>0.42</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.10</fadeInTime>
+      <solidTime>1.10</solidTime>
+      <fadeOutTime>0.45</fadeOutTime>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_TimeBurnCollapse</defName>
+    <label>Mote</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnCollapse</texPath>
+      <color>(1.00, 0.78, 0.48, 0.82)</color>
+      <drawSize>(3.6, 3.6)</drawSize>
+      <shaderParameters>
+        <_Interval>0.08</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <solidTime>0.18</solidTime>
+      <fadeOutTime>0.52</fadeOutTime>
+      <growthRate>1.8</growthRate>
+    </mote>
+  </ThingDef>
+
+</Defs>

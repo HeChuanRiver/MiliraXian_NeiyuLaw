@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_LifeBurn.label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</MX_Mingyuan_LifeBurn.label>
-  <MX_Mingyuan_LifeBurn.description>Hostile burn inflicted by Mingyuan. It drains needs, accelerates aging, deals true damage, weakens stats, and bursts into a single large burn hit when the threshold is reached. If the target dies, Life Burn spreads to nearby enemies.</MX_Mingyuan_LifeBurn.description>
+  <MX_Mingyuan_LifeBurn.description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and spills part of itself to nearby enemies when the host dies.</MX_Mingyuan_LifeBurn.description>
   <MX_Mingyuan_LifeBurn.stages.0.label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</MX_Mingyuan_LifeBurn.stages.0.label>
   <MX_Mingyuan_SelfBurn.label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</MX_Mingyuan_SelfBurn.label>
-  <MX_Mingyuan_SelfBurn.description>Beneficial burn counter. It boosts damage, movement, attack speed, work speed, shield regeneration, and Life Burn stacking.</MX_Mingyuan_SelfBurn.description>
+  <MX_Mingyuan_SelfBurn.description>Mingyuan turns the burning inside herself into momentum. Stored layers can rise above the bonus limit as a buffer, but damage, movement, attack speed, work speed, shield regeneration, and Life Burn bonuses only count up to 300 effective layers.</MX_Mingyuan_SelfBurn.description>
   <MX_Mingyuan_SelfBurn.stages.0.label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</MX_Mingyuan_SelfBurn.stages.0.label>
   <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
-  <MX_Mingyuan_BurningBody.description>Mingyuan's otherworld-forged body: extreme part health, increased consciousness, heat and blast conversion, counterburn, periodic repair, and short invulnerability after taking damage.</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and brief invulnerability follows real wounds.</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
-  <MX_Mingyuan_ProtectiveFlameShield.description>Flame shield with 200 energy. It absorbs small, large, and lethal hits, regenerates automatically, rebuilds after breaking, and clears some hostile control states on hit.</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_ProtectiveFlameShield.description>A 200-energy pale flame shield. It absorbs very small hits, overwhelming hits, and lethal strikes, spends 10 energy per absorbed hit, batches regeneration every 10 seconds, rebuilds after breaking, and clears hostile control when struck. At 300 effective Self Burn layers, absorbed hits cost no energy and add more Self Burn.</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
-  <MX_Mingyuan_RebirthFlame.description>Mingyuan's death-rebirth logic. On death, she detonates, resurrects, and enters Eternal Burning for 30 seconds.</MX_Mingyuan_RebirthFlame.description>
+  <MX_Mingyuan_RebirthFlame.description>When Mingyuan falls, the flame buried in her body detonates and begins shaping her back from the ashes.</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>
-  <MX_Mingyuan_EternalBurning.description>Temporary rebirth lock. Damage and ticking are blocked until the rebirth process ends.</MX_Mingyuan_EternalBurning.description>
-  <MX_Mingyuan_TimeBurnFrozen.label>&lt;color=#C95CFF&gt;Time Burn Frozen&lt;/color&gt;</MX_Mingyuan_TimeBurnFrozen.label>
-  <MX_Mingyuan_TimeBurnFrozen.description>Marker hediff used by Time Burn while a pawn's ticks are stopped.</MX_Mingyuan_TimeBurnFrozen.description>
+  <MX_Mingyuan_EternalBurning.description>Mingyuan is enclosed in the fire that rebuilds her. While this flame lasts, outside blows cannot decide her death.</MX_Mingyuan_EternalBurning.description>
+  <MX_Mingyuan_TimeBurnFrozen.label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</MX_Mingyuan_TimeBurnFrozen.label>
+  <MX_Mingyuan_TimeBurnFrozen.description>The target's lifetime is being burned away. When the remaining biological age reaches zero, the flame claims the body.</MX_Mingyuan_TimeBurnFrozen.description>
 </LanguageData>

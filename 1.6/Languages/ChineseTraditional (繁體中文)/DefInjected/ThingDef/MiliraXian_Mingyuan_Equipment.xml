@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Mingyuan_CinderSword.label>燼灰</MX_Mingyuan_CinderSword.label>
-  <MX_Mingyuan_CinderSword.description>明淵的長劍。命中時由明淵的全域命中邏輯施加生命燃燒。</MX_Mingyuan_CinderSword.description>
-  <MX_Mingyuan_CinderSword.tools.0.label>燼灰</MX_Mingyuan_CinderSword.tools.0.label>
+  <MX_Mingyuan_CinderSword.label>塵燼</MX_Mingyuan_CinderSword.label>
+  <MX_Mingyuan_CinderSword.description>明淵的淡色燼刃。造成 44 點割傷、150% 穿甲，透過 0.5 近戰冷卻倍率在約 3 秒內打出兩次攻擊；明淵的火焰會在命中時追加生命燃燒。</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.tools.0.label>塵燼</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>長虹</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>明淵的長弓。遠程命中會透過明淵的全域命中邏輯施加生命燃燒。</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>由淡金與赤色火焰構成的明淵長弓。瞄準 4 秒，向全圖距離目標發射 4 支高角箭，每支 25 傷害並有 2 格爆發；命中時追加生命燃燒。</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>長虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
-  <MX_Mingyuan_BurningPillarField.label>明淵燃燒火柱場</MX_Mingyuan_BurningPillarField.label>
-  <MX_Mingyuan_AshesField.label>明淵餘燼場</MX_Mingyuan_AshesField.label>
+  <MX_Mingyuan_BurningPillarField.label>燃燒之柱核心</MX_Mingyuan_BurningPillarField.label>
+  <MX_Mingyuan_AshesField.label>焚我餘燼領域</MX_Mingyuan_AshesField.label>
   <MX_Mingyuan_InfernoArmor.label>熔獄戰甲</MX_Mingyuan_InfernoArmor.label>
-  <MX_Mingyuan_InfernoArmor.description>明淵的全覆式熔獄戰甲。</MX_Mingyuan_InfernoArmor.description>
-  <MX_Mingyuan_BurningFeatherCrown.label>濁燃羽冠</MX_Mingyuan_BurningFeatherCrown.label>
-  <MX_Mingyuan_BurningFeatherCrown.description>明淵的羽冠。</MX_Mingyuan_BurningFeatherCrown.description>
+  <MX_Mingyuan_InfernoArmor.description>由明淵淡色獄火冷卻而成的戰甲。覆蓋身體與羽翼，抵禦常見傷害，提供極高隔熱、承載、移速、閃避與承傷減免，且不會損壞。</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_BurningFeatherCrown.label>燃濁羽冠</MX_Mingyuan_BurningFeatherCrown.label>
+  <MX_Mingyuan_BurningFeatherCrown.description>以白金羽片與赤色燃羽織成的冠飾。它穩定明淵的視線，加快遠程攻擊，提升閃避，並偏轉部分傷害。</MX_Mingyuan_BurningFeatherCrown.description>
 </LanguageData>

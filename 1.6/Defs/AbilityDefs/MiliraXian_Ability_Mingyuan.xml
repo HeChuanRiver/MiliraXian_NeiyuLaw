@@ -10,8 +10,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_AscendantFlameDash</defName>
         <label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</label>
-        <description>Fly up to 150 cells to a standable target cell, leaving a 3-cell-wide burning trail for 15 seconds and burning hostile pawns on the path.</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
+        <description>Mingyuan becomes a pale ascendant flame, crosses up to 150 cells without line of sight, leaves a 3-cell-wide burning trail for 15 seconds, deals 10 burn damage, applies 30 Life Burn layers, knocks enemies back, and stuns them for 3 seconds. Cooldown: 3 seconds.</description>
+        <iconPath>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>100</displayOrder>
         <cooldownTicksRange>180</cooldownTicksRange>
@@ -41,7 +41,7 @@
                 <maxDistance>150</maxDistance>
                 <pathWidth>3</pathWidth>
                 <pathDamage>10</pathDamage>
-                <lifeBurnLayers>100</lifeBurnLayers>
+                <lifeBurnLayers>30</lifeBurnLayers>
                 <selfLifeBurnLayers>30</selfLifeBurnLayers>
                 <stunTicks>180</stunTicks>
                 <flyerDef>MX_Mingyuan_AscendantFlameDashFlyer</flyerDef>
@@ -55,8 +55,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_InstantCombustion</defName>
         <label>&lt;color=#FFD37A&gt;Instant Combustion&lt;/color&gt;</label>
-        <description>Burn the eyes and brain of hostile pawns within 30 cells, double Life Burn layers, and stun them.</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <description>Mingyuan releases a 30-cell flash of pale fire. Hostile pawns take 1 burn damage to the brain and each eye, their Life Burn layers are doubled or seeded, and they are stunned for 12 seconds. Warmup: 3 seconds. Cooldown: 18 hours.</description>
+        <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>110</displayOrder>
         <cooldownTicksRange>45000</cooldownTicksRange>
@@ -77,8 +77,14 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanInstantCombustion">
                 <radius>30</radius>
-                <partDamage>10</partDamage>
+                <partDamage>1</partDamage>
                 <stunTicks>720</stunTicks>
+                <flashMoteDef>MX_Mingyuan_Mote_InstantCombustionFlash</flashMoteDef>
+                <targetMoteDef>MX_Mingyuan_Mote_InstantCombustionMark</targetMoteDef>
+                <flashMoteScale>1.35</flashMoteScale>
+                <targetMoteScale>1</targetMoteScale>
+                <maxTargetMotes>48</maxTargetMotes>
+                <minimumLifeBurnLayers>1</minimumLifeBurnLayers>
             </li>
         </comps>
     </AbilityDef>
@@ -86,8 +92,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_BurningPillar</defName>
         <label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</label>
-        <description>Create a long-lasting pillar of fire that burns hostile pawns and deconstructs buildings.</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
+        <description>Place a burning core that grows from radius 1 to 15 over 10 minutes and lasts 3 hours. The edge cuts harder while the center burns harder; burn damage adds Life Burn layers. Buildings take 33% of maximum hit points per pulse. After 10 minutes the core can be ordered to move.</description>
+        <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>120</displayOrder>
         <cooldownTicksRange>60000</cooldownTicksRange>
@@ -101,6 +107,7 @@
             <targetable>true</targetable>
             <range>50</range>
             <warmupTime>5</warmupTime>
+            <soundCast>FireSpew_Resolve</soundCast>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -119,8 +126,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_TimeBurn</defName>
         <label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</label>
-        <description>Stop a pawn's ticks for 24 hours or deconstruct a targeted building.</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <description>Burn a pawn's biological age down to zero over 1 hour; when the age reaches zero the pawn dies. Mechanoids collapse into steel and plasteel. Buildings are dissolved into 100% of their raw materials. Warmup: 8 seconds. Cooldown: 48 hours.</description>
+        <iconPath>MiliraXianMingyuan/UI/Ability_TimeBurn</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>130</displayOrder>
         <cooldownTicksRange>120000</cooldownTicksRange>
@@ -131,6 +138,7 @@
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
+            <soundCast>Psycast_Skip_Entry</soundCast>
             <targetable>true</targetable>
             <range>40</range>
             <warmupTime>8</warmupTime>
@@ -144,7 +152,18 @@
         </verbProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanTimeBurn">
-                <durationTicks>60000</durationTicks>
+                <durationTicks>2500</durationTicks>
+                <tickIntervalTicks>60</tickIntervalTicks>
+                <moteIntervalTicks>120</moteIntervalTicks>
+                <startMoteDef>MX_Mingyuan_Mote_TimeBurnStart</startMoteDef>
+                <targetMoteDef>MX_Mingyuan_Mote_TimeBurnMark</targetMoteDef>
+                <collapseMoteDef>MX_Mingyuan_Mote_TimeBurnCollapse</collapseMoteDef>
+                <effectSoundDef>Psycast_Skip_Entry</effectSoundDef>
+                <startMoteScale>2.2</startMoteScale>
+                <targetMoteScale>1.15</targetMoteScale>
+                <collapseMoteScale>2.4</collapseMoteScale>
+                <mechSteelCount>75</mechSteelCount>
+                <mechPlasteelCount>25</mechPlasteelCount>
             </li>
         </comps>
     </AbilityDef>
@@ -152,8 +171,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_AshesOfSelf</defName>
         <label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</label>
-        <description>Spend shield energy or blood to gain Self Burn and create a 5x5 burning field.</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
+        <description>Spend all shield energy, or 50% blood if the shield cannot pay, to gain 100 Self Burn layers and open a 5x5 ashes field for 15 seconds. The field follows Mingyuan, pulses every 0.5 seconds, deals 1 burn damage, and adds Life Burn. Cooldown: 15 seconds.</description>
+        <iconPath>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>140</displayOrder>
         <cooldownTicksRange>900</cooldownTicksRange>
@@ -175,9 +194,12 @@
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAshesOfSelf">
                 <fieldDef>MX_Mingyuan_AshesField</fieldDef>
                 <selfBurnLayers>100</selfBurnLayers>
-                <shieldEnergyCost>40</shieldEnergyCost>
-                <healthCostFraction>0.2</healthCostFraction>
+                <bloodLossCost>0.5</bloodLossCost>
                 <fieldDurationTicks>900</fieldDurationTicks>
+                <fieldPreviewRadius>2.4</fieldPreviewRadius>
+                <castMoteDef>MX_Mingyuan_Mote_AshesCast</castMoteDef>
+                <castMoteScale>1.35</castMoteScale>
+                <effectSoundDef>FireSpew_Resolve</effectSoundDef>
             </li>
         </comps>
     </AbilityDef>

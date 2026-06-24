@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_InstantCombustionFlash</defName>
+    <label>Mote</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/InstantCombustionFlash</texPath>
+      <color>(1.00, 0.90, 0.56, 0.82)</color>
+      <drawSize>(8.0, 8.0)</drawSize>
+      <shaderParameters>
+        <_Interval>0.08</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <solidTime>0.10</solidTime>
+      <fadeOutTime>0.46</fadeOutTime>
+      <growthRate>3.2</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_InstantCombustionMark</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/InstantCombustionMark</texPath>
+      <color>(1.00, 0.92, 0.62, 0.72)</color>
+      <drawSize>(1.48, 1.48)</drawSize>
+      <shaderParameters>
+        <_Interval>0.18</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.06</fadeInTime>
+      <solidTime>0.50</solidTime>
+      <fadeOutTime>0.34</fadeOutTime>
+    </mote>
+  </ThingDef>
+
+</Defs>
