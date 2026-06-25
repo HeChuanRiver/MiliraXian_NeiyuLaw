@@ -16,14 +16,8 @@ namespace MiliraXian.Characters
         public bool clampToMax = true;
         public bool showGizmo = true;
         public bool hideOnHealthTab = true;
-        public float barColorRed = 0.72f;
-        public float barColorGreen = 0.18f;
-        public float barColorBlue = 0.24f;
-        public float barColorAlpha = 1f;
-        public float barHighlightRed = 0.9f;
-        public float barHighlightGreen = 0.35f;
-        public float barHighlightBlue = 0.42f;
-        public float barHighlightAlpha = 1f;
+        public Color barColor = new Color(0.72f, 0.18f, 0.24f, 1f);
+        public Color barHighlightColor = new Color(0.9f, 0.35f, 0.42f, 1f);
 
         public HediffCompProperties_PawnSpecialResource()
         {
@@ -57,9 +51,9 @@ namespace MiliraXian.Characters
 
         public string ResourceDescription => PropsResource.resourceDescription;
 
-        public Color BarColor => new Color(PropsResource.barColorRed, PropsResource.barColorGreen, PropsResource.barColorBlue, PropsResource.barColorAlpha);
+        public Color BarColor => PropsResource.barColor;
 
-        public Color BarHighlightColor => new Color(PropsResource.barHighlightRed, PropsResource.barHighlightGreen, PropsResource.barHighlightBlue, PropsResource.barHighlightAlpha);
+        public Color BarHighlightColor => PropsResource.barHighlightColor;
 
         public override void CompExposeData()
         {

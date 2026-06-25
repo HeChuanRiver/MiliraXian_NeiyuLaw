@@ -23,11 +23,12 @@ namespace MiliraXian.Characters.QingHe
 
         public static DamageDef MX_QH_NoteImpact;
 
-        public static HediffDef MX_SpringFlow;
-        public static HediffDef MX_QH_LongBreath;
-        public static HediffDef MX_QH_LongBreathDamageImmunity;
-        public static HediffDef MX_QH_LotusShield;
-        public static HediffDef MX_QH_SkillTreeState;
+        public static HediffDef MX_QH_SpringFlow;
+        public static HediffDef MX_QH_DivineBlessing;
+        public static HediffDef MX_QH_DivineBlessingImmunity;
+        public static HediffDef MX_QH_DivineProtection;
+        public static HediffDef MX_QH_FlowerResonance;
+        public static HediffDef MX_QH_MusicMastery;
         public static HediffDef MX_QH_FlowerDecree;
 
         public static TraitDef MX_QH_Trait_LongBreath;

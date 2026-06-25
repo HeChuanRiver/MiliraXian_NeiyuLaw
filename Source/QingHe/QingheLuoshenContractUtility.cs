@@ -5,7 +5,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public class Hediff_QingheLuoshenContract : HediffWithTarget
+    public class Hediff_LuoshenContract : HediffWithTarget
     {
         private string mirroredFlowerWordDefName;
         private bool mirroredFlowerWordAddedByContract;
@@ -57,7 +57,7 @@ namespace MiliraXian.Characters.QingHe
                 return false;
             }
 
-            HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(qinghe);
+            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(qinghe);
             return state?.HasNode(QingheSkillTreeSystem.NodeLuoshenfu) == true;
         }
 
@@ -78,7 +78,7 @@ namespace MiliraXian.Characters.QingHe
             return qinghe != null && HasContractWith(qinghe, pawn);
         }
 
-        public static void SyncForQinghe(Pawn qinghe, HediffComp_QingheSkillTreeState state)
+        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state)
         {
             if (!MX_QHUtility.IsQinghe(qinghe))
             {
@@ -170,8 +170,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff_QingheLuoshenContract qingheContract = EnsureContractHediff(qinghe, spouse);
-            Hediff_QingheLuoshenContract spouseContract = EnsureContractHediff(spouse, qinghe);
+            Hediff_LuoshenContract qingheContract = EnsureContractHediff(qinghe, spouse);
+            Hediff_LuoshenContract spouseContract = EnsureContractHediff(spouse, qinghe);
             RemoveMirroredTrait(spouse, spouseContract);
 
             if (QingheFlowerChoiceUtility.IsFlowerWordTraitDefName(selectedFlowerWordDefName))
@@ -189,7 +189,7 @@ namespace MiliraXian.Characters.QingHe
             NotifyThoughtsDirty(spouse);
         }
 
-        private static Hediff_QingheLuoshenContract EnsureContractHediff(Pawn pawn, Pawn targetPawn)
+        private static Hediff_LuoshenContract EnsureContractHediff(Pawn pawn, Pawn targetPawn)
         {
             HediffDef hediffDef = ContractHediffDef;
             if (pawn?.health?.hediffSet == null || hediffDef == null)
@@ -197,10 +197,10 @@ namespace MiliraXian.Characters.QingHe
                 return null;
             }
 
-            Hediff_QingheLuoshenContract hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as Hediff_QingheLuoshenContract;
+            Hediff_LuoshenContract hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as Hediff_LuoshenContract;
             if (hediff == null)
             {
-                hediff = HediffMaker.MakeHediff(hediffDef, pawn) as Hediff_QingheLuoshenContract;
+                hediff = HediffMaker.MakeHediff(hediffDef, pawn) as Hediff_LuoshenContract;
                 pawn.health.AddHediff(hediff);
             }
 
@@ -234,7 +234,7 @@ namespace MiliraXian.Characters.QingHe
 
         private static void RemoveContractHediff(Pawn pawn, Pawn targetPawn)
         {
-            Hediff_QingheLuoshenContract hediff = GetContractHediff(pawn);
+            Hediff_LuoshenContract hediff = GetContractHediff(pawn);
             if (hediff == null)
             {
                 return;
@@ -249,7 +249,7 @@ namespace MiliraXian.Characters.QingHe
             pawn.health.RemoveHediff(hediff);
         }
 
-        private static void RemoveMirroredTrait(Pawn pawn, Hediff_QingheLuoshenContract hediff)
+        private static void RemoveMirroredTrait(Pawn pawn, Hediff_LuoshenContract hediff)
         {
             string defName = hediff?.MirroredFlowerWordDefName;
             if (!hediff.MirroredFlowerWordAddedByContract || !QingheFlowerChoiceUtility.IsFlowerWordTraitDefName(defName) || pawn?.story?.traits == null)
@@ -300,10 +300,10 @@ namespace MiliraXian.Characters.QingHe
             return GetContractHediff(pawn)?.target == targetPawn;
         }
 
-        private static Hediff_QingheLuoshenContract GetContractHediff(Pawn pawn)
+        private static Hediff_LuoshenContract GetContractHediff(Pawn pawn)
         {
             HediffDef hediffDef = ContractHediffDef;
-            return hediffDef != null ? pawn?.health?.hediffSet?.GetFirstHediffOfDef(hediffDef) as Hediff_QingheLuoshenContract : null;
+            return hediffDef != null ? pawn?.health?.hediffSet?.GetFirstHediffOfDef(hediffDef) as Hediff_LuoshenContract : null;
         }
 
         private static void GiveBrokenThought(Pawn pawn, Pawn otherPawn)

@@ -53,7 +53,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             finish.initAction = delegate
             {
                 Comp_QingheMusicScore scoreComp = ScoreComp;
-                HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+                HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
                 if (scoreComp == null || state == null)
                 {
                     Messages.Message("清荷暂时无法研读这份曲谱。", pawn, MessageTypeDefOf.RejectInput, historical: false);

@@ -4,26 +4,26 @@ using MiliraXian.Characters.QingHe.Things;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class Hediff_LotusShield : HediffWithComps
+    public class Hediff_DivineProtection : HediffWithComps
     {
     }
 
-    public class HediffCompProperties_LotusShield : HediffCompProperties
+    public class HediffCompProperties_DivineProtection : HediffCompProperties
     {
         public CompProperties_LotusShield shieldCompProperties;
 
-        public HediffCompProperties_LotusShield()
+        public HediffCompProperties_DivineProtection()
         {
-            compClass = typeof(HediffComp_LotusShield);
+            compClass = typeof(HediffComp_DivineProtection);
         }
     }
 
     /// <summary>
     /// Bind LotusShield ThingComp lifecycle to a Hediff.
     /// </summary>
-    public class HediffComp_LotusShield : HediffComp
+    public class HediffComp_DivineProtection : HediffComp
     {
-        public HediffCompProperties_LotusShield Props => (HediffCompProperties_LotusShield)props;
+        public HediffCompProperties_DivineProtection Props => (HediffCompProperties_DivineProtection)props;
 
         private static readonly FieldInfo CompsByTypeField = typeof(ThingWithComps).GetField("compsByType", BindingFlags.Instance | BindingFlags.NonPublic);
 

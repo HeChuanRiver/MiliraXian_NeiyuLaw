@@ -102,7 +102,7 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            if (!HasLongBreathDamageImmunity(__instance))
+            if (!HasDivineBlessingImmunity(__instance))
             {
                 return true;
             }
@@ -119,28 +119,28 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff longBreath = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath);
-            HediffComp_LongBreathWard longBreathComp = longBreath?.TryGetComp<HediffComp_LongBreathWard>();
-            if (longBreathComp == null)
+            Hediff divineBlessing = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
+            HediffComp_DivineBlessing divineBlessingComp = divineBlessing?.TryGetComp<HediffComp_DivineBlessing>();
+            if (divineBlessingComp == null)
             {
                 return;
             }
 
             // Lotus shield is processed by pawn ThingComp.PostPreApplyDamage.
-            // LongBreath only checks when damage still reaches the body.
+            // Divine blessing only checks when damage still reaches the body.
             if (absorbed)
             {
                 return;
             }
 
-            longBreathComp.NotifyDamageNotAbsorbed(ref dinfo);
+            divineBlessingComp.NotifyDamageNotAbsorbed(ref dinfo);
 
-            if (!longBreathComp.CanTrigger(ref dinfo))
+            if (!divineBlessingComp.CanTrigger(ref dinfo))
             {
                 return;
             }
 
-            longBreathComp.Trigger(ref dinfo, ref absorbed);
+            divineBlessingComp.Trigger(ref dinfo, ref absorbed);
         }
 
         public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)
@@ -216,14 +216,14 @@ namespace MiliraXian.Characters.QingHe
             QingheLuoshenContractUtility.NotifySpouseRelationRemoved(pawn, otherPawn);
         }
 
-        private static bool HasLongBreathDamageImmunity(Pawn pawn)
+        private static bool HasDivineBlessingImmunity(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LongBreathDamageImmunity == null)
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_DivineBlessingImmunity == null)
             {
                 return false;
             }
 
-            return pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreathDamageImmunity) != null;
+            return pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) != null;
         }
 
         private static void EnsureQingheCoreTraits(Pawn pawn)

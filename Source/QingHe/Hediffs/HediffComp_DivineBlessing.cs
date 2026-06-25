@@ -5,7 +5,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_LongBreathWard : HediffCompProperties
+    public class HediffCompProperties_DivineBlessing : HediffCompProperties
     {
         public HediffDef invisibilityHediffDef;
         public HediffDef damageImmunityHediffDef;
@@ -17,10 +17,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public int damageImmunityDurationTicks = 180;
         public int retriggerCooldownTicks = 3600;
         public int cooldownWarningCooldownTicks = 600;
+        public int maxCharges = 1;
 
-        public HediffCompProperties_LongBreathWard()
+        public HediffCompProperties_DivineBlessing()
         {
-            compClass = typeof(HediffComp_LongBreathWard);
+            compClass = typeof(HediffComp_DivineBlessing);
         }
     }
 
@@ -32,20 +33,45 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// - Restores missing parts and all non-permanent injuries.
     /// - Grants temporary Psychic Invisibility when available.
     /// </summary>
-    public class HediffComp_LongBreathWard : HediffComp
+    public class HediffComp_DivineBlessing : HediffComp
     {
         private int cooldownTicksLeft;
         private int cooldownWarningCooldownTicksLeft;
         private bool invisibilityEndingEffectPlayed;
+        private int currentCharges = -1;
 
-        public HediffCompProperties_LongBreathWard Props => (HediffCompProperties_LongBreathWard)props;
+        public HediffCompProperties_DivineBlessing Props => (HediffCompProperties_DivineBlessing)props;
+
+        public int MaxCharges => ResolveMaxCharges();
+
+        public int CurrentCharges => Mathf.Clamp(currentCharges, 0, MaxCharges);
+
+        public bool IsRecharging => CurrentCharges < MaxCharges && RechargeTicksTotal > 0;
+
+        public int RechargeTicksLeft => IsRecharging ? Mathf.Clamp(cooldownTicksLeft, 0, RechargeTicksTotal) : 0;
+
+        public int RechargeTicksTotal => Mathf.Max(0, Props.retriggerCooldownTicks);
+
+        public float RechargeProgressPercent => IsRecharging && RechargeTicksTotal > 0 ? 1f - Mathf.Clamp01(RechargeTicksLeft / (float)RechargeTicksTotal) : 0f;
+
+        public override void CompPostMake()
+        {
+            base.CompPostMake();
+            SyncChargeBounds();
+        }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
+            SyncChargeBounds();
+
             if (cooldownTicksLeft > 0)
             {
                 cooldownTicksLeft--;
+                if (cooldownTicksLeft <= 0)
+                {
+                    RestoreCharge();
+                }
             }
 
             if (cooldownWarningCooldownTicksLeft > 0)
@@ -62,6 +88,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_longBreath_cooldownTicksLeft", 0);
             Scribe_Values.Look(ref cooldownWarningCooldownTicksLeft, "mx_qh_longBreath_cooldownWarningCooldownTicksLeft", 0);
             Scribe_Values.Look(ref invisibilityEndingEffectPlayed, "mx_qh_longBreath_invisibilityEndingEffectPlayed", false);
+            Scribe_Values.Look(ref currentCharges, "mx_qh_longBreath_currentCharges", 1);
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                SyncChargeBounds();
+            }
         }
 
         public bool CanTrigger(ref DamageInfo dinfo)
@@ -71,7 +103,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return false;
             }
 
-            if (cooldownTicksLeft > 0)
+            if (CurrentCharges <= 0)
             {
                 return false;
             }
@@ -86,7 +118,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            if (cooldownTicksLeft <= 0)
+            if (CurrentCharges > 0)
             {
                 return;
             }
@@ -257,7 +289,51 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void StartCooldown()
         {
-            cooldownTicksLeft = Mathf.Max(0, Props.retriggerCooldownTicks);
+            currentCharges = Mathf.Max(0, CurrentCharges - 1);
+            if (CurrentCharges < MaxCharges && cooldownTicksLeft <= 0)
+            {
+                cooldownTicksLeft = RechargeTicksTotal;
+            }
+        }
+
+        private void RestoreCharge()
+        {
+            currentCharges = Mathf.Min(MaxCharges, CurrentCharges + 1);
+            cooldownTicksLeft = CurrentCharges < MaxCharges ? RechargeTicksTotal : 0;
+        }
+
+        private void SyncChargeBounds()
+        {
+            int maxCharges = MaxCharges;
+            if (currentCharges < 0)
+            {
+                currentCharges = cooldownTicksLeft > 0 ? Mathf.Max(0, maxCharges - 1) : maxCharges;
+            }
+            else if (currentCharges > maxCharges)
+            {
+                currentCharges = maxCharges;
+            }
+
+            if (currentCharges >= maxCharges)
+            {
+                cooldownTicksLeft = 0;
+            }
+            else if (cooldownTicksLeft <= 0 && RechargeTicksTotal > 0)
+            {
+                cooldownTicksLeft = RechargeTicksTotal;
+            }
+        }
+
+        private int ResolveMaxCharges()
+        {
+            int maxCharges = Mathf.Max(1, Props.maxCharges);
+            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            if (state != null && state.HasNode(QingheSkillTreeSystem.NodeYingyue))
+            {
+                maxCharges++;
+            }
+
+            return maxCharges;
         }
 
         private void RestoreAllDamage()
@@ -358,7 +434,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void ApplyDamageImmunity()
         {
-            HediffDef immunityDef = Props.damageImmunityHediffDef ?? MX_QHDefOf.MX_QH_LongBreathDamageImmunity;
+            HediffDef immunityDef = Props.damageImmunityHediffDef ?? MX_QHDefOf.MX_QH_DivineBlessingImmunity;
             if (immunityDef == null)
             {
                 return;

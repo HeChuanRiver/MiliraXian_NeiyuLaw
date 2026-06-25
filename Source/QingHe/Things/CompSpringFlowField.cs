@@ -135,13 +135,13 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
+                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) is Hediff_QH_SpringFlow h)
                 {
                     h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
                 }
                 else
                 {
-                    var hediff = (Hediff_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_SpringFlow, pawn);
+                    var hediff = (Hediff_QH_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
                     pawn.health.AddHediff(hediff);
                 }
 

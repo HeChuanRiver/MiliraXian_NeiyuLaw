@@ -12,12 +12,14 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float BarLeftPadding = 10f;
         private const float BarRightPadding = 8f;
         private const float ResourceBarWidth = 150f;
-        private const float BarHeight = 12f;
+        private const float BarHeight = 9f;
         private const float SegmentGap = 2f;
+        private static readonly RectOffset BarMargin = new RectOffset((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
 
         private readonly Pawn pawn;
 
-        private static readonly Color SegmentEmptyColor = new Color(0.03f, 0.035f, 0.05f, 1f);
+        private static readonly Color SegmentEmptyColor = Color.black;
+        private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color FlowerDecreeBaseColor = new Color(0.88f, 0.42f, 0.62f, 1f);
         private static readonly Color FlowerDecreeHighlightColor = new Color(1f, 0.90f, 0.74f, 1f);
 
@@ -54,8 +56,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             for (int i = 0; i < max; i++)
             {
                 Rect segmentRect = new Rect(barRect.x + i * (segmentWidth + SegmentGap), barRect.y, segmentWidth, barRect.height);
-                Widgets.DrawBoxSolid(segmentRect, Color.black);
-                Rect contentRect = new Rect(segmentRect.x + 1f, segmentRect.y + 1f, segmentRect.width - 2f, segmentRect.height - 2f);
+                Widgets.DrawBoxSolid(segmentRect, OuterBorderColor);
+                Rect contentRect = segmentRect.ContractedBy(1f);
                 Widgets.DrawBoxSolid(contentRect, SegmentEmptyColor);
 
                 if (i < fullSegments)
@@ -74,11 +76,11 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
         }
 
-        private static Rect GetResourceBarRect(Rect rect, float height)
+        private Rect GetResourceBarRect(Rect rect, float height)
         {
             float availableWidth = rect.width - BarLeftPadding - BarRightPadding;
             float width = Mathf.Min(ResourceBarWidth, availableWidth);
-            return new Rect(rect.x + BarLeftPadding, rect.y + 2f, width, height);
+            return GetAlignedRect(rect, new Vector2(width, height), BarMargin);
         }
 
         private string BuildTip(HediffComp_FlowerDecree comp)

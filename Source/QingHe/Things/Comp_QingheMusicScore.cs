@@ -36,7 +36,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return false;
             }
 
-            HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
             if (state == null)
             {
                 disabledReason = "清荷尚未建立花神庭。";

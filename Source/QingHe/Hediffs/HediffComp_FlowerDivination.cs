@@ -187,7 +187,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return false;
             }
 
-            HediffComp_QingheSkillTreeState skillTree = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            HediffComp_FlowerResonance skillTree = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
             if (skillTree == null || !skillTree.HasNode(QingheSkillTreeSystem.NodeFlowerDance))
             {
                 reason = Props?.noResonanceReason ?? "尚未习得花之舞。";

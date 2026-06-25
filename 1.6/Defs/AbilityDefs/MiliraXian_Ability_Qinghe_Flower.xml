@@ -143,7 +143,7 @@
                 <armorPenetration>0.25</armorPenetration>
                 <stunDamageAmount>8</stunDamageAmount>
                 <bleedDamageAmount>5</bleedDamageAmount>
-                <slowHediff>MX_QH_FlowerMandate_ChrysanthemumSlow</slowHediff>
+                <slowHediff>MX_QH_ChrysanthemumSlow</slowHediff>
                 <slowSeverity>1</slowSeverity>
                 <slowDurationTicks>1800</slowDurationTicks>
                 <brainDestroyChance>0.08</brainDestroyChance>

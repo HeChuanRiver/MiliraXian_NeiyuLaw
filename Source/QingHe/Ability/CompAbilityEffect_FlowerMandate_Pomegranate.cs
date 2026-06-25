@@ -17,7 +17,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public string fallbackSummonFleckDefName = "PsycastAreaEffect";
         public string missingResourceMessage = "花令不足。";
         public string maxActiveSummonsMessage = "召花令维持数量已达上限。";
-        public string placeholderMessage;
 
         public CompProperties_AbilityFlowerMandate_Pomegranate()
         {

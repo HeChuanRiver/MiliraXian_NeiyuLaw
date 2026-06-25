@@ -14,34 +14,39 @@ namespace MiliraXian.Characters.QingHe
         public const string NodeFlowerSigil = "MX_QH_Node_FlowerSigil";
         public const string NodeFlowerDance = "MX_QH_Node_FlowerDance";
         public const string NodeShang = "MX_QH_Node_Shang";
+        public const string NodeQingjue = "MX_QH_Node_Qingjue";
         public const string NodeGaoshan = "MX_QH_Node_Gaoshan";
         public const string NodeZhi = "MX_QH_Node_Zhi";
         public const string NodeYu = "MX_QH_Node_Yu";
         public const string NodeLuoyu = "MX_QH_Node_Luoyu";
         public const string NodeSishiLiuzhuan = "MX_QH_Node_SishiLiuzhuan";
         public const string NodeLuoshenfu = "MX_QH_Node_Luoshenfu";
+        public const string NodeYingyue = "MX_QH_Node_Yingyue";
 
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
             SyncChoices(pawn, state);
         }
 
-        public static void SyncChoices(Pawn pawn, HediffComp_QingheSkillTreeState state)
+        public static void SyncChoices(Pawn pawn, HediffComp_FlowerResonance state)
         {
             if (state == null)
             {
                 return;
             }
 
-            QingheFlowerChoiceUtility.SyncFlowerMandate(pawn, state.HasNode(NodeFlowerMandate) ? state.SelectedFlowerMandateDefName : null);
+            QingheFlowerChoiceUtility.SyncFlowerMandates(
+                pawn,
+                state.HasNode(NodeFlowerMandate) ? state.SelectedFlowerMandateDefName : null,
+                state.HasNode(NodeSishiLiuzhuan) ? state.SelectedTimedFlowerMandateDefName : null);
             QingheFlowerChoiceUtility.SyncFlowerSigil(pawn, state.HasNode(NodeFlowerSigil) ? state.SelectedFlowerSigilDefName : null);
             QingheFlowerChoiceUtility.SyncFlowerWord(pawn, state.HasNode(NodeFlowerWord) ? state.SelectedFlowerWordDefName : null);
             QingheLuoshenContractUtility.SyncForQinghe(pawn, state);
             QingheFlowerChoiceUtility.SyncFlowerDivinationSlash(pawn, state.HasNode(NodeFlowerDance));
         }
 
-        public static bool TrySetFlowerMandate(HediffComp_QingheSkillTreeState state, string abilityDefName, out string reason)
+        public static bool TrySetFlowerMandate(HediffComp_FlowerResonance state, string abilityDefName, out string reason)
         {
             if (!QingheFlowerChoiceUtility.FlowerMandates.Contains(abilityDefName))
             {
@@ -54,7 +59,7 @@ namespace MiliraXian.Characters.QingHe
             return true;
         }
 
-        public static bool TrySetFlowerSigil(HediffComp_QingheSkillTreeState state, string hediffDefName, out string reason)
+        public static bool TrySetFlowerSigil(HediffComp_FlowerResonance state, string hediffDefName, out string reason)
         {
             if (!state.HasNode(NodeFlowerSigil))
             {
@@ -73,7 +78,7 @@ namespace MiliraXian.Characters.QingHe
             return true;
         }
 
-        public static bool TrySetFlowerWord(HediffComp_QingheSkillTreeState state, string traitDefName, out string reason)
+        public static bool TrySetFlowerWord(HediffComp_FlowerResonance state, string traitDefName, out string reason)
         {
             if (!state.HasNode(NodeFlowerWord))
             {
@@ -92,31 +97,16 @@ namespace MiliraXian.Characters.QingHe
             return true;
         }
 
-        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_QingheSkillTreeState state)
+        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_FlowerResonance state)
         {
             if (pawn == null || pawn.Dead || state == null || Find.Selector.SingleSelectedThing != pawn)
             {
                 yield break;
             }
 
-            yield return new Command_Action
-            {
-                defaultLabel = "花神庭",
-                defaultDesc = "打开清荷的技能树界面。",
-                action = delegate
-                {
-                    Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state));
-                }
-            };
-
             if (state.HasNode(NodeFlowerMandate))
             {
                 yield return new Gizmo_QH_FlowerDecree(pawn);
-            }
-
-            if (state.HasNode(NodeFlowerDance))
-            {
-                yield return new Gizmo_QH_FlowerDivination(pawn);
             }
 
             if (!Prefs.DevMode)
@@ -132,6 +122,17 @@ namespace MiliraXian.Characters.QingHe
                 {
                     state.AddSkillPoints(1);
                     Messages.Message("清荷获得 1 点技能点。", pawn, MessageTypeDefOf.NeutralEvent, historical: false);
+                }
+            };
+
+            yield return new Command_Action
+            {
+                defaultLabel = "DEV: 经验 +100",
+                defaultDesc = "为清荷技能树增加 100 点经验。",
+                action = delegate
+                {
+                    state.AddExperience(100f);
+                    Messages.Message("清荷获得 100 点技能树经验。", pawn, MessageTypeDefOf.NeutralEvent, historical: false);
                 }
             };
 

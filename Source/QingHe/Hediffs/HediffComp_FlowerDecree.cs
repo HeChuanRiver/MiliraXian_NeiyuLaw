@@ -141,7 +141,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private float ResolveSkillTreeMaxResourceBonus()
         {
-            HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
             if (state == null)
             {
                 return 0f;

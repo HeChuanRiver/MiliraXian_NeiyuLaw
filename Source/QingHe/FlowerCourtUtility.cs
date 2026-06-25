@@ -5,31 +5,42 @@ namespace MiliraXian.Characters.QingHe
 {
     public static class FlowerCourtUtility
     {
-        public static HediffComp_QingheSkillTreeState EnsureSkillTreeState(Pawn pawn)
+        public static HediffComp_FlowerResonance EnsureSkillTreeState(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SkillTreeState == null)
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_FlowerResonance == null)
             {
                 return null;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SkillTreeState);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerResonance);
             if (hediff == null)
             {
-                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SkillTreeState, pawn);
+                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_FlowerResonance, pawn);
                 pawn.health.AddHediff(hediff);
             }
 
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_QingheSkillTreeState>();
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerResonance>();
+        }
+
+        public static HediffComp_FlowerResonance GetSkillTreeState(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_FlowerResonance == null)
+            {
+                return null;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerResonance);
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerResonance>();
         }
 
         public static HediffComp_FlowerDivination GetFlowerDivination(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_SkillTreeState == null)
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_FlowerResonance == null)
             {
                 return null;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SkillTreeState);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerResonance);
             return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerDivination>();
         }
 
@@ -68,15 +79,15 @@ namespace MiliraXian.Characters.QingHe
 
         private static void EnsureCoreHediffs(Pawn pawn)
         {
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_LongBreath);
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_LotusShield);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineBlessing);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineProtection);
 
             // Re-bind CompLotusShield if the hediff already existed (e.g. after loading a save)
             // where CompPostPostAdd() won't fire. EnsureShieldBound() is idempotent.
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineProtection);
             if (hediff is HediffWithComps hwc)
             {
-                hwc.GetComp<HediffComp_LotusShield>()?.EnsureShieldBound();
+                hwc.GetComp<HediffComp_DivineProtection>()?.EnsureShieldBound();
             }
         }
 

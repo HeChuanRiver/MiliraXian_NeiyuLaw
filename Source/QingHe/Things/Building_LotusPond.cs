@@ -50,7 +50,7 @@ namespace MiliraXian.Characters.QingHe.Things
                         return;
                     }
 
-                    HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
+                    HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
                     FlowerCourtUtility.EnsureFlowerResources(interactor);
                     if (state == null)
                     {
@@ -65,7 +65,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 "在荷池旁冥想",
                 delegate
                 {
-                    HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
+                    HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
                     if (state == null)
                     {
                         Messages.Message("清荷尚未建立花神庭。", interactor, MessageTypeDefOf.RejectInput, historical: false);

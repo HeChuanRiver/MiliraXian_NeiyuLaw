@@ -55,6 +55,45 @@ namespace MiliraXian.Characters.UI
             return new Rect(parentRect.x + localRect.x, parentRect.y + localRect.y, localRect.width, localRect.height);
         }
 
+        protected Rect GetAlignedRect(Rect outerRect, Vector2 preferredSize, RectOffset margin)
+        {
+            margin = margin ?? new RectOffset();
+
+            float availableX = outerRect.x + margin.left;
+            float availableY = outerRect.y + margin.top;
+            float availableWidth = Mathf.Max(0f, outerRect.width - margin.left - margin.right);
+            float availableHeight = Mathf.Max(0f, outerRect.height - margin.top - margin.bottom);
+            float width = Mathf.Min(preferredSize.x, availableWidth);
+            float height = Mathf.Min(preferredSize.y, availableHeight);
+
+            float x = availableX;
+            if (Alignment == TextAnchor.UpperCenter || Alignment == TextAnchor.MiddleCenter || Alignment == TextAnchor.LowerCenter)
+            {
+                x += (availableWidth - width) / 2f;
+            }
+            else if (Alignment == TextAnchor.UpperRight || Alignment == TextAnchor.MiddleRight || Alignment == TextAnchor.LowerRight)
+            {
+                x += availableWidth - width;
+            }
+
+            float y = availableY;
+            if (Alignment == TextAnchor.MiddleLeft || Alignment == TextAnchor.MiddleCenter || Alignment == TextAnchor.MiddleRight)
+            {
+                y += (availableHeight - height) / 2f;
+            }
+            else if (Alignment == TextAnchor.LowerLeft || Alignment == TextAnchor.LowerCenter || Alignment == TextAnchor.LowerRight)
+            {
+                y += availableHeight - height;
+            }
+
+            return new Rect(x, y, width, height);
+        }
+
+        protected virtual bool MouseIsOverHitbox(Rect rect)
+        {
+            return Mouse.IsOver(rect);
+        }
+
         public virtual void WidgetTick()
         {
         }

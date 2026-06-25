@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <HediffDef>
+        <defName>MX_QH_FlowerDecree</defName>
+        <label>花令</label>
+        <description>隐藏Hediff：资源计数器</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.95, 0.74, 0.84)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDecree">
+                <resourceLabel>花令</resourceLabel>
+                <resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</resourceDescription>
+                <initialValue>0</initialValue>
+                <maxValue>300</maxValue>
+                <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
+                <valuePerDecree>100</valuePerDecree>
+                <maxResourceBonusPerSkillNode>1</maxResourceBonusPerSkillNode>
+                <flowerDivinationRecoveryFactor>5</flowerDivinationRecoveryFactor>
+                <highlightTicks>90</highlightTicks>
+                <clampToMax>true</clampToMax>
+                <showGizmo>false</showGizmo>
+                <hideOnHealthTab>true</hideOnHealthTab>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_FlowerResonance</defName>
+        <label>和鸣</label>
+        <description>隐藏 Hediff：角色技能数据</description>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerResonance</hediffClass>
+        <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonance">
+                <initialSkillPoints>1</initialSkillPoints>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonanceGizmos" />
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDivination">
+                <activeDurationTicks>3600</activeDurationTicks>
+                <cooldownTicks>3600</cooldownTicks>
+                <warmupTicks>120</warmupTicks>
+                <warmupLightningIntervalTicks>18</warmupLightningIntervalTicks>
+                <warmupLightningRadius>1.4</warmupLightningRadius>
+                <afterimageIntervalTicks>6</afterimageIntervalTicks>
+                <slashAfterimageIntervalTicks>2</slashAfterimageIntervalTicks>
+                <afterimageFadeTicks>60</afterimageFadeTicks>
+                <afterimageStartAlpha>0.44</afterimageStartAlpha>
+                <afterimageMinDistance>0.55</afterimageMinDistance>
+                <activeEffecter>MX_QH_Effecter_FlowerDivinationActive</activeEffecter>
+                <startReady>true</startReady>
+                <activeLabel>花神降临</activeLabel>
+                <noResonanceReason>尚未习得花之舞。</noResonanceReason>
+                <alreadyActiveReason>花神已经降临。</alreadyActiveReason>
+                <cooldownReason>花神降临仍在冷却中。</cooldownReason>
+                <activatedMessage>花神降临。</activatedMessage>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_DivineBlessing</defName>
+        <label>花神之垂怜</label>
+        <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续5秒的心灵隐形。此效果每120秒只可触发一次。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineBlessing">
+                <lethalTriggerHealthPercent>0.12</lethalTriggerHealthPercent>
+                <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
+                <invisibilityDurationTicks>300</invisibilityDurationTicks>
+                <damageImmunityDurationTicks>180</damageImmunityDurationTicks>
+                <retriggerCooldownTicks>7200</retriggerCooldownTicks>
+                <cooldownWarningCooldownTicks>600</cooldownWarningCooldownTicks>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_DivineBlessingImmunity</defName>
+        <label>神应</label>
+        <description>受到花神的垂怜，暂时免疫所有伤害。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.6, 1.0, 1.0)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>180</disappearsAfterTicks>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_DivineProtection</defName>
+        <label>花神之眷顾</label>
+        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效20秒。</description>
+        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_DivineProtection</hediffClass>
+        <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineProtection">
+                <shieldCompProperties>
+                    <maxEnergy>100</maxEnergy>
+                    <baseRegenPerSecond>2</baseRegenPerSecond>
+                    <shangMaxEnergyMultiplier>2</shangMaxEnergyMultiplier>
+                    <zhiRegenMultiplier>3</zhiRegenMultiplier>
+                    <hitRegenDelayTicks>120</hitRegenDelayTicks>
+                    <gaoshanDamageCap>40</gaoshanDamageCap>
+                    <yuDamageCap>10</yuDamageCap>
+                    <yuBreakDisabledTicks>120</yuBreakDisabledTicks>
+                    <breakDisabledTicks>1200</breakDisabledTicks>
+                    <breakOnEmp>false</breakOnEmp>
+                    <visual>
+                        <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
+                        <texPath>MiliraXianQinghe/Effect/lotus_shield</texPath>
+                        <shaderType>MX_QH_LotusShieldDistortion</shaderType>
+                        <shaderParameters>
+                            <_FlowMap>/MiliraXianQinghe/Effect/lotus_shield_flowmap</_FlowMap>
+                            <_BaseLayerAlpha>1.0</_BaseLayerAlpha>
+                            <_AdditiveGlowColor>(1,0.45,0.43,1)</_AdditiveGlowColor>
+                            <_AdditiveGlowAlpha>1.0</_AdditiveGlowAlpha>
+                            <_AdditiveGlowBreathAmplitude>0.9</_AdditiveGlowBreathAmplitude>
+                            <_AdditiveGlowBreathSpeed>0.21</_AdditiveGlowBreathSpeed>
+                            <_AdditiveGlowMinMask>0</_AdditiveGlowMinMask>
+                            <_SwayStrength>0.015</_SwayStrength>
+                            <_SwaySpeed>1.13</_SwaySpeed>
+                        </shaderParameters>
+                        <drawSize>(2.5,2.5)</drawSize>
+                        <alpha>0.8</alpha>
+                        <drawOffset>(0,0,-0.23)</drawOffset>
+                        <breakScale>(1.3,1.3)</breakScale>
+                        <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
+                        <absorbFleckScale>0.6</absorbFleckScale>
+                        <farGlow>
+                            <texPath>Things/Mote/FireGlow</texPath>
+                            <color>(1,0.81,0.93,1)</color>
+                            <alpha>1.0</alpha>
+                            <sizeMultiplier>2.8</sizeMultiplier>
+                            <breathAmplitude>0.6</breathAmplitude>
+                            <breathSpeed>0.21</breathSpeed>
+                        </farGlow>
+                        <hitGlow>
+                            <texPath>Things/Mote/PsychicDistortionRing</texPath>
+                            <color>(1,0.72,0.92,1)</color>
+                            <alpha>0.85</alpha>
+                            <sizeMultiplier>0.9</sizeMultiplier>
+                            <durationTicks>120</durationTicks>
+                            <drawOffset>(0,0,0.2)</drawOffset>
+                        </hitGlow>
+                    </visual>
+                </shieldCompProperties>
+            </li>
+        </comps>
+    </HediffDef>
+
+</Defs>

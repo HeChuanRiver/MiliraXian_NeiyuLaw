@@ -4,15 +4,15 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_QingheSkillTreeGizmos : HediffCompProperties
+    public class HediffCompProperties_FlowerResonanceGizmos : HediffCompProperties
     {
-        public HediffCompProperties_QingheSkillTreeGizmos()
+        public HediffCompProperties_FlowerResonanceGizmos()
         {
-            compClass = typeof(HediffComp_QingheSkillTreeGizmos);
+            compClass = typeof(HediffComp_FlowerResonanceGizmos);
         }
     }
 
-    public class HediffComp_QingheSkillTreeGizmos : HediffComp
+    public class HediffComp_FlowerResonanceGizmos : HediffComp
     {
         public override bool CompDisallowVisible()
         {
@@ -21,7 +21,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            HediffComp_QingheSkillTreeState state = parent?.GetComp<HediffComp_QingheSkillTreeState>();
+            HediffComp_FlowerResonance state = parent?.GetComp<HediffComp_FlowerResonance>();
             foreach (Gizmo gizmo in QingheSkillTreeSystem.GetGizmos(Pawn, state))
             {
                 yield return gizmo;

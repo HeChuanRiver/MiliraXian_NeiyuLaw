@@ -40,7 +40,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             Toil finish = ToilMaker.MakeToil("FinishFlowerCourtMeditation");
             finish.initAction = delegate
             {
-                HediffComp_QingheSkillTreeState state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+                HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
                 if (state == null)
                 {
                     Messages.Message("清荷尚未建立花神庭。", pawn, MessageTypeDefOf.RejectInput, historical: false);

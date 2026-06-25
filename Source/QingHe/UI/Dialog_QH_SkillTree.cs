@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.UI
         private const float ChoiceIconSize = 46f;
 
         private readonly Pawn pawn;
-        private readonly HediffComp_QingheSkillTreeState state;
+        private readonly HediffComp_FlowerResonance state;
         private QingheSkillTreeDef selectedTree;
         private Vector2 scrollPosition;
 
@@ -35,10 +35,14 @@ namespace MiliraXian.Characters.QingHe.UI
         private static readonly Color LineLearnedColor = new Color(0.58f, 0.84f, 0.66f, 1f);
         private static readonly Color LineLockedColor = new Color(0.28f, 0.30f, 0.32f, 1f);
         private static readonly Color SelectedChoiceColor = new Color(0.72f, 0.90f, 0.80f, 0.22f);
+        private static readonly Color MasteryTextColor = new Color(1f, 0.82f, 0.22f, 1f);
+        private static readonly Color ExperienceBarColor = new Color(0.58f, 0.84f, 1f, 1f);
+        private static readonly Color MasteryExperienceBarColor = new Color(0.30f, 0.42f, 0.62f, 1f);
+        private static readonly Color MasteryCompleteBarColor = new Color(0.22f, 0.24f, 0.30f, 1f);
 
         public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
 
-        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_QingheSkillTreeState state)
+        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_FlowerResonance state)
         {
             this.pawn = pawn;
             this.state = state;
@@ -65,14 +69,48 @@ namespace MiliraXian.Characters.QingHe.UI
         private void DrawExperienceHeader(Rect rect)
         {
             Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(rect.x, rect.y, rect.width, 20f), pawn.LabelShortCap + "    技能点：" + state.SkillPoints);
+            string masteryText = state.MusicMasteryLevel > 0
+                ? "    音律精通：" + ToRoman(state.MusicMasteryLevel) + " / XII"
+                : "";
+            Widgets.Label(new Rect(rect.x, rect.y, rect.width, 20f), pawn.LabelShortCap + "    技能点：" + state.SkillPoints + masteryText);
 
             Rect barRect = new Rect(rect.x, rect.y + 23f, rect.width, 16f);
-            Widgets.FillableBar(barRect, state.ExperienceProgressPercent);
+            DrawExperienceBar(barRect);
             Widgets.DrawBox(barRect);
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(barRect, "经验 " + state.Experience.ToString("F0") + " / " + state.ExperienceToNextPoint.ToString("F0"));
+            Color oldColor = GUI.color;
+            if (state.MusicMasteryLevel > 0)
+            {
+                GUI.color = MasteryTextColor;
+            }
+            else
+            {
+                GUI.color = state.ExperienceProgressPercent > 0.5f ? Color.black : Color.white;
+            }
+            Widgets.Label(barRect, state.MusicMasteryComplete
+                ? "音律精通已满，经验锁定"
+                : "经验 " + state.Experience.ToString("F0") + " / " + state.ExperienceToNextPoint.ToString("F0"));
+            GUI.color = oldColor;
             Text.Anchor = TextAnchor.UpperLeft;
+        }
+
+        private void DrawExperienceBar(Rect rect)
+        {
+            Widgets.DrawBoxSolid(rect, new Color(0.06f, 0.07f, 0.08f, 1f));
+            if (state.MusicMasteryComplete)
+            {
+                Widgets.DrawBoxSolid(rect, MasteryCompleteBarColor);
+                return;
+            }
+
+            float fillPercent = Mathf.Clamp01(state.ExperienceProgressPercent);
+            if (fillPercent <= 0f)
+            {
+                return;
+            }
+
+            Color fillColor = state.MusicMasteryLevel > 0 ? MasteryExperienceBarColor : ExperienceBarColor;
+            Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width * fillPercent, rect.height), fillColor);
         }
 
         private void DrawChoicePanel(Rect rect)
@@ -406,6 +444,37 @@ namespace MiliraXian.Characters.QingHe.UI
             float width = node.important ? ImportantNodeWidth : NodeWidth;
             float height = node.important ? ImportantNodeHeight : NodeHeight;
             return new Rect(40f + node.column * ColumnSpacing, node.y, width, height);
+        }
+
+        private static string ToRoman(int value)
+        {
+            switch (Mathf.Clamp(value, 1, HediffComp_FlowerResonance.MaxMusicMasteryLevel))
+            {
+                case 1:
+                    return "I";
+                case 2:
+                    return "II";
+                case 3:
+                    return "III";
+                case 4:
+                    return "IV";
+                case 5:
+                    return "V";
+                case 6:
+                    return "VI";
+                case 7:
+                    return "VII";
+                case 8:
+                    return "VIII";
+                case 9:
+                    return "IX";
+                case 10:
+                    return "X";
+                case 11:
+                    return "XI";
+                default:
+                    return "XII";
+            }
         }
     }
 }

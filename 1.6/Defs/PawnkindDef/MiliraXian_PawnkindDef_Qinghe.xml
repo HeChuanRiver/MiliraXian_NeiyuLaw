@@ -205,17 +205,17 @@
                  生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
                 <extraForcedHediffs>
                     <li>
-                        <def>MX_QH_LongBreath</def>
+                        <def>MX_QH_DivineBlessing</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_LotusShield</def>
+                        <def>MX_QH_DivineProtection</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_SkillTreeState</def>
+                        <def>MX_QH_FlowerResonance</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>

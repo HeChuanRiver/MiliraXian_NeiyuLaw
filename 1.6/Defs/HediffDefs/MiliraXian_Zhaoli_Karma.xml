@@ -21,14 +21,8 @@
                 <clampToMax>false</clampToMax>
                 <showGizmo>true</showGizmo>
                 <hideOnHealthTab>false</hideOnHealthTab>
-                <barColorRed>0.78</barColorRed>
-                <barColorGreen>0.10</barColorGreen>
-                <barColorBlue>0.12</barColorBlue>
-                <barColorAlpha>1</barColorAlpha>
-                <barHighlightRed>1.00</barHighlightRed>
-                <barHighlightGreen>0.22</barHighlightGreen>
-                <barHighlightBlue>0.24</barHighlightBlue>
-                <barHighlightAlpha>1</barHighlightAlpha>
+                <barColor>(0.78, 0.10, 0.12, 1)</barColor>
+                <barHighlightColor>(1.00, 0.22, 0.24, 1)</barHighlightColor>
             </li>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliKarmaLinks">
                 <maxLinks>20</maxLinks>

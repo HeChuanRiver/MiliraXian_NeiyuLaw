@@ -40,6 +40,11 @@ namespace MiliraXian.Characters.QingHe
 
         public static void SyncFlowerMandate(Pawn pawn, string selectedAbilityDefName)
         {
+            SyncFlowerMandates(pawn, selectedAbilityDefName, null);
+        }
+
+        public static void SyncFlowerMandates(Pawn pawn, string primaryAbilityDefName, string timedAbilityDefName)
+        {
             if (pawn?.abilities == null)
             {
                 return;
@@ -48,15 +53,48 @@ namespace MiliraXian.Characters.QingHe
             RemoveAbility(pawn, DefaultFlowerMandateAbilityDefName);
             for (int i = 0; i < FlowerMandateAbilityDefNames.Count; i++)
             {
-                RemoveAbility(pawn, FlowerMandateAbilityDefNames[i]);
+                string defName = FlowerMandateAbilityDefNames[i];
+                if (defName != primaryAbilityDefName && defName != timedAbilityDefName)
+                {
+                    RemoveAbility(pawn, defName);
+                }
             }
 
-            if (selectedAbilityDefName.NullOrEmpty())
+            if (!primaryAbilityDefName.NullOrEmpty())
+            {
+                EnsureAbility(pawn, primaryAbilityDefName);
+            }
+
+            if (!timedAbilityDefName.NullOrEmpty() && timedAbilityDefName != primaryAbilityDefName)
+            {
+                EnsureAbility(pawn, timedAbilityDefName);
+            }
+        }
+
+        public static void StartFlowerMandateCooldown(Pawn pawn, string abilityDefName)
+        {
+            Ability ability = GetFlowerMandateAbility(pawn, abilityDefName);
+            if (ability == null)
             {
                 return;
             }
 
-            EnsureAbility(pawn, selectedAbilityDefName);
+            int ticks = ability.def.cooldownTicksRange.RandomInRange;
+            if (ticks > 0)
+            {
+                ability.StartCooldown(ticks);
+            }
+        }
+
+        public static Ability GetFlowerMandateAbility(Pawn pawn, string abilityDefName)
+        {
+            if (pawn?.abilities == null || abilityDefName.NullOrEmpty())
+            {
+                return null;
+            }
+
+            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
+            return def != null ? pawn.abilities.GetAbility(def, includeTemporary: false) : null;
         }
 
         public static void SyncFlowerDivinationSlash(Pawn pawn, bool unlocked)
