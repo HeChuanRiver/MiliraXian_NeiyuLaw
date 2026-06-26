@@ -1,5 +1,6 @@
 ﻿using Verse;
 
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
@@ -15,6 +16,9 @@ namespace MiliraXian.Characters.QingHe.Things
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
         public int ambientVisualFlecksPerBurst = 2;
+        public DamageDef enhancedBleedDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectBleedAccumulation;
+        public float enhancedBleedDamageAmount = 0.08f;
+        public float enhancedBleedArmorPenetration = 2.1f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;
 
@@ -31,6 +35,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private int lifetimeTicks;
         private int ageTicks;
         private int ticksToNextAmbientVisual;
+        private bool enhanced;
         private Mote fieldMote;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
@@ -98,6 +103,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look<int>(ref lifetimeTicks, "lifetimeTicks", 0, false);
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
+            Scribe_Values.Look(ref enhanced, "enhanced", false);
             Scribe_References.Look<Mote>(ref fieldMote, "fieldMote", false);
         }
 
@@ -120,6 +126,11 @@ namespace MiliraXian.Characters.QingHe.Things
             SpawnFieldMote();
         }
 
+        public void SetEnhanced(bool value)
+        {
+            enhanced = value;
+        }
+
         public override bool DontDrawParent()
         {
             return Props.fieldMoteDef != null;
@@ -127,7 +138,6 @@ namespace MiliraXian.Characters.QingHe.Things
         
         private void AttachEffect()
         {
-            var applied = false;
             foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, CurrentRadius, true))
             {
                 if (!(thing is Pawn pawn) || pawn.Dead || pawn.Faction != caster.Faction)
@@ -144,13 +154,33 @@ namespace MiliraXian.Characters.QingHe.Things
                     var hediff = (Hediff_QH_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
                     pawn.health.AddHediff(hediff);
                 }
-
-                applied = true;
             }
 
-            if (!applied)
+            ApplyEnhancedBleed();
+        }
+
+        private void ApplyEnhancedBleed()
+        {
+            if (!enhanced || caster == null || parent?.Map == null || Props.enhancedBleedDamageDef == null || Props.enhancedBleedDamageAmount <= 0f)
             {
                 return;
+            }
+
+            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, CurrentRadius, true))
+            {
+                Pawn pawn = thing as Pawn;
+                if (pawn == null || pawn.Dead || !GenHostility.HostileTo(caster, pawn))
+                {
+                    continue;
+                }
+
+                DamageInfo dinfo = new DamageInfo(
+                    Props.enhancedBleedDamageDef,
+                    Props.enhancedBleedDamageAmount,
+                    Props.enhancedBleedArmorPenetration,
+                    -1f,
+                    caster);
+                pawn.TakeDamage(dinfo);
             }
         }
 

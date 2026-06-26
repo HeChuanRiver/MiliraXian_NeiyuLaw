@@ -64,7 +64,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             Thing thing = GenSpawn.Spawn(Props.shieldDef, cell, caster.Map, WipeMode.Vanish);
-            thing.TryGetComp<CompFlowerMandate_WintersweetShield>()?.Init(caster, Props.durationTicks);
+            CompFlowerMandate_WintersweetShield shield = thing.TryGetComp<CompFlowerMandate_WintersweetShield>();
+            shield?.Init(caster, Props.durationTicks);
+            shield?.SetEnhanced(FlowerMandateEnhanceUtility.ActiveFor(caster, parent.def));
             PlaySummonVisual(caster.Map, cell, Props.summonEffecterDefName, Props.fallbackSummonFleckDefName, Props.summonEffectScale);
         }
 

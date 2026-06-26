@@ -46,6 +46,12 @@
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonance">
                 <initialSkillPoints>1</initialSkillPoints>
             </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerChoices">
+                <flowerMandateCooldownTicksTotal>60000</flowerMandateCooldownTicksTotal>
+                <timedFlowerMandateCooldownTicksTotal>60000</timedFlowerMandateCooldownTicksTotal>
+                <flowerSigilCooldownTicksTotal>60000</flowerSigilCooldownTicksTotal>
+                <flowerWordCooldownTicksTotal>60000</flowerWordCooldownTicksTotal>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonanceGizmos" />
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDivination">
                 <activeDurationTicks>3600</activeDurationTicks>
@@ -72,7 +78,7 @@
     <HediffDef>
         <defName>MX_QH_DivineBlessing</defName>
         <label>花神之垂怜</label>
-        <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续5秒的心灵隐形。此效果每120秒只可触发一次。</description>
+        <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。此效果每120秒只可触发一次。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
@@ -82,12 +88,45 @@
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineBlessing">
                 <lethalTriggerHealthPercent>0.12</lethalTriggerHealthPercent>
                 <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
-                <invisibilityDurationTicks>300</invisibilityDurationTicks>
+                <invisibilityDurationTicks>600</invisibilityDurationTicks>
                 <damageImmunityDurationTicks>180</damageImmunityDurationTicks>
                 <retriggerCooldownTicks>7200</retriggerCooldownTicks>
                 <cooldownWarningCooldownTicks>600</cooldownWarningCooldownTicks>
             </li>
         </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_FlowerDivinationBuff</defName>
+        <label>花神降临</label>
+        <description>花神降临于清荷之身。意识、移动速度、操作能力提高，发射的抛射物威力大幅提升，射击冷却缩短，并无视眩晕。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.0, 0.72, 0.92)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <stages>
+            <li>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <postFactor>1.25</postFactor>
+                    </li>
+                    <li>
+                        <capacity>Manipulation</capacity>
+                        <postFactor>1.25</postFactor>
+                    </li>
+                </capMods>
+                <statFactors>
+                    <MoveSpeed>1.25</MoveSpeed>
+                    <RangedWeapon_DamageMultiplier>2.0</RangedWeapon_DamageMultiplier>
+                    <RangedCooldownFactor>0.6</RangedCooldownFactor>
+                </statFactors>
+            </li>
+        </stages>
     </HediffDef>
 
     <HediffDef>
@@ -109,7 +148,7 @@
     <HediffDef>
         <defName>MX_QH_DivineProtection</defName>
         <label>花神之眷顾</label>
-        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效20秒。</description>
+        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_DivineProtection</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -118,15 +157,15 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineProtection">
                 <shieldCompProperties>
-                    <maxEnergy>100</maxEnergy>
-                    <baseRegenPerSecond>2</baseRegenPerSecond>
-                    <shangMaxEnergyMultiplier>2</shangMaxEnergyMultiplier>
+                    <maxEnergy>200</maxEnergy>
+                    <baseRegenPerSecond>5</baseRegenPerSecond>
+                    <shangMaxEnergyMultiplier>3</shangMaxEnergyMultiplier>
                     <zhiRegenMultiplier>3</zhiRegenMultiplier>
                     <hitRegenDelayTicks>120</hitRegenDelayTicks>
-                    <gaoshanDamageCap>40</gaoshanDamageCap>
-                    <yuDamageCap>10</yuDamageCap>
-                    <yuBreakDisabledTicks>120</yuBreakDisabledTicks>
-                    <breakDisabledTicks>1200</breakDisabledTicks>
+                    <gaoshanDamageCap>20</gaoshanDamageCap>
+                    <yuDamageCap>5</yuDamageCap>
+                    <yuBreakDisabledTicks>0</yuBreakDisabledTicks>
+                    <breakDisabledTicks>600</breakDisabledTicks>
                     <breakOnEmp>false</breakOnEmp>
                     <visual>
                         <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>

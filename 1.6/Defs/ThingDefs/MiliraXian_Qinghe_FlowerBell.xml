@@ -114,6 +114,12 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellDivinationAreaOnHit">
+        <radius>2.4</radius>
+        <damageMultiplier>1</damageMultiplier>
+        <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
+        <burstMoteScale>2.4</burstMoteScale>
+      </li>
     </comps>
   </ThingDef>
 
@@ -134,15 +140,13 @@
     <graphicData>
       <color>(255,130,150)</color>
     </graphicData>
-    <projectile>
-      <extraDamages>
-        <li>
-          <def>MX_StatusEffectBleedAccumulation</def>
-          <amount>0.08</amount>
-          <armorPenetration>2.10</armorPenetration>
-        </li>
-      </extraDamages>
-    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+        <damageDef>MX_StatusEffectBleedAccumulation</damageDef>
+        <amount>0.08</amount>
+        <armorPenetration>2.10</armorPenetration>
+      </li>
+    </comps>
   </ThingDef>
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
@@ -151,15 +155,13 @@
     <graphicData>
       <color>(160,245,110)</color>
     </graphicData>
-    <projectile>
-      <extraDamages>
-        <li>
-          <def>MX_StatusEffectToxinAccumulation</def>
-          <amount>0.05</amount>
-          <armorPenetration>2.10</armorPenetration>
-        </li>
-      </extraDamages>
-    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+        <damageDef>MX_StatusEffectToxinAccumulation</damageDef>
+        <amount>0.05</amount>
+        <armorPenetration>2.10</armorPenetration>
+      </li>
+    </comps>
   </ThingDef>
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
@@ -168,16 +170,12 @@
     <graphicData>
       <color>(230,185,255)</color>
     </graphicData>
-    <projectile>
-      <extraDamages>
-        <li>
-          <def>MX_StatusEffectFearAccumulation</def>
-          <amount>0.25</amount>
-          <armorPenetration>2.10</armorPenetration>
-        </li>
-      </extraDamages>
-    </projectile>
     <comps Inherit="False">
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+        <damageDef>MX_StatusEffectFearAccumulation</damageDef>
+        <amount>0.25</amount>
+        <armorPenetration>2.10</armorPenetration>
+      </li>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
         <trailMaxPoints>22</trailMaxPoints>
@@ -200,6 +198,12 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellDivinationAreaOnHit">
+        <radius>2.4</radius>
+        <damageMultiplier>1</damageMultiplier>
+        <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
+        <burstMoteScale>2.4</burstMoteScale>
+      </li>
     </comps>
   </ThingDef>
 
@@ -209,14 +213,12 @@
     <graphicData>
       <color>(170,225,255)</color>
     </graphicData>
-    <projectile>
-      <extraDamages>
-        <li>
-          <def>MX_StatusEffectColdAccumulation</def>
-          <amount>0.08</amount>
-          <armorPenetration>2.10</armorPenetration>
-        </li>
-      </extraDamages>
-    </projectile>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+        <damageDef>MX_StatusEffectColdAccumulation</damageDef>
+        <amount>0.08</amount>
+        <armorPenetration>2.10</armorPenetration>
+      </li>
+    </comps>
   </ThingDef>
 </Defs>

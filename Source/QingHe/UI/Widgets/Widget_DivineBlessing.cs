@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                 return;
             }
 
-            Rect fillRect = new Rect(innerRect.x, innerRect.yMax - innerRect.height * fillPercent, innerRect.width, innerRect.height * fillPercent);
+            Rect fillRect = new Rect(innerRect.x, innerRect.y, innerRect.width * fillPercent, innerRect.height);
             Widgets.DrawBoxSolid(fillRect, fillColor);
         }
 

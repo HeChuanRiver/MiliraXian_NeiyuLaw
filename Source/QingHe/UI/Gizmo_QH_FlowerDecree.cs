@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.QingHe.UI
     {
         private readonly Pawn pawn;
 
-        protected override float GizmoWidth => 240f;
+        protected override float GizmoWidth => 250f;
 
         protected override float GizmoHeight => 75f;
 
@@ -24,11 +24,11 @@ namespace MiliraXian.Characters.QingHe.UI
 
         protected override void BuildWidgets(List<Widget_Base> outWidgets)
         {
-            outWidgets.Add(new Widget_FlowerBellEnhanceDiamond(pawn, new Rect(120f, 6f, 37f, 37f), TextAnchor.MiddleCenter, MX_QHRenderStatics.FlowerBellEnhanceTex));
-            outWidgets.Add(new Widget_TimedFlowerMandateDiamond(pawn, new Rect(160f, 6f, 37f, 37f), TextAnchor.MiddleCenter));
-            outWidgets.Add(new Widget_FlowerDivinationDiamond(pawn, new Rect(140f, 26f, 37f, 37f), TextAnchor.MiddleCenter));
-            outWidgets.Add(new Widget_SkillTreeProgressDiamond(pawn, new Rect(180f, 26f, 37f, 37f), TextAnchor.MiddleCenter));
-            outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(200f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
+            outWidgets.Add(new Widget_FlowerBellEnhanceDiamond(pawn, new Rect(120f, 0f, 41f, 41f), TextAnchor.MiddleCenter, MX_QHRenderStatics.FlowerBellEnhanceTex));
+            outWidgets.Add(new Widget_TimedFlowerMandateDiamond(pawn, new Rect(170f, 0f, 41f, 41f), TextAnchor.MiddleCenter));
+            outWidgets.Add(new Widget_FlowerMandateDiamond(pawn, new Rect(145f, 25f, 41f, 41f), TextAnchor.MiddleCenter));
+            outWidgets.Add(new Widget_SkillTreeProgressDiamond(pawn, new Rect(195f, 25f, 41f, 41f), TextAnchor.MiddleCenter));
+            outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(225f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
             outWidgets.Add(new Widget_LongBreathChargeBlocks(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
             outWidgets.Add(new TextWidget("花令", new Rect(8f, 2f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
             outWidgets.Add(new Widget_FlowerDecreeBar(pawn, new Rect(0f, 12, 120f, 24f), TextAnchor.MiddleLeft));

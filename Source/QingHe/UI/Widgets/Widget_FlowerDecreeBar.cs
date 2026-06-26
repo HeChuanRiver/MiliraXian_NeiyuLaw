@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private readonly Pawn pawn;
 
-        private static readonly Color SegmentEmptyColor = Color.black;
+        private static readonly Color SegmentEmptyColor = new Color(0.16f, 0.17f, 0.18f, 1f);
         private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color FlowerDecreeBaseColor = new Color(0.88f, 0.42f, 0.62f, 1f);
         private static readonly Color FlowerDecreeHighlightColor = new Color(1f, 0.90f, 0.74f, 1f);

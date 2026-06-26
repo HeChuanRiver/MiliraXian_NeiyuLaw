@@ -148,15 +148,15 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             float bonus = 0f;
-            if (state.HasNode(QingheSkillTreeSystem.NodeGaoshan))
+            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan))
             {
                 bonus += PropsDecree.maxResourceBonusPerSkillNode;
             }
-            if (state.HasNode(QingheSkillTreeSystem.NodeLuoyu))
+            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoyu))
             {
                 bonus += PropsDecree.maxResourceBonusPerSkillNode;
             }
-            if (state.HasNode(QingheSkillTreeSystem.NodeSishiLiuzhuan))
+            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_SishiLiuzhuan))
             {
                 bonus += PropsDecree.maxResourceBonusPerSkillNode;
             }

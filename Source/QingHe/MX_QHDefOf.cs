@@ -30,6 +30,7 @@ namespace MiliraXian.Characters.QingHe
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_MusicMastery;
         public static HediffDef MX_QH_FlowerDecree;
+        public static HediffDef MX_QH_FlowerDivinationBuff;
 
         public static TraitDef MX_QH_Trait_LongBreath;
         public static TraitDef MX_QH_Trait_WaterFairy;

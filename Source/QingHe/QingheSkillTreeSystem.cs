@@ -9,92 +9,73 @@ namespace MiliraXian.Characters.QingHe
 {
     public static class QingheSkillTreeSystem
     {
-        public const string NodeFlowerMandate = "MX_QH_Node_FlowerMandate";
-        public const string NodeFlowerWord = "MX_QH_Node_FlowerWord";
-        public const string NodeFlowerSigil = "MX_QH_Node_FlowerSigil";
-        public const string NodeFlowerDance = "MX_QH_Node_FlowerDance";
-        public const string NodeShang = "MX_QH_Node_Shang";
-        public const string NodeQingjue = "MX_QH_Node_Qingjue";
-        public const string NodeGaoshan = "MX_QH_Node_Gaoshan";
-        public const string NodeZhi = "MX_QH_Node_Zhi";
-        public const string NodeYu = "MX_QH_Node_Yu";
-        public const string NodeLuoyu = "MX_QH_Node_Luoyu";
-        public const string NodeSishiLiuzhuan = "MX_QH_Node_SishiLiuzhuan";
-        public const string NodeLuoshenfu = "MX_QH_Node_Luoshenfu";
-        public const string NodeYingyue = "MX_QH_Node_Yingyue";
-
         public static void SyncChoices(Pawn pawn)
         {
             HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
-            SyncChoices(pawn, state);
+            HediffComp_FlowerChoices choices = FlowerCourtUtility.EnsureFlowerChoices(pawn);
+            SyncChoices(pawn, state, choices);
         }
 
-        public static void SyncChoices(Pawn pawn, HediffComp_FlowerResonance state)
+        public static void SyncChoices(Pawn pawn, HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices)
         {
-            if (state == null)
+            if (state == null || choices == null)
             {
                 return;
             }
 
             QingheFlowerChoiceUtility.SyncFlowerMandates(
                 pawn,
-                state.HasNode(NodeFlowerMandate) ? state.SelectedFlowerMandateDefName : null,
-                state.HasNode(NodeSishiLiuzhuan) ? state.SelectedTimedFlowerMandateDefName : null);
-            QingheFlowerChoiceUtility.SyncFlowerSigil(pawn, state.HasNode(NodeFlowerSigil) ? state.SelectedFlowerSigilDefName : null);
-            QingheFlowerChoiceUtility.SyncFlowerWord(pawn, state.HasNode(NodeFlowerWord) ? state.SelectedFlowerWordDefName : null);
-            QingheLuoshenContractUtility.SyncForQinghe(pawn, state);
-            QingheFlowerChoiceUtility.SyncFlowerDivinationSlash(pawn, state.HasNode(NodeFlowerDance));
+                state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerMandate) ? choices.SelectedFlowerMandate : null,
+                state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_SishiLiuzhuan) ? choices.SelectedTimedFlowerMandate : null);
+            QingheFlowerChoiceUtility.SyncFlowerSigil(pawn, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerSigil) ? choices.SelectedFlowerSigil : null);
+            QingheFlowerChoiceUtility.SyncFlowerWord(pawn, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerWord) ? choices.SelectedFlowerWord : null);
+            QingheLuoshenContractUtility.SyncForQinghe(pawn, state, choices);
+            QingheFlowerChoiceUtility.SyncFlowerDivinationSlash(pawn, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance));
         }
 
-        public static bool TrySetFlowerMandate(HediffComp_FlowerResonance state, string abilityDefName, out string reason)
+        public static bool TrySetFlowerMandate(HediffComp_FlowerChoices choices, AbilityDef abilityDef, out string reason)
         {
-            if (!QingheFlowerChoiceUtility.FlowerMandates.Contains(abilityDefName))
+            if (choices == null)
             {
-                reason = "未知的飞花令。";
+                reason = "清荷尚未建立花神庭。";
                 return false;
             }
 
-            state.SetFlowerMandate(abilityDefName);
-            reason = null;
-            return true;
+            return choices.TrySetFlowerMandate(abilityDef, out reason);
         }
 
-        public static bool TrySetFlowerSigil(HediffComp_FlowerResonance state, string hediffDefName, out string reason)
+        public static bool TrySetFlowerSigil(HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices, HediffDef hediffDef, out string reason)
         {
-            if (!state.HasNode(NodeFlowerSigil))
+            if (choices == null)
+            {
+                reason = "清荷尚未建立花神庭。";
+                return false;
+            }
+
+            if (!state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerSigil))
             {
                 reason = "尚未习得花神签节点。";
                 return false;
             }
 
-            if (!QingheFlowerChoiceUtility.FlowerSigils.Contains(hediffDefName))
+            return choices.TrySetFlowerSigil(hediffDef, out reason);
+        }
+
+        public static bool TrySetFlowerWord(HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices, TraitDef traitDef, out string reason)
+        {
+            if (choices == null)
             {
-                reason = "未知的花神签。";
+                reason = "清荷尚未建立花神庭。";
                 return false;
             }
 
-            state.SetFlowerSigil(hediffDefName);
-            reason = null;
-            return true;
-        }
-
-        public static bool TrySetFlowerWord(HediffComp_FlowerResonance state, string traitDefName, out string reason)
-        {
-            if (!state.HasNode(NodeFlowerWord))
+            if (!state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerWord))
             {
                 reason = "尚未习得花语节点。";
                 return false;
             }
 
-            if (!QingheFlowerChoiceUtility.FlowerWords.Contains(traitDefName))
-            {
-                reason = "未知的花语。";
-                return false;
-            }
-
-            state.SetFlowerWord(traitDefName);
-            reason = null;
-            return true;
+            return choices.TrySetFlowerWord(traitDef, out reason);
         }
 
         public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_FlowerResonance state)
@@ -104,9 +85,14 @@ namespace MiliraXian.Characters.QingHe
                 yield break;
             }
 
-            if (state.HasNode(NodeFlowerMandate))
+            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerMandate))
             {
                 yield return new Gizmo_QH_FlowerDecree(pawn);
+            }
+
+            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance))
+            {
+                yield return new Gizmo_QH_FlowerDivination(pawn);
             }
 
             if (!Prefs.DevMode)
@@ -150,5 +136,6 @@ namespace MiliraXian.Characters.QingHe
                 }
             };
         }
+
     }
 }

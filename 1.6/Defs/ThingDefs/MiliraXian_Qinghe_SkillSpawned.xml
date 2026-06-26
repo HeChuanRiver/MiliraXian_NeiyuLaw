@@ -28,6 +28,9 @@
                 <fadeOutTicks>45</fadeOutTicks>
                 <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
                 <ambientVisualFlecksPerBurst>2</ambientVisualFlecksPerBurst>
+                <enhancedBleedDamageDef>MX_StatusEffectBleedAccumulation</enhancedBleedDamageDef>
+                <enhancedBleedDamageAmount>0.08</enhancedBleedDamageAmount>
+                <enhancedBleedArmorPenetration>2.10</enhancedBleedArmorPenetration>
                 <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
                 <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
             </li>
@@ -199,7 +202,7 @@
         </statBases>
         <verbs>
             <li>
-                <verbClass>Verb_Shoot</verbClass>
+                <verbClass>MiliraXian.Characters.QingHe.Things.Verb_ShootFlowerMandatePomegranate</verbClass>
                 <hasStandardCommand>false</hasStandardCommand>
                 <defaultProjectile>MX_Bullet_QH_FlowerMandate_Pomegranate</defaultProjectile>
                 <warmupTime>0.25</warmupTime>
@@ -209,6 +212,11 @@
                 <defaultCooldownTime>1.25</defaultCooldownTime>
             </li>
         </verbs>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerMandate_PomegranateGun">
+                <enhancedProjectileDef>MX_Bullet_QH_FlowerMandate_Pomegranate_Enhanced</enhancedProjectileDef>
+            </li>
+        </comps>
     </ThingDef>
 
     <ThingDef ParentName="BaseBullet">
@@ -248,6 +256,98 @@
                 <curveAmplitudeMin>0.35</curveAmplitudeMin>
                 <curveAmplitudeMax>0.55</curveAmplitudeMax>
                 <curveFrequency>0.10</curveFrequency>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_QH_FlowerMandate_Pomegranate_Enhanced</defName>
+        <label>*enhanced summoned flower shot*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerMandate_Pomegranate</thingClass>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.34,0.92)</drawSize>
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(255,120,120)</color>
+        </graphicData>
+        <projectile>
+            <damageDef>MX_QH_NoteImpact</damageDef>
+            <damageAmountBase>5</damageAmountBase>
+            <armorPenetrationBase>1.50</armorPenetrationBase>
+            <speed>28</speed>
+            <arcHeightFactor>0.05</arcHeightFactor>
+        </projectile>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+                <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+                <trailMaxPoints>18</trailMaxPoints>
+                <trailMinPointDistance>0.10</trailMinPointDistance>
+                <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+                <trailWidthStart>0.16</trailWidthStart>
+                <trailWidthEnd>0.05</trailWidthEnd>
+                <trailAlpha>0.85</trailAlpha>
+                <trailAltitudeOffset>0.65</trailAltitudeOffset>
+                <useProjectileGraphicColor>true</useProjectileGraphicColor>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+                <homingStartDelayTicks>4</homingStartDelayTicks>
+                <minHomingTicksToImpact>8</minHomingTicksToImpact>
+                <homingTurnLerp>0.12</homingTurnLerp>
+                <curveAmplitudeMin>0.35</curveAmplitudeMin>
+                <curveAmplitudeMax>0.55</curveAmplitudeMax>
+                <curveFrequency>0.10</curveFrequency>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerMandate_PomegranateAreaHit">
+                <radius>2.4</radius>
+                <damageMultiplier>1.0</damageMultiplier>
+                <toxinDamageDef>MX_StatusEffectToxinAccumulation</toxinDamageDef>
+                <toxinDamageAmount>0.05</toxinDamageAmount>
+                <toxinArmorPenetration>2.10</toxinArmorPenetration>
+                <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
+                <burstMoteScale>2.2</burstMoteScale>
+            </li>
+        </comps>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseBullet">
+        <defName>MX_Bullet_QH_FlowerMandate_WintersweetRetaliation</defName>
+        <label>*wintersweet retaliation shot*</label>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerMandate_WintersweetRetaliation</thingClass>
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(0.30,0.86)</drawSize>
+            <shaderType>TransparentPostLight</shaderType>
+            <color>(170,225,255)</color>
+        </graphicData>
+        <projectile>
+            <damageDef>MX_QH_NoteImpact</damageDef>
+            <damageAmountBase>8</damageAmountBase>
+            <armorPenetrationBase>1.50</armorPenetrationBase>
+            <speed>36</speed>
+            <arcHeightFactor>0.05</arcHeightFactor>
+        </projectile>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+                <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+                <trailMaxPoints>18</trailMaxPoints>
+                <trailMinPointDistance>0.10</trailMinPointDistance>
+                <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
+                <trailWidthStart>0.14</trailWidthStart>
+                <trailWidthEnd>0.04</trailWidthEnd>
+                <trailAlpha>0.75</trailAlpha>
+                <trailAltitudeOffset>0.65</trailAltitudeOffset>
+                <useProjectileGraphicColor>true</useProjectileGraphicColor>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerMandate_WintersweetRetaliationAreaHit">
+                <radius>2.4</radius>
+                <areaDamageMultiplier>1.0</areaDamageMultiplier>
+                <coldDamageDef>MX_StatusEffectColdAccumulation</coldDamageDef>
+                <coldDamageAmount>0.08</coldDamageAmount>
+                <coldArmorPenetration>2.10</coldArmorPenetration>
+                <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
+                <burstMoteScale>2.2</burstMoteScale>
             </li>
         </comps>
     </ThingDef>
@@ -294,6 +394,7 @@
                 <absorbFleckScale>1.0</absorbFleckScale>
                 <breakEffectScale>3.6</breakEffectScale>
                 <breakFlashScale>8.0</breakFlashScale>
+                <enhancedRetaliationProjectileDef>MX_Bullet_QH_FlowerMandate_WintersweetRetaliation</enhancedRetaliationProjectileDef>
             </li>
         </comps>
     </ThingDef>

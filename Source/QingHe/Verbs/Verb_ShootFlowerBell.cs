@@ -1,4 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Hediffs;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -21,7 +21,17 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
     public class Verb_ShootFlowerBell : Verb_Shoot
     {
+        private const float FlowerDecreeCostPerBurst = 1f;
+        private const float MinimumFlowerDecreeToAttackEnhanced = 1f;
+
+        private bool enhancedBurstInitialized;
+        private bool enhancedForCurrentBurst;
+        private bool enhancedForCurrentShot;
+        private float flowerDecreeCostPerShot;
+
         private VerbProperties_FlowerBell FlowerBellProps => verbProps as VerbProperties_FlowerBell;
+
+        public bool EnhancedForCurrentShot => enhancedForCurrentShot;
 
         public override ThingDef Projectile => CurrentSettings()?.projectile ?? base.Projectile;
 
@@ -41,10 +51,62 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         public FlowerBellMandateVerbProperties CurrentSettings()
         {
-            return ResolveSettings(CurrentFlowerMandateDefName());
+            return ResolveSettings(CurrentFlowerMandateDef());
         }
 
-        public FlowerBellMandateVerbProperties ResolveSettings(string flowerMandateDefName)
+        public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false, bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
+        {
+            CheckEnhancedAttackAvailable();
+            return base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast);
+        }
+
+        public override void WarmupComplete()
+        {
+            enhancedBurstInitialized = false;
+            enhancedForCurrentBurst = false;
+            enhancedForCurrentShot = false;
+            flowerDecreeCostPerShot = 0f;
+            base.WarmupComplete();
+        }
+
+        public override void Reset()
+        {
+            enhancedBurstInitialized = false;
+            enhancedForCurrentBurst = false;
+            enhancedForCurrentShot = false;
+            flowerDecreeCostPerShot = 0f;
+            base.Reset();
+        }
+
+        protected override bool TryCastShot()
+        {
+            InitializeEnhancedBurstIfNeeded();
+            enhancedForCurrentShot = false;
+
+            if (enhancedForCurrentBurst)
+            {
+                HediffComp_FlowerDecree decree = FlowerCourtUtility.GetFlowerDecree(CasterPawn);
+                if (decree == null || decree.CurrentResourceValue + 1E-05f < flowerDecreeCostPerShot)
+                {
+                    DisableFlowerBellEnhanced();
+                    enhancedForCurrentBurst = false;
+                }
+                else
+                {
+                    enhancedForCurrentShot = true;
+                }
+            }
+
+            bool shotFired = base.TryCastShot();
+            if (shotFired && enhancedForCurrentShot)
+            {
+                FlowerCourtUtility.GetFlowerDecree(CasterPawn)?.TryConsumeDecree(flowerDecreeCostPerShot);
+            }
+
+            return shotFired;
+        }
+
+        public FlowerBellMandateVerbProperties ResolveSettings(AbilityDef flowerMandate)
         {
             var settings = FlowerBellProps?.mandateSettings;
             if (settings.NullOrEmpty())
@@ -67,7 +129,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                     continue;
                 }
 
-                if (entry.flowerMandate.defName == flowerMandateDefName)
+                if (entry.flowerMandate == flowerMandate)
                 {
                     return entry;
                 }
@@ -76,9 +138,55 @@ namespace MiliraXian.Characters.QingHe.Verbs
             return fallback;
         }
 
-        private string CurrentFlowerMandateDefName()
+        private AbilityDef CurrentFlowerMandateDef()
         {
-            return FlowerCourtUtility.EnsureSkillTreeState(CasterPawn)?.SelectedFlowerMandateDefName;
+            return FlowerCourtUtility.EnsureFlowerChoices(CasterPawn)?.SelectedFlowerMandate;
+        }
+
+        private void InitializeEnhancedBurstIfNeeded()
+        {
+            if (enhancedBurstInitialized)
+            {
+                return;
+            }
+
+            enhancedBurstInitialized = true;
+            flowerDecreeCostPerShot = FlowerDecreeCostPerBurst / Mathf.Max(1, ShotsPerBurst);
+
+            if (!CheckEnhancedAttackAvailable())
+            {
+                enhancedForCurrentBurst = false;
+                return;
+            }
+
+            enhancedForCurrentBurst = true;
+        }
+
+        private bool CheckEnhancedAttackAvailable()
+        {
+            if (!FlowerBellEnhanced())
+            {
+                return false;
+            }
+
+            HediffComp_FlowerDecree decree = FlowerCourtUtility.GetFlowerDecree(CasterPawn);
+            if (decree != null && decree.CurrentResourceValue + 1E-05f >= MinimumFlowerDecreeToAttackEnhanced)
+            {
+                return true;
+            }
+
+            DisableFlowerBellEnhanced();
+            return false;
+        }
+
+        private bool FlowerBellEnhanced()
+        {
+            return FlowerCourtUtility.GetFlowerChoices(CasterPawn)?.FlowerBellEnhanced == true;
+        }
+
+        private void DisableFlowerBellEnhanced()
+        {
+            FlowerCourtUtility.GetFlowerChoices(CasterPawn)?.SetFlowerBellEnhanced(false);
         }
     }
 }

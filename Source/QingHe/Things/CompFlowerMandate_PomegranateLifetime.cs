@@ -19,8 +19,11 @@ namespace MiliraXian.Characters.QingHe.Things
     {
         private Pawn caster;
         private int ticksLeft;
+        private bool enhanced;
 
         public CompProperties_FlowerMandate_PomegranateLifetime Props => (CompProperties_FlowerMandate_PomegranateLifetime)props;
+        public Pawn Caster => caster;
+        public bool Enhanced => enhanced;
         public float VisualAlpha => Props.fadeOutTicks > 0 ? Mathf.Clamp01(ticksLeft / (float)Props.fadeOutTicks) : 1f;
 
         public override void CompTick()
@@ -43,6 +46,7 @@ namespace MiliraXian.Characters.QingHe.Things
             base.PostExposeData();
             Scribe_References.Look(ref caster, "caster", false);
             Scribe_Values.Look(ref ticksLeft, "ticksLeft", Props.durationTicks);
+            Scribe_Values.Look(ref enhanced, "enhanced", false);
         }
 
         public override Color? ForceColor()
@@ -56,6 +60,11 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             caster = newCaster;
             ticksLeft = durationTicks > 0 ? durationTicks : Props.durationTicks;
+        }
+
+        public void SetEnhanced(bool value)
+        {
+            enhanced = value;
         }
 
         public bool WasSummonedBy(Pawn pawn)

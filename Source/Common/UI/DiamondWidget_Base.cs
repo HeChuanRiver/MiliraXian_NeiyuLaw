@@ -34,5 +34,46 @@ namespace MiliraXian.Characters.UI
             float normalizedY = Mathf.Abs(mousePosition.y - rect.center.y) / halfHeight;
             return normalizedX + normalizedY <= 1f;
         }
+
+        protected static void DrawDiamond(Rect rect, Texture2D texture, Color color)
+        {
+            if (rect.width <= 0f || rect.height <= 0f || texture == null)
+            {
+                return;
+            }
+
+            Color oldColor = GUI.color;
+            GUI.color = color;
+            GUI.DrawTexture(rect, texture, ScaleMode.StretchToFill, true);
+            GUI.color = oldColor;
+        }
+
+        protected static void DrawDiamondFill(Rect rect, Texture2D texture, float fillPercent, Color color)
+        {
+            if (rect.width <= 0f || rect.height <= 0f || texture == null)
+            {
+                return;
+            }
+
+            fillPercent = Mathf.Clamp01(fillPercent);
+            float height = rect.height * fillPercent;
+            if (height <= 0f)
+            {
+                return;
+            }
+
+            Rect fillRect = new Rect(rect.x, rect.yMax - height, rect.width, height);
+            Rect texCoords = new Rect(0f, 0f, 1f, fillPercent);
+            Color oldColor = GUI.color;
+            GUI.color = color;
+            GUI.DrawTextureWithTexCoords(fillRect, texture, texCoords, true);
+            GUI.color = oldColor;
+        }
+
+        protected static Rect CenteredSquare(Rect rect, float scale)
+        {
+            float size = Mathf.Min(rect.width, rect.height) * Mathf.Clamp01(scale);
+            return new Rect(rect.center.x - size * 0.5f, rect.center.y - size * 0.5f, size, size);
+        }
     }
 }

@@ -18,9 +18,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyFillColor = new Color(0.08f, 0.09f, 0.09f, 0.9f);
-        private static readonly Color ReadyColor = new Color(0.36f, 0.82f, 0.48f, 1f);
-        private static readonly Color ActiveColor = new Color(0.95f, 0.42f, 0.64f, 1f);
-        private static readonly Color CooldownColor = new Color(0.23f, 0.50f, 0.92f, 1f);
+        private static readonly Color MaskColor = new Color(0f, 0f, 0f, 0.58f);
 
         public Widget_FlowerDivinationDiamond(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
@@ -32,23 +30,20 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
             HediffComp_FlowerDivination divination = FlowerCourtUtility.EnsureFlowerDivination(pawn);
-            bool learned = state?.HasNode(QingheSkillTreeSystem.NodeFlowerDance) == true;
+            bool learned = state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance) == true;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
             bool mouseOverDiamond = MouseIsOverHitbox(diamondRect);
             bool canStart = learned && divination != null && divination.CanStartDivination(out _) && mouseOverDiamond;
             Color tint = canStart ? GenUI.MouseoverColor : Color.white;
             Rect innerRect = diamondRect.ContractedBy(BorderThickness);
 
-            DrawDiamond(diamondRect, BorderColor);
-            DrawDiamond(innerRect, EmptyFillColor);
+            DrawDiamond(diamondRect, MX_QHRenderStatics.DiamondSolidTex, BorderColor);
+            DrawDiamond(innerRect, MX_QHRenderStatics.DiamondSolidTex, EmptyFillColor);
 
             if (learned)
             {
-                float fillPercent = ResolveFillPercent(divination);
-                if (fillPercent > 0.0001f)
-                {
-                    DrawDiamondFill(innerRect, fillPercent, ResolveFillColor(divination) * tint);
-                }
+                DrawDiamond(innerRect, MX_QHRenderStatics.FlowerDivinationTex, tint);
+                DrawStateMask(innerRect, divination);
             }
             if (mouseOverDiamond)
             {
@@ -58,36 +53,6 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             {
                 TryStartDivination(divination);
             }
-        }
-
-        private static void DrawDiamond(Rect rect, Color color)
-        {
-            if (rect.width <= 0f || rect.height <= 0f)
-            {
-                return;
-            }
-
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            GUI.DrawTexture(rect, MX_QHRenderStatics.DiamondSolidTex, ScaleMode.StretchToFill, true);
-            GUI.color = oldColor;
-        }
-
-        private static void DrawDiamondFill(Rect rect, float fillPercent, Color color)
-        {
-            fillPercent = Mathf.Clamp01(fillPercent);
-            float height = rect.height * fillPercent;
-            if (height <= 0f)
-            {
-                return;
-            }
-
-            Rect fillRect = new Rect(rect.x, rect.yMax - height, rect.width, height);
-            Rect texCoords = new Rect(0f, 0f, 1f, fillPercent);
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            GUI.DrawTextureWithTexCoords(fillRect, MX_QHRenderStatics.DiamondSolidTex, texCoords, true);
-            GUI.color = oldColor;
         }
 
         private void TryStartDivination(HediffComp_FlowerDivination divination)
@@ -114,44 +79,50 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
         }
 
-        private static float ResolveFillPercent(HediffComp_FlowerDivination divination)
+        private static void DrawStateMask(Rect rect, HediffComp_FlowerDivination divination)
         {
-            if (divination == null)
+            if (divination == null || divination.Ready)
+            {
+                return;
+            }
+
+            if (divination.Active)
+            {
+                DrawTopMask(rect.ExpandedBy(1f), QuantizeFillPercent(divination.ActiveElapsedPercent));
+                return;
+            }
+
+            if (divination.OnCooldown)
+            {
+                DrawTopMask(rect.ExpandedBy(1f), QuantizeFillPercent(divination.CooldownRemainingPercent));
+            }
+        }
+
+        private static float QuantizeFillPercent(float fillPercent)
+        {
+            fillPercent = Mathf.Clamp01(fillPercent);
+            if (fillPercent <= 0f)
             {
                 return 0f;
             }
 
-            if (divination.Active)
-            {
-                return divination.ActiveRemainingPercent;
-            }
-
-            if (divination.OnCooldown)
-            {
-                return divination.CooldownReadyPercent;
-            }
-
-            return divination.Ready ? 1f : 0f;
+            return Mathf.CeilToInt(fillPercent * 16f) / 16f;
         }
 
-        private static Color ResolveFillColor(HediffComp_FlowerDivination divination)
+        private static void DrawTopMask(Rect rect, float fillPercent)
         {
-            if (divination == null)
+            fillPercent = Mathf.Clamp01(fillPercent);
+            if (fillPercent <= 0f || rect.width <= 0f || rect.height <= 0f)
             {
-                return EmptyFillColor;
+                return;
             }
 
-            if (divination.Active)
-            {
-                return ActiveColor;
-            }
-
-            if (divination.OnCooldown)
-            {
-                return CooldownColor;
-            }
-
-            return ReadyColor;
+            Rect maskRect = new Rect(rect.x, rect.y, rect.width, rect.height * fillPercent);
+            Rect texCoords = new Rect(0f, 1f - fillPercent, 1f, fillPercent);
+            Color oldColor = GUI.color;
+            GUI.color = MaskColor;
+            GUI.DrawTextureWithTexCoords(maskRect, MX_QHRenderStatics.DiamondSolidTex, texCoords, true);
+            GUI.color = oldColor;
         }
 
         private static string BuildTip(HediffComp_FlowerDivination divination, bool learned)

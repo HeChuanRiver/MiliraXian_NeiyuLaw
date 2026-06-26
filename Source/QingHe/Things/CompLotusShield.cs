@@ -1,7 +1,6 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
-using MiliraXian.Characters.QingHe.Hediffs;
 
 namespace MiliraXian.Characters.QingHe.Things
 {
@@ -17,7 +16,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public int hitRegenDelayTicks = 120;
         public float gaoshanDamageCap = 40f;
         public float yuDamageCap = 10f;
-        public int yuBreakDisabledTicks = 120;
+        public int yuBreakDisabledTicks = 0;
 
         // After breaking, shield is disabled for these ticks.
         public int breakDisabledTicks = 600;
@@ -54,7 +53,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public float MaxEnergy => Mathf.Max(
             1f,
             Props.maxEnergy
-            * (HasSkillNode(QingheSkillTreeSystem.NodeShang) ? Mathf.Max(0.01f, Props.shangMaxEnergyMultiplier) : 1f)
+            * (HasSkillNode(MX_QHSkillNodeDefOf.MX_QH_Node_Shang) ? Mathf.Max(0.01f, Props.shangMaxEnergyMultiplier) : 1f)
             * (FlowerCourtUtility.GetSkillTreeState(PawnOwner)?.LotusShieldCapacityMultiplierFromMastery ?? 1f));
 
         public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
@@ -71,7 +70,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float multiplier = HasSkillNode(QingheSkillTreeSystem.NodeZhi) ? Mathf.Max(0f, Props.zhiRegenMultiplier) : 1f;
+                float multiplier = HasSkillNode(MX_QHSkillNodeDefOf.MX_QH_Node_Zhi) ? Mathf.Max(0f, Props.zhiRegenMultiplier) : 1f;
                 return Mathf.Max(0f, Props.baseRegenPerSecond * multiplier);
             }
         }
@@ -145,48 +144,26 @@ namespace MiliraXian.Characters.QingHe.Things
             absorbed = false;
 
             Pawn owner = PawnOwner;
-            if (owner == null || owner.Dead)
+            if (owner == null || owner.Dead || dinfo.Amount <= 0f || InBreak || dinfo.Def.ignoreShields ||energy <= 0f)
             {
                 return;
             }
-
-            if (dinfo.Amount <= 0f)
-            {
-                return;
-            }
-
-            if (InBreak)
-            {
-                return;
-            }
-
-            if (dinfo.Def == DamageDefOf.EMP && Props.breakOnEmp)
-            {
-                Break();
-                return;
-            }
-
-            if (dinfo.Def.ignoreShields)
-            {
-                return;
-            }
-
-            if (energy <= 0f)
-            {
-                return;
-            }
-
             float damageCap = 0f;
-            if (FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(QingheSkillTreeSystem.NodeYu))
+            if (FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yu))
             {
                 damageCap = Mathf.Max(0f, Props.yuDamageCap);
             }
-            else if (HasSkillNode(QingheSkillTreeSystem.NodeGaoshan))
+            else if (HasSkillNode(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan))
             {
                 damageCap = Mathf.Max(0f, Props.gaoshanDamageCap);
             }
 
             float shieldDamage = damageCap > 0f ? Mathf.Min(dinfo.Amount, damageCap) : Mathf.Max(0f, dinfo.Amount);
+            if (FlowerDivinationBuffUtility.Active(PawnOwner))
+            {
+                shieldDamage *= FlowerDivinationBuffUtility.ShieldDamageFactor;
+            }
+
             if (shieldDamage <= 0f)
             {
                 return;
@@ -247,16 +224,16 @@ namespace MiliraXian.Characters.QingHe.Things
             energy = 0f;
             ticksToRegen = 0;
             ticksToReset = Mathf.Max(
-                1,
-                FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(QingheSkillTreeSystem.NodeYu)
+                0,
+                FlowerCourtUtility.GetFlowerDivination(PawnOwner)?.Active == true && HasSkillNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yu)
                     ? Props.yuBreakDisabledTicks
                     : Props.breakDisabledTicks);
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
         }
 
-        private bool HasSkillNode(string nodeDefName)
+        private bool HasSkillNode(QingheSkillNodeDef node)
         {
-            return FlowerCourtUtility.EnsureSkillTreeState(PawnOwner)?.HasNode(nodeDefName) == true;
+            return FlowerCourtUtility.EnsureSkillTreeState(PawnOwner)?.HasNode(node) == true;
         }
 
         public string BuildShieldTooltip()

@@ -25,6 +25,11 @@ namespace MiliraXian.Characters.QingHe
         public int slowDurationTicks = 1800;
 
         public float brainDestroyChance = 0.08f;
+        public float enhancedPsychicSensitivityThreshold = 1f;
+        public float enhancedPsychicDamageMultiplier = 10f;
+        public DamageDef enhancedFearDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectFearAccumulation;
+        public float enhancedFearDamageAmount = 1.5f;
+        public float enhancedFearArmorPenetration = 2.1f;
 
         public string warmupCasterFx = "MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupCaster";
         public string warmupTargetFx = "MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupTarget";
@@ -181,11 +186,18 @@ namespace MiliraXian.Characters.QingHe
             GraphicsUtility.Fleck(map, center, Props.releaseImpactFleck, Mathf.Max(0.45f, Props.releaseImpactScale));
 
             DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Cut;
+            bool enhanced = FlowerMandateEnhanceUtility.ActiveFor(caster, parent.def);
             List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, Props.radius);
             for (int i = 0; i < victims.Count; i++)
             {
                 Pawn victim = victims[i];
-                victim.TakeDamage(new DamageInfo(damageDef, Props.damageAmount, Props.armorPenetration, -1f, caster));
+                float damageAmount = Props.damageAmount;
+                if (enhanced && victim.GetStatValue(StatDefOf.PsychicSensitivity) > Props.enhancedPsychicSensitivityThreshold)
+                {
+                    damageAmount *= Mathf.Max(0f, Props.enhancedPsychicDamageMultiplier);
+                }
+
+                victim.TakeDamage(new DamageInfo(damageDef, damageAmount, Props.armorPenetration, -1f, caster));
 
                 if (Props.stunDamageAmount > 0f)
                 {
@@ -203,7 +215,24 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 TryBreakBrain(victim, map);
+                ApplyEnhancedFear(enhanced, caster, victim);
             }
+        }
+
+        private void ApplyEnhancedFear(bool enhanced, Pawn caster, Pawn victim)
+        {
+            if (!enhanced || caster == null || victim == null || victim.Dead || victim.Destroyed || Props.enhancedFearDamageDef == null || Props.enhancedFearDamageAmount <= 0f)
+            {
+                return;
+            }
+
+            DamageInfo dinfo = new DamageInfo(
+                Props.enhancedFearDamageDef,
+                Props.enhancedFearDamageAmount,
+                Props.enhancedFearArmorPenetration,
+                -1f,
+                caster);
+            victim.TakeDamage(dinfo);
         }
 
         private void TryBreakBrain(Pawn victim, Map map)

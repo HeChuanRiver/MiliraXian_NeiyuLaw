@@ -1,5 +1,6 @@
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.UI;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using Widgets = Verse.Widgets;
@@ -13,6 +14,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float OuterPadding = 1f;
         private const float ActiveCheckSize = 12f;
         private const float InactiveCrossSize = 12f;
+        private const float MinimumFlowerDecreeToEnable = 1f;
 
         private readonly Pawn pawn;
         private readonly Texture2D overlayTexture;
@@ -31,18 +33,19 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         protected override void DrawContents(Rect rect)
         {
             HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
-            bool learned = state?.HasNode(QingheSkillTreeSystem.NodeQingjue) == true;
-            bool active = learned && state.FlowerBellEnhanced;
+            HediffComp_FlowerChoices choices = FlowerCourtUtility.EnsureFlowerChoices(pawn);
+            bool learned = state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Qingjue) == true;
+            bool active = learned && choices?.FlowerBellEnhanced == true;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
             bool mouseOverDiamond = MouseIsOverHitbox(diamondRect);
             bool canClick = learned && mouseOverDiamond;
             Color buttonTint = canClick ? GenUI.MouseoverColor : Color.white;
 
-            DrawMaskedRect(diamondRect, BorderColor);
+            DrawDiamond(diamondRect, MX_QHRenderStatics.DiamondSolidTex, BorderColor);
             Rect innerRect = diamondRect.ContractedBy(BorderThickness);
             if (learned)
             {
-                DrawTextureDiamond(innerRect, ResolveTexture(active), ResolveTint(active) * buttonTint);
+                DrawDiamond(innerRect, ResolveTexture(active), ResolveTint(active) * buttonTint);
                 if (active)
                 {
                     DrawActiveCheck(diamondRect, buttonTint);
@@ -54,43 +57,40 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
             else
             {
-                DrawMaskedRect(innerRect, EmptyFillColor);
+                DrawDiamond(innerRect, MX_QHRenderStatics.DiamondSolidTex, EmptyFillColor);
             }
 
             if (mouseOverDiamond)
             {
-                TooltipHandler.TipRegion(rect, () => BuildTip(state, learned, active), GetStableTipId());
+                TooltipHandler.TipRegion(rect, () => BuildTip(choices, learned, active), GetStableTipId());
             }
             if (canClick && Widgets.ButtonInvisible(diamondRect))
             {
-                state.SetFlowerBellEnhanced(!state.FlowerBellEnhanced);
+                TryToggleEnhanced(choices);
             }
         }
 
-        private static void DrawMaskedRect(Rect rect, Color color)
+        private void TryToggleEnhanced(HediffComp_FlowerChoices choices)
         {
-            if (rect.width <= 0f || rect.height <= 0f)
+            if (choices == null)
             {
                 return;
             }
 
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            GUI.DrawTexture(rect, MX_QHRenderStatics.DiamondSolidTex, ScaleMode.StretchToFill, true);
-            GUI.color = oldColor;
-        }
-
-        private static void DrawTextureDiamond(Rect rect, Texture2D texture, Color tint)
-        {
-            if (rect.width <= 0f || rect.height <= 0f || texture == null)
+            bool enable = !choices.FlowerBellEnhanced;
+            if (enable && !HasEnoughFlowerDecreeToEnable())
             {
+                Messages.Message("花令不足，无法开启花信铃强化。", pawn, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
-            Color oldColor = GUI.color;
-            GUI.color = tint;
-            GUI.DrawTexture(rect, texture, ScaleMode.StretchToFill, true);
-            GUI.color = oldColor;
+            choices.SetFlowerBellEnhanced(enable);
+        }
+
+        private bool HasEnoughFlowerDecreeToEnable()
+        {
+            HediffComp_FlowerDecree decree = FlowerCourtUtility.GetFlowerDecree(pawn);
+            return decree != null && decree.CurrentResourceValue > MinimumFlowerDecreeToEnable;
         }
 
         private static void DrawActiveCheck(Rect rect, Color tint)
@@ -133,7 +133,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return Color.white;
         }
 
-        private static string BuildTip(HediffComp_FlowerResonance state, bool learned, bool active)
+        private static string BuildTip(HediffComp_FlowerChoices choices, bool learned, bool active)
         {
             if (!learned)
             {
@@ -141,9 +141,9 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
 
             string tip = "花信铃强化\n\n状态: " + (active ? "开启" : "关闭");
-            if (state != null)
+            if (choices != null)
             {
-                tip += "\n当前飞花令: " + QingheFlowerChoiceUtility.LabelForDefName(state.SelectedFlowerMandateDefName);
+                tip += "\n当前飞花令: " + QingheFlowerChoiceUtility.LabelForDef(choices.SelectedFlowerMandate);
             }
 
             return tip;

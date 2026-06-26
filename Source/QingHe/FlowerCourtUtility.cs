@@ -1,4 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Hediffs;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -31,6 +31,22 @@ namespace MiliraXian.Characters.QingHe
 
             Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerResonance);
             return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerResonance>();
+        }
+
+        public static HediffComp_FlowerChoices EnsureFlowerChoices(Pawn pawn)
+        {
+            return EnsureSkillTreeState(pawn)?.parent?.GetComp<HediffComp_FlowerChoices>();
+        }
+
+        public static HediffComp_FlowerChoices GetFlowerChoices(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_FlowerResonance == null)
+            {
+                return null;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerResonance);
+            return (hediff as HediffWithComps)?.GetComp<HediffComp_FlowerChoices>();
         }
 
         public static HediffComp_FlowerDivination GetFlowerDivination(Pawn pawn)

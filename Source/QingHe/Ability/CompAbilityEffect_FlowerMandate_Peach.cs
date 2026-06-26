@@ -51,7 +51,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
             if (map == null || !cell.IsValid || !cell.InBounds(map)) return;
 
             var field = GenSpawn.Spawn(Props.fieldDef, cell, map);
-            field.TryGetComp<CompSpringFlowField>()?.Init(parent.pawn, Props.fieldDurationTicks);
+            CompSpringFlowField fieldComp = field.TryGetComp<CompSpringFlowField>();
+            fieldComp?.Init(parent.pawn, Props.fieldDurationTicks);
+            fieldComp?.SetEnhanced(FlowerMandateEnhanceUtility.ActiveFor(parent.pawn, parent.def));
             PlaySummonVisual(map, cell, ResolveRadius());
         }
 

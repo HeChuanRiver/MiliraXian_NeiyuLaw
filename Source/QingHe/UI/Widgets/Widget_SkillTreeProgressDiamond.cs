@@ -12,14 +12,17 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const int TipSalt = 910209;
         private const float BorderThickness = 2f;
         private const float OuterPadding = 1f;
+        private const float CenterOverlayScale = 0.78f;
 
         private readonly Pawn pawn;
 
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyFillColor = new Color(0.08f, 0.09f, 0.09f, 0.9f);
-        private static readonly Color MasteryCompleteFillColor = new Color(0.22f, 0.24f, 0.30f, 0.95f);
-        private static readonly Color ExperienceColor = new Color(0.58f, 0.84f, 1f, 1f);
-        private static readonly Color MasteryExperienceColor = new Color(0.30f, 0.42f, 0.62f, 1f);
+        private static readonly Color CenterBorderColor = new Color(0.50f, 0.52f, 0.52f, 1f);
+        private static readonly Color CenterOverlayColor = new Color(0.12f, 0.16f, 0.20f, 0.94f);
+        private static readonly Color MasteryCenterOverlayColor = new Color(0.12f, 0.16f, 0.20f, 0.94f);
+        private static readonly Color ExperienceColor = new Color(0.70f, 0.92f, 1f, 1f);
+        private static readonly Color MasteryExperienceColor = new Color(1f, 0.76f, 0.24f, 1f);
         private static readonly Color MasteryTextColor = new Color(1f, 0.82f, 0.22f, 1f);
 
         public Widget_SkillTreeProgressDiamond(Pawn pawn, Rect localRect, TextAnchor alignment)
@@ -37,23 +40,32 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             Color tint = canClick && mouseOverDiamond ? GenUI.MouseoverColor : Color.white;
             Rect innerRect = diamondRect.ContractedBy(BorderThickness);
 
-            DrawDiamond(diamondRect, BorderColor);
-            DrawDiamond(innerRect, state?.MusicMasteryComplete == true ? MasteryCompleteFillColor : EmptyFillColor);
+            DrawDiamond(diamondRect, MX_QHRenderStatics.DiamondSolidTex, BorderColor);
+            DrawDiamond(innerRect, MX_QHRenderStatics.DiamondSolidTex, EmptyFillColor);
 
-            if (state != null && state.ExperienceProgressPercent > 0.0001f)
+            float experienceFillPercent = state?.MusicMasteryComplete == true ? 1f : QuantizeFillPercent(state?.ExperienceProgressPercent ?? 0f);
+            if (experienceFillPercent > 0.0001f)
             {
                 Color fillColor = state.MusicMasteryLevel > 0 ? MasteryExperienceColor : ExperienceColor;
-                DrawDiamondFill(innerRect, state.ExperienceProgressPercent, fillColor * tint);
+                DrawDiamondFill(innerRect, MX_QHRenderStatics.DiamondSolidTex, experienceFillPercent, fillColor * tint);
             }
 
             if (state != null && state.MusicMasteryLevel > 0)
             {
+                Rect centerRect = CenteredSquare(innerRect, CenterOverlayScale);
+                DrawDiamond(centerRect.ExpandedBy(1f), MX_QHRenderStatics.DiamondSolidTex, CenterBorderColor * tint);
+                DrawDiamond(centerRect, MX_QHRenderStatics.DiamondSolidTex, MasteryCenterOverlayColor * tint);
                 DrawCenterLabel(rect, ToRoman(state.MusicMasteryLevel), MasteryTextColor * tint);
             }
-            else if (state != null && state.SkillPoints > 0)
+            else if (state != null)
             {
-                Color labelColor = state.ExperienceProgressPercent > 0.5f ? Color.black : Color.white;
-                DrawCenterLabel(rect, state.SkillPoints.ToString(), labelColor * tint);
+                Rect centerRect = CenteredSquare(innerRect, CenterOverlayScale);
+                DrawDiamond(centerRect.ExpandedBy(1f), MX_QHRenderStatics.DiamondSolidTex, CenterBorderColor * tint);
+                DrawDiamond(centerRect, MX_QHRenderStatics.DiamondSolidTex, CenterOverlayColor * tint);
+                if (state.SkillPoints > 0)
+                {
+                    DrawCenterLabel(rect, state.SkillPoints.ToString(), Color.white * tint);
+                }
             }
 
             if (mouseOverDiamond)
@@ -62,38 +74,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
             if (canClick && mouseOverDiamond && Widgets.ButtonInvisible(diamondRect))
             {
-                Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state));
+                Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state, FlowerCourtUtility.EnsureFlowerChoices(pawn)));
             }
-        }
-
-        private static void DrawDiamond(Rect rect, Color color)
-        {
-            if (rect.width <= 0f || rect.height <= 0f)
-            {
-                return;
-            }
-
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            GUI.DrawTexture(rect, MX_QHRenderStatics.DiamondSolidTex, ScaleMode.StretchToFill, true);
-            GUI.color = oldColor;
-        }
-
-        private static void DrawDiamondFill(Rect rect, float fillPercent, Color color)
-        {
-            fillPercent = Mathf.Clamp01(fillPercent);
-            float height = rect.height * fillPercent;
-            if (height <= 0f)
-            {
-                return;
-            }
-
-            Rect fillRect = new Rect(rect.x, rect.yMax - height, rect.width, height);
-            Rect texCoords = new Rect(0f, 0f, 1f, fillPercent);
-            Color oldColor = GUI.color;
-            GUI.color = color;
-            GUI.DrawTextureWithTexCoords(fillRect, MX_QHRenderStatics.DiamondSolidTex, texCoords, true);
-            GUI.color = oldColor;
         }
 
         private static void DrawCenterLabel(Rect rect, string label, Color color)
@@ -110,6 +92,17 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             GUI.color = oldColor;
             Text.Anchor = oldAnchor;
             Text.Font = oldFont;
+        }
+
+        private static float QuantizeFillPercent(float fillPercent)
+        {
+            fillPercent = Mathf.Clamp01(fillPercent);
+            if (fillPercent <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.CeilToInt(fillPercent * 16f) / 16f;
         }
 
         private static string BuildTip(HediffComp_FlowerResonance state)

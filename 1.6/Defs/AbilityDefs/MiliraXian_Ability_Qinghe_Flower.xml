@@ -42,6 +42,7 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -78,6 +79,7 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -119,6 +121,7 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -147,6 +150,11 @@
                 <slowSeverity>1</slowSeverity>
                 <slowDurationTicks>1800</slowDurationTicks>
                 <brainDestroyChance>0.08</brainDestroyChance>
+                <enhancedPsychicSensitivityThreshold>1.0</enhancedPsychicSensitivityThreshold>
+                <enhancedPsychicDamageMultiplier>10</enhancedPsychicDamageMultiplier>
+                <enhancedFearDamageDef>MX_StatusEffectFearAccumulation</enhancedFearDamageDef>
+                <enhancedFearDamageAmount>1.5</enhancedFearDamageAmount>
+                <enhancedFearArmorPenetration>2.10</enhancedFearArmorPenetration>
                 <curveMote>MX_QH_Mote_FlowerMandate_ChrysanthemumCurvedTrail</curveMote>
                 <curveDistortWidth>4.2</curveDistortWidth>
                 <curveDistortAlpha>0.68</curveDistortAlpha>
@@ -176,6 +184,7 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>

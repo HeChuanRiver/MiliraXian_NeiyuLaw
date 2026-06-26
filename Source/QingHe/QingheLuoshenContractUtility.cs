@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(qinghe);
-            return state?.HasNode(QingheSkillTreeSystem.NodeLuoshenfu) == true;
+            return state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu) == true;
         }
 
         public static bool IsContractMaintainedFor(Pawn pawn)
@@ -78,14 +78,14 @@ namespace MiliraXian.Characters.QingHe
             return qinghe != null && HasContractWith(qinghe, pawn);
         }
 
-        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state)
+        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices)
         {
             if (!MX_QHUtility.IsQinghe(qinghe))
             {
                 return;
             }
 
-            if (state == null || !state.HasNode(QingheSkillTreeSystem.NodeLuoshenfu))
+            if (state == null || !state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu))
             {
                 RemoveContractFromPartner(qinghe);
                 return;
@@ -99,7 +99,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             RemoveContractFromOtherPartners(qinghe, spouse);
-            SyncToPartner(qinghe, spouse, state.HasNode(QingheSkillTreeSystem.NodeFlowerWord) ? state.SelectedFlowerWordDefName : null);
+            SyncToPartner(qinghe, spouse, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerWord) ? choices?.SelectedFlowerWord : null);
         }
 
         public static void NotifySpouseRelationAdded(Pawn pawn, Pawn otherPawn)
@@ -163,7 +163,7 @@ namespace MiliraXian.Characters.QingHe
             GiveBrokenThought(survivor, lost);
         }
 
-        private static void SyncToPartner(Pawn qinghe, Pawn spouse, string selectedFlowerWordDefName)
+        private static void SyncToPartner(Pawn qinghe, Pawn spouse, TraitDef selectedFlowerWord)
         {
             if (qinghe?.health?.hediffSet == null || spouse?.health?.hediffSet == null || spouse.story?.traits == null)
             {
@@ -174,10 +174,10 @@ namespace MiliraXian.Characters.QingHe
             Hediff_LuoshenContract spouseContract = EnsureContractHediff(spouse, qinghe);
             RemoveMirroredTrait(spouse, spouseContract);
 
-            if (QingheFlowerChoiceUtility.IsFlowerWordTraitDefName(selectedFlowerWordDefName))
+            if (QingheFlowerChoiceUtility.IsFlowerWordTraitDef(selectedFlowerWord))
             {
-                bool addedByContract = EnsureTrait(spouse, selectedFlowerWordDefName);
-                spouseContract.SetMirroredFlowerWord(selectedFlowerWordDefName, addedByContract);
+                bool addedByContract = EnsureTrait(spouse, selectedFlowerWord);
+                spouseContract.SetMirroredFlowerWord(selectedFlowerWord.defName, addedByContract);
             }
             else
             {
@@ -252,12 +252,12 @@ namespace MiliraXian.Characters.QingHe
         private static void RemoveMirroredTrait(Pawn pawn, Hediff_LuoshenContract hediff)
         {
             string defName = hediff?.MirroredFlowerWordDefName;
-            if (!hediff.MirroredFlowerWordAddedByContract || !QingheFlowerChoiceUtility.IsFlowerWordTraitDefName(defName) || pawn?.story?.traits == null)
+            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
+            if (!hediff.MirroredFlowerWordAddedByContract || !QingheFlowerChoiceUtility.IsFlowerWordTraitDef(traitDef) || pawn?.story?.traits == null)
             {
                 return;
             }
 
-            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
             Trait trait = traitDef != null ? pawn.story.traits.GetTrait(traitDef) : null;
             if (trait != null)
             {
@@ -267,9 +267,8 @@ namespace MiliraXian.Characters.QingHe
             hediff.SetMirroredFlowerWord(null, false);
         }
 
-        private static bool EnsureTrait(Pawn pawn, string defName)
+        private static bool EnsureTrait(Pawn pawn, TraitDef traitDef)
         {
-            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
             if (traitDef != null && pawn.story?.traits?.HasTrait(traitDef) == false)
             {
                 pawn.story.traits.GainTrait(new Trait(traitDef));

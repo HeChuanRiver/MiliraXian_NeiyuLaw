@@ -51,6 +51,10 @@ namespace MiliraXian.Characters.QingHe
 
             patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.TryRemoveDirectRelation)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(StunHandler), nameof(StunHandler.StunFor)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StunHandler_StunFor_Prefix)));
+
         }
 
         public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
@@ -214,6 +218,11 @@ namespace MiliraXian.Characters.QingHe
 
             Pawn pawn = RelationsTrackerPawnField.GetValue(__instance) as Pawn;
             QingheLuoshenContractUtility.NotifySpouseRelationRemoved(pawn, otherPawn);
+        }
+
+        public static bool Patch_StunHandler_StunFor_Prefix(StunHandler __instance)
+        {
+            return !FlowerDivinationBuffUtility.Active(__instance?.parent as Pawn);
         }
 
         private static bool HasDivineBlessingImmunity(Pawn pawn)

@@ -34,46 +34,47 @@ namespace MiliraXian.Characters.QingHe
             "MX_QH_FlowerWord_Narcissus"
         };
 
-        public static IReadOnlyList<string> FlowerMandates => FlowerMandateAbilityDefNames;
-        public static IReadOnlyList<string> FlowerSigils => FlowerSigilHediffDefNames;
-        public static IReadOnlyList<string> FlowerWords => FlowerWordTraitDefNames;
+        public static IReadOnlyList<AbilityDef> FlowerMandates => ResolveDefs<AbilityDef>(FlowerMandateAbilityDefNames);
+        public static IReadOnlyList<HediffDef> FlowerSigils => ResolveDefs<HediffDef>(FlowerSigilHediffDefNames);
+        public static IReadOnlyList<TraitDef> FlowerWords => ResolveDefs<TraitDef>(FlowerWordTraitDefNames);
 
-        public static void SyncFlowerMandate(Pawn pawn, string selectedAbilityDefName)
+        public static void SyncFlowerMandate(Pawn pawn, AbilityDef selectedAbilityDef)
         {
-            SyncFlowerMandates(pawn, selectedAbilityDefName, null);
+            SyncFlowerMandates(pawn, selectedAbilityDef, null);
         }
 
-        public static void SyncFlowerMandates(Pawn pawn, string primaryAbilityDefName, string timedAbilityDefName)
+        public static void SyncFlowerMandates(Pawn pawn, AbilityDef primaryAbilityDef, AbilityDef timedAbilityDef)
         {
             if (pawn?.abilities == null)
             {
                 return;
             }
 
-            RemoveAbility(pawn, DefaultFlowerMandateAbilityDefName);
-            for (int i = 0; i < FlowerMandateAbilityDefNames.Count; i++)
+            RemoveAbility(pawn, DefDatabase<AbilityDef>.GetNamedSilentFail(DefaultFlowerMandateAbilityDefName));
+            IReadOnlyList<AbilityDef> mandates = FlowerMandates;
+            for (int i = 0; i < mandates.Count; i++)
             {
-                string defName = FlowerMandateAbilityDefNames[i];
-                if (defName != primaryAbilityDefName && defName != timedAbilityDefName)
+                AbilityDef def = mandates[i];
+                if (def != primaryAbilityDef && def != timedAbilityDef)
                 {
-                    RemoveAbility(pawn, defName);
+                    RemoveAbility(pawn, def);
                 }
             }
 
-            if (!primaryAbilityDefName.NullOrEmpty())
+            if (primaryAbilityDef != null)
             {
-                EnsureAbility(pawn, primaryAbilityDefName);
+                EnsureAbility(pawn, primaryAbilityDef);
             }
 
-            if (!timedAbilityDefName.NullOrEmpty() && timedAbilityDefName != primaryAbilityDefName)
+            if (timedAbilityDef != null && timedAbilityDef != primaryAbilityDef)
             {
-                EnsureAbility(pawn, timedAbilityDefName);
+                EnsureAbility(pawn, timedAbilityDef);
             }
         }
 
-        public static void StartFlowerMandateCooldown(Pawn pawn, string abilityDefName)
+        public static void StartFlowerMandateCooldown(Pawn pawn, AbilityDef abilityDef)
         {
-            Ability ability = GetFlowerMandateAbility(pawn, abilityDefName);
+            Ability ability = GetFlowerMandateAbility(pawn, abilityDef);
             if (ability == null)
             {
                 return;
@@ -86,15 +87,14 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        public static Ability GetFlowerMandateAbility(Pawn pawn, string abilityDefName)
+        public static Ability GetFlowerMandateAbility(Pawn pawn, AbilityDef abilityDef)
         {
-            if (pawn?.abilities == null || abilityDefName.NullOrEmpty())
+            if (pawn?.abilities == null || abilityDef == null)
             {
                 return null;
             }
 
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
-            return def != null ? pawn.abilities.GetAbility(def, includeTemporary: false) : null;
+            return pawn.abilities.GetAbility(abilityDef, includeTemporary: false);
         }
 
         public static void SyncFlowerDivinationSlash(Pawn pawn, bool unlocked)
@@ -106,81 +106,85 @@ namespace MiliraXian.Characters.QingHe
 
             if (unlocked)
             {
-                EnsureAbility(pawn, FlowerDivinationSlashAbilityDefName);
+                EnsureAbility(pawn, DefDatabase<AbilityDef>.GetNamedSilentFail(FlowerDivinationSlashAbilityDefName));
             }
             else
             {
-                RemoveAbility(pawn, FlowerDivinationSlashAbilityDefName);
+                RemoveAbility(pawn, DefDatabase<AbilityDef>.GetNamedSilentFail(FlowerDivinationSlashAbilityDefName));
             }
         }
 
-        public static void SyncFlowerSigil(Pawn pawn, string selectedHediffDefName)
+        public static void SyncFlowerSigil(Pawn pawn, HediffDef selectedHediffDef)
         {
             if (pawn?.health?.hediffSet == null)
             {
                 return;
             }
 
-            for (int i = 0; i < FlowerSigilHediffDefNames.Count; i++)
+            IReadOnlyList<HediffDef> sigils = FlowerSigils;
+            for (int i = 0; i < sigils.Count; i++)
             {
-                RemoveHediff(pawn, FlowerSigilHediffDefNames[i]);
+                RemoveHediff(pawn, sigils[i]);
             }
 
-            if (!selectedHediffDefName.NullOrEmpty())
+            if (selectedHediffDef != null)
             {
-                EnsureHediff(pawn, selectedHediffDefName);
+                EnsureHediff(pawn, selectedHediffDef);
             }
         }
 
-        public static void SyncFlowerWord(Pawn pawn, string selectedTraitDefName)
+        public static void SyncFlowerWord(Pawn pawn, TraitDef selectedTraitDef)
         {
             if (pawn?.story?.traits == null)
             {
                 return;
             }
 
-            for (int i = 0; i < FlowerWordTraitDefNames.Count; i++)
+            IReadOnlyList<TraitDef> words = FlowerWords;
+            for (int i = 0; i < words.Count; i++)
             {
-                RemoveTrait(pawn, FlowerWordTraitDefNames[i]);
+                RemoveTrait(pawn, words[i]);
             }
 
-            if (!selectedTraitDefName.NullOrEmpty())
+            if (selectedTraitDef != null)
             {
-                EnsureTrait(pawn, selectedTraitDefName);
+                EnsureTrait(pawn, selectedTraitDef);
             }
         }
 
-        public static bool IsFlowerWordTraitDefName(string defName)
+        public static bool IsFlowerWordTraitDef(TraitDef traitDef)
         {
-            return !defName.NullOrEmpty() && FlowerWordTraitDefNames.Contains(defName);
+            if (traitDef == null)
+            {
+                return false;
+            }
+
+            IReadOnlyList<TraitDef> words = FlowerWords;
+            for (int i = 0; i < words.Count; i++)
+            {
+                if (words[i] == traitDef)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        public static string LabelForDefName(string defName)
+        public static string LabelForDef(Def def)
         {
-            if (defName.NullOrEmpty())
+            if (def == null)
             {
                 return "未选择";
             }
 
-            AbilityDef abilityDef = DefDatabase<AbilityDef>.GetNamedSilentFail(defName);
-            if (abilityDef != null)
-            {
-                return abilityDef.LabelCap;
-            }
-
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
-            if (hediffDef != null)
-            {
-                return hediffDef.LabelCap;
-            }
-
-            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
+            TraitDef traitDef = def as TraitDef;
             if (traitDef != null)
             {
                 return LabelForTraitDef(traitDef);
             }
 
-            return defName;
+            return def.LabelCap;
         }
 
         private static string LabelForTraitDef(TraitDef traitDef)
@@ -201,9 +205,9 @@ namespace MiliraXian.Characters.QingHe
             return traitDef?.LabelCap ?? string.Empty;
         }
 
-        public static string ShortLabelForDefName(string defName)
+        public static string ShortLabelForDef(Def def)
         {
-            string label = LabelForDefName(defName);
+            string label = LabelForDef(def);
             if (label.NullOrEmpty())
             {
                 return "?";
@@ -218,14 +222,9 @@ namespace MiliraXian.Characters.QingHe
             return label.Length > 2 ? label.Substring(0, 2) : label;
         }
 
-        public static Texture2D IconForDefName(string defName)
+        public static Texture2D IconForDef(Def def)
         {
-            if (defName.NullOrEmpty())
-            {
-                return null;
-            }
-
-            AbilityDef abilityDef = DefDatabase<AbilityDef>.GetNamedSilentFail(defName);
+            AbilityDef abilityDef = def as AbilityDef;
             if (abilityDef?.uiIcon != null)
             {
                 return abilityDef.uiIcon;
@@ -234,26 +233,26 @@ namespace MiliraXian.Characters.QingHe
             return null;
         }
 
-        public static bool HasAppliedChoice(Pawn pawn, string defName)
+        public static bool HasAppliedChoice(Pawn pawn, Def def)
         {
-            if (defName.NullOrEmpty() || pawn == null)
+            if (def == null || pawn == null)
             {
                 return false;
             }
 
-            AbilityDef abilityDef = DefDatabase<AbilityDef>.GetNamedSilentFail(defName);
+            AbilityDef abilityDef = def as AbilityDef;
             if (abilityDef != null)
             {
                 return pawn.abilities?.GetAbility(abilityDef, includeTemporary: false) != null;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
+            HediffDef hediffDef = def as HediffDef;
             if (hediffDef != null)
             {
                 return pawn.health?.hediffSet?.GetFirstHediffOfDef(hediffDef) != null;
             }
 
-            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
+            TraitDef traitDef = def as TraitDef;
             if (traitDef != null)
             {
                 return pawn.story?.traits?.HasTrait(traitDef) == true;
@@ -262,36 +261,32 @@ namespace MiliraXian.Characters.QingHe
             return false;
         }
 
-        private static void EnsureAbility(Pawn pawn, string defName)
+        private static void EnsureAbility(Pawn pawn, AbilityDef def)
         {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(defName);
             if (def != null && pawn.abilities.GetAbility(def, includeTemporary: false) == null)
             {
                 pawn.abilities.GainAbility(def);
             }
         }
 
-        private static void RemoveAbility(Pawn pawn, string defName)
+        private static void RemoveAbility(Pawn pawn, AbilityDef def)
         {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(defName);
             if (def != null)
             {
                 pawn.abilities.RemoveAbility(def);
             }
         }
 
-        private static void EnsureHediff(Pawn pawn, string defName)
+        private static void EnsureHediff(Pawn pawn, HediffDef def)
         {
-            HediffDef def = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
             if (def != null && pawn.health.hediffSet.GetFirstHediffOfDef(def) == null)
             {
                 pawn.health.AddHediff(HediffMaker.MakeHediff(def, pawn));
             }
         }
 
-        private static void RemoveHediff(Pawn pawn, string defName)
+        private static void RemoveHediff(Pawn pawn, HediffDef def)
         {
-            HediffDef def = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
             Hediff hediff = def != null ? pawn.health.hediffSet.GetFirstHediffOfDef(def) : null;
             if (hediff != null)
             {
@@ -299,23 +294,36 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        private static void EnsureTrait(Pawn pawn, string defName)
+        private static void EnsureTrait(Pawn pawn, TraitDef def)
         {
-            TraitDef def = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
             if (def != null && !pawn.story.traits.HasTrait(def))
             {
                 pawn.story.traits.GainTrait(new Trait(def));
             }
         }
 
-        private static void RemoveTrait(Pawn pawn, string defName)
+        private static void RemoveTrait(Pawn pawn, TraitDef def)
         {
-            TraitDef def = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
             Trait trait = def != null ? pawn.story.traits.GetTrait(def) : null;
             if (trait != null)
             {
                 pawn.story.traits.RemoveTrait(trait);
             }
+        }
+
+        private static List<T> ResolveDefs<T>(List<string> defNames) where T : Def
+        {
+            List<T> defs = new List<T>();
+            for (int i = 0; i < defNames.Count; i++)
+            {
+                T def = DefDatabase<T>.GetNamedSilentFail(defNames[i]);
+                if (def != null)
+                {
+                    defs.Add(def);
+                }
+            }
+
+            return defs;
         }
     }
 }

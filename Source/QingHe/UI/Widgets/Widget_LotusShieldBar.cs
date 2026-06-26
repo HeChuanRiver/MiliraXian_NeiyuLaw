@@ -19,7 +19,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private static readonly Color SeasonColor = new Color(0.72f, 0.86f, 0.76f, 1f);
         private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color ShieldBackgroundColor = Color.black;
+        private static readonly Color ShieldBackgroundColor = new Color(0.16f, 0.17f, 0.18f, 1f);
         private static readonly Color ShieldBaseColor = new Color(0.55f, 0.7f, 1f, 1f);
         private static readonly Color ShieldBreakDarkColor = new Color(0.22f, 0.05f, 0.06f, 1f);
         private static readonly Color ShieldBreakBrightColor = new Color(1f, 0.95f, 0.95f, 1f);
@@ -86,7 +86,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
             Text.Font = GameFont.Tiny;
             Text.Anchor = TextAnchor.MiddleCenter;
-            GUI.color = Color.black;
+            GUI.color = fillPercent < 0.4f ? Color.white : Color.black;
             Widgets.Label(rect, Mathf.RoundToInt(fillPercent * 100f).ToString() + "%");
 
             GUI.color = oldColor;

@@ -328,7 +328,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             int maxCharges = Mathf.Max(1, Props.maxCharges);
             HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
-            if (state != null && state.HasNode(QingheSkillTreeSystem.NodeYingyue))
+            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue))
             {
                 maxCharges++;
             }

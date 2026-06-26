@@ -95,7 +95,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             Thing thing = GenSpawn.Spawn(Props.summonDef, cell, caster.Map, WipeMode.Vanish);
             thing.SetFaction(caster.Faction);
-            thing.TryGetComp<CompFlowerMandate_PomegranateLifetime>()?.Init(caster, Props.durationTicks);
+            CompFlowerMandate_PomegranateLifetime lifetime = thing.TryGetComp<CompFlowerMandate_PomegranateLifetime>();
+            lifetime?.Init(caster, Props.durationTicks);
+            lifetime?.SetEnhanced(FlowerMandateEnhanceUtility.ActiveFor(caster, parent.def));
             PlaySummonVisual(caster.Map, cell, Props.summonEffecterDefName, Props.fallbackSummonFleckDefName, Props.summonEffectScale);
         }
 

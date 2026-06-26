@@ -1,4 +1,3 @@
-using System.Reflection;
 using Verse;
 using MiliraXian.Characters.QingHe.Things;
 
@@ -25,13 +24,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public HediffCompProperties_DivineProtection Props => (HediffCompProperties_DivineProtection)props;
 
-        private static readonly FieldInfo CompsByTypeField = typeof(ThingWithComps).GetField("compsByType", BindingFlags.Instance | BindingFlags.NonPublic);
-
         public override string CompTipStringExtra
         {
             get
             {
-                CompLotusShield shield = Pawn?.GetComp<CompLotusShield>();
+                CompLotusShield shield = GetLotusShield();
                 if (shield == null)
                 {
                     return null;
@@ -61,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            CompLotusShield existed = Pawn.GetComp<CompLotusShield>();
+            CompLotusShield existed = GetLotusShield();
             if (existed != null)
             {
                 return;
@@ -74,10 +71,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             comp.Initialize(Props?.shieldCompProperties ?? new CompProperties_LotusShield());
             comp.PostPostMake();
             Pawn.AllComps.Add(comp);
-            if (CompsByTypeField != null)
-            {
-                CompsByTypeField.SetValue(Pawn, null);
-            }
         }
 
         private void RemoveShieldComp()
@@ -87,15 +80,29 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            CompLotusShield existed = Pawn.GetComp<CompLotusShield>();
+            CompLotusShield existed = GetLotusShield();
             if (existed != null)
             {
                 Pawn.AllComps.Remove(existed);
-                if (CompsByTypeField != null)
+            }
+        }
+
+        private CompLotusShield GetLotusShield()
+        {
+            if (Pawn?.AllComps == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < Pawn.AllComps.Count; i++)
+            {
+                if (Pawn.AllComps[i] is CompLotusShield shield)
                 {
-                    CompsByTypeField.SetValue(Pawn, null);
+                    return shield;
                 }
             }
+
+            return null;
         }
     }
 }

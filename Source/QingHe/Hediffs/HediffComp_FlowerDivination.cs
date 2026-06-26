@@ -167,6 +167,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 activeTicksLeft = activeTicks;
                 cooldownTicksLeft = 0;
                 ticksUntilAfterimage = 0;
+                EnsureBuffHediff();
                 EnsureActiveEffecter();
                 ResetAfterimageTracking();
             }
@@ -188,7 +189,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             HediffComp_FlowerResonance skillTree = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
-            if (skillTree == null || !skillTree.HasNode(QingheSkillTreeSystem.NodeFlowerDance))
+            if (skillTree == null || !skillTree.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance))
             {
                 reason = Props?.noResonanceReason ?? "尚未习得花之舞。";
                 return false;
@@ -220,6 +221,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             activeTicksLeft = 0;
             ticksUntilAfterimage = 0;
+            RemoveBuffHediff();
             CleanupActiveEffecter();
             ResetAfterimageTracking();
             StartCooldown();
@@ -250,6 +252,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureInitialized();
             activeTicksLeft = 0;
             ticksUntilAfterimage = 0;
+            RemoveBuffHediff();
             CleanupActiveEffecter();
             ResetAfterimageTracking();
             cooldownTicksLeft = Mathf.Max(0, ticks);
@@ -294,6 +297,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             activeTicksLeft = 0;
             cooldownTicksLeft = 0;
             ticksUntilAfterimage = 0;
+            RemoveBuffHediff();
             CleanupActiveEffecter();
             ResetAfterimageTracking();
         }
@@ -321,7 +325,52 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
             if (state == FlowerDivinationState.Active)
             {
+                EnsureBuffHediff();
                 EnsureActiveEffecter();
+            }
+            else
+            {
+                RemoveBuffHediff();
+            }
+        }
+
+        public bool IsBuffActive()
+        {
+            EnsureInitialized();
+            return state == FlowerDivinationState.Active
+                && Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowerDivinationBuff) != null;
+        }
+
+        private void EnsureBuffHediff()
+        {
+            Pawn pawn = Pawn;
+            HediffDef buffDef = MX_QHDefOf.MX_QH_FlowerDivinationBuff;
+            if (pawn?.health == null || pawn.Dead || buffDef == null)
+            {
+                return;
+            }
+
+            if (pawn.health.hediffSet.GetFirstHediffOfDef(buffDef) != null)
+            {
+                return;
+            }
+
+            pawn.health.AddHediff(HediffMaker.MakeHediff(buffDef, pawn));
+        }
+
+        private void RemoveBuffHediff()
+        {
+            Pawn pawn = Pawn;
+            HediffDef buffDef = MX_QHDefOf.MX_QH_FlowerDivinationBuff;
+            if (pawn?.health?.hediffSet == null || buffDef == null)
+            {
+                return;
+            }
+
+            Hediff buff = pawn.health.hediffSet.GetFirstHediffOfDef(buffDef);
+            if (buff != null)
+            {
+                pawn.health.RemoveHediff(buff);
             }
         }
 

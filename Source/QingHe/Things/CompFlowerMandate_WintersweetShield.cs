@@ -26,6 +26,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public float absorbFleckScale = 1.0f;
         public float breakEffectScale = 3.6f;
         public float breakFlashScale = 8f;
+        public ThingDef enhancedRetaliationProjectileDef;
 
         public CompProperties_FlowerMandate_WintersweetShield()
         {
@@ -42,6 +43,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private float energy;
         private int ticksLeft;
         private int ageTicks;
+        private bool enhanced;
 
         public CompProperties_FlowerMandate_WintersweetShield Props => (CompProperties_FlowerMandate_WintersweetShield)props;
 
@@ -95,6 +97,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look(ref energy, "energy", Props.startingEnergy);
             Scribe_Values.Look(ref ticksLeft, "ticksLeft", Props.durationTicks);
             Scribe_Values.Look(ref ageTicks, "ageTicks", 0);
+            Scribe_Values.Look(ref enhanced, "enhanced", false);
         }
 
         public override Color? ForceColor()
@@ -144,6 +147,11 @@ namespace MiliraXian.Characters.QingHe.Things
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
             energy = Props.startingEnergy;
             ageTicks = 0;
+        }
+
+        public void SetEnhanced(bool value)
+        {
+            enhanced = value;
         }
 
         public bool TryInterceptProjectile(Projectile projectile, Vector3 lastExactPos, Vector3 newExactPos)
@@ -266,6 +274,43 @@ namespace MiliraXian.Characters.QingHe.Things
 
             Vector3 loc = GetImpactPointOnShield(lastExactPos, newExactPos, center);
             FleckMaker.Static(loc, map, fleck, Mathf.Max(0.1f, Props.absorbFleckScale));
+            TryFireEnhancedRetaliation(projectile, loc);
+        }
+
+        private void TryFireEnhancedRetaliation(Projectile absorbedProjectile, Vector3 launchPos)
+        {
+            if (!enhanced || Props.enhancedRetaliationProjectileDef == null || parent?.Spawned != true || parent.Map == null)
+            {
+                return;
+            }
+
+            Thing target = absorbedProjectile?.Launcher;
+            if (target == null || target.Destroyed || target.MapHeld != parent.Map)
+            {
+                return;
+            }
+
+            IntVec3 launchCell = launchPos.ToIntVec3();
+            if (!launchCell.InBounds(parent.Map))
+            {
+                launchCell = parent.Position;
+            }
+
+            Projectile retaliation = GenSpawn.Spawn(Props.enhancedRetaliationProjectileDef, launchCell, parent.Map) as Projectile;
+            if (retaliation == null)
+            {
+                return;
+            }
+
+            Thing launcher = caster ?? parent;
+            retaliation.Launch(
+                launcher,
+                launchPos,
+                target,
+                target,
+                ProjectileHitFlags.IntendedTarget,
+                preventFriendlyFire: false,
+                equipment: null);
         }
 
         private Vector3 GetImpactPointOnShield(Vector3 lastExactPos, Vector3 newExactPos, Vector3 center)

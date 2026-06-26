@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
@@ -18,15 +18,51 @@ namespace MiliraXian.Characters.QingHe.UI
         private const float ImportantNodeWidth = 152f;
         private const float ImportantNodeHeight = 78f;
         private const float ColumnSpacing = 190f;
+        private const float FirstColumnCenterX = 116f;
+        private const float ConnectionAnchorHalfWidth = NodeWidth * 0.5f;
+        private const float ConnectionEndYOffset = 18f;
+        private const float ConnectionMiddleXOffset = 10f;
+        private const float TreeViewWidth = 900f;
+        private const float TreeViewHeight = 420f;
+        private const float YingyueFlowerDanceY = 70f;
+        private const float YingyueTopLinkY = 140f;
+        private const float YingyueLinkSpacing = 80f;
+        private const float CrossTreeLinkWidth = 118f;
+        private const float CrossTreeLinkHeight = NodeHeight;
+        private const float ChoiceSummarySize = 64f;
         private const float ChoiceRowHeight = 128f;
         private const float ChoiceIconSize = 46f;
 
         private readonly Pawn pawn;
         private readonly HediffComp_FlowerResonance state;
+        private readonly HediffComp_FlowerChoices choices;
         private QingheSkillTreeDef selectedTree;
         private Vector2 scrollPosition;
+        private Vector2 treeViewportSize;
 
-        private delegate bool ChoiceSetter(string defName, out string reason);
+        public delegate bool ChoiceSetter<T>(T def, out string reason) where T : Def;
+
+        private enum ChoicePanelKind
+        {
+            FlowerMandate,
+            TimedFlowerMandate,
+            FlowerSigil,
+            FlowerWord
+        }
+
+        private struct CrossTreePrerequisiteLink
+        {
+            public QingheSkillNodeDef prerequisite;
+            public QingheSkillNodeDef target;
+            public float y;
+
+            public CrossTreePrerequisiteLink(QingheSkillNodeDef prerequisite, QingheSkillNodeDef target, float y)
+            {
+                this.prerequisite = prerequisite;
+                this.target = target;
+                this.y = y;
+            }
+        }
 
         private static readonly Color LearnedNodeColor = new Color(0.46f, 0.68f, 0.54f, 1f);
         private static readonly Color CanLearnNodeColor = new Color(0.34f, 0.42f, 0.48f, 1f);
@@ -34,6 +70,8 @@ namespace MiliraXian.Characters.QingHe.UI
         private static readonly Color ImportantNodeColor = new Color(0.54f, 0.42f, 0.27f, 1f);
         private static readonly Color LineLearnedColor = new Color(0.58f, 0.84f, 0.66f, 1f);
         private static readonly Color LineLockedColor = new Color(0.28f, 0.30f, 0.32f, 1f);
+        private static readonly Color CrossTreeLinkColor = new Color(0.22f, 0.28f, 0.34f, 1f);
+        private static readonly Color CrossTreeLinkLearnedColor = new Color(0.30f, 0.46f, 0.52f, 1f);
         private static readonly Color SelectedChoiceColor = new Color(0.72f, 0.90f, 0.80f, 0.22f);
         private static readonly Color MasteryTextColor = new Color(1f, 0.82f, 0.22f, 1f);
         private static readonly Color ExperienceBarColor = new Color(0.58f, 0.84f, 1f, 1f);
@@ -42,10 +80,11 @@ namespace MiliraXian.Characters.QingHe.UI
 
         public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
 
-        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_FlowerResonance state)
+        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices)
         {
             this.pawn = pawn;
             this.state = state;
+            this.choices = choices;
             forcePause = true;
             absorbInputAroundWindow = true;
             closeOnClickedOutside = true;
@@ -118,47 +157,31 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.DrawMenuSection(rect);
             Rect inner = rect.ContractedBy(8f);
             Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(inner.x, inner.y, inner.width, 24f), "当前特性");
+            Widgets.Label(new Rect(inner.x, inner.y, inner.width, 24f), "当前选择");
 
             float y = inner.y + 30f;
-            DrawChoiceRow(new Rect(inner.x, y, inner.width, ChoiceRowHeight), "飞花令", state.HasNode(QingheSkillTreeSystem.NodeFlowerMandate), state.SelectedFlowerMandateDefName, QingheFlowerChoiceUtility.FlowerMandates, TrySetFlowerMandate);
-            y += ChoiceRowHeight + 8f;
-            DrawChoiceRow(new Rect(inner.x, y, inner.width, ChoiceRowHeight), "花神签", state.HasNode(QingheSkillTreeSystem.NodeFlowerSigil), state.SelectedFlowerSigilDefName, QingheFlowerChoiceUtility.FlowerSigils, TrySetFlowerSigil);
-            y += ChoiceRowHeight + 8f;
-            DrawChoiceRow(new Rect(inner.x, y, inner.width, ChoiceRowHeight), "花语", state.HasNode(QingheSkillTreeSystem.NodeFlowerWord), state.SelectedFlowerWordDefName, QingheFlowerChoiceUtility.FlowerWords, TrySetFlowerWord);
+            float cellWidth = (inner.width - 8f) * 0.5f;
+            DrawChoiceSummary(new Rect(inner.x, y, cellWidth, ChoiceSummarySize), ChoicePanelKind.FlowerMandate, "飞花令", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerMandate), choices?.SelectedFlowerMandate, blocked: false, choices?.FlowerMandateCooldownTicksLeft ?? 0);
+            DrawChoiceSummary(new Rect(inner.x + cellWidth + 8f, y, cellWidth, ChoiceSummarySize), ChoicePanelKind.TimedFlowerMandate, "寄时飞花令", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_SishiLiuzhuan), choices?.SelectedTimedFlowerMandate, choices?.SelectedFlowerMandate == null, choices?.TimedFlowerMandateCooldownTicksLeft ?? 0);
+
+            y += ChoiceSummarySize + 8f;
+            DrawChoiceSummary(new Rect(inner.x, y, cellWidth, ChoiceSummarySize), ChoicePanelKind.FlowerSigil, "花神签", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerSigil), choices?.SelectedFlowerSigil, blocked: false, choices?.FlowerSigilCooldownTicksLeft ?? 0);
+            DrawChoiceSummary(new Rect(inner.x + cellWidth + 8f, y, cellWidth, ChoiceSummarySize), ChoicePanelKind.FlowerWord, "花语", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerWord), choices?.SelectedFlowerWord, blocked: false, choices?.FlowerWordCooldownTicksLeft ?? 0);
+
         }
 
-        private void DrawChoiceRow(Rect rect, string label, bool unlocked, string selectedDefName, IReadOnlyList<string> options, ChoiceSetter setter)
+
+        private void DrawChoiceSummary(Rect rect, ChoicePanelKind panelKind, string label, bool unlocked, Def selectedDef, bool blocked, int cooldownTicksLeft)
         {
             Widgets.DrawMenuSection(rect);
-            Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(rect.x + 8f, rect.y + 6f, rect.width - 16f, 22f), label);
-
-            float cellWidth = (rect.width - 16f) / 4f;
-            for (int i = 0; i < options.Count; i++)
-            {
-                string defName = options[i];
-                Rect cellRect = new Rect(rect.x + 8f + i * cellWidth, rect.y + 30f, cellWidth - 4f, rect.height - 38f);
-                DrawChoiceCell(cellRect, label, unlocked, selectedDefName == defName, defName, setter);
-            }
-        }
-
-        private void DrawChoiceCell(Rect rect, string choiceTypeLabel, bool unlocked, bool selected, string defName, ChoiceSetter setter)
-        {
-            bool applied = QingheFlowerChoiceUtility.HasAppliedChoice(pawn, defName);
-            if (selected || applied)
-            {
-                Widgets.DrawBoxSolid(rect.ExpandedBy(3f), SelectedChoiceColor);
-                Widgets.DrawBox(rect.ExpandedBy(3f), 2);
-            }
-
-            if (Mouse.IsOver(rect))
+            if (Mouse.IsOver(rect) && !blocked)
             {
                 Widgets.DrawHighlight(rect);
             }
 
-            Rect iconRect = new Rect(rect.center.x - ChoiceIconSize * 0.5f, rect.y + 4f, ChoiceIconSize, ChoiceIconSize);
-            Rect labelRect = new Rect(rect.x, iconRect.yMax + 3f, rect.width, 32f);
+            Rect iconRect = new Rect(rect.x + 8f, rect.y + 8f, 34f, 34f);
+            Rect labelRect = new Rect(iconRect.xMax + 6f, rect.y + 6f, rect.width - iconRect.width - 20f, 18f);
+            Rect textRect = new Rect(iconRect.xMax + 6f, rect.y + 27f, rect.width - iconRect.width - 20f, 22f);
 
             Widgets.DrawBox(iconRect);
             Text.Anchor = TextAnchor.MiddleCenter;
@@ -166,54 +189,118 @@ namespace MiliraXian.Characters.QingHe.UI
             if (!unlocked)
             {
                 Widgets.Label(iconRect, "?");
-                Text.Font = GameFont.Tiny;
-                Widgets.Label(labelRect, "?");
-                Text.Anchor = TextAnchor.UpperLeft;
-                TooltipHandler.TipRegion(rect, "需要先习得对应节点。");
-                return;
             }
-
-            Texture2D icon = QingheFlowerChoiceUtility.IconForDefName(defName);
-            if (icon != null)
+            else if (selectedDef == null)
             {
-                GUI.DrawTexture(iconRect.ContractedBy(3f), icon, ScaleMode.ScaleToFit);
+                if (!blocked && cooldownTicksLeft <= 0)
+                {
+                    DrawPulsingPlus(iconRect);
+                }
             }
             else
             {
-                Widgets.Label(iconRect, QingheFlowerChoiceUtility.ShortLabelForDefName(defName));
+                Texture2D icon = QingheFlowerChoiceUtility.IconForDef(selectedDef);
+                if (icon != null)
+                {
+                    GUI.DrawTexture(iconRect.ContractedBy(3f), icon, ScaleMode.ScaleToFit);
+                }
+                else
+                {
+                    Widgets.Label(iconRect, QingheFlowerChoiceUtility.ShortLabelForDef(selectedDef));
+                }
             }
 
-            Text.Font = GameFont.Tiny;
-            Widgets.Label(labelRect, QingheFlowerChoiceUtility.ShortLabelForDefName(defName));
             Text.Anchor = TextAnchor.UpperLeft;
-            TooltipHandler.TipRegion(rect, QingheFlowerChoiceUtility.LabelForDefName(defName));
+            Text.Font = GameFont.Tiny;
+            Widgets.Label(labelRect, label);
+            Widgets.Label(textRect, BuildChoiceSummaryStateText(unlocked, selectedDef, blocked, cooldownTicksLeft));
 
-            if (Widgets.ButtonInvisible(rect))
+            TooltipHandler.TipRegion(rect, BuildChoiceSummaryTip(label, unlocked, selectedDef, blocked, cooldownTicksLeft));
+            if (!blocked && Widgets.ButtonInvisible(rect))
             {
-                if (selected && applied)
-                {
-                    Messages.Message(choiceTypeLabel + "已经是“" + QingheFlowerChoiceUtility.LabelForDefName(defName) + "”。", pawn, MessageTypeDefOf.RejectInput, historical: false);
-                    return;
-                }
-
-                ConfirmChoice(choiceTypeLabel, defName, setter);
+                OpenChoicePicker(panelKind, label, unlocked);
             }
         }
 
-        private void ConfirmChoice(string choiceTypeLabel, string defName, ChoiceSetter setter)
+        private void OpenChoicePicker(ChoicePanelKind panelKind, string label, bool unlocked)
         {
-            string choiceLabel = QingheFlowerChoiceUtility.LabelForDefName(defName);
-            string text = "确定要将" + choiceTypeLabel + "切换为“" + choiceLabel + "”吗？";
-            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(text, delegate
+            if (!unlocked)
             {
-                if (!setter(defName, out string reason))
-                {
-                    Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
-                    return;
-                }
+                Messages.Message(label + "尚未习得。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
 
-                Messages.Message("清荷已将" + choiceTypeLabel + "切换为“" + choiceLabel + "”。", pawn, MessageTypeDefOf.PositiveEvent, historical: false);
-            }, title: "切换" + choiceTypeLabel));
+            switch (panelKind)
+            {
+                case ChoicePanelKind.TimedFlowerMandate:
+                    if (choices?.SelectedFlowerMandate == null)
+                    {
+                        Messages.Message("请先选择主飞花令。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                        return;
+                    }
+
+                    Find.WindowStack.Add(new Dialog_QH_ChoicePicker<AbilityDef>(pawn, label, choices?.SelectedTimedFlowerMandate, QingheFlowerChoiceUtility.FlowerMandates, TrySetTimedFlowerMandate, choices?.SelectedFlowerMandate));
+                    break;
+                case ChoicePanelKind.FlowerSigil:
+                    Find.WindowStack.Add(new Dialog_QH_ChoicePicker<HediffDef>(pawn, label, choices?.SelectedFlowerSigil, QingheFlowerChoiceUtility.FlowerSigils, TrySetFlowerSigil));
+                    break;
+                case ChoicePanelKind.FlowerWord:
+                    Find.WindowStack.Add(new Dialog_QH_ChoicePicker<TraitDef>(pawn, label, choices?.SelectedFlowerWord, QingheFlowerChoiceUtility.FlowerWords, TrySetFlowerWord));
+                    break;
+                default:
+                    Find.WindowStack.Add(new Dialog_QH_ChoicePicker<AbilityDef>(pawn, label, choices?.SelectedFlowerMandate, QingheFlowerChoiceUtility.FlowerMandates, TrySetFlowerMandate));
+                    break;
+            }
+        }
+
+        private static void DrawPulsingPlus(Rect rect)
+        {
+            float pulse = 0.55f + Mathf.Sin(Time.realtimeSinceStartup * 6f) * 0.35f;
+            Color oldColor = GUI.color;
+            GUI.color = Color.Lerp(Color.white, new Color(1f, 0.82f, 0.24f, 1f), pulse);
+            GUI.DrawTexture(rect.ContractedBy(7f), TexButton.Plus, ScaleMode.ScaleToFit, true);
+            GUI.color = oldColor;
+        }
+
+        private static string BuildChoiceSummaryStateText(bool unlocked, Def selectedDef, bool blocked, int cooldownTicksLeft)
+        {
+            if (!unlocked)
+            {
+                return "?";
+            }
+
+            if (blocked)
+            {
+                return "-";
+            }
+
+            if (cooldownTicksLeft > 0)
+            {
+                return "CD";
+            }
+
+            return selectedDef == null ? "+" : QingheFlowerChoiceUtility.ShortLabelForDef(selectedDef);
+        }
+
+        private static string BuildChoiceSummaryTip(string label, bool unlocked, Def selectedDef, bool blocked, int cooldownTicksLeft)
+        {
+            if (!unlocked)
+            {
+                return label + "\n\n尚未习得。";
+            }
+
+            if (blocked)
+            {
+                return label + "\n\n请先选择主飞花令。";
+            }
+
+            string tip = label + "\n\n当前: " + (selectedDef == null ? "未选择" : QingheFlowerChoiceUtility.LabelForDef(selectedDef));
+            if (cooldownTicksLeft > 0)
+            {
+                tip += "\n切换冷却: " + cooldownTicksLeft.ToStringTicksToPeriod(true, false, true, true, false);
+            }
+
+            return tip;
         }
 
         private void DrawTreeTabsAndPanel(Rect rect)
@@ -255,13 +342,23 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawTreePanel(Rect rect, QingheSkillTreeDef tree)
         {
-            Rect viewRect = new Rect(0f, 0f, 900f, 400f);
+            treeViewportSize = rect.size;
+            Rect viewRect = new Rect(0f, 0f, TreeViewWidth, TreeViewHeight);
             Widgets.BeginScrollView(rect, ref scrollPosition, viewRect);
 
             List<QingheSkillNodeDef> nodes = DefDatabase<QingheSkillNodeDef>.AllDefsListForReading
                 .Where(node => node.tree == tree)
                 .ToList();
-            DrawConnections(nodes);
+            if (IsYingyueTree(tree))
+            {
+                DrawYingyueConnections();
+                DrawYingyueCrossTreeLinks();
+            }
+            else
+            {
+                DrawConnections(nodes);
+            }
+
             for (int i = 0; i < nodes.Count; i++)
             {
                 DrawNode(nodes[i]);
@@ -270,44 +367,235 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.EndScrollView();
         }
 
-        private void DrawConnections(List<QingheSkillNodeDef> nodes)
+        private void DrawYingyueConnections()
         {
-            for (int i = 0; i < nodes.Count; i++)
+            QingheSkillNodeDef flowerDance = MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance;
+            QingheSkillNodeDef yingyue = MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue;
+            List<CrossTreePrerequisiteLink> links = YingyueCrossTreeLinks();
+            for (int i = 0; i < links.Count; i++)
             {
-                QingheSkillNodeDef node = nodes[i];
-                Rect nodeRect = NodeRect(node);
-                List<QingheSkillNodeDef> prerequisites = node.prerequisites;
-                for (int j = 0; j < prerequisites.Count; j++)
+                CrossTreePrerequisiteLink link = links[i];
+                if (flowerDance != null && link.target != null)
                 {
-                    QingheSkillNodeDef prerequisite = prerequisites[j];
-                    if (prerequisite == null || prerequisite.tree != node.tree)
-                    {
-                        continue;
-                    }
+                    Vector2 flowerDanceCenter = NodeCenter(flowerDance);
+                    Vector2 targetCenter = NodeCenter(link.target);
+                    Vector2 start = new Vector2(flowerDanceCenter.x + ConnectionAnchorHalfWidth, GetConnectionAnchorY(flowerDanceCenter.y, links.Count, i));
+                    Vector2 end = new Vector2(targetCenter.x - ConnectionAnchorHalfWidth, GetConnectionAnchorY(targetCenter.y, 2, 0));
+                    DrawBentLine(start, end, state.HasNode(flowerDance) ? LineLearnedColor : LineLockedColor, links.Count, i);
+                }
 
-                    Rect preRect = NodeRect(prerequisite);
-                    Vector2 start = new Vector2(preRect.xMax, preRect.center.y);
-                    Vector2 end = new Vector2(nodeRect.x, GetConnectionEndY(nodeRect, prerequisites.Count, j));
-                    Color color = state.HasNode(prerequisite.defName) ? LineLearnedColor : LineLockedColor;
-                    DrawBentLine(start, end, color);
+                if (link.prerequisite != null && link.target != null)
+                {
+                    Rect linkRect = CrossTreeLinkRect(link);
+                    Vector2 targetCenter = NodeCenter(link.target);
+                    Vector2 start = new Vector2(linkRect.xMax, linkRect.center.y);
+                    Vector2 end = new Vector2(targetCenter.x - ConnectionAnchorHalfWidth, GetConnectionAnchorY(targetCenter.y, 2, 1));
+                    DrawBentLine(start, end, state.HasNode(link.prerequisite) ? LineLearnedColor : LineLockedColor, 2, 1);
+                }
+
+                if (link.target != null && yingyue != null)
+                {
+                    Vector2 targetCenter = NodeCenter(link.target);
+                    Vector2 yingyueCenter = NodeCenter(yingyue);
+                    Vector2 start = new Vector2(targetCenter.x + ConnectionAnchorHalfWidth, targetCenter.y);
+                    Vector2 end = new Vector2(yingyueCenter.x - ConnectionAnchorHalfWidth, GetConnectionAnchorY(yingyueCenter.y, links.Count, i));
+                    DrawBentLine(start, end, state.HasNode(link.target) ? LineLearnedColor : LineLockedColor, links.Count, i);
                 }
             }
         }
 
-        private float GetConnectionEndY(Rect nodeRect, int prerequisiteCount, int prerequisiteIndex)
+        private void DrawYingyueCrossTreeLinks()
         {
-            if (prerequisiteCount <= 1)
+            List<CrossTreePrerequisiteLink> links = YingyueCrossTreeLinks();
+            for (int i = 0; i < links.Count; i++)
             {
-                return nodeRect.center.y;
+                DrawCrossTreeLink(links[i]);
             }
-
-            float step = Mathf.Min(18f, nodeRect.height / (prerequisiteCount + 1));
-            return nodeRect.center.y + (prerequisiteIndex - (prerequisiteCount - 1) * 0.5f) * step;
         }
 
-        private void DrawBentLine(Vector2 start, Vector2 end, Color color)
+        private void DrawCrossTreeLink(CrossTreePrerequisiteLink link)
         {
-            float middleX = (start.x + end.x) * 0.5f;
+            if (link.prerequisite == null)
+            {
+                return;
+            }
+
+            Rect rect = CrossTreeLinkRect(link);
+            bool learned = state.HasNode(link.prerequisite);
+            bool canLearn = state.CanLearn(link.prerequisite, out string reason);
+            bool hidden = ShouldHideNode(link.prerequisite, learned);
+            Color fill = learned ? LearnedNodeColor : canLearn ? CanLearnNodeColor : LockedNodeColor;
+            if (link.prerequisite.important && !learned)
+            {
+                fill = Color.Lerp(fill, ImportantNodeColor, 0.55f);
+            }
+
+            Widgets.DrawBoxSolid(rect, fill);
+            Widgets.DrawBox(rect, link.prerequisite.important ? 2 : 1);
+            if (Mouse.IsOver(rect))
+            {
+                Widgets.DrawHighlight(rect);
+            }
+
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Text.Font = GameFont.Small;
+            Widgets.Label(new Rect(rect.x + 6f, rect.y + 5f, rect.width - 12f, 20f), hidden ? "?" : link.prerequisite.LabelCap.ToString());
+            Text.Font = GameFont.Tiny;
+            string stateText = hidden ? "?" : learned ? "已习得" : "消耗 " + link.prerequisite.cost;
+            Widgets.Label(new Rect(rect.x + 6f, rect.yMax - 20f, rect.width - 12f, 16f), stateText);
+            Text.Anchor = TextAnchor.UpperLeft;
+            Text.Font = GameFont.Small;
+
+            TooltipHandler.TipRegion(rect, BuildNodeTip(link.prerequisite, learned, canLearn, reason, hidden) + "\n\n点击跳转到对应曲谱节点。");
+            if (Widgets.ButtonInvisible(rect))
+            {
+                JumpToNode(link.prerequisite);
+            }
+        }
+
+        private List<CrossTreePrerequisiteLink> YingyueCrossTreeLinks()
+        {
+            return new List<CrossTreePrerequisiteLink>
+            {
+                new CrossTreePrerequisiteLink(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan, MX_QHSkillNodeDefOf.MX_QH_Node_Yu, YingyueTopLinkY),
+                new CrossTreePrerequisiteLink(MX_QHSkillNodeDefOf.MX_QH_Node_Luoyu, MX_QHSkillNodeDefOf.MX_QH_Node_Bianzhi, YingyueTopLinkY + YingyueLinkSpacing),
+                new CrossTreePrerequisiteLink(MX_QHSkillNodeDefOf.MX_QH_Node_SishiLiuzhuan, MX_QHSkillNodeDefOf.MX_QH_Node_Run, YingyueTopLinkY + YingyueLinkSpacing * 2f)
+            };
+        }
+
+        private Rect CrossTreeLinkRect(CrossTreePrerequisiteLink link)
+        {
+            float x = FirstColumnCenterX - CrossTreeLinkWidth * 0.5f;
+            return new Rect(x, link.y - CrossTreeLinkHeight * 0.5f, CrossTreeLinkWidth, CrossTreeLinkHeight);
+        }
+
+        private void JumpToNode(QingheSkillNodeDef node)
+        {
+            if (node?.tree == null)
+            {
+                return;
+            }
+
+            if (!state.IsTreeUnlocked(node.tree))
+            {
+                Messages.Message("尚未获得对应曲谱。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            selectedTree = node.tree;
+            CenterScrollOnNode(node);
+        }
+
+        private void CenterScrollOnNode(QingheSkillNodeDef node)
+        {
+            Vector2 center = NodeCenter(node);
+            float viewportWidth = treeViewportSize.x > 0f ? treeViewportSize.x : 640f;
+            float viewportHeight = treeViewportSize.y > 0f ? treeViewportSize.y : 400f;
+            float x = Mathf.Clamp(center.x - viewportWidth * 0.5f, 0f, Mathf.Max(0f, TreeViewWidth - viewportWidth));
+            float y = Mathf.Clamp(center.y - viewportHeight * 0.5f, 0f, Mathf.Max(0f, TreeViewHeight - viewportHeight));
+            scrollPosition = new Vector2(x, y);
+        }
+
+        private void DrawConnections(List<QingheSkillNodeDef> nodes)
+        {
+            Dictionary<QingheSkillNodeDef, List<QingheSkillNodeDef>> outgoingByPrerequisite = BuildOutgoingByPrerequisite(nodes);
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                QingheSkillNodeDef node = nodes[i];
+                List<QingheSkillNodeDef> prerequisites = SameTreePrerequisites(node);
+                for (int j = 0; j < prerequisites.Count; j++)
+                {
+                    QingheSkillNodeDef prerequisite = prerequisites[j];
+                    Vector2 preCenter = NodeCenter(prerequisite);
+                    Vector2 nodeCenter = NodeCenter(node);
+                    outgoingByPrerequisite.TryGetValue(prerequisite, out List<QingheSkillNodeDef> outgoing);
+                    int outgoingIndex = outgoing?.IndexOf(node) ?? 0;
+                    int outgoingCount = outgoing?.Count ?? 1;
+                    Vector2 start = new Vector2(preCenter.x + ConnectionAnchorHalfWidth, GetConnectionAnchorY(preCenter.y, outgoingCount, outgoingIndex));
+                    Vector2 end = new Vector2(nodeCenter.x - ConnectionAnchorHalfWidth, GetConnectionAnchorY(nodeCenter.y, prerequisites.Count, j));
+                    Color color = state.HasNode(prerequisite) ? LineLearnedColor : LineLockedColor;
+                    int laneCount;
+                    int laneIndex;
+                    GetConnectionLane(outgoingCount, outgoingIndex, prerequisites.Count, j, out laneCount, out laneIndex);
+                    DrawBentLine(start, end, color, laneCount, laneIndex);
+                }
+            }
+        }
+
+        private Dictionary<QingheSkillNodeDef, List<QingheSkillNodeDef>> BuildOutgoingByPrerequisite(List<QingheSkillNodeDef> nodes)
+        {
+            Dictionary<QingheSkillNodeDef, List<QingheSkillNodeDef>> result = new Dictionary<QingheSkillNodeDef, List<QingheSkillNodeDef>>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                QingheSkillNodeDef node = nodes[i];
+                List<QingheSkillNodeDef> prerequisites = SameTreePrerequisites(node);
+                for (int j = 0; j < prerequisites.Count; j++)
+                {
+                    QingheSkillNodeDef prerequisite = prerequisites[j];
+                    if (!result.TryGetValue(prerequisite, out List<QingheSkillNodeDef> outgoing))
+                    {
+                        outgoing = new List<QingheSkillNodeDef>();
+                        result.Add(prerequisite, outgoing);
+                    }
+
+                    outgoing.Add(node);
+                }
+            }
+
+            foreach (List<QingheSkillNodeDef> outgoing in result.Values)
+            {
+                outgoing.SortBy(target => NodeCenter(target).y, target => target.column);
+            }
+
+            return result;
+        }
+
+        private static List<QingheSkillNodeDef> SameTreePrerequisites(QingheSkillNodeDef node)
+        {
+            if (node?.prerequisites == null)
+            {
+                return new List<QingheSkillNodeDef>();
+            }
+
+            List<QingheSkillNodeDef> result = new List<QingheSkillNodeDef>();
+            for (int i = 0; i < node.prerequisites.Count; i++)
+            {
+                QingheSkillNodeDef prerequisite = node.prerequisites[i];
+                if (prerequisite != null && prerequisite.tree == node.tree)
+                {
+                    result.Add(prerequisite);
+                }
+            }
+
+            return result;
+        }
+
+        private float GetConnectionAnchorY(float nodeCenterY, int connectionCount, int connectionIndex)
+        {
+            if (connectionCount <= 1)
+            {
+                return nodeCenterY;
+            }
+
+            return nodeCenterY + (connectionIndex - (connectionCount - 1) * 0.5f) * ConnectionEndYOffset;
+        }
+
+        private void GetConnectionLane(int outgoingCount, int outgoingIndex, int incomingCount, int incomingIndex, out int laneCount, out int laneIndex)
+        {
+            if (incomingCount > outgoingCount)
+            {
+                laneCount = incomingCount;
+                laneIndex = incomingIndex;
+                return;
+            }
+
+            laneCount = outgoingCount;
+            laneIndex = outgoingIndex;
+        }
+
+        private void DrawBentLine(Vector2 start, Vector2 end, Color color, int laneCount = 1, int laneIndex = 0)
+        {
+            float middleX = (start.x + end.x) * 0.5f + GetConnectionMiddleXOffset(laneCount, laneIndex);
             Vector2 middleA = new Vector2(middleX, start.y);
             Vector2 middleB = new Vector2(middleX, end.y);
             Widgets.DrawLine(start, middleA, color, 1.2f);
@@ -315,11 +603,21 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.DrawLine(middleB, end, color, 1.2f);
         }
 
+        private float GetConnectionMiddleXOffset(int laneCount, int laneIndex)
+        {
+            if (laneCount <= 1)
+            {
+                return 0f;
+            }
+
+            return (laneIndex - (laneCount - 1) * 0.5f) * ConnectionMiddleXOffset;
+        }
+
         private void DrawNode(QingheSkillNodeDef node)
         {
             Rect rect = NodeRect(node);
-            bool learned = state.HasNode(node.defName);
-            bool canLearn = state.CanLearn(node.defName, out string reason);
+            bool learned = state.HasNode(node);
+            bool canLearn = state.CanLearn(node, out string reason);
             bool hidden = ShouldHideNode(node, learned);
             Color fill = learned ? LearnedNodeColor : canLearn ? CanLearnNodeColor : LockedNodeColor;
             if (node.important && !learned)
@@ -369,7 +667,7 @@ namespace MiliraXian.Characters.QingHe.UI
                           + "将消耗技能点：" + node.cost;
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(text, delegate
             {
-                if (!state.TryLearn(node.defName, out string learnReason))
+                if (!state.TryLearn(node, out string learnReason))
                 {
                     Messages.Message(learnReason, pawn, MessageTypeDefOf.RejectInput, historical: false);
                     return;
@@ -380,19 +678,31 @@ namespace MiliraXian.Characters.QingHe.UI
             }, title: "习得技能"));
         }
 
-        private bool TrySetFlowerMandate(string defName, out string reason)
+        private bool TrySetFlowerMandate(AbilityDef def, out string reason)
         {
-            return QingheSkillTreeSystem.TrySetFlowerMandate(state, defName, out reason);
+            bool result = QingheSkillTreeSystem.TrySetFlowerMandate(choices, def, out reason);
+            return result;
         }
 
-        private bool TrySetFlowerSigil(string defName, out string reason)
+        private bool TrySetTimedFlowerMandate(AbilityDef def, out string reason)
         {
-            return QingheSkillTreeSystem.TrySetFlowerSigil(state, defName, out reason);
+            if (choices == null)
+            {
+                reason = "清荷尚未建立花神庭。";
+                return false;
+            }
+
+            return choices.TrySetTimedFlowerMandate(def, out reason);
         }
 
-        private bool TrySetFlowerWord(string defName, out string reason)
+        private bool TrySetFlowerSigil(HediffDef def, out string reason)
         {
-            return QingheSkillTreeSystem.TrySetFlowerWord(state, defName, out reason);
+            return QingheSkillTreeSystem.TrySetFlowerSigil(state, choices, def, out reason);
+        }
+
+        private bool TrySetFlowerWord(TraitDef def, out string reason)
+        {
+            return QingheSkillTreeSystem.TrySetFlowerWord(state, choices, def, out reason);
         }
 
         private bool ShouldHideNode(QingheSkillNodeDef node, bool learned)
@@ -404,7 +714,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
             for (int i = 0; i < node.prerequisites.Count; i++)
             {
-                if (state.HasNode(node.prerequisites[i].defName))
+                if (state.HasNode(node.prerequisites[i]))
                 {
                     return false;
                 }
@@ -443,7 +753,46 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             float width = node.important ? ImportantNodeWidth : NodeWidth;
             float height = node.important ? ImportantNodeHeight : NodeHeight;
-            return new Rect(40f + node.column * ColumnSpacing, node.y, width, height);
+            Vector2 center = NodeCenter(node);
+            return new Rect(center.x - width * 0.5f, center.y - height * 0.5f, width, height);
+        }
+
+        private Vector2 NodeCenter(QingheSkillNodeDef node)
+        {
+            if (IsYingyueTree(node?.tree))
+            {
+                if (node == MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance)
+                {
+                    return new Vector2(FirstColumnCenterX, YingyueFlowerDanceY);
+                }
+
+                if (node == MX_QHSkillNodeDefOf.MX_QH_Node_Yu)
+                {
+                    return new Vector2(FirstColumnCenterX + ColumnSpacing, YingyueTopLinkY);
+                }
+
+                if (node == MX_QHSkillNodeDefOf.MX_QH_Node_Bianzhi)
+                {
+                    return new Vector2(FirstColumnCenterX + ColumnSpacing, YingyueTopLinkY + YingyueLinkSpacing);
+                }
+
+                if (node == MX_QHSkillNodeDefOf.MX_QH_Node_Run)
+                {
+                    return new Vector2(FirstColumnCenterX + ColumnSpacing, YingyueTopLinkY + YingyueLinkSpacing * 2f);
+                }
+
+                if (node == MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue)
+                {
+                    return new Vector2(FirstColumnCenterX + ColumnSpacing * 2f, YingyueTopLinkY + YingyueLinkSpacing);
+                }
+            }
+
+            return new Vector2(FirstColumnCenterX + node.column * ColumnSpacing, node.y);
+        }
+
+        private static bool IsYingyueTree(QingheSkillTreeDef tree)
+        {
+            return tree != null && tree == MX_QHSkillNodeDefOf.MX_QH_Node_FlowerDance?.tree;
         }
 
         private static string ToRoman(int value)
@@ -474,6 +823,118 @@ namespace MiliraXian.Characters.QingHe.UI
                     return "XI";
                 default:
                     return "XII";
+            }
+        }
+    }
+
+    public class Dialog_QH_ChoicePicker<T> : Window where T : Def
+    {
+        private const float ChoiceIconSize = 46f;
+        private const float WindowWidth = 360f;
+        private const float WindowHeight = 150f;
+
+        private readonly Pawn pawn;
+        private readonly string choiceTypeLabel;
+        private readonly T selectedDef;
+        private readonly IReadOnlyList<T> options;
+        private readonly Dialog_QH_SkillTree.ChoiceSetter<T> setter;
+        private readonly T disabledDef;
+
+        public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
+
+        public Dialog_QH_ChoicePicker(Pawn pawn, string choiceTypeLabel, T selectedDef, IReadOnlyList<T> options, Dialog_QH_SkillTree.ChoiceSetter<T> setter, T disabledDef = null)
+        {
+            this.pawn = pawn;
+            this.choiceTypeLabel = choiceTypeLabel;
+            this.selectedDef = selectedDef;
+            this.options = options;
+            this.setter = setter;
+            this.disabledDef = disabledDef;
+            forcePause = true;
+            absorbInputAroundWindow = true;
+            closeOnClickedOutside = true;
+            doCloseX = true;
+        }
+
+        public override void DoWindowContents(Rect inRect)
+        {
+            Text.Font = GameFont.Small;
+            Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 24f), choiceTypeLabel);
+
+            Rect rowRect = new Rect(inRect.x, inRect.y + 34f, inRect.width, 84f);
+            float cellWidth = rowRect.width / Mathf.Max(1, options?.Count ?? 1);
+            for (int i = 0; i < (options?.Count ?? 0); i++)
+            {
+                T def = options[i];
+                Rect cellRect = new Rect(rowRect.x + i * cellWidth, rowRect.y, cellWidth - 4f, rowRect.height);
+                DrawChoiceCell(cellRect, def, selectedDef == def, disabledDef == def);
+            }
+        }
+
+        private void DrawChoiceCell(Rect rect, T def, bool selected, bool disabled)
+        {
+            if (selected)
+            {
+                Widgets.DrawBoxSolid(rect.ExpandedBy(3f), new Color(0.72f, 0.90f, 0.80f, 0.22f));
+                Widgets.DrawBox(rect.ExpandedBy(3f), 2);
+            }
+
+            if (Mouse.IsOver(rect))
+            {
+                Widgets.DrawHighlight(rect);
+            }
+
+            Rect iconRect = new Rect(rect.center.x - ChoiceIconSize * 0.5f, rect.y + 4f, ChoiceIconSize, ChoiceIconSize);
+            Rect labelRect = new Rect(rect.x, iconRect.yMax + 3f, rect.width, 32f);
+
+            Widgets.DrawBox(iconRect);
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Text.Font = GameFont.Medium;
+
+            Color oldColor = GUI.color;
+            if (disabled)
+            {
+                GUI.color = new Color(0.45f, 0.45f, 0.45f, 0.72f);
+            }
+
+            Texture2D icon = QingheFlowerChoiceUtility.IconForDef(def);
+            if (icon != null)
+            {
+                GUI.DrawTexture(iconRect.ContractedBy(3f), icon, ScaleMode.ScaleToFit);
+            }
+            else
+            {
+                Widgets.Label(iconRect, QingheFlowerChoiceUtility.ShortLabelForDef(def));
+            }
+
+            Text.Font = GameFont.Tiny;
+            Widgets.Label(labelRect, QingheFlowerChoiceUtility.ShortLabelForDef(def));
+            Text.Anchor = TextAnchor.UpperLeft;
+            GUI.color = oldColor;
+
+            TooltipHandler.TipRegion(rect, QingheFlowerChoiceUtility.LabelForDef(def));
+            if (Widgets.ButtonInvisible(rect))
+            {
+                if (disabled)
+                {
+                    Messages.Message("寄时飞花令不能与主飞花令相同。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+
+                if (selected)
+                {
+                    Messages.Message(choiceTypeLabel + "已经是“" + QingheFlowerChoiceUtility.LabelForDef(def) + "”。", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+
+                if (!setter(def, out string reason))
+                {
+                    Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+
+                Messages.Message("清荷已将" + choiceTypeLabel + "切换为“" + QingheFlowerChoiceUtility.LabelForDef(def) + "”。", pawn, MessageTypeDefOf.PositiveEvent, historical: false);
+                Close();
             }
         }
     }
