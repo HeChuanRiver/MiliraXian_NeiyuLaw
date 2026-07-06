@@ -6,8 +6,8 @@
         <thoughtClass>Thought_Situational</thoughtClass>
         <stages>
             <li>
-                <label>洛神契：相守</label>
-                <description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</description>
+                <label>Luoshen contract: together</label>
+                <description>I formed a contract with {PAWN_nameDef} under Luoshen's witness. Being with {PAWN_nameDef} makes me feel at peace.</description>
                 <baseMoodEffect>16</baseMoodEffect>
             </li>
         </stages>
@@ -20,9 +20,24 @@
         <stackLimit>1</stackLimit>
         <stages>
             <li>
-                <label>洛神契破碎 ({0})</label>
-                <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的花语只余空响。</description>
+                <label>Luoshen contract broken ({0})</label>
+                <description>The contract I maintained with {OTHERPAWN_nameDef} has broken. The flower words that once resonated now echo hollowly.</description>
                 <baseMoodEffect>-24</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenRibbonGrace</defName>
+        <thoughtClass>Thought_MemorySocial</thoughtClass>
+        <durationDays>30</durationDays>
+        <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+        <lerpOpinionToZeroAfterDurationPct>0.75</lerpOpinionToZeroAfterDurationPct>
+        <stages>
+            <li>
+                <label>Luoshen's ribbon ({0})</label>
+                <description>Luoshen's ribbon once drew my heart toward {OTHERPAWN_nameDef}. That gentleness still echoes within me.</description>
+                <baseOpinionOffset>50</baseOpinionOffset>
             </li>
         </stages>
     </ThoughtDef>

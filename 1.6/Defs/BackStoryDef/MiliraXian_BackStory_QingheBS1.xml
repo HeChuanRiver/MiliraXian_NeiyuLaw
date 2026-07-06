@@ -4,9 +4,9 @@
     <!-- 仙米BS1 -->
     <AlienRace.AlienBackstoryDef>
         <defName>MiliraXian_BackStoryChild_Qinghe_BS1</defName>
-        <title>花庭守</title>
-        <titleShort>花庭守</titleShort>
-        <description>[PAWN_nameDef] 自幼与各种花卉为伴，在“霁”的六大派系中她与“生命”共鸣最深。从她第一次聆听花语开始，它们就成为了她生命中的一部分。\n\n"花信未必会立刻抵达，但总要有人先把水面拂净。"</description>
+        <title>Flower Court Keeper</title>
+        <titleShort>Flower Court Keeper</titleShort>
+        <description>[PAWN_nameDef] grew up among many kinds of flowers. Among the six branches born from "Ji", her resonance with "life" was the deepest. From the first time she heard the flowers' words, they became part of her life.\n\n"The flower message may not arrive at once, but someone must first clear the water's surface."</description>
         <slot>Childhood</slot>
         <skillGains>
             <Cooking>12</Cooking>
@@ -28,9 +28,9 @@
 
     <AlienRace.AlienBackstoryDef>
         <defName>MiliraXian_BackStoryAdult_Qinghe_BS1</defName>
-        <title>花神使</title>
-        <titleShort>花神使</titleShort>
-        <description>[PAWN_nameDef] 离开远在仙域的花神庭后，她致力于在这片陌生的大地上布施花神的恩泽。\n\n"若庭中仍有一朵花愿意开放，我便还不能离开。"</description>
+        <title>Flower God's Envoy</title>
+        <titleShort>Flower God's Envoy</titleShort>
+        <description>After leaving the Flower God's Court in the distant immortal realm, [PAWN_nameDef] devoted herself to spreading the flower god's grace across this unfamiliar land.\n\n"If even one flower in the court is still willing to bloom, I cannot leave yet."</description>
         <slot>Adulthood</slot>
         <skillGains>
             <Mining>1</Mining>

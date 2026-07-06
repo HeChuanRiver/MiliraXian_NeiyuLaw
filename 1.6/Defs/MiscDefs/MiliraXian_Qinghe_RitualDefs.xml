@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <RitualObligationTargetFilterDef MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>MX_QH_LotusPondRitualTarget</defName>
+        <workerClass>RitualObligationTargetWorker_ThingDef</workerClass>
+        <colonistThingsOnly>true</colonistThingsOnly>
+        <thingDefs>
+            <li>MX_QH_LotusPond</li>
+        </thingDefs>
+    </RitualObligationTargetFilterDef>
+
+    <RitualPatternDef MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>MX_QH_QixiRitualPattern</defName>
+        <ritualExpectedDesc>Every year on {DATE}, {MEMBERS} can hold a Qixi rite beside the lotus pond.</ritualExpectedDesc>
+        <ritualExpectedDescNoAdjective>{MEMBERS} can hold a Qixi rite beside the lotus pond.</ritualExpectedDescNoAdjective>
+        <shortDescOverride>A festival rite beside the lotus pond, praying for artistry and flowing music.</shortDescOverride>
+        <ritualExplanation>The Qixi rite uses the standard festival structure: a speaker gives a short address, then participants gather beside the lotus pond. Ritual quality affects the mood memory participants receive.</ritualExplanation>
+        <beginRitualOverride>Begin Qixi rite</beginRitualOverride>
+        <iconPathOverride>UI/Icons/Rituals/RitualFestival</iconPathOverride>
+        <canStartAnytime>true</canStartAnytime>
+        <ritualObligationTriggers>
+            <li Class="RitualObligationTrigger_DateProperties">
+                <mustBePlayerIdeo>true</mustBePlayerIdeo>
+            </li>
+        </ritualObligationTriggers>
+        <ritualObligationTargetFilter>MX_QH_LotusPondRitualTarget</ritualObligationTargetFilter>
+        <ritualBehavior>DateRitual</ritualBehavior>
+        <ritualOutcomeEffect>CelebratedDate</ritualOutcomeEffect>
+        <tags>
+            <li>CelebratedDate</li>
+            <li>MX_QH_Qixi</li>
+        </tags>
+        <patternGroupTag>MX_QH_Qixi</patternGroupTag>
+    </RitualPatternDef>
+
+    <PreceptDef ParentName="FestivalBase" MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>MX_QH_QixiRitual</defName>
+        <label>qixi</label>
+        <description>Qinghe qixi ritual.</description>
+        <ritualPatternBase>MX_QH_QixiRitualPattern</ritualPatternBase>
+        <allowDuplicates>false</allowDuplicates>
+        <maxCount>1</maxCount>
+        <ignoreNameUniqueness>true</ignoreNameUniqueness>
+    </PreceptDef>
+</Defs>

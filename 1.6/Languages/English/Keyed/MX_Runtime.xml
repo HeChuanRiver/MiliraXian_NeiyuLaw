@@ -105,6 +105,102 @@
   <MX_QH_ReportHengZhi>channeling Cross-Pluck impact</MX_QH_ReportHengZhi>
   <MX_QH_ReportYangChun>channeling Yangchun harmony</MX_QH_ReportYangChun>
   <MiliraXian.QingHe.Ability_TempestDrain.Disabled>Not enough Tempest to maintain Tempest Drain.</MiliraXian.QingHe.Ability_TempestDrain.Disabled>
+  <MX_QH_DevLearnAllNodesLabel>DEV: learn all Qinghe nodes</MX_QH_DevLearnAllNodesLabel>
+  <MX_QH_DevLearnAllNodesDesc>Developer test command for Qinghe's skill tree and migrated skill linkage.</MX_QH_DevLearnAllNodesDesc>
+  <MX_QH_DevLearnAllNodesMessage>Qinghe has learned all currently defined nodes.</MX_QH_DevLearnAllNodesMessage>
+  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
+  <MX_QH_SpiritBurstMissingResource>Not enough Flower Decree to cast Spirit Burst.</MX_QH_SpiritBurstMissingResource>
+  <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
+  <MX_QH_FlowerDanceMissingResource>Not enough Flower Decree to perform Flower Dance.</MX_QH_FlowerDanceMissingResource>
+  <MX_QH_FlowerDanceNotLearned>Flower Dance has not been learned.</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_FlowerDanceLandingNoLineOfSight>The dance landing point must be in Qinghe's line of sight.</MX_QH_FlowerDanceLandingNoLineOfSight>
+  <MX_QH_FlowerDanceDirectionNoLineOfSight>The strike direction must be visible from the landing point.</MX_QH_FlowerDanceDirectionNoLineOfSight>
+  <MX_QH_FlowerDanceInvalidLanding>Cannot blink to that location.</MX_QH_FlowerDanceInvalidLanding>
+  <MX_QH_FlowerDanceChooseLanding>Choose dance landing point</MX_QH_FlowerDanceChooseLanding>
+  <MX_QH_FlowerDanceChooseDirection>Choose dance direction</MX_QH_FlowerDanceChooseDirection>
+  <MX_QH_LuoshenRibbonInvalidTarget>Luoshen's ribbon can only connect two conscious people.</MX_QH_LuoshenRibbonInvalidTarget>
+  <MX_QH_LuoshenRibbonChooseFirst>Choose one end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseFirst>
+  <MX_QH_LuoshenRibbonChooseSecond>Choose the other end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseSecond>
+  <MX_QH_LotusPondAssignQingheOnly>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPondAssignQingheOnly>
+  <MX_QH_OpenFlowerCourtRequiresQinghe>Open Flower Court (requires Qinghe)</MX_QH_OpenFlowerCourtRequiresQinghe>
+  <MX_QH_OpenFlowerCourt>Open Flower Court</MX_QH_OpenFlowerCourt>
+  <MX_QH_LotusPondCannotReach>Qinghe cannot reach the lotus pond.</MX_QH_LotusPondCannotReach>
+  <MX_QH_FlowerCourtMissing>Qinghe has not established the Flower Court.</MX_QH_FlowerCourtMissing>
+  <MX_QH_TuneFlowerBellRequiresWeapon>Tune Flower Bell (requires Four-Season Flower Bell equipped)</MX_QH_TuneFlowerBellRequiresWeapon>
+  <MX_QH_TuneFlowerBellOption>Tune Flower Bell: {0}</MX_QH_TuneFlowerBellOption>
+  <MX_QH_CurrentSuffix> (current)</MX_QH_CurrentSuffix>
+  <MX_QH_TuneFlowerBellNoWeapon>Qinghe has no Flower Bell to tune.</MX_QH_TuneFlowerBellNoWeapon>
+  <MX_QH_FlowerBellBuildingDamageLabel>Siegebreak note</MX_QH_FlowerBellBuildingDamageLabel>
+  <MX_QH_FlowerBellBuildingDamageDesc>Toggle Four-Season Flower Bell's extra building damage. When enabled, it uses projectiles with 300% building damage factor; when disabled, 100%.</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_FlowerBellResonanceSpring>spring</MX_QH_FlowerBellResonanceSpring>
+  <MX_QH_FlowerBellResonanceSummer>summer</MX_QH_FlowerBellResonanceSummer>
+  <MX_QH_FlowerBellResonanceAutumn>autumn</MX_QH_FlowerBellResonanceAutumn>
+  <MX_QH_FlowerBellResonanceWinter>winter</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_SkillTreeNoScores>No score has been interpreted.</MX_QH_SkillTreeNoScores>
+  <MX_QH_SkillTreeStateLearned>learned</MX_QH_SkillTreeStateLearned>
+  <MX_QH_SkillTreeStateAlreadyLearned>Already learned.</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateReading>interpreting</MX_QH_SkillTreeStateReading>
+  <MX_QH_SkillTreeStateReadingWithProgress>interpreting {0}</MX_QH_SkillTreeStateReadingWithProgress>
+  <MX_QH_SkillTreeStatePending>pending interpretation</MX_QH_SkillTreeStatePending>
+  <MX_QH_SkillTreeNoNodeSelected>No node selected.</MX_QH_SkillTreeNoNodeSelected>
+  <MX_QH_SkillTreeUnlockProgress>Unlock progress</MX_QH_SkillTreeUnlockProgress>
+  <MX_QH_SkillTreeStatusLine>Status: {0}</MX_QH_SkillTreeStatusLine>
+  <MX_QH_SkillTreeEffects>Effects</MX_QH_SkillTreeEffects>
+  <MX_QH_SkillTreeSourceScores>Source scores</MX_QH_SkillTreeSourceScores>
+  <MX_QH_SkillTreeImportantNode>Type: important node</MX_QH_SkillTreeImportantNode>
+  <MX_QH_SkillTreeSourceScoreEntry>&lt;i&gt;{0}&lt;/i&gt;</MX_QH_SkillTreeSourceScoreEntry>
+  <MX_QH_FlowerPanelHelpTitle>Qinghe panel help</MX_QH_FlowerPanelHelpTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeTitle>Flower Decree</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeBody>Used to cast Flower Mandates. Segments show current charges and recovery progress.</MX_QH_FlowerPanelHelpFlowerDecreeBody>
+  <MX_QH_FlowerPanelHelpShieldTitle>Shield</MX_QH_FlowerPanelHelpShieldTitle>
+  <MX_QH_FlowerPanelHelpShieldBody>Shows the current percentage of Flower-God Ward.</MX_QH_FlowerPanelHelpShieldBody>
+  <MX_QH_FlowerPanelHelpLongBreathTitle>Long Breath</MX_QH_FlowerPanelHelpLongBreathTitle>
+  <MX_QH_FlowerPanelHelpLongBreathBody>Green blocks are available charges; yellow fill shows recharge progress.</MX_QH_FlowerPanelHelpLongBreathBody>
+  <MX_QH_FlowerPanelHelpFlowerCourtTitle>Flower Court</MX_QH_FlowerPanelHelpFlowerCourtTitle>
+  <MX_QH_FlowerPanelHelpFlowerCourtBody>Shows skill node progress. The center number is learned nodes; click to open the Flower Court panel.</MX_QH_FlowerPanelHelpFlowerCourtBody>
+  <MX_QH_SkillBookConsumed>This book's Qinghe musical intent has faded.</MX_QH_SkillBookConsumed>
+  <MX_QH_SkillBookRequiresQinghe>Requires Qinghe herself to read.</MX_QH_SkillBookRequiresQinghe>
+  <MX_QH_SkillBookCannotReadNow>Qinghe cannot read right now.</MX_QH_SkillBookCannotReadNow>
+  <MX_QH_SkillBookDataMissing>Skill book data is missing.</MX_QH_SkillBookDataMissing>
+  <MX_QH_MusicMasteryMaxed>Qinghe's mastery level has reached its maximum.</MX_QH_MusicMasteryMaxed>
+  <MX_QH_SkillBookAlreadyRead>Qinghe has already read this skill book.</MX_QH_SkillBookAlreadyRead>
+  <MX_QH_SkillBookBenefitMastery>Increase Qinghe mastery level +{0}</MX_QH_SkillBookBenefitMastery>
+  <MX_QH_SkillBookBenefitNodes>Unlock Qinghe skill nodes: {0}</MX_QH_SkillBookBenefitNodes>
+  <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>
+  <MX_QH_MusicScoreStatCategory>Qinghe musical intent</MX_QH_MusicScoreStatCategory>
+  <MX_QH_ReadingProgressStat>Reading progress</MX_QH_ReadingProgressStat>
+  <MX_QH_ReadingProgressStatDesc>After Qinghe finishes reading, she will understand the score's intent and this book will turn back into an ordinary book.</MX_QH_ReadingProgressStatDesc>
+  <MX_QH_SkillBookAcquiredLetterLabel>New score bound</MX_QH_SkillBookAcquiredLetterLabel>
+  <MX_QH_SkillBookAcquiredLetterText>Qinghe obtained a new score book: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;Have Qinghe read it to advance the corresponding score node interpretation.</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_UnknownNode>Unknown node.</MX_QH_UnknownNode>
+  <MX_QH_SkillNodesLearnedLetterLabel>Score node learned</MX_QH_SkillNodesLearnedLetterLabel>
+  <MX_QH_SkillNodesLearnedLetterText>Qinghe finished reading &lt;i&gt;{0}&lt;/i&gt; and learned score node(s): {1}.</MX_QH_SkillNodesLearnedLetterText>
+  <MX_QH_MusicMasteryLearnedLetterLabel>Score mastery improved</MX_QH_MusicMasteryLearnedLetterLabel>
+  <MX_QH_MusicMasteryLearnedLetterText>Qinghe finished reading &lt;i&gt;{0}&lt;/i&gt;, increasing score mastery to {1}.</MX_QH_MusicMasteryLearnedLetterText>
+  <MX_QH_LongNightStillnessLabel>Long-Night Stillness</MX_QH_LongNightStillnessLabel>
+  <MX_QH_LongNightStillnessDescription>Qinghe has accumulated full meditative stillness. The next construction, crafting, or artwork quality roll will consume most of it and gain a steadier quality bonus.</MX_QH_LongNightStillnessDescription>
+  <MX_QH_MeditativeStillnessFullMessage>Qinghe's meditative stillness is full.</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_LotusShieldTooltipTitle>Flower-God Ward</MX_QH_LotusShieldTooltipTitle>
+  <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
+  <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>
+  <MX_QH_LotusShieldRegenDelayLine>Regen delay: {0}s</MX_QH_LotusShieldRegenDelayLine>
+  <MX_QH_FlowerCourtTitle>Flower Court</MX_QH_FlowerCourtTitle>
+  <MX_QH_FlowerCourtUnlockedTreesLine>Interpreted score sets: {0}</MX_QH_FlowerCourtUnlockedTreesLine>
+  <MX_QH_FlowerCourtLearnedNodesLine>Learned nodes: {0}</MX_QH_FlowerCourtLearnedNodesLine>
+  <MX_QH_FlowerCourtStillnessLine>Stillness: {0} / {1}</MX_QH_FlowerCourtStillnessLine>
+  <MX_QH_FlowerDecreeLabel>Flower Decree</MX_QH_FlowerDecreeLabel>
+  <MX_QH_LotusShieldLabel>Shield</MX_QH_LotusShieldLabel>
+  <MX_QH_LongBreathChargesLine>Long Breath charges: {0} / {1}</MX_QH_LongBreathChargesLine>
+  <MX_QH_StatusLine>Status: {0}</MX_QH_StatusLine>
+  <MX_QH_LongBreathStateRecharging>recharging</MX_QH_LongBreathStateRecharging>
+  <MX_QH_LongBreathStateReady>ready</MX_QH_LongBreathStateReady>
+  <MX_QH_LongBreathStateEmpty>depleted</MX_QH_LongBreathStateEmpty>
+  <MX_QH_RechargeProgressLine>Recharge progress: {0}</MX_QH_RechargeProgressLine>
+  <MX_QH_RemainingTimeLine>Time remaining: {0}</MX_QH_RemainingTimeLine>
+  <MX_QH_FlowerDecreeValueLine>Flower Decree: {0} / {1}</MX_QH_FlowerDecreeValueLine>
+  <MX_QH_RecoveryProgressLine>Recovery progress: {0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>

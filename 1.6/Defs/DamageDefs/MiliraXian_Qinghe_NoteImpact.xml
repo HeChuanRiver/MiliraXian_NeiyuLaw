@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <DamageDef>
+  <DamageDef Name="MX_QH_NoteImpactBase">
     <defName>MX_QH_NoteImpact</defName>
-    <label>音击</label>
+    <label>note impact</label>
     <externalViolence>true</externalViolence>
     <armorCategory>Sharp</armorCategory>
     <isRanged>true</isRanged>
-    <workerClass>DamageWorker_AddInjury</workerClass>
-    <deathMessage>{0}被花信铃音击倒了。</deathMessage>
+    <workerClass>MiliraXian.Characters.QingHe.Things.DamageWorker_FlowerBellExplosion</workerClass>
+    <deathMessage>{0} was struck down by the Flower Bell's note.</deathMessage>
     <hediff>PsychicInjury</hediff>
+    <explosionCellFleck>BlastEMP</explosionCellFleck>
+    <explosionColorCenter>(0.95, 0.78, 1.00, 0.85)</explosionColorCenter>
+    <explosionColorEdge>(0.55, 0.90, 1.00, 0.35)</explosionColorEdge>
+  </DamageDef>
+
+  <DamageDef ParentName="MX_QH_NoteImpactBase">
+    <defName>MX_QH_NoteImpact_Building</defName>
+    <label>siegebreaking note impact</label>
+    <buildingDamageFactor>3</buildingDamageFactor>
   </DamageDef>
 </Defs>

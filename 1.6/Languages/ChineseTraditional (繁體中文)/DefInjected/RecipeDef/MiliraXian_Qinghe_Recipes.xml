@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AssembleLostMusicScore.label>拼合清荷曲譜</MX_QH_AssembleLostMusicScore.label>
+  <MX_QH_AssembleLostMusicScore.description>將失傳的曲譜殘片拼合成書卷。成功時得到隨機清荷技能書，失敗時只得到普通書。</MX_QH_AssembleLostMusicScore.description>
+  <MX_QH_AssembleLostMusicScore.jobString>正在拼合清荷曲譜。</MX_QH_AssembleLostMusicScore.jobString>
+</LanguageData>

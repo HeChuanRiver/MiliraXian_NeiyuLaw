@@ -105,6 +105,102 @@
   <MX_QH_ReportHengZhi>正在引導橫指衝擊</MX_QH_ReportHengZhi>
   <MX_QH_ReportYangChun>正在引導陽春和聲</MX_QH_ReportYangChun>
   <MiliraXian.QingHe.Ability_TempestDrain.Disabled>激流不足，無法維持扼流。</MiliraXian.QingHe.Ability_TempestDrain.Disabled>
+  <MX_QH_DevLearnAllNodesLabel>DEV：習得全部清荷節點</MX_QH_DevLearnAllNodesLabel>
+  <MX_QH_DevLearnAllNodesDesc>用於測試清荷技能樹與當前已遷移技能聯動。</MX_QH_DevLearnAllNodesDesc>
+  <MX_QH_DevLearnAllNodesMessage>清荷已習得所有當前定義的節點。</MX_QH_DevLearnAllNodesMessage>
+  <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SpringFlowMissingResource>花令不足，無法施放春泉湧流。</MX_QH_SpringFlowMissingResource>
+  <MX_QH_SpiritBurstMissingResource>花令不足，無法施放斷魂。</MX_QH_SpiritBurstMissingResource>
+  <MX_QH_LunarMirrorMissingResource>花令不足，無法施放霜月鏡。</MX_QH_LunarMirrorMissingResource>
+  <MX_QH_FlowerDanceMissingResource>花令不足，無法施展花舞。</MX_QH_FlowerDanceMissingResource>
+  <MX_QH_FlowerDanceNotLearned>尚未習得花舞。</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_FlowerDanceLandingNoLineOfSight>舞踏的落點需要在清荷視線內。</MX_QH_FlowerDanceLandingNoLineOfSight>
+  <MX_QH_FlowerDanceDirectionNoLineOfSight>舞踏的打擊方向需要從落點可見。</MX_QH_FlowerDanceDirectionNoLineOfSight>
+  <MX_QH_FlowerDanceInvalidLanding>無法閃現到該位置。</MX_QH_FlowerDanceInvalidLanding>
+  <MX_QH_FlowerDanceChooseLanding>選擇舞踏落點</MX_QH_FlowerDanceChooseLanding>
+  <MX_QH_FlowerDanceChooseDirection>選擇舞踏方向</MX_QH_FlowerDanceChooseDirection>
+  <MX_QH_LuoshenRibbonInvalidTarget>洛神的緞帶只能連接兩名清醒的人。</MX_QH_LuoshenRibbonInvalidTarget>
+  <MX_QH_LuoshenRibbonChooseFirst>選擇洛神緞帶的一端</MX_QH_LuoshenRibbonChooseFirst>
+  <MX_QH_LuoshenRibbonChooseSecond>選擇洛神緞帶的另一端</MX_QH_LuoshenRibbonChooseSecond>
+  <MX_QH_LotusPondAssignQingheOnly>荷池只可分配給清荷。</MX_QH_LotusPondAssignQingheOnly>
+  <MX_QH_OpenFlowerCourtRequiresQinghe>打開花神庭（需要清荷本人）</MX_QH_OpenFlowerCourtRequiresQinghe>
+  <MX_QH_OpenFlowerCourt>打開花神庭</MX_QH_OpenFlowerCourt>
+  <MX_QH_LotusPondCannotReach>清荷現在無法接近荷池。</MX_QH_LotusPondCannotReach>
+  <MX_QH_FlowerCourtMissing>清荷尚未建立花神庭。</MX_QH_FlowerCourtMissing>
+  <MX_QH_TuneFlowerBellRequiresWeapon>調諧花信鈴（需要裝備四時花信鈴）</MX_QH_TuneFlowerBellRequiresWeapon>
+  <MX_QH_TuneFlowerBellOption>調諧花信鈴：{0}</MX_QH_TuneFlowerBellOption>
+  <MX_QH_CurrentSuffix>（當前）</MX_QH_CurrentSuffix>
+  <MX_QH_TuneFlowerBellNoWeapon>清荷沒有可調諧的花信鈴。</MX_QH_TuneFlowerBellNoWeapon>
+  <MX_QH_FlowerBellBuildingDamageLabel>破城音</MX_QH_FlowerBellBuildingDamageLabel>
+  <MX_QH_FlowerBellBuildingDamageDesc>切換四時花信鈴對建築的額外傷害。開啟時使用建築傷害係數 300% 的投射物；關閉時為 100%。</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_FlowerBellResonanceSpring>春</MX_QH_FlowerBellResonanceSpring>
+  <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
+  <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
+  <MX_QH_FlowerBellResonanceWinter>冬</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_SkillTreeNoScores>尚未解讀曲譜。</MX_QH_SkillTreeNoScores>
+  <MX_QH_SkillTreeStateLearned>已習得</MX_QH_SkillTreeStateLearned>
+  <MX_QH_SkillTreeStateAlreadyLearned>已經習得。</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateReading>解讀中</MX_QH_SkillTreeStateReading>
+  <MX_QH_SkillTreeStateReadingWithProgress>解讀中 {0}</MX_QH_SkillTreeStateReadingWithProgress>
+  <MX_QH_SkillTreeStatePending>待解讀</MX_QH_SkillTreeStatePending>
+  <MX_QH_SkillTreeNoNodeSelected>未選擇節點。</MX_QH_SkillTreeNoNodeSelected>
+  <MX_QH_SkillTreeUnlockProgress>解鎖進度</MX_QH_SkillTreeUnlockProgress>
+  <MX_QH_SkillTreeStatusLine>狀態：{0}</MX_QH_SkillTreeStatusLine>
+  <MX_QH_SkillTreeEffects>具體效果</MX_QH_SkillTreeEffects>
+  <MX_QH_SkillTreeSourceScores>對應曲譜</MX_QH_SkillTreeSourceScores>
+  <MX_QH_SkillTreeImportantNode>類型：重要節點</MX_QH_SkillTreeImportantNode>
+  <MX_QH_SkillTreeSourceScoreEntry>《{0}》</MX_QH_SkillTreeSourceScoreEntry>
+  <MX_QH_FlowerPanelHelpTitle>清荷面板說明</MX_QH_FlowerPanelHelpTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeTitle>花令</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeBody>用於釋放飛花令，分段顯示當前花令數量和恢復進度。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
+  <MX_QH_FlowerPanelHelpShieldTitle>護盾</MX_QH_FlowerPanelHelpShieldTitle>
+  <MX_QH_FlowerPanelHelpShieldBody>顯示花神護體當前護盾百分比。</MX_QH_FlowerPanelHelpShieldBody>
+  <MX_QH_FlowerPanelHelpLongBreathTitle>長息</MX_QH_FlowerPanelHelpLongBreathTitle>
+  <MX_QH_FlowerPanelHelpLongBreathBody>綠色方塊表示可用充能，黃色填充表示正在恢復。</MX_QH_FlowerPanelHelpLongBreathBody>
+  <MX_QH_FlowerPanelHelpFlowerCourtTitle>花神庭</MX_QH_FlowerPanelHelpFlowerCourtTitle>
+  <MX_QH_FlowerPanelHelpFlowerCourtBody>顯示技能節點進度；中心數字為已習得節點數，點擊打開花神庭面板。</MX_QH_FlowerPanelHelpFlowerCourtBody>
+  <MX_QH_SkillBookConsumed>這本書中的清荷曲意已經散去。</MX_QH_SkillBookConsumed>
+  <MX_QH_SkillBookRequiresQinghe>需要清荷本人閱讀。</MX_QH_SkillBookRequiresQinghe>
+  <MX_QH_SkillBookCannotReadNow>清荷當前無法閱讀。</MX_QH_SkillBookCannotReadNow>
+  <MX_QH_SkillBookDataMissing>技能書資料缺失。</MX_QH_SkillBookDataMissing>
+  <MX_QH_MusicMasteryMaxed>清荷的精通等級已經達到上限。</MX_QH_MusicMasteryMaxed>
+  <MX_QH_SkillBookAlreadyRead>清荷已經讀過這份技能書。</MX_QH_SkillBookAlreadyRead>
+  <MX_QH_SkillBookBenefitMastery>提升清荷精通等級 +{0}</MX_QH_SkillBookBenefitMastery>
+  <MX_QH_SkillBookBenefitNodes>解鎖清荷技能節點：{0}</MX_QH_SkillBookBenefitNodes>
+  <MX_QH_Parentheses>（{0}）</MX_QH_Parentheses>
+  <MX_QH_MusicScoreStatCategory>清荷曲意</MX_QH_MusicScoreStatCategory>
+  <MX_QH_ReadingProgressStat>閱讀進度</MX_QH_ReadingProgressStat>
+  <MX_QH_ReadingProgressStatDesc>清荷讀完後會領悟其中曲意，此書會變回普通書籍。</MX_QH_ReadingProgressStatDesc>
+  <MX_QH_SkillBookAcquiredLetterLabel>新曲譜入卷</MX_QH_SkillBookAcquiredLetterLabel>
+  <MX_QH_SkillBookAcquiredLetterText>清荷得到了一本新的曲譜書：《{0}》。&#10;&#10;讓清荷閱讀它，即可推進對應曲譜節點的解讀進度。</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_UnknownNode>未知節點。</MX_QH_UnknownNode>
+  <MX_QH_SkillNodesLearnedLetterLabel>曲譜節點習得</MX_QH_SkillNodesLearnedLetterLabel>
+  <MX_QH_SkillNodesLearnedLetterText>清荷讀完了《{0}》，習得曲譜節點：{1}。</MX_QH_SkillNodesLearnedLetterText>
+  <MX_QH_MusicMasteryLearnedLetterLabel>曲譜精通提升</MX_QH_MusicMasteryLearnedLetterLabel>
+  <MX_QH_MusicMasteryLearnedLetterText>清荷讀完了《{0}》，曲譜精通提升至 {1}。</MX_QH_MusicMasteryLearnedLetterText>
+  <MX_QH_LongNightStillnessLabel>長夜靜思</MX_QH_LongNightStillnessLabel>
+  <MX_QH_LongNightStillnessDescription>清荷已積蓄圓滿的靜思。下一次進行需要品質的建造、製作或藝術創作時，將消耗大部分靜思並獲得更穩定的品質提升。</MX_QH_LongNightStillnessDescription>
+  <MX_QH_MeditativeStillnessFullMessage>清荷的靜思已經積蓄圓滿。</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_LotusShieldTooltipTitle>花神護體</MX_QH_LotusShieldTooltipTitle>
+  <MX_QH_LotusShieldEnergyLine>護盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
+  <MX_QH_LotusShieldRegenLine>護盾回復：{0} /秒</MX_QH_LotusShieldRegenLine>
+  <MX_QH_LotusShieldRegenDelayLine>回復延遲：{0}秒</MX_QH_LotusShieldRegenDelayLine>
+  <MX_QH_FlowerCourtTitle>花神庭</MX_QH_FlowerCourtTitle>
+  <MX_QH_FlowerCourtUnlockedTreesLine>已解讀曲譜集：{0}</MX_QH_FlowerCourtUnlockedTreesLine>
+  <MX_QH_FlowerCourtLearnedNodesLine>已習得節點：{0}</MX_QH_FlowerCourtLearnedNodesLine>
+  <MX_QH_FlowerCourtStillnessLine>靜思：{0} / {1}</MX_QH_FlowerCourtStillnessLine>
+  <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
+  <MX_QH_LotusShieldLabel>護盾</MX_QH_LotusShieldLabel>
+  <MX_QH_LongBreathChargesLine>長息充能：{0} / {1}</MX_QH_LongBreathChargesLine>
+  <MX_QH_StatusLine>狀態：{0}</MX_QH_StatusLine>
+  <MX_QH_LongBreathStateRecharging>充能中</MX_QH_LongBreathStateRecharging>
+  <MX_QH_LongBreathStateReady>已就緒</MX_QH_LongBreathStateReady>
+  <MX_QH_LongBreathStateEmpty>充能耗盡</MX_QH_LongBreathStateEmpty>
+  <MX_QH_RechargeProgressLine>恢復進度：{0}</MX_QH_RechargeProgressLine>
+  <MX_QH_RemainingTimeLine>剩餘時間：{0}</MX_QH_RemainingTimeLine>
+  <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
+  <MX_QH_RecoveryProgressLine>恢復進度：{0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoverySpeedLine>恢復速度：{0} /秒</MX_QH_RecoverySpeedLine>
 
   <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>開發者測試用：手動為昭離增加10點因果。</MX_ZL_DebugAddKarmaDesc>

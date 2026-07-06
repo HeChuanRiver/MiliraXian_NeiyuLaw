@@ -4,4 +4,7 @@
   <MX_Dehydrate.deathMessage>{0}死于严重的液体循环崩溃。</MX_Dehydrate.deathMessage>
   <MX_Desynced.label>离弦</MX_Desynced.label>
   <MX_Desynced.deathMessage>{0}被吵死了。</MX_Desynced.deathMessage>
+  <MX_QH_NoteImpact.label>音击</MX_QH_NoteImpact.label>
+  <MX_QH_NoteImpact.deathMessage>{0}被花信铃音击倒了。</MX_QH_NoteImpact.deathMessage>
+  <MX_QH_NoteImpact_Building.label>破城音击</MX_QH_NoteImpact_Building.label>
 </LanguageData>

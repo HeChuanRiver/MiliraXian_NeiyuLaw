@@ -7,31 +7,11 @@ namespace MiliraXian.Characters.QingHe
 {
     public class Hediff_LuoshenContract : HediffWithTarget
     {
-        private string mirroredFlowerWordDefName;
-        private bool mirroredFlowerWordAddedByContract;
-
-        public string MirroredFlowerWordDefName => mirroredFlowerWordDefName;
-
-        public bool MirroredFlowerWordAddedByContract => mirroredFlowerWordAddedByContract;
-
         public override bool Visible => false;
 
         public void SetTargetPawn(Pawn targetPawn)
         {
             target = targetPawn;
-        }
-
-        public void SetMirroredFlowerWord(string traitDefName, bool addedByContract)
-        {
-            mirroredFlowerWordDefName = traitDefName;
-            mirroredFlowerWordAddedByContract = addedByContract;
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look(ref mirroredFlowerWordDefName, "mx_qh_luoshenContract_mirroredFlowerWordDefName");
-            Scribe_Values.Look(ref mirroredFlowerWordAddedByContract, "mx_qh_luoshenContract_mirroredFlowerWordAddedByContract", false);
         }
     }
 
@@ -78,7 +58,7 @@ namespace MiliraXian.Characters.QingHe
             return qinghe != null && HasContractWith(qinghe, pawn);
         }
 
-        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state, HediffComp_FlowerChoices choices)
+        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state)
         {
             if (!MX_QHUtility.IsQinghe(qinghe))
             {
@@ -99,7 +79,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             RemoveContractFromOtherPartners(qinghe, spouse);
-            SyncToPartner(qinghe, spouse, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlowerWord) ? choices?.SelectedFlowerWord : null);
+            SyncToPartner(qinghe, spouse);
         }
 
         public static void NotifySpouseRelationAdded(Pawn pawn, Pawn otherPawn)
@@ -163,7 +143,7 @@ namespace MiliraXian.Characters.QingHe
             GiveBrokenThought(survivor, lost);
         }
 
-        private static void SyncToPartner(Pawn qinghe, Pawn spouse, TraitDef selectedFlowerWord)
+        private static void SyncToPartner(Pawn qinghe, Pawn spouse)
         {
             if (qinghe?.health?.hediffSet == null || spouse?.health?.hediffSet == null || spouse.story?.traits == null)
             {
@@ -172,19 +152,7 @@ namespace MiliraXian.Characters.QingHe
 
             Hediff_LuoshenContract qingheContract = EnsureContractHediff(qinghe, spouse);
             Hediff_LuoshenContract spouseContract = EnsureContractHediff(spouse, qinghe);
-            RemoveMirroredTrait(spouse, spouseContract);
 
-            if (QingheFlowerChoiceUtility.IsFlowerWordTraitDef(selectedFlowerWord))
-            {
-                bool addedByContract = EnsureTrait(spouse, selectedFlowerWord);
-                spouseContract.SetMirroredFlowerWord(selectedFlowerWord.defName, addedByContract);
-            }
-            else
-            {
-                spouseContract.SetMirroredFlowerWord(null, false);
-            }
-
-            qingheContract.SetMirroredFlowerWord(null, false);
             NotifyThoughtsDirty(qinghe);
             NotifyThoughtsDirty(spouse);
         }
@@ -245,37 +213,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            RemoveMirroredTrait(pawn, hediff);
             pawn.health.RemoveHediff(hediff);
-        }
-
-        private static void RemoveMirroredTrait(Pawn pawn, Hediff_LuoshenContract hediff)
-        {
-            string defName = hediff?.MirroredFlowerWordDefName;
-            TraitDef traitDef = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
-            if (!hediff.MirroredFlowerWordAddedByContract || !QingheFlowerChoiceUtility.IsFlowerWordTraitDef(traitDef) || pawn?.story?.traits == null)
-            {
-                return;
-            }
-
-            Trait trait = traitDef != null ? pawn.story.traits.GetTrait(traitDef) : null;
-            if (trait != null)
-            {
-                pawn.story.traits.RemoveTrait(trait);
-            }
-
-            hediff.SetMirroredFlowerWord(null, false);
-        }
-
-        private static bool EnsureTrait(Pawn pawn, TraitDef traitDef)
-        {
-            if (traitDef != null && pawn.story?.traits?.HasTrait(traitDef) == false)
-            {
-                pawn.story.traits.GainTrait(new Trait(traitDef));
-                return true;
-            }
-
-            return false;
         }
 
         private static Pawn GetLivingSpouse(Pawn pawn)

@@ -3,8 +3,8 @@
   <!-- Bleed / electric leak -->
   <HediffDef>
     <defName>MX_StatusEffectBleed</defName>
-    <label>流血累积</label>
-    <description>花信铃春季共鸣留下的血气扰动。持续命中会累积流血，达到上限后转为流血效果。</description>
+    <label>bleed buildup</label>
+    <description>A blood disturbance left by the Flower Bell's spring resonance. Repeated hits build up bleed, which becomes a bleeding effect at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -19,7 +19,7 @@
         <effectHediff>MX_StatusEffectBleeding</effectHediff>
         <resistanceHediff>MX_StatusEffectBleedResistance</resistanceHediff>
         <effectDurationTicks>1200</effectDurationTicks>
-        <fullAccumulationText>流血</fullAccumulationText>
+        <fullAccumulationText>bleeding</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(1.00, 0.36, 0.42)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -54,8 +54,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectElectricLeak</defName>
-    <label>漏电累积</label>
-    <description>花信铃春季共鸣扰动机械结构。持续命中会累积漏电，达到上限后转为短路效果。</description>
+    <label>electric leak buildup</label>
+    <description>The Flower Bell's spring resonance disrupts mechanical structures. Repeated hits build up electric leak, which becomes short circuit at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
     <isBad>true</isBad>
@@ -70,7 +70,7 @@
         <effectHediff>MX_StatusEffectShortCircuit</effectHediff>
         <resistanceHediff>MX_StatusEffectElectricLeakResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
-        <fullAccumulationText>短路</fullAccumulationText>
+        <fullAccumulationText>short circuit</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(1.00, 0.86, 0.28)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -93,8 +93,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectBleeding</defName>
-    <label>流血</label>
-    <description>目标受到花信铃春季共鸣引发的流血效果。具体效果逻辑待实现。</description>
+    <label>bleeding</label>
+    <description>The target is bleeding from the Flower Bell's spring resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -131,8 +131,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectShortCircuit</defName>
-    <label>短路</label>
-    <description>机械体受到花信铃春季共鸣引发的短路效果。具体效果逻辑待实现。</description>
+    <label>short circuit</label>
+    <description>The mechanoid is short-circuited by the Flower Bell's spring resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
     <isBad>true</isBad>
@@ -172,8 +172,8 @@
   <!-- Toxin / corrosion -->
   <HediffDef>
     <defName>MX_StatusEffectToxin</defName>
-    <label>毒素积累</label>
-    <description>花信铃夏季共鸣留下的毒性。持续命中会积累毒素，达到上限后转为猛毒效果。</description>
+    <label>toxin buildup</label>
+    <description>Toxicity left by the Flower Bell's summer resonance. Repeated hits build up toxin, which becomes venom at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -188,7 +188,7 @@
         <effectHediff>MX_StatusEffectVenom</effectHediff>
         <resistanceHediff>MX_StatusEffectToxinResistance</resistanceHediff>
         <effectDurationTicks>2400</effectDurationTicks>
-        <fullAccumulationText>猛毒</fullAccumulationText>
+        <fullAccumulationText>venom</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(0.62, 0.95, 0.42)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -206,8 +206,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectCorrosion</defName>
-    <label>腐蚀累积</label>
-    <description>花信铃夏季共鸣腐蚀机械结构。持续命中会累积腐蚀，达到上限后转为腐蚀效果。</description>
+    <label>corrosion buildup</label>
+    <description>The Flower Bell's summer resonance corrodes mechanical structures. Repeated hits build up corrosion, which becomes corrosion at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
     <isBad>true</isBad>
@@ -222,7 +222,7 @@
         <effectHediff>MX_StatusEffectCorroded</effectHediff>
         <resistanceHediff>MX_StatusEffectCorrosionResistance</resistanceHediff>
         <effectDurationTicks>2500</effectDurationTicks>
-        <fullAccumulationText>腐蚀</fullAccumulationText>
+        <fullAccumulationText>corrosion</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(0.66, 0.90, 0.58)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -242,8 +242,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectVenom</defName>
-    <label>猛毒</label>
-    <description>目标受到花信铃夏季共鸣引发的猛毒效果。具体效果逻辑待实现。</description>
+    <label>venom</label>
+    <description>The target is afflicted by venom from the Flower Bell's summer resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -281,8 +281,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectCorroded</defName>
-    <label>腐蚀</label>
-    <description>机械体受到花信铃夏季共鸣引发的腐蚀效果。具体效果逻辑待实现。</description>
+    <label>corrosion</label>
+    <description>The mechanoid is corroded by the Flower Bell's summer resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
     <isBad>true</isBad>
@@ -312,19 +312,19 @@
   <!-- Fear / overload -->
   <MentalStateDef ParentName="BaseMentalState">
     <defName>MX_StatusEffectFearedMentalState</defName>
-    <label>恐惧</label>
+    <label>fear</label>
     <stateClass>MiliraXian.Characters.MentalState_StatusEffectFeared</stateClass>
     <category>Misc</category>
     <nameColor>(0.92, 0.74, 1.00)</nameColor>
     <blockNormalThoughts>true</blockNormalThoughts>
     <minTicksBeforeRecovery>600</minTicksBeforeRecovery>
     <maxTicksBeforeRecovery>600</maxTicksBeforeRecovery>
-    <baseInspectLine>恐惧中</baseInspectLine>
+    <baseInspectLine>fearful</baseInspectLine>
   </MentalStateDef>
   <HediffDef>
     <defName>MX_StatusEffectFear</defName>
-    <label>恐惧累积</label>
-    <description>花信铃秋季共鸣扰动心神。持续命中会累积恐惧，达到上限后转为恐惧效果。</description>
+    <label>fear buildup</label>
+    <description>The Flower Bell's autumn resonance disturbs the mind. Repeated hits build up fear, which becomes fear at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -339,7 +339,7 @@
         <effectHediff>MX_StatusEffectFeared</effectHediff>
         <resistanceHediff>MX_StatusEffectFearResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
-        <fullAccumulationText>恐惧</fullAccumulationText>
+        <fullAccumulationText>fear</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(0.92, 0.74, 1.00)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -358,8 +358,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectOverload</defName>
-    <label>过载累积</label>
-    <description>花信铃秋季共鸣压迫机械控制核心。持续命中会累积过载，达到上限后转为过载效果。</description>
+    <label>overload buildup</label>
+    <description>The Flower Bell's autumn resonance pressures mechanical control cores. Repeated hits build up overload, which becomes overload at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -374,7 +374,7 @@
         <effectHediff>MX_StatusEffectOverloaded</effectHediff>
         <resistanceHediff>MX_StatusEffectOverloadResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
-        <fullAccumulationText>过载</fullAccumulationText>
+        <fullAccumulationText>overload</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(0.92, 0.74, 1.00)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -393,8 +393,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectFeared</defName>
-    <label>恐惧</label>
-    <description>目标受到花信铃秋季共鸣引发的恐惧效果。具体效果逻辑待实现。</description>
+    <label>fear</label>
+    <description>The target is frightened by the Flower Bell's autumn resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -421,8 +421,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_StatusEffectOverloaded</defName>
-    <label>过载</label>
-    <description>机械体受到花信铃秋季共鸣引发的过载效果。具体效果逻辑待实现。</description>
+    <label>overload</label>
+    <description>The mechanoid is overloaded by the Flower Bell's autumn resonance.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -450,8 +450,8 @@
   <!-- Cold / freeze -->
   <HediffDef>
     <defName>MX_StatusEffectCold</defName>
-    <label>寒冷累积</label>
-    <description>花信铃冬季共鸣留下的寒意。持续命中会累积寒冷，达到上限后转为冻结。</description>
+    <label>cold buildup</label>
+    <description>Cold left by the Flower Bell's winter resonance. Repeated hits build up cold, which becomes frozen at full accumulation.</description>
     <hediffClass>MiliraXian.Characters.Hediff_Accumulation</hediffClass>
     <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -466,7 +466,7 @@
         <effectHediff>MX_StatusEffectFrozen</effectHediff>
         <resistanceHediff>MX_StatusEffectFreezeResistance</resistanceHediff>
         <effectDurationTicks>300</effectDurationTicks>
-        <fullAccumulationText>冻结</fullAccumulationText>
+        <fullAccumulationText>frozen</fullAccumulationText>
         <fullAccumulationTextOffset>(0.20, 0, 0.55)</fullAccumulationTextOffset>
         <fullAccumulationTextColor>(0.56, 0.88, 1.00)</fullAccumulationTextColor>
         <fullAccumulationTextDuration>1.25</fullAccumulationTextDuration>
@@ -494,8 +494,8 @@
 
   <HediffDef>
     <defName>MX_StatusEffectFrozen</defName>
-    <label>冻结</label>
-    <description>目标被花信铃冬季共鸣冻结，短时间内无法行动。</description>
+    <label>frozen</label>
+    <description>The target is frozen by the Flower Bell's winter resonance and cannot act for a short time.</description>
     <hediffClass>MiliraXian.Characters.Hediff_StatusEffectFrozen</hediffClass>
     <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -519,8 +519,8 @@
 
   <HediffDef>
     <defName>MX_StatusEffectFreezeResistance</defName>
-    <label>冻结抗性</label>
-    <description>目标近期承受冻结后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>freeze resistance</label>
+    <description>The target has briefly adapted after recently being frozen, reducing the accumulation speed of similar status effects.</description>
     <hediffClass>MiliraXian.Characters.Hediff_AccumulationResistance</hediffClass>
     <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -563,8 +563,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectBleedResistance</defName>
-    <label>流血抗性</label>
-    <description>目标近期承受流血后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>bleed resistance</label>
+    <description>The target has briefly adapted after recently bleeding, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">
@@ -575,8 +575,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectElectricLeakResistance</defName>
-    <label>漏电抗性</label>
-    <description>目标近期承受短路后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>electric leak resistance</label>
+    <description>The target has briefly adapted after recently short-circuiting, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">
@@ -587,8 +587,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectToxinResistance</defName>
-    <label>毒素抗性</label>
-    <description>目标近期承受猛毒后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>toxin resistance</label>
+    <description>The target has briefly adapted after recently suffering venom, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">
@@ -599,8 +599,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectCorrosionResistance</defName>
-    <label>腐蚀抗性</label>
-    <description>目标近期承受腐蚀后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>corrosion resistance</label>
+    <description>The target has briefly adapted after recently suffering corrosion, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">
@@ -611,8 +611,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectFearResistance</defName>
-    <label>恐惧抗性</label>
-    <description>目标近期承受恐惧后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>fear resistance</label>
+    <description>The target has briefly adapted after recently suffering fear, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">
@@ -623,8 +623,8 @@
   </HediffDef>
   <HediffDef ParentName="MX_StatusEffectBaseResistance">
     <defName>MX_StatusEffectOverloadResistance</defName>
-    <label>过载抗性</label>
-    <description>目标近期承受过载后产生的短暂适应，会降低同类异常积累速度。</description>
+    <label>overload resistance</label>
+    <description>The target has briefly adapted after recently suffering overload, reducing the accumulation speed of similar status effects.</description>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <comps>
       <li Class="HediffCompProperties_Disappears">

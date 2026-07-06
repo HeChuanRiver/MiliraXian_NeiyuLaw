@@ -8,10 +8,8 @@ namespace MiliraXian.Characters.QingHe
     public static class MX_QHRenderStatics
     {
         private const string DiamondSolidTexPath = "MiliraXianQinghe/UI/MX_QH_DiamondSolid";
-        private const string FlowerDivinationTexPath = "MiliraXianQinghe/UI/MX_QH_FlowerDivination_Diamond";
 
         public static readonly MaterialPropertyBlock SharedPropertyBlock = new MaterialPropertyBlock();
         public static readonly Texture2D DiamondSolidTex = ContentFinder<Texture2D>.Get(DiamondSolidTexPath);
-        public static readonly Texture2D FlowerDivinationTex = ContentFinder<Texture2D>.Get(FlowerDivinationTexPath);
     }
 }

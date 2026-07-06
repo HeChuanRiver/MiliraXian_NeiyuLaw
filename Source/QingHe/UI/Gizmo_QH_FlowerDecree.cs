@@ -27,9 +27,9 @@ namespace MiliraXian.Characters.QingHe.UI
             outWidgets.Add(new Widget_SkillTreeProgressDiamond(pawn, new Rect(124f, 13f, 47f, 47f), TextAnchor.MiddleCenter));
             outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(160f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
             outWidgets.Add(new Widget_LongBreathChargeBlocks(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
-            outWidgets.Add(new TextWidget("花令", new Rect(8f, 2f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
+            outWidgets.Add(new TextWidget("MX_QH_FlowerDecreeLabel".Translate(), new Rect(8f, 2f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
             outWidgets.Add(new Widget_FlowerDecreeBar(pawn, new Rect(0f, 12, 120f, 24f), TextAnchor.MiddleLeft));
-            outWidgets.Add(new TextWidget("护盾", new Rect(8f, 28f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
+            outWidgets.Add(new TextWidget("MX_QH_LotusShieldLabel".Translate(), new Rect(8f, 28f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
             outWidgets.Add(new Widget_LotusShieldBar(pawn, new Rect(0f, 38, 120f, 24f), TextAnchor.MiddleLeft));
         }
     }

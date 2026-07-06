@@ -4,4 +4,12 @@
   <MX_QH_Trait_LongBreath.degreeDatas.0.description>When taking lethal damage or damage that would destroy a body part, if Tempest is above 0, negate the damage, repair all injuries, empty Tempest, and gain brief psychic invisibility.</MX_QH_Trait_LongBreath.degreeDatas.0.description>
   <MX_QH_Trait_WaterFairy.degreeDatas.0.label>Water Fairy</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
   <MX_QH_Trait_WaterFairy.degreeDatas.0.description>Qinghe's innate water-spirit protection. Includes Long Breath, Clear Flow, and Lotus Guardian: Long Breath triggers against lethal or part-destroying damage, negating the hit and repairing all injuries; Clear Flow automatically heals 2.5 HP of wounds every 180 ticks; Lotus Guardian provides a regenerating shield that can gain higher capacity, faster regeneration, and steadfast damage caps through score nodes.</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Peony.degreeDatas.0.label>flower word: peony</MX_QH_FlowerWord_Peony.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Peony.degreeDatas.0.description>A spring flower word. When Qinghe resonates with peony, she is better at soothing wounds and hearts, improving medicine, social ability, beauty, and social impact.</MX_QH_FlowerWord_Peony.degreeDatas.0.description>
+  <MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.label>flower word: jade hairpin</MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.label>
+  <MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.description>A summer flower word. When Qinghe resonates with jade hairpin, crafting and artistic ability improve, and focused work more easily sparks work frenzy or artistic inspiration.</MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Osmanthus.degreeDatas.0.label>flower word: osmanthus</MX_QH_FlowerWord_Osmanthus.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Osmanthus.degreeDatas.0.description>An autumn flower word. When Qinghe resonates with osmanthus, intellectual and shooting ability improve, dark study becomes more efficient, and shots become more precise.</MX_QH_FlowerWord_Osmanthus.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Narcissus.degreeDatas.0.label>flower word: narcissus</MX_QH_FlowerWord_Narcissus.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Narcissus.degreeDatas.0.description>A winter flower word. When Qinghe resonates with narcissus, cooking and construction improve; she will not produce toxic meals while cooking and will not be upset by being soaking wet.</MX_QH_FlowerWord_Narcissus.degreeDatas.0.description>
 </LanguageData>

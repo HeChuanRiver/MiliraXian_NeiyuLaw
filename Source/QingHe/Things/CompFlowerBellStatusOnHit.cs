@@ -1,4 +1,3 @@
-using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -40,32 +39,33 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            if (!HasBianzhi(caster))
-            {
-                return;
-            }
-
             if (Props.chance < 1f && !Rand.Chance(Mathf.Clamp01(Props.chance)))
             {
                 return;
             }
 
-            float amount = Props.amount * AccumulationMultiplier(caster);
+            float amount = Props.amount;
             float armorPenetration = Props.armorPenetration >= 0f ? Props.armorPenetration : Props.damageDef.defaultArmorPenetration;
             DamageInfo dinfo = new DamageInfo(Props.damageDef, amount, armorPenetration, ProjectileParent?.ExactRotation.eulerAngles.y ?? -1f, caster);
             target.TakeDamage(dinfo);
         }
 
-        private static bool HasBianzhi(Pawn caster)
+        public static CompProperties_FlowerBellStatusOnHit PropsFor(ThingDef projectileDef)
         {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.GetSkillTreeState(caster);
-            return state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Bianzhi) == true;
-        }
+            if (projectileDef?.comps == null)
+            {
+                return null;
+            }
 
-        private float AccumulationMultiplier(Pawn caster)
-        {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.GetSkillTreeState(caster);
-            return state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yangchun) == true ? Mathf.Max(0f, Props.yangchunMultiplier) : 1f;
+            for (int i = 0; i < projectileDef.comps.Count; i++)
+            {
+                if (projectileDef.comps[i] is CompProperties_FlowerBellStatusOnHit props)
+                {
+                    return props;
+                }
+            }
+
+            return null;
         }
     }
 }

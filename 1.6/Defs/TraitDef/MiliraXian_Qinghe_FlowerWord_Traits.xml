@@ -5,8 +5,8 @@
         <commonality>0.000001</commonality>
         <degreeDatas>
             <li>
-                <label>花语·牡丹</label>
-                <description>春季花语。清荷与牡丹共鸣时，更擅长安抚伤痛与人心，医疗、社交、魅力和社交影响力都会提升。</description>
+                <label>flower word: peony</label>
+                <description>A spring flower word. When Qinghe resonates with peony, she is better at soothing wounds and hearts, improving medicine, social ability, beauty, and social impact.</description>
                 <skillGains>
                     <Medicine>4</Medicine>
                     <Social>4</Social>
@@ -28,8 +28,8 @@
         <commonality>0.000001</commonality>
         <degreeDatas>
             <li>
-                <label>花语·玉簪</label>
-                <description>夏季花语。清荷与玉簪共鸣时，手工和艺术能力提升，也更容易在专注劳作中触发工作狂热或艺术灵感。</description>
+                <label>flower word: jade hairpin</label>
+                <description>A summer flower word. When Qinghe resonates with jade hairpin, crafting and artistic ability improve, and focused work more easily sparks work frenzy or artistic inspiration.</description>
                 <skillGains>
                     <Crafting>4</Crafting>
                     <Artistic>4</Artistic>
@@ -47,8 +47,8 @@
         <commonality>0.000001</commonality>
         <degreeDatas>
             <li>
-                <label>花语·月桂</label>
-                <description>秋季花语。清荷与月桂共鸣时，智识和射击能力提升，暗黑调查更高效，射击也更精准。</description>
+                <label>flower word: osmanthus</label>
+                <description>An autumn flower word. When Qinghe resonates with osmanthus, intellectual and shooting ability improve, dark study becomes more efficient, and shots become more precise.</description>
                 <skillGains>
                     <Intellectual>4</Intellectual>
                     <Shooting>4</Shooting>
@@ -68,8 +68,8 @@
         <commonality>0.000001</commonality>
         <degreeDatas>
             <li>
-                <label>花语·水仙</label>
-                <description>冬季花语。清荷与水仙共鸣时，烹饪和建造能力提升，不会在烹饪时做出有毒餐食，也不会因浑身湿透而心情低落。</description>
+                <label>flower word: narcissus</label>
+                <description>A winter flower word. When Qinghe resonates with narcissus, cooking and construction improve; she will not produce toxic meals while cooking and will not be upset by being soaking wet.</description>
                 <skillGains>
                     <Cooking>4</Cooking>
                     <Construction>4</Construction>

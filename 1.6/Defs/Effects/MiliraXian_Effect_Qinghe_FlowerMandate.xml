@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef>
-        <defName>MX_QH_Mote_FlowerMandate_ChrysanthemumCurvedTrail</defName>
+        <defName>MX_QH_Mote_SpiritBurstCurvedTrail</defName>
         <label>Mote</label>
-        <thingClass>MiliraXian.Characters.QingHe.Mote_FlowerMandate_ChrysanthemumCurvedTrail</thingClass>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Mote_SpiritBurstCurvedTrail</thingClass>
         <category>Mote</category>
         <graphicData>
             <graphicClass>Graphic_Mote</graphicClass>
@@ -31,7 +31,7 @@
     </ThingDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumWarmupCaster</defName>
+        <defName>MX_QH_Fleck_SpiritBurstWarmupCaster</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.02</fadeInTime>
         <solidTime>0.14</solidTime>
@@ -47,7 +47,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumWarmupTarget</defName>
+        <defName>MX_QH_Fleck_SpiritBurstWarmupTarget</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.02</fadeInTime>
         <solidTime>0.16</solidTime>
@@ -63,7 +63,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumReleaseTarget</defName>
+        <defName>MX_QH_Fleck_SpiritBurstReleaseTarget</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.05</solidTime>
@@ -79,7 +79,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumHit</defName>
+        <defName>MX_QH_Fleck_SpiritBurstHit</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.05</solidTime>
@@ -95,7 +95,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumHitExplosion</defName>
+        <defName>MX_QH_Fleck_SpiritBurstHitExplosion</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.03</solidTime>
@@ -111,7 +111,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</defName>
+        <defName>MX_QH_Fleck_SpiritBurstSpark</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.12</fadeInTime>
         <solidTime>0.28</solidTime>
@@ -125,7 +125,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumBrainBreak</defName>
+        <defName>MX_QH_Fleck_SpiritBurstBrainBreak</defName>
         <altitudeLayer>MoteOverhead</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.06</solidTime>
@@ -141,7 +141,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumCurveLine</defName>
+        <defName>MX_QH_Fleck_SpiritBurstCurveLine</defName>
         <altitudeLayer>MoteLow</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.20</solidTime>
@@ -156,7 +156,7 @@
     </FleckDef>
 
     <FleckDef ParentName="FleckBase_Thrown">
-        <defName>MX_QH_Fleck_FlowerMandate_ChrysanthemumCurveDistortion</defName>
+        <defName>MX_QH_Fleck_SpiritBurstCurveDistortion</defName>
         <altitudeLayer>MoteLow</altitudeLayer>
         <fadeInTime>0.00</fadeInTime>
         <solidTime>0.20</solidTime>
@@ -175,18 +175,18 @@
     </FleckDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupCaster</defName>
+        <defName>MX_QH_Effecter_SpiritBurstWarmupCaster</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumWarmupCaster</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstWarmupCaster</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.0~1.0</scale>
                 <spawnLocType>OnSource</spawnLocType>
             </li>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstSpark</fleckDef>
                 <burstCount>1~2</burstCount>
                 <scale>0.18~0.35</scale>
                 <speed>0.35~0.85</speed>
@@ -198,11 +198,11 @@
     </EffecterDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumWarmupTarget</defName>
+        <defName>MX_QH_Effecter_SpiritBurstWarmupTarget</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumWarmupTarget</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstWarmupTarget</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.0~1.0</scale>
                 <spawnLocType>OnSource</spawnLocType>
@@ -211,18 +211,18 @@
     </EffecterDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumReleaseCaster</defName>
+        <defName>MX_QH_Effecter_SpiritBurstReleaseCaster</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumWarmupCaster</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstWarmupCaster</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.1~1.1</scale>
                 <spawnLocType>OnSource</spawnLocType>
             </li>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstSpark</fleckDef>
                 <burstCount>2~4</burstCount>
                 <scale>0.26~0.45</scale>
                 <speed>0.5~1.1</speed>
@@ -234,18 +234,18 @@
     </EffecterDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumReleaseTarget</defName>
+        <defName>MX_QH_Effecter_SpiritBurstReleaseTarget</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumReleaseTarget</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstReleaseTarget</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.0~1.0</scale>
                 <spawnLocType>OnSource</spawnLocType>
             </li>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstSpark</fleckDef>
                 <burstCount>4~7</burstCount>
                 <scale>0.30~0.58</scale>
                 <speed>0.65~1.45</speed>
@@ -257,18 +257,18 @@
     </EffecterDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumHit</defName>
+        <defName>MX_QH_Effecter_SpiritBurstHit</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumHit</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstHit</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.0~1.0</scale>
                 <spawnLocType>OnSource</spawnLocType>
             </li>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstSpark</fleckDef>
                 <burstCount>2~4</burstCount>
                 <scale>0.24~0.52</scale>
                 <speed>0.45~1.05</speed>
@@ -280,18 +280,18 @@
     </EffecterDef>
 
     <EffecterDef>
-        <defName>MX_QH_Effecter_FlowerMandate_ChrysanthemumBrainBreak</defName>
+        <defName>MX_QH_Effecter_SpiritBurstBrainBreak</defName>
         <children>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumBrainBreak</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstBrainBreak</fleckDef>
                 <burstCount>1~1</burstCount>
                 <scale>1.0~1.0</scale>
                 <spawnLocType>OnSource</spawnLocType>
             </li>
             <li>
                 <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
-                <fleckDef>MX_QH_Fleck_FlowerMandate_ChrysanthemumSpark</fleckDef>
+                <fleckDef>MX_QH_Fleck_SpiritBurstSpark</fleckDef>
                 <burstCount>4~6</burstCount>
                 <scale>0.32~0.62</scale>
                 <speed>0.65~1.4</speed>

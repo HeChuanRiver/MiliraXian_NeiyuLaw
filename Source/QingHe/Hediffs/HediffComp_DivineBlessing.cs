@@ -50,7 +50,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public int RechargeTicksLeft => IsRecharging ? Mathf.Clamp(cooldownTicksLeft, 0, RechargeTicksTotal) : 0;
 
-        public int RechargeTicksTotal => Mathf.Max(0, Props.retriggerCooldownTicks);
+        public int RechargeTicksTotal
+        {
+            get
+            {
+                float factor = FlowerCourtUtility.GetDivineFortune(Pawn)?.DivineBlessingRechargeFactor ?? 1f;
+                return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks * Mathf.Max(0f, factor)));
+            }
+        }
 
         public float RechargeProgressPercent => IsRecharging && RechargeTicksTotal > 0 ? 1f - Mathf.Clamp01(RechargeTicksLeft / (float)RechargeTicksTotal) : 0f;
 

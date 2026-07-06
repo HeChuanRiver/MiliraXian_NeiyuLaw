@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_LuoshenContractMaintained.stages.0.label>洛神契：相守</MX_QH_LuoshenContractMaintained.stages.0.label>
+  <MX_QH_LuoshenContractMaintained.stages.0.description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
+  <MX_QH_LuoshenContractBroken.stages.0.label>洛神契破碎 ({0})</MX_QH_LuoshenContractBroken.stages.0.label>
+  <MX_QH_LuoshenContractBroken.stages.0.description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的花语只余空响。</MX_QH_LuoshenContractBroken.stages.0.description>
+  <MX_QH_LuoshenRibbonGrace.stages.0.label>洛神缎带 ({0})</MX_QH_LuoshenRibbonGrace.stages.0.label>
+  <MX_QH_LuoshenRibbonGrace.stages.0.description>洛神的缎带曾牵起我与{OTHERPAWN_nameDef}之间的心意，这份温柔仍在心中回响。</MX_QH_LuoshenRibbonGrace.stages.0.description>
+</LanguageData>

@@ -2,8 +2,8 @@
 <Defs>
     <HediffDef>
         <defName>MX_QH_LuoshenContract</defName>
-        <label>洛神契</label>
-        <description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</description>
+        <label>Luoshen contract</label>
+        <description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediff_LuoshenContract</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
@@ -15,37 +15,9 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_MusicMastery</defName>
-        <label>音律精通</label>
-        <description>清荷在习得全部花神庭技能后继续精进音律，基础能力与花神护体随精通等级提升。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(1.0, 0.82, 0.22)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <initialSeverity>1.0</initialSeverity>
-        <minSeverity>1.0</minSeverity>
-        <maxSeverity>12.0</maxSeverity>
-        <stages>
-            <li>
-                <minSeverity>1.0</minSeverity>
-                <label>音律精通</label>
-                <multiplyStatChangesBySeverity>true</multiplyStatChangesBySeverity>
-                <statOffsets>
-                    <MoveSpeed>0.02</MoveSpeed>
-                    <WorkSpeedGlobal>0.01</WorkSpeedGlobal>
-                </statOffsets>
-                <statFactors>
-                    <PsychicSensitivity>1.01</PsychicSensitivity>
-                </statFactors>
-            </li>
-        </stages>
-    </HediffDef>
-
-    <HediffDef>
         <defName>MX_QH_SpringFlow</defName>
-        <label>春泉洗礼</label>
-        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。</description>
+        <label>spring flow blessing</label>
+        <description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, and reduced pain&lt;/color&gt;.</description>
         <isBad>false</isBad>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QH_SpringFlow</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
@@ -80,24 +52,36 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_ChrysanthemumSlow</defName>
-        <label>秋令迟滞</label>
-        <description>行动被秋令音律拖滞。</description>
+        <defName>MX_QH_FlowerDance</defName>
+        <label>flower dance</label>
+        <description>Qinghe enters Flower Dance, improving movement speed, dodge, and Flower Decree recovery. Divine Protection begins recharging immediately after being hit.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.78, 0.52, 0.96)</defaultLabelColor>
-        <isBad>true</isBad>
+        <defaultLabelColor>(1.0, 0.72, 0.92)</defaultLabelColor>
+        <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
         <stages>
             <li>
-                <statFactors>
-                    <MoveSpeed>0.55</MoveSpeed>
-                </statFactors>
+                <statOffsets>
+                    <MoveSpeed>0.35</MoveSpeed>
+                    <MeleeDodgeChance>0.20</MeleeDodgeChance>
+                </statOffsets>
             </li>
         </stages>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>300</disappearsAfterTicks>
+                <disappearsAfterTicks>900</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDance">
+                <activeEffecter>MX_QH_Effecter_FlowerDivinationActive</activeEffecter>
+                <afterimageIntervalTicks>6</afterimageIntervalTicks>
+                <afterimageFadeTicks>60</afterimageFadeTicks>
+                <afterimageStartAlpha>0.44</afterimageStartAlpha>
+                <afterimageMinDistance>0.55</afterimageMinDistance>
             </li>
         </comps>
     </HediffDef>

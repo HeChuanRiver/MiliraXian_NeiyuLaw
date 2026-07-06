@@ -4,4 +4,12 @@
   <MX_QH_Trait_LongBreath.degreeDatas.0.description>受到致命傷害或摧毀身體部件的傷害時，若激流值大於0，抵消此次傷害、修復自身所有損傷並清空激流值，同時獲得短暫心靈隱形。</MX_QH_Trait_LongBreath.degreeDatas.0.description>
   <MX_QH_Trait_WaterFairy.degreeDatas.0.label>水中仙</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
   <MX_QH_Trait_WaterFairy.degreeDatas.0.description>清荷與生俱來的水靈加護。自帶「長息」「清流」與「花神護體」效果：長息會在遭受致命傷害或將摧毀部位的傷害時觸發，抵消傷害並修復全身損傷；清流每180 ticks自動治癒2.5生命值傷口；花神護體提供可回復護盾，並可透過曲譜節點獲得更高容量、更快回復和剛毅限傷效果。</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Peony.degreeDatas.0.label>花語·牡丹</MX_QH_FlowerWord_Peony.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Peony.degreeDatas.0.description>春季花語。清荷與牡丹共鳴時，更擅長安撫傷痛與人心，醫療、社交、魅力和社交影響力都會提升。</MX_QH_FlowerWord_Peony.degreeDatas.0.description>
+  <MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.label>花語·玉簪</MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.label>
+  <MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.description>夏季花語。清荷與玉簪共鳴時，手工和藝術能力提升，也更容易在專注勞作中觸發工作狂熱或藝術靈感。</MX_QH_FlowerWord_JadeHairpin.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Osmanthus.degreeDatas.0.label>花語·月桂</MX_QH_FlowerWord_Osmanthus.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Osmanthus.degreeDatas.0.description>秋季花語。清荷與月桂共鳴時，智識和射擊能力提升，暗黑調查更高效，射擊也更精準。</MX_QH_FlowerWord_Osmanthus.degreeDatas.0.description>
+  <MX_QH_FlowerWord_Narcissus.degreeDatas.0.label>花語·水仙</MX_QH_FlowerWord_Narcissus.degreeDatas.0.label>
+  <MX_QH_FlowerWord_Narcissus.degreeDatas.0.description>冬季花語。清荷與水仙共鳴時，烹飪和建造能力提升，不會在烹飪時做出有毒餐食，也不會因渾身濕透而心情低落。</MX_QH_FlowerWord_Narcissus.degreeDatas.0.description>
 </LanguageData>

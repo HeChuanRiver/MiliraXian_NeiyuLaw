@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Tree_FlowerMandate.label>飛花令</MX_QH_Tree_FlowerMandate.label>
+  <MX_QH_Tree_FlowerMandate.description>清荷的三式飛花令。全部習得後，飛花令進入強化形態。</MX_QH_Tree_FlowerMandate.description>
+  <MX_QH_Tree_DivineFortune.label>花神之眷顧</MX_QH_Tree_DivineFortune.label>
+  <MX_QH_Tree_DivineFortune.description>清荷可自動回復的護盾與花令基礎強化。</MX_QH_Tree_DivineFortune.description>
+  <MX_QH_Tree_DivineBlessing.label>花神之垂憐</MX_QH_Tree_DivineBlessing.label>
+  <MX_QH_Tree_DivineBlessing.description>清荷受到致命傷害時觸發的保護效果。</MX_QH_Tree_DivineBlessing.description>
+  <MX_QH_Tree_FlowerDance.label>花舞</MX_QH_Tree_FlowerDance.label>
+  <MX_QH_Tree_FlowerDance.description>消耗花令開啟的限時強化形態。</MX_QH_Tree_FlowerDance.description>
+  <MX_QH_Tree_Jueying.label>縱躍</MX_QH_Tree_Jueying.label>
+  <MX_QH_Tree_Jueying.description>清荷的突進型決戰技。</MX_QH_Tree_Jueying.description>
+  <MX_QH_Tree_Luoshen.label>洛神賦</MX_QH_Tree_Luoshen.label>
+  <MX_QH_Tree_Luoshen.description>與伴侶關係和非戰鬥修行相關的曲意。</MX_QH_Tree_Luoshen.description>
+</LanguageData>

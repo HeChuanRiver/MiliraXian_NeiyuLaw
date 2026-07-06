@@ -27,18 +27,15 @@ namespace MiliraXian.Characters.QingHe.UI
             Text.Font = GameFont.Medium;
             Text.Anchor = TextAnchor.UpperLeft;
             GUI.color = HeaderColor;
-            Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), "清荷面板说明");
+            Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), "MX_QH_FlowerPanelHelpTitle".Translate());
 
             GUI.color = BodyColor;
             Text.Font = GameFont.Small;
             float y = inRect.y + 48f;
-            DrawItem(inRect, ref y, "花令", "用于释放飞花令，分段显示当前花令数量和恢复进度。");
-            DrawItem(inRect, ref y, "护盾", "显示花神护体当前护盾百分比。");
-            DrawItem(inRect, ref y, "长息", "绿色方块表示可用充能，黄色填充表示正在恢复。");
-            DrawItem(inRect, ref y, "花信铃强化", "习得清角后可切换强化状态。");
-            DrawItem(inRect, ref y, "飞花令·寄时", "习得四时流转后可选择一个不同于主飞花令的额外飞花令。");
-            DrawItem(inRect, ref y, "花神降临", "显示降临持续时间或冷却进度，可用时点击启动。");
-            DrawItem(inRect, ref y, "花神庭", "显示技能树经验进度；中心数字为可用技能点，点击打开花神庭面板。");
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpFlowerDecreeTitle".Translate(), "MX_QH_FlowerPanelHelpFlowerDecreeBody".Translate());
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpShieldTitle".Translate(), "MX_QH_FlowerPanelHelpShieldBody".Translate());
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpLongBreathTitle".Translate(), "MX_QH_FlowerPanelHelpLongBreathBody".Translate());
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpFlowerCourtTitle".Translate(), "MX_QH_FlowerPanelHelpFlowerCourtBody".Translate());
 
             GUI.color = Color.white;
         }

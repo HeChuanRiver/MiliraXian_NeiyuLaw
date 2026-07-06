@@ -2,8 +2,8 @@
 <Defs>
     <ThingDef ParentName="BuildingBase">
         <defName>MX_QH_LotusPond</defName>
-        <label>荷池</label>
-        <description>清荷用于调谐四时共鸣的花神庭核心。清荷本人可以在这里与四时花神建立当前共鸣。</description>
+        <label>lotus pond</label>
+        <description>The core of Qinghe's Flower Court, used to tune four-season resonance. Qinghe herself can establish the current resonance with the four-season flower gods here.</description>
         <category>Building</category>
         <thingClass>MiliraXian.Characters.QingHe.Things.Building_LotusPond</thingClass>
         <forceDebugSpawnable>true</forceDebugSpawnable>
@@ -52,5 +52,13 @@
                 <li>RitualFocus</li>
             </buildingTags>
         </building>
+        <comps>
+            <li Class="CompProperties_UsesMeditationFocus" />
+            <li Class="CompProperties_AssignableToPawn">
+                <drawUnownedAssignmentOverlay>false</drawUnownedAssignmentOverlay>
+                <noAssignablePawnsDesc>The lotus pond can only be assigned to Qinghe.</noAssignablePawnsDesc>
+                <compClass>MiliraXian.Characters.QingHe.Things.CompAssignableToPawn_QingheMeditationSpot</compClass>
+            </li>
+        </comps>
     </ThingDef>
 </Defs>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Node_SpringFlow.label>flower decree</MX_QH_Node_SpringFlow.label>
+  <MX_QH_Node_SpringFlow.description>The initial score group. Qinghe already knows Spring Flow; this node only unlocks the Flower Decree score group.</MX_QH_Node_SpringFlow.description>
+  <MX_QH_Node_Chuanhun.label>soulpiercer</MX_QH_Node_Chuanhun.label>
+  <MX_QH_Node_Chuanhun.description>Unlocked by "Feihua Jueyu". Creates a sonic burst at a distant target location, stunning targets in the area and dealing psychic damage.</MX_QH_Node_Chuanhun.description>
+  <MX_QH_Node_Shuangyuejing.label>frost moon mirror</MX_QH_Node_Shuangyuejing.label>
+  <MX_QH_Node_Shuangyuejing.description>Unlocked by "Duanqiao Canxue". Summons a circular ice curtain that freezes and absorbs hostile projectiles passing through it.</MX_QH_Node_Shuangyuejing.description>
+  <MX_QH_Node_Gaoshan.label>Gaoshan</MX_QH_Node_Gaoshan.label>
+  <MX_QH_Node_Gaoshan.description>Unlocked by "Gaoshan". Increases Divine Protection shield capacity and Flower Decree maximum.</MX_QH_Node_Gaoshan.description>
+  <MX_QH_Node_Liushui.label>Liushui</MX_QH_Node_Liushui.label>
+  <MX_QH_Node_Liushui.description>Unlocked by "Liushui". Increases Divine Protection recharge speed.</MX_QH_Node_Liushui.description>
+  <MX_QH_Node_Chunjiang.label>Chunjiang</MX_QH_Node_Chunjiang.label>
+  <MX_QH_Node_Chunjiang.description>Unlocked by "Chunjiang". When Divine Protection takes heavy damage, caps the shield damage from a single hit.</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_Yingyue.label>Yingyue</MX_QH_Node_Yingyue.label>
+  <MX_QH_Node_Yingyue.description>Unlocked by "Yingyue". Increases the available charges of Divine Blessing.</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_NishangDance.label>Nishang Dance</MX_QH_Node_NishangDance.label>
+  <MX_QH_Node_NishangDance.description>Unlocked by "Nishang Dance". Allows Qinghe to spend Flower Decree to enter Flower Dance.</MX_QH_Node_NishangDance.description>
+  <MX_QH_Node_Jueying.label>Jueying</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>Unlocked by "Jueying". Allows Qinghe to use Leaping Shadow, choosing a direction after landing to strike in a cone.</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Luoshenfu.label>Luoshen Fu</MX_QH_Node_Luoshenfu.label>
+  <MX_QH_Node_Luoshenfu.description>Unlocked by "Luoshen Fu". Enables spouse-related Luoshen Fu effects.</MX_QH_Node_Luoshenfu.description>
+</LanguageData>

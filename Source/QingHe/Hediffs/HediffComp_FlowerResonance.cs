@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -8,7 +7,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class HediffCompProperties_FlowerResonance : HediffCompProperties
     {
-        public int initialSkillPoints = 1;
+        public int maxMusicMasteryLevel = 24;
 
         public HediffCompProperties_FlowerResonance()
         {
@@ -18,38 +17,28 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffComp_FlowerResonance : HediffComp
     {
-        public const int MaxMusicMasteryLevel = 12;
-
         private bool initialized;
+        private List<MX_QHSkillNodeDef> learnedNodes;
+        private Dictionary<QingheMusicScoreDef, float> musicScoreReadingProgress;
+
+        // Legacy fields kept only so old saves can load and discard removed v2 growth data.
         private int skillPoints;
         private float experience;
-        private List<QingheSkillNodeDef> learnedNodes;
-        private List<QingheSkillTreeDef> unlockedTrees;
         private int musicMasteryLevel;
 
         public HediffCompProperties_FlowerResonance Props => (HediffCompProperties_FlowerResonance)props;
 
-        public int SkillPoints => skillPoints;
+        public IEnumerable<MX_QHSkillNodeDef> LearnedNodes => learnedNodes ?? Enumerable.Empty<MX_QHSkillNodeDef>();
 
-        public float Experience => experience;
+        public int LearnedNodeCount => learnedNodes?.Count ?? 0;
 
-        public IEnumerable<QingheSkillNodeDef> LearnedNodes => learnedNodes;
+        public int UnlockedTreeCount => DefDatabase<QingheSkillTreeDef>.AllDefsListForReading.Count(IsTreeUnlocked);
 
         public int MusicMasteryLevel => musicMasteryLevel;
 
-        public bool MusicMasteryComplete => musicMasteryLevel >= MaxMusicMasteryLevel;
+        public int MaxMusicMasteryLevel => Props.maxMusicMasteryLevel;
 
-        public bool IsMusicMasteryActive => TotalEarnedSkillPoints >= TotalSkillPointCost();
-
-        public float LotusShieldCapacityMultiplierFromMastery => MusicMasteryLevel > 0 ? 1f + 0.04f * musicMasteryLevel : 1f;
-
-        public float ExperienceToNextPoint => MusicMasteryComplete ? 0f : ExperienceRequiredForPoint(TotalEarnedSkillPoints + musicMasteryLevel);
-
-        public float ExperienceProgressPercent => ExperienceToNextPoint <= 0f ? 0f : Mathf.Clamp01(experience / ExperienceToNextPoint);
-
-        private int SpentSkillPoints => CalculateSpentSkillPoints();
-
-        private int TotalEarnedSkillPoints => System.Math.Min(skillPoints + SpentSkillPoints, TotalSkillPointCost());
+        public float LotusShieldCapacityMultiplierFromMastery => 1f + musicMasteryLevel * 0.03f;
 
         public override bool CompDisallowVisible()
         {
@@ -67,258 +56,245 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             SyncDependentComps();
         }
 
-        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
-        {
-            NormalizeMusicMasteryState();
-            SyncMusicMasteryHediff();
-        }
-
         public override void CompExposeData()
         {
             Scribe_Values.Look(ref initialized, "mx_qh_skillTree_initialized", false);
             Scribe_Values.Look(ref skillPoints, "mx_qh_skillTree_skillPoints", 0);
             Scribe_Values.Look(ref experience, "mx_qh_skillTree_experience", 0f);
             Scribe_Collections.Look(ref learnedNodes, "mx_qh_skillTree_learnedNodes", LookMode.Def);
-            Scribe_Collections.Look(ref unlockedTrees, "mx_qh_skillTree_unlockedTrees", LookMode.Def);
+            Scribe_Collections.Look(ref musicScoreReadingProgress, "mx_qh_musicScoreReadingProgress", LookMode.Def, LookMode.Value);
             Scribe_Values.Look(ref musicMasteryLevel, "mx_qh_skillTree_musicMasteryLevel", 0);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 InitializeNewState();
-                NormalizeMusicMasteryState();
+                NormalizeCollections();
+                EnsureInitiallyLearnedNodes();
                 SyncDependentComps();
             }
         }
 
         public bool IsTreeUnlocked(QingheSkillTreeDef treeDef)
         {
-            return treeDef != null && unlockedTrees.Contains(treeDef);
+            NormalizeCollections();
+            return treeDef != null && learnedNodes.Any(node => node?.tree == treeDef);
         }
 
-        public void UnlockTree(QingheSkillTreeDef treeDef)
+        public bool HasNode(MX_QHSkillNodeDef node)
         {
-            if (treeDef != null && !unlockedTrees.Contains(treeDef))
-            {
-                unlockedTrees.Add(treeDef);
-            }
-        }
-
-        public bool HasNode(QingheSkillNodeDef node)
-        {
+            NormalizeCollections();
             return node != null && learnedNodes.Contains(node);
         }
 
-        public bool CanLearn(QingheSkillNodeDef node, out string reason)
+        public bool CanLearn(MX_QHSkillNodeDef node, out string reason)
         {
+            NormalizeCollections();
             if (node == null)
             {
-                reason = "未知节点。";
+                reason = "MX_QH_UnknownNode".Translate();
                 return false;
             }
 
             if (HasNode(node))
             {
-                reason = "已经习得。";
+                reason = "MX_QH_SkillTreeStateAlreadyLearned".Translate();
                 return false;
-            }
-
-            if (skillPoints < node.cost)
-            {
-                reason = "技能点不足。";
-                return false;
-            }
-
-            if (node.tree != null && !IsTreeUnlocked(node.tree))
-            {
-                reason = "尚未获得对应曲谱。";
-                return false;
-            }
-
-            List<QingheSkillNodeDef> prerequisites = node.prerequisites;
-            for (int i = 0; i < prerequisites.Count; i++)
-            {
-                if (!HasNode(prerequisites[i]))
-                {
-                    reason = "前置节点未习得。";
-                    return false;
-                }
             }
 
             reason = null;
             return true;
         }
 
-        public bool TryLearn(QingheSkillNodeDef node, out string reason)
+        public bool TryLearn(MX_QHSkillNodeDef node, out string reason)
         {
             if (!CanLearn(node, out reason))
             {
                 return false;
             }
 
-            skillPoints -= node.cost;
             learnedNodes.Add(node);
-            NormalizeMusicMasteryState();
             SyncDependentComps();
             reason = null;
             return true;
         }
 
-        public void AddSkillPoints(int amount)
+        public int LearnNodes(IEnumerable<MX_QHSkillNodeDef> nodes)
         {
-            skillPoints = System.Math.Max(0, skillPoints + amount);
-            NormalizeMusicMasteryState();
-            SyncDependentComps();
+            NormalizeCollections();
+            if (nodes == null)
+            {
+                return 0;
+            }
+
+            int learnedCount = 0;
+            foreach (MX_QHSkillNodeDef node in nodes)
+            {
+                if (node != null && !learnedNodes.Contains(node))
+                {
+                    learnedNodes.Add(node);
+                    learnedCount++;
+                }
+            }
+
+            if (learnedCount > 0)
+            {
+                SyncDependentComps();
+            }
+
+            return learnedCount;
         }
 
-        public void AddExperience(float amount)
+        public float GetMusicScoreReadingProgressTicks(QingheMusicScoreDef score)
         {
-            if (amount <= 0f)
+            NormalizeCollections();
+            if (score == null)
+            {
+                return 0f;
+            }
+
+            float progress;
+            return musicScoreReadingProgress.TryGetValue(score, out progress) ? Mathf.Max(0f, progress) : 0f;
+        }
+
+        public float GetMusicScoreReadingProgressPercent(QingheMusicScoreDef score)
+        {
+            if (score == null)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp01(GetMusicScoreReadingProgressTicks(score) / Mathf.Max(1, score.requiredReadingTicks));
+        }
+
+        public float GetNodeReadingProgressPercent(MX_QHSkillNodeDef node)
+        {
+            NormalizeCollections();
+            if (node == null)
+            {
+                return 0f;
+            }
+
+            if (HasNode(node))
+            {
+                return 1f;
+            }
+
+            float bestProgress = 0f;
+            foreach (QingheMusicScoreDef score in DefDatabase<QingheMusicScoreDef>.AllDefsListForReading)
+            {
+                if (score.unlocksNodes != null && score.unlocksNodes.Contains(node))
+                {
+                    bestProgress = Mathf.Max(bestProgress, GetMusicScoreReadingProgressPercent(score));
+                }
+            }
+
+            return bestProgress;
+        }
+
+        public bool AddMusicScoreReadingProgress(QingheMusicScoreDef score, float progressTicks)
+        {
+            NormalizeCollections();
+            if (score == null)
+            {
+                return false;
+            }
+
+            float progress = GetMusicScoreReadingProgressTicks(score) + Mathf.Max(0f, progressTicks);
+            int requiredTicks = Mathf.Max(1, score.requiredReadingTicks);
+            if (progress >= requiredTicks)
+            {
+                musicScoreReadingProgress[score] = requiredTicks;
+                return true;
+            }
+
+            musicScoreReadingProgress[score] = progress;
+            return false;
+        }
+
+        public void ClearMusicScoreReadingProgress(QingheMusicScoreDef score)
+        {
+            NormalizeCollections();
+            if (score != null)
+            {
+                musicScoreReadingProgress.Remove(score);
+            }
+        }
+
+        public bool TryGainMusicMastery(int levels, out string reason)
+        {
+            NormalizeCollections();
+            int gain = levels <= 0 ? 1 : levels;
+            int maxLevel = MaxMusicMasteryLevel;
+            if (musicMasteryLevel >= maxLevel)
+            {
+                reason = "MX_QH_MusicMasteryMaxed".Translate();
+                return false;
+            }
+
+            musicMasteryLevel = System.Math.Min(maxLevel, musicMasteryLevel + gain);
+            SyncDependentComps();
+            reason = null;
+            return true;
+        }
+
+        public void LearnAllNodesInTree(QingheSkillTreeDef treeDef)
+        {
+            NormalizeCollections();
+            if (treeDef == null)
             {
                 return;
             }
 
-            experience = System.Math.Max(0f, experience + amount);
-            NormalizeMusicMasteryState();
-            while (!MusicMasteryComplete && ExperienceToNextPoint > 0f && experience >= ExperienceToNextPoint)
+            foreach (MX_QHSkillNodeDef node in DefDatabase<MX_QHSkillNodeDef>.AllDefsListForReading)
             {
-                experience -= ExperienceToNextPoint;
-                if (IsMusicMasteryActive)
+                if (node.tree == treeDef && !learnedNodes.Contains(node))
                 {
-                    musicMasteryLevel = System.Math.Min(MaxMusicMasteryLevel, musicMasteryLevel + 1);
-                    if (MusicMasteryComplete)
-                    {
-                        experience = 0f;
-                    }
+                    learnedNodes.Add(node);
                 }
-                else
-                {
-                    skillPoints++;
-                }
-
-                SyncMusicMasteryHediff();
             }
+
+            SyncDependentComps();
         }
 
         private void InitializeNewState()
         {
+            NormalizeCollections();
             if (initialized)
             {
                 return;
             }
 
             initialized = true;
-            learnedNodes = new List<QingheSkillNodeDef>();
-            unlockedTrees = new List<QingheSkillTreeDef>();
-            skillPoints = System.Math.Max(0, Props?.initialSkillPoints ?? 1);
-            foreach (QingheSkillTreeDef treeDef in DefDatabase<QingheSkillTreeDef>.AllDefsListForReading)
-            {
-                if (treeDef.initiallyUnlocked)
-                {
-                    unlockedTrees.Add(treeDef);
-                }
-            }
+            EnsureInitiallyLearnedNodes();
 
-            NormalizeMusicMasteryState();
+            skillPoints = 0;
+            experience = 0f;
+            musicMasteryLevel = 0;
         }
 
-        private void NormalizeMusicMasteryState()
+        private void EnsureInitiallyLearnedNodes()
         {
-            int completeCost = TotalSkillPointCost();
-            int spent = SpentSkillPoints;
-            int totalNormalPoints = skillPoints + spent;
-            if (completeCost > 0 && totalNormalPoints > completeCost)
-            {
-                int overflowLevels = totalNormalPoints - completeCost;
-                skillPoints = System.Math.Max(0, completeCost - spent);
-                musicMasteryLevel += overflowLevels;
-            }
-
-            musicMasteryLevel = Mathf.Clamp(musicMasteryLevel, 0, MaxMusicMasteryLevel);
-            if (!IsMusicMasteryActive)
-            {
-                musicMasteryLevel = 0;
-            }
-
-            if (MusicMasteryComplete)
-            {
-                experience = 0f;
-            }
+            LearnNodes(DefDatabase<MX_QHSkillNodeDef>.AllDefsListForReading.Where(node => node.initiallyLearned));
         }
 
         private void SyncDependentComps()
         {
-            parent?.GetComp<HediffComp_FlowerChoices>()?.ApplyChoicesToPawn();
-            SyncMusicMasteryHediff();
+            FlowerCourtUtility.GetDivineFortune(Pawn)?.Recalculate();
+            QingheSkillTreeSystem.SyncChoices(Pawn, this);
         }
 
-        private int CalculateSpentSkillPoints()
+        private void NormalizeCollections()
         {
-            if (learnedNodes.NullOrEmpty())
+            if (learnedNodes == null)
             {
-                return 0;
+                learnedNodes = new List<MX_QHSkillNodeDef>();
             }
 
-            int spent = 0;
-            for (int i = 0; i < learnedNodes.Count; i++)
+            if (musicScoreReadingProgress == null)
             {
-                QingheSkillNodeDef node = learnedNodes[i];
-                if (node != null)
-                {
-                    spent += System.Math.Max(0, node.cost);
-                }
+                musicScoreReadingProgress = new Dictionary<QingheMusicScoreDef, float>();
             }
 
-            return spent;
-        }
-
-        private static int TotalSkillPointCost()
-        {
-            int total = 0;
-            foreach (QingheSkillNodeDef node in DefDatabase<QingheSkillNodeDef>.AllDefsListForReading)
-            {
-                total += System.Math.Max(0, node.cost);
-            }
-
-            return total;
-        }
-
-        private static float ExperienceRequiredForPoint(int earnedSkillPoints)
-        {
-            int completeCost = TotalSkillPointCost();
-            float preComplete = 75f + 4f * earnedSkillPoints + 0.08f * earnedSkillPoints * earnedSkillPoints;
-            if (earnedSkillPoints < completeCost)
-            {
-                return Mathf.Min(495f, preComplete);
-            }
-
-            int overflow = earnedSkillPoints - completeCost + 1;
-            return 500f + 100f * overflow * overflow;
-        }
-
-        private void SyncMusicMasteryHediff()
-        {
-            if (Pawn == null || Pawn.Dead || MX_QHDefOf.MX_QH_MusicMastery == null)
-            {
-                return;
-            }
-
-            Hediff hediff = Pawn.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_MusicMastery);
-            if (musicMasteryLevel <= 0)
-            {
-                if (hediff != null)
-                {
-                    Pawn.health.RemoveHediff(hediff);
-                }
-                return;
-            }
-
-            if (hediff == null)
-            {
-                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_MusicMastery, Pawn);
-                Pawn.health.AddHediff(hediff);
-            }
-
-            hediff.Severity = musicMasteryLevel;
         }
     }
 }

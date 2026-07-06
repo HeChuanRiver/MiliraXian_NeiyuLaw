@@ -12,4 +12,27 @@
   <SpringFlowField.label>涌泉力场</SpringFlowField.label>
   <TempestDrainField.label>扼流力场</TempestDrainField.label>
   <MX_QH_Elegance_YangChunField.label>阳春音场</MX_QH_Elegance_YangChunField.label>
+  <MX_QH_LotusPond.label>荷池</MX_QH_LotusPond.label>
+  <MX_QH_LotusPond.description>清荷用于调谐四时共鸣的花神庭核心。清荷本人可以在这里与四时花神建立当前共鸣。</MX_QH_LotusPond.description>
+  <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>荷池只可分配给清荷。</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
+  <MX_QH_LostMusicScoreFragment.label>失传的曲谱残片</MX_QH_LostMusicScoreFragment.label>
+  <MX_QH_LostMusicScoreFragment.description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的清荷技能书。</MX_QH_LostMusicScoreFragment.description>
+  <MX_QH_SkillBook.label>清荷技能书</MX_QH_SkillBook.label>
+  <MX_QH_SkillBook.description>记录清荷曲意的特殊书籍。只有清荷本人能够读懂其中内容；读完后，书中曲意散去，书本会变回普通教材。</MX_QH_SkillBook.description>
+  <MX_QH_Book.label>清荷书卷</MX_QH_Book.label>
+  <MX_QH_Book.description>清荷相关书卷。</MX_QH_Book.description>
+  <MX_QH_Weapon_FlowerBell.label>四时花信铃</MX_QH_Weapon_FlowerBell.label>
+  <MX_QH_Weapon_FlowerBell.description>清荷以花神之力凝聚的铃形兵装，可在荷池处调谐四时共鸣。</MX_QH_Weapon_FlowerBell.description>
+  <MX_Bullet_Qinghe_FlowerBell_Spring.label>春信铃音</MX_Bullet_Qinghe_FlowerBell_Spring.label>
+  <MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>春信破城铃音</MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Summer.label>夏信铃音</MX_Bullet_Qinghe_FlowerBell_Summer.label>
+  <MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>夏信破城铃音</MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Autumn.label>秋信铃音</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
+  <MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>秋信破城铃音</MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Winter.label>冬信铃音</MX_Bullet_Qinghe_FlowerBell_Winter.label>
+  <MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>冬信破城铃音</MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>
+  <MX_Bullet_QH_LunarMirrorRetaliation.label>腊梅反击铃音</MX_Bullet_QH_LunarMirrorRetaliation.label>
+  <MX_QH_LunarMirror.label>腊梅护盾</MX_QH_LunarMirror.label>
+  <MX_QH_AscentSlashFlyer.label>花神闪飞行体</MX_QH_AscentSlashFlyer.label>
+  <MX_QH_AscentSlashKnockbackFlyer.label>花神闪击退飞行体</MX_QH_AscentSlashKnockbackFlyer.label>
 </LanguageData>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Node_SpringFlow.label>飞花令</MX_QH_Node_SpringFlow.label>
+  <MX_QH_Node_SpringFlow.description>初始曲谱集。清荷已经掌握春泉涌流，此节点仅用于开启飞花令曲谱集。</MX_QH_Node_SpringFlow.description>
+  <MX_QH_Node_Chuanhun.label>穿魂</MX_QH_Node_Chuanhun.label>
+  <MX_QH_Node_Chuanhun.description>由《飞花绝语》解锁。对远距离目标地点产生音爆，眩晕范围内目标并造成心灵伤害。</MX_QH_Node_Chuanhun.description>
+  <MX_QH_Node_Shuangyuejing.label>霜月镜</MX_QH_Node_Shuangyuejing.label>
+  <MX_QH_Node_Shuangyuejing.description>由《断桥残雪》解锁。召唤圆形冰幕，冻结并吸收经过的敌对投射物。</MX_QH_Node_Shuangyuejing.description>
+  <MX_QH_Node_Gaoshan.label>高山</MX_QH_Node_Gaoshan.label>
+  <MX_QH_Node_Gaoshan.description>由《高山》解锁。提高花神之眷顾的护盾容量，并提升花令上限。</MX_QH_Node_Gaoshan.description>
+  <MX_QH_Node_Liushui.label>流水</MX_QH_Node_Liushui.label>
+  <MX_QH_Node_Liushui.description>由《流水》解锁。提高花神之眷顾的回充速度。</MX_QH_Node_Liushui.description>
+  <MX_QH_Node_Chunjiang.label>春江</MX_QH_Node_Chunjiang.label>
+  <MX_QH_Node_Chunjiang.description>由《春江》解锁。花神之眷顾受到高额伤害时，将单次护盾伤害压低到上限内。</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_Yingyue.label>映月</MX_QH_Node_Yingyue.label>
+  <MX_QH_Node_Yingyue.description>由《映月》解锁。花神之垂怜的可用次数充能提高。</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_NishangDance.label>霓裳之舞</MX_QH_Node_NishangDance.label>
+  <MX_QH_Node_NishangDance.description>由《霓裳之舞》解锁。允许清荷消耗花令进入花舞状态。</MX_QH_Node_NishangDance.description>
+  <MX_QH_Node_Jueying.label>绝影</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>由《绝影》解锁。允许清荷使用纵跃，在目标落点后选择方向造成扇形打击。</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Luoshenfu.label>洛神赋</MX_QH_Node_Luoshenfu.label>
+  <MX_QH_Node_Luoshenfu.description>由《洛神赋》解锁。开启洛神赋相关伴侣效果。</MX_QH_Node_Luoshenfu.description>
+</LanguageData>

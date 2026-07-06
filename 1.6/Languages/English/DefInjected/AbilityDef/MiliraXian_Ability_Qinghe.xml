@@ -13,7 +13,19 @@
   <MX_Qinghe_Elegance_HengZhi.label>Cross-Pluck</MX_Qinghe_Elegance_HengZhi.label>
   <MX_Qinghe_Elegance_HengZhi.description>Only usable in pipa form. Deals heavy impact damage around the caster and knocks enemies back. The more targets hit, the faster Elegance grows.</MX_Qinghe_Elegance_HengZhi.description>
   <MX_Qinghe_Elegance_DuanHun.label>Soulbreak</MX_Qinghe_Elegance_DuanHun.label>
-  <MX_Qinghe_Elegance_DuanHun.description>Only usable in bamboo flute form. Applies Soulbreak melody to a small distant area, causing damage, stun, bleeding, long-lasting slow, and a small chance to directly destroy the brain.</MX_Qinghe_Elegance_DuanHun.description>
+  <MX_Qinghe_Elegance_DuanHun.description>Only usable in bamboo flute form. Applies Soulbreak melody to a small distant area, causing damage, stun, and a small chance to directly destroy the brain.</MX_Qinghe_Elegance_DuanHun.description>
   <MX_Qinghe_Elegance_YangChun.label>Yangchun</MX_Qinghe_Elegance_YangChun.label>
   <MX_Qinghe_Elegance_YangChun.description>Only usable in qin form. After casting, the same casting job releases a harmonic pulse: enemies are damaged and slowed, allies are healed and hastened, and Elegance increases.</MX_Qinghe_Elegance_YangChun.description>
+  <MX_QH_SpringFlow.label>Spring Flow</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>Spend 1 Flower Decree to call forth Spring Flow at the target point, briefly healing allies in range and applying Spring Flow Baptism.</MX_QH_SpringFlow.description>
+  <MX_QH_SpiritBurst.label>Spirit Burst</MX_QH_SpiritBurst.label>
+  <MX_QH_SpiritBurst.description>Autumn Flower Mandate. Spend 1 Flower Decree to play an autumnal melody at the target point, damaging and stunning enemies in a small area.</MX_QH_SpiritBurst.description>
+  <MX_QH_LunarMirror.label>Lunar Mirror</MX_QH_LunarMirror.label>
+  <MX_QH_LunarMirror.description>Winter Flower Mandate. Spend 1 Flower Decree to summon a snow-like shield at the target point, briefly intercepting hostile projectiles that cross its boundary.</MX_QH_LunarMirror.description>
+  <MX_QH_FlowerDance.label>Flower Dance</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>Spend 1 Flower Decree to enter Flower Dance for a short time, improving movement, evasion, and Flower Decree recovery, and causing Flower-God Ward to recharge immediately after being hit.</MX_QH_FlowerDance.description>
+  <MX_QH_AscentSlash.label>Dance Step</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>A decisive dash technique unlocked by Jueying. First choose a blink landing point in Qinghe's line of sight, then choose a visible strike direction from that point. Qinghe blinks to the landing point, then damages, briefly stuns, and knocks back enemies in a cone. Costs Flower Decree.</MX_QH_AscentSlash.description>
+  <MX_QH_LuoshenRibbon.label>Luoshen's Ribbon</MX_QH_LuoshenRibbon.label>
+  <MX_QH_LuoshenRibbon.description>Unlocked by Luoshenfu. Choose two conscious people and bind their thoughts with Luoshen's ribbon, greatly improving their opinion of each other.</MX_QH_LuoshenRibbon.description>
 </LanguageData>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_QixiRitualPattern.ritualExpectedDesc>Every year on {DATE}, {MEMBERS} can hold a Qixi rite beside the lotus pond.</MX_QH_QixiRitualPattern.ritualExpectedDesc>
+  <MX_QH_QixiRitualPattern.ritualExpectedDescNoAdjective>{MEMBERS} can hold a Qixi rite beside the lotus pond.</MX_QH_QixiRitualPattern.ritualExpectedDescNoAdjective>
+  <MX_QH_QixiRitualPattern.shortDescOverride>A festival rite beside the lotus pond, praying for artistry and flowing music.</MX_QH_QixiRitualPattern.shortDescOverride>
+  <MX_QH_QixiRitualPattern.ritualExplanation>The Qixi rite uses the standard festival structure: a speaker gives a short address, then participants gather beside the lotus pond. Ritual quality affects the mood memory participants receive.</MX_QH_QixiRitualPattern.ritualExplanation>
+  <MX_QH_QixiRitualPattern.beginRitualOverride>Begin Qixi rite</MX_QH_QixiRitualPattern.beginRitualOverride>
+</LanguageData>

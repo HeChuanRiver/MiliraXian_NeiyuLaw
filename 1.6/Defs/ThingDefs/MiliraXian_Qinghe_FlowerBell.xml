@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
-    <label>四时花信铃</label>
-    <description>清荷以花神之力凝聚的铃形兵装，所发出的音击随当前飞花令切换效果。</description>
+    <label>four-season Flower Bell</label>
+    <description>A bell-shaped armament condensed from Qinghe's flower god power. Its four-season resonance can be tuned at a lotus pond.</description>
     <recipeMaker Inherit="False" IsNull="True" />
     <techLevel>Archotech</techLevel>
     <smeltable>false</smeltable>
@@ -31,47 +31,47 @@
       <AccuracyLong>1.0</AccuracyLong>
       <RangedWeapon_Cooldown>1.5</RangedWeapon_Cooldown>
     </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li>
+        <compClass>MiliraXian.Characters.QingHe.Things.CompEquippable_FlowerBell</compClass>
+      </li>
+      <li Class="CompProperties_Styleable" />
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellResonance">
+        <settings>
+          <li>
+            <resonance>Spring</resonance>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
+            <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Spring_Building</buildingProjectile>
+          </li>
+          <li>
+            <resonance>Summer</resonance>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
+            <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Summer_Building</buildingProjectile>
+          </li>
+          <li>
+            <resonance>Autumn</resonance>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
+            <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Autumn_Building</buildingProjectile>
+          </li>
+          <li>
+            <resonance>Winter</resonance>
+            <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
+            <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Winter_Building</buildingProjectile>
+          </li>
+        </settings>
+      </li>
+    </comps>
     <verbs>
-      <li Class="MiliraXian.Characters.QingHe.Verbs.VerbProperties_FlowerBell">
+      <li>
         <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
-        <defaultProjectile>MX_Bullet_Qinghe_FlowerBell</defaultProjectile>
+        <defaultProjectile>MX_Bullet_Qinghe_FlowerBell_Spring</defaultProjectile>
         <warmupTime>0.90</warmupTime>
         <range>29.9</range>
         <burstShotCount>3</burstShotCount>
         <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
         <defaultCooldownTime>1.5</defaultCooldownTime>
-        <mandateSettings>
-          <li>
-            <projectile>MX_Bullet_Qinghe_FlowerBell</projectile>
-            <burstShotCount>3</burstShotCount>
-            <cooldownTime>1.5</cooldownTime>
-          </li>
-          <li>
-            <flowerMandate>MX_QH_FlowerMandate_Peach</flowerMandate>
-            <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
-            <burstShotCount>5</burstShotCount>
-            <cooldownTime>2.2</cooldownTime>
-          </li>
-          <li>
-            <flowerMandate>MX_QH_FlowerMandate_Pomegranate</flowerMandate>
-            <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
-            <burstShotCount>4</burstShotCount>
-            <cooldownTime>1.7</cooldownTime>
-          </li>
-          <li>
-            <flowerMandate>MX_QH_FlowerMandate_Chrysanthemum</flowerMandate>
-            <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
-            <burstShotCount>1</burstShotCount>
-            <cooldownTime>2.8</cooldownTime>
-          </li>
-          <li>
-            <flowerMandate>MX_QH_FlowerMandate_Wintersweet</flowerMandate>
-            <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
-            <burstShotCount>2</burstShotCount>
-            <cooldownTime>1.2</cooldownTime>
-          </li>
-        </mandateSettings>
       </li>
     </verbs>
   </ThingDef>
@@ -86,10 +86,11 @@
     </graphicData>
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
-      <damageAmountBase>1</damageAmountBase>
+      <damageAmountBase>5</damageAmountBase>
       <armorPenetrationBase>2.10</armorPenetrationBase>
       <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
+      <soundExplode>Explosion_Bomb</soundExplode>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
@@ -114,111 +115,114 @@
       <li Class="CompProperties_ProjectileEffecter">
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellDivinationAreaOnHit">
-        <radius>2.4</radius>
-        <damageMultiplier>1</damageMultiplier>
-        <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
-        <burstMoteScale>2.4</burstMoteScale>
-      </li>
     </comps>
   </ThingDef>
 
-  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
-    <defName>MX_Bullet_Qinghe_FlowerBell</defName>
-    <label>花信铃音</label>
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Spring_Base">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Spring</defName>
+    <label>spring bell note</label>
     <graphicData>
-      <color>(230,195,255)</color>
+      <color>(255,130,150)</color>
     </graphicData>
     <projectile>
       <damageAmountBase>6</damageAmountBase>
     </projectile>
-  </ThingDef>
-
-  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
-    <defName>MX_Bullet_Qinghe_FlowerBell_Spring</defName>
-    <label>血铃音</label>
-    <graphicData>
-      <color>(255,130,150)</color>
-    </graphicData>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectBleedAccumulation</damageDef>
         <amount>0.08</amount>
         <armorPenetration>2.10</armorPenetration>
+        <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
   </ThingDef>
 
-  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+  <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Spring_Base">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Spring_Building</defName>
+    <label>spring siegebreaking bell note</label>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact_Building</damageDef>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Summer_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Summer</defName>
-    <label>毒铃音</label>
+    <label>summer bell note</label>
     <graphicData>
       <color>(160,245,110)</color>
     </graphicData>
+    <projectile>
+      <damageAmountBase>5</damageAmountBase>
+    </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectToxinAccumulation</damageDef>
-        <amount>0.05</amount>
+        <amount>0.06</amount>
         <armorPenetration>2.10</armorPenetration>
+        <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
   </ThingDef>
 
-  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+  <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Summer_Base">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Summer_Building</defName>
+    <label>summer siegebreaking bell note</label>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact_Building</damageDef>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Autumn_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Autumn</defName>
-    <label>惧铃音</label>
+    <label>autumn bell note</label>
     <graphicData>
       <color>(230,185,255)</color>
     </graphicData>
-    <comps Inherit="False">
+    <projectile>
+      <damageAmountBase>4</damageAmountBase>
+    </projectile>
+    <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectFearAccumulation</damageDef>
         <amount>0.25</amount>
         <armorPenetration>2.10</armorPenetration>
-      </li>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
-        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <trailMaxPoints>22</trailMaxPoints>
-        <trailMinPointDistance>0.10</trailMinPointDistance>
-        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
-        <trailWidthStart>0.18</trailWidthStart>
-        <trailWidthEnd>0.05</trailWidthEnd>
-        <trailAlpha>1.00</trailAlpha>
-        <trailAltitudeOffset>0.70</trailAltitudeOffset>
-        <useProjectileGraphicColor>true</useProjectileGraphicColor>
-      </li>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
-        <homingStartDelayTicks>5</homingStartDelayTicks>
-        <minHomingTicksToImpact>10</minHomingTicksToImpact>
-        <homingTurnLerp>0.13</homingTurnLerp>
-        <curveAmplitudeMin>0.08</curveAmplitudeMin>
-        <curveAmplitudeMax>0.16</curveAmplitudeMax>
-        <curveFrequency>0.08</curveFrequency>
-      </li>
-      <li Class="CompProperties_ProjectileEffecter">
-        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
-      </li>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellDivinationAreaOnHit">
-        <radius>2.4</radius>
-        <damageMultiplier>1</damageMultiplier>
-        <burstMoteDef>MX_QH_Mote_FlowerDivinationBurst</burstMoteDef>
-        <burstMoteScale>2.4</burstMoteScale>
+        <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
   </ThingDef>
 
-  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+  <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Autumn_Base">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Autumn_Building</defName>
+    <label>autumn siegebreaking bell note</label>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact_Building</damageDef>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Winter_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Winter</defName>
-    <label>寒铃音</label>
+    <label>winter bell note</label>
     <graphicData>
       <color>(170,225,255)</color>
     </graphicData>
+    <projectile>
+      <damageAmountBase>5</damageAmountBase>
+    </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectColdAccumulation</damageDef>
         <amount>0.08</amount>
         <armorPenetration>2.10</armorPenetration>
+        <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Winter_Base">
+    <defName>MX_Bullet_Qinghe_FlowerBell_Winter_Building</defName>
+    <label>winter siegebreaking bell note</label>
+    <projectile>
+      <damageDef>MX_QH_NoteImpact_Building</damageDef>
+    </projectile>
   </ThingDef>
 </Defs>

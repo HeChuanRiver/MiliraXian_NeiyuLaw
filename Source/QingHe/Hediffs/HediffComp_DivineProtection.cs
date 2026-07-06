@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffCompProperties_DivineProtection : HediffCompProperties
     {
-        public CompProperties_LotusShield shieldCompProperties;
+        public CompProperties_DivineProtectionShield shieldCompProperties;
 
         public HediffCompProperties_DivineProtection()
         {
@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             get
             {
-                CompLotusShield shield = GetLotusShield();
+                CompDivineProtectionShield shield = GetLotusShield();
                 if (shield == null)
                 {
                     return null;
@@ -58,17 +58,17 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            CompLotusShield existed = GetLotusShield();
+            CompDivineProtectionShield existed = GetLotusShield();
             if (existed != null)
             {
                 return;
             }
 
-            CompLotusShield comp = new CompLotusShield
+            CompDivineProtectionShield comp = new CompDivineProtectionShield
             {
                 parent = Pawn
             };
-            comp.Initialize(Props?.shieldCompProperties ?? new CompProperties_LotusShield());
+            comp.Initialize(Props?.shieldCompProperties ?? new CompProperties_DivineProtectionShield());
             comp.PostPostMake();
             Pawn.AllComps.Add(comp);
         }
@@ -80,14 +80,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            CompLotusShield existed = GetLotusShield();
+            CompDivineProtectionShield existed = GetLotusShield();
             if (existed != null)
             {
                 Pawn.AllComps.Remove(existed);
             }
         }
 
-        private CompLotusShield GetLotusShield()
+        private CompDivineProtectionShield GetLotusShield()
         {
             if (Pawn?.AllComps == null)
             {
@@ -96,7 +96,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             for (int i = 0; i < Pawn.AllComps.Count; i++)
             {
-                if (Pawn.AllComps[i] is CompLotusShield shield)
+                if (Pawn.AllComps[i] is CompDivineProtectionShield shield)
                 {
                     return shield;
                 }

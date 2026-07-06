@@ -18,8 +18,6 @@
   <MX_QH_LotusShield.description>Qinghe is blessed by the Twelve Flower Gods and naturally generates a recoverable shield around herself. Learned score nodes can increase its capacity, speed up regeneration, or add steadfast damage caps.\n\nOutside Flower Divination, taking shield damage briefly delays regeneration; during Flower Divination, the shield can regenerate immediately after taking damage. When the shield breaks, it is temporarily disabled.</MX_QH_LotusShield.description>
   <MX_QH_QingheStatusGizmo.label>Qinghe Status Display</MX_QH_QingheStatusGizmo.label>
   <MX_QH_QingheStatusGizmo.description>Hidden hediff used to display Qinghe's status gizmo.</MX_QH_QingheStatusGizmo.description>
-  <MX_QH_Elegance_DuanHunSlow.label>Soulbreak Drag</MX_QH_Elegance_DuanHunSlow.label>
-  <MX_QH_Elegance_DuanHunSlow.description>Movement is dragged down by the Soulbreak melody.</MX_QH_Elegance_DuanHunSlow.description>
   <MX_QH_Elegance_YangChunAlly.label>Yangchun Harmony</MX_QH_Elegance_YangChunAlly.label>
   <MX_QH_Elegance_YangChunAlly.description>Bathed in Yangchun's musical intent, steps and mind are tuned into harmony.</MX_QH_Elegance_YangChunAlly.description>
   <MX_QH_Elegance_YangChunEnemy.label>Yangchun Suppression</MX_QH_Elegance_YangChunEnemy.label>
@@ -36,4 +34,38 @@
   <MX_DehydrateDamage.description>Some internal fluid behavior has been disrupted, causing circulatory failure or mechanical malfunction.</MX_DehydrateDamage.description>
   <MX_QH_Desynced.label>Desynced</MX_QH_Desynced.label>
   <MX_QH_Desynced.description>Resonance from Qinghe's instrument disrupts movement and aiming rhythm, greatly reducing movement speed and shooting accuracy.</MX_QH_Desynced.description>
+  <MX_QH_FlowerDecree.label>Flower Decree</MX_QH_FlowerDecree.label>
+  <MX_QH_FlowerDecree.description>Hidden Hediff: resource counter.</MX_QH_FlowerDecree.description>
+  <MX_QH_FlowerDecree.comps.0.resourceLabel>Flower Decree</MX_QH_FlowerDecree.comps.0.resourceLabel>
+  <MX_QH_FlowerDecree.comps.0.resourceDescription>Qinghe's charge resource, used to cast Four-Season Flower Mandates.</MX_QH_FlowerDecree.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.label>Stillness</MX_QH_MeditativeStillness.label>
+  <MX_QH_MeditativeStillness.description>Hidden Hediff: stores the stillness Qinghe accumulates while meditating at the lotus pond.</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.comps.0.resourceLabel>Stillness</MX_QH_MeditativeStillness.comps.0.resourceLabel>
+  <MX_QH_MeditativeStillness.comps.0.resourceDescription>Qinghe's meditative reserve, accumulated while meditating at the lotus pond.</MX_QH_MeditativeStillness.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.comps.0.longNightLabel>MX_QH_LongNightStillnessLabel</MX_QH_MeditativeStillness.comps.0.longNightLabel>
+  <MX_QH_MeditativeStillness.comps.0.longNightDescription>MX_QH_LongNightStillnessDescription</MX_QH_MeditativeStillness.comps.0.longNightDescription>
+  <MX_QH_FlowerResonance.label>Resonance</MX_QH_FlowerResonance.label>
+  <MX_QH_FlowerResonance.description>Hidden Hediff: Qinghe skill data.</MX_QH_FlowerResonance.description>
+  <MX_QH_DivineBlessing.label>Flower-God Mercy</MX_QH_DivineBlessing.label>
+  <MX_QH_DivineBlessing.description>When Qinghe would take fatal damage or damage that could destroy a body part, negate the damage, repair all injuries, and gain brief invulnerability and 10 seconds of psychic invisibility. This effect can trigger once every 120 seconds.</MX_QH_DivineBlessing.description>
+  <MX_QH_DivineBlessingImmunity.label>Divine Response</MX_QH_DivineBlessingImmunity.label>
+  <MX_QH_DivineBlessingImmunity.description>Blessed by the Flower God, temporarily immune to all damage.</MX_QH_DivineBlessingImmunity.description>
+  <MX_QH_DivineFortune.label>Flower-God Grace</MX_QH_DivineFortune.label>
+  <MX_QH_DivineFortune.description>Hidden Hediff: unified Qinghe stat proxy.</MX_QH_DivineFortune.description>
+  <MX_QH_DivineProtection.label>Flower-God Ward</MX_QH_DivineProtection.label>
+  <MX_QH_DivineProtection.description>Qinghe is protected by the Twelve Flower Gods and naturally generates a shield that blocks damage.\n\nWhen broken, the shield is disabled for 10 seconds.</MX_QH_DivineProtection.description>
+  <MX_QH_FlowerSigil_RedApricot.label>flower god sigil: red apricot</MX_QH_FlowerSigil_RedApricot.label>
+  <MX_QH_FlowerSigil_RedApricot.description>A spring resonance passive. The red apricot flower god protects Qinghe, periodically healing the most severe wound, including permanent injuries.</MX_QH_FlowerSigil_RedApricot.description>
+  <MX_QH_FlowerSigil_Lotus.label>flower god sigil: lotus</MX_QH_FlowerSigil_Lotus.label>
+  <MX_QH_FlowerSigil_Lotus.description>A summer resonance passive placeholder for dodge, disease, toxin, and pollution immunity hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_Lotus.description>
+  <MX_QH_FlowerSigil_Magnolia.label>flower god sigil: magnolia</MX_QH_FlowerSigil_Magnolia.label>
+  <MX_QH_FlowerSigil_Magnolia.description>An autumn resonance passive placeholder for psychic invisibility, psychic sensitivity, and entropy loss hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_Magnolia.description>
+  <MX_QH_FlowerSigil_RedPlum.label>flower god sigil: red plum</MX_QH_FlowerSigil_RedPlum.label>
+  <MX_QH_FlowerSigil_RedPlum.description>A winter resonance passive placeholder for cold tolerance and freeze accumulation hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_RedPlum.description>
+  <MX_QH_LuoshenContract.label>Luoshen contract</MX_QH_LuoshenContract.label>
+  <MX_QH_LuoshenContract.description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</MX_QH_LuoshenContract.description>
+  <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, and reduced pain&lt;/color&gt;.</MX_QH_SpringFlow.description>
+  <MX_QH_FlowerDance.label>flower dance</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>Qinghe enters Flower Dance, improving movement speed, dodge, and Flower Decree recovery. Divine Protection begins recharging immediately after being hit.</MX_QH_FlowerDance.description>
 </LanguageData>

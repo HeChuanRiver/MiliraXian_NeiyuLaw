@@ -8,7 +8,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public int baseRecoveryTicksPerDecree = 1200;
         public float valuePerDecree = 100f;
         public float maxResourceBonusPerSkillNode = 1f;
-        public float flowerDivinationRecoveryFactor = 5f;
         public int highlightTicks = 90;
 
         public HediffCompProperties_FlowerDecree()
@@ -31,7 +30,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float MaxResourceValue => MaxValue / ValuePerDecree;
 
-        public float SkillTreeMaxResourceBonus => ResolveSkillTreeMaxResourceBonus();
+        public float SkillTreeMaxResourceBonus => FlowerCourtUtility.GetDivineFortune(Pawn)?.FlowerDecreeMaxBonus * PropsDecree.maxResourceBonusPerSkillNode ?? 0f;
 
         public float CurrentRecoveryFactor => ResolveRecoveryFactor();
 
@@ -139,39 +138,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return ValuePerDecree / baseTicks * ResolveRecoveryFactor();
         }
 
-        private float ResolveSkillTreeMaxResourceBonus()
-        {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
-            if (state == null)
-            {
-                return 0f;
-            }
-
-            float bonus = 0f;
-            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan))
-            {
-                bonus += PropsDecree.maxResourceBonusPerSkillNode;
-            }
-            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoyu))
-            {
-                bonus += PropsDecree.maxResourceBonusPerSkillNode;
-            }
-            if (state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_SishiLiuzhuan))
-            {
-                bonus += PropsDecree.maxResourceBonusPerSkillNode;
-            }
-
-            return Mathf.Max(0f, bonus);
-        }
-
         private float ResolveRecoveryFactor()
         {
-            if (FlowerCourtUtility.GetFlowerDivination(Pawn)?.Active == true)
-            {
-                return Mathf.Max(0f, PropsDecree.flowerDivinationRecoveryFactor);
-            }
-
-            return 1f;
+            return FlowerCourtUtility.GetDivineFortune(Pawn)?.FlowerDecreeRegenMultiplier ?? 1f;
         }
     }
 }

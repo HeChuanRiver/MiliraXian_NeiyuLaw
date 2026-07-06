@@ -1,39 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <AbilityDef>
-        <defName>MX_QH_FlowerMandate</defName>
-        <label>飞花令</label>
-        <description>清荷尚未调谐四时共鸣，暂时无法回应花神。调谐共鸣后，飞花令会替换为对应季节的花神技能。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-        <category>MX_QingheSkill</category>
-        <displayOrder>200</displayOrder>
-        <cooldownTicksRange>60</cooldownTicksRange>
-        <targetRequired>false</targetRequired>
-        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>false</targetable>
-            <range>1</range>
-            <warmupTime>0</warmupTime>
-            <targetParams>
-                <canTargetSelf>true</canTargetSelf>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_FlowerMandatePlaceholder">
-                <alwaysDisabled>true</alwaysDisabled>
-                <disabledReason>尚未调谐四时共鸣。</disabledReason>
-                <placeholderMessage>清荷尚未调谐四时共鸣，暂时无法回应花神。</placeholderMessage>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <AbilityDef>
-        <defName>MX_QH_FlowerMandate_Peach</defName>
-        <label>飞花令·桃花</label>
-        <description>春季飞花令。消耗1点花令，在目标地点唤出春泉涌流，短时间内治疗范围内的友方单位并附加春泉洗礼。效果会随春季调谐提升。</description>
+        <defName>MX_QH_SpringFlow</defName>
+        <label>spring flow</label>
+        <description>Spend 1 Flower Decree to call forth Spring Flow at the target location, briefly healing allies in the area and applying Spring Flow Blessing.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>201</displayOrder>
@@ -42,7 +12,6 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -57,62 +26,20 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Peach">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
                 <resourceCost>1</resourceCost>
-                <missingResourceMessage>花令不足，无法施放飞花令·桃花。</missingResourceMessage>
+                <missingResourceMessage>MX_QH_SpringFlowMissingResource</missingResourceMessage>
             </li>
         </comps>
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_FlowerMandate_Pomegranate</defName>
-        <label>飞花令·石榴</label>
-        <description>夏季共鸣主动占位：召花令。具体效果尚未实现。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-        <category>MX_QingheSkill</category>
-        <displayOrder>202</displayOrder>
-        <cooldownTicksRange>480</cooldownTicksRange>
-        <targetRequired>true</targetRequired>
-        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>true</targetable>
-            <range>30</range>
-            <warmupTime>1.0</warmupTime>
-            <targetParams>
-                <canTargetSelf>false</canTargetSelf>
-                <canTargetPawns>false</canTargetPawns>
-                <canTargetLocations>true</canTargetLocations>
-                <canTargetBuildings>false</canTargetBuildings>
-                <canTargetItems>false</canTargetItems>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Pomegranate">
-                <summonDef>MX_QH_FlowerMandate_Pomegranate</summonDef>
-                <durationTicks>900</durationTicks>
-                <maxActiveSummons>3</maxActiveSummons>
-                <summonEffecterDefName>MXNL_ForFeatherCastingCircle</summonEffecterDefName>
-                <summonEffectScale>1.25</summonEffectScale>
-                <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
-                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-                <resourceCost>1</resourceCost>
-                <missingResourceMessage>花令不足，无法施放召花令。</missingResourceMessage>
-                <maxActiveSummonsMessage>召花令维持数量已达上限。</maxActiveSummonsMessage>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <AbilityDef>
-        <defName>MX_QH_FlowerMandate_Chrysanthemum</defName>
-        <label>飞花令·雏菊</label>
-        <description>秋季飞花令。消耗1点花令，在目标地点奏出秋令音律，伤害并迟滞小范围内的敌人。</description>
+        <defName>MX_QH_SpiritBurst</defName>
+        <label>flower decree: daisy</label>
+        <description>An autumn Flower Decree. Spend 1 Flower Decree to play an autumn melody at the target location, damaging and stunning enemies in a small area.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>203</displayOrder>
@@ -121,7 +48,6 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -136,26 +62,22 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityFlowerMandate_Chrysanthemum">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpiritBurst">
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
                 <resourceCost>1</resourceCost>
-                <missingResourceMessage>花令不足，无法施放飞花令·雏菊。</missingResourceMessage>
+                <missingResourceMessage>MX_QH_SpiritBurstMissingResource</missingResourceMessage>
                 <radius>2.5</radius>
                 <damageDef>MX_QH_NoteImpact</damageDef>
                 <damageAmount>16</damageAmount>
                 <armorPenetration>0.25</armorPenetration>
                 <stunDamageAmount>8</stunDamageAmount>
-                <bleedDamageAmount>5</bleedDamageAmount>
-                <slowHediff>MX_QH_ChrysanthemumSlow</slowHediff>
-                <slowSeverity>1</slowSeverity>
-                <slowDurationTicks>1800</slowDurationTicks>
                 <brainDestroyChance>0.08</brainDestroyChance>
                 <enhancedPsychicSensitivityThreshold>1.0</enhancedPsychicSensitivityThreshold>
                 <enhancedPsychicDamageMultiplier>10</enhancedPsychicDamageMultiplier>
                 <enhancedFearDamageDef>MX_StatusEffectFearAccumulation</enhancedFearDamageDef>
                 <enhancedFearDamageAmount>1.5</enhancedFearDamageAmount>
                 <enhancedFearArmorPenetration>2.10</enhancedFearArmorPenetration>
-                <curveMote>MX_QH_Mote_FlowerMandate_ChrysanthemumCurvedTrail</curveMote>
+                <curveMote>MX_QH_Mote_SpiritBurstCurvedTrail</curveMote>
                 <curveDistortWidth>4.2</curveDistortWidth>
                 <curveDistortAlpha>0.68</curveDistortAlpha>
                 <curveWidth>3.1</curveWidth>
@@ -173,9 +95,9 @@
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_FlowerMandate_Wintersweet</defName>
-        <label>飞花令·腊梅</label>
-        <description>冬季飞花令。消耗1点花令，在目标地点召出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。</description>
+        <defName>MX_QH_LunarMirror</defName>
+        <label>flower decree: wintersweet</label>
+        <description>A winter Flower Decree. Spend 1 Flower Decree to summon an icy shield at the target location, briefly intercepting hostile projectiles that cross its boundary.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>204</displayOrder>
@@ -184,7 +106,6 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerMandate</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -199,21 +120,53 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerMandate_Wintersweet">
-                <shieldDef>MX_QH_FlowerMandate_Wintersweet</shieldDef>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
+                <shieldDef>MX_QH_LunarMirror</shieldDef>
                 <durationTicks>900</durationTicks>
                 <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
                 <resourceCost>1</resourceCost>
-                <missingResourceMessage>花令不足，无法施放飞花令·腊梅。</missingResourceMessage>
+                <missingResourceMessage>MX_QH_LunarMirrorMissingResource</missingResourceMessage>
             </li>
         </comps>
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_FlowerDivinationSlash</defName>
-        <label>花神闪</label>
-        <description>花神降临期间开放的决战技。先选择清荷视线内的闪现落点，再选择落点可见的打击方向；清荷闪现到落点后，对指定方向扇形范围内的敌人造成伤害、短暂眩晕并击退。</description>
+        <defName>MX_QH_FlowerDance</defName>
+        <label>flower dance</label>
+        <description>Spend 1 Flower Decree to enter Flower Dance for a short time, improving movement speed, dodge, and Flower Decree recovery, and allowing Divine Protection to recharge immediately after being hit.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>220</displayOrder>
+        <cooldownTicksRange>1200</cooldownTicksRange>
+        <targetRequired>false</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>false</targetable>
+            <range>1</range>
+            <warmupTime>0.35</warmupTime>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerDance">
+                <hediffDef>MX_QH_FlowerDance</hediffDef>
+                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
+                <resourceCost>1</resourceCost>
+                <durationTicks>900</durationTicks>
+                <missingResourceMessage>MX_QH_FlowerDanceMissingResource</missingResourceMessage>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QH_AscentSlash</defName>
+        <label>dance step</label>
+        <description>A decisive dash technique available after learning Jueying. Choose a blink landing cell in Qinghe's line of sight, then a strike direction visible from that landing cell. Qinghe blinks there, then damages, briefly stuns, and knocks back enemies in a cone. Costs Flower Decree.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>230</displayOrder>
@@ -222,7 +175,7 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityFlowerDivinationSlash</gizmoClass>
+        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityAscentSlash</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -238,9 +191,9 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerDivinationSlash">
-                <flyerDef>MX_QH_FlowerDivinationSlashFlyer</flyerDef>
-                <knockbackFlyerDef>MX_QH_FlowerDivinationSlashKnockbackFlyer</knockbackFlyerDef>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
+                <flyerDef>MX_QH_AscentSlashFlyer</flyerDef>
+                <knockbackFlyerDef>MX_QH_AscentSlashKnockbackFlyer</knockbackFlyerDef>
                 <range>22</range>
                 <coneRadius>5.5</coneRadius>
                 <coneAngleDegrees>80</coneAngleDegrees>
@@ -249,7 +202,45 @@
                 <armorPenetration>0.35</armorPenetration>
                 <stunTicks>60</stunTicks>
                 <knockbackDistance>3</knockbackDistance>
-                <divinationTicksCost>180</divinationTicksCost>
+                <flowerDecreeCost>1</flowerDecreeCost>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QH_LuoshenRibbon</defName>
+        <label>Luoshen's ribbon</label>
+        <description>Available after learning Luoshen Fu. Choose two conscious people and guide their hearts with Luoshen's ribbon, greatly improving their opinion of each other.</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>240</displayOrder>
+        <cooldownTicksRange>360000</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>24</range>
+            <warmupTime>1.5</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetAnimals>false</canTargetAnimals>
+                <canTargetMechs>false</canTargetMechs>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLuoshenRibbon">
+                <destination>Selected</destination>
+                <range>24</range>
+                <requiresLineOfSight>true</requiresLineOfSight>
+                <opinionThoughtDef>MX_QH_LuoshenRibbonGrace</opinionThoughtDef>
+                <invalidTargetMessage>MX_QH_LuoshenRibbonInvalidTarget</invalidTargetMessage>
             </li>
         </comps>
     </AbilityDef>

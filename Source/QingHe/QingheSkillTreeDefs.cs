@@ -6,22 +6,22 @@ namespace MiliraXian.Characters.QingHe
     public class QingheSkillTreeDef : Def
     {
         public int displayOrder;
-        public bool initiallyUnlocked;
     }
 
-    public class QingheSkillNodeDef : Def
+    public class MX_QHSkillNodeDef : Def
     {
         public QingheSkillTreeDef tree;
+        public int displayOrder;
         public int column;
-        public float y;
-        public int cost;
+        public float y = -1f;
+        public bool initiallyLearned;
         public bool important;
-        public List<QingheSkillNodeDef> prerequisites = new List<QingheSkillNodeDef>();
     }
 
     public class QingheMusicScoreDef : Def
     {
-        public QingheSkillTreeDef unlocksTree;
-        public float experienceGain;
+        public List<MX_QHSkillNodeDef> unlocksNodes = new List<MX_QHSkillNodeDef>();
+        public int masteryGain;
+        public int requiredReadingTicks = 5000;
     }
 }

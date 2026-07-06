@@ -13,7 +13,19 @@
   <MX_Qinghe_Elegance_HengZhi.label>橫指</MX_Qinghe_Elegance_HengZhi.label>
   <MX_Qinghe_Elegance_HengZhi.description>僅琵琶形態可用。對自身周圍敵人造成高額衝擊並擊退，命中目標越多，雅樂增長越快。</MX_Qinghe_Elegance_HengZhi.description>
   <MX_Qinghe_Elegance_DuanHun.label>斷魂</MX_Qinghe_Elegance_DuanHun.label>
-  <MX_Qinghe_Elegance_DuanHun.description>僅竹笛形態可用。對遠處小範圍施加斷魂音律，造成傷害、眩暈、流血與長時減速，並有低概率直接摧毀大腦。</MX_Qinghe_Elegance_DuanHun.description>
+  <MX_Qinghe_Elegance_DuanHun.description>僅竹笛形態可用。對遠處小範圍施加斷魂音律，造成傷害、眩暈，並有低概率直接摧毀大腦。</MX_Qinghe_Elegance_DuanHun.description>
   <MX_Qinghe_Elegance_YangChun.label>陽春</MX_Qinghe_Elegance_YangChun.label>
   <MX_Qinghe_Elegance_YangChun.description>僅琴形態可用。完成施法後，由同一施法 Job 末尾追加和聲脈衝：敵方受傷並減速，友方獲得治療和加速增益，同時提升雅樂。</MX_Qinghe_Elegance_YangChun.description>
+  <MX_QH_SpringFlow.label>春泉湧流</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>消耗1點花令，在目標地點喚出春泉湧流，短時間內治療範圍內的友方單位並附加春泉洗禮。</MX_QH_SpringFlow.description>
+  <MX_QH_SpiritBurst.label>斷魂</MX_QH_SpiritBurst.label>
+  <MX_QH_SpiritBurst.description>秋季飛花令。消耗1點花令，在目標地點奏出秋令音律，傷害並眩暈小範圍內的敵人。</MX_QH_SpiritBurst.description>
+  <MX_QH_LunarMirror.label>霜月鏡</MX_QH_LunarMirror.label>
+  <MX_QH_LunarMirror.description>冬季飛花令。消耗1點花令，在目標地點召出冰雪般的護盾，短時間內攔截穿過範圍邊界的敵方投射物。</MX_QH_LunarMirror.description>
+  <MX_QH_FlowerDance.label>花舞</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>消耗1點花令，進入短時間的花舞狀態，提升移動速度、閃避與花令回復，並使花神之眷顧在受擊後立刻回充。</MX_QH_FlowerDance.description>
+  <MX_QH_AscentSlash.label>舞踏</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>習得絕影後可使用的突進型決戰技。先選擇清荷視線內的閃現落點，再選擇落點可見的打擊方向；清荷閃現到落點後，對指定方向扇形範圍內的敵人造成傷害、短暫眩暈並擊退。消耗花令。</MX_QH_AscentSlash.description>
+  <MX_QH_LuoshenRibbon.label>洛神的緞帶</MX_QH_LuoshenRibbon.label>
+  <MX_QH_LuoshenRibbon.description>習得洛神賦後可使用。選擇兩名清醒的人，以洛神的緞帶牽引彼此心意，大幅提升雙方互相的看法。</MX_QH_LuoshenRibbon.description>
 </LanguageData>

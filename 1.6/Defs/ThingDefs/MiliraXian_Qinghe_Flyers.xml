@@ -1,9 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef ParentName="PawnFlyerBase">
-        <defName>MX_QH_FlowerDivinationSlashFlyer</defName>
-        <label>花神闪飞行体</label>
-        <thingClass>MiliraXian.Characters.QingHe.Abilities.PawnFlyer_FlowerDivinationSlash</thingClass>
+        <defName>MX_QH_AscentSlashFlyer</defName>
+        <label>flower blink flyer</label>
+        <thingClass>MiliraXian.Characters.QingHe.Abilities.PawnFlyer_AscentSlash</thingClass>
         <pawnFlyer>
             <flightDurationMin>0.08</flightDurationMin>
             <flightSpeed>100</flightSpeed>
@@ -19,8 +19,8 @@
     </ThingDef>
 
     <ThingDef ParentName="PawnFlyerBase">
-        <defName>MX_QH_FlowerDivinationSlashKnockbackFlyer</defName>
-        <label>花神闪击退飞行体</label>
+        <defName>MX_QH_AscentSlashKnockbackFlyer</defName>
+        <label>flower blink knockback flyer</label>
         <thingClass>PawnFlyer</thingClass>
         <altitudeLayer>Pawn</altitudeLayer>
         <pawnFlyer>

@@ -3,12 +3,12 @@
 
     <ScenarioDef ParentName="ScenarioBase">
         <defName>MXNL_QingheFlowerCourtStart</defName>
-        <label>花庭初绽</label>
-        <description><![CDATA[日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，清荷离开熟悉的庭院，独自来到这片与世隔绝的地面，想要亲手让花神的恩泽在陌生的土地上生根。
+        <label>Flower Court's First Bloom</label>
+        <description><![CDATA[Day after day of secluded cultivation could not answer every question. After hearing that her teacher Neiyu had come to the RimWorld, Qinghe left the familiar court and arrived alone on this isolated ground, hoping to let the flower god's grace take root in an unfamiliar land with her own hands.
 
-这一次，只有清荷自己、随身的少量行装，以及一片尚未开辟的土地。]]></description>
+This time, there is only Qinghe herself, a small amount of gear, and a piece of land not yet opened.]]></description>
         <scenario>
-            <summary><![CDATA[一位花神使来到边缘世界，尝试让花神的恩泽在这片陌生的土地上生根。]]></summary>
+            <summary><![CDATA[A flower god's envoy arrives on the RimWorld, trying to let the flower god's grace take root in this unfamiliar land.]]></summary>
             <playerFaction Inherit="false">
                 <def>PlayerFaction</def>
                 <factionDef>Milira_PlayerFaction</factionDef>
@@ -16,13 +16,13 @@
             <parts>
                 <li Class="ScenPart_GameStartDialog">
                     <def>GameStartDialog</def>
-                    <text><![CDATA[日复一日的闭关修行终究不能回答所有疑问。
+                    <text><![CDATA[Day after day of secluded cultivation could not answer every question.
 
-清荷追随自己的老师霓羽离开了熟悉的庭院，独自来到这片边缘世界的地面。她想亲手培育一座新的庭院，让花神的恩泽在陌生的土地上生根。
+Following her teacher Neiyu's path, Qinghe left the familiar court and arrived alone on this RimWorld ground. She wants to cultivate a new court with her own hands, letting the flower god's grace take root in an unfamiliar land.
 
-你拥有的只是随身携带的少量行装，以及一片尚未开辟的土地。
+You have only a small amount of gear and a piece of land not yet opened.
 
-先活下来，然后想办法建造一座新的花神庭，重新唤醒自己的力量。]]></text>
+Survive first, then find a way to build a new Flower God's Court and awaken your power again.]]></text>
                     <closeSound>GameStartSting</closeSound>
                 </li>
 

@@ -1,27 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <JobDef>
-        <defName>MX_QH_MeditateAtFlowerCourt</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_MeditateAtFlowerCourt</driverClass>
-        <reportString>在荷池旁冥想。</reportString>
+        <defName>MX_QH_ReadSkillBook</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_MX_ReadSkillBook</driverClass>
+        <reportString>reading TargetA.</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
 
-    <JobDef>
-        <defName>MX_QH_StudyMusicScoreAtLotusPond</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_StudyMusicScoreAtLotusPond</driverClass>
-        <reportString>在荷池旁研读曲谱。</reportString>
-        <casualInterruptible>true</casualInterruptible>
-        <checkOverrideOnDamage>Always</checkOverrideOnDamage>
-    </JobDef>
+    <WorkGiverDef>
+        <defName>MX_QH_ReadSkillBook</defName>
+        <label>read Qinghe score</label>
+        <giverClass>MiliraXian.Characters.QingHe.Jobs.WorkGiver_MX_ReadSkillBook</giverClass>
+        <workType>Research</workType>
+        <verb>read</verb>
+        <gerund>reading Qinghe score</gerund>
+        <priorityInType>150</priorityInType>
+        <requiredCapacities>
+            <li>Manipulation</li>
+        </requiredCapacities>
+        <canBeDoneByMechs>false</canBeDoneByMechs>
+    </WorkGiverDef>
 
     <JobDef>
-        <defName>MX_QH_FlowerDivination</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_FlowerDivination</driverClass>
-        <reportString>呼唤花神降临。</reportString>
-        <playerInterruptible>false</playerInterruptible>
-        <casualInterruptible>false</casualInterruptible>
+        <defName>MX_QH_TuneBell</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneBell</driverClass>
+        <reportString>tuning the Flower Bell beside the lotus pond.</reportString>
+        <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
 

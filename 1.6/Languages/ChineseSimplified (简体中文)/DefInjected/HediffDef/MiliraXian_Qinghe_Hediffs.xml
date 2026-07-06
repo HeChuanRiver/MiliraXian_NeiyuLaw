@@ -18,8 +18,6 @@
   <MX_QH_LotusShield.description>清荷受到十二花神的眷顾，能在身边自然产生可回复的护盾。习得对应曲谱节点后，花神护体会获得更高容量、更快回复，或刚毅限伤效果。\n\n未处于花神降临时，护盾承伤后会短暂停止回复；花神降临期间可立即回复。护盾被击碎时会暂时失效。</MX_QH_LotusShield.description>
   <MX_QH_QingheStatusGizmo.label>清荷状态显示</MX_QH_QingheStatusGizmo.label>
   <MX_QH_QingheStatusGizmo.description>隐藏 Hediff：用于显示清荷状态 Gizmo。</MX_QH_QingheStatusGizmo.description>
-  <MX_QH_Elegance_DuanHunSlow.label>断魂迟滞</MX_QH_Elegance_DuanHunSlow.label>
-  <MX_QH_Elegance_DuanHunSlow.description>行动被断魂音律拖滞。</MX_QH_Elegance_DuanHunSlow.description>
   <MX_QH_Elegance_YangChunAlly.label>阳春和声</MX_QH_Elegance_YangChunAlly.label>
   <MX_QH_Elegance_YangChunAlly.description>沐浴在阳春乐意中，步伐与心境被调谐。</MX_QH_Elegance_YangChunAlly.description>
   <MX_QH_Elegance_YangChunEnemy.label>阳春抑拍</MX_QH_Elegance_YangChunEnemy.label>
@@ -36,4 +34,38 @@
   <MX_DehydrateDamage.description>内部的部分流体行为被干扰，导致循环系统异常或机械故障。</MX_DehydrateDamage.description>
   <MX_QH_Desynced.label>离弦</MX_QH_Desynced.label>
   <MX_QH_Desynced.description>受到清荷所持乐器产生的共振扰乱，行动节奏与瞄准节奏被打乱，移动速度和射击精准度显著下降。</MX_QH_Desynced.description>
+  <MX_QH_FlowerDecree.label>花令</MX_QH_FlowerDecree.label>
+  <MX_QH_FlowerDecree.description>隐藏Hediff：资源计数器</MX_QH_FlowerDecree.description>
+  <MX_QH_FlowerDecree.comps.0.resourceLabel>花令</MX_QH_FlowerDecree.comps.0.resourceLabel>
+  <MX_QH_FlowerDecree.comps.0.resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</MX_QH_FlowerDecree.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.label>静思</MX_QH_MeditativeStillness.label>
+  <MX_QH_MeditativeStillness.description>隐藏 Hediff：记录清荷在荷池处冥想积累的静思值。</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.comps.0.resourceLabel>静思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
+  <MX_QH_MeditativeStillness.comps.0.resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</MX_QH_MeditativeStillness.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.comps.0.longNightLabel>MX_QH_LongNightStillnessLabel</MX_QH_MeditativeStillness.comps.0.longNightLabel>
+  <MX_QH_MeditativeStillness.comps.0.longNightDescription>MX_QH_LongNightStillnessDescription</MX_QH_MeditativeStillness.comps.0.longNightDescription>
+  <MX_QH_FlowerResonance.label>和鸣</MX_QH_FlowerResonance.label>
+  <MX_QH_FlowerResonance.description>隐藏 Hediff：角色技能数据</MX_QH_FlowerResonance.description>
+  <MX_QH_DivineBlessing.label>花神之垂怜</MX_QH_DivineBlessing.label>
+  <MX_QH_DivineBlessing.description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。此效果每120秒只可触发一次。</MX_QH_DivineBlessing.description>
+  <MX_QH_DivineBlessingImmunity.label>神应</MX_QH_DivineBlessingImmunity.label>
+  <MX_QH_DivineBlessingImmunity.description>受到花神的垂怜，暂时免疫所有伤害。</MX_QH_DivineBlessingImmunity.description>
+  <MX_QH_DivineFortune.label>花神之恩泽</MX_QH_DivineFortune.label>
+  <MX_QH_DivineFortune.description>隐藏 Hediff：统一数值代理层</MX_QH_DivineFortune.description>
+  <MX_QH_DivineProtection.label>花神之眷顾</MX_QH_DivineProtection.label>
+  <MX_QH_DivineProtection.description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</MX_QH_DivineProtection.description>
+  <MX_QH_FlowerSigil_RedApricot.label>花神签·红杏</MX_QH_FlowerSigil_RedApricot.label>
+  <MX_QH_FlowerSigil_RedApricot.description>春季共鸣被动。花神红杏护持清荷，周期性修复最严重的伤口，包括永久伤口。</MX_QH_FlowerSigil_RedApricot.description>
+  <MX_QH_FlowerSigil_Lotus.label>花神签·荷花</MX_QH_FlowerSigil_Lotus.label>
+  <MX_QH_FlowerSigil_Lotus.description>夏季共鸣被动占位：闪避、疾病/毒素/污染免疫框架。具体效果尚未实现。</MX_QH_FlowerSigil_Lotus.description>
+  <MX_QH_FlowerSigil_Magnolia.label>花神签·玉兰</MX_QH_FlowerSigil_Magnolia.label>
+  <MX_QH_FlowerSigil_Magnolia.description>秋季共鸣被动占位：心灵隐形、心灵敏感度和熵消散框架。具体效果尚未实现。</MX_QH_FlowerSigil_Magnolia.description>
+  <MX_QH_FlowerSigil_RedPlum.label>花神签·红梅</MX_QH_FlowerSigil_RedPlum.label>
+  <MX_QH_FlowerSigil_RedPlum.description>冬季共鸣被动占位：低温耐性和冻结累积框架。具体效果尚未实现。</MX_QH_FlowerSigil_RedPlum.description>
+  <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
+  <MX_QH_LuoshenContract.description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</MX_QH_LuoshenContract.description>
+  <MX_QH_SpringFlow.label>春泉洗礼</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。</MX_QH_SpringFlow.description>
+  <MX_QH_FlowerDance.label>花舞</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>清荷进入花舞状态，移动速度、闪避与花令回复提升，花神之眷顾在受击后立即开始回充。</MX_QH_FlowerDance.description>
 </LanguageData>

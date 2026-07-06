@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AssembleLostMusicScore.label>assemble Qinghe score</MX_QH_AssembleLostMusicScore.label>
+  <MX_QH_AssembleLostMusicScore.description>Assemble lost score fragments into a book. On success, this produces a random Qinghe skill book; on failure, only an ordinary book.</MX_QH_AssembleLostMusicScore.description>
+  <MX_QH_AssembleLostMusicScore.jobString>assembling Qinghe score.</MX_QH_AssembleLostMusicScore.jobString>
+</LanguageData>

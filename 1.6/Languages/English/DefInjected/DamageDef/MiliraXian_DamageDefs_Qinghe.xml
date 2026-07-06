@@ -4,4 +4,7 @@
   <MX_Dehydrate.deathMessage>{0} died from severe fluid-cycle collapse.</MX_Dehydrate.deathMessage>
   <MX_Desynced.label>Desynced</MX_Desynced.label>
   <MX_Desynced.deathMessage>{0} was killed by the dissonance.</MX_Desynced.deathMessage>
+  <MX_QH_NoteImpact.label>note impact</MX_QH_NoteImpact.label>
+  <MX_QH_NoteImpact.deathMessage>{0} was struck down by the Flower Bell's note.</MX_QH_NoteImpact.deathMessage>
+  <MX_QH_NoteImpact_Building.label>siegebreaking note impact</MX_QH_NoteImpact_Building.label>
 </LanguageData>

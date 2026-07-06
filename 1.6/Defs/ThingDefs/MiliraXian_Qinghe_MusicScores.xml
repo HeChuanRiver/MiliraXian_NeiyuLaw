@@ -1,21 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <ThingDef>
-        <defName>MX_QH_Score_Luoshenfu</defName>
-        <label>曲谱集：洛神赋</label>
-        <description>清荷遗落的曲谱之一，记录着花语与花神庭非战斗修行的曲意。清荷可以将它带到荷池旁研读。</description>
+        <defName>MX_QH_LostMusicScoreFragment</defName>
+        <label>lost score fragment</label>
+        <description>A damaged and difficult-to-read Qinghe score fragment. It can be assembled at an art bench into a random Qinghe skill book.</description>
         <thingClass>ThingWithComps</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
-        <rotatable>true</rotatable>
+        <rotatable>false</rotatable>
         <drawerType>MapMeshOnly</drawerType>
         <altitudeLayer>Item</altitudeLayer>
         <alwaysHaulable>true</alwaysHaulable>
         <useHitPoints>true</useHitPoints>
+        <healthAffectsPrice>true</healthAffectsPrice>
         <drawGUIOverlay>true</drawGUIOverlay>
-        <stackLimit>1</stackLimit>
+        <stackLimit>75</stackLimit>
+        <graphicData>
+            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>0.45</drawSize>
+        </graphicData>
+        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
+        <thingCategories>
+            <li>Books</li>
+        </thingCategories>
+        <statBases>
+            <MaxHitPoints>40</MaxHitPoints>
+            <DeteriorationRate>3</DeteriorationRate>
+            <Mass>0.05</Mass>
+            <Flammability>1</Flammability>
+            <MarketValue>80</MarketValue>
+        </statBases>
+    </ThingDef>
+
+    <ThingDef>
+        <defName>MX_QH_SkillBook</defName>
+        <label>Qinghe skill book</label>
+        <description>A special book recording Qinghe's musical intent. Only Qinghe herself can understand it; after it is read, the intent fades and the book becomes an ordinary textbook again.</description>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_QingheMusicScoreBook</thingClass>
+        <category>Item</category>
+        <selectable>true</selectable>
+        <rotatable>false</rotatable>
+        <drawerType>MapMeshOnly</drawerType>
+        <altitudeLayer>Item</altitudeLayer>
+        <alwaysHaulable>true</alwaysHaulable>
+        <burnableByRecipe>true</burnableByRecipe>
+        <useHitPoints>true</useHitPoints>
+        <healthAffectsPrice>true</healthAffectsPrice>
+        <drawGUIOverlay>true</drawGUIOverlay>
         <tradeNeverStack>true</tradeNeverStack>
         <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
+        <neverMultiSelect>true</neverMultiSelect>
+        <stackLimit>1</stackLimit>
         <graphicData>
             <texPath>Things/Item/Book/Textbook/Textbook</texPath>
             <graphicClass>Graphic_Single</graphicClass>
@@ -27,8 +63,34 @@
         </thingCategories>
         <comps>
             <li Class="CompProperties_Forbiddable" />
+            <li>
+                <compClass>CompQuality</compClass>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
-                <score>MX_QH_ScoreDef_Luoshenfu</score>
+                <plainBookDef>MX_QH_Book</plainBookDef>
+                <requiredReadingTicks>5000</requiredReadingTicks>
+                <openGraphic>
+                    <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
+                    <graphicClass>Graphic_Multi</graphicClass>
+                    <drawSize>0.7</drawSize>
+                </openGraphic>
+                <storageGraphic>
+                    <texPath>Things/Item/Book/Textbook/Textbook_Vertical</texPath>
+                    <graphicClass>Graphic_Multi</graphicClass>
+                    <addTopAltitudeBias>true</addTopAltitudeBias>
+                </storageGraphic>
+                <possibleScores>
+                    <li>MX_QH_ScoreDef_DuanqiaoCanxue</li>
+                    <li>MX_QH_ScoreDef_FeihuaJueyu</li>
+                    <li>MX_QH_ScoreDef_Gaoshan</li>
+                    <li>MX_QH_ScoreDef_Liushui</li>
+                    <li>MX_QH_ScoreDef_Chunjiang</li>
+                    <li>MX_QH_ScoreDef_Yingyue</li>
+                    <li>MX_QH_ScoreDef_NishangDance</li>
+                    <li>MX_QH_ScoreDef_Jueying</li>
+                    <li>MX_QH_ScoreDef_Luoshenfu</li>
+                    <li>MX_QH_ScoreDef_FlowerGodGrace</li>
+                </possibleScores>
             </li>
         </comps>
         <statBases>
@@ -36,87 +98,118 @@
             <DeteriorationRate>5</DeteriorationRate>
             <Mass>0.50</Mass>
             <Flammability>1</Flammability>
+            <Beauty>1</Beauty>
             <MarketValue>600</MarketValue>
         </statBases>
     </ThingDef>
 
     <ThingDef>
-        <defName>MX_QH_Score_Yangchun</defName>
-        <label>曲谱集：阳春</label>
-        <description>清荷遗落的曲谱之一，记录着花神签与护体之法的曲意。清荷可以将它带到荷池旁研读。</description>
-        <thingClass>ThingWithComps</thingClass>
+        <defName>MX_QH_Book</defName>
+        <label>Qinghe volume</label>
+        <description>A book related to Qinghe.</description>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_MX_CustomBook</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
         <rotatable>true</rotatable>
-        <drawerType>MapMeshOnly</drawerType>
         <altitudeLayer>Item</altitudeLayer>
+        <tickerType>Rare</tickerType>
         <alwaysHaulable>true</alwaysHaulable>
+        <burnableByRecipe>true</burnableByRecipe>
         <useHitPoints>true</useHitPoints>
+        <healthAffectsPrice>true</healthAffectsPrice>
         <drawGUIOverlay>true</drawGUIOverlay>
-        <stackLimit>1</stackLimit>
         <tradeNeverStack>true</tradeNeverStack>
+        <neverMultiSelect>true</neverMultiSelect>
+        <stackLimit>1</stackLimit>
         <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
+        <comps>
+            <li Class="CompProperties_Forbiddable" />
+            <li>
+                <compClass>CompQuality</compClass>
+            </li>
+            <li Class="CompProperties_Book">
+                <nameMaker>Namer_TextBook</nameMaker>
+                <descriptionMaker>Description_SkillBook</descriptionMaker>
+                <ageYearsRange>100~200</ageYearsRange>
+                <openGraphic>
+                    <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
+                    <graphicClass>Graphic_Multi</graphicClass>
+                    <drawSize>0.7</drawSize>
+                </openGraphic>
+                <verticalGraphic>
+                    <texPath>Things/Item/Book/Textbook/Textbook_Vertical</texPath>
+                    <graphicClass>Graphic_Multi</graphicClass>
+                    <addTopAltitudeBias>true</addTopAltitudeBias>
+                </verticalGraphic>
+                <doers>
+                    <li Class="BookOutcomeProperties_GainSkillExp" />
+                    <li Class="BookOutcomeProperties_GiveQuest">
+                        <questChance>0.01</questChance>
+                    </li>
+                </doers>
+            </li>
+        </comps>
+        <thingCategories>
+            <li>Books</li>
+        </thingCategories>
+        <inspectorTabs>
+            <li>ITab_Book</li>
+        </inspectorTabs>
+        <statBases>
+            <MaxHitPoints>60</MaxHitPoints>
+            <DeteriorationRate>5</DeteriorationRate>
+            <Mass>0.50</Mass>
+            <Flammability>1</Flammability>
+            <Beauty>1</Beauty>
+            <MarketValue>160</MarketValue>
+        </statBases>
+        <thingSetMakerTags>
+            <li>RewardStandardMidFreq</li>
+        </thingSetMakerTags>
+        <possessionCount>1</possessionCount>
         <graphicData>
             <texPath>Things/Item/Book/Textbook/Textbook</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>0.8</drawSize>
         </graphicData>
         <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
-        <thingCategories>
-            <li>Books</li>
-        </thingCategories>
-        <comps>
-            <li Class="CompProperties_Forbiddable" />
-            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
-                <score>MX_QH_ScoreDef_Yangchun</score>
-            </li>
-        </comps>
-        <statBases>
-            <MaxHitPoints>60</MaxHitPoints>
-            <DeteriorationRate>5</DeteriorationRate>
-            <Mass>0.50</Mass>
-            <Flammability>1</Flammability>
-            <MarketValue>600</MarketValue>
-        </statBases>
     </ThingDef>
 
-    <ThingDef>
-        <defName>MX_QH_Score_Yingyue</defName>
-        <label>曲谱集：映月</label>
-        <description>清荷遗落的曲谱之一，记录着花神降临与决战技的曲意。清荷可以将它带到荷池旁研读。</description>
-        <thingClass>ThingWithComps</thingClass>
-        <category>Item</category>
-        <selectable>true</selectable>
-        <rotatable>true</rotatable>
-        <drawerType>MapMeshOnly</drawerType>
-        <altitudeLayer>Item</altitudeLayer>
-        <alwaysHaulable>true</alwaysHaulable>
-        <useHitPoints>true</useHitPoints>
-        <drawGUIOverlay>true</drawGUIOverlay>
-        <stackLimit>1</stackLimit>
-        <tradeNeverStack>true</tradeNeverStack>
-        <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
-        <graphicData>
-            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
-            <graphicClass>Graphic_Single</graphicClass>
-            <drawSize>0.8</drawSize>
-        </graphicData>
-        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
-        <thingCategories>
-            <li>Books</li>
-        </thingCategories>
-        <comps>
-            <li Class="CompProperties_Forbiddable" />
-            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
-                <score>MX_QH_ScoreDef_Yingyue</score>
+    <RecipeDef>
+        <defName>MX_QH_AssembleLostMusicScore</defName>
+        <label>assemble Qinghe score</label>
+        <description>Assemble lost score fragments into a volume. Success produces a random Qinghe skill book; failure produces an ordinary book.</description>
+        <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_InterpretLostScorebook</workerClass>
+        <jobString>assembling Qinghe score.</jobString>
+        <workAmount>300</workAmount>
+        <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+        <workSkill>Artistic</workSkill>
+        <effectWorking>Sculpt</effectWorking>
+        <soundWorking>Recipe_Sculpt</soundWorking>
+        <recipeUsers>
+            <li>TableSculpting</li>
+        </recipeUsers>
+        <ingredients>
+            <li>
+                <filter>
+                    <thingDefs>
+                        <li>MX_QH_LostMusicScoreFragment</li>
+                    </thingDefs>
+                </filter>
+                <count>3</count>
             </li>
-        </comps>
-        <statBases>
-            <MaxHitPoints>60</MaxHitPoints>
-            <DeteriorationRate>5</DeteriorationRate>
-            <Mass>0.50</Mass>
-            <Flammability>1</Flammability>
-            <MarketValue>900</MarketValue>
-        </statBases>
-    </ThingDef>
+        </ingredients>
+        <fixedIngredientFilter>
+            <thingDefs>
+                <li>MX_QH_LostMusicScoreFragment</li>
+            </thingDefs>
+        </fixedIngredientFilter>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.QingHe.Things.MX_InterpretLostScorebookExtension">
+                <skillBookChance>0.9</skillBookChance>
+                <plainBookDef>TextBook</plainBookDef>
+            </li>
+        </modExtensions>
+        <displayPriority>1200</displayPriority>
+    </RecipeDef>
 </Defs>
