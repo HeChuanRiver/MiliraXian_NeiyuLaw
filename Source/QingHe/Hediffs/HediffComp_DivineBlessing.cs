@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
@@ -335,7 +336,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int ResolveMaxCharges()
         {
             int maxCharges = Mathf.Max(1, Props.maxCharges);
-            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
+            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
             if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue))
             {
                 maxCharges++;
@@ -474,3 +475,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 }
+
+
+

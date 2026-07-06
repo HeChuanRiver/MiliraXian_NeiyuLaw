@@ -2,8 +2,8 @@
 <Defs>
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
-    <label>four-season Flower Bell</label>
-    <description>A bell-shaped armament condensed from Qinghe's flower god power. Its four-season resonance can be tuned at a lotus pond.</description>
+    <label>四时花信铃</label>
+    <description>清荷以花神之力凝聚的铃形兵装，可在荷池处调谐四时共鸣。</description>
     <recipeMaker Inherit="False" IsNull="True" />
     <techLevel>Archotech</techLevel>
     <smeltable>false</smeltable>
@@ -34,7 +34,7 @@
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
       <li>
-        <compClass>MiliraXian.Characters.QingHe.Things.CompEquippable_FlowerBell</compClass>
+        <compClass>MiliraXian.Characters.QingHe.Things.Weapons.CompEquippable_FlowerBell</compClass>
       </li>
       <li Class="CompProperties_Styleable" />
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellResonance">
@@ -120,7 +120,7 @@
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Spring_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Spring</defName>
-    <label>spring bell note</label>
+    <label>春信铃音</label>
     <graphicData>
       <color>(255,130,150)</color>
     </graphicData>
@@ -139,7 +139,7 @@
 
   <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Spring_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Spring_Building</defName>
-    <label>spring siegebreaking bell note</label>
+    <label>春信破城铃音</label>
     <projectile>
       <damageDef>MX_QH_NoteImpact_Building</damageDef>
     </projectile>
@@ -147,7 +147,7 @@
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Summer_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Summer</defName>
-    <label>summer bell note</label>
+    <label>夏信铃音</label>
     <graphicData>
       <color>(160,245,110)</color>
     </graphicData>
@@ -166,7 +166,7 @@
 
   <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Summer_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Summer_Building</defName>
-    <label>summer siegebreaking bell note</label>
+    <label>夏信破城铃音</label>
     <projectile>
       <damageDef>MX_QH_NoteImpact_Building</damageDef>
     </projectile>
@@ -174,7 +174,7 @@
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Autumn_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Autumn</defName>
-    <label>autumn bell note</label>
+    <label>秋信铃音</label>
     <graphicData>
       <color>(230,185,255)</color>
     </graphicData>
@@ -193,7 +193,7 @@
 
   <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Autumn_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Autumn_Building</defName>
-    <label>autumn siegebreaking bell note</label>
+    <label>秋信破城铃音</label>
     <projectile>
       <damageDef>MX_QH_NoteImpact_Building</damageDef>
     </projectile>
@@ -201,7 +201,7 @@
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Winter_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Winter</defName>
-    <label>winter bell note</label>
+    <label>冬信铃音</label>
     <graphicData>
       <color>(170,225,255)</color>
     </graphicData>
@@ -220,7 +220,7 @@
 
   <ThingDef ParentName="MX_Bullet_Qinghe_FlowerBell_Winter_Base">
     <defName>MX_Bullet_Qinghe_FlowerBell_Winter_Building</defName>
-    <label>winter siegebreaking bell note</label>
+    <label>冬信破城铃音</label>
     <projectile>
       <damageDef>MX_QH_NoteImpact_Building</damageDef>
     </projectile>

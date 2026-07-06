@@ -2,8 +2,8 @@
 <Defs>
     <AbilityDef>
         <defName>MX_QH_SpringFlow</defName>
-        <label>spring flow</label>
-        <description>Spend 1 Flower Decree to call forth Spring Flow at the target location, briefly healing allies in the area and applying Spring Flow Blessing.</description>
+        <label>春泉涌流</label>
+        <description>消耗1点花令，在目标地点唤出春泉涌流，短时间内治疗范围内的友方单位并附加春泉洗礼。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>201</displayOrder>
@@ -38,8 +38,8 @@
 
     <AbilityDef>
         <defName>MX_QH_SpiritBurst</defName>
-        <label>flower decree: daisy</label>
-        <description>An autumn Flower Decree. Spend 1 Flower Decree to play an autumn melody at the target location, damaging and stunning enemies in a small area.</description>
+        <label>断魂</label>
+        <description>秋季飞花令。消耗1点花令，在目标地点奏出秋令音律，伤害并眩晕小范围内的敌人。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>203</displayOrder>
@@ -96,8 +96,8 @@
 
     <AbilityDef>
         <defName>MX_QH_LunarMirror</defName>
-        <label>flower decree: wintersweet</label>
-        <description>A winter Flower Decree. Spend 1 Flower Decree to summon an icy shield at the target location, briefly intercepting hostile projectiles that cross its boundary.</description>
+        <label>霜月镜</label>
+        <description>冬季飞花令。消耗1点花令，在目标地点召出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>204</displayOrder>
@@ -133,8 +133,8 @@
 
     <AbilityDef>
         <defName>MX_QH_FlowerDance</defName>
-        <label>flower dance</label>
-        <description>Spend 1 Flower Decree to enter Flower Dance for a short time, improving movement speed, dodge, and Flower Decree recovery, and allowing Divine Protection to recharge immediately after being hit.</description>
+        <label>花舞</label>
+        <description>消耗1点花令，进入短时间的花舞状态，提升移动速度、闪避与花令回复，并使花神之眷顾在受击后立刻回充。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>220</displayOrder>
@@ -165,8 +165,8 @@
 
     <AbilityDef>
         <defName>MX_QH_AscentSlash</defName>
-        <label>dance step</label>
-        <description>A decisive dash technique available after learning Jueying. Choose a blink landing cell in Qinghe's line of sight, then a strike direction visible from that landing cell. Qinghe blinks there, then damages, briefly stuns, and knocks back enemies in a cone. Costs Flower Decree.</description>
+        <label>舞踏</label>
+        <description>习得绝影后可使用的突进型决战技。先选择清荷视线内的闪现落点，再选择落点可见的打击方向；清荷闪现到落点后，对指定方向扇形范围内的敌人造成伤害、短暂眩晕并击退。消耗花令。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>230</displayOrder>
@@ -209,8 +209,8 @@
 
     <AbilityDef>
         <defName>MX_QH_LuoshenRibbon</defName>
-        <label>Luoshen's ribbon</label>
-        <description>Available after learning Luoshen Fu. Choose two conscious people and guide their hearts with Luoshen's ribbon, greatly improving their opinion of each other.</description>
+        <label>洛神的缎带</label>
+        <description>习得洛神赋后可使用。选择两名清醒的人，以洛神的缎带牵引彼此心意，大幅提升双方互相的看法。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>240</displayOrder>

@@ -54,14 +54,8 @@
   <MX_QH_DivineFortune.description>隱藏 Hediff：統一數值代理層</MX_QH_DivineFortune.description>
   <MX_QH_DivineProtection.label>花神之眷顧</MX_QH_DivineProtection.label>
   <MX_QH_DivineProtection.description>清荷受到十二花神的保護，能自然產生一面抵擋傷害的護盾。\n\n護盾被擊碎時會失效10秒。</MX_QH_DivineProtection.description>
-  <MX_QH_FlowerSigil_RedApricot.label>花神籤·紅杏</MX_QH_FlowerSigil_RedApricot.label>
-  <MX_QH_FlowerSigil_RedApricot.description>春季共鳴被動。花神紅杏護持清荷，週期性修復最嚴重的傷口，包括永久傷口。</MX_QH_FlowerSigil_RedApricot.description>
-  <MX_QH_FlowerSigil_Lotus.label>花神籤·荷花</MX_QH_FlowerSigil_Lotus.label>
-  <MX_QH_FlowerSigil_Lotus.description>夏季共鳴被動佔位：閃避、疾病/毒素/污染免疫框架。具體效果尚未實現。</MX_QH_FlowerSigil_Lotus.description>
-  <MX_QH_FlowerSigil_Magnolia.label>花神籤·玉蘭</MX_QH_FlowerSigil_Magnolia.label>
-  <MX_QH_FlowerSigil_Magnolia.description>秋季共鳴被動佔位：心靈隱形、心靈敏感度和熵消散框架。具體效果尚未實現。</MX_QH_FlowerSigil_Magnolia.description>
-  <MX_QH_FlowerSigil_RedPlum.label>花神籤·紅梅</MX_QH_FlowerSigil_RedPlum.label>
-  <MX_QH_FlowerSigil_RedPlum.description>冬季共鳴被動佔位：低溫耐性和凍結累積框架。具體效果尚未實現。</MX_QH_FlowerSigil_RedPlum.description>
+  <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
+  <MX_QH_Trickle.description>清荷會持續緩慢回復傷口，並逐步修復永久損傷與失去的身體部位。</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>隱藏狀態：記錄清荷與配偶之間的洛神契綁定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>

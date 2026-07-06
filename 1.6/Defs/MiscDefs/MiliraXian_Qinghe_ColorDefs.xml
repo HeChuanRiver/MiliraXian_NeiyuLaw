@@ -2,7 +2,7 @@
 <Defs>
     <ColorDef>
         <defName>MX_QH_FlowerPink</defName>
-        <label>pale pink</label>
+        <label>淡粉色</label>
         <color>(255,205,225)</color>
         <colorType>Misc</colorType>
         <randomlyPickable>false</randomlyPickable>

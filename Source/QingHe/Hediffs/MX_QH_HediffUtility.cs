@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
@@ -7,14 +8,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public static class MX_QH_HediffUtility
     {
-        public static HediffComp_FlowerResonance EnsureFlowerResonance(Pawn pawn)
+        public static HediffComp_SkillTreeState EnsureFlowerResonance(Pawn pawn)
         {
-            return EnsureHediffComp<HediffComp_FlowerResonance>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return EnsureHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
-        public static HediffComp_FlowerResonance GetFlowerResonance(Pawn pawn)
+        public static HediffComp_SkillTreeState GetFlowerResonance(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_FlowerResonance>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return GetHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
         public static HediffComp_FlowerDecree EnsureFlowerDecree(Pawn pawn)
@@ -69,6 +70,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineBlessing);
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineProtection);
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineFortune);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_Trickle);
             EnsureFlowerResonance(pawn);
             EnsureFlowerDecree(pawn);
             EnsureMeditativeStillness(pawn);
@@ -125,3 +127,5 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 }
+
+

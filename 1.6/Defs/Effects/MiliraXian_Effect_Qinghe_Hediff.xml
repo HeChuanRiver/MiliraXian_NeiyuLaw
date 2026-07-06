@@ -2,7 +2,7 @@
 <Defs>
   <ThingDef ParentName="MoteBase">
     <defName>MX_QH_Mote_FlowerDivinationBurst</defName>
-    <label>Mote</label>
+    <label>清荷特效</label>
     <thingClass>MoteAttached</thingClass>
     <graphicData>
       <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
@@ -33,7 +33,7 @@
   </ThingDef>
   <ThingDef ParentName="MoteBase" MayRequire="Ludeon.RimWorld.Ideology">
     <defName>MX_QH_Mote_FlowerDivinationBokeh</defName>
-    <label>Mote</label>
+    <label>清荷特效</label>
     <thingClass>MoteAttached</thingClass>
     <graphicData>
       <graphicClass>Graphic_Mote</graphicClass>
@@ -55,7 +55,7 @@
   </ThingDef>
   <ThingDef ParentName="MoteBase">
     <defName>MX_QH_Mote_FlowerDivinationFootRing</defName>
-    <label>Mote</label>
+    <label>清荷特效</label>
     <thingClass>MoteAttached</thingClass>
     <graphicData>
       <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>

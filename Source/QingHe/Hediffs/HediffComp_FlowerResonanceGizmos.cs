@@ -1,18 +1,19 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_FlowerResonanceGizmos : HediffCompProperties
+    public class HediffCompProperties_SkillTreeStateGizmos : HediffCompProperties
     {
-        public HediffCompProperties_FlowerResonanceGizmos()
+        public HediffCompProperties_SkillTreeStateGizmos()
         {
-            compClass = typeof(HediffComp_FlowerResonanceGizmos);
+            compClass = typeof(HediffComp_SkillTreeStateGizmos);
         }
     }
 
-    public class HediffComp_FlowerResonanceGizmos : HediffComp
+    public class HediffComp_SkillTreeStateGizmos : HediffComp, ISkillTreeStateListener
     {
         public override bool CompDisallowVisible()
         {
@@ -21,11 +22,18 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            HediffComp_FlowerResonance state = parent?.GetComp<HediffComp_FlowerResonance>();
+            HediffComp_SkillTreeState state = parent?.GetComp<HediffComp_SkillTreeState>();
             foreach (Gizmo gizmo in MX_QHSkillSystem.GetGizmos(Pawn, state))
             {
                 yield return gizmo;
             }
         }
+
+        public void Notify_SkillTreeStateChanged(Pawn pawn, HediffComp_SkillTreeState state)
+        {
+            MX_QHSkillSystem.SyncChoices(pawn, state);
+        }
     }
 }
+
+

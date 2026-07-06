@@ -19,6 +19,9 @@ namespace MiliraXian.Characters.QingHe.Things
         public DamageDef enhancedBleedDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectBleedAccumulation;
         public float enhancedBleedDamageAmount = 0.08f;
         public float enhancedBleedArmorPenetration = 2.1f;
+        public DamageDef enhancedToxinDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectToxinAccumulation;
+        public float enhancedToxinDamageAmount = 0.08f;
+        public float enhancedToxinArmorPenetration = 2.1f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;
 
@@ -156,12 +159,12 @@ namespace MiliraXian.Characters.QingHe.Things
                 }
             }
 
-            ApplyEnhancedBleed();
+            ApplyEnhancedHostileEffects();
         }
 
-        private void ApplyEnhancedBleed()
+        private void ApplyEnhancedHostileEffects()
         {
-            if (!enhanced || caster == null || parent?.Map == null || Props.enhancedBleedDamageDef == null || Props.enhancedBleedDamageAmount <= 0f)
+            if (!enhanced || caster == null || parent?.Map == null)
             {
                 return;
             }
@@ -174,14 +177,23 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                DamageInfo dinfo = new DamageInfo(
-                    Props.enhancedBleedDamageDef,
-                    Props.enhancedBleedDamageAmount,
-                    Props.enhancedBleedArmorPenetration,
-                    -1f,
-                    caster);
-                pawn.TakeDamage(dinfo);
+                ApplyEnhancedDamage(pawn, Props.enhancedBleedDamageDef, Props.enhancedBleedDamageAmount, Props.enhancedBleedArmorPenetration);
+                if (pawn.RaceProps?.IsMechanoid != true)
+                {
+                    ApplyEnhancedDamage(pawn, Props.enhancedToxinDamageDef, Props.enhancedToxinDamageAmount, Props.enhancedToxinArmorPenetration);
+                }
             }
+        }
+
+        private void ApplyEnhancedDamage(Pawn pawn, DamageDef damageDef, float amount, float armorPenetration)
+        {
+            if (pawn == null || damageDef == null || amount <= 0f)
+            {
+                return;
+            }
+
+            DamageInfo dinfo = new DamageInfo(damageDef, amount, armorPenetration, -1f, caster);
+            pawn.TakeDamage(dinfo);
         }
 
         private void PlayAmbientVisual()

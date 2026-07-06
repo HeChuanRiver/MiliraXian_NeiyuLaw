@@ -5,6 +5,18 @@
   <MX_Common_ResourceOverflowing>The current value is above its maximum.</MX_Common_ResourceOverflowing>
   <MX_Common_Unknown>unknown</MX_Common_Unknown>
   <MX_Common_UnknownTarget>unknown target</MX_Common_UnknownTarget>
+  <MX_Common_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_Common_SkillTreeStateAlreadyLearned>
+  <MX_Common_SkillBookMissingState>Skill state is missing.</MX_Common_SkillBookMissingState>
+  <MX_Common_SkillBookDataMissing>Skill book data is missing.</MX_Common_SkillBookDataMissing>
+  <MX_Common_SkillBookNoLearnableContent>This skill book has no learnable content for this reader.</MX_Common_SkillBookNoLearnableContent>
+  <MX_Common_SkillBookBenefitNodes>Increase skill node: {0}</MX_Common_SkillBookBenefitNodes>
+  <MX_Common_SkillBookBenefitNodeLine> - Learn school skill: {0} (+{1} skill points/hour)</MX_Common_SkillBookBenefitNodeLine>
+  <MX_Common_SkillBookQualitySummary>Judging by its paper, ink, and binding, this volume is of {0} quality; its condition shapes how smoothly it can be studied.</MX_Common_SkillBookQualitySummary>
+  <MX_Common_Parentheses>({0})</MX_Common_Parentheses>
+  <MX_Common_SkillNodesLearnedLetterLabel>New skill learned</MX_Common_SkillNodesLearnedLetterLabel>
+  <MX_Common_SkillNodesLearnedLetterText>{0} has been read, granting: {1}</MX_Common_SkillNodesLearnedLetterText>
+  <MX_Common_SkillTreeStateLevel>{0}/{1}</MX_Common_SkillTreeStateLevel>
+  <MX_Common_SkillBookStatCategory>Skill book contents</MX_Common_SkillBookStatCategory>
 
   <MX_ModeSwitch_CommandLabel>Switch form</MX_ModeSwitch_CommandLabel>
   <MX_ModeSwitch_CommandDesc>Switch to another form.</MX_ModeSwitch_CommandDesc>
@@ -139,7 +151,8 @@
   <MX_QH_FlowerBellResonanceWinter>winter</MX_QH_FlowerBellResonanceWinter>
   <MX_QH_SkillTreeNoScores>No score has been interpreted.</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>learned</MX_QH_SkillTreeStateLearned>
-  <MX_QH_SkillTreeStateAlreadyLearned>Already learned.</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateLevel>level {0}/{1}</MX_QH_SkillTreeStateLevel>
   <MX_QH_SkillTreeStateReading>interpreting</MX_QH_SkillTreeStateReading>
   <MX_QH_SkillTreeStateReadingWithProgress>interpreting {0}</MX_QH_SkillTreeStateReadingWithProgress>
   <MX_QH_SkillTreeStatePending>pending interpretation</MX_QH_SkillTreeStatePending>
@@ -159,26 +172,35 @@
   <MX_QH_FlowerPanelHelpLongBreathBody>Green blocks are available charges; yellow fill shows recharge progress.</MX_QH_FlowerPanelHelpLongBreathBody>
   <MX_QH_FlowerPanelHelpFlowerCourtTitle>Flower Court</MX_QH_FlowerPanelHelpFlowerCourtTitle>
   <MX_QH_FlowerPanelHelpFlowerCourtBody>Shows skill node progress. The center number is learned nodes; click to open the Flower Court panel.</MX_QH_FlowerPanelHelpFlowerCourtBody>
-  <MX_QH_SkillBookConsumed>This book's Qinghe musical intent has faded.</MX_QH_SkillBookConsumed>
-  <MX_QH_SkillBookRequiresQinghe>Requires Qinghe herself to read.</MX_QH_SkillBookRequiresQinghe>
-  <MX_QH_SkillBookCannotReadNow>Qinghe cannot read right now.</MX_QH_SkillBookCannotReadNow>
-  <MX_QH_SkillBookDataMissing>Skill book data is missing.</MX_QH_SkillBookDataMissing>
-  <MX_QH_MusicMasteryMaxed>Qinghe's mastery level has reached its maximum.</MX_QH_MusicMasteryMaxed>
-  <MX_QH_SkillBookAlreadyRead>Qinghe has already read this skill book.</MX_QH_SkillBookAlreadyRead>
-  <MX_QH_ReadSkillBookFloatMenu>Prioritize reading Qinghe score {0}</MX_QH_ReadSkillBookFloatMenu>
-  <MX_QH_SkillBookBenefitMastery>Increase Qinghe mastery level +{0}</MX_QH_SkillBookBenefitMastery>
-  <MX_QH_SkillBookBenefitNodes>Unlock Qinghe skill nodes: {0}</MX_QH_SkillBookBenefitNodes>
   <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>
   <MX_QH_MusicScoreStatCategory>Qinghe musical intent</MX_QH_MusicScoreStatCategory>
-  <MX_QH_ReadingProgressStat>Reading progress</MX_QH_ReadingProgressStat>
-  <MX_QH_ReadingProgressStatDesc>After Qinghe finishes reading, she will understand the score's intent and this book will turn back into an ordinary book.</MX_QH_ReadingProgressStatDesc>
   <MX_QH_SkillBookAcquiredLetterLabel>New score bound</MX_QH_SkillBookAcquiredLetterLabel>
-  <MX_QH_SkillBookAcquiredLetterText>Qinghe obtained a new score book: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;Have Qinghe read it to advance the corresponding score node interpretation.</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_SkillBookAcquiredLetterText>A new score book was assembled: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;A pawn with Qinghe's skill category can study it to advance the corresponding score node.</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_Book_LostScore_Label>Lost Score</MX_QH_Book_LostScore_Label>
+  <MX_QH_Book_LostScore_Desc>A score book preserving the long-lost pieces {0}. A matching skill tree can study it to advance those nodes.</MX_QH_Book_LostScore_Desc>
+  <MX_QH_Book_FeihuaJueyu_Label>Feihua Jueyu</MX_QH_Book_FeihuaJueyu_Label>
+  <MX_QH_Book_FeihuaJueyu_Desc>A score describing petals cut into sound. Studying it can unlock Soulpiercer for a matching skill tree.</MX_QH_Book_FeihuaJueyu_Desc>
+  <MX_QH_Book_DuanqiaoCanxue_Label>Duanqiao Canxue</MX_QH_Book_DuanqiaoCanxue_Label>
+  <MX_QH_Book_DuanqiaoCanxue_Desc>A cold and broken score. Studying it can unlock Frost Moon Mirror for a matching skill tree.</MX_QH_Book_DuanqiaoCanxue_Desc>
+  <MX_QH_Book_Gaoshan_Label>Gaoshan</MX_QH_Book_Gaoshan_Label>
+  <MX_QH_Book_Gaoshan_Desc>A quiet mountain score. Studying it can improve Divine Protection shield capacity and Flower Decree maximum.</MX_QH_Book_Gaoshan_Desc>
+  <MX_QH_Book_Liushui_Label>Liushui</MX_QH_Book_Liushui_Label>
+  <MX_QH_Book_Liushui_Desc>A flowing-water score. Studying it can improve Divine Protection recharge speed.</MX_QH_Book_Liushui_Desc>
+  <MX_QH_Book_Chunjiang_Label>Chunjiang</MX_QH_Book_Chunjiang_Label>
+  <MX_QH_Book_Chunjiang_Desc>A spring-river score. Studying it can steady Divine Protection against heavy single-hit damage.</MX_QH_Book_Chunjiang_Desc>
+  <MX_QH_Book_DivineGrace_Label>Divine Grace</MX_QH_Book_DivineGrace_Label>
+  <MX_QH_Book_DivineGrace_Desc>A refined volume of Qinghe's cultivation notes. Reading it raises the Divine Grace node by one level.</MX_QH_Book_DivineGrace_Desc>
+  <MX_QH_Book_Yingyue_Label>Yingyue</MX_QH_Book_Yingyue_Label>
+  <MX_QH_Book_Yingyue_Desc>A moon-reflection score. Studying it can increase the available charges of Divine Blessing.</MX_QH_Book_Yingyue_Desc>
+  <MX_QH_Book_NishangDance_Label>Nishang Dance</MX_QH_Book_NishangDance_Label>
+  <MX_QH_Book_NishangDance_Desc>A dance score with layered sleeves and drifting light. Studying it can unlock Flower Dance.</MX_QH_Book_NishangDance_Desc>
+  <MX_QH_Book_Jueying_Label>Jueying</MX_QH_Book_Jueying_Label>
+  <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Leaping Shadow.</MX_QH_Book_Jueying_Desc>
+  <MX_QH_Book_Luoshenfu_Label>Luoshen Fu</MX_QH_Book_Luoshenfu_Label>
+  <MX_QH_Book_Luoshenfu_Desc>A graceful fu-score about bonds and return. Studying it can unlock Luoshen Fu effects.</MX_QH_Book_Luoshenfu_Desc>
   <MX_QH_UnknownNode>Unknown node.</MX_QH_UnknownNode>
   <MX_QH_SkillNodesLearnedLetterLabel>Score node learned</MX_QH_SkillNodesLearnedLetterLabel>
-  <MX_QH_SkillNodesLearnedLetterText>Qinghe finished reading &lt;i&gt;{0}&lt;/i&gt; and learned score node(s): {1}.</MX_QH_SkillNodesLearnedLetterText>
-  <MX_QH_MusicMasteryLearnedLetterLabel>Score mastery improved</MX_QH_MusicMasteryLearnedLetterLabel>
-  <MX_QH_MusicMasteryLearnedLetterText>Qinghe finished reading &lt;i&gt;{0}&lt;/i&gt;, increasing score mastery to {1}.</MX_QH_MusicMasteryLearnedLetterText>
+  <MX_QH_SkillNodesLearnedLetterText>A reading of &lt;i&gt;{0}&lt;/i&gt; improved: {1}.</MX_QH_SkillNodesLearnedLetterText>
   <MX_QH_LongNightStillnessLabel>Long-Night Stillness</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>Qinghe has accumulated full meditative stillness. The next construction, crafting, or artwork quality roll will consume most of it and gain a steadier quality bonus.</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>Qinghe's meditative stillness is full.</MX_QH_MeditativeStillnessFullMessage>
@@ -202,6 +224,10 @@
   <MX_QH_FlowerDecreeValueLine>Flower Decree: {0} / {1}</MX_QH_FlowerDecreeValueLine>
   <MX_QH_RecoveryProgressLine>Recovery progress: {0} / {1}</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
+  <MX_QH_QixiRequiresQinghe>Only Qinghe can host the Qixi rite.</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiOutcomeFragments>Recovered {0} lost Qinghe score fragment(s).</MX_QH_QixiOutcomeFragments>
+  <MX_QH_QixiOutcomeInspirations>Inspired participant(s): {0}.</MX_QH_QixiOutcomeInspirations>
+  <MX_QH_QixiInspirationReason>Inspired by Qinghe's Qixi rite.</MX_QH_QixiInspirationReason>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>

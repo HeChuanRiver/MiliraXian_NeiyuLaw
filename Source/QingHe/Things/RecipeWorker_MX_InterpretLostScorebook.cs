@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
@@ -26,8 +27,13 @@ namespace MiliraXian.Characters.QingHe.Things
 
             MX_InterpretLostScorebookExtension extension = recipe.GetModExtension<MX_InterpretLostScorebookExtension>();
             Thing result = Rand.Chance(extension?.skillBookChance ?? 0.35f)
-                ? MakeSkillBook()
+                ? MakeSkillBook(billDoer)
                 : MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook);
+            if (result == null)
+            {
+                result = MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook);
+            }
+
             if (result == null)
             {
                 return;
@@ -37,22 +43,32 @@ namespace MiliraXian.Characters.QingHe.Things
             IntVec3 placeCell = billGiver?.Position ?? billDoer.Position;
             GenPlace.TryPlaceThing(result, placeCell, map, ThingPlaceMode.Near);
 
-            if (result is Thing_QingheMusicScoreBook)
+            if (result is Thing_MX_SkillBook)
             {
                 SendSkillBookAcquiredLetter(billDoer, result);
             }
         }
 
-        private static Thing MakeSkillBook()
+        private static Thing MakeSkillBook(Pawn billDoer)
         {
-            QingheMusicScoreDef score = DefDatabase<QingheMusicScoreDef>.AllDefsListForReading.RandomElementWithFallback();
-            if (score == null)
+            Thing thing = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_SkillBook);
+            Thing_MX_SkillBook book = thing as Thing_MX_SkillBook;
+            if (book == null)
             {
                 return null;
             }
 
-            Thing thing = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_SkillBook);
-            thing.TryGetComp<Comp_QingheMusicScore>()?.Initialize(score);
+            if (!book.InitializeFor(billDoer))
+            {
+                return null;
+            }
+
+            CompQuality compQuality = book.TryGetComp<CompQuality>();
+            if (compQuality != null)
+            {
+                compQuality.SetQuality(QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Outsider);
+            }
+
             return thing;
         }
 
@@ -82,7 +98,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            string bookTitle = (book as Thing_QingheMusicScoreBook)?.ScoreComp?.BookTitle ?? book.LabelCap;
+            string bookTitle = (book as Thing_MX_SkillBook)?.BookTitle ?? book.LabelCap;
             Find.LetterStack.ReceiveLetter(
                 "MX_QH_SkillBookAcquiredLetterLabel".Translate(),
                 "MX_QH_SkillBookAcquiredLetterText".Translate(bookTitle),
@@ -91,3 +107,5 @@ namespace MiliraXian.Characters.QingHe.Things
         }
     }
 }
+
+

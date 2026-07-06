@@ -2,30 +2,114 @@
 <Defs>
     <RitualObligationTargetFilterDef MayRequire="Ludeon.RimWorld.Ideology">
         <defName>MX_QH_LotusPondRitualTarget</defName>
-        <workerClass>RitualObligationTargetWorker_ThingDef</workerClass>
-        <colonistThingsOnly>true</colonistThingsOnly>
-        <thingDefs>
-            <li>MX_QH_LotusPond</li>
-        </thingDefs>
+        <workerClass>MiliraXian.Characters.QingHe.Rituals.RitualObligationTargetWorker_QixiLotusPond</workerClass>
     </RitualObligationTargetFilterDef>
+
+    <RitualBehaviorDef ParentName="DateRitualBehavior" MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>MX_QH_QixiRitualBehavior</defName>
+        <roles Inherit="False">
+            <li Class="MiliraXian.Characters.QingHe.Rituals.RitualRole_Qinghe">
+                <label>清荷</label>
+                <id>leader</id>
+                <required>true</required>
+                <substitutable>false</substitutable>
+                <maxCount>1</maxCount>
+                <countsAsParticipant>false</countsAsParticipant>
+                <allowChild>false</allowChild>
+                <mustBeAbleToReachTarget>true</mustBeAbleToReachTarget>
+            </li>
+        </roles>
+    </RitualBehaviorDef>
+
+    <RitualOutcomeEffectDef MayRequire="Ludeon.RimWorld.Ideology">
+        <defName>MX_QH_QixiOutcome</defName>
+        <description>根据仪式品质，参与者会获得持续{MOODDAYS}天、介于{MINMOOD}到{MAXMOOD}之间的心情影响。完成乞巧仪式还会获得失传的清荷曲谱残片，较好的结果可能激发参与者的灵感。</description>
+        <workerClass>MiliraXian.Characters.QingHe.Rituals.RitualOutcomeEffectWorker_Qixi</workerClass>
+        <extraPredictedOutcomeDescriptions>
+            <li>仪式会获得2-4份失传的曲谱残片。较好的结果可能带来工作狂热或创作灵感。</li>
+        </extraPredictedOutcomeDescriptions>
+        <comps>
+            <li Class="RitualOutcomeComp_BuildingOfDefUsed">
+                <def>Lectern</def>
+                <qualityOffset>0.15</qualityOffset>
+                <maxHorDistFromTarget>5</maxHorDistFromTarget>
+            </li>
+            <li Class="RitualOutcomeComp_RitualSeatPresent">
+                <qualityOffset>0.15</qualityOffset>
+            </li>
+            <li Class="RitualOutcomeComp_RolePresentNotSubstituted">
+                <roleId>leader</roleId>
+                <label>清荷在场</label>
+                <qualityOffset>0.25</qualityOffset>
+            </li>
+            <li Class="RitualOutcomeComp_ParticipantCount">
+                <label>参与者数量</label>
+                <curve>
+                    <points>
+                        <li>(1, 0.0)</li>
+                        <li>(5, 0.15)</li>
+                        <li>(10, 0.25)</li>
+                    </points>
+                </curve>
+            </li>
+            <li Class="RitualOutcomeComp_RitualTargetDefs">
+                <defs>
+                    <li>MX_QH_LotusPond</li>
+                </defs>
+                <label>在荷池旁开始</label>
+                <qualityOffset>0.2</qualityOffset>
+                <expectedThingLabelTip>一座荷池</expectedThingLabelTip>
+            </li>
+        </comps>
+        <outcomeChances>
+            <li>
+                <label>糟糕</label>
+                <chance>0.05</chance>
+                <memory>TerribleFestival</memory>
+                <description>{0}十分糟糕。祈愿散落在尴尬的沉默里，没人找到期盼中的曲意。</description>
+                <positivityIndex>-2</positivityIndex>
+            </li>
+            <li>
+                <label>乏味</label>
+                <chance>0.15</chance>
+                <memory>BoringFestival</memory>
+                <description>{0}有些乏味。聚会尚算平和，但乐声始终没有真正沉静下来。</description>
+                <positivityIndex>-1</positivityIndex>
+            </li>
+            <li>
+                <label>雅致</label>
+                <chance>0.6</chance>
+                <memory>FunFestival</memory>
+                <description>{0}颇为雅致。清亮的乐音与安静的愿望让众人心中一轻。</description>
+                <potentialExtraOutcomeDesc>一名参与者可能获得工作狂热或创作灵感。</potentialExtraOutcomeDesc>
+                <positivityIndex>1</positivityIndex>
+            </li>
+            <li>
+                <label>灵感涌现</label>
+                <chance>0.2</chance>
+                <memory>UnforgettableFestival</memory>
+                <description>{0}令人灵感涌现。仪式仿佛得到了荷池彼岸旧日旋律的短暂回应。</description>
+                <potentialExtraOutcomeDesc>两名参与者可能获得工作狂热或创作灵感。</potentialExtraOutcomeDesc>
+                <positivityIndex>2</positivityIndex>
+            </li>
+        </outcomeChances>
+    </RitualOutcomeEffectDef>
 
     <RitualPatternDef MayRequire="Ludeon.RimWorld.Ideology">
         <defName>MX_QH_QixiRitualPattern</defName>
-        <ritualExpectedDesc>Every year on {DATE}, {MEMBERS} can hold a Qixi rite beside the lotus pond.</ritualExpectedDesc>
-        <ritualExpectedDescNoAdjective>{MEMBERS} can hold a Qixi rite beside the lotus pond.</ritualExpectedDescNoAdjective>
-        <shortDescOverride>A festival rite beside the lotus pond, praying for artistry and flowing music.</shortDescOverride>
-        <ritualExplanation>The Qixi rite uses the standard festival structure: a speaker gives a short address, then participants gather beside the lotus pond. Ritual quality affects the mood memory participants receive.</ritualExplanation>
-        <beginRitualOverride>Begin Qixi rite</beginRitualOverride>
+        <ritualExpectedDesc>{MEMBERS}可以在荷池旁举行乞巧仪式。</ritualExpectedDesc>
+        <ritualExpectedDescNoAdjective>{MEMBERS}可以在荷池旁举行乞巧仪式。</ritualExpectedDescNoAdjective>
+        <shortDescOverride>在荷池旁举行一场祈愿巧思与曲意流转的节庆仪式。</shortDescOverride>
+        <ritualExplanation>乞巧仪式必须由清荷在荷池旁主持。仪式品质会影响参与者获得的心情记忆；完成后会获得失传的清荷曲谱残页，较好的结果还可能带来手工或艺术灵感。</ritualExplanation>
+        <beginRitualOverride>开始乞巧仪式</beginRitualOverride>
         <iconPathOverride>UI/Icons/Rituals/RitualFestival</iconPathOverride>
-        <canStartAnytime>true</canStartAnytime>
-        <ritualObligationTriggers>
-            <li Class="RitualObligationTrigger_DateProperties">
-                <mustBePlayerIdeo>true</mustBePlayerIdeo>
-            </li>
-        </ritualObligationTriggers>
+        <ritualOnlyForIdeoMembers>false</ritualOnlyForIdeoMembers>
+        <alwaysStartAnytime>true</alwaysStartAnytime>
+        <playsIdeoMusic>false</playsIdeoMusic>
+        <showIdeoIconsInDialog>false</showIdeoIconsInDialog>
         <ritualObligationTargetFilter>MX_QH_LotusPondRitualTarget</ritualObligationTargetFilter>
-        <ritualBehavior>DateRitual</ritualBehavior>
-        <ritualOutcomeEffect>CelebratedDate</ritualOutcomeEffect>
+        <ritualBehavior>MX_QH_QixiRitualBehavior</ritualBehavior>
+        <ritualOutcomeEffect>MX_QH_QixiOutcome</ritualOutcomeEffect>
         <tags>
             <li>CelebratedDate</li>
             <li>MX_QH_Qixi</li>
@@ -35,9 +119,18 @@
 
     <PreceptDef ParentName="FestivalBase" MayRequire="Ludeon.RimWorld.Ideology">
         <defName>MX_QH_QixiRitual</defName>
-        <label>qixi</label>
-        <description>Qinghe qixi ritual.</description>
+        <label>乞巧</label>
+        <description>在荷池旁举行的清荷节庆仪式。参与者向花神庭祈愿巧思与曲意，随后聚会片刻。</description>
+        <preceptClass>MiliraXian.Characters.QingHe.Rituals.Precept_QixiRitual</preceptClass>
+        <visible>false</visible>
+        <classic>true</classic>
+        <countsTowardsPreceptLimit>false</countsTowardsPreceptLimit>
         <ritualPatternBase>MX_QH_QixiRitualPattern</ritualPatternBase>
+        <usesIdeoVisualEffects>false</usesIdeoVisualEffects>
+        <mergeRitualGizmosFromAllIdeos>true</mergeRitualGizmosFromAllIdeos>
+        <useRepeatPenalty>false</useRepeatPenalty>
+        <showRitualFloatMenuOption>false</showRitualFloatMenuOption>
+        <isNonIdeoRitual>true</isNonIdeoRitual>
         <allowDuplicates>false</allowDuplicates>
         <maxCount>1</maxCount>
         <ignoreNameUniqueness>true</ignoreNameUniqueness>

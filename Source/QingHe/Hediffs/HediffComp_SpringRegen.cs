@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -19,6 +20,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         /// Whether permanent injuries (e.g. scars) can be healed.
         /// </summary>
         public bool healPermanentInjuries = false;
+
+        /// <summary>
+        /// Whether missing body parts can be restored after injuries are healed.
+        /// </summary>
+        public bool restoreMissingParts = false;
 
         public HediffCompProperties_SpringRegen()
         {
@@ -50,7 +56,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            TryHealOneInjury();
+            float healed = TryHealOneInjury();
+            if (healed <= 0f && Props.restoreMissingParts)
+            {
+                TryRestoreOneMissingPart();
+            }
         }
 
         private float TryHealOneInjury()
@@ -105,6 +115,36 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             target.Heal(healAmount);
             float healed = before - target.Severity;
             return healed > 0f ? healed : 0f;
+        }
+
+        private bool TryRestoreOneMissingPart()
+        {
+            List<Hediff_MissingPart> missingParts = Pawn.health.hediffSet.GetMissingPartsCommonAncestors();
+            if (missingParts == null || missingParts.Count == 0)
+            {
+                return false;
+            }
+
+            Hediff_MissingPart target = null;
+            for (int i = 0; i < missingParts.Count; i++)
+            {
+                Hediff_MissingPart missingPart = missingParts[i];
+                if (missingPart?.Part == null)
+                {
+                    continue;
+                }
+
+                target = missingPart;
+                break;
+            }
+
+            if (target == null)
+            {
+                return false;
+            }
+
+            Pawn.health.RestorePart(target.Part);
+            return true;
         }
     }
 }

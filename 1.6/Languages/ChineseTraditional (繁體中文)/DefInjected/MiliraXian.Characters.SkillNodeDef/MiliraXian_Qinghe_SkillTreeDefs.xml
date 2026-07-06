@@ -12,6 +12,8 @@
   <MX_QH_Node_Liushui.description>由《流水》解鎖。提高花神之眷顧的回充速度。</MX_QH_Node_Liushui.description>
   <MX_QH_Node_Chunjiang.label>春江</MX_QH_Node_Chunjiang.label>
   <MX_QH_Node_Chunjiang.description>由《春江》解鎖。花神之眷顧受到高額傷害時，將單次護盾傷害壓低到上限內。</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_DivineGrace.label>神恩</MX_QH_Node_DivineGrace.label>
+  <MX_QH_Node_DivineGrace.description>清荷的精通節點。每一級代表清荷自身修行更進一步；具體效果由清荷的被動系統讀取並生效。</MX_QH_Node_DivineGrace.description>
   <MX_QH_Node_Yingyue.label>映月</MX_QH_Node_Yingyue.label>
   <MX_QH_Node_Yingyue.description>由《映月》解鎖。花神之垂憐的可用次數充能提高。</MX_QH_Node_Yingyue.description>
   <MX_QH_Node_NishangDance.label>霓裳之舞</MX_QH_Node_NishangDance.label>

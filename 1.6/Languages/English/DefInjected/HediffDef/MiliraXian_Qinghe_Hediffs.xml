@@ -54,14 +54,8 @@
   <MX_QH_DivineFortune.description>Hidden Hediff: unified Qinghe stat proxy.</MX_QH_DivineFortune.description>
   <MX_QH_DivineProtection.label>Flower-God Ward</MX_QH_DivineProtection.label>
   <MX_QH_DivineProtection.description>Qinghe is protected by the Twelve Flower Gods and naturally generates a shield that blocks damage.\n\nWhen broken, the shield is disabled for 10 seconds.</MX_QH_DivineProtection.description>
-  <MX_QH_FlowerSigil_RedApricot.label>flower god sigil: red apricot</MX_QH_FlowerSigil_RedApricot.label>
-  <MX_QH_FlowerSigil_RedApricot.description>A spring resonance passive. The red apricot flower god protects Qinghe, periodically healing the most severe wound, including permanent injuries.</MX_QH_FlowerSigil_RedApricot.description>
-  <MX_QH_FlowerSigil_Lotus.label>flower god sigil: lotus</MX_QH_FlowerSigil_Lotus.label>
-  <MX_QH_FlowerSigil_Lotus.description>A summer resonance passive placeholder for dodge, disease, toxin, and pollution immunity hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_Lotus.description>
-  <MX_QH_FlowerSigil_Magnolia.label>flower god sigil: magnolia</MX_QH_FlowerSigil_Magnolia.label>
-  <MX_QH_FlowerSigil_Magnolia.description>An autumn resonance passive placeholder for psychic invisibility, psychic sensitivity, and entropy loss hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_Magnolia.description>
-  <MX_QH_FlowerSigil_RedPlum.label>flower god sigil: red plum</MX_QH_FlowerSigil_RedPlum.label>
-  <MX_QH_FlowerSigil_RedPlum.description>A winter resonance passive placeholder for cold tolerance and freeze accumulation hooks. Its full effect has not been implemented yet.</MX_QH_FlowerSigil_RedPlum.description>
+  <MX_QH_Trickle.label>Trickle</MX_QH_Trickle.label>
+  <MX_QH_Trickle.description>Qinghe slowly recovers from wounds over time, eventually restoring permanent injuries and missing body parts.</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>Luoshen contract</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>

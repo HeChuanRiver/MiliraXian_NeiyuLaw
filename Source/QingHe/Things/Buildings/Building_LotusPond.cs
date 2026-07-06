@@ -1,15 +1,57 @@
 ﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using System.Linq;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Rituals;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
+using UnityEngine;
 using Verse.AI;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Buildings
 {
+    public class RoomRoleWorker_QingheLotusRainPavilion : RoomRoleWorker
+    {
+        private const float LotusPondScore = 3000f;
+
+        public override float GetScore(Room room)
+        {
+            return HasLotusPond(room) ? LotusPondScore : 0f;
+        }
+
+        public override float GetScoreDeltaIfBuildingPlaced(Room room, ThingDef buildingDef)
+        {
+            if (room?.Role?.Worker is RoomRoleWorker_QingheLotusRainPavilion)
+            {
+                return 0f;
+            }
+
+            return buildingDef == MX_QHDefOf.MX_QH_LotusPond ? LotusPondScore : 0f;
+        }
+
+        private static bool HasLotusPond(Room room)
+        {
+            if (room == null || MX_QHDefOf.MX_QH_LotusPond == null)
+            {
+                return false;
+            }
+
+            List<Thing> things = room.ContainedAndAdjacentThings;
+            for (int i = 0; i < things.Count; i++)
+            {
+                if (things[i]?.def == MX_QHDefOf.MX_QH_LotusPond)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     public class CompAssignableToPawn_QingheMeditationSpot : CompAssignableToPawn_MeditationSpot
     {
         public override IEnumerable<Pawn> AssigningCandidates
@@ -87,7 +129,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         return;
                     }
 
-                    HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(interactor);
+                    HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(interactor);
                     MX_QH_HediffUtility.EnsureFlowerDecree(interactor);
                     if (state == null)
                     {
@@ -97,6 +139,34 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 
                     Find.WindowStack.Add(new Dialog_QH_SkillTree(interactor, state));
                 });
+
+            if (ModsConfig.IdeologyActive)
+            {
+                Precept_Ritual qixiRitual = Precept_QixiRitual.EnsureFor(Faction.OfPlayer?.ideos?.PrimaryIdeo ?? interactor.Ideo);
+                if (qixiRitual != null)
+                {
+                    string reason = qixiRitual.behavior?.CanStartRitualNow(clickedThing, qixiRitual, interactor);
+                    RitualTargetUseReport targetReport = qixiRitual.CanUseTarget(clickedThing, null);
+                    if (!targetReport.failReason.NullOrEmpty())
+                    {
+                        reason = targetReport.failReason;
+                    }
+
+                    System.Action action = null;
+                    if (reason.NullOrEmpty())
+                    {
+                        action = delegate { qixiRitual.ShowRitualBeginWindow(clickedThing, null, interactor); };
+                    }
+
+                    yield return new FloatMenuOption(
+                        reason.NullOrEmpty()
+                            ? qixiRitual.GetBeginRitualText()
+                            : qixiRitual.GetBeginRitualText() + " (" + reason + ")",
+                        action,
+                        qixiRitual.Icon,
+                        Color.white);
+                }
+            }
 
             ThingWithComps flowerBell = interactor.equipment?.Primary;
             CompFlowerBellResonance resonanceComp = flowerBell?.TryGetComp<CompFlowerBellResonance>();
@@ -132,3 +202,5 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
         }
     }
 }
+
+

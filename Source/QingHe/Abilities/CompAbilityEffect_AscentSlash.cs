@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Vfx;
@@ -715,3 +716,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         }
     }
 }
+
+
+

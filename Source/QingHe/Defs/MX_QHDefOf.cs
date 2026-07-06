@@ -7,13 +7,13 @@ namespace MiliraXian.Characters.QingHe.Defs
     public static class MX_QHDefOf
     {
         public static JobDef MX_QH_TuneBell;
-        public static JobDef MX_QH_ReadSkillBook;
 
         public static ThingDef SpringFlowField;
         public static ThingDef MX_QH_AscentSlashKnockbackFlyer;
         public static ThingDef MX_QH_LunarMirror;
         public static ThingDef MX_QH_LotusPond;
         public static ThingDef MX_QH_SkillBook;
+        public static ThingDef MX_QH_LostMusicScoreFragment;
 
         public static DamageDef MX_QH_NoteImpact;
 
@@ -28,6 +28,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_MeditativeStillness;
         public static HediffDef MX_QH_FlowerDance;
+        public static HediffDef MX_QH_LuoshenContract;
+        public static HediffDef MX_QH_Trickle;
 
         public static ThoughtDef MX_QH_LuoshenRibbonGrace;
         public static ThoughtDef MX_QH_LuoshenContractBroken;
@@ -40,6 +42,9 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static InspirationDef Frenzy_Work;
         public static InspirationDef Inspired_Creativity;
+
+        public static PreceptDef MX_QH_QixiRitual;
+        public static RitualPatternDef MX_QH_QixiRitualPattern;
 
         public static ThingDef MX_QH_Weapon_FlowerBell;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell_Spring;

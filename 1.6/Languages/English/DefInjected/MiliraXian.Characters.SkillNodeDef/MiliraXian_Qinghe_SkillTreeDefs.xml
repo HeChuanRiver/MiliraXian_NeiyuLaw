@@ -12,6 +12,8 @@
   <MX_QH_Node_Liushui.description>Unlocked by "Liushui". Increases Divine Protection recharge speed.</MX_QH_Node_Liushui.description>
   <MX_QH_Node_Chunjiang.label>Chunjiang</MX_QH_Node_Chunjiang.label>
   <MX_QH_Node_Chunjiang.description>Unlocked by "Chunjiang". When Divine Protection takes heavy damage, caps the shield damage from a single hit.</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_DivineGrace.label>divine grace</MX_QH_Node_DivineGrace.label>
+  <MX_QH_Node_DivineGrace.description>Qinghe's mastery node. Each level deepens her own cultivation; concrete effects are applied by Qinghe's passive systems.</MX_QH_Node_DivineGrace.description>
   <MX_QH_Node_Yingyue.label>Yingyue</MX_QH_Node_Yingyue.label>
   <MX_QH_Node_Yingyue.description>Unlocked by "Yingyue". Increases the available charges of Divine Blessing.</MX_QH_Node_Yingyue.description>
   <MX_QH_Node_NishangDance.label>Nishang Dance</MX_QH_Node_NishangDance.label>

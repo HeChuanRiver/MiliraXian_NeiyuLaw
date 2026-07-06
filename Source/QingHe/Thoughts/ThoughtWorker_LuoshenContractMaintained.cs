@@ -4,11 +4,11 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Thoughts
 {
-    public class ThoughtWorker_QingheLuoshenContractMaintained : ThoughtWorker
+    public class ThoughtWorker_LuoshenContractMaintained : ThoughtWorker
     {
         protected override ThoughtState CurrentStateInternal(Pawn p)
         {
-            return Hediff_LuoshenContract.IsMaintainedFor(p)
+            return HediffComp_LuoshenContract.IsMaintainedFor(p)
                 ? ThoughtState.ActiveAtStage(0)
                 : ThoughtState.Inactive;
         }

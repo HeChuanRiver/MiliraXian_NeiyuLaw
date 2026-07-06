@@ -18,7 +18,7 @@
   <MX_QH_LostMusicScoreFragment.label>失傳的曲譜殘片</MX_QH_LostMusicScoreFragment.label>
   <MX_QH_LostMusicScoreFragment.description>殘缺而難辨的清荷曲譜碎片。可在藝創台拼合成一本隨機的清荷技能書。</MX_QH_LostMusicScoreFragment.description>
   <MX_QH_SkillBook.label>清荷技能書</MX_QH_SkillBook.label>
-  <MX_QH_SkillBook.description>記錄清荷曲意的特殊書籍。只有清荷本人能夠讀懂其中內容；讀完後，書中曲意散去，書本會變回普通教材。</MX_QH_SkillBook.description>
+  <MX_QH_SkillBook.description>記錄舊曲譜的書。擁有清荷技能類別的小人閱讀時可推進對應清荷技能節點；其他讀者也可以像普通書一樣閱讀。</MX_QH_SkillBook.description>
   <MX_QH_Book.label>清荷書卷</MX_QH_Book.label>
   <MX_QH_Book.description>清荷相關書卷。</MX_QH_Book.description>
   <MX_QH_Weapon_FlowerBell.label>四時花信鈴</MX_QH_Weapon_FlowerBell.label>

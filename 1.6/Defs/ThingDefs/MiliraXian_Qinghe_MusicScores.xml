@@ -1,11 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
+    <RulePackDef>
+        <defName>Namer_MX_QH_SkillBook</defName>
+        <rulePack>
+            <rulesStrings>
+                <li>title->失传的曲谱</li>
+                <li>title->古旧曲谱</li>
+                <li>title->残篇曲谱</li>
+            </rulesStrings>
+        </rulePack>
+    </RulePackDef>
+
+    <RulePackDef>
+        <defName>Description_MX_QH_SkillBook</defName>
+        <rulePack>
+            <rulesStrings>
+                <li>desc->[mx_skillbook_paragraphs]&#10;&#10;[mx_skillbook_quality_summary]</li>
+            </rulesStrings>
+        </rulePack>
+    </RulePackDef>
+
+    <RulePackDef>
+        <defName>Namer_MX_QH_CustomBook</defName>
+        <rulePack>
+            <rulesStrings>
+                <li>title->旧书卷</li>
+                <li>title->批注书卷</li>
+                <li>title->誊抄手稿</li>
+            </rulesStrings>
+        </rulePack>
+    </RulePackDef>
+
+    <RulePackDef>
+        <defName>Description_MX_QH_CustomBook</defName>
+        <rulePack>
+            <rulesStrings>
+                <li>desc->一本仍可阅读的书卷，后来的持有者在页边补了些批注。</li>
+                <li>desc->一本翻阅痕迹明显的旧书，扉页曾被小心修补。</li>
+                <li>desc->一本保存整齐的誊抄手稿，纸页被细心整理过。</li>
+            </rulesStrings>
+        </rulePack>
+    </RulePackDef>
+
     <ThingDef>
         <defName>MX_QH_LostMusicScoreFragment</defName>
-        <label>lost score fragment</label>
-        <description>A damaged and difficult-to-read Qinghe score fragment. It can be assembled at an art bench into a random Qinghe skill book.</description>
+        <label>失传的曲谱残片</label>
+        <description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的清荷技能书。</description>
         <thingClass>ThingWithComps</thingClass>
         <category>Item</category>
+        <tradeability>All</tradeability>
         <selectable>true</selectable>
         <rotatable>false</rotatable>
         <drawerType>MapMeshOnly</drawerType>
@@ -24,6 +67,12 @@
         <thingCategories>
             <li>Books</li>
         </thingCategories>
+        <tradeTags>
+            <li>ExoticMisc</li>
+        </tradeTags>
+        <thingSetMakerTags>
+            <li>RewardStandardMidFreq</li>
+        </thingSetMakerTags>
         <statBases>
             <MaxHitPoints>40</MaxHitPoints>
             <DeteriorationRate>3</DeteriorationRate>
@@ -35,16 +84,16 @@
 
     <ThingDef>
         <defName>MX_QH_SkillBook</defName>
-        <label>Qinghe skill book</label>
-        <description>A special book recording Qinghe's musical intent. Only Qinghe herself can understand it; after it is read, the intent fades and the book becomes an ordinary textbook again.</description>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_QingheMusicScoreBook</thingClass>
+        <label>清荷技能书</label>
+        <description>记录旧曲谱的书。拥有清荷技能类别的小人阅读时可推进对应清荷技能节点；其他读者也可以像普通书一样阅读。</description>
+        <thingClass>MiliraXian.Characters.Thing_MX_SkillBook</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
         <rotatable>false</rotatable>
         <drawerType>MapMeshOnly</drawerType>
         <altitudeLayer>Item</altitudeLayer>
         <alwaysHaulable>true</alwaysHaulable>
-        <burnableByRecipe>true</burnableByRecipe>
+        <burnableByRecipe>false</burnableByRecipe>
         <useHitPoints>true</useHitPoints>
         <healthAffectsPrice>true</healthAffectsPrice>
         <drawGUIOverlay>true</drawGUIOverlay>
@@ -67,8 +116,8 @@
                 <compClass>CompQuality</compClass>
             </li>
             <li Class="CompProperties_Book">
-                <nameMaker>Namer_TextBook</nameMaker>
-                <descriptionMaker>Description_SkillBook</descriptionMaker>
+                <nameMaker>Namer_MX_QH_SkillBook</nameMaker>
+                <descriptionMaker>Description_MX_QH_SkillBook</descriptionMaker>
                 <ageYearsRange>100~200</ageYearsRange>
                 <openGraphic>
                     <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
@@ -80,22 +129,22 @@
                     <graphicClass>Graphic_Multi</graphicClass>
                     <addTopAltitudeBias>true</addTopAltitudeBias>
                 </verticalGraphic>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
-                <plainBookDef>MX_QH_Book</plainBookDef>
-                <requiredReadingTicks>5000</requiredReadingTicks>
-                <possibleScores>
-                    <li>MX_QH_ScoreDef_DuanqiaoCanxue</li>
-                    <li>MX_QH_ScoreDef_FeihuaJueyu</li>
-                    <li>MX_QH_ScoreDef_Gaoshan</li>
-                    <li>MX_QH_ScoreDef_Liushui</li>
-                    <li>MX_QH_ScoreDef_Chunjiang</li>
-                    <li>MX_QH_ScoreDef_Yingyue</li>
-                    <li>MX_QH_ScoreDef_NishangDance</li>
-                    <li>MX_QH_ScoreDef_Jueying</li>
-                    <li>MX_QH_ScoreDef_Luoshenfu</li>
-                    <li>MX_QH_ScoreDef_FlowerGodGrace</li>
-                </possibleScores>
+                <doers>
+                    <li Class="MiliraXian.Characters.BookOutcomeProperties_SkillTreeUnlock">
+                        <skillCategory>MX_QH_Category_Qinghe</skillCategory>
+                        <learningSpeed>1</learningSpeed>
+                        <extraNodeChance>0.15</extraNodeChance>
+                        <combinedBookName>MX_QH_Book_LostScore_Label</combinedBookName>
+                    </li>
+                    <li Class="MiliraXian.Characters.BookOutcomeProperties_SkillTreeUnlock">
+                        <skillCategory>MX_QH_Category_Qinghe</skillCategory>
+                        <learningSpeed>1</learningSpeed>
+                    </li>
+                    <li Class="BookOutcomeProperties_GainSkillExp" />
+                    <li Class="BookOutcomeProperties_GiveQuest">
+                        <questChance>0.01</questChance>
+                    </li>
+                </doers>
             </li>
         </comps>
         <statBases>
@@ -106,13 +155,16 @@
             <Beauty>1</Beauty>
             <MarketValue>600</MarketValue>
         </statBases>
+        <inspectorTabs>
+            <li>ITab_Book</li>
+        </inspectorTabs>
     </ThingDef>
 
     <ThingDef>
         <defName>MX_QH_Book</defName>
-        <label>Qinghe volume</label>
-        <description>A book related to Qinghe.</description>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_MX_CustomBook</thingClass>
+        <label>清荷书卷</label>
+        <description>清荷相关书卷。</description>
+        <thingClass>MiliraXian.Characters.Thing_MX_CustomBook</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
         <rotatable>true</rotatable>
@@ -133,8 +185,8 @@
                 <compClass>CompQuality</compClass>
             </li>
             <li Class="CompProperties_Book">
-                <nameMaker>Namer_TextBook</nameMaker>
-                <descriptionMaker>Description_SkillBook</descriptionMaker>
+                <nameMaker>Namer_MX_QH_CustomBook</nameMaker>
+                <descriptionMaker>Description_MX_QH_CustomBook</descriptionMaker>
                 <ageYearsRange>100~200</ageYearsRange>
                 <openGraphic>
                     <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
@@ -182,10 +234,10 @@
 
     <RecipeDef>
         <defName>MX_QH_AssembleLostMusicScore</defName>
-        <label>assemble Qinghe score</label>
-        <description>Assemble lost score fragments into a volume. Success produces a random Qinghe skill book; failure produces an ordinary book.</description>
+        <label>拼合清荷曲谱</label>
+        <description>将失传的曲谱残片拼合成书卷。成功时得到随机清荷技能书，失败时只得到普通书。</description>
         <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_InterpretLostScorebook</workerClass>
-        <jobString>assembling Qinghe score.</jobString>
+        <jobString>正在拼合清荷曲谱。</jobString>
         <workAmount>300</workAmount>
         <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
         <workSkill>Artistic</workSkill>

@@ -18,7 +18,7 @@
   <MX_QH_LostMusicScoreFragment.label>lost score fragment</MX_QH_LostMusicScoreFragment.label>
   <MX_QH_LostMusicScoreFragment.description>A damaged and difficult-to-read Qinghe score fragment. It can be assembled at an art bench into a random Qinghe skill book.</MX_QH_LostMusicScoreFragment.description>
   <MX_QH_SkillBook.label>Qinghe skill book</MX_QH_SkillBook.label>
-  <MX_QH_SkillBook.description>A special book recording Qinghe's musical intent. Only Qinghe herself can understand it; after it is read, the intent fades and the book becomes an ordinary textbook again.</MX_QH_SkillBook.description>
+  <MX_QH_SkillBook.description>A score book that can advance a matching Qinghe skill node for a pawn with Qinghe's skill category. Other readers can still read it like an ordinary book.</MX_QH_SkillBook.description>
   <MX_QH_Book.label>Qinghe volume</MX_QH_Book.label>
   <MX_QH_Book.description>A book related to Qinghe.</MX_QH_Book.description>
   <MX_QH_Weapon_FlowerBell.label>four-season Flower Bell</MX_QH_Weapon_FlowerBell.label>

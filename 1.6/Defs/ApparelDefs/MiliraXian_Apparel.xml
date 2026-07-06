@@ -85,8 +85,8 @@
     <!-- 清荷占位常服：暂时复用霓羽常服纹理 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_QingheNormal</defName>
-        <label>Qinghe: everyday attire</label>
-        <description>Qinghe's everyday attire. It bears a lotus pattern and a faint floral fragrance, with material and workmanship carefully designed by Qinghe herself.</description>
+        <label>清荷·常服</label>
+        <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -348,8 +348,8 @@
     <!-- 清荷占位头饰：暂时复用霓羽珠饰纹理 -->
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_QingheHeaddress</defName>
-        <label>Qinghe: floral headdress</label>
-        <description>The floral headdress Qinghe wears every day. Shaped after her beloved lotus, it is elegant and fresh, releasing a faint, comforting fragrance.</description>
+        <label>清荷·花饰</label>
+        <description>清荷日常佩戴的花饰。样式是她最爱的荷花，典雅而不失清新，散发出一缕让人安心的清香。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />

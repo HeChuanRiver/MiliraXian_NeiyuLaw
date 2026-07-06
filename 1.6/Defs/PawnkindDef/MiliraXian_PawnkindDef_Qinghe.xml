@@ -5,7 +5,7 @@
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
         <!-- Lotus Rosalia -->
-        <label>flower god envoy</label>
+        <label>清荷·莱莉娅</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->

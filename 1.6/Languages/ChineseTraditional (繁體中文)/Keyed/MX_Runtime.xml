@@ -5,6 +5,18 @@
   <MX_Common_ResourceOverflowing>目前數值已超過上限。</MX_Common_ResourceOverflowing>
   <MX_Common_Unknown>未知</MX_Common_Unknown>
   <MX_Common_UnknownTarget>未知目標</MX_Common_UnknownTarget>
+  <MX_Common_SkillTreeStateAlreadyLearned>已經達到最高等級。</MX_Common_SkillTreeStateAlreadyLearned>
+  <MX_Common_SkillBookMissingState>缺少技能狀態。</MX_Common_SkillBookMissingState>
+  <MX_Common_SkillBookDataMissing>技能書資料缺失。</MX_Common_SkillBookDataMissing>
+  <MX_Common_SkillBookNoLearnableContent>這本技能書對目前讀者沒有可學習內容。</MX_Common_SkillBookNoLearnableContent>
+  <MX_Common_SkillBookBenefitNodes>提升技能節點：{0}</MX_Common_SkillBookBenefitNodes>
+  <MX_Common_SkillBookBenefitNodeLine> - 可習得流派技能：{0} (+{1}技能點/小時)</MX_Common_SkillBookBenefitNodeLine>
+  <MX_Common_SkillBookQualitySummary>從紙頁、墨跡與裝訂來看，這本書卷的整體品相為{0}；完整度會影響研讀時的順暢程度。</MX_Common_SkillBookQualitySummary>
+  <MX_Common_Parentheses>（{0}）</MX_Common_Parentheses>
+  <MX_Common_SkillNodesLearnedLetterLabel>習得新技能</MX_Common_SkillNodesLearnedLetterLabel>
+  <MX_Common_SkillNodesLearnedLetterText>{0} 已完成研讀，獲得：{1}</MX_Common_SkillNodesLearnedLetterText>
+  <MX_Common_SkillTreeStateLevel>{0}/{1}</MX_Common_SkillTreeStateLevel>
+  <MX_Common_SkillBookStatCategory>技能書內容</MX_Common_SkillBookStatCategory>
 
   <MX_ModeSwitch_CommandLabel>切換形態</MX_ModeSwitch_CommandLabel>
   <MX_ModeSwitch_CommandDesc>切換為其他形態</MX_ModeSwitch_CommandDesc>
@@ -139,7 +151,8 @@
   <MX_QH_FlowerBellResonanceWinter>冬</MX_QH_FlowerBellResonanceWinter>
   <MX_QH_SkillTreeNoScores>尚未解讀曲譜。</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>已習得</MX_QH_SkillTreeStateLearned>
-  <MX_QH_SkillTreeStateAlreadyLearned>已經習得。</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateAlreadyLearned>已經達到最高等級。</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateLevel>{0}/{1} 級</MX_QH_SkillTreeStateLevel>
   <MX_QH_SkillTreeStateReading>解讀中</MX_QH_SkillTreeStateReading>
   <MX_QH_SkillTreeStateReadingWithProgress>解讀中 {0}</MX_QH_SkillTreeStateReadingWithProgress>
   <MX_QH_SkillTreeStatePending>待解讀</MX_QH_SkillTreeStatePending>
@@ -159,26 +172,35 @@
   <MX_QH_FlowerPanelHelpLongBreathBody>綠色方塊表示可用充能，黃色填充表示正在恢復。</MX_QH_FlowerPanelHelpLongBreathBody>
   <MX_QH_FlowerPanelHelpFlowerCourtTitle>花神庭</MX_QH_FlowerPanelHelpFlowerCourtTitle>
   <MX_QH_FlowerPanelHelpFlowerCourtBody>顯示技能節點進度；中心數字為已習得節點數，點擊打開花神庭面板。</MX_QH_FlowerPanelHelpFlowerCourtBody>
-  <MX_QH_SkillBookConsumed>這本書中的清荷曲意已經散去。</MX_QH_SkillBookConsumed>
-  <MX_QH_SkillBookRequiresQinghe>需要清荷本人閱讀。</MX_QH_SkillBookRequiresQinghe>
-  <MX_QH_SkillBookCannotReadNow>清荷當前無法閱讀。</MX_QH_SkillBookCannotReadNow>
-  <MX_QH_SkillBookDataMissing>技能書資料缺失。</MX_QH_SkillBookDataMissing>
-  <MX_QH_MusicMasteryMaxed>清荷的精通等級已經達到上限。</MX_QH_MusicMasteryMaxed>
-  <MX_QH_SkillBookAlreadyRead>清荷已經讀過這份技能書。</MX_QH_SkillBookAlreadyRead>
-  <MX_QH_ReadSkillBookFloatMenu>優先閱讀清荷曲譜 {0}</MX_QH_ReadSkillBookFloatMenu>
-  <MX_QH_SkillBookBenefitMastery>提升清荷精通等級 +{0}</MX_QH_SkillBookBenefitMastery>
-  <MX_QH_SkillBookBenefitNodes>解鎖清荷技能節點：{0}</MX_QH_SkillBookBenefitNodes>
   <MX_QH_Parentheses>（{0}）</MX_QH_Parentheses>
   <MX_QH_MusicScoreStatCategory>清荷曲意</MX_QH_MusicScoreStatCategory>
-  <MX_QH_ReadingProgressStat>閱讀進度</MX_QH_ReadingProgressStat>
-  <MX_QH_ReadingProgressStatDesc>清荷讀完後會領悟其中曲意，此書會變回普通書籍。</MX_QH_ReadingProgressStatDesc>
   <MX_QH_SkillBookAcquiredLetterLabel>新曲譜入卷</MX_QH_SkillBookAcquiredLetterLabel>
-  <MX_QH_SkillBookAcquiredLetterText>清荷得到了一本新的曲譜書：《{0}》。&#10;&#10;讓清荷閱讀它，即可推進對應曲譜節點的解讀進度。</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_SkillBookAcquiredLetterText>裝訂出了一本新的曲譜書：《{0}》。&#10;&#10;擁有清荷技能類別的小人研讀它時，可推進對應曲譜節點。</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_Book_LostScore_Label>失傳的曲譜</MX_QH_Book_LostScore_Label>
+  <MX_QH_Book_LostScore_Desc>記載了失傳已久的{0}曲目的曲譜。擁有對應技能樹的小人研讀後，可推進這些曲譜節點。</MX_QH_Book_LostScore_Desc>
+  <MX_QH_Book_FeihuaJueyu_Label>飛花絕語</MX_QH_Book_FeihuaJueyu_Label>
+  <MX_QH_Book_FeihuaJueyu_Desc>一卷以飛花化音為旨的曲譜。擁有對應技能樹的小人研讀後可解鎖穿魂。</MX_QH_Book_FeihuaJueyu_Desc>
+  <MX_QH_Book_DuanqiaoCanxue_Label>斷橋殘雪</MX_QH_Book_DuanqiaoCanxue_Label>
+  <MX_QH_Book_DuanqiaoCanxue_Desc>一卷寒意未散的殘譜。擁有對應技能樹的小人研讀後可解鎖霜月鏡。</MX_QH_Book_DuanqiaoCanxue_Desc>
+  <MX_QH_Book_Gaoshan_Label>高山</MX_QH_Book_Gaoshan_Label>
+  <MX_QH_Book_Gaoshan_Desc>一卷沉靜如山的曲譜。研讀後可提高護盾容量與花令上限。</MX_QH_Book_Gaoshan_Desc>
+  <MX_QH_Book_Liushui_Label>流水</MX_QH_Book_Liushui_Label>
+  <MX_QH_Book_Liushui_Desc>一卷行雲流水般的曲譜。研讀後可提高護盾回充速度。</MX_QH_Book_Liushui_Desc>
+  <MX_QH_Book_Chunjiang_Label>春江</MX_QH_Book_Chunjiang_Label>
+  <MX_QH_Book_Chunjiang_Desc>一卷春水初漲的曲譜。研讀後可讓護盾更能承受高額單次傷害。</MX_QH_Book_Chunjiang_Desc>
+  <MX_QH_Book_DivineGrace_Label>神恩</MX_QH_Book_DivineGrace_Label>
+  <MX_QH_Book_DivineGrace_Desc>一卷整理過的清荷修行札記。研讀後可使神恩節點提升一級。</MX_QH_Book_DivineGrace_Desc>
+  <MX_QH_Book_Yingyue_Label>映月</MX_QH_Book_Yingyue_Label>
+  <MX_QH_Book_Yingyue_Desc>一卷月影清澈的曲譜。研讀後可提高花神之垂憐的可用次數。</MX_QH_Book_Yingyue_Desc>
+  <MX_QH_Book_NishangDance_Label>霓裳之舞</MX_QH_Book_NishangDance_Label>
+  <MX_QH_Book_NishangDance_Desc>一卷衣袂流光的舞譜。研讀後可解鎖花舞狀態。</MX_QH_Book_NishangDance_Desc>
+  <MX_QH_Book_Jueying_Label>絕影</MX_QH_Book_Jueying_Label>
+  <MX_QH_Book_Jueying_Desc>一卷動若流影的曲譜。研讀後可解鎖縱躍。</MX_QH_Book_Jueying_Desc>
+  <MX_QH_Book_Luoshenfu_Label>洛神賦</MX_QH_Book_Luoshenfu_Label>
+  <MX_QH_Book_Luoshenfu_Desc>一卷寫盡牽繫與歸來的賦譜。研讀後可開啟洛神賦相關效果。</MX_QH_Book_Luoshenfu_Desc>
   <MX_QH_UnknownNode>未知節點。</MX_QH_UnknownNode>
   <MX_QH_SkillNodesLearnedLetterLabel>曲譜節點習得</MX_QH_SkillNodesLearnedLetterLabel>
-  <MX_QH_SkillNodesLearnedLetterText>清荷讀完了《{0}》，習得曲譜節點：{1}。</MX_QH_SkillNodesLearnedLetterText>
-  <MX_QH_MusicMasteryLearnedLetterLabel>曲譜精通提升</MX_QH_MusicMasteryLearnedLetterLabel>
-  <MX_QH_MusicMasteryLearnedLetterText>清荷讀完了《{0}》，曲譜精通提升至 {1}。</MX_QH_MusicMasteryLearnedLetterText>
+  <MX_QH_SkillNodesLearnedLetterText>《{0}》的一次研讀提升了：{1}。</MX_QH_SkillNodesLearnedLetterText>
   <MX_QH_LongNightStillnessLabel>長夜靜思</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>清荷已積蓄圓滿的靜思。下一次進行需要品質的建造、製作或藝術創作時，將消耗大部分靜思並獲得更穩定的品質提升。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>清荷的靜思已經積蓄圓滿。</MX_QH_MeditativeStillnessFullMessage>
@@ -202,6 +224,10 @@
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
   <MX_QH_RecoveryProgressLine>恢復進度：{0} / {1}</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>恢復速度：{0} /秒</MX_QH_RecoverySpeedLine>
+  <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧儀式。</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiOutcomeFragments>獲得了 {0} 份失傳的清荷曲譜殘頁。</MX_QH_QixiOutcomeFragments>
+  <MX_QH_QixiOutcomeInspirations>獲得靈感的參與者：{0}。</MX_QH_QixiOutcomeInspirations>
+  <MX_QH_QixiInspirationReason>受清荷的乞巧儀式啟發。</MX_QH_QixiInspirationReason>
 
   <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>開發者測試用：手動為昭離增加10點因果。</MX_ZL_DebugAddKarmaDesc>

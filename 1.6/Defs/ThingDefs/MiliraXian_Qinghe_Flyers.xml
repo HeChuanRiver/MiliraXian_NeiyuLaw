@@ -2,8 +2,8 @@
 <Defs>
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_QH_AscentSlashFlyer</defName>
-        <label>flower blink flyer</label>
-        <thingClass>MiliraXian.Characters.QingHe.Abilities.PawnFlyer_AscentSlash</thingClass>
+        <label>花神闪飞行体</label>
+        <thingClass>MiliraXian.Characters.QingHe.Vfx.PawnFlyer_AscentSlash</thingClass>
         <pawnFlyer>
             <flightDurationMin>0.08</flightDurationMin>
             <flightSpeed>100</flightSpeed>
@@ -20,7 +20,7 @@
 
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_QH_AscentSlashKnockbackFlyer</defName>
-        <label>flower blink knockback flyer</label>
+        <label>花神闪击退飞行体</label>
         <thingClass>PawnFlyer</thingClass>
         <altitudeLayer>Pawn</altitudeLayer>
         <pawnFlyer>

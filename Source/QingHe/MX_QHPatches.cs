@@ -368,7 +368,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff_LuoshenContract.NotifySpouseRelationAdded(___pawn, otherPawn);
+            HediffComp_LuoshenContract.NotifySpouseRelationAdded(___pawn, otherPawn);
         }
 
         public static void Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix(
@@ -382,7 +382,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
+            HediffComp_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
         }
 
         private static void EnsureQingheCoreTraits(Pawn pawn)

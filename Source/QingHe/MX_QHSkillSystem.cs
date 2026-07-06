@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.UI;
@@ -11,11 +12,11 @@ namespace MiliraXian.Characters.QingHe
     {
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
             SyncChoices(pawn, state);
         }
 
-        public static void SyncChoices(Pawn pawn, HediffComp_FlowerResonance state)
+        public static void SyncChoices(Pawn pawn, HediffComp_SkillTreeState state)
         {
             if (pawn?.abilities == null || state == null)
             {
@@ -28,10 +29,10 @@ namespace MiliraXian.Characters.QingHe
             SyncAbility(pawn, "MX_QH_FlowerDance", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_NishangDance));
             SyncAbility(pawn, "MX_QH_AscentSlash", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying));
             SyncAbility(pawn, "MX_QH_LuoshenRibbon", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu));
-            Hediff_LuoshenContract.SyncForQinghe(pawn, state);
+            HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
         }
 
-        public static bool HasAllFlowerMandates(HediffComp_FlowerResonance state)
+        public static bool HasAllFlowerMandates(HediffComp_SkillTreeState state)
         {
             return state != null
                 && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_SpringFlow)
@@ -39,7 +40,7 @@ namespace MiliraXian.Characters.QingHe
                 && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Shuangyuejing);
         }
 
-        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_FlowerResonance state)
+        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_SkillTreeState state)
         {
             if (pawn == null || pawn.Dead || state == null || Find.Selector.SingleSelectedThing != pawn)
             {
@@ -59,9 +60,9 @@ namespace MiliraXian.Characters.QingHe
                 defaultDesc = "MX_QH_DevLearnAllNodesDesc".Translate(),
                 action = delegate
                 {
-                    foreach (QingheSkillTreeDef treeDef in DefDatabase<QingheSkillTreeDef>.AllDefsListForReading)
+                    foreach (SkillNodeCollectionDef collectionDef in DefDatabase<SkillNodeCollectionDef>.AllDefsListForReading)
                     {
-                        state.LearnAllNodesInTree(treeDef);
+                        state.LearnAllNodesInCollection(collectionDef);
                     }
                     Messages.Message("MX_QH_DevLearnAllNodesMessage".Translate(), pawn, MessageTypeDefOf.NeutralEvent, historical: false);
                 }
@@ -91,3 +92,6 @@ namespace MiliraXian.Characters.QingHe
         }
     }
 }
+
+
+

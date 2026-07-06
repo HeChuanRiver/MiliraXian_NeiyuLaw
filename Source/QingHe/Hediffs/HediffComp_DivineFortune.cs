@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
@@ -81,7 +82,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             RecalculateFromSkillState(MX_QH_HediffUtility.GetFlowerResonance(Pawn));
         }
 
-        private void RecalculateFromSkillState(HediffComp_FlowerResonance skillState)
+        private void RecalculateFromSkillState(HediffComp_SkillTreeState skillState)
         {
             shieldCapacityMultiplier = 1f;
             shieldRegenMultiplier = 1f;
@@ -122,7 +123,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             flowerDecreeMaxBonus += CountNode(skillState, MX_QHSkillNodeDefOf.MX_QH_Node_Shuangyuejing) * Props.flowerDecreeMaxBonusPerMandateNode;
             flowerDecreeRegenMultiplier *= Mathf.Max(0f, Props.flowerDecreeRegenMultiplier);
 
-            ApplyMusicMastery(skillState.MusicMasteryLevel);
+            ApplyDivineGrace(skillState.GetNodeLevel(MX_QHSkillNodeDefOf.MX_QH_Node_DivineGrace));
 
             if (IsActiveStateEnabled())
             {
@@ -131,7 +132,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        private void ApplyMusicMastery(int level)
+        private void ApplyDivineGrace(int level)
         {
             if (level <= 0)
             {
@@ -146,12 +147,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             divineBlessingRechargeFactor = Mathf.Max(Mathf.Clamp01(Props.minDivineBlessingRechargeFactor), 1f - reduction);
         }
 
-        private static int CountNode(HediffComp_FlowerResonance skillState, MX_QHSkillNodeDef node)
+        private static int CountNode(HediffComp_SkillTreeState skillState, SkillNodeDef node)
         {
             return skillState != null && node != null && skillState.HasNode(node) ? 1 : 0;
         }
 
-        private static bool HasAllDivineFortuneNodes(HediffComp_FlowerResonance skillState)
+        private static bool HasAllDivineFortuneNodes(HediffComp_SkillTreeState skillState)
         {
             return skillState != null
                 && skillState.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan)
@@ -167,3 +168,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 }
+
+
+

@@ -1,15 +1,24 @@
-using MiliraXian.Characters.QingHe.Defs;
+﻿using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters;
 using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class Hediff_LuoshenContract : HediffWithTarget
+    public class HediffCompProperties_LuoshenContract : HediffCompProperties
     {
-        private const string ContractHediffDefName = "MX_QH_LuoshenContract";
-        private const string BrokenThoughtDefName = "MX_QH_LuoshenContractBroken";
+        public HediffCompProperties_LuoshenContract()
+        {
+            compClass = typeof(HediffComp_LuoshenContract);
+        }
+    }
 
-        public override bool Visible => false;
+    public class HediffComp_LuoshenContract : HediffComp
+    {
+        public override bool CompDisallowVisible()
+        {
+            return true;
+        }
 
         public static bool IsMaintainedFor(Pawn pawn)
         {
@@ -28,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return qinghe != null && HasContractWith(qinghe, pawn);
         }
 
-        public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state)
+        public static void SyncForQinghe(Pawn qinghe, HediffComp_SkillTreeState state)
         {
             if (!MX_QHCharacterUtility.IsQinghe(qinghe))
             {
@@ -85,11 +94,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        public void SetTargetPawn(Pawn targetPawn)
-        {
-            target = targetPawn;
-        }
-
         private static void SyncToPartner(Pawn qinghe, Pawn spouse)
         {
             if (qinghe?.health?.hediffSet == null || spouse?.health?.hediffSet == null || spouse.story?.traits == null)
@@ -97,29 +101,34 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            EnsureContractHediff(qinghe, spouse);
-            EnsureContractHediff(spouse, qinghe);
+            SetContractTarget(qinghe, spouse);
+            SetContractTarget(spouse, qinghe);
             NotifyThoughtsDirty(qinghe);
             NotifyThoughtsDirty(spouse);
         }
 
-        private static Hediff_LuoshenContract EnsureContractHediff(Pawn pawn, Pawn targetPawn)
+        private static void SetContractTarget(Pawn pawn, Pawn targetPawn)
         {
-            HediffDef hediffDef = ContractHediffDef;
-            if (pawn?.health?.hediffSet == null || hediffDef == null)
+            if (pawn?.health?.hediffSet == null || targetPawn == null || MX_QHDefOf.MX_QH_LuoshenContract == null)
             {
-                return null;
+                return;
             }
 
-            Hediff_LuoshenContract hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as Hediff_LuoshenContract;
+            HediffWithTarget hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LuoshenContract) as HediffWithTarget;
             if (hediff == null)
             {
-                hediff = HediffMaker.MakeHediff(hediffDef, pawn) as Hediff_LuoshenContract;
+                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_LuoshenContract, pawn) as HediffWithTarget;
+                if (hediff == null)
+                {
+                    return;
+                }
+
+                hediff.target = targetPawn;
                 pawn.health.AddHediff(hediff);
+                return;
             }
 
-            hediff?.SetTargetPawn(targetPawn);
-            return hediff;
+            hediff.target = targetPawn;
         }
 
         private static void RemoveContractFromPartner(Pawn qinghe)
@@ -148,7 +157,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private static void RemoveContractHediff(Pawn pawn, Pawn targetPawn)
         {
-            Hediff_LuoshenContract hediff = GetContractHediff(pawn);
+            HediffWithTarget hediff = GetContractHediff(pawn);
             if (hediff == null)
             {
                 return;
@@ -183,10 +192,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return GetContractHediff(pawn)?.target == targetPawn;
         }
 
-        private static Hediff_LuoshenContract GetContractHediff(Pawn pawn)
+        private static HediffWithTarget GetContractHediff(Pawn pawn)
         {
-            HediffDef hediffDef = ContractHediffDef;
-            return hediffDef != null ? pawn?.health?.hediffSet?.GetFirstHediffOfDef(hediffDef) as Hediff_LuoshenContract : null;
+            return MX_QHDefOf.MX_QH_LuoshenContract != null
+                ? pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LuoshenContract) as HediffWithTarget
+                : null;
         }
 
         private static void GiveBrokenThought(Pawn pawn, Pawn otherPawn)
@@ -196,10 +206,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            ThoughtDef thoughtDef = DefDatabase<ThoughtDef>.GetNamedSilentFail(BrokenThoughtDefName);
-            if (thoughtDef != null)
+            if (MX_QHDefOf.MX_QH_LuoshenContractBroken != null)
             {
-                pawn.needs?.mood?.thoughts?.memories?.TryGainMemory(thoughtDef, otherPawn);
+                pawn.needs?.mood?.thoughts?.memories?.TryGainMemory(MX_QHDefOf.MX_QH_LuoshenContractBroken, otherPawn);
             }
         }
 
@@ -210,7 +219,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 pawn.needs?.mood?.thoughts?.situational?.Notify_SituationalThoughtsDirty();
             }
         }
-
-        private static HediffDef ContractHediffDef => DefDatabase<HediffDef>.GetNamedSilentFail(ContractHediffDefName);
     }
 }
+
+
+

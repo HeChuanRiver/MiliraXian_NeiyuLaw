@@ -2,7 +2,7 @@
 <Defs>
     <ThingDef>
         <defName>MX_QH_Mote_SpiritBurstCurvedTrail</defName>
-        <label>Mote</label>
+        <label>清荷特效</label>
         <thingClass>MiliraXian.Characters.QingHe.Things.Mote.Mote_SpiritBurstCurvedTrail</thingClass>
         <category>Mote</category>
         <graphicData>

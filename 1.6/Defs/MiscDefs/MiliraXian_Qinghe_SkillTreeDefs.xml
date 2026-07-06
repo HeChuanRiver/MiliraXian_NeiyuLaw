@@ -1,240 +1,238 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
-        <defName>MX_QH_Tree_FlowerMandate</defName>
-        <label>flower decree</label>
-        <description>Qinghe's three Flower Decrees. Learning all of them empowers Flower Decree.</description>
+    <MiliraXian.Characters.SkillNodeCategoryDef>
+        <defName>MX_QH_Category_Qinghe</defName>
+        <label>清荷</label>
+        <description>清荷自己的技能类别。</description>
         <displayOrder>0</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCategoryDef>
 
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    <MiliraXian.Characters.SkillNodeCollectionDef>
+        <defName>MX_QH_Tree_FlowerMandate</defName>
+        <label>飞花令</label>
+        <description>清荷的三式飞花令。全部习得后，飞花令进入强化形态。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <displayOrder>0</displayOrder>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
+
+    <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_DivineFortune</defName>
-        <label>divine protection</label>
-        <description>Basic upgrades for Qinghe's self-recovering shield and Flower Decree.</description>
+        <label>花神之眷顾</label>
+        <description>清荷可自动回复的护盾与花令基础强化。</description>
+        <category>MX_QH_Category_Qinghe</category>
         <displayOrder>1</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_DivineBlessing</defName>
-        <label>divine blessing</label>
-        <description>A protective effect triggered when Qinghe suffers fatal damage.</description>
+        <label>花神之垂怜</label>
+        <description>清荷受到致命伤害时触发的保护效果。</description>
+        <category>MX_QH_Category_Qinghe</category>
         <displayOrder>2</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_FlowerDance</defName>
-        <label>flower dance</label>
-        <description>A temporary empowered state activated by spending Flower Decree.</description>
+        <label>花舞</label>
+        <description>消耗花令开启的限时强化形态。</description>
+        <category>MX_QH_Category_Qinghe</category>
         <displayOrder>3</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_Jueying</defName>
-        <label>leaping shadow</label>
-        <description>Qinghe's decisive dash technique.</description>
+        <label>纵跃</label>
+        <description>清荷的突进型决战技。</description>
+        <category>MX_QH_Category_Qinghe</category>
         <displayOrder>4</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_Luoshen</defName>
-        <label>Luoshen Fu</label>
-        <description>Musical intent related to spouses and non-combat cultivation.</description>
+        <label>洛神赋</label>
+        <description>与伴侣关系和非战斗修行相关的曲意。</description>
+        <category>MX_QH_Category_Qinghe</category>
         <displayOrder>5</displayOrder>
-    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
+    </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_SpringFlow</defName>
-        <label>flower decree</label>
-        <description>The initial score group. Qinghe already knows Spring Flow; this node only unlocks the Flower Decree score group.</description>
-        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <label>飞花令</label>
+        <description>初始曲谱集。清荷已经掌握春泉涌流，此节点仅用于开启飞花令曲谱集。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
         <initiallyLearned>true</initiallyLearned>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Chuanhun</defName>
-        <label>soulpiercer</label>
-        <description>Unlocked by "Feihua Jueyu". Creates a sonic burst at a distant target location, stunning targets in the area and dealing psychic damage.</description>
-        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <label>穿魂</label>
+        <description>由《飞花绝语》解锁。对远距离目标地点产生音爆，眩晕范围内目标并造成心灵伤害。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>10</displayOrder>
         <column>1</column>
         <y>70</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_FeihuaJueyu_Label</bookName>
+        <bookDescription>MX_QH_Book_FeihuaJueyu_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Shuangyuejing</defName>
-        <label>frost moon mirror</label>
-        <description>Unlocked by "Duanqiao Canxue". Summons a circular ice curtain that freezes and absorbs hostile projectiles passing through it.</description>
-        <tree>MX_QH_Tree_FlowerMandate</tree>
+        <label>霜月镜</label>
+        <description>由《断桥残雪》解锁。召唤圆形冰幕，冻结并吸收经过的敌对投射物。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>20</displayOrder>
         <column>1</column>
         <y>250</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_DuanqiaoCanxue_Label</bookName>
+        <bookDescription>MX_QH_Book_DuanqiaoCanxue_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Gaoshan</defName>
-        <label>Gaoshan</label>
-        <description>Unlocked by "Gaoshan". Increases Divine Protection shield capacity and Flower Decree maximum.</description>
-        <tree>MX_QH_Tree_DivineFortune</tree>
+        <label>高山</label>
+        <description>由《高山》解锁。提高花神之眷顾的护盾容量，并提升花令上限。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>70</y>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>1</skillPoints>
+        <bookName>MX_QH_Book_Gaoshan_Label</bookName>
+        <bookDescription>MX_QH_Book_Gaoshan_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Liushui</defName>
-        <label>Liushui</label>
-        <description>Unlocked by "Liushui". Increases Divine Protection recharge speed.</description>
-        <tree>MX_QH_Tree_DivineFortune</tree>
+        <label>流水</label>
+        <description>由《流水》解锁。提高花神之眷顾的回充速度。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>10</displayOrder>
         <column>0</column>
         <y>160</y>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>1</skillPoints>
+        <bookName>MX_QH_Book_Liushui_Label</bookName>
+        <bookDescription>MX_QH_Book_Liushui_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Chunjiang</defName>
-        <label>Chunjiang</label>
-        <description>Unlocked by "Chunjiang". When Divine Protection takes heavy damage, caps the shield damage from a single hit.</description>
-        <tree>MX_QH_Tree_DivineFortune</tree>
+        <label>春江</label>
+        <description>由《春江》解锁。花神之眷顾受到高额伤害时，将单次护盾伤害压低到上限内。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>20</displayOrder>
         <column>0</column>
         <y>250</y>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>1</skillPoints>
+        <bookName>MX_QH_Book_Chunjiang_Label</bookName>
+        <bookDescription>MX_QH_Book_Chunjiang_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
+        <defName>MX_QH_Node_DivineGrace</defName>
+        <label>神恩</label>
+        <description>清荷的精通节点。每一级代表清荷自身修行更进一步；具体效果由清荷的被动系统读取并生效。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_DivineFortune</collection>
+        <displayOrder>30</displayOrder>
+        <column>0</column>
+        <y>340</y>
+        <maxLevel>24</maxLevel>
+        <skillPoints>1</skillPoints>
+        <bookName>MX_QH_Book_DivineGrace_Label</bookName>
+        <bookDescription>MX_QH_Book_DivineGrace_Desc</bookDescription>
+        <bookAcquirePriority>0</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
+
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Yingyue</defName>
-        <label>Yingyue</label>
-        <description>Unlocked by "Yingyue". Increases the available charges of Divine Blessing.</description>
-        <tree>MX_QH_Tree_DivineBlessing</tree>
+        <label>映月</label>
+        <description>由《映月》解锁。花神之垂怜的可用次数充能提高。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_DivineBlessing</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_Yingyue_Label</bookName>
+        <bookDescription>MX_QH_Book_Yingyue_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_NishangDance</defName>
-        <label>Nishang Dance</label>
-        <description>Unlocked by "Nishang Dance". Allows Qinghe to spend Flower Decree to enter Flower Dance.</description>
-        <tree>MX_QH_Tree_FlowerDance</tree>
+        <label>霓裳之舞</label>
+        <description>由《霓裳之舞》解锁。允许清荷消耗花令进入花舞状态。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_FlowerDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_NishangDance_Label</bookName>
+        <bookDescription>MX_QH_Book_NishangDance_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Jueying</defName>
-        <label>Jueying</label>
-        <description>Unlocked by "Jueying". Allows Qinghe to use Leaping Shadow, choosing a direction after landing to strike in a cone.</description>
-        <tree>MX_QH_Tree_Jueying</tree>
+        <label>绝影</label>
+        <description>由《绝影》解锁。允许清荷使用纵跃，在目标落点后选择方向造成扇形打击。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_Jueying</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_Jueying_Label</bookName>
+        <bookDescription>MX_QH_Book_Jueying_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Luoshenfu</defName>
-        <label>Luoshen Fu</label>
-        <description>Unlocked by "Luoshen Fu". Enables spouse-related Luoshen Fu effects.</description>
-        <tree>MX_QH_Tree_Luoshen</tree>
+        <label>洛神赋</label>
+        <description>由《洛神赋》解锁。开启洛神赋相关伴侣效果。</description>
+        <category>MX_QH_Category_Qinghe</category>
+        <collection>MX_QH_Tree_Luoshen</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_DuanqiaoCanxue</defName>
-        <label>Duanqiao Canxue</label>
-        <description>Unlocks Flower Decree: Frost Moon Mirror.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Shuangyuejing</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_FeihuaJueyu</defName>
-        <label>Feihua Jueyu</label>
-        <description>Unlocks Flower Decree: Soulpiercer.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Chuanhun</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Gaoshan</defName>
-        <label>Gaoshan</label>
-        <description>Improves Divine Protection shield capacity.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Gaoshan</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Liushui</defName>
-        <label>Liushui</label>
-        <description>Improves Divine Protection recharge speed.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Liushui</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Chunjiang</defName>
-        <label>Chunjiang</label>
-        <description>Reduces the pressure on Divine Protection when it takes heavy single-hit damage.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Chunjiang</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Yingyue</defName>
-        <label>Yingyue</label>
-        <description>Improves Divine Blessing charge count.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Yingyue</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_NishangDance</defName>
-        <label>Nishang Dance</label>
-        <description>Unlocks the active empowered state: Flower Dance.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_NishangDance</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Jueying</defName>
-        <label>Jueying</label>
-        <description>Unlocks the decisive dash technique: Leaping Shadow.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Jueying</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_Luoshenfu</defName>
-        <label>Luoshen Fu</label>
-        <description>Unlocks spouse-related Luoshen Fu effects.</description>
-        <unlocksNodes>
-            <li>MX_QH_Node_Luoshenfu</li>
-        </unlocksNodes>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-
-    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
-        <defName>MX_QH_ScoreDef_FlowerGodGrace</defName>
-        <label>flower god's grace</label>
-        <description>Increases Qinghe's mastery level.</description>
-        <masteryGain>1</masteryGain>
-    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
+        <skillPoints>2</skillPoints>
+        <bookName>MX_QH_Book_Luoshenfu_Label</bookName>
+        <bookDescription>MX_QH_Book_Luoshenfu_Desc</bookDescription>
+        <bookAcquirePriority>10</bookAcquirePriority>
+        <bookAcquireWeight>1</bookAcquireWeight>
+    </MiliraXian.Characters.SkillNodeDef>
 </Defs>
+

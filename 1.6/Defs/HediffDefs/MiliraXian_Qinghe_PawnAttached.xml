@@ -2,8 +2,8 @@
 <Defs>
     <HediffDef>
         <defName>MX_QH_FlowerDecree</defName>
-        <label>flower decree</label>
-        <description>Hidden hediff: resource counter.</description>
+        <label>花令</label>
+        <description>隐藏Hediff：资源计数器</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.95, 0.74, 0.84)</defaultLabelColor>
         <isBad>false</isBad>
@@ -14,8 +14,8 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDecree">
-                <resourceLabel>flower decree</resourceLabel>
-                <resourceDescription>Qinghe's charge-based resource, used to cast four-season Flower Decrees.</resourceDescription>
+                <resourceLabel>花令</resourceLabel>
+                <resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>300</maxValue>
                 <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
@@ -31,8 +31,8 @@
 
     <HediffDef>
         <defName>MX_QH_MeditativeStillness</defName>
-        <label>stillness</label>
-        <description>Hidden hediff: records the stillness Qinghe accumulates while meditating at a lotus pond.</description>
+        <label>静思</label>
+        <description>隐藏 Hediff：记录清荷在荷池处冥想积累的静思值。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_MeditativeStillness</hediffClass>
         <defaultLabelColor>(0.48, 0.90, 0.58)</defaultLabelColor>
         <isBad>false</isBad>
@@ -43,8 +43,8 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_MeditativeStillness">
-                <resourceLabel>stillness</resourceLabel>
-                <resourceDescription>The calm stillness Qinghe accumulates while meditating at a lotus pond.</resourceDescription>
+                <resourceLabel>静思</resourceLabel>
+                <resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <baseGainPerDay>100</baseGainPerDay>
@@ -65,9 +65,31 @@
     </HediffDef>
 
     <HediffDef>
+        <defName>MX_QH_Trickle</defName>
+        <label>涓流</label>
+        <description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.54, 0.96, 0.76)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SpringRegen">
+                <healIntervalTicks>600</healIntervalTicks>
+                <healAmountPerTrigger>1.0</healAmountPerTrigger>
+                <healPermanentInjuries>true</healPermanentInjuries>
+                <restoreMissingParts>true</restoreMissingParts>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
         <defName>MX_QH_FlowerResonance</defName>
-        <label>resonance</label>
-        <description>Hidden hediff: character skill data.</description>
+        <label>和鸣</label>
+        <description>隐藏 Hediff：角色技能数据</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
@@ -77,15 +99,20 @@
         <minSeverity>1.0</minSeverity>
         <maxSeverity>1.0</maxSeverity>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonance" />
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerResonanceGizmos" />
+            <li Class="MiliraXian.Characters.HediffCompProperties_SkillTreeState">
+                <alreadyLearnedReasonKey>MX_QH_SkillTreeStateAlreadyLearned</alreadyLearnedReasonKey>
+                <categories>
+                    <li>MX_QH_Category_Qinghe</li>
+                </categories>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SkillTreeStateGizmos" />
         </comps>
     </HediffDef>
 
     <HediffDef>
         <defName>MX_QH_DivineBlessing</defName>
-        <label>divine blessing</label>
-        <description>When taking fatal damage or damage that may destroy a body part, negate that damage, heal all injuries, and gain brief damage immunity plus 10 seconds of psychic invisibility. This effect can trigger once every 120 seconds.</description>
+        <label>花神之垂怜</label>
+        <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。此效果每120秒只可触发一次。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
@@ -105,8 +132,8 @@
 
     <HediffDef>
         <defName>MX_QH_DivineBlessingImmunity</defName>
-        <label>divine answer</label>
-        <description>Protected by the flower god's blessing, temporarily immune to all damage.</description>
+        <label>神应</label>
+        <description>受到花神的垂怜，暂时免疫所有伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 1.0, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -121,8 +148,8 @@
 
     <HediffDef>
         <defName>MX_QH_DivineFortune</defName>
-        <label>divine fortune</label>
-        <description>Hidden hediff: unified stat adjustment layer.</description>
+        <label>花神之恩泽</label>
+        <description>隐藏 Hediff：统一数值代理层</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.8, 0.95, 0.8)</defaultLabelColor>
         <isBad>false</isBad>
@@ -155,8 +182,8 @@
 
     <HediffDef>
         <defName>MX_QH_DivineProtection</defName>
-        <label>divine protection</label>
-        <description>Qinghe is protected by the twelve flower gods, naturally generating a shield that absorbs damage.\n\nWhen the shield breaks, it is disabled for 10 seconds.</description>
+        <label>花神之眷顾</label>
+        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -214,3 +241,4 @@
     </HediffDef>
 
 </Defs>
+

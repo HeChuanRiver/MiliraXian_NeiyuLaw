@@ -1,4 +1,5 @@
 ﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.UI;
 using RimWorld;
@@ -31,7 +32,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
             HediffComp_PawnSpecialResource stillness = MX_QH_HediffUtility.EnsureMeditativeStillness(pawn);
             bool canClick = state != null;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
@@ -92,7 +93,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return Mathf.CeilToInt(fillPercent * 16f) / 16f;
         }
 
-        private static string BuildTip(HediffComp_FlowerResonance state, HediffComp_PawnSpecialResource stillness)
+        private static string BuildTip(HediffComp_SkillTreeState state, HediffComp_PawnSpecialResource stillness)
         {
             if (state == null)
             {
@@ -100,7 +101,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
 
             return "MX_QH_FlowerCourtTitle".Translate() + "\n\n"
-                   + "MX_QH_FlowerCourtUnlockedTreesLine".Translate(state.UnlockedTreeCount) + "\n"
+                   + "MX_QH_FlowerCourtUnlockedTreesLine".Translate(state.UnlockedCollectionCount) + "\n"
                    + "MX_QH_FlowerCourtLearnedNodesLine".Translate(state.LearnedNodeCount) + "\n"
                    + "MX_QH_FlowerCourtStillnessLine".Translate((stillness?.CurrentValue ?? 0f).ToString("0"), (stillness?.MaxValue ?? 100f).ToString("0"));
         }
@@ -112,3 +113,5 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         }
     }
 }
+
+

@@ -2,9 +2,9 @@
 <Defs>
     <HediffDef>
         <defName>MX_QH_LuoshenContract</defName>
-        <label>Luoshen contract</label>
-        <description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_LuoshenContract</hediffClass>
+        <label>洛神契</label>
+        <description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</description>
+        <hediffClass>Verse.HediffWithTarget</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -12,12 +12,15 @@
         <initialSeverity>1.0</initialSeverity>
         <minSeverity>1.0</minSeverity>
         <maxSeverity>1.0</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LuoshenContract" />
+        </comps>
     </HediffDef>
 
     <HediffDef>
         <defName>MX_QH_SpringFlow</defName>
-        <label>spring flow blessing</label>
-        <description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, and reduced pain&lt;/color&gt;.</description>
+        <label>春泉洗礼</label>
+        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。</description>
         <isBad>false</isBad>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
@@ -53,8 +56,8 @@
 
     <HediffDef>
         <defName>MX_QH_FlowerDance</defName>
-        <label>flower dance</label>
-        <description>Qinghe enters Flower Dance, improving movement speed, dodge, and Flower Decree recovery. Divine Protection begins recharging immediately after being hit.</description>
+        <label>花舞</label>
+        <description>清荷进入花舞状态，移动速度、闪避与花令回复提升，花神之眷顾在受击后立即开始回充。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.72, 0.92)</defaultLabelColor>
         <isBad>false</isBad>

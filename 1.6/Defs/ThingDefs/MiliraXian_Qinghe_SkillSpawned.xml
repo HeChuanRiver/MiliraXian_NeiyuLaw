@@ -2,7 +2,7 @@
 <Defs>
     <ThingDef>
         <defName>SpringFlowField</defName>
-        <label>spring flow</label>
+        <label>涌泉力场</label>
         <thingClass>ThingWithComps</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
@@ -31,6 +31,9 @@
                 <enhancedBleedDamageDef>MX_StatusEffectBleedAccumulation</enhancedBleedDamageDef>
                 <enhancedBleedDamageAmount>0.08</enhancedBleedDamageAmount>
                 <enhancedBleedArmorPenetration>2.10</enhancedBleedArmorPenetration>
+                <enhancedToxinDamageDef>MX_StatusEffectToxinAccumulation</enhancedToxinDamageDef>
+                <enhancedToxinDamageAmount>0.08</enhancedToxinDamageAmount>
+                <enhancedToxinArmorPenetration>2.10</enhancedToxinArmorPenetration>
                 <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
                 <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
             </li>
@@ -126,7 +129,7 @@
 
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_QH_LunarMirrorRetaliation</defName>
-        <label>wintersweet retaliation shot</label>
+        <label>腊梅反击铃音</label>
         <thingClass>MiliraXian.Characters.QingHe.Things.Projectiles.Projectile_LunarMirrorRetaliation</thingClass>
         <graphicData>
             <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
@@ -165,7 +168,7 @@
 
     <ThingDef>
         <defName>MX_QH_LunarMirror</defName>
-        <label>wintersweet shield</label>
+        <label>腊梅护盾</label>
         <thingClass>ThingWithComps</thingClass>
         <category>None</category>
         <tickerType>Normal</tickerType>

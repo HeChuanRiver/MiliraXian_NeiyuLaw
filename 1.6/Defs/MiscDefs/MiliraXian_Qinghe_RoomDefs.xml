@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <RoomRoleDef>
+        <defName>MX_QH_LotusRainPavilion</defName>
+        <label>荷雨亭</label>
+        <workerClass>MiliraXian.Characters.QingHe.Things.Buildings.RoomRoleWorker_QingheLotusRainPavilion</workerClass>
+        <relatedStats>
+            <li>Beauty</li>
+            <li>Cleanliness</li>
+        </relatedStats>
+    </RoomRoleDef>
+</Defs>
