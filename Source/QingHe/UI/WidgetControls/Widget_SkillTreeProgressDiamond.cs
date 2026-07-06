@@ -1,4 +1,5 @@
-using MiliraXian.Characters.QingHe.Hediffs;
+﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.UI;
 using RimWorld;
 using UnityEngine;
@@ -30,8 +31,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
-            HediffComp_PawnSpecialResource stillness = FlowerCourtUtility.EnsureMeditativeStillness(pawn);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+            HediffComp_PawnSpecialResource stillness = MX_QH_HediffUtility.EnsureMeditativeStillness(pawn);
             bool canClick = state != null;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
             bool mouseOverDiamond = MouseIsOverHitbox(diamondRect);

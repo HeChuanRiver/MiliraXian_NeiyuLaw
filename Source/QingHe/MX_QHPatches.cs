@@ -1,4 +1,5 @@
-using HarmonyLib;
+﻿using HarmonyLib;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Stats;
 using MiliraXian.Characters.QingHe.Things;
@@ -70,38 +71,39 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
         {
-            if (!MX_QHUtility.IsQinghe(__result))
+            if (!MX_QHCharacterUtility.IsQinghe(__result))
             {
                 return;
             }
 
-            MX_QHUtility.MarkForLoadoutStabilization(__result);
-            MX_QHUtility.EnsureDefaultLoadout(__result);
+            MX_QHCharacterUtility.MarkForLoadoutStabilization(__result);
+            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
         }
 
         public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
         {
-            if (!MX_QHUtility.IsQinghe(__result))
+            if (!MX_QHCharacterUtility.IsQinghe(__result))
             {
                 return;
             }
 
-            MX_QHUtility.EnsureDefaultLoadout(__result);
+            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
         {
-            if (!MX_QHUtility.IsQinghe(__instance))
+            if (!MX_QHCharacterUtility.IsQinghe(__instance))
             {
                 return;
             }
 
             EnsureQingheCoreTraits(__instance);
-            FlowerCourtUtility.EnsureFlowerCourtSystems(__instance);
-            if (MX_QHUtility.ShouldFinalizeLoadout(__instance))
+            MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
+            MX_QHSkillSystem.SyncChoices(__instance);
+            if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
             {
-                MX_QHUtility.EnsureDefaultLoadout(__instance);
-                MX_QHUtility.ClearLoadoutStabilization(__instance);
+                MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
+                MX_QHCharacterUtility.ClearLoadoutStabilization(__instance);
             }
         }
 
@@ -185,7 +187,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            __result = MX_QHUtility.IsQinghe(p);
+            __result = MX_QHCharacterUtility.IsQinghe(p);
         }
 
         public static void Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix(
@@ -208,7 +210,7 @@ namespace MiliraXian.Characters.QingHe
                 yield return target;
             }
 
-            if (!MX_QHUtility.IsQinghe(pawn) || pawn?.Map == null || pawn.IsPrisonerOfColony)
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || pawn?.Map == null || pawn.IsPrisonerOfColony)
             {
                 yield break;
             }
@@ -236,13 +238,13 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_MeditationUtility_GetMeditationJob_Postfix(Pawn pawn, ref Job __result)
         {
-            if (__result == null || !MX_QHUtility.IsQinghe(pawn))
+            if (__result == null || !MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 return;
             }
 
-            Building_LotusPond lotusPond = __result.GetTarget(TargetIndex.A).Thing as Building_LotusPond;
-            if (lotusPond == null)
+            Building lotusPond = __result.GetTarget(TargetIndex.A).Thing as Building;
+            if (lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond)
             {
                 return;
             }
@@ -264,28 +266,28 @@ namespace MiliraXian.Characters.QingHe
         public static void Patch_JobDriver_Meditate_MeditationTick_Postfix(JobDriver_Meditate __instance)
         {
             Pawn pawn = __instance?.pawn;
-            if (!MX_QHUtility.IsQinghe(pawn) || pawn?.Map == null)
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || pawn?.Map == null)
             {
                 return;
             }
 
-            Building_LotusPond lotusPond = ResolveMeditatingLotusPond(pawn);
+            Building lotusPond = ResolveMeditatingLotusPond(pawn);
             if (lotusPond == null)
             {
                 return;
             }
 
-            FlowerCourtUtility.AddMeditativeStillnessFromLotusPond(pawn, lotusPond);
+            MX_QH_HediffUtility.AddMeditativeStillnessFromLotusPond(pawn, lotusPond);
         }
 
         public static void Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix(Pawn pawn, ref QualityCategory __result)
         {
-            if (!MX_QHUtility.IsQinghe(pawn))
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 return;
             }
 
-            FlowerCourtUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
+            MX_QH_HediffUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
         }
 
         public static bool Patch_Projectile_CheckForFreeInterceptBetween_Prefix(
@@ -314,7 +316,7 @@ namespace MiliraXian.Characters.QingHe
             return true;
         }
 
-        private static Building_LotusPond ResolveMeditatingLotusPond(Pawn pawn)
+        private static Building ResolveMeditatingLotusPond(Pawn pawn)
         {
             Job job = pawn?.CurJob;
             if (job == null || pawn.Map == null || MX_QHDefOf.MX_QH_LotusPond == null)
@@ -323,7 +325,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             LocalTargetInfo target = job.GetTarget(TargetIndex.A);
-            Building_LotusPond assignedLotusPond = pawn.ownership?.AssignedMeditationSpot as Building_LotusPond;
+            Building assignedLotusPond = pawn.ownership?.AssignedMeditationSpot as Building;
             if (IsMeditatingAtLotusPond(pawn, assignedLotusPond, target))
             {
                 return assignedLotusPond;
@@ -331,19 +333,18 @@ namespace MiliraXian.Characters.QingHe
 
             foreach (Building building in pawn.Map.listerBuildings.AllBuildingsColonistOfDef(MX_QHDefOf.MX_QH_LotusPond))
             {
-                Building_LotusPond lotusPond = building as Building_LotusPond;
-                if (IsMeditatingAtLotusPond(pawn, lotusPond, target))
+                if (IsMeditatingAtLotusPond(pawn, building, target))
                 {
-                    return lotusPond;
+                    return building;
                 }
             }
 
             return null;
         }
 
-        private static bool IsMeditatingAtLotusPond(Pawn pawn, Building_LotusPond lotusPond, LocalTargetInfo target)
+        private static bool IsMeditatingAtLotusPond(Pawn pawn, Building lotusPond, LocalTargetInfo target)
         {
-            if (pawn == null || lotusPond == null || lotusPond.Map != pawn.Map)
+            if (pawn == null || lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond || lotusPond.Map != pawn.Map)
             {
                 return false;
             }
@@ -367,7 +368,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            QingheLuoshenContractUtility.NotifySpouseRelationAdded(___pawn, otherPawn);
+            Hediff_LuoshenContract.NotifySpouseRelationAdded(___pawn, otherPawn);
         }
 
         public static void Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix(
@@ -381,7 +382,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            QingheLuoshenContractUtility.NotifySpouseRelationRemoved(___pawn, otherPawn);
+            Hediff_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
         }
 
         private static void EnsureQingheCoreTraits(Pawn pawn)

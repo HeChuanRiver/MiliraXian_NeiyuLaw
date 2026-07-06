@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
     public class DamageWorker_FlowerBellExplosion : DamageWorker_AddInjury
     {

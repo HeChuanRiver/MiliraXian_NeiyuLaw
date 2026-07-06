@@ -68,7 +68,7 @@
         <defName>MX_QH_FlowerResonance</defName>
         <label>resonance</label>
         <description>Hidden hediff: character skill data.</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_FlowerResonance</hediffClass>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -157,7 +157,7 @@
         <defName>MX_QH_DivineProtection</defName>
         <label>divine protection</label>
         <description>Qinghe is protected by the twelve flower gods, naturally generating a shield that absorbs damage.\n\nWhen the shield breaks, it is disabled for 10 seconds.</description>
-        <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_DivineProtection</hediffClass>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>

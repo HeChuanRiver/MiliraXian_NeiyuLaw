@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
@@ -6,11 +7,11 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public static class QingheSkillTreeSystem
+    public static class MX_QHSkillSystem
     {
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
             SyncChoices(pawn, state);
         }
 
@@ -27,7 +28,7 @@ namespace MiliraXian.Characters.QingHe
             SyncAbility(pawn, "MX_QH_FlowerDance", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_NishangDance));
             SyncAbility(pawn, "MX_QH_AscentSlash", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying));
             SyncAbility(pawn, "MX_QH_LuoshenRibbon", state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu));
-            QingheLuoshenContractUtility.SyncForQinghe(pawn, state);
+            Hediff_LuoshenContract.SyncForQinghe(pawn, state);
         }
 
         public static bool HasAllFlowerMandates(HediffComp_FlowerResonance state)

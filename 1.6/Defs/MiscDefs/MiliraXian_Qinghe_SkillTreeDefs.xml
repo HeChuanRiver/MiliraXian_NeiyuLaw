@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_FlowerMandate</defName>
         <label>flower decree</label>
         <description>Qinghe's three Flower Decrees. Learning all of them empowers Flower Decree.</description>
         <displayOrder>0</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_DivineFortune</defName>
         <label>divine protection</label>
         <description>Basic upgrades for Qinghe's self-recovering shield and Flower Decree.</description>
         <displayOrder>1</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_DivineBlessing</defName>
         <label>divine blessing</label>
         <description>A protective effect triggered when Qinghe suffers fatal damage.</description>
         <displayOrder>2</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_FlowerDance</defName>
         <label>flower dance</label>
         <description>A temporary empowered state activated by spending Flower Decree.</description>
         <displayOrder>3</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_Jueying</defName>
         <label>leaping shadow</label>
         <description>Qinghe's decisive dash technique.</description>
         <displayOrder>4</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
         <defName>MX_QH_Tree_Luoshen</defName>
         <label>Luoshen Fu</label>
         <description>Musical intent related to spouses and non-combat cultivation.</description>
         <displayOrder>5</displayOrder>
-    </MiliraXian.Characters.QingHe.QingheSkillTreeDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheSkillTreeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_SpringFlow</defName>
         <label>flower decree</label>
         <description>The initial score group. Qinghe already knows Spring Flow; this node only unlocks the Flower Decree score group.</description>
@@ -52,9 +52,9 @@
         <y>160</y>
         <initiallyLearned>true</initiallyLearned>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Chuanhun</defName>
         <label>soulpiercer</label>
         <description>Unlocked by "Feihua Jueyu". Creates a sonic burst at a distant target location, stunning targets in the area and dealing psychic damage.</description>
@@ -63,9 +63,9 @@
         <column>1</column>
         <y>70</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Shuangyuejing</defName>
         <label>frost moon mirror</label>
         <description>Unlocked by "Duanqiao Canxue". Summons a circular ice curtain that freezes and absorbs hostile projectiles passing through it.</description>
@@ -74,9 +74,9 @@
         <column>1</column>
         <y>250</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Gaoshan</defName>
         <label>Gaoshan</label>
         <description>Unlocked by "Gaoshan". Increases Divine Protection shield capacity and Flower Decree maximum.</description>
@@ -84,9 +84,9 @@
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>70</y>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Liushui</defName>
         <label>Liushui</label>
         <description>Unlocked by "Liushui". Increases Divine Protection recharge speed.</description>
@@ -94,9 +94,9 @@
         <displayOrder>10</displayOrder>
         <column>0</column>
         <y>160</y>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Chunjiang</defName>
         <label>Chunjiang</label>
         <description>Unlocked by "Chunjiang". When Divine Protection takes heavy damage, caps the shield damage from a single hit.</description>
@@ -104,9 +104,9 @@
         <displayOrder>20</displayOrder>
         <column>0</column>
         <y>250</y>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Yingyue</defName>
         <label>Yingyue</label>
         <description>Unlocked by "Yingyue". Increases the available charges of Divine Blessing.</description>
@@ -115,9 +115,9 @@
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_NishangDance</defName>
         <label>Nishang Dance</label>
         <description>Unlocked by "Nishang Dance". Allows Qinghe to spend Flower Decree to enter Flower Dance.</description>
@@ -126,9 +126,9 @@
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Jueying</defName>
         <label>Jueying</label>
         <description>Unlocked by "Jueying". Allows Qinghe to use Leaping Shadow, choosing a direction after landing to strike in a cone.</description>
@@ -137,9 +137,9 @@
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    <MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
         <defName>MX_QH_Node_Luoshenfu</defName>
         <label>Luoshen Fu</label>
         <description>Unlocked by "Luoshen Fu". Enables spouse-related Luoshen Fu effects.</description>
@@ -148,93 +148,93 @@
         <column>0</column>
         <y>160</y>
         <important>true</important>
-    </MiliraXian.Characters.QingHe.MX_QHSkillNodeDef>
+    </MiliraXian.Characters.QingHe.Defs.MX_QHSkillNodeDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_DuanqiaoCanxue</defName>
         <label>Duanqiao Canxue</label>
         <description>Unlocks Flower Decree: Frost Moon Mirror.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Shuangyuejing</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_FeihuaJueyu</defName>
         <label>Feihua Jueyu</label>
         <description>Unlocks Flower Decree: Soulpiercer.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Chuanhun</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Gaoshan</defName>
         <label>Gaoshan</label>
         <description>Improves Divine Protection shield capacity.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Gaoshan</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Liushui</defName>
         <label>Liushui</label>
         <description>Improves Divine Protection recharge speed.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Liushui</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Chunjiang</defName>
         <label>Chunjiang</label>
         <description>Reduces the pressure on Divine Protection when it takes heavy single-hit damage.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Chunjiang</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Yingyue</defName>
         <label>Yingyue</label>
         <description>Improves Divine Blessing charge count.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Yingyue</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_NishangDance</defName>
         <label>Nishang Dance</label>
         <description>Unlocks the active empowered state: Flower Dance.</description>
         <unlocksNodes>
             <li>MX_QH_Node_NishangDance</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Jueying</defName>
         <label>Jueying</label>
         <description>Unlocks the decisive dash technique: Leaping Shadow.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Jueying</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_Luoshenfu</defName>
         <label>Luoshen Fu</label>
         <description>Unlocks spouse-related Luoshen Fu effects.</description>
         <unlocksNodes>
             <li>MX_QH_Node_Luoshenfu</li>
         </unlocksNodes>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 
-    <MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    <MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
         <defName>MX_QH_ScoreDef_FlowerGodGrace</defName>
         <label>flower god's grace</label>
         <description>Increases Qinghe's mastery level.</description>
         <masteryGain>1</masteryGain>
-    </MiliraXian.Characters.QingHe.QingheMusicScoreDef>
+    </MiliraXian.Characters.QingHe.Defs.QingheMusicScoreDef>
 </Defs>

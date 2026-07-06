@@ -2,7 +2,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Vfx
 {
     [StaticConstructorOnStartup]
     public static class MX_QHRenderStatics

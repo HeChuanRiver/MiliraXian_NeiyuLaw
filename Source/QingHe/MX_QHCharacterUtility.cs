@@ -4,7 +4,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public static class MX_QHUtility
+    public static class MX_QHCharacterUtility
     {
         public const string PawnKindDef_Qinghe = "MiliraXian_Qinghe";
         private const string DefaultWeaponDefName = "MX_QH_Weapon_FlowerBell";

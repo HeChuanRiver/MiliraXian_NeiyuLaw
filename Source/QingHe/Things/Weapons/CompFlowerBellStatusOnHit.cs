@@ -1,8 +1,8 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     public class CompProperties_FlowerBellStatusOnHit : CompProperties
     {

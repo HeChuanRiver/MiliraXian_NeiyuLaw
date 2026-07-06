@@ -1,9 +1,9 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
     public class Projectile_FlowerBell : ProjectileHomingCurveBase
     {

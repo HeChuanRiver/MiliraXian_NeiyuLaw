@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Vfx
 {
-    public static class GraphicsUtility
+    public static class MX_QHGraphicsUtility
     {
         private const string FieldEdgeTexPath = "Misc/FieldEdge";
         private static readonly int MainTex = Shader.PropertyToID("_MainTex");

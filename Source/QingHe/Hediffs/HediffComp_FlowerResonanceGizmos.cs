@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
             HediffComp_FlowerResonance state = parent?.GetComp<HediffComp_FlowerResonance>();
-            foreach (Gizmo gizmo in QingheSkillTreeSystem.GetGizmos(Pawn, state))
+            foreach (Gizmo gizmo in MX_QHSkillSystem.GetGizmos(Pawn, state))
             {
                 yield return gizmo;
             }

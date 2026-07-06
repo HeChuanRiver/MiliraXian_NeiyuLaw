@@ -1,7 +1,8 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Vfx;
 
 namespace MiliraXian.Characters.QingHe.Things
 {
@@ -49,7 +50,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public float MaxEnergy => Mathf.Max(
             1f,
             Props.maxEnergy
-            * (FlowerCourtUtility.GetDivineFortune(PawnOwner)?.ShieldCapacityMultiplier ?? 1f));
+            * (MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldCapacityMultiplier ?? 1f));
 
         public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
 
@@ -65,7 +66,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float multiplier = FlowerCourtUtility.GetDivineFortune(PawnOwner)?.ShieldRegenMultiplier ?? 1f;
+                float multiplier = MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldRegenMultiplier ?? 1f;
                 return Mathf.Max(0f, Props.baseRegenPerSecond * multiplier);
             }
         }
@@ -143,7 +144,7 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
-            float damageCap = FlowerCourtUtility.GetDivineFortune(PawnOwner)?.ShieldDamageCap ?? 0f;
+            float damageCap = MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldDamageCap ?? 0f;
             float shieldDamage = damageCap > 0f ? Mathf.Min(dinfo.Amount, damageCap) : Mathf.Max(0f, dinfo.Amount);
             if (shieldDamage <= 0f)
             {
@@ -203,13 +204,13 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private int ResolveRegenDelayTicks()
         {
-            HediffComp_DivineFortune fortune = FlowerCourtUtility.GetDivineFortune(PawnOwner);
+            HediffComp_DivineFortune fortune = MX_QH_HediffUtility.GetDivineFortune(PawnOwner);
             return fortune != null ? fortune.ShieldRegenDelayTicks : Mathf.Max(0, Props.hitRegenDelayTicks);
         }
 
         private int ResolveBreakDelayTicks()
         {
-            HediffComp_DivineFortune fortune = FlowerCourtUtility.GetDivineFortune(PawnOwner);
+            HediffComp_DivineFortune fortune = MX_QH_HediffUtility.GetDivineFortune(PawnOwner);
             return fortune != null ? fortune.ShieldBreakDelayTicks : Mathf.Max(0, Props.breakDisabledTicks);
         }
 

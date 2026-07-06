@@ -1,9 +1,9 @@
-using MiliraXian.Characters;
+﻿using MiliraXian.Characters;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
     public class Projectile_LunarMirrorRetaliation : Bullet
     {

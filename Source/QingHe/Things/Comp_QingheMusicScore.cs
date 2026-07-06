@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;
@@ -15,8 +15,6 @@ namespace MiliraXian.Characters.QingHe.Things
         public List<QingheMusicScoreDef> possibleScores;
         public ThingDef plainBookDef;
         public int requiredReadingTicks = 5000;
-        public GraphicData openGraphic;
-        public GraphicData storageGraphic;
 
         public CompProperties_QingheMusicScore()
         {
@@ -27,8 +25,6 @@ namespace MiliraXian.Characters.QingHe.Things
     public class Comp_QingheMusicScore : ThingComp
     {
         private QingheMusicScoreDef score;
-        private string title;
-        private string content;
         private float readingProgress;
         private bool consumed;
 
@@ -38,11 +34,11 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public IReadOnlyList<MX_QHSkillNodeDef> UnlocksNodes => ScoreDef?.unlocksNodes;
 
-        public string UnlocksNodeLabel => ScoreDef?.LabelCap ?? BookTitle;
+        public string UnlocksNodeLabel => ScoreDef?.LabelCap ?? parent.def.LabelCap;
 
-        public string BookTitle => title.NullOrEmpty() ? (ScoreDef != null ? ScoreDef.LabelCap.ToString() : parent.def.LabelCap.ToString()) : title;
+        public string BookTitle => ScoreDef != null ? ScoreDef.LabelCap.ToString() : parent.def.LabelCap.ToString();
 
-        public string BookContent => content.NullOrEmpty() ? ScoreDef?.description ?? parent.def.description : content;
+        public string BookContent => ScoreDef?.description ?? parent.def.description;
 
         public bool HasUnlockNodes => UnlocksNodes != null && UnlocksNodes.Count > 0;
 
@@ -68,8 +64,6 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             base.PostExposeData();
             Scribe_Defs.Look(ref score, "mx_qh_score");
-            Scribe_Values.Look(ref title, "mx_qh_title");
-            Scribe_Values.Look(ref content, "mx_qh_content");
             Scribe_Values.Look(ref readingProgress, "mx_qh_readingProgress", 0f);
             Scribe_Values.Look(ref consumed, "mx_qh_consumed", false);
 
@@ -79,11 +73,9 @@ namespace MiliraXian.Characters.QingHe.Things
             }
         }
 
-        public void Initialize(QingheMusicScoreDef newScore, string newTitle = null, string newContent = null)
+        public void Initialize(QingheMusicScoreDef newScore)
         {
             score = newScore;
-            title = newTitle.NullOrEmpty() ? newScore?.LabelCap.ToString() : newTitle;
-            content = newContent.NullOrEmpty() ? newScore?.description : newContent;
             readingProgress = 0f;
             consumed = false;
         }
@@ -92,18 +84,6 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             if (ScoreDef != null)
             {
-                if (ScoreDef.requiredReadingTicks <= 0)
-                {
-                    ScoreDef.requiredReadingTicks = RequiredReadingTicks;
-                }
-                if (title.NullOrEmpty())
-                {
-                    title = ScoreDef.LabelCap.ToString();
-                }
-                if (content.NullOrEmpty())
-                {
-                    content = ScoreDef.description;
-                }
                 return;
             }
 
@@ -125,7 +105,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return false;
             }
 
-            if (!MX_QHUtility.IsQinghe(pawn))
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 disabledReason = "MX_QH_SkillBookRequiresQinghe".Translate();
                 return false;
@@ -137,7 +117,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return false;
             }
 
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
             if (state == null)
             {
                 disabledReason = "MX_QH_FlowerCourtMissing".Translate();
@@ -179,7 +159,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(pawn);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
             if (state == null || ScoreDef == null)
             {
                 return;
@@ -216,7 +196,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void CompleteReading(Pawn reader)
         {
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(reader);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(reader);
             if (state == null)
             {
                 return;
@@ -231,7 +211,7 @@ namespace MiliraXian.Characters.QingHe.Things
                     return;
                 }
 
-                QingheSkillBookUtility.SendMusicMasteryLearnedLetter(reader, bookTitle, state.MusicMasteryLevel);
+                SendMusicMasteryLearnedLetter(reader, bookTitle, state.MusicMasteryLevel);
                 state.ClearMusicScoreReadingProgress(ScoreDef);
             }
             else
@@ -245,153 +225,24 @@ namespace MiliraXian.Characters.QingHe.Things
                     return;
                 }
 
-                QingheSkillBookUtility.SendSkillNodesLearnedLetter(reader, bookTitle, newlyLearnedNodes);
+                SendSkillNodesLearnedLetter(reader, bookTitle, newlyLearnedNodes);
                 state.ClearMusicScoreReadingProgress(ScoreDef);
             }
 
             consumed = true;
             reader.jobs?.EndCurrentJob(JobCondition.Succeeded);
-            QingheSkillBookUtility.ReplaceWithPlainBook(parent, reader);
-        }
-    }
-
-    public class Thing_QingheMusicScoreBook : ThingWithComps
-    {
-        private Comp_QingheMusicScore cachedScoreComp;
-        private Graphic openGraphic;
-        private Graphic storageGraphic;
-        private bool isOpen;
-
-        public Comp_QingheMusicScore ScoreComp => cachedScoreComp ?? (cachedScoreComp = GetComp<Comp_QingheMusicScore>());
-
-        private Graphic OpenGraphic => openGraphic ?? (openGraphic = ScoreComp?.Props.openGraphic?.Graphic);
-
-        public Graphic StorageGraphic => storageGraphic ?? (storageGraphic = ScoreComp?.Props.storageGraphic?.Graphic);
-
-        public bool IsOpen
-        {
-            get => isOpen;
-            set => isOpen = value;
+            ReplaceWithPlainBook(reader);
         }
 
-        public override string LabelNoCount => (ScoreComp?.BookTitle ?? def.LabelCap)
-            + GenLabel.LabelExtras(this, includeHp: true, includeQuality: true);
-
-        public override string LabelNoParenthesis => ScoreComp?.BookTitle ?? def.LabelCap;
-
-        public override string DescriptionDetailed
+        private void ReplaceWithPlainBook(Pawn reader)
         {
-            get
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.AppendLine((ScoreComp?.BookTitle ?? LabelCap).Colorize(ColoredText.TipSectionTitleColor)
-                    + GenLabel.LabelExtras(this, includeHp: false, includeQuality: true)
-                    + "\n");
-                builder.AppendLine((ScoreComp?.BookContent ?? def.description) + "\n");
-
-                string benefits = ScoreComp?.GetBenefitsString();
-                if (!benefits.NullOrEmpty())
-                {
-                    builder.AppendLine(" - " + benefits);
-                }
-
-                return builder.ToString().TrimEndNewlines();
-            }
-        }
-
-        public override void PostPostMake()
-        {
-            base.PostPostMake();
-            ScoreComp?.EnsureInitialized();
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look(ref isOpen, "mx_qh_isOpen", false);
-        }
-
-        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
-        {
-            foreach (FloatMenuOption option in base.GetFloatMenuOptions(selPawn))
-            {
-                option.iconThing = this;
-                yield return option;
-            }
-        }
-
-        public void Notify_ReadTick(Pawn pawn, int delta)
-        {
-            ScoreComp?.AddReadingProgress(pawn, delta);
-        }
-
-        public override bool CanStackWith(Thing other)
-        {
-            return false;
-        }
-
-        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
-        {
-            if (isOpen && OpenGraphic != null)
-            {
-                Pawn_CarryTracker carryTracker = ParentHolder as Pawn_CarryTracker;
-                Rot4 rot = carryTracker != null ? carryTracker.pawn.Rotation : Rotation;
-                OpenGraphic.Draw(drawLoc, flip ? rot.Opposite : rot, this);
-                return;
-            }
-
-            base.DrawAt(drawLoc, flip);
-        }
-
-        public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
-        {
-            foreach (StatDrawEntry entry in base.SpecialDisplayStats())
-            {
-                yield return entry;
-            }
-
-            string benefits = ScoreComp?.GetBenefitsString();
-            if (!benefits.NullOrEmpty())
-            {
-                yield return new StatDrawEntry(
-                    StatCategoryDefOf.Basics,
-                    "MX_QH_MusicScoreStatCategory".Translate(),
-                    benefits,
-                    benefits,
-                    1000);
-            }
-
-            if (ScoreComp != null)
-            {
-                yield return new StatDrawEntry(
-                    StatCategoryDefOf.Basics,
-                    "MX_QH_ReadingProgressStat".Translate(),
-                    ScoreComp.ReadingProgressPercent.ToStringPercent("F0"),
-                    "MX_QH_ReadingProgressStatDesc".Translate(),
-                    999);
-            }
-        }
-    }
-
-    public static class QingheSkillBookUtility
-    {
-        public static Thing MakeSkillBook(QingheMusicScoreDef scoreDef)
-        {
-            Thing thing = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_SkillBook);
-            thing.TryGetComp<Comp_QingheMusicScore>()?.Initialize(scoreDef);
-            return thing;
-        }
-
-        public static void ReplaceWithPlainBook(Thing skillBook, Pawn reader)
-        {
+            Thing skillBook = parent;
             if (skillBook == null || skillBook.Destroyed)
             {
                 return;
             }
 
-            Comp_QingheMusicScore scoreComp = skillBook.TryGetComp<Comp_QingheMusicScore>();
-            ThingDef plainBookDef = scoreComp?.PlainBookDef ?? ThingDefOf.TextBook;
-            Book plainBook = MakePlainBook(plainBookDef, scoreComp?.BookTitle, scoreComp?.BookContent);
+            Book plainBook = MakePlainBook(PlainBookDef);
             if (plainBook == null)
             {
                 return;
@@ -413,7 +264,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
         }
 
-        public static Book MakePlainBook(ThingDef plainBookDef, string title = null, string content = null)
+        private Book MakePlainBook(ThingDef plainBookDef)
         {
             ThingDef def = plainBookDef ?? ThingDefOf.TextBook;
             Thing thing = ThingMaker.MakeThing(def, GenStuff.RandomStuffFor(def));
@@ -431,28 +282,13 @@ namespace MiliraXian.Characters.QingHe.Things
 
             if (book is Thing_MX_CustomBook qingheBook)
             {
-                qingheBook.SetCustomText(title, content);
+                qingheBook.SetCustomText(BookTitle, BookContent);
             }
 
             return book;
         }
 
-        public static void SendSkillBookAcquiredLetter(Pawn pawn, Thing book)
-        {
-            if (Find.LetterStack == null || book == null)
-            {
-                return;
-            }
-
-            string bookTitle = (book as Thing_QingheMusicScoreBook)?.ScoreComp?.BookTitle ?? book.LabelCap;
-            Find.LetterStack.ReceiveLetter(
-                "MX_QH_SkillBookAcquiredLetterLabel".Translate(),
-                "MX_QH_SkillBookAcquiredLetterText".Translate(bookTitle),
-                LetterDefOf.PositiveEvent,
-                new LookTargets(book));
-        }
-
-        public static void SendSkillNodesLearnedLetter(Pawn reader, string bookTitle, IEnumerable<MX_QHSkillNodeDef> nodes)
+        private static void SendSkillNodesLearnedLetter(Pawn reader, string bookTitle, IEnumerable<MX_QHSkillNodeDef> nodes)
         {
             if (Find.LetterStack == null)
             {
@@ -469,7 +305,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 reader == null ? null : new LookTargets(reader));
         }
 
-        public static void SendMusicMasteryLearnedLetter(Pawn reader, string bookTitle, int masteryLevel)
+        private static void SendMusicMasteryLearnedLetter(Pawn reader, string bookTitle, int masteryLevel)
         {
             if (Find.LetterStack == null)
             {

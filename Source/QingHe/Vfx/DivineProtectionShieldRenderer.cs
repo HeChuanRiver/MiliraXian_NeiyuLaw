@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Vfx
 {
     public class DivineProtectionShieldGlowProperties
     {

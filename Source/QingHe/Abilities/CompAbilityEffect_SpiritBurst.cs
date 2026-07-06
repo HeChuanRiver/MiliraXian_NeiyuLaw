@@ -1,5 +1,8 @@
-using System.Collections.Generic;
-using MiliraXian.Characters.QingHe.Things;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Vfx;
+using MiliraXian.Characters.QingHe.Things.Mote;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -176,13 +179,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 center = caster.Position;
             }
 
-            GraphicsUtility.Fx(map, caster.Position, Props.releaseCasterFx, 1f);
-            GraphicsUtility.Fx(map, center, Props.releaseTargetFx, 1f);
-            GraphicsUtility.Fleck(map, center, Props.releaseFleck, Mathf.Max(0.85f, Props.radius * 0.65f));
-            GraphicsUtility.Fleck(map, center, Props.releaseImpactFleck, Mathf.Max(0.45f, Props.releaseImpactScale));
+            MX_QHGraphicsUtility.Fx(map, caster.Position, Props.releaseCasterFx, 1f);
+            MX_QHGraphicsUtility.Fx(map, center, Props.releaseTargetFx, 1f);
+            MX_QHGraphicsUtility.Fleck(map, center, Props.releaseFleck, Mathf.Max(0.85f, Props.radius * 0.65f));
+            MX_QHGraphicsUtility.Fleck(map, center, Props.releaseImpactFleck, Mathf.Max(0.45f, Props.releaseImpactScale));
 
             DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Cut;
-            bool enhanced = QingheSkillTreeSystem.HasAllFlowerMandates(FlowerCourtUtility.GetSkillTreeState(caster));
+            bool enhanced = MX_QHSkillSystem.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster));
             List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, Props.radius);
             for (int i = 0; i < victims.Count; i++)
             {
@@ -202,9 +205,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
                 if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
                 {
-                    GraphicsUtility.Fx(map, victim.Position, Props.hitFx, 1f);
-                    GraphicsUtility.Fleck(map, victim.Position, Props.hitFleck, 0.72f);
-                    GraphicsUtility.Fleck(map, victim.Position, Props.hitBurstFleck, 0.64f);
+                    MX_QHGraphicsUtility.Fx(map, victim.Position, Props.hitFx, 1f);
+                    MX_QHGraphicsUtility.Fleck(map, victim.Position, Props.hitFleck, 0.72f);
+                    MX_QHGraphicsUtility.Fleck(map, victim.Position, Props.hitBurstFleck, 0.64f);
                 }
 
                 TryBreakBrain(victim, map);
@@ -253,7 +256,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             victim.health.AddHediff(HediffDefOf.MissingBodyPart, brain);
             if (victim.Spawned && !victim.Destroyed && victim.MapHeld == map)
             {
-                GraphicsUtility.Fx(map, victim.Position, Props.brainBreakFx, 1f);
+                MX_QHGraphicsUtility.Fx(map, victim.Position, Props.brainBreakFx, 1f);
             }
         }
 
@@ -312,7 +315,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 Props.curveMaxSegs,
                 Props.curveDistortStep);
 
-            if (GraphicsUtility.Mote(map, cell, mote))
+            if (MX_QHGraphicsUtility.Mote(map, cell, mote))
             {
                 mote.exactPosition = cell.ToVector3Shifted();
             }
@@ -333,8 +336,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 cell = caster.Position;
             }
 
-            GraphicsUtility.Fx(map, caster.Position, Props.warmupCasterFx, 1f);
-            GraphicsUtility.Fx(map, cell, Props.warmupTargetFx, Mathf.Lerp(0.85f, 1f, Mathf.Clamp01(intensity)));
+            MX_QHGraphicsUtility.Fx(map, caster.Position, Props.warmupCasterFx, 1f);
+            MX_QHGraphicsUtility.Fx(map, cell, Props.warmupTargetFx, Mathf.Lerp(0.85f, 1f, Mathf.Clamp01(intensity)));
         }
     }
 }

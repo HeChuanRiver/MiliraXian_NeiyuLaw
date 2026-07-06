@@ -1,4 +1,6 @@
-using MiliraXian.Characters.QingHe.Things;
+﻿using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -66,7 +68,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Thing thing = GenSpawn.Spawn(Props.shieldDef, cell, caster.Map, WipeMode.Vanish);
             CompLunarMirrorShield shield = thing.TryGetComp<CompLunarMirrorShield>();
             shield?.Init(caster, Props.durationTicks);
-            shield?.SetEnhanced(QingheSkillTreeSystem.HasAllFlowerMandates(FlowerCourtUtility.GetSkillTreeState(caster)));
+            shield?.SetEnhanced(MX_QHSkillSystem.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster)));
             PlaySummonVisual(caster.Map, cell, Props.summonEffecterDefName, Props.fallbackSummonFleckDefName, Props.summonEffectScale);
         }
 
@@ -96,13 +98,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
         {
             if (!effecterDefName.NullOrEmpty())
             {
-                GraphicsUtility.Fx(map, cell, effecterDefName, scale);
+                MX_QHGraphicsUtility.Fx(map, cell, effecterDefName, scale);
                 return;
             }
 
             if (!fallbackFleckDefName.NullOrEmpty())
             {
-                GraphicsUtility.Fleck(map, cell, fallbackFleckDefName, scale);
+                MX_QHGraphicsUtility.Fleck(map, cell, fallbackFleckDefName, scale);
             }
         }
     }

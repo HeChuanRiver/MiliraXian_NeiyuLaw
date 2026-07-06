@@ -165,6 +165,7 @@
   <MX_QH_SkillBookDataMissing>Skill book data is missing.</MX_QH_SkillBookDataMissing>
   <MX_QH_MusicMasteryMaxed>Qinghe's mastery level has reached its maximum.</MX_QH_MusicMasteryMaxed>
   <MX_QH_SkillBookAlreadyRead>Qinghe has already read this skill book.</MX_QH_SkillBookAlreadyRead>
+  <MX_QH_ReadSkillBookFloatMenu>Prioritize reading Qinghe score {0}</MX_QH_ReadSkillBookFloatMenu>
   <MX_QH_SkillBookBenefitMastery>Increase Qinghe mastery level +{0}</MX_QH_SkillBookBenefitMastery>
   <MX_QH_SkillBookBenefitNodes>Unlock Qinghe skill nodes: {0}</MX_QH_SkillBookBenefitNodes>
   <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>

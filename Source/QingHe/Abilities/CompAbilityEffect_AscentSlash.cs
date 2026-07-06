@@ -1,5 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -301,7 +303,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private static bool HasLearnedJueying(Pawn pawn)
         {
-            return FlowerCourtUtility.EnsureSkillTreeState(pawn)?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying) == true;
+            return MX_QH_HediffUtility.EnsureFlowerResonance(pawn)?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying) == true;
         }
 
         private void ResolveLandingImpact(Pawn caster, IntVec3 origin, IntVec3 landing, IntVec3 directionCell)
@@ -314,14 +316,14 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             caster.rotationTracker?.FaceCell(directionCell);
             PlayVisuals(map, landing, landing, Props.exitEffecter, Props.exitFleck, 1.15f);
-            GraphicsUtility.Fx(map, landing, Props.impactEffecter, 1f);
-            GraphicsUtility.Fleck(map, landing, Props.impactFleck, Mathf.Max(0.8f, Props.coneRadius * 0.18f));
+            MX_QHGraphicsUtility.Fx(map, landing, Props.impactEffecter, 1f);
+            MX_QHGraphicsUtility.Fleck(map, landing, Props.impactFleck, Mathf.Max(0.8f, Props.coneRadius * 0.18f));
             Props.castSound?.PlayOneShot(new TargetInfo(landing, map));
 
             Vector3 forward = ComputeForward(landing, directionCell);
             map.GetComponent<MapComponent_QingheAscentSlashVisuals>()?.AddArc(landing, forward, Props.coneRadius, Props.coneAngleDegrees, AscentSlashArcDurationTicks);
             map.GetComponent<MapComponent_QingheAscentSlashVisuals>()?.AddDelayedImpact(caster, landing, directionCell, Props.impactDelayTicks, Props);
-            FlowerCourtUtility.GetFlowerDecree(caster)?.TryConsumeDecree(Props.flowerDecreeCost);
+            MX_QH_HediffUtility.GetFlowerDecree(caster)?.TryConsumeDecree(Props.flowerDecreeCost);
         }
 
         public static void ResolveDelayedConeImpact(Pawn caster, Map map, IntVec3 landing, IntVec3 directionCell, CompProperties_AbilityAscentSlash props)
@@ -358,7 +360,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 TryKnockback(victim, landing, props.knockbackDistance, props.knockbackFlyerDef);
                 if (victim.Spawned && victim.MapHeld == map)
                 {
-                    GraphicsUtility.Fleck(map, victim.Position, props.hitFleck, 0.7f);
+                    MX_QHGraphicsUtility.Fleck(map, victim.Position, props.hitFleck, 0.7f);
                 }
             }
         }
@@ -601,8 +603,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private static void PlayVisuals(Map map, IntVec3 source, IntVec3 cell, string effecter, string fleck, float scale)
         {
-            GraphicsUtility.Fx(map, cell, effecter, scale);
-            GraphicsUtility.Fleck(map, cell, fleck, scale);
+            MX_QHGraphicsUtility.Fx(map, cell, effecter, scale);
+            MX_QHGraphicsUtility.Fleck(map, cell, fleck, scale);
             if (source.IsValid && source.InBounds(map) && source != cell)
             {
                 GenDraw.DrawLineBetween(source.ToVector3Shifted(), cell.ToVector3Shifted());

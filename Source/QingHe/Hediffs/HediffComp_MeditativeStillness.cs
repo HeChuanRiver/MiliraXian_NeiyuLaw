@@ -32,7 +32,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 HediffComp_MeditativeStillness comp = StillnessComp;
                 if (comp?.LongNightReady == true && !comp.PropsStillness.longNightLabel.NullOrEmpty())
                 {
-                    return MX_QHUtility.TranslateIfKey(comp.PropsStillness.longNightLabel);
+                    return MX_QHCharacterUtility.TranslateIfKey(comp.PropsStillness.longNightLabel);
                 }
 
                 return base.LabelBase;
@@ -60,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 HediffComp_MeditativeStillness comp = StillnessComp;
                 if (comp?.LongNightReady == true && !comp.PropsStillness.longNightDescription.NullOrEmpty())
                 {
-                    return MX_QHUtility.TranslateIfKey(comp.PropsStillness.longNightDescription);
+                    return MX_QHCharacterUtility.TranslateIfKey(comp.PropsStillness.longNightDescription);
                 }
 
                 return base.Description;

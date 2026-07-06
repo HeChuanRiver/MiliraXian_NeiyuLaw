@@ -1,12 +1,8 @@
-using Verse;
+﻿using Verse;
 using MiliraXian.Characters.QingHe.Things;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class Hediff_DivineProtection : HediffWithComps
-    {
-    }
-
     public class HediffCompProperties_DivineProtection : HediffCompProperties
     {
         public CompProperties_DivineProtectionShield shieldCompProperties;

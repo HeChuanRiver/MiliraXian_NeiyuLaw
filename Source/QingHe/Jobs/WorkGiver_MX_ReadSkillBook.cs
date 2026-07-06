@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
 using Verse;
@@ -69,7 +70,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             return pawn != null
                 && pawn.Map != null
                 && !pawn.Downed
-                && MX_QHUtility.IsQinghe(pawn);
+                && MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
         public static void NotifyPawnReadSkillBook(Pawn pawn)

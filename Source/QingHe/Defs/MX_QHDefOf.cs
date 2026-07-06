@@ -1,7 +1,7 @@
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Defs
 {
     [DefOf]
     public static class MX_QHDefOf

@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
 
@@ -279,8 +280,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void SyncDependentComps()
         {
-            FlowerCourtUtility.GetDivineFortune(Pawn)?.Recalculate();
-            QingheSkillTreeSystem.SyncChoices(Pawn, this);
+            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
+            MX_QHSkillSystem.SyncChoices(Pawn, this);
         }
 
         private void NormalizeCollections()

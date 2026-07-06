@@ -165,6 +165,7 @@
   <MX_QH_SkillBookDataMissing>技能书数据缺失。</MX_QH_SkillBookDataMissing>
   <MX_QH_MusicMasteryMaxed>清荷的精通等级已经达到上限。</MX_QH_MusicMasteryMaxed>
   <MX_QH_SkillBookAlreadyRead>清荷已经读过这份技能书。</MX_QH_SkillBookAlreadyRead>
+  <MX_QH_ReadSkillBookFloatMenu>优先阅读清荷曲谱 {0}</MX_QH_ReadSkillBookFloatMenu>
   <MX_QH_SkillBookBenefitMastery>提升清荷精通等级 +{0}</MX_QH_SkillBookBenefitMastery>
   <MX_QH_SkillBookBenefitNodes>解锁清荷技能节点：{0}</MX_QH_SkillBookBenefitNodes>
   <MX_QH_Parentheses>（{0}）</MX_QH_Parentheses>

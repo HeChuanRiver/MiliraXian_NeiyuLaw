@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float MaxResourceValue => MaxValue / ValuePerDecree;
 
-        public float SkillTreeMaxResourceBonus => FlowerCourtUtility.GetDivineFortune(Pawn)?.FlowerDecreeMaxBonus * PropsDecree.maxResourceBonusPerSkillNode ?? 0f;
+        public float SkillTreeMaxResourceBonus => MX_QH_HediffUtility.GetDivineFortune(Pawn)?.FlowerDecreeMaxBonus * PropsDecree.maxResourceBonusPerSkillNode ?? 0f;
 
         public float CurrentRecoveryFactor => ResolveRecoveryFactor();
 
@@ -140,7 +140,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private float ResolveRecoveryFactor()
         {
-            return FlowerCourtUtility.GetDivineFortune(Pawn)?.FlowerDecreeRegenMultiplier ?? 1f;
+            return MX_QH_HediffUtility.GetDivineFortune(Pawn)?.FlowerDecreeRegenMultiplier ?? 1f;
         }
     }
 }

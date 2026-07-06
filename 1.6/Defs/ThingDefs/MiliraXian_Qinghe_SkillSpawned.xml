@@ -3,7 +3,7 @@
     <ThingDef>
         <defName>SpringFlowField</defName>
         <label>spring flow</label>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_SpringFlowField</thingClass>
+        <thingClass>ThingWithComps</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
         <altitudeLayer>MoteLow</altitudeLayer>
@@ -127,7 +127,7 @@
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_QH_LunarMirrorRetaliation</defName>
         <label>wintersweet retaliation shot</label>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_LunarMirrorRetaliation</thingClass>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Projectiles.Projectile_LunarMirrorRetaliation</thingClass>
         <graphicData>
             <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
             <graphicClass>Graphic_Single</graphicClass>
@@ -154,7 +154,7 @@
                 <trailAltitudeOffset>0.65</trailAltitudeOffset>
                 <useProjectileGraphicColor>true</useProjectileGraphicColor>
             </li>
-            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+            <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
                 <damageDef>MX_StatusEffectColdAccumulation</damageDef>
                 <amount>0.08</amount>
                 <armorPenetration>2.10</armorPenetration>
@@ -166,7 +166,7 @@
     <ThingDef>
         <defName>MX_QH_LunarMirror</defName>
         <label>wintersweet shield</label>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Thing_LunarMirror</thingClass>
+        <thingClass>ThingWithComps</thingClass>
         <category>None</category>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>

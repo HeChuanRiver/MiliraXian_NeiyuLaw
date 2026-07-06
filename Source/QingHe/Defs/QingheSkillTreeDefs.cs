@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Defs
 {
     public class QingheSkillTreeDef : Def
     {

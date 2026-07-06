@@ -1,54 +1,24 @@
-using System;
-using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class Hediff_LuoshenContract : HediffWithTarget
-    {
-        public override bool Visible => false;
-
-        public void SetTargetPawn(Pawn targetPawn)
-        {
-            target = targetPawn;
-        }
-    }
-
-    public class ThoughtWorker_QingheLuoshenContractMaintained : ThoughtWorker
-    {
-        protected override ThoughtState CurrentStateInternal(Pawn p)
-        {
-            return QingheLuoshenContractUtility.IsContractMaintainedFor(p)
-                ? ThoughtState.ActiveAtStage(0)
-                : ThoughtState.Inactive;
-        }
-    }
-
-    public static class QingheLuoshenContractUtility
     {
         private const string ContractHediffDefName = "MX_QH_LuoshenContract";
         private const string BrokenThoughtDefName = "MX_QH_LuoshenContractBroken";
 
-        public static bool IsContractUnlocked(Pawn qinghe)
-        {
-            if (!MX_QHUtility.IsQinghe(qinghe) || qinghe.Dead)
-            {
-                return false;
-            }
+        public override bool Visible => false;
 
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(qinghe);
-            return state?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu) == true;
-        }
-
-        public static bool IsContractMaintainedFor(Pawn pawn)
+        public static bool IsMaintainedFor(Pawn pawn)
         {
             if (pawn == null || pawn.Dead)
             {
                 return false;
             }
 
-            if (MX_QHUtility.IsQinghe(pawn))
+            if (MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 Pawn spouse = GetLivingSpouse(pawn);
                 return spouse != null && HasContractWith(pawn, spouse);
@@ -60,7 +30,7 @@ namespace MiliraXian.Characters.QingHe
 
         public static void SyncForQinghe(Pawn qinghe, HediffComp_FlowerResonance state)
         {
-            if (!MX_QHUtility.IsQinghe(qinghe))
+            if (!MX_QHCharacterUtility.IsQinghe(qinghe))
             {
                 return;
             }
@@ -84,20 +54,20 @@ namespace MiliraXian.Characters.QingHe
 
         public static void NotifySpouseRelationAdded(Pawn pawn, Pawn otherPawn)
         {
-            Pawn qinghe = MX_QHUtility.IsQinghe(pawn) ? pawn : (MX_QHUtility.IsQinghe(otherPawn) ? otherPawn : null);
+            Pawn qinghe = MX_QHCharacterUtility.IsQinghe(pawn) ? pawn : (MX_QHCharacterUtility.IsQinghe(otherPawn) ? otherPawn : null);
             if (qinghe == null)
             {
                 return;
             }
 
-            QingheSkillTreeSystem.SyncChoices(qinghe);
+            MX_QHSkillSystem.SyncChoices(qinghe);
             NotifyThoughtsDirty(pawn);
             NotifyThoughtsDirty(otherPawn);
         }
 
         public static void NotifySpouseRelationRemoved(Pawn pawn, Pawn otherPawn)
         {
-            Pawn qinghe = MX_QHUtility.IsQinghe(pawn) ? pawn : (MX_QHUtility.IsQinghe(otherPawn) ? otherPawn : null);
+            Pawn qinghe = MX_QHCharacterUtility.IsQinghe(pawn) ? pawn : (MX_QHCharacterUtility.IsQinghe(otherPawn) ? otherPawn : null);
             Pawn spouse = qinghe == pawn ? otherPawn : pawn;
             if (qinghe == null || spouse == null)
             {
@@ -115,32 +85,9 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        public static void NotifyPawnKilled(Pawn deadPawn)
+        public void SetTargetPawn(Pawn targetPawn)
         {
-            if (deadPawn == null)
-            {
-                return;
-            }
-
-            Pawn qinghe = MX_QHUtility.IsQinghe(deadPawn) ? deadPawn : GetQingheContractPartner(deadPawn);
-            Pawn spouse = qinghe == deadPawn ? GetContractPartner(qinghe) : deadPawn;
-            if (qinghe == null || spouse == null)
-            {
-                return;
-            }
-
-            bool wasContract = HasContractWith(qinghe, spouse) || HasContractWith(spouse, qinghe);
-            RemoveContract(qinghe, spouse);
-            NotifyThoughtsDirty(qinghe);
-            NotifyThoughtsDirty(spouse);
-            if (!wasContract)
-            {
-                return;
-            }
-
-            Pawn survivor = qinghe.Dead ? spouse : qinghe;
-            Pawn lost = survivor == qinghe ? spouse : qinghe;
-            GiveBrokenThought(survivor, lost);
+            target = targetPawn;
         }
 
         private static void SyncToPartner(Pawn qinghe, Pawn spouse)
@@ -150,9 +97,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff_LuoshenContract qingheContract = EnsureContractHediff(qinghe, spouse);
-            Hediff_LuoshenContract spouseContract = EnsureContractHediff(spouse, qinghe);
-
+            EnsureContractHediff(qinghe, spouse);
+            EnsureContractHediff(spouse, qinghe);
             NotifyThoughtsDirty(qinghe);
             NotifyThoughtsDirty(spouse);
         }
@@ -229,7 +175,7 @@ namespace MiliraXian.Characters.QingHe
         private static Pawn GetQingheContractPartner(Pawn pawn)
         {
             Pawn partner = GetContractPartner(pawn);
-            return MX_QHUtility.IsQinghe(partner) ? partner : null;
+            return MX_QHCharacterUtility.IsQinghe(partner) ? partner : null;
         }
 
         private static bool HasContractWith(Pawn pawn, Pawn targetPawn)

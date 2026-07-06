@@ -66,19 +66,24 @@
             <li>
                 <compClass>CompQuality</compClass>
             </li>
-            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
-                <plainBookDef>MX_QH_Book</plainBookDef>
-                <requiredReadingTicks>5000</requiredReadingTicks>
+            <li Class="CompProperties_Book">
+                <nameMaker>Namer_TextBook</nameMaker>
+                <descriptionMaker>Description_SkillBook</descriptionMaker>
+                <ageYearsRange>100~200</ageYearsRange>
                 <openGraphic>
                     <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
                     <graphicClass>Graphic_Multi</graphicClass>
                     <drawSize>0.7</drawSize>
                 </openGraphic>
-                <storageGraphic>
+                <verticalGraphic>
                     <texPath>Things/Item/Book/Textbook/Textbook_Vertical</texPath>
                     <graphicClass>Graphic_Multi</graphicClass>
                     <addTopAltitudeBias>true</addTopAltitudeBias>
-                </storageGraphic>
+                </verticalGraphic>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_QingheMusicScore">
+                <plainBookDef>MX_QH_Book</plainBookDef>
+                <requiredReadingTicks>5000</requiredReadingTicks>
                 <possibleScores>
                     <li>MX_QH_ScoreDef_DuanqiaoCanxue</li>
                     <li>MX_QH_ScoreDef_FeihuaJueyu</li>

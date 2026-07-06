@@ -1,17 +1,15 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
 using Verse.AI;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Buildings
 {
-    public class Building_LotusPond : Building
-    {
-    }
-
     public class CompAssignableToPawn_QingheMeditationSpot : CompAssignableToPawn_MeditationSpot
     {
         public override IEnumerable<Pawn> AssigningCandidates
@@ -24,14 +22,14 @@ namespace MiliraXian.Characters.QingHe.Things
                 }
 
                 return parent.Map.mapPawns.FreeColonists
-                    .Where(MX_QHUtility.IsQinghe)
+                    .Where(MX_QHCharacterUtility.IsQinghe)
                     .OrderByDescending(pawn => CanAssignTo(pawn).Accepted);
             }
         }
 
         public override AcceptanceReport CanAssignTo(Pawn pawn)
         {
-            if (!MX_QHUtility.IsQinghe(pawn))
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 return "MX_QH_LotusPondAssignQingheOnly".Translate();
             }
@@ -41,7 +39,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public override void TryAssignPawn(Pawn pawn)
         {
-            if (!MX_QHUtility.IsQinghe(pawn))
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 return;
             }
@@ -62,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public override IEnumerable<FloatMenuOption> GetOptionsFor(Thing clickedThing, FloatMenuContext context)
         {
-            if (!(clickedThing is Building_LotusPond))
+            if (clickedThing?.def != MX_QHDefOf.MX_QH_LotusPond)
             {
                 yield break;
             }
@@ -73,7 +71,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 yield break;
             }
 
-            if (!MX_QHUtility.IsQinghe(interactor))
+            if (!MX_QHCharacterUtility.IsQinghe(interactor))
             {
                 yield return new FloatMenuOption("MX_QH_OpenFlowerCourtRequiresQinghe".Translate(), null);
                 yield break;
@@ -89,8 +87,8 @@ namespace MiliraXian.Characters.QingHe.Things
                         return;
                     }
 
-                    HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(interactor);
-                    FlowerCourtUtility.EnsureFlowerResources(interactor);
+                    HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(interactor);
+                    MX_QH_HediffUtility.EnsureFlowerDecree(interactor);
                     if (state == null)
                     {
                         Messages.Message("MX_QH_FlowerCourtMissing".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);

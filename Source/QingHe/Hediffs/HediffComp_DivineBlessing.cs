@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -54,7 +55,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             get
             {
-                float factor = FlowerCourtUtility.GetDivineFortune(Pawn)?.DivineBlessingRechargeFactor ?? 1f;
+                float factor = MX_QH_HediffUtility.GetDivineFortune(Pawn)?.DivineBlessingRechargeFactor ?? 1f;
                 return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks * Mathf.Max(0f, factor)));
             }
         }
@@ -334,7 +335,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int ResolveMaxCharges()
         {
             int maxCharges = Mathf.Max(1, Props.maxCharges);
-            HediffComp_FlowerResonance state = FlowerCourtUtility.EnsureSkillTreeState(Pawn);
+            HediffComp_FlowerResonance state = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
             if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue))
             {
                 maxCharges++;

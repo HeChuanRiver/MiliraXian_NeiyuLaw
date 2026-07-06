@@ -1,3 +1,4 @@
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.UI;
 using RimWorld;

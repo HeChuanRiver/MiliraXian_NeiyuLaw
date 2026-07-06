@@ -1,4 +1,5 @@
-using MiliraXian.Characters.QingHe.Abilities;
+﻿using MiliraXian.Characters.QingHe.Abilities;
+using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -39,7 +40,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            FlowerCourtUtility.GetDivineFortune(Pawn)?.Recalculate();
+            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         public override void CompPostPostRemoved()
@@ -47,7 +48,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompPostPostRemoved();
             CleanupActiveEffecter();
             ResetAfterimageTracking();
-            FlowerCourtUtility.GetDivineFortune(Pawn)?.Recalculate();
+            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         public override void CompExposeData()
@@ -62,7 +63,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public void NotifyRefreshed()
         {
             EnsureActiveEffecter();
-            FlowerCourtUtility.GetDivineFortune(Pawn)?.Recalculate();
+            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         private void EnsureActiveEffecter()

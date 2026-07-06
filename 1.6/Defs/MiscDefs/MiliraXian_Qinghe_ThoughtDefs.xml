@@ -2,7 +2,7 @@
 <Defs>
     <ThoughtDef>
         <defName>MX_QH_LuoshenContractMaintained</defName>
-        <workerClass>MiliraXian.Characters.QingHe.ThoughtWorker_QingheLuoshenContractMaintained</workerClass>
+        <workerClass>MiliraXian.Characters.QingHe.Thoughts.ThoughtWorker_QingheLuoshenContractMaintained</workerClass>
         <thoughtClass>Thought_Situational</thoughtClass>
         <stages>
             <li>

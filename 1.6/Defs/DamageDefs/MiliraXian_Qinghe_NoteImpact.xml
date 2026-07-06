@@ -6,7 +6,7 @@
     <externalViolence>true</externalViolence>
     <armorCategory>Sharp</armorCategory>
     <isRanged>true</isRanged>
-    <workerClass>MiliraXian.Characters.QingHe.Things.DamageWorker_FlowerBellExplosion</workerClass>
+    <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.DamageWorker_FlowerBellExplosion</workerClass>
     <deathMessage>{0} was struck down by the Flower Bell's note.</deathMessage>
     <hediff>PsychicInjury</hediff>
     <explosionCellFleck>BlastEMP</explosionCellFleck>

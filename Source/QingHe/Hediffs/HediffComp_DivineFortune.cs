@@ -1,4 +1,5 @@
-using RimWorld;
+﻿using RimWorld;
+using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
 
@@ -77,7 +78,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void Recalculate()
         {
-            RecalculateFromSkillState(FlowerCourtUtility.GetSkillTreeState(Pawn));
+            RecalculateFromSkillState(MX_QH_HediffUtility.GetFlowerResonance(Pawn));
         }
 
         private void RecalculateFromSkillState(HediffComp_FlowerResonance skillState)

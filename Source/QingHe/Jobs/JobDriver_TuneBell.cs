@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -12,7 +13,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         private const TargetIndex WeaponIndex = TargetIndex.B;
         private const int TuneTicks = 360;
 
-        private Building_LotusPond LotusPond => job.GetTarget(PondIndex).Thing as Building_LotusPond;
+        private Building LotusPond => job.GetTarget(PondIndex).Thing as Building;
 
         private ThingWithComps FlowerBell => job.GetTarget(WeaponIndex).Thing as ThingWithComps;
 
@@ -23,7 +24,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            this.FailOn(() => !MX_QHUtility.IsQinghe(pawn));
+            this.FailOn(() => !MX_QHCharacterUtility.IsQinghe(pawn));
             this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
             this.FailOnDespawnedNullOrForbidden(PondIndex);
             this.FailOnBurningImmobile(PondIndex);

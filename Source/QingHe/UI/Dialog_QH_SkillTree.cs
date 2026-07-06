@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;

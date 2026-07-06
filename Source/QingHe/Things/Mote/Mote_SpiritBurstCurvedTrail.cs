@@ -1,7 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
+using MiliraXian.Characters.QingHe.Vfx;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Things
+namespace MiliraXian.Characters.QingHe.Things.Mote
 {
     public class Mote_SpiritBurstCurvedTrail : MoteDualAttached
     {

@@ -3,7 +3,7 @@
     <ThingDef>
         <defName>MX_QH_Mote_SpiritBurstCurvedTrail</defName>
         <label>Mote</label>
-        <thingClass>MiliraXian.Characters.QingHe.Things.Mote_SpiritBurstCurvedTrail</thingClass>
+        <thingClass>MiliraXian.Characters.QingHe.Things.Mote.Mote_SpiritBurstCurvedTrail</thingClass>
         <category>Mote</category>
         <graphicData>
             <graphicClass>Graphic_Mote</graphicClass>

@@ -3,7 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Abilities
+namespace MiliraXian.Characters.QingHe.Vfx
 {
     public class MapComponent_QingheFlowerDanceVisuals : MapComponent
     {

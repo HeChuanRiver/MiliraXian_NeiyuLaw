@@ -37,7 +37,7 @@
         <compClass>MiliraXian.Characters.QingHe.Things.CompEquippable_FlowerBell</compClass>
       </li>
       <li Class="CompProperties_Styleable" />
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellResonance">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellResonance">
         <settings>
           <li>
             <resonance>Spring</resonance>
@@ -77,7 +77,7 @@
   </ThingDef>
 
   <ThingDef ParentName="BaseBullet" Name="MX_QH_BaseFlowerBellBullet" Abstract="True">
-    <thingClass>MiliraXian.Characters.QingHe.Things.Projectile_FlowerBell</thingClass>
+    <thingClass>MiliraXian.Characters.QingHe.Things.Projectiles.Projectile_FlowerBell</thingClass>
     <graphicData>
       <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -128,7 +128,7 @@
       <damageAmountBase>6</damageAmountBase>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectBleedAccumulation</damageDef>
         <amount>0.08</amount>
         <armorPenetration>2.10</armorPenetration>
@@ -155,7 +155,7 @@
       <damageAmountBase>5</damageAmountBase>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectToxinAccumulation</damageDef>
         <amount>0.06</amount>
         <armorPenetration>2.10</armorPenetration>
@@ -182,7 +182,7 @@
       <damageAmountBase>4</damageAmountBase>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectFearAccumulation</damageDef>
         <amount>0.25</amount>
         <armorPenetration>2.10</armorPenetration>
@@ -209,7 +209,7 @@
       <damageAmountBase>5</damageAmountBase>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_FlowerBellStatusOnHit">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <damageDef>MX_StatusEffectColdAccumulation</damageDef>
         <amount>0.08</amount>
         <armorPenetration>2.10</armorPenetration>

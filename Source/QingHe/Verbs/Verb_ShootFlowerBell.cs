@@ -1,4 +1,4 @@
-using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Verbs

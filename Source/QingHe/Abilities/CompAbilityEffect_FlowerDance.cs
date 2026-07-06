@@ -1,5 +1,6 @@
-using MiliraXian.Characters.QingHe.Hediffs;
+﻿using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters;
+using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
 
@@ -78,7 +79,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 hediffWithComps.GetComp<HediffComp_FlowerDance>()?.NotifyRefreshed();
             }
 
-            FlowerCourtUtility.GetDivineFortune(caster)?.Recalculate();
+            MX_QH_HediffUtility.GetDivineFortune(caster)?.Recalculate();
         }
     }
 }

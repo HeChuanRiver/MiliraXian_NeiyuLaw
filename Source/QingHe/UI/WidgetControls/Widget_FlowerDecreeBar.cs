@@ -1,3 +1,4 @@
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.UI;
 using UnityEngine;
@@ -99,7 +100,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                          + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.CurrentRecoveryProgressPerSecond.ToString("F2"));
             if (!comp.ResourceDescription.NullOrEmpty())
             {
-                tip += "\n\n" + MX_QHUtility.TranslateIfKey(comp.ResourceDescription);
+                tip += "\n\n" + MX_QHCharacterUtility.TranslateIfKey(comp.ResourceDescription);
             }
 
             return tip;

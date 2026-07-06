@@ -1,8 +1,8 @@
 ﻿using Verse;
 
 using MiliraXian.Characters;
-using MiliraXian.Characters.QingHe;
-using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 
@@ -36,7 +36,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private int ageTicks;
         private int ticksToNextAmbientVisual;
         private bool enhanced;
-        private Mote fieldMote;
+        private Verse.Mote fieldMote;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
         public float CurrentRadius => Props.radius;
@@ -60,8 +60,8 @@ namespace MiliraXian.Characters.QingHe.Things
 
             float pulse = 0.28f + Mathf.Sin(Find.TickManager.TicksGame * 0.06666667f) * 0.08f;
             var color = new Color(1f, 0.68f, 0.82f, pulse * VisualAlpha);
-            var material = GraphicsUtility.FieldEdgeMaterial(color);
-            GraphicsUtility.DrawRadiusRingWithMaterial(parent.Position, CurrentRadius, material, parent.Map);
+            var material = MX_QHGraphicsUtility.FieldEdgeMaterial(color);
+            MX_QHGraphicsUtility.DrawRadiusRingWithMaterial(parent.Position, CurrentRadius, material, parent.Map);
         }
 
         public override void CompTick()
@@ -104,7 +104,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
             Scribe_Values.Look(ref enhanced, "enhanced", false);
-            Scribe_References.Look<Mote>(ref fieldMote, "fieldMote", false);
+            Scribe_References.Look<Verse.Mote>(ref fieldMote, "fieldMote", false);
         }
 
         public void Init(Pawn newCaster)
@@ -145,14 +145,14 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) is Hediff_QH_SpringFlow h)
+                Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
+                if (hediff != null)
                 {
-                    h.GetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
+                    hediff.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
                 }
                 else
                 {
-                    var hediff = (Hediff_QH_SpringFlow)HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
-                    pawn.health.AddHediff(hediff);
+                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn));
                 }
             }
 
