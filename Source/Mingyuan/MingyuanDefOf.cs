@@ -28,6 +28,7 @@ namespace MiliraXian.Characters.Mingyuan
         public static ThingDef MX_Mingyuan_Mote_AshesPulse;
         public static ThingDef MX_Mingyuan_Mote_AshesHit;
         public static ThingDef MX_Mingyuan_Mote_SelfBurnGain;
+        public static ThingDef MX_Mingyuan_Mote_SelfBurnOverburn;
         public static ThingDef MX_Mingyuan_Mote_ShieldSelfBurnLink;
         public static ThingDef MX_Mingyuan_Mote_LifeBurnMark;
         public static ThingDef MX_Mingyuan_Mote_LifeBurnBurst;

@@ -3,17 +3,18 @@
   <MX_Mingyuan_Enabled>enabled</MX_Mingyuan_Enabled>
   <MX_Mingyuan_Disabled>disabled</MX_Mingyuan_Disabled>
   <MX_Mingyuan_SelfBurn_LabelExtra>{0} layers</MX_Mingyuan_SelfBurn_LabelExtra>
+  <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} layers, Overburn</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>Current Self Burn: {0} layers</MX_Mingyuan_SelfBurn_TipCurrentLayers>
   <MX_Mingyuan_SelfBurn_TipEffectiveLayers>Effective bonus layers: {0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
-  <MX_Mingyuan_SelfBurn_TipBonuses>Bonuses from effective layers: damage +{0}, movement +{1}, attack speed +{2}, global work speed +{3}, shield regeneration +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipOverburn>Overburn: {0} layers above {1}. State: {2}</MX_Mingyuan_SelfBurn_TipOverburn>
+  <MX_Mingyuan_SelfBurn_TipBonuses>Effective layer bonuses: damage +{0}, movement +{1}, attack speed +{2}, global work speed +{3}</MX_Mingyuan_SelfBurn_TipBonuses>
   <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>Otherworld Burner bonus: melee Life Burn +{0} layers, ranged Life Burn +{1} layers</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
-  <MX_Mingyuan_SelfBurn_TipDecay>Natural decay: every {0} ticks, -{1} layers. Next decay in {2} ticks.</MX_Mingyuan_SelfBurn_TipDecay>
-  <MX_Mingyuan_Shield_TipStatus>Shield energy: {0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRegen>Pending 10-second regeneration: +{0}; next settlement in {1}s</MX_Mingyuan_Shield_TipRegen>
-  <MX_Mingyuan_Shield_TipAbsorb>Absorbs hits &lt;= {0}, &gt;= {1}, and lethal hits. Energy cost per absorbed hit: {2}.</MX_Mingyuan_Shield_TipAbsorb>
-  <MX_Mingyuan_Shield_TipReady>Shield ready.</MX_Mingyuan_Shield_TipReady>
-  <MX_Mingyuan_Shield_TipBroken>Shield broken; rebuilds in {0}s.</MX_Mingyuan_Shield_TipBroken>
-  <MX_Mingyuan_Shield_TipNoCost>No-cost absorption at {0} effective Self Burn: {1}</MX_Mingyuan_Shield_TipNoCost>
+  <MX_Mingyuan_SelfBurn_TipOverburnEffect>Overburn: active direct damage +{0}, active Life Burn stacking +{1}; shield reserve cannot refill from Self Burn.</MX_Mingyuan_SelfBurn_TipOverburnEffect>
+  <MX_Mingyuan_SelfBurn_TipRhythm>Drafted: every {0} ticks +{1} up to {2}. Undrafted: every {3} ticks -{4}. Overburn: every {3} ticks -{5}. Next change in {6} ticks.</MX_Mingyuan_SelfBurn_TipRhythm>
+  <MX_Mingyuan_Shield_TipStatus>Repair reserve: {0}/{1}</MX_Mingyuan_Shield_TipStatus>
+  <MX_Mingyuan_Shield_TipRepair>Every second, spends 1 reserve to restore one missing body part or heal all non-permanent wounds on one body part. Next check in {0}s.</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRefill>Self Burn refill check in {0}s. Ratio: {1} Self Burn = 1 reserve; max spend per success: {2}. Refill cooldown: {3}s. Allowed: {4}</MX_Mingyuan_Shield_TipRefill>
+  <MX_Mingyuan_Shield_TipOverburnDrain>Overburn drain: {0}. While active, reserve loses {1} every 5s. Next drain in {2}s.</MX_Mingyuan_Shield_TipOverburnDrain>
   <MX_Mingyuan_BurningPillar_Inspect>Radius: {0}
 Core stability: {1}/{2}
 Remaining: {3}s
@@ -28,6 +29,6 @@ Buildings: 33% max HP per pulse</MX_Mingyuan_BurningPillar_Inspect>
   <MX_Mingyuan_BurningPillar_StopDesc>Stop the burning core at its current position.</MX_Mingyuan_BurningPillar_StopDesc>
   <MX_Mingyuan_BurningPillar_InvalidDestination>Invalid burning pillar destination.</MX_Mingyuan_BurningPillar_InvalidDestination>
   <MX_Mingyuan_BurningPillar_NoValidCell>No valid cell for Burning Pillar.</MX_Mingyuan_BurningPillar_NoValidCell>
-  <MX_Mingyuan_AshesOfSelf_InsufficientCost>Mingyuan lacks shield energy or safe blood to ignite Ashes of Self.</MX_Mingyuan_AshesOfSelf_InsufficientCost>
+  <MX_Mingyuan_AshesOfSelf_InsufficientCost>Mingyuan cannot safely spend 50% blood to ignite Ashes of Self.</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>Ashes field: radius {0}, burn damage {1}, Life Burn +{2}, remaining {3}s</MX_Mingyuan_AshesField_Inspect>
 </LanguageData>

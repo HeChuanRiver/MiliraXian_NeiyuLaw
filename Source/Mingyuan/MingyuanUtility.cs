@@ -79,11 +79,16 @@ namespace MiliraXian.Characters.Mingyuan
             return hediff;
         }
 
-        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true)
+        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false)
         {
             if (target == null || layers <= 0f || target.Dead || IsLifeBurnImmunePawn(target))
             {
                 return;
+            }
+
+            if (scaleWithOverburn)
+            {
+                layers *= GetOverburnLifeBurnFactor(instigator);
             }
 
             Hediff hediff = EnsureHediff(target, LifeBurnDef, layers);
@@ -101,6 +106,44 @@ namespace MiliraXian.Characters.Mingyuan
             Hediff hediff = EnsureHediff(pawn, SelfBurnDef, layers);
             HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
             comp?.NotifySelfBurnStack(refreshDecayTimer, showMote);
+        }
+
+        public static Hediff EnsureSelfBurnTracker(Pawn pawn)
+        {
+            if (pawn?.health == null || pawn.Dead || SelfBurnDef == null)
+            {
+                return null;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(SelfBurnDef);
+            if (hediff != null)
+            {
+                return hediff;
+            }
+
+            hediff = HediffMaker.MakeHediff(SelfBurnDef, pawn);
+            hediff.Severity = 0f;
+            pawn.health.AddHediff(hediff);
+            return hediff;
+        }
+
+        public static float ReduceSelfBurn(Pawn pawn, float layers)
+        {
+            if (pawn?.health == null || layers <= 0f)
+            {
+                return 0f;
+            }
+
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(SelfBurnDef);
+            if (hediff == null || hediff.Severity <= 0f)
+            {
+                return 0f;
+            }
+
+            float reduced = Mathf.Min(layers, hediff.Severity);
+            hediff.Severity = Mathf.Max(0f, hediff.Severity - reduced);
+            pawn.health.Notify_HediffChanged(hediff);
+            return reduced;
         }
 
         public static float GetLifeBurnLayers(Pawn pawn)
@@ -130,6 +173,47 @@ namespace MiliraXian.Characters.Mingyuan
             HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
             float cap = comp?.PropsSelfBurn.effectiveBonusCap ?? DefaultSelfBurnEffectiveCap;
             return Mathf.Min(layers, Mathf.Max(0f, cap));
+        }
+
+        public static float GetSelfBurnOverburnThreshold(Pawn pawn)
+        {
+            Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef);
+            HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
+            return comp?.PropsSelfBurn.overburnThreshold ?? DefaultSelfBurnEffectiveCap;
+        }
+
+        public static bool IsOverburning(Pawn pawn)
+        {
+            return GetSelfBurnLayers(pawn) > GetSelfBurnOverburnThreshold(pawn);
+        }
+
+        public static float GetOverburnLayers(Pawn pawn)
+        {
+            return Mathf.Max(0f, GetSelfBurnLayers(pawn) - GetSelfBurnOverburnThreshold(pawn));
+        }
+
+        public static float GetOverburnDamageFactor(Pawn pawn)
+        {
+            if (!IsOverburning(pawn))
+            {
+                return 1f;
+            }
+
+            Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef);
+            HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
+            return Mathf.Max(1f, comp?.PropsSelfBurn.overburnDamageFactor ?? 2f);
+        }
+
+        public static float GetOverburnLifeBurnFactor(Pawn pawn)
+        {
+            if (!IsOverburning(pawn))
+            {
+                return 1f;
+            }
+
+            Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef);
+            HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
+            return Mathf.Max(1f, comp?.PropsSelfBurn.overburnLifeBurnFactor ?? 2f);
         }
 
         public static float GetLifeBurnBonusStep(Pawn pawn)
@@ -163,6 +247,7 @@ namespace MiliraXian.Characters.Mingyuan
             if (scaleWithSelfBurn)
             {
                 amount *= GetSelfBurnSkillDamageFactor(instigator);
+                amount *= GetOverburnDamageFactor(instigator);
             }
 
             DamageInfo dinfo = new DamageInfo(damageDef ?? DamageDefOf.Burn, amount, 999f, -1f, instigator, hitPart);

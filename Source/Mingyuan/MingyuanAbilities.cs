@@ -216,7 +216,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
 
                 MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.pathDamage, caster, scaleWithSelfBurn: true);
-                MingyuanUtility.AddLifeBurn(pawn, caster, Props.lifeBurnLayers);
+                MingyuanUtility.AddLifeBurn(pawn, caster, Props.lifeBurnLayers, scaleWithOverburn: true);
                 if (!pawn.Dead && pawn.Spawned)
                 {
                     pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
@@ -857,12 +857,6 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool ConsumeCost(Pawn caster)
         {
-            HediffComp_MingyuanProtectiveFlameShield shield = (caster.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)?.GetComp<HediffComp_MingyuanProtectiveFlameShield>();
-            if (shield != null && shield.TryConsumeAllEnergy())
-            {
-                return true;
-            }
-
             if (caster.RaceProps?.IsFlesh != true || caster.WouldDieFromAdditionalBloodLoss(Props.bloodLossCost))
             {
                 return false;

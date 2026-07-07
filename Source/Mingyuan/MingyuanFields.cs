@@ -400,7 +400,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, burnDamage, caster, scaleWithSelfBurn: true);
             MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Cut, cutDamage, caster, scaleWithSelfBurn: true);
-            MingyuanUtility.AddLifeBurn(pawn, caster, Mathf.Max(0f, burnDamage * PropsTornado.lifeBurnLayersPerBurnDamage));
+            MingyuanUtility.AddLifeBurn(pawn, caster, Mathf.Max(0f, burnDamage * PropsTornado.lifeBurnLayersPerBurnDamage), scaleWithOverburn: true);
         }
 
         private void HandleBuilding(Thing building)
@@ -767,7 +767,7 @@ namespace MiliraXian.Characters.Mingyuan
             float layers = PropsField.lifeBurnLayers + (selfBurn / 100f) * PropsField.selfBurnLifeBurnPer100;
 
             MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, damage, caster);
-            MingyuanUtility.AddLifeBurn(pawn, caster, layers);
+            MingyuanUtility.AddLifeBurn(pawn, caster, layers, scaleWithOverburn: true);
             TrySpawnHitMote(pawn, ref spawnedHitMotes);
             if (PropsField.scalesWithSelfBurn)
             {

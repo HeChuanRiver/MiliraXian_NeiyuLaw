@@ -43,21 +43,14 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            HediffComp_MingyuanProtectiveFlameShield shield = (__instance.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)?.GetComp<HediffComp_MingyuanProtectiveFlameShield>();
-            if (MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
+            if (body != null && MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
             {
                 absorbed = true;
-                shield?.AddEnergy(dinfo.Amount * (body?.PropsBody.heatShieldEnergyFactor ?? 0.25f));
                 MingyuanUtility.RestorePawnToBestCondition(__instance, true);
                 return;
             }
 
-            if (absorbed)
-            {
-                return;
-            }
-
-            shield?.TryAbsorb(ref dinfo, ref absorbed);
+            return;
         }
     }
 
@@ -93,7 +86,7 @@ namespace MiliraXian.Characters.Mingyuan
             float baseLayers = ranged ? RangedLifeBurnLayers : MeleeLifeBurnLayers;
             float bonusLayers = step * (ranged ? RangedSelfBurnBonusPer100 : MeleeSelfBurnBonusPer100);
             float layers = baseLayers + bonusLayers;
-            MingyuanUtility.AddLifeBurn(target, instigator, layers);
+            MingyuanUtility.AddLifeBurn(target, instigator, layers, scaleWithOverburn: true);
         }
     }
 
@@ -145,6 +138,16 @@ namespace MiliraXian.Characters.Mingyuan
             return Mathf.Max(0.05f, 1f - (lifeBurn / 100f) * 0.01f);
         }
 
+        public static float PenaltyIncreaseFactor(float lifeBurn)
+        {
+            if (lifeBurn <= 0f)
+            {
+                return 1f;
+            }
+
+            return 1f + Mathf.Min(0.95f, (lifeBurn / 100f) * 0.01f);
+        }
+
         public static HediffComp_MingyuanLifeBurn GetLifeBurnComp(Pawn pawn)
         {
             if (MingyuanUtility.IsLifeBurnImmunePawn(pawn))
@@ -168,22 +171,32 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            float lifeBurn = MingyuanUtility.GetLifeBurnLayers(pawn);
-            if (lifeBurn > 0f)
+            bool lifeBurnStat = IsLifeBurnReducedStat(stat) || IsLifeBurnIncreasedStat(stat);
+            bool selfBurnStat = IsSelfBurnStat(stat);
+            if (!lifeBurnStat && !selfBurnStat)
             {
-                float per100 = lifeBurn / 100f;
-                if (stat == StatDefOf.MoveSpeed
-                    || stat == StatDefOf.MeleeHitChance
-                    || stat == StatDefOf.ShootingAccuracyPawn
-                    || stat == StatDefOf.WorkSpeedGlobal
-                    || stat == StatDefOf.RangedWeapon_DamageMultiplier)
+                return;
+            }
+
+            if (lifeBurnStat)
+            {
+                float lifeBurn = MingyuanUtility.GetLifeBurnLayers(pawn);
+                if (lifeBurn > 0f)
                 {
-                    __result *= MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn);
+                    if (IsLifeBurnReducedStat(stat))
+                    {
+                        __result *= MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn);
+                    }
+                    else
+                    {
+                        __result *= MingyuanLifeBurnPatchUtility.PenaltyIncreaseFactor(lifeBurn);
+                    }
                 }
-                else if (stat == StatDefOf.IncomingDamageFactor || stat == StatDefOf.MeleeCooldownFactor || stat == StatDefOf.RangedCooldownFactor)
-                {
-                    __result *= 1f + per100 * 0.01f;
-                }
+            }
+
+            if (!selfBurnStat)
+            {
+                return;
             }
 
             float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(pawn);
@@ -205,6 +218,31 @@ namespace MiliraXian.Characters.Mingyuan
                 __result /= 1f + selfBurn * 0.01f;
             }
         }
+
+        private static bool IsLifeBurnReducedStat(StatDef stat)
+        {
+            return stat == StatDefOf.MoveSpeed
+                   || stat == StatDefOf.MeleeHitChance
+                   || stat == StatDefOf.ShootingAccuracyPawn
+                   || stat == StatDefOf.WorkSpeedGlobal
+                   || stat == StatDefOf.RangedWeapon_DamageMultiplier;
+        }
+
+        private static bool IsLifeBurnIncreasedStat(StatDef stat)
+        {
+            return stat == StatDefOf.IncomingDamageFactor
+                   || stat == StatDefOf.MeleeCooldownFactor
+                   || stat == StatDefOf.RangedCooldownFactor;
+        }
+
+        private static bool IsSelfBurnStat(StatDef stat)
+        {
+            return stat == StatDefOf.MoveSpeed
+                   || stat == StatDefOf.WorkSpeedGlobal
+                   || stat == StatDefOf.RangedWeapon_DamageMultiplier
+                   || stat == StatDefOf.MeleeCooldownFactor
+                   || stat == StatDefOf.RangedCooldownFactor;
+        }
     }
 
     [HarmonyPatch(typeof(VerbProperties), nameof(VerbProperties.AdjustedMeleeDamageAmount), new Type[] { typeof(Tool), typeof(Pawn), typeof(Thing), typeof(HediffComp_VerbGiver) })]
@@ -224,6 +262,8 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 __result *= 1f + selfBurn * 0.01f;
             }
+
+            __result *= MingyuanUtility.GetOverburnDamageFactor(attacker);
         }
     }
 
@@ -258,6 +298,12 @@ namespace MiliraXian.Characters.Mingyuan
             if (selfBurn > 0f)
             {
                 __result = Mathf.Max(1, Mathf.RoundToInt(__result * (1f + selfBurn * 0.01f)));
+            }
+
+            float overburnFactor = MingyuanUtility.GetOverburnDamageFactor(ownerPawn);
+            if (overburnFactor > 1f)
+            {
+                __result = Mathf.Max(1, Mathf.RoundToInt(__result * overburnFactor));
             }
         }
     }

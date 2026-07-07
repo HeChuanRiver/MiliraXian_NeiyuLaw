@@ -3,17 +3,18 @@
   <MX_Mingyuan_Enabled>已启用</MX_Mingyuan_Enabled>
   <MX_Mingyuan_Disabled>未启用</MX_Mingyuan_Disabled>
   <MX_Mingyuan_SelfBurn_LabelExtra>{0} 层</MX_Mingyuan_SelfBurn_LabelExtra>
+  <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} 层，过燃</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>当前自我燃烧：{0} 层</MX_Mingyuan_SelfBurn_TipCurrentLayers>
   <MX_Mingyuan_SelfBurn_TipEffectiveLayers>有效加成层数：{0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
-  <MX_Mingyuan_SelfBurn_TipBonuses>有效层数加成：伤害 +{0}，移速 +{1}，攻速 +{2}，全局工作速度 +{3}，护盾回复 +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipOverburn>过燃值：超过 {1} 的部分为 {0} 层。状态：{2}</MX_Mingyuan_SelfBurn_TipOverburn>
+  <MX_Mingyuan_SelfBurn_TipBonuses>有效层数加成：伤害 +{0}，移速 +{1}，攻速 +{2}，全局工作速度 +{3}</MX_Mingyuan_SelfBurn_TipBonuses>
   <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>异空间燃烧者加成：近战生命燃烧 +{0} 层，远程生命燃烧 +{1} 层</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
-  <MX_Mingyuan_SelfBurn_TipDecay>自然衰减：每 {0} tick -{1} 层；下次衰减剩余 {2} tick。</MX_Mingyuan_SelfBurn_TipDecay>
-  <MX_Mingyuan_Shield_TipStatus>护盾能量：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRegen>待结算 10 秒回复：+{0}；下次结算 {1} 秒后</MX_Mingyuan_Shield_TipRegen>
-  <MX_Mingyuan_Shield_TipAbsorb>吸收 &lt;= {0}、&gt;= {1} 与致命打击。每次吸收耗能：{2}。</MX_Mingyuan_Shield_TipAbsorb>
-  <MX_Mingyuan_Shield_TipReady>护盾就绪。</MX_Mingyuan_Shield_TipReady>
-  <MX_Mingyuan_Shield_TipBroken>护盾破碎；{0} 秒后重组。</MX_Mingyuan_Shield_TipBroken>
-  <MX_Mingyuan_Shield_TipNoCost>{0} 有效自我燃烧后免耗吸收：{1}</MX_Mingyuan_Shield_TipNoCost>
+  <MX_Mingyuan_SelfBurn_TipOverburnEffect>过燃：主动直接伤害 +{0}，主动生命燃烧叠层 +{1}；护盾储备不能再由自我燃烧补充。</MX_Mingyuan_SelfBurn_TipOverburnEffect>
+  <MX_Mingyuan_SelfBurn_TipRhythm>征召：每 {0} tick +{1}，最多自然恢复到 {2}。非征召：每 {3} tick -{4}。过燃：每 {3} tick -{5}。下次变化剩余 {6} tick。</MX_Mingyuan_SelfBurn_TipRhythm>
+  <MX_Mingyuan_Shield_TipStatus>修复储备：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
+  <MX_Mingyuan_Shield_TipRepair>每秒消耗 1 点储备，恢复一个缺失部位，或治疗一个部位上的全部非永久伤口。下次检查：{0} 秒后。</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRefill>自燃补盾检查：{0} 秒后。比例：{1} 自我燃烧 = 1 储备；每次最多消耗 {2}。补充冷却：{3} 秒。当前允许：{4}</MX_Mingyuan_Shield_TipRefill>
+  <MX_Mingyuan_Shield_TipOverburnDrain>过燃流失：{0}。过燃时每 5 秒失去 {1} 储备。下次流失：{2} 秒后。</MX_Mingyuan_Shield_TipOverburnDrain>
   <MX_Mingyuan_BurningPillar_Inspect>半径：{0}
 核心稳定：{1}/{2}
 剩余：{3} 秒
@@ -28,6 +29,6 @@
   <MX_Mingyuan_BurningPillar_StopDesc>让燃烧核心停在当前位置。</MX_Mingyuan_BurningPillar_StopDesc>
   <MX_Mingyuan_BurningPillar_InvalidDestination>燃烧之柱目的地无效。</MX_Mingyuan_BurningPillar_InvalidDestination>
   <MX_Mingyuan_BurningPillar_NoValidCell>燃烧之柱没有可用放置格。</MX_Mingyuan_BurningPillar_NoValidCell>
-  <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊没有足够护盾能量，或剩余血液不足以安全点燃焚我余烬。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
+  <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊无法安全消耗 50% 血液点燃焚我余烬。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>余烬领域：半径 {0}，灼伤 {1}，生命燃烧 +{2}，剩余 {3} 秒</MX_Mingyuan_AshesField_Inspect>
 </LanguageData>

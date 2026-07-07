@@ -186,6 +186,7 @@ namespace MiliraXian.Characters.Mingyuan
     public class GameComponent_MingyuanTimeBurn : GameComponent
     {
         private List<MingyuanTimeBurnRecord> records = new List<MingyuanTimeBurnRecord>();
+        private int nextProcessTick;
 
         public GameComponent_MingyuanTimeBurn(Game game)
         {
@@ -205,11 +206,13 @@ namespace MiliraXian.Characters.Mingyuan
                 if (record?.pawn == pawn)
                 {
                     record.Reset(pawn, caster, props, tick);
+                    nextProcessTick = tick;
                     return;
                 }
             }
 
             records.Add(new MingyuanTimeBurnRecord(pawn, caster, props, tick));
+            nextProcessTick = tick;
         }
 
         public override void GameComponentTick()
@@ -221,6 +224,12 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int tick = Find.TickManager.TicksGame;
+            if (nextProcessTick > tick)
+            {
+                return;
+            }
+
+            int nextDueTick = int.MaxValue;
             for (int i = records.Count - 1; i >= 0; i--)
             {
                 MingyuanTimeBurnRecord record = records[i];
@@ -245,6 +254,7 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (tick < record.nextAgeTick && tick < record.endTick)
                 {
+                    nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
                     continue;
                 }
 
@@ -263,17 +273,33 @@ namespace MiliraXian.Characters.Mingyuan
                 }
 
                 record.nextAgeTick = Mathf.Min(tick + Mathf.Max(1, record.tickIntervalTicks), record.endTick);
+                nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
             }
+
+            nextProcessTick = records.Count > 0 && nextDueTick != int.MaxValue ? Mathf.Max(tick + 1, nextDueTick) : 0;
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Collections.Look(ref records, "mingyuanTimeBurnRecords", LookMode.Deep);
+            Scribe_Values.Look(ref nextProcessTick, "nextProcessTick", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && records == null)
             {
                 records = new List<MingyuanTimeBurnRecord>();
             }
+        }
+
+        private static int NextDueTick(MingyuanTimeBurnRecord record)
+        {
+            if (record == null)
+            {
+                return int.MaxValue;
+            }
+
+            int nextAge = record.nextAgeTick > 0 ? record.nextAgeTick : record.endTick;
+            int nextMote = record.nextMoteTick > 0 ? record.nextMoteTick : record.endTick;
+            return Mathf.Min(record.endTick, Mathf.Min(nextAge, nextMote));
         }
 
         private static long CalculateAge(MingyuanTimeBurnRecord record, int tick)
