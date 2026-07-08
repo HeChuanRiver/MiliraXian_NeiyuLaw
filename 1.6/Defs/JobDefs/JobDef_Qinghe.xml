@@ -11,10 +11,9 @@
     <JobDef>
         <defName>MX_QH_TuneBell</defName>
         <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneBell</driverClass>
-        <reportString>正在荷池旁调谐花信铃。</reportString>
+        <reportString>正在调谐花信铃的乐律。</reportString>
         <casualInterruptible>true</casualInterruptible>
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
 
 </Defs>
-

@@ -12,12 +12,12 @@
     <endOnColonyMove>false</endOnColonyMove>
     <questNameRules>
       <rulesStrings>
-        <li>questName->花神庭</li>
+        <li>questName->来自百花的呼唤</li>
       </rulesStrings>
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->一份与清荷有关的荷池设计图已经浮出水面。接取任务后，你将能够在杂项分类中建造荷池。非清荷开局时，荷池建成后清荷会抵达殖民地；之后请将荷池所在的房间整理成观感看得过去的荷雨亭。荷雨亭安定后，你会获得1个失传的曲谱残片，可在艺创台解读。</li>
+        <li>questDescription->你得到了一份神秘的设计图，看起来像一间雅致的亭居。——接取后可建造特殊建筑：荷池（此为开启获取米莉拉角色拓展：清荷的支线任务）</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourt_AvailableQuest" />

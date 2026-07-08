@@ -5,7 +5,7 @@
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
         <!-- Lotus Rosalia -->
-        <label>清荷·莱莉娅</label>
+        <label>花神使</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -117,7 +117,7 @@
             </li>
             <li>
                 <skill>Construction</skill>
-                <range>6~6</range>
+                <range>16~16</range>
             </li>
             <li>
                 <skill>Mining</skill>
@@ -125,7 +125,7 @@
             </li>
             <li>
                 <skill>Cooking</skill>
-                <range>8~8</range>
+                <range>18~18</range>
             </li>
             <li>
                 <skill>Plants</skill>
@@ -137,7 +137,7 @@
             </li>
             <li>
                 <skill>Crafting</skill>
-                <range>8~8</range>
+                <range>18~18</range>
             </li>
             <li>
                 <skill>Artistic</skill>
@@ -153,7 +153,7 @@
             </li>
             <li>
                 <skill>Intellectual</skill>
-                <range>9~9</range>
+                <range>17~17</range>
             </li>
         </skills>
 

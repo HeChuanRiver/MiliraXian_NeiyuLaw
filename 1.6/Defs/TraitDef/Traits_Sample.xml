@@ -5,7 +5,7 @@
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>Neiyu Xian</label>
+        <label>霓羽仙</label>
         <description>"她爱着世人，她愿世间飘落霓裳花。"</description>
         <statOffsets></statOffsets>
         <statFactors>
@@ -36,7 +36,7 @@
     <degreeDatas>
       <li>
         <label>涓流长息</label>
-        <description>受到致命伤害或摧毁部件的伤害时，抵消此次伤害、修复自身所有损伤，同时进入短暂的无敌和心灵隐形状态，此2效果具有24小时冷却时间。——"梨花带雨，润物无声。"</description>
+        <description>"梨花带雨，润物无声。"（开启效果：花神之垂怜、涓流）</description>
       </li>
     </degreeDatas>
   </TraitDef>
@@ -45,7 +45,7 @@
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>水中仙</label>
+        <label>霓羽仙</label>
         <description>"出淤泥而不染，濯清涟而不妖。"</description>
       </li>
     </degreeDatas>
@@ -55,7 +55,7 @@
         <skill>Cooking</skill>
       </li>
       <li Class="AriandelLibrary.AL_LockSkill_Extension">
-        <skill>Plants</skill>
+        <skill>Artistic</skill>
         <level>20</level>
         <preventDecay>true</preventDecay>
       </li>

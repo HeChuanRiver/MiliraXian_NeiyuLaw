@@ -95,11 +95,11 @@
         <statBases>
             <Mass>1.2</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>2.0</ArmorRating_Sharp>
-            <ArmorRating_Blunt>2.0</ArmorRating_Blunt>
-            <ArmorRating_Heat>2.0</ArmorRating_Heat>
+            <ArmorRating_Sharp>1.0</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.15</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.0</ArmorRating_Heat>
             <Insulation_Cold>24</Insulation_Cold>
-            <Insulation_Heat>24</Insulation_Heat>
+            <Insulation_Heat>12</Insulation_Heat>
         </statBases>
         <apparel>
             <useWornGraphicMask>true</useWornGraphicMask>
@@ -129,8 +129,7 @@
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+25</CarryingCapacity>
-            <MeleeDodgeChance>10.0</MeleeDodgeChance>
-            <MoveSpeed>1.10</MoveSpeed>
+            <MeleeDodgeChance>12.0</MeleeDodgeChance>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -394,7 +393,7 @@
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
-            <ImmunityGainSpeed>0.45</ImmunityGainSpeed>
+            <ImmunityGainSpeed>0.8</ImmunityGainSpeed>
         </equippedStatOffsets>
     </ThingDef>
 </Defs>

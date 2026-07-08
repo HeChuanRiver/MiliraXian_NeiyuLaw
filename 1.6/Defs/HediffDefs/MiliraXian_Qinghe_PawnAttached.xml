@@ -32,7 +32,7 @@
     <HediffDef>
         <defName>MX_QH_MeditativeStillness</defName>
         <label>静思</label>
-        <description>隐藏 Hediff：记录清荷在荷池处冥想积累的静思值。</description>
+        <description>冥想或者读书可以积累静思，清荷进行艺术创作和手工制作都会基于当前积累的量消耗静思，并给予一定品质加成。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_MeditativeStillness</hediffClass>
         <defaultLabelColor>(0.48, 0.90, 0.58)</defaultLabelColor>
         <isBad>false</isBad>
@@ -69,7 +69,7 @@
         <label>涓流</label>
         <description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.54, 0.96, 0.76)</defaultLabelColor>
+        <defaultLabelColor>(0.64, 0.36, 0.76)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
@@ -111,7 +111,7 @@
 
     <HediffDef>
         <defName>MX_QH_AscentSlashInvulnerable</defName>
-        <label>剑势·绝影</label>
+        <label>伤害免疫（绝影）</label>
         <description>清荷施展剑势·绝影期间跃入空中，暂时免疫所有伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.6, 0.9, 1.0)</defaultLabelColor>
@@ -495,7 +495,7 @@
 
     <HediffDef>
         <defName>MX_QH_DivineFortune</defName>
-        <label>花神之恩泽</label>
+        <label>花神之褔泽</label>
         <description>隐藏 Hediff：统一数值代理层</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.8, 0.95, 0.8)</defaultLabelColor>
@@ -588,4 +588,3 @@
     </HediffDef>
 
 </Defs>
-

@@ -3,7 +3,7 @@
 
   <IncidentDef>
     <defName>MX_QH_FlowerCourtQuest</defName>
-    <label>花神庭</label>
+    <label>已获得设计图：荷池</label>
     <category>Misc</category>
     <targetTags>
       <li>Map_PlayerHome</li>
@@ -11,8 +11,8 @@
     <workerClass>MiliraXian.Characters.QingHe.IncidentWorker_QingheFlowerCourtQuest</workerClass>
     <questScriptDef>MX_QH_FlowerCourtQuestScript</questScriptDef>
     <baseChance>1.0</baseChance>
-    <letterLabel>花神庭</letterLabel>
-    <letterText>一份陌生而清雅的荷池设计图被送到了殖民地。纸页上没有署名，只在末尾留下一行浅淡的花痕，像是在等待一处足够安静的庭院。</letterText>
+    <letterLabel>已获得设计图</letterLabel>
+    <letterText>一份陌生的设计图被送到了殖民地。纸页上没有署名，只在末尾留下一行浅淡的花痕，像是在等待一处足够安静的庭院。</letterText>
   </IncidentDef>
 
 </Defs>

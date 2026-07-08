@@ -124,8 +124,8 @@
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>Not enough Flower Decree to cast Spirit Burst.</MX_QH_SpiritBurstMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_FlowerDanceMissingResource>Not enough Flower Decree to perform Flower Dance.</MX_QH_FlowerDanceMissingResource>
-  <MX_QH_FlowerDanceNotLearned>Flower Dance has not been learned.</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_FlowerDanceMissingResource>Not enough Flower Decree to perform Nishang Dance.</MX_QH_FlowerDanceMissingResource>
+  <MX_QH_FlowerDanceNotLearned>Nishang Dance has not been learned.</MX_QH_FlowerDanceNotLearned>
   <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
   <MX_QH_FlowerDanceLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_FlowerDanceLandingNoLineOfSight>
   <MX_QH_FlowerDanceInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_FlowerDanceInvalidLanding>
@@ -138,12 +138,12 @@
   <MX_QH_OpenFlowerCourt>Open Flower Court</MX_QH_OpenFlowerCourt>
   <MX_QH_LotusPondCannotReach>Qinghe cannot reach the lotus pond.</MX_QH_LotusPondCannotReach>
   <MX_QH_FlowerCourtMissing>Qinghe has not established the Flower Court.</MX_QH_FlowerCourtMissing>
-  <MX_QH_TuneFlowerBellRequiresWeapon>Tune Flower Bell (requires Four-Season Flower Bell equipped)</MX_QH_TuneFlowerBellRequiresWeapon>
+  <MX_QH_TuneFlowerBellRequiresWeapon>Tune Flower Bell (requires Flower Bell equipped)</MX_QH_TuneFlowerBellRequiresWeapon>
   <MX_QH_TuneFlowerBellOption>Tune Flower Bell: {0}</MX_QH_TuneFlowerBellOption>
   <MX_QH_CurrentSuffix> (current)</MX_QH_CurrentSuffix>
   <MX_QH_TuneFlowerBellNoWeapon>Qinghe has no Flower Bell to tune.</MX_QH_TuneFlowerBellNoWeapon>
   <MX_QH_FlowerBellBuildingDamageLabel>Siegebreak note</MX_QH_FlowerBellBuildingDamageLabel>
-  <MX_QH_FlowerBellBuildingDamageDesc>Toggle Four-Season Flower Bell's extra building damage. When enabled, it uses projectiles with 300% building damage factor; when disabled, 100%.</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_FlowerBellBuildingDamageDesc>Toggle Flower Bell's extra building damage. When enabled, it uses projectiles with 300% building damage factor; when disabled, 100%.</MX_QH_FlowerBellBuildingDamageDesc>
   <MX_QH_FlowerBellResonanceSpring>spring</MX_QH_FlowerBellResonanceSpring>
   <MX_QH_FlowerBellResonanceSummer>summer</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>autumn</MX_QH_FlowerBellResonanceAutumn>
@@ -176,7 +176,7 @@
   <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>
   <MX_QH_MusicScoreStatCategory>Qinghe musical intent</MX_QH_MusicScoreStatCategory>
   <MX_QH_SkillBookAcquiredLetterLabel>New score bound</MX_QH_SkillBookAcquiredLetterLabel>
-  <MX_QH_SkillBookAcquiredLetterText>A new score book was assembled: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;A pawn with Qinghe's skill category can study it to advance the corresponding score node.</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_SkillBookAcquiredLetterText>A new score book was assembled: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;When Qinghe studies it, she can learn or advance the corresponding score node.</MX_QH_SkillBookAcquiredLetterText>
   <MX_QH_Book_LostScore_Label>Lost Score</MX_QH_Book_LostScore_Label>
   <MX_QH_Book_LostScore_Desc>A score book preserving the long-lost pieces {0}. A matching skill tree can study it to advance those nodes.</MX_QH_Book_LostScore_Desc>
   <MX_QH_Book_FeihuaJueyu_Label>Feihua Jueyu</MX_QH_Book_FeihuaJueyu_Label>
@@ -194,7 +194,7 @@
   <MX_QH_Book_Yingyue_Label>Yingyue</MX_QH_Book_Yingyue_Label>
   <MX_QH_Book_Yingyue_Desc>A moon-reflection score. Studying it can increase the available charges of Divine Blessing.</MX_QH_Book_Yingyue_Desc>
   <MX_QH_Book_NishangDance_Label>Nishang Dance</MX_QH_Book_NishangDance_Label>
-  <MX_QH_Book_NishangDance_Desc>A dance score with layered sleeves and drifting light. Studying it can unlock Flower Dance.</MX_QH_Book_NishangDance_Desc>
+  <MX_QH_Book_NishangDance_Desc>A dance score with layered sleeves and drifting light. Studying it can unlock Nishang Dance.</MX_QH_Book_NishangDance_Desc>
   <MX_QH_Book_Jueying_Label>Jueying</MX_QH_Book_Jueying_Label>
   <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Sword Form: Jueying.</MX_QH_Book_Jueying_Desc>
   <MX_QH_Book_Luoshenfu_Label>Luoshen Fu</MX_QH_Book_Luoshenfu_Label>

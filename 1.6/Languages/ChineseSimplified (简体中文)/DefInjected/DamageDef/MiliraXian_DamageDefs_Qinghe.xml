@@ -7,6 +7,6 @@
   <MX_StatusEffectFearAccumulation.label>恐惧积累</MX_StatusEffectFearAccumulation.label>
   <MX_StatusEffectColdAccumulation.label>寒冷积累</MX_StatusEffectColdAccumulation.label>
   <MX_QH_NoteImpact.label>音击</MX_QH_NoteImpact.label>
-  <MX_QH_NoteImpact.deathMessage>{0}被花信铃音击倒了。</MX_QH_NoteImpact.deathMessage>
+  <MX_QH_NoteImpact.deathMessage>{0}被花信铃的声音击倒了。</MX_QH_NoteImpact.deathMessage>
   <MX_QH_NoteImpact_Building.label>破城音击</MX_QH_NoteImpact_Building.label>
 </LanguageData>

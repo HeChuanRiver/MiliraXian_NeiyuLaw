@@ -56,8 +56,8 @@
 
     <HediffDef>
         <defName>MX_QH_FlowerDance</defName>
-        <label>花舞</label>
-        <description>清荷进入花舞状态，移动速度、闪避与花令回复提升，花神之眷顾在受击后立即开始回充。</description>
+        <label>霓裳之舞</label>
+        <description>清荷进入起舞状态，移动速度、闪避与花令回复提升，护盾可在受击后立即开始回充。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.72, 0.92)</defaultLabelColor>
         <isBad>false</isBad>
@@ -70,13 +70,13 @@
             <li>
                 <statOffsets>
                     <MoveSpeed>0.35</MoveSpeed>
-                    <MeleeDodgeChance>0.20</MeleeDodgeChance>
+                    <MeleeDodgeChance>0.60</MeleeDodgeChance>
                 </statOffsets>
             </li>
         </stages>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>900</disappearsAfterTicks>
+                <disappearsAfterTicks>1800</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDance">

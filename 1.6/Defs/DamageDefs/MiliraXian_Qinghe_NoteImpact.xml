@@ -7,11 +7,11 @@
     <armorCategory>Sharp</armorCategory>
     <isRanged>true</isRanged>
     <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.DamageWorker_FlowerBellExplosion</workerClass>
-    <deathMessage>{0}被花信铃音击倒了。</deathMessage>
+    <deathMessage>{0}被花信铃的声音击倒了。</deathMessage>
     <hediff>PsychicInjury</hediff>
     <explosionCellFleck>BlastEMP</explosionCellFleck>
     <explosionColorCenter>(0.95, 0.78, 1.00, 0.85)</explosionColorCenter>
-    <explosionColorEdge>(0.55, 0.90, 1.00, 0.35)</explosionColorEdge>
+    <explosionColorEdge>(0.85, 0.30, 0.50, 0.15)</explosionColorEdge>
   </DamageDef>
 
   <DamageDef ParentName="MX_QH_NoteImpactBase">

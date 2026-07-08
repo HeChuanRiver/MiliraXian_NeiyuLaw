@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Tree_FlowerMandate.label>four-season flowers</MX_QH_Tree_FlowerMandate.label>
+  <MX_QH_Tree_FlowerMandate.description>No corner of the spring city is without flying flowers; in the Cold Food east wind, palace willows lean.</MX_QH_Tree_FlowerMandate.description>
+  <MX_QH_Tree_FlowerMandate.completionEffectLabel>Completion effect:</MX_QH_Tree_FlowerMandate.completionEffectLabel>
+  <MX_QH_Tree_FlowerMandate.completionEffectDescription>Flower Decree: Severance - empowers all three Flower Decree abilities, adding extra status effect buildup.</MX_QH_Tree_FlowerMandate.completionEffectDescription>
+  <MX_QH_Tree_DivineFortune.label>trickle melody</MX_QH_Tree_DivineFortune.label>
+  <MX_QH_Tree_DivineFortune.description>Placeholder for a short introduction.</MX_QH_Tree_DivineFortune.description>
+  <MX_QH_Tree_DivineFortune.completionEffectLabel>Completion effect:</MX_QH_Tree_DivineFortune.completionEffectLabel>
+  <MX_QH_Tree_DivineFortune.completionEffectDescription>Tempered Grace - when the shield takes heavy damage, extra protection triggers so a single hit cannot deal more than 20 shield damage.</MX_QH_Tree_DivineFortune.completionEffectDescription>
+  <MX_QH_Tree_FlowerDance.label>dancing melody</MX_QH_Tree_FlowerDance.label>
+  <MX_QH_Tree_FlowerDance.description>"Young nobles of Wuling vie to wrap her head; for one song, red silk beyond counting."</MX_QH_Tree_FlowerDance.description>
+  <MX_QH_Tree_FlowerMastery.label>hundred-flower jade tone</MX_QH_Tree_FlowerMastery.label>
+  <MX_QH_Tree_FlowerMastery.description>The true teachings of flowers, learned only after clear and quiet understanding.</MX_QH_Tree_FlowerMastery.description>
+</LanguageData>

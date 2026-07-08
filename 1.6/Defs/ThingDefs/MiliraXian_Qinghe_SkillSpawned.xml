@@ -191,12 +191,12 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_LunarMirrorShield">
                 <radius>4.0</radius>
-                <startingEnergy>160</startingEnergy>
+                <startingEnergy>300</startingEnergy>
                 <energyLossPerDamage>1.0</energyLossPerDamage>
-                <durationTicks>900</durationTicks>
+                <durationTicks>1200</durationTicks>
                 <fadeInTicks>30</fadeInTicks>
                 <fadeOutTicks>45</fadeOutTicks>
-                <breakOnEmp>true</breakOnEmp>
+                <breakOnEmp>false</breakOnEmp>
                 <interceptGroundProjectiles>true</interceptGroundProjectiles>
                 <interceptAirProjectiles>true</interceptAirProjectiles>
                 <interceptOutgoingProjectiles>false</interceptOutgoingProjectiles>
@@ -214,6 +214,3 @@
     </ThingDef>
 
 </Defs>
-
-
-

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉湧流</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>消耗1點花令，在目標地點喚出春泉湧流，短時間內治療範圍內的友方單位並附加春泉洗禮。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>消耗1點花令，在目標地點召喚出春泉，短時間內治療範圍內的友方單位並附加春泉洗禮效果。效果持續15秒。</MX_QH_SpringFlow.description>
   <MX_QH_SpiritBurst.label>斷魂</MX_QH_SpiritBurst.label>
-  <MX_QH_SpiritBurst.description>秋季飛花令。消耗1點花令，在目標地點奏出秋令音律，傷害並眩暈小範圍內的敵人。</MX_QH_SpiritBurst.description>
+  <MX_QH_SpiritBurst.description>消耗2點花令，演奏出強力聲波，對目標區域內的敵人造成傷害並使其眩暈。</MX_QH_SpiritBurst.description>
   <MX_QH_LunarMirror.label>霜月鏡</MX_QH_LunarMirror.label>
-  <MX_QH_LunarMirror.description>冬季飛花令。消耗1點花令，在目標地點召出冰雪般的護盾，短時間內攔截穿過範圍邊界的敵方投射物。</MX_QH_LunarMirror.description>
-  <MX_QH_FlowerDance.label>花舞</MX_QH_FlowerDance.label>
-  <MX_QH_FlowerDance.description>消耗1點花令，進入短時間的花舞狀態，提升移動速度、閃避與花令回復，並使花神之眷顧在受擊後立刻回充。</MX_QH_FlowerDance.description>
+  <MX_QH_LunarMirror.description>消耗2點花令，在目標地點召喚出冰雪般的護盾，短時間內攔截穿過範圍邊界的敵方投射物。護盾持續20秒，最多吸收300點傷害。</MX_QH_LunarMirror.description>
+  <MX_QH_FlowerDance.label>霓裳之舞</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>消耗3點花令，進入起舞狀態，提升移動速度、閃避與花令回復，並使花神之眷顧在受擊後立刻回充。持續1小時。</MX_QH_FlowerDance.description>
   <MX_QH_AscentSlash.label>劍勢·絕影</MX_QH_AscentSlash.label>
-  <MX_QH_AscentSlash.description>習得絕影後可使用的突進型決戰技。選擇清荷視線內的落點後，清荷躍起並俯衝到目標位置，對前方扇形範圍內的敵人與敵方建築造成傷害；對敵方建築造成雙倍傷害，對敵人造成流血積累、短暫眩暈並擊退，機械族改為漏電積累。動畫期間清荷免疫傷害。消耗花令。</MX_QH_AscentSlash.description>
+  <MX_QH_AscentSlash.description>從霓羽處習得的舞技。消耗1點花令，高高躍起，隨後衝向目標位置，對面前的扇形區域內敵人造成傷害和擊飛，此技能可對建築造成雙倍傷害。</MX_QH_AscentSlash.description>
   <MX_QH_LuoshenRibbon.label>洛神的緞帶</MX_QH_LuoshenRibbon.label>
   <MX_QH_LuoshenRibbon.description>習得洛神賦後可使用。選擇兩名清醒的人，以洛神的緞帶牽引彼此心意，大幅提升雙方互相的看法。</MX_QH_LuoshenRibbon.description>
 </LanguageData>

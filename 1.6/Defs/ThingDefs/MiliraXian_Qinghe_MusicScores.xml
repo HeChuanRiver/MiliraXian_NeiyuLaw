@@ -45,7 +45,7 @@
     <ThingDef>
         <defName>MX_QH_LostMusicScoreFragment</defName>
         <label>失传的曲谱残片</label>
-        <description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的清荷技能书。</description>
+        <description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的书。有几率获得失传的技能书（清荷专属）</description>
         <thingClass>ThingWithComps</thingClass>
         <category>Item</category>
         <tradeability>All</tradeability>
@@ -85,7 +85,7 @@
     <ThingDef>
         <defName>MX_QH_SkillBook</defName>
         <label>清荷技能书</label>
-        <description>记录旧曲谱的书。拥有清荷技能类别的小人阅读时可推进对应清荷技能节点；其他读者也可以像普通书一样阅读。</description>
+        <description>记录旧曲谱的书。清荷阅读时可学习对应技能节点；其他读者也可以像普通书一样阅读。</description>
         <thingClass>MiliraXian.Characters.Thing_MX_SkillBook</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
@@ -164,7 +164,7 @@
 
     <ThingDef>
         <defName>MX_QH_Book</defName>
-        <label>清荷书卷</label>
+        <label>荷雨亭曲艺</label>
         <description>清荷相关书卷。</description>
         <thingClass>MiliraXian.Characters.Thing_MX_CustomBook</thingClass>
         <category>Item</category>
@@ -251,10 +251,10 @@
 
     <RecipeDef>
         <defName>MX_QH_AssembleLostMusicScore</defName>
-        <label>拼合清荷曲谱</label>
-        <description>将失传的曲谱残片拼合成书卷。90%概率得到随机清荷技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</description>
+        <label>尝试修复失传的曲谱</label>
+        <description>将失传的曲谱残片整理成书卷。50%概率得到随机技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</description>
         <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_InterpretLostScorebook</workerClass>
-        <jobString>正在拼合清荷曲谱。</jobString>
+        <jobString>正在修复失传的曲谱。</jobString>
         <workAmount>300</workAmount>
         <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
         <workSkill>Artistic</workSkill>
@@ -270,7 +270,7 @@
                         <li>MX_QH_LostMusicScoreFragment</li>
                     </thingDefs>
                 </filter>
-                <count>3</count>
+                <count>1</count>
             </li>
         </ingredients>
         <fixedIngredientFilter>
@@ -285,7 +285,7 @@
                 </allowedPawnKinds>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Things.MX_InterpretLostScorebookExtension">
-                <skillBookChance>0.9</skillBookChance>
+                <skillBookChance>0.5</skillBookChance>
                 <plainBookDef>TextBook</plainBookDef>
             </li>
         </modExtensions>
@@ -294,10 +294,10 @@
 
     <RecipeDef>
         <defName>MX_QH_WriteLotusRainPavilionOpera</defName>
-        <label>撰写荷雨亭曲艺</label>
-        <description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率写成随机清荷技能书，否则写成《荷雨亭曲艺》。技能书有15%概率额外记录第二个不同技能。</description>
+        <label>撰写《荷雨亭曲艺》</label>
+        <description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率附有清荷的技能相关内容。</description>
         <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_WriteQingheCustomBook</workerClass>
-        <jobString>正在撰写荷雨亭曲艺。</jobString>
+        <jobString>正在撰写《荷雨亭曲艺》。</jobString>
         <workAmount>6000</workAmount>
         <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
         <workSkill>Artistic</workSkill>

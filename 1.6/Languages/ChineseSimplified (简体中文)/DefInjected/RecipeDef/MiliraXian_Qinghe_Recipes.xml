@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_AssembleLostMusicScore.label>拼合清荷曲谱</MX_QH_AssembleLostMusicScore.label>
-  <MX_QH_AssembleLostMusicScore.description>将失传的曲谱残片拼合成书卷。90%概率得到随机清荷技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</MX_QH_AssembleLostMusicScore.description>
-  <MX_QH_AssembleLostMusicScore.jobString>正在拼合清荷曲谱。</MX_QH_AssembleLostMusicScore.jobString>
-  <MX_QH_WriteLotusRainPavilionOpera.label>撰写荷雨亭曲艺</MX_QH_WriteLotusRainPavilionOpera.label>
-  <MX_QH_WriteLotusRainPavilionOpera.description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率写成随机清荷技能书，否则写成《荷雨亭曲艺》。技能书有15%概率额外记录第二个不同技能。</MX_QH_WriteLotusRainPavilionOpera.description>
-  <MX_QH_WriteLotusRainPavilionOpera.jobString>正在撰写荷雨亭曲艺。</MX_QH_WriteLotusRainPavilionOpera.jobString>
+  <MX_QH_AssembleLostMusicScore.label>尝试修复失传的曲谱</MX_QH_AssembleLostMusicScore.label>
+  <MX_QH_AssembleLostMusicScore.description>将失传的曲谱残片整理成书卷。50%概率得到随机技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</MX_QH_AssembleLostMusicScore.description>
+  <MX_QH_AssembleLostMusicScore.jobString>正在修复失传的曲谱。</MX_QH_AssembleLostMusicScore.jobString>
+  <MX_QH_WriteLotusRainPavilionOpera.label>撰写《荷雨亭曲艺》</MX_QH_WriteLotusRainPavilionOpera.label>
+  <MX_QH_WriteLotusRainPavilionOpera.description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率附有清荷的技能相关内容。</MX_QH_WriteLotusRainPavilionOpera.description>
+  <MX_QH_WriteLotusRainPavilionOpera.jobString>正在撰写《荷雨亭曲艺》。</MX_QH_WriteLotusRainPavilionOpera.jobString>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>荷雨亭曲艺：春水调</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>清荷记下荷雨初歇时的水声与轻拍。读到此卷时，仿佛能听见春水漫过石阶，细碎花影随声摇动。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>荷雨亭曲艺：花影记</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>

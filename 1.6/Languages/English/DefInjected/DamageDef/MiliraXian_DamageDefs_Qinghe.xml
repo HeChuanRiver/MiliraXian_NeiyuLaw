@@ -7,6 +7,6 @@
   <MX_StatusEffectFearAccumulation.label>fear accumulation</MX_StatusEffectFearAccumulation.label>
   <MX_StatusEffectColdAccumulation.label>cold accumulation</MX_StatusEffectColdAccumulation.label>
   <MX_QH_NoteImpact.label>note impact</MX_QH_NoteImpact.label>
-  <MX_QH_NoteImpact.deathMessage>{0} was struck down by the Flower Bell's note.</MX_QH_NoteImpact.deathMessage>
+  <MX_QH_NoteImpact.deathMessage>{0} was struck down by the Flower Bell's sound.</MX_QH_NoteImpact.deathMessage>
   <MX_QH_NoteImpact_Building.label>siegebreaking note impact</MX_QH_NoteImpact_Building.label>
 </LanguageData>

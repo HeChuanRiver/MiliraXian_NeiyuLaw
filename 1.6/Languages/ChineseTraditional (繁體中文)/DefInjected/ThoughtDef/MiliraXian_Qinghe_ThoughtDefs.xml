@@ -2,10 +2,10 @@
 <LanguageData>
   <MX_QH_LuoshenContractMaintained.stages.0.label>洛神契：相守</MX_QH_LuoshenContractMaintained.stages.0.label>
   <MX_QH_LuoshenContractMaintained.stages.0.description>與{PAWN_nameDef}在洛神的見證下結下了契約，和{PAWN_nameDef}在一起的感覺令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
-  <MX_QH_LuoshenContractMaintained.stages.1.label>洛水賦詩</MX_QH_LuoshenContractMaintained.stages.1.label>
-  <MX_QH_LuoshenContractMaintained.stages.1.description>洛水舊賦仍在心中迴響。即使無人同遊，清荷也能從這份曲意中獲得安寧。</MX_QH_LuoshenContractMaintained.stages.1.description>
+  <MX_QH_LuoshenContractMaintained.stages.1.label>洛水之儀</MX_QH_LuoshenContractMaintained.stages.1.label>
+  <MX_QH_LuoshenContractMaintained.stages.1.description>洛神的話語仍在心中迴響，我理應接受這份好意。</MX_QH_LuoshenContractMaintained.stages.1.description>
   <MX_QH_LuoshenContractBroken.stages.0.label>洛神契破碎 ({0})</MX_QH_LuoshenContractBroken.stages.0.label>
-  <MX_QH_LuoshenContractBroken.stages.0.description>我與{OTHERPAWN_nameDef}維繫的契約已經破碎，曾經共鳴的花語只餘空響。</MX_QH_LuoshenContractBroken.stages.0.description>
+  <MX_QH_LuoshenContractBroken.stages.0.description>我與{OTHERPAWN_nameDef}維繫的契約已經破碎，曾經共鳴的聲音只餘空響。</MX_QH_LuoshenContractBroken.stages.0.description>
   <MX_QH_LuoshenRibbonGrace.stages.0.label>洛神緞帶 ({0})</MX_QH_LuoshenRibbonGrace.stages.0.label>
   <MX_QH_LuoshenRibbonGrace.stages.0.description>洛神的緞帶曾牽起我與{OTHERPAWN_nameDef}之間的心意，這份溫柔仍在心中迴響。</MX_QH_LuoshenRibbonGrace.stages.0.description>
   <MX_QH_QingheInstrumentPerformance.stages.0.label>聽見清荷演奏</MX_QH_QingheInstrumentPerformance.stages.0.label>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_Node_SpringFlow.label>春泉</MX_QH_Node_SpringFlow.label>
-  <MX_QH_Node_SpringFlow.description>石間清泉依春時而動，潤物無聲而有形。——習得飛花令：春泉湧流</MX_QH_Node_SpringFlow.description>
+  <MX_QH_Node_SpringFlow.description>——習得飛花令：春泉湧流\n\n可召喚泉水持續治療區域內的友方目標</MX_QH_Node_SpringFlow.description>
   <MX_QH_Node_Chuanhun.label>破魂絕音</MX_QH_Node_Chuanhun.label>
-  <MX_QH_Node_Chuanhun.description>由《飛花絕語》解鎖。對遠距離目標地點產生音爆，眩暈範圍內目標並造成心靈傷害，並提升花令上限。</MX_QH_Node_Chuanhun.description>
+  <MX_QH_Node_Chuanhun.description>——習得飛花令：斷魂\n\n可發動超遠距離音爆，擊暈小範圍內的敵人並造成傷害（額外效果：花令的積累上限 +1）</MX_QH_Node_Chuanhun.description>
   <MX_QH_Node_Shuangyuejing.label>霜華</MX_QH_Node_Shuangyuejing.label>
-  <MX_QH_Node_Shuangyuejing.description>由《斷橋殘雪》解鎖。召喚圓形冰幕，凍結並吸收經過的敵對投射物，並提升花令上限。</MX_QH_Node_Shuangyuejing.description>
+  <MX_QH_Node_Shuangyuejing.description>——習得飛花令：霜月鏡\n\n可召喚一面護盾，攔截一段時間內經過的所有敵對投射物（額外效果：花令的積累上限 +1）</MX_QH_Node_Shuangyuejing.description>
   <MX_QH_Node_Gaoshan.label>剛峻之意</MX_QH_Node_Gaoshan.label>
-  <MX_QH_Node_Gaoshan.description>由《高山》解鎖。提高花神之眷顧的護盾容量。</MX_QH_Node_Gaoshan.description>
+  <MX_QH_Node_Gaoshan.description>——習得被動特性：令自身的護盾最大值 +150%。</MX_QH_Node_Gaoshan.description>
   <MX_QH_Node_Liushui.label>柔韌之意</MX_QH_Node_Liushui.label>
-  <MX_QH_Node_Liushui.description>由《流水》解鎖。提高花神之眷顧的回充速度。</MX_QH_Node_Liushui.description>
+  <MX_QH_Node_Liushui.description>——習得被動特性：令自身的護盾回復速率 +200%。</MX_QH_Node_Liushui.description>
   <MX_QH_Node_Chunjiang.label>風月之意</MX_QH_Node_Chunjiang.label>
-  <MX_QH_Node_Chunjiang.description>由《春江花月夜》解鎖。縮短花神之眷顧被擊碎後的失效延遲，使護盾更快重新回充。</MX_QH_Node_Chunjiang.description>
-  <MX_QH_Node_DivineGrace.label>神恩</MX_QH_Node_DivineGrace.label>
-  <MX_QH_Node_DivineGrace.description>清荷的精通節點。每一級代表清荷自身修行更進一步；具體效果由清荷的被動系統讀取並生效。</MX_QH_Node_DivineGrace.description>
+  <MX_QH_Node_Chunjiang.description>——習得被動特性：令護盾被擊破後的失效時間縮短至 2秒。</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_DivineGrace.label>花神之恩典</MX_QH_Node_DivineGrace.label>
+  <MX_QH_Node_DivineGrace.description>——習得可重複提升的被動特性，每級都可提升一定基礎屬性和護盾屬性、花令回復速度。</MX_QH_Node_DivineGrace.description>
   <MX_QH_Node_Yingyue.label>映月殘章</MX_QH_Node_Yingyue.label>
-  <MX_QH_Node_Yingyue.description>由《二泉映月》解鎖。花神之垂憐的可用次數充能提高。</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_Yingyue.description>——習得被動特性：令花神之垂憐的可積累次數 +1</MX_QH_Node_Yingyue.description>
   <MX_QH_Node_NishangDance.label>霓裳舞</MX_QH_Node_NishangDance.label>
-  <MX_QH_Node_NishangDance.description>由《霓裳羽衣舞》解鎖。——習得舞技：花舞</MX_QH_Node_NishangDance.description>
+  <MX_QH_Node_NishangDance.description>——習得舞技：霓裳之舞，可強化自身的移速、閃避率和護盾，令護盾能在受到傷害後立刻開始回復</MX_QH_Node_NishangDance.description>
   <MX_QH_Node_Jueying.label>劍勢·絕影</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>清荷與老師霓羽交流後領悟的全新舞技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。——習得舞技：劍勢·絕影，可對扇形範圍內的敵方建築造成雙倍傷害</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Jueying.description>清荷與老師霓羽交流後領悟的全新舞技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。——習得舞技：劍勢·絕影，可對扇形範圍內的敵方造成傷害，對建築造成雙倍傷害</MX_QH_Node_Jueying.description>
   <MX_QH_Node_Luoshenfu.label>洛水之儀</MX_QH_Node_Luoshenfu.label>
-  <MX_QH_Node_Luoshenfu.description>由《洛神賦》解鎖。——習得能力：洛神的緞帶</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_Luoshenfu.description>——習得主動能力：洛神的緞帶，可以大幅改善任意兩個殖民者之間的看法\n\n——習得被動特性：洛水之儀，提高自身的魅力和心情，如擁有配偶，還會建立心靈綁定</MX_QH_Node_Luoshenfu.description>
 </LanguageData>

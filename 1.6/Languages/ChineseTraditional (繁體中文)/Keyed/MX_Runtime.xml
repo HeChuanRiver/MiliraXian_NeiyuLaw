@@ -124,8 +124,8 @@
   <MX_QH_SpringFlowMissingResource>花令不足，無法施放春泉湧流。</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>花令不足，無法施放斷魂。</MX_QH_SpiritBurstMissingResource>
   <MX_QH_LunarMirrorMissingResource>花令不足，無法施放霜月鏡。</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_FlowerDanceMissingResource>花令不足，無法施展花舞。</MX_QH_FlowerDanceMissingResource>
-  <MX_QH_FlowerDanceNotLearned>尚未習得花舞。</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_FlowerDanceMissingResource>花令不足，無法施展霓裳之舞。</MX_QH_FlowerDanceMissingResource>
+  <MX_QH_FlowerDanceNotLearned>尚未習得霓裳之舞。</MX_QH_FlowerDanceNotLearned>
   <MX_QH_AscentSlashNotLearned>尚未習得絕影，無法使用劍勢·絕影。</MX_QH_AscentSlashNotLearned>
   <MX_QH_FlowerDanceLandingNoLineOfSight>劍勢·絕影的落點需要在清荷視線內。</MX_QH_FlowerDanceLandingNoLineOfSight>
   <MX_QH_FlowerDanceInvalidLanding>無法在該位置施展劍勢·絕影。</MX_QH_FlowerDanceInvalidLanding>
@@ -138,12 +138,12 @@
   <MX_QH_OpenFlowerCourt>打開花神庭</MX_QH_OpenFlowerCourt>
   <MX_QH_LotusPondCannotReach>清荷現在無法接近荷池。</MX_QH_LotusPondCannotReach>
   <MX_QH_FlowerCourtMissing>清荷尚未建立花神庭。</MX_QH_FlowerCourtMissing>
-  <MX_QH_TuneFlowerBellRequiresWeapon>調諧花信鈴（需要裝備四時花信鈴）</MX_QH_TuneFlowerBellRequiresWeapon>
+  <MX_QH_TuneFlowerBellRequiresWeapon>調諧花信鈴（需要裝備花信鈴）</MX_QH_TuneFlowerBellRequiresWeapon>
   <MX_QH_TuneFlowerBellOption>調諧花信鈴：{0}</MX_QH_TuneFlowerBellOption>
   <MX_QH_CurrentSuffix>（當前）</MX_QH_CurrentSuffix>
   <MX_QH_TuneFlowerBellNoWeapon>清荷沒有可調諧的花信鈴。</MX_QH_TuneFlowerBellNoWeapon>
   <MX_QH_FlowerBellBuildingDamageLabel>破城音</MX_QH_FlowerBellBuildingDamageLabel>
-  <MX_QH_FlowerBellBuildingDamageDesc>切換四時花信鈴對建築的額外傷害。開啟時使用建築傷害係數 300% 的投射物；關閉時為 100%。</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_FlowerBellBuildingDamageDesc>切換花信鈴對建築的額外傷害。開啟時使用建築傷害係數 300% 的投射物；關閉時為 100%。</MX_QH_FlowerBellBuildingDamageDesc>
   <MX_QH_FlowerBellResonanceSpring>春</MX_QH_FlowerBellResonanceSpring>
   <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
@@ -176,7 +176,7 @@
   <MX_QH_Parentheses>（{0}）</MX_QH_Parentheses>
   <MX_QH_MusicScoreStatCategory>清荷曲意</MX_QH_MusicScoreStatCategory>
   <MX_QH_SkillBookAcquiredLetterLabel>新曲譜入卷</MX_QH_SkillBookAcquiredLetterLabel>
-  <MX_QH_SkillBookAcquiredLetterText>裝訂出了一本新的曲譜書：《{0}》。&#10;&#10;擁有清荷技能類別的小人研讀它時，可推進對應曲譜節點。</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_SkillBookAcquiredLetterText>裝訂出了一本新的曲譜書：《{0}》。&#10;&#10;清荷研讀它時，可學習或推進對應曲譜節點。</MX_QH_SkillBookAcquiredLetterText>
   <MX_QH_Book_LostScore_Label>失傳的曲譜</MX_QH_Book_LostScore_Label>
   <MX_QH_Book_LostScore_Desc>記載了失傳已久的{0}曲目的曲譜。擁有對應技能樹的小人研讀後，可推進這些曲譜節點。</MX_QH_Book_LostScore_Desc>
   <MX_QH_Book_FeihuaJueyu_Label>飛花絕語</MX_QH_Book_FeihuaJueyu_Label>
@@ -194,7 +194,7 @@
   <MX_QH_Book_Yingyue_Label>映月</MX_QH_Book_Yingyue_Label>
   <MX_QH_Book_Yingyue_Desc>一卷月影清澈的曲譜。研讀後可提高花神之垂憐的可用次數。</MX_QH_Book_Yingyue_Desc>
   <MX_QH_Book_NishangDance_Label>霓裳之舞</MX_QH_Book_NishangDance_Label>
-  <MX_QH_Book_NishangDance_Desc>一卷衣袂流光的舞譜。研讀後可解鎖花舞狀態。</MX_QH_Book_NishangDance_Desc>
+  <MX_QH_Book_NishangDance_Desc>一卷衣袂流光的舞譜。研讀後可解鎖霓裳之舞。</MX_QH_Book_NishangDance_Desc>
   <MX_QH_Book_Jueying_Label>絕影</MX_QH_Book_Jueying_Label>
   <MX_QH_Book_Jueying_Desc>一卷動若流影的曲譜。研讀後可解鎖劍勢·絕影。</MX_QH_Book_Jueying_Desc>
   <MX_QH_Book_Luoshenfu_Label>洛神賦</MX_QH_Book_Luoshenfu_Label>

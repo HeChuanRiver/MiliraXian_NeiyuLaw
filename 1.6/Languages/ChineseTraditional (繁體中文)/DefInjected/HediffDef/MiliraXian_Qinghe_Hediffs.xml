@@ -5,12 +5,12 @@
   <MX_QH_FlowerDecree.comps.0.resourceLabel>花令</MX_QH_FlowerDecree.comps.0.resourceLabel>
   <MX_QH_FlowerDecree.comps.0.resourceDescription>清荷的充能型層數資源，用於釋放四時飛花令。</MX_QH_FlowerDecree.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>靜思</MX_QH_MeditativeStillness.label>
-  <MX_QH_MeditativeStillness.description>隱藏 Hediff：記錄清荷在荷池處冥想積累的靜思值。</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.description>冥想或者讀書可以積累靜思，清荷進行藝術創作和手工製作都會基於當前積累的量消耗靜思，並給予一定品質加成。</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>靜思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>清荷在荷池處冥想時積累的靜心沉澱。</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>和鳴</MX_QH_FlowerResonance.label>
   <MX_QH_FlowerResonance.description>隱藏 Hediff：角色技能資料</MX_QH_FlowerResonance.description>
-  <MX_QH_AscentSlashInvulnerable.label>劍勢·絕影</MX_QH_AscentSlashInvulnerable.label>
+  <MX_QH_AscentSlashInvulnerable.label>傷害免疫（絕影）</MX_QH_AscentSlashInvulnerable.label>
   <MX_QH_AscentSlashInvulnerable.description>清荷施展劍勢·絕影期間躍入空中，暫時免疫所有傷害。</MX_QH_AscentSlashInvulnerable.description>
   <MX_QH_DivineBlessing.label>花神之垂憐</MX_QH_DivineBlessing.label>
   <MX_QH_DivineBlessing.description>受到致命傷害或可能摧毀身體部件的傷害時，抵消此次傷害、修復自身所有損傷，同時獲得短暫無敵和持續10秒的心靈隱形。此效果每120秒只可觸發一次。</MX_QH_DivineBlessing.description>
@@ -18,7 +18,7 @@
   <MX_QH_DivineBlessingImmunity.description>受到花神的垂憐，暫時免疫所有傷害。</MX_QH_DivineBlessingImmunity.description>
   <MX_QH_DivineGrace.label>花神之恩典</MX_QH_DivineGrace.label>
   <MX_QH_DivineGrace.description>清荷精通修行的顯化。隨著花神之恩典等級提高，清荷的基礎能力會逐步增強。</MX_QH_DivineGrace.description>
-  <MX_QH_DivineFortune.label>花神之恩澤</MX_QH_DivineFortune.label>
+  <MX_QH_DivineFortune.label>花神之福澤</MX_QH_DivineFortune.label>
   <MX_QH_DivineFortune.description>隱藏 Hediff：統一數值代理層</MX_QH_DivineFortune.description>
   <MX_QH_DivineProtection.label>花神之眷顧</MX_QH_DivineProtection.label>
   <MX_QH_DivineProtection.description>清荷受到十二花神的保護，能自然產生一面抵擋傷害的護盾。\n\n護盾被擊碎時會失效10秒。</MX_QH_DivineProtection.description>
@@ -28,6 +28,6 @@
   <MX_QH_LuoshenContract.description>隱藏狀態：記錄清荷與配偶之間的洛神契綁定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕&lt;/color&gt;。</MX_QH_SpringFlow.description>
-  <MX_QH_FlowerDance.label>花舞</MX_QH_FlowerDance.label>
-  <MX_QH_FlowerDance.description>清荷進入花舞狀態，移動速度、閃避與花令回復提升，花神之眷顧在受擊後立即開始回充。</MX_QH_FlowerDance.description>
+  <MX_QH_FlowerDance.label>霓裳之舞</MX_QH_FlowerDance.label>
+  <MX_QH_FlowerDance.description>清荷進入起舞狀態，移動速度、閃避與花令回復提升，護盾可在受擊後立即開始回充。</MX_QH_FlowerDance.description>
 </LanguageData>

@@ -11,8 +11,8 @@
                 <baseMoodEffect>16</baseMoodEffect>
             </li>
             <li>
-                <label>洛水赋诗</label>
-                <description>洛水旧赋仍在心中回响。即使无人同游，清荷也能从这份曲意中获得安宁。</description>
+                <label>洛水之仪</label>
+                <description>洛神的话语仍在心中回响，我理应接受这份好意。</description>
                 <baseMoodEffect>8</baseMoodEffect>
             </li>
         </stages>
@@ -26,7 +26,7 @@
         <stages>
             <li>
                 <label>洛神契破碎 ({0})</label>
-                <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的花语只余空响。</description>
+                <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的声音只余空响。</description>
                 <baseMoodEffect>-24</baseMoodEffect>
             </li>
         </stages>
