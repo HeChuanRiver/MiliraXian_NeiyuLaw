@@ -50,6 +50,18 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             stillness.AddStillness(gain);
         }
 
+        public static void AddMeditativeStillnessFromReading(Pawn pawn, int delta, float roomBonusFactor)
+        {
+            HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
+            if (stillness == null || delta <= 0)
+            {
+                return;
+            }
+
+            float gain = stillness.PropsStillness.baseGainPerDay / 60000f * delta * Mathf.Max(0.1f, roomBonusFactor);
+            stillness.AddStillness(gain);
+        }
+
         public static void ApplyMeditativeStillnessQualityBonus(Pawn pawn, ref QualityCategory quality)
         {
             HediffComp_MeditativeStillness stillness = GetHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
@@ -65,6 +77,34 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return GetHediffComp<HediffComp_DivineFortune>(pawn, MX_QHDefOf.MX_QH_DivineFortune);
         }
 
+        public static void SyncDivineGrace(Pawn pawn, HediffComp_SkillTreeState state = null)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_DivineGrace == null)
+            {
+                return;
+            }
+
+            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_DivineGrace;
+            int level = (state ?? GetFlowerResonance(pawn))?.GetNodeLevel(node) ?? 0;
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineGrace);
+            if (level <= 0)
+            {
+                if (hediff != null)
+                {
+                    pawn.health.RemoveHediff(hediff);
+                }
+                return;
+            }
+
+            if (hediff == null)
+            {
+                hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_DivineGrace, pawn);
+                pawn.health.AddHediff(hediff);
+            }
+
+            (hediff as HediffWithComps)?.GetComp<HediffComp_DivineGrace>()?.SetLevel(level, node?.MaxLevel ?? 24);
+        }
+
         public static void EnsureCoreHediffs(Pawn pawn)
         {
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineBlessing);
@@ -74,6 +114,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureFlowerResonance(pawn);
             EnsureFlowerDecree(pawn);
             EnsureMeditativeStillness(pawn);
+            SyncDivineGrace(pawn);
 
             GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();
         }

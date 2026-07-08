@@ -25,6 +25,9 @@ namespace MiliraXian.Characters
         public Vector3 fullAccumulationTextOffset = Vector3.zero;
         public Color fullAccumulationTextColor = Color.white;
         public float fullAccumulationTextDuration = 1.2f;
+        public ThingDef fullAccumulationMoteDef;
+        public Vector3 fullAccumulationMoteOffset = new Vector3(0f, 0f, 0.85f);
+        public float fullAccumulationMoteScale = 1f;
 
         public HediffCompProperties_Accumulation()
         {
@@ -123,6 +126,7 @@ namespace MiliraXian.Characters
             ApplyFullDamage(target);
             ApplyEffectHediff(target);
             ThrowFullAccumulationText(target);
+            ThrowFullAccumulationMote(target);
             if (PropsAccumulation.removeOnFullAccumulation && target.health.hediffSet.hediffs.Contains(parent))
             {
                 target.health.RemoveHediff(parent);
@@ -167,6 +171,20 @@ namespace MiliraXian.Characters
             }
 
             MoteMaker.ThrowText(target.DrawPos + PropsAccumulation.fullAccumulationTextOffset, target.MapHeld, PropsAccumulation.fullAccumulationText, PropsAccumulation.fullAccumulationTextColor, PropsAccumulation.fullAccumulationTextDuration);
+        }
+
+        private void ThrowFullAccumulationMote(Pawn target)
+        {
+            if (PropsAccumulation.fullAccumulationMoteDef == null || target == null || !target.Spawned || target.MapHeld == null)
+            {
+                return;
+            }
+
+            MoteMaker.MakeAttachedOverlay(
+                target,
+                PropsAccumulation.fullAccumulationMoteDef,
+                PropsAccumulation.fullAccumulationMoteOffset,
+                Mathf.Max(0.01f, PropsAccumulation.fullAccumulationMoteScale));
         }
 
         private void MaintainProgressBarMote()

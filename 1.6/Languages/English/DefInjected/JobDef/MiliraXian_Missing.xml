@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <CastSpringFlow.reportString>casting Spring Flow</CastSpringFlow.reportString>
-  <CastTempestDrain.reportString>casting Tempest Drain</CastTempestDrain.reportString>
-  <MX_Qinghe_Elegance_CastAbility_HengZhi.reportString>casting Cross-Pluck</MX_Qinghe_Elegance_CastAbility_HengZhi.reportString>
-  <MX_Qinghe_Elegance_CastAbility_DuanHun.reportString>casting Soulbreak</MX_Qinghe_Elegance_CastAbility_DuanHun.reportString>
-  <MX_Qinghe_Elegance_CastAbility_YangChun.reportString>casting Yangchun</MX_Qinghe_Elegance_CastAbility_YangChun.reportString>
   <MX_Zhaoli_CastAbility_Dingshu.reportString>casting Fixed Fate</MX_Zhaoli_CastAbility_Dingshu.reportString>
 </LanguageData>

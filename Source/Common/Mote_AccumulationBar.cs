@@ -13,10 +13,17 @@ namespace MiliraXian.Characters
 
         public float Progress { get; set; }
 
+        protected override void Tick()
+        {
+            base.Tick();
+            SyncMapPositionToAttachment();
+        }
+
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
             MX_AccumulationBarProperties props = def.GetModExtension<MX_AccumulationBarProperties>() ?? MX_AccumulationBarProperties.Default;
             UpdatePositionAndRotation();
+            SyncMapPositionToAttachment();
             if (Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active)
             {
                 return;
@@ -78,6 +85,20 @@ namespace MiliraXian.Characters
             Matrix4x4 matrix = default(Matrix4x4);
             matrix.SetTRS(iconCenter + Vector3.up * props.iconAltitudeOffset, Quaternion.identity, new Vector3(props.iconSize, 1f, props.iconSize));
             Graphics.DrawMesh(MeshPool.plane10, matrix, BuildMat(props.iconTexPath, props.iconShaderType, props.iconColor), 0);
+        }
+
+        private void SyncMapPositionToAttachment()
+        {
+            if (!Spawned || Map == null)
+            {
+                return;
+            }
+
+            IntVec3 cell = exactPosition.ToIntVec3();
+            if (cell.InBounds(Map))
+            {
+                Position = cell;
+            }
         }
 
         private static Material BuildMat(string texPath, ShaderTypeDef shaderType, Color color)

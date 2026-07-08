@@ -176,9 +176,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             Vector3 pos = owner.Drawer.DrawPos;
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-            pos += Visual.drawOffset;
+            Quaternion rotation = PawnBodyRenderRotation(owner);
+            pos += RotateDrawOffset(Visual.drawOffset, rotation);
 
-            DrawGlow(Visual.farGlow, pos, Visual.drawSize, drawAlpha, effectTime, 1f);
+            DrawGlow(Visual.farGlow, pos, Visual.drawSize, drawAlpha, effectTime, 1f, rotation);
 
             float hitGlowFactor = 0f;
             if (lastAbsorbTick >= 0)
@@ -190,7 +191,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     hitGlowFactor = Mathf.Clamp01(1f - elapsedTicks / (float)durationTicks);
                 }
             }
-            DrawGlow(Visual.hitGlow, pos, Visual.drawSize, drawAlpha, effectTime, hitGlowFactor);
+            DrawGlow(Visual.hitGlow, pos, Visual.drawSize, drawAlpha, effectTime, hitGlowFactor, rotation);
 
             MaterialPropertyBlock propertyBlock = MX_QHRenderStatics.SharedPropertyBlock;
             propertyBlock.Clear();
@@ -205,7 +206,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             Matrix4x4 matrix = Matrix4x4.TRS(
                 pos,
-                Quaternion.identity,
+                rotation,
                 new Vector3(Visual.drawSize.x, 1f, Visual.drawSize.y));
             Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0, null, 0, propertyBlock);
             propertyBlock.Clear();
@@ -225,7 +226,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return Mathf.Clamp01(1f - elapsed / decayTicks);
         }
 
-        private static void DrawGlow(DivineProtectionShieldGlowProperties glow, Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime, float factor)
+        private static void DrawGlow(DivineProtectionShieldGlowProperties glow, Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime, float factor, Quaternion rotation)
         {
             if (glow == null || factor <= 0.001f || glow.texPath.NullOrEmpty() || shieldAlpha <= 0.001f || glow.alpha <= 0.001f)
             {
@@ -250,11 +251,31 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             Vector2 drawSize = shieldDrawSize * Mathf.Max(0.01f, glow.sizeMultiplier);
             Matrix4x4 matrix = Matrix4x4.TRS(
-                pos + glow.drawOffset,
-                Quaternion.identity,
+                pos + RotateDrawOffset(glow.drawOffset, rotation),
+                rotation,
                 new Vector3(drawSize.x, 1f, drawSize.y));
 
             Graphics.DrawMesh(MeshPool.plane10, matrix, glowMat, 0);
+        }
+
+        private static Quaternion PawnBodyRenderRotation(Pawn pawn)
+        {
+            if (pawn?.Drawer?.renderer == null)
+            {
+                return Quaternion.identity;
+            }
+
+            return Quaternion.AngleAxis(pawn.Drawer.renderer.BodyAngle(PawnRenderFlags.None), Vector3.up);
+        }
+
+        private static Vector3 RotateDrawOffset(Vector3 offset, Quaternion rotation)
+        {
+            if (offset == Vector3.zero)
+            {
+                return Vector3.zero;
+            }
+
+            return rotation * offset;
         }
     }
 }

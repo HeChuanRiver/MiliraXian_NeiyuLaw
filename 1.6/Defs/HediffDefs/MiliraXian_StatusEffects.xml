@@ -16,6 +16,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectBleedBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectBleedBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectBleeding</effectHediff>
         <resistanceHediff>MX_StatusEffectBleedResistance</resistanceHediff>
         <effectDurationTicks>1200</effectDurationTicks>
@@ -67,6 +68,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectElectricLeakBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectElectricLeakBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectShortCircuit</effectHediff>
         <resistanceHediff>MX_StatusEffectElectricLeakResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
@@ -185,6 +187,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectToxinBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectToxinBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectVenom</effectHediff>
         <resistanceHediff>MX_StatusEffectToxinResistance</resistanceHediff>
         <effectDurationTicks>2400</effectDurationTicks>
@@ -219,6 +222,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectCorrosionBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectCorrosionBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectCorroded</effectHediff>
         <resistanceHediff>MX_StatusEffectCorrosionResistance</resistanceHediff>
         <effectDurationTicks>2500</effectDurationTicks>
@@ -336,6 +340,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectFearBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectFearBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectFeared</effectHediff>
         <resistanceHediff>MX_StatusEffectFearResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
@@ -371,6 +376,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectOverloadBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectOverloadBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectOverloaded</effectHediff>
         <resistanceHediff>MX_StatusEffectOverloadResistance</resistanceHediff>
         <effectDurationTicks>600</effectDurationTicks>
@@ -463,6 +469,7 @@
         <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
         <severityDecayPerTick>0.001</severityDecayPerTick>
         <progressBarMoteDef>MX_Mote_StatusEffectColdBar</progressBarMoteDef>
+        <fullAccumulationMoteDef>MX_Mote_StatusEffectColdBurstIcon</fullAccumulationMoteDef>
         <effectHediff>MX_StatusEffectFrozen</effectHediff>
         <resistanceHediff>MX_StatusEffectFreezeResistance</resistanceHediff>
         <effectDurationTicks>300</effectDurationTicks>

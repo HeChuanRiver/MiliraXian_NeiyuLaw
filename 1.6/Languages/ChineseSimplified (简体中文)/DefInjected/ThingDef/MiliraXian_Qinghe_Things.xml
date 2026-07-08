@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Qinghe_Form_Pipa.label>荷乐·琵琶</MX_Qinghe_Form_Pipa.label>
-  <MX_Qinghe_Form_Pipa.description>清荷的琵琶，擅长中距离连发压制。</MX_Qinghe_Form_Pipa.description>
-  <MX_Qinghe_Form_Zhudi.label>荷乐·竹笛</MX_Qinghe_Form_Zhudi.label>
-  <MX_Qinghe_Form_Zhudi.description>清荷的竹笛形兵装，擅长远距离精准点射。</MX_Qinghe_Form_Zhudi.description>
-  <MX_Qinghe_Form_Qin.label>清荷·琴形</MX_Qinghe_Form_Qin.label>
-  <MX_Qinghe_Form_Qin.description>清荷的琴形兵装，擅长近身斩击。</MX_Qinghe_Form_Qin.description>
-  <MX_Qinghe_Form_Qin.tools.0.label>弦刃</MX_Qinghe_Form_Qin.tools.0.label>
-  <MX_Bullet_Qinghe_PipaNote.label>清荷·琵琶音符</MX_Bullet_Qinghe_PipaNote.label>
-  <MX_Bullet_Qinghe_ZhudiNote.label>清荷·竹笛音束</MX_Bullet_Qinghe_ZhudiNote.label>
   <SpringFlowField.label>涌泉力场</SpringFlowField.label>
-  <TempestDrainField.label>扼流力场</TempestDrainField.label>
-  <MX_QH_Elegance_YangChunField.label>阳春音场</MX_QH_Elegance_YangChunField.label>
   <MX_QH_LotusPond.label>荷池</MX_QH_LotusPond.label>
   <MX_QH_LotusPond.description>清荷用于调谐四时共鸣的花神庭核心。清荷本人可以在这里与四时花神建立当前共鸣。</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>荷池只可分配给清荷。</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
@@ -21,6 +10,8 @@
   <MX_QH_SkillBook.description>记录旧曲谱的书。拥有清荷技能类别的小人阅读时可推进对应清荷技能节点；其他读者也可以像普通书一样阅读。</MX_QH_SkillBook.description>
   <MX_QH_Book.label>清荷书卷</MX_QH_Book.label>
   <MX_QH_Book.description>清荷相关书卷。</MX_QH_Book.description>
+  <MX_QH_UnfinishedLotusRainPavilionOpera.label>未完成的荷雨亭曲艺</MX_QH_UnfinishedLotusRainPavilionOpera.label>
+  <MX_QH_UnfinishedLotusRainPavilionOpera.description>尚未完成的荷雨亭曲艺手稿。</MX_QH_UnfinishedLotusRainPavilionOpera.description>
   <MX_QH_Weapon_FlowerBell.label>四时花信铃</MX_QH_Weapon_FlowerBell.label>
   <MX_QH_Weapon_FlowerBell.description>清荷以花神之力凝聚的铃形兵装，可在荷池处调谐四时共鸣。</MX_QH_Weapon_FlowerBell.description>
   <MX_Bullet_Qinghe_FlowerBell_Spring.label>春信铃音</MX_Bullet_Qinghe_FlowerBell_Spring.label>
@@ -33,6 +24,28 @@
   <MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>冬信破城铃音</MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>
   <MX_Bullet_QH_LunarMirrorRetaliation.label>腊梅反击铃音</MX_Bullet_QH_LunarMirrorRetaliation.label>
   <MX_QH_LunarMirror.label>腊梅护盾</MX_QH_LunarMirror.label>
-  <MX_QH_AscentSlashFlyer.label>花神闪飞行体</MX_QH_AscentSlashFlyer.label>
+  <MX_QH_AscentSlashFlyer.label>剑势·绝影飞行体</MX_QH_AscentSlashFlyer.label>
   <MX_QH_AscentSlashKnockbackFlyer.label>花神闪击退飞行体</MX_QH_AscentSlashKnockbackFlyer.label>
+  <MX_QH_Mote_SpiritBurstCurvedTrail.label>清荷特效</MX_QH_Mote_SpiritBurstCurvedTrail.label>
+  <MX_QH_Mote_FlowerDivinationBurst.label>清荷特效</MX_QH_Mote_FlowerDivinationBurst.label>
+  <MX_QH_Mote_FlowerDivinationBokeh.label>清荷特效</MX_QH_Mote_FlowerDivinationBokeh.label>
+  <MX_QH_Mote_FlowerDivinationFootRing.label>清荷特效</MX_QH_Mote_FlowerDivinationFootRing.label>
+  <MX_Mote_StatusEffectColdBar.label>Mote</MX_Mote_StatusEffectColdBar.label>
+  <MX_Mote_StatusEffectBleedBar.label>Mote</MX_Mote_StatusEffectBleedBar.label>
+  <MX_Mote_StatusEffectElectricLeakBar.label>Mote</MX_Mote_StatusEffectElectricLeakBar.label>
+  <MX_Mote_StatusEffectToxinBar.label>Mote</MX_Mote_StatusEffectToxinBar.label>
+  <MX_Mote_StatusEffectCorrosionBar.label>Mote</MX_Mote_StatusEffectCorrosionBar.label>
+  <MX_Mote_StatusEffectFearBar.label>Mote</MX_Mote_StatusEffectFearBar.label>
+  <MX_Mote_StatusEffectOverloadBar.label>Mote</MX_Mote_StatusEffectOverloadBar.label>
+  <MX_Mote_StatusEffectFreeze_A.label>Mote</MX_Mote_StatusEffectFreeze_A.label>
+  <MX_Mote_StatusEffectBleedBurstIcon.label>清荷特效</MX_Mote_StatusEffectBleedBurstIcon.label>
+  <MX_Mote_StatusEffectElectricLeakBurstIcon.label>清荷特效</MX_Mote_StatusEffectElectricLeakBurstIcon.label>
+  <MX_Mote_StatusEffectToxinBurstIcon.label>清荷特效</MX_Mote_StatusEffectToxinBurstIcon.label>
+  <MX_Mote_StatusEffectCorrosionBurstIcon.label>清荷特效</MX_Mote_StatusEffectCorrosionBurstIcon.label>
+  <MX_Mote_StatusEffectFearBurstIcon.label>清荷特效</MX_Mote_StatusEffectFearBurstIcon.label>
+  <MX_Mote_StatusEffectOverloadBurstIcon.label>清荷特效</MX_Mote_StatusEffectOverloadBurstIcon.label>
+  <MX_Mote_StatusEffectColdBurstIcon.label>清荷特效</MX_Mote_StatusEffectColdBurstIcon.label>
+  <MX_Mote_StatusEffectFearedIcon.label>Mote</MX_Mote_StatusEffectFearedIcon.label>
+  <MX_Mote_StatusEffectOverloadedIcon.label>Mote</MX_Mote_StatusEffectOverloadedIcon.label>
+  <MX_Mote_StatusEffectFreeze_B.label>Mote</MX_Mote_StatusEffectFreeze_B.label>
 </LanguageData>

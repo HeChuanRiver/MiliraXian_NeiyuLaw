@@ -9,7 +9,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 {
-    public class Widget_SkillTreeProgressDiamond : DiamondWidget_Base
+    public class Widget_SkillTree : DiamondWidget_Base
     {
         private const int TipSalt = 910209;
         private const float BorderThickness = 2f;
@@ -21,10 +21,9 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyFillColor = new Color(0.08f, 0.09f, 0.09f, 0.9f);
         private static readonly Color CenterBorderColor = new Color(0.50f, 0.52f, 0.52f, 1f);
-        private static readonly Color CenterOverlayColor = new Color(0.12f, 0.16f, 0.20f, 0.94f);
         private static readonly Color StillnessFillColor = new Color(0.44f, 0.92f, 0.58f, 1f);
 
-        public Widget_SkillTreeProgressDiamond(Pawn pawn, Rect localRect, TextAnchor alignment)
+        public Widget_SkillTree(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
         {
             this.pawn = pawn;
@@ -52,8 +51,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             {
                 Rect centerRect = CenteredSquare(innerRect, CenterOverlayScale);
                 DrawDiamond(centerRect.ExpandedBy(1f), MX_QHRenderStatics.DiamondSolidTex, CenterBorderColor * tint);
-                DrawDiamond(centerRect, MX_QHRenderStatics.DiamondSolidTex, CenterOverlayColor * tint);
-                DrawCenterLabel(rect, state.LearnedNodeCount.ToString(), Color.white * tint);
+                DrawDiamondOriginal(centerRect, MX_QHRenderStatics.DiamondSolidTex);
             }
 
             if (mouseOverDiamond)
@@ -64,22 +62,6 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             {
                 Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state));
             }
-        }
-
-        private static void DrawCenterLabel(Rect rect, string label, Color color)
-        {
-            GameFont oldFont = Text.Font;
-            TextAnchor oldAnchor = Text.Anchor;
-            Color oldColor = GUI.color;
-
-            Text.Font = GameFont.Tiny;
-            Text.Anchor = TextAnchor.MiddleCenter;
-            GUI.color = color;
-            Widgets.Label(rect, label);
-
-            GUI.color = oldColor;
-            Text.Anchor = oldAnchor;
-            Text.Font = oldFont;
         }
 
         private static float QuantizeFillPercent(float fillPercent)
@@ -113,5 +95,4 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         }
     }
 }
-
 

@@ -1,39 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Tempest.label>Tempest</MX_QH_Tempest.label>
-  <MX_QH_Tempest.description>Qinghe's special resource. It is accumulated by using skills and can be spent to offset damage or unleash powerful abilities.</MX_QH_Tempest.description>
-  <MX_QH_Tempest.comps.0.resourceLabel>Tempest</MX_QH_Tempest.comps.0.resourceLabel>
-  <MX_QH_Tempest.comps.0.resourceDescription>Qinghe's special resource. It is accumulated by using skills and can be spent to offset damage or unleash powerful abilities.</MX_QH_Tempest.comps.0.resourceDescription>
-  <MX_QH_Elegance.label>Elegance</MX_QH_Elegance.label>
-  <MX_QH_Elegance.description>Qinghe's special resource. It is accumulated through combat and skill use, empowering her abilities and increasing Tempest recovery.</MX_QH_Elegance.description>
-  <MX_QH_Elegance.comps.0.resourceLabel>Elegance</MX_QH_Elegance.comps.0.resourceLabel>
-  <MX_QH_Elegance.comps.0.resourceDescription>Qinghe's special resource. It is accumulated through combat and skill use, empowering her abilities and increasing Tempest recovery.</MX_QH_Elegance.comps.0.resourceDescription>
-  <MX_QH_LongBreath.label>Long Breath</MX_QH_LongBreath.label>
-  <MX_QH_LongBreath.description>When Qinghe would take fatal damage or body-part-destroying damage, if she has any Tempest, that damage is negated, all injuries are repaired, Tempest is cleared, and she gains brief invulnerability and psychic invisibility.</MX_QH_LongBreath.description>
-  <MX_QH_LongBreathDamageImmunity.label>Long Breath Surge</MX_QH_LongBreathDamageImmunity.label>
-  <MX_QH_LongBreathDamageImmunity.description>A brief damage immunity granted after Long Breath triggers.</MX_QH_LongBreathDamageImmunity.description>
-  <MX_QH_SpringRegen.label>Clear Flow</MX_QH_SpringRegen.label>
-  <MX_QH_SpringRegen.description>Automatically heals a small amount of injury every short interval.</MX_QH_SpringRegen.description>
-  <MX_QH_LotusShield.label>Flower-God Ward</MX_QH_LotusShield.label>
-  <MX_QH_LotusShield.description>Qinghe is blessed by the Twelve Flower Gods and naturally generates a recoverable shield around herself. Learned score nodes can increase its capacity, speed up regeneration, or add steadfast damage caps.\n\nOutside Flower Divination, taking shield damage briefly delays regeneration; during Flower Divination, the shield can regenerate immediately after taking damage. When the shield breaks, it is temporarily disabled.</MX_QH_LotusShield.description>
-  <MX_QH_QingheStatusGizmo.label>Qinghe Status Display</MX_QH_QingheStatusGizmo.label>
-  <MX_QH_QingheStatusGizmo.description>Hidden hediff used to display Qinghe's status gizmo.</MX_QH_QingheStatusGizmo.description>
-  <MX_QH_Elegance_YangChunAlly.label>Yangchun Harmony</MX_QH_Elegance_YangChunAlly.label>
-  <MX_QH_Elegance_YangChunAlly.description>Bathed in Yangchun's musical intent, steps and mind are tuned into harmony.</MX_QH_Elegance_YangChunAlly.description>
-  <MX_QH_Elegance_YangChunEnemy.label>Yangchun Suppression</MX_QH_Elegance_YangChunEnemy.label>
-  <MX_QH_Elegance_YangChunEnemy.description>Suppressed by the sound field; action rhythm is thrown into disorder.</MX_QH_Elegance_YangChunEnemy.description>
-  <MX_SpringFlow.label>Spring Flow Baptism</MX_SpringFlow.label>
-  <MX_SpringFlow.description>Blessed by Qinghe's Spring Flow, gaining improved offense, protection, and pain relief.</MX_SpringFlow.description>
-  <MX_AquaMirror.label>Mirror Bloom</MX_AquaMirror.label>
-  <MX_AquaMirror.description>Protected by Aqua Mirror. When the mirror disappears, it heals the bearer and retaliates against nearby enemies.</MX_AquaMirror.description>
-  <MX_Draining.label>Waterflow Severance</MX_Draining.label>
-  <MX_Draining.description>Internal fluids are forcibly drawn out. Without intervention, death by dehydration will soon follow.</MX_Draining.description>
-  <MX_DryCorpse.label>Dehydrated</MX_DryCorpse.label>
-  <MX_DryCorpse.description>A corpse drained of moisture. It will never rot or desiccate further, as if touched by some supernatural force.</MX_DryCorpse.description>
-  <MX_DehydrateDamage.label>Fluid Cycle Disorder</MX_DehydrateDamage.label>
-  <MX_DehydrateDamage.description>Some internal fluid behavior has been disrupted, causing circulatory failure or mechanical malfunction.</MX_DehydrateDamage.description>
-  <MX_QH_Desynced.label>Desynced</MX_QH_Desynced.label>
-  <MX_QH_Desynced.description>Resonance from Qinghe's instrument disrupts movement and aiming rhythm, greatly reducing movement speed and shooting accuracy.</MX_QH_Desynced.description>
   <MX_QH_FlowerDecree.label>Flower Decree</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>Hidden Hediff: resource counter.</MX_QH_FlowerDecree.description>
   <MX_QH_FlowerDecree.comps.0.resourceLabel>Flower Decree</MX_QH_FlowerDecree.comps.0.resourceLabel>
@@ -42,14 +8,16 @@
   <MX_QH_MeditativeStillness.description>Hidden Hediff: stores the stillness Qinghe accumulates while meditating at the lotus pond.</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>Stillness</MX_QH_MeditativeStillness.comps.0.resourceLabel>
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>Qinghe's meditative reserve, accumulated while meditating at the lotus pond.</MX_QH_MeditativeStillness.comps.0.resourceDescription>
-  <MX_QH_MeditativeStillness.comps.0.longNightLabel>MX_QH_LongNightStillnessLabel</MX_QH_MeditativeStillness.comps.0.longNightLabel>
-  <MX_QH_MeditativeStillness.comps.0.longNightDescription>MX_QH_LongNightStillnessDescription</MX_QH_MeditativeStillness.comps.0.longNightDescription>
   <MX_QH_FlowerResonance.label>Resonance</MX_QH_FlowerResonance.label>
   <MX_QH_FlowerResonance.description>Hidden Hediff: Qinghe skill data.</MX_QH_FlowerResonance.description>
+  <MX_QH_AscentSlashInvulnerable.label>Sword Form: Jueying</MX_QH_AscentSlashInvulnerable.label>
+  <MX_QH_AscentSlashInvulnerable.description>Qinghe is airborne during Sword Form: Jueying and temporarily immune to all damage.</MX_QH_AscentSlashInvulnerable.description>
   <MX_QH_DivineBlessing.label>Flower-God Mercy</MX_QH_DivineBlessing.label>
   <MX_QH_DivineBlessing.description>When Qinghe would take fatal damage or damage that could destroy a body part, negate the damage, repair all injuries, and gain brief invulnerability and 10 seconds of psychic invisibility. This effect can trigger once every 120 seconds.</MX_QH_DivineBlessing.description>
   <MX_QH_DivineBlessingImmunity.label>Divine Response</MX_QH_DivineBlessingImmunity.label>
   <MX_QH_DivineBlessingImmunity.description>Blessed by the Flower God, temporarily immune to all damage.</MX_QH_DivineBlessingImmunity.description>
+  <MX_QH_DivineGrace.label>Flower-God Benediction</MX_QH_DivineGrace.label>
+  <MX_QH_DivineGrace.description>The visible sign of Qinghe's mastery. As its level rises, Qinghe's base abilities improve.</MX_QH_DivineGrace.description>
   <MX_QH_DivineFortune.label>Flower-God Grace</MX_QH_DivineFortune.label>
   <MX_QH_DivineFortune.description>Hidden Hediff: unified Qinghe stat proxy.</MX_QH_DivineFortune.description>
   <MX_QH_DivineProtection.label>Flower-God Ward</MX_QH_DivineProtection.label>

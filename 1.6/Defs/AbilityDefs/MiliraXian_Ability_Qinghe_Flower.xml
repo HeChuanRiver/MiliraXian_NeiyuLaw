@@ -165,8 +165,8 @@
 
     <AbilityDef>
         <defName>MX_QH_AscentSlash</defName>
-        <label>舞踏</label>
-        <description>习得绝影后可使用的突进型决战技。先选择清荷视线内的闪现落点，再选择落点可见的打击方向；清荷闪现到落点后，对指定方向扇形范围内的敌人造成伤害、短暂眩晕并击退。消耗花令。</description>
+        <label>剑势·绝影</label>
+        <description>习得绝影后可使用的突进型决战技。选择清荷视线内的落点后，清荷跃起并俯冲到目标位置，对前方扇形范围内的敌人与敌方建筑造成伤害；对敌方建筑造成双倍伤害，对敌人造成流血积累、短暂眩晕并击退，机械族改为漏电积累。动画期间清荷免疫伤害。消耗花令。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>230</displayOrder>
@@ -175,7 +175,6 @@
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <gizmoClass>MiliraXian.Characters.QingHe.Abilities.Command_AbilityAscentSlash</gizmoClass>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -200,6 +199,10 @@
                 <damageDef>MX_QH_NoteImpact</damageDef>
                 <damageAmount>32</damageAmount>
                 <armorPenetration>0.35</armorPenetration>
+                <accumulationDamageDef>MX_StatusEffectBleedAccumulation</accumulationDamageDef>
+                <accumulationDamageAmount>0.18</accumulationDamageAmount>
+                <accumulationArmorPenetration>2.1</accumulationArmorPenetration>
+                <buildingDamageMultiplier>2</buildingDamageMultiplier>
                 <stunTicks>60</stunTicks>
                 <knockbackDistance>3</knockbackDistance>
                 <flowerDecreeCost>1</flowerDecreeCost>
@@ -217,6 +220,11 @@
         <cooldownTicksRange>360000</cooldownTicksRange>
         <targetRequired>true</targetRequired>
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <warmupMote>Mote_WarmupWordOf</warmupMote>
+        <warmupSound>Psycast_WordOf_Warmup</warmupSound>
+        <stunTargetWhileCasting>true</stunTargetWhileCasting>
+        <showPsycastEffects>false</showPsycastEffects>
+        <moteOffsetAmountTowardsTarget>0.5</moteOffsetAmountTowardsTarget>
         <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
         <verbProperties>
@@ -237,10 +245,17 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLuoshenRibbon">
                 <destination>Selected</destination>
+                <psychic>true</psychic>
+                <applicableToMechs>false</applicableToMechs>
                 <range>24</range>
                 <requiresLineOfSight>true</requiresLineOfSight>
                 <opinionThoughtDef>MX_QH_LuoshenRibbonGrace</opinionThoughtDef>
                 <invalidTargetMessage>MX_QH_LuoshenRibbonInvalidTarget</invalidTargetMessage>
+                <successMessage>MX_QH_LuoshenRibbonApplied</successMessage>
+            </li>
+            <li Class="CompProperties_AbilityFleckOnTarget">
+                <fleckDef>WordOfApply</fleckDef>
+                <sound>Psycast_WordOf_Effect</sound>
             </li>
         </comps>
     </AbilityDef>

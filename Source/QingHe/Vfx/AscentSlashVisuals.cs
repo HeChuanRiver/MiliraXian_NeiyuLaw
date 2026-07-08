@@ -6,8 +6,59 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
+    public class PawnFlyerWorker_AscentSlashDive : PawnFlyerWorker
+    {
+        public PawnFlyerWorker_AscentSlashDive(PawnFlyerProperties properties) : base(properties)
+        {
+        }
+
+        public override float GetHeight(float t)
+        {
+            if (t < 0.42f)
+            {
+                return Mathf.Pow(Mathf.Clamp01(t / 0.42f), 0.22f);
+            }
+
+            return 1f - Mathf.Pow(Mathf.Clamp01((t - 0.42f) / 0.58f), 1.2f);
+        }
+    }
+
     public class PawnFlyer_AscentSlash : PawnFlyer
     {
+        private const float AscentStagePortion = 0.32f;
+        private const float HoverStagePortion = 0.08f;
+        private const float MaxAltitudeLayers = 96f;
+
+        public override Vector3 DrawPos
+        {
+            get
+            {
+                return ComputeTwoStageDrawPos(out _, out _);
+            }
+        }
+
+        public override void DynamicDrawPhaseAt(DrawPhase phase, Vector3 drawLoc, bool flip = false)
+        {
+            Vector3 drawPos = ComputeTwoStageDrawPos(out _, out _);
+            if (FlyingPawn != null)
+            {
+                FlyingPawn.DynamicDrawPhaseAt(phase, drawPos);
+                return;
+            }
+
+            FlyingThing?.DynamicDrawPhaseAt(phase, drawPos);
+        }
+
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+        {
+            Vector3 drawPos = ComputeTwoStageDrawPos(out Vector3 groundPos, out float height);
+            DrawShadow(groundPos, height);
+            if (CarriedThing != null && FlyingPawn != null)
+            {
+                PawnRenderUtility.DrawCarriedThing(FlyingPawn, drawPos, CarriedThing);
+            }
+        }
+
         protected override void TickInterval(int delta)
         {
             base.TickInterval(delta);
@@ -26,6 +77,56 @@ namespace MiliraXian.Characters.QingHe.Vfx
             {
                 FleckMaker.ThrowAirPuffUp(DrawPos, Map);
             }
+        }
+
+        private Vector3 ComputeTwoStageDrawPos(out Vector3 groundPos, out float height)
+        {
+            float progress = ticksFlightTime > 0 ? Mathf.Clamp01(ticksFlying / (float)ticksFlightTime) : 1f;
+            Vector3 destination = DestinationPos;
+            float screenRise = Mathf.Max(0f, def?.pawnFlyer?.heightFactor ?? 0f);
+            Vector3 liftOffset = Altitudes.AltIncVect * MaxAltitudeLayers + Vector3.forward * screenRise;
+
+            if (progress < AscentStagePortion)
+            {
+                float ascentProgress = Mathf.Clamp01(progress / AscentStagePortion);
+                float easedAscent = 1f - Mathf.Pow(1f - ascentProgress, 2.2f);
+                height = easedAscent;
+                groundPos = startVec;
+                Position = groundPos.ToIntVec3();
+                return startVec + liftOffset * easedAscent;
+            }
+
+            float diveStart = AscentStagePortion + HoverStagePortion;
+            if (progress < diveStart)
+            {
+                height = 1f;
+                groundPos = startVec;
+                Position = groundPos.ToIntVec3();
+                return startVec + liftOffset;
+            }
+
+            float diveProgress = Mathf.Clamp01((progress - diveStart) / (1f - diveStart));
+            float easedDive = diveProgress * diveProgress;
+            Vector3 peak = startVec + liftOffset;
+            Vector3 drawPos = Vector3.Lerp(peak, destination, easedDive);
+            groundPos = Vector3.Lerp(startVec, destination, easedDive);
+            height = 1f - easedDive;
+            Position = groundPos.ToIntVec3();
+            return drawPos;
+        }
+
+        private void DrawShadow(Vector3 drawLoc, float height)
+        {
+            Material shadowMaterial = def?.pawnFlyer?.ShadowMaterial;
+            if (shadowMaterial == null)
+            {
+                return;
+            }
+
+            float shadowScale = Mathf.Lerp(1f, 0.6f, Mathf.Clamp01(height));
+            Matrix4x4 matrix = default(Matrix4x4);
+            matrix.SetTRS(drawLoc, Quaternion.identity, new Vector3(shadowScale, 1f, shadowScale));
+            Graphics.DrawMesh(MeshPool.plane10, matrix, shadowMaterial, 0);
         }
     }
 

@@ -375,10 +375,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            FleckDef fleck = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastPsychicEffect");
+            FleckDef fleck = MX_QHDefOf.PsycastPsychicEffect;
             if (fleck == null)
             {
-                fleck = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastSkipFlashExit");
+                fleck = MX_QHDefOf.PsycastSkipFlashExit;
             }
 
             if (fleck == null)
@@ -471,7 +471,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private HediffDef GetInvisibilityDef()
         {
-            return Props.invisibilityHediffDef ?? DefDatabase<HediffDef>.GetNamedSilentFail("PsychicInvisibility");
+            return Props.invisibilityHediffDef ?? MX_QHDefOf.PsychicInvisibility;
         }
     }
 }

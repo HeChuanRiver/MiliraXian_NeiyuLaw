@@ -31,6 +31,7 @@
             <allowedSpectateSides>Down</allowedSpectateSides>
         </ritualFocus>
         <placeWorkers>
+            <li>MiliraXian.Characters.QingHe.Things.Buildings.PlaceWorker_QingheLotusPondDesign</li>
             <li>PlaceWorker_RitualFocusNoArrow</li>
             <li>PlaceWorker_PreventInteractionSpotOverlap</li>
         </placeWorkers>

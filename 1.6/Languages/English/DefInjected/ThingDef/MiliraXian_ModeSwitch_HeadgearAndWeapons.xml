@@ -9,9 +9,6 @@
   <MX_Neiyu_Form_Bow.label>Neiyu: Bow Form</MX_Neiyu_Form_Bow.label>
   <MX_Neiyu_Form_Bow.description>The bow-form armament transformed from the flower state. Featherlight brilliance gathers on the string, and its arrows fall like rain, excelling at elegant sustained suppression from mid to long range.</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>Neiyu: Rending Main Arrow</MX_Bullet_BigSplitArrow.label>
-  <MX_Bullet_BigSplitArrow.description>A massive splitting arrow fired from Neiyu's bow form. After traveling forward, it bursts into numerous smaller arrows.</MX_Bullet_BigSplitArrow.description>
   <MX_Bullet_HomingShard.label>Neiyu: Pursuing Feather Shard</MX_Bullet_HomingShard.label>
-  <MX_Bullet_HomingShard.description>A shard split from the main arrow. After scattering, it slightly corrects its path and continues attacking along the original aim direction.</MX_Bullet_HomingShard.description>
   <MX_Bullet_BarrageArrow.label>Neiyu: Flowfeather Arrow</MX_Bullet_BarrageArrow.label>
-  <MX_Bullet_BarrageArrow.description>An arrow used exclusively for Flowfeather Rend, meant to spread a dense curtain of suppressive fire across the area ahead.</MX_Bullet_BarrageArrow.description>
 </LanguageData>

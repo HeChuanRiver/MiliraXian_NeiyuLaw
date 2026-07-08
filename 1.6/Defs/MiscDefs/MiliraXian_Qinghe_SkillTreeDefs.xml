@@ -2,63 +2,51 @@
 <Defs>
     <MiliraXian.Characters.SkillNodeCategoryDef>
         <defName>MX_QH_Category_Qinghe</defName>
-        <label>清荷</label>
+        <label>荷雨亭曲艺</label>
         <description>清荷自己的技能类别。</description>
         <displayOrder>0</displayOrder>
     </MiliraXian.Characters.SkillNodeCategoryDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_FlowerMandate</defName>
-        <label>飞花令</label>
+        <label>四时飞花</label>
         <description>清荷的三式飞花令。全部习得后，飞花令进入强化形态。</description>
         <category>MX_QH_Category_Qinghe</category>
         <displayOrder>0</displayOrder>
+        <completionEffectLabel>全部习得：强化飞花令</completionEffectLabel>
+        <completionEffectDescription>春泉涌流获得强化，除基础治疗外，对范围内敌方持续附加流血和中毒积累，机械族改为漏电积累。破魂绝音获得强化，对范围内敌人造成基于心灵敏感度的心灵伤害和恐惧积累，并附加眩晕。霜月镜获得强化，冻结所有来袭投射物并原路反射冰霜射线。</completionEffectDescription>
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
         <defName>MX_QH_Tree_DivineFortune</defName>
-        <label>花神之眷顾</label>
+        <label>涓流之韵</label>
         <description>清荷可自动回复的护盾与花令基础强化。</description>
         <category>MX_QH_Category_Qinghe</category>
         <displayOrder>1</displayOrder>
+        <completionEffectLabel>全部习得：刚毅护盾</completionEffectLabel>
+        <completionEffectDescription>花神之眷顾获得刚毅护盾效果。护盾受到高额伤害时，单次护盾伤害最高不会超过20点。</completionEffectDescription>
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
-        <defName>MX_QH_Tree_DivineBlessing</defName>
-        <label>花神之垂怜</label>
+        <defName>MX_QH_Tree_FlowerDance</defName>
+        <label>起舞之韵</label>
         <description>清荷受到致命伤害时触发的保护效果。</description>
         <category>MX_QH_Category_Qinghe</category>
         <displayOrder>2</displayOrder>
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
-        <defName>MX_QH_Tree_FlowerDance</defName>
-        <label>花舞</label>
+        <defName>MX_QH_Tree_FlowerMastery</defName>
+        <label>百花玉音</label>
         <description>消耗花令开启的限时强化形态。</description>
         <category>MX_QH_Category_Qinghe</category>
         <displayOrder>3</displayOrder>
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
-    <MiliraXian.Characters.SkillNodeCollectionDef>
-        <defName>MX_QH_Tree_Jueying</defName>
-        <label>纵跃</label>
-        <description>清荷的突进型决战技。</description>
-        <category>MX_QH_Category_Qinghe</category>
-        <displayOrder>4</displayOrder>
-    </MiliraXian.Characters.SkillNodeCollectionDef>
-
-    <MiliraXian.Characters.SkillNodeCollectionDef>
-        <defName>MX_QH_Tree_Luoshen</defName>
-        <label>洛神赋</label>
-        <description>与伴侣关系和非战斗修行相关的曲意。</description>
-        <category>MX_QH_Category_Qinghe</category>
-        <displayOrder>5</displayOrder>
-    </MiliraXian.Characters.SkillNodeCollectionDef>
-
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_SpringFlow</defName>
-        <label>飞花令</label>
-        <description>初始曲谱集。清荷已经掌握春泉涌流，此节点仅用于开启飞花令曲谱集。</description>
+        <label>春泉</label>
+        <description>石间清泉依春时而动，润物无声而有形。——习得飞花令：春泉涌流</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>0</displayOrder>
@@ -70,8 +58,8 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Chuanhun</defName>
-        <label>穿魂</label>
-        <description>由《飞花绝语》解锁。对远距离目标地点产生音爆，眩晕范围内目标并造成心灵伤害。</description>
+        <label>破魂绝音</label>
+        <description>由《飞花绝语》解锁。对远距离目标地点产生音爆，眩晕范围内目标并造成心灵伤害，并提升花令上限。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>10</displayOrder>
@@ -87,8 +75,8 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Shuangyuejing</defName>
-        <label>霜月镜</label>
-        <description>由《断桥残雪》解锁。召唤圆形冰幕，冻结并吸收经过的敌对投射物。</description>
+        <label>霜华</label>
+        <description>由《断桥残雪》解锁。召唤圆形冰幕，冻结并吸收经过的敌对投射物，并提升花令上限。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_FlowerMandate</collection>
         <displayOrder>20</displayOrder>
@@ -104,8 +92,8 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Gaoshan</defName>
-        <label>高山</label>
-        <description>由《高山》解锁。提高花神之眷顾的护盾容量，并提升花令上限。</description>
+        <label>刚峻之意</label>
+        <description>由《高山》解锁。提高花神之眷顾的护盾容量。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>0</displayOrder>
@@ -120,7 +108,7 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Liushui</defName>
-        <label>流水</label>
+        <label>柔韧之意</label>
         <description>由《流水》解锁。提高花神之眷顾的回充速度。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_DivineFortune</collection>
@@ -136,8 +124,8 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Chunjiang</defName>
-        <label>春江</label>
-        <description>由《春江》解锁。花神之眷顾受到高额伤害时，将单次护盾伤害压低到上限内。</description>
+        <label>风月之意</label>
+        <description>由《春江花月夜》解锁。缩短花神之眷顾被击碎后的失效延迟，使护盾更快重新回充。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>20</displayOrder>
@@ -155,7 +143,7 @@
         <label>神恩</label>
         <description>清荷的精通节点。每一级代表清荷自身修行更进一步；具体效果由清荷的被动系统读取并生效。</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_DivineFortune</collection>
+        <collection>MX_QH_Tree_FlowerMastery</collection>
         <displayOrder>30</displayOrder>
         <column>0</column>
         <y>340</y>
@@ -169,13 +157,13 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Yingyue</defName>
-        <label>映月</label>
-        <description>由《映月》解锁。花神之垂怜的可用次数充能提高。</description>
+        <label>映月残章</label>
+        <description>由《二泉映月》解锁。花神之垂怜的可用次数充能提高。</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_DivineBlessing</collection>
+        <collection>MX_QH_Tree_FlowerDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
-        <y>160</y>
+        <y>40</y>
         <important>true</important>
         <skillPoints>2</skillPoints>
         <bookName>MX_QH_Book_Yingyue_Label</bookName>
@@ -186,13 +174,13 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_NishangDance</defName>
-        <label>霓裳之舞</label>
-        <description>由《霓裳之舞》解锁。允许清荷消耗花令进入花舞状态。</description>
+        <label>霓裳舞</label>
+        <description>由《霓裳羽衣舞》解锁。——习得舞技：花舞</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_FlowerDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
-        <y>160</y>
+        <y>80</y>
         <important>true</important>
         <skillPoints>2</skillPoints>
         <bookName>MX_QH_Book_NishangDance_Label</bookName>
@@ -203,27 +191,34 @@
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Jueying</defName>
-        <label>绝影</label>
-        <description>由《绝影》解锁。允许清荷使用纵跃，在目标落点后选择方向造成扇形打击。</description>
+        <label>剑势·绝影</label>
+        <description>清荷与老师霓羽交流后领悟的全新舞技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。——习得舞技：剑势·绝影，可对扇形范围内的敌方建筑造成双倍伤害</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_Jueying</collection>
+        <collection>MX_QH_Tree_FlowerDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
-        <y>160</y>
+        <y>120</y>
         <important>true</important>
         <skillPoints>2</skillPoints>
         <bookName>MX_QH_Book_Jueying_Label</bookName>
         <bookDescription>MX_QH_Book_Jueying_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <spawnConditions>
+            <li>
+                <relatedColonistPawnKinds>
+                    <li>MiliraXian_Neiyu</li>
+                </relatedColonistPawnKinds>
+            </li>
+        </spawnConditions>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Luoshenfu</defName>
-        <label>洛神赋</label>
-        <description>由《洛神赋》解锁。开启洛神赋相关伴侣效果。</description>
+        <label>洛水之仪</label>
+        <description>由《洛神赋》解锁。——习得能力：洛神的缎带</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_Luoshen</collection>
+        <collection>MX_QH_Tree_FlowerDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>
@@ -235,4 +230,3 @@
         <bookAcquireWeight>1</bookAcquireWeight>
     </MiliraXian.Characters.SkillNodeDef>
 </Defs>
-

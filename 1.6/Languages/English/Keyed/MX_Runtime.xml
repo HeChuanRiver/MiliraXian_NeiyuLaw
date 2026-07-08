@@ -126,14 +126,13 @@
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
   <MX_QH_FlowerDanceMissingResource>Not enough Flower Decree to perform Flower Dance.</MX_QH_FlowerDanceMissingResource>
   <MX_QH_FlowerDanceNotLearned>Flower Dance has not been learned.</MX_QH_FlowerDanceNotLearned>
-  <MX_QH_FlowerDanceLandingNoLineOfSight>The dance landing point must be in Qinghe's line of sight.</MX_QH_FlowerDanceLandingNoLineOfSight>
-  <MX_QH_FlowerDanceDirectionNoLineOfSight>The strike direction must be visible from the landing point.</MX_QH_FlowerDanceDirectionNoLineOfSight>
-  <MX_QH_FlowerDanceInvalidLanding>Cannot blink to that location.</MX_QH_FlowerDanceInvalidLanding>
-  <MX_QH_FlowerDanceChooseLanding>Choose dance landing point</MX_QH_FlowerDanceChooseLanding>
-  <MX_QH_FlowerDanceChooseDirection>Choose dance direction</MX_QH_FlowerDanceChooseDirection>
+  <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
+  <MX_QH_FlowerDanceLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_FlowerDanceLandingNoLineOfSight>
+  <MX_QH_FlowerDanceInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_FlowerDanceInvalidLanding>
   <MX_QH_LuoshenRibbonInvalidTarget>Luoshen's ribbon can only connect two conscious people.</MX_QH_LuoshenRibbonInvalidTarget>
   <MX_QH_LuoshenRibbonChooseFirst>Choose one end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseFirst>
   <MX_QH_LuoshenRibbonChooseSecond>Choose the other end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseSecond>
+  <MX_QH_LuoshenRibbonApplied>Luoshen's ribbon has drawn {0} and {1}'s hearts together.</MX_QH_LuoshenRibbonApplied>
   <MX_QH_LotusPondAssignQingheOnly>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPondAssignQingheOnly>
   <MX_QH_OpenFlowerCourtRequiresQinghe>Open Flower Court (requires Qinghe)</MX_QH_OpenFlowerCourtRequiresQinghe>
   <MX_QH_OpenFlowerCourt>Open Flower Court</MX_QH_OpenFlowerCourt>
@@ -160,6 +159,8 @@
   <MX_QH_SkillTreeUnlockProgress>Unlock progress</MX_QH_SkillTreeUnlockProgress>
   <MX_QH_SkillTreeStatusLine>Status: {0}</MX_QH_SkillTreeStatusLine>
   <MX_QH_SkillTreeEffects>Effects</MX_QH_SkillTreeEffects>
+  <MX_QH_SkillTreeCollectionCompletionActive>{0} (active)</MX_QH_SkillTreeCollectionCompletionActive>
+  <MX_QH_SkillTreeCollectionCompletionLocked>{0} (active after all nodes are learned)</MX_QH_SkillTreeCollectionCompletionLocked>
   <MX_QH_SkillTreeSourceScores>Source scores</MX_QH_SkillTreeSourceScores>
   <MX_QH_SkillTreeImportantNode>Type: important node</MX_QH_SkillTreeImportantNode>
   <MX_QH_SkillTreeSourceScoreEntry>&lt;i&gt;{0}&lt;/i&gt;</MX_QH_SkillTreeSourceScoreEntry>
@@ -171,7 +172,7 @@
   <MX_QH_FlowerPanelHelpLongBreathTitle>Long Breath</MX_QH_FlowerPanelHelpLongBreathTitle>
   <MX_QH_FlowerPanelHelpLongBreathBody>Green blocks are available charges; yellow fill shows recharge progress.</MX_QH_FlowerPanelHelpLongBreathBody>
   <MX_QH_FlowerPanelHelpFlowerCourtTitle>Flower Court</MX_QH_FlowerPanelHelpFlowerCourtTitle>
-  <MX_QH_FlowerPanelHelpFlowerCourtBody>Shows skill node progress. The center number is learned nodes; click to open the Flower Court panel.</MX_QH_FlowerPanelHelpFlowerCourtBody>
+  <MX_QH_FlowerPanelHelpFlowerCourtBody>Shows skill node and stillness progress; click to open the Flower Court panel.</MX_QH_FlowerPanelHelpFlowerCourtBody>
   <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>
   <MX_QH_MusicScoreStatCategory>Qinghe musical intent</MX_QH_MusicScoreStatCategory>
   <MX_QH_SkillBookAcquiredLetterLabel>New score bound</MX_QH_SkillBookAcquiredLetterLabel>
@@ -179,15 +180,15 @@
   <MX_QH_Book_LostScore_Label>Lost Score</MX_QH_Book_LostScore_Label>
   <MX_QH_Book_LostScore_Desc>A score book preserving the long-lost pieces {0}. A matching skill tree can study it to advance those nodes.</MX_QH_Book_LostScore_Desc>
   <MX_QH_Book_FeihuaJueyu_Label>Feihua Jueyu</MX_QH_Book_FeihuaJueyu_Label>
-  <MX_QH_Book_FeihuaJueyu_Desc>A score describing petals cut into sound. Studying it can unlock Soulpiercer for a matching skill tree.</MX_QH_Book_FeihuaJueyu_Desc>
+  <MX_QH_Book_FeihuaJueyu_Desc>A score describing petals cut into sound. Studying it can unlock Soulpiercer for a matching skill tree and increase Flower Decree maximum.</MX_QH_Book_FeihuaJueyu_Desc>
   <MX_QH_Book_DuanqiaoCanxue_Label>Duanqiao Canxue</MX_QH_Book_DuanqiaoCanxue_Label>
-  <MX_QH_Book_DuanqiaoCanxue_Desc>A cold and broken score. Studying it can unlock Frost Moon Mirror for a matching skill tree.</MX_QH_Book_DuanqiaoCanxue_Desc>
+  <MX_QH_Book_DuanqiaoCanxue_Desc>A cold and broken score. Studying it can unlock Frost Moon Mirror for a matching skill tree and increase Flower Decree maximum.</MX_QH_Book_DuanqiaoCanxue_Desc>
   <MX_QH_Book_Gaoshan_Label>Gaoshan</MX_QH_Book_Gaoshan_Label>
-  <MX_QH_Book_Gaoshan_Desc>A quiet mountain score. Studying it can improve Divine Protection shield capacity and Flower Decree maximum.</MX_QH_Book_Gaoshan_Desc>
+  <MX_QH_Book_Gaoshan_Desc>A quiet mountain score. Studying it can improve Divine Protection shield capacity.</MX_QH_Book_Gaoshan_Desc>
   <MX_QH_Book_Liushui_Label>Liushui</MX_QH_Book_Liushui_Label>
   <MX_QH_Book_Liushui_Desc>A flowing-water score. Studying it can improve Divine Protection recharge speed.</MX_QH_Book_Liushui_Desc>
   <MX_QH_Book_Chunjiang_Label>Chunjiang</MX_QH_Book_Chunjiang_Label>
-  <MX_QH_Book_Chunjiang_Desc>A spring-river score. Studying it can steady Divine Protection against heavy single-hit damage.</MX_QH_Book_Chunjiang_Desc>
+  <MX_QH_Book_Chunjiang_Desc>A spring-river score. Studying it can shorten Divine Protection's disabled delay after the shield breaks.</MX_QH_Book_Chunjiang_Desc>
   <MX_QH_Book_DivineGrace_Label>Divine Grace</MX_QH_Book_DivineGrace_Label>
   <MX_QH_Book_DivineGrace_Desc>A refined volume of Qinghe's cultivation notes. Reading it raises the Divine Grace node by one level.</MX_QH_Book_DivineGrace_Desc>
   <MX_QH_Book_Yingyue_Label>Yingyue</MX_QH_Book_Yingyue_Label>
@@ -195,7 +196,7 @@
   <MX_QH_Book_NishangDance_Label>Nishang Dance</MX_QH_Book_NishangDance_Label>
   <MX_QH_Book_NishangDance_Desc>A dance score with layered sleeves and drifting light. Studying it can unlock Flower Dance.</MX_QH_Book_NishangDance_Desc>
   <MX_QH_Book_Jueying_Label>Jueying</MX_QH_Book_Jueying_Label>
-  <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Leaping Shadow.</MX_QH_Book_Jueying_Desc>
+  <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Sword Form: Jueying.</MX_QH_Book_Jueying_Desc>
   <MX_QH_Book_Luoshenfu_Label>Luoshen Fu</MX_QH_Book_Luoshenfu_Label>
   <MX_QH_Book_Luoshenfu_Desc>A graceful fu-score about bonds and return. Studying it can unlock Luoshen Fu effects.</MX_QH_Book_Luoshenfu_Desc>
   <MX_QH_UnknownNode>Unknown node.</MX_QH_UnknownNode>
@@ -208,6 +209,14 @@
   <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>
   <MX_QH_LotusShieldRegenDelayLine>Regen delay: {0}s</MX_QH_LotusShieldRegenDelayLine>
+  <MX_QH_DivineGraceLevel>{0}/{1}</MX_QH_DivineGraceLevel>
+  <MX_QH_DivineGraceFortuneHeader>Mastery bonuses:</MX_QH_DivineGraceFortuneHeader>
+  <MX_QH_DivineGraceShieldCapacityLine> - Shield capacity: x{0}</MX_QH_DivineGraceShieldCapacityLine>
+  <MX_QH_DivineGraceShieldRegenLine> - Shield regen: x{0}</MX_QH_DivineGraceShieldRegenLine>
+  <MX_QH_DivineGraceShieldDamageCapLine> - steadfast damage cap: {0}</MX_QH_DivineGraceShieldDamageCapLine>
+  <MX_QH_DivineGraceFlowerDecreeMaxLine> - Flower Decree max: +{0}</MX_QH_DivineGraceFlowerDecreeMaxLine>
+  <MX_QH_DivineGraceFlowerDecreeRegenLine> - Flower Decree regen: x{0}</MX_QH_DivineGraceFlowerDecreeRegenLine>
+  <MX_QH_DivineGraceBlessingRechargeLine> - Flower-God Mercy cooldown: x{0}</MX_QH_DivineGraceBlessingRechargeLine>
   <MX_QH_FlowerCourtTitle>Flower Court</MX_QH_FlowerCourtTitle>
   <MX_QH_FlowerCourtUnlockedTreesLine>Interpreted score sets: {0}</MX_QH_FlowerCourtUnlockedTreesLine>
   <MX_QH_FlowerCourtLearnedNodesLine>Learned nodes: {0}</MX_QH_FlowerCourtLearnedNodesLine>
@@ -225,9 +234,21 @@
   <MX_QH_RecoveryProgressLine>Recovery progress: {0} / {1}</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>Only Qinghe can host the Qixi rite.</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiCooldown>The Qixi rite is still on cooldown. Time remaining: {0}.</MX_QH_QixiCooldown>
   <MX_QH_QixiOutcomeFragments>Recovered {0} lost Qinghe score fragment(s).</MX_QH_QixiOutcomeFragments>
   <MX_QH_QixiOutcomeInspirations>Inspired participant(s): {0}.</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>Inspired by Qinghe's Qixi rite.</MX_QH_QixiInspirationReason>
+  <MX_QH_FlowerCourtDesignLocked>The lotus pond design has not been acquired.</MX_QH_FlowerCourtDesignLocked>
+  <MX_QH_FlowerCourtDesignUnlockedMessage>Lotus pond design acquired.</MX_QH_FlowerCourtDesignUnlockedMessage>
+  <MX_QH_FlowerCourtLotusPondBuiltMessage>The lotus pond is complete.</MX_QH_FlowerCourtLotusPondBuiltMessage>
+  <MX_QH_FlowerCourtQingheArrivedLetterLabel>Qinghe arrives</MX_QH_FlowerCourtQingheArrivedLetterLabel>
+  <MX_QH_FlowerCourtQingheArrivedLetterText>The water in the lotus pond has stilled. Qinghe has followed this new court to the colony and is willing to stay. She still needs a decent Lotus Rain Pavilion before she can truly settle in.</MX_QH_FlowerCourtQingheArrivedLetterText>
+  <MX_QH_FlowerCourtSecondStageLetterLabel>Prepare the pavilion</MX_QH_FlowerCourtSecondStageLetterLabel>
+  <MX_QH_FlowerCourtSecondStageLetterText>The lotus pond has been built. Arrange its room into a decent Lotus Rain Pavilion. When it is ready, you will receive 1 lost score fragment that Qinghe can interpret at an art bench.</MX_QH_FlowerCourtSecondStageLetterText>
+  <MX_QH_FlowerCourtCompletedLetterLabel>Flower Court established</MX_QH_FlowerCourtCompletedLetterLabel>
+  <MX_QH_FlowerCourtCompletedLetterText>The Lotus Rain Pavilion has settled into place. In response, a lost score fragment has gathered beside the lotus pond. Qinghe can interpret it at an art bench.</MX_QH_FlowerCourtCompletedLetterText>
+  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>Flower Court</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
+  <MX_QH_FlowerCourtAutoAcceptedLetterText>Qinghe has prepared the lotus pond design. You can now build a lotus pond from the Misc category and use it as the core of the new Flower Court.</MX_QH_FlowerCourtAutoAcceptedLetterText>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>
@@ -311,4 +332,6 @@
   <MX_ZL_RaidTransitionRemaining>Phase transition remaining:</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>Next warp:</MX_ZL_RaidNextWarp>
   <MX_ZL_RaidPhaseTransitionStarted>{0} is shifting into phase {1}! She is invulnerable during the transition and gains {2} layers of Deathward Shield.</MX_ZL_RaidPhaseTransitionStarted>
+  <MX_QH_RecipeRequiresQinghe>Only Qinghe can do this recipe.</MX_QH_RecipeRequiresQinghe>
+  <MX_QH_CustomBookThoughtBenefit> - Reading grants mood: read Lotus Rain Pavilion opera</MX_QH_CustomBookThoughtBenefit>
 </LanguageData>

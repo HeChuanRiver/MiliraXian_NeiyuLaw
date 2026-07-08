@@ -8,7 +8,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 {
-    public class Widget_LongBreathChargeBlocks : Widget_Base
+    public class Widget_DivineBlessing : Widget_Base
     {
         private const int TipSalt = 910205;
         private const int MaxDisplayBlocks = 2;
@@ -21,7 +21,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private static readonly Color ChargedColor = new Color(0.45f, 0.90f, 0.42f, 1f);
         private static readonly Color RechargingColor = new Color(1f, 0.82f, 0.24f, 1f);
 
-        public Widget_LongBreathChargeBlocks(Pawn pawn, Rect localRect, TextAnchor alignment)
+        public Widget_DivineBlessing(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
         {
             this.pawn = pawn;

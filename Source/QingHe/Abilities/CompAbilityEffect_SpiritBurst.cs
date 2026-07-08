@@ -185,7 +185,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             MX_QHGraphicsUtility.Fleck(map, center, Props.releaseImpactFleck, Mathf.Max(0.45f, Props.releaseImpactScale));
 
             DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Cut;
-            bool enhanced = MX_QHSkillSystem.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster));
+            bool enhanced = MX_QHSkillUtility.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster));
             List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, Props.radius);
             for (int i = 0; i < victims.Count; i++)
             {
@@ -241,7 +241,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             BodyPartRecord brain = null;
             foreach (BodyPartRecord part in victim.health.hediffSet.GetNotMissingParts())
             {
-                if (part.def == DefDatabase<BodyPartDef>.GetNamedSilentFail("Brain"))
+                if (part.def == MX_QHDefOf.Brain)
                 {
                     brain = part;
                     break;

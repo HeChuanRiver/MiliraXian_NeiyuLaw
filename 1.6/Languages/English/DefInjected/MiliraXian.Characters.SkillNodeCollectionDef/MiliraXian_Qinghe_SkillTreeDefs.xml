@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Tree_FlowerMandate.label>flower decree</MX_QH_Tree_FlowerMandate.label>
+  <MX_QH_Tree_FlowerMandate.label>four-season flowers</MX_QH_Tree_FlowerMandate.label>
   <MX_QH_Tree_FlowerMandate.description>Qinghe's three Flower Decrees. Learning all of them empowers Flower Decree.</MX_QH_Tree_FlowerMandate.description>
-  <MX_QH_Tree_DivineFortune.label>divine protection</MX_QH_Tree_DivineFortune.label>
+  <MX_QH_Tree_FlowerMandate.completionEffectLabel>Completion: empowered Flower Decrees</MX_QH_Tree_FlowerMandate.completionEffectLabel>
+  <MX_QH_Tree_FlowerMandate.completionEffectDescription>Spring Flow is empowered: in addition to its base healing, it continuously applies bleed and toxic buildup to enemies in range, or electric leak buildup to mechanoids. Soulbreak Absolute Note is empowered, dealing psychic damage based on psychic sensitivity, applying terror buildup, and stunning enemies in range. Frost Moon Mirror is empowered, freezing incoming projectiles and reflecting them as frost rays.</MX_QH_Tree_FlowerMandate.completionEffectDescription>
+  <MX_QH_Tree_DivineFortune.label>trickle melody</MX_QH_Tree_DivineFortune.label>
   <MX_QH_Tree_DivineFortune.description>Basic upgrades for Qinghe's self-recovering shield and Flower Decree.</MX_QH_Tree_DivineFortune.description>
-  <MX_QH_Tree_DivineBlessing.label>divine blessing</MX_QH_Tree_DivineBlessing.label>
-  <MX_QH_Tree_DivineBlessing.description>A protective effect triggered when Qinghe suffers fatal damage.</MX_QH_Tree_DivineBlessing.description>
-  <MX_QH_Tree_FlowerDance.label>flower dance</MX_QH_Tree_FlowerDance.label>
-  <MX_QH_Tree_FlowerDance.description>A temporary empowered state activated by spending Flower Decree.</MX_QH_Tree_FlowerDance.description>
-  <MX_QH_Tree_Jueying.label>leaping shadow</MX_QH_Tree_Jueying.label>
-  <MX_QH_Tree_Jueying.description>Qinghe's decisive dash technique.</MX_QH_Tree_Jueying.description>
-  <MX_QH_Tree_Luoshen.label>Luoshen Fu</MX_QH_Tree_Luoshen.label>
-  <MX_QH_Tree_Luoshen.description>Musical intent related to spouses and non-combat cultivation.</MX_QH_Tree_Luoshen.description>
+  <MX_QH_Tree_DivineFortune.completionEffectLabel>Completion: steadfast shield</MX_QH_Tree_DivineFortune.completionEffectLabel>
+  <MX_QH_Tree_DivineFortune.completionEffectDescription>Divine Protection gains steadfast shield. When the shield takes heavy damage, a single hit cannot deal more than 20 shield damage.</MX_QH_Tree_DivineFortune.completionEffectDescription>
+  <MX_QH_Tree_FlowerDance.label>dancing melody</MX_QH_Tree_FlowerDance.label>
+  <MX_QH_Tree_FlowerDance.description>A protective effect triggered when Qinghe suffers fatal damage.</MX_QH_Tree_FlowerDance.description>
+  <MX_QH_Tree_FlowerMastery.label>hundred-flower jade tone</MX_QH_Tree_FlowerMastery.label>
+  <MX_QH_Tree_FlowerMastery.description>A temporary empowered state activated by spending Flower Decree.</MX_QH_Tree_FlowerMastery.description>
 </LanguageData>

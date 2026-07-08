@@ -54,6 +54,12 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(JobDriver_Meditate), "MeditationTick"),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_Meditate_MeditationTick_Postfix)));
 
+            patcher.Patch(AccessTools.Method(typeof(Book), nameof(Book.OnBookReadTick), new[] { typeof(Pawn), typeof(int), typeof(float) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Book_OnBookReadTick_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(JobDriver_PlayMusicalInstrument), "ModifyPlayToil", new[] { typeof(Toil) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix)));
+
             patcher.Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn), new[] { typeof(Pawn), typeof(SkillDef), typeof(bool) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix)));
 
@@ -99,7 +105,7 @@ namespace MiliraXian.Characters.QingHe
 
             EnsureQingheCoreTraits(__instance);
             MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
-            MX_QHSkillSystem.SyncChoices(__instance);
+            MX_QHSkillUtility.SyncChoices(__instance);
             if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
             {
                 MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
@@ -119,8 +125,7 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            if (MX_QHDefOf.MX_QH_DivineBlessingImmunity == null
-                || __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) == null)
+            if (!HasDamageImmunityHediff(__instance))
             {
                 return true;
             }
@@ -128,6 +133,19 @@ namespace MiliraXian.Characters.QingHe
             dinfo.SetAmount(0f);
             absorbed = true;
             return false;
+        }
+
+        private static bool HasDamageImmunityHediff(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null)
+            {
+                return false;
+            }
+
+            return (MX_QHDefOf.MX_QH_DivineBlessingImmunity != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) != null)
+                || (MX_QHDefOf.MX_QH_AscentSlashInvulnerable != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) != null);
         }
 
         public static void Patch_Pawn_PreApplyDamage_Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
@@ -167,13 +185,6 @@ namespace MiliraXian.Characters.QingHe
             {
                 return;
             }
-
-            if (MX_QHDefOf.MX_QH_FlowerWord_JadeHairpin == null
-                || !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_FlowerWord_JadeHairpin))
-            {
-                return;
-            }
-
             if (__instance.def == MX_QHDefOf.Frenzy_Work || __instance.def == MX_QHDefOf.Inspired_Creativity)
             {
                 __result *= 2f;
@@ -182,12 +193,24 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_Bill_PawnAllowedToStartAnew_Postfix(Bill __instance, Pawn p, ref bool __result)
         {
-            if (!__result || __instance?.recipe?.defName != "MX_QH_AssembleLostMusicScore")
+            if (!__result || __instance?.recipe == null)
             {
                 return;
             }
 
-            __result = MX_QHCharacterUtility.IsQinghe(p);
+            MX_QingheRecipeRequirementExtension extension = __instance.recipe.GetModExtension<MX_QingheRecipeRequirementExtension>();
+            if (extension?.allowedPawnKinds.NullOrEmpty() != false)
+            {
+                return;
+            }
+
+            if (p?.kindDef != null && extension.allowedPawnKinds.Contains(p.kindDef))
+            {
+                return;
+            }
+
+            JobFailReason.Is(extension.failureReasonKey.Translate());
+            __result = false;
         }
 
         public static void Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix(
@@ -280,6 +303,16 @@ namespace MiliraXian.Characters.QingHe
             MX_QH_HediffUtility.AddMeditativeStillnessFromLotusPond(pawn, lotusPond);
         }
 
+        public static void Patch_Book_OnBookReadTick_Postfix(Pawn pawn, int delta, float roomBonusFactor)
+        {
+            MX_QH_HediffUtility.AddMeditativeStillnessFromReading(pawn, delta, roomBonusFactor);
+        }
+
+        public static void Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix(JobDriver_PlayMusicalInstrument __instance, Toil toil)
+        {
+            toil?.AddPreTickIntervalAction(delta => ApplyQingheInstrumentPerformance(__instance, delta));
+        }
+
         public static void Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix(Pawn pawn, ref QualityCategory __result)
         {
             if (!MX_QHCharacterUtility.IsQinghe(pawn))
@@ -356,6 +389,42 @@ namespace MiliraXian.Characters.QingHe
             }
 
             return target.Cell == interactionCell && pawn.Position == interactionCell;
+        }
+
+        private const int QingheInstrumentPerformanceIntervalTicks = 600;
+
+        private const float QingheInstrumentAudienceJoyGain = 0.03f;
+
+        private static void ApplyQingheInstrumentPerformance(JobDriver_PlayMusicalInstrument driver, int delta)
+        {
+            Pawn performer = driver?.pawn;
+            if (!MX_QHCharacterUtility.IsQinghe(performer)
+                || performer.Map == null
+                || !performer.Spawned
+                || !performer.IsHashIntervalTick(QingheInstrumentPerformanceIntervalTicks, delta))
+            {
+                return;
+            }
+
+            Room room = performer.GetRoom();
+            if (room == null)
+            {
+                return;
+            }
+
+            JoyKindDef musicJoy = MX_QHDefOf.HighCulture ?? JoyKindDefOf.Social;
+            IReadOnlyList<Pawn> pawns = performer.Map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < pawns.Count; i++)
+            {
+                Pawn target = pawns[i];
+                if (target == null || target.Dead || target.GetRoom() != room)
+                {
+                    continue;
+                }
+
+                target.needs?.mood?.thoughts?.memories?.TryGainMemory(MX_QHDefOf.MX_QH_QingheInstrumentPerformance, performer);
+                target.needs?.joy?.GainJoy(QingheInstrumentAudienceJoyGain, musicJoy);
+            }
         }
 
         public static void Patch_PawnRelationsTracker_AddDirectRelation_Postfix(
@@ -437,6 +506,5 @@ namespace MiliraXian.Characters.QingHe
                 parentStat = stat
             });
         }
-
     }
 }

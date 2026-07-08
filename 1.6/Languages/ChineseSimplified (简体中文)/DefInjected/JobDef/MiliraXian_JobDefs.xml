@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Zhaoli_CastAbility_Uninterruptible.reportString>施放昭离技能</MX_Zhaoli_CastAbility_Uninterruptible.reportString>
-  <MX_Zhaoli_ChannelDingshu.reportString>施放定数</MX_Zhaoli_ChannelDingshu.reportString>
-  <MX_QH_CastAbility_HengZhi.reportString>施放横指</MX_QH_CastAbility_HengZhi.reportString>
-  <MX_QH_CastAbility_DuanHun.reportString>施放断魂</MX_QH_CastAbility_DuanHun.reportString>
-  <MX_QH_CastAbility_YangChun.reportString>施放阳春</MX_QH_CastAbility_YangChun.reportString>
+  <MX_ReadSkillBook.reportString>正在读书。</MX_ReadSkillBook.reportString>
+  <MX_QH_TuneBell.reportString>正在荷池旁调谐花信铃。</MX_QH_TuneBell.reportString>
 </LanguageData>

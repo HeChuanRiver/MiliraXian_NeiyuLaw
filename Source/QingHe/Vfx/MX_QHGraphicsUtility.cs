@@ -52,6 +52,22 @@ namespace MiliraXian.Characters.QingHe.Vfx
             FleckMaker.Static(cell, map, def, Mathf.Max(0.01f, scale));
         }
 
+        public static void Fleck(Map map, Vector3 worldPos, string defName, float scale = 1f)
+        {
+            if (map == null || defName.NullOrEmpty())
+            {
+                return;
+            }
+
+            var def = DefDatabase<FleckDef>.GetNamedSilentFail(defName);
+            if (def == null)
+            {
+                return;
+            }
+
+            FleckMaker.Static(worldPos, map, def, Mathf.Max(0.01f, scale));
+        }
+
         public static void Overlay(Map map, TargetInfo source, TargetInfo target, string defName)
         {
             if (map == null || defName.NullOrEmpty() || !source.IsValid || !target.IsValid)

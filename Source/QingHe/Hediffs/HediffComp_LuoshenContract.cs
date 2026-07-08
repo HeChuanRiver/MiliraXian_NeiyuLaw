@@ -22,19 +22,30 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static bool IsMaintainedFor(Pawn pawn)
         {
+            return MaintainedThoughtStageFor(pawn) >= 0;
+        }
+
+        public static int MaintainedThoughtStageFor(Pawn pawn)
+        {
             if (pawn == null || pawn.Dead)
             {
-                return false;
+                return -1;
             }
 
             if (MX_QHCharacterUtility.IsQinghe(pawn))
             {
                 Pawn spouse = GetLivingSpouse(pawn);
-                return spouse != null && HasContractWith(pawn, spouse);
+                if (spouse != null && HasContractWith(pawn, spouse))
+                {
+                    return 0;
+                }
+
+                HediffComp_SkillTreeState state = MX_QH_HediffUtility.GetFlowerResonance(pawn);
+                return state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu) ? 1 : -1;
             }
 
             Pawn qinghe = GetQingheContractPartner(pawn);
-            return qinghe != null && HasContractWith(qinghe, pawn);
+            return qinghe != null && HasContractWith(qinghe, pawn) ? 0 : -1;
         }
 
         public static void SyncForQinghe(Pawn qinghe, HediffComp_SkillTreeState state)
@@ -69,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            MX_QHSkillSystem.SyncChoices(qinghe);
+            MX_QHSkillUtility.SyncChoices(qinghe);
             NotifyThoughtsDirty(pawn);
             NotifyThoughtsDirty(otherPawn);
         }

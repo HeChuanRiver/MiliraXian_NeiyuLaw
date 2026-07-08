@@ -297,6 +297,76 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
   </ThingDef>
+  <ThingDef ParentName="MoteBase" Name="MX_Mote_StatusEffectBurstIconBase" Abstract="True">
+    <label>清荷特效</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(0.42, 0.42)</drawSize>
+      <color>(1, 1, 1, 0.90)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>0.22</solidTime>
+      <fadeOutTime>0.55</fadeOutTime>
+      <growthRate>0.65</growthRate>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectBleedBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_bleed</texPath>
+      <color>(1.00, 0.48, 0.52, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectElectricLeakBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_leakage</texPath>
+      <color>(1.00, 0.86, 0.28, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectToxinBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_toxic</texPath>
+      <color>(0.72, 1.00, 0.52, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectCorrosionBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_toxic</texPath>
+      <color>(0.66, 0.90, 0.58, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectFearBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
+      <color>(0.98, 0.82, 1.00, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectOverloadBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_overclocked</texPath>
+      <color>(0.98, 0.82, 1.00, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_StatusEffectBurstIconBase">
+    <defName>MX_Mote_StatusEffectColdBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_freeze</texPath>
+      <color>(0.72, 0.90, 1.00, 0.90)</color>
+    </graphicData>
+  </ThingDef>
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_StatusEffectFearedIcon</defName>
     <label>Mote</label>

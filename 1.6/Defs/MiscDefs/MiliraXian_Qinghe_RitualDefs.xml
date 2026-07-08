@@ -7,6 +7,7 @@
 
     <RitualBehaviorDef ParentName="DateRitualBehavior" MayRequire="Ludeon.RimWorld.Ideology">
         <defName>MX_QH_QixiRitualBehavior</defName>
+        <workerClass>MiliraXian.Characters.QingHe.Rituals.RitualBehaviorWorker_Qixi</workerClass>
         <roles Inherit="False">
             <li Class="MiliraXian.Characters.QingHe.Rituals.RitualRole_Qinghe">
                 <label>清荷</label>
@@ -29,11 +30,6 @@
             <li>仪式会获得2-4份失传的曲谱残片。较好的结果可能带来工作狂热或创作灵感。</li>
         </extraPredictedOutcomeDescriptions>
         <comps>
-            <li Class="RitualOutcomeComp_BuildingOfDefUsed">
-                <def>Lectern</def>
-                <qualityOffset>0.15</qualityOffset>
-                <maxHorDistFromTarget>5</maxHorDistFromTarget>
-            </li>
             <li Class="RitualOutcomeComp_RitualSeatPresent">
                 <qualityOffset>0.15</qualityOffset>
             </li>

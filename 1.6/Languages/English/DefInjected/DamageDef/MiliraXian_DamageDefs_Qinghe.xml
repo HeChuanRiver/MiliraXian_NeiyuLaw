@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Dehydrate.label>Water Toxin</MX_Dehydrate.label>
-  <MX_Dehydrate.deathMessage>{0} died from severe fluid-cycle collapse.</MX_Dehydrate.deathMessage>
-  <MX_Desynced.label>Desynced</MX_Desynced.label>
-  <MX_Desynced.deathMessage>{0} was killed by the dissonance.</MX_Desynced.deathMessage>
+  <MX_StatusEffectBleedAccumulation.label>bleed accumulation</MX_StatusEffectBleedAccumulation.label>
+  <MX_StatusEffectToxinAccumulation.label>toxin accumulation</MX_StatusEffectToxinAccumulation.label>
+  <MX_StatusEffectVenomDamage.label>venom corrosion</MX_StatusEffectVenomDamage.label>
+  <MX_StatusEffectVenomDamage.deathMessage>{0} succumbed to flower bell venom.</MX_StatusEffectVenomDamage.deathMessage>
+  <MX_StatusEffectFearAccumulation.label>fear accumulation</MX_StatusEffectFearAccumulation.label>
+  <MX_StatusEffectColdAccumulation.label>cold accumulation</MX_StatusEffectColdAccumulation.label>
   <MX_QH_NoteImpact.label>note impact</MX_QH_NoteImpact.label>
   <MX_QH_NoteImpact.deathMessage>{0} was struck down by the Flower Bell's note.</MX_QH_NoteImpact.deathMessage>
   <MX_QH_NoteImpact_Building.label>siegebreaking note impact</MX_QH_NoteImpact_Building.label>

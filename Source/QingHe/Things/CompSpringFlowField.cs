@@ -203,7 +203,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            FleckDef splash = Props.ambientSplashFleckDef ?? DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
+            FleckDef splash = Props.ambientSplashFleckDef ?? MX_QHDefOf.GroundWaterSplash;
             if (splash == null)
             {
                 return;

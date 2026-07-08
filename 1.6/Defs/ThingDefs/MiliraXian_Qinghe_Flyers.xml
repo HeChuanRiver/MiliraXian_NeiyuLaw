@@ -2,16 +2,16 @@
 <Defs>
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_QH_AscentSlashFlyer</defName>
-        <label>花神闪飞行体</label>
+        <label>剑势·绝影飞行体</label>
         <thingClass>MiliraXian.Characters.QingHe.Vfx.PawnFlyer_AscentSlash</thingClass>
         <pawnFlyer>
-            <flightDurationMin>0.08</flightDurationMin>
-            <flightSpeed>100</flightSpeed>
-            <heightFactor>0.65</heightFactor>
+            <flightDurationMin>0.36</flightDurationMin>
+            <flightSpeed>90</flightSpeed>
+            <workerClass>MiliraXian.Characters.QingHe.Vfx.PawnFlyerWorker_AscentSlashDive</workerClass>
+            <heightFactor>24</heightFactor>
             <progressCurve>
                 <points>
                     <li>(0, 0)</li>
-                    <li>(0.25, 0.60)</li>
                     <li>(1, 1)</li>
                 </points>
             </progressCurve>

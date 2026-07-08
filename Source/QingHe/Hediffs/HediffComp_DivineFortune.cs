@@ -65,6 +65,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float DivineBlessingRechargeFactor => divineBlessingRechargeFactor;
 
+        public override bool CompDisallowVisible()
+        {
+            return true;
+        }
+
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
@@ -114,7 +119,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 shieldBreakDelayTicks = Mathf.Min(shieldBreakDelayTicks, Mathf.Max(0, Props.acceleratedShieldBreakDelayTicks));
             }
 
-            if (HasAllDivineFortuneNodes(skillState))
+            if (skillState.IsCollectionCompleted(MX_QHSkillNodeDefOf.MX_QH_Tree_DivineFortune))
             {
                 shieldDamageCap = Mathf.Max(shieldDamageCap, Props.shieldDamageCap);
             }
@@ -150,14 +155,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private static int CountNode(HediffComp_SkillTreeState skillState, SkillNodeDef node)
         {
             return skillState != null && node != null && skillState.HasNode(node) ? 1 : 0;
-        }
-
-        private static bool HasAllDivineFortuneNodes(HediffComp_SkillTreeState skillState)
-        {
-            return skillState != null
-                && skillState.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Gaoshan)
-                && skillState.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Liushui)
-                && skillState.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Chunjiang);
         }
 
         private bool IsActiveStateEnabled()

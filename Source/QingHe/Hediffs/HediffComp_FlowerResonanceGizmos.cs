@@ -23,7 +23,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
             HediffComp_SkillTreeState state = parent?.GetComp<HediffComp_SkillTreeState>();
-            foreach (Gizmo gizmo in MX_QHSkillSystem.GetGizmos(Pawn, state))
+            foreach (Gizmo gizmo in MX_QHSkillUtility.GetGizmos(Pawn, state))
             {
                 yield return gizmo;
             }
@@ -31,7 +31,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void Notify_SkillTreeStateChanged(Pawn pawn, HediffComp_SkillTreeState state)
         {
-            MX_QHSkillSystem.SyncChoices(pawn, state);
+            MX_QHSkillUtility.SyncChoices(pawn, state);
         }
     }
 }

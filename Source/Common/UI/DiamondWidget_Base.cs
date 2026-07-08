@@ -48,6 +48,19 @@ namespace MiliraXian.Characters.UI
             GUI.color = oldColor;
         }
 
+        protected static void DrawDiamondOriginal(Rect rect, Texture2D texture)
+        {
+            if (rect.width <= 0f || rect.height <= 0f || texture == null)
+            {
+                return;
+            }
+
+            Color oldColor = GUI.color;
+            GUI.color = Color.white;
+            GUI.DrawTexture(rect, texture, ScaleMode.StretchToFill, true);
+            GUI.color = oldColor;
+        }
+
         protected static void DrawDiamondFill(Rect rect, Texture2D texture, float fillPercent, Color color)
         {
             if (rect.width <= 0f || rect.height <= 0f || texture == null)

@@ -2,8 +2,18 @@
 <LanguageData>
   <MX_QH_LuoshenContractMaintained.stages.0.label>洛神契：相守</MX_QH_LuoshenContractMaintained.stages.0.label>
   <MX_QH_LuoshenContractMaintained.stages.0.description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
+  <MX_QH_LuoshenContractMaintained.stages.1.label>洛水赋诗</MX_QH_LuoshenContractMaintained.stages.1.label>
+  <MX_QH_LuoshenContractMaintained.stages.1.description>洛水旧赋仍在心中回响。即使无人同游，清荷也能从这份曲意中获得安宁。</MX_QH_LuoshenContractMaintained.stages.1.description>
   <MX_QH_LuoshenContractBroken.stages.0.label>洛神契破碎 ({0})</MX_QH_LuoshenContractBroken.stages.0.label>
   <MX_QH_LuoshenContractBroken.stages.0.description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的花语只余空响。</MX_QH_LuoshenContractBroken.stages.0.description>
   <MX_QH_LuoshenRibbonGrace.stages.0.label>洛神缎带 ({0})</MX_QH_LuoshenRibbonGrace.stages.0.label>
   <MX_QH_LuoshenRibbonGrace.stages.0.description>洛神的缎带曾牵起我与{OTHERPAWN_nameDef}之间的心意，这份温柔仍在心中回响。</MX_QH_LuoshenRibbonGrace.stages.0.description>
+  <MX_QH_QingheInstrumentPerformance.stages.0.label>听见清荷演奏</MX_QH_QingheInstrumentPerformance.stages.0.label>
+  <MX_QH_QingheInstrumentPerformance.stages.0.description>清荷的乐声在屋内缓缓流转，令人心绪舒展。</MX_QH_QingheInstrumentPerformance.stages.0.description>
+  <MX_QH_LotusRainPavilionOperaRead.stages.0.label>读过荷雨亭曲艺</MX_QH_LotusRainPavilionOperaRead.stages.0.label>
+  <MX_QH_LotusRainPavilionOperaRead.stages.0.description>荷雨亭曲艺的文字清雅舒缓，像是在雨后的亭中听了一段温柔的旧曲。</MX_QH_LotusRainPavilionOperaRead.stages.0.description>
+  <MX_QH_NoLotusPond.stages.0.label>没有荷池</MX_QH_NoLotusPond.stages.0.label>
+  <MX_QH_NoLotusPond.stages.0.description>清荷身边没有可供栖心的荷池，水意无处安放。</MX_QH_NoLotusPond.stages.0.description>
+  <MX_QH_LotusPavilionBeautyLow.stages.0.label>荷雨亭不够雅致</MX_QH_LotusPavilionBeautyLow.stages.0.label>
+  <MX_QH_LotusPavilionBeautyLow.stages.0.description>荷池所在的屋舍还不够清雅，难以让清荷真正静下心来。</MX_QH_LotusPavilionBeautyLow.stages.0.description>
 </LanguageData>

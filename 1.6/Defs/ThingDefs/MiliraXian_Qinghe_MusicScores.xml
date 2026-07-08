@@ -134,11 +134,13 @@
                         <skillCategory>MX_QH_Category_Qinghe</skillCategory>
                         <learningSpeed>1</learningSpeed>
                         <extraNodeChance>0.15</extraNodeChance>
+                        <extractedNodeAcquireWeightFactor>0.35</extractedNodeAcquireWeightFactor>
                         <combinedBookName>MX_QH_Book_LostScore_Label</combinedBookName>
                     </li>
                     <li Class="MiliraXian.Characters.BookOutcomeProperties_SkillTreeUnlock">
                         <skillCategory>MX_QH_Category_Qinghe</skillCategory>
                         <learningSpeed>1</learningSpeed>
+                        <extractedNodeAcquireWeightFactor>0.35</extractedNodeAcquireWeightFactor>
                     </li>
                     <li Class="BookOutcomeProperties_GainSkillExp" />
                     <li Class="BookOutcomeProperties_GiveQuest">
@@ -200,6 +202,10 @@
                 </verticalGraphic>
                 <doers>
                     <li Class="BookOutcomeProperties_GainSkillExp" />
+                    <li Class="MiliraXian.Characters.QingHe.Things.BookOutcomeProperties_QingheCustomBookThought">
+                        <thoughtDef>MX_QH_LotusRainPavilionOperaRead</thoughtDef>
+                        <gainIntervalTicks>600</gainIntervalTicks>
+                    </li>
                     <li Class="BookOutcomeProperties_GiveQuest">
                         <questChance>0.01</questChance>
                     </li>
@@ -232,10 +238,21 @@
         <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
     </ThingDef>
 
+    <ThingDef ParentName="UnfinishedBase">
+        <defName>MX_QH_UnfinishedLotusRainPavilionOpera</defName>
+        <label>未完成的荷雨亭曲艺</label>
+        <description>尚未完成的荷雨亭曲艺手稿。</description>
+        <graphicData>
+            <texPath>Things/Item/Unfinished/UnfinishedMusicalInstrument</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <stuffCategories Inherit="False" />
+    </ThingDef>
+
     <RecipeDef>
         <defName>MX_QH_AssembleLostMusicScore</defName>
         <label>拼合清荷曲谱</label>
-        <description>将失传的曲谱残片拼合成书卷。成功时得到随机清荷技能书，失败时只得到普通书。</description>
+        <description>将失传的曲谱残片拼合成书卷。90%概率得到随机清荷技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</description>
         <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_InterpretLostScorebook</workerClass>
         <jobString>正在拼合清荷曲谱。</jobString>
         <workAmount>300</workAmount>
@@ -262,11 +279,110 @@
             </thingDefs>
         </fixedIngredientFilter>
         <modExtensions>
+            <li Class="MiliraXian.Characters.QingHe.Things.MX_QingheRecipeRequirementExtension">
+                <allowedPawnKinds>
+                    <li>MiliraXian_Qinghe</li>
+                </allowedPawnKinds>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Things.MX_InterpretLostScorebookExtension">
                 <skillBookChance>0.9</skillBookChance>
                 <plainBookDef>TextBook</plainBookDef>
             </li>
         </modExtensions>
         <displayPriority>1200</displayPriority>
+    </RecipeDef>
+
+    <RecipeDef>
+        <defName>MX_QH_WriteLotusRainPavilionOpera</defName>
+        <label>撰写荷雨亭曲艺</label>
+        <description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率写成随机清荷技能书，否则写成《荷雨亭曲艺》。技能书有15%概率额外记录第二个不同技能。</description>
+        <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_WriteQingheCustomBook</workerClass>
+        <jobString>正在撰写荷雨亭曲艺。</jobString>
+        <workAmount>6000</workAmount>
+        <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+        <workSkill>Artistic</workSkill>
+        <workSkillLearnFactor>0.5</workSkillLearnFactor>
+        <unfinishedThingDef>MX_QH_UnfinishedLotusRainPavilionOpera</unfinishedThingDef>
+        <effectWorking>Sculpt</effectWorking>
+        <soundWorking>Recipe_Sculpt</soundWorking>
+        <recipeUsers>
+            <li>TableSculpting</li>
+        </recipeUsers>
+        <ingredients>
+            <li>
+                <filter>
+                    <thingDefs>
+                        <li>WoodLog</li>
+                    </thingDefs>
+                </filter>
+                <count>25</count>
+            </li>
+            <li>
+                <filter>
+                    <thingDefs>
+                        <li>Dye</li>
+                    </thingDefs>
+                </filter>
+                <count>10</count>
+            </li>
+        </ingredients>
+        <fixedIngredientFilter>
+            <thingDefs>
+                <li>WoodLog</li>
+                <li>Dye</li>
+            </thingDefs>
+        </fixedIngredientFilter>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.QingHe.Things.MX_QingheRecipeRequirementExtension">
+                <allowedPawnKinds>
+                    <li>MiliraXian_Qinghe</li>
+                </allowedPawnKinds>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.MX_WriteQingheCustomBookExtension">
+                <skillBookChance>0.25</skillBookChance>
+                <bookDef>MX_QH_Book</bookDef>
+                <variants>
+                    <li>
+                        <title>荷雨亭曲艺：春水调</title>
+                        <content>清荷记下荷雨初歇时的水声与轻拍。读到此卷时，仿佛能听见春水漫过石阶，细碎花影随声摇动。</content>
+                    </li>
+                    <li>
+                        <title>荷雨亭曲艺：花影记</title>
+                        <content>这卷手稿写的是花影、步法与短曲之间的呼应。句子不求铺张，却处处留下清荷对庭中草木的细致观察。</content>
+                    </li>
+                    <li>
+                        <title>荷雨亭曲艺：听雨小谱</title>
+                        <content>清荷把雨落荷叶的节拍拆成数段短谱，又在页边附上演奏时的心得。文字安静，读来却有微雨入亭的回响。</content>
+                    </li>
+                    <li>
+                        <title>荷雨亭曲艺：莲步散声</title>
+                        <content>这是一篇兼记舞步与曲调的书卷。清荷以很轻的笔触描摹衣袂、铃音和水面涟漪，使寻常曲艺多了几分雅致。</content>
+                    </li>
+                    <li>
+                        <title>荷雨亭曲艺：羽衣听荷</title>
+                        <content>清荷把荷雨亭中的水声写成底韵，又在页边记下霓羽起势时衣袂掠风的轻响。整卷读来像一场隔水相和的短曲。</content>
+                        <spawnConditions>
+                            <li>
+                                <relatedColonistPawnKinds>
+                                    <li>MiliraXian_Neiyu</li>
+                                </relatedColonistPawnKinds>
+                            </li>
+                        </spawnConditions>
+                    </li>
+                    <li>
+                        <title>荷雨亭曲艺：离火照雨</title>
+                        <content>这卷手稿写雨夜灯火与弦声相映。清荷将昭离谈及的余烬、命火与回声化作曲中转折，使荷亭旧调多了一分明亮锋芒。</content>
+                        <spawnConditions>
+                            <li>
+                                <relatedColonistPawnKinds>
+                                    <li>MiliraXian_Zhaoli</li>
+                                </relatedColonistPawnKinds>
+                            </li>
+                        </spawnConditions>
+                    </li>
+                </variants>
+            </li>
+        </modExtensions>
+        <displayPriority>1190</displayPriority>
     </RecipeDef>
 </Defs>

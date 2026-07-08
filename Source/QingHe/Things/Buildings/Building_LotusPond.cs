@@ -52,6 +52,24 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
         }
     }
 
+    public class PlaceWorker_QingheLotusPondDesign : PlaceWorker
+    {
+        public override bool IsBuildDesignatorVisible(BuildableDef def)
+        {
+            return Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.LotusPondDesignUnlocked == true;
+        }
+
+        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+        {
+            if (Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.LotusPondDesignUnlocked == true)
+            {
+                return true;
+            }
+
+            return "MX_QH_FlowerCourtDesignLocked".Translate();
+        }
+    }
+
     public class CompAssignableToPawn_QingheMeditationSpot : CompAssignableToPawn_MeditationSpot
     {
         public override IEnumerable<Pawn> AssigningCandidates

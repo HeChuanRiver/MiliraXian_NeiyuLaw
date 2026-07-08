@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_QixiOutcome.description>Depending on ritual quality, participants gain a mood thought lasting {MOODDAYS} days, between {MINMOOD} and {MAXMOOD}. Completing the Qixi rite also grants lost Qinghe score fragments, and better outcomes may inspire participants.</MX_QH_QixiOutcome.description>
+  <MX_QH_QixiOutcome.comps.1.label>Qinghe present</MX_QH_QixiOutcome.comps.1.label>
+  <MX_QH_QixiOutcome.comps.2.label>participant count</MX_QH_QixiOutcome.comps.2.label>
+  <MX_QH_QixiOutcome.comps.3.label>started by lotus pond</MX_QH_QixiOutcome.comps.3.label>
+  <MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>a lotus pond</MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>
+  <MX_QH_QixiOutcome.outcomeChances.0.label>terrible</MX_QH_QixiOutcome.outcomeChances.0.label>
+  <MX_QH_QixiOutcome.outcomeChances.0.description>{0} was terrible. Wishes scattered into awkward silence, and no one found the expected melody.</MX_QH_QixiOutcome.outcomeChances.0.description>
+  <MX_QH_QixiOutcome.outcomeChances.1.label>dull</MX_QH_QixiOutcome.outcomeChances.1.label>
+  <MX_QH_QixiOutcome.outcomeChances.1.description>{0} was somewhat dull. The gathering was peaceful enough, but the music never truly settled.</MX_QH_QixiOutcome.outcomeChances.1.description>
+  <MX_QH_QixiOutcome.outcomeChances.2.label>elegant</MX_QH_QixiOutcome.outcomeChances.2.label>
+  <MX_QH_QixiOutcome.outcomeChances.2.description>{0} was quite elegant. Clear music and quiet wishes left everyone's heart lighter.</MX_QH_QixiOutcome.outcomeChances.2.description>
+  <MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>One participant may gain work frenzy or creative inspiration.</MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>
+  <MX_QH_QixiOutcome.outcomeChances.3.label>inspired</MX_QH_QixiOutcome.outcomeChances.3.label>
+  <MX_QH_QixiOutcome.outcomeChances.3.description>{0} stirred inspiration. The rite seemed briefly answered by an old melody beyond the lotus pond.</MX_QH_QixiOutcome.outcomeChances.3.description>
+  <MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>Two participants may gain work frenzy or creative inspiration.</MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>
+</LanguageData>

@@ -20,24 +20,30 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public DamageDef damageDef;
         public float damageAmount = 32f;
         public float armorPenetration = 0.35f;
+        public DamageDef accumulationDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectBleedAccumulation;
+        public float accumulationDamageAmount = 0.18f;
+        public float accumulationArmorPenetration = 2.1f;
+        public float buildingDamageMultiplier = 2f;
         public int stunTicks = 60;
         public float knockbackDistance = 3f;
         public float flowerDecreeCost = 1f;
         public int impactDelayTicks = 30;
 
-        public string disabledReason = "MX_QH_FlowerDanceNotLearned";
+        public string disabledReason = "MX_QH_AscentSlashNotLearned";
         public string noLineOfSightToLandingMessage = "MX_QH_FlowerDanceLandingNoLineOfSight";
-        public string noLineOfSightToDirectionMessage = "MX_QH_FlowerDanceDirectionNoLineOfSight";
         public string invalidLandingMessage = "MX_QH_FlowerDanceInvalidLanding";
-        public string chooseLandingLabel = "MX_QH_FlowerDanceChooseLanding";
-        public string chooseDirectionLabel = "MX_QH_FlowerDanceChooseDirection";
 
-        public string entryEffecter = "Skip_EntryNoDelay";
-        public string exitEffecter = "Skip_ExitNoDelay";
+        public string entryEffecter;
+        public string exitEffecter;
         public string impactEffecter = "ImpactSmallDustCloud";
-        public string entryFleck = "PsycastSkipFlashEntry";
-        public string exitFleck = "PsycastSkipFlashExit";
+        public string takeoffGroundEffecter = "MXNL_Effecter_Skyfall_FlyBeginGround";
+        public string entryFleck;
+        public string exitFleck;
         public string impactFleck = "ExplosionFlash";
+        public string ascentTrailFleck = "MXNL_Skyfall_FlyBegin_F";
+        public float ascentTrailFleckScale = 1.15f;
+        public float ascentTrailOffsetX = 0f;
+        public float ascentTrailOffsetZ = 8f;
         public string hitFleck = "PsycastAreaEffect";
         public SoundDef castSound;
 
@@ -49,13 +55,12 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
     public class CompAbilityEffect_AscentSlash : CompAbilityEffect, ICompAbilityEffectOnJumpCompleted
     {
-        private static readonly Color LandingRangeColor = new Color(0.3f, 0.8f, 1f, 0.45f);
         private static readonly Color ConePreviewColor = new Color(1f, 0.45f, 0.65f, 0.55f);
         private const int AscentSlashArcDurationTicks = 36;
 
         private readonly List<IntVec3> tmpPreviewCells = new List<IntVec3>();
-        private readonly List<Pawn> tmpPreviewPawns = new List<Pawn>();
-        private readonly HashSet<Pawn> tmpPreviewPawnSet = new HashSet<Pawn>();
+        private readonly List<Thing> tmpPreviewTargets = new List<Thing>();
+        private readonly HashSet<Thing> tmpPreviewTargetSet = new HashSet<Thing>();
         private bool reselectCasterOnLanding;
 
         public new CompProperties_AbilityAscentSlash Props => (CompProperties_AbilityAscentSlash)props;
@@ -101,32 +106,36 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            if (!ValidateLanding(caster, target, true) || !ValidateDirection(caster.MapHeld, target.Cell, dest, true))
+            if (!ValidateLanding(caster, target, true))
             {
                 return;
             }
 
             IntVec3 origin = caster.Position;
             IntVec3 landing = target.Cell;
-            IntVec3 directionCell = dest.Cell;
+            IntVec3 directionCell = ComputeDirectionCell(origin, landing);
             Map map = caster.MapHeld;
 
-            PlayVisuals(map, origin, landing, Props.entryEffecter, Props.entryFleck, 1f);
+            RememberSelectionForFlight(caster);
+            AddAscentSlashInvulnerability(caster);
+            PlayTakeoffVisuals(map, origin);
 
             if (Props.flyerDef != null)
             {
-                PawnFlyer flyer = PawnFlyer.MakeFlyer(Props.flyerDef, caster, landing, null, Props.castSound, triggeringAbility: parent, target: dest);
+                PawnFlyer flyer = PawnFlyer.MakeFlyer(Props.flyerDef, caster, landing, null, Props.castSound, triggeringAbility: parent, target: target);
                 GenSpawn.Spawn(flyer, landing, map);
                 RestoreCasterSelectionDuringFlight(caster);
                 return;
             }
 
             ResolveLandingImpact(caster, origin, landing, directionCell);
+            RemoveAscentSlashInvulnerability(caster);
             RestoreCasterSelectionIfNeeded(caster);
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
+            DrawLandingPreview(target);
         }
 
         public void OnJumpCompleted(IntVec3 origin, LocalTargetInfo target)
@@ -137,30 +146,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            ResolveLandingImpact(caster, origin, caster.Position, target.Cell);
+            IntVec3 landing = caster.Position;
+            ResolveLandingImpact(caster, origin, landing, ComputeDirectionCell(origin, landing));
+            RemoveAscentSlashInvulnerability(caster);
             RestoreCasterSelectionIfNeeded(caster);
-        }
-
-        public bool ValidateLandingForCommand(LocalTargetInfo target, bool showMessages)
-        {
-            return ValidateLanding(parent?.pawn, target, showMessages);
-        }
-
-        public bool ValidateDirectionForCommand(LocalTargetInfo landing, LocalTargetInfo direction, bool showMessages)
-        {
-            Pawn caster = parent?.pawn;
-            return caster?.MapHeld != null && ValidateDirection(caster.MapHeld, landing.Cell, direction, showMessages);
-        }
-
-        public bool CanLandForCommand(LocalTargetInfo target, out string reason)
-        {
-            return CanLand(parent?.pawn, target, out reason);
-        }
-
-        public bool CanChooseDirectionForCommand(LocalTargetInfo landing, LocalTargetInfo direction, out string reason)
-        {
-            Pawn caster = parent?.pawn;
-            return CanChooseDirection(caster?.MapHeld, landing.Cell, direction, out reason);
         }
 
         public void DrawLandingPreview(LocalTargetInfo target)
@@ -171,35 +160,16 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            GenDraw.DrawRadiusRing(caster.Position, Props.range, LandingRangeColor, cell => LandingCellVisible(caster, cell));
             string reason;
-            if (!CanLandForCommand(target, out reason))
+            if (!CanLand(caster, target, out reason))
             {
                 return;
             }
 
-            GenDraw.DrawTargetHighlightWithLayer(target.CenterVector3, AltitudeLayer.MetaOverlays);
-        }
-
-        public void DrawDirectionPreview(LocalTargetInfo landing, LocalTargetInfo direction)
-        {
-            string reason;
-            if (!landing.IsValid || !CanChooseDirectionForCommand(landing, direction, out reason))
-            {
-                return;
-            }
-
-            GenDraw.DrawTargetHighlightWithLayer(landing.CenterVector3, AltitudeLayer.MetaOverlays);
-            GenDraw.DrawTargetHighlight(direction);
-            BuildConeCells(parent?.pawn?.MapHeld, landing.Cell, direction.Cell, tmpPreviewCells);
+            IntVec3 directionCell = ComputeDirectionCell(caster.Position, target.Cell);
+            BuildConeCells(caster.MapHeld, target.Cell, directionCell, tmpPreviewCells);
             GenDraw.DrawFieldEdges(tmpPreviewCells, ConePreviewColor);
-            DrawAffectedPawnHighlights(landing.Cell, direction.Cell);
-        }
-
-        public void NotifyQueuedFromSelectedCommand()
-        {
-            Pawn caster = parent?.pawn;
-            reselectCasterOnLanding = caster != null && Find.Selector != null && Find.Selector.IsSelected(caster);
+            DrawAffectedTargetHighlights(target.Cell, directionCell);
         }
 
         private bool ValidateLanding(Pawn caster, LocalTargetInfo target, bool showMessages)
@@ -244,42 +214,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             return true;
         }
 
-        private bool ValidateDirection(Map map, IntVec3 landing, LocalTargetInfo direction, bool showMessages)
-        {
-            Pawn caster = parent?.pawn;
-            string reason;
-            if (!CanChooseDirection(map, landing, direction, out reason))
-            {
-                return Reject(reason, caster, direction, showMessages);
-            }
-
-            return true;
-        }
-
-        private bool CanChooseDirection(Map map, IntVec3 landing, LocalTargetInfo direction, out string reason)
-        {
-            if (map == null || !landing.IsValid || !landing.InBounds(map) || !direction.IsValid || !direction.Cell.InBounds(map))
-            {
-                reason = Props.noLineOfSightToDirectionMessage.Translate();
-                return false;
-            }
-
-            if (direction.Cell == landing)
-            {
-                reason = Props.noLineOfSightToDirectionMessage.Translate();
-                return false;
-            }
-
-            if (!GenSight.LineOfSight(landing, direction.Cell, map))
-            {
-                reason = Props.noLineOfSightToDirectionMessage.Translate();
-                return false;
-            }
-
-            reason = null;
-            return true;
-        }
-
         private bool Reject(string message, Pawn caster, LocalTargetInfo target, bool showMessages)
         {
             if (showMessages)
@@ -293,13 +227,16 @@ namespace MiliraXian.Characters.QingHe.Abilities
             return false;
         }
 
-        private bool LandingCellVisible(Pawn caster, IntVec3 cell)
+        private static IntVec3 ComputeDirectionCell(IntVec3 origin, IntVec3 landing)
         {
-            Map map = caster?.MapHeld;
-            return map != null
-                && cell.InBounds(map)
-                && GenSight.LineOfSight(caster.Position, cell, map)
-                && JumpUtility.ValidJumpTarget(caster, map, cell);
+            IntVec3 offset = landing - origin;
+            offset.y = 0;
+            if (offset.x == 0 && offset.z == 0)
+            {
+                return landing + IntVec3.North;
+            }
+
+            return landing + offset;
         }
 
         private static bool HasLearnedJueying(Pawn pawn)
@@ -327,6 +264,41 @@ namespace MiliraXian.Characters.QingHe.Abilities
             MX_QH_HediffUtility.GetFlowerDecree(caster)?.TryConsumeDecree(Props.flowerDecreeCost);
         }
 
+        private void RememberSelectionForFlight(Pawn caster)
+        {
+            reselectCasterOnLanding = caster != null && Find.Selector != null && Find.Selector.IsSelected(caster);
+        }
+
+        private static void AddAscentSlashInvulnerability(Pawn caster)
+        {
+            if (caster?.health == null || MX_QHDefOf.MX_QH_AscentSlashInvulnerable == null)
+            {
+                return;
+            }
+
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
+            if (hediff == null)
+            {
+                hediff = caster.health.AddHediff(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
+            }
+
+            hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
+        }
+
+        private static void RemoveAscentSlashInvulnerability(Pawn caster)
+        {
+            if (caster?.health == null || MX_QHDefOf.MX_QH_AscentSlashInvulnerable == null)
+            {
+                return;
+            }
+
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
+            if (hediff != null)
+            {
+                caster.health.RemoveHediff(hediff);
+            }
+        }
+
         public static void ResolveDelayedConeImpact(Pawn caster, Map map, IntVec3 landing, IntVec3 directionCell, CompProperties_AbilityAscentSlash props)
         {
             if (props == null)
@@ -347,18 +319,22 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             float halfAngle = Mathf.Clamp(props.coneAngleDegrees, 1f, 360f) * 0.5f;
             DamageDef damageDef = props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Blunt;
-            List<Pawn> victims = CollectHostilePawnsInCone(map, landing, caster, props.coneRadius, forward, halfAngle);
+            List<Thing> victims = CollectHostileTargetsInCone(map, landing, caster, props.coneRadius, forward, halfAngle);
 
             for (int i = 0; i < victims.Count; i++)
             {
-                Pawn victim = victims[i];
-                victim.TakeDamage(new DamageInfo(damageDef, props.damageAmount, props.armorPenetration, -1f, caster));
-                if (props.stunTicks > 0 && !victim.Dead && !victim.Destroyed)
+                Thing victim = victims[i];
+                float damageAmount = victim is Building ? props.damageAmount * props.buildingDamageMultiplier : props.damageAmount;
+                victim.TakeDamage(new DamageInfo(damageDef, damageAmount, props.armorPenetration, -1f, caster));
+
+                Pawn victimPawn = victim as Pawn;
+                ApplyAccumulation(victimPawn, caster, props);
+                if (props.stunTicks > 0 && victimPawn != null && !victimPawn.Dead && !victimPawn.Destroyed)
                 {
-                    victim.stances?.stunner?.StunFor(props.stunTicks, caster);
+                    victimPawn.stances?.stunner?.StunFor(props.stunTicks, caster);
                 }
 
-                TryKnockback(victim, landing, props.knockbackDistance, props.knockbackFlyerDef);
+                TryKnockback(victimPawn, landing, props.knockbackDistance, props.knockbackFlyerDef);
                 if (victim.Spawned && victim.MapHeld == map)
                 {
                     MX_QHGraphicsUtility.Fleck(map, victim.Position, props.hitFleck, 0.7f);
@@ -366,17 +342,32 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
         }
 
-        private static List<Pawn> CollectHostilePawnsInCone(Map map, IntVec3 center, Pawn caster, float radius, Vector3 forward, float halfAngle)
+        private static void ApplyAccumulation(Pawn victim, Pawn caster, CompProperties_AbilityAscentSlash props)
         {
-            List<Pawn> result = new List<Pawn>();
-            HashSet<Pawn> unique = new HashSet<Pawn>();
-            CollectHostilePawnsInCone(map, center, caster, radius, forward, halfAngle, result, unique);
+            if (victim == null || victim.Dead || victim.Destroyed || props.accumulationDamageDef == null || props.accumulationDamageAmount <= 0f)
+            {
+                return;
+            }
+
+            victim.TakeDamage(new DamageInfo(
+                props.accumulationDamageDef,
+                props.accumulationDamageAmount,
+                props.accumulationArmorPenetration,
+                -1f,
+                caster));
+        }
+
+        private static List<Thing> CollectHostileTargetsInCone(Map map, IntVec3 center, Pawn caster, float radius, Vector3 forward, float halfAngle)
+        {
+            List<Thing> result = new List<Thing>();
+            HashSet<Thing> unique = new HashSet<Thing>();
+            CollectHostileTargetsInCone(map, center, caster, radius, forward, halfAngle, result, unique);
             return result;
         }
 
-        private static void CollectHostilePawnsInCone(Map map, IntVec3 center, Pawn caster, float radius, Vector3 forward, float halfAngle, List<Pawn> outPawns, HashSet<Pawn> unique)
+        private static void CollectHostileTargetsInCone(Map map, IntVec3 center, Pawn caster, float radius, Vector3 forward, float halfAngle, List<Thing> outTargets, HashSet<Thing> unique)
         {
-            outPawns.Clear();
+            outTargets.Clear();
             unique.Clear();
             if (map == null || caster == null)
             {
@@ -405,18 +396,35 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 List<Thing> things = cell.GetThingList(map);
                 for (int i = 0; i < things.Count; i++)
                 {
-                    Pawn pawn = things[i] as Pawn;
-                    if (pawn == null || pawn == caster || pawn.Dead || pawn.Destroyed || !GenHostility.HostileTo(caster, pawn))
+                    Thing thing = things[i];
+                    if (!CanHitWithAscentSlash(caster, thing))
                     {
                         continue;
                     }
 
-                    if (unique.Add(pawn))
+                    if (unique.Add(thing))
                     {
-                        outPawns.Add(pawn);
+                        outTargets.Add(thing);
                     }
                 }
             }
+        }
+
+        private static bool CanHitWithAscentSlash(Pawn caster, Thing thing)
+        {
+            if (thing == null || thing == caster || thing.Destroyed || !thing.Spawned)
+            {
+                return false;
+            }
+
+            Pawn pawn = thing as Pawn;
+            if (pawn != null)
+            {
+                return !pawn.Dead && GenHostility.HostileTo(caster, pawn);
+            }
+
+            Building building = thing as Building;
+            return building != null && thing.HostileTo(caster);
         }
 
         private static Vector3 ComputeForward(IntVec3 source, IntVec3 target)
@@ -547,7 +555,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
         }
 
-        private void DrawAffectedPawnHighlights(IntVec3 landing, IntVec3 directionCell)
+        private void DrawAffectedTargetHighlights(IntVec3 landing, IntVec3 directionCell)
         {
             Pawn caster = parent?.pawn;
             Map map = caster?.MapHeld;
@@ -563,10 +571,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             float halfAngle = Mathf.Clamp(Props.coneAngleDegrees, 1f, 360f) * 0.5f;
-            CollectHostilePawnsInCone(map, landing, caster, Props.coneRadius, forward, halfAngle, tmpPreviewPawns, tmpPreviewPawnSet);
-            for (int i = 0; i < tmpPreviewPawns.Count; i++)
+            CollectHostileTargetsInCone(map, landing, caster, Props.coneRadius, forward, halfAngle, tmpPreviewTargets, tmpPreviewTargetSet);
+            for (int i = 0; i < tmpPreviewTargets.Count; i++)
             {
-                GenDraw.DrawTargetHighlight(tmpPreviewPawns[i]);
+                GenDraw.DrawTargetHighlight(tmpPreviewTargets[i]);
             }
         }
 
@@ -611,110 +619,17 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 GenDraw.DrawLineBetween(source.ToVector3Shifted(), cell.ToVector3Shifted());
             }
         }
-    }
 
-    public class Command_AbilityAscentSlash : Command_Ability
-    {
-        public Command_AbilityAscentSlash(Ability ability, Pawn pawn) : base(ability, pawn)
+        private void PlayTakeoffVisuals(Map map, IntVec3 origin)
         {
-        }
-
-        public override void ProcessInput(Event ev)
-        {
-            base.ProcessInput(ev);
-            SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-            if (!Ability.CanCast)
-            {
-                return;
-            }
-
-            CompAbilityEffect_AscentSlash comp = Ability.CompOfType<CompAbilityEffect_AscentSlash>();
-            if (comp == null)
-            {
-                return;
-            }
-
-            Find.DesignatorManager.Deselect();
-            BeginLandingTargeting(comp);
-        }
-
-        private void BeginLandingTargeting(CompAbilityEffect_AscentSlash comp)
-        {
-            TargetingParameters parameters = TargetingParameters.ForCell();
-            Find.Targeter.BeginTargeting(
-                parameters,
-                landing =>
-                {
-                    if (!comp.ValidateLandingForCommand(landing, true))
-                    {
-                        BeginLandingTargeting(comp);
-                        return;
-                    }
-
-                    BeginDirectionTargeting(comp, landing);
-                },
-                landing => comp.DrawLandingPreview(landing),
-                null,
-                Pawn,
-                null,
-                null,
-                playSoundOnAction: true,
-                onGuiAction: landing => DrawLandingMouseLabel(comp, landing, Ability.def.uiIcon));
-        }
-
-        private void BeginDirectionTargeting(CompAbilityEffect_AscentSlash comp, LocalTargetInfo landing)
-        {
-            TargetingParameters parameters = TargetingParameters.ForCell();
-            Find.Targeter.BeginTargeting(
-                parameters,
-                direction =>
-                {
-                    if (!comp.ValidateDirectionForCommand(landing, direction, true))
-                    {
-                        BeginDirectionTargeting(comp, landing);
-                        return;
-                    }
-
-                    comp.NotifyQueuedFromSelectedCommand();
-                    ability.QueueCastingJob(landing, direction);
-                },
-                direction => comp.DrawDirectionPreview(landing, direction),
-                null,
-                Pawn,
-                null,
-                null,
-                playSoundOnAction: true,
-                onGuiAction: direction => DrawDirectionMouseLabel(comp, landing, direction, Ability.def.uiIcon));
-        }
-
-        private static void DrawLandingMouseLabel(CompAbilityEffect_AscentSlash comp, LocalTargetInfo target, Texture2D validIcon)
-        {
-            string reason;
-            DrawMouseLabel(comp.Props.chooseLandingLabel.Translate(), comp.CanLandForCommand(target, out reason) ? null : reason, validIcon);
-        }
-
-        private static void DrawDirectionMouseLabel(CompAbilityEffect_AscentSlash comp, LocalTargetInfo landing, LocalTargetInfo direction, Texture2D validIcon)
-        {
-            string reason;
-            DrawMouseLabel(comp.Props.chooseDirectionLabel.Translate(), comp.CanChooseDirectionForCommand(landing, direction, out reason) ? null : reason, validIcon);
-        }
-
-        private static void DrawMouseLabel(string label, string rejectReason, Texture2D validIcon)
-        {
-            if (!rejectReason.NullOrEmpty())
-            {
-                GenUI.DrawMouseAttachment(TexCommand.CannotShoot);
-                Widgets.MouseAttachedLabel(rejectReason, 0f, 0f, ColorLibrary.RedReadable);
-                return;
-            }
-
-            GenUI.DrawMouseAttachment(validIcon);
-            if (!label.NullOrEmpty())
-            {
-                Widgets.MouseAttachedLabel(label, 0f, 0f, null);
-            }
+            MX_QHGraphicsUtility.Fx(map, origin, Props.takeoffGroundEffecter, 1f);
+            Vector3 trailPos = origin.ToVector3Shifted() + new Vector3(Props.ascentTrailOffsetX, 0f, Props.ascentTrailOffsetZ);
+            MX_QHGraphicsUtility.Fleck(map, trailPos, Props.ascentTrailFleck, Props.ascentTrailFleckScale);
+            MX_QHGraphicsUtility.Fx(map, origin, Props.entryEffecter, 1f);
+            MX_QHGraphicsUtility.Fleck(map, origin, Props.entryFleck, 1f);
         }
     }
+
 }
 
 

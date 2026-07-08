@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Node_SpringFlow.label>飛花令</MX_QH_Node_SpringFlow.label>
-  <MX_QH_Node_SpringFlow.description>初始曲譜集。清荷已經掌握春泉湧流，此節點僅用於開啟飛花令曲譜集。</MX_QH_Node_SpringFlow.description>
-  <MX_QH_Node_Chuanhun.label>穿魂</MX_QH_Node_Chuanhun.label>
-  <MX_QH_Node_Chuanhun.description>由《飛花絕語》解鎖。對遠距離目標地點產生音爆，眩暈範圍內目標並造成心靈傷害。</MX_QH_Node_Chuanhun.description>
-  <MX_QH_Node_Shuangyuejing.label>霜月鏡</MX_QH_Node_Shuangyuejing.label>
-  <MX_QH_Node_Shuangyuejing.description>由《斷橋殘雪》解鎖。召喚圓形冰幕，凍結並吸收經過的敵對投射物。</MX_QH_Node_Shuangyuejing.description>
-  <MX_QH_Node_Gaoshan.label>高山</MX_QH_Node_Gaoshan.label>
-  <MX_QH_Node_Gaoshan.description>由《高山》解鎖。提高花神之眷顧的護盾容量，並提升花令上限。</MX_QH_Node_Gaoshan.description>
-  <MX_QH_Node_Liushui.label>流水</MX_QH_Node_Liushui.label>
+  <MX_QH_Node_SpringFlow.label>春泉</MX_QH_Node_SpringFlow.label>
+  <MX_QH_Node_SpringFlow.description>石間清泉依春時而動，潤物無聲而有形。——習得飛花令：春泉湧流</MX_QH_Node_SpringFlow.description>
+  <MX_QH_Node_Chuanhun.label>破魂絕音</MX_QH_Node_Chuanhun.label>
+  <MX_QH_Node_Chuanhun.description>由《飛花絕語》解鎖。對遠距離目標地點產生音爆，眩暈範圍內目標並造成心靈傷害，並提升花令上限。</MX_QH_Node_Chuanhun.description>
+  <MX_QH_Node_Shuangyuejing.label>霜華</MX_QH_Node_Shuangyuejing.label>
+  <MX_QH_Node_Shuangyuejing.description>由《斷橋殘雪》解鎖。召喚圓形冰幕，凍結並吸收經過的敵對投射物，並提升花令上限。</MX_QH_Node_Shuangyuejing.description>
+  <MX_QH_Node_Gaoshan.label>剛峻之意</MX_QH_Node_Gaoshan.label>
+  <MX_QH_Node_Gaoshan.description>由《高山》解鎖。提高花神之眷顧的護盾容量。</MX_QH_Node_Gaoshan.description>
+  <MX_QH_Node_Liushui.label>柔韌之意</MX_QH_Node_Liushui.label>
   <MX_QH_Node_Liushui.description>由《流水》解鎖。提高花神之眷顧的回充速度。</MX_QH_Node_Liushui.description>
-  <MX_QH_Node_Chunjiang.label>春江</MX_QH_Node_Chunjiang.label>
-  <MX_QH_Node_Chunjiang.description>由《春江》解鎖。花神之眷顧受到高額傷害時，將單次護盾傷害壓低到上限內。</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_Chunjiang.label>風月之意</MX_QH_Node_Chunjiang.label>
+  <MX_QH_Node_Chunjiang.description>由《春江花月夜》解鎖。縮短花神之眷顧被擊碎後的失效延遲，使護盾更快重新回充。</MX_QH_Node_Chunjiang.description>
   <MX_QH_Node_DivineGrace.label>神恩</MX_QH_Node_DivineGrace.label>
   <MX_QH_Node_DivineGrace.description>清荷的精通節點。每一級代表清荷自身修行更進一步；具體效果由清荷的被動系統讀取並生效。</MX_QH_Node_DivineGrace.description>
-  <MX_QH_Node_Yingyue.label>映月</MX_QH_Node_Yingyue.label>
-  <MX_QH_Node_Yingyue.description>由《映月》解鎖。花神之垂憐的可用次數充能提高。</MX_QH_Node_Yingyue.description>
-  <MX_QH_Node_NishangDance.label>霓裳之舞</MX_QH_Node_NishangDance.label>
-  <MX_QH_Node_NishangDance.description>由《霓裳之舞》解鎖。允許清荷消耗花令進入花舞狀態。</MX_QH_Node_NishangDance.description>
-  <MX_QH_Node_Jueying.label>絕影</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>由《絕影》解鎖。允許清荷使用縱躍，在目標落點後選擇方向造成扇形打擊。</MX_QH_Node_Jueying.description>
-  <MX_QH_Node_Luoshenfu.label>洛神賦</MX_QH_Node_Luoshenfu.label>
-  <MX_QH_Node_Luoshenfu.description>由《洛神賦》解鎖。開啟洛神賦相關伴侶效果。</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_Yingyue.label>映月殘章</MX_QH_Node_Yingyue.label>
+  <MX_QH_Node_Yingyue.description>由《二泉映月》解鎖。花神之垂憐的可用次數充能提高。</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_NishangDance.label>霓裳舞</MX_QH_Node_NishangDance.label>
+  <MX_QH_Node_NishangDance.description>由《霓裳羽衣舞》解鎖。——習得舞技：花舞</MX_QH_Node_NishangDance.description>
+  <MX_QH_Node_Jueying.label>劍勢·絕影</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>清荷與老師霓羽交流後領悟的全新舞技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。——習得舞技：劍勢·絕影，可對扇形範圍內的敵方建築造成雙倍傷害</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Luoshenfu.label>洛水之儀</MX_QH_Node_Luoshenfu.label>
+  <MX_QH_Node_Luoshenfu.description>由《洛神賦》解鎖。——習得能力：洛神的緞帶</MX_QH_Node_Luoshenfu.description>
 </LanguageData>

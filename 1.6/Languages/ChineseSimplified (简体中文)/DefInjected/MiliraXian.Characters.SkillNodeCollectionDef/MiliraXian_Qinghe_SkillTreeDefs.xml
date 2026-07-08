@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Tree_FlowerMandate.label>飞花令</MX_QH_Tree_FlowerMandate.label>
+  <MX_QH_Tree_FlowerMandate.label>四时飞花</MX_QH_Tree_FlowerMandate.label>
   <MX_QH_Tree_FlowerMandate.description>清荷的三式飞花令。全部习得后，飞花令进入强化形态。</MX_QH_Tree_FlowerMandate.description>
-  <MX_QH_Tree_DivineFortune.label>花神之眷顾</MX_QH_Tree_DivineFortune.label>
+  <MX_QH_Tree_FlowerMandate.completionEffectLabel>全部习得：强化飞花令</MX_QH_Tree_FlowerMandate.completionEffectLabel>
+  <MX_QH_Tree_FlowerMandate.completionEffectDescription>春泉涌流获得强化，除基础治疗外，对范围内敌方持续附加流血和中毒积累，机械族改为漏电积累。破魂绝音获得强化，对范围内敌人造成基于心灵敏感度的心灵伤害和恐惧积累，并附加眩晕。霜月镜获得强化，冻结所有来袭投射物并原路反射冰霜射线。</MX_QH_Tree_FlowerMandate.completionEffectDescription>
+  <MX_QH_Tree_DivineFortune.label>涓流之韵</MX_QH_Tree_DivineFortune.label>
   <MX_QH_Tree_DivineFortune.description>清荷可自动回复的护盾与花令基础强化。</MX_QH_Tree_DivineFortune.description>
-  <MX_QH_Tree_DivineBlessing.label>花神之垂怜</MX_QH_Tree_DivineBlessing.label>
-  <MX_QH_Tree_DivineBlessing.description>清荷受到致命伤害时触发的保护效果。</MX_QH_Tree_DivineBlessing.description>
-  <MX_QH_Tree_FlowerDance.label>花舞</MX_QH_Tree_FlowerDance.label>
-  <MX_QH_Tree_FlowerDance.description>消耗花令开启的限时强化形态。</MX_QH_Tree_FlowerDance.description>
-  <MX_QH_Tree_Jueying.label>纵跃</MX_QH_Tree_Jueying.label>
-  <MX_QH_Tree_Jueying.description>清荷的突进型决战技。</MX_QH_Tree_Jueying.description>
-  <MX_QH_Tree_Luoshen.label>洛神赋</MX_QH_Tree_Luoshen.label>
-  <MX_QH_Tree_Luoshen.description>与伴侣关系和非战斗修行相关的曲意。</MX_QH_Tree_Luoshen.description>
+  <MX_QH_Tree_DivineFortune.completionEffectLabel>全部习得：刚毅护盾</MX_QH_Tree_DivineFortune.completionEffectLabel>
+  <MX_QH_Tree_DivineFortune.completionEffectDescription>花神之眷顾获得刚毅护盾效果。护盾受到高额伤害时，单次护盾伤害最高不会超过20点。</MX_QH_Tree_DivineFortune.completionEffectDescription>
+  <MX_QH_Tree_FlowerDance.label>起舞之韵</MX_QH_Tree_FlowerDance.label>
+  <MX_QH_Tree_FlowerDance.description>清荷受到致命伤害时触发的保护效果。</MX_QH_Tree_FlowerDance.description>
+  <MX_QH_Tree_FlowerMastery.label>百花玉音</MX_QH_Tree_FlowerMastery.label>
+  <MX_QH_Tree_FlowerMastery.description>消耗花令开启的限时强化形态。</MX_QH_Tree_FlowerMastery.description>
 </LanguageData>

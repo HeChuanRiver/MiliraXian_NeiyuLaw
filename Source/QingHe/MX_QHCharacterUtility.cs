@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
 
@@ -6,16 +7,11 @@ namespace MiliraXian.Characters.QingHe
 {
     public static class MX_QHCharacterUtility
     {
-        public const string PawnKindDef_Qinghe = "MiliraXian_Qinghe";
-        private const string DefaultWeaponDefName = "MX_QH_Weapon_FlowerBell";
-        private const string DefaultClothingDefName = "MX_QingheNormal";
-        private const string DefaultHeaddressDefName = "MX_QingheHeaddress";
-
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
 
         public static bool IsQinghe(Pawn pawn)
         {
-            return pawn?.kindDef.defName == PawnKindDef_Qinghe;
+            return pawn?.kindDef == MX_QHDefOf.MiliraXian_Qinghe;
         }
 
         public static bool HasRequiredWeapon(Pawn pawn, ThingDef requiredWeapon)
@@ -82,17 +78,17 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            ThingDef weaponDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultWeaponDefName);
+            ThingDef weaponDef = MX_QHDefOf.MX_QH_Weapon_FlowerBell;
             if (weaponDef == null)
             {
-                Log.Error("[MiliraXian.Characters.QingHe] Missing ThingDef: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe default weapon ThingDef.");
                 return;
             }
 
             ThingWithComps weapon = ThingMaker.MakeThing(weaponDef) as ThingWithComps;
             if (weapon == null)
             {
-                Log.Error("[MiliraXian.Characters.QingHe] Default weapon is not ThingWithComps: " + DefaultWeaponDefName);
+                Log.Error("[MiliraXian.Characters.QingHe] Qinghe default weapon is not ThingWithComps.");
                 return;
             }
 
@@ -115,39 +111,38 @@ namespace MiliraXian.Characters.QingHe
 
         private static void EnsureDefaultClothing(Pawn pawn)
         {
-            EnsureDefaultApparel(pawn, DefaultClothingDefName, "Default clothing");
+            EnsureDefaultApparel(pawn, MX_QHDefOf.MX_QingheNormal, "Default clothing");
         }
 
         private static void EnsureDefaultHeaddress(Pawn pawn)
         {
-            EnsureDefaultApparel(pawn, DefaultHeaddressDefName, "Default headdress");
+            EnsureDefaultApparel(pawn, MX_QHDefOf.MX_QingheHeaddress, "Default headdress");
         }
 
-        private static void EnsureDefaultApparel(Pawn pawn, string defName, string debugLabel)
+        private static void EnsureDefaultApparel(Pawn pawn, ThingDef apparelDef, string debugLabel)
         {
             if (!IsQinghe(pawn) || pawn.apparel == null)
             {
                 return;
             }
 
-            Apparel existing = FindWornApparel(pawn, defName);
+            Apparel existing = FindWornApparel(pawn, apparelDef);
             if (existing != null)
             {
                 EnsureForcedApparel(pawn, existing);
                 return;
             }
 
-            ThingDef apparelDef = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
             if (apparelDef == null)
             {
-                Log.Error("[MiliraXian.Characters.QingHe] Missing ThingDef: " + defName);
+                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe " + debugLabel + " ThingDef.");
                 return;
             }
 
             Apparel apparel = ThingMaker.MakeThing(apparelDef) as Apparel;
             if (apparel == null)
             {
-                Log.Error("[MiliraXian.Characters.QingHe] " + debugLabel + " is not Apparel: " + defName);
+                Log.Error("[MiliraXian.Characters.QingHe] " + debugLabel + " is not Apparel.");
                 return;
             }
 
@@ -174,9 +169,9 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        private static Apparel FindWornApparel(Pawn pawn, string defName)
+        private static Apparel FindWornApparel(Pawn pawn, ThingDef apparelDef)
         {
-            if (pawn?.apparel == null)
+            if (pawn?.apparel == null || apparelDef == null)
             {
                 return null;
             }
@@ -184,7 +179,7 @@ namespace MiliraXian.Characters.QingHe
             for (int index = 0; index < pawn.apparel.WornApparel.Count; index++)
             {
                 Apparel apparel = pawn.apparel.WornApparel[index];
-                if (apparel?.def?.defName == defName)
+                if (apparel?.def == apparelDef)
                 {
                     return apparel;
                 }

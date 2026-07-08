@@ -18,6 +18,11 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static SkillNodeDef MX_QH_Node_Jueying;
         public static SkillNodeDef MX_QH_Node_Luoshenfu;
         public static SkillNodeDef MX_QH_Node_DivineGrace;
+
+        public static SkillNodeCollectionDef MX_QH_Tree_FlowerMandate;
+        public static SkillNodeCollectionDef MX_QH_Tree_DivineFortune;
+        public static SkillNodeCollectionDef MX_QH_Tree_FlowerDance;
+        public static SkillNodeCollectionDef MX_QH_Tree_FlowerMastery;
     }
 }
 

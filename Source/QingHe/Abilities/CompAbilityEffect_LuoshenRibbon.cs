@@ -7,6 +7,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
     {
         public ThoughtDef opinionThoughtDef;
         public string invalidTargetMessage = "MX_QH_LuoshenRibbonInvalidTarget";
+        public string successMessage = "MX_QH_LuoshenRibbonApplied";
 
         public CompProperties_AbilityLuoshenRibbon()
         {
@@ -22,6 +23,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public override TargetingParameters targetParams => new TargetingParameters
         {
+            canTargetSelf = true,
             canTargetPawns = true,
             canTargetBuildings = false,
             canTargetAnimals = false,
@@ -46,11 +48,12 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             first.needs?.mood?.thoughts?.memories?.TryGainMemory(thoughtDef, second);
             second.needs?.mood?.thoughts?.memories?.TryGainMemory(thoughtDef, first);
+            Messages.Message(Props.successMessage.Translate(first.LabelShort, second.LabelShort), second, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
         public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
         {
-            return Valid(target, false) && ValidateTarget(dest, false);
+            return Valid(target, false);
         }
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)

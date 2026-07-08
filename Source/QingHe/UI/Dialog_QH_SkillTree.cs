@@ -29,6 +29,12 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private readonly Pawn pawn;
         private readonly HediffComp_SkillTreeState state;
+        private readonly List<SkillNodeCollectionDef> collections = new List<SkillNodeCollectionDef>();
+        private readonly Dictionary<SkillNodeCollectionDef, List<SkillNodeDef>> nodesByCollection = new Dictionary<SkillNodeCollectionDef, List<SkillNodeDef>>();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionLearned = new Dictionary<SkillNodeCollectionDef, bool>();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionHasUnrevealed = new Dictionary<SkillNodeCollectionDef, bool>();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionCompletionActive = new Dictionary<SkillNodeCollectionDef, bool>();
+        private readonly Dictionary<SkillNodeDef, SkillNodeUiState> nodeStates = new Dictionary<SkillNodeDef, SkillNodeUiState>();
         private SkillNodeCollectionDef selectedCollection;
         private SkillNodeDef selectedNode;
         private Vector2 scrollPosition;
@@ -39,6 +45,7 @@ namespace MiliraXian.Characters.QingHe.UI
         private static readonly Color LockedNodeColor = new Color(0.16f, 0.17f, 0.18f, 1f);
         private static readonly Color ImportantNodeColor = new Color(0.54f, 0.42f, 0.27f, 1f);
         private static readonly Color ProgressFillColor = new Color(0.62f, 0.78f, 0.66f, 0.72f);
+        private static readonly Color ThinNodeBorderColor = new Color(0f, 0f, 0f, 0.82f);
 
         public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
 
@@ -50,6 +57,7 @@ namespace MiliraXian.Characters.QingHe.UI
             absorbInputAroundWindow = true;
             closeOnClickedOutside = true;
             doCloseButton = false;
+            BuildSkillTreeSnapshot();
         }
 
         public override void DoWindowContents(Rect inRect)
@@ -65,10 +73,6 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawCollectionTabsAndPanel(Rect rect)
         {
-            List<SkillNodeCollectionDef> collections = DefDatabase<SkillNodeCollectionDef>.AllDefsListForReading
-                .Where(collection => DefDatabase<SkillNodeDef>.AllDefsListForReading.Any(node => node.collection == collection && (state == null || state.IsRelevantNode(node))))
-                .OrderBy(collection => collection.displayOrder)
-                .ToList();
             if (!collections.Contains(selectedCollection))
             {
                 selectedCollection = collections.FirstOrDefault();
@@ -80,7 +84,8 @@ namespace MiliraXian.Characters.QingHe.UI
             for (int i = 0; i < collections.Count; i++)
             {
                 SkillNodeCollectionDef collection = collections[i];
-                tabRecords.Add(new TabRecord(collection.LabelCap, delegate
+                string tabLabel = IsCollectionLearned(collection) ? collection.LabelCap.ToString() : "?";
+                tabRecords.Add(new TabRecord(tabLabel, delegate
                 {
                     selectedCollection = collection;
                     selectedNode = null;
@@ -107,17 +112,22 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawCollectionPanel(Rect rect, SkillNodeCollectionDef collection)
         {
-            List<SkillNodeDef> nodes = DefDatabase<SkillNodeDef>.AllDefsListForReading
-                .Where(node => node.collection == collection && (state == null || state.IsRelevantNode(node)))
-                .OrderBy(node => node.displayOrder)
-                .ToList();
-            if (!nodes.Contains(selectedNode))
+            List<SkillNodeDef> nodes = NodesForCollection(collection);
+            bool collectionLearned = IsCollectionLearned(collection);
+            if (!collectionLearned)
             {
-                selectedNode = nodes.FirstOrDefault();
+                selectedNode = null;
+                detailScrollPosition = Vector2.zero;
+            }
+            else if (!nodes.Contains(selectedNode) || !IsNodeSelectable(selectedNode, collectionLearned))
+            {
+                selectedNode = nodes.FirstOrDefault(node => IsNodeSelectable(node, collectionLearned));
                 detailScrollPosition = Vector2.zero;
             }
 
-            Rect treeRect = new Rect(rect.x, rect.y, rect.width - DetailPanelWidth - PanelGap, rect.height);
+            Rect treeRect = collectionLearned
+                ? new Rect(rect.x, rect.y, rect.width - DetailPanelWidth - PanelGap, rect.height)
+                : rect;
             Rect detailRect = new Rect(treeRect.xMax + PanelGap, rect.y, DetailPanelWidth, rect.height);
             Rect viewRect = BuildTreeViewRect(treeRect, nodes);
 
@@ -128,19 +138,25 @@ namespace MiliraXian.Characters.QingHe.UI
             }
 
             Widgets.EndScrollView();
-            DrawNodeDetails(detailRect, selectedNode);
+            if (collectionLearned)
+            {
+                DrawNodeDetails(detailRect, selectedNode);
+            }
         }
 
         private void DrawNode(SkillNodeDef node, int fallbackIndex)
         {
-            int level = state?.GetNodeLevel(node) ?? 0;
-            bool learned = level > 0;
-            bool maxed = state != null && level >= node.MaxLevel;
+            SkillNodeUiState nodeState = StateForNode(node);
+            int level = nodeState.level;
+            bool learned = nodeState.learned;
+            bool maxed = nodeState.maxed;
             bool selected = selectedNode == node;
-            string reason = null;
-            bool canLearn = state != null && state.CanLearn(node, out reason);
-            float readProgress = maxed ? 0f : state?.GetNodeReadingProgressPercent(node) ?? 0f;
-            float progress = BuildNodeProgress(node, level, readProgress);
+            string reason = nodeState.reason;
+            bool canLearn = nodeState.canLearn;
+            float readProgress = nodeState.readProgress;
+            float progress = nodeState.progress;
+            bool known = nodeState.known;
+            bool selectable = nodeState.selectable;
             Rect rect = NodeRect(node, fallbackIndex);
             Color fill = learned ? LearnedNodeColor : canLearn ? CanLearnNodeColor : LockedNodeColor;
             if (node.important && !learned)
@@ -155,7 +171,10 @@ namespace MiliraXian.Characters.QingHe.UI
                 progressRect.width *= Mathf.Clamp01(progress);
                 Widgets.DrawBoxSolid(progressRect, ProgressFillColor);
             }
-            Widgets.DrawBox(rect, node.important ? 2 : 1);
+            Color oldColor = GUI.color;
+            GUI.color = ThinNodeBorderColor;
+            Widgets.DrawBox(rect, 1);
+            GUI.color = oldColor;
             if (selected)
             {
                 Widgets.DrawBox(rect, 2);
@@ -164,7 +183,7 @@ namespace MiliraXian.Characters.QingHe.UI
             {
                 Widgets.DrawHighlight(rect);
             }
-            if (Widgets.ButtonInvisible(rect))
+            if (selectable && Widgets.ButtonInvisible(rect))
             {
                 selectedNode = node;
                 detailScrollPosition = Vector2.zero;
@@ -172,9 +191,11 @@ namespace MiliraXian.Characters.QingHe.UI
 
             Text.Anchor = TextAnchor.MiddleCenter;
             Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(rect.x + 6f, rect.y + 8f, rect.width - 12f, 28f), node.LabelCap.ToString());
+            Widgets.Label(new Rect(rect.x + 6f, rect.y + 8f, rect.width - 12f, 28f), known ? node.LabelCap.ToString() : "?");
             Text.Font = GameFont.Tiny;
-            string stateText = node.MaxLevel > 1
+            string stateText = !known
+                ? "?"
+                : node.MaxLevel > 1
                 ? "MX_QH_SkillTreeStateLevel".Translate(level, node.MaxLevel).ToString()
                 : learned
                     ? "MX_QH_SkillTreeStateLearned".Translate().ToString()
@@ -187,7 +208,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Text.Anchor = TextAnchor.UpperLeft;
             Text.Font = GameFont.Small;
 
-            TooltipHandler.TipRegion(rect, BuildNodeTip(node, learned, canLearn, reason, progress));
+            TooltipHandler.TipRegion(rect, known ? BuildNodeTip(node, learned, canLearn, reason, progress) : "?");
         }
 
         private void DrawNodeDetails(Rect rect, SkillNodeDef node)
@@ -207,13 +228,14 @@ namespace MiliraXian.Characters.QingHe.UI
             float y = 0f;
             Widgets.BeginScrollView(innerRect, ref detailScrollPosition, viewRect);
 
-            int level = state?.GetNodeLevel(node) ?? 0;
-            bool learned = level > 0;
-            bool maxed = state != null && level >= node.MaxLevel;
-            string reason = null;
-            bool canLearn = state != null && state.CanLearn(node, out reason);
-            float readProgress = maxed ? 0f : state?.GetNodeReadingProgressPercent(node) ?? 0f;
-            float progress = BuildNodeProgress(node, level, readProgress);
+            SkillNodeUiState nodeState = StateForNode(node);
+            int level = nodeState.level;
+            bool learned = nodeState.learned;
+            bool maxed = nodeState.maxed;
+            string reason = nodeState.reason;
+            bool canLearn = nodeState.canLearn;
+            float readProgress = nodeState.readProgress;
+            float progress = nodeState.progress;
 
             Text.Font = GameFont.Medium;
             Widgets.Label(new Rect(0f, y, viewRect.width, 32f), node.LabelCap);
@@ -252,6 +274,15 @@ namespace MiliraXian.Characters.QingHe.UI
             float descHeight = Text.CalcHeight(node.description, viewRect.width);
             Widgets.Label(new Rect(0f, y, viewRect.width, descHeight), node.description);
             y += descHeight + 18f;
+
+            string completionEffectText = BuildCollectionCompletionEffectText(node.collection);
+            if (!completionEffectText.NullOrEmpty())
+            {
+                Text.Font = GameFont.Tiny;
+                float completionHeight = Text.CalcHeight(completionEffectText, viewRect.width);
+                Widgets.Label(new Rect(0f, y, viewRect.width, completionHeight), completionEffectText);
+                y += completionHeight + 18f;
+            }
 
             string sourceText = BuildSourceScoreText(node);
             if (!sourceText.NullOrEmpty())
@@ -323,6 +354,133 @@ namespace MiliraXian.Characters.QingHe.UI
 
             string label = MX_QHCharacterUtility.TranslateIfKey(node.bookName);
             return "MX_QH_SkillTreeSourceScoreEntry".Translate(label).ToString();
+        }
+
+        private string BuildCollectionCompletionEffectText(SkillNodeCollectionDef collection)
+        {
+            if (collection == null || !collection.HasCompletionEffect)
+            {
+                return null;
+            }
+
+            if (collectionHasUnrevealed.TryGetValue(collection, out bool hasUnrevealed) && hasUnrevealed)
+            {
+                return null;
+            }
+
+            string label = MX_QHCharacterUtility.TranslateIfKey(collection.completionEffectLabel);
+            string description = MX_QHCharacterUtility.TranslateIfKey(collection.completionEffectDescription);
+            bool active = collectionCompletionActive.TryGetValue(collection, out bool value) && value;
+            string title = active
+                ? "MX_QH_SkillTreeCollectionCompletionActive".Translate(label).ToString()
+                : "MX_QH_SkillTreeCollectionCompletionLocked".Translate(label).ToString();
+
+            return description.NullOrEmpty() ? title : title + "\n" + description;
+        }
+
+        private void BuildSkillTreeSnapshot()
+        {
+            HashSet<SkillNodeDef> extractedNodes = GameComponent_MX_SkillTreeKnowledge.ExtractedNodesSnapshot();
+            List<SkillNodeDef> relevantNodes = DefDatabase<SkillNodeDef>.AllDefsListForReading
+                .Where(node => state == null || state.IsRelevantNode(node))
+                .ToList();
+
+            collections.AddRange(DefDatabase<SkillNodeCollectionDef>.AllDefsListForReading
+                .Where(collection => relevantNodes.Any(node => node.collection == collection))
+                .OrderBy(collection => collection.displayOrder));
+
+            for (int i = 0; i < relevantNodes.Count; i++)
+            {
+                SkillNodeDef node = relevantNodes[i];
+                int level = state?.GetNodeLevel(node) ?? 0;
+                bool maxed = state != null && level >= node.MaxLevel;
+                string reason = null;
+                bool canLearn = state != null && state.CanLearn(node, out reason);
+                float readProgress = maxed ? 0f : state?.GetNodeReadingProgressPercent(node) ?? 0f;
+                bool known = level > 0 || readProgress > 0f || extractedNodes.Contains(node);
+
+                nodeStates[node] = new SkillNodeUiState
+                {
+                    level = level,
+                    learned = level > 0,
+                    maxed = maxed,
+                    canLearn = canLearn,
+                    reason = reason,
+                    readProgress = readProgress,
+                    progress = BuildNodeProgress(node, level, readProgress),
+                    known = known
+                };
+            }
+
+            for (int i = 0; i < collections.Count; i++)
+            {
+                SkillNodeCollectionDef collection = collections[i];
+                List<SkillNodeDef> nodes = relevantNodes
+                    .Where(node => node.collection == collection)
+                    .OrderBy(node => node.displayOrder)
+                    .ToList();
+                nodesByCollection[collection] = nodes;
+
+                bool learned = nodes.Any(node => StateForNode(node).learned);
+                collectionLearned[collection] = learned;
+                collectionHasUnrevealed[collection] = nodes.Any(node => !StateForNode(node).known);
+                collectionCompletionActive[collection] = state != null && state.IsCollectionCompletionEffectActive(collection);
+            }
+
+            foreach (KeyValuePair<SkillNodeDef, SkillNodeUiState> pair in nodeStates)
+            {
+                pair.Value.selectable = pair.Value.known && IsCollectionLearned(pair.Key.collection);
+            }
+        }
+
+        private List<SkillNodeDef> NodesForCollection(SkillNodeCollectionDef collection)
+        {
+            if (collection != null && nodesByCollection.TryGetValue(collection, out List<SkillNodeDef> nodes))
+            {
+                return nodes;
+            }
+
+            return new List<SkillNodeDef>();
+        }
+
+        private SkillNodeUiState StateForNode(SkillNodeDef node)
+        {
+            if (node != null && nodeStates.TryGetValue(node, out SkillNodeUiState nodeState))
+            {
+                return nodeState;
+            }
+
+            return SkillNodeUiState.Empty;
+        }
+
+        private bool IsCollectionLearned(SkillNodeCollectionDef collection)
+        {
+            return collection != null && collectionLearned.TryGetValue(collection, out bool learned) && learned;
+        }
+
+        private bool IsNodeSelectable(SkillNodeDef node, bool collectionLearned)
+        {
+            if (!collectionLearned || node == null)
+            {
+                return false;
+            }
+
+            return StateForNode(node).selectable;
+        }
+
+        private class SkillNodeUiState
+        {
+            public static readonly SkillNodeUiState Empty = new SkillNodeUiState();
+
+            public int level;
+            public bool learned;
+            public bool maxed;
+            public bool canLearn;
+            public string reason;
+            public float readProgress;
+            public float progress;
+            public bool known;
+            public bool selectable;
         }
 
         private static float BuildNodeProgress(SkillNodeDef node, int level, float readProgress)

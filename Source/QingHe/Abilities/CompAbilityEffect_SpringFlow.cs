@@ -55,7 +55,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             var field = GenSpawn.Spawn(Props.fieldDef, cell, map);
             CompSpringFlowField fieldComp = field.TryGetComp<CompSpringFlowField>();
             fieldComp?.Init(parent.pawn, Props.fieldDurationTicks);
-            fieldComp?.SetEnhanced(MX_QHSkillSystem.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(parent.pawn)));
+            fieldComp?.SetEnhanced(MX_QHSkillUtility.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(parent.pawn)));
             PlaySummonVisual(map, cell, ResolveRadius());
         }
 
@@ -83,8 +83,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private static void PlaySummonVisual(Map map, IntVec3 cell, float radius)
         {
-            var splash = DefDatabase<FleckDef>.GetNamedSilentFail("GroundWaterSplash");
-            var ring = DefDatabase<FleckDef>.GetNamedSilentFail("PsycastAreaEffect");
+            var splash = MX_QHDefOf.GroundWaterSplash;
+            var ring = FleckDefOf.PsycastAreaEffect;
             float burstRadius = Mathf.Max(1.5f, radius * 0.5f);
 
             if (ring != null)

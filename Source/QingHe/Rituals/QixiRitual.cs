@@ -32,7 +32,7 @@ namespace MiliraXian.Characters.QingHe.Rituals
             bool needsFill = false;
             if (Scribe.mode == LoadSaveMode.LoadingVars && sourcePattern == null)
             {
-                sourcePattern = MX_QHDefOf.MX_QH_QixiRitualPattern ?? DefDatabase<RitualPatternDef>.GetNamedSilentFail("MX_QH_QixiRitualPattern");
+                sourcePattern = MX_QHDefOf.MX_QH_QixiRitualPattern;
                 needsFill = sourcePattern != null;
             }
 
@@ -61,6 +61,58 @@ namespace MiliraXian.Characters.QingHe.Rituals
                 pattern.Fill(ritual);
                 ritual.RegenerateName();
             }
+        }
+    }
+
+    public class RitualBehaviorWorker_Qixi : RitualBehaviorWorker
+    {
+        public RitualBehaviorWorker_Qixi()
+        {
+        }
+
+        public RitualBehaviorWorker_Qixi(RitualBehaviorDef def)
+            : base(def)
+        {
+        }
+
+        public override string CanStartRitualNow(TargetInfo target, Precept_Ritual ritual, Pawn selectedPawn = null, Dictionary<string, Pawn> forcedForRole = null)
+        {
+            string reason = base.CanStartRitualNow(target, ritual, selectedPawn, forcedForRole);
+            if (!reason.NullOrEmpty())
+            {
+                return reason;
+            }
+
+            return Current.Game?.GetComponent<GameComponent_QingheQixiRitual>()?.CooldownReason;
+        }
+    }
+
+    public class GameComponent_QingheQixiRitual : GameComponent
+    {
+        private int nextAllowedTick;
+
+        public string CooldownReason
+        {
+            get
+            {
+                int ticksLeft = nextAllowedTick - (Find.TickManager?.TicksGame ?? 0);
+                return ticksLeft > 0 ? "MX_QH_QixiCooldown".Translate(ticksLeft.ToStringTicksToPeriod()) : null;
+            }
+        }
+
+        public GameComponent_QingheQixiRitual(Game game)
+        {
+        }
+
+        public void NotifyRitualCompleted()
+        {
+            nextAllowedTick = (Find.TickManager?.TicksGame ?? 0) + GenDate.TicksPerYear;
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref nextAllowedTick, "mx_qh_qixi_nextAllowedTick", 0);
         }
     }
 
@@ -148,6 +200,7 @@ namespace MiliraXian.Characters.QingHe.Rituals
 
         protected override void ApplyExtraOutcome(Dictionary<Pawn, int> totalPresence, LordJob_Ritual jobRitual, RitualOutcomePossibility outcome, out string extraOutcomeDesc, ref LookTargets letterLookTargets)
         {
+            Current.Game?.GetComponent<GameComponent_QingheQixiRitual>()?.NotifyRitualCompleted();
             int fragmentCount = SpawnFragments(jobRitual, ref letterLookTargets);
             List<Pawn> inspiredPawns = outcome.Positive ? GiveInspirations(totalPresence, outcome.BestPositiveOutcome(jobRitual) ? 2 : 1) : new List<Pawn>();
 

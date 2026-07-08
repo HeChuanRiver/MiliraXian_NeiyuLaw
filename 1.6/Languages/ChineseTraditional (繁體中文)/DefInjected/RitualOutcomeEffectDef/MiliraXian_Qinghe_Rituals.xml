@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_QixiOutcome.description>根據儀式品質，參與者會獲得持續{MOODDAYS}天、介於{MINMOOD}到{MAXMOOD}之間的心情影響。完成乞巧儀式還會獲得失傳的清荷曲譜殘片，較好的結果可能激發參與者的靈感。</MX_QH_QixiOutcome.description>
+  <MX_QH_QixiOutcome.comps.1.label>清荷在場</MX_QH_QixiOutcome.comps.1.label>
+  <MX_QH_QixiOutcome.comps.2.label>參與者數量</MX_QH_QixiOutcome.comps.2.label>
+  <MX_QH_QixiOutcome.comps.3.label>在荷池旁開始</MX_QH_QixiOutcome.comps.3.label>
+  <MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>一座荷池</MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>
+  <MX_QH_QixiOutcome.outcomeChances.0.label>糟糕</MX_QH_QixiOutcome.outcomeChances.0.label>
+  <MX_QH_QixiOutcome.outcomeChances.0.description>{0}十分糟糕。祈願散落在尷尬的沉默裡，沒人找到期盼中的曲意。</MX_QH_QixiOutcome.outcomeChances.0.description>
+  <MX_QH_QixiOutcome.outcomeChances.1.label>乏味</MX_QH_QixiOutcome.outcomeChances.1.label>
+  <MX_QH_QixiOutcome.outcomeChances.1.description>{0}有些乏味。聚會尚算平和，但樂聲始終沒有真正沉靜下來。</MX_QH_QixiOutcome.outcomeChances.1.description>
+  <MX_QH_QixiOutcome.outcomeChances.2.label>雅致</MX_QH_QixiOutcome.outcomeChances.2.label>
+  <MX_QH_QixiOutcome.outcomeChances.2.description>{0}頗為雅致。清亮的樂音與安靜的願望讓眾人心中一輕。</MX_QH_QixiOutcome.outcomeChances.2.description>
+  <MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>一名參與者可能獲得工作狂熱或創作靈感。</MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>
+  <MX_QH_QixiOutcome.outcomeChances.3.label>靈感湧現</MX_QH_QixiOutcome.outcomeChances.3.label>
+  <MX_QH_QixiOutcome.outcomeChances.3.description>{0}令人靈感湧現。儀式彷彿得到了荷池彼岸舊日旋律的短暫回應。</MX_QH_QixiOutcome.outcomeChances.3.description>
+  <MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>兩名參與者可能獲得工作狂熱或創作靈感。</MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>
+</LanguageData>

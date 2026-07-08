@@ -1,21 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QingHe_DebugMaxTempest.label>Max Tempest</MX_QingHe_DebugMaxTempest.label>
-  <MX_QingHe_DebugMaxTempest.description>Immediately fill Tempest to maximum.</MX_QingHe_DebugMaxTempest.description>
-  <MX_QingHe_DebugMaxElegance.label>Max Elegance</MX_QingHe_DebugMaxElegance.label>
-  <MX_QingHe_DebugMaxElegance.description>Immediately fill Elegance to maximum.</MX_QingHe_DebugMaxElegance.description>
-  <MX_Qinghe_SpringFlow.label>Spring Flow</MX_Qinghe_SpringFlow.label>
-  <MX_Qinghe_SpringFlow.description>Create a clear spring at the target point. Allied targets within 6 cells gain increased melee damage, increased ranged damage, reduced incoming damage, and pain relief.\nThis skill's marked effect can be strengthened by Elegance.\nRequires sustained channeling. Tempest accumulates during the channel, and the spring lasts 15 seconds.</MX_Qinghe_SpringFlow.description>
-  <MX_Qinghe_AquaMirror.label>Aqua Mirror</MX_Qinghe_AquaMirror.label>
-  <MX_Qinghe_AquaMirror.description>Apply a 10-second Aqua Mirror to allied targets within 4 cells of the target point. The mirror blocks part of incoming damage. When it is depleted or expires, it instantly heals the target, restoring all non-permanent wounds and missing body parts, and damages nearby enemies.\nThis skill's marked effect can be strengthened by Elegance.\nWhen Aqua Mirror disappears, a small amount of Tempest is generated.</MX_Qinghe_AquaMirror.description>
-  <MX_Qinghe_TempestDrain.label>Tempest Drain</MX_Qinghe_TempestDrain.label>
-  <MX_Qinghe_TempestDrain.description>Channel a large draining field at the target point. Hostile targets inside continuously accumulate Waterflow Severance, suffer heavy penalties, and die immediately when the buildup reaches maximum.\nThis skill's marked effect can be strengthened by Elegance.\nRequires at least 50 Tempest. While channeling, Tempest is continuously consumed until less than 10 remains, then the field closes automatically. This skill cannot be manually interrupted.\nTargets closer to the field center accumulate severance faster.</MX_Qinghe_TempestDrain.description>
-  <MX_Qinghe_Elegance_HengZhi.label>Cross-Pluck</MX_Qinghe_Elegance_HengZhi.label>
-  <MX_Qinghe_Elegance_HengZhi.description>Only usable in pipa form. Deals heavy impact damage around the caster and knocks enemies back. The more targets hit, the faster Elegance grows.</MX_Qinghe_Elegance_HengZhi.description>
-  <MX_Qinghe_Elegance_DuanHun.label>Soulbreak</MX_Qinghe_Elegance_DuanHun.label>
-  <MX_Qinghe_Elegance_DuanHun.description>Only usable in bamboo flute form. Applies Soulbreak melody to a small distant area, causing damage, stun, and a small chance to directly destroy the brain.</MX_Qinghe_Elegance_DuanHun.description>
-  <MX_Qinghe_Elegance_YangChun.label>Yangchun</MX_Qinghe_Elegance_YangChun.label>
-  <MX_Qinghe_Elegance_YangChun.description>Only usable in qin form. After casting, the same casting job releases a harmonic pulse: enemies are damaged and slowed, allies are healed and hastened, and Elegance increases.</MX_Qinghe_Elegance_YangChun.description>
   <MX_QH_SpringFlow.label>Spring Flow</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>Spend 1 Flower Decree to call forth Spring Flow at the target point, briefly healing allies in range and applying Spring Flow Baptism.</MX_QH_SpringFlow.description>
   <MX_QH_SpiritBurst.label>Spirit Burst</MX_QH_SpiritBurst.label>
@@ -24,8 +8,8 @@
   <MX_QH_LunarMirror.description>Winter Flower Mandate. Spend 1 Flower Decree to summon a snow-like shield at the target point, briefly intercepting hostile projectiles that cross its boundary.</MX_QH_LunarMirror.description>
   <MX_QH_FlowerDance.label>Flower Dance</MX_QH_FlowerDance.label>
   <MX_QH_FlowerDance.description>Spend 1 Flower Decree to enter Flower Dance for a short time, improving movement, evasion, and Flower Decree recovery, and causing Flower-God Ward to recharge immediately after being hit.</MX_QH_FlowerDance.description>
-  <MX_QH_AscentSlash.label>Dance Step</MX_QH_AscentSlash.label>
-  <MX_QH_AscentSlash.description>A decisive dash technique unlocked by Jueying. First choose a blink landing point in Qinghe's line of sight, then choose a visible strike direction from that point. Qinghe blinks to the landing point, then damages, briefly stuns, and knocks back enemies in a cone. Costs Flower Decree.</MX_QH_AscentSlash.description>
+  <MX_QH_AscentSlash.label>Sword Form: Jueying</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>A decisive dash technique unlocked by Jueying. Choose a landing point in Qinghe's line of sight; Qinghe leaps up, dives to that point, and damages enemies and hostile buildings in a forward cone. Hostile buildings take double damage; enemies receive bleed buildup, brief stun, and knockback. Mechanoids receive electric leak buildup instead. Qinghe is immune to damage during the animation. Costs Flower Decree.</MX_QH_AscentSlash.description>
   <MX_QH_LuoshenRibbon.label>Luoshen's Ribbon</MX_QH_LuoshenRibbon.label>
   <MX_QH_LuoshenRibbon.description>Unlocked by Luoshenfu. Choose two conscious people and bind their thoughts with Luoshen's ribbon, greatly improving their opinion of each other.</MX_QH_LuoshenRibbon.description>
 </LanguageData>
