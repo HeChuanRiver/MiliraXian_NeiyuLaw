@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using RimWorld;
 using Verse;
 
@@ -99,20 +100,13 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 }
             }
 
-            float healAmount = Props.healAmountPerTrigger;
-            var scaler = parent.TryGetComp<MiliraXian.Characters.HediffComp_PawnResourceScaling>();
-            if (scaler != null)
-            {
-                healAmount = scaler.HealAmount > 0f ? scaler.HealAmount : healAmount;
-            }
-
-            if (target == null || healAmount <= 0f)
+            if (target == null || Props.healAmountPerTrigger <= 0f)
             {
                 return 0f;
             }
 
             float before = target.Severity;
-            target.Heal(healAmount);
+            target.Heal(Props.healAmountPerTrigger * Mathf.Max(0f, parent.Severity));
             float healed = before - target.Severity;
             return healed > 0f ? healed : 0f;
         }

@@ -128,8 +128,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             GenDraw.DrawRadiusRing(
                 target.Cell,
                 Props.radius,
-                new Color(1f, 0.75f, 0.45f, 0.45f),
-                cell => GenSight.LineOfSight(target.Cell, cell, map));
+                new Color(1f, 0.75f, 0.45f, 0.45f));
         }
 
         public override IEnumerable<PreCastAction> GetPreCastActions()
@@ -194,11 +193,12 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Cut;
             bool enhanced = MX_QHSkillUtility.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster));
+            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
             List<Pawn> victims = RadialUtility.CollectHostilePawns(map, center, caster, Props.radius);
             for (int i = 0; i < victims.Count; i++)
             {
                 Pawn victim = victims[i];
-                float damageAmount = Props.damageAmount;
+                float damageAmount = Props.damageAmount * specialFactor;
                 if (enhanced && victim.GetStatValue(StatDefOf.PsychicSensitivity) > Props.enhancedPsychicSensitivityThreshold)
                 {
                     damageAmount *= Mathf.Max(0f, Props.enhancedPsychicDamageMultiplier);
@@ -219,11 +219,11 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 }
 
                 TryBreakBrain(victim, map);
-                ApplyEnhancedFear(enhanced, caster, victim);
+                ApplyEnhancedFear(enhanced, caster, victim, specialFactor);
             }
         }
 
-        private void ApplyEnhancedFear(bool enhanced, Pawn caster, Pawn victim)
+        private void ApplyEnhancedFear(bool enhanced, Pawn caster, Pawn victim, float specialFactor)
         {
             if (!enhanced || caster == null || victim == null || victim.Dead || victim.Destroyed || Props.enhancedFearDamageDef == null || Props.enhancedFearDamageAmount <= 0f)
             {
@@ -232,7 +232,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             DamageInfo dinfo = new DamageInfo(
                 Props.enhancedFearDamageDef,
-                Props.enhancedFearDamageAmount,
+                Props.enhancedFearDamageAmount * specialFactor,
                 Props.enhancedFearArmorPenetration,
                 -1f,
                 caster);

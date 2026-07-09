@@ -18,8 +18,6 @@
   <MX_QH_DivineBlessingImmunity.description>受到花神的垂怜，暂时免疫所有伤害。</MX_QH_DivineBlessingImmunity.description>
   <MX_QH_DivineGrace.label>花神之恩典</MX_QH_DivineGrace.label>
   <MX_QH_DivineGrace.description>清荷精通修行的显化。随着花神之恩典等级提高，清荷的基础能力会逐步增强。</MX_QH_DivineGrace.description>
-  <MX_QH_DivineFortune.label>花神之褔泽</MX_QH_DivineFortune.label>
-  <MX_QH_DivineFortune.description>隐藏 Hediff：统一数值代理层</MX_QH_DivineFortune.description>
   <MX_QH_DivineProtection.label>花神之眷顾</MX_QH_DivineProtection.label>
   <MX_QH_DivineProtection.description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</MX_QH_DivineProtection.description>
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>

@@ -2,6 +2,7 @@
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Abilities
@@ -68,18 +69,19 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 caster.health.AddHediff(hediff);
             }
 
+            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
+            hediff.Severity = specialFactor;
+
             HediffComp_Disappears disappears = hediff.TryGetComp<HediffComp_Disappears>();
             if (disappears != null && Props.durationTicks > 0)
             {
-                disappears.SetDuration(Props.durationTicks);
+                disappears.SetDuration(Mathf.RoundToInt(Props.durationTicks * specialFactor));
             }
 
             if (hediff is HediffWithComps hediffWithComps)
             {
                 hediffWithComps.GetComp<HediffComp_FlowerDance>()?.NotifyRefreshed();
             }
-
-            MX_QH_HediffUtility.GetDivineFortune(caster)?.Recalculate();
         }
     }
 }

@@ -126,6 +126,9 @@
   <MX_QH_DevLearnAllNodesLabel>DEV：習得全部清荷節點</MX_QH_DevLearnAllNodesLabel>
   <MX_QH_DevLearnAllNodesDesc>用於測試清荷技能樹與當前已遷移技能聯動。</MX_QH_DevLearnAllNodesDesc>
   <MX_QH_DevLearnAllNodesMessage>清荷已習得所有當前定義的節點。</MX_QH_DevLearnAllNodesMessage>
+  <MX_QH_DevAddDivineGraceLevelLabel>DEV：花神之恩典 +1</MX_QH_DevAddDivineGraceLevelLabel>
+  <MX_QH_DevAddDivineGraceLevelDesc>直接令花神之恩典提高 1 級，用於測試 staged stat 生效路徑。</MX_QH_DevAddDivineGraceLevelDesc>
+  <MX_QH_DevAddDivineGraceLevelMessage>花神之恩典已提升至 {0} 級。</MX_QH_DevAddDivineGraceLevelMessage>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
   <MX_QH_SpringFlowMissingResource>花令不足，無法施放春泉湧流。</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>花令不足，無法施放斷魂。</MX_QH_SpiritBurstMissingResource>
@@ -219,14 +222,6 @@
   <MX_QH_LotusShieldEnergyLine>護盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>護盾回復：{0} /秒</MX_QH_LotusShieldRegenLine>
   <MX_QH_LotusShieldRegenDelayLine>回復延遲：{0}秒</MX_QH_LotusShieldRegenDelayLine>
-  <MX_QH_DivineGraceLevel>{0}/{1}</MX_QH_DivineGraceLevel>
-  <MX_QH_DivineGraceFortuneHeader>精通加成：</MX_QH_DivineGraceFortuneHeader>
-  <MX_QH_DivineGraceShieldCapacityLine> - 護盾容量：x{0}</MX_QH_DivineGraceShieldCapacityLine>
-  <MX_QH_DivineGraceShieldRegenLine> - 護盾回復：x{0}</MX_QH_DivineGraceShieldRegenLine>
-  <MX_QH_DivineGraceShieldDamageCapLine> - 剛毅限傷：{0}</MX_QH_DivineGraceShieldDamageCapLine>
-  <MX_QH_DivineGraceFlowerDecreeMaxLine> - 花令上限：+{0}</MX_QH_DivineGraceFlowerDecreeMaxLine>
-  <MX_QH_DivineGraceFlowerDecreeRegenLine> - 花令回復：x{0}</MX_QH_DivineGraceFlowerDecreeRegenLine>
-  <MX_QH_DivineGraceBlessingRechargeLine> - 花神之垂憐冷卻：x{0}</MX_QH_DivineGraceBlessingRechargeLine>
   <MX_QH_FlowerCourtTitle>花神庭</MX_QH_FlowerCourtTitle>
   <MX_QH_FlowerCourtUnlockedTreesLine>已解讀曲譜集：{0}</MX_QH_FlowerCourtUnlockedTreesLine>
   <MX_QH_FlowerCourtLearnedNodesLine>已習得節點：{0}</MX_QH_FlowerCourtLearnedNodesLine>

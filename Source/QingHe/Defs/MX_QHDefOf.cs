@@ -27,6 +27,17 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static DamageDef MX_QH_NoteImpact;
 
+        public static StatDef MX_QH_LotusShieldMaxEnergyFactor;
+        public static StatDef MX_QH_LotusShieldRegenPerSecondFactor;
+        public static StatDef MX_QH_LotusShieldHitRegenDelayFactor;
+        public static StatDef MX_QH_LotusShieldBreakDelayOffset;
+        public static StatDef MX_QH_LotusShieldDamageCapFactor;
+        public static StatDef MX_QH_LotusShieldDamageCapOffset;
+        public static StatDef MX_QH_FlowerDecreeMaxOffset;
+        public static StatDef MX_QH_FlowerDecreeRegenFactor;
+        public static StatDef MX_QH_DivineBlessingRechargeSpeedFactor;
+        public static StatDef MX_QH_SpecialAbilityEffectFactor;
+
         [DefAlias("MX_QH_SpringFlow")]
         public static AbilityDef MX_QH_SpringFlowAbility;
         [DefAlias("MX_QH_SpiritBurst")]
@@ -45,7 +56,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_DivineBlessing;
         public static HediffDef MX_QH_DivineBlessingImmunity;
         public static HediffDef MX_QH_DivineGrace;
-        public static HediffDef MX_QH_DivineFortune;
         public static HediffDef MX_QH_DivineProtection;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;

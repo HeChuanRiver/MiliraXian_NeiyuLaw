@@ -1,7 +1,7 @@
 ﻿using RimWorld;
 using UnityEngine;
 using Verse;
-using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Vfx;
 
 namespace MiliraXian.Characters.QingHe.Things
@@ -18,6 +18,7 @@ namespace MiliraXian.Characters.QingHe.Things
         // After breaking, shield is disabled for these ticks.
         public int breakDisabledTicks = 600;
         public bool breakOnEmp = true;
+        public float shieldDamageCap = 20f;
 
         public DivineProtectionShieldVisualProperties visual = new DivineProtectionShieldVisualProperties();
 
@@ -49,10 +50,45 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public float MaxEnergy => Mathf.Max(
             1f,
-            Props.maxEnergy
-            * (MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldCapacityMultiplier ?? 1f));
+            Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldMaxEnergyFactor, 1f));
 
         public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
+
+        public float ShieldDamageCap
+        {
+            get
+            {
+                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 0f);
+                if (Mathf.Approximately(factor, 0f))
+                {
+                    return 0f;
+                }
+
+                float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 0f);
+                float afterOffset = Mathf.Max(1f, Props.shieldDamageCap + offset);
+                return Mathf.Max(1f, afterOffset * factor);
+            }
+        }
+
+        public int CurrentRegenDelayTicks
+        {
+            get
+            {
+                return ApplyDelayFactorOffset(
+                    Props.hitRegenDelayTicks,
+                    MX_QHDefOf.MX_QH_LotusShieldHitRegenDelayFactor);
+            }
+        }
+
+        public int CurrentBreakDelayTicks
+        {
+            get
+            {
+                return Mathf.Max(
+                    0,
+                    Mathf.RoundToInt(Props.breakDisabledTicks + GetStatValue(MX_QHDefOf.MX_QH_LotusShieldBreakDelayOffset, 0f)));
+            }
+        }
 
         public bool InBreak => ticksToReset > 0;
 
@@ -66,8 +102,9 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float multiplier = MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldRegenMultiplier ?? 1f;
-                return Mathf.Max(0f, Props.baseRegenPerSecond * multiplier);
+                return Mathf.Max(
+                    0f,
+                    Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldRegenPerSecondFactor, 1f));
             }
         }
 
@@ -144,7 +181,7 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
-            float damageCap = MX_QH_HediffUtility.GetDivineFortune(PawnOwner)?.ShieldDamageCap ?? 0f;
+            float damageCap = ShieldDamageCap;
             float shieldDamage = damageCap > 0f ? Mathf.Min(dinfo.Amount, damageCap) : Mathf.Max(0f, dinfo.Amount);
             if (shieldDamage <= 0f)
             {
@@ -204,14 +241,28 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private int ResolveRegenDelayTicks()
         {
-            HediffComp_DivineFortune fortune = MX_QH_HediffUtility.GetDivineFortune(PawnOwner);
-            return fortune != null ? fortune.ShieldRegenDelayTicks : Mathf.Max(0, Props.hitRegenDelayTicks);
+            return CurrentRegenDelayTicks;
         }
 
         private int ResolveBreakDelayTicks()
         {
-            HediffComp_DivineFortune fortune = MX_QH_HediffUtility.GetDivineFortune(PawnOwner);
-            return fortune != null ? fortune.ShieldBreakDelayTicks : Mathf.Max(0, Props.breakDisabledTicks);
+            return CurrentBreakDelayTicks;
+        }
+
+        private int ApplyDelayFactorOffset(float baseValue, StatDef factorStat)
+        {
+            return Mathf.Max(0, Mathf.RoundToInt(baseValue * GetStatValue(factorStat, 1f)));
+        }
+
+        private float GetStatValue(StatDef statDef, float fallback)
+        {
+            Pawn owner = PawnOwner;
+            if (owner == null || statDef == null)
+            {
+                return fallback;
+            }
+
+            return owner.GetStatValue(statDef);
         }
 
         public string BuildShieldTooltip()

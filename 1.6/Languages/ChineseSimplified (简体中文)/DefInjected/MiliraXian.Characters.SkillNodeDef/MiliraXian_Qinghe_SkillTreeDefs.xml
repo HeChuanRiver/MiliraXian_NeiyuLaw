@@ -11,7 +11,7 @@
   <MX_QH_Node_Liushui.label>柔韧之意</MX_QH_Node_Liushui.label>
   <MX_QH_Node_Liushui.description>——习得被动特性：令自身的护盾回复速率 +200%。</MX_QH_Node_Liushui.description>
   <MX_QH_Node_Chunjiang.label>风月之意</MX_QH_Node_Chunjiang.label>
-  <MX_QH_Node_Chunjiang.description>——习得被动特性：令护盾被击破后的失效时间缩短至 2秒。</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_Chunjiang.description>——习得被动特性：令护盾被击破后的失效时间缩短至 3秒。</MX_QH_Node_Chunjiang.description>
   <MX_QH_Node_DivineGrace.label>花神之恩典</MX_QH_Node_DivineGrace.label>
   <MX_QH_Node_DivineGrace.description>——习得可重复提升的被动特性，每级都可提升一定基础属性和护盾属性、花令回复速度。</MX_QH_Node_DivineGrace.description>
   <MX_QH_Node_Yingyue.label>映月残章</MX_QH_Node_Yingyue.label>

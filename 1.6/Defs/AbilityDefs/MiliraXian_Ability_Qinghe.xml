@@ -21,6 +21,8 @@
             <targetable>true</targetable>
             <range>11</range>
             <warmupTime>1.8</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -57,6 +59,8 @@
             <targetable>true</targetable>
             <range>55</range>
             <warmupTime>1.2</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>true</canTargetPawns>
@@ -115,6 +119,8 @@
             <targetable>true</targetable>
             <range>16</range>
             <warmupTime>2.0</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -185,6 +191,7 @@
             <range>19</range>
             <warmupTime>0.55</warmupTime>
             <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -237,6 +244,7 @@
             <range>24</range>
             <warmupTime>1.5</warmupTime>
             <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>true</canTargetSelf>
                 <canTargetPawns>true</canTargetPawns>

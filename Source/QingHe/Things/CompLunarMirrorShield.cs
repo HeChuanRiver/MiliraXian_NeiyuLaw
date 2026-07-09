@@ -145,7 +145,7 @@ namespace MiliraXian.Characters.QingHe.Things
             caster = newCaster;
             casterFaction = newCaster?.Faction;
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
-            energy = Props.startingEnergy;
+            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
             ageTicks = 0;
         }
 

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using MiliraXian.Characters.QingHe.Defs;
+using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -7,7 +9,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public int baseRecoveryTicksPerDecree = 1200;
         public float valuePerDecree = 100f;
-        public float maxResourceBonusPerSkillNode = 1f;
         public int highlightTicks = 90;
 
         public HediffCompProperties_FlowerDecree()
@@ -24,13 +25,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public float ValuePerDecree => Mathf.Max(1f, PropsDecree.valuePerDecree);
 
-        public override float MaxValue => (PropsResource.maxValue / ValuePerDecree + SkillTreeMaxResourceBonus) * ValuePerDecree;
+        public override float MaxValue
+        {
+            get
+            {
+                float maxDecrees = PropsResource.maxValue / ValuePerDecree
+                    + GetStatValue(MX_QHDefOf.MX_QH_FlowerDecreeMaxOffset, 0f);
+                return Mathf.Max(ValuePerDecree, maxDecrees * ValuePerDecree);
+            }
+        }
 
         public float CurrentResourceValue => CurrentValue / ValuePerDecree;
 
         public float MaxResourceValue => MaxValue / ValuePerDecree;
-
-        public float SkillTreeMaxResourceBonus => MX_QH_HediffUtility.GetDivineFortune(Pawn)?.FlowerDecreeMaxBonus * PropsDecree.maxResourceBonusPerSkillNode ?? 0f;
 
         public float CurrentRecoveryFactor => ResolveRecoveryFactor();
 
@@ -135,12 +142,24 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private float ResolveRecoveryValuePerTick()
         {
             int baseTicks = Mathf.Max(1, PropsDecree.baseRecoveryTicksPerDecree);
-            return ValuePerDecree / baseTicks * ResolveRecoveryFactor();
+            float basePerSecond = ValuePerDecree / baseTicks * 60f;
+            float valuePerSecond = basePerSecond * ResolveRecoveryFactor();
+            return Mathf.Max(0f, valuePerSecond) / 60f;
         }
 
         private float ResolveRecoveryFactor()
         {
-            return MX_QH_HediffUtility.GetDivineFortune(Pawn)?.FlowerDecreeRegenMultiplier ?? 1f;
+            return GetStatValue(MX_QHDefOf.MX_QH_FlowerDecreeRegenFactor, 1f);
+        }
+
+        private float GetStatValue(StatDef statDef, float fallback)
+        {
+            if (Pawn == null || statDef == null)
+            {
+                return fallback;
+            }
+
+            return Pawn.GetStatValue(statDef);
         }
     }
 }

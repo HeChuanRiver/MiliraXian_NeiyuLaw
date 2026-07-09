@@ -85,8 +85,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             GenDraw.DrawRadiusRing(
                 target.Cell,
                 ResolveShieldRadius(),
-                new Color(0.62f, 0.88f, 1f, 0.30f),
-                cell => GenSight.LineOfSight(target.Cell, cell, map));
+                new Color(0.62f, 0.88f, 1f, 0.30f));
         }
 
         private float ResolveShieldRadius()

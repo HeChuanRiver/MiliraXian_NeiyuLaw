@@ -27,6 +27,12 @@ namespace MiliraXian.Characters
         public int bookAcquirePriority;
         public float bookAcquireWeight = 1f;
         public List<MX_BookSpawnCondition> spawnConditions;
+        public List<StatModifier> statOffsets;
+        public List<StatModifier> statFactors;
+        public List<StatModifier> statOffsetsPerLevel;
+        public List<StatModifier> statFactorsPerLevel;
+        public List<AbilityDef> grantedAbilities;
+        public List<HediffDef> grantedHediffs;
 
         public int MaxLevel => maxLevel < 1 ? 1 : maxLevel;
 

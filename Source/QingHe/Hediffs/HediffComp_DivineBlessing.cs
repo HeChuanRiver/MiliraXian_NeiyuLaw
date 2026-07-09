@@ -56,8 +56,15 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             get
             {
-                float factor = MX_QH_HediffUtility.GetDivineFortune(Pawn)?.DivineBlessingRechargeFactor ?? 1f;
-                return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks * Mathf.Max(0f, factor)));
+                float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
+                    ? 1f
+                    : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
+                if (speed <= 0f)
+                {
+                    return 0;
+                }
+
+                return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
             }
         }
 

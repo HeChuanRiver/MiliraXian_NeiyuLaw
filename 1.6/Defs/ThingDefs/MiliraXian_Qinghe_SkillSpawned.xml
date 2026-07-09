@@ -162,6 +162,7 @@
                 <amount>0.08</amount>
                 <armorPenetration>2.10</armorPenetration>
                 <requireHostileTarget>false</requireHostileTarget>
+                <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
             </li>
         </comps>
     </ThingDef>

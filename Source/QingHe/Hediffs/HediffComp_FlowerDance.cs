@@ -40,7 +40,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         public override void CompPostPostRemoved()
@@ -48,7 +47,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompPostPostRemoved();
             CleanupActiveEffecter();
             ResetAfterimageTracking();
-            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         public override void CompExposeData()
@@ -63,7 +61,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public void NotifyRefreshed()
         {
             EnsureActiveEffecter();
-            MX_QH_HediffUtility.GetDivineFortune(Pawn)?.Recalculate();
         }
 
         private void EnsureActiveEffecter()

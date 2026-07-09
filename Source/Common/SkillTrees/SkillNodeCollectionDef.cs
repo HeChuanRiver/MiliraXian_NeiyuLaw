@@ -15,6 +15,8 @@ namespace MiliraXian.Characters
         public int displayOrder;
         public string completionEffectLabel;
         public string completionEffectDescription;
+        public List<StatModifier> statOffsets;
+        public List<StatModifier> statFactors;
 
         public bool HasCompletionEffect => !completionEffectLabel.NullOrEmpty() || !completionEffectDescription.NullOrEmpty();
     }

@@ -1,4 +1,5 @@
 ﻿using MiliraXian.Characters;
+using MiliraXian.Characters.QingHe;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -28,7 +29,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                     ExplosionRadius,
                     DamageDef,
                     launcher,
-                    DamageAmount,
+                    Mathf.RoundToInt(DamageAmount * MX_QHSkillUtility.GetSpecialAbilityEffectFactor(launcher as Pawn)),
                     ArmorPenetration,
                     null,
                     equipmentDef,

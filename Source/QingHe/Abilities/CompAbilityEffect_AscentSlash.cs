@@ -320,15 +320,20 @@ namespace MiliraXian.Characters.QingHe.Abilities
             float halfAngle = Mathf.Clamp(props.coneAngleDegrees, 1f, 360f) * 0.5f;
             DamageDef damageDef = props.damageDef ?? MX_QHDefOf.MX_QH_NoteImpact ?? DamageDefOf.Blunt;
             List<Thing> victims = CollectHostileTargetsInCone(map, landing, caster, props.coneRadius, forward, halfAngle);
+            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
 
             for (int i = 0; i < victims.Count; i++)
             {
                 Thing victim = victims[i];
-                float damageAmount = victim is Building ? props.damageAmount * props.buildingDamageMultiplier : props.damageAmount;
+                float damageAmount = props.damageAmount * specialFactor;
+                if (victim is Building)
+                {
+                    damageAmount *= props.buildingDamageMultiplier;
+                }
                 victim.TakeDamage(new DamageInfo(damageDef, damageAmount, props.armorPenetration, -1f, caster));
 
                 Pawn victimPawn = victim as Pawn;
-                ApplyAccumulation(victimPawn, caster, props);
+                ApplyAccumulation(victimPawn, caster, props, specialFactor);
                 if (props.stunTicks > 0 && victimPawn != null && !victimPawn.Dead && !victimPawn.Destroyed)
                 {
                     victimPawn.stances?.stunner?.StunFor(props.stunTicks, caster);
@@ -342,7 +347,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
         }
 
-        private static void ApplyAccumulation(Pawn victim, Pawn caster, CompProperties_AbilityAscentSlash props)
+        private static void ApplyAccumulation(Pawn victim, Pawn caster, CompProperties_AbilityAscentSlash props, float specialFactor)
         {
             if (victim == null || victim.Dead || victim.Destroyed || props.accumulationDamageDef == null || props.accumulationDamageAmount <= 0f)
             {
@@ -351,7 +356,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             victim.TakeDamage(new DamageInfo(
                 props.accumulationDamageDef,
-                props.accumulationDamageAmount,
+                props.accumulationDamageAmount * specialFactor,
                 props.accumulationArmorPenetration,
                 -1f,
                 caster));

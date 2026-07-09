@@ -62,9 +62,10 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             }
 
             float armorPenetration = props.armorPenetration >= 0f ? props.armorPenetration : props.damageDef.defaultArmorPenetration;
+            float amount = props.amount * CompFlowerBellStatusOnHit.ResolveSpecialAbilityEffectFactor(caster, props);
             DamageInfo dinfo = new DamageInfo(
                 props.damageDef,
-                props.amount,
+                amount,
                 armorPenetration,
                 -1f,
                 caster);

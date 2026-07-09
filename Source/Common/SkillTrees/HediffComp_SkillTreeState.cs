@@ -300,6 +300,13 @@ namespace MiliraXian.Characters
 
         private void NotifyStateChanged()
         {
+            SyncGrantedDefs();
+
+            if (parent is ISkillTreeStateListener parentListener)
+            {
+                parentListener.Notify_SkillTreeStateChanged(Pawn, this);
+            }
+
             if (parent?.comps == null)
             {
                 return;
@@ -311,6 +318,121 @@ namespace MiliraXian.Characters
                 {
                     listener.Notify_SkillTreeStateChanged(Pawn, this);
                 }
+            }
+        }
+
+        public void SyncGrantedDefs()
+        {
+            Pawn pawn = Pawn;
+            if (pawn == null)
+            {
+                return;
+            }
+
+            List<SkillNodeDef> relevantNodes = RelevantNodes().ToList();
+            SyncGrantedAbilities(pawn, relevantNodes);
+            SyncGrantedHediffs(pawn, relevantNodes);
+        }
+
+        private void SyncGrantedAbilities(Pawn pawn, List<SkillNodeDef> relevantNodes)
+        {
+            if (pawn.abilities == null)
+            {
+                return;
+            }
+
+            HashSet<AbilityDef> allGranted = new HashSet<AbilityDef>();
+            HashSet<AbilityDef> activeGranted = new HashSet<AbilityDef>();
+            for (int i = 0; i < relevantNodes.Count; i++)
+            {
+                SkillNodeDef node = relevantNodes[i];
+                if (node?.grantedAbilities == null)
+                {
+                    continue;
+                }
+
+                bool active = GetNodeLevel(node) > 0;
+                for (int j = 0; j < node.grantedAbilities.Count; j++)
+                {
+                    AbilityDef ability = node.grantedAbilities[j];
+                    if (ability == null)
+                    {
+                        continue;
+                    }
+
+                    allGranted.Add(ability);
+                    if (active)
+                    {
+                        activeGranted.Add(ability);
+                    }
+                }
+            }
+
+            foreach (AbilityDef ability in allGranted)
+            {
+                if (activeGranted.Contains(ability))
+                {
+                    if (pawn.abilities.GetAbility(ability, includeTemporary: false) == null)
+                    {
+                        pawn.abilities.GainAbility(ability);
+                    }
+                }
+                else
+                {
+                    pawn.abilities.RemoveAbility(ability);
+                }
+            }
+        }
+
+        private void SyncGrantedHediffs(Pawn pawn, List<SkillNodeDef> relevantNodes)
+        {
+            if (pawn.health?.hediffSet == null)
+            {
+                return;
+            }
+
+            Dictionary<HediffDef, int> grantedLevels = new Dictionary<HediffDef, int>();
+            for (int i = 0; i < relevantNodes.Count; i++)
+            {
+                SkillNodeDef node = relevantNodes[i];
+                if (node?.grantedHediffs == null)
+                {
+                    continue;
+                }
+
+                int level = GetNodeLevel(node);
+                for (int j = 0; j < node.grantedHediffs.Count; j++)
+                {
+                    HediffDef hediffDef = node.grantedHediffs[j];
+                    if (hediffDef == null)
+                    {
+                        continue;
+                    }
+
+                    grantedLevels.TryGetValue(hediffDef, out int currentLevel);
+                    grantedLevels[hediffDef] = Mathf.Max(currentLevel, level);
+                }
+            }
+
+            foreach (KeyValuePair<HediffDef, int> pair in grantedLevels)
+            {
+                Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(pair.Key);
+                if (pair.Value <= 0)
+                {
+                    if (hediff != null)
+                    {
+                        pawn.health.RemoveHediff(hediff);
+                    }
+                    continue;
+                }
+
+                if (hediff == null)
+                {
+                    hediff = HediffMaker.MakeHediff(pair.Key, pawn);
+                    pawn.health.AddHediff(hediff);
+                }
+
+                hediff.Severity = Mathf.Clamp(pair.Value, pair.Key.minSeverity, pair.Key.maxSeverity);
             }
         }
 

@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public float chance = 1f;
         public float yangchunMultiplier = 1.5f;
         public bool requireHostileTarget = true;
+        public bool scaleWithQingheSpecialAbilityEffect;
 
         public CompProperties_FlowerBellStatusOnHit()
         {
@@ -44,7 +45,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
-            float amount = Props.amount;
+            float amount = Props.amount * ResolveSpecialAbilityEffectFactor(caster, Props);
             float armorPenetration = Props.armorPenetration >= 0f ? Props.armorPenetration : Props.damageDef.defaultArmorPenetration;
             DamageInfo dinfo = new DamageInfo(Props.damageDef, amount, armorPenetration, ProjectileParent?.ExactRotation.eulerAngles.y ?? -1f, caster);
             target.TakeDamage(dinfo);
@@ -66,6 +67,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
 
             return null;
+        }
+
+        public static float ResolveSpecialAbilityEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)
+        {
+            return props?.scaleWithQingheSpecialAbilityEffect == true
+                ? MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster)
+                : 1f;
         }
     }
 }

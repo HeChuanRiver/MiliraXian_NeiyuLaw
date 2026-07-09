@@ -151,11 +151,14 @@ namespace MiliraXian.Characters.QingHe.Things
                 Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
                 if (hediff != null)
                 {
+                    hediff.Severity = Mathf.Max(hediff.Severity, ResolveSpecialEffectFactor());
                     hediff.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
                 }
                 else
                 {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn));
+                    hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
+                    hediff.Severity = ResolveSpecialEffectFactor();
+                    pawn.health.AddHediff(hediff);
                 }
             }
 
@@ -177,12 +180,18 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                ApplyEnhancedDamage(pawn, Props.enhancedBleedDamageDef, Props.enhancedBleedDamageAmount, Props.enhancedBleedArmorPenetration);
+                float factor = ResolveSpecialEffectFactor();
+                ApplyEnhancedDamage(pawn, Props.enhancedBleedDamageDef, Props.enhancedBleedDamageAmount * factor, Props.enhancedBleedArmorPenetration);
                 if (pawn.RaceProps?.IsMechanoid != true)
                 {
-                    ApplyEnhancedDamage(pawn, Props.enhancedToxinDamageDef, Props.enhancedToxinDamageAmount, Props.enhancedToxinArmorPenetration);
+                    ApplyEnhancedDamage(pawn, Props.enhancedToxinDamageDef, Props.enhancedToxinDamageAmount * factor, Props.enhancedToxinArmorPenetration);
                 }
             }
+        }
+
+        private float ResolveSpecialEffectFactor()
+        {
+            return MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
         }
 
         private void ApplyEnhancedDamage(Pawn pawn, DamageDef damageDef, float amount, float armorPenetration)

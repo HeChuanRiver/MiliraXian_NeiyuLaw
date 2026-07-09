@@ -25,6 +25,9 @@
         <displayOrder>1</displayOrder>
         <completionEffectLabel>全部习得效果：</completionEffectLabel>
         <completionEffectDescription>刚柔并济——护盾受到高额伤害时触发额外保护，单次护盾受伤最高不会超过20点</completionEffectDescription>
+        <statOffsets>
+            <MX_QH_LotusShieldDamageCapFactor>1</MX_QH_LotusShieldDamageCapFactor>
+        </statOffsets>
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
@@ -54,6 +57,9 @@
         <y>160</y>
         <initiallyLearned>true</initiallyLearned>
         <important>true</important>
+        <grantedAbilities>
+            <li>MX_QH_SpringFlow</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -71,6 +77,12 @@
         <bookDescription>MX_QH_Book_FeihuaJueyu_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <statOffsets>
+            <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
+        </statOffsets>
+        <grantedAbilities>
+            <li>MX_QH_SpiritBurst</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -88,6 +100,12 @@
         <bookDescription>MX_QH_Book_DuanqiaoCanxue_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <statOffsets>
+            <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
+        </statOffsets>
+        <grantedAbilities>
+            <li>MX_QH_LunarMirror</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -104,6 +122,9 @@
         <bookDescription>MX_QH_Book_Gaoshan_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <statFactors>
+            <MX_QH_LotusShieldMaxEnergyFactor>2.5</MX_QH_LotusShieldMaxEnergyFactor>
+        </statFactors>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -120,12 +141,15 @@
         <bookDescription>MX_QH_Book_Liushui_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <statFactors>
+            <MX_QH_LotusShieldRegenPerSecondFactor>3</MX_QH_LotusShieldRegenPerSecondFactor>
+        </statFactors>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Chunjiang</defName>
         <label>风月之意</label>
-        <description>——习得被动特性：令护盾被击破后的失效时间缩短至 2秒。</description>
+        <description>——习得被动特性：令护盾被击破后的失效时间缩短至 3秒。</description>
         <category>MX_QH_Category_Qinghe</category>
         <collection>MX_QH_Tree_DivineFortune</collection>
         <displayOrder>20</displayOrder>
@@ -136,6 +160,9 @@
         <bookDescription>MX_QH_Book_Chunjiang_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <statOffsets>
+            <MX_QH_LotusShieldBreakDelayOffset>-420</MX_QH_LotusShieldBreakDelayOffset>
+        </statOffsets>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -153,6 +180,9 @@
         <bookDescription>MX_QH_Book_DivineGrace_Desc</bookDescription>
         <bookAcquirePriority>0</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <grantedHediffs>
+            <li>MX_QH_DivineGrace</li>
+        </grantedHediffs>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -187,6 +217,9 @@
         <bookDescription>MX_QH_Book_NishangDance_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <grantedAbilities>
+            <li>MX_QH_FlowerDance</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
@@ -204,6 +237,9 @@
         <bookDescription>MX_QH_Book_Jueying_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <grantedAbilities>
+            <li>MX_QH_AscentSlash</li>
+        </grantedAbilities>
         <spawnConditions>
             <li>
                 <relatedColonistPawnKinds>
@@ -228,5 +264,8 @@
         <bookDescription>MX_QH_Book_Luoshenfu_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <grantedAbilities>
+            <li>MX_QH_LuoshenRibbon</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 </Defs>

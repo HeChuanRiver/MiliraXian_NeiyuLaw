@@ -4,6 +4,7 @@ using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe
@@ -18,25 +19,28 @@ namespace MiliraXian.Characters.QingHe
 
         public static void SyncChoices(Pawn pawn, HediffComp_SkillTreeState state)
         {
-            if (pawn?.abilities == null || state == null)
+            if (pawn == null || state == null)
             {
                 return;
             }
 
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_SpringFlowAbility, true);
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_SpiritBurstAbility, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Chuanhun));
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_LunarMirrorAbility, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Shuangyuejing));
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_FlowerDanceAbility, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_NishangDance));
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_AscentSlashAbility, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying));
-            SyncAbility(pawn, MX_QHDefOf.MX_QH_LuoshenRibbonAbility, state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Luoshenfu));
-            MX_QH_HediffUtility.SyncDivineGrace(pawn, state);
-            MX_QH_HediffUtility.GetDivineFortune(pawn)?.Recalculate();
+            state.SyncGrantedDefs();
             HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
         }
 
         public static bool HasAllFlowerMandates(HediffComp_SkillTreeState state)
         {
             return state?.IsCollectionCompleted(MX_QHSkillNodeDefOf.MX_QH_Tree_FlowerMandate) == true;
+        }
+
+        public static float GetSpecialAbilityEffectFactor(Pawn pawn)
+        {
+            if (pawn == null || MX_QHDefOf.MX_QH_SpecialAbilityEffectFactor == null)
+            {
+                return 1f;
+            }
+
+            return Mathf.Max(0f, pawn.GetStatValue(MX_QHDefOf.MX_QH_SpecialAbilityEffectFactor));
         }
 
         public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_SkillTreeState state)
@@ -67,27 +71,37 @@ namespace MiliraXian.Characters.QingHe
                 }
             };
 
+            yield return new Command_Action
+            {
+                defaultLabel = "MX_QH_DevAddDivineGraceLevelLabel".Translate(),
+                defaultDesc = "MX_QH_DevAddDivineGraceLevelDesc".Translate(),
+                action = delegate
+                {
+                    AddDivineGraceLevel(pawn, state);
+                }
+            };
 
         }
 
-        private static void SyncAbility(Pawn pawn, AbilityDef abilityDef, bool shouldHave)
+        private static void AddDivineGraceLevel(Pawn pawn, HediffComp_SkillTreeState state)
         {
-            if (abilityDef == null)
+            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_DivineGrace;
+            if (pawn == null || state == null || node == null)
             {
                 return;
             }
 
-            if (shouldHave)
+            if (!state.TryLearn(node, out string reason))
             {
-                if (pawn.abilities.GetAbility(abilityDef, includeTemporary: false) == null)
+                if (!reason.NullOrEmpty())
                 {
-                    pawn.abilities.GainAbility(abilityDef);
+                    Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
                 }
                 return;
             }
 
-            pawn.abilities.RemoveAbility(abilityDef);
+            Messages.Message("MX_QH_DevAddDivineGraceLevelMessage".Translate(state.GetNodeLevel(node).ToString("0")), pawn, MessageTypeDefOf.NeutralEvent, historical: false);
         }
+
     }
 }
-

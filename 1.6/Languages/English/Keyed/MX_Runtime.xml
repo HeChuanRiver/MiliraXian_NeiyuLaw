@@ -126,6 +126,9 @@
   <MX_QH_DevLearnAllNodesLabel>DEV: learn all Qinghe nodes</MX_QH_DevLearnAllNodesLabel>
   <MX_QH_DevLearnAllNodesDesc>Developer test command for Qinghe's skill tree and migrated skill linkage.</MX_QH_DevLearnAllNodesDesc>
   <MX_QH_DevLearnAllNodesMessage>Qinghe has learned all currently defined nodes.</MX_QH_DevLearnAllNodesMessage>
+  <MX_QH_DevAddDivineGraceLevelLabel>DEV: Divine Grace +1</MX_QH_DevAddDivineGraceLevelLabel>
+  <MX_QH_DevAddDivineGraceLevelDesc>Directly raises Divine Grace by 1 level to test the staged stat path.</MX_QH_DevAddDivineGraceLevelDesc>
+  <MX_QH_DevAddDivineGraceLevelMessage>Divine Grace is now level {0}.</MX_QH_DevAddDivineGraceLevelMessage>
   <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>Not enough Flower Decree to cast Spirit Burst.</MX_QH_SpiritBurstMissingResource>
@@ -219,14 +222,6 @@
   <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>
   <MX_QH_LotusShieldRegenDelayLine>Regen delay: {0}s</MX_QH_LotusShieldRegenDelayLine>
-  <MX_QH_DivineGraceLevel>{0}/{1}</MX_QH_DivineGraceLevel>
-  <MX_QH_DivineGraceFortuneHeader>Mastery bonuses:</MX_QH_DivineGraceFortuneHeader>
-  <MX_QH_DivineGraceShieldCapacityLine> - Shield capacity: x{0}</MX_QH_DivineGraceShieldCapacityLine>
-  <MX_QH_DivineGraceShieldRegenLine> - Shield regen: x{0}</MX_QH_DivineGraceShieldRegenLine>
-  <MX_QH_DivineGraceShieldDamageCapLine> - steadfast damage cap: {0}</MX_QH_DivineGraceShieldDamageCapLine>
-  <MX_QH_DivineGraceFlowerDecreeMaxLine> - Flower Decree max: +{0}</MX_QH_DivineGraceFlowerDecreeMaxLine>
-  <MX_QH_DivineGraceFlowerDecreeRegenLine> - Flower Decree regen: x{0}</MX_QH_DivineGraceFlowerDecreeRegenLine>
-  <MX_QH_DivineGraceBlessingRechargeLine> - Flower-God Mercy cooldown: x{0}</MX_QH_DivineGraceBlessingRechargeLine>
   <MX_QH_FlowerCourtTitle>Flower Court</MX_QH_FlowerCourtTitle>
   <MX_QH_FlowerCourtUnlockedTreesLine>Interpreted score sets: {0}</MX_QH_FlowerCourtUnlockedTreesLine>
   <MX_QH_FlowerCourtLearnedNodesLine>Learned nodes: {0}</MX_QH_FlowerCourtLearnedNodesLine>

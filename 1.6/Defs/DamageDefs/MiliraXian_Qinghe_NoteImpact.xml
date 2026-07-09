@@ -16,7 +16,7 @@
 
   <DamageDef ParentName="MX_QH_NoteImpactBase">
     <defName>MX_QH_NoteImpact_Building</defName>
-    <label>破城音击</label>
+    <label>共振音击</label>
     <buildingDamageFactor>3</buildingDamageFactor>
   </DamageDef>
 </Defs>
