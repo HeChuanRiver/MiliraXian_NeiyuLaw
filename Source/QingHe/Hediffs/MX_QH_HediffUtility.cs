@@ -46,7 +46,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float gain = stillness.PropsStillness.baseGainPerDay / 60000f * ResolveLotusPondRoomStillnessFactor(lotusPond);
+            float gain = stillness.PropsStillness.meditationGainPerDay / 60000f * ResolveLotusPondRoomStillnessFactor(lotusPond);
             stillness.AddStillness(gain);
         }
 
@@ -58,7 +58,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float gain = stillness.PropsStillness.baseGainPerDay / 60000f * delta * Mathf.Max(0.1f, roomBonusFactor);
+            float gain = stillness.PropsStillness.readingGainPerDay / 60000f * delta * Mathf.Max(0.1f, roomBonusFactor);
+            stillness.AddStillness(gain);
+        }
+
+        public static void AddMeditativeStillnessFromSleep(Pawn pawn, int delta)
+        {
+            HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
+            if (stillness == null || delta <= 0)
+            {
+                return;
+            }
+
+            float gain = stillness.PropsStillness.sleepGainPerDay / 60000f * delta;
             stillness.AddStillness(gain);
         }
 

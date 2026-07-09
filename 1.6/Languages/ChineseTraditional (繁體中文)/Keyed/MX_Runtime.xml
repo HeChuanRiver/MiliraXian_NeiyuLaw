@@ -11,7 +11,13 @@
   <MX_Common_SkillBookNoLearnableContent>這本技能書對目前讀者沒有可學習內容。</MX_Common_SkillBookNoLearnableContent>
   <MX_Common_SkillBookBenefitNodes>提升技能節點：{0}</MX_Common_SkillBookBenefitNodes>
   <MX_Common_SkillBookBenefitNodeLine> - 可習得流派技能：{0} (+{1}技能點/小時)</MX_Common_SkillBookBenefitNodeLine>
-  <MX_Common_SkillBookQualitySummary>從紙頁、墨跡與裝訂來看，這本書卷的整體品相為{0}；完整度會影響研讀時的順暢程度。</MX_Common_SkillBookQualitySummary>
+  <MX_Common_SkillBookQualitySummary_Awful>紙頁脆裂泛黃，墨跡暈成斑痕，許多段落只能從殘句中勉強推讀。</MX_Common_SkillBookQualitySummary_Awful>
+  <MX_Common_SkillBookQualitySummary_Poor>裝訂尚未散開，但墨痕雜亂、旁批潦草，讀起來頗費心神。</MX_Common_SkillBookQualitySummary_Poor>
+  <MX_Common_SkillBookQualitySummary_Normal>紙面平整，字跡清楚，足以讓讀者按部就班地研讀其中法門。</MX_Common_SkillBookQualitySummary_Normal>
+  <MX_Common_SkillBookQualitySummary_Good>紙墨保存良好，註解也頗有章法，疑難處多能順勢讀通。</MX_Common_SkillBookQualitySummary_Good>
+  <MX_Common_SkillBookQualitySummary_Excellent>此卷製作用心，圖解精細，批註層次分明，翻閱間自有引導之意。</MX_Common_SkillBookQualitySummary_Excellent>
+  <MX_Common_SkillBookQualitySummary_Masterwork>每一道摺痕、每一筆墨色都恰到好處，彷彿書卷本身也懂得授業。</MX_Common_SkillBookQualitySummary_Masterwork>
+  <MX_Common_SkillBookQualitySummary_Legendary>書頁間自有沉靜氣韻，目光稍駐，便似能觸及字裡行間潛藏的真意。</MX_Common_SkillBookQualitySummary_Legendary>
   <MX_Common_Parentheses>（{0}）</MX_Common_Parentheses>
   <MX_Common_SkillNodesLearnedLetterLabel>習得新技能</MX_Common_SkillNodesLearnedLetterLabel>
   <MX_Common_SkillNodesLearnedLetterText>{0} 已完成研讀，獲得：{1}</MX_Common_SkillNodesLearnedLetterText>
@@ -148,6 +154,10 @@
   <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
   <MX_QH_FlowerBellResonanceWinter>冬</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_FlowerBellResonanceDescriptionSpring>春季共鳴使鈴音帶有生發之意，命中血肉目標時會逐步擾動血氣，命中機械目標時則會累積漏電。</MX_QH_FlowerBellResonanceDescriptionSpring>
+  <MX_QH_FlowerBellResonanceDescriptionSummer>夏季共鳴使鈴音熾盛而濃烈，命中血肉目標時會累積毒素，命中機械目標時則會侵蝕結構。</MX_QH_FlowerBellResonanceDescriptionSummer>
+  <MX_QH_FlowerBellResonanceDescriptionAutumn>秋季共鳴使鈴音肅殺而清冷，命中血肉目標時會壓迫心神，命中機械目標時則會推動過載。</MX_QH_FlowerBellResonanceDescriptionAutumn>
+  <MX_QH_FlowerBellResonanceDescriptionWinter>冬季共鳴使鈴音沉入寒意，命中目標時會不斷累積寒冷，最終將其凍結。</MX_QH_FlowerBellResonanceDescriptionWinter>
   <MX_QH_SkillTreeNoScores>尚未解讀曲譜。</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>已習得</MX_QH_SkillTreeStateLearned>
   <MX_QH_SkillTreeStateAlreadyLearned>已經達到最高等級。</MX_QH_SkillTreeStateAlreadyLearned>

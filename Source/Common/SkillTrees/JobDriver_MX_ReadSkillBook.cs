@@ -178,7 +178,14 @@ namespace MiliraXian.Characters
             {
                 toil.defaultCompleteMode = ToilCompleteMode.Never;
             }
+            toil.WithProgressBar(TargetIndex.A, GetReadProgress);
             return toil;
+        }
+
+        private float GetReadProgress()
+        {
+            Thing_MX_SkillBook skillBook = SkillBook;
+            return skillBook == null ? 0f : skillBook.GetSkillStudyProgressPercent(pawn);
         }
 
         private Thing_MX_SkillBook SkillBook => Book as Thing_MX_SkillBook;

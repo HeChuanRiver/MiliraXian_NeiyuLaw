@@ -17,6 +17,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public FlowerBellResonance resonance;
         public ThingDef projectile;
         public ThingDef buildingProjectile;
+        public string resonanceDescription;
     }
 
     public class CompProperties_FlowerBellResonance : CompProperties
@@ -80,6 +81,22 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         {
             Scribe_Values.Look(ref resonance, "mx_qh_flowerBell_resonance", FlowerBellResonance.Spring);
             Scribe_Values.Look(ref extraBuildingDamage, "mx_qh_flowerBell_extraBuildingDamage", false);
+        }
+
+        public override string TransformLabel(string label)
+        {
+            return label + "【" + LabelFor(resonance) + "】";
+        }
+
+        public override string GetDescriptionPart()
+        {
+            string description = CurrentSet?.resonanceDescription;
+            if (description.NullOrEmpty())
+            {
+                return null;
+            }
+
+            return Translator.CanTranslate(description) ? description.Translate().ToString() : description;
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()

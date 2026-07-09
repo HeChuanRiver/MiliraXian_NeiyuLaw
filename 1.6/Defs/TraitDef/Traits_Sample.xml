@@ -47,6 +47,9 @@
       <li>
         <label>霓羽仙</label>
         <description>"出淤泥而不染，濯清涟而不妖。"</description>
+        <statFactors>
+          <IncomingDamageFactor>0.99</IncomingDamageFactor>
+        </statFactors>
       </li>
     </degreeDatas>
     <modExtensions>

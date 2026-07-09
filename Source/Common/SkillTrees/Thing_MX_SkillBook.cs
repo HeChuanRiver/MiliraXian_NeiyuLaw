@@ -147,6 +147,20 @@ namespace MiliraXian.Characters
             return SkillDoers().Any(doer => doer.CachedStudyTargetLearned(pawn));
         }
 
+        public float GetSkillStudyProgressPercent(Pawn pawn)
+        {
+            float progress = 0f;
+            foreach (BookOutcomeDoer_SkillTreeUnlock doer in SkillDoers())
+            {
+                if (doer.TryGetStudyProgress(pawn, out float doerProgress))
+                {
+                    progress = Mathf.Max(progress, doerProgress);
+                }
+            }
+
+            return progress;
+        }
+
         public void ClearCachedSkillStudyTargets(Pawn pawn)
         {
             foreach (BookOutcomeDoer_SkillTreeUnlock doer in SkillDoers())
@@ -232,7 +246,7 @@ namespace MiliraXian.Characters
         public string GenerateSkillBookQualitySummary(string key = null)
         {
             QualityCategory quality = this.TryGetComp<CompQuality>()?.Quality ?? QualityCategory.Normal;
-            return TranslateKey(key ?? "MX_Common_SkillBookQualitySummary", quality.GetLabel());
+            return TranslateKey((key ?? "MX_Common_SkillBookQualitySummary") + "_" + quality);
         }
 
         private string GetBenefitsString()

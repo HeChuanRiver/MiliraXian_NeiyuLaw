@@ -76,7 +76,17 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             base.DrawEffectPreview(target);
-            GenDraw.DrawRadiusRing(target.Cell, ResolveShieldRadius(), new Color(0.62f, 0.88f, 1f, 0.30f));
+            Map map = Find.CurrentMap;
+            if (map == null || !target.Cell.IsValid)
+            {
+                return;
+            }
+
+            GenDraw.DrawRadiusRing(
+                target.Cell,
+                ResolveShieldRadius(),
+                new Color(0.62f, 0.88f, 1f, 0.30f),
+                cell => GenSight.LineOfSight(target.Cell, cell, map));
         }
 
         private float ResolveShieldRadius()

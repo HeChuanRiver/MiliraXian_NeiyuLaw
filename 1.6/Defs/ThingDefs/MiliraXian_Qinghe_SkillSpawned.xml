@@ -168,7 +168,7 @@
 
     <ThingDef>
         <defName>MX_QH_LunarMirror</defName>
-        <label>腊梅护盾</label>
+        <label>霜月镜</label>
         <thingClass>ThingWithComps</thingClass>
         <category>None</category>
         <tickerType>Normal</tickerType>

@@ -43,21 +43,25 @@
             <resonance>Spring</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Spring_Building</buildingProjectile>
+            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionSpring</resonanceDescription>
           </li>
           <li>
             <resonance>Summer</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Summer_Building</buildingProjectile>
+            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionSummer</resonanceDescription>
           </li>
           <li>
             <resonance>Autumn</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Autumn_Building</buildingProjectile>
+            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionAutumn</resonanceDescription>
           </li>
           <li>
             <resonance>Winter</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Winter_Building</buildingProjectile>
+            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionWinter</resonanceDescription>
           </li>
         </settings>
       </li>

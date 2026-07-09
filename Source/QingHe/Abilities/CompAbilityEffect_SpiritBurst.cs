@@ -118,10 +118,18 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
-            if (target.IsValid)
+            base.DrawEffectPreview(target);
+            Map map = Find.CurrentMap;
+            if (map == null || !target.Cell.IsValid)
             {
-                GenDraw.DrawRadiusRing(target.Cell, Props.radius, new Color(1f, 0.75f, 0.45f, 0.45f));
+                return;
             }
+
+            GenDraw.DrawRadiusRing(
+                target.Cell,
+                Props.radius,
+                new Color(1f, 0.75f, 0.45f, 0.45f),
+                cell => GenSight.LineOfSight(target.Cell, cell, map));
         }
 
         public override IEnumerable<PreCastAction> GetPreCastActions()

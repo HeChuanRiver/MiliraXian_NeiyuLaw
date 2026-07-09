@@ -47,7 +47,9 @@
                 <resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
-                <baseGainPerDay>100</baseGainPerDay>
+                <meditationGainPerDay>100</meditationGainPerDay>
+                <readingGainPerDay>100</readingGainPerDay>
+                <sleepGainPerDay>100</sleepGainPerDay>
                 <partialQualityConsumeFactor>0.3</partialQualityConsumeFactor>
                 <fullQualityConsumeFactor>0.8</fullQualityConsumeFactor>
                 <qualityBonusChancePerFullStillness>1</qualityBonusChancePerFullStillness>

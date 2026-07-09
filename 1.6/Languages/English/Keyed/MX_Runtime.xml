@@ -11,7 +11,13 @@
   <MX_Common_SkillBookNoLearnableContent>This skill book has no learnable content for this reader.</MX_Common_SkillBookNoLearnableContent>
   <MX_Common_SkillBookBenefitNodes>Increase skill node: {0}</MX_Common_SkillBookBenefitNodes>
   <MX_Common_SkillBookBenefitNodeLine> - Learn school skill: {0} (+{1} skill points/hour)</MX_Common_SkillBookBenefitNodeLine>
-  <MX_Common_SkillBookQualitySummary>Judging by its paper, ink, and binding, this volume is of {0} quality; its condition shapes how smoothly it can be studied.</MX_Common_SkillBookQualitySummary>
+  <MX_Common_SkillBookQualitySummary_Awful>The paper is brittle, the ink has bled into stains, and several passages must be guessed from context.</MX_Common_SkillBookQualitySummary_Awful>
+  <MX_Common_SkillBookQualitySummary_Poor>The binding still holds, but smudged ink and careless notes make the text slow to follow.</MX_Common_SkillBookQualitySummary_Poor>
+  <MX_Common_SkillBookQualitySummary_Normal>The pages are orderly enough, with clear hand and steady ink suitable for careful study.</MX_Common_SkillBookQualitySummary_Normal>
+  <MX_Common_SkillBookQualitySummary_Good>The paper is clean, the ink is even, and the annotations guide the reader through difficult turns.</MX_Common_SkillBookQualitySummary_Good>
+  <MX_Common_SkillBookQualitySummary_Excellent>The volume is finely prepared, its diagrams precise and its commentary arranged with patient care.</MX_Common_SkillBookQualitySummary_Excellent>
+  <MX_Common_SkillBookQualitySummary_Masterwork>Every fold, stroke, and margin note feels deliberate, as if the book itself knows how to teach.</MX_Common_SkillBookQualitySummary_Masterwork>
+  <MX_Common_SkillBookQualitySummary_Legendary>The pages carry a quiet authority; even a brief glance seems to draw the reader toward hidden understanding.</MX_Common_SkillBookQualitySummary_Legendary>
   <MX_Common_Parentheses>({0})</MX_Common_Parentheses>
   <MX_Common_SkillNodesLearnedLetterLabel>New skill learned</MX_Common_SkillNodesLearnedLetterLabel>
   <MX_Common_SkillNodesLearnedLetterText>{0} has been read, granting: {1}</MX_Common_SkillNodesLearnedLetterText>
@@ -148,6 +154,10 @@
   <MX_QH_FlowerBellResonanceSummer>summer</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>autumn</MX_QH_FlowerBellResonanceAutumn>
   <MX_QH_FlowerBellResonanceWinter>winter</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_FlowerBellResonanceDescriptionSpring>Spring resonance carries a living pulse. Hits disturb blood in flesh targets and build electric leakage in mechanoids.</MX_QH_FlowerBellResonanceDescriptionSpring>
+  <MX_QH_FlowerBellResonanceDescriptionSummer>Summer resonance is heavy and fervent. Hits build toxins in flesh targets and corrode mechanical structure.</MX_QH_FlowerBellResonanceDescriptionSummer>
+  <MX_QH_FlowerBellResonanceDescriptionAutumn>Autumn resonance is clear and severe. Hits pressure the mind of flesh targets and push mechanoids toward overload.</MX_QH_FlowerBellResonanceDescriptionAutumn>
+  <MX_QH_FlowerBellResonanceDescriptionWinter>Winter resonance sinks into cold. Hits build chill on the target until it is frozen in place.</MX_QH_FlowerBellResonanceDescriptionWinter>
   <MX_QH_SkillTreeNoScores>No score has been interpreted.</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>learned</MX_QH_SkillTreeStateLearned>
   <MX_QH_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_QH_SkillTreeStateAlreadyLearned>

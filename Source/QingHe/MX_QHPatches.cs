@@ -57,6 +57,9 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(Book), nameof(Book.OnBookReadTick), new[] { typeof(Pawn), typeof(int), typeof(float) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Book_OnBookReadTick_Postfix)));
 
+            patcher.Patch(AccessTools.Method(typeof(JobDriver_LayDown), nameof(JobDriver_LayDown.LayDownToil), new[] { typeof(bool) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_LayDown_LayDownToil_Postfix)));
+
             patcher.Patch(AccessTools.Method(typeof(JobDriver_PlayMusicalInstrument), "ModifyPlayToil", new[] { typeof(Toil) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix)));
 
@@ -308,6 +311,11 @@ namespace MiliraXian.Characters.QingHe
             MX_QH_HediffUtility.AddMeditativeStillnessFromReading(pawn, delta, roomBonusFactor);
         }
 
+        public static void Patch_JobDriver_LayDown_LayDownToil_Postfix(JobDriver_LayDown __instance, Toil __result)
+        {
+            __result?.AddPreTickIntervalAction(delta => ApplyQingheSleepStillness(__instance, delta));
+        }
+
         public static void Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix(JobDriver_PlayMusicalInstrument __instance, Toil toil)
         {
             toil?.AddPreTickIntervalAction(delta => ApplyQingheInstrumentPerformance(__instance, delta));
@@ -321,6 +329,17 @@ namespace MiliraXian.Characters.QingHe
             }
 
             MX_QH_HediffUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
+        }
+
+        private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
+        {
+            Pawn pawn = driver?.pawn;
+            if (driver == null || !driver.asleep || !MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
+            MX_QH_HediffUtility.AddMeditativeStillnessFromSleep(pawn, delta);
         }
 
         public static bool Patch_Projectile_CheckForFreeInterceptBetween_Prefix(

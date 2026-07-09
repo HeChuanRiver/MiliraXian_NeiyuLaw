@@ -136,6 +136,35 @@ namespace MiliraXian.Characters
             return pawn != null && cachedReader == pawn && cachedNodeLearned;
         }
 
+        public bool TryGetStudyProgress(Pawn pawn, out float progress)
+        {
+            progress = 0f;
+            if (pawn == null)
+            {
+                return false;
+            }
+
+            if (cachedReader == pawn && cachedState != null && cachedNode != null)
+            {
+                progress = cachedNodeLearned ? 1f : cachedState.GetNodeReadingProgressPercent(cachedNode);
+                return true;
+            }
+
+            if (!CanStudy(pawn, out _))
+            {
+                return false;
+            }
+
+            HediffComp_SkillTreeState state = GetSkillState(pawn);
+            if (state == null || Node == null)
+            {
+                return false;
+            }
+
+            progress = state.GetNodeReadingProgressPercent(Node);
+            return true;
+        }
+
         public bool CanSelectFor(Pawn pawn)
         {
             if (Node == null)
