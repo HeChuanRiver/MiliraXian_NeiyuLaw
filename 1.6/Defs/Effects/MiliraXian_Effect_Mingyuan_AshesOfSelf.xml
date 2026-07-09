@@ -116,6 +116,34 @@
   </ThingDef>
 
   <ThingDef>
+    <defName>MX_Mingyuan_Mote_SelfBurnOverburn</defName>
+    <label>Mote</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/SelfBurnGain</texPath>
+      <color>(1.00, 0.42, 0.20, 0.82)</color>
+      <drawSize>(2.15, 2.15)</drawSize>
+      <shaderParameters>
+        <_Interval>0.14</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <solidTime>0.45</solidTime>
+      <fadeOutTime>0.36</fadeOutTime>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
     <defName>MX_Mingyuan_Mote_ShieldSelfBurnLink</defName>
     <label>Mote</label>
     <thingClass>MoteAttached</thingClass>

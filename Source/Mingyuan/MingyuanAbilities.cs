@@ -361,6 +361,7 @@ namespace MiliraXian.Characters.Mingyuan
         public int durationTicks = 900;
         public int pulseIntervalTicks = 60;
         public float lifeBurnLayers = 20f;
+        public bool scaleWithOverburn = true;
         public int fadeInTicks = 15;
         public int fadeOutTicks = 60;
 
@@ -492,7 +493,7 @@ namespace MiliraXian.Characters.Mingyuan
                 Pawn pawn;
                 if (MingyuanUtility.IsHostilePawn(things[i], caster, out pawn))
                 {
-                    MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers);
+                    MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers, scaleWithOverburn: PropsScorch.scaleWithOverburn);
                 }
             }
         }

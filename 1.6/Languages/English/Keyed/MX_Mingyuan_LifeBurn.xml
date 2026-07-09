@@ -11,5 +11,5 @@
   <MX_Mingyuan_LifeBurn_TipDebuffDown>Reduced: move speed, melee hit chance, shooting accuracy, global work speed, melee damage, ranged damage -{0}</MX_Mingyuan_LifeBurn_TipDebuffDown>
   <MX_Mingyuan_LifeBurn_TipDebuffUp>Increased: melee cooldown, ranged cooldown, incoming damage +{0}</MX_Mingyuan_LifeBurn_TipDebuffUp>
   <MX_Mingyuan_LifeBurn_TipNeedsAgeGear>Every 2s: needs -{0}, biological age +{1} ticks, equipment durability -{2}</MX_Mingyuan_LifeBurn_TipNeedsAgeGear>
-  <MX_Mingyuan_LifeBurn_TipTransfer>On death: transfers {0} layers to hostile pawns within {1} cells, with up to {2} transfer trails.</MX_Mingyuan_LifeBurn_TipTransfer>
+  <MX_Mingyuan_LifeBurn_TipTransfer>On death: splits {0} total layers among up to {3} nearest hostile pawns within {1} cells, with up to {2} transfer trails.</MX_Mingyuan_LifeBurn_TipTransfer>
 </LanguageData>

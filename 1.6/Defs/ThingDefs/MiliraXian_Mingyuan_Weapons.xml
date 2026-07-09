@@ -72,7 +72,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>Long Rainbow</label>
-        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds, fires 4 high-arc arrows at any map-range target, and each arrow deals 25 damage with a 2-cell burst. Mingyuan's flame adds Life Burn on hit.</description>
+        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds and fires 4 high-arc arrows at any map-range target. Each arrow deals lighter direct damage, applies heavier Life Burn, and can ricochet among nearby enemies.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -136,6 +136,7 @@
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_Mingyuan_RainbowArrow</defName>
         <label>Long Rainbow Arrow</label>
+        <thingClass>MiliraXian.Characters.Mingyuan.Projectile_MingyuanRainbowArrow</thingClass>
         <graphicData>
             <texPath>MiliraXianMingyuan/Projectile/RainbowArrow</texPath>
             <graphicClass>Graphic_Single</graphicClass>
@@ -145,12 +146,21 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>25</damageAmountBase>
-            <armorPenetrationBase>1.00</armorPenetrationBase>
+            <damageAmountBase>10</damageAmountBase>
+            <armorPenetrationBase>0.65</armorPenetrationBase>
             <explosionRadius>2</explosionRadius>
             <speed>45</speed>
             <arcHeightFactor>0.90</arcHeightFactor>
         </projectile>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.Mingyuan.MingyuanRainbowArrowExtension">
+                <bounceCount>6</bounceCount>
+                <bounceRadius>5</bounceRadius>
+                <maxHitsPerPawn>3</maxHitsPerPawn>
+                <lifeBurnLayers>8</lifeBurnLayers>
+                <scaleLifeBurnWithOverburn>true</scaleLifeBurnWithOverburn>
+            </li>
+        </modExtensions>
     </ThingDef>
 
 </Defs>

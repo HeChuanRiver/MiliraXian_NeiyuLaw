@@ -19,7 +19,7 @@
     <!-- Mingyuan -->
     <HeadTypeDef ParentName="AverageBase">
         <defName>MiliraMingyuanHead</defName>
-        <graphicPath>MiliraXianMingyuan/PawnMingyuan/Head/MiliraHeadMingyuan</graphicPath>
+        <graphicPath>MiliraXianNeiyu/PawnNeiyu/Head/MiliraHeadNeiyu</graphicPath>
         <gender>None</gender>
         <randomChosen>false</randomChosen>
     </HeadTypeDef>

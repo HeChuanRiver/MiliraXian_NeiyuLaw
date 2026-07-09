@@ -6,13 +6,26 @@
   <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} 層，過燃</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>目前自我燃燒：{0} 層</MX_Mingyuan_SelfBurn_TipCurrentLayers>
   <MX_Mingyuan_SelfBurn_TipEffectiveLayers>有效加成層數：{0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
-  <MX_Mingyuan_SelfBurn_TipOverburn>過燃值：超過 {1} 的部分為 {0} 層。狀態：{2}</MX_Mingyuan_SelfBurn_TipOverburn>
-  <MX_Mingyuan_SelfBurn_TipBonuses>有效層數加成：傷害 +{0}，移速 +{1}，攻速 +{2}，全域工作速度 +{3}</MX_Mingyuan_SelfBurn_TipBonuses>
-  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>異空間燃燒者加成：近戰生命燃燒 +{0} 層，遠程生命燃燒 +{1} 層</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
-  <MX_Mingyuan_SelfBurn_TipOverburnEffect>過燃：主動直接傷害 +{0}，主動生命燃燒疊層 +{1}；護盾儲備不能再由自我燃燒補充。</MX_Mingyuan_SelfBurn_TipOverburnEffect>
-  <MX_Mingyuan_SelfBurn_TipRhythm>徵召：每 {0} tick +{1}，最多自然恢復到 {2}。非徵召：每 {3} tick -{4}。過燃：每 {3} tick -{5}。下次變化剩餘 {6} tick。</MX_Mingyuan_SelfBurn_TipRhythm>
+  <MX_Mingyuan_SelfBurn_TipOverburn>過燃：{0} / {1}，狀態：{2}</MX_Mingyuan_SelfBurn_TipOverburn>
+  <MX_Mingyuan_SelfBurn_TipBonuses>加成：
+- 近戰/技能傷害 +{0}
+- 遠程武器傷害 +{1}
+- 移速 +{2}，攻速 +{3}
+- 全域工作速度 +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>生命燃燒：
+- 近戰 +{0} 層
+- 遠程 +{1} 層</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
+  <MX_Mingyuan_SelfBurn_TipOverburnEffect>過燃：
+- 主動直接傷害 +{0}
+- 主動生命燃燒疊層 +{1}
+- 護盾儲備不能由自燃補充</MX_Mingyuan_SelfBurn_TipOverburnEffect>
+  <MX_Mingyuan_SelfBurn_TipRhythm>變化：
+- 徵召：每 {0} tick +{1}，自然上限 {2}
+- 非徵召：每 {3} tick -{4}，明淵保留 1 層
+- 過燃：每 {3} tick -{5}
+- 下次變化：{6} tick</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>修復儲備：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRepair>每秒消耗 1 點儲備，恢復一個缺失部位，或治療一個部位上的全部非永久傷口。下次檢查：{0} 秒後。</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRepair>每秒消耗 1 點儲備，恢復一個缺失部位，或治療一個部位上的全部傷口與舊傷疤痕。下次檢查：{0} 秒後。</MX_Mingyuan_Shield_TipRepair>
   <MX_Mingyuan_Shield_TipRefill>自燃補盾檢查：{0} 秒後。比例：{1} 自我燃燒 = 1 儲備；每次最多消耗 {2}。補充冷卻：{3} 秒。當前允許：{4}</MX_Mingyuan_Shield_TipRefill>
   <MX_Mingyuan_Shield_TipOverburnDrain>過燃流失：{0}。過燃時每 5 秒失去 {1} 儲備。下次流失：{2} 秒後。</MX_Mingyuan_Shield_TipOverburnDrain>
   <MX_Mingyuan_BurningPillar_Inspect>半徑：{0}

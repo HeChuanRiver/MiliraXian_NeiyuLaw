@@ -8,7 +8,7 @@
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianMingyuan/Apparel/InfernoArmor</texPath>
+            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
         </graphicData>
         <statBases>
             <Mass>2.0</Mass>
@@ -36,7 +36,7 @@
                 <li>Hands</li>
                 <li>Milira_Wings</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianMingyuan/Apparel/InfernoArmor</wornGraphicPath>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanArmor</li>
             </tags>
@@ -66,11 +66,11 @@
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</texPath>
+            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>1.0</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</uiIconPath>
+        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
 
         <statBases>
             <Mass>0.5</Mass>
@@ -92,7 +92,7 @@
             <bodyPartGroups Inherit="False">
                 <li>UpperHead</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</wornGraphicPath>
+            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanCrown</li>
             </tags>

@@ -80,7 +80,7 @@
             <PsychicSensitivity>-2</PsychicSensitivity>
         </disallowedTraitsWithDegree>
 
-        <forcedHairColor>(255,225,150)</forcedHairColor>
+        <forcedHairColor>(255,255,255)</forcedHairColor>
 
         <abilities>
             <li>MX_Mingyuan_AscendantFlameDash</li>
@@ -102,7 +102,7 @@
                 <forcedAgeYears>180</forcedAgeYears>
                 <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
 
-                <forcedHeadTypeDef>MiliraMingyuanHead</forcedHeadTypeDef>
+                <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
 
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>
@@ -139,7 +139,7 @@
             <li Class="AriandelLibrary.SpecialPawnExtension">
                 <uniqueID>Mingyuan</uniqueID>
                 <tabDef>MI_Milira_Tab</tabDef>
-                <iconPathRecruited>MiliraXianMingyuan/Icon/Mingyuan</iconPathRecruited>
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
                 <labelKey>SpecialPawnMingyuan.label</labelKey>
                 <descKey>SpecialPawnMingyuan.desc</descKey>
                 <order>15</order>

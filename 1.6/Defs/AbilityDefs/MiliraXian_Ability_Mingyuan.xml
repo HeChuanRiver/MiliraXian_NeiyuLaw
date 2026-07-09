@@ -10,7 +10,7 @@
     <AbilityDef>
         <defName>MX_Mingyuan_AscendantFlameDash</defName>
         <label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</label>
-        <description>Mingyuan becomes a pale ascendant flame, crosses up to 150 cells without line of sight, leaves a 3-cell-wide burning trail for 15 seconds, deals 10 burn damage, applies 30 Life Burn layers, knocks enemies back, and stuns them for 3 seconds. Cooldown: 3 seconds.</description>
+        <description>Mingyuan becomes a pale ascendant flame, crosses up to 150 cells without line of sight, leaves a 3-cell-wide burning trail for 15 seconds, deals 10 burn damage, applies 30 Life Burn layers, knocks enemies back, and stuns them for 3 seconds. Enemies standing on the trail gain Life Burn every 0.5 seconds. Cooldown: 3 seconds.</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>100</displayOrder>
@@ -171,7 +171,7 @@
     <AbilityDef>
         <defName>MX_Mingyuan_AshesOfSelf</defName>
         <label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</label>
-        <description>Spend all shield energy, or 50% blood if the shield cannot pay, to gain 100 Self Burn layers and open a 5x5 ashes field for 15 seconds. The field follows Mingyuan, pulses every 0.5 seconds, deals 1 burn damage, and adds Life Burn. Cooldown: 15 seconds.</description>
+        <description>Spend 50% blood to gain 100 Self Burn layers and open a 5x5 ashes field for 15 seconds. The field follows Mingyuan, pulses every 0.5 seconds, deals 1 burn damage, and adds Life Burn. If Self Burn rises above 300, Mingyuan enters Overburn. Cooldown: 15 seconds.</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>140</displayOrder>

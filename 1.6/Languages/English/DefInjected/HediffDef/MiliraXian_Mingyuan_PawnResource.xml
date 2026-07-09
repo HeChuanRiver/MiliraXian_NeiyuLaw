@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_LifeBurn.label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</MX_Mingyuan_LifeBurn.label>
-  <MX_Mingyuan_LifeBurn.description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and spills part of itself to nearby enemies when the host dies.</MX_Mingyuan_LifeBurn.description>
+  <MX_Mingyuan_LifeBurn.description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and splits part of itself among nearby enemies when the host dies.</MX_Mingyuan_LifeBurn.description>
   <MX_Mingyuan_LifeBurn.stages.0.label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</MX_Mingyuan_LifeBurn.stages.0.label>
   <MX_Mingyuan_SelfBurn.label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</MX_Mingyuan_SelfBurn.label>
-  <MX_Mingyuan_SelfBurn.description>Mingyuan turns the burning inside herself into momentum. Stored layers can rise above the bonus limit as a buffer, but damage, movement, attack speed, work speed, shield regeneration, and Life Burn bonuses only count up to 300 effective layers.</MX_Mingyuan_SelfBurn.description>
-  <MX_Mingyuan_SelfBurn.stages.0.label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</MX_Mingyuan_SelfBurn.stages.0.label>
+  <MX_Mingyuan_SelfBurn.description>Mingyuan turns the burning inside herself into momentum. Layers from 0 to 300 improve melee and skill damage, give a capped bonus to ranged weapon damage, and improve movement, attack speed, work speed, and Life Burn output. Layers above 300 become Overburn: direct damage and active Life Burn stacking are doubled, but her protective flame reserve starts draining.</MX_Mingyuan_SelfBurn.description>
+  <MX_Mingyuan_SelfBurn.stages.0.label></MX_Mingyuan_SelfBurn.stages.0.label>
   <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
-  <MX_Mingyuan_BurningBody.description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and brief invulnerability follows real wounds.</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and each true wound grants 5 Self Burn.</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
-  <MX_Mingyuan_ProtectiveFlameShield.description>A 200-energy pale flame shield. It absorbs very small hits, overwhelming hits, and lethal strikes, spends 10 energy per absorbed hit, batches regeneration every 10 seconds, rebuilds after breaking, and clears hostile control when struck. At 300 effective Self Burn layers, absorbed hits cost no energy and add more Self Burn.</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_ProtectiveFlameShield.description>A 100-point pale flame reserve. It no longer blocks damage directly; instead, every second it spends 1 reserve to restore one missing body part or fully heal all wounds and scars on one body part. Stable Self Burn can be converted back into reserve, but Overburn drains the reserve away.</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
   <MX_Mingyuan_RebirthFlame.description>When Mingyuan falls, the flame buried in her body detonates and begins shaping her back from the ashes.</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>

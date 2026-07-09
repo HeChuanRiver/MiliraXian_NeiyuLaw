@@ -6,13 +6,26 @@
   <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} layers, Overburn</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>Current Self Burn: {0} layers</MX_Mingyuan_SelfBurn_TipCurrentLayers>
   <MX_Mingyuan_SelfBurn_TipEffectiveLayers>Effective bonus layers: {0}/{1}</MX_Mingyuan_SelfBurn_TipEffectiveLayers>
-  <MX_Mingyuan_SelfBurn_TipOverburn>Overburn: {0} layers above {1}. State: {2}</MX_Mingyuan_SelfBurn_TipOverburn>
-  <MX_Mingyuan_SelfBurn_TipBonuses>Effective layer bonuses: damage +{0}, movement +{1}, attack speed +{2}, global work speed +{3}</MX_Mingyuan_SelfBurn_TipBonuses>
-  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>Otherworld Burner bonus: melee Life Burn +{0} layers, ranged Life Burn +{1} layers</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
-  <MX_Mingyuan_SelfBurn_TipOverburnEffect>Overburn: active direct damage +{0}, active Life Burn stacking +{1}; shield reserve cannot refill from Self Burn.</MX_Mingyuan_SelfBurn_TipOverburnEffect>
-  <MX_Mingyuan_SelfBurn_TipRhythm>Drafted: every {0} ticks +{1} up to {2}. Undrafted: every {3} ticks -{4}. Overburn: every {3} ticks -{5}. Next change in {6} ticks.</MX_Mingyuan_SelfBurn_TipRhythm>
+  <MX_Mingyuan_SelfBurn_TipOverburn>Overburn: {0} / {1}. State: {2}</MX_Mingyuan_SelfBurn_TipOverburn>
+  <MX_Mingyuan_SelfBurn_TipBonuses>Bonuses:
+- Melee/skill damage +{0}
+- Ranged weapon damage +{1}
+- Movement +{2}, attack speed +{3}
+- Global work speed +{4}</MX_Mingyuan_SelfBurn_TipBonuses>
+  <MX_Mingyuan_SelfBurn_TipLifeBurnBonus>Life Burn:
+- Melee +{0} layers
+- Ranged +{1} layers</MX_Mingyuan_SelfBurn_TipLifeBurnBonus>
+  <MX_Mingyuan_SelfBurn_TipOverburnEffect>Overburn:
+- Active direct damage +{0}
+- Active Life Burn stacking +{1}
+- Shield reserve cannot refill from Self Burn</MX_Mingyuan_SelfBurn_TipOverburnEffect>
+  <MX_Mingyuan_SelfBurn_TipRhythm>Flow:
+- Drafted: every {0} ticks +{1}, natural cap {2}
+- Undrafted: every {3} ticks -{4}, Mingyuan keeps 1 layer
+- Overburn: every {3} ticks -{5}
+- Next change: {6} ticks</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>Repair reserve: {0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRepair>Every second, spends 1 reserve to restore one missing body part or heal all non-permanent wounds on one body part. Next check in {0}s.</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRepair>Every second, spends 1 reserve to restore one missing body part or heal all wounds and scars on one body part. Next check in {0}s.</MX_Mingyuan_Shield_TipRepair>
   <MX_Mingyuan_Shield_TipRefill>Self Burn refill check in {0}s. Ratio: {1} Self Burn = 1 reserve; max spend per success: {2}. Refill cooldown: {3}s. Allowed: {4}</MX_Mingyuan_Shield_TipRefill>
   <MX_Mingyuan_Shield_TipOverburnDrain>Overburn drain: {0}. While active, reserve loses {1} every 5s. Next drain in {2}s.</MX_Mingyuan_Shield_TipOverburnDrain>
   <MX_Mingyuan_BurningPillar_Inspect>Radius: {0}

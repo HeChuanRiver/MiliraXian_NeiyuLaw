@@ -38,8 +38,9 @@
     <comps>
       <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanAscendantFlameScorch">
         <durationTicks>900</durationTicks>
-        <pulseIntervalTicks>60</pulseIntervalTicks>
-        <lifeBurnLayers>0</lifeBurnLayers>
+        <pulseIntervalTicks>30</pulseIntervalTicks>
+        <lifeBurnLayers>8</lifeBurnLayers>
+        <scaleWithOverburn>true</scaleWithOverburn>
         <fadeInTicks>15</fadeInTicks>
         <fadeOutTicks>60</fadeOutTicks>
       </li>

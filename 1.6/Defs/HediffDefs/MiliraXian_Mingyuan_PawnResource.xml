@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_LifeBurn</defName>
         <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
-        <description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and spills part of itself to nearby enemies when the host dies.</description>
+        <description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and splits part of itself among nearby enemies when the host dies.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
         <isBad>true</isBad>
@@ -33,6 +33,12 @@
                 <decayFraction>0.1</decayFraction>
                 <removeBelowLayers>0.5</removeBelowLayers>
                 <transferVisualLimit>8</transferVisualLimit>
+                <maxTransferTargets>8</maxTransferTargets>
+                <minTransferLayers>1</minTransferLayers>
+                <maxBurstExecutionsPerTick>4</maxBurstExecutionsPerTick>
+                <burstRetryTicks>15</burstRetryTicks>
+                <burstRetryJitterTicks>45</burstRetryJitterTicks>
+                <maxDeathTransfersPerTick>4</maxDeathTransfersPerTick>
             </li>
         </comps>
     </HediffDef>
@@ -40,7 +46,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_SelfBurn</defName>
         <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
-        <description>Mingyuan turns the burning inside herself into momentum. Stored layers can rise above the bonus limit as a buffer, but damage, movement, attack speed, work speed, shield regeneration, and Life Burn bonuses only count up to 300 effective layers.</description>
+        <description>Mingyuan turns the burning inside herself into momentum. Layers from 0 to 300 improve melee and skill damage, give a capped bonus to ranged weapon damage, improve movement, attack speed, work speed, and Life Burn output. Layers above 300 become Overburn: direct damage and active Life Burn stacking are doubled, but her protective flame reserve starts draining.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
         <isBad>false</isBad>
@@ -50,7 +56,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
+                <label></label>
             </li>
         </stages>
         <comps>
@@ -61,6 +67,18 @@
                 <gainMoteScale>1</gainMoteScale>
                 <gainMoteCooldownTicks>60</gainMoteCooldownTicks>
                 <effectiveBonusCap>300</effectiveBonusCap>
+                <overburnThreshold>300</overburnThreshold>
+                <overburnDamageFactor>2</overburnDamageFactor>
+                <overburnLifeBurnFactor>2</overburnLifeBurnFactor>
+                <rangedWeaponDamagePerLayer>0.002</rangedWeaponDamagePerLayer>
+                <rangedWeaponDamageBonusCap>0.6</rangedWeaponDamageBonusCap>
+                <combatRegenIntervalTicks>60</combatRegenIntervalTicks>
+                <combatRegenLayers>1</combatRegenLayers>
+                <nonCombatDecayIntervalTicks>60</nonCombatDecayIntervalTicks>
+                <nonCombatDecayLayers>1</nonCombatDecayLayers>
+                <overburnDecayLayers>1</overburnDecayLayers>
+                <overburnMoteDef>MX_Mingyuan_Mote_SelfBurnOverburn</overburnMoteDef>
+                <overburnMoteScale>1.35</overburnMoteScale>
             </li>
         </comps>
     </HediffDef>
@@ -68,7 +86,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and brief invulnerability follows real wounds.</description>
+        <description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and real wounds feed 5 Self Burn.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -104,7 +122,7 @@
                 <restoreIntervalTicks>1800</restoreIntervalTicks>
                 <invulnerableTicks>90</invulnerableTicks>
                 <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
-                <selfBurnOnHit>2</selfBurnOnHit>
+                <selfBurnOnHit>5</selfBurnOnHit>
                 <heatShieldEnergyFactor>0.25</heatShieldEnergyFactor>
             </li>
         </comps>
@@ -113,7 +131,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
         <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
-        <description>A 200-energy pale flame shield. It absorbs very small hits, overwhelming hits, and lethal strikes, spends 10 energy per absorbed hit, batches regeneration every 10 seconds, rebuilds after breaking, and clears hostile control when struck. At 300 effective Self Burn layers, absorbed hits cost no energy and add more Self Burn.</description>
+        <description>A 100-point pale flame reserve. It no longer blocks damage directly; instead, every second it spends 1 reserve to restore one missing body part or fully heal all wounds and scars on one body part. Stable Self Burn can be converted back into reserve, but Overburn drains the reserve away.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>
@@ -124,9 +142,14 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanProtectiveFlameShield">
-                <maxEnergy>200</maxEnergy>
-                <regenPerSecond>2</regenPerSecond>
-                <regenIntervalTicks>600</regenIntervalTicks>
+                <maxEnergy>100</maxEnergy>
+                <repairIntervalTicks>60</repairIntervalTicks>
+                <selfBurnRefillIntervalTicks>300</selfBurnRefillIntervalTicks>
+                <selfBurnRefillCooldownTicks>1800</selfBurnRefillCooldownTicks>
+                <selfBurnPerEnergy>3</selfBurnPerEnergy>
+                <selfBurnRefillMaxFractionOfCap>0.3</selfBurnRefillMaxFractionOfCap>
+                <overburnDrainIntervalTicks>300</overburnDrainIntervalTicks>
+                <overburnDrainEnergy>1</overburnDrainEnergy>
                 <lowIgnoreDamage>20</lowIgnoreDamage>
                 <highIgnoreDamage>100</highIgnoreDamage>
                 <breakRecoverTicks>480</breakRecoverTicks>

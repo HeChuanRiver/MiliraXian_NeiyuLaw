@@ -227,6 +227,21 @@ namespace MiliraXian.Characters.Mingyuan
             return selfBurn > 0f ? 1f + selfBurn * 0.01f : 1f;
         }
 
+        public static float GetSelfBurnRangedWeaponDamageFactor(Pawn pawn)
+        {
+            float selfBurn = GetSelfBurnEffectiveLayers(pawn);
+            if (selfBurn <= 0f)
+            {
+                return 1f;
+            }
+
+            Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef);
+            HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
+            float perLayer = Mathf.Max(0f, comp?.PropsSelfBurn.rangedWeaponDamagePerLayer ?? 0.002f);
+            float cap = Mathf.Max(0f, comp?.PropsSelfBurn.rangedWeaponDamageBonusCap ?? 0.6f);
+            return 1f + Mathf.Min(selfBurn * perLayer, cap);
+        }
+
         public static bool IsHostilePawn(Thing thing, Pawn caster, out Pawn pawn)
         {
             pawn = thing as Pawn;
@@ -299,7 +314,7 @@ namespace MiliraXian.Characters.Mingyuan
             return true;
         }
 
-        public static void HealNonPermanentInjuries(Pawn pawn, float amount)
+        public static void HealInjuriesIncludingScars(Pawn pawn, float amount)
         {
             if (pawn?.health?.hediffSet == null || pawn.Dead || amount <= 0f)
             {
@@ -310,7 +325,7 @@ namespace MiliraXian.Characters.Mingyuan
             for (int i = hediffs.Count - 1; i >= 0 && amount > 0f; i--)
             {
                 Hediff_Injury injury = hediffs[i] as Hediff_Injury;
-                if (injury == null || injury.IsPermanent() || injury.Severity <= 0f)
+                if (injury == null || injury.Severity <= 0f)
                 {
                     continue;
                 }

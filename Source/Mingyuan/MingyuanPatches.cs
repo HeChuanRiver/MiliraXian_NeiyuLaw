@@ -209,7 +209,7 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 __result *= 1f + selfBurn * 0.005f;
             }
-            else if (stat == StatDefOf.WorkSpeedGlobal || stat == StatDefOf.RangedWeapon_DamageMultiplier)
+            else if (stat == StatDefOf.WorkSpeedGlobal)
             {
                 __result *= 1f + selfBurn * 0.01f;
             }
@@ -239,7 +239,6 @@ namespace MiliraXian.Characters.Mingyuan
         {
             return stat == StatDefOf.MoveSpeed
                    || stat == StatDefOf.WorkSpeedGlobal
-                   || stat == StatDefOf.RangedWeapon_DamageMultiplier
                    || stat == StatDefOf.MeleeCooldownFactor
                    || stat == StatDefOf.RangedCooldownFactor;
         }
@@ -294,10 +293,10 @@ namespace MiliraXian.Characters.Mingyuan
                 __result = Mathf.Max(1, Mathf.RoundToInt(__result * MingyuanLifeBurnPatchUtility.PenaltyFactor(lifeBurn)));
             }
 
-            float selfBurn = MingyuanUtility.GetSelfBurnEffectiveLayers(ownerPawn);
-            if (selfBurn > 0f)
+            float rangedWeaponDamageFactor = MingyuanUtility.GetSelfBurnRangedWeaponDamageFactor(ownerPawn);
+            if (rangedWeaponDamageFactor > 1f)
             {
-                __result = Mathf.Max(1, Mathf.RoundToInt(__result * (1f + selfBurn * 0.01f)));
+                __result = Mathf.Max(1, Mathf.RoundToInt(__result * rangedWeaponDamageFactor));
             }
 
             float overburnFactor = MingyuanUtility.GetOverburnDamageFactor(ownerPawn);

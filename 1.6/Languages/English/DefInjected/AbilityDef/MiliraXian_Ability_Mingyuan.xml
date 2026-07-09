@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_AscendantFlameDash.label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</MX_Mingyuan_AscendantFlameDash.label>
-  <MX_Mingyuan_AscendantFlameDash.description>Mingyuan becomes a pale ascendant flame, crosses up to 150 cells without line of sight, leaves a 3-cell-wide burning trail for 15 seconds, deals 10 burn damage, applies 30 Life Burn layers, knocks enemies back, and stuns them for 3 seconds. Cooldown: 3 seconds.</MX_Mingyuan_AscendantFlameDash.description>
+  <MX_Mingyuan_AscendantFlameDash.description>Mingyuan becomes a pale ascendant flame, crosses up to 150 cells without line of sight, leaves a 3-cell-wide burning trail for 15 seconds, deals 10 burn damage, applies 30 Life Burn layers, knocks enemies back, and stuns them for 3 seconds. Enemies standing on the trail gain Life Burn every 0.5 seconds. Cooldown: 3 seconds.</MX_Mingyuan_AscendantFlameDash.description>
   <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;Instant Combustion&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
   <MX_Mingyuan_InstantCombustion.description>Mingyuan releases a 30-cell flash of pale fire. Hostile pawns take 1 burn damage to the brain and each eye, their Life Burn layers are doubled or seeded, and they are stunned for 12 seconds. Warmup: 3 seconds. Cooldown: 18 hours.</MX_Mingyuan_InstantCombustion.description>
   <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
@@ -9,5 +9,5 @@
   <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
   <MX_Mingyuan_TimeBurn.description>Burn a pawn's biological age down to zero over 1 hour; when the age reaches zero the pawn dies. Mechanoids collapse into steel and plasteel. Buildings are dissolved into 100% of their raw materials. Warmup: 8 seconds. Cooldown: 48 hours.</MX_Mingyuan_TimeBurn.description>
   <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>
-  <MX_Mingyuan_AshesOfSelf.description>Spend all shield energy, or 50% blood if the shield cannot pay, to gain 100 Self Burn layers and open a 5x5 ashes field for 15 seconds. The field follows Mingyuan, pulses every 0.5 seconds, deals 1 burn damage, and adds Life Burn. Cooldown: 15 seconds.</MX_Mingyuan_AshesOfSelf.description>
+  <MX_Mingyuan_AshesOfSelf.description>Spend 50% blood to gain 100 Self Burn layers and open a 5x5 ashes field for 15 seconds. The field follows Mingyuan, pulses every 0.5 seconds, deals 1 burn damage, and adds Life Burn. If Self Burn rises above 300, Mingyuan enters Overburn. Cooldown: 15 seconds.</MX_Mingyuan_AshesOfSelf.description>
 </LanguageData>

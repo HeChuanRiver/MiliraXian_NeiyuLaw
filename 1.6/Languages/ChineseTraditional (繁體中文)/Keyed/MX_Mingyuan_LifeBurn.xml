@@ -11,5 +11,5 @@
   <MX_Mingyuan_LifeBurn_TipDebuffDown>降低：移速、近戰命中、射擊精度、全域工作速度、近戰傷害、遠程傷害 -{0}</MX_Mingyuan_LifeBurn_TipDebuffDown>
   <MX_Mingyuan_LifeBurn_TipDebuffUp>提高：近戰冷卻、遠程冷卻、承受傷害 +{0}</MX_Mingyuan_LifeBurn_TipDebuffUp>
   <MX_Mingyuan_LifeBurn_TipNeedsAgeGear>每 2 秒：需求 -{0}，生物年齡 +{1} tick，裝備耐久 -{2}</MX_Mingyuan_LifeBurn_TipNeedsAgeGear>
-  <MX_Mingyuan_LifeBurn_TipTransfer>死亡時：將 {0} 層數轉移給 {1} 格內敵對單位，最多顯示 {2} 條遷移曲線。</MX_Mingyuan_LifeBurn_TipTransfer>
+  <MX_Mingyuan_LifeBurn_TipTransfer>死亡時：將總計 {0} 層數分攤給 {1} 格內最多 {3} 個最近敵對單位，最多顯示 {2} 條遷移曲線。</MX_Mingyuan_LifeBurn_TipTransfer>
 </LanguageData>

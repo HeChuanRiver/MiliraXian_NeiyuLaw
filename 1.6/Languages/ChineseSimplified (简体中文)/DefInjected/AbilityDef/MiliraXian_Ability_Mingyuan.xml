@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_AscendantFlameDash.label>&lt;color=#FFB25C&gt;升焰疾行&lt;/color&gt;</MX_Mingyuan_AscendantFlameDash.label>
-  <MX_Mingyuan_AscendantFlameDash.description>明渊化为淡金升焰，无视视线穿越最多 150 格，留下 3 格宽、持续 15 秒的灼痕；路径上的敌人受到 10 点灼伤、30 层生命燃烧、击退与 3 秒眩晕。冷却：3 秒。</MX_Mingyuan_AscendantFlameDash.description>
+  <MX_Mingyuan_AscendantFlameDash.description>明渊化作淡色升焰，无视视线跨越最多 150 格，留下 3 格宽、持续 15 秒的灼痕。路径敌人受到 10 点灼伤，获得 30 层生命燃烧，被击退并眩晕 3 秒。站在灼痕上的敌人每 0.5 秒继续获得生命燃烧。冷却：3 秒。</MX_Mingyuan_AscendantFlameDash.description>
   <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
-  <MX_Mingyuan_InstantCombustion.description>明渊释放 30 格淡色强光。敌人大脑与每只眼睛受到 1 点灼伤，生命燃烧翻倍或补入基础层数，并眩晕 12 秒。前摇：3 秒。冷却：18 小时。</MX_Mingyuan_InstantCombustion.description>
+  <MX_Mingyuan_InstantCombustion.description>明渊释放 30 格淡色强光。敌对小人的大脑与每只眼睛各受 1 点灼伤，生命燃烧层数翻倍或被点燃，并眩晕 12 秒。前摇：3 秒。冷却：18 小时。</MX_Mingyuan_InstantCombustion.description>
   <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;燃烧之柱&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
-  <MX_Mingyuan_BurningPillar.description>放置一枚燃烧核心，10 分钟内由半径 1 成长到 15，持续 3 小时。越靠近中心灼伤越高，越靠近边缘割伤越高；灼伤决定生命燃烧层数。建筑每次受到最大生命 33% 伤害。10 分钟后可命令核心移动。</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_BurningPillar.description>放置一枚燃烧核心，10 分钟内从半径 1 成长到 15，持续 3 小时。越靠近边缘割伤越高，越靠近中心灼伤越高；灼伤决定生命燃烧叠层。建筑每次脉冲受到最大生命 33% 伤害。10 分钟后可指令核心移动。</MX_Mingyuan_BurningPillar.description>
   <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
-  <MX_Mingyuan_TimeBurn.description>在 1 小时内将目标生物年龄燃至零；归零后目标死亡。机械族崩解为钢铁与玻璃钢。建筑会分解为 100% 原材料。前摇：8 秒。冷却：48 小时。</MX_Mingyuan_TimeBurn.description>
+  <MX_Mingyuan_TimeBurn.description>在 1 小时内把目标生物年龄燃尽为 0；归零时目标死亡。机械族会坍缩为钢铁与玻璃钢，建筑会分解为 100% 原材料。前摇：8 秒。冷却：48 小时。</MX_Mingyuan_TimeBurn.description>
   <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;焚我余烬&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>
-  <MX_Mingyuan_AshesOfSelf.description>消耗全部护盾能量，或在护盾无法支付时消耗 50% 血液，获得 100 层自我燃烧，并展开持续 15 秒的 5x5 余烬领域。领域跟随明渊，每 0.5 秒造成 1 点灼伤并叠加生命燃烧。冷却：15 秒。</MX_Mingyuan_AshesOfSelf.description>
+  <MX_Mingyuan_AshesOfSelf.description>消耗 50% 血液，获得 100 层自我燃烧，并展开持续 15 秒的 5x5 余烬领域。领域跟随明渊，每 0.5 秒造成 1 点灼伤并叠加生命燃烧。自我燃烧超过 300 时进入过燃。冷却：15 秒。</MX_Mingyuan_AshesOfSelf.description>
 </LanguageData>

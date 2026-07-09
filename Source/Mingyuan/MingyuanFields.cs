@@ -789,7 +789,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            MingyuanUtility.HealNonPermanentInjuries(caster, Mathf.Max(0f, PropsField.selfHealAmount));
+            MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
             ThingDef moteDef = PropsField.selfHealMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_SelfBurnGain;
             MingyuanUtility.TryMakeAttachedMote(caster, moteDef, PropsField.selfHealMoteScale);
         }
