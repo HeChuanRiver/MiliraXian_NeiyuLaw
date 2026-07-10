@@ -26,9 +26,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public float brainDestroyChance = 0.08f;
         public float enhancedPsychicSensitivityThreshold = 1f;
         public float enhancedPsychicDamageMultiplier = 10f;
-        public DamageDef enhancedFearDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectFearAccumulation;
-        public float enhancedFearDamageAmount = 1.5f;
-        public float enhancedFearArmorPenetration = 2.1f;
+        public List<HediffDef_Abnormal> enhancedFearAbnormals = new List<HediffDef_Abnormal>();
+        public float enhancedFearAccumulationAmount = 150f;
 
         public string warmupCasterFx = "MX_QH_Effecter_SpiritBurstWarmupCaster";
         public string warmupTargetFx = "MX_QH_Effecter_SpiritBurstWarmupTarget";
@@ -225,18 +224,20 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private void ApplyEnhancedFear(bool enhanced, Pawn caster, Pawn victim, float specialFactor)
         {
-            if (!enhanced || caster == null || victim == null || victim.Dead || victim.Destroyed || Props.enhancedFearDamageDef == null || Props.enhancedFearDamageAmount <= 0f)
+            if (!enhanced || caster == null || victim == null || victim.Dead || victim.Destroyed || Props.enhancedFearAbnormals == null || Props.enhancedFearAccumulationAmount <= 0f)
             {
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(
-                Props.enhancedFearDamageDef,
-                Props.enhancedFearDamageAmount * specialFactor,
-                Props.enhancedFearArmorPenetration,
-                -1f,
-                caster);
-            victim.TakeDamage(dinfo);
+            float amount = Props.enhancedFearAccumulationAmount * specialFactor;
+            for (int i = 0; i < Props.enhancedFearAbnormals.Count; i++)
+            {
+                HediffDef_Abnormal abnormal = Props.enhancedFearAbnormals[i];
+                if (abnormal != null)
+                {
+                    AbnormalSystem.ApplyAccumulation(caster, victim, abnormal, amount);
+                }
+            }
         }
 
         private void TryBreakBrain(Pawn victim, Map map)

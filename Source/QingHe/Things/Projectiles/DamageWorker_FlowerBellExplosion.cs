@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Projectiles
@@ -38,38 +37,15 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
 
             if (t is Pawn pawn)
             {
-                ApplyStatusDamage(explosion, pawn);
+                ApplyAbnormals(explosion, pawn);
             }
         }
 
-        private static void ApplyStatusDamage(Explosion explosion, Pawn pawn)
+        private static void ApplyAbnormals(Explosion explosion, Pawn pawn)
         {
             CompProperties_FlowerBellStatusOnHit props = CompFlowerBellStatusOnHit.PropsFor(explosion.projectile);
             Pawn caster = explosion.instigator as Pawn;
-            if (props == null || props.damageDef == null || props.amount <= 0f || pawn == null || pawn.Dead || pawn.Destroyed || caster == null)
-            {
-                return;
-            }
-
-            if (props.requireHostileTarget && !GenHostility.HostileTo(caster, pawn))
-            {
-                return;
-            }
-
-            if (props.chance < 1f && !Rand.Chance(Mathf.Clamp01(props.chance)))
-            {
-                return;
-            }
-
-            float armorPenetration = props.armorPenetration >= 0f ? props.armorPenetration : props.damageDef.defaultArmorPenetration;
-            float amount = props.amount * CompFlowerBellStatusOnHit.ResolveSpecialAbilityEffectFactor(caster, props);
-            DamageInfo dinfo = new DamageInfo(
-                props.damageDef,
-                amount,
-                armorPenetration,
-                -1f,
-                caster);
-            pawn.TakeDamage(dinfo);
+            CompFlowerBellStatusOnHit.ApplyAbnormals(caster, pawn, props);
         }
     }
 }

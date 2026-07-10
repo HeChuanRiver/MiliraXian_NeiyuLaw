@@ -28,12 +28,16 @@
                 <fadeOutTicks>45</fadeOutTicks>
                 <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
                 <ambientVisualFlecksPerBurst>2</ambientVisualFlecksPerBurst>
-                <enhancedBleedDamageDef>MX_StatusEffectBleedAccumulation</enhancedBleedDamageDef>
-                <enhancedBleedDamageAmount>0.08</enhancedBleedDamageAmount>
-                <enhancedBleedArmorPenetration>2.10</enhancedBleedArmorPenetration>
-                <enhancedToxinDamageDef>MX_StatusEffectToxinAccumulation</enhancedToxinDamageDef>
-                <enhancedToxinDamageAmount>0.08</enhancedToxinDamageAmount>
-                <enhancedToxinArmorPenetration>2.10</enhancedToxinArmorPenetration>
+                <enhancedBleedAbnormals>
+                    <li>MX_AbnormalBleed</li>
+                    <li>MX_AbnormalElectricLeak</li>
+                </enhancedBleedAbnormals>
+                <enhancedBleedAccumulationAmount>8</enhancedBleedAccumulationAmount>
+                <enhancedToxinAbnormals>
+                    <li>MX_AbnormalToxin</li>
+                    <li>MX_AbnormalCorrosion</li>
+                </enhancedToxinAbnormals>
+                <enhancedToxinAccumulationAmount>8</enhancedToxinAccumulationAmount>
                 <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
                 <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
             </li>
@@ -158,9 +162,10 @@
                 <useProjectileGraphicColor>true</useProjectileGraphicColor>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-                <damageDef>MX_StatusEffectColdAccumulation</damageDef>
-                <amount>0.08</amount>
-                <armorPenetration>2.10</armorPenetration>
+                <abnormals>
+                    <li>MX_AbnormalCold</li>
+                </abnormals>
+                <accumulationAmount>8</accumulationAmount>
                 <requireHostileTarget>false</requireHostileTarget>
                 <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
             </li>

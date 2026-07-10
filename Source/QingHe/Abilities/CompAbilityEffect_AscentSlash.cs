@@ -20,9 +20,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public DamageDef damageDef;
         public float damageAmount = 32f;
         public float armorPenetration = 0.35f;
-        public DamageDef accumulationDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectBleedAccumulation;
-        public float accumulationDamageAmount = 0.18f;
-        public float accumulationArmorPenetration = 2.1f;
+        public List<HediffDef_Abnormal> accumulationAbnormals = new List<HediffDef_Abnormal>();
+        public float accumulationAmount = 18f;
         public float buildingDamageMultiplier = 2f;
         public int stunTicks = 60;
         public float knockbackDistance = 3f;
@@ -349,17 +348,20 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private static void ApplyAccumulation(Pawn victim, Pawn caster, CompProperties_AbilityAscentSlash props, float specialFactor)
         {
-            if (victim == null || victim.Dead || victim.Destroyed || props.accumulationDamageDef == null || props.accumulationDamageAmount <= 0f)
+            if (victim == null || victim.Dead || victim.Destroyed || props.accumulationAbnormals == null || props.accumulationAmount <= 0f)
             {
                 return;
             }
 
-            victim.TakeDamage(new DamageInfo(
-                props.accumulationDamageDef,
-                props.accumulationDamageAmount * specialFactor,
-                props.accumulationArmorPenetration,
-                -1f,
-                caster));
+            float amount = props.accumulationAmount * specialFactor;
+            for (int i = 0; i < props.accumulationAbnormals.Count; i++)
+            {
+                HediffDef_Abnormal abnormal = props.accumulationAbnormals[i];
+                if (abnormal != null)
+                {
+                    AbnormalSystem.ApplyAccumulation(caster, victim, abnormal, amount);
+                }
+            }
         }
 
         private static List<Thing> CollectHostileTargetsInCone(Map map, IntVec3 center, Pawn caster, float radius, Vector3 forward, float halfAngle)

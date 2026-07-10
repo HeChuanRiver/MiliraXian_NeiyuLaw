@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
-using MiliraXian.Characters.QingHe.Stats;
 using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
 using System.Collections.Generic;
@@ -18,8 +17,6 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
-            RegisterFlowerBellCorrosionArmorStatParts();
-
             patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
 
@@ -184,7 +181,7 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)
         {
-            if (pawn?.story?.traits == null || __instance?.def == null)
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || __instance?.def == null)
             {
                 return;
             }
@@ -221,6 +218,11 @@ namespace MiliraXian.Characters.QingHe
             bool allowFallbackSpots,
             ref IEnumerable<LocalTargetInfo> __result)
         {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
             __result = AppendQingheLotusPondMeditationSpots(__result, pawn, allowFallbackSpots);
         }
 
@@ -313,6 +315,11 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_JobDriver_LayDown_LayDownToil_Postfix(JobDriver_LayDown __instance, Toil __result)
         {
+            if (!MX_QHCharacterUtility.IsQinghe(__instance?.pawn))
+            {
+                return;
+            }
+
             __result?.AddPreTickIntervalAction(delta => ApplyQingheSleepStillness(__instance, delta));
         }
 
@@ -493,37 +500,5 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        private static void RegisterFlowerBellCorrosionArmorStatParts()
-        {
-            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Sharp);
-            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Blunt);
-            RegisterFlowerBellCorrosionArmorStatPart(StatDefOf.ArmorRating_Heat);
-        }
-
-        private static void RegisterFlowerBellCorrosionArmorStatPart(StatDef stat)
-        {
-            if (stat == null)
-            {
-                return;
-            }
-
-            if (stat.parts == null)
-            {
-                stat.parts = new List<StatPart>();
-            }
-
-            for (int i = 0; i < stat.parts.Count; i++)
-            {
-                if (stat.parts[i] is StatPart_FlowerBellCorrosionArmor)
-                {
-                    return;
-                }
-            }
-
-            stat.parts.Add(new StatPart_FlowerBellCorrosionArmor
-            {
-                parentStat = stat
-            });
-        }
     }
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/StatDef[defName="ArmorRating_Sharp" or defName="ArmorRating_Blunt" or defName="ArmorRating_Heat"]/parts</xpath>
+        <value>
+            <li Class="MiliraXian.Characters.QingHe.Stats.StatPart_FlowerBellCorrosionArmor" />
+        </value>
+    </Operation>
+</Patch>

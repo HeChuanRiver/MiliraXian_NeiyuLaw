@@ -133,9 +133,11 @@
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-        <damageDef>MX_StatusEffectBleedAccumulation</damageDef>
-        <amount>0.21</amount>
-        <armorPenetration>2.10</armorPenetration>
+        <abnormals>
+          <li>MX_AbnormalBleed</li>
+          <li>MX_AbnormalElectricLeak</li>
+        </abnormals>
+        <accumulationAmount>21</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
@@ -160,9 +162,11 @@
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-        <damageDef>MX_StatusEffectToxinAccumulation</damageDef>
-        <amount>0.16</amount>
-        <armorPenetration>2.10</armorPenetration>
+        <abnormals>
+          <li>MX_AbnormalToxin</li>
+          <li>MX_AbnormalCorrosion</li>
+        </abnormals>
+        <accumulationAmount>16</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
@@ -187,9 +191,11 @@
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-        <damageDef>MX_StatusEffectFearAccumulation</damageDef>
-        <amount>0.05</amount>
-        <armorPenetration>2.10</armorPenetration>
+        <abnormals>
+          <li>MX_AbnormalFear</li>
+          <li>MX_AbnormalOverload</li>
+        </abnormals>
+        <accumulationAmount>5</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>
@@ -214,9 +220,10 @@
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-        <damageDef>MX_StatusEffectColdAccumulation</damageDef>
-        <amount>0.12</amount>
-        <armorPenetration>2.10</armorPenetration>
+        <abnormals>
+          <li>MX_AbnormalCold</li>
+        </abnormals>
+        <accumulationAmount>12</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
       </li>
     </comps>

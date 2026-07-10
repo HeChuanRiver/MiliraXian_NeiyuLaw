@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_StatusEffectBleedAccumulation.label>流血積累</MX_StatusEffectBleedAccumulation.label>
-  <MX_StatusEffectToxinAccumulation.label>中毒積累</MX_StatusEffectToxinAccumulation.label>
-  <MX_StatusEffectVenomDamage.label>毒性腐蝕</MX_StatusEffectVenomDamage.label>
-  <MX_StatusEffectVenomDamage.deathMessage>{0}死於花信鈴毒。</MX_StatusEffectVenomDamage.deathMessage>
-  <MX_StatusEffectFearAccumulation.label>恐懼積累</MX_StatusEffectFearAccumulation.label>
-  <MX_StatusEffectColdAccumulation.label>寒冷積累</MX_StatusEffectColdAccumulation.label>
   <MX_QH_NoteImpact.label>音擊</MX_QH_NoteImpact.label>
   <MX_QH_NoteImpact.deathMessage>{0}被花信鈴的聲音擊倒了。</MX_QH_NoteImpact.deathMessage>
   <MX_QH_NoteImpact_Building.label>破城音擊</MX_QH_NoteImpact_Building.label>

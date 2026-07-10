@@ -30,22 +30,4 @@
   <MX_QH_Mote_FlowerDivinationBurst.label>清荷特效</MX_QH_Mote_FlowerDivinationBurst.label>
   <MX_QH_Mote_FlowerDivinationBokeh.label>清荷特效</MX_QH_Mote_FlowerDivinationBokeh.label>
   <MX_QH_Mote_FlowerDivinationFootRing.label>清荷特效</MX_QH_Mote_FlowerDivinationFootRing.label>
-  <MX_Mote_StatusEffectColdBar.label>Mote</MX_Mote_StatusEffectColdBar.label>
-  <MX_Mote_StatusEffectBleedBar.label>Mote</MX_Mote_StatusEffectBleedBar.label>
-  <MX_Mote_StatusEffectElectricLeakBar.label>Mote</MX_Mote_StatusEffectElectricLeakBar.label>
-  <MX_Mote_StatusEffectToxinBar.label>Mote</MX_Mote_StatusEffectToxinBar.label>
-  <MX_Mote_StatusEffectCorrosionBar.label>Mote</MX_Mote_StatusEffectCorrosionBar.label>
-  <MX_Mote_StatusEffectFearBar.label>Mote</MX_Mote_StatusEffectFearBar.label>
-  <MX_Mote_StatusEffectOverloadBar.label>Mote</MX_Mote_StatusEffectOverloadBar.label>
-  <MX_Mote_StatusEffectFreeze_A.label>Mote</MX_Mote_StatusEffectFreeze_A.label>
-  <MX_Mote_StatusEffectBleedBurstIcon.label>清荷特效</MX_Mote_StatusEffectBleedBurstIcon.label>
-  <MX_Mote_StatusEffectElectricLeakBurstIcon.label>清荷特效</MX_Mote_StatusEffectElectricLeakBurstIcon.label>
-  <MX_Mote_StatusEffectToxinBurstIcon.label>清荷特效</MX_Mote_StatusEffectToxinBurstIcon.label>
-  <MX_Mote_StatusEffectCorrosionBurstIcon.label>清荷特效</MX_Mote_StatusEffectCorrosionBurstIcon.label>
-  <MX_Mote_StatusEffectFearBurstIcon.label>清荷特效</MX_Mote_StatusEffectFearBurstIcon.label>
-  <MX_Mote_StatusEffectOverloadBurstIcon.label>清荷特效</MX_Mote_StatusEffectOverloadBurstIcon.label>
-  <MX_Mote_StatusEffectColdBurstIcon.label>清荷特效</MX_Mote_StatusEffectColdBurstIcon.label>
-  <MX_Mote_StatusEffectFearedIcon.label>Mote</MX_Mote_StatusEffectFearedIcon.label>
-  <MX_Mote_StatusEffectOverloadedIcon.label>Mote</MX_Mote_StatusEffectOverloadedIcon.label>
-  <MX_Mote_StatusEffectFreeze_B.label>Mote</MX_Mote_StatusEffectFreeze_B.label>
 </LanguageData>

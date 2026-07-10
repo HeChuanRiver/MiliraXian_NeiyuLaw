@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Stats
@@ -13,8 +13,8 @@ namespace MiliraXian.Characters.QingHe.Stats
                 return;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_StatusEffectsDefOf.MX_StatusEffectCorroded);
-            HediffComp_StatusEffectCorroded comp = hediff?.TryGetComp<HediffComp_StatusEffectCorroded>();
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_AbnormalDefOf.MX_AbnormalCorroded);
+            HediffComp_AbnormalCorroded comp = hediff?.TryGetComp<HediffComp_AbnormalCorroded>();
             if (comp == null)
             {
                 return;
@@ -31,8 +31,8 @@ namespace MiliraXian.Characters.QingHe.Stats
                 return null;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_StatusEffectsDefOf.MX_StatusEffectCorroded);
-            HediffComp_StatusEffectCorroded comp = hediff?.TryGetComp<HediffComp_StatusEffectCorroded>();
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_AbnormalDefOf.MX_AbnormalCorroded);
+            HediffComp_AbnormalCorroded comp = hediff?.TryGetComp<HediffComp_AbnormalCorroded>();
             if (comp == null)
             {
                 return null;

@@ -82,9 +82,11 @@
                 <brainDestroyChance>0.01</brainDestroyChance>
                 <enhancedPsychicSensitivityThreshold>1.0</enhancedPsychicSensitivityThreshold>
                 <enhancedPsychicDamageMultiplier>10</enhancedPsychicDamageMultiplier>
-                <enhancedFearDamageDef>MX_StatusEffectFearAccumulation</enhancedFearDamageDef>
-                <enhancedFearDamageAmount>1.5</enhancedFearDamageAmount>
-                <enhancedFearArmorPenetration>2.10</enhancedFearArmorPenetration>
+                <enhancedFearAbnormals>
+                    <li>MX_AbnormalFear</li>
+                    <li>MX_AbnormalOverload</li>
+                </enhancedFearAbnormals>
+                <enhancedFearAccumulationAmount>150</enhancedFearAccumulationAmount>
                 <curveMote>MX_QH_Mote_SpiritBurstCurvedTrail</curveMote>
                 <curveDistortWidth>4.2</curveDistortWidth>
                 <curveDistortAlpha>0.68</curveDistortAlpha>
@@ -210,9 +212,11 @@
                 <damageDef>MX_QH_NoteImpact</damageDef>
                 <damageAmount>32</damageAmount>
                 <armorPenetration>0.35</armorPenetration>
-                <accumulationDamageDef>MX_StatusEffectBleedAccumulation</accumulationDamageDef>
-                <accumulationDamageAmount>0.18</accumulationDamageAmount>
-                <accumulationArmorPenetration>2.1</accumulationArmorPenetration>
+                <accumulationAbnormals>
+                    <li>MX_AbnormalBleed</li>
+                    <li>MX_AbnormalElectricLeak</li>
+                </accumulationAbnormals>
+                <accumulationAmount>18</accumulationAmount>
                 <buildingDamageMultiplier>2</buildingDamageMultiplier>
                 <stunTicks>60</stunTicks>
                 <knockbackDistance>4</knockbackDistance>

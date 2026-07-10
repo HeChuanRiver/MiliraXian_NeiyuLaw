@@ -1,5 +1,6 @@
 ﻿using Verse;
 
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Vfx;
@@ -16,12 +17,10 @@ namespace MiliraXian.Characters.QingHe.Things
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
         public int ambientVisualFlecksPerBurst = 2;
-        public DamageDef enhancedBleedDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectBleedAccumulation;
-        public float enhancedBleedDamageAmount = 0.08f;
-        public float enhancedBleedArmorPenetration = 2.1f;
-        public DamageDef enhancedToxinDamageDef = MX_StatusEffectsDefOf.MX_StatusEffectToxinAccumulation;
-        public float enhancedToxinDamageAmount = 0.08f;
-        public float enhancedToxinArmorPenetration = 2.1f;
+        public List<HediffDef_Abnormal> enhancedBleedAbnormals = new List<HediffDef_Abnormal>();
+        public float enhancedBleedAccumulationAmount = 8f;
+        public List<HediffDef_Abnormal> enhancedToxinAbnormals = new List<HediffDef_Abnormal>();
+        public float enhancedToxinAccumulationAmount = 8f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;
 
@@ -181,11 +180,8 @@ namespace MiliraXian.Characters.QingHe.Things
                 }
 
                 float factor = ResolveSpecialEffectFactor();
-                ApplyEnhancedDamage(pawn, Props.enhancedBleedDamageDef, Props.enhancedBleedDamageAmount * factor, Props.enhancedBleedArmorPenetration);
-                if (pawn.RaceProps?.IsMechanoid != true)
-                {
-                    ApplyEnhancedDamage(pawn, Props.enhancedToxinDamageDef, Props.enhancedToxinDamageAmount * factor, Props.enhancedToxinArmorPenetration);
-                }
+                ApplyEnhancedAccumulation(pawn, Props.enhancedBleedAbnormals, Props.enhancedBleedAccumulationAmount * factor);
+                ApplyEnhancedAccumulation(pawn, Props.enhancedToxinAbnormals, Props.enhancedToxinAccumulationAmount * factor);
             }
         }
 
@@ -194,15 +190,21 @@ namespace MiliraXian.Characters.QingHe.Things
             return MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
         }
 
-        private void ApplyEnhancedDamage(Pawn pawn, DamageDef damageDef, float amount, float armorPenetration)
+        private void ApplyEnhancedAccumulation(Pawn pawn, List<HediffDef_Abnormal> abnormals, float amount)
         {
-            if (pawn == null || damageDef == null || amount <= 0f)
+            if (pawn == null || abnormals == null || amount <= 0f)
             {
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(damageDef, amount, armorPenetration, -1f, caster);
-            pawn.TakeDamage(dinfo);
+            for (int i = 0; i < abnormals.Count; i++)
+            {
+                HediffDef_Abnormal abnormal = abnormals[i];
+                if (abnormal != null)
+                {
+                    AbnormalSystem.ApplyAccumulation(caster, pawn, abnormal, amount);
+                }
+            }
         }
 
         private void PlayAmbientVisual()

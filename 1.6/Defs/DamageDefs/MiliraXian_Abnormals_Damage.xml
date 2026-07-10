@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <DamageDef>
+        <defName>MX_AbnormalVenomDamage</defName>
+        <label>花毒腐蚀</label>
+        <description>花信铃夏之共鸣造成的毒素腐蚀伤害。</description>
+        <workerClass>DamageWorker_AddInjury</workerClass>
+        <hasForcefulImpact>false</hasForcefulImpact>
+        <makesBlood>false</makesBlood>
+        <canInterruptJobs>false</canInterruptJobs>
+        <externalViolence>true</externalViolence>
+        <armorCategory>Sharp</armorCategory>
+        <isRanged>true</isRanged>
+        <hediff>AcidBurn</hediff>
+        <impactSoundType>Toxic</impactSoundType>
+        <damageEffecter>Impact_Toxic</damageEffecter>
+        <defaultDamage>4</defaultDamage>
+        <defaultArmorPenetration>0</defaultArmorPenetration>
+        <deathMessage>{0}死于花信铃的剧毒。</deathMessage>
+    </DamageDef>
+</Defs>
