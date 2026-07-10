@@ -72,7 +72,7 @@
         <hasStandardCommand>true</hasStandardCommand>
         <defaultProjectile>MX_Bullet_Qinghe_FlowerBell_Spring</defaultProjectile>
         <warmupTime>0.80</warmupTime>
-        <range>29.9</range>
+        <range>26</range>
         <burstShotCount>3</burstShotCount>
         <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
         <defaultCooldownTime>2.5</defaultCooldownTime>
@@ -91,7 +91,7 @@
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
       <damageAmountBase>5</damageAmountBase>
-      <armorPenetrationBase>2.10</armorPenetrationBase>
+      <armorPenetrationBase>1.40</armorPenetrationBase>
       <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
       <soundExplode>Explosion_Bomb</soundExplode>

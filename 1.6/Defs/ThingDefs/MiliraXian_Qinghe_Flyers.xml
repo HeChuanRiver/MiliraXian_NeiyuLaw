@@ -20,7 +20,7 @@
 
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_QH_AscentSlashKnockbackFlyer</defName>
-        <label>花神闪击退飞行体</label>
+        <label>绝影击退飞行体</label>
         <thingClass>PawnFlyer</thingClass>
         <altitudeLayer>Pawn</altitudeLayer>
         <pawnFlyer>
