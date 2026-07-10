@@ -4,6 +4,11 @@ using Verse;
 
 namespace MiliraXian.Characters
 {
+    public interface IAbnormalResult
+    {
+        void Initialize(Pawn instigator, HediffDef_Abnormal abnormalDef);
+    }
+
     public class Hediff_Abnormal : HediffWithComps
     {
         private int ticksUntilDecay;
@@ -175,6 +180,11 @@ namespace MiliraXian.Characters
 
             Hediff effect = HediffMaker.MakeHediff(abnormalDef.effectHediff, target);
             effect.Severity = abnormalDef.effectSeverity;
+            if (effect is IAbnormalResult result)
+            {
+                result.Initialize(source, abnormalDef);
+            }
+
             target.health.AddHediff(effect);
             if (abnormalDef.effectDurationTicks > 0)
             {

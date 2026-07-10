@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXZL_ZhaoliDeathFieldActive.label>&lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt;</MXZL_ZhaoliDeathFieldActive.label>
-  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt;'s sustained &lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt; continuously suppresses every unit in range except herself. Once a target leaves the field, its death countdown is cleared immediately.</MXZL_ZhaoliDeathFieldActive.description>
-  <MXZL_ZhaoliDeathFieldSlow.label>&lt;color=#B86CFF&gt;Deathflow Pressure&lt;/color&gt;</MXZL_ZhaoliDeathFieldSlow.label>
-  <MXZL_ZhaoliDeathFieldSlow.description>Inside the &lt;color=#B86CFF&gt;Deathflow Field&lt;/color&gt;, movement is heavily suppressed, making it difficult to escape this &lt;color=#C9A2FF&gt;black-red domain&lt;/color&gt;.</MXZL_ZhaoliDeathFieldSlow.description>
+  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt;'s sustained &lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt; continuously applies Death Sentence to every unit in range except herself. Death Sentence accumulation decays rapidly after a target leaves the field.</MXZL_ZhaoliDeathFieldActive.description>
   <MXZL_ZhaoliDormancy.label>&lt;color=#C77DFF&gt;All Things Impermanent: Dormancy&lt;/color&gt;</MXZL_ZhaoliDormancy.label>
   <MXZL_ZhaoliDormancy.description>Forced &lt;color=#C77DFF&gt;dormancy&lt;/color&gt; caused by overflowing karma. &lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt; remains asleep and cannot act normally until she wakes naturally after thirty days.</MXZL_ZhaoliDormancy.description>
   <MXZL_ZhaoliKarma.label>&lt;color=#E85A7A&gt;Karma&lt;/color&gt;</MXZL_ZhaoliKarma.label>

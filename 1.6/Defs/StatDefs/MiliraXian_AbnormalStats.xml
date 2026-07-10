@@ -199,4 +199,16 @@
         <label>寒冷附加效率乘数</label>
         <description>该角色施加寒冷异常积累量时使用的效率乘数。</description>
     </StatDef>
+
+    <StatDef ParentName="MX_AbnormalFactorBase">
+        <defName>MX_AbnormalDeathSentenceLimitFactor</defName>
+        <label>告死积累上限乘数</label>
+        <description>触发告死效果所需异常积累量的乘数。数值为0时，告死异常无效。</description>
+    </StatDef>
+
+    <StatDef ParentName="MX_AbnormalFactorBase">
+        <defName>MX_AbnormalDeathSentenceEfficiencyFactor</defName>
+        <label>告死附加效率乘数</label>
+        <description>该角色施加告死异常积累量时使用的效率乘数。</description>
+    </StatDef>
 </Defs>

@@ -297,6 +297,45 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
   </ThingDef>
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_Mote_AbnormalDeathSentenceBar</defName>
+    <label>异常特效</label>
+    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <graphicData>
+      <texPath>Things/Mote/Transparent</texPath>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <fadeOutTime>0.18</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+        <backgroundShaderType>MetaOverlay</backgroundShaderType>
+        <fillShaderType>MetaOverlay</fillShaderType>
+        <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
+        <fillColor>(0.36, 0.08, 0.52, 0.68)</fillColor>
+        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</iconTexPath>
+        <iconShaderType>MoteGlow</iconShaderType>
+        <iconColor>(0.58, 0.22, 0.78, 0.95)</iconColor>
+        <size>(1.04, 0.09)</size>
+        <margin>0.035</margin>
+        <offsetZ>-0.85</offsetZ>
+        <altitudeOffset>0.08</altitudeOffset>
+        <stackSpacing>0.22</stackSpacing>
+        <stackDownward>true</stackDownward>
+        <iconSize>0.18</iconSize>
+        <iconGap>0.04</iconGap>
+      </li>
+    </modExtensions>
+  </ThingDef>
   <ThingDef ParentName="MoteBase" Name="MX_Mote_AbnormalBurstIconBase" Abstract="True">
     <label>清荷特效</label>
     <thingClass>MoteAttached</thingClass>
@@ -351,6 +390,13 @@
     <graphicData>
       <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
       <color>(0.98, 0.82, 1.00, 0.90)</color>
+    </graphicData>
+  </ThingDef>
+  <ThingDef ParentName="MX_Mote_AbnormalBurstIconBase">
+    <defName>MX_Mote_AbnormalDeathSentenceBurstIcon</defName>
+    <graphicData>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
+      <color>(0.58, 0.22, 0.78, 0.95)</color>
     </graphicData>
   </ThingDef>
   <ThingDef ParentName="MX_Mote_AbnormalBurstIconBase">

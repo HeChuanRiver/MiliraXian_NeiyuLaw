@@ -20,7 +20,7 @@
     <HediffDef>
         <defName>MX_QH_SpringFlow</defName>
         <label>春泉洗礼</label>
-        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。</description>
+        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</description>
         <isBad>false</isBad>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
@@ -31,6 +31,9 @@
             <li>
                 <minSeverity>0.0</minSeverity>
                 <painFactor>0.8</painFactor>
+                <statFactors>
+                    <MX_AbnormalDeathSentenceLimitFactor>0</MX_AbnormalDeathSentenceLimitFactor>
+                </statFactors>
                 <statFactorsBySeverity>
                     <li>
                         <stat>MeleeDamageFactor</stat>

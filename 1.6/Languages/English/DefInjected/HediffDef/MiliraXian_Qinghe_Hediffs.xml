@@ -25,7 +25,7 @@
   <MX_QH_LuoshenContract.label>Luoshen contract</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, and reduced pain&lt;/color&gt;.</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, reduced pain, and immunity to Death Sentence accumulation&lt;/color&gt;.</MX_QH_SpringFlow.description>
   <MX_QH_FlowerDance.label>Nishang Dance</MX_QH_FlowerDance.label>
   <MX_QH_FlowerDance.description>Qinghe enters a dancing state, improving movement speed, dodge, and Flower Decree recovery. Her shield can begin recharging immediately after being hit.</MX_QH_FlowerDance.description>
 </LanguageData>

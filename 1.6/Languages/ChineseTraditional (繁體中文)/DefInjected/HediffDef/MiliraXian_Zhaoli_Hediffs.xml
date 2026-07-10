@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXZL_ZhaoliDeathFieldActive.label>&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;</MXZL_ZhaoliDeathFieldActive.label>
-  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;維持中的&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;，會持續壓制範圍內除自身外的一切單位。目標離開範圍後，告死倒計時會立即清零。</MXZL_ZhaoliDeathFieldActive.description>
-  <MXZL_ZhaoliDeathFieldSlow.label>&lt;color=#B86CFF&gt;告死滯壓&lt;/color&gt;</MXZL_ZhaoliDeathFieldSlow.label>
-  <MXZL_ZhaoliDeathFieldSlow.description>身處&lt;color=#B86CFF&gt;告死流場&lt;/color&gt;之中，行動會被明顯壓制，難以脫離這片&lt;color=#C9A2FF&gt;黑紅領域&lt;/color&gt;。</MXZL_ZhaoliDeathFieldSlow.description>
+  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;昭離&lt;/color&gt;維持中的&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;，會持續向範圍內除自身外的一切單位施加告死。目標離開範圍後，告死積累會快速衰減。</MXZL_ZhaoliDeathFieldActive.description>
   <MXZL_ZhaoliDormancy.label>&lt;color=#C77DFF&gt;諸事無常·沉眠&lt;/color&gt;</MXZL_ZhaoliDormancy.label>
   <MXZL_ZhaoliDormancy.description>因果溢出後引發的&lt;color=#C77DFF&gt;強制沉眠&lt;/color&gt;。&lt;color=#E85A7A&gt;昭離&lt;/color&gt;會持續陷入沉睡狀態，無法正常行動，直到三十日後才會自然甦醒。</MXZL_ZhaoliDormancy.description>
   <MXZL_ZhaoliKarma.label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</MXZL_ZhaoliKarma.label>

@@ -25,7 +25,7 @@
   <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗礼</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻&lt;/color&gt;。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</MX_QH_SpringFlow.description>
   <MX_QH_FlowerDance.label>霓裳之舞</MX_QH_FlowerDance.label>
   <MX_QH_FlowerDance.description>清荷进入起舞状态，移动速度、闪避与花令回复提升，护盾可在受击后立即开始回充。</MX_QH_FlowerDance.description>
 </LanguageData>

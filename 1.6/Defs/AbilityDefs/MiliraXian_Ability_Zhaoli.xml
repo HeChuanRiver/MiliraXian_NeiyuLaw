@@ -9,7 +9,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_DeathField</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>创造一个直径18格的圆形&lt;color=#C9A2FF&gt;力场&lt;/color&gt;。力场内除&lt;color=#E85A7A&gt;昭离&lt;/color&gt;自身外的单位会受到&lt;color=#B86CFF&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;并推进&lt;color=#E85A7A&gt;9→1&lt;/color&gt;倒计时。目标只要离开范围，倒计时立即清零；若连续停留9秒，则会被&lt;color=#E85A7A&gt;告死&lt;/color&gt;。</description>
+        <description>创造一个直径18格的圆形&lt;color=#C9A2FF&gt;力场&lt;/color&gt;。力场内除&lt;color=#E85A7A&gt;昭离&lt;/color&gt;自身外的单位会受到&lt;color=#B86CFF&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;并积累1点告死。目标离开范围后，告死会快速衰减；积累至9点时，最后一次施加告死的角色将处决目标。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_DeathField</iconPath>
 
         <category>MX_ZhaoliSkill</category>
