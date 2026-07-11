@@ -45,9 +45,10 @@
                 <selfLifeBurnLayers>30</selfLifeBurnLayers>
                 <stunTicks>180</stunTicks>
                 <flyerDef>MX_Mingyuan_AscendantFlameDashFlyer</flyerDef>
-                <scorchMoteDef>MX_Mingyuan_Mote_AscendantFlameScorch</scorchMoteDef>
-                <scorchMoteScale>1</scorchMoteScale>
-                <maxScorchMotes>225</maxScorchMotes>
+                <scorchControllerDef>MX_Mingyuan_AscendantFlameScorchController</scorchControllerDef>
+                <scorchFleckDef>MX_Mingyuan_Fleck_AscendantFlameScorch</scorchFleckDef>
+                <scorchFleckScale>1</scorchFleckScale>
+                <maxScorchFlecks>32</maxScorchFlecks>
             </li>
         </comps>
     </AbilityDef>
@@ -83,7 +84,7 @@
                 <targetMoteDef>MX_Mingyuan_Mote_InstantCombustionMark</targetMoteDef>
                 <flashMoteScale>1.35</flashMoteScale>
                 <targetMoteScale>1</targetMoteScale>
-                <maxTargetMotes>48</maxTargetMotes>
+                <maxTargetMotes>16</maxTargetMotes>
                 <minimumLifeBurnLayers>1</minimumLifeBurnLayers>
             </li>
         </comps>
@@ -154,13 +155,10 @@
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanTimeBurn">
                 <durationTicks>2500</durationTicks>
                 <tickIntervalTicks>60</tickIntervalTicks>
-                <moteIntervalTicks>120</moteIntervalTicks>
                 <startMoteDef>MX_Mingyuan_Mote_TimeBurnStart</startMoteDef>
-                <targetMoteDef>MX_Mingyuan_Mote_TimeBurnMark</targetMoteDef>
                 <collapseMoteDef>MX_Mingyuan_Mote_TimeBurnCollapse</collapseMoteDef>
                 <effectSoundDef>Psycast_Skip_Entry</effectSoundDef>
                 <startMoteScale>2.2</startMoteScale>
-                <targetMoteScale>1.15</targetMoteScale>
                 <collapseMoteScale>2.4</collapseMoteScale>
                 <mechSteelCount>75</mechSteelCount>
                 <mechPlasteelCount>25</mechPlasteelCount>

@@ -42,20 +42,6 @@ namespace MiliraXian.Characters.Mingyuan
             thing.Destroy(DestroyMode.Vanish);
         }
 
-        public static void TryMakeAttachedMote(Thing target, ThingDef moteDef, float scale)
-        {
-            if (target == null || target.Destroyed || !target.Spawned || moteDef == null)
-            {
-                return;
-            }
-
-            Mote mote = MoteMaker.MakeAttachedOverlay(target, moteDef, Vector3.zero, Mathf.Max(0.1f, scale));
-            if (mote != null)
-            {
-                mote.exactRotation = Rand.Range(0f, 360f);
-            }
-        }
-
         public static void TryMakeStaticMote(IntVec3 cell, Map map, ThingDef moteDef, float scale)
         {
             if (map == null || moteDef == null || !cell.IsValid || !cell.InBounds(map))
@@ -115,16 +101,12 @@ namespace MiliraXian.Characters.Mingyuan
         public int startTick;
         public int endTick;
         public int nextAgeTick;
-        public int nextMoteTick;
         public int durationTicks;
         public int tickIntervalTicks;
-        public int moteIntervalTicks;
         public long startAgeTicks;
         public HediffDef markerHediff;
-        public ThingDef targetMoteDef;
         public ThingDef collapseMoteDef;
         public SoundDef effectSoundDef;
-        public float targetMoteScale = 1f;
         public float collapseMoteScale = 1f;
         public int mechSteelCount = 75;
         public int mechPlasteelCount = 25;
@@ -146,15 +128,11 @@ namespace MiliraXian.Characters.Mingyuan
             durationTicks = Mathf.Max(1, props.durationTicks);
             endTick = tick + durationTicks;
             tickIntervalTicks = Mathf.Max(1, props.tickIntervalTicks);
-            moteIntervalTicks = Mathf.Max(1, props.moteIntervalTicks);
             nextAgeTick = tick;
-            nextMoteTick = tick;
             startAgeTicks = Math.Max(0L, pawn?.ageTracker?.AgeBiologicalTicks ?? 0L);
             markerHediff = MingyuanUtility.TimeBurnFrozenDef;
-            targetMoteDef = props.targetMoteDef;
             collapseMoteDef = props.collapseMoteDef;
             effectSoundDef = props.effectSoundDef;
-            targetMoteScale = Mathf.Max(0.1f, props.targetMoteScale);
             collapseMoteScale = Mathf.Max(0.1f, props.collapseMoteScale);
             mechSteelCount = Mathf.Max(0, props.mechSteelCount);
             mechPlasteelCount = Mathf.Max(0, props.mechPlasteelCount);
@@ -167,16 +145,12 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref startTick, "startTick", 0);
             Scribe_Values.Look(ref endTick, "endTick", 0);
             Scribe_Values.Look(ref nextAgeTick, "nextAgeTick", 0);
-            Scribe_Values.Look(ref nextMoteTick, "nextMoteTick", 0);
             Scribe_Values.Look(ref durationTicks, "durationTicks", 2500);
             Scribe_Values.Look(ref tickIntervalTicks, "tickIntervalTicks", 60);
-            Scribe_Values.Look(ref moteIntervalTicks, "moteIntervalTicks", 120);
             Scribe_Values.Look(ref startAgeTicks, "startAgeTicks", 0L);
             Scribe_Defs.Look(ref markerHediff, "markerHediff");
-            Scribe_Defs.Look(ref targetMoteDef, "targetMoteDef");
             Scribe_Defs.Look(ref collapseMoteDef, "collapseMoteDef");
             Scribe_Defs.Look(ref effectSoundDef, "effectSoundDef");
-            Scribe_Values.Look(ref targetMoteScale, "targetMoteScale", 1f);
             Scribe_Values.Look(ref collapseMoteScale, "collapseMoteScale", 1f);
             Scribe_Values.Look(ref mechSteelCount, "mechSteelCount", 75);
             Scribe_Values.Look(ref mechPlasteelCount, "mechPlasteelCount", 25);
@@ -246,12 +220,6 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                if (tick >= record.nextMoteTick)
-                {
-                    MingyuanTimeBurnUtility.TryMakeAttachedMote(record.pawn, record.targetMoteDef, record.targetMoteScale);
-                    record.nextMoteTick = tick + Mathf.Max(1, record.moteIntervalTicks);
-                }
-
                 if (tick < record.nextAgeTick && tick < record.endTick)
                 {
                     nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
@@ -298,8 +266,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int nextAge = record.nextAgeTick > 0 ? record.nextAgeTick : record.endTick;
-            int nextMote = record.nextMoteTick > 0 ? record.nextMoteTick : record.endTick;
-            return Mathf.Min(record.endTick, Mathf.Min(nextAge, nextMote));
+            return Mathf.Min(record.endTick, nextAge);
         }
 
         private static long CalculateAge(MingyuanTimeBurnRecord record, int tick)

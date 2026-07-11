@@ -15,17 +15,12 @@
         <rotatable>false</rotatable>
         <graphicData>
             <graphicClass>MiliraXian.Characters.Mingyuan.Graphic_MingyuanBurningPillarTornado</graphicClass>
-            <shaderType>MoteGlowDistorted</shaderType>
-            <shaderParameters>
-                <_DistortionTex>/Other/Ripples</_DistortionTex>
-                <_distortionIntensity>0.04</_distortionIntensity>
-                <_distortionScale>0.16</_distortionScale>
-            </shaderParameters>
+            <shaderType>MoteGlow</shaderType>
             <color>(1.00,0.78,0.36,0.42)</color>
             <texPath>MiliraXianMingyuan/Effect/BurningPillarTornado</texPath>
             <drawSize>(30,30)</drawSize>
         </graphicData>
-        <drawOffscreen>true</drawOffscreen>
+        <drawOffscreen>false</drawOffscreen>
         <useHitPoints>true</useHitPoints>
         <statBases>
             <MaxHitPoints>2000</MaxHitPoints>
@@ -61,8 +56,13 @@
                 <targetPriorityFactor>0.65</targetPriorityFactor>
                 <visualRotationDegreesPerTick>2.25</visualRotationDegreesPerTick>
                 <visualFadeTicks>120</visualFadeTicks>
-                <coreMoteDef>MX_Mingyuan_Mote_BurningPillarCore</coreMoteDef>
-                <coreMoteScale>1</coreMoteScale>
+                <coreGraphicData>
+                    <graphicClass>Graphic_Single</graphicClass>
+                    <shaderType>MoteGlow</shaderType>
+                    <texPath>MiliraXianMingyuan/Effect/BurningPillarCore</texPath>
+                    <color>(1.00,0.82,0.42,0.76)</color>
+                    <drawSize>(1.65,1.65)</drawSize>
+                </coreGraphicData>
             </li>
         </comps>
     </ThingDef>
@@ -76,17 +76,12 @@
         <altitudeLayer>MoteLow</altitudeLayer>
         <graphicData>
             <graphicClass>Graphic_Single</graphicClass>
-            <shaderType>MoteGlowDistorted</shaderType>
-            <shaderParameters>
-                <_DistortionTex>/Other/Ripples</_DistortionTex>
-                <_distortionIntensity>0.035</_distortionIntensity>
-                <_distortionScale>0.16</_distortionScale>
-            </shaderParameters>
+            <shaderType>MoteGlow</shaderType>
             <color>(1.00,0.74,0.34,0.52)</color>
             <texPath>MiliraXianMingyuan/Effect/AshesFieldRange</texPath>
             <drawSize>(5,5)</drawSize>
         </graphicData>
-        <drawOffscreen>true</drawOffscreen>
+        <drawOffscreen>false</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
@@ -94,19 +89,11 @@
                 <durationTicks>900</durationTicks>
                 <pulseIntervalTicks>30</pulseIntervalTicks>
                 <damageAmount>1</damageAmount>
-                <armorPenetration>999</armorPenetration>
                 <lifeBurnLayers>20</lifeBurnLayers>
                 <scalesWithSelfBurn>true</scalesWithSelfBurn>
                 <selfBurnLifeBurnPer100>20</selfBurnLifeBurnPer100>
                 <selfHealAmount>1</selfHealAmount>
                 <maxSelfBurnGainPerPulse>20</maxSelfBurnGainPerPulse>
-                <pulseMoteDef>MX_Mingyuan_Mote_AshesPulse</pulseMoteDef>
-                <hitMoteDef>MX_Mingyuan_Mote_AshesHit</hitMoteDef>
-                <selfHealMoteDef>MX_Mingyuan_Mote_SelfBurnGain</selfHealMoteDef>
-                <pulseMoteScale>1</pulseMoteScale>
-                <hitMoteScale>0.85</hitMoteScale>
-                <selfHealMoteScale>1</selfHealMoteScale>
-                <maxHitMotesPerPulse>12</maxHitMotesPerPulse>
                 <previewRingColor>(1.00,0.75,0.34,0.64)</previewRingColor>
             </li>
         </comps>

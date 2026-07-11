@@ -4,7 +4,7 @@
   <MX_Mingyuan_CinderSword.description>明渊的淡色烬刃。造成 44 点割伤、150% 穿甲，通过 0.5 近战冷却倍率在约 3 秒内打出两次攻击；明渊的火焰会在命中时追加生命燃烧。</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>尘烬</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>长虹</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>由淡金与赤色火焰构成的明渊长弓。瞄准 4 秒，向全图距离目标发射 4 支高角箭。每支箭造成 10 伤害，追加更高生命燃烧，并会在 5 格内敌人之间最多弹射 6 次；同一目标最多被同一支箭命中 3 次。</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>由淡金与赤色火焰构成的明渊长弓。瞄准 4 秒，向全图距离目标发射 4 支高角箭。每支箭造成 10 伤害，追加 300 层生命燃烧，并会在 5 格内敌人之间最多弹射 6 次；同一目标最多被同一支箭命中 3 次。</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>长虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>燃烧之柱核心</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>焚我余烬领域</MX_Mingyuan_AshesField.label>

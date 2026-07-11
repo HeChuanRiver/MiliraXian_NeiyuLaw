@@ -17,24 +17,19 @@ namespace MiliraXian.Characters.Mingyuan
         public static ThingDef MX_Mingyuan_BurningPillarField;
         public static ThingDef MX_Mingyuan_AshesField;
         public static ThingDef MX_Mingyuan_AscendantFlameDashFlyer;
-        public static ThingDef MX_Mingyuan_Mote_AscendantFlameScorch;
-        public static ThingDef MX_Mingyuan_Mote_BurningPillarCore;
+        public static ThingDef MX_Mingyuan_AscendantFlameScorchController;
+        public static ThingDef MX_Mingyuan_RebirthMarker;
         public static ThingDef MX_Mingyuan_Mote_InstantCombustionFlash;
         public static ThingDef MX_Mingyuan_Mote_InstantCombustionMark;
         public static ThingDef MX_Mingyuan_Mote_TimeBurnStart;
-        public static ThingDef MX_Mingyuan_Mote_TimeBurnMark;
         public static ThingDef MX_Mingyuan_Mote_TimeBurnCollapse;
         public static ThingDef MX_Mingyuan_Mote_AshesCast;
-        public static ThingDef MX_Mingyuan_Mote_AshesPulse;
-        public static ThingDef MX_Mingyuan_Mote_AshesHit;
         public static ThingDef MX_Mingyuan_Mote_SelfBurnGain;
         public static ThingDef MX_Mingyuan_Mote_SelfBurnOverburn;
         public static ThingDef MX_Mingyuan_Mote_ShieldSelfBurnLink;
-        public static ThingDef MX_Mingyuan_Mote_LifeBurnMark;
         public static ThingDef MX_Mingyuan_Mote_LifeBurnBurst;
-        public static ThingDef MX_Mingyuan_Mote_LifeBurnTransferTrail;
 
+        public static FleckDef MX_Mingyuan_Fleck_AscendantFlameScorch;
         public static FleckDef MX_Mingyuan_Fleck_LifeBurnTransferLine;
-        public static FleckDef MX_Mingyuan_Fleck_LifeBurnTransferDistort;
     }
 }

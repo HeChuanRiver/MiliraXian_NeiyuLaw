@@ -193,4 +193,20 @@
         </value>
     </Operation>
 
+    <!-- Native damage callback used only by Milira pawns carrying Burning Body. -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/comps</xpath>
+        <value>
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanDamageResponder" />
+        </value>
+    </Operation>
+
+    <!-- Projectile damage already reads this weapon stat in vanilla. -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/StatDef[defName='RangedWeapon_DamageMultiplier']/parts</xpath>
+        <value>
+            <li Class="MiliraXian.Characters.Mingyuan.StatPart_MingyuanRangedDamage" />
+        </value>
+    </Operation>
+
 </Patch>

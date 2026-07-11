@@ -21,7 +21,7 @@
     <useHitPoints>false</useHitPoints>
     <isSaveable>false</isSaveable>
     <rotatable>false</rotatable>
-    <drawOffscreen>true</drawOffscreen>
+    <drawOffscreen>false</drawOffscreen>
     <mote>
       <fadeInTime>0.02</fadeInTime>
       <solidTime>0.10</solidTime>
@@ -50,7 +50,7 @@
     <useHitPoints>false</useHitPoints>
     <isSaveable>false</isSaveable>
     <rotatable>false</rotatable>
-    <drawOffscreen>true</drawOffscreen>
+    <drawOffscreen>false</drawOffscreen>
     <mote>
       <fadeInTime>0.06</fadeInTime>
       <solidTime>0.50</solidTime>

@@ -21,40 +21,12 @@
     <useHitPoints>false</useHitPoints>
     <isSaveable>false</isSaveable>
     <rotatable>false</rotatable>
-    <drawOffscreen>true</drawOffscreen>
+    <drawOffscreen>false</drawOffscreen>
     <mote>
       <fadeInTime>0.04</fadeInTime>
       <solidTime>0.14</solidTime>
       <fadeOutTime>0.58</fadeOutTime>
       <growthRate>1.2</growthRate>
-    </mote>
-  </ThingDef>
-
-  <ThingDef>
-    <defName>MX_Mingyuan_Mote_TimeBurnMark</defName>
-    <label>Mote</label>
-    <thingClass>MoteAttached</thingClass>
-    <category>Mote</category>
-    <graphicData>
-      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
-      <shaderType>MoteGlowPulse</shaderType>
-      <texPath>MiliraXianMingyuan/Effect/TimeBurnMark</texPath>
-      <color>(0.92, 0.70, 1.00, 0.64)</color>
-      <drawSize>(1.45, 1.45)</drawSize>
-      <shaderParameters>
-        <_Interval>0.42</_Interval>
-      </shaderParameters>
-    </graphicData>
-    <altitudeLayer>MoteOverhead</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <useHitPoints>false</useHitPoints>
-    <isSaveable>false</isSaveable>
-    <rotatable>false</rotatable>
-    <drawOffscreen>true</drawOffscreen>
-    <mote>
-      <fadeInTime>0.10</fadeInTime>
-      <solidTime>1.10</solidTime>
-      <fadeOutTime>0.45</fadeOutTime>
     </mote>
   </ThingDef>
 
@@ -78,7 +50,7 @@
     <useHitPoints>false</useHitPoints>
     <isSaveable>false</isSaveable>
     <rotatable>false</rotatable>
-    <drawOffscreen>true</drawOffscreen>
+    <drawOffscreen>false</drawOffscreen>
     <mote>
       <fadeInTime>0.02</fadeInTime>
       <solidTime>0.18</solidTime>

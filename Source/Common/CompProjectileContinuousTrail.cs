@@ -4,6 +4,11 @@ using Verse;
 
 namespace MiliraXian.Characters
 {
+    public interface IProjectileVisualPositionProvider
+    {
+        Vector3 VisualTrailPosition { get; }
+    }
+
     public class CompProperties_ProjectileContinuousTrail : CompProperties
     {
         public string trailTexPath = "UI/Overlays/ThingLine";
@@ -15,6 +20,7 @@ namespace MiliraXian.Characters
         public float trailAlpha = 0.62f;
         public float trailAltitudeOffset = 0.7f;
         public bool useProjectileGraphicColor = true;
+        public bool useGlowShader;
         public Color trailColor = Color.white;
 
         public CompProperties_ProjectileContinuousTrail()
@@ -30,6 +36,7 @@ namespace MiliraXian.Characters
         private readonly Material[] fadeMaterials = new Material[FadeMaterialSteps];
         private Color cachedTrailBaseColor = Color.clear;
         private string cachedTrailTexPath;
+        private bool cachedUseGlowShader;
         private bool initialized;
 
         private CompProperties_ProjectileContinuousTrail Props => (CompProperties_ProjectileContinuousTrail)props;
@@ -83,11 +90,11 @@ namespace MiliraXian.Characters
 
                 initialized = true;
                 trailPoints.Clear();
-                trailPoints.Add(projectile.ExactPosition);
+                trailPoints.Add(ResolveTrailPosition(projectile));
                 return;
             }
 
-            RecordTrailPoint(projectile.ExactPosition);
+            RecordTrailPoint(ResolveTrailPosition(projectile));
         }
 
         public override void PostDraw()
@@ -187,10 +194,11 @@ namespace MiliraXian.Characters
                 texPath = "UI/Overlays/ThingLine";
             }
 
-            if (cachedTrailTexPath != texPath || cachedTrailBaseColor != color)
+            if (cachedTrailTexPath != texPath || cachedTrailBaseColor != color || cachedUseGlowShader != Props.useGlowShader)
             {
                 cachedTrailTexPath = texPath;
                 cachedTrailBaseColor = color;
+                cachedUseGlowShader = Props.useGlowShader;
                 for (int i = 0; i < fadeMaterials.Length; i++)
                 {
                     fadeMaterials[i] = null;
@@ -203,7 +211,10 @@ namespace MiliraXian.Characters
             {
                 Color matColor = cachedTrailBaseColor;
                 matColor.a = step / (float)(FadeMaterialSteps - 1);
-                mat = MaterialPool.MatFrom(cachedTrailTexPath, ShaderDatabase.Transparent, matColor);
+                mat = MaterialPool.MatFrom(
+                    cachedTrailTexPath,
+                    Props.useGlowShader ? ShaderDatabase.MoteGlow : ShaderDatabase.Transparent,
+                    matColor);
                 fadeMaterials[step] = mat;
             }
 
@@ -220,6 +231,7 @@ namespace MiliraXian.Characters
         {
             cachedTrailTexPath = null;
             cachedTrailBaseColor = Color.clear;
+            cachedUseGlowShader = false;
             for (int i = 0; i < fadeMaterials.Length; i++)
             {
                 fadeMaterials[i] = null;
@@ -234,6 +246,12 @@ namespace MiliraXian.Characters
                 + (-p0 + p2) * t
                 + (2f * p0 - 5f * p1 + 4f * p2 - p3) * t2
                 + (-p0 + 3f * p1 - 3f * p2 + p3) * t3);
+        }
+
+        private static Vector3 ResolveTrailPosition(Projectile projectile)
+        {
+            IProjectileVisualPositionProvider provider = projectile as IProjectileVisualPositionProvider;
+            return provider?.VisualTrailPosition ?? projectile.ExactPosition;
         }
     }
 }

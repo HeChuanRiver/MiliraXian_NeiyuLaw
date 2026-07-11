@@ -15,9 +15,10 @@ namespace MiliraXian.Characters.Mingyuan
         public float selfLifeBurnLayers = 30f;
         public int stunTicks = 180;
         public ThingDef flyerDef;
-        public ThingDef scorchMoteDef;
-        public float scorchMoteScale = 1f;
-        public int maxScorchMotes = 225;
+        public ThingDef scorchControllerDef;
+        public FleckDef scorchFleckDef;
+        public float scorchFleckScale = 1f;
+        public int maxScorchFlecks = 32;
 
         public CompProperties_AbilityMingyuanAscendantFlameDash()
         {
@@ -32,7 +33,6 @@ namespace MiliraXian.Characters.Mingyuan
         private readonly List<IntVec3> tmpPathCells = new List<IntVec3>(512);
         private readonly HashSet<IntVec3> tmpPathCellSet = new HashSet<IntVec3>();
         private readonly HashSet<IntVec3> tmpScorchCellSet = new HashSet<IntVec3>();
-        private readonly HashSet<Pawn> tmpAffectedPawns = new HashSet<Pawn>();
 
         public new CompProperties_AbilityMingyuanAscendantFlameDash Props => (CompProperties_AbilityMingyuanAscendantFlameDash)props;
 
@@ -83,19 +83,22 @@ namespace MiliraXian.Characters.Mingyuan
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             Pawn caster = parent.pawn;
-            if (caster == null || caster.Map == null || !caster.Spawned || !target.Cell.IsValid || !Valid(target, false))
+            if (caster == null || caster.Map == null || !caster.Spawned || !target.Cell.IsValid)
             {
                 return;
             }
 
             Map map = caster.Map;
-            if (!TryBuildDashPath(caster, target.Cell, tmpPathCells, out IntVec3 destination) || destination == caster.Position)
+            if (!TryBuildDashPath(caster, target.Cell, tmpPathCells, out IntVec3 destination)
+                || destination != target.Cell
+                || destination == caster.Position
+                || !destination.Standable(map))
             {
                 return;
             }
 
             base.Apply(target, dest);
-            SpawnScorchMotes(caster, destination, map);
+            SpawnScorchController(caster, destination, map, tmpPathCells);
             AffectDashCells(caster, map, tmpPathCells);
 
             bool selected = Find.Selector.IsSelected(caster);
@@ -195,22 +198,17 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void AffectDashCells(Pawn caster, Map map, List<IntVec3> cells)
         {
-            tmpAffectedPawns.Clear();
+            tmpScorchCellSet.Clear();
             for (int i = 0; i < cells.Count; i++)
             {
-                AffectDashCell(caster, map, cells[i]);
+                tmpScorchCellSet.Add(cells[i]);
             }
 
-            tmpAffectedPawns.Clear();
-        }
-
-        private void AffectDashCell(Pawn caster, Map map, IntVec3 cell)
-        {
-            List<Thing> things = cell.GetThingList(map);
-            for (int i = 0; i < things.Count; i++)
+            IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < pawns.Count; i++)
             {
                 Pawn pawn;
-                if (!MingyuanUtility.IsHostilePawn(things[i], caster, out pawn) || !tmpAffectedPawns.Add(pawn))
+                if (!MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn) || !tmpScorchCellSet.Contains(pawn.Position))
                 {
                     continue;
                 }
@@ -223,87 +221,31 @@ namespace MiliraXian.Characters.Mingyuan
                     KnockbackPawn(caster, pawn, map, 3);
                 }
             }
-        }
-
-        private void SpawnScorchMotes(Pawn caster, IntVec3 destination, Map map)
-        {
-            ThingDef scorchDef = Props.scorchMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_AscendantFlameScorch;
-            if (caster == null || map == null || scorchDef == null || !destination.IsValid)
-            {
-                return;
-            }
-
-            float dx = destination.x - caster.Position.x;
-            float dz = destination.z - caster.Position.z;
-            float distance = Mathf.Sqrt(dx * dx + dz * dz);
-            if (distance < 0.001f)
-            {
-                return;
-            }
-
-            List<IntVec3> centerLine = GenSight.BresenhamCellsBetween(caster.Position, destination);
-            if (centerLine.NullOrEmpty())
-            {
-                return;
-            }
-
-            float perpX = -dz / distance;
-            float perpZ = dx / distance;
-            int halfWidth = Mathf.Max(0, Props.pathWidth / 2);
-            int cellsPerRow = Mathf.Max(1, halfWidth * 2 + 1);
-            int maxMotes = Mathf.Max(cellsPerRow, Props.maxScorchMotes);
-            int rowStride = Mathf.Max(1, Mathf.CeilToInt((float)Mathf.Max(1, centerLine.Count - 1) * cellsPerRow / maxMotes));
-
-            tmpScorchCellSet.Clear();
-            for (int i = 0; i < centerLine.Count; i++)
-            {
-                IntVec3 center = centerLine[i];
-                if (center == caster.Position)
-                {
-                    continue;
-                }
-
-                bool forceEndpoint = center == destination;
-                if (!forceEndpoint && (i - 1) % rowStride != 0)
-                {
-                    continue;
-                }
-
-                for (int offset = -halfWidth; offset <= halfWidth; offset++)
-                {
-                    IntVec3 cell = new IntVec3(
-                        Mathf.RoundToInt(center.x + perpX * offset),
-                        center.y,
-                        Mathf.RoundToInt(center.z + perpZ * offset));
-                    if (!cell.InBounds(map) || !tmpScorchCellSet.Add(cell) || HasScorchMote(map, cell, scorchDef))
-                    {
-                        continue;
-                    }
-
-                    Thing thing = GenSpawn.Spawn(scorchDef, cell, map, WipeMode.Vanish);
-                    Thing_MingyuanAscendantFlameScorch scorch = thing as Thing_MingyuanAscendantFlameScorch;
-                    if (scorch != null)
-                    {
-                        scorch.Init(caster, Mathf.Max(0.1f, Props.scorchMoteScale), Rand.Range(0f, 360f));
-                    }
-                }
-            }
 
             tmpScorchCellSet.Clear();
         }
 
-        private static bool HasScorchMote(Map map, IntVec3 cell, ThingDef scorchDef)
+        private void SpawnScorchController(Pawn caster, IntVec3 destination, Map map, List<IntVec3> pathCells)
         {
-            List<Thing> things = cell.GetThingList(map);
-            for (int i = 0; i < things.Count; i++)
+            ThingDef controllerDef = Props.scorchControllerDef ?? MX_MingyuanDefOf.MX_Mingyuan_AscendantFlameScorchController;
+            FleckDef fleckDef = Props.scorchFleckDef ?? MX_MingyuanDefOf.MX_Mingyuan_Fleck_AscendantFlameScorch;
+            if (caster == null || map == null || controllerDef == null || !destination.IsValid || pathCells.NullOrEmpty())
             {
-                if (things[i]?.def == scorchDef)
-                {
-                    return true;
-                }
+                return;
             }
 
-            return false;
+            Thing_MingyuanAscendantFlameScorch controller = GenSpawn.Spawn(controllerDef, destination, map, WipeMode.Vanish)
+                as Thing_MingyuanAscendantFlameScorch;
+            if (controller == null)
+            {
+                return;
+            }
+
+            controller.Init(caster, pathCells, fleckDef, Props.scorchFleckScale, Props.maxScorchFlecks);
+            if (!controller.HasPathCells)
+            {
+                controller.Destroy(DestroyMode.Vanish);
+            }
         }
 
         private void KnockbackPawn(Pawn caster, Pawn pawn, Map map, int maxCells)
@@ -344,15 +286,13 @@ namespace MiliraXian.Characters.Mingyuan
     {
         private CompMingyuanAscendantFlameScorch ScorchComp => GetComp<CompMingyuanAscendantFlameScorch>();
 
-        public float VisualAlpha => ScorchComp?.VisualAlpha ?? 1f;
+        public bool HasPathCells => ScorchComp?.HasPathCells ?? false;
 
-        public float VisualScale => ScorchComp?.VisualScale ?? 1f;
+        public IReadOnlyList<IntVec3> PathCells => ScorchComp?.PathCells;
 
-        public float VisualRotation => ScorchComp?.VisualRotation ?? 0f;
-
-        public void Init(Pawn caster, float scale, float rotation)
+        public void Init(Pawn caster, List<IntVec3> pathCells, FleckDef fleckDef, float fleckScale, int maxFlecks)
         {
-            ScorchComp?.Init(caster, scale, rotation);
+            ScorchComp?.Init(caster, pathCells, fleckDef, fleckScale, maxFlecks);
         }
     }
 
@@ -362,8 +302,6 @@ namespace MiliraXian.Characters.Mingyuan
         public int pulseIntervalTicks = 60;
         public float lifeBurnLayers = 20f;
         public bool scaleWithOverburn = true;
-        public int fadeInTicks = 15;
-        public int fadeOutTicks = 60;
 
         public CompProperties_MingyuanAscendantFlameScorch()
         {
@@ -373,61 +311,91 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class CompMingyuanAscendantFlameScorch : ThingComp
     {
+        private static readonly HashSet<IntVec3> OccupiedCells = new HashSet<IntVec3>();
+
         private Pawn caster;
-        private int spawnTick;
         private int expireTick;
         private int ticksToPulse;
-        private float visualScale = 1f;
-        private float visualRotation;
+        private List<IntVec3> pathCells = new List<IntVec3>(256);
+        private readonly HashSet<IntVec3> pathCellSet = new HashSet<IntVec3>();
+        private FleckDef visualFleckDef;
+        private float visualFleckScale = 1f;
+        private int visualFleckLimit = 32;
 
         public CompProperties_MingyuanAscendantFlameScorch PropsScorch => (CompProperties_MingyuanAscendantFlameScorch)props;
 
-        public float VisualScale => Mathf.Max(0.1f, visualScale);
+        public bool HasPathCells => pathCells != null && pathCells.Count > 0;
 
-        public float VisualRotation => visualRotation;
-
-        public float VisualAlpha
-        {
-            get
-            {
-                EnsureInitialized();
-                int currentTick = Find.TickManager.TicksGame;
-                float alpha = 1f;
-                int fadeInTicks = Mathf.Max(0, PropsScorch.fadeInTicks);
-                if (fadeInTicks > 0)
-                {
-                    alpha = Mathf.Min(alpha, Mathf.Clamp01((currentTick - spawnTick) / (float)fadeInTicks));
-                }
-
-                int fadeOutTicks = Mathf.Max(0, PropsScorch.fadeOutTicks);
-                if (fadeOutTicks > 0)
-                {
-                    alpha = Mathf.Min(alpha, Mathf.Clamp01((expireTick - currentTick) / (float)fadeOutTicks));
-                }
-
-                return alpha;
-            }
-        }
+        public IReadOnlyList<IntVec3> PathCells => pathCells;
 
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_References.Look(ref caster, "caster", false);
-            Scribe_Values.Look(ref spawnTick, "spawnTick", 0);
             Scribe_Values.Look(ref expireTick, "expireTick", 0);
             Scribe_Values.Look(ref ticksToPulse, "ticksToPulse", 0);
-            Scribe_Values.Look(ref visualScale, "visualScale", 1f);
-            Scribe_Values.Look(ref visualRotation, "visualRotation", 0f);
+            Scribe_Collections.Look(ref pathCells, "pathCells", LookMode.Value);
+            Scribe_Defs.Look(ref visualFleckDef, "visualFleckDef");
+            Scribe_Values.Look(ref visualFleckScale, "visualFleckScale", 1f);
+            Scribe_Values.Look(ref visualFleckLimit, "visualFleckLimit", 32);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                pathCells = pathCells ?? new List<IntVec3>(256);
+                RebuildPathSet();
+            }
         }
 
-        public void Init(Pawn newCaster, float scale, float rotation)
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            if (respawningAfterLoad)
+            {
+                RebuildPathSet();
+                SpawnVisualFlecks(Mathf.Max(1, expireTick - Find.TickManager.TicksGame));
+            }
+        }
+
+        public void Init(Pawn newCaster, List<IntVec3> newPathCells, FleckDef fleckDef, float fleckScale, int maxFlecks)
         {
             caster = newCaster;
-            spawnTick = Find.TickManager.TicksGame;
-            expireTick = spawnTick + Mathf.Max(1, PropsScorch.durationTicks);
+            expireTick = Find.TickManager.TicksGame + Mathf.Max(1, PropsScorch.durationTicks);
             ticksToPulse = Rand.RangeInclusive(1, Mathf.Max(1, PropsScorch.pulseIntervalTicks));
-            visualScale = Mathf.Max(0.1f, scale);
-            visualRotation = rotation;
+            visualFleckDef = fleckDef;
+            visualFleckScale = Mathf.Max(0.1f, fleckScale);
+            visualFleckLimit = Mathf.Max(0, maxFlecks);
+
+            OccupiedCells.Clear();
+            List<Thing> existingControllers = parent.Map?.listerThings?.ThingsOfDef(parent.def);
+            if (existingControllers != null)
+            {
+                for (int i = 0; i < existingControllers.Count; i++)
+                {
+                    Thing_MingyuanAscendantFlameScorch existing = existingControllers[i] as Thing_MingyuanAscendantFlameScorch;
+                    if (existing == null || existing == parent || existing.PathCells == null)
+                    {
+                        continue;
+                    }
+
+                    for (int j = 0; j < existing.PathCells.Count; j++)
+                    {
+                        OccupiedCells.Add(existing.PathCells[j]);
+                    }
+                }
+            }
+
+            pathCells.Clear();
+            pathCellSet.Clear();
+            for (int i = 0; i < newPathCells.Count; i++)
+            {
+                IntVec3 cell = newPathCells[i];
+                if (!OccupiedCells.Contains(cell) && pathCellSet.Add(cell))
+                {
+                    pathCells.Add(cell);
+                }
+            }
+
+            OccupiedCells.Clear();
+            SpawnVisualFlecks(PropsScorch.durationTicks);
         }
 
         public override void CompTick()
@@ -438,9 +406,8 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            EnsureInitialized();
             int currentTick = Find.TickManager.TicksGame;
-            if (currentTick >= expireTick)
+            if (currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead || !HasPathCells)
             {
                 parent.Destroy(DestroyMode.Vanish);
                 return;
@@ -456,105 +423,57 @@ namespace MiliraXian.Characters.Mingyuan
             PulseStandingPawns();
         }
 
-        private void EnsureInitialized()
+        private void RebuildPathSet()
         {
-            int currentTick = Find.TickManager.TicksGame;
-            if (spawnTick <= 0)
+            pathCellSet.Clear();
+            if (pathCells == null)
             {
-                spawnTick = parent.TickSpawned > 0 ? parent.TickSpawned : currentTick;
+                return;
             }
 
-            if (expireTick <= 0)
+            for (int i = 0; i < pathCells.Count; i++)
             {
-                expireTick = spawnTick + Mathf.Max(1, PropsScorch.durationTicks);
-            }
-
-            if (ticksToPulse <= 0)
-            {
-                ticksToPulse = Rand.RangeInclusive(1, Mathf.Max(1, PropsScorch.pulseIntervalTicks));
-            }
-
-            if (visualScale <= 0f)
-            {
-                visualScale = 1f;
+                pathCellSet.Add(pathCells[i]);
             }
         }
 
         private void PulseStandingPawns()
         {
-            if (caster == null || caster.Destroyed || caster.Dead || parent.Map == null || PropsScorch.lifeBurnLayers <= 0f)
+            if (parent.Map == null || PropsScorch.lifeBurnLayers <= 0f)
             {
                 return;
             }
 
-            List<Thing> things = parent.Position.GetThingList(parent.Map);
-            for (int i = 0; i < things.Count; i++)
+            IReadOnlyList<Pawn> pawns = parent.Map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < pawns.Count; i++)
             {
                 Pawn pawn;
-                if (MingyuanUtility.IsHostilePawn(things[i], caster, out pawn))
+                if (MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn) && pathCellSet.Contains(pawn.Position))
                 {
                     MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers, scaleWithOverburn: PropsScorch.scaleWithOverburn);
                 }
             }
         }
-    }
 
-    public class Graphic_MingyuanScorchFlicker : Graphic_MoteRandom
-    {
-        private const int TicksPerFrameChange = 15;
-        private static readonly MaterialPropertyBlock ScorchPropertyBlock = new MaterialPropertyBlock();
-
-        public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
+        private void SpawnVisualFlecks(int remainingTicks)
         {
-            if (subGraphics == null || subGraphics.Length == 0)
-            {
-                base.DrawWorker(loc, rot, thingDef, thing, extraRotation);
-                return;
-            }
-
-            Mote mote = thing as Mote;
-            int offset = mote != null ? mote.offsetRandom : thing?.HashOffset() ?? 0;
-            int frame = Mathf.Abs((Find.TickManager.TicksGame + offset) / TicksPerFrameChange) % subGraphics.Length;
-            Material material = subGraphics[frame].MatSingle;
-            if (mote != null)
-            {
-                Graphic_Mote.DrawMote(data, material, base.Color, loc, rot, thingDef, thing, 0, ForcePropertyBlock);
-                return;
-            }
-
-            Thing_MingyuanAscendantFlameScorch scorch = thing as Thing_MingyuanAscendantFlameScorch;
-            float alpha = scorch?.VisualAlpha ?? 1f;
-            if (alpha <= 0.001f)
+            FleckDef fleckDef = visualFleckDef ?? MX_MingyuanDefOf.MX_Mingyuan_Fleck_AscendantFlameScorch;
+            if (parent.Map == null || fleckDef == null || !HasPathCells || visualFleckLimit <= 0 || remainingTicks <= 0)
             {
                 return;
             }
 
-            float scale = scorch?.VisualScale ?? 1f;
-            float drawRotation = scorch?.VisualRotation ?? extraRotation;
-            Vector3 drawScale = new Vector3(data.drawSize.x * scale, 1f, data.drawSize.y * scale);
-            Color drawColor = base.Color;
-            drawColor.a *= alpha;
-
-            Matrix4x4 matrix = default(Matrix4x4);
-            matrix.SetTRS(loc, Quaternion.AngleAxis(drawRotation, Vector3.up), drawScale);
-            if (!ForcePropertyBlock && drawColor.IndistinguishableFrom(material.color))
+            int count = Mathf.Min(visualFleckLimit, pathCells.Count);
+            int stride = Mathf.Max(1, Mathf.CeilToInt(pathCells.Count / (float)count));
+            int spawned = 0;
+            for (int i = 0; i < pathCells.Count && spawned < count; i += stride)
             {
-                Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
-                return;
+                FleckCreationData data = FleckMaker.GetDataStatic(pathCells[i].ToVector3Shifted(), parent.Map, fleckDef, visualFleckScale);
+                data.rotation = Rand.Range(0f, 360f);
+                data.solidTimeOverride = Mathf.Max(0.1f, remainingTicks / 60f);
+                parent.Map.flecks.CreateFleck(data);
+                spawned++;
             }
-
-            ScorchPropertyBlock.SetColor(ShaderPropertyIDs.Color, drawColor);
-            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, ScorchPropertyBlock);
-        }
-
-        public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
-        {
-            if (newColorTwo != Color.white)
-            {
-                Log.ErrorOnce("Cannot use Graphic_MingyuanScorchFlicker.GetColoredVersion with a non-white colorTwo.", 739114011);
-            }
-
-            return GraphicDatabase.Get<Graphic_MingyuanScorchFlicker>(path, newShader, drawSize, newColor, Color.white, data);
         }
     }
 
@@ -567,7 +486,7 @@ namespace MiliraXian.Characters.Mingyuan
         public ThingDef targetMoteDef;
         public float flashMoteScale = 1f;
         public float targetMoteScale = 1f;
-        public int maxTargetMotes = 48;
+        public int maxTargetMotes = 16;
         public float minimumLifeBurnLayers = 1f;
 
         public CompProperties_AbilityMingyuanInstantCombustion()
@@ -749,13 +668,10 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public int durationTicks = MingyuanUtility.TicksPerHour;
         public int tickIntervalTicks = 60;
-        public int moteIntervalTicks = 120;
         public ThingDef startMoteDef;
-        public ThingDef targetMoteDef;
         public ThingDef collapseMoteDef;
         public SoundDef effectSoundDef;
         public float startMoteScale = 2.2f;
-        public float targetMoteScale = 1.15f;
         public float collapseMoteScale = 2.4f;
         public int mechSteelCount = 75;
         public int mechPlasteelCount = 25;

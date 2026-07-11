@@ -6,29 +6,6 @@ using Verse;
 
 namespace MiliraXian.Characters.Mingyuan
 {
-    public static class MingyuanTimeLockUtility
-    {
-        public static bool IsLocked(Thing thing)
-        {
-            return Current.Game?.GetComponent<GameComponent_MingyuanTimeLock>()?.IsLocked(thing) ?? false;
-        }
-
-        public static bool IsEternalBurning(Pawn pawn)
-        {
-            return MingyuanUtility.HasHediff(pawn, MingyuanUtility.EternalBurningDef);
-        }
-
-        public static void RegisterLock(Thing thing, int durationTicks, HediffDef markerHediff, bool restoreOnEnd)
-        {
-            if (thing == null || durationTicks <= 0)
-            {
-                return;
-            }
-
-            Current.Game?.GetComponent<GameComponent_MingyuanTimeLock>()?.Register(thing, Find.TickManager.TicksGame + durationTicks, markerHediff, restoreOnEnd);
-        }
-    }
-
     public class MingyuanTimeLockRecord : IExposable
     {
         public Thing thing;
@@ -65,57 +42,15 @@ namespace MiliraXian.Characters.Mingyuan
         {
         }
 
-        public bool IsLocked(Thing thing)
+        public override void LoadedGame()
         {
-            if (thing == null)
-            {
-                return false;
-            }
-
-            int tick = Find.TickManager.TicksGame;
-            for (int i = 0; i < locks.Count; i++)
-            {
-                MingyuanTimeLockRecord record = locks[i];
-                if (record?.thing == thing && tick < record.endTick)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void Register(Thing thing, int endTick, HediffDef markerHediff, bool restoreOnEnd)
-        {
-            if (thing == null)
+            base.LoadedGame();
+            if (locks.Count == 0)
             {
                 return;
             }
 
-            for (int i = 0; i < locks.Count; i++)
-            {
-                MingyuanTimeLockRecord record = locks[i];
-                if (record?.thing == thing)
-                {
-                    record.endTick = Mathf.Max(record.endTick, endTick);
-                    record.markerHediff = markerHediff ?? record.markerHediff;
-                    record.restoreOnEnd = record.restoreOnEnd || restoreOnEnd;
-                    return;
-                }
-            }
-
-            locks.Add(new MingyuanTimeLockRecord(thing, endTick, markerHediff, restoreOnEnd));
-        }
-
-        public override void GameComponentTick()
-        {
-            base.GameComponentTick();
-            if (Current.ProgramState != ProgramState.Playing || locks.Count == 0)
-            {
-                return;
-            }
-
-            int tick = Find.TickManager.TicksGame;
+            GameComponent_MingyuanRebirth rebirth = Current.Game?.GetComponent<GameComponent_MingyuanRebirth>();
             for (int i = locks.Count - 1; i >= 0; i--)
             {
                 MingyuanTimeLockRecord record = locks[i];
@@ -125,27 +60,39 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                if (tick < record.endTick)
+                Pawn pawn = record.thing as Pawn;
+                if (pawn == null)
                 {
+                    locks.RemoveAt(i);
                     continue;
                 }
 
-                Pawn pawn = record.thing as Pawn;
-                if (pawn != null)
+                if (record.markerHediff != null)
                 {
-                    if (record.restoreOnEnd)
+                    Hediff marker = pawn.health?.hediffSet?.GetFirstHediffOfDef(record.markerHediff);
+                    if (marker != null)
                     {
-                        MingyuanUtility.RestorePawnToBestCondition(pawn, false);
+                        pawn.health.RemoveHediff(marker);
+                    }
+                }
+
+                int tick = Find.TickManager.TicksGame;
+                if (tick < record.endTick && pawn.Spawned && pawn.Map != null && rebirth != null)
+                {
+                    Map map = pawn.Map;
+                    IntVec3 cell = pawn.Position;
+                    pawn.DeSpawn();
+                    if (!pawn.IsWorldPawn())
+                    {
+                        Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
                     }
 
-                    if (record.markerHediff != null)
-                    {
-                        Hediff hediff = pawn.health?.hediffSet?.GetFirstHediffOfDef(record.markerHediff);
-                        if (hediff != null)
-                        {
-                            pawn.health.RemoveHediff(hediff);
-                        }
-                    }
+                    Thing marker = MingyuanRebirthUtility.SpawnRebirthMarker(map, cell);
+                    rebirth.RegisterPendingRebirth(pawn, map, cell, record.endTick, marker);
+                }
+                else if (record.restoreOnEnd)
+                {
+                    MingyuanUtility.RestorePawnToBestCondition(pawn, false);
                 }
 
                 locks.RemoveAt(i);
@@ -189,16 +136,14 @@ namespace MiliraXian.Characters.Mingyuan
 
             DoRebirthExplosion(pawn, map, cell);
             PreparePawnForPendingRebirth(pawn);
-            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + 1);
+            Thing marker = SpawnRebirthMarker(map, cell);
+            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + EternalBurningTicks, marker);
             return true;
         }
 
         private static void DoRebirthExplosion(Pawn pawn, Map map, IntVec3 cell)
         {
-            for (int i = 0; i < 5; i++)
-            {
-                GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, 999, 999f);
-            }
+            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, 999, 999f);
 
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 8f, true))
             {
@@ -208,6 +153,17 @@ namespace MiliraXian.Characters.Mingyuan
                     target.stances?.stunner?.StunFor(600, pawn, false, true, false);
                 }
             }
+        }
+
+        public static Thing SpawnRebirthMarker(Map map, IntVec3 cell)
+        {
+            ThingDef markerDef = MX_MingyuanDefOf.MX_Mingyuan_RebirthMarker;
+            if (map == null || markerDef == null || !cell.IsValid || !cell.InBounds(map))
+            {
+                return null;
+            }
+
+            return GenSpawn.Spawn(markerDef, cell, map, WipeMode.Vanish);
         }
 
         private static void PreparePawnForPendingRebirth(Pawn pawn)
@@ -270,9 +226,7 @@ namespace MiliraXian.Characters.Mingyuan
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.BurningBodyDef);
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.ShieldDef);
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.RebirthDef);
-            MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.EternalBurningDef);
             MingyuanUtility.RestorePawnToBestCondition(pawn, false);
-            MingyuanTimeLockUtility.RegisterLock(pawn, EternalBurningTicks, MingyuanUtility.EternalBurningDef, true);
             return true;
         }
     }
@@ -283,17 +237,19 @@ namespace MiliraXian.Characters.Mingyuan
         public Map map;
         public IntVec3 cell;
         public int rebirthTick;
+        public Thing marker;
 
         public MingyuanPendingRebirth()
         {
         }
 
-        public MingyuanPendingRebirth(Pawn pawn, Map map, IntVec3 cell, int rebirthTick)
+        public MingyuanPendingRebirth(Pawn pawn, Map map, IntVec3 cell, int rebirthTick, Thing marker)
         {
             this.pawn = pawn;
             this.map = map;
             this.cell = cell;
             this.rebirthTick = rebirthTick;
+            this.marker = marker;
         }
 
         public void ExposeData()
@@ -302,6 +258,7 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_References.Look(ref map, "map");
             Scribe_Values.Look(ref cell, "cell");
             Scribe_Values.Look(ref rebirthTick, "rebirthTick", 0);
+            Scribe_References.Look(ref marker, "marker");
         }
     }
 
@@ -326,14 +283,14 @@ namespace MiliraXian.Characters.Mingyuan
             return false;
         }
 
-        public void RegisterPendingRebirth(Pawn pawn, Map map, IntVec3 cell, int rebirthTick)
+        public void RegisterPendingRebirth(Pawn pawn, Map map, IntVec3 cell, int rebirthTick, Thing marker)
         {
             if (pawn == null || map == null)
             {
                 return;
             }
 
-            pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick));
+            pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick, marker));
         }
 
         public override void GameComponentTick()
@@ -350,6 +307,7 @@ namespace MiliraXian.Characters.Mingyuan
                 MingyuanPendingRebirth pending = pendingRebirths[i];
                 if (pending?.pawn == null || pending.pawn.Destroyed)
                 {
+                    DestroyMarker(pending?.marker);
                     pendingRebirths.RemoveAt(i);
                     continue;
                 }
@@ -361,7 +319,38 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (MingyuanRebirthUtility.TryFinishRebirth(pending.pawn, pending.map, pending.cell))
                 {
+                    DestroyMarker(pending.marker);
                     pendingRebirths.RemoveAt(i);
+                }
+                else
+                {
+                    pending.rebirthTick = tick + 60;
+                }
+            }
+        }
+
+        public override void LoadedGame()
+        {
+            base.LoadedGame();
+            int tick = Find.TickManager.TicksGame;
+            for (int i = 0; i < pendingRebirths.Count; i++)
+            {
+                MingyuanPendingRebirth pending = pendingRebirths[i];
+                if (pending?.pawn == null || pending.map == null || !pending.cell.IsValid)
+                {
+                    continue;
+                }
+
+                bool missingMarker = pending.marker == null || pending.marker.Destroyed;
+                if (!missingMarker)
+                {
+                    continue;
+                }
+
+                pending.marker = MingyuanRebirthUtility.SpawnRebirthMarker(pending.map, pending.cell);
+                if (pending.pawn.Dead && pending.rebirthTick <= tick + 1)
+                {
+                    pending.rebirthTick = tick + MingyuanRebirthUtility.EternalBurningTicks;
                 }
             }
         }
@@ -373,6 +362,14 @@ namespace MiliraXian.Characters.Mingyuan
             if (Scribe.mode == LoadSaveMode.PostLoadInit && pendingRebirths == null)
             {
                 pendingRebirths = new List<MingyuanPendingRebirth>();
+            }
+        }
+
+        private static void DestroyMarker(Thing marker)
+        {
+            if (marker != null && !marker.Destroyed)
+            {
+                marker.Destroy(DestroyMode.Vanish);
             }
         }
     }

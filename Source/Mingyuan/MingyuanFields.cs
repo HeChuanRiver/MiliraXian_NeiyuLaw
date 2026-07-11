@@ -37,7 +37,9 @@ namespace MiliraXian.Characters.Mingyuan
 
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
-            base.DrawAt(TornadoComp?.SmoothedDrawLoc(drawLoc) ?? drawLoc, flip);
+            Vector3 smoothedLoc = TornadoComp?.SmoothedDrawLoc(drawLoc) ?? drawLoc;
+            base.DrawAt(smoothedLoc, flip);
+            TornadoComp?.DrawCore(smoothedLoc);
         }
     }
 
@@ -72,8 +74,7 @@ namespace MiliraXian.Characters.Mingyuan
         public float targetPriorityFactor = 0.65f;
         public float visualRotationDegreesPerTick = 2.25f;
         public int visualFadeTicks = 120;
-        public ThingDef coreMoteDef;
-        public float coreMoteScale = 1f;
+        public GraphicData coreGraphicData;
 
         public CompProperties_MingyuanBurningPillarTornado()
         {
@@ -93,7 +94,6 @@ namespace MiliraXian.Characters.Mingyuan
         private IntVec3 drawToCell = IntVec3.Invalid;
         private int drawMoveStartTick;
         private int grantedCoreHitPoints;
-        private Mote coreMote;
 
         public CompProperties_MingyuanBurningPillarTornado PropsTornado => (CompProperties_MingyuanBurningPillarTornado)props;
 
@@ -177,7 +177,6 @@ namespace MiliraXian.Characters.Mingyuan
                 parent.SetFaction(caster.Faction);
             }
 
-            MaintainCoreMote();
         }
 
         public override void CompTick()
@@ -197,7 +196,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             GrowCoreHitPoints();
-            MaintainCoreMote();
             TickDamagePulse();
             TickMovement();
         }
@@ -259,6 +257,17 @@ namespace MiliraXian.Characters.Mingyuan
             return Vector3.Lerp(from, to, progress);
         }
 
+        public void DrawCore(Vector3 drawLoc)
+        {
+            Graphic coreGraphic = PropsTornado.coreGraphicData?.Graphic;
+            if (coreGraphic == null || VisualAlpha <= 0.001f)
+            {
+                return;
+            }
+
+            coreGraphic.Draw(drawLoc + Altitudes.AltIncVect, Rot4.North, parent, -VisualRotation * 0.35f);
+        }
+
         private void EnsureInitialized()
         {
             int currentTick = Find.TickManager.TicksGame;
@@ -311,31 +320,6 @@ namespace MiliraXian.Characters.Mingyuan
             int delta = capacity - grantedCoreHitPoints;
             grantedCoreHitPoints = capacity;
             parent.HitPoints = Mathf.Min(parent.MaxHitPoints, parent.HitPoints + delta);
-        }
-
-        private void MaintainCoreMote()
-        {
-            ThingDef moteDef = PropsTornado.coreMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_BurningPillarCore;
-            if (moteDef == null || parent.MapHeld == null || !parent.Spawned)
-            {
-                return;
-            }
-
-            if (coreMote == null || coreMote.Destroyed)
-            {
-                coreMote = MoteMaker.MakeAttachedOverlay(parent, moteDef, Vector3.zero, Mathf.Max(0.1f, PropsTornado.coreMoteScale));
-            }
-
-            coreMote.Maintain();
-            SyncCoreMotePosition();
-        }
-
-        private void SyncCoreMotePosition()
-        {
-            if (coreMote != null && !coreMote.Destroyed)
-            {
-                coreMote.exactPosition = SmoothedDrawLoc(parent.DrawPos);
-            }
         }
 
         private void TickDamagePulse()
@@ -457,7 +441,6 @@ namespace MiliraXian.Characters.Mingyuan
             drawFromCell = current;
             drawToCell = destination;
             drawMoveStartTick = Find.TickManager.TicksGame;
-            SyncCoreMotePosition();
             if (wasSelected)
             {
                 Find.Selector.Select(parent, false, false);
@@ -554,6 +537,7 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
+    [StaticConstructorOnStartup]
     public class Graphic_MingyuanBurningPillarTornado : Graphic_Single
     {
         private static readonly MaterialPropertyBlock TornadoPropertyBlock = new MaterialPropertyBlock();
@@ -591,22 +575,13 @@ namespace MiliraXian.Characters.Mingyuan
         public int durationTicks = 10000;
         public int pulseIntervalTicks = 15;
         public float damageAmount = 100f;
-        public float armorPenetration = 999f;
         public float lifeBurnLayers = 100f;
         public bool destroyBuildings;
         public bool destroyAnimals;
         public bool scalesWithSelfBurn;
         public float selfBurnLifeBurnPer100 = 20f;
-        public float selfBurnDamagePerLayer = 0.01f;
         public float selfHealAmount = 1f;
         public float maxSelfBurnGainPerPulse = 20f;
-        public ThingDef pulseMoteDef;
-        public ThingDef hitMoteDef;
-        public ThingDef selfHealMoteDef;
-        public float pulseMoteScale = 1f;
-        public float hitMoteScale = 1f;
-        public float selfHealMoteScale = 1f;
-        public int maxHitMotesPerPulse = 12;
         public Color previewRingColor = new Color(1f, 0.75f, 0.34f, 0.64f);
 
         public CompProperties_MingyuanBurningField()
@@ -710,8 +685,6 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void Pulse()
         {
-            SpawnPulseMote();
-            int spawnedHitMotes = 0;
             selfBurnGainedThisPulse = 0f;
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(CenterCell, parent.Map, PropsField.radius, true))
             {
@@ -723,7 +696,7 @@ namespace MiliraXian.Characters.Mingyuan
                 Pawn pawn = thing as Pawn;
                 if (pawn != null)
                 {
-                    HandlePawn(pawn, ref spawnedHitMotes);
+                    HandlePawn(pawn);
                     continue;
                 }
 
@@ -734,7 +707,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        private void HandlePawn(Pawn pawn, ref int spawnedHitMotes)
+        private void HandlePawn(Pawn pawn)
         {
             if (pawn == null || pawn.Dead)
             {
@@ -768,7 +741,6 @@ namespace MiliraXian.Characters.Mingyuan
 
             MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, damage, caster);
             MingyuanUtility.AddLifeBurn(pawn, caster, layers, scaleWithOverburn: true);
-            TrySpawnHitMote(pawn, ref spawnedHitMotes);
             if (PropsField.scalesWithSelfBurn)
             {
                 float gain = Mathf.Max(1f, layers / 20f);
@@ -776,7 +748,7 @@ namespace MiliraXian.Characters.Mingyuan
                 if (remainingGain > 0f)
                 {
                     float appliedGain = Mathf.Min(gain, remainingGain);
-                    MingyuanUtility.AddSelfBurn(caster, appliedGain);
+                    MingyuanUtility.AddSelfBurn(caster, appliedGain, showMote: false);
                     selfBurnGainedThisPulse += appliedGain;
                 }
             }
@@ -790,28 +762,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
-            ThingDef moteDef = PropsField.selfHealMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_SelfBurnGain;
-            MingyuanUtility.TryMakeAttachedMote(caster, moteDef, PropsField.selfHealMoteScale);
-        }
-
-        private void SpawnPulseMote()
-        {
-            ThingDef moteDef = PropsField.pulseMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_AshesPulse;
-            MingyuanUtility.TryMakeStaticMote(CenterCell, parent.Map, moteDef, PropsField.pulseMoteScale);
-        }
-
-        private void TrySpawnHitMote(Pawn pawn, ref int spawnedHitMotes)
-        {
-            if (spawnedHitMotes >= Mathf.Max(0, PropsField.maxHitMotesPerPulse))
-            {
-                return;
-            }
-
-            ThingDef moteDef = PropsField.hitMoteDef ?? MX_MingyuanDefOf.MX_Mingyuan_Mote_AshesHit;
-            if (MingyuanUtility.TryMakeAttachedMote(pawn, moteDef, PropsField.hitMoteScale))
-            {
-                spawnedHitMotes++;
-            }
         }
     }
 }

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_LifeBurn.label>&lt;color=#FF7A45&gt;生命燃烧&lt;/color&gt;</MX_Mingyuan_LifeBurn.label>
-  <MX_Mingyuan_LifeBurn.description>缠在生命上的异界火。它消耗需求与年龄，削弱战斗和工作，造成真实灼伤，并在宿主死亡时把部分火焰分摊给附近敌人。</MX_Mingyuan_LifeBurn.description>
-  <MX_Mingyuan_LifeBurn.stages.0.label>&lt;color=#FF7A45&gt;生命燃烧&lt;/color&gt;</MX_Mingyuan_LifeBurn.stages.0.label>
+  <MX_Mingyuan_LifeBurn.description>缠在生命上的异界火。它消耗需求与年龄，削弱战斗和工作，造成真实灼伤；宿主死亡时，附近敌人各增加自身爆条阈值 10% 的层数。</MX_Mingyuan_LifeBurn.description>
+  <MX_Mingyuan_LifeBurn.stages.0.label></MX_Mingyuan_LifeBurn.stages.0.label>
   <MX_Mingyuan_SelfBurn.label>&lt;color=#FFB25C&gt;自我燃烧&lt;/color&gt;</MX_Mingyuan_SelfBurn.label>
   <MX_Mingyuan_SelfBurn.description>明渊把体内燃烧转为行动力。0 到 300 层提升近战与技能伤害，给远程武器有限伤害加成，并提升移速、攻速、工作速度与生命燃烧输出；超过 300 层后进入过燃，主动直接伤害和主动生命燃烧叠层翻倍，但护身火盾的修复储备会开始流失。</MX_Mingyuan_SelfBurn.description>
   <MX_Mingyuan_SelfBurn.stages.0.label></MX_Mingyuan_SelfBurn.stages.0.label>
   <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;燃烧之躯&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
-  <MX_Mingyuan_BurningBody.description>被淡色异界火重塑的身体。部位生命大幅提高，意识提升，热能与爆炸转化为恢复，攻击者会被反灼，控制状态会被清除，每次真实受伤都会获得 5 层自我燃烧。</MX_Mingyuan_BurningBody.description>
-  <MX_Mingyuan_BurningBody.stages.0.label>&lt;color=#FFD37A&gt;燃烧之躯&lt;/color&gt;</MX_Mingyuan_BurningBody.stages.0.label>
+  <MX_Mingyuan_BurningBody.description>被淡色异界火重塑的身体。承受伤害降至 1%，意识提升，热能与爆炸转化为恢复，攻击者会被反灼，控制状态会被清除，每次真实受伤都会获得 5 层自我燃烧。</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.stages.0.label></MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;护身火盾&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
   <MX_Mingyuan_ProtectiveFlameShield.description>100 点淡色火焰修复储备。它不再直接格挡伤害，而是每秒消耗 1 点，恢复一个缺失部位，或完全治疗一个部位上的全部伤口与旧伤疤痕。稳定自我燃烧可以转回储备；过燃会使储备持续流失。</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;重生之焰&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
-  <MX_Mingyuan_RebirthFlame.description>明渊倒下时，埋在体内的火会爆开，并从余烬中重新塑形。</MX_Mingyuan_RebirthFlame.description>
+  <MX_Mingyuan_RebirthFlame.description>明渊倒下时，埋在体内的火会爆开并留下重生火标记，30 秒后完成重塑。</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;永恒燃烧&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>
   <MX_Mingyuan_EternalBurning.description>明渊被重塑自身的火包裹。火焰尚在时，外来的打击不能决定她的死亡。</MX_Mingyuan_EternalBurning.description>
   <MX_Mingyuan_TimeBurnFrozen.label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</MX_Mingyuan_TimeBurnFrozen.label>

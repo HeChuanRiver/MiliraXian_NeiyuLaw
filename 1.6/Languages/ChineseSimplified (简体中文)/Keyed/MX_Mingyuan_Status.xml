@@ -2,6 +2,7 @@
 <LanguageData>
   <MX_Mingyuan_Enabled>已启用</MX_Mingyuan_Enabled>
   <MX_Mingyuan_Disabled>未启用</MX_Mingyuan_Disabled>
+  <MX_Mingyuan_RangedDamage_StatPart>明渊燃烧状态：x{0}</MX_Mingyuan_RangedDamage_StatPart>
   <MX_Mingyuan_SelfBurn_LabelExtra>{0} 层</MX_Mingyuan_SelfBurn_LabelExtra>
   <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} 层，过燃</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>当前自我燃烧：{0} 层</MX_Mingyuan_SelfBurn_TipCurrentLayers>

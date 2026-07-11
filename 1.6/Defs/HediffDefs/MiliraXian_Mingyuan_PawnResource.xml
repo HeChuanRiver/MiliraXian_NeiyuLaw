@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_LifeBurn</defName>
         <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
-        <description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and splits part of itself among nearby enemies when the host dies.</description>
+        <description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and gives nearby enemies 10% of their own burst threshold when the host dies.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
         <isBad>true</isBad>
@@ -14,9 +14,33 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
+                <label></label>
+                <statFactorsBySeverity>
+                    <li><stat>MoveSpeed</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeHitChance</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
+                    <li><stat>ShootingAccuracyPawn</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
+                    <li><stat>WorkSpeedGlobal</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
+                    <li><stat>IncomingDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
+                    <li><stat>RangedCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
+                </statFactorsBySeverity>
             </li>
         </stages>
+        <renderNodeProperties>
+            <li>
+                <debugLabel>MX_Mingyuan_LifeBurnMark</debugLabel>
+                <workerClass>PawnRenderNodeWorker_Hediff</workerClass>
+                <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+                <shaderTypeDef>MoteGlow</shaderTypeDef>
+                <overrideMeshSize>(1.42,1.42)</overrideMeshSize>
+                <color>(1.00,0.88,0.54,0.70)</color>
+                <parentTagDef>Root</parentTagDef>
+                <pawnType>Any</pawnType>
+                <rotDrawMode>Fresh, Rotting</rotDrawMode>
+                <baseLayer>75</baseLayer>
+            </li>
+        </renderNodeProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanLifeBurn">
                 <tickInterval>120</tickInterval>
@@ -25,20 +49,20 @@
                 <needDrainPer100Layers>0.01</needDrainPer100Layers>
                 <ageTicksPerLayer>60</ageTicksPerLayer>
                 <transferRadius>30</transferRadius>
-                <transferFraction>0.5</transferFraction>
+                <deathTransferProgressFraction>0.10</deathTransferProgressFraction>
                 <executeHealthScaleMultiplier>10</executeHealthScaleMultiplier>
                 <burstDamageMultiplier>1</burstDamageMultiplier>
                 <burnSelfStackFraction>0.05</burnSelfStackFraction>
                 <decayDelayTicks>1800</decayDelayTicks>
                 <decayFraction>0.1</decayFraction>
                 <removeBelowLayers>0.5</removeBelowLayers>
-                <transferVisualLimit>8</transferVisualLimit>
+                <transferVisualLimit>3</transferVisualLimit>
                 <maxTransferTargets>8</maxTransferTargets>
-                <minTransferLayers>1</minTransferLayers>
                 <maxBurstExecutionsPerTick>4</maxBurstExecutionsPerTick>
                 <burstRetryTicks>15</burstRetryTicks>
                 <burstRetryJitterTicks>45</burstRetryJitterTicks>
                 <maxDeathTransfersPerTick>4</maxDeathTransfersPerTick>
+                <deathTransferTargetCooldownTicks>300</deathTransferTargetCooldownTicks>
             </li>
         </comps>
     </HediffDef>
@@ -57,12 +81,28 @@
             <li>
                 <minSeverity>0</minSeverity>
                 <label></label>
+                <statFactorsBySeverity>
+                    <li><stat>MoveSpeed</stat><valueBySeverity><points><li>(0,1)</li><li>(300,2.5)</li></points></valueBySeverity></li>
+                    <li><stat>WorkSpeedGlobal</stat><valueBySeverity><points><li>(0,1)</li><li>(300,4)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(300,4)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(50,0.6667)</li><li>(100,0.5)</li><li>(150,0.4)</li><li>(200,0.3333)</li><li>(250,0.2857)</li><li>(300,0.25)</li></points></valueBySeverity></li>
+                    <li><stat>RangedCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(50,0.6667)</li><li>(100,0.5)</li><li>(150,0.4)</li><li>(200,0.3333)</li><li>(250,0.2857)</li><li>(300,0.25)</li></points></valueBySeverity></li>
+                </statFactorsBySeverity>
+            </li>
+            <li>
+                <minSeverity>300.0001</minSeverity>
+                <label></label>
+                <statFactors>
+                    <MoveSpeed>2.5</MoveSpeed>
+                    <WorkSpeedGlobal>4</WorkSpeedGlobal>
+                    <MeleeDamageFactor>8</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.25</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.25</RangedCooldownFactor>
+                </statFactors>
             </li>
         </stages>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanSelfBurn">
-                <decayIntervalTicks>500</decayIntervalTicks>
-                <decayLayers>10</decayLayers>
                 <gainMoteDef>MX_Mingyuan_Mote_SelfBurnGain</gainMoteDef>
                 <gainMoteScale>1</gainMoteScale>
                 <gainMoteCooldownTicks>60</gainMoteCooldownTicks>
@@ -86,8 +126,8 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>A body remade by pale extradimensional fire. Body parts become vastly harder to break, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and real wounds feed 5 Self Burn.</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <description>A body remade by pale extradimensional fire. Incoming damage is reduced to 1%, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and real wounds feed 5 Self Burn.</description>
+        <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -98,7 +138,10 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
+                <label></label>
+                <statFactors>
+                    <IncomingDamageFactor>0.01</IncomingDamageFactor>
+                </statFactors>
                 <capMods>
                     <li>
                         <capacity>Consciousness</capacity>
@@ -123,7 +166,10 @@
                 <invulnerableTicks>90</invulnerableTicks>
                 <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
                 <selfBurnOnHit>5</selfBurnOnHit>
-                <heatShieldEnergyFactor>0.25</heatShieldEnergyFactor>
+                <meleeLifeBurnLayers>10</meleeLifeBurnLayers>
+                <rangedLifeBurnLayers>2</rangedLifeBurnLayers>
+                <meleeSelfBurnBonusPer100>10</meleeSelfBurnBonusPer100>
+                <rangedSelfBurnBonusPer100>2</rangedSelfBurnBonusPer100>
             </li>
         </comps>
     </HediffDef>
@@ -150,12 +196,6 @@
                 <selfBurnRefillMaxFractionOfCap>0.3</selfBurnRefillMaxFractionOfCap>
                 <overburnDrainIntervalTicks>300</overburnDrainIntervalTicks>
                 <overburnDrainEnergy>1</overburnDrainEnergy>
-                <lowIgnoreDamage>20</lowIgnoreDamage>
-                <highIgnoreDamage>100</highIgnoreDamage>
-                <breakRecoverTicks>480</breakRecoverTicks>
-                <hitEnergyCost>10</hitEnergyCost>
-                <selfBurnNoCostThreshold>300</selfBurnNoCostThreshold>
-                <selfBurnOnNoCostHit>10</selfBurnOnNoCostHit>
                 <shieldSelfBurnMoteDef>MX_Mingyuan_Mote_ShieldSelfBurnLink</shieldSelfBurnMoteDef>
                 <shieldSelfBurnMoteScale>1</shieldSelfBurnMoteScale>
                 <shieldSelfBurnMoteCooldownTicks>60</shieldSelfBurnMoteCooldownTicks>
@@ -166,7 +206,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_RebirthFlame</defName>
         <label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</label>
-        <description>When Mingyuan falls, the flame buried in her body detonates and begins shaping her back from the ashes.</description>
+        <description>When Mingyuan falls, the flame buried in her body detonates, leaves a rebirth flame, and restores her after 30 seconds.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.36, 0.24)</defaultLabelColor>
         <isBad>false</isBad>
@@ -200,6 +240,20 @@
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
+        <renderNodeProperties>
+            <li>
+                <debugLabel>MX_Mingyuan_TimeBurnMark</debugLabel>
+                <workerClass>PawnRenderNodeWorker_Hediff</workerClass>
+                <texPath>MiliraXianMingyuan/Effect/TimeBurnMark</texPath>
+                <shaderTypeDef>MoteGlow</shaderTypeDef>
+                <overrideMeshSize>(1.58,1.58)</overrideMeshSize>
+                <color>(0.92,0.70,1.00,0.64)</color>
+                <parentTagDef>Root</parentTagDef>
+                <pawnType>Any</pawnType>
+                <rotDrawMode>Fresh, Rotting</rotDrawMode>
+                <baseLayer>76</baseLayer>
+            </li>
+        </renderNodeProperties>
     </HediffDef>
 
 </Defs>

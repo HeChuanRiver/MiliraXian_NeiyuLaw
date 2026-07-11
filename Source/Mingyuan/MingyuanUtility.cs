@@ -14,8 +14,6 @@ namespace MiliraXian.Characters.Mingyuan
         public const int TicksPerHour = 2500;
         public const float DefaultSelfBurnEffectiveCap = 300f;
 
-        private static readonly HashSet<DamageDef> HeatOrBlastDefs = new HashSet<DamageDef>();
-
         public static bool SuppressOnHitLifeBurn;
 
         public static HediffDef LifeBurnDef => MX_MingyuanDefOf.MX_Mingyuan_LifeBurn ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_LifeBurn");
@@ -269,6 +267,7 @@ namespace MiliraXian.Characters.Mingyuan
             dinfo.SetIgnoreArmor(true);
             dinfo.SetIgnoreInstantKillProtection(true);
             dinfo.SetApplyAllDamage(true);
+            bool previousSuppression = SuppressOnHitLifeBurn;
             try
             {
                 SuppressOnHitLifeBurn = true;
@@ -276,7 +275,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
             finally
             {
-                SuppressOnHitLifeBurn = false;
+                SuppressOnHitLifeBurn = previousSuppression;
             }
         }
 
@@ -338,33 +337,8 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool IsHeatOrExplosionDamage(DamageDef def)
         {
-            if (def == null)
-            {
-                return false;
-            }
-
-            if (HeatOrBlastDefs.Count == 0)
-            {
-                AddDamageDef("Burn");
-                AddDamageDef("Flame");
-                AddDamageDef("Bomb");
-                AddDamageDef("Explosion");
-            }
-
-            return HeatOrBlastDefs.Contains(def)
-                   || def.defName.IndexOf("Burn", System.StringComparison.OrdinalIgnoreCase) >= 0
-                   || def.defName.IndexOf("Flame", System.StringComparison.OrdinalIgnoreCase) >= 0
-                   || def.defName.IndexOf("Bomb", System.StringComparison.OrdinalIgnoreCase) >= 0
-                   || def.defName.IndexOf("Explosion", System.StringComparison.OrdinalIgnoreCase) >= 0;
-        }
-
-        private static void AddDamageDef(string defName)
-        {
-            DamageDef def = DefDatabase<DamageDef>.GetNamedSilentFail(defName);
-            if (def != null)
-            {
-                HeatOrBlastDefs.Add(def);
-            }
+            return def != null
+                   && (def.isExplosive || def.armorCategory?.armorRatingStat == StatDefOf.ArmorRating_Heat);
         }
 
         public static void ClearControlStates(Pawn pawn)

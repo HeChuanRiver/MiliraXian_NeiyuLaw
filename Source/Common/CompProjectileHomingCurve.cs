@@ -50,6 +50,7 @@ namespace MiliraXian.Characters
         public float retargetSearchRadius = 10f;
         public float retargetPawnWeight = 3.5f;
         public float retargetNonPawnWeight = 1.0f;
+        public bool useIntendedTargetDistanceForHomingLifetime = false;
 
         public CompProperties_ProjectileHomingCurve()
         {
@@ -265,15 +266,20 @@ namespace MiliraXian.Characters
         private int ResolveHomingLifetimeTicks(Projectile projectile, IProjectileHomingCurveHost host)
         {
             float speedPerTick = Mathf.Max(0.001f, projectile.def.projectile.SpeedTilesPerTick);
-            float maxRange = ResolveProjectileMaxRange(projectile, host);
+            float maxRange = ResolveProjectileMaxRange(projectile, host, Props.useIntendedTargetDistanceForHomingLifetime);
             float factor = Mathf.Max(0.05f, Props.homingLifetimeFactor);
             int lifetimeTicks = Mathf.CeilToInt(maxRange / speedPerTick * factor);
             return Mathf.Max(Props.minHomingTicksToImpact, lifetimeTicks);
         }
 
-        private static float ResolveProjectileMaxRange(Projectile projectile, IProjectileHomingCurveHost host)
+        private static float ResolveProjectileMaxRange(Projectile projectile, IProjectileHomingCurveHost host, bool preferIntendedTargetDistance)
         {
             float range = 0f;
+            float directDistance = ResolveDirectDistanceToIntendedTarget(projectile, host);
+            if (preferIntendedTargetDistance && directDistance > 0.01f)
+            {
+                return directDistance;
+            }
 
             range = Mathf.Max(range, ResolveRangeFromVerbList(projectile.EquipmentDef, projectile.def));
             Thing launcher = projectile.Launcher;
@@ -287,21 +293,32 @@ namespace MiliraXian.Characters
                 return range;
             }
 
-            LocalTargetInfo intendedTarget = host != null ? host.HomingIntendedTarget : LocalTargetInfo.Invalid;
-            if (intendedTarget.IsValid)
+            if (directDistance > 0.01f)
             {
-                Vector3 origin = host != null ? host.HomingExactPosition : projectile.ExactPosition;
-                Vector3 targetPos = intendedTarget.HasThing && intendedTarget.Thing != null
-                    ? intendedTarget.Thing.DrawPos
-                    : intendedTarget.Cell.ToVector3Shifted();
-                float directDistance = (targetPos - origin).Yto0().magnitude;
-                if (directDistance > 0.01f)
-                {
-                    return directDistance;
-                }
+                return directDistance;
             }
 
             return 30f;
+        }
+
+        private static float ResolveDirectDistanceToIntendedTarget(Projectile projectile, IProjectileHomingCurveHost host)
+        {
+            if (projectile == null)
+            {
+                return 0f;
+            }
+
+            LocalTargetInfo intendedTarget = host != null ? host.HomingIntendedTarget : LocalTargetInfo.Invalid;
+            if (!intendedTarget.IsValid)
+            {
+                return 0f;
+            }
+
+            Vector3 origin = host != null ? host.HomingExactPosition : projectile.ExactPosition;
+            Vector3 targetPos = intendedTarget.HasThing && intendedTarget.Thing != null
+                ? intendedTarget.Thing.DrawPos
+                : intendedTarget.Cell.ToVector3Shifted();
+            return (targetPos - origin).Yto0().magnitude;
         }
 
         private static float ResolveRangeFromVerbList(ThingDef sourceDef, ThingDef projectileDef)

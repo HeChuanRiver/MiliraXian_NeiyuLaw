@@ -72,7 +72,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>Long Rainbow</label>
-        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds and fires 4 high-arc arrows at any map-range target. Each arrow deals lighter direct damage, applies heavier Life Burn, and can ricochet among nearby enemies.</description>
+        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds and fires 4 high-arc arrows at any map-range target. Each arrow deals lighter direct damage, applies 300 Life Burn layers, and can ricochet among nearby enemies.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -148,17 +148,72 @@
             <damageDef>Arrow</damageDef>
             <damageAmountBase>10</damageAmountBase>
             <armorPenetrationBase>0.65</armorPenetrationBase>
-            <explosionRadius>2</explosionRadius>
             <speed>45</speed>
-            <arcHeightFactor>0.90</arcHeightFactor>
+            <arcHeightFactor>0</arcHeightFactor>
         </projectile>
+        <comps>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+                <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
+                <trailMaxPoints>10</trailMaxPoints>
+                <trailMinPointDistance>0.18</trailMinPointDistance>
+                <trailSmoothSubdivisions>1</trailSmoothSubdivisions>
+                <trailWidthStart>0.03</trailWidthStart>
+                <trailWidthEnd>0.14</trailWidthEnd>
+                <trailAlpha>0.70</trailAlpha>
+                <trailAltitudeOffset>0.80</trailAltitudeOffset>
+                <useProjectileGraphicColor>true</useProjectileGraphicColor>
+                <useGlowShader>true</useGlowShader>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+                <homingStartDelayTicks>2</homingStartDelayTicks>
+                <minHomingTicksToImpact>8</minHomingTicksToImpact>
+                <homingLifetimeFactor>1.15</homingLifetimeFactor>
+                <useIntendedTargetDistanceForHomingLifetime>true</useIntendedTargetDistanceForHomingLifetime>
+                <forceUsedTargetToIntended>true</forceUsedTargetToIntended>
+                <extraHomingTicks>2</extraHomingTicks>
+                <intendedHitMaxDistance>0.55</intendedHitMaxDistance>
+                <enableIntendedTargetSegmentHitCheck>true</enableIntendedTargetSegmentHitCheck>
+                <segmentHitRadiusMargin>0.10</segmentHitRadiusMargin>
+                <enableIntendedTargetOvershootFuse>true</enableIntendedTargetOvershootFuse>
+                <overshootFuseExtraRadius>0.24</overshootFuseExtraRadius>
+                <homingTurnLerp>0.12</homingTurnLerp>
+                <terminalSnapDistance>3.0</terminalSnapDistance>
+                <terminalSnapTurnLerp>0.90</terminalSnapTurnLerp>
+                <curveAmplitudeMin>0.08</curveAmplitudeMin>
+                <curveAmplitudeMax>0.22</curveAmplitudeMax>
+                <curveFrequency>0.16</curveFrequency>
+                <curveGuideDistanceFactor>0.35</curveGuideDistanceFactor>
+                <curveGuideDistanceMin>3.0</curveGuideDistanceMin>
+                <curveGuideDistanceMax>7.0</curveGuideDistanceMax>
+                <terminalLockDistance>1.05</terminalLockDistance>
+                <curveWobbleFadeDistance>4.2</curveWobbleFadeDistance>
+                <enableTurnStopWhenLikelyHit>true</enableTurnStopWhenLikelyHit>
+                <turnStopMinTargetRadius>0.42</turnStopMinTargetRadius>
+                <turnStopMargin>0.10</turnStopMargin>
+                <turnStopPredictTicks>3</turnStopPredictTicks>
+                <enableRetargetOnTargetLost>true</enableRetargetOnTargetLost>
+                <retargetMaxCount>2</retargetMaxCount>
+                <retargetRetryIntervalTicks>8</retargetRetryIntervalTicks>
+                <retargetSearchRadius>12</retargetSearchRadius>
+                <retargetPawnWeight>4.0</retargetPawnWeight>
+                <retargetNonPawnWeight>0.5</retargetNonPawnWeight>
+            </li>
+        </comps>
         <modExtensions>
             <li Class="MiliraXian.Characters.Mingyuan.MingyuanRainbowArrowExtension">
                 <bounceCount>6</bounceCount>
                 <bounceRadius>5</bounceRadius>
                 <maxHitsPerPawn>3</maxHitsPerPawn>
-                <lifeBurnLayers>8</lifeBurnLayers>
+                <lifeBurnLayers>300</lifeBurnLayers>
                 <scaleLifeBurnWithOverburn>true</scaleLifeBurnWithOverburn>
+                <requireBounceLineOfSight>true</requireBounceLineOfSight>
+                <skipDownedBounceTargets>true</skipDownedBounceTargets>
+                <bounceForwardWeight>10</bounceForwardWeight>
+                <bounceDistanceWeight>0.45</bounceDistanceWeight>
+                <bounceRepeatPenalty>18</bounceRepeatPenalty>
+                <visualArcHeight>0.90</visualArcHeight>
+                <glowScale>1.28</glowScale>
+                <glowColor>(1.00,0.62,0.24,0.58)</glowColor>
             </li>
         </modExtensions>
     </ThingDef>

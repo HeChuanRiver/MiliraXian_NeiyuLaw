@@ -7,9 +7,9 @@
   <MX_Mingyuan_LifeBurn_TipBurstDamage>Burst hit: {0} true burn damage</MX_Mingyuan_LifeBurn_TipBurstDamage>
   <MX_Mingyuan_LifeBurn_TipPeriodicDamage>Every 2s: {0} true burn damage</MX_Mingyuan_LifeBurn_TipPeriodicDamage>
   <MX_Mingyuan_LifeBurn_TipSelfStack>Every 2s: Life Burn self-stack +{0}</MX_Mingyuan_LifeBurn_TipSelfStack>
-  <MX_Mingyuan_LifeBurn_TipDecay>After {0}s without external stacks: -{1} layers every 2s</MX_Mingyuan_LifeBurn_TipDecay>
+  <MX_Mingyuan_LifeBurn_TipDecay>After {0}s without external stacks: loses {1} of current layers every 2s</MX_Mingyuan_LifeBurn_TipDecay>
   <MX_Mingyuan_LifeBurn_TipDebuffDown>Reduced: move speed, melee hit chance, shooting accuracy, global work speed, melee damage, ranged damage -{0}</MX_Mingyuan_LifeBurn_TipDebuffDown>
   <MX_Mingyuan_LifeBurn_TipDebuffUp>Increased: melee cooldown, ranged cooldown, incoming damage +{0}</MX_Mingyuan_LifeBurn_TipDebuffUp>
   <MX_Mingyuan_LifeBurn_TipNeedsAgeGear>Every 2s: needs -{0}, biological age +{1} ticks, equipment durability -{2}</MX_Mingyuan_LifeBurn_TipNeedsAgeGear>
-  <MX_Mingyuan_LifeBurn_TipTransfer>On death: splits {0} total layers among up to {3} nearest hostile pawns within {1} cells, with up to {2} transfer trails.</MX_Mingyuan_LifeBurn_TipTransfer>
+  <MX_Mingyuan_LifeBurn_TipTransfer>Death transfer: up to {2} nearest hostile pawns within {1} cells each gain {0} of their own burst threshold. The same pawn can receive this transfer once every {3}s.</MX_Mingyuan_LifeBurn_TipTransfer>
 </LanguageData>

@@ -2,6 +2,7 @@
 <LanguageData>
   <MX_Mingyuan_Enabled>enabled</MX_Mingyuan_Enabled>
   <MX_Mingyuan_Disabled>disabled</MX_Mingyuan_Disabled>
+  <MX_Mingyuan_RangedDamage_StatPart>Mingyuan burn state: x{0}</MX_Mingyuan_RangedDamage_StatPart>
   <MX_Mingyuan_SelfBurn_LabelExtra>{0} layers</MX_Mingyuan_SelfBurn_LabelExtra>
   <MX_Mingyuan_SelfBurn_LabelExtraOverburn>{0} layers, Overburn</MX_Mingyuan_SelfBurn_LabelExtraOverburn>
   <MX_Mingyuan_SelfBurn_TipCurrentLayers>Current Self Burn: {0} layers</MX_Mingyuan_SelfBurn_TipCurrentLayers>
