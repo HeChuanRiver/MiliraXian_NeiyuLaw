@@ -31,9 +31,9 @@
     </MiliraXian.Characters.SkillNodeCollectionDef>
 
     <MiliraXian.Characters.SkillNodeCollectionDef>
-        <defName>MX_QH_Tree_FlowerDance</defName>
-        <label>起舞之韵</label>
-        <description>“五陵年少争缠头，一曲红绡不知数”</description>
+        <defName>MX_QH_Tree_SwordDance</defName>
+        <label>剑舞</label>
+        <description>铃音敛入锋刃，剑势随四时共鸣而变。</description>
         <category>MX_QH_Category_Qinghe</category>
         <displayOrder>2</displayOrder>
     </MiliraXian.Characters.SkillNodeCollectionDef>
@@ -188,9 +188,9 @@
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Yingyue</defName>
         <label>映月残章</label>
-        <description>——习得被动特性：令花神之垂怜的可积累次数 +1</description>
+        <description>——习得心眼，并令花神之垂怜的可积累次数 +1</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_FlowerDance</collection>
+        <collection>MX_QH_Tree_SwordDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>40</y>
@@ -200,34 +200,33 @@
         <bookDescription>MX_QH_Book_Yingyue_Desc</bookDescription>
         <bookAcquirePriority>10</bookAcquirePriority>
         <bookAcquireWeight>1</bookAcquireWeight>
+        <grantedAbilities>
+            <li>MX_QH_EyeOfHeart</li>
+        </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
-        <defName>MX_QH_Node_NishangDance</defName>
-        <label>霓裳舞</label>
-        <description>——习得舞技：霓裳之舞，可强化自身的移速、闪避率和护盾，令护盾能在受到伤害后立刻开始回复</description>
+        <defName>MX_QH_Node_IllusoryReflection</defName>
+        <label>镜花水月</label>
+        <description>——习得剑技：镜花水月，进入无法中断的水月架势并反击近战攻击。</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_FlowerDance</collection>
+        <collection>MX_QH_Tree_SwordDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>80</y>
+        <initiallyLearned>true</initiallyLearned>
         <important>true</important>
-        <skillPoints>2</skillPoints>
-        <bookName>MX_QH_Book_NishangDance_Label</bookName>
-        <bookDescription>MX_QH_Book_NishangDance_Desc</bookDescription>
-        <bookAcquirePriority>10</bookAcquirePriority>
-        <bookAcquireWeight>1</bookAcquireWeight>
         <grantedAbilities>
-            <li>MX_QH_FlowerDance</li>
+            <li>MX_QH_IllusoryReflection</li>
         </grantedAbilities>
     </MiliraXian.Characters.SkillNodeDef>
 
     <MiliraXian.Characters.SkillNodeDef>
         <defName>MX_QH_Node_Jueying</defName>
         <label>剑势·绝影</label>
-        <description>清荷与老师霓羽交流后领悟的全新舞技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。——习得舞技：剑势·绝影，可对扇形范围内的敌方造成伤害，对建筑造成双倍伤害</description>
+        <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：剑势·绝影。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时可消耗全部剑压强化为7次范围斩击，否则造成3次单体斩击。</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_FlowerDance</collection>
+        <collection>MX_QH_Tree_SwordDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>120</y>
@@ -254,7 +253,7 @@
         <label>洛水之仪</label>
         <description>——习得主动能力：洛神的缎带，可以大幅改善任意两个殖民者之间的看法\n\n——习得被动特性：洛水之仪，提高自身的魅力和心情，如拥有配偶，还会建立心灵绑定</description>
         <category>MX_QH_Category_Qinghe</category>
-        <collection>MX_QH_Tree_FlowerDance</collection>
+        <collection>MX_QH_Tree_SwordDance</collection>
         <displayOrder>0</displayOrder>
         <column>0</column>
         <y>160</y>

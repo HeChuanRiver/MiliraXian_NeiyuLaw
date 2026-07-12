@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using RimWorld;
+using MiliraXian.Characters.QingHe.Hediffs;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Weapons
@@ -17,7 +18,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public FlowerBellResonance resonance;
         public ThingDef projectile;
         public ThingDef buildingProjectile;
-        public string resonanceDescription;
     }
 
     public class CompProperties_FlowerBellResonance : CompProperties
@@ -32,93 +32,54 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public class CompFlowerBellResonance : ThingComp
     {
-        private FlowerBellResonance resonance = FlowerBellResonance.Spring;
-        private bool extraBuildingDamage;
-
         public CompProperties_FlowerBellResonance Props => (CompProperties_FlowerBellResonance)props;
 
-        public FlowerBellResonance Resonance => resonance;
-
-        public bool ExtraBuildingDamage => extraBuildingDamage;
-
-        public ThingDef CurrentProjectile
+        public ThingDef CurrentProjectileFor(Pawn pawn)
         {
-            get
-            {
-                FlowerBellResonanceProjectileSet set = CurrentSet;
-                return extraBuildingDamage ? set?.buildingProjectile ?? set?.projectile : set?.projectile;
-            }
+            HediffComp_QingheCombatState state = MX_QH_HediffUtility.EnsureCombatState(pawn);
+            FlowerBellResonanceProjectileSet set = SetFor(state?.Resonance ?? FlowerBellResonance.Spring);
+            return state?.ExtraBuildingDamage == true ? set?.buildingProjectile ?? set?.projectile : set?.projectile;
         }
 
-        private FlowerBellResonanceProjectileSet CurrentSet
+        private FlowerBellResonanceProjectileSet SetFor(FlowerBellResonance resonance)
         {
-            get
-            {
-                if (Props?.settings == null)
-                {
-                    return null;
-                }
-
-                for (int i = 0; i < Props.settings.Count; i++)
-                {
-                    FlowerBellResonanceProjectileSet set = Props.settings[i];
-                    if (set != null && set.resonance == resonance)
-                    {
-                        return set;
-                    }
-                }
-
-                return Props.settings.Count > 0 ? Props.settings[0] : null;
-            }
-        }
-
-        public void SetResonance(FlowerBellResonance value)
-        {
-            resonance = value;
-        }
-
-        public override void PostExposeData()
-        {
-            Scribe_Values.Look(ref resonance, "mx_qh_flowerBell_resonance", FlowerBellResonance.Spring);
-            Scribe_Values.Look(ref extraBuildingDamage, "mx_qh_flowerBell_extraBuildingDamage", false);
-        }
-
-        public override string TransformLabel(string label)
-        {
-            return label + "【" + LabelFor(resonance) + "】";
-        }
-
-        public override string GetDescriptionPart()
-        {
-            string description = CurrentSet?.resonanceDescription;
-            if (description.NullOrEmpty())
+            if (Props?.settings == null)
             {
                 return null;
             }
 
-            return Translator.CanTranslate(description) ? description.Translate().ToString() : description;
+            for (int i = 0; i < Props.settings.Count; i++)
+            {
+                FlowerBellResonanceProjectileSet set = Props.settings[i];
+                if (set != null && set.resonance == resonance)
+                {
+                    return set;
+                }
+            }
+
+            return Props.settings.Count > 0 ? Props.settings[0] : null;
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            yield return BuildingDamageToggleGizmo();
+            yield break;
         }
 
-        public IEnumerable<Gizmo> EquippedGizmos()
+        public IEnumerable<Gizmo> EquippedGizmos(Pawn pawn)
         {
-            yield return BuildingDamageToggleGizmo();
+            yield return BuildingDamageToggleGizmo(pawn);
         }
 
-        private Gizmo BuildingDamageToggleGizmo()
+        private Gizmo BuildingDamageToggleGizmo(Pawn pawn)
         {
             return new Command_Toggle
             {
                 defaultLabel = "MX_QH_FlowerBellBuildingDamageLabel".Translate(),
                 defaultDesc = "MX_QH_FlowerBellBuildingDamageDesc".Translate(),
-                isActive = () => extraBuildingDamage,
+                isActive = () => MX_QH_HediffUtility.GetCombatState(pawn)?.ExtraBuildingDamage == true,
                 toggleAction = delegate
                 {
-                    extraBuildingDamage = !extraBuildingDamage;
+                    MX_QH_HediffUtility.EnsureCombatState(pawn)?.ToggleExtraBuildingDamage();
                 }
             };
         }
@@ -154,7 +115,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 yield break;
             }
 
-            foreach (Gizmo gizmo in resonanceComp.EquippedGizmos())
+            Pawn pawn = PrimaryVerb?.CasterPawn;
+            foreach (Gizmo gizmo in resonanceComp.EquippedGizmos(pawn))
             {
                 yield return gizmo;
             }

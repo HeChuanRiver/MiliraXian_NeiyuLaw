@@ -4,6 +4,12 @@
   <MX_QH_FlowerDecree.description>隱藏Hediff：資源計數器</MX_QH_FlowerDecree.description>
   <MX_QH_FlowerDecree.comps.0.resourceLabel>花令</MX_QH_FlowerDecree.comps.0.resourceLabel>
   <MX_QH_FlowerDecree.comps.0.resourceDescription>清荷的充能型層數資源，用於釋放四時飛花令。</MX_QH_FlowerDecree.comps.0.resourceDescription>
+  <MX_QH_CombatState.label>四時共鳴</MX_QH_CombatState.label>
+  <MX_QH_CombatState.description>隱藏狀態：記錄清荷目前的四時共鳴。</MX_QH_CombatState.description>
+  <MX_QH_SwordPressure.label>劍壓</MX_QH_SwordPressure.label>
+  <MX_QH_SwordPressure.description>隱藏狀態：清荷近戰模式使用的戰鬥資源。</MX_QH_SwordPressure.description>
+  <MX_QH_SwordPressure.comps.0.resourceLabel>劍壓</MX_QH_SwordPressure.comps.0.resourceLabel>
+  <MX_QH_SwordPressure.comps.0.resourceDescription>揮劍命中敵人或成功發動心眼時積累。未完成的一段劍壓會在停止獲取後逐漸消退。</MX_QH_SwordPressure.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>靜思</MX_QH_MeditativeStillness.label>
   <MX_QH_MeditativeStillness.description>冥想或者讀書可以積累靜思，清荷進行藝術創作和手工製作都會基於當前積累的量消耗靜思，並給予一定品質加成。</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>靜思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
@@ -26,6 +32,6 @@
   <MX_QH_LuoshenContract.description>隱藏狀態：記錄清荷與配偶之間的洛神契綁定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，並免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlow.description>
-  <MX_QH_FlowerDance.label>霓裳之舞</MX_QH_FlowerDance.label>
-  <MX_QH_FlowerDance.description>清荷進入起舞狀態，移動速度、閃避與花令回復提升，護盾可在受擊後立即開始回充。</MX_QH_FlowerDance.description>
+  <MX_QH_EyeOfHeartState.label>心眼</MX_QH_EyeOfHeartState.label>
+  <MX_QH_EyeOfHeartState.description>清荷正凝神觀察來襲的攻擊。</MX_QH_EyeOfHeartState.description>
 </LanguageData>

@@ -28,6 +28,26 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
         }
 
+        public static HediffComp_QingheCombatState EnsureCombatState(Pawn pawn)
+        {
+            return EnsureHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
+        }
+
+        public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
+        {
+            return GetHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
+        }
+
+        public static HediffComp_SwordPressure EnsureSwordPressure(Pawn pawn)
+        {
+            return PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
+        }
+
+        public static HediffComp_SwordPressure GetSwordPressure(Pawn pawn)
+        {
+            return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
+        }
+
         public static HediffComp_MeditativeStillness EnsureMeditativeStillness(Pawn pawn)
         {
             if (!MX_QHCharacterUtility.IsQinghe(pawn))
@@ -91,6 +111,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_Trickle);
             EnsureFlowerResonance(pawn);
             EnsureFlowerDecree(pawn);
+            EnsureCombatState(pawn);
+            EnsureSwordPressure(pawn);
             EnsureMeditativeStillness(pawn);
 
             GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();

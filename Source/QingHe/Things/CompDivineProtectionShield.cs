@@ -183,6 +183,10 @@ namespace MiliraXian.Characters.QingHe.Things
             }
             float damageCap = ShieldDamageCap;
             float shieldDamage = damageCap > 0f ? Mathf.Min(dinfo.Amount, damageCap) : Mathf.Max(0f, dinfo.Amount);
+            if (QingHe.Things.Weapons.QingheSwordCombatUtility.IsSwordMode(owner))
+            {
+                shieldDamage *= 0.5f;
+            }
             if (shieldDamage <= 0f)
             {
                 return;
@@ -228,6 +232,21 @@ namespace MiliraXian.Characters.QingHe.Things
         public override bool CompAllowVerbCast(Verb verb)
         {
             return true;
+        }
+
+        public void RestoreEnergy(float amount)
+        {
+            if (amount <= 0f || InBreak)
+            {
+                return;
+            }
+
+            energy = Mathf.Min(MaxEnergy, energy + amount);
+        }
+
+        public void RestoreFraction(float fraction)
+        {
+            RestoreEnergy(MaxEnergy * Mathf.Max(0f, fraction));
         }
 
         private void Break()

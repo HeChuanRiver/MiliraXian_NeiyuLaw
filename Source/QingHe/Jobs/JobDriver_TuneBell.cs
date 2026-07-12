@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Things;
 using MiliraXian.Characters.QingHe.Things.Weapons;
+using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -10,12 +11,9 @@ namespace MiliraXian.Characters.QingHe.Jobs
     public class JobDriver_TuneBell : JobDriver
     {
         private const TargetIndex PondIndex = TargetIndex.A;
-        private const TargetIndex WeaponIndex = TargetIndex.B;
         private const int TuneTicks = 360;
 
         private Building LotusPond => job.GetTarget(PondIndex).Thing as Building;
-
-        private ThingWithComps FlowerBell => job.GetTarget(WeaponIndex).Thing as ThingWithComps;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -28,7 +26,6 @@ namespace MiliraXian.Characters.QingHe.Jobs
             this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
             this.FailOnDespawnedNullOrForbidden(PondIndex);
             this.FailOnBurningImmobile(PondIndex);
-            this.FailOn(() => FlowerBell?.TryGetComp<CompFlowerBellResonance>() == null);
 
             yield return Toils_Goto.GotoThing(PondIndex, PathEndMode.InteractionCell);
             yield return Toils_General.Wait(TuneTicks)
@@ -39,14 +36,14 @@ namespace MiliraXian.Characters.QingHe.Jobs
             Toil finish = ToilMaker.MakeToil("FinishTuningFlowerBellAtLotusPond");
             finish.initAction = delegate
             {
-                CompFlowerBellResonance comp = FlowerBell?.TryGetComp<CompFlowerBellResonance>();
-                if (comp == null)
+                HediffComp_QingheCombatState state = MX_QH_HediffUtility.EnsureCombatState(pawn);
+                if (state == null)
                 {
                     Messages.Message("MX_QH_TuneFlowerBellNoWeapon".Translate(), pawn, MessageTypeDefOf.RejectInput, historical: false);
                     return;
                 }
 
-                comp.SetResonance((FlowerBellResonance)job.count);
+                state.SetResonance((FlowerBellResonance)job.count);
             };
             finish.defaultCompleteMode = ToilCompleteMode.Instant;
             yield return finish;

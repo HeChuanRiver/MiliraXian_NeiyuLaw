@@ -8,8 +8,8 @@
   <MX_QH_Tree_DivineFortune.description>憋不出来了，总之是一句简介</MX_QH_Tree_DivineFortune.description>
   <MX_QH_Tree_DivineFortune.completionEffectLabel>全部习得效果：</MX_QH_Tree_DivineFortune.completionEffectLabel>
   <MX_QH_Tree_DivineFortune.completionEffectDescription>刚柔并济——护盾受到高额伤害时触发额外保护，单次护盾受伤最高不会超过20点</MX_QH_Tree_DivineFortune.completionEffectDescription>
-  <MX_QH_Tree_FlowerDance.label>起舞之韵</MX_QH_Tree_FlowerDance.label>
-  <MX_QH_Tree_FlowerDance.description>“五陵年少争缠头，一曲红绡不知数”</MX_QH_Tree_FlowerDance.description>
+  <MX_QH_Tree_SwordDance.label>剑舞</MX_QH_Tree_SwordDance.label>
+  <MX_QH_Tree_SwordDance.description>铃音敛入锋刃，剑势随四时共鸣而变。</MX_QH_Tree_SwordDance.description>
   <MX_QH_Tree_FlowerMastery.label>百花玉音</MX_QH_Tree_FlowerMastery.label>
   <MX_QH_Tree_FlowerMastery.description>静心明过方可习得的花之真传</MX_QH_Tree_FlowerMastery.description>
 </LanguageData>

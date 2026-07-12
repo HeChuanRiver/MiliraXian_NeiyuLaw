@@ -2,6 +2,8 @@
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Jobs;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,6 +37,22 @@ namespace MiliraXian.Characters.QingHe
                 {
                     priority = Priority.Last
                 });
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Verb_MeleeAttack), "SoundDodge", new[] { typeof(Thing) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbMeleeAttack_SoundDodge_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Projectile), "ImpactSomething"),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Projectile_ImpactSomething_Prefix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(VerbProperties), nameof(VerbProperties.AdjustedArmorPenetration), new[] { typeof(Verb), typeof(Pawn) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbProperties_AdjustedArmorPenetration_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras_Prefix)));
 
             patcher.Patch(AccessTools.Method(typeof(InspirationWorker), nameof(InspirationWorker.CommonalityFor)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_InspirationWorker_CommonalityFor_Postfix)));
@@ -125,6 +143,17 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
+            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
+                ? __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
+                : null;
+            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(dinfo);
+
+            JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
+            {
+                return false;
+            }
+
             if (!HasDamageImmunityHediff(__instance))
             {
                 return true;
@@ -145,7 +174,9 @@ namespace MiliraXian.Characters.QingHe
             return (MX_QHDefOf.MX_QH_DivineBlessingImmunity != null
                     && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) != null)
                 || (MX_QHDefOf.MX_QH_AscentSlashInvulnerable != null
-                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) != null);
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) != null)
+                || (MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable) != null);
         }
 
         public static void Patch_Pawn_PreApplyDamage_Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
@@ -224,6 +255,110 @@ namespace MiliraXian.Characters.QingHe
             }
 
             __result = AppendQingheLotusPondMeditationSpots(__result, pawn, allowFallbackSpots);
+        }
+
+        public static void Patch_VerbProperties_AdjustedArmorPenetration_Postfix(Verb ownerVerb, Pawn attacker, ref float __result)
+        {
+            if (!QingheSwordCombatUtility.IsSwordMode(attacker)
+                || QingheSwordCombatUtility.ResonanceFor(attacker) != FlowerBellResonance.Autumn
+                || ownerVerb?.EquipmentSource?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
+            {
+                return;
+            }
+
+            __result *= 1.5f;
+        }
+
+        public static bool Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras_Prefix(Pawn pawn, Vector3 drawPos, Rot4 facing)
+        {
+            ThingWithComps weapon = pawn?.equipment?.Primary;
+            JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            if (reflection == null
+                || weapon?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
+            {
+                return true;
+            }
+
+            Rot4 stanceFacing = reflection.StanceFacing;
+            float drawFactor = pawn.ageTracker.CurLifeStage.equipmentDrawDistanceFactor;
+            float angle;
+            Vector3 offset;
+            switch (stanceFacing.AsInt)
+            {
+                case 0:
+                    angle = 18f;
+                    offset = new Vector3(0f, 0f, -0.08f);
+                    break;
+                case 1:
+                    angle = 72f;
+                    offset = new Vector3(0.20f, 0f, -0.16f);
+                    break;
+                case 2:
+                    angle = 162f;
+                    offset = new Vector3(0f, 0f, -0.20f);
+                    break;
+                default:
+                    angle = 288f;
+                    offset = new Vector3(-0.20f, 0f, -0.16f);
+                    break;
+            }
+
+            const float settleDurationTicks = 18f;
+            float settleProgress = Mathf.Clamp01(reflection.StanceElapsedTicks / settleDurationTicks);
+            float settleRemaining = 1f - Mathf.SmoothStep(0f, 1f, settleProgress);
+            float startAngleOffset = stanceFacing == Rot4.North || stanceFacing == Rot4.East
+                ? -6f
+                : 6f;
+            angle += startAngleOffset * settleRemaining;
+            offset += new Vector3(0f, 0f, 0.04f * settleRemaining);
+            PawnRenderUtility.DrawEquipmentAiming(weapon, drawPos + offset * drawFactor, angle);
+
+            if (pawn.apparel != null)
+            {
+                for (int i = 0; i < pawn.apparel.WornApparel.Count; i++)
+                {
+                    pawn.apparel.WornApparel[i].DrawWornExtras();
+                }
+            }
+            return false;
+        }
+
+        public static void Patch_VerbMeleeAttack_SoundDodge_Postfix(Verb_MeleeAttack __instance, Thing target)
+        {
+            NotifyHostileAttackAttempt(target as Pawn, __instance?.CasterPawn);
+        }
+
+        public static void Patch_Projectile_ImpactSomething_Prefix(
+            Projectile __instance,
+            LocalTargetInfo ___intendedTarget,
+            Thing ___launcher)
+        {
+            Pawn target = ___intendedTarget.Pawn;
+            if (target == null
+                || !target.Spawned
+                || target.MapHeld != __instance?.MapHeld
+                || target.Position != __instance.Position)
+            {
+                return;
+            }
+
+            NotifyHostileAttackAttempt(target, ___launcher);
+        }
+
+        private static void NotifyHostileAttackAttempt(Pawn target, Thing instigator)
+        {
+            if (target?.health?.hediffSet == null || instigator == null)
+            {
+                return;
+            }
+
+            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
+                ? target.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
+                : null;
+            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(instigator);
+
+            JobDriver_IllusoryReflectionStance reflection = target.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            reflection?.TryHandleAttackAttempt(instigator);
         }
 
         private static IEnumerable<LocalTargetInfo> AppendQingheLotusPondMeditationSpots(

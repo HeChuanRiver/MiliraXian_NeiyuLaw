@@ -19,6 +19,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool destroyOldWeapon = true;
         public bool requirePrimary = true;
+        public bool blockWhilePawnBusy;
         public int cooldownTicks = 0;
 
         public CompProperties_ModeSwitchWeapon()
@@ -171,6 +172,8 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             bool onCooldown = Props.cooldownTicks > 0 && Find.TickManager.TicksGame - lastToggleTick < Props.cooldownTicks;
+            bool pawnBusy = Props.blockWhilePawnBusy && PawnUnavailableForSwitch(context.Pawn);
+            bool directSwitch = Props.formWeaponDefs.Count == 2;
 
             string commandLabel = ResolveText(Props.commandLabel, "MX_ModeSwitch_CommandLabel");
             string commandDesc = ResolveText(Props.commandDesc, "MX_ModeSwitch_CommandDesc");
@@ -178,13 +181,21 @@ namespace MiliraXian.Characters.Neiyu
 
             Command_Action cmd = new Command_Action
             {
-                defaultLabel = "MX_ModeSwitch_CommandLabelWithForm".Translate(commandLabel, currentFormLabel).ToString(),
-                defaultDesc = "MX_ModeSwitch_CommandFullDesc".Translate(commandDesc, currentFormLabel).ToString(),
+                defaultLabel = directSwitch
+                    ? commandLabel
+                    : "MX_ModeSwitch_CommandLabelWithForm".Translate(commandLabel, currentFormLabel).ToString(),
+                defaultDesc = directSwitch
+                    ? commandDesc
+                    : "MX_ModeSwitch_CommandFullDesc".Translate(commandDesc, currentFormLabel).ToString(),
                 icon = GetFormIcon(previewIndex) ?? GetFormIcon(context.CurrentIndex) ?? TexCommand.Attack,
-                Disabled = onCooldown
+                Disabled = onCooldown || pawnBusy
             };
 
-            if (onCooldown)
+            if (pawnBusy)
+            {
+                cmd.disabledReason = "MX_ModeSwitch_PawnBusy".Translate().ToString();
+            }
+            else if (onCooldown)
             {
                 int ticksLeft = Props.cooldownTicks - (Find.TickManager.TicksGame - lastToggleTick);
                 cmd.disabledReason = "MX_ModeSwitch_Cooldown".Translate((ticksLeft / 60f).ToString("F1")).ToString();
@@ -192,7 +203,14 @@ namespace MiliraXian.Characters.Neiyu
 
             cmd.action = delegate
             {
-                OpenSwitchMenu(context);
+                if (directSwitch)
+                {
+                    TrySwitchTo(context, previewIndex);
+                }
+                else
+                {
+                    OpenSwitchMenu(context);
+                }
             };
 
             return cmd;
@@ -272,7 +290,7 @@ namespace MiliraXian.Characters.Neiyu
                 && index < Props.formLabels.Count
                 && !string.IsNullOrEmpty(Props.formLabels[index]))
             {
-                return Props.formLabels[index];
+                return ResolveText(Props.formLabels[index], Props.formLabels[index]);
             }
 
             ThingDef def = Props?.formWeaponDefs != null && index >= 0 && index < Props.formWeaponDefs.Count
@@ -332,6 +350,11 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             if (Props.cooldownTicks > 0 && Find.TickManager.TicksGame - lastToggleTick < Props.cooldownTicks)
+            {
+                return;
+            }
+
+            if (Props.blockWhilePawnBusy && PawnUnavailableForSwitch(pawn))
             {
                 return;
             }
@@ -428,6 +451,15 @@ namespace MiliraXian.Characters.Neiyu
             {
                 thing.Destroy(DestroyMode.Vanish);
             }
+        }
+
+        private static bool PawnUnavailableForSwitch(Pawn pawn)
+        {
+            return pawn == null
+                || pawn.Downed
+                || pawn.Dead
+                || pawn.stances?.stunner?.Stunned == true
+                || pawn.jobs?.curDriver?.PlayerInterruptable == false;
         }
     }
 

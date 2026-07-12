@@ -32,6 +32,9 @@
             </targetParams>
         </verbProperties>
         <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
@@ -70,6 +73,9 @@
             </targetParams>
         </verbProperties>
         <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpiritBurst">
                 <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
                 <resourceCost>2</resourceCost>
@@ -132,6 +138,9 @@
             </targetParams>
         </verbProperties>
         <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
                 <shieldDef>MX_QH_LunarMirror</shieldDef>
                 <durationTicks>1200</durationTicks>
@@ -144,13 +153,13 @@
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_FlowerDance</defName>
-        <label>霓裳之舞</label>
-        <description>消耗3点花令，进入起舞状态，提升移动速度、闪避与花令回复，并使花神之眷顾在受击后立刻回充。持续1小时。</description>
+        <defName>MX_QH_EyeOfHeart</defName>
+        <label>心眼</label>
+        <description>凝神持续1秒。期间遭到任何敌对攻击时，无论攻击是否命中或造成伤害，立即回复10%的莲华护盾并获得1点剑压。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>220</displayOrder>
-        <cooldownTicksRange>7500</cooldownTicksRange>
+        <cooldownTicksRange>900</cooldownTicksRange>
         <targetRequired>false</targetRequired>
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
@@ -159,26 +168,93 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>false</targetable>
             <range>1</range>
-            <warmupTime>2.35</warmupTime>
+            <warmupTime>0</warmupTime>
+            <nonInterruptingSelfCast>true</nonInterruptingSelfCast>
             <targetParams>
                 <canTargetSelf>true</canTargetSelf>
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityFlowerDance">
-                <hediffDef>MX_QH_FlowerDance</hediffDef>
-                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-                <resourceCost>3</resourceCost>
-                <durationTicks>2500</durationTicks>
-                <missingResourceMessage>MX_QH_FlowerDanceMissingResource</missingResourceMessage>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityEyeOfHeart">
+                <stateHediff>MX_QH_EyeOfHeartState</stateHediff>
+                <durationTicks>60</durationTicks>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QH_IllusoryReflection</defName>
+        <label>镜花水月</label>
+        <description>向所选方向举刀进入持续5秒且无法主动中断的防御架势，受到范围内的任意攻击时，化解此次攻击并立即消耗一层剑压发动高威力斩击。剑压不足1层时也能发动，但斩击威力将大幅削弱。\n\n防御架势期间受到范围外的攻击伤害降低60%。\n\n——镜花水月，如梦似幻。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>225</displayOrder>
+        <cooldownTicksRange>1800</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <jobDef>MX_QH_IllusoryReflection</jobDef>
+        <waitForJobEnd>true</waitForJobEnd>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>0</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityIllusoryReflection">
+                <durationTicks>300</durationTicks>
+                <normalDamage>24</normalDamage>
+                <empoweredDamage>96</empoweredDamage>
+                <armorPenetration>1.25</armorPenetration>
+                <coneRadius>4.5</coneRadius>
+                <coneAngleDegrees>180</coneAngleDegrees>
+                <invulnerabilityHediff>MX_QH_IllusoryReflectionInvulnerable</invulnerabilityHediff>
+                <invulnerabilityTicks>120</invulnerabilityTicks>
+                <eyeOfHeartCooldownReductionTicks>600</eyeOfHeartCooldownReductionTicks>
+                <normalSlashFleck>MX_QH_Fleck_MirrorSlashNormal</normalSlashFleck>
+                <normalSlashVisualScale>3.2</normalSlashVisualScale>
+                <normalSlashVisualForwardOffset>0</normalSlashVisualForwardOffset>
+                <normalSlashVisualAngleOffsetDegrees>0</normalSlashVisualAngleOffsetDegrees>
+                <mirrorSlashTexPath>MiliraXianQinghe/Effect/flower_divination_slash_2</mirrorSlashTexPath>
+                <mirrorSlashRevealSeconds>0.11</mirrorSlashRevealSeconds>
+                <mirrorSlashHoldSeconds>0.01</mirrorSlashHoldSeconds>
+                <mirrorSlashFadeSeconds>0.56</mirrorSlashFadeSeconds>
+                <mirrorSlashDrawSizeFactor>1.35</mirrorSlashDrawSizeFactor>
+                <mirrorSlashForwardOffsetFactor>0.02</mirrorSlashForwardOffsetFactor>
+                <mirrorSlashAngleOffsetDegrees>0</mirrorSlashAngleOffsetDegrees>
+                <mirrorSlashHeadWidth>0.238</mirrorSlashHeadWidth>
+                <mirrorSlashHeadIntensity>3.3</mirrorSlashHeadIntensity>
+                <mirrorSlashAdditiveIntensity>3.95</mirrorSlashAdditiveIntensity>
+                <mirrorSlashDistortionStrength>0.155</mirrorSlashDistortionStrength>
+                <mirrorSlashDistortionScale>0.36</mirrorSlashDistortionScale>
+                <mirrorSlashDistortionScrollX>0.17</mirrorSlashDistortionScrollX>
+                <mirrorSlashDistortionScrollY>0</mirrorSlashDistortionScrollY>
+                <mirrorSlashDistortionOpacity>0.65</mirrorSlashDistortionOpacity>
             </li>
         </comps>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_QH_AscentSlash</defName>
-        <label>剑势·绝影</label>
-        <description>从霓羽处习得的舞技。消耗1点花令，高高跃起，随后冲向目标位置，对面前的扇形区域内敌人造成伤害和击飞，此技能可对建筑造成双倍伤害。</description>
+        <label>必杀剑：落樱</label>
+        <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动数次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>230</displayOrder>
@@ -192,8 +268,8 @@
             <targetable>true</targetable>
             <range>19</range>
             <warmupTime>0.55</warmupTime>
-            <requireLineOfSight>true</requireLineOfSight>
-            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
+            <requireLineOfSight>false</requireLineOfSight>
+            <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -203,13 +279,28 @@
             </targetParams>
         </verbProperties>
         <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
-                <flyerDef>MX_QH_AscentSlashFlyer</flyerDef>
                 <knockbackFlyerDef>MX_QH_AscentSlashKnockbackFlyer</knockbackFlyerDef>
                 <range>19</range>
-                <coneRadius>5.5</coneRadius>
-                <coneAngleDegrees>90</coneAngleDegrees>
-                <damageDef>MX_QH_NoteImpact</damageDef>
+                <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
+                <dashDurationMinTicks>8</dashDurationMinTicks>
+                <dashCollisionRadius>1.35</dashCollisionRadius>
+                <dashImpactRadius>1.8</dashImpactRadius>
+                <dashDamageAmount>10</dashDamageAmount>
+                <takeoffDelayTicks>18</takeoffDelayTicks>
+                <ascentTicks>52</ascentTicks>
+                <hoverTicks>22</hoverTicks>
+                <descentTicks>14</descentTicks>
+                <ascentDecelerationPower>2.2</ascentDecelerationPower>
+                <descentAccelerationPower>2.4</descentAccelerationPower>
+                <secondStageTrackingRange>4</secondStageTrackingRange>
+                <secondStageLimitedFollowDistance>1.5</secondStageLimitedFollowDistance>
+                <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
+                <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
+                <secondImpactRadius>2</secondImpactRadius>
                 <damageAmount>32</damageAmount>
                 <armorPenetration>0.35</armorPenetration>
                 <accumulationAbnormals>
@@ -220,7 +311,23 @@
                 <buildingDamageMultiplier>2</buildingDamageMultiplier>
                 <stunTicks>60</stunTicks>
                 <knockbackDistance>4</knockbackDistance>
-                <flowerDecreeCost>1</flowerDecreeCost>
+                <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
+                <empoweredSlashCount>7</empoweredSlashCount>
+                <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>
+                <empoweredSlashRadius>1</empoweredSlashRadius>
+                <empoweredSlashFleck>MX_QH_Fleck_MirrorSlashNormal</empoweredSlashFleck>
+                <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
+                <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
+                <normalSlashCount>3</normalSlashCount>
+                <postHitRecoveryPoints>2</postHitRecoveryPoints>
+                <postHitRecoveryTicks>600</postHitRecoveryTicks>
+                <impactDelayTicks>30</impactDelayTicks>
+                <takeoffGroundFleck>MXNL_Skyfall_FlyBegin_G</takeoffGroundFleck>
+                <takeoffGroundFleckSize>(4.8,1.9)</takeoffGroundFleckSize>
+                <takeoffGroundFleckOffset>(0,0)</takeoffGroundFleckOffset>
+                <ascentTrailFleck>MXNL_Skyfall_FlyBegin_F</ascentTrailFleck>
+                <ascentTrailFleckSize>(1.1,10.1)</ascentTrailFleckSize>
+                <ascentTrailFleckOffset>(0,4)</ascentTrailFleckOffset>
             </li>
         </comps>
     </AbilityDef>
@@ -259,6 +366,9 @@
             </targetParams>
         </verbProperties>
         <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLuoshenRibbon">
                 <destination>Selected</destination>
                 <psychic>true</psychic>

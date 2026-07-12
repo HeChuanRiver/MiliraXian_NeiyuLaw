@@ -16,4 +16,16 @@
         <checkOverrideOnDamage>Always</checkOverrideOnDamage>
     </JobDef>
 
+    <JobDef>
+        <defName>MX_QH_IllusoryReflection</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_IllusoryReflectionStance</driverClass>
+        <reportString>正在维持水月架势。</reportString>
+        <playerInterruptible>false</playerInterruptible>
+        <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+        <casualInterruptible>false</casualInterruptible>
+        <suspendable>false</suspendable>
+        <alwaysShowWeapon>true</alwaysShowWeapon>
+        <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+    </JobDef>
+
 </Defs>

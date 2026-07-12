@@ -2,8 +2,8 @@
 <Defs>
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
-    <label>花信铃</label>
-    <description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。/n/n可开启共振模式，共振音符将对建筑造成三倍伤害。（此效果用于针对建筑无法受到异常状态影响的补偿）</description>
+    <label>花信风铃</label>
+    <description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。\n\n共鸣音符将对建筑造成三倍伤害，以补偿建筑无法受到异常状态影响。</description>
     <recipeMaker Inherit="False" IsNull="True" />
     <techLevel>Archotech</techLevel>
     <smeltable>false</smeltable>
@@ -33,6 +33,20 @@
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_QingheResonantWeaponLabel">
+        <resonanceLabels>
+          <li>MX_QH_FlowerBellResonanceSpring</li>
+          <li>MX_QH_FlowerBellResonanceSummer</li>
+          <li>MX_QH_FlowerBellResonanceAutumn</li>
+          <li>MX_QH_FlowerBellResonanceWinter</li>
+        </resonanceLabels>
+        <resonanceDescriptions>
+          <li>MX_QH_FlowerBellResonanceDescriptionSpring</li>
+          <li>MX_QH_FlowerBellResonanceDescriptionSummer</li>
+          <li>MX_QH_FlowerBellResonanceDescriptionAutumn</li>
+          <li>MX_QH_FlowerBellResonanceDescriptionWinter</li>
+        </resonanceDescriptions>
+      </li>
       <li>
         <compClass>MiliraXian.Characters.QingHe.Things.Weapons.CompEquippable_FlowerBell</compClass>
       </li>
@@ -43,28 +57,45 @@
             <resonance>Spring</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Spring</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Spring_Building</buildingProjectile>
-            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionSpring</resonanceDescription>
           </li>
           <li>
             <resonance>Summer</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Summer</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Summer_Building</buildingProjectile>
-            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionSummer</resonanceDescription>
           </li>
           <li>
             <resonance>Autumn</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Autumn</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Autumn_Building</buildingProjectile>
-            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionAutumn</resonanceDescription>
           </li>
           <li>
             <resonance>Winter</resonance>
             <projectile>MX_Bullet_Qinghe_FlowerBell_Winter</projectile>
             <buildingProjectile>MX_Bullet_Qinghe_FlowerBell_Winter_Building</buildingProjectile>
-            <resonanceDescription>MX_QH_FlowerBellResonanceDescriptionWinter</resonanceDescription>
           </li>
         </settings>
       </li>
+      <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+        <formWeaponDefs>
+          <li>MX_QH_Weapon_FlowerBell</li>
+          <li>MX_QH_Weapon_Sword</li>
+        </formWeaponDefs>
+        <formLabels>
+          <li>MX_QH_WeaponFormFlowerBell</li>
+          <li>MX_QH_WeaponFormSword</li>
+        </formLabels>
+        <formIconPaths>
+          <li>MiliraXianNeiyu/Items/FlowerStick</li>
+          <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+        </formIconPaths>
+        <commandLabel>MX_QH_ModeSwitchCommandLabel</commandLabel>
+        <commandDesc>MX_QH_ModeSwitchCommandDesc</commandDesc>
+        <destroyOldWeapon>true</destroyOldWeapon>
+        <requirePrimary>true</requirePrimary>
+        <blockWhilePawnBusy>true</blockWhilePawnBusy>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+      <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
     </comps>
     <verbs>
       <li>

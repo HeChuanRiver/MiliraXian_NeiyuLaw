@@ -29,6 +29,7 @@
   <MX_ModeSwitch_CommandLabelWithForm>{0}: {1}</MX_ModeSwitch_CommandLabelWithForm>
   <MX_ModeSwitch_CommandFullDesc>{0}&#10;&#10;Current: {1}&#10;Click to choose the target form.</MX_ModeSwitch_CommandFullDesc>
   <MX_ModeSwitch_Cooldown>On cooldown: {0}s</MX_ModeSwitch_Cooldown>
+  <MX_ModeSwitch_PawnBusy>The current action cannot be interrupted by switching weapons.</MX_ModeSwitch_PawnBusy>
   <MX_ModeSwitch_NoTargetForm>No target form is available.</MX_ModeSwitch_NoTargetForm>
   <MX_ModeSwitch_TargetFormMissing>Target form is not configured.</MX_ModeSwitch_TargetFormMissing>
   <MX_ModeSwitch_TargetFormInvalidThing>Target form is not a valid thing: {0}</MX_ModeSwitch_TargetFormInvalidThing>
@@ -133,11 +134,19 @@
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>Not enough Flower Decree to cast Spirit Burst.</MX_QH_SpiritBurstMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_FlowerDanceMissingResource>Not enough Flower Decree to perform Nishang Dance.</MX_QH_FlowerDanceMissingResource>
-  <MX_QH_FlowerDanceNotLearned>Nishang Dance has not been learned.</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_RequiresSwordMode>Sanhua must be equipped.</MX_QH_RequiresSwordMode>
+  <MX_QH_RequiresBellMode>The Flower-Tiding Bell must be equipped.</MX_QH_RequiresBellMode>
+  <MX_QH_WeaponFormFlowerBell>Flower-Tiding Bell</MX_QH_WeaponFormFlowerBell>
+  <MX_QH_WeaponFormSword>Sanhua</MX_QH_WeaponFormSword>
+  <MX_QH_ModeSwitchCommandLabel>Switch weapon</MX_QH_ModeSwitchCommandLabel>
+  <MX_QH_ModeSwitchCommandDesc>Switch between the Flower-Tiding Bell and Sanhua.</MX_QH_ModeSwitchCommandDesc>
+  <MX_QH_SwordPressureLabel>Sword Pressure</MX_QH_SwordPressureLabel>
+  <MX_QH_SwordPressureValueLine>Sword Pressure: {0} / {1}</MX_QH_SwordPressureValueLine>
+  <MX_QH_SwordModeDodgeExplanation>Sanhua stance: greatly increased melee dodge</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
-  <MX_QH_FlowerDanceLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_FlowerDanceLandingNoLineOfSight>
-  <MX_QH_FlowerDanceInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_FlowerDanceInvalidLanding>
+  <MX_QH_AscentSlashInProgress>Sword Form: Jueying is already in progress.</MX_QH_AscentSlashInProgress>
+  <MX_QH_AscentSlashLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_AscentSlashLandingNoLineOfSight>
+  <MX_QH_AscentSlashInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LuoshenRibbonInvalidTarget>Luoshen's ribbon can only connect two conscious people.</MX_QH_LuoshenRibbonInvalidTarget>
   <MX_QH_LuoshenRibbonChooseFirst>Choose one end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseFirst>
   <MX_QH_LuoshenRibbonChooseSecond>Choose the other end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseSecond>
@@ -157,10 +166,18 @@
   <MX_QH_FlowerBellResonanceSummer>summer</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>autumn</MX_QH_FlowerBellResonanceAutumn>
   <MX_QH_FlowerBellResonanceWinter>winter</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_SwordResonanceSpring>Spring Dawn</MX_QH_SwordResonanceSpring>
+  <MX_QH_SwordResonanceSummer>Lotus Rain</MX_QH_SwordResonanceSummer>
+  <MX_QH_SwordResonanceAutumn>Impermanence</MX_QH_SwordResonanceAutumn>
+  <MX_QH_SwordResonanceWinter>Condensing Frost</MX_QH_SwordResonanceWinter>
   <MX_QH_FlowerBellResonanceDescriptionSpring>Spring resonance carries a living pulse. Hits disturb blood in flesh targets and build electric leakage in mechanoids.</MX_QH_FlowerBellResonanceDescriptionSpring>
   <MX_QH_FlowerBellResonanceDescriptionSummer>Summer resonance is heavy and fervent. Hits build toxins in flesh targets and corrode mechanical structure.</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>Autumn resonance is clear and severe. Hits pressure the mind of flesh targets and push mechanoids toward overload.</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>Winter resonance sinks into cold. Hits build chill on the target until it is frozen in place.</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionSpring>Spring Dawn resonance: Hits grant Qinghe Spring Flow Baptism and build Bleeding and Electric Leakage.</MX_QH_SwordResonanceDescriptionSpring>
+  <MX_QH_SwordResonanceDescriptionSummer>Lotus Rain resonance: Sword Pressure gained from hits is increased by 50%, and hits build Toxin and Corrosion.</MX_QH_SwordResonanceDescriptionSummer>
+  <MX_QH_SwordResonanceDescriptionAutumn>Impermanence resonance: Attacks gain 50% armor penetration and build Fear and Overload.</MX_QH_SwordResonanceDescriptionAutumn>
+  <MX_QH_SwordResonanceDescriptionWinter>Condensing Frost resonance: Each hit restores 8 points of Lotus Shield and builds Freeze.</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_SkillTreeNoScores>No score has been interpreted.</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>learned</MX_QH_SkillTreeStateLearned>
   <MX_QH_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_QH_SkillTreeStateAlreadyLearned>
@@ -206,8 +223,6 @@
   <MX_QH_Book_DivineGrace_Desc>A refined volume of Qinghe's cultivation notes. Reading it raises the Divine Grace node by one level.</MX_QH_Book_DivineGrace_Desc>
   <MX_QH_Book_Yingyue_Label>Yingyue</MX_QH_Book_Yingyue_Label>
   <MX_QH_Book_Yingyue_Desc>A moon-reflection score. Studying it can increase the available charges of Divine Blessing.</MX_QH_Book_Yingyue_Desc>
-  <MX_QH_Book_NishangDance_Label>Nishang Dance</MX_QH_Book_NishangDance_Label>
-  <MX_QH_Book_NishangDance_Desc>A dance score with layered sleeves and drifting light. Studying it can unlock Nishang Dance.</MX_QH_Book_NishangDance_Desc>
   <MX_QH_Book_Jueying_Label>Jueying</MX_QH_Book_Jueying_Label>
   <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Sword Form: Jueying.</MX_QH_Book_Jueying_Desc>
   <MX_QH_Book_Luoshenfu_Label>Luoshen Fu</MX_QH_Book_Luoshenfu_Label>

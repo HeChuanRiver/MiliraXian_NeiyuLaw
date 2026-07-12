@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             ApplyAbnormals(caster, target, Props);
         }
 
-        public static void ApplyAbnormals(Pawn caster, Pawn target, CompProperties_FlowerBellStatusOnHit props)
+        public static void ApplyAbnormals(Pawn caster, Pawn target, CompProperties_FlowerBellStatusOnHit props, float amountMultiplier = 1f)
         {
             if (caster == null || target == null || target.Dead || target.Destroyed || props?.abnormals == null || props.abnormals.Count == 0 || props.accumulationAmount <= 0f)
             {
@@ -55,7 +55,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
-            float amount = props.accumulationAmount * ResolveSpecialAbilityEffectFactor(caster, props);
+            float amount = props.accumulationAmount * ResolveSpecialAbilityEffectFactor(caster, props) * Mathf.Max(0f, amountMultiplier);
             for (int i = 0; i < props.abnormals.Count; i++)
             {
                 HediffDef_Abnormal abnormal = props.abnormals[i];

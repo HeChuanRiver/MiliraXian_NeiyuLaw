@@ -85,77 +85,21 @@
     </HediffDef>
 
     <HediffDef>
-        <defName>MX_QH_FlowerDance</defName>
-        <label>霓裳之舞</label>
-        <description>清荷进入起舞状态，移动速度、闪避与花令回复提升，护盾可在受击后立即开始回充。</description>
+        <defName>MX_QH_EyeOfHeartState</defName>
+        <label>心眼</label>
+        <description>清荷正凝神观察来袭的攻击。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(1.0, 0.72, 0.92)</defaultLabelColor>
+        <defaultLabelColor>(0.62,0.90,1.0)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
-        <initialSeverity>1.0</initialSeverity>
-        <minSeverity>1.0</minSeverity>
-        <maxSeverity>10.0</maxSeverity>
-        <alwaysShowSeverity>true</alwaysShowSeverity>
-        <stages>
-            <li>
-                <statOffsetsBySeverity>
-                    <li>
-                        <stat>MoveSpeed</stat>
-                        <valueBySeverity>
-                            <points>
-                                <li>(0,0)</li>
-                                <li>(1,0.35)</li>
-                                <li>(10,3.5)</li>
-                            </points>
-                        </valueBySeverity>
-                    </li>
-                    <li>
-                        <stat>MeleeDodgeChance</stat>
-                        <valueBySeverity>
-                            <points>
-                                <li>(0,0)</li>
-                                <li>(1,0.60)</li>
-                                <li>(10,6.0)</li>
-                            </points>
-                        </valueBySeverity>
-                    </li>
-                </statOffsetsBySeverity>
-                <statFactorsBySeverity>
-                    <li>
-                        <stat>MX_QH_LotusShieldHitRegenDelayFactor</stat>
-                        <valueBySeverity>
-                            <points>
-                                <li>(0,1)</li>
-                                <li>(1,0)</li>
-                                <li>(10,0)</li>
-                            </points>
-                        </valueBySeverity>
-                    </li>
-                    <li>
-                        <stat>MX_QH_FlowerDecreeRegenFactor</stat>
-                        <valueBySeverity>
-                            <points>
-                                <li>(0,1)</li>
-                                <li>(1,2)</li>
-                                <li>(10,11)</li>
-                            </points>
-                        </valueBySeverity>
-                    </li>
-                </statFactorsBySeverity>
-            </li>
-        </stages>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>1800</disappearsAfterTicks>
-                <showRemainingTime>true</showRemainingTime>
+                <disappearsAfterTicks>60</disappearsAfterTicks>
             </li>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDance">
-                <activeEffecter>MX_QH_Effecter_FlowerDivinationActive</activeEffecter>
-                <afterimageIntervalTicks>6</afterimageIntervalTicks>
-                <afterimageFadeTicks>60</afterimageFadeTicks>
-                <afterimageStartAlpha>0.44</afterimageStartAlpha>
-                <afterimageMinDistance>0.55</afterimageMinDistance>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_EyeOfHeart">
+                <shieldRestoreFraction>0.1</shieldRestoreFraction>
+                <swordPressureGain>1</swordPressureGain>
             </li>
         </comps>
     </HediffDef>

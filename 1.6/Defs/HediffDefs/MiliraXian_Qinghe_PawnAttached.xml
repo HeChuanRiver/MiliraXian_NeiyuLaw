@@ -29,6 +29,45 @@
     </HediffDef>
 
     <HediffDef>
+        <defName>MX_QH_CombatState</defName>
+        <label>四时共鸣</label>
+        <description>隐藏状态：记录清荷当前的四时共鸣。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheCombatState" />
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_SwordPressure</defName>
+        <label>剑压</label>
+        <description>隐藏状态：清荷近战模式使用的战斗资源。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SwordPressure">
+                <resourceLabel>剑压</resourceLabel>
+                <resourceDescription>挥剑命中敌人或成功发动心眼时积累。未完成的一段剑压会在停止获取后逐渐消退。</resourceDescription>
+                <initialValue>0</initialValue>
+                <maxValue>300</maxValue>
+                <valuePerPoint>100</valuePerPoint>
+                <decayDelayTicks>300</decayDelayTicks>
+                <decayPerSecond>12</decayPerSecond>
+                <clampToMax>true</clampToMax>
+                <showGizmo>false</showGizmo>
+                <hideOnHealthTab>true</hideOnHealthTab>
+                <barColor>(0.30,0.78,0.92)</barColor>
+                <barHighlightColor>(0.82,0.96,1.0)</barHighlightColor>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
         <defName>MX_QH_MeditativeStillness</defName>
         <label>静思</label>
         <description>冥想或者读书可以积累静思，清荷进行艺术创作和手工制作都会基于当前积累的量消耗静思，并给予一定品质加成。</description>
@@ -122,6 +161,20 @@
         <comps>
             <li Class="HediffCompProperties_Disappears">
                 <disappearsAfterTicks>300</disappearsAfterTicks>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_IllusoryReflectionInvulnerable</defName>
+        <label>水月无敌</label>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>120</disappearsAfterTicks>
             </li>
         </comps>
     </HediffDef>

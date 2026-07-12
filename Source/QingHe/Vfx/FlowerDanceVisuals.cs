@@ -5,7 +5,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
-    public class MapComponent_QingheFlowerDanceVisuals : MapComponent
+    public class MapComponent_QingheAfterimages : MapComponent
     {
         private const int MaxAfterimages = 96;
         private const int AfterimageTextureSize = 512;
@@ -14,10 +14,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private const int GhostAlphaSteps = 32;
         private static readonly Color GhostTint = new Color(1f, 0.94f, 0.97f, 1f);
 
-        private readonly List<FlowerDanceAfterimage> afterimages = new List<FlowerDanceAfterimage>();
+        private readonly List<QingheAfterimage> afterimages = new List<QingheAfterimage>();
         private Mesh afterimageMesh;
 
-        public MapComponent_QingheFlowerDanceVisuals(Map map) : base(map)
+        public MapComponent_QingheAfterimages(Map map) : base(map)
         {
         }
 
@@ -51,7 +51,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 afterimages.RemoveAt(0);
             }
 
-            afterimages.Add(new FlowerDanceAfterimage
+            afterimages.Add(new QingheAfterimage
             {
                 pawn = pawn,
                 drawPos = drawPos,
@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             for (int i = afterimages.Count - 1; i >= 0; i--)
             {
-                FlowerDanceAfterimage afterimage = afterimages[i];
+                QingheAfterimage afterimage = afterimages[i];
                 int age = now - afterimage.startTick;
                 if (age < 0 || age > afterimage.durationTicks || afterimage.pawn == null || afterimage.pawn.Destroyed)
                 {
@@ -120,12 +120,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
 
             RenderTexture texture = new RenderTexture(AfterimageTextureSize, AfterimageTextureSize, 24, RenderTextureFormat.ARGB32);
-            texture.name = "MX_QH_FlowerDanceAfterimage";
+            texture.name = "MX_QH_Afterimage";
             Find.PawnCacheRenderer.RenderPawn(pawn, texture, Vector3.zero, AfterimageCameraZoom, 0f, facing, renderHead: true, renderHeadgear: true, renderClothes: true);
             return texture;
         }
 
-        private void DrawPawnGhostSnapshot(FlowerDanceAfterimage afterimage, float alpha)
+        private void DrawPawnGhostSnapshot(QingheAfterimage afterimage, float alpha)
         {
             Material material = afterimage.material;
             if (material == null || material == BaseContent.ClearMat)
@@ -164,7 +164,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             afterimages.Clear();
         }
 
-        private static void ReleaseAfterimage(FlowerDanceAfterimage afterimage)
+        private static void ReleaseAfterimage(QingheAfterimage afterimage)
         {
             if (afterimage.texture != null)
             {
@@ -178,7 +178,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
         }
 
-        private struct FlowerDanceAfterimage
+        private struct QingheAfterimage
         {
             public Pawn pawn;
             public Vector3 drawPos;

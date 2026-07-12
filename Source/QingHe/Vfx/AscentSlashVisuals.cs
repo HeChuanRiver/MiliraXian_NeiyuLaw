@@ -1,11 +1,84 @@
 using System.Collections.Generic;
-using MiliraXian.Characters.QingHe.Abilities;
+using System.Reflection;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
+    internal struct AscentSlashVisualState
+    {
+        public bool absolute;
+        public Vector3 value;
+    }
+
+    internal static class AscentSlashVisualTracker
+    {
+        private static readonly Dictionary<int, AscentSlashVisualState> states = new Dictionary<int, AscentSlashVisualState>();
+
+        public static void SetAbsolutePosition(Pawn pawn, Vector3 drawPos)
+        {
+            Set(pawn, absolute: true, drawPos);
+        }
+
+        public static void SetOffset(Pawn pawn, Vector3 offset)
+        {
+            Set(pawn, absolute: false, offset);
+        }
+
+        public static void Clear(Pawn pawn)
+        {
+            if (pawn != null)
+            {
+                states.Remove(pawn.thingIDNumber);
+            }
+        }
+
+        public static bool TryApply(Pawn pawn, ref Vector3 drawPos)
+        {
+            if (pawn == null || !states.TryGetValue(pawn.thingIDNumber, out AscentSlashVisualState state))
+            {
+                return false;
+            }
+
+            drawPos = state.absolute ? state.value : drawPos + state.value;
+            return true;
+        }
+
+        private static void Set(Pawn pawn, bool absolute, Vector3 value)
+        {
+            if (pawn == null)
+            {
+                return;
+            }
+
+            states[pawn.thingIDNumber] = new AscentSlashVisualState
+            {
+                absolute = absolute,
+                value = value
+            };
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn_DrawTracker), "DrawPos", MethodType.Getter)]
+    public static class MX_QHAscentSlashDrawPosPatches
+    {
+        private static readonly FieldInfo TrackerPawnField = AccessTools.Field(typeof(Pawn_DrawTracker), "pawn");
+
+        [HarmonyPostfix]
+        public static void Patch_DrawPos_Postfix(Pawn_DrawTracker __instance, ref Vector3 __result)
+        {
+            Pawn pawn = TrackerPawnField?.GetValue(__instance) as Pawn;
+            if (pawn == null || pawn.Destroyed || !pawn.Spawned)
+            {
+                return;
+            }
+
+            AscentSlashVisualTracker.TryApply(pawn, ref __result);
+        }
+    }
+
     public class PawnFlyerWorker_AscentSlashDive : PawnFlyerWorker
     {
         public PawnFlyerWorker_AscentSlashDive(PawnFlyerProperties properties) : base(properties)
@@ -65,7 +138,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             Pawn flyingPawn = FlyingPawn;
             if (flyingPawn != null && flyingPawn.MapHeld != null)
             {
-                flyingPawn.MapHeld.GetComponent<MapComponent_QingheFlowerDanceVisuals>()?.AddAfterimage(
+                flyingPawn.MapHeld.GetComponent<MapComponent_QingheAfterimages>()?.AddAfterimage(
                     flyingPawn,
                     DrawPos,
                     flyingPawn.Rotation,
@@ -132,47 +205,16 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
     public class MapComponent_QingheAscentSlashVisuals : MapComponent
     {
-        private const string DefaultArcTexPathFirst = "MiliraXianQinghe/Effect/flower_divination_slash_1";
-        private const string DefaultArcTexPathSecond = "MiliraXianQinghe/Effect/flower_divination_slash_2";
-        private const int SecondArcDelayTicks = 5;
-        private const float FirstArcAngleOffset = -9f;
-        private const float SecondArcAngleOffset = 9f;
-        private const int MaxVisuals = 24;
         private const int MaxLightningBolts = 24;
         private const int DefaultLightningBoltDurationTicks = 18;
 
-        private static readonly Dictionary<string, Material> arcMaterials = new Dictionary<string, Material>();
-        private static readonly HashSet<string> triedLoadArcMaterials = new HashSet<string>();
         private static Material lightningMaterial;
         private static bool triedLoadLightningMaterial;
 
-        private readonly List<AscentSlashArcVisual> arcVisuals = new List<AscentSlashArcVisual>();
         private readonly List<AscentSlashLightningBolt> lightningBolts = new List<AscentSlashLightningBolt>();
-        private readonly List<AscentSlashDelayedImpact> delayedImpacts = new List<AscentSlashDelayedImpact>();
 
         public MapComponent_QingheAscentSlashVisuals(Map map) : base(map)
         {
-        }
-
-        public void AddArc(IntVec3 origin, Vector3 forward, float radius, float angleDegrees, int durationTicks, string texPath = null)
-        {
-            if (map == null || !origin.IsValid || forward.sqrMagnitude < 0.001f)
-            {
-                return;
-            }
-
-            forward.y = 0f;
-            forward.Normalize();
-
-            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
-            if (!texPath.NullOrEmpty())
-            {
-                AddArcVisual(origin.ToVector3Shifted(), forward, radius, angleDegrees, 0f, now, durationTicks, texPath);
-                return;
-            }
-
-            AddArcVisual(origin.ToVector3Shifted(), forward, radius, angleDegrees, FirstArcAngleOffset, now, durationTicks, DefaultArcTexPathFirst);
-            AddArcVisual(origin.ToVector3Shifted(), forward, radius, angleDegrees, SecondArcAngleOffset, now + SecondArcDelayTicks, durationTicks, DefaultArcTexPathSecond);
         }
 
         public void AddLightningBolt(IntVec3 strikeCell, int durationTicks = DefaultLightningBoltDurationTicks)
@@ -202,51 +244,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
             });
         }
 
-        public void AddDelayedImpact(Pawn caster, IntVec3 landing, IntVec3 directionCell, int delayTicks, CompProperties_AbilityAscentSlash props)
-        {
-            if (map == null || caster == null || props == null || !landing.IsValid || !directionCell.IsValid)
-            {
-                return;
-            }
-
-            delayedImpacts.Add(new AscentSlashDelayedImpact
-            {
-                caster = caster,
-                landing = landing,
-                directionCell = directionCell,
-                triggerTick = (Find.TickManager != null ? Find.TickManager.TicksGame : 0) + Mathf.Max(0, delayTicks),
-                props = props
-            });
-        }
-
         public override void MapComponentDraw()
         {
             base.MapComponentDraw();
             int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
             DrawLightningBolts(now);
-            DrawArcs(now);
-        }
-
-        public override void MapComponentTick()
-        {
-            base.MapComponentTick();
-            if (delayedImpacts.Count == 0)
-            {
-                return;
-            }
-
-            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
-            for (int i = delayedImpacts.Count - 1; i >= 0; i--)
-            {
-                AscentSlashDelayedImpact impact = delayedImpacts[i];
-                if (now < impact.triggerTick)
-                {
-                    continue;
-                }
-
-                delayedImpacts.RemoveAt(i);
-                CompAbilityEffect_AscentSlash.ResolveDelayedConeImpact(impact.caster, map, impact.landing, impact.directionCell, impact.props);
-            }
         }
 
         private void DrawLightningBolts(int now)
@@ -287,108 +289,6 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
         }
 
-        private void DrawArcs(int now)
-        {
-            if (arcVisuals.Count == 0)
-            {
-                return;
-            }
-
-            for (int i = arcVisuals.Count - 1; i >= 0; i--)
-            {
-                AscentSlashArcVisual visual = arcVisuals[i];
-                int age = now - visual.startTick;
-                if (age < 0)
-                {
-                    continue;
-                }
-
-                if (age > visual.durationTicks)
-                {
-                    arcVisuals.RemoveAt(i);
-                    continue;
-                }
-
-                DrawArc(visual, age / (float)visual.durationTicks);
-            }
-        }
-
-        private static void DrawArc(AscentSlashArcVisual visual, float progress)
-        {
-            Material material = ResolveArcMaterial(visual.texPath);
-            if (material == null)
-            {
-                return;
-            }
-
-            float clampedProgress = Mathf.Clamp01(progress);
-            float easedMove = Mathf.SmoothStep(0f, 1f, clampedProgress);
-            float easedScale = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(clampedProgress / 0.92f));
-            float distance = Mathf.Lerp(-visual.radius * 0.12f, visual.radius * 0.56f, easedMove);
-            float drawSize = Mathf.Lerp(visual.radius * 0.08f, visual.radius * 1.45f, easedScale);
-            float alpha = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(clampedProgress / 0.12f))
-                * (1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((clampedProgress - 0.45f) / 0.55f)));
-            alpha *= 0.72f;
-            if (alpha <= 0.01f)
-            {
-                return;
-            }
-
-            Vector3 center = visual.origin + visual.forward * distance + Altitudes.AltIncVect * 4f;
-            float angle = Mathf.Atan2(visual.forward.x, visual.forward.z) * 57.29578f + 180f + visual.angleOffsetDegrees;
-            DrawArcMesh(center, angle, drawSize, alpha, material);
-        }
-
-        private void AddArcVisual(Vector3 origin, Vector3 forward, float radius, float angleDegrees, float angleOffsetDegrees, int startTick, int durationTicks, string texPath)
-        {
-            while (arcVisuals.Count >= MaxVisuals)
-            {
-                arcVisuals.RemoveAt(0);
-            }
-
-            arcVisuals.Add(new AscentSlashArcVisual
-            {
-                origin = origin,
-                forward = forward,
-                radius = Mathf.Max(0.5f, radius),
-                angleDegrees = Mathf.Clamp(angleDegrees, 15f, 160f),
-                angleOffsetDegrees = angleOffsetDegrees,
-                startTick = startTick,
-                durationTicks = Mathf.Max(1, durationTicks),
-                texPath = texPath
-            });
-        }
-
-        private static Material ResolveArcMaterial(string texPath)
-        {
-            if (texPath.NullOrEmpty())
-            {
-                return null;
-            }
-
-            Material material;
-            if (arcMaterials.TryGetValue(texPath, out material))
-            {
-                return material;
-            }
-
-            if (triedLoadArcMaterials.Contains(texPath))
-            {
-                return null;
-            }
-
-            triedLoadArcMaterials.Add(texPath);
-            Texture2D texture = ContentFinder<Texture2D>.Get(texPath, reportFailure: false);
-            if (texture == null)
-            {
-                return null;
-            }
-
-            material = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, new Color(1f, 0.96f, 0.98f, 1f));
-            arcMaterials[texPath] = material;
-            return material;
-        }
-
         private static Material ResolveLightningMaterial()
         {
             if (lightningMaterial != null)
@@ -416,27 +316,6 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return Mathf.Clamp01(1f - age / (float)Mathf.Max(1, durationTicks));
         }
 
-        private static void DrawArcMesh(Vector3 center, float angle, float drawSize, float alpha, Material baseMaterial)
-        {
-            Material faded = FadedMaterialPool.FadedVersionOf(baseMaterial, Mathf.Clamp01(alpha));
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
-            float size = Mathf.Max(0.01f, drawSize);
-            Matrix4x4 matrix = Matrix4x4.TRS(center, rotation, new Vector3(size, 1f, size));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, faded, 0);
-        }
-
-        private struct AscentSlashArcVisual
-        {
-            public Vector3 origin;
-            public Vector3 forward;
-            public float radius;
-            public float angleDegrees;
-            public float angleOffsetDegrees;
-            public int startTick;
-            public int durationTicks;
-            public string texPath;
-        }
-
         private struct AscentSlashLightningBolt
         {
             public IntVec3 strikeCell;
@@ -445,13 +324,5 @@ namespace MiliraXian.Characters.QingHe.Vfx
             public int durationTicks;
         }
 
-        private struct AscentSlashDelayedImpact
-        {
-            public Pawn caster;
-            public IntVec3 landing;
-            public IntVec3 directionCell;
-            public int triggerTick;
-            public CompProperties_AbilityAscentSlash props;
-        }
     }
 }

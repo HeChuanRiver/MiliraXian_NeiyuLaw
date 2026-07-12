@@ -2,7 +2,7 @@
 <Defs>
     <ThingDef>
         <defName>MX_QH_Mote_SpiritBurstCurvedTrail</defName>
-        <label>清荷特效</label>
+        <label>断魂音束Mote</label>
         <thingClass>MiliraXian.Characters.QingHe.Things.Mote.Mote_SpiritBurstCurvedTrail</thingClass>
         <category>Mote</category>
         <graphicData>
@@ -105,7 +105,7 @@
             <graphicClass>Graphic_FleckPulse</graphicClass>
             <texPath>Things/Mote/PsycastSkipFlash</texPath>
             <shaderType>MoteGlow</shaderType>
-            <drawSize>(1.18,1.18)</drawSize>
+            <drawSize>(0.8,0.8)</drawSize>
             <color>(1.00, 0.64, 0.88, 0.34)</color>
         </graphicData>
     </FleckDef>
@@ -302,5 +302,3 @@
         </children>
     </EffecterDef>
 </Defs>
-
-

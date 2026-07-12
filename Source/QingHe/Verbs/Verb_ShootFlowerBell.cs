@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
         {
             get
             {
-                ThingDef projectile = EquipmentSource?.TryGetComp<CompFlowerBellResonance>()?.CurrentProjectile;
+                ThingDef projectile = EquipmentSource?.TryGetComp<CompFlowerBellResonance>()?.CurrentProjectileFor(CasterPawn);
                 return projectile ?? base.Projectile;
             }
         }

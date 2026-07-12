@@ -29,6 +29,7 @@
   <MX_ModeSwitch_CommandLabelWithForm>{0}：{1}</MX_ModeSwitch_CommandLabelWithForm>
   <MX_ModeSwitch_CommandFullDesc>{0}&#10;&#10;当前：{1}&#10;点击后选择目标形态。</MX_ModeSwitch_CommandFullDesc>
   <MX_ModeSwitch_Cooldown>冷却中：{0}s</MX_ModeSwitch_Cooldown>
+  <MX_ModeSwitch_PawnBusy>当前动作无法被兵装切换打断。</MX_ModeSwitch_PawnBusy>
   <MX_ModeSwitch_NoTargetForm>没有可切换的目标形态。</MX_ModeSwitch_NoTargetForm>
   <MX_ModeSwitch_TargetFormMissing>目标形态未配置。</MX_ModeSwitch_TargetFormMissing>
   <MX_ModeSwitch_TargetFormInvalidThing>目标形态不是有效物品：{0}</MX_ModeSwitch_TargetFormInvalidThing>
@@ -125,11 +126,19 @@
   <MX_QH_SpringFlowMissingResource>花令不足，无法施放春泉涌流。</MX_QH_SpringFlowMissingResource>
   <MX_QH_SpiritBurstMissingResource>花令不足，无法施放断魂。</MX_QH_SpiritBurstMissingResource>
   <MX_QH_LunarMirrorMissingResource>花令不足，无法施放霜月镜。</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_FlowerDanceMissingResource>花令不足，无法施展霓裳之舞。</MX_QH_FlowerDanceMissingResource>
-  <MX_QH_FlowerDanceNotLearned>尚未习得霓裳之舞。</MX_QH_FlowerDanceNotLearned>
+  <MX_QH_RequiresSwordMode>需要装备散华。</MX_QH_RequiresSwordMode>
+  <MX_QH_RequiresBellMode>需要装备花信风铃。</MX_QH_RequiresBellMode>
+  <MX_QH_WeaponFormFlowerBell>花信风铃</MX_QH_WeaponFormFlowerBell>
+  <MX_QH_WeaponFormSword>散华</MX_QH_WeaponFormSword>
+  <MX_QH_ModeSwitchCommandLabel>切换武器</MX_QH_ModeSwitchCommandLabel>
+  <MX_QH_ModeSwitchCommandDesc>在花信风铃与散华之间切换武器。</MX_QH_ModeSwitchCommandDesc>
+  <MX_QH_SwordPressureLabel>剑压</MX_QH_SwordPressureLabel>
+  <MX_QH_SwordPressureValueLine>剑压：{0} / {1}</MX_QH_SwordPressureValueLine>
+  <MX_QH_SwordModeDodgeExplanation>散华姿态：近战闪避大幅提升</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashNotLearned>尚未习得绝影，无法使用剑势·绝影。</MX_QH_AscentSlashNotLearned>
-  <MX_QH_FlowerDanceLandingNoLineOfSight>剑势·绝影的落点需要在清荷视线内。</MX_QH_FlowerDanceLandingNoLineOfSight>
-  <MX_QH_FlowerDanceInvalidLanding>无法在该位置施展剑势·绝影。</MX_QH_FlowerDanceInvalidLanding>
+  <MX_QH_AscentSlashInProgress>剑势·绝影仍在施展中。</MX_QH_AscentSlashInProgress>
+  <MX_QH_AscentSlashLandingNoLineOfSight>剑势·绝影的落点需要在清荷视线内。</MX_QH_AscentSlashLandingNoLineOfSight>
+  <MX_QH_AscentSlashInvalidLanding>无法在该位置施展剑势·绝影。</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LuoshenRibbonInvalidTarget>洛神的缎带只能连接两名清醒的人。</MX_QH_LuoshenRibbonInvalidTarget>
   <MX_QH_LuoshenRibbonChooseFirst>选择洛神缎带的一端</MX_QH_LuoshenRibbonChooseFirst>
   <MX_QH_LuoshenRibbonChooseSecond>选择洛神缎带的另一端</MX_QH_LuoshenRibbonChooseSecond>
@@ -149,10 +158,18 @@
   <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
   <MX_QH_FlowerBellResonanceWinter>冬</MX_QH_FlowerBellResonanceWinter>
-  <MX_QH_FlowerBellResonanceDescriptionSpring>。</MX_QH_FlowerBellResonanceDescriptionSpring>
-  <MX_QH_FlowerBellResonanceDescriptionSummer>。</MX_QH_FlowerBellResonanceDescriptionSummer>
-  <MX_QH_FlowerBellResonanceDescriptionAutumn>。</MX_QH_FlowerBellResonanceDescriptionAutumn>
-  <MX_QH_FlowerBellResonanceDescriptionWinter>。</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceSpring>春晓</MX_QH_SwordResonanceSpring>
+  <MX_QH_SwordResonanceSummer>荷雨</MX_QH_SwordResonanceSummer>
+  <MX_QH_SwordResonanceAutumn>无常</MX_QH_SwordResonanceAutumn>
+  <MX_QH_SwordResonanceWinter>凝霜</MX_QH_SwordResonanceWinter>
+  <MX_QH_FlowerBellResonanceDescriptionSpring>春季共鸣使铃音带有生发之意，命中血肉目标时会逐步扰动血气，命中机械目标时则会积累漏电。</MX_QH_FlowerBellResonanceDescriptionSpring>
+  <MX_QH_FlowerBellResonanceDescriptionSummer>夏季共鸣使铃音炽盛而浓烈，命中血肉目标时会积累毒素，命中机械目标时则会侵蚀结构。</MX_QH_FlowerBellResonanceDescriptionSummer>
+  <MX_QH_FlowerBellResonanceDescriptionAutumn>秋季共鸣使铃音肃杀而清冷，命中血肉目标时会压迫心神，命中机械目标时则会推动过载。</MX_QH_FlowerBellResonanceDescriptionAutumn>
+  <MX_QH_FlowerBellResonanceDescriptionWinter>冬季共鸣使铃音沉入寒意，命中目标时会不断积累寒冷，最终将其冻结。</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionSpring>春晓共鸣：攻击命中后为清荷附加春泉洗礼，并积累流血与漏电。</MX_QH_SwordResonanceDescriptionSpring>
+  <MX_QH_SwordResonanceDescriptionSummer>荷雨共鸣：攻击命中时获得的剑压提高50%，并积累剧毒与腐蚀。</MX_QH_SwordResonanceDescriptionSummer>
+  <MX_QH_SwordResonanceDescriptionAutumn>无常共鸣：攻击的穿甲能力提高50%，并积累恐惧与过载。</MX_QH_SwordResonanceDescriptionAutumn>
+  <MX_QH_SwordResonanceDescriptionWinter>凝霜共鸣：每次攻击命中后回复8点莲华护盾，并积累冻结。</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_SkillTreeNoScores>尚未发现</MX_QH_SkillTreeNoScores>
   <MX_QH_SkillTreeStateLearned>已习得</MX_QH_SkillTreeStateLearned>
   <MX_QH_SkillTreeStateAlreadyLearned>已经达到最高等级。</MX_QH_SkillTreeStateAlreadyLearned>
@@ -198,8 +215,6 @@
   <MX_QH_Book_DivineGrace_Desc>一卷整理过的清荷修行札记。研读后可提升一级“花神之恩典”。</MX_QH_Book_DivineGrace_Desc>
   <MX_QH_Book_Yingyue_Label>映月</MX_QH_Book_Yingyue_Label>
   <MX_QH_Book_Yingyue_Desc>一卷月影清澈的曲谱。研读后可提高花神之垂怜的可用次数。</MX_QH_Book_Yingyue_Desc>
-  <MX_QH_Book_NishangDance_Label>霓裳之舞</MX_QH_Book_NishangDance_Label>
-  <MX_QH_Book_NishangDance_Desc>一卷衣袂流光的舞谱。研读后可解锁霓裳之舞。</MX_QH_Book_NishangDance_Desc>
   <MX_QH_Book_Jueying_Label>绝影</MX_QH_Book_Jueying_Label>
   <MX_QH_Book_Jueying_Desc>一卷动若流影的曲谱（也许是从霓羽那偷来的）。研读后可解锁剑势·绝影。</MX_QH_Book_Jueying_Desc>
   <MX_QH_Book_Luoshenfu_Label>洛神赋</MX_QH_Book_Luoshenfu_Label>

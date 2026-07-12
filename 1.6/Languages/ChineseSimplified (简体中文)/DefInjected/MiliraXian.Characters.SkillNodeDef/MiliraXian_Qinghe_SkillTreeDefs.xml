@@ -15,11 +15,11 @@
   <MX_QH_Node_DivineGrace.label>花神之恩典</MX_QH_Node_DivineGrace.label>
   <MX_QH_Node_DivineGrace.description>——习得可重复提升的被动特性，每级都可提升一定基础属性和护盾属性、花令回复速度。</MX_QH_Node_DivineGrace.description>
   <MX_QH_Node_Yingyue.label>映月残章</MX_QH_Node_Yingyue.label>
-  <MX_QH_Node_Yingyue.description>——习得被动特性：令花神之垂怜的可积累次数 +1</MX_QH_Node_Yingyue.description>
-  <MX_QH_Node_NishangDance.label>霓裳舞</MX_QH_Node_NishangDance.label>
-  <MX_QH_Node_NishangDance.description>——习得舞技：霓裳之舞，可强化自身的移速、闪避率和护盾，令护盾能在受到伤害后立刻开始回复</MX_QH_Node_NishangDance.description>
+  <MX_QH_Node_Yingyue.description>——习得心眼，并令花神之垂怜的可积累次数 +1</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_IllusoryReflection.label>镜花水月</MX_QH_Node_IllusoryReflection.label>
+  <MX_QH_Node_IllusoryReflection.description>——习得剑技：镜花水月，进入无法中断的水月架势，反击近距离攻击并减轻远距离攻击伤害。</MX_QH_Node_IllusoryReflection.description>
   <MX_QH_Node_Jueying.label>剑势·绝影</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>清荷与老师霓羽交流后领悟的全新舞技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。——习得舞技：剑势·绝影，可对扇形范围内的敌方造成伤害，对建筑造成双倍伤害</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Jueying.description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：剑势·绝影。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时可消耗全部剑压强化为7次范围斩击，否则造成3次单体斩击。</MX_QH_Node_Jueying.description>
   <MX_QH_Node_Luoshenfu.label>洛水之仪</MX_QH_Node_Luoshenfu.label>
   <MX_QH_Node_Luoshenfu.description>——习得主动能力：洛神的缎带，可以大幅改善任意两个殖民者之间的看法\n\n——习得被动特性：洛水之仪，提高自身的魅力和心情，如拥有配偶，还会建立心灵绑定</MX_QH_Node_Luoshenfu.description>
 </LanguageData>

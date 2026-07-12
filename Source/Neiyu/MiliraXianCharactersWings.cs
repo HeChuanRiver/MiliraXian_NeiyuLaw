@@ -131,8 +131,8 @@ namespace MiliraXian.Characters.Neiyu
                     new MiliraXianCharacterWingEntry(
                         "MiliraXian_Qinghe",
                         // TODO：这里记得改翅膀贴图 (for 清荷
-                        "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu",
-                        "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu",
+                        "MiliraXianQinghe/Pawn/LeftWingNew_Qinghe",
+                        "MiliraXianQinghe/Pawn/RightWingNew_Qinghe",
                         "Milira_FlyNorth_Qinghe",
                         "Milira_FlyEast_Qinghe",
                         "Milira_FlySouth_Qinghe",

@@ -7,6 +7,7 @@ namespace MiliraXian.Characters.QingHe.Defs
     public static class MX_QHDefOf
     {
         public static JobDef MX_QH_TuneBell;
+        public static JobDef MX_QH_IllusoryReflection;
 
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;
@@ -26,6 +27,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static ThingDef MX_QingheHeaddress;
 
         public static DamageDef MX_QH_NoteImpact;
+        public static DamageDef MX_QH_Slash;
+        public static DamageDef MX_QH_SlashSkill;
 
         public static StatDef MX_QH_LotusShieldMaxEnergyFactor;
         public static StatDef MX_QH_LotusShieldRegenPerSecondFactor;
@@ -44,8 +47,10 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static AbilityDef MX_QH_SpiritBurstAbility;
         [DefAlias("MX_QH_LunarMirror")]
         public static AbilityDef MX_QH_LunarMirrorAbility;
-        [DefAlias("MX_QH_FlowerDance")]
-        public static AbilityDef MX_QH_FlowerDanceAbility;
+        [DefAlias("MX_QH_EyeOfHeart")]
+        public static AbilityDef MX_QH_EyeOfHeartAbility;
+        [DefAlias("MX_QH_IllusoryReflection")]
+        public static AbilityDef MX_QH_IllusoryReflectionAbility;
         [DefAlias("MX_QH_AscentSlash")]
         public static AbilityDef MX_QH_AscentSlashAbility;
         [DefAlias("MX_QH_LuoshenRibbon")]
@@ -53,14 +58,17 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static HediffDef MX_QH_SpringFlow;
         public static HediffDef MX_QH_AscentSlashInvulnerable;
+        public static HediffDef MX_QH_IllusoryReflectionInvulnerable;
         public static HediffDef MX_QH_DivineBlessing;
         public static HediffDef MX_QH_DivineBlessingImmunity;
         public static HediffDef MX_QH_DivineGrace;
         public static HediffDef MX_QH_DivineProtection;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
+        public static HediffDef MX_QH_SwordPressure;
+        public static HediffDef MX_QH_CombatState;
+        public static HediffDef MX_QH_EyeOfHeartState;
         public static HediffDef MX_QH_MeditativeStillness;
-        public static HediffDef MX_QH_FlowerDance;
         public static HediffDef MX_QH_LuoshenContract;
         public static HediffDef MX_QH_Trickle;
 
@@ -86,8 +94,10 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static FleckDef PsycastPsychicEffect;
         public static FleckDef PsycastSkipFlashExit;
         public static HediffDef PsychicInvisibility;
+        public static ShaderTypeDef MX_QH_MirrorSlash;
 
         public static ThingDef MX_QH_Weapon_FlowerBell;
+        public static ThingDef MX_QH_Weapon_Sword;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell_Spring;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell_Summer;
         public static ThingDef MX_Bullet_Qinghe_FlowerBell_Autumn;

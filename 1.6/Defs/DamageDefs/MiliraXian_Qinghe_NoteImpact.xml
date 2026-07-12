@@ -19,4 +19,36 @@
     <label>共振音击</label>
     <buildingDamageFactor>3</buildingDamageFactor>
   </DamageDef>
+
+  <DamageDef Name="MX_QH_SlashBase" Abstract="True">
+    <workerClass>MiliraXian.Characters.QingHe.Things.Weapons.DamageWorker_QingheSlash</workerClass>
+    <externalViolence>true</externalViolence>
+    <armorCategory>Sharp</armorCategory>
+    <hediff>Cut</hediff>
+    <deathMessage>{0}被清荷的剑势斩倒了。</deathMessage>
+  </DamageDef>
+
+  <DamageDef ParentName="MX_QH_SlashBase">
+    <defName>MX_QH_Slash</defName>
+    <label>散华斩击</label>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>true</canGainSwordPressure>
+        <swordPressureGain>25</swordPressureGain>
+        <resonanceAccumulationMultiplier>1</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+
+  <DamageDef ParentName="MX_QH_SlashBase">
+    <defName>MX_QH_SlashSkill</defName>
+    <label>散华剑势</label>
+    <buildingDamageFactor>2</buildingDamageFactor>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
 </Defs>

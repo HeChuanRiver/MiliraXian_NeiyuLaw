@@ -3,4 +3,8 @@
   <MX_QH_NoteImpact.label>note impact</MX_QH_NoteImpact.label>
   <MX_QH_NoteImpact.deathMessage>{0} was struck down by the Flower Bell's sound.</MX_QH_NoteImpact.deathMessage>
   <MX_QH_NoteImpact_Building.label>siegebreaking note impact</MX_QH_NoteImpact_Building.label>
+  <MX_QH_Slash.label>Sanhua slash</MX_QH_Slash.label>
+  <MX_QH_Slash.deathMessage>{0} was cut down by Qinghe's sword form.</MX_QH_Slash.deathMessage>
+  <MX_QH_SlashSkill.label>Sanhua sword form</MX_QH_SlashSkill.label>
+  <MX_QH_SlashSkill.deathMessage>{0} was cut down by Qinghe's sword form.</MX_QH_SlashSkill.deathMessage>
 </LanguageData>

@@ -186,19 +186,13 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                 }
             }
 
-            ThingWithComps flowerBell = interactor.equipment?.Primary;
-            CompFlowerBellResonance resonanceComp = flowerBell?.TryGetComp<CompFlowerBellResonance>();
-            if (resonanceComp == null)
-            {
-                yield return new FloatMenuOption("MX_QH_TuneFlowerBellRequiresWeapon".Translate(), null);
-                yield break;
-            }
+            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.EnsureCombatState(interactor);
 
             foreach (FlowerBellResonance resonance in System.Enum.GetValues(typeof(FlowerBellResonance)))
             {
                 FlowerBellResonance targetResonance = resonance;
                 string label = "MX_QH_TuneFlowerBellOption".Translate(CompFlowerBellResonance.LabelFor(targetResonance));
-                if (resonanceComp.Resonance == targetResonance)
+                if (combatState?.Resonance == targetResonance)
                 {
                     yield return new FloatMenuOption(label + "MX_QH_CurrentSuffix".Translate(), null);
                     continue;
@@ -212,7 +206,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         return;
                     }
 
-                    Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_TuneBell, clickedThing, flowerBell);
+                    Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_TuneBell, clickedThing);
                     job.count = (int)targetResonance;
                     interactor.jobs.TryTakeOrderedJob(job, JobTag.Misc);
                 });
