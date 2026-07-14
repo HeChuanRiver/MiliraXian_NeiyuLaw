@@ -10,14 +10,7 @@
   <MX_Neiyu_Form_Bow.comps.0.commandLabel>Switch form</MX_Neiyu_Form_Bow.comps.0.commandLabel>
   <MX_Neiyu_Form_Bow.comps.0.commandDesc>Cycle forms: flower → sword → bow → flower.</MX_Neiyu_Form_Bow.comps.0.commandDesc>
 
-  <MX_Qinghe_Form_Pipa.comps.1.commandLabel>Switch form</MX_Qinghe_Form_Pipa.comps.1.commandLabel>
-  <MX_Qinghe_Form_Pipa.comps.1.commandDesc>Click to switch:</MX_Qinghe_Form_Pipa.comps.1.commandDesc>
-  <MX_Qinghe_Form_Zhudi.comps.1.commandLabel>Switch form</MX_Qinghe_Form_Zhudi.comps.1.commandLabel>
-  <MX_Qinghe_Form_Zhudi.comps.1.commandDesc>Cycle forms: pipa → bamboo flute → qin.</MX_Qinghe_Form_Zhudi.comps.1.commandDesc>
-  <MX_Qinghe_Form_Qin.comps.1.commandLabel>Switch form</MX_Qinghe_Form_Qin.comps.1.commandLabel>
-  <MX_Qinghe_Form_Qin.comps.1.commandDesc>Cycle forms: pipa → bamboo flute → qin.</MX_Qinghe_Form_Qin.comps.1.commandDesc>
 
-  <MX_QH_Mote_DuanHunCurvedTrail.label>Mote</MX_QH_Mote_DuanHunCurvedTrail.label>
   <MXZL_Mote_GuiyiLinkLine.label>Mote</MXZL_Mote_GuiyiLinkLine.label>
   <MXZL_Mote_GuiyiLinkPulse.label>Mote</MXZL_Mote_GuiyiLinkPulse.label>
   <MXZL_Mote_GuiyiLinkStripe.label>Mote</MXZL_Mote_GuiyiLinkStripe.label>

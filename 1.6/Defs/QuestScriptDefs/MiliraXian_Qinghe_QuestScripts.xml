@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <QuestScriptDef>
+    <defName>MX_QH_FlowerCourtQuestScript</defName>
+    <autoAccept>false</autoAccept>
+    <defaultHidden>false</defaultHidden>
+    <expireDaysRange>-1~-1</expireDaysRange>
+    <isRootSpecial>true</isRootSpecial>
+    <sendAvailableLetter>true</sendAvailableLetter>
+    <defaultCharity>true</defaultCharity>
+    <endOnColonyMove>false</endOnColonyMove>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->来自百花的呼唤</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->你得到了一份神秘的设计图，看起来像一间雅致的亭居。——接取后可建造特殊建筑：荷池（此为开启获取米莉拉角色拓展：清荷的支线任务）</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourt_AvailableQuest" />
+  </QuestScriptDef>
+
+</Defs>

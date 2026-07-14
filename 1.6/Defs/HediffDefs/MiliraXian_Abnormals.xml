@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Bleed / electric leak -->
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalBleed</defName>
+    <label>流血积累</label>
+    <description>花信铃的春之共鸣扰动了目标的血液。积累达到上限时会触发流血效果。</description>
+    <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalBleedLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalBleedEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalBleedBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalBleedBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalBleeding</effectHediff>
+    <effectDurationTicks>1200</effectDurationTicks>
+    <triggerText>流血</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(1.00, 0.36, 0.42)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAbnormalApplied">
+        <addHediff>BloodLoss</addHediff>
+        <severityPerAccumulation>0.00035</severityPerAccumulation>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalElectricLeak</defName>
+    <label>电漏积累</label>
+    <description>花信铃的春之共鸣扰乱了机械结构。积累达到上限时会触发短路效果。</description>
+    <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalElectricLeakLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalElectricLeakEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalElectricLeakBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalElectricLeakBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalShortCircuit</effectHediff>
+    <effectDurationTicks>600</effectDurationTicks>
+    <triggerText>短路</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(1.00, 0.86, 0.28)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalElectricLeak">
+        <energyLossPercentPerAccumulation>0.0008</energyLossPercentPerAccumulation>
+      </li>
+    </comps>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <HediffDef>
+    <defName>MX_AbnormalBleeding</defName>
+    <label>流血</label>
+    <description>目标受到花信铃春之共鸣的影响，正在持续流血。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <painOffset>0.20</painOffset>
+        <statFactors>
+          <MoveSpeed>0.70</MoveSpeed>
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>1200</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalBleeding">
+        <woundCount>2</woundCount>
+        <woundSeverity>3</woundSeverity>
+        <bloodFilthDef>Filth_Blood</bloodFilthDef>
+        <bloodFilthCount>3</bloodFilthCount>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>BloodLoss</addHediff>
+        <severityPerTick>0.00008</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_AbnormalShortCircuit</defName>
+    <label>短路</label>
+    <description>机械体受到花信铃春之共鸣的影响，控制与供能系统发生短路。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalShortCircuit">
+        <explosionDamageDef>Bomb</explosionDamageDef>
+        <explosionRadius>1.5</explosionRadius>
+        <explosionRadiusMultiplierByBodySize>
+          <points>
+            <li>(0.50, 1.00)</li>
+            <li>(1.00, 1.00)</li>
+            <li>(2.00, 1.35)</li>
+            <li>(4.00, 1.80)</li>
+          </points>
+        </explosionRadiusMultiplierByBodySize>
+        <explosionDamageAmount>8</explosionDamageAmount>
+        <explosionArmorPenetration>0</explosionArmorPenetration>
+        <stunTicks>180</stunTicks>
+        <interruptCooldownTicks>30</interruptCooldownTicks>
+        <energyLossPercent>0.20</energyLossPercent>
+        <steamFleckDef>Steam</steamFleckDef>
+        <steamIntervalTicks>35~80</steamIntervalTicks>
+        <steamScaleRange>0.45~0.75</steamScaleRange>
+        <steamPositionJitter>0.28</steamPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Toxin / corrosion -->
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalToxin</defName>
+    <label>毒素积累</label>
+    <description>花信铃的夏之共鸣在目标体内留下毒素。积累达到上限时会触发剧毒效果。</description>
+    <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalToxinLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalToxinEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalToxinBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalToxinBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalVenom</effectHediff>
+    <effectDurationTicks>2400</effectDurationTicks>
+    <triggerText>中毒</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(0.62, 0.95, 0.42)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAbnormalApplied">
+        <addHediff>ToxicBuildup</addHediff>
+        <severityPerAccumulation>0.0006</severityPerAccumulation>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalCorrosion</defName>
+    <label>腐蚀积累</label>
+    <description>花信铃的夏之共鸣正在侵蚀机械结构。积累达到上限时会触发腐蚀效果。</description>
+    <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalCorrosionLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalCorrosionEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalCorrosionBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalCorrosionBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalCorroded</effectHediff>
+    <effectDurationTicks>2500</effectDurationTicks>
+    <triggerText>腐蚀</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(0.66, 0.90, 0.58)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <HediffDef>
+    <defName>MX_AbnormalVenom</defName>
+    <label>剧毒</label>
+    <description>目标受到花信铃夏之共鸣的影响，毒素正在持续侵蚀其身体。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <vomitMtbDays>0.25</vomitMtbDays>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2400</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>ToxicBuildup</addHediff>
+        <severityPerTick>0.00010</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalVenom">
+        <damageDef>MX_AbnormalVenomDamage</damageDef>
+        <damageIntervalTicks>120</damageIntervalTicks>
+        <damageAmount>4</damageAmount>
+        <armorPenetration>0</armorPenetration>
+        <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
+        <poisonFleckIntervalTicks>30~70</poisonFleckIntervalTicks>
+        <poisonFleckScaleRange>0.55~0.95</poisonFleckScaleRange>
+        <poisonFleckPositionJitter>0.35</poisonFleckPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_AbnormalCorroded</defName>
+    <label>腐蚀</label>
+    <description>机械体受到花信铃夏之共鸣的影响，结构与装甲正在持续腐蚀。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalCorroded">
+        <armorMultiplier>0.70</armorMultiplier>
+        <damageDef>MX_AbnormalVenomDamage</damageDef>
+        <damageIntervalTicks>240</damageIntervalTicks>
+        <damageAmount>2</damageAmount>
+        <armorPenetration>0</armorPenetration>
+        <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
+        <poisonFleckIntervalTicks>35~80</poisonFleckIntervalTicks>
+        <poisonFleckScaleRange>0.45~0.75</poisonFleckScaleRange>
+        <poisonFleckPositionJitter>0.35</poisonFleckPositionJitter>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Fear / overload -->
+  <MentalStateDef ParentName="BaseMentalState">
+    <defName>MX_AbnormalFearedMentalState</defName>
+    <label>恐惧</label>
+    <stateClass>MiliraXian.Characters.MentalState_AbnormalFeared</stateClass>
+    <category>Misc</category>
+    <nameColor>(0.92, 0.74, 1.00)</nameColor>
+    <blockNormalThoughts>true</blockNormalThoughts>
+    <minTicksBeforeRecovery>600</minTicksBeforeRecovery>
+    <maxTicksBeforeRecovery>600</maxTicksBeforeRecovery>
+    <baseInspectLine>恐惧</baseInspectLine>
+  </MentalStateDef>
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalFear</defName>
+    <label>恐惧积累</label>
+    <description>花信铃的秋之共鸣正在扰乱目标心神。积累达到上限时会触发恐惧效果。</description>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalFearLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalFearEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalFearBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalFearBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalFeared</effectHediff>
+    <effectDurationTicks>600</effectDurationTicks>
+    <triggerText>恐惧</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalOverload</defName>
+    <label>过载积累</label>
+    <description>花信铃的秋之共鸣正在压迫机械控制核心。积累达到上限时会触发过载效果。</description>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalOverloadLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalOverloadEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalOverloadBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalOverloadBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalOverloaded</effectHediff>
+    <effectDurationTicks>600</effectDurationTicks>
+    <triggerText>过载</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+  <HediffDef>
+    <defName>MX_AbnormalFeared</defName>
+    <label>恐惧</label>
+    <description>目标受到花信铃秋之共鸣的影响，陷入了无法自控的恐惧。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalFeared">
+        <mentalStateDef>MX_AbnormalFearedMentalState</mentalStateDef>
+        <mentalStateDurationTicks>600</mentalStateDurationTicks>
+        <forced>true</forced>
+        <forceWake>true</forceWake>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AttachedMote">
+        <moteDef>MX_Mote_AbnormalFearedIcon</moteDef>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_AbnormalOverloaded</defName>
+    <label>过载</label>
+    <description>机械体受到花信铃秋之共鸣的影响，控制核心陷入了过载状态。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalPlaceholderEffect</hediffClass>
+    <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>600</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalOverloaded">
+        <mentalStateDef>BerserkMechanoid</mentalStateDef>
+        <mentalStateDurationTicks>600</mentalStateDurationTicks>
+        <forced>true</forced>
+        <forceWake>true</forceWake>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AttachedMote">
+        <moteDef>MX_Mote_AbnormalOverloadedIcon</moteDef>
+      </li>
+    </comps>
+  </HediffDef>
+  <!-- Cold / freeze -->
+  <MiliraXian.Characters.HediffDef_Abnormal>
+    <defName>MX_AbnormalCold</defName>
+    <label>寒冷积累</label>
+    <description>花信铃的冬之共鸣正在侵入目标。积累达到上限时会触发冻结效果。</description>
+    <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <baseAccumulationLimit>100</baseAccumulationLimit>
+    <accumulationLimitFactorStat>MX_AbnormalColdLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalColdEfficiencyFactor</applicationEfficiencyFactorStat>
+    <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
+    <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
+    <progressBarMoteDef>MX_Mote_AbnormalColdBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalColdBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalFrozen</effectHediff>
+    <effectDurationTicks>300</effectDurationTicks>
+    <triggerText>冻结</triggerText>
+    <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+    <triggerTextColor>(0.56, 0.88, 1.00)</triggerTextColor>
+    <triggerTextDuration>1.25</triggerTextDuration>
+    <comps>
+      <li Class="MiliraXian.Characters.HediffCompProperties_OnAbnormalApplied">
+        <addHediff>Hypothermia</addHediff>
+        <severityPerAccumulation>0.0008</severityPerAccumulation>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </MiliraXian.Characters.HediffDef_Abnormal>
+
+  <HediffDef>
+    <defName>MX_AbnormalFrozen</defName>
+    <label>冻结</label>
+    <description>目标受到花信铃冬之共鸣的影响，被短暂冻结而无法行动。</description>
+    <hediffClass>MiliraXian.Characters.Hediff_AbnormalFrozen</hediffClass>
+    <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+      <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
+        <addHediff>Hypothermia</addHediff>
+        <severityPerTick>0.00012</severityPerTick>
+        <fleshOnly>true</fleshOnly>
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>

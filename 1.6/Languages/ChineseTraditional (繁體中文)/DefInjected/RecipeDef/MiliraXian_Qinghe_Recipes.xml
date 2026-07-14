@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AssembleLostMusicScore.label>嘗試修復失傳的曲譜</MX_QH_AssembleLostMusicScore.label>
+  <MX_QH_AssembleLostMusicScore.description>將失傳的曲譜殘片整理成書卷。50%機率得到隨機技能書，否則得到普通書。技能書有15%機率額外記錄第二個不同技能。</MX_QH_AssembleLostMusicScore.description>
+  <MX_QH_AssembleLostMusicScore.jobString>正在修復失傳的曲譜。</MX_QH_AssembleLostMusicScore.jobString>
+  <MX_QH_WriteLotusRainPavilionOpera.label>撰寫《荷雨亭曲藝》</MX_QH_WriteLotusRainPavilionOpera.label>
+  <MX_QH_WriteLotusRainPavilionOpera.description>由清荷將荷雨亭中的花影、水聲與曲調寫成書卷。25%機率附有清荷的技能相關內容。</MX_QH_WriteLotusRainPavilionOpera.description>
+  <MX_QH_WriteLotusRainPavilionOpera.jobString>正在撰寫《荷雨亭曲藝》。</MX_QH_WriteLotusRainPavilionOpera.jobString>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>荷雨亭曲藝：春水調</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>清荷記下荷雨初歇時的水聲與輕拍。讀到此卷時，彷彿能聽見春水漫過石階，細碎花影隨聲搖動。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>荷雨亭曲藝：花影記</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.content>這卷手稿寫的是花影、步法與短曲之間的呼應。句子不求鋪張，卻處處留下清荷對庭中草木的細緻觀察。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.title>荷雨亭曲藝：聽雨小譜</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.content>清荷把雨落荷葉的節拍拆成數段短譜，又在頁邊附上演奏時的心得。文字安靜，讀來卻有微雨入亭的回響。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.title>荷雨亭曲藝：蓮步散聲</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.content>這是一篇兼記舞步與曲調的書卷。清荷以很輕的筆觸描摹衣袂、鈴音和水面漣漪，使尋常曲藝多了幾分雅致。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.title>荷雨亭曲藝：羽衣聽荷</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.content>清荷把荷雨亭中的水聲寫成底韻，又在頁邊記下霓羽起勢時衣袂掠風的輕響。整卷讀來像一場隔水相和的短曲。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.title>荷雨亭曲藝：離火照雨</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.content>這卷手稿寫雨夜燈火與弦聲相映。清荷將昭離談及的餘燼、命火與回聲化作曲中轉折，使荷亭舊調多了一分明亮鋒芒。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.content>
+</LanguageData>

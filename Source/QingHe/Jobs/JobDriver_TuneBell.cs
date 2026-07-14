@@ -1,0 +1,52 @@
+﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Things.Weapons;
+using MiliraXian.Characters.QingHe.Hediffs;
+using RimWorld;
+using Verse;
+using Verse.AI;
+
+namespace MiliraXian.Characters.QingHe.Jobs
+{
+    public class JobDriver_TuneBell : JobDriver
+    {
+        private const TargetIndex PondIndex = TargetIndex.A;
+        private const int TuneTicks = 360;
+
+        private Building LotusPond => job.GetTarget(PondIndex).Thing as Building;
+
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            return pawn.Reserve(LotusPond, job, 1, -1, null, errorOnFailed);
+        }
+
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            this.FailOn(() => !MX_QHCharacterUtility.IsQinghe(pawn));
+            this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
+            this.FailOnDespawnedNullOrForbidden(PondIndex);
+            this.FailOnBurningImmobile(PondIndex);
+
+            yield return Toils_Goto.GotoThing(PondIndex, PathEndMode.InteractionCell);
+            yield return Toils_General.Wait(TuneTicks)
+                .FailOnDestroyedNullOrForbidden(PondIndex)
+                .FailOnCannotTouch(PondIndex, PathEndMode.InteractionCell)
+                .WithProgressBarToilDelay(PondIndex);
+
+            Toil finish = ToilMaker.MakeToil("FinishTuningFlowerBellAtLotusPond");
+            finish.initAction = delegate
+            {
+                HediffComp_QingheCombatState state = MX_QH_HediffUtility.EnsureCombatState(pawn);
+                if (state == null)
+                {
+                    Messages.Message("MX_QH_TuneFlowerBellNoWeapon".Translate(), pawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+
+                state.SetResonance((FlowerBellResonance)job.count);
+            };
+            finish.defaultCompleteMode = ToilCompleteMode.Instant;
+            yield return finish;
+        }
+    }
+}

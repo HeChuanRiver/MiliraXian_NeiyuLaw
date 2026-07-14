@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Qinghe_Form_Pipa.label>荷乐·琵琶</MX_Qinghe_Form_Pipa.label>
-  <MX_Qinghe_Form_Pipa.description>清荷的琵琶，擅长中距离连发压制。</MX_Qinghe_Form_Pipa.description>
-  <MX_Qinghe_Form_Zhudi.label>荷乐·竹笛</MX_Qinghe_Form_Zhudi.label>
-  <MX_Qinghe_Form_Zhudi.description>清荷的竹笛形兵装，擅长远距离精准点射。</MX_Qinghe_Form_Zhudi.description>
-  <MX_Qinghe_Form_Qin.label>清荷·琴形</MX_Qinghe_Form_Qin.label>
-  <MX_Qinghe_Form_Qin.description>清荷的琴形兵装，擅长近身斩击。</MX_Qinghe_Form_Qin.description>
-  <MX_Qinghe_Form_Qin.tools.0.label>弦刃</MX_Qinghe_Form_Qin.tools.0.label>
-  <MX_Bullet_Qinghe_PipaNote.label>清荷·琵琶音符</MX_Bullet_Qinghe_PipaNote.label>
-  <MX_Bullet_Qinghe_ZhudiNote.label>清荷·竹笛音束</MX_Bullet_Qinghe_ZhudiNote.label>
   <SpringFlowField.label>涌泉力场</SpringFlowField.label>
-  <TempestDrainField.label>扼流力场</TempestDrainField.label>
-  <MX_QH_Elegance_YangChunField.label>阳春音场</MX_QH_Elegance_YangChunField.label>
+  <MX_QH_LotusPond.label>荷池</MX_QH_LotusPond.label>
+  <MX_QH_LotusPond.description>清荷用于调谐四时共鸣的花神庭核心。清荷本人可以在这里与四时花神建立当前共鸣。</MX_QH_LotusPond.description>
+  <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>荷池只可分配给清荷。</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
+  <MX_QH_LostMusicScoreFragment.label>失传的曲谱残片</MX_QH_LostMusicScoreFragment.label>
+  <MX_QH_LostMusicScoreFragment.description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的书。有几率获得失传的技能书（清荷专属）</MX_QH_LostMusicScoreFragment.description>
+  <MX_QH_SkillBook.label>清荷技能书</MX_QH_SkillBook.label>
+  <MX_QH_SkillBook.description>记录旧曲谱的书。清荷阅读时可学习对应技能节点；其他读者也可以像普通书一样阅读。</MX_QH_SkillBook.description>
+  <MX_QH_Book.label>荷雨亭曲艺</MX_QH_Book.label>
+  <MX_QH_Book.description>清荷相关书卷。</MX_QH_Book.description>
+  <MX_QH_UnfinishedLotusRainPavilionOpera.label>未完成的荷雨亭曲艺</MX_QH_UnfinishedLotusRainPavilionOpera.label>
+  <MX_QH_UnfinishedLotusRainPavilionOpera.description>尚未完成的荷雨亭曲艺手稿。</MX_QH_UnfinishedLotusRainPavilionOpera.description>
+  <MX_QH_Weapon_FlowerBell.label>花信风铃</MX_QH_Weapon_FlowerBell.label>
+  <MX_QH_Weapon_FlowerBell.description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。\n\n共鸣音符将对建筑造成三倍伤害，以补偿建筑无法受到异常状态影响。</MX_QH_Weapon_FlowerBell.description>
+  <MX_QH_Weapon_Sword.label>散华</MX_QH_Weapon_Sword.label>
+  <MX_QH_Weapon_Sword.description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。</MX_QH_Weapon_Sword.description>
+  <MX_QH_Weapon_Sword.tools.0.label>清荷剑刃</MX_QH_Weapon_Sword.tools.0.label>
+  <MX_Bullet_Qinghe_FlowerBell_Spring.label>铃音·春</MX_Bullet_Qinghe_FlowerBell_Spring.label>
+  <MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>铃音·春（共振）</MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Summer.label>铃音·夏</MX_Bullet_Qinghe_FlowerBell_Summer.label>
+  <MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>铃音·夏（共振）</MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Autumn.label>铃音·秋</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
+  <MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>铃音·秋（共振）</MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>
+  <MX_Bullet_Qinghe_FlowerBell_Winter.label>铃音·冬</MX_Bullet_Qinghe_FlowerBell_Winter.label>
+  <MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>铃音·冬（共振）</MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>
+  <MX_Bullet_QH_LunarMirrorRetaliation.label>腊梅反击铃音</MX_Bullet_QH_LunarMirrorRetaliation.label>
+  <MX_QH_LunarMirror.label>腊梅护盾</MX_QH_LunarMirror.label>
+  <MX_QH_AscentSlashFlyer.label>剑势·绝影飞行体</MX_QH_AscentSlashFlyer.label>
+  <MX_QH_AscentSlashKnockbackFlyer.label>绝影击退飞行体</MX_QH_AscentSlashKnockbackFlyer.label>
+  <MX_QH_Mote_SpiritBurstCurvedTrail.label>清荷特效</MX_QH_Mote_SpiritBurstCurvedTrail.label>
+  <MX_QH_Mote_FlowerDivinationBurst.label>清荷特效</MX_QH_Mote_FlowerDivinationBurst.label>
+  <MX_QH_Mote_FlowerDivinationBokeh.label>清荷特效</MX_QH_Mote_FlowerDivinationBokeh.label>
+  <MX_QH_Mote_FlowerDivinationFootRing.label>清荷特效</MX_QH_Mote_FlowerDivinationFootRing.label>
 </LanguageData>

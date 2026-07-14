@@ -3,29 +3,26 @@
     <AbilityCategoryDef>
         <defName>MX_QingheSkill</defName>
     </AbilityCategoryDef>
-    <!-- 清荷 —— 基础技能 -->
+
     <AbilityDef>
-        <defName>MX_Qinghe_SpringFlow</defName>
-        <label>涌泉</label>
-        <description>在目标地点创造一股清泉，对6格范围内的己方目标附加*近战伤害系数提升*、*远程伤害系数提升*、*承受伤害降低*和减轻疼痛的效果。\n该技能的*标示效果*可被雅乐的效果强化。\n需要持续引导，引导期间持续积累激流，泉水持续15秒</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
-        <jobDef>CastSpringFlow</jobDef>
-
+        <defName>MX_QH_SpringFlow</defName>
+        <label>春泉涌流</label>
+        <description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果。效果持续15秒。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
-        <displayOrder>120</displayOrder>
+        <displayOrder>201</displayOrder>
         <cooldownTicksRange>480</cooldownTicksRange>
-
         <targetRequired>true</targetRequired>
         <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <waitForJobEnd>true</waitForJobEnd>
-
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
-            <range>30</range>
-            <warmupTime>1.2</warmupTime>
+            <range>11</range>
+            <warmupTime>1.8</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -35,80 +32,103 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilitySpringFlow">
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
                 <fieldDef>SpringFlowField</fieldDef>
                 <fieldDurationTicks>900</fieldDurationTicks>
-                <previewRadius>6.0</previewRadius>
-            </li>
-            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
-                <perTick>
-                    <li>
-                        <resourceDef>MX_QH_Tempest</resourceDef>
-                        <amount>0.04</amount>
-                    </li>
-                </perTick>
+                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
+                <resourceCost>1</resourceCost>
+                <missingResourceMessage>MX_QH_SpringFlowMissingResource</missingResourceMessage>
             </li>
         </comps>
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_Qinghe_AquaMirror</defName>
-        <label>水镜</label>
-        <description>为目标地点附近4格内的己方目标附上持续10秒的水镜，水镜可以抵挡一部分伤害。受到攻击耗尽或持续时间结束后消失时，*瞬间治疗目标*，恢复目标所有非永久伤口和缺失身体部件并*对小范围内敌方目标造成伤害*。\n该技能的*标示效果*可被雅乐的效果强化。\n水镜消失时，积累少量激流。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
-
+        <defName>MX_QH_SpiritBurst</defName>
+        <label>断魂</label>
+        <description>消耗2点花令，演奏出强力声波，对目标区域内的敌人造成伤害并使其眩晕。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
-        <displayOrder>120</displayOrder>
-        <cooldownTicksRange>480</cooldownTicksRange>
-
-        <targetRequired>true</targetRequired>
-        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>true</targetable>
-            <range>30</range>
-            <warmupTime>1.2</warmupTime>
-            <targetParams>
-                <canTargetSelf>false</canTargetSelf>
-                <canTargetPawns>false</canTargetPawns>
-                <canTargetLocations>true</canTargetLocations>
-                <canTargetBuildings>false</canTargetBuildings>
-                <canTargetItems>false</canTargetItems>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.Qinghe.CompProperties_AbilityAquaMirror">
-                <previewRadius>4.0</previewRadius>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <!-- 清荷 —— 激流技能 -->
-    <AbilityDef>
-        <defName>MX_Qinghe_TempestDrain</defName>
-        <label>扼流</label>
-        <description>在目标地点引导一个大范围扼流力场，使进入其中的敌对目标*持续积累水循环断流状态*，附加大量负面效果且积累到最大值时立刻死亡。\n该技能的*标示效果*可被雅乐的效果强化。\n需要至少50点激流，引导时持续消耗激流直到剩余不足10点时自动关闭，该技能不可手动打断。\n目标越靠近力场中心，断流积累的速度越快。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath><!--TODO: Draw a unique icon-->
-        <jobDef>CastTempestDrain</jobDef>
-
-        <category>MX_QingheSkill</category>
-        <displayOrder>120</displayOrder>
-        <cooldownTicksRange>480</cooldownTicksRange>
-
+        <displayOrder>203</displayOrder>
+        <cooldownTicksRange>1200</cooldownTicksRange>
         <targetRequired>true</targetRequired>
         <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <waitForJobEnd>true</waitForJobEnd>
-
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
-            <range>30</range>
+            <range>55</range>
             <warmupTime>1.2</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>true</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpiritBurst">
+                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
+                <resourceCost>2</resourceCost>
+                <missingResourceMessage>MX_QH_SpiritBurstMissingResource</missingResourceMessage>
+                <radius>2.5</radius>
+                <damageDef>MX_QH_NoteImpact</damageDef>
+                <damageAmount>75</damageAmount>
+                <armorPenetration>1.75</armorPenetration>
+                <stunDamageAmount>8</stunDamageAmount>
+                <brainDestroyChance>0.01</brainDestroyChance>
+                <enhancedPsychicSensitivityThreshold>1.0</enhancedPsychicSensitivityThreshold>
+                <enhancedPsychicDamageMultiplier>10</enhancedPsychicDamageMultiplier>
+                <enhancedFearAbnormals>
+                    <li>MX_AbnormalFear</li>
+                    <li>MX_AbnormalOverload</li>
+                </enhancedFearAbnormals>
+                <enhancedFearAccumulationAmount>150</enhancedFearAccumulationAmount>
+                <curveMote>MX_QH_Mote_SpiritBurstCurvedTrail</curveMote>
+                <curveDistortWidth>4.2</curveDistortWidth>
+                <curveDistortAlpha>0.68</curveDistortAlpha>
+                <curveWidth>3.1</curveWidth>
+                <curveDensity>8.8</curveDensity>
+                <curveWaveLen>4.8</curveWaveLen>
+                <curveAlpha>2.1</curveAlpha>
+                <curveAfterLayers>9</curveAfterLayers>
+                <curveAfterGap>1</curveAfterGap>
+                <curveAfterAlpha>0.62</curveAfterAlpha>
+                <curveMinSegs>28</curveMinSegs>
+                <curveMaxSegs>96</curveMaxSegs>
+                <curveDistortStep>3</curveDistortStep>
+            </li>
+        </comps>
+    </AbilityDef>
+
+    <AbilityDef>
+        <defName>MX_QH_LunarMirror</defName>
+        <label>霜月镜</label>
+        <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。护盾持续20秒，最多吸收300点伤害。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>204</displayOrder>
+        <cooldownTicksRange>600</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>16</range>
+            <warmupTime>2.0</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -118,196 +138,255 @@
             </targetParams>
         </verbProperties>
         <comps>
-            <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityTempestDrain">
-                <fieldDef>TempestDrainField</fieldDef>
-                <minResourceToCast>50</minResourceToCast>
-                <minResourceToMaintain>10</minResourceToMaintain>
-                <channelDurationTicks>999999</channelDurationTicks>
-                <previewRadius>12.0</previewRadius>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_ChannelResource">
-                <perTick>
-                    <li>
-                        <resourceDef>MX_QH_Tempest</resourceDef>
-                        <amount>-0.1</amount>
-                    </li>
-                </perTick>
-                <failConditions>
-                    <li>
-                        <resourceDef>MX_QH_Tempest</resourceDef>
-                        <minAmount>10</minAmount>
-                    </li>
-                </failConditions>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
+                <shieldDef>MX_QH_LunarMirror</shieldDef>
+                <durationTicks>1200</durationTicks>
+                <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
+                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
+                <resourceCost>2</resourceCost>
+                <missingResourceMessage>MX_QH_LunarMirrorMissingResource</missingResourceMessage>
             </li>
         </comps>
     </AbilityDef>
 
-<!-- =========================
-       QingHe Elegance 武器技能示例
-       资源：MX_QH_Elegance
-       ========================= -->
+    <AbilityDef>
+        <defName>MX_QH_EyeOfHeart</defName>
+        <label>心眼</label>
+        <description>凝神持续1秒。期间遭到任何敌对攻击时，无论攻击是否命中或造成伤害，立即回复10%的莲华护盾并获得1点剑压。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>220</displayOrder>
+        <cooldownTicksRange>900</cooldownTicksRange>
+        <targetRequired>false</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>false</targetable>
+            <range>1</range>
+            <warmupTime>0</warmupTime>
+            <nonInterruptingSelfCast>true</nonInterruptingSelfCast>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityEyeOfHeart">
+                <stateHediff>MX_QH_EyeOfHeartState</stateHediff>
+                <durationTicks>60</durationTicks>
+            </li>
+        </comps>
+    </AbilityDef>
 
-  <!-- 横指（琵琶形态）：同一施法 Job 内结算范围冲击+击退 -->
-  <AbilityDef>
-    <defName>MX_Qinghe_Elegance_HengZhi</defName>
-    <label>横指</label>
-    <description>仅琵琶形态可用。对自身周围敌人造成高额冲击并击退，命中目标越多，雅乐（Elegance）增长越快。</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-    <category>MX_QingheSkill</category>
-    <displayOrder>130</displayOrder>
-    <cooldownTicksRange>240</cooldownTicksRange>
+    <AbilityDef>
+        <defName>MX_QH_IllusoryReflection</defName>
+        <label>镜花水月</label>
+        <description>向所选方向举刀进入持续5秒且无法主动中断的防御架势，受到范围内的任意攻击时，化解此次攻击并立即消耗一层剑压发动高威力斩击。剑压不足1层时也能发动，但斩击威力将大幅削弱。\n\n防御架势期间受到范围外的攻击伤害降低60%。\n\n——镜花水月，如梦似幻。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>225</displayOrder>
+        <cooldownTicksRange>1800</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <jobDef>MX_QH_IllusoryReflection</jobDef>
+        <waitForJobEnd>true</waitForJobEnd>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>30</range>
+            <warmupTime>0</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityIllusoryReflection">
+                <durationTicks>300</durationTicks>
+                <normalDamage>24</normalDamage>
+                <empoweredDamage>96</empoweredDamage>
+                <armorPenetration>1.25</armorPenetration>
+                <coneRadius>4.5</coneRadius>
+                <coneAngleDegrees>180</coneAngleDegrees>
+                <invulnerabilityHediff>MX_QH_IllusoryReflectionInvulnerable</invulnerabilityHediff>
+                <invulnerabilityTicks>120</invulnerabilityTicks>
+                <eyeOfHeartCooldownReductionTicks>600</eyeOfHeartCooldownReductionTicks>
+                <stanceSound>MX_QH_MirrorSlash_Stance</stanceSound>
+                <slashSound>MX_QH_MirrorSlash_Slash</slashSound>
+                <normalSlashFleck>MX_QH_Fleck_MirrorSlashNormal</normalSlashFleck>
+                <normalSlashVisualScale>3.2</normalSlashVisualScale>
+                <normalSlashVisualForwardOffset>0</normalSlashVisualForwardOffset>
+                <normalSlashVisualAngleOffsetDegrees>0</normalSlashVisualAngleOffsetDegrees>
+                <mirrorSlashTexPath>MiliraXianQinghe/Effect/flower_divination_slash_2</mirrorSlashTexPath>
+                <mirrorSlashRevealSeconds>0.11</mirrorSlashRevealSeconds>
+                <mirrorSlashHoldSeconds>0.01</mirrorSlashHoldSeconds>
+                <mirrorSlashFadeSeconds>0.56</mirrorSlashFadeSeconds>
+                <mirrorSlashDrawSizeFactor>1.35</mirrorSlashDrawSizeFactor>
+                <mirrorSlashForwardOffsetFactor>0.02</mirrorSlashForwardOffsetFactor>
+                <mirrorSlashAngleOffsetDegrees>0</mirrorSlashAngleOffsetDegrees>
+                <mirrorSlashHeadWidth>0.238</mirrorSlashHeadWidth>
+                <mirrorSlashHeadIntensity>3.3</mirrorSlashHeadIntensity>
+                <mirrorSlashAdditiveIntensity>3.95</mirrorSlashAdditiveIntensity>
+                <mirrorSlashDistortionStrength>0.155</mirrorSlashDistortionStrength>
+                <mirrorSlashDistortionScale>0.36</mirrorSlashDistortionScale>
+                <mirrorSlashDistortionScrollX>0.17</mirrorSlashDistortionScrollX>
+                <mirrorSlashDistortionScrollY>0</mirrorSlashDistortionScrollY>
+                <mirrorSlashDistortionOpacity>0.65</mirrorSlashDistortionOpacity>
+            </li>
+        </comps>
+    </AbilityDef>
 
-    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
-    <jobDef>MX_Qinghe_Elegance_CastAbility_HengZhi</jobDef>
+    <AbilityDef>
+        <defName>MX_QH_AscentSlash</defName>
+        <label>必杀剑：落樱</label>
+        <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动数次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>230</displayOrder>
+        <cooldownTicksRange>360</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>19</range>
+            <warmupTime>0.55</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
+            <targetParams>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>true</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
+                <knockbackFlyerDef>MX_QH_AscentSlashKnockbackFlyer</knockbackFlyerDef>
+                <range>19</range>
+                <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
+                <dashDurationMinTicks>8</dashDurationMinTicks>
+                <dashCollisionRadius>1.35</dashCollisionRadius>
+                <dashImpactRadius>1.8</dashImpactRadius>
+                <dashDamageAmount>10</dashDamageAmount>
+                <takeoffDelayTicks>18</takeoffDelayTicks>
+                <ascentTicks>52</ascentTicks>
+                <hoverTicks>22</hoverTicks>
+                <descentTicks>14</descentTicks>
+                <ascentDecelerationPower>2.2</ascentDecelerationPower>
+                <descentAccelerationPower>2.4</descentAccelerationPower>
+                <secondStageTrackingRange>4</secondStageTrackingRange>
+                <secondStageLimitedFollowDistance>1.5</secondStageLimitedFollowDistance>
+                <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
+                <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
+                <secondImpactRadius>2</secondImpactRadius>
+                <damageAmount>32</damageAmount>
+                <armorPenetration>0.35</armorPenetration>
+                <accumulationAbnormals>
+                    <li>MX_AbnormalBleed</li>
+                    <li>MX_AbnormalElectricLeak</li>
+                </accumulationAbnormals>
+                <accumulationAmount>18</accumulationAmount>
+                <buildingDamageMultiplier>2</buildingDamageMultiplier>
+                <stunTicks>60</stunTicks>
+                <knockbackDistance>4</knockbackDistance>
+                <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
+                <empoweredSlashCount>7</empoweredSlashCount>
+                <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>
+                <empoweredSlashRadius>1</empoweredSlashRadius>
+                <empoweredSlashFleck>MX_QH_Fleck_MirrorSlashNormal</empoweredSlashFleck>
+                <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
+                <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
+                <normalSlashCount>3</normalSlashCount>
+                <postHitRecoveryPoints>2</postHitRecoveryPoints>
+                <postHitRecoveryTicks>600</postHitRecoveryTicks>
+                <impactDelayTicks>30</impactDelayTicks>
+                <dropSound>MX_QH_AscentSlash_Drop</dropSound>
+                <slashSound>MX_QH_AscentSlash_Slash</slashSound>
+                <takeoffGroundFleck>MXNL_Skyfall_FlyBegin_G</takeoffGroundFleck>
+                <takeoffGroundFleckSize>(4.8,1.9)</takeoffGroundFleckSize>
+                <takeoffGroundFleckOffset>(0,0)</takeoffGroundFleckOffset>
+                <ascentTrailFleck>MXNL_Skyfall_FlyBegin_F</ascentTrailFleck>
+                <ascentTrailFleckSize>(1.1,10.1)</ascentTrailFleckSize>
+                <ascentTrailFleckOffset>(0,4)</ascentTrailFleckOffset>
+            </li>
+        </comps>
+    </AbilityDef>
 
-    <targetRequired>false</targetRequired>
-    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-
-    <verbProperties>
-      <verbClass>Verb_CastAbility</verbClass>
-      <targetable>false</targetable>
-      <range>1.9</range>
-      <warmupTime>0.25</warmupTime>
-      <targetParams>
-        <canTargetSelf>true</canTargetSelf>
-      </targetParams>
-    </verbProperties>
-
-    <comps>
-      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityHengZhi">
-        <!-- 绑定到当前已存在的近战形态 Def -->
-        <requiredWeapon>MX_Qinghe_Form_Pipa</requiredWeapon>
-
-        <!-- 在同一施法 Job 内，施法完成后额外等待几 tick 再结算（0=立即） -->
-        <postCastDelayTicks>0</postCastDelayTicks>
-
-        <radius>3.9</radius>
-        <damageDef>MX_Dehydrate</damageDef>
-        <damageAmount>24</damageAmount>
-        <armorPenetration>0.55</armorPenetration>
-        <bluntDamageAmount>10</bluntDamageAmount>
-        <bluntArmorPenetration>0.15</bluntArmorPenetration>
-        <knockbackDistance>4</knockbackDistance>
-        <damageFactorMax>1</damageFactorMax>
-        <knockbackFactorMax>0.5</knockbackFactorMax>
-        <eleganceGainPerTarget>3</eleganceGainPerTarget>
-        <eleganceGainMax>24</eleganceGainMax>
-      </li>
-    </comps>
-  </AbilityDef>
-
-  <!-- 断魂（竹笛形态）：同一施法 Job 内结算目标区控制与破坏 -->
-  <AbilityDef>
-    <defName>MX_Qinghe_Elegance_DuanHun</defName>
-    <label>断魂</label>
-    <description>仅竹笛形态可用。对远处小范围施加断魂音律，造成伤害、眩晕、流血与长时减速，并有低概率直接摧毁大脑。</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-    <category>MX_QingheSkill</category>
-    <displayOrder>131</displayOrder>
-    <cooldownTicksRange>720</cooldownTicksRange>
-
-    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
-    <jobDef>MX_Qinghe_Elegance_CastAbility_DuanHun</jobDef>
-
-    <targetRequired>true</targetRequired>
-    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-
-    <verbProperties>
-      <verbClass>Verb_CastAbility</verbClass>
-      <targetable>true</targetable>
-      <range>55</range>
-      <warmupTime>1.2</warmupTime>
-      <targetParams>
-        <canTargetSelf>false</canTargetSelf>
-        <canTargetPawns>true</canTargetPawns>
-        <canTargetLocations>true</canTargetLocations>
-        <canTargetBuildings>false</canTargetBuildings>
-        <canTargetItems>false</canTargetItems>
-      </targetParams>
-    </verbProperties>
-
-    <comps>
-      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityDuanHun">
-        <!-- 绑定到当前已存在的远程形态 Def -->
-        <requiredWeapon>MX_Qinghe_Form_Zhudi</requiredWeapon>
-
-        <!-- 在同一施法 Job 内，施法完成后额外等待几 tick 再结算（0=立即） -->
-        <postCastDelayTicks>0</postCastDelayTicks>
-
-        <radius>2.5</radius>
-        <damageDef>MX_Desynced</damageDef>
-        <damageAmount>16</damageAmount>
-        <armorPenetration>0.25</armorPenetration>
-        <stunDamageAmount>8</stunDamageAmount>
-        <bleedDamageAmount>5</bleedDamageAmount>
-        <slowHediff>MX_QH_Elegance_DuanHunSlow</slowHediff>
-        <slowSeverity>1</slowSeverity>
-        <slowDurationTicks>1800</slowDurationTicks>
-        <damageFactorMax>0.75</damageFactorMax>
-        <slowDurationFactorMax>1</slowDurationFactorMax>
-        <brainDestroyChance>0.08</brainDestroyChance>
-        <eleganceGainOnCast>8</eleganceGainOnCast>
-        <eleganceGainPerTarget>2</eleganceGainPerTarget>
-        <curveMote>MX_QH_Mote_DuanHunCurvedTrail</curveMote>
-        <curveDistortWidth>4.2</curveDistortWidth>
-        <curveDistortAlpha>0.68</curveDistortAlpha>
-        <curveWidth>3.1</curveWidth>
-        <curveDensity>8.8</curveDensity>
-        <curveWaveLen>4.8</curveWaveLen>
-        <curveAlpha>2.1</curveAlpha>
-        <curveAfterLayers>9</curveAfterLayers>
-        <curveAfterGap>1</curveAfterGap>
-        <curveAfterAlpha>0.62</curveAfterAlpha>
-        <curveMinSegs>28</curveMinSegs>
-        <curveMaxSegs>96</curveMaxSegs>
-        <curveDistortStep>3</curveDistortStep>
-      </li>
-    </comps>
-  </AbilityDef>
-
-  <!-- 阳春（琴形态）：同一施法 Job 内结算敌伤友疗脉冲 -->
-  <AbilityDef>
-    <defName>MX_Qinghe_Elegance_YangChun</defName>
-    <label>阳春</label>
-    <description>仅琴形态可用。完成施法后，由同一施法 Job 末尾追加和声脉冲：敌方受伤并减速，友方获得治疗和加速增益，同时提升雅乐（Elegance）。</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-    <category>MX_QingheSkill</category>
-    <displayOrder>132</displayOrder>
-    <cooldownTicksRange>600</cooldownTicksRange>
-
-    <!-- 关键：改用自定义施法 JobDef（driver 继承 JobDriver_CastAbility） -->
-    <jobDef>MX_Qinghe_Elegance_CastAbility_YangChun</jobDef>
-
-    <targetRequired>false</targetRequired>
-    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-    <waitForJobEnd>true</waitForJobEnd>
-
-    <verbProperties>
-      <verbClass>Verb_CastAbility</verbClass>
-      <targetable>false</targetable>
-      <range>1.9</range>
-      <warmupTime>0.2</warmupTime>
-      <targetParams>
-        <canTargetSelf>true</canTargetSelf>
-      </targetParams>
-    </verbProperties>
-
-    <comps>
-      <li Class="MiliraXian.Characters.QingHe.CompProperties_AbilityYangChun">
-        <!-- Bind to existing support-form weapon Def -->
-        <requiredWeapon>MX_Qinghe_Form_Qin</requiredWeapon>
-
-        <!-- Extra delay ticks before channel starts in same cast job -->
-        <postCastDelayTicks>6</postCastDelayTicks>
-
-        <fieldDef>MX_QH_Elegance_YangChunField</fieldDef>
-        <fieldDurationTicks>9999999</fieldDurationTicks>
-        <previewRadius>7.9</previewRadius>
-      </li>
-    </comps>
-  </AbilityDef>
-
+    <AbilityDef>
+        <defName>MX_QH_LuoshenRibbon</defName>
+        <label>洛神的缎带</label>
+        <description>习得洛神赋后可使用。选择两名清醒的人，以洛神的缎带牵引彼此心意，大幅提升双方互相的看法。</description>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <category>MX_QingheSkill</category>
+        <displayOrder>240</displayOrder>
+        <cooldownTicksRange>360000</cooldownTicksRange>
+        <targetRequired>true</targetRequired>
+        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+        <warmupMote>Mote_WarmupWordOf</warmupMote>
+        <warmupSound>Psycast_WordOf_Warmup</warmupSound>
+        <stunTargetWhileCasting>true</stunTargetWhileCasting>
+        <showPsycastEffects>false</showPsycastEffects>
+        <moteOffsetAmountTowardsTarget>0.5</moteOffsetAmountTowardsTarget>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>24</range>
+            <warmupTime>1.5</warmupTime>
+            <requireLineOfSight>true</requireLineOfSight>
+            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
+            <targetParams>
+                <canTargetSelf>true</canTargetSelf>
+                <canTargetPawns>true</canTargetPawns>
+                <canTargetAnimals>false</canTargetAnimals>
+                <canTargetMechs>false</canTargetMechs>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
+                <requireSword>false</requireSword>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLuoshenRibbon">
+                <destination>Selected</destination>
+                <psychic>true</psychic>
+                <applicableToMechs>false</applicableToMechs>
+                <range>24</range>
+                <requiresLineOfSight>true</requiresLineOfSight>
+                <opinionThoughtDef>MX_QH_LuoshenRibbonGrace</opinionThoughtDef>
+                <invalidTargetMessage>MX_QH_LuoshenRibbonInvalidTarget</invalidTargetMessage>
+                <successMessage>MX_QH_LuoshenRibbonApplied</successMessage>
+            </li>
+            <li Class="CompProperties_AbilityFleckOnTarget">
+                <fleckDef>WordOfApply</fleckDef>
+                <sound>Psycast_WordOf_Effect</sound>
+            </li>
+        </comps>
+    </AbilityDef>
 </Defs>

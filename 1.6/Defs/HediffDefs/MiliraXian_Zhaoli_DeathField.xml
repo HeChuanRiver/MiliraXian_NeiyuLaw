@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续压制范围内除自身外的一切单位。目标离开范围后，告死倒计时会立即清零。</description>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内除自身外的一切单位施加告死。目标离开范围后，告死积累会快速衰减。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
@@ -20,28 +20,33 @@
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathField">
                 <radius>9</radius>
                 <fieldDurationTicks>540</fieldDurationTicks>
-                <bleedIntervalTicks>60</bleedIntervalTicks>
-                <bleedDamage>3</bleedDamage>
-                <bleedDamageDef>Cut</bleedDamageDef>
-                <executeStayTicks>540</executeStayTicks>
-                <slowHediff>MXZL_ZhaoliDeathFieldSlow</slowHediff>
-                <slowRefreshTicks>90</slowRefreshTicks>
-                <karmaPerExecution>1</karmaPerExecution>
+                <applyIntervalTicks>60</applyIntervalTicks>
+                <abnormal>MX_AbnormalDeathSentence</abnormal>
+                <accumulationPerApplication>1</accumulationPerApplication>
             </li>
         </comps>
     </HediffDef>
 
-    <HediffDef>
-        <defName>MXZL_ZhaoliDeathFieldSlow</defName>
-        <label>&lt;color=#B86CFF&gt;告死滞压&lt;/color&gt;</label>
-        <description>身处&lt;color=#B86CFF&gt;告死流场&lt;/color&gt;之中，行动会被明显压制，难以脱离这片&lt;color=#C9A2FF&gt;黑红领域&lt;/color&gt;。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
+    <MiliraXian.Characters.HediffDef_Abnormal>
+        <defName>MX_AbnormalDeathSentence</defName>
+        <label>告死</label>
+        <description>昭离以流场侵蚀目标的生机。积累期间目标行动受阻，并会周期性受到割伤；积累达到上限时，最后一次施加告死的角色将完成处决。</description>
         <defaultLabelColor>(0.58, 0.08, 0.16)</defaultLabelColor>
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
-        <initialSeverity>1</initialSeverity>
-        <minSeverity>1</minSeverity>
-        <maxSeverity>1</maxSeverity>
+        <everCurableByItem>false</everCurableByItem>
+        <baseAccumulationLimit>9</baseAccumulationLimit>
+        <accumulationLimitFactorStat>MX_AbnormalDeathSentenceLimitFactor</accumulationLimitFactorStat>
+        <applicationEfficiencyFactorStat>MX_AbnormalDeathSentenceEfficiencyFactor</applicationEfficiencyFactorStat>
+        <ticksUntilDecayAfterRefresh>65</ticksUntilDecayAfterRefresh>
+        <accumulationDecayPerTick>1</accumulationDecayPerTick>
+        <progressBarMoteDef>MX_Mote_AbnormalDeathSentenceBar</progressBarMoteDef>
+        <triggerMoteDef>MX_Mote_AbnormalDeathSentenceBurstIcon</triggerMoteDef>
+        <effectHediff>MX_AbnormalDeathSentenceResult</effectHediff>
+        <effectDurationTicks>1</effectDurationTicks>
+        <triggerText>告死</triggerText>
+        <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
+        <triggerTextColor>(0.94, 0.26, 0.26)</triggerTextColor>
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
@@ -51,8 +56,28 @@
             </li>
         </stages>
         <comps>
+            <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathSentence">
+                <cutSeverity>3</cutSeverity>
+            </li>
+            <li Class="MiliraXian.Characters.HediffCompProperties_AttachedMote">
+                <moteDef>MXZL_Mote_DeathFieldMark</moteDef>
+            </li>
+        </comps>
+    </MiliraXian.Characters.HediffDef_Abnormal>
+
+    <HediffDef>
+        <defName>MX_AbnormalDeathSentenceResult</defName>
+        <label>告死结算</label>
+        <description>告死的隐藏结算状态。</description>
+        <hediffClass>MiliraXian.Characters.Zhaoli.Hediff_ZhaoliDeathSentenceResult</hediffClass>
+        <isBad>true</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <initialSeverity>1</initialSeverity>
+        <minSeverity>1</minSeverity>
+        <maxSeverity>1</maxSeverity>
+        <comps>
             <li Class="Verse.HediffCompProperties_Disappears">
-                <disappearsAfterTicks>90</disappearsAfterTicks>
+                <disappearsAfterTicks>1</disappearsAfterTicks>
                 <showRemainingTime>false</showRemainingTime>
             </li>
         </comps>

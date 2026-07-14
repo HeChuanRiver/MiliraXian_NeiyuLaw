@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QingHe_DebugMaxTempest.label>最大激流</MX_QingHe_DebugMaxTempest.label>
-  <MX_QingHe_DebugMaxTempest.description>立即获得最大激流。</MX_QingHe_DebugMaxTempest.description>
-  <MX_QingHe_DebugMaxElegance.label>最大雅乐</MX_QingHe_DebugMaxElegance.label>
-  <MX_QingHe_DebugMaxElegance.description>立即获得最大雅乐。</MX_QingHe_DebugMaxElegance.description>
-  <MX_Qinghe_SpringFlow.label>涌泉</MX_Qinghe_SpringFlow.label>
-  <MX_Qinghe_SpringFlow.description>在目标地点创造一股清泉，对6格范围内的己方目标附加近战伤害提升、远程伤害提升、承受伤害降低和减轻疼痛的效果。\n该技能的标示效果可被雅乐强化。\n需要持续引导，引导期间持续积累激流，泉水持续15秒。</MX_Qinghe_SpringFlow.description>
-  <MX_Qinghe_AquaMirror.label>水镜</MX_Qinghe_AquaMirror.label>
-  <MX_Qinghe_AquaMirror.description>为目标地点附近4格内的己方目标附上持续10秒的水镜。水镜可以抵挡一部分伤害；受到攻击耗尽或持续时间结束而消失时，会瞬间治疗目标，恢复所有非永久伤口和缺失身体部件，并对小范围内敌方目标造成伤害。\n该技能的标示效果可被雅乐强化。\n水镜消失时会积累少量激流。</MX_Qinghe_AquaMirror.description>
-  <MX_Qinghe_TempestDrain.label>扼流</MX_Qinghe_TempestDrain.label>
-  <MX_Qinghe_TempestDrain.description>在目标地点引导一个大范围扼流力场，使进入其中的敌对目标持续积累水循环断流状态，附加大量负面效果，并在积累到最大值时立刻死亡。\n该技能的标示效果可被雅乐强化。\n需要至少50点激流；引导时持续消耗激流，直到剩余不足10点时自动关闭。该技能不可手动打断。\n目标越靠近力场中心，断流积累速度越快。</MX_Qinghe_TempestDrain.description>
-  <MX_Qinghe_Elegance_HengZhi.label>横指</MX_Qinghe_Elegance_HengZhi.label>
-  <MX_Qinghe_Elegance_HengZhi.description>仅琵琶形态可用。对自身周围敌人造成高额冲击并击退，命中目标越多，雅乐增长越快。</MX_Qinghe_Elegance_HengZhi.description>
-  <MX_Qinghe_Elegance_DuanHun.label>断魂</MX_Qinghe_Elegance_DuanHun.label>
-  <MX_Qinghe_Elegance_DuanHun.description>仅竹笛形态可用。对远处小范围施加断魂音律，造成伤害、眩晕、流血与长时减速，并有低概率直接摧毁大脑。</MX_Qinghe_Elegance_DuanHun.description>
-  <MX_Qinghe_Elegance_YangChun.label>阳春</MX_Qinghe_Elegance_YangChun.label>
-  <MX_Qinghe_Elegance_YangChun.description>仅琴形态可用。完成施法后，由同一施法 Job 末尾追加和声脉冲：敌方受伤并减速，友方获得治疗和加速增益，同时提升雅乐。</MX_Qinghe_Elegance_YangChun.description>
+  <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果。效果持续15秒。</MX_QH_SpringFlow.description>
+  <MX_QH_SpiritBurst.label>断魂</MX_QH_SpiritBurst.label>
+  <MX_QH_SpiritBurst.description>消耗2点花令，演奏出强力声波，对目标区域内的敌人造成伤害并使其眩晕。</MX_QH_SpiritBurst.description>
+  <MX_QH_LunarMirror.label>霜月镜</MX_QH_LunarMirror.label>
+  <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。护盾持续20秒，最多吸收300点伤害。</MX_QH_LunarMirror.description>
+  <MX_QH_EyeOfHeart.label>心眼</MX_QH_EyeOfHeart.label>
+  <MX_QH_EyeOfHeart.description>凝神持续1秒。期间遭到任何敌对攻击时，无论攻击是否命中或造成伤害，立即回复10%的莲华护盾并获得1点剑压。</MX_QH_EyeOfHeart.description>
+  <MX_QH_IllusoryReflection.label>镜花水月</MX_QH_IllusoryReflection.label>
+  <MX_QH_IllusoryReflection.description>进入持续5秒且无法主动中断的水月架势。来源位于4格内的敌对攻击会被无效，并立即向攻击来源反击；来源位于范围外的敌对攻击伤害降低60%。拥有至少1点剑压时，消耗1点向攻击来源发动强力扇形斩击，并缩短心眼10秒冷却；否则进行一次普通攻击。</MX_QH_IllusoryReflection.description>
+  <MX_QH_AscentSlash.label>必杀剑：落樱</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动高威力斩击。剑压不足1档时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</MX_QH_AscentSlash.description>
+  <MX_QH_LuoshenRibbon.label>洛神的缎带</MX_QH_LuoshenRibbon.label>
+  <MX_QH_LuoshenRibbon.description>习得洛神赋后可使用。选择两名清醒的人，以洛神的缎带牵引彼此心意，大幅提升双方互相的看法。</MX_QH_LuoshenRibbon.description>
 </LanguageData>

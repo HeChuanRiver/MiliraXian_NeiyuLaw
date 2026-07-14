@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerDivinationBurst</defName>
+    <label>清荷特效</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteMultiplyAddCircularGrayscale</shaderType>
+      <texPath>Things/Mote/RadiationDistortion_A</texPath>
+      <color>(1.00, 0.76, 0.92, 1.00)</color>
+      <shaderParameters>
+        <_MultiplyTex>/Things/Mote/RadiationDistortion_B</_MultiplyTex>
+        <_texAScale>0.3</_texAScale>
+        <_texBScale>0.3</_texBScale>
+        <_texAScrollSpeed>1.5</_texAScrollSpeed>
+        <_texBScrollSpeed>-0.8</_texBScrollSpeed>
+        <_Intensity>11</_Intensity>
+      </shaderParameters>
+      <drawSize>(2.2, 2.2)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.05</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>0.15</solidTime>
+      <growthRate>2.0</growthRate>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MoteBase" MayRequire="Ludeon.RimWorld.Ideology">
+    <defName>MX_QH_Mote_FlowerDivinationBokeh</defName>
+    <label>清荷特效</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Mote</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>Things/Mote/RitualEffects/Bokeh</texPath>
+      <drawSize>(2.4, 2.4)</drawSize>
+      <color>(1.00, 0.82, 0.96, 0.72)</color>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.22</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+    </mote>
+  </ThingDef>
+  <ThingDef ParentName="MoteBase">
+    <defName>MX_QH_Mote_FlowerDivinationFootRing</defName>
+    <label>清荷特效</label>
+    <thingClass>MoteAttached</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>Things/Mote/PsychicDistortionRing</texPath>
+      <drawSize>(2.8, 2.8)</drawSize>
+      <color>(1.00, 0.72, 0.92, 0.72)</color>
+      <shaderParameters>
+        <_Interval>0.75</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <mote>
+      <fadeInTime>0.25</fadeInTime>
+      <fadeOutTime>0.35</fadeOutTime>
+      <solidTime>999999</solidTime>
+    </mote>
+  </ThingDef>
+  <EffecterDef>
+    <defName>MX_QH_Effecter_FlowerDivinationActive</defName>
+    <offsetMode>Free</offsetMode>
+    <children>
+      <li MayRequire="Ludeon.RimWorld.Ideology">
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <moteDef>MX_QH_Mote_FlowerDivinationBokeh</moteDef>
+        <spawnLocType>OnSource</spawnLocType>
+        <attachToSpawnThing>true</attachToSpawnThing>
+        <destroyMoteOnCleanup>true</destroyMoteOnCleanup>
+        <positionOffset>(0, 0, 0)</positionOffset>
+        <scale>1</scale>
+        <rotation>0~0</rotation>
+        <rotationRate>0</rotationRate>
+        <absoluteAngle>true</absoluteAngle>
+      </li>
+      <li>
+        <subEffecterClass>SubEffecter_SprayerTriggered</subEffecterClass>
+        <moteDef>MX_QH_Mote_FlowerDivinationFootRing</moteDef>
+        <spawnLocType>OnSource</spawnLocType>
+        <attachToSpawnThing>true</attachToSpawnThing>
+        <destroyMoteOnCleanup>true</destroyMoteOnCleanup>
+        <positionOffset>(0, 0, -0.08)</positionOffset>
+        <scale>1</scale>
+        <rotation>0~0</rotation>
+        <rotationRate>0</rotationRate>
+        <absoluteAngle>true</absoluteAngle>
+      </li>
+    </children>
+  </EffecterDef>
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_SpringFlowHediff</defName>
     <altitudeLayer>MoteLow</altitudeLayer>
@@ -16,39 +123,6 @@
       <color>(0.70, 0.95, 1.00, 0.34)</color>
     </graphicData>
   </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_YangChunHarmonyHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.24</fadeOutTime>
-    <growthRate>0.35</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsycastCast</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.58,0.58)</drawSize>
-      <color>(1.00, 0.88, 0.96, 0.28)</color>
-    </graphicData>
-  </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_YangChunMuteHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.26</fadeOutTime>
-    <growthRate>0.45</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsychicDistortionRing</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.68,0.68)</drawSize>
-      <color>(0.98, 0.66, 0.90, 0.34)</color>
-    </graphicData>
-  </FleckDef>
-
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_QH_Fleck_DrainHediff</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>
@@ -64,23 +138,6 @@
       <color>(0.74, 0.72, 1.00, 0.38)</color>
     </graphicData>
   </FleckDef>
-
-  <FleckDef ParentName="FleckBase_Thrown">
-    <defName>MX_QH_Fleck_DuanHunSlowHediff</defName>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <fadeInTime>0.02</fadeInTime>
-    <solidTime>0.10</solidTime>
-    <fadeOutTime>0.26</fadeOutTime>
-    <growthRate>0.40</growthRate>
-    <graphicData>
-      <graphicClass>Graphic_FleckPulse</graphicClass>
-      <texPath>Things/Mote/PsycastCast</texPath>
-      <shaderType>MoteGlow</shaderType>
-      <drawSize>(0.54,0.54)</drawSize>
-      <color>(0.94, 0.70, 0.98, 0.30)</color>
-    </graphicData>
-  </FleckDef>
-
   <EffecterDef>
     <defName>MX_QH_Effecter_SpringFlowHediff</defName>
     <offsetMode>Free</offsetMode>
@@ -103,53 +160,6 @@
       </li>
     </children>
   </EffecterDef>
-
-  <EffecterDef>
-    <defName>MX_QH_Effecter_YangChunHarmonyHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_YangChunHarmonyHediff</fleckDef>
-        <ticksBetweenMotes>24</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.45)</positionOffset>
-        <scale>0.9</scale>
-        <rotation>-3~3</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
-  <EffecterDef>
-    <defName>MX_QH_Effecter_YangChunMuteHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_YangChunMuteHediff</fleckDef>
-        <ticksBetweenMotes>22</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.38)</positionOffset>
-        <scale>0.9</scale>
-        <rotation>0~0</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
   <EffecterDef>
     <defName>MX_QH_Effecter_DrainHediff</defName>
     <offsetMode>Free</offsetMode>
@@ -172,28 +182,4 @@
       </li>
     </children>
   </EffecterDef>
-
-  <EffecterDef>
-    <defName>MX_QH_Effecter_DuanHunSlowHediff</defName>
-    <offsetMode>Free</offsetMode>
-    <children>
-      <li>
-        <subEffecterClass>SubEffecter_SprayerContinuous</subEffecterClass>
-        <fleckDef>MX_QH_Fleck_DuanHunSlowHediff</fleckDef>
-        <ticksBetweenMotes>20</ticksBetweenMotes>
-        <burstCount>1</burstCount>
-        <spawnLocType>OnSource</spawnLocType>
-        <positionRadius>0.05</positionRadius>
-        <positionOffset>(0, 0, 0.42)</positionOffset>
-        <scale>0.95</scale>
-        <rotation>-2~2</rotation>
-        <rotationRate>0</rotationRate>
-        <absoluteAngle>true</absoluteAngle>
-        <angle>0</angle>
-        <fleckUsesAngleForVelocity>false</fleckUsesAngleForVelocity>
-        <speed>0</speed>
-      </li>
-    </children>
-  </EffecterDef>
-
 </Defs>

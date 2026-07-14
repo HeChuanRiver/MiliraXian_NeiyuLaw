@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <ScenarioDef ParentName="ScenarioBase">
+        <defName>MXNL_QingheFlowerCourtStart</defName>
+        <label>花庭初绽</label>
+        <description><![CDATA[日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，清荷离开熟悉的庭院，独自来到这片与世隔绝的地面，想要亲手让花神的恩泽在陌生的土地上生根。
+
+这一次，只有清荷自己、随身的少量行装，以及一片尚未开辟的土地。]]></description>
+        <scenario>
+            <summary><![CDATA[一位花神使来到边缘世界，尝试让花神的恩泽在这片陌生的土地上生根。]]></summary>
+            <playerFaction Inherit="false">
+                <def>PlayerFaction</def>
+                <factionDef>Milira_PlayerFaction</factionDef>
+            </playerFaction>
+            <parts>
+                <li Class="ScenPart_GameStartDialog">
+                    <def>GameStartDialog</def>
+                    <text><![CDATA[日复一日的闭关修行终究不能回答所有疑问。
+
+清荷追随自己的老师霓羽离开了自己熟悉的庭院，独自来到这片边缘世界的地面。她想亲手培育一座新的庭院，让花神的恩泽在陌生的土地上生根。
+
+你拥有的只是随身携带的少量行装，以及一片尚未开辟的土地。
+
+先活下来，然后想办法建造一座新的荷池，重新唤醒自己的力量。]]></text>
+                    <closeSound>GameStartSting</closeSound>
+                </li>
+
+                <li Class="ScenPart_ConfigPage_ConfigureStartingPawns_KindDefs">
+                    <def>ConfigurePawnsKindDefs</def>
+                    <pawnChoiceCount>1</pawnChoiceCount>
+                    <leftBehindPawnKind>MiliraXian_Qinghe</leftBehindPawnKind>
+                    <kindCounts>
+                        <li>
+                            <kindDef>MiliraXian_Qinghe</kindDef>
+                            <count>1</count>
+                            <requiredAtStart>true</requiredAtStart>
+                        </li>
+                    </kindCounts>
+                </li>
+
+                <li Class="ScenPart_PlayerPawnsArriveMethod">
+                    <def>PlayerPawnsArriveMethod</def>
+                    <method>Standing</method>
+                </li>
+
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>Silver</thingDef>
+                    <count>900</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>Milira_TravellerFood</thingDef>
+                    <count>40</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>MedicineIndustrial</thingDef>
+                    <count>20</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>ComponentIndustrial</thingDef>
+                    <count>20</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>Milira_SunPlateSteel</thingDef>
+                    <count>120</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>Milira_SolarCrystal</thingDef>
+                    <count>20</count>
+                </li>
+                <li Class="ScenPart_StartingThing_Defined">
+                    <def>StartingThing_Defined</def>
+                    <thingDef>Bedroll</thingDef>
+                    <stuff>Cloth</stuff>
+                    <count>1</count>
+                </li>
+
+                <li Class="ScenPart_ScatterThingsNearPlayerStart">
+                    <def>ScatterThingsNearPlayerStart</def>
+                    <thingDef>Steel</thingDef>
+                    <count>320</count>
+                </li>
+                <li Class="ScenPart_ScatterThingsNearPlayerStart">
+                    <def>ScatterThingsNearPlayerStart</def>
+                    <thingDef>WoodLog</thingDef>
+                    <count>500</count>
+                </li>
+                <li Class="ScenPart_ScatterThingsNearPlayerStart">
+                    <def>ScatterThingsNearPlayerStart</def>
+                    <thingDef>Plasteel</thingDef>
+                    <count>180</count>
+                </li>
+
+                <li Class="ScenPart_ScatterThingsAnywhere">
+                    <def>ScatterThingsAnywhere</def>
+                    <thingDef>ShipChunk</thingDef>
+                    <allowRoofed>false</allowRoofed>
+                    <count>6</count>
+                </li>
+                <li Class="ScenPart_ScatterThingsAnywhere">
+                    <def>ScatterThingsAnywhere</def>
+                    <thingDef>Steel</thingDef>
+                    <count>220</count>
+                </li>
+            </parts>
+        </scenario>
+    </ScenarioDef>
+
+</Defs>

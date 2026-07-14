@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ShaderTypeDef>
+        <defName>MX_QH_LotusShieldDistortion</defName>
+        <shaderPath>Map/LotusShieldDistortion</shaderPath>
+    </ShaderTypeDef>
+    <ShaderTypeDef>
+        <defName>MX_QH_MirrorSlash</defName>
+        <shaderPath>Map/MirrorSlash</shaderPath>
+    </ShaderTypeDef>
+</Defs>

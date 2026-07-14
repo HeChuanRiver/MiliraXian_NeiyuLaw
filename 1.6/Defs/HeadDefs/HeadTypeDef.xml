@@ -16,6 +16,14 @@
         <randomChosen>false</randomChosen>
     </HeadTypeDef>
 
+    <!-- Qinghe -->
+    <HeadTypeDef ParentName="AverageBase">
+        <defName>MiliraQingheHead</defName>
+        <graphicPath>MiliraXianNeiyu/PawnNeiyu/Head/MiliraHeadNeiyu</graphicPath>
+        <gender>None</gender>
+        <randomChosen>false</randomChosen>
+    </HeadTypeDef>
+
     <!-- Mingyuan -->
     <HeadTypeDef ParentName="AverageBase">
         <defName>MiliraMingyuanHead</defName>

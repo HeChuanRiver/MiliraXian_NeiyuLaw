@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThinkTreeDef[defName="MentalStateNonCritical"]/thinkRoot/subNodes</xpath>
+    <value>
+      <li Class="ThinkNode_ConditionalMentalState">
+        <state>MX_AbnormalFearedMentalState</state>
+        <subNodes>
+          <li Class="MiliraXian.Characters.JobGiver_AbnormalFearedWander" />
+        </subNodes>
+      </li>
+    </value>
+  </Operation>
+</Patch>

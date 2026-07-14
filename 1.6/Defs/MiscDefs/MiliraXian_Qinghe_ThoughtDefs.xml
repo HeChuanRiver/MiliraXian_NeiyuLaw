@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenContractMaintained</defName>
+        <workerClass>MiliraXian.Characters.QingHe.Thoughts.ThoughtWorker_LuoshenContractMaintained</workerClass>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <stages>
+            <li>
+                <label>洛神契：相守</label>
+                <description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</description>
+                <baseMoodEffect>16</baseMoodEffect>
+            </li>
+            <li>
+                <label>洛水之仪</label>
+                <description>洛神的话语仍在心中回响，我理应接受这份好意。</description>
+                <baseMoodEffect>8</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenContractBroken</defName>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>10</durationDays>
+        <stackLimit>1</stackLimit>
+        <stages>
+            <li>
+                <label>洛神契破碎 ({0})</label>
+                <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的声音只余空响。</description>
+                <baseMoodEffect>-24</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LuoshenRibbonGrace</defName>
+        <thoughtClass>Thought_MemorySocial</thoughtClass>
+        <durationDays>30</durationDays>
+        <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+        <lerpOpinionToZeroAfterDurationPct>0.75</lerpOpinionToZeroAfterDurationPct>
+        <stages>
+            <li>
+                <label>洛神缎带 ({0})</label>
+                <description>洛神的缎带曾牵起我与{OTHERPAWN_nameDef}之间的心意，这份温柔仍在心中回响。</description>
+                <baseOpinionOffset>50</baseOpinionOffset>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_QingheInstrumentPerformance</defName>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>0.2</durationDays>
+        <stackLimit>1</stackLimit>
+        <showBubble>false</showBubble>
+        <stages>
+            <li>
+                <label>听见清荷演奏</label>
+                <description>清荷的乐声在屋内缓缓流转，令人心绪舒展。</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LotusRainPavilionOperaRead</defName>
+        <thoughtClass>Thought_Memory</thoughtClass>
+        <durationDays>0.2</durationDays>
+        <stackLimit>1</stackLimit>
+        <showBubble>false</showBubble>
+        <stages>
+            <li>
+                <label>读过荷雨亭曲艺</label>
+                <description>荷雨亭曲艺的文字清雅舒缓，像是在雨后的亭中听了一段温柔的旧曲。</description>
+                <baseMoodEffect>4</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_NoLotusPond</defName>
+        <workerClass>MiliraXian.Characters.QingHe.Thoughts.ThoughtWorker_QingheNoLotusPond</workerClass>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <stages>
+            <li>
+                <label>没有荷池</label>
+                <description>清荷身边没有可供栖心的荷池，水意无处安放。</description>
+                <baseMoodEffect>-6</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_QH_LotusPavilionBeautyLow</defName>
+        <workerClass>MiliraXian.Characters.QingHe.Thoughts.ThoughtWorker_QingheLotusPavilionBeautyLow</workerClass>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <stages>
+            <li>
+                <label>荷雨亭不够雅致</label>
+                <description>荷池所在的屋舍还不够清雅，难以让清荷真正静下心来。</description>
+                <baseMoodEffect>-4</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+</Defs>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AssembleLostMusicScore.label>try to restore a lost score</MX_QH_AssembleLostMusicScore.label>
+  <MX_QH_AssembleLostMusicScore.description>Arrange lost score fragments into a book. This has a 50% chance to produce a random skill book; otherwise it produces an ordinary book. Skill books have a 15% chance to include a second different skill.</MX_QH_AssembleLostMusicScore.description>
+  <MX_QH_AssembleLostMusicScore.jobString>restoring a lost score.</MX_QH_AssembleLostMusicScore.jobString>
+  <MX_QH_WriteLotusRainPavilionOpera.label>write "Lotus Rain Pavilion Artistry"</MX_QH_WriteLotusRainPavilionOpera.label>
+  <MX_QH_WriteLotusRainPavilionOpera.description>Qinghe writes the flower shadows, water sounds, and melodies of the Lotus Rain Pavilion into a volume. There is a 25% chance it includes Qinghe skill-related content.</MX_QH_WriteLotusRainPavilionOpera.description>
+  <MX_QH_WriteLotusRainPavilionOpera.jobString>writing "Lotus Rain Pavilion Artistry."</MX_QH_WriteLotusRainPavilionOpera.jobString>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>Lotus Rain Pavilion Verse: Spring Water Tune</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>Qinghe records the water sounds and soft beats after lotus rain has cleared. Reading this volume feels like hearing spring water slip over stone steps while scattered flower shadows sway with the sound.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>Lotus Rain Pavilion Verse: Flower Shadow Notes</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.content>This manuscript writes of flower shadows, dance steps, and the call-and-response of short melodies. Its sentences are never showy, but they preserve Qinghe's careful observation of the garden plants.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.1.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.title>Lotus Rain Pavilion Verse: Listening to Rain</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.content>Qinghe breaks the rhythm of rain on lotus leaves into several short scores, then adds performance notes in the margins. The writing is quiet, yet it echoes like fine rain entering the pavilion.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.2.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.title>Lotus Rain Pavilion Verse: Lotus Steps</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.content>This volume records both dance steps and melody. With a gentle touch, Qinghe sketches sleeves, bell notes, and ripples on the water, giving ordinary performance art a quiet grace.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.3.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.title>Lotus Rain Pavilion Verse: Feather Robe by the Lotus</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.content>Qinghe writes the water sounds of the Lotus Rain Pavilion as the underlying tone, then notes the light whisper of Neiyu's sleeves at the beginning of a form. The whole volume reads like a brief duet across water.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.4.content>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.title>Lotus Rain Pavilion Verse: Flame Through Rain</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.title>
+  <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.content>This manuscript sets rainy-night lamplight against the sound of strings. Qinghe turns Zhaoli's words of embers, life-fire, and echoes into turns of melody, adding a bright edge to the pavilion's old tune.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.5.content>
+</LanguageData>

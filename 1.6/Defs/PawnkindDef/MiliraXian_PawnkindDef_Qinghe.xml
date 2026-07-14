@@ -5,7 +5,7 @@
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
         <!-- Lotus Rosalia -->
-        <label>清荷·莱莎莉雅</label>
+        <label>花神使</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -32,7 +32,7 @@
         <!-- apparel tags for random apparel 用于随机生成装备时，允许的装备tag -->
         <apparelTags>
         <!--    TODO: Apparel Tag for QingHe -->
-            <li>MiliraXian_NeiyuNormal</li>
+            <li>MX_QingheNormal</li>
         </apparelTags>
 
         <!--    TODO: Specific Apparel Req for QingHe-->
@@ -42,8 +42,8 @@
         <!-- apparel you force to spawn 强制要求生成的装备 -->
         <!--        TODO: Add Apparel for QingHe -->
         <apparelRequired>
-            <li>MiliraXian_NeiyuNormal</li>
-            <li>MX_Apparel_EarringsZhenzhu</li>
+            <li>MX_QingheNormal</li>
+            <li>MX_QingheHeaddress</li>
         </apparelRequired>
         <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
         <apparelDisallowTags>
@@ -53,7 +53,7 @@
 
         <!-- 武器的tag -->
         <weaponTags>
-<!--            <li>MiliraXian_NeiyuFlower</li>-->
+          <li>MiliraXian_QingheInstrument</li>
         </weaponTags>
 
         <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围 -->
@@ -103,16 +103,59 @@
 
         <!-- 这个角色的头发RGB -->
         <forcedHairColor>(255,255,255)</forcedHairColor>
+        <favoriteColor>MX_QH_FlowerPink</favoriteColor>
 
         <!-- 给予这个角色的技能 -->
-        <abilities>
-            <!-- TODO: Abilities for QingHe -->
-            <!-- This is an ability from "Milira Faction: Milira Imperium", so I commented out it. ↓↓↓ 这个技能来自“米莉拉派系扩展：米莉拉帝国”所以我把它注释掉了。↓↓↓-->
-            <li>MX_Qinghe_SpringFlow</li>
-            <li>MX_Qinghe_AquaMirror</li>
-            <li>MX_Qinghe_TempestDrain</li>
-            <!-- <li>MI_ShroudPower_Skip</li> -->
-        </abilities>
+        <skills>
+            <li>
+                <skill>Shooting</skill>
+                <range>3~3</range>
+            </li>
+            <li>
+                <skill>Melee</skill>
+                <range>2~2</range>
+            </li>
+            <li>
+                <skill>Construction</skill>
+                <range>16~16</range>
+            </li>
+            <li>
+                <skill>Mining</skill>
+                <range>6~6</range>
+            </li>
+            <li>
+                <skill>Cooking</skill>
+                <range>18~18</range>
+            </li>
+            <li>
+                <skill>Plants</skill>
+                <range>12~12</range>
+            </li>
+            <li>
+                <skill>Animals</skill>
+                <range>10~10</range>
+            </li>
+            <li>
+                <skill>Crafting</skill>
+                <range>18~18</range>
+            </li>
+            <li>
+                <skill>Artistic</skill>
+                <range>14~14</range>
+            </li>
+            <li>
+                <skill>Medicine</skill>
+                <range>8~8</range>
+            </li>
+            <li>
+                <skill>Social</skill>
+                <range>8~8</range>
+            </li>
+            <li>
+                <skill>Intellectual</skill>
+                <range>17~17</range>
+            </li>
+        </skills>
 
         <!-- modExtensions是用来使用的非官方类的地方 -->
         <modExtensions>
@@ -143,14 +186,13 @@
 
                 <!-- You can use your own texture if you have your owen HeadTypeDef (Without mod Facial Animation).
                  如果你自己创建了一个HeadTypeDef，那么便可以用来在没有面部动画mod的情况下为头部更换贴图。 -->
-                <!-- TODO: Replace for QingHe's Head -->
-                <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
+                <forcedHeadTypeDef>MiliraQingheHead</forcedHeadTypeDef>
 
                 <!-- Disable random spawned trait, use the trait below only. You may write multiple traits here. 
                  禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>
-                    <li><def>MiliraXianNeiyu_Love</def></li>
+                    <li><def>MX_QH_Trait_LongBreath</def></li>
                     <li><def>MX_QH_Trait_WaterFairy</def></li>
                     <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
                     <li>
@@ -162,38 +204,23 @@
                 <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
                  生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
                 <extraForcedHediffs>
-<!--                    <li>-->
-<!--                        <def>MXNL_NeiyuShield</def>-->
-<!--                        <severity>1</severity>-->
-<!--                        <overwriteIfExists>true</overwriteIfExists>-->
-<!--                    </li>-->
                     <li>
-                        <def>MX_QH_Tempest</def>
+                        <def>MX_QH_DivineBlessing</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_Elegance</def>
+                        <def>MX_QH_DivineProtection</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_LongBreath</def>
+                        <def>MX_QH_FlowerResonance</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_LotusShield</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_QH_SpringRegen</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_QH_QingheStatusGizmo</def>
+                        <def>MX_QH_FlowerDecree</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
@@ -297,7 +324,7 @@
              填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
             <li Class="AriandelLibrary.AL_TraitLock_Extension">
                 <requiredTraits>
-                    <li>MiliraXianNeiyu_Love</li>
+                    <li>MX_QH_Trait_LongBreath</li>
                     <li>MX_QH_Trait_WaterFairy</li>
                 </requiredTraits>
             </li>
@@ -327,4 +354,3 @@
 
 
 </Defs>
-

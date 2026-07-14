@@ -133,13 +133,7 @@ namespace MiliraXian.Characters
             UpdateVisualMoveDirection(steeringDirection);
         }
 
-        public override Quaternion ExactRotation
-        {
-            get
-            {
-                return Quaternion.LookRotation(GetCurrentDirection());
-            }
-        }
+        public override Quaternion ExactRotation => Quaternion.LookRotation(GetCurrentDirection());
 
         protected Thing ResolveImpactHitThing(Thing hitThing, Vector3 impactPos, Map map)
         {

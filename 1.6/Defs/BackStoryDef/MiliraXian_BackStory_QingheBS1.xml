@@ -4,23 +4,18 @@
     <!-- 仙米BS1 -->
     <AlienRace.AlienBackstoryDef>
         <defName>MiliraXian_BackStoryChild_Qinghe_BS1</defName>
-        <title>水仙子</title>
-        <titleShort>水仙子</titleShort>
-        <description>[PAWN_nameDef] 长得有点像绮罗，但是毫无疑问的是，她是一位纯正的米莉拉。\n 在"霁"演化出的六大派系中，她主管生命与平衡。 \n "所以，我选择与流水和音乐作伴。"</description>
+        <title>花庭守</title>
+        <titleShort>花庭守</titleShort>
+        <description>[PAWN_nameDef] 自幼与各种花卉为伴，在“霁”的六大派系中她与“生命”共鸣最深。从她第一次聆听花语开始，它们就成为了她生命中的一部分。\n\n“花信未必会立刻抵达，但总要有人先把水面拂净。”</description>
         <slot>Childhood</slot>
         <skillGains>
-            <Shooting>6</Shooting>
-            <Melee>6</Melee>
-            <Construction>6</Construction>
-            <Mining>6</Mining>
-            <Cooking>-6</Cooking>
-            <Plants>6</Plants>
-            <Animals>6</Animals>
-            <Crafting>6</Crafting>
-            <Artistic>6</Artistic>
-            <Medicine>6</Medicine>
-            <Social>6</Social>
-            <Intellectual>6</Intellectual>
+            <Cooking>12</Cooking>
+            <Plants>8</Plants>
+            <Crafting>2</Crafting>
+            <Artistic>8</Artistic>
+            <Medicine>2</Medicine>
+            <Social>2</Social>
+            <Intellectual>4</Intellectual>
         </skillGains>
         <spawnCategories>
             <li>MiliraXian_BackStoryChild_Qinghe_Tag</li>
@@ -33,23 +28,19 @@
 
     <AlienRace.AlienBackstoryDef>
         <defName>MiliraXian_BackStoryAdult_Qinghe_BS1</defName>
-        <title>调停者</title>
-        <titleShort>调停者</titleShort>
-        <description>[PAWN_nameDef] 掌管着世间平衡之力。比起使用暴力，她更愿意用水流和乐声支援她的朋友们，但如果有必要的话，她也会毫不犹豫地拿起武器战斗。\n"不好意思，如果这就是你想要的结局的话。"</description>
+        <title>花神使</title>
+        <titleShort>花神使</titleShort>
+        <description>[PAWN_nameDef] 离开远在仙域的花神庭后，她致力于在这片陌生的大地上布施花神的恩泽。\n\n“若庭中仍有一朵花愿意开放，我便还不能离开。”</description>
         <slot>Adulthood</slot>
         <skillGains>
-            <Shooting>18</Shooting>
-            <Melee>7</Melee>
-            <Construction>20</Construction>
-            <Mining>14</Mining>
-            <Cooking>12</Cooking>
+            <Mining>1</Mining>
+            <Cooking>18</Cooking>
             <Plants>20</Plants>
-            <Animals>20</Animals>
-            <Crafting>16</Crafting>
-            <Artistic>20</Artistic>
-            <Medicine>20</Medicine>
-            <Social>11</Social>
-            <Intellectual>20</Intellectual>
+            <Crafting>2</Crafting>
+            <Artistic>12</Artistic>
+            <Medicine>4</Medicine>
+            <Social>2</Social>
+            <Intellectual>6</Intellectual>
         </skillGains>
         <spawnCategories>
             <li>MiliraXian_BackStoryAdult_Qinghe_Tag</li>

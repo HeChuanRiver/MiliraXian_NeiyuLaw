@@ -10,14 +10,14 @@
                 <key>Milira_WingBinding</key>
                 <value>
                     <keyframes>
-                        <li><graphicState>Milira_FlyEast_Neiyu_0</graphicState><tick>0</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_1</graphicState><tick>3</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_2</graphicState><tick>9</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_3</graphicState><tick>12</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_4</graphicState><tick>15</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_5</graphicState><tick>21</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_6</graphicState><tick>25</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_7</graphicState><tick>30</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_0</graphicState><tick>0</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_1</graphicState><tick>3</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_2</graphicState><tick>9</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_3</graphicState><tick>12</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_4</graphicState><tick>15</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_5</graphicState><tick>21</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_6</graphicState><tick>25</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_7</graphicState><tick>30</tick></li>
                     </keyframes>
                 </value>
             </li>
@@ -73,14 +73,14 @@
                 <key>Milira_WingBinding</key>
                 <value>
                     <keyframes>
-                        <li><graphicState>Milira_FlyEast_Neiyu_0</graphicState><tick>0</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_1</graphicState><tick>3</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_2</graphicState><tick>9</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_3</graphicState><tick>12</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_4</graphicState><tick>15</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_5</graphicState><tick>21</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_6</graphicState><tick>25</tick></li>
-                        <li><graphicState>Milira_FlyEast_Neiyu_7</graphicState><tick>30</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_0</graphicState><tick>0</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_1</graphicState><tick>3</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_2</graphicState><tick>9</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_3</graphicState><tick>12</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_4</graphicState><tick>15</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_5</graphicState><tick>21</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_6</graphicState><tick>25</tick></li>
+                        <li><graphicState>Milira_FlyEast_Qinghe_7</graphicState><tick>30</tick></li>
                     </keyframes>
                 </value>
             </li>
@@ -136,14 +136,14 @@
                 <key>Milira_WingBinding</key>
                 <value>
                     <keyframes>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_0</graphicState><tick>0</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_1</graphicState><tick>3</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_2</graphicState><tick>9</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_3</graphicState><tick>12</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_4</graphicState><tick>15</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_5</graphicState><tick>21</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_6</graphicState><tick>25</tick></li>
-                        <li><graphicState>Milira_FlyNorth_Neiyu_7</graphicState><tick>30</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_0</graphicState><tick>0</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_1</graphicState><tick>3</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_2</graphicState><tick>9</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_3</graphicState><tick>12</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_4</graphicState><tick>15</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_5</graphicState><tick>21</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_6</graphicState><tick>25</tick></li>
+                        <li><graphicState>Milira_FlyNorth_Qinghe_7</graphicState><tick>30</tick></li>
                     </keyframes>
                 </value>
             </li>
@@ -183,14 +183,14 @@
                 <key>Milira_WingBinding</key>
                 <value>
                     <keyframes>
-                        <li><graphicState>Milira_FlySouth_Neiyu_0</graphicState><tick>0</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_1</graphicState><tick>3</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_2</graphicState><tick>9</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_3</graphicState><tick>12</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_4</graphicState><tick>15</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_5</graphicState><tick>21</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_6</graphicState><tick>25</tick></li>
-                        <li><graphicState>Milira_FlySouth_Neiyu_7</graphicState><tick>30</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_0</graphicState><tick>0</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_1</graphicState><tick>3</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_2</graphicState><tick>9</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_3</graphicState><tick>12</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_4</graphicState><tick>15</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_5</graphicState><tick>21</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_6</graphicState><tick>25</tick></li>
+                        <li><graphicState>Milira_FlySouth_Qinghe_7</graphicState><tick>30</tick></li>
                     </keyframes>
                 </value>
             </li>

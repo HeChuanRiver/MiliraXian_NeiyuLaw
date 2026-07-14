@@ -270,7 +270,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             return NeiyuEquipmentUtility.IsNeiyu(pawn)
                 || ZhaoliKarmaUtility.IsZhaoli(pawn)
-                || MX_QHUtility.IsQinghe(pawn);
+                || MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
         private static float MinimumConsciousnessFromSettings()

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <HediffDef>
+        <defName>MX_QH_LuoshenContract</defName>
+        <label>洛神契</label>
+        <description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</description>
+        <hediffClass>Verse.HediffWithTarget</hediffClass>
+        <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LuoshenContract" />
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_SpringFlow</defName>
+        <label>春泉洗礼</label>
+        <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</description>
+        <isBad>false</isBad>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(1.0, 0.8, 1.0)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <minSeverity>1.0</minSeverity>
+        <maxSeverity>10.0</maxSeverity>
+        <stages>
+            <li>
+                <minSeverity>0.0</minSeverity>
+                <painFactor>0.8</painFactor>
+                <statFactors>
+                    <MX_AbnormalDeathSentenceLimitFactor>0</MX_AbnormalDeathSentenceLimitFactor>
+                </statFactors>
+                <statFactorsBySeverity>
+                    <li>
+                        <stat>MeleeDamageFactor</stat>
+                        <valueBySeverity>
+                            <points>
+                                <li>(0,1)</li>
+                                <li>(1,1.3)</li>
+                                <li>(10,4)</li>
+                            </points>
+                        </valueBySeverity>
+                    </li>
+                    <li>
+                        <stat>RangedWeapon_DamageMultiplier</stat>
+                        <valueBySeverity>
+                            <points>
+                                <li>(0,1)</li>
+                                <li>(1,1.3)</li>
+                                <li>(10,4)</li>
+                            </points>
+                        </valueBySeverity>
+                    </li>
+                    <li>
+                        <stat>IncomingDamageFactor</stat>
+                        <valueBySeverity>
+                            <points>
+                                <li>(0,1)</li>
+                                <li>(1,0.6)</li>
+                                <li>(10,0.1)</li>
+                            </points>
+                        </valueBySeverity>
+                    </li>
+                </statFactorsBySeverity>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>120</disappearsAfterTicks>
+                <showRemainingTime>true</showRemainingTime>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SpringRegen">
+                <healIntervalTicks>60</healIntervalTicks>
+                <healAmountPerTrigger>1.0</healAmountPerTrigger>
+                <healPermanentInjuries>false</healPermanentInjuries>
+            </li>
+            <li Class="HediffCompProperties_Effecter">
+                <stateEffecter>MX_QH_Effecter_SpringFlowHediff</stateEffecter>
+            </li>
+        </comps>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>MX_QH_EyeOfHeartState</defName>
+        <label>心眼</label>
+        <description>清荷正凝神观察来袭的攻击。</description>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.62,0.90,1.0)</defaultLabelColor>
+        <isBad>false</isBad>
+        <scenarioCanAdd>false</scenarioCanAdd>
+        <everCurableByItem>false</everCurableByItem>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>60</disappearsAfterTicks>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_EyeOfHeart">
+                <shieldRestoreFraction>0.1</shieldRestoreFraction>
+                <swordPressureGain>1</swordPressureGain>
+            </li>
+        </comps>
+    </HediffDef>
+</Defs>

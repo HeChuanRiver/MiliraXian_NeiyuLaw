@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef ParentName="BaseMeleeWeapon">
+        <defName>MX_QH_Weapon_Sword</defName>
+        <label>散华</label>
+        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。</description>
+        <recipeMaker Inherit="False" IsNull="True" />
+
+        <graphicData>
+            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(2,2)</drawSize>
+        </graphicData>
+        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <generateCommonality>0</generateCommonality>
+        <scatterableOnMapGen>false</scatterableOnMapGen>
+        <tradeability>Sellable</tradeability>
+
+        <techLevel>Archotech</techLevel>
+        <smeltable>false</smeltable>
+
+        <weaponTags>
+            <li>MiliraXian_QingheSword</li>
+        </weaponTags>
+        <thingCategories>
+        </thingCategories>
+        <weaponClasses>
+            <li>Melee</li>
+        </weaponClasses>
+
+        <costList>
+            <Steel>140</Steel>
+            <Jade>30</Jade>
+        </costList>
+
+        <statBases>
+            <MarketValue>3000</MarketValue>
+            <Mass>0.8</Mass>
+            <MeleeWeapon_CooldownMultiplier>0.75</MeleeWeapon_CooldownMultiplier>
+        </statBases>
+
+        <tools>
+            <li>
+                <label>清荷剑刃</label>
+                <capacities>
+                    <li>MX_QH_SwordCut</li>
+                </capacities>
+                <power>32</power>
+                <armorPenetration>0.3</armorPenetration>
+                <cooldownTime>1.6</cooldownTime>
+            </li>
+        </tools>
+
+        <comps>
+            <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_QingheResonantWeaponLabel">
+                <resonanceLabels>
+                    <li>MX_QH_SwordResonanceSpring</li>
+                    <li>MX_QH_SwordResonanceSummer</li>
+                    <li>MX_QH_SwordResonanceAutumn</li>
+                    <li>MX_QH_SwordResonanceWinter</li>
+                </resonanceLabels>
+                <resonanceDescriptions>
+                    <li>MX_QH_SwordResonanceDescriptionSpring</li>
+                    <li>MX_QH_SwordResonanceDescriptionSummer</li>
+                    <li>MX_QH_SwordResonanceDescriptionAutumn</li>
+                    <li>MX_QH_SwordResonanceDescriptionWinter</li>
+                </resonanceDescriptions>
+            </li>
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_QH_Weapon_FlowerBell</li>
+                    <li>MX_QH_Weapon_Sword</li>
+                </formWeaponDefs>
+                <formLabels>
+                    <li>MX_QH_WeaponFormFlowerBell</li>
+                    <li>MX_QH_WeaponFormSword</li>
+                </formLabels>
+                <formIconPaths>
+                    <li>MiliraXianNeiyu/Items/FlowerStick</li>
+                    <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
+                </formIconPaths>
+                <commandLabel>MX_QH_ModeSwitchCommandLabel</commandLabel>
+                <commandDesc>MX_QH_ModeSwitchCommandDesc</commandDesc>
+                <destroyOldWeapon>true</destroyOldWeapon>
+                <requirePrimary>true</requirePrimary>
+                <blockWhilePawnBusy>true</blockWhilePawnBusy>
+                <cooldownTicks>300</cooldownTicks>
+            </li>
+            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+        </comps>
+
+        <modExtensions>
+            <li Class="AncotLibrary.ExtraGraphicData_Extension">
+                <graphicData>
+                    <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
+                    <graphicClass>Graphic_Single</graphicClass>
+                    <drawSize>(1.5,4.5)</drawSize>
+                </graphicData>
+            </li>
+        </modExtensions>
+    </ThingDef>
+</Defs>

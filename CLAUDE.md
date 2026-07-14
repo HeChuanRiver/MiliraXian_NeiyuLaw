@@ -64,6 +64,57 @@ Skills that require sustained/channeling behavior use custom `JobDriver` + `Comp
 
 Examples: `SpringFlow`, `TempestDrain`, `HengZhi`, `DuanHun`, `YangChun`.
 
+## Colored Text in RimWorld
+
+RimWorld 基于 Unity IMGUI，支持多种彩色文字机制，项目中的使用示例如下：
+
+### 1. Unity Rich Text 标签
+XML 本地化字符串和 C# 中均可直接使用 Unity 富文本标签，例如：
+- `&lt;color=#F05A5A&gt;红色文字&lt;/color&gt;`（XML中需转义尖括号）
+- `&lt;color=red&gt;红色文字&lt;/color&gt;`
+- `&lt;b&gt;粗体&lt;/b&gt;`、`&lt;i&gt;斜体&lt;/i&gt;`、`&lt;size=16&gt;字号&lt;/size&gt;`
+
+> **注意**：在 XML Def 文件（如 `Defs/*.xml`）中使用 Rich Text 时，`<` 和 `>` 必须转义为 `&lt;` 和 `&gt;`，否则会被 XML 解析器视为嵌套标签导致 Parse Error。C# 字符串中可直接使用原始尖括号。
+
+### 2. TaggedString.Colorize
+RimWorld 提供的扩展方法，用于在代码中给文字上色，配合 `ColoredText` 和 `ColorLibrary` 使用：
+```csharp
+string warning = "警告文本".Colorize(ColoredText.WarningColor);
+string redText = "失败".Colorize(ColorLibrary.RedReadable);
+```
+
+### 3. MoteMaker.ThrowText（3D 浮动文字）
+在世界空间中显示带颜色的浮动文字：
+```csharp
+MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, remainingHits.ToString(), new Color(0.94f, 0.26f, 0.26f), 1.1f);
+```
+示例见 `Source/Zhaoli/ZhaoliDeathField.cs:352`。
+
+### 4. Messages.Message（消息栏）
+通过 `MessageTypeDefOf` 控制消息颜色，无需手动处理富文本：
+```csharp
+Messages.Message("操作成功", pawn, MessageTypeDefOf.PositiveEvent);
+Messages.Message("操作失败", pawn, MessageTypeDefOf.RejectInput);
+Messages.Message("需要注意", pawn, MessageTypeDefOf.CautionInput);
+Messages.Message("中性信息", pawn, MessageTypeDefOf.NeutralEvent);
+```
+
+### 5. GUI.color（IMGUI 绘制）
+在使用 `Widgets.Label`、`GUI.Label` 等绘制文字前，修改 `GUI.color` 可改变接下来所有绘制的颜色：
+```csharp
+GUI.color = Color.red;
+Widgets.Label(rect, "红色标签");
+GUI.color = Color.white; // 绘制结束后恢复
+```
+
+### 6. GenDraw（范围/区域预览）
+技能范围预览或区域高亮时直接传入 `Color`：
+```csharp
+GenDraw.DrawRadiusRing(target.Cell, Props.radius, new Color(0.48f, 0.08f, 0.1f));
+GenDraw.DrawFieldEdges(cells, new Color(0.44f, 0.12f, 0.16f));
+```
+示例见 `Source/Zhaoli/ZhaoliDeathField.cs:63` 与 `Source/Zhaoli/ZhaoliMinshen.cs:179`。
+
 ## External Dependencies
 
 | Dependency | Source | Note |

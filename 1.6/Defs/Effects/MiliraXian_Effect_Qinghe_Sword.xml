@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+        <defName>MX_QH_Fleck_MirrorSlashNormal</defName>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <growthRate>0.8</growthRate>
+        <fadeInTime>0.01</fadeInTime>
+        <solidTime>0.02</solidTime>
+        <fadeOutTime>0.2</fadeOutTime>
+        <randomGraphics>
+            <li>
+                <graphicClass>Graphic_Fleck</graphicClass>
+                <texPath>MiliraXianQinghe/Effect/Slashes/slash_A</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <drawSize>(1,1)</drawSize>
+            </li>
+            <li>
+                <graphicClass>Graphic_Fleck</graphicClass>
+                <texPath>MiliraXianQinghe/Effect/Slashes/slash_B</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <drawSize>(1,1)</drawSize>
+            </li>
+            <li>
+                <graphicClass>Graphic_Fleck</graphicClass>
+                <texPath>MiliraXianQinghe/Effect/Slashes/slash_C</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <drawSize>(1,1)</drawSize>
+            </li>
+            <li>
+                <graphicClass>Graphic_Fleck</graphicClass>
+                <texPath>MiliraXianQinghe/Effect/Slashes/slash_D</texPath>
+                <shaderType>MoteGlow</shaderType>
+                <renderInstanced>true</renderInstanced>
+                <drawSize>(1,1)</drawSize>
+            </li>
+        </randomGraphics>
+    </FleckDef>
+</Defs>

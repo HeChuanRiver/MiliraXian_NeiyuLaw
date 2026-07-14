@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Zhaoli_DeathField.label>&lt;color=#E85A7A&gt;告死流場&lt;/color&gt;</MX_Zhaoli_DeathField.label>
-  <MX_Zhaoli_DeathField.description>創造一個直徑18格的圓形&lt;color=#C9A2FF&gt;力場&lt;/color&gt;。力場內除&lt;color=#E85A7A&gt;昭離&lt;/color&gt;自身外的單位會受到&lt;color=#B86CFF&gt;20%減速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;並推進&lt;color=#E85A7A&gt;9→1&lt;/color&gt;倒計時。目標只要離開範圍，倒計時立即清零；若連續停留9秒，則會被&lt;color=#E85A7A&gt;告死&lt;/color&gt;。</MX_Zhaoli_DeathField.description>
+  <MX_Zhaoli_DeathField.description>創造一個直徑18格的圓形&lt;color=#C9A2FF&gt;力場&lt;/color&gt;。力場內除&lt;color=#E85A7A&gt;昭離&lt;/color&gt;自身外的單位會受到&lt;color=#B86CFF&gt;20%減速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;並積累1點告死。目標離開範圍後，告死會快速衰減；積累至9點時，最後一次施加告死的角色將處決目標。</MX_Zhaoli_DeathField.description>
   <MX_Zhaoli_Guiyi.label>&lt;color=#C77DFF&gt;詭醫&lt;/color&gt;</MX_Zhaoli_Guiyi.label>
   <MX_Zhaoli_Guiyi.description>消耗&lt;color=#E85A7A&gt;1點因果&lt;/color&gt;，治癒目標一切疾病與損傷。該效果會恢復缺失肢體，清除成癮、機械損傷、永久舊傷與其他負面健康狀態。&lt;color=#C77DFF&gt;詭醫&lt;/color&gt;無法對昭離自己或敵對目標使用，並會在目標身上建立持續30天的&lt;color=#D66BFF&gt;因果連結&lt;/color&gt;。</MX_Zhaoli_Guiyi.description>
   <MX_Zhaoli_Dingshu.label>&lt;color=#C9A2FF&gt;定數&lt;/color&gt;</MX_Zhaoli_Dingshu.label>

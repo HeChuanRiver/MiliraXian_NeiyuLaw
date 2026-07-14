@@ -98,7 +98,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private static bool IsSupportedSpecialPawn(Pawn pawn)
         {
-            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHUtility.IsQinghe(pawn);
+            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
         private static bool ShouldRunIntegration()

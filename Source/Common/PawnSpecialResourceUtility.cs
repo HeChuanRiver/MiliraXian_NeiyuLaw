@@ -30,23 +30,52 @@ namespace MiliraXian.Characters
         
         public static float GetCurrentResource(Pawn pawn, HediffDef specialResourceDef)
         {
-            return GetSpecialResourceComp(pawn, specialResourceDef)?.CurrentValue ?? 0f;
+            HediffComp_PawnSpecialResource comp = GetSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceValueAdapter valueAdapter)
+            {
+                return valueAdapter.CurrentResourceValue;
+            }
+
+            return comp?.CurrentValue ?? 0f;
         }
 
         public static float GetMaxResource(Pawn pawn, HediffDef specialResourceDef)
         {
-            return GetSpecialResourceComp(pawn, specialResourceDef)?.MaxValue ?? 0f;
+            HediffComp_PawnSpecialResource comp = GetSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceValueAdapter valueAdapter)
+            {
+                return valueAdapter.MaxResourceValue;
+            }
+
+            return comp?.MaxValue ?? 0f;
         }
 
         public static void AddResource(Pawn pawn, HediffDef specialResourceDef, float value)
         {
-            EnsureSpecialResourceComp(pawn, specialResourceDef)?.AddValue(value);
+            HediffComp_PawnSpecialResource comp = EnsureSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceAddHandler addHandler)
+            {
+                addHandler.AddResourceValue(value);
+                return;
+            }
+
+            comp?.AddValue(value);
         }
 
         public static bool TryConsumeResource(Pawn pawn, HediffDef specialResourceDef, float value)
         {
             HediffComp_PawnSpecialResource comp = EnsureSpecialResourceComp(pawn, specialResourceDef);
+            if (comp is ISpecialResourceAddHandler addHandler)
+            {
+                return addHandler.TryConsumeResourceValue(value);
+            }
+
             return comp != null && comp.TryConsume(value);
+        }
+
+        public static float GetResourcePercent(Pawn pawn, HediffDef specialResourceDef)
+        {
+            return GetSpecialResourceComp(pawn, specialResourceDef)?.ValuePercent ?? 0f;
         }
     }
 }

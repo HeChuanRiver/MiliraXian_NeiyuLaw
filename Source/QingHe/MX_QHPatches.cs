@@ -1,6 +1,14 @@
-using HarmonyLib;
+﻿using HarmonyLib;
+using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Jobs;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
+using System.Collections.Generic;
+using UnityEngine;
 using Verse;
+using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe
 {
@@ -11,6 +19,12 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
+            patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnGenerator_GeneratePawn_Postfix)));
+
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix)));
 
@@ -25,29 +39,96 @@ namespace MiliraXian.Characters.QingHe
                 });
 
             patcher.Patch(
-                AccessTools.Method(
-                    typeof(Verb),
-                    nameof(Verb.TryStartCastOn),
-                    new[] { typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(bool), typeof(bool), typeof(bool), typeof(bool) }),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Verb_TryStartCastOn_Postfix)));
+                AccessTools.Method(typeof(Verb_MeleeAttack), "SoundDodge", new[] { typeof(Thing) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbMeleeAttack_SoundDodge_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Projectile), "ImpactSomething"),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Projectile_ImpactSomething_Prefix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(VerbProperties), nameof(VerbProperties.AdjustedArmorPenetration), new[] { typeof(Verb), typeof(Pawn) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbProperties_AdjustedArmorPenetration_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras_Prefix)));
+
+            patcher.Patch(AccessTools.Method(typeof(InspirationWorker), nameof(InspirationWorker.CommonalityFor)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_InspirationWorker_CommonalityFor_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Bill), nameof(Bill.PawnAllowedToStartAnew)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Bill_PawnAllowedToStartAnew_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(MeditationUtility), nameof(MeditationUtility.AllMeditationSpotCandidates)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(MeditationUtility), nameof(MeditationUtility.GetMeditationJob)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MeditationUtility_GetMeditationJob_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(JobDriver_Meditate), "MeditationTick"),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_Meditate_MeditationTick_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Book), nameof(Book.OnBookReadTick), new[] { typeof(Pawn), typeof(int), typeof(float) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Book_OnBookReadTick_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(JobDriver_LayDown), nameof(JobDriver_LayDown.LayDownToil), new[] { typeof(bool) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_LayDown_LayDownToil_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(JobDriver_PlayMusicalInstrument), "ModifyPlayToil", new[] { typeof(Toil) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn), new[] { typeof(Pawn), typeof(SkillDef), typeof(bool) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Projectile), "CheckForFreeInterceptBetween", new[] { typeof(Vector3), typeof(Vector3) }),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Projectile_CheckForFreeInterceptBetween_Prefix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.AddDirectRelation)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_AddDirectRelation_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.TryRemoveDirectRelation)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix)));
+
         }
 
-        public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
+        public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
         {
-            if (!MX_QHUtility.IsQinghe(__instance))
+            if (!MX_QHCharacterUtility.IsQinghe(__result))
             {
                 return;
             }
 
-            PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Tempest);
-            PawnSpecialResourceUtility.EnsureSpecialResourceComp(__instance, MX_QHDefOf.MX_QH_Elegance);
+            MX_QHCharacterUtility.MarkForLoadoutStabilization(__result);
+            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+        }
 
-            EnsureLongBreathState(__instance);
-            EnsureWaterFairyTrait(__instance);
-            EnsureSpringRegenState(__instance);
-            EnsureLotusShieldBinding(__instance);
-            EnsureQingheStatusGizmoState(__instance);
-            SyncEleganceAbilityByCurrentWeapon(__instance);
+        public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(__result))
+            {
+                return;
+            }
+
+            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+        }
+
+        public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(__instance))
+            {
+                return;
+            }
+
+            EnsureQingheCoreTraits(__instance);
+            MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
+            MX_QHSkillUtility.SyncChoices(__instance);
+            if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
+            {
+                MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
+                MX_QHCharacterUtility.ClearLoadoutStabilization(__instance);
+            }
         }
 
         public static bool Patch_Pawn_PreApplyDamage_Prefix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
@@ -57,23 +138,23 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            if (dinfo.Def != null && dinfo.Instigator != __instance)
-            {
-                EleganceUtility.NotifyCombatEvent(__instance);
-
-                var attacker = dinfo.Instigator as Pawn;
-                if (attacker != null && attacker != __instance && attacker.HostileTo(__instance))
-                {
-                    EleganceUtility.NotifyCombatEvent(attacker);
-                }
-            }
-
             if (dinfo.Amount <= 0f)
             {
                 return true;
             }
 
-            if (!HasLongBreathDamageImmunity(__instance))
+            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
+                ? __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
+                : null;
+            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(dinfo);
+
+            JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
+            {
+                return false;
+            }
+
+            if (!HasDamageImmunityHediff(__instance))
             {
                 return true;
             }
@@ -83,6 +164,21 @@ namespace MiliraXian.Characters.QingHe
             return false;
         }
 
+        private static bool HasDamageImmunityHediff(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null)
+            {
+                return false;
+            }
+
+            return (MX_QHDefOf.MX_QH_DivineBlessingImmunity != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) != null)
+                || (MX_QHDefOf.MX_QH_AscentSlashInvulnerable != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) != null)
+                || (MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable != null
+                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable) != null);
+        }
+
         public static void Patch_Pawn_PreApplyDamage_Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
         {
             if (__instance?.health?.hediffSet == null)
@@ -90,199 +186,453 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff longBreath = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath);
-            HediffComp_LongBreathWard longBreathComp = longBreath?.TryGetComp<HediffComp_LongBreathWard>();
-            if (longBreathComp == null)
+            Hediff divineBlessing = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
+            HediffComp_DivineBlessing divineBlessingComp = divineBlessing?.TryGetComp<HediffComp_DivineBlessing>();
+            if (divineBlessingComp == null)
             {
                 return;
             }
 
             // Lotus shield is processed by pawn ThingComp.PostPreApplyDamage.
-            // LongBreath only checks when damage still reaches the body.
+            // Divine blessing only checks when damage still reaches the body.
             if (absorbed)
             {
                 return;
             }
 
-            longBreathComp.NotifyDamageNotAbsorbed(ref dinfo);
+            divineBlessingComp.NotifyDamageNotAbsorbed(ref dinfo);
 
-            if (!longBreathComp.CanTrigger(ref dinfo))
+            if (!divineBlessingComp.CanTrigger(ref dinfo))
             {
                 return;
             }
 
-            longBreathComp.Trigger(ref dinfo, ref absorbed);
+            divineBlessingComp.Trigger(ref dinfo, ref absorbed);
         }
 
-        public static void Patch_Verb_TryStartCastOn_Postfix(
-            Verb __instance,
-            LocalTargetInfo castTarg,
-            bool __result)
+        public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)
         {
-            if (!__result || __instance?.verbProps == null)
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || __instance?.def == null)
             {
                 return;
             }
-
-            if (__instance is Verb_CastAbility)
+            if (__instance.def == MX_QHDefOf.Frenzy_Work || __instance.def == MX_QHDefOf.Inspired_Creativity)
             {
-                return;
+                __result *= 2f;
             }
-
-            if (!__instance.verbProps.violent)
-            {
-                return;
-            }
-
-            if (!__instance.verbProps.IsMeleeAttack && !__instance.verbProps.Ranged)
-            {
-                return;
-            }
-
-            Pawn caster = __instance.CasterPawn;
-            Thing targetThing = castTarg.HasThing ? castTarg.Thing : null;
-            if (caster == null || targetThing == null || !caster.HostileTo(targetThing))
-            {
-                return;
-            }
-
-            EleganceUtility.NotifyCombatEvent(caster);
         }
 
-        private static bool HasLongBreathDamageImmunity(Pawn pawn)
+        public static void Patch_Bill_PawnAllowedToStartAnew_Postfix(Bill __instance, Pawn p, ref bool __result)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LongBreathDamageImmunity == null)
+            if (!__result || __instance?.recipe == null)
+            {
+                return;
+            }
+
+            MX_QingheRecipeRequirementExtension extension = __instance.recipe.GetModExtension<MX_QingheRecipeRequirementExtension>();
+            if (extension?.allowedPawnKinds.NullOrEmpty() != false)
+            {
+                return;
+            }
+
+            if (p?.kindDef != null && extension.allowedPawnKinds.Contains(p.kindDef))
+            {
+                return;
+            }
+
+            JobFailReason.Is(extension.failureReasonKey.Translate());
+            __result = false;
+        }
+
+        public static void Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix(
+            Pawn pawn,
+            bool allowFallbackSpots,
+            ref IEnumerable<LocalTargetInfo> __result)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
+            __result = AppendQingheLotusPondMeditationSpots(__result, pawn, allowFallbackSpots);
+        }
+
+        public static void Patch_VerbProperties_AdjustedArmorPenetration_Postfix(Verb ownerVerb, Pawn attacker, ref float __result)
+        {
+            if (!QingheSwordCombatUtility.IsSwordMode(attacker)
+                || QingheSwordCombatUtility.ResonanceFor(attacker) != FlowerBellResonance.Autumn
+                || ownerVerb?.EquipmentSource?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
+            {
+                return;
+            }
+
+            __result *= 1.5f;
+        }
+
+        public static bool Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras_Prefix(Pawn pawn, Vector3 drawPos, Rot4 facing)
+        {
+            ThingWithComps weapon = pawn?.equipment?.Primary;
+            JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            if (reflection == null
+                || weapon?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
+            {
+                return true;
+            }
+
+            Rot4 stanceFacing = reflection.StanceFacing;
+            float drawFactor = pawn.ageTracker.CurLifeStage.equipmentDrawDistanceFactor;
+            float angle;
+            Vector3 offset;
+            switch (stanceFacing.AsInt)
+            {
+                case 0:
+                    angle = 18f;
+                    offset = new Vector3(0f, 0f, -0.08f);
+                    break;
+                case 1:
+                    angle = 72f;
+                    offset = new Vector3(0.20f, 0f, -0.16f);
+                    break;
+                case 2:
+                    angle = 162f;
+                    offset = new Vector3(0f, 0f, -0.20f);
+                    break;
+                default:
+                    angle = 288f;
+                    offset = new Vector3(-0.20f, 0f, -0.16f);
+                    break;
+            }
+
+            const float settleDurationTicks = 18f;
+            float settleProgress = Mathf.Clamp01(reflection.StanceElapsedTicks / settleDurationTicks);
+            float settleRemaining = 1f - Mathf.SmoothStep(0f, 1f, settleProgress);
+            float startAngleOffset = stanceFacing == Rot4.North || stanceFacing == Rot4.East
+                ? -6f
+                : 6f;
+            angle += startAngleOffset * settleRemaining;
+            offset += new Vector3(0f, 0f, 0.04f * settleRemaining);
+            PawnRenderUtility.DrawEquipmentAiming(weapon, drawPos + offset * drawFactor, angle);
+
+            if (pawn.apparel != null)
+            {
+                for (int i = 0; i < pawn.apparel.WornApparel.Count; i++)
+                {
+                    pawn.apparel.WornApparel[i].DrawWornExtras();
+                }
+            }
+            return false;
+        }
+
+        public static void Patch_VerbMeleeAttack_SoundDodge_Postfix(Verb_MeleeAttack __instance, Thing target)
+        {
+            NotifyHostileAttackAttempt(target as Pawn, __instance?.CasterPawn);
+        }
+
+        public static void Patch_Projectile_ImpactSomething_Prefix(
+            Projectile __instance,
+            LocalTargetInfo ___intendedTarget,
+            Thing ___launcher)
+        {
+            Pawn target = ___intendedTarget.Pawn;
+            if (target == null
+                || !target.Spawned
+                || target.MapHeld != __instance?.MapHeld
+                || target.Position != __instance.Position)
+            {
+                return;
+            }
+
+            NotifyHostileAttackAttempt(target, ___launcher);
+        }
+
+        private static void NotifyHostileAttackAttempt(Pawn target, Thing instigator)
+        {
+            if (target?.health?.hediffSet == null || instigator == null)
+            {
+                return;
+            }
+
+            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
+                ? target.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
+                : null;
+            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(instigator);
+
+            JobDriver_IllusoryReflectionStance reflection = target.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            reflection?.TryHandleAttackAttempt(instigator);
+        }
+
+        private static IEnumerable<LocalTargetInfo> AppendQingheLotusPondMeditationSpots(
+            IEnumerable<LocalTargetInfo> original,
+            Pawn pawn,
+            bool allowFallbackSpots)
+        {
+            bool yieldedAny = false;
+            foreach (LocalTargetInfo target in original)
+            {
+                yieldedAny = true;
+                yield return target;
+            }
+
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || pawn?.Map == null || pawn.IsPrisonerOfColony)
+            {
+                yield break;
+            }
+
+            foreach (Building building in pawn.Map.listerBuildings.AllBuildingsColonistOfDef(MX_QHDefOf.MX_QH_LotusPond))
+            {
+                if (building == null || !MeditationUtility.IsValidMeditationBuildingForPawn(building, pawn))
+                {
+                    continue;
+                }
+
+                if (!allowFallbackSpots && building.GetAssignedPawn() != pawn)
+                {
+                    continue;
+                }
+
+                if (yieldedAny && building.GetAssignedPawn() != pawn)
+                {
+                    continue;
+                }
+
+                yield return building;
+            }
+        }
+
+        public static void Patch_MeditationUtility_GetMeditationJob_Postfix(Pawn pawn, ref Job __result)
+        {
+            if (__result == null || !MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
+            Building lotusPond = __result.GetTarget(TargetIndex.A).Thing as Building;
+            if (lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond)
+            {
+                return;
+            }
+
+            IntVec3 cell = lotusPond.InteractionCell;
+            if (!cell.IsValid
+                || !cell.InBounds(lotusPond.Map)
+                || !cell.Standable(lotusPond.Map)
+                || cell.IsForbidden(pawn)
+                || !pawn.CanReserveAndReach(cell, PathEndMode.OnCell, pawn.NormalMaxDanger()))
+            {
+                __result = null;
+                return;
+            }
+
+            __result.SetTarget(TargetIndex.A, cell);
+        }
+
+        public static void Patch_JobDriver_Meditate_MeditationTick_Postfix(JobDriver_Meditate __instance)
+        {
+            Pawn pawn = __instance?.pawn;
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || pawn?.Map == null)
+            {
+                return;
+            }
+
+            Building lotusPond = ResolveMeditatingLotusPond(pawn);
+            if (lotusPond == null)
+            {
+                return;
+            }
+
+            MX_QH_HediffUtility.AddMeditativeStillnessFromLotusPond(pawn, lotusPond);
+        }
+
+        public static void Patch_Book_OnBookReadTick_Postfix(Pawn pawn, int delta, float roomBonusFactor)
+        {
+            MX_QH_HediffUtility.AddMeditativeStillnessFromReading(pawn, delta, roomBonusFactor);
+        }
+
+        public static void Patch_JobDriver_LayDown_LayDownToil_Postfix(JobDriver_LayDown __instance, Toil __result)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(__instance?.pawn))
+            {
+                return;
+            }
+
+            __result?.AddPreTickIntervalAction(delta => ApplyQingheSleepStillness(__instance, delta));
+        }
+
+        public static void Patch_JobDriver_PlayMusicalInstrument_ModifyPlayToil_Postfix(JobDriver_PlayMusicalInstrument __instance, Toil toil)
+        {
+            toil?.AddPreTickIntervalAction(delta => ApplyQingheInstrumentPerformance(__instance, delta));
+        }
+
+        public static void Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix(Pawn pawn, ref QualityCategory __result)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
+            MX_QH_HediffUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
+        }
+
+        private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
+        {
+            Pawn pawn = driver?.pawn;
+            if (driver == null || !driver.asleep || !MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return;
+            }
+
+            MX_QH_HediffUtility.AddMeditativeStillnessFromSleep(pawn, delta);
+        }
+
+        public static bool Patch_Projectile_CheckForFreeInterceptBetween_Prefix(
+            Projectile __instance,
+            Vector3 lastExactPos,
+            Vector3 newExactPos,
+            ref bool __result)
+        {
+            if (__instance?.Map == null || __instance.Destroyed || MX_QHDefOf.MX_QH_LunarMirror == null)
+            {
+                return true;
+            }
+
+            var shields = __instance.Map.listerThings.ThingsOfDef(MX_QHDefOf.MX_QH_LunarMirror);
+            for (int i = 0; i < shields.Count; i++)
+            {
+                if (shields[i]?.TryGetComp<CompLunarMirrorShield>()?.TryInterceptProjectile(__instance, lastExactPos, newExactPos) == true)
+                {
+                    GenClamor.DoClamor(__instance, 12f, ClamorDefOf.Impact);
+                    __instance.Destroy();
+                    __result = true;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static Building ResolveMeditatingLotusPond(Pawn pawn)
+        {
+            Job job = pawn?.CurJob;
+            if (job == null || pawn.Map == null || MX_QHDefOf.MX_QH_LotusPond == null)
+            {
+                return null;
+            }
+
+            LocalTargetInfo target = job.GetTarget(TargetIndex.A);
+            Building assignedLotusPond = pawn.ownership?.AssignedMeditationSpot as Building;
+            if (IsMeditatingAtLotusPond(pawn, assignedLotusPond, target))
+            {
+                return assignedLotusPond;
+            }
+
+            foreach (Building building in pawn.Map.listerBuildings.AllBuildingsColonistOfDef(MX_QHDefOf.MX_QH_LotusPond))
+            {
+                if (IsMeditatingAtLotusPond(pawn, building, target))
+                {
+                    return building;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsMeditatingAtLotusPond(Pawn pawn, Building lotusPond, LocalTargetInfo target)
+        {
+            if (pawn == null || lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond || lotusPond.Map != pawn.Map)
             {
                 return false;
             }
 
-            return pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreathDamageImmunity) != null;
-        }
-
-        private static void EnsureLongBreathState(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_LongBreath != null)
+            IntVec3 interactionCell = lotusPond.InteractionCell;
+            if (!interactionCell.IsValid)
             {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LongBreath) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_LongBreath, pawn));
-                }
+                return false;
             }
+
+            return target.Cell == interactionCell && pawn.Position == interactionCell;
         }
 
-        private static void EnsureWaterFairyTrait(Pawn pawn)
+        private const int QingheInstrumentPerformanceIntervalTicks = 600;
+
+        private const float QingheInstrumentAudienceJoyGain = 0.03f;
+
+        private static void ApplyQingheInstrumentPerformance(JobDriver_PlayMusicalInstrument driver, int delta)
         {
-            if (pawn?.story?.traits == null || MX_QHDefOf.MX_QH_Trait_WaterFairy == null)
+            Pawn performer = driver?.pawn;
+            if (!MX_QHCharacterUtility.IsQinghe(performer)
+                || performer.Map == null
+                || !performer.Spawned
+                || !performer.IsHashIntervalTick(QingheInstrumentPerformanceIntervalTicks, delta))
             {
                 return;
             }
 
-            Trait oldLongBreathTrait = MX_QHDefOf.MX_QH_Trait_LongBreath != null
-                ? pawn.story.traits.GetTrait(MX_QHDefOf.MX_QH_Trait_LongBreath)
-                : null;
-            if (oldLongBreathTrait != null)
+            Room room = performer.GetRoom();
+            if (room == null)
             {
-                pawn.story.traits.RemoveTrait(oldLongBreathTrait);
+                return;
             }
 
-            if (!pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
+            JoyKindDef musicJoy = MX_QHDefOf.HighCulture ?? JoyKindDefOf.Social;
+            IReadOnlyList<Pawn> pawns = performer.Map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < pawns.Count; i++)
+            {
+                Pawn target = pawns[i];
+                if (target == null || target.Dead || target.GetRoom() != room)
+                {
+                    continue;
+                }
+
+                target.needs?.mood?.thoughts?.memories?.TryGainMemory(MX_QHDefOf.MX_QH_QingheInstrumentPerformance, performer);
+                target.needs?.joy?.GainJoy(QingheInstrumentAudienceJoyGain, musicJoy);
+            }
+        }
+
+        public static void Patch_PawnRelationsTracker_AddDirectRelation_Postfix(
+            PawnRelationDef def,
+            Pawn otherPawn,
+            Pawn ___pawn)
+        {
+            if (def != PawnRelationDefOf.Spouse)
+            {
+                return;
+            }
+
+            HediffComp_LuoshenContract.NotifySpouseRelationAdded(___pawn, otherPawn);
+        }
+
+        public static void Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix(
+            PawnRelationDef def,
+            Pawn otherPawn,
+            bool __result,
+            Pawn ___pawn)
+        {
+            if (!__result || def != PawnRelationDefOf.Spouse)
+            {
+                return;
+            }
+
+            HediffComp_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
+        }
+
+        private static void EnsureQingheCoreTraits(Pawn pawn)
+        {
+            if (pawn?.story?.traits == null)
+            {
+                return;
+            }
+
+            if (MX_QHDefOf.MX_QH_Trait_LongBreath != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_LongBreath))
+            {
+                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_LongBreath));
+            }
+
+            if (MX_QHDefOf.MX_QH_Trait_WaterFairy != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
             {
                 pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_WaterFairy));
             }
-        }
-
-        private static void EnsureSpringRegenState(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_SpringRegen != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringRegen) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringRegen, pawn));
-                }
-            }
-        }
-
-        private static void EnsureLotusShieldBinding(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_LotusShield == null)
-            {
-                return;
-            }
-
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_LotusShield);
-            HediffComp_LotusShield comp = (hediff as HediffWithComps)?.GetComp<HediffComp_LotusShield>();
-            comp?.EnsureShieldBound();
-        }
-
-        private static void EnsureQingheStatusGizmoState(Pawn pawn)
-        {
-            if (pawn?.health?.hediffSet != null && MX_QHDefOf.MX_QH_QingheStatusGizmo != null)
-            {
-                if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_QingheStatusGizmo) == null)
-                {
-                    pawn.health.AddHediff(HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_QingheStatusGizmo, pawn));
-                }
-            }
-        }
-
-        private static void SyncEleganceAbilityByCurrentWeapon(Pawn pawn)
-        {
-            if (pawn?.abilities == null)
-            {
-                return;
-            }
-
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_HengZhi");
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_DuanHun");
-            RemoveAbility(pawn, "MX_Qinghe_Elegance_YangChun");
-
-            ThingDef primaryDef = pawn.equipment?.Primary?.def;
-            if (primaryDef == null)
-            {
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Pipa")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_HengZhi");
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Zhudi")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_DuanHun");
-                return;
-            }
-
-            if (primaryDef.defName == "MX_Qinghe_Form_Qin")
-            {
-                EnsureAbility(pawn, "MX_Qinghe_Elegance_YangChun");
-            }
-        }
-
-        private static void EnsureAbility(Pawn pawn, string abilityDefName)
-        {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
-            if (def == null)
-            {
-                return;
-            }
-
-            if (pawn.abilities.GetAbility(def, includeTemporary: false) == null)
-            {
-                pawn.abilities.GainAbility(def);
-            }
-        }
-
-        private static void RemoveAbility(Pawn pawn, string abilityDefName)
-        {
-            AbilityDef def = DefDatabase<AbilityDef>.GetNamedSilentFail(abilityDefName);
-            if (def == null)
-            {
-                return;
-            }
-
-            pawn.abilities.RemoveAbility(def);
         }
 
     }

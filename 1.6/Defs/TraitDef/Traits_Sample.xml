@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    
   <TraitDef>
     <defName>MiliraXianNeiyu_Love</defName>
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>Neiyu Xian</label>
+        <label>霓羽仙</label>
         <description>"她爱着世人，她愿世间飘落霓裳花。"</description>
-        <statOffsets>
-        </statOffsets>      
+        <statOffsets></statOffsets>
         <statFactors>
           <IncomingDamageFactor>0.99</IncomingDamageFactor>
         </statFactors>
@@ -17,48 +15,54 @@
     </degreeDatas>
     <modExtensions>
       <!-- Same function as "Perfect memory". 挂上后，这个特质包含博闻强识的效果，完全无技能遗忘。 -->
-      <li Class="AriandelLibrary.AL_NoSkillDecay_Extension"/>
-
+      <li Class="AriandelLibrary.AL_NoSkillDecay_Extension" />
       <!-- Ignore gene penalty on skills. 突破基因对技能的减益限制（忽略基因惩罚）。 -->
       <li Class="AriandelLibrary.AL_IgnoreGenePenalty_Extension">
         <skill>Cooking</skill>
       </li>
-
       <!-- Set skill level and this skill won't decay. 设置生成时技能等级，并单独阻止该技能等级遗忘 -->
       <li Class="AriandelLibrary.AL_LockSkill_Extension">
         <skill>Cooking</skill>
         <level>20</level>
         <preventDecay>true</preventDecay>
       </li>
-
       <!-- Reflect psychic shock lance 反弹心灵冲击枪 -->
       <li Class="AriandelLibrary.AL_PsychicShockReflect_Extension" />
     </modExtensions>
   </TraitDef>
-
-
   <TraitDef>
     <defName>MX_QH_Trait_LongBreath</defName>
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>长息</label>
-        <description>受到致命伤害或摧毁身体部件的伤害时，若激流值大于0，抵消此次伤害、修复自身所有损伤并清空激流值，同时获得短暂心灵隐形。</description>
+        <label>涓流长息</label>
+        <description>"梨花带雨，润物无声。"（开启效果：花神之垂怜、涓流）</description>
       </li>
     </degreeDatas>
   </TraitDef>
-
-
   <TraitDef>
     <defName>MX_QH_Trait_WaterFairy</defName>
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>水中仙</label>
-        <description>清荷与生俱来的水灵加护。自带“长息”“清流”与“花神护体”效果：长息会在遭受致命伤害或将摧毁部位的伤害时触发，抵消伤害并修复全身损伤；清流每180 ticks自动治愈2.5生命值伤口；花神护体提供可回复护盾，激流越高单点护盾承伤越高，雅乐越高护盾回复越快，护盾被击碎后会失效10秒。</description>
+        <label>霓羽仙</label>
+        <description>"出淤泥而不染，濯清涟而不妖。"</description>
+        <statFactors>
+          <IncomingDamageFactor>0.99</IncomingDamageFactor>
+        </statFactors>
       </li>
     </degreeDatas>
+    <modExtensions>
+      <li Class="AriandelLibrary.AL_NoSkillDecay_Extension" />
+      <li Class="AriandelLibrary.AL_IgnoreGenePenalty_Extension">
+        <skill>Cooking</skill>
+      </li>
+      <li Class="AriandelLibrary.AL_LockSkill_Extension">
+        <skill>Artistic</skill>
+        <level>20</level>
+        <preventDecay>true</preventDecay>
+      </li>
+      <li Class="AriandelLibrary.AL_PsychicShockReflect_Extension" />
+    </modExtensions>
   </TraitDef>
-
-
 </Defs>

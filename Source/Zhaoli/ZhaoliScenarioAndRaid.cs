@@ -204,7 +204,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool IsSpecialPawn(Pawn pawn)
         {
-            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHUtility.IsQinghe(pawn);
+            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
         public static bool ShouldDeathFieldAffectTarget(Pawn caster, Pawn target)

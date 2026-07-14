@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Node_SpringFlow.label>spring flow</MX_QH_Node_SpringFlow.label>
+  <MX_QH_Node_SpringFlow.description>Unlocks Flower Decree: Spring Flow.\n\nSummon spring water to continuously heal allied targets in the area.</MX_QH_Node_SpringFlow.description>
+  <MX_QH_Node_Chuanhun.label>soulbreak absolute note</MX_QH_Node_Chuanhun.label>
+  <MX_QH_Node_Chuanhun.description>Unlocks Flower Decree: Spirit Burst.\n\nUnleash an extremely long-range sonic burst, stunning enemies in a small area and dealing damage. Extra effect: Flower Decree maximum +1.</MX_QH_Node_Chuanhun.description>
+  <MX_QH_Node_Shuangyuejing.label>frost bloom</MX_QH_Node_Shuangyuejing.label>
+  <MX_QH_Node_Shuangyuejing.description>Unlocks Flower Decree: Lunar Mirror.\n\nSummon a shield that intercepts all hostile projectiles passing through it for a time. Extra effect: Flower Decree maximum +1.</MX_QH_Node_Shuangyuejing.description>
+  <MX_QH_Node_Gaoshan.label>mountain resolve</MX_QH_Node_Gaoshan.label>
+  <MX_QH_Node_Gaoshan.description>Unlocks passive: increases personal shield maximum by 150%.</MX_QH_Node_Gaoshan.description>
+  <MX_QH_Node_Liushui.label>flowing resilience</MX_QH_Node_Liushui.label>
+  <MX_QH_Node_Liushui.description>Unlocks passive: increases personal shield recharge rate by 200%.</MX_QH_Node_Liushui.description>
+  <MX_QH_Node_Chunjiang.label>river moon intent</MX_QH_Node_Chunjiang.label>
+  <MX_QH_Node_Chunjiang.description>Unlocks passive: reduces the shield downtime after breaking to 2 seconds.</MX_QH_Node_Chunjiang.description>
+  <MX_QH_Node_DivineGrace.label>Flower-God Benediction</MX_QH_Node_DivineGrace.label>
+  <MX_QH_Node_DivineGrace.description>Unlocks a repeatable passive. Each level improves base stats, shield stats, and Flower Decree recovery speed.</MX_QH_Node_DivineGrace.description>
+  <MX_QH_Node_Yingyue.label>moon-reflection fragment</MX_QH_Node_Yingyue.label>
+  <MX_QH_Node_Yingyue.description>Unlocks Eye of Heart and allows Flower-God Mercy to store 1 additional charge.</MX_QH_Node_Yingyue.description>
+  <MX_QH_Node_IllusoryReflection.label>Illusory Reflection</MX_QH_Node_IllusoryReflection.label>
+  <MX_QH_Node_IllusoryReflection.description>Unlocks Illusory Reflection, an uninterruptible sword stance that counters nearby attacks and mitigates attacks from farther away.</MX_QH_Node_IllusoryReflection.description>
+  <MX_QH_Node_Jueying.label>Sword Form: Jueying</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>A sword technique Qinghe developed after exchanging forms with her teacher Neiyu. Bell tones become sword qi, combining the breathtaking speed of Sword Form: Skyfall with Qinghe's own cutting art.\n\nUnlocks Sword Form: Jueying. Dash in the chosen direction, then leap and pursue after hitting a target. On landing, consume all Sword Pressure to empower the attack into seven area slashes; without Sword Pressure, perform three single-target slashes.</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Luoshenfu.label>Luoshui rite</MX_QH_Node_Luoshenfu.label>
+  <MX_QH_Node_Luoshenfu.description>Unlocks active ability: Luoshen's Ribbon, greatly improving the opinion between any two colonists.\n\nUnlocks passive: Luoshui Rite, improving Qinghe's social impact and mood. If she has a spouse, it also establishes a psychic bond.</MX_QH_Node_Luoshenfu.description>
+</LanguageData>

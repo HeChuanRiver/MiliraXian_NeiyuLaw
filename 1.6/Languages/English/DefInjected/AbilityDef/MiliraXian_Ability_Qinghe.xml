@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QingHe_DebugMaxTempest.label>Max Tempest</MX_QingHe_DebugMaxTempest.label>
-  <MX_QingHe_DebugMaxTempest.description>Immediately fill Tempest to maximum.</MX_QingHe_DebugMaxTempest.description>
-  <MX_QingHe_DebugMaxElegance.label>Max Elegance</MX_QingHe_DebugMaxElegance.label>
-  <MX_QingHe_DebugMaxElegance.description>Immediately fill Elegance to maximum.</MX_QingHe_DebugMaxElegance.description>
-  <MX_Qinghe_SpringFlow.label>Spring Flow</MX_Qinghe_SpringFlow.label>
-  <MX_Qinghe_SpringFlow.description>Create a clear spring at the target point. Allied targets within 6 cells gain increased melee damage, increased ranged damage, reduced incoming damage, and pain relief.\nThis skill's marked effect can be strengthened by Elegance.\nRequires sustained channeling. Tempest accumulates during the channel, and the spring lasts 15 seconds.</MX_Qinghe_SpringFlow.description>
-  <MX_Qinghe_AquaMirror.label>Aqua Mirror</MX_Qinghe_AquaMirror.label>
-  <MX_Qinghe_AquaMirror.description>Apply a 10-second Aqua Mirror to allied targets within 4 cells of the target point. The mirror blocks part of incoming damage. When it is depleted or expires, it instantly heals the target, restoring all non-permanent wounds and missing body parts, and damages nearby enemies.\nThis skill's marked effect can be strengthened by Elegance.\nWhen Aqua Mirror disappears, a small amount of Tempest is generated.</MX_Qinghe_AquaMirror.description>
-  <MX_Qinghe_TempestDrain.label>Tempest Drain</MX_Qinghe_TempestDrain.label>
-  <MX_Qinghe_TempestDrain.description>Channel a large draining field at the target point. Hostile targets inside continuously accumulate Waterflow Severance, suffer heavy penalties, and die immediately when the buildup reaches maximum.\nThis skill's marked effect can be strengthened by Elegance.\nRequires at least 50 Tempest. While channeling, Tempest is continuously consumed until less than 10 remains, then the field closes automatically. This skill cannot be manually interrupted.\nTargets closer to the field center accumulate severance faster.</MX_Qinghe_TempestDrain.description>
-  <MX_Qinghe_Elegance_HengZhi.label>Cross-Pluck</MX_Qinghe_Elegance_HengZhi.label>
-  <MX_Qinghe_Elegance_HengZhi.description>Only usable in pipa form. Deals heavy impact damage around the caster and knocks enemies back. The more targets hit, the faster Elegance grows.</MX_Qinghe_Elegance_HengZhi.description>
-  <MX_Qinghe_Elegance_DuanHun.label>Soulbreak</MX_Qinghe_Elegance_DuanHun.label>
-  <MX_Qinghe_Elegance_DuanHun.description>Only usable in bamboo flute form. Applies Soulbreak melody to a small distant area, causing damage, stun, bleeding, long-lasting slow, and a small chance to directly destroy the brain.</MX_Qinghe_Elegance_DuanHun.description>
-  <MX_Qinghe_Elegance_YangChun.label>Yangchun</MX_Qinghe_Elegance_YangChun.label>
-  <MX_Qinghe_Elegance_YangChun.description>Only usable in qin form. After casting, the same casting job releases a harmonic pulse: enemies are damaged and slowed, allies are healed and hastened, and Elegance increases.</MX_Qinghe_Elegance_YangChun.description>
+  <MX_QH_SpringFlow.label>Spring Flow</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>Spend 1 Flower Decree to summon a spring at the target point, briefly healing allies in range and applying Spring Flow Baptism. Lasts 15 seconds.</MX_QH_SpringFlow.description>
+  <MX_QH_SpiritBurst.label>Spirit Burst</MX_QH_SpiritBurst.label>
+  <MX_QH_SpiritBurst.description>Spend 2 Flower Decree to play a powerful sonic wave, damaging and stunning enemies in the target area.</MX_QH_SpiritBurst.description>
+  <MX_QH_LunarMirror.label>Lunar Mirror</MX_QH_LunarMirror.label>
+  <MX_QH_LunarMirror.description>Spend 2 Flower Decree to summon a snow-like shield at the target point, briefly intercepting hostile projectiles that cross its boundary. The shield lasts 20 seconds and absorbs up to 300 damage.</MX_QH_LunarMirror.description>
+  <MX_QH_EyeOfHeart.label>Eye of Heart</MX_QH_EyeOfHeart.label>
+  <MX_QH_EyeOfHeart.description>Focus for 1 second. Any hostile attack attempt triggers the effect, whether it hits or deals damage, restoring 10% of the lotus shield and granting 1 Sword Pressure.</MX_QH_EyeOfHeart.description>
+  <MX_QH_IllusoryReflection.label>Illusory Reflection</MX_QH_IllusoryReflection.label>
+  <MX_QH_IllusoryReflection.description>Enter an uninterruptible stance for 5 seconds. Hostile attacks originating within 4 cells are negated and immediately countered; hostile attacks from outside the area deal 60% less damage. With at least 1 Sword Pressure, consume 1 point to unleash a powerful cone slash toward the attack source and reduce Eye of Heart's cooldown by 10 seconds; otherwise perform a normal attack.</MX_QH_IllusoryReflection.description>
+  <MX_QH_AscentSlash.label>Finishing Sword: Falling Blossoms</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>Dash rapidly in the chosen direction, dealing minor kick damage to the first target struck. If the kick hits a hostile unit or building, leap into the air and use the momentum to consume all Sword Pressure for a powerful series of slashes. The technique can still be used with less than 1 full point of Sword Pressure, but its slash count and power are greatly reduced.\n\n"Hm... You think you've seen this move somewhere before? Maybe. Wait, I'm not that... What do you mean by 'shrimp-head'?"</MX_QH_AscentSlash.description>
+  <MX_QH_LuoshenRibbon.label>Luoshen's Ribbon</MX_QH_LuoshenRibbon.label>
+  <MX_QH_LuoshenRibbon.description>Unlocked by Luoshenfu. Choose two conscious people and bind their thoughts with Luoshen's ribbon, greatly improving their opinion of each other.</MX_QH_LuoshenRibbon.description>
 </LanguageData>

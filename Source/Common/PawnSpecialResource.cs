@@ -16,14 +16,8 @@ namespace MiliraXian.Characters
         public bool clampToMax = true;
         public bool showGizmo = true;
         public bool hideOnHealthTab = true;
-        public float barColorRed = 0.72f;
-        public float barColorGreen = 0.18f;
-        public float barColorBlue = 0.24f;
-        public float barColorAlpha = 1f;
-        public float barHighlightRed = 0.9f;
-        public float barHighlightGreen = 0.35f;
-        public float barHighlightBlue = 0.42f;
-        public float barHighlightAlpha = 1f;
+        public Color barColor = new Color(0.72f, 0.18f, 0.24f, 1f);
+        public Color barHighlightColor = new Color(0.9f, 0.35f, 0.42f, 1f);
 
         public HediffCompProperties_PawnSpecialResource()
         {
@@ -47,30 +41,19 @@ namespace MiliraXian.Characters
             }
         }
 
-        public float MaxValue => PropsResource.maxValue;
+        public virtual float MaxValue => PropsResource.maxValue;
 
         public bool IsOverflowing => MaxValue > 0f && CurrentValue > MaxValue;
 
-        public float ValuePercent
-        {
-            get
-            {
-                if (MaxValue <= 0f)
-                {
-                    return 0f;
-                }
-
-                return Mathf.Clamp01(CurrentValue / MaxValue);
-            }
-        }
+        public float ValuePercent => MaxValue <= 0f ? 0f : Mathf.Clamp01(CurrentValue / MaxValue);
 
         public string ResourceLabel => PropsResource.resourceLabel;
 
         public string ResourceDescription => PropsResource.resourceDescription;
 
-        public Color BarColor => new Color(PropsResource.barColorRed, PropsResource.barColorGreen, PropsResource.barColorBlue, PropsResource.barColorAlpha);
+        public Color BarColor => PropsResource.barColor;
 
-        public Color BarHighlightColor => new Color(PropsResource.barHighlightRed, PropsResource.barHighlightGreen, PropsResource.barHighlightBlue, PropsResource.barHighlightAlpha);
+        public Color BarHighlightColor => PropsResource.barHighlightColor;
 
         public override void CompExposeData()
         {
@@ -171,6 +154,20 @@ namespace MiliraXian.Characters
             return value;
         }
     }
+
+    public interface ISpecialResourceAddHandler
+    {
+        void AddResourceValue(float value);
+
+        bool TryConsumeResourceValue(float value);
+    }
+
+    public interface ISpecialResourceValueAdapter
+    {
+        float CurrentResourceValue { get; }
+
+        float MaxResourceValue { get; }
+    }
     
     [StaticConstructorOnStartup]
     public class PawnSpecialResourceGizmo : Gizmo_Slider
@@ -180,10 +177,7 @@ namespace MiliraXian.Characters
 
         protected override float Target
         {
-            get
-            {
-                return resource.ValuePercent;
-            }
+            get => resource.ValuePercent;
             set
             {
             }
@@ -203,14 +197,8 @@ namespace MiliraXian.Characters
 
         protected override bool DraggingBar
         {
-            get
-            {
-                return draggingBar;
-            }
-            set
-            {
-                draggingBar = value;
-            }
+            get => draggingBar;
+            set => draggingBar = value;
         }
 
         public PawnSpecialResourceGizmo(HediffComp_PawnSpecialResource resource)

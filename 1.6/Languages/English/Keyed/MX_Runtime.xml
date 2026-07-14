@@ -5,12 +5,31 @@
   <MX_Common_ResourceOverflowing>The current value is above its maximum.</MX_Common_ResourceOverflowing>
   <MX_Common_Unknown>unknown</MX_Common_Unknown>
   <MX_Common_UnknownTarget>unknown target</MX_Common_UnknownTarget>
+  <MX_Common_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_Common_SkillTreeStateAlreadyLearned>
+  <MX_Common_SkillBookMissingState>Skill state is missing.</MX_Common_SkillBookMissingState>
+  <MX_Common_SkillBookDataMissing>Skill book data is missing.</MX_Common_SkillBookDataMissing>
+  <MX_Common_SkillBookNoLearnableContent>This skill book has no learnable content for this reader.</MX_Common_SkillBookNoLearnableContent>
+  <MX_Common_SkillBookBenefitNodes>Increase skill node: {0}</MX_Common_SkillBookBenefitNodes>
+  <MX_Common_SkillBookBenefitNodeLine> - Learn school skill: {0} (+{1} skill points/hour)</MX_Common_SkillBookBenefitNodeLine>
+  <MX_Common_SkillBookQualitySummary_Awful>The paper is brittle, the ink has bled into stains, and several passages must be guessed from context.</MX_Common_SkillBookQualitySummary_Awful>
+  <MX_Common_SkillBookQualitySummary_Poor>The binding still holds, but smudged ink and careless notes make the text slow to follow.</MX_Common_SkillBookQualitySummary_Poor>
+  <MX_Common_SkillBookQualitySummary_Normal>The pages are orderly enough, with clear hand and steady ink suitable for careful study.</MX_Common_SkillBookQualitySummary_Normal>
+  <MX_Common_SkillBookQualitySummary_Good>The paper is clean, the ink is even, and the annotations guide the reader through difficult turns.</MX_Common_SkillBookQualitySummary_Good>
+  <MX_Common_SkillBookQualitySummary_Excellent>The volume is finely prepared, its diagrams precise and its commentary arranged with patient care.</MX_Common_SkillBookQualitySummary_Excellent>
+  <MX_Common_SkillBookQualitySummary_Masterwork>Every fold, stroke, and margin note feels deliberate, as if the book itself knows how to teach.</MX_Common_SkillBookQualitySummary_Masterwork>
+  <MX_Common_SkillBookQualitySummary_Legendary>The pages carry a quiet authority; even a brief glance seems to draw the reader toward hidden understanding.</MX_Common_SkillBookQualitySummary_Legendary>
+  <MX_Common_Parentheses>({0})</MX_Common_Parentheses>
+  <MX_Common_SkillNodesLearnedLetterLabel>New skill learned</MX_Common_SkillNodesLearnedLetterLabel>
+  <MX_Common_SkillNodesLearnedLetterText>{0} has been read, granting: {1}</MX_Common_SkillNodesLearnedLetterText>
+  <MX_Common_SkillTreeStateLevel>{0}/{1}</MX_Common_SkillTreeStateLevel>
+  <MX_Common_SkillBookStatCategory>Skill book contents</MX_Common_SkillBookStatCategory>
 
   <MX_ModeSwitch_CommandLabel>Switch form</MX_ModeSwitch_CommandLabel>
   <MX_ModeSwitch_CommandDesc>Switch to another form.</MX_ModeSwitch_CommandDesc>
   <MX_ModeSwitch_CommandLabelWithForm>{0}: {1}</MX_ModeSwitch_CommandLabelWithForm>
   <MX_ModeSwitch_CommandFullDesc>{0}&#10;&#10;Current: {1}&#10;Click to choose the target form.</MX_ModeSwitch_CommandFullDesc>
   <MX_ModeSwitch_Cooldown>On cooldown: {0}s</MX_ModeSwitch_Cooldown>
+  <MX_ModeSwitch_PawnBusy>The current action cannot be interrupted by switching weapons.</MX_ModeSwitch_PawnBusy>
   <MX_ModeSwitch_NoTargetForm>No target form is available.</MX_ModeSwitch_NoTargetForm>
   <MX_ModeSwitch_TargetFormMissing>Target form is not configured.</MX_ModeSwitch_TargetFormMissing>
   <MX_ModeSwitch_TargetFormInvalidThing>Target form is not a valid thing: {0}</MX_ModeSwitch_TargetFormInvalidThing>
@@ -96,7 +115,7 @@
   <MX_QH_ShieldInactive>Shield inactive</MX_QH_ShieldInactive>
   <MX_QH_LotusShieldStatusActive>Status: active</MX_QH_LotusShieldStatusActive>
   <MX_QH_LotusShieldStatusDown>Status: down ({0}s left)</MX_QH_LotusShieldStatusDown>
-  <MX_QH_LotusShieldDamagePerPoint>Damage per shield point: {0}</MX_QH_LotusShieldDamagePerPoint>
+  <MX_QH_LotusShieldCapacity>Shield capacity: {0}</MX_QH_LotusShieldCapacity>
   <MX_QH_LotusShieldRegen>Shield regen: {0} /s</MX_QH_LotusShieldRegen>
   <MX_QH_NeedPipaForm>Requires pipa form.</MX_QH_NeedPipaForm>
   <MX_QH_NeedZhudiForm>Requires bamboo flute form.</MX_QH_NeedZhudiForm>
@@ -107,6 +126,151 @@
   <MX_QH_ReportHengZhi>channeling Cross-Pluck impact</MX_QH_ReportHengZhi>
   <MX_QH_ReportYangChun>channeling Yangchun harmony</MX_QH_ReportYangChun>
   <MiliraXian.QingHe.Ability_TempestDrain.Disabled>Not enough Tempest to maintain Tempest Drain.</MiliraXian.QingHe.Ability_TempestDrain.Disabled>
+  <MX_QH_DevLearnAllNodesLabel>DEV: learn all Qinghe nodes</MX_QH_DevLearnAllNodesLabel>
+  <MX_QH_DevLearnAllNodesDesc>Developer test command for Qinghe's skill tree and migrated skill linkage.</MX_QH_DevLearnAllNodesDesc>
+  <MX_QH_DevLearnAllNodesMessage>Qinghe has learned all currently defined nodes.</MX_QH_DevLearnAllNodesMessage>
+  <MX_QH_DevAddDivineGraceLevelLabel>DEV: Divine Grace +1</MX_QH_DevAddDivineGraceLevelLabel>
+  <MX_QH_DevAddDivineGraceLevelDesc>Directly raises Divine Grace by 1 level to test the staged stat path.</MX_QH_DevAddDivineGraceLevelDesc>
+  <MX_QH_DevAddDivineGraceLevelMessage>Divine Grace is now level {0}.</MX_QH_DevAddDivineGraceLevelMessage>
+  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
+  <MX_QH_SpiritBurstMissingResource>Not enough Flower Decree to cast Spirit Burst.</MX_QH_SpiritBurstMissingResource>
+  <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
+  <MX_QH_RequiresSwordMode>Sanhua must be equipped.</MX_QH_RequiresSwordMode>
+  <MX_QH_RequiresBellMode>The Flower-Tiding Bell must be equipped.</MX_QH_RequiresBellMode>
+  <MX_QH_WeaponFormFlowerBell>Flower-Tiding Bell</MX_QH_WeaponFormFlowerBell>
+  <MX_QH_WeaponFormSword>Sanhua</MX_QH_WeaponFormSword>
+  <MX_QH_ModeSwitchCommandLabel>Switch weapon</MX_QH_ModeSwitchCommandLabel>
+  <MX_QH_ModeSwitchCommandDesc>Switch between the Flower-Tiding Bell and Sanhua.</MX_QH_ModeSwitchCommandDesc>
+  <MX_QH_SwordPressureLabel>Sword Pressure</MX_QH_SwordPressureLabel>
+  <MX_QH_SwordPressureValueLine>Sword Pressure: {0} / {1}</MX_QH_SwordPressureValueLine>
+  <MX_QH_SwordModeDodgeExplanation>Sanhua stance: greatly increased melee dodge</MX_QH_SwordModeDodgeExplanation>
+  <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
+  <MX_QH_AscentSlashInProgress>Sword Form: Jueying is already in progress.</MX_QH_AscentSlashInProgress>
+  <MX_QH_AscentSlashLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_AscentSlashLandingNoLineOfSight>
+  <MX_QH_AscentSlashInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_AscentSlashInvalidLanding>
+  <MX_QH_LuoshenRibbonInvalidTarget>Luoshen's ribbon can only connect two conscious people.</MX_QH_LuoshenRibbonInvalidTarget>
+  <MX_QH_LuoshenRibbonChooseFirst>Choose one end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseFirst>
+  <MX_QH_LuoshenRibbonChooseSecond>Choose the other end of Luoshen's ribbon</MX_QH_LuoshenRibbonChooseSecond>
+  <MX_QH_LuoshenRibbonApplied>Luoshen's ribbon has drawn {0} and {1}'s hearts together.</MX_QH_LuoshenRibbonApplied>
+  <MX_QH_LotusPondAssignQingheOnly>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPondAssignQingheOnly>
+  <MX_QH_OpenFlowerCourtRequiresQinghe>Open Flower Court (requires Qinghe)</MX_QH_OpenFlowerCourtRequiresQinghe>
+  <MX_QH_OpenFlowerCourt>Open Flower Court</MX_QH_OpenFlowerCourt>
+  <MX_QH_LotusPondCannotReach>Qinghe cannot reach the lotus pond.</MX_QH_LotusPondCannotReach>
+  <MX_QH_FlowerCourtMissing>Qinghe has not established the Flower Court.</MX_QH_FlowerCourtMissing>
+  <MX_QH_TuneFlowerBellRequiresWeapon>Tune Flower Bell (requires Flower Bell equipped)</MX_QH_TuneFlowerBellRequiresWeapon>
+  <MX_QH_TuneFlowerBellOption>Tune Flower Bell: {0}</MX_QH_TuneFlowerBellOption>
+  <MX_QH_CurrentSuffix> (current)</MX_QH_CurrentSuffix>
+  <MX_QH_TuneFlowerBellNoWeapon>Qinghe has no Flower Bell to tune.</MX_QH_TuneFlowerBellNoWeapon>
+  <MX_QH_FlowerBellBuildingDamageLabel>Siegebreak note</MX_QH_FlowerBellBuildingDamageLabel>
+  <MX_QH_FlowerBellBuildingDamageDesc>Toggle Flower Bell's extra building damage. When enabled, it uses projectiles with 300% building damage factor; when disabled, 100%.</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_FlowerBellResonanceSpring>spring</MX_QH_FlowerBellResonanceSpring>
+  <MX_QH_FlowerBellResonanceSummer>summer</MX_QH_FlowerBellResonanceSummer>
+  <MX_QH_FlowerBellResonanceAutumn>autumn</MX_QH_FlowerBellResonanceAutumn>
+  <MX_QH_FlowerBellResonanceWinter>winter</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_SwordResonanceSpring>Spring Dawn</MX_QH_SwordResonanceSpring>
+  <MX_QH_SwordResonanceSummer>Lotus Rain</MX_QH_SwordResonanceSummer>
+  <MX_QH_SwordResonanceAutumn>Impermanence</MX_QH_SwordResonanceAutumn>
+  <MX_QH_SwordResonanceWinter>Condensing Frost</MX_QH_SwordResonanceWinter>
+  <MX_QH_FlowerBellResonanceDescriptionSpring>Spring resonance carries a living pulse. Hits disturb blood in flesh targets and build electric leakage in mechanoids.</MX_QH_FlowerBellResonanceDescriptionSpring>
+  <MX_QH_FlowerBellResonanceDescriptionSummer>Summer resonance is heavy and fervent. Hits build toxins in flesh targets and corrode mechanical structure.</MX_QH_FlowerBellResonanceDescriptionSummer>
+  <MX_QH_FlowerBellResonanceDescriptionAutumn>Autumn resonance is clear and severe. Hits pressure the mind of flesh targets and push mechanoids toward overload.</MX_QH_FlowerBellResonanceDescriptionAutumn>
+  <MX_QH_FlowerBellResonanceDescriptionWinter>Winter resonance sinks into cold. Hits build chill on the target until it is frozen in place.</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionSpring>Spring Dawn resonance: Hits grant Qinghe Spring Flow Baptism and build Bleeding and Electric Leakage.</MX_QH_SwordResonanceDescriptionSpring>
+  <MX_QH_SwordResonanceDescriptionSummer>Lotus Rain resonance: Sword Pressure gained from hits is increased by 50%, and hits build Toxin and Corrosion.</MX_QH_SwordResonanceDescriptionSummer>
+  <MX_QH_SwordResonanceDescriptionAutumn>Impermanence resonance: Attacks gain 50% armor penetration and build Fear and Overload.</MX_QH_SwordResonanceDescriptionAutumn>
+  <MX_QH_SwordResonanceDescriptionWinter>Condensing Frost resonance: Each hit restores 8 points of Lotus Shield and builds Freeze.</MX_QH_SwordResonanceDescriptionWinter>
+  <MX_QH_SkillTreeNoScores>No score has been interpreted.</MX_QH_SkillTreeNoScores>
+  <MX_QH_SkillTreeStateLearned>learned</MX_QH_SkillTreeStateLearned>
+  <MX_QH_SkillTreeStateAlreadyLearned>Already at maximum level.</MX_QH_SkillTreeStateAlreadyLearned>
+  <MX_QH_SkillTreeStateLevel>level {0}/{1}</MX_QH_SkillTreeStateLevel>
+  <MX_QH_SkillTreeStateReading>interpreting</MX_QH_SkillTreeStateReading>
+  <MX_QH_SkillTreeStateReadingWithProgress>interpreting {0}</MX_QH_SkillTreeStateReadingWithProgress>
+  <MX_QH_SkillTreeStatePending>pending interpretation</MX_QH_SkillTreeStatePending>
+  <MX_QH_SkillTreeNoNodeSelected>No node selected.</MX_QH_SkillTreeNoNodeSelected>
+  <MX_QH_SkillTreeUnlockProgress>Unlock progress</MX_QH_SkillTreeUnlockProgress>
+  <MX_QH_SkillTreeStatusLine>Status: {0}</MX_QH_SkillTreeStatusLine>
+  <MX_QH_SkillTreeEffects>Effects</MX_QH_SkillTreeEffects>
+  <MX_QH_SkillTreeCollectionCompletionActive>{0} (active)</MX_QH_SkillTreeCollectionCompletionActive>
+  <MX_QH_SkillTreeCollectionCompletionLocked>{0} (active after all nodes are learned)</MX_QH_SkillTreeCollectionCompletionLocked>
+  <MX_QH_SkillTreeSourceScores>Source scores</MX_QH_SkillTreeSourceScores>
+  <MX_QH_SkillTreeImportantNode>Type: important node</MX_QH_SkillTreeImportantNode>
+  <MX_QH_SkillTreeSourceScoreEntry>&lt;i&gt;{0}&lt;/i&gt;</MX_QH_SkillTreeSourceScoreEntry>
+  <MX_QH_FlowerPanelHelpTitle>Qinghe panel help</MX_QH_FlowerPanelHelpTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeTitle>Flower Decree</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeBody>Used to cast Flower Mandates. Segments show current charges and recovery progress.</MX_QH_FlowerPanelHelpFlowerDecreeBody>
+  <MX_QH_FlowerPanelHelpShieldTitle>Shield</MX_QH_FlowerPanelHelpShieldTitle>
+  <MX_QH_FlowerPanelHelpShieldBody>Shows the current percentage of Flower-God Ward.</MX_QH_FlowerPanelHelpShieldBody>
+  <MX_QH_FlowerPanelHelpLongBreathTitle>Long Breath</MX_QH_FlowerPanelHelpLongBreathTitle>
+  <MX_QH_FlowerPanelHelpLongBreathBody>Green blocks are available charges; yellow fill shows recharge progress.</MX_QH_FlowerPanelHelpLongBreathBody>
+  <MX_QH_FlowerPanelHelpFlowerCourtTitle>Flower Court</MX_QH_FlowerPanelHelpFlowerCourtTitle>
+  <MX_QH_FlowerPanelHelpFlowerCourtBody>Shows skill node and stillness progress; click to open the Flower Court panel.</MX_QH_FlowerPanelHelpFlowerCourtBody>
+  <MX_QH_Parentheses> ({0})</MX_QH_Parentheses>
+  <MX_QH_MusicScoreStatCategory>Qinghe musical intent</MX_QH_MusicScoreStatCategory>
+  <MX_QH_SkillBookAcquiredLetterLabel>New score bound</MX_QH_SkillBookAcquiredLetterLabel>
+  <MX_QH_SkillBookAcquiredLetterText>A new score book was assembled: &lt;i&gt;{0}&lt;/i&gt;.&#10;&#10;When Qinghe studies it, she can learn or advance the corresponding score node.</MX_QH_SkillBookAcquiredLetterText>
+  <MX_QH_Book_LostScore_Label>Lost Score</MX_QH_Book_LostScore_Label>
+  <MX_QH_Book_LostScore_Desc>A score book preserving the long-lost pieces {0}. A matching skill tree can study it to advance those nodes.</MX_QH_Book_LostScore_Desc>
+  <MX_QH_Book_FeihuaJueyu_Label>Feihua Jueyu</MX_QH_Book_FeihuaJueyu_Label>
+  <MX_QH_Book_FeihuaJueyu_Desc>A score describing petals cut into sound. Studying it can unlock Soulpiercer for a matching skill tree and increase Flower Decree maximum.</MX_QH_Book_FeihuaJueyu_Desc>
+  <MX_QH_Book_DuanqiaoCanxue_Label>Duanqiao Canxue</MX_QH_Book_DuanqiaoCanxue_Label>
+  <MX_QH_Book_DuanqiaoCanxue_Desc>A cold and broken score. Studying it can unlock Frost Moon Mirror for a matching skill tree and increase Flower Decree maximum.</MX_QH_Book_DuanqiaoCanxue_Desc>
+  <MX_QH_Book_Gaoshan_Label>Gaoshan</MX_QH_Book_Gaoshan_Label>
+  <MX_QH_Book_Gaoshan_Desc>A quiet mountain score. Studying it can improve Divine Protection shield capacity.</MX_QH_Book_Gaoshan_Desc>
+  <MX_QH_Book_Liushui_Label>Liushui</MX_QH_Book_Liushui_Label>
+  <MX_QH_Book_Liushui_Desc>A flowing-water score. Studying it can improve Divine Protection recharge speed.</MX_QH_Book_Liushui_Desc>
+  <MX_QH_Book_Chunjiang_Label>Chunjiang</MX_QH_Book_Chunjiang_Label>
+  <MX_QH_Book_Chunjiang_Desc>A spring-river score. Studying it can shorten Divine Protection's disabled delay after the shield breaks.</MX_QH_Book_Chunjiang_Desc>
+  <MX_QH_Book_DivineGrace_Label>Divine Grace</MX_QH_Book_DivineGrace_Label>
+  <MX_QH_Book_DivineGrace_Desc>A refined volume of Qinghe's cultivation notes. Reading it raises the Divine Grace node by one level.</MX_QH_Book_DivineGrace_Desc>
+  <MX_QH_Book_Yingyue_Label>Yingyue</MX_QH_Book_Yingyue_Label>
+  <MX_QH_Book_Yingyue_Desc>A moon-reflection score. Studying it can increase the available charges of Divine Blessing.</MX_QH_Book_Yingyue_Desc>
+  <MX_QH_Book_Jueying_Label>Jueying</MX_QH_Book_Jueying_Label>
+  <MX_QH_Book_Jueying_Desc>A decisive movement score. Studying it can unlock Sword Form: Jueying.</MX_QH_Book_Jueying_Desc>
+  <MX_QH_Book_Luoshenfu_Label>Luoshen Fu</MX_QH_Book_Luoshenfu_Label>
+  <MX_QH_Book_Luoshenfu_Desc>A graceful fu-score about bonds and return. Studying it can unlock Luoshen Fu effects.</MX_QH_Book_Luoshenfu_Desc>
+  <MX_QH_UnknownNode>Unknown node.</MX_QH_UnknownNode>
+  <MX_QH_SkillNodesLearnedLetterLabel>Score node learned</MX_QH_SkillNodesLearnedLetterLabel>
+  <MX_QH_SkillNodesLearnedLetterText>A reading of &lt;i&gt;{0}&lt;/i&gt; improved: {1}.</MX_QH_SkillNodesLearnedLetterText>
+  <MX_QH_LongNightStillnessLabel>Long-Night Stillness</MX_QH_LongNightStillnessLabel>
+  <MX_QH_LongNightStillnessDescription>Qinghe has accumulated full meditative stillness. The next construction, crafting, or artwork quality roll will consume most of it and gain a steadier quality bonus.</MX_QH_LongNightStillnessDescription>
+  <MX_QH_MeditativeStillnessFullMessage>Qinghe's meditative stillness is full.</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_LotusShieldTooltipTitle>Flower-God Ward</MX_QH_LotusShieldTooltipTitle>
+  <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
+  <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>
+  <MX_QH_LotusShieldRegenDelayLine>Regen delay: {0}s</MX_QH_LotusShieldRegenDelayLine>
+  <MX_QH_FlowerCourtTitle>Flower Court</MX_QH_FlowerCourtTitle>
+  <MX_QH_FlowerCourtUnlockedTreesLine>Interpreted score sets: {0}</MX_QH_FlowerCourtUnlockedTreesLine>
+  <MX_QH_FlowerCourtLearnedNodesLine>Learned nodes: {0}</MX_QH_FlowerCourtLearnedNodesLine>
+  <MX_QH_FlowerCourtStillnessLine>Stillness: {0} / {1}</MX_QH_FlowerCourtStillnessLine>
+  <MX_QH_FlowerDecreeLabel>Flower Decree</MX_QH_FlowerDecreeLabel>
+  <MX_QH_LotusShieldLabel>Shield</MX_QH_LotusShieldLabel>
+  <MX_QH_LongBreathChargesLine>Long Breath charges: {0} / {1}</MX_QH_LongBreathChargesLine>
+  <MX_QH_StatusLine>Status: {0}</MX_QH_StatusLine>
+  <MX_QH_LongBreathStateRecharging>recharging</MX_QH_LongBreathStateRecharging>
+  <MX_QH_LongBreathStateReady>ready</MX_QH_LongBreathStateReady>
+  <MX_QH_LongBreathStateEmpty>depleted</MX_QH_LongBreathStateEmpty>
+  <MX_QH_RechargeProgressLine>Recharge progress: {0}</MX_QH_RechargeProgressLine>
+  <MX_QH_RemainingTimeLine>Time remaining: {0}</MX_QH_RemainingTimeLine>
+  <MX_QH_FlowerDecreeValueLine>Flower Decree: {0} / {1}</MX_QH_FlowerDecreeValueLine>
+  <MX_QH_RecoveryProgressLine>Recovery progress: {0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
+  <MX_QH_QixiRequiresQinghe>Only Qinghe can host the Qixi rite.</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiCooldown>The Qixi rite is still on cooldown. Time remaining: {0}.</MX_QH_QixiCooldown>
+  <MX_QH_QixiOutcomeFragments>Recovered {0} lost Qinghe score fragment(s).</MX_QH_QixiOutcomeFragments>
+  <MX_QH_QixiOutcomeInspirations>Inspired participant(s): {0}.</MX_QH_QixiOutcomeInspirations>
+  <MX_QH_QixiInspirationReason>Inspired by Qinghe's Qixi rite.</MX_QH_QixiInspirationReason>
+  <MX_QH_FlowerCourtDesignLocked>The lotus pond design has not been acquired.</MX_QH_FlowerCourtDesignLocked>
+  <MX_QH_FlowerCourtDesignUnlockedMessage>Lotus pond design acquired.</MX_QH_FlowerCourtDesignUnlockedMessage>
+  <MX_QH_FlowerCourtLotusPondBuiltMessage>The lotus pond is complete.</MX_QH_FlowerCourtLotusPondBuiltMessage>
+  <MX_QH_FlowerCourtQingheArrivedLetterLabel>Qinghe arrives</MX_QH_FlowerCourtQingheArrivedLetterLabel>
+  <MX_QH_FlowerCourtQingheArrivedLetterText>The water in the lotus pond has stilled. Qinghe has followed this new court to the colony and is willing to stay. She still needs a decent Lotus Rain Pavilion before she can truly settle in.</MX_QH_FlowerCourtQingheArrivedLetterText>
+  <MX_QH_FlowerCourtSecondStageLetterLabel>Prepare the pavilion</MX_QH_FlowerCourtSecondStageLetterLabel>
+  <MX_QH_FlowerCourtSecondStageLetterText>The lotus pond has been built. Arrange its room into a decent Lotus Rain Pavilion. When it is ready, you will receive 1 lost score fragment that Qinghe can interpret at an art bench.</MX_QH_FlowerCourtSecondStageLetterText>
+  <MX_QH_FlowerCourtCompletedLetterLabel>Flower Court established</MX_QH_FlowerCourtCompletedLetterLabel>
+  <MX_QH_FlowerCourtCompletedLetterText>The Lotus Rain Pavilion has settled into place. In response, a lost score fragment has gathered beside the lotus pond. Qinghe can interpret it at an art bench.</MX_QH_FlowerCourtCompletedLetterText>
+  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>Flower Court</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
+  <MX_QH_FlowerCourtAutoAcceptedLetterText>Qinghe has prepared the lotus pond design. You can now build a lotus pond from the Misc category and use it as the core of the new Flower Court.</MX_QH_FlowerCourtAutoAcceptedLetterText>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>
@@ -190,4 +354,6 @@
   <MX_ZL_RaidTransitionRemaining>Phase transition remaining:</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>Next warp:</MX_ZL_RaidNextWarp>
   <MX_ZL_RaidPhaseTransitionStarted>{0} is shifting into phase {1}! She is invulnerable during the transition and gains {2} layers of Deathward Shield.</MX_ZL_RaidPhaseTransitionStarted>
+  <MX_QH_RecipeRequiresQinghe>Only Qinghe can do this recipe.</MX_QH_RecipeRequiresQinghe>
+  <MX_QH_CustomBookThoughtBenefit> - Reading grants mood: read Lotus Rain Pavilion opera</MX_QH_CustomBookThoughtBenefit>
 </LanguageData>

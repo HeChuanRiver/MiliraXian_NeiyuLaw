@@ -9,9 +9,6 @@
   <MX_Neiyu_Form_Bow.label>霓羽·弓形</MX_Neiyu_Form_Bow.label>
   <MX_Neiyu_Form_Bow.description>由花形轉化而來的弓形兵裝。羽輝聚弦，流矢如雨，更擅長在中遠距離維持持續而華麗的壓制。</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
-  <MX_Bullet_BigSplitArrow.description>由霓羽弓形發射的巨型分裂箭，在前進一段距離後會裂解為大量小箭。</MX_Bullet_BigSplitArrow.description>
   <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
-  <MX_Bullet_HomingShard.description>由主箭分裂出的碎矢，會在裂解後略微修正方向，並繼續朝原本的瞄準方向進攻。</MX_Bullet_HomingShard.description>
   <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>
-  <MX_Bullet_BarrageArrow.description>僅供流羽裂界使用的箭矢，用於在前方區域鋪開密集的箭幕壓制。</MX_Bullet_BarrageArrow.description>
 </LanguageData>
