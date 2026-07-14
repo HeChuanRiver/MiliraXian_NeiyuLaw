@@ -15,6 +15,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float BlockGap = 3f;
 
         private readonly Pawn pawn;
+        private HediffComp_DivineBlessing cachedComp;
 
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyColor = new Color(0.035f, 0.04f, 0.045f, 1f);
@@ -83,8 +84,13 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private HediffComp_DivineBlessing GetLongBreathComp()
         {
-            Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_DivineBlessing>();
+            if (cachedComp == null || cachedComp.Pawn != pawn)
+            {
+                Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
+                cachedComp = (hediff as HediffWithComps)?.GetComp<HediffComp_DivineBlessing>();
+            }
+
+            return cachedComp;
         }
 
         private static string BuildTip(HediffComp_DivineBlessing comp)

@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const int TipSalt = 910203;
         private const float SegmentGap = 2f;
         private readonly Pawn pawn;
+        private HediffComp_SwordPressure cachedPressure;
 
         private static readonly Color EmptyColor = new Color(0.16f, 0.17f, 0.18f, 1f);
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
@@ -28,7 +29,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_SwordPressure pressure = PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
+            HediffComp_SwordPressure pressure = GetSwordPressureComp();
             Rect barRect = new Rect(rect.x + 10f, rect.y + (rect.height - 9f) * 0.5f, Mathf.Min(150f, rect.width - 18f), 9f);
             DrawSegments(barRect, pressure);
             TooltipHandler.TipRegion(barRect, () => BuildTip(pressure), Gen.HashCombineInt(pawn?.thingIDNumber ?? 0, TipSalt));
@@ -58,6 +59,16 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                     Widgets.DrawBoxSolid(new Rect(content.x, content.y, content.width * fill, content.height), color);
                 }
             }
+        }
+
+        private HediffComp_SwordPressure GetSwordPressureComp()
+        {
+            if (cachedPressure == null || cachedPressure.Pawn != pawn)
+            {
+                cachedPressure = PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
+            }
+
+            return cachedPressure;
         }
 
         private static Color FilledColorFor(float current, float max)

@@ -12,8 +12,10 @@ namespace MiliraXian.Characters.Vfx
         private const float AfterimageCameraZoom = 0.5f;
         private const float AfterimageMeshScale = 1f / AfterimageCameraZoom;
         private const int AlphaSteps = 32;
+        private static readonly int MainTex = Shader.PropertyToID("_MainTex");
         private readonly List<PawnAfterimage> afterimages = new List<PawnAfterimage>();
         private Mesh afterimageMesh;
+        private Material afterimageMaterial;
 
         public MapComponent_PawnAfterimages(Map map) : base(map)
         {
@@ -42,12 +44,6 @@ namespace MiliraXian.Characters.Vfx
                 return;
             }
 
-            Material material = new Material(ShaderDatabase.Transparent)
-            {
-                mainTexture = texture,
-                color = Color.white
-            };
-
             if (afterimages.Count >= MaxAfterimages)
             {
                 ReleaseAfterimage(afterimages[0]);
@@ -62,8 +58,7 @@ namespace MiliraXian.Characters.Vfx
                 durationTicks = Mathf.Max(1, durationTicks),
                 startAlpha = Mathf.Clamp01(startAlpha),
                 tint = tint,
-                texture = texture,
-                material = material
+                texture = texture
             });
         }
 
@@ -75,6 +70,11 @@ namespace MiliraXian.Characters.Vfx
             {
                 Object.Destroy(afterimageMesh);
                 afterimageMesh = null;
+            }
+            if (afterimageMaterial != null)
+            {
+                Object.Destroy(afterimageMaterial);
+                afterimageMaterial = null;
             }
         }
 
@@ -117,7 +117,11 @@ namespace MiliraXian.Characters.Vfx
                 return null;
             }
 
-            RenderTexture texture = new RenderTexture(AfterimageTextureSize, AfterimageTextureSize, 24, RenderTextureFormat.ARGB32);
+            RenderTexture texture = RenderTexture.GetTemporary(
+                AfterimageTextureSize,
+                AfterimageTextureSize,
+                24,
+                RenderTextureFormat.ARGB32);
             texture.name = "MX_PawnAfterimage";
             Find.PawnCacheRenderer.RenderPawn(pawn, texture, Vector3.zero, AfterimageCameraZoom, 0f, facing, renderHead: true, renderHeadgear: true, renderClothes: true);
             return texture;
@@ -125,8 +129,8 @@ namespace MiliraXian.Characters.Vfx
 
         private void DrawAfterimage(PawnAfterimage afterimage, float alpha)
         {
-            Material material = afterimage.material;
-            if (material == null || material == BaseContent.ClearMat)
+            Material material = AfterimageMaterial;
+            if (material == null)
             {
                 return;
             }
@@ -142,6 +146,7 @@ namespace MiliraXian.Characters.Vfx
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             Color tint = afterimage.tint;
             tint.a *= QuantizeAlpha(alpha);
+            block.SetTexture(MainTex, afterimage.texture);
             block.SetColor(ShaderPropertyIDs.Color, tint);
             Graphics.DrawMesh(afterimageMesh, matrix, material, 0, null, 0, block);
             block.Clear();
@@ -150,6 +155,23 @@ namespace MiliraXian.Characters.Vfx
         private static float QuantizeAlpha(float alpha)
         {
             return Mathf.Clamp01(Mathf.Ceil(Mathf.Clamp01(alpha) * AlphaSteps) / AlphaSteps);
+        }
+
+        private Material AfterimageMaterial
+        {
+            get
+            {
+                if (afterimageMaterial == null)
+                {
+                    afterimageMaterial = new Material(ShaderDatabase.Transparent)
+                    {
+                        mainTexture = BaseContent.WhiteTex,
+                        color = Color.white
+                    };
+                }
+
+                return afterimageMaterial;
+            }
         }
 
         private void ReleaseAllAfterimages()
@@ -166,13 +188,7 @@ namespace MiliraXian.Characters.Vfx
         {
             if (afterimage.texture != null)
             {
-                afterimage.texture.Release();
-                Object.Destroy(afterimage.texture);
-            }
-
-            if (afterimage.material != null)
-            {
-                Object.Destroy(afterimage.material);
+                RenderTexture.ReleaseTemporary(afterimage.texture);
             }
         }
 
@@ -185,7 +201,6 @@ namespace MiliraXian.Characters.Vfx
             public float startAlpha;
             public Color tint;
             public RenderTexture texture;
-            public Material material;
         }
     }
 }

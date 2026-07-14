@@ -39,8 +39,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         private int cooldownTicksLeft;
         private int cooldownWarningCooldownTicksLeft;
-        private bool invisibilityEndingEffectPlayed;
         private int currentCharges = -1;
+        private HediffComp_SkillTreeState cachedFlowerResonance;
+        private int cachedRechargeTicksTotal;
+        private int rechargeTicksCachedAtTick = int.MinValue;
 
         public HediffCompProperties_DivineBlessing Props => (HediffCompProperties_DivineBlessing)props;
 
@@ -56,15 +58,20 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             get
             {
+                int currentTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+                if (rechargeTicksCachedAtTick == currentTick)
+                {
+                    return cachedRechargeTicksTotal;
+                }
+
                 float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
                     ? 1f
                     : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
-                if (speed <= 0f)
-                {
-                    return 0;
-                }
-
-                return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+                cachedRechargeTicksTotal = speed <= 0f
+                    ? 0
+                    : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+                rechargeTicksCachedAtTick = currentTick;
+                return cachedRechargeTicksTotal;
             }
         }
 
@@ -95,7 +102,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 cooldownWarningCooldownTicksLeft--;
             }
 
-            TickInvisibilityEndingEffect();
         }
 
         public override void CompExposeData()
@@ -103,11 +109,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompExposeData();
             Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_longBreath_cooldownTicksLeft", 0);
             Scribe_Values.Look(ref cooldownWarningCooldownTicksLeft, "mx_qh_longBreath_cooldownWarningCooldownTicksLeft", 0);
-            Scribe_Values.Look(ref invisibilityEndingEffectPlayed, "mx_qh_longBreath_invisibilityEndingEffectPlayed", false);
             Scribe_Values.Look(ref currentCharges, "mx_qh_longBreath_currentCharges", 1);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                cachedFlowerResonance = null;
+                rechargeTicksCachedAtTick = int.MinValue;
                 SyncChargeBounds();
             }
         }
@@ -170,7 +177,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             RestoreAllDamage();
             PlayInvisibilityEffect();
-            invisibilityEndingEffectPlayed = false;
             ApplyInvisibility();
             ApplyDamageImmunity();
             StartCooldown();
@@ -343,7 +349,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int ResolveMaxCharges()
         {
             int maxCharges = Mathf.Max(1, Props.maxCharges);
-            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
+            if (cachedFlowerResonance == null || cachedFlowerResonance.Pawn != Pawn)
+            {
+                cachedFlowerResonance = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
+            }
+
+            HediffComp_SkillTreeState state = cachedFlowerResonance;
             if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue))
             {
                 maxCharges++;
@@ -394,36 +405,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             FleckMaker.Static(Pawn.Position, Pawn.MapHeld, fleck, 1f);
-        }
-
-        private void TickInvisibilityEndingEffect()
-        {
-            if (invisibilityEndingEffectPlayed || Pawn?.health?.hediffSet == null)
-            {
-                return;
-            }
-
-            Hediff hediff = GetInvisibilityHediff();
-            if (hediff == null)
-            {
-                invisibilityEndingEffectPlayed = false;
-                return;
-            }
-
-            HediffComp_Disappears disappears = hediff.TryGetComp<HediffComp_Disappears>();
-            if (disappears == null || disappears.ticksToDisappear > 1)
-            {
-                return;
-            }
-
-            HediffComp_Invisibility invisibility = hediff.TryGetComp<HediffComp_Invisibility>();
-            if (invisibility != null)
-            {
-                invisibility.BecomeVisible();
-            }
-
-            PlayInvisibilityEffect();
-            invisibilityEndingEffectPlayed = true;
         }
 
         private void ApplyInvisibility()
@@ -480,6 +461,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             return Props.invisibilityHediffDef ?? MX_QHDefOf.PsychicInvisibility;
         }
+
     }
 }
 

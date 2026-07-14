@@ -17,6 +17,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float CenterOverlayScale = 0.78f;
 
         private readonly Pawn pawn;
+        private HediffComp_SkillTreeState cachedState;
+        private HediffComp_MeditativeStillness cachedStillness;
 
         private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyFillColor = new Color(0.08f, 0.09f, 0.09f, 0.9f);
@@ -31,8 +33,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
-            HediffComp_PawnSpecialResource stillness = MX_QH_HediffUtility.EnsureMeditativeStillness(pawn);
+            HediffComp_SkillTreeState state = GetSkillTreeState();
+            HediffComp_PawnSpecialResource stillness = GetStillnessComp();
             bool canClick = state != null;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
             bool mouseOverDiamond = MouseIsOverHitbox(diamondRect);
@@ -73,6 +75,26 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
 
             return Mathf.CeilToInt(fillPercent * 16f) / 16f;
+        }
+
+        private HediffComp_SkillTreeState GetSkillTreeState()
+        {
+            if (cachedState == null || cachedState.Pawn != pawn)
+            {
+                cachedState = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+            }
+
+            return cachedState;
+        }
+
+        private HediffComp_MeditativeStillness GetStillnessComp()
+        {
+            if (cachedStillness == null || cachedStillness.Pawn != pawn)
+            {
+                cachedStillness = MX_QH_HediffUtility.EnsureMeditativeStillness(pawn);
+            }
+
+            return cachedStillness;
         }
 
         private static string BuildTip(HediffComp_SkillTreeState state, HediffComp_PawnSpecialResource stillness)

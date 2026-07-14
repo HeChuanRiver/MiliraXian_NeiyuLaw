@@ -18,6 +18,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private static readonly RectOffset BarMargin = new RectOffset((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
 
         private readonly Pawn pawn;
+        private HediffComp_FlowerDecree cachedComp;
 
         private static readonly Color SegmentEmptyColor = new Color(0.16f, 0.17f, 0.18f, 1f);
         private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
@@ -32,7 +33,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_FlowerDecree comp = PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
+            HediffComp_FlowerDecree comp = GetFlowerDecreeComp();
             Rect barRect = GetResourceBarRect(rect, BarHeight);
             DrawBar(barRect, comp);
 
@@ -82,6 +83,16 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             float availableWidth = rect.width - BarLeftPadding - BarRightPadding;
             float width = Mathf.Min(ResourceBarWidth, availableWidth);
             return GetAlignedRect(rect, new Vector2(width, height), BarMargin);
+        }
+
+        private HediffComp_FlowerDecree GetFlowerDecreeComp()
+        {
+            if (cachedComp == null || cachedComp.Pawn != pawn)
+            {
+                cachedComp = PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
+            }
+
+            return cachedComp;
         }
 
         private string BuildTip(HediffComp_FlowerDecree comp)

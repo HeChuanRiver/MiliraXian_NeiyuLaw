@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -97,6 +98,8 @@ namespace MiliraXian.Characters
             {
                 progressBarMote.Destroy(DestroyMode.Vanish);
             }
+            progressBarMote = null;
+            RefreshProgressBarStackIndices(pawn);
         }
 
         public override void ExposeData()
@@ -235,11 +238,38 @@ namespace MiliraXian.Characters
                 bar.SourceAbnormalDef = AbnormalDef;
                 GenSpawn.Spawn(bar, pawn.Position, pawn.MapHeld, WipeMode.Vanish);
                 progressBarMote = bar;
+                RefreshProgressBarStackIndices(pawn);
             }
 
             bar.SourceAbnormalDef = AbnormalDef;
             bar.Progress = Progress;
             bar.Maintain();
+        }
+
+        private static void RefreshProgressBarStackIndices(Pawn target)
+        {
+            List<Hediff> hediffs = target?.health?.hediffSet?.hediffs;
+            if (hediffs == null)
+            {
+                return;
+            }
+
+            int stackIndex = 0;
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                Hediff_Abnormal abnormal = hediffs[i] as Hediff_Abnormal;
+                if (abnormal == null)
+                {
+                    continue;
+                }
+
+                Mote_AbnormalBar bar = abnormal.progressBarMote as Mote_AbnormalBar;
+                if (bar != null && !bar.Destroyed)
+                {
+                    bar.StackIndex = stackIndex;
+                }
+                stackIndex++;
+            }
         }
     }
 }

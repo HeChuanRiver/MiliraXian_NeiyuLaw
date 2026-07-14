@@ -38,6 +38,8 @@ namespace MiliraXian.Characters
 
         public float Progress { get; set; }
 
+        public int StackIndex { get; set; }
+
         protected override void Tick()
         {
             base.Tick();
@@ -57,7 +59,8 @@ namespace MiliraXian.Characters
             GenDraw.FillableBarRequest request = default(GenDraw.FillableBarRequest);
             request.center = exactPosition;
             request.center.x += props.offsetX;
-            request.center.z += props.offsetZ + GetStackIndex(props) * props.stackSpacing;
+            int signedStackIndex = props.stackDownward ? -StackIndex : StackIndex;
+            request.center.z += props.offsetZ + signedStackIndex * props.stackSpacing;
             request.center.y += props.altitudeOffset;
             request.size = props.size;
             request.fillPercent = Mathf.Clamp01(Progress);
@@ -67,34 +70,6 @@ namespace MiliraXian.Characters
             request.rotation = Rot4.North;
             GenDraw.DrawFillableBar(request);
             DrawIcon(request.center, props);
-        }
-
-        private int GetStackIndex(AbnormalBarProperties props)
-        {
-            Pawn pawn = link1.Target.Thing as Pawn;
-            if (pawn?.health?.hediffSet?.hediffs == null || SourceAbnormalDef == null)
-            {
-                return 0;
-            }
-
-            int index = 0;
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
-            {
-                if (!(hediffs[i] is Hediff_Abnormal abnormal))
-                {
-                    continue;
-                }
-
-                if (abnormal.def == SourceAbnormalDef)
-                {
-                    return props.stackDownward ? -index : index;
-                }
-
-                index++;
-            }
-
-            return 0;
         }
 
         private void DrawIcon(Vector3 barCenter, AbnormalBarProperties props)
