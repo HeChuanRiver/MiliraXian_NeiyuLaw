@@ -84,8 +84,14 @@ namespace MiliraXian.Characters
             }
 
             Pawn pawn = PawnRef(__instance);
-            DrawNeiyuShield(pawn, drawLoc);
-            DrawZhaoliShield(pawn, drawLoc);
+            if (NeiyuEquipmentUtility.IsNeiyu(pawn))
+            {
+                DrawNeiyuShield(pawn, drawLoc);
+            }
+            else if (ZhaoliKarmaUtility.IsZhaoli(pawn))
+            {
+                DrawZhaoliShield(pawn, drawLoc);
+            }
         }
 
         private static void DrawNeiyuShield(Pawn pawn, Vector3 drawLoc)
