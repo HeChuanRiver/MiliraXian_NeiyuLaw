@@ -72,7 +72,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>Long Rainbow</label>
-        <description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds and fires 4 high-arc arrows at any map-range target. Each arrow deals lighter direct damage, applies 300 Life Burn layers, and can ricochet among nearby enemies.</description>
+        <description>Mingyuan's pale-gold and scarlet longbow. Focus form charges for 5 seconds, then instantly bursts one visible enemy's Life Burn without ordinary weapon damage. Radiation form sweeps a 10-cell, 108-degree sector once per second, dealing 1 burn damage and adding 23% of each target's own Life Burn threshold.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -112,23 +112,62 @@
             <AccuracyShort>1.00</AccuracyShort>
             <AccuracyMedium>1.00</AccuracyMedium>
             <AccuracyLong>1.00</AccuracyLong>
-            <RangedWeapon_Cooldown>2.00</RangedWeapon_Cooldown>
+            <RangedWeapon_Cooldown>1.00</RangedWeapon_Cooldown>
         </statBases>
 
         <verbs>
             <li>
-                <verbClass>Verb_Shoot</verbClass>
+                <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanRainbowBow</verbClass>
                 <hasStandardCommand>true</hasStandardCommand>
-                <defaultProjectile>MX_Bullet_Mingyuan_RainbowArrow</defaultProjectile>
-                <warmupTime>4.0</warmupTime>
+                <isPrimary>true</isPrimary>
+                <violent>true</violent>
+                <ai_IsWeapon>true</ai_IsWeapon>
+                <targetable>true</targetable>
+                <warmupTime>5.0</warmupTime>
                 <range>999</range>
-                <burstShotCount>4</burstShotCount>
-                <ticksBetweenBurstShots>10</ticksBetweenBurstShots>
-                <soundCast>Bow_Small</soundCast>
+                <burstShotCount>1</burstShotCount>
+                <ticksBetweenBurstShots>1</ticksBetweenBurstShots>
+                <requireLineOfSight>false</requireLineOfSight>
+                <targetParams>
+                    <canTargetLocations>true</canTargetLocations>
+                    <canTargetPawns>true</canTargetPawns>
+                    <canTargetBuildings>false</canTargetBuildings>
+                    <canTargetItems>false</canTargetItems>
+                </targetParams>
             </li>
         </verbs>
 
-        <comps>
+        <comps Inherit="False">
+            <li Class="CompProperties_Forbiddable" />
+            <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanRainbowBow">
+                <modeIconPath>MiliraXianMingyuan/Items/RainbowBow</modeIconPath>
+
+                <focusWarmupSeconds>5</focusWarmupSeconds>
+                <focusRange>999</focusRange>
+                <focusChargeSound>Psycast_Skip_Entry</focusChargeSound>
+                <focusFireSound>ChargeLance_Fire</focusFireSound>
+                <focusBeamFleck>MX_Mingyuan_Fleck_LifeBurnTransferLine</focusBeamFleck>
+                <focusMuzzleFlashMote>MX_Mingyuan_Mote_InstantCombustionFlash</focusMuzzleFlashMote>
+                <focusMuzzleFlashScale>0.24</focusMuzzleFlashScale>
+                <focusTargetMote>MX_Mingyuan_Mote_BowFocusTarget</focusTargetMote>
+                <focusTargetMoteScale>0.92</focusTargetMoteScale>
+
+                <radiationWarmupSeconds>0.35</radiationWarmupSeconds>
+                <radiationRange>10</radiationRange>
+                <radiationArcDegrees>108</radiationArcDegrees>
+                <radiationMinIntervalTicks>60</radiationMinIntervalTicks>
+                <radiationDamage>1</radiationDamage>
+                <radiationLayerFraction>0.23</radiationLayerFraction>
+                <radiationWarmupSound>FireSpew_Warmup</radiationWarmupSound>
+                <radiationFireSound>FireSpew_Resolve</radiationFireSound>
+                <radiationHitMote>MX_Mingyuan_Mote_InstantCombustionMark</radiationHitMote>
+                <radiationHitMoteScale>0.42</radiationHitMoteScale>
+                <radiationHitVisualLimit>8</radiationHitVisualLimit>
+                <radiationBlastTicks>30</radiationBlastTicks>
+
+                <visualControllerDef>MX_Mingyuan_BowVisual</visualControllerDef>
+            </li>
+            <li Class="CompProperties_Styleable" />
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>

@@ -45,4 +45,11 @@
   <MX_Mingyuan_BurningPillar_NoValidCell>燃烧之柱没有可用放置格。</MX_Mingyuan_BurningPillar_NoValidCell>
   <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊无法安全消耗 50% 血液点燃焚我余烬。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>余烬领域：半径 {0}，灼伤 {1}，生命燃烧 +{2}，剩余 {3} 秒</MX_Mingyuan_AshesField_Inspect>
+  <MX_Mingyuan_Bow_ModeFocus>聚焦形态</MX_Mingyuan_Bow_ModeFocus>
+  <MX_Mingyuan_Bow_ModeRadiation>辐射形态</MX_Mingyuan_Bow_ModeRadiation>
+  <MX_Mingyuan_Bow_ModeCommand>长虹：{0}</MX_Mingyuan_Bow_ModeCommand>
+  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。&#10;聚焦：全图视线、固定蓄力 5 秒、必中并立即爆条。&#10;辐射：10 格、108° 穿透扇区、每秒至多一次。</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeBusy>长虹正在蓄力或结算，暂时不能切换形态。</MX_Mingyuan_Bow_ModeBusy>
+  <MX_Mingyuan_Bow_ModeInspect>当前形态：{0}</MX_Mingyuan_Bow_ModeInspect>
+  <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形态只能选择视线内、可被生命燃烧影响的敌对单位。</MX_Mingyuan_Bow_InvalidFocusTarget>
 </LanguageData>

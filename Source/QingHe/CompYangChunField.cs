@@ -67,11 +67,9 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            EleganceUtility.NotifyDecayEvent(caster);
-
             if (ticksToNextPulse <= 0)
             {
-                ticksToNextPulse = Props.pulseIntervalTicks;
+                ticksToNextPulse = UnityEngine.Mathf.Max(1, Props.pulseIntervalTicks);
                 ApplyPulse();
             }
 
@@ -90,6 +88,7 @@ namespace MiliraXian.Characters.QingHe
             caster = newCaster;
             ticksToNextPulse = 1;
             parent.TryGetComp<CompResourceTick>()?.Init(newCaster);
+            EleganceUtility.NotifyDecayEvent(newCaster);
         }
 
         public void SpawnFx()
@@ -105,6 +104,7 @@ namespace MiliraXian.Characters.QingHe
         private void ApplyPulse()
         {
             GraphicsUtility.Fx(parent.Map, parent.Position, Props.pulseFx, Props.pulseFxScale * Props.radius / 7.9f);
+            EleganceUtility.NotifyDecayEvent(caster);
 
             var allyCount = 0;
             var enemyCount = 0;
@@ -115,9 +115,20 @@ namespace MiliraXian.Characters.QingHe
             var healFactor = EleganceUtility.FactorLinear(Props.healFactorMax, caster);
             var severityFactor = EleganceUtility.FactorLinear(Props.hediffSeverityFactorMax, caster);
 
-            foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
+            float radius = UnityEngine.Mathf.Max(0f, Props.radius);
+            float radiusSquared = radius * radius;
+            var pawns = parent.Map.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
             {
-                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Destroyed || pawn == caster)
+                Pawn pawn = pawns[index];
+                if (pawn == null || pawn.Dead || pawn.Destroyed || pawn == caster)
+                {
+                    continue;
+                }
+
+                int dx = pawn.Position.x - parent.Position.x;
+                int dz = pawn.Position.z - parent.Position.z;
+                if (dx * dx + dz * dz > radiusSquared)
                 {
                     continue;
                 }

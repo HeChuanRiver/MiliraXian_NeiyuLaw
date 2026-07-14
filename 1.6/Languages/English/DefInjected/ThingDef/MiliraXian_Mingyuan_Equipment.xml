@@ -4,7 +4,7 @@
   <MX_Mingyuan_CinderSword.description>Mingyuan's pale cinder blade. It strikes for 44 cut damage with 150% armor penetration, attacks twice in roughly 3 seconds through a 0.5 melee cooldown multiplier, and Mingyuan's flame adds Life Burn on each hit.</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>Cinder Ash</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>Long Rainbow</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>Mingyuan's longbow of pale gold and red fire. It aims for 4 seconds and fires 4 high-arc arrows at any map-range target. Each arrow deals 10 damage, adds 300 Life Burn layers, and ricochets up to 6 times among enemies within 5 cells; the same target can be hit by one arrow up to 3 times.</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>Mingyuan's pale-gold and scarlet longbow can switch between Focus and Radiation forms. Focus charges for exactly 5 seconds, then instantly bursts one visible enemy's Life Burn without ordinary weapon damage. Radiation fires at most once per second and pierces every legal enemy in a 10-cell, 108-degree sector, dealing 1 burn damage and adding 23% of each target's own burst threshold.</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>Long Rainbow Arrow</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>burning pillar core</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>ashes of self field</MX_Mingyuan_AshesField.label>

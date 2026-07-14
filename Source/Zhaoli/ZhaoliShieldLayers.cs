@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -12,6 +13,21 @@ namespace MiliraXian.Characters.Zhaoli
         public const string ShieldHediffDefName = "MXZL_ZhaoliShieldLayers";
         public const int ShieldLayersPerExecution = 5;
 
+        private sealed class ShieldCacheEntry
+        {
+            public ShieldCacheEntry(HediffComp_ZhaoliShieldLayers comp)
+            {
+                Comp = comp;
+            }
+
+            public HediffComp_ZhaoliShieldLayers Comp { get; }
+        }
+
+        private static ConditionalWeakTable<Pawn, ShieldCacheEntry> ShieldByPawn =
+            new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+
+        private static HediffDef shieldHediffDef;
+
         public static HediffComp_ZhaoliShieldLayers GetShieldComp(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null)
@@ -19,14 +35,21 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ShieldHediffDefName);
+            if (ShieldByPawn.TryGetValue(pawn, out ShieldCacheEntry cached) && cached.Comp != null)
+            {
+                return cached.Comp;
+            }
+
+            HediffDef hediffDef = shieldHediffDef ?? (shieldHediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ShieldHediffDefName));
             if (hediffDef == null)
             {
                 return null;
             }
 
             HediffWithComps hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef) as HediffWithComps;
-            return hediff?.GetComp<HediffComp_ZhaoliShieldLayers>();
+            HediffComp_ZhaoliShieldLayers comp = hediff?.GetComp<HediffComp_ZhaoliShieldLayers>();
+            Cache(pawn, comp);
+            return comp;
         }
 
         public static HediffComp_ZhaoliShieldLayers EnsureShieldComp(Pawn pawn)
@@ -37,7 +60,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return comp;
             }
 
-            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ShieldHediffDefName);
+            HediffDef hediffDef = shieldHediffDef ?? (shieldHediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ShieldHediffDefName));
             if (hediffDef == null)
             {
                 return null;
@@ -45,7 +68,9 @@ namespace MiliraXian.Characters.Zhaoli
 
             Hediff hediff = pawn.health.GetOrAddHediff(hediffDef);
             pawn.health.Notify_HediffChanged(hediff);
-            return (hediff as HediffWithComps)?.GetComp<HediffComp_ZhaoliShieldLayers>();
+            comp = (hediff as HediffWithComps)?.GetComp<HediffComp_ZhaoliShieldLayers>();
+            Cache(pawn, comp);
+            return comp;
         }
 
         public static void AddLayers(Pawn pawn, int layerCount)
@@ -56,6 +81,30 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             EnsureShieldComp(pawn)?.AddLayers(layerCount);
+        }
+
+        public static void Invalidate(Pawn pawn)
+        {
+            if (pawn != null)
+            {
+                ShieldByPawn.Remove(pawn);
+            }
+        }
+
+        internal static void ClearCache()
+        {
+            ShieldByPawn = new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+        }
+
+        private static void Cache(Pawn pawn, HediffComp_ZhaoliShieldLayers comp)
+        {
+            if (pawn == null || comp == null)
+            {
+                return;
+            }
+
+            ShieldByPawn.Remove(pawn);
+            ShieldByPawn.Add(pawn, new ShieldCacheEntry(comp));
         }
     }
 
@@ -127,6 +176,12 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref shieldLayers, "mxzl_shieldLayers", 0);
         }
 
+        public override void CompPostPostRemoved()
+        {
+            ZhaoliShieldLayerUtility.Invalidate(Pawn);
+            base.CompPostPostRemoved();
+        }
+
         public override bool CompDisallowVisible()
         {
             return false;
@@ -142,20 +197,19 @@ namespace MiliraXian.Characters.Zhaoli
             shieldLayers = Mathf.Max(0, shieldLayers + layerCount);
         }
 
-        public bool TryAbsorb(ref DamageInfo dinfo, ref bool absorbed)
+        public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
-            if (absorbed || Pawn == null || Pawn.Dead || shieldLayers <= 0)
+            base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+            if (Pawn == null || Pawn.Dead || shieldLayers <= 0 || totalDamageDealt <= 0f)
             {
-                return false;
+                return;
             }
 
             shieldLayers = Mathf.Max(0, shieldLayers - 1);
-            absorbed = true;
-            PlayAbsorbFx();
-            return true;
+            PlayShieldHitFx();
         }
 
-        private void PlayAbsorbFx()
+        private void PlayShieldHitFx()
         {
             if (Pawn == null || !Pawn.Spawned || Pawn.Map == null)
             {
@@ -184,85 +238,4 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    [StaticConstructorOnStartup]
-    [HarmonyPatch(typeof(PawnRenderer), nameof(PawnRenderer.RenderPawnAt))]
-    public static class Patch_ZhaoliShieldLayers_Draw
-    {
-        private static readonly AccessTools.FieldRef<PawnRenderer, Pawn> PawnRef =
-            AccessTools.FieldRefAccess<PawnRenderer, Pawn>("pawn");
-
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
-
-        [HarmonyPostfix]
-        public static void Postfix(PawnRenderer __instance, Vector3 drawLoc, Rot4? rotOverride = null, bool neverAimWeapon = false)
-        {
-            if (__instance == null)
-            {
-                return;
-            }
-
-            Pawn pawn = PawnRef(__instance);
-            HediffComp_ZhaoliShieldLayers shield = ZhaoliShieldLayerUtility.GetShieldComp(pawn);
-            if (shield == null || !shield.ShouldDrawActiveShield)
-            {
-                return;
-            }
-
-            string texPath = shield.PropsShield.activeShieldTexPath;
-            if (texPath.NullOrEmpty())
-            {
-                return;
-            }
-
-            Material shieldMat = GetShieldMaterial(texPath, shield.PropsShield.activeShieldAlpha);
-            if (shieldMat == null)
-            {
-                return;
-            }
-
-            float pulseScale = shield.ActiveShieldPulseScale;
-            Vector2 drawSize = shield.PropsShield.activeShieldDrawSize;
-
-            Vector3 pos = drawLoc;
-            pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-            pos += Altitudes.AltIncVect * shield.PropsShield.activeShieldAltitudeOffset;
-
-            Matrix4x4 matrix = Matrix4x4.TRS(
-                pos,
-                Quaternion.AngleAxis(shield.ActiveShieldAngle, Vector3.up),
-                new Vector3(drawSize.x * pulseScale, 1f, drawSize.y * pulseScale));
-
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
-        }
-
-        private static Material GetShieldMaterial(string texPath, float alpha)
-        {
-            string cacheKey = texPath + "|" + Mathf.Clamp01(alpha).ToString("F3");
-            Material shieldMat;
-            if (ShieldMaterialByPath.TryGetValue(cacheKey, out shieldMat))
-            {
-                return shieldMat;
-            }
-
-            shieldMat = MaterialPool.MatFrom(texPath, ShaderDatabase.Transparent, new Color(1f, 1f, 1f, Mathf.Clamp01(alpha)));
-            ShieldMaterialByPath[cacheKey] = shieldMat;
-            return shieldMat;
-        }
-    }
-
-    [HarmonyPatch(typeof(Pawn), nameof(Pawn.PreApplyDamage))]
-    public static class Patch_ZhaoliShieldLayers_PreApplyDamage
-    {
-        [HarmonyPostfix]
-        public static void Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
-        {
-            if (absorbed || !ZhaoliKarmaUtility.IsZhaoli(__instance))
-            {
-                return;
-            }
-
-            HediffComp_ZhaoliShieldLayers shieldComp = ZhaoliShieldLayerUtility.GetShieldComp(__instance);
-            shieldComp?.TryAbsorb(ref dinfo, ref absorbed);
-        }
-    }
 }

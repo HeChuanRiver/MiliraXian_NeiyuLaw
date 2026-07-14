@@ -129,50 +129,75 @@ namespace MiliraXian.Characters.Neiyu
             float maxScatterDistance = Mathf.Max(minScatterDistance + 2f, scatterDistance * 1.35f);
             maxScatterDistance = Mathf.Min(maxScatterDistance, 18f);
             CellRect mapRect = CellRect.WholeMap(map);
-            for (int i = 0; i < count; i++)
+            System.Collections.Generic.List<Thing> retargetCandidates = SimplePool<System.Collections.Generic.List<Thing>>.Get();
+            System.Collections.Generic.HashSet<int> retargetSeenIds = SimplePool<System.Collections.Generic.HashSet<int>>.Get();
+            float retargetTotalWeight = 0f;
+            bool canRetarget = (ext?.enableSplitRetarget ?? true) && intendedTarget.HasThing;
+            if (canRetarget)
             {
-                Thing spawned = GenSpawn.Spawn(splitProjectileDef, Position, map);
-                Projectile child = spawned as Projectile;
-                if (child == null)
-                {
-                    continue;
-                }
+                retargetTotalWeight = CompProjectileHomingCurve.GatherHostileTargets(
+                    map,
+                    aimPoint,
+                    launcher,
+                    ext?.splitRetargetRadius ?? 10f,
+                    ext?.splitRetargetPawnWeight ?? 3.5f,
+                    ext?.splitRetargetNonPawnWeight ?? 1.0f,
+                    intendedTarget.Thing,
+                    retargetCandidates,
+                    retargetSeenIds);
+            }
 
-                float angle = Rand.Range(-halfConeAngle, halfConeAngle);
-                Vector3 scatterDir = forward.RotatedBy(angle).normalized;
-                float travelDistance = Rand.Range(minScatterDistance, maxScatterDistance);
-                IntVec3 scatterCell = (ExactPosition + scatterDir * travelDistance).ToIntVec3();
-                if (!scatterCell.InBounds(map))
+            try
+            {
+                for (int i = 0; i < count; i++)
                 {
-                    scatterCell = mapRect.ClosestCellTo(scatterCell);
-                }
+                    Thing spawned = GenSpawn.Spawn(splitProjectileDef, Position, map);
+                    Projectile child = spawned as Projectile;
+                    if (child == null)
+                    {
+                        continue;
+                    }
 
-                LocalTargetInfo usedTarget = new LocalTargetInfo(scatterCell);
-                LocalTargetInfo homingTarget = intendedTarget.IsValid ? intendedTarget : usedTarget;
-                if ((ext?.enableSplitRetarget ?? true)
-                    && homingTarget.HasThing
-                    && Rand.Chance(Mathf.Clamp01(ext?.splitRetargetChance ?? 0.45f)))
-                {
-                    Thing altTarget = CompProjectileHomingCurve.TryPickRandomHostileTarget(
-                        map,
-                        aimPoint,
-                        launcher,
-                        ext?.splitRetargetRadius ?? 10f,
+                    float angle = Rand.Range(-halfConeAngle, halfConeAngle);
+                    Vector3 scatterDir = forward.RotatedBy(angle).normalized;
+                    float travelDistance = Rand.Range(minScatterDistance, maxScatterDistance);
+                    IntVec3 scatterCell = (ExactPosition + scatterDir * travelDistance).ToIntVec3();
+                    if (!scatterCell.InBounds(map))
+                    {
+                        scatterCell = mapRect.ClosestCellTo(scatterCell);
+                    }
+
+                    LocalTargetInfo usedTarget = new LocalTargetInfo(scatterCell);
+                    LocalTargetInfo homingTarget = intendedTarget.IsValid ? intendedTarget : usedTarget;
+                    if (canRetarget
+                        && retargetTotalWeight > 0.001f
+                        && Rand.Chance(Mathf.Clamp01(ext?.splitRetargetChance ?? 0.45f)))
+                    {
+                        Thing altTarget = CompProjectileHomingCurve.PickRandomHostileTarget(
+                            retargetCandidates,
                         ext?.splitRetargetPawnWeight ?? 3.5f,
                         ext?.splitRetargetNonPawnWeight ?? 1.0f,
-                        homingTarget.Thing);
-                    if (altTarget != null)
-                    {
-                        homingTarget = new LocalTargetInfo(altTarget);
+                            retargetTotalWeight);
+                        if (altTarget != null)
+                        {
+                            homingTarget = new LocalTargetInfo(altTarget);
+                        }
                     }
-                }
 
-                Projectile_HomingShard shard = child as Projectile_HomingShard;
-                if (shard != null)
-                {
-                    shard.SetSequentialDelay(Rand.RangeInclusive(2, 6));
+                    Projectile_HomingShard shard = child as Projectile_HomingShard;
+                    if (shard != null)
+                    {
+                        shard.SetSequentialDelay(Rand.RangeInclusive(2, 6));
+                    }
+                    child.Launch(launcher, ExactPosition, usedTarget, homingTarget, HitFlags, preventFriendlyFire, equipment, targetCoverDef);
                 }
-                child.Launch(launcher, ExactPosition, usedTarget, homingTarget, HitFlags, preventFriendlyFire, equipment, targetCoverDef);
+            }
+            finally
+            {
+                retargetCandidates.Clear();
+                retargetSeenIds.Clear();
+                SimplePool<System.Collections.Generic.List<Thing>>.Return(retargetCandidates);
+                SimplePool<System.Collections.Generic.HashSet<int>>.Return(retargetSeenIds);
             }
 
             if (!Destroyed)
@@ -227,7 +252,7 @@ namespace MiliraXian.Characters.Neiyu
         protected override void Tick()
         {
             base.Tick();
-            if (this.IsHashIntervalTick(2) && Map != null)
+            if (MiliraXian.Characters.MXVisualBudget.ShouldEmit(this, 2))
             {
                 FleckMaker.ThrowLightningGlow(ExactPosition, Map, 0.2f);
             }

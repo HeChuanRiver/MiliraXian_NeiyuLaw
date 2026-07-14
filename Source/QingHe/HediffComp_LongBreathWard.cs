@@ -35,23 +35,23 @@ namespace MiliraXian.Characters.QingHe
     /// </summary>
     public class HediffComp_LongBreathWard : HediffComp
     {
+        // Retained only to migrate the old remaining-ticks save field.
         private int lowResourceWarningCooldownTicksLeft;
+        private int lowResourceWarningUntilTick;
 
         public HediffCompProperties_LongBreathWard Props => (HediffCompProperties_LongBreathWard)props;
-
-        public override void CompPostTick(ref float severityAdjustment)
-        {
-            base.CompPostTick(ref severityAdjustment);
-            if (lowResourceWarningCooldownTicksLeft > 0)
-            {
-                lowResourceWarningCooldownTicksLeft--;
-            }
-        }
 
         public override void CompExposeData()
         {
             base.CompExposeData();
             Scribe_Values.Look(ref lowResourceWarningCooldownTicksLeft, "mx_qh_longBreath_lowResourceWarningCooldownTicksLeft", 0);
+            Scribe_Values.Look(ref lowResourceWarningUntilTick, "mx_qh_longBreath_lowResourceWarningUntilTick", 0);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && lowResourceWarningUntilTick <= 0 && lowResourceWarningCooldownTicksLeft > 0)
+            {
+                int currentTick = Find.TickManager?.TicksGame ?? 0;
+                lowResourceWarningUntilTick = currentTick + lowResourceWarningCooldownTicksLeft;
+                lowResourceWarningCooldownTicksLeft = 0;
+            }
         }
 
         public bool CanTrigger(ref DamageInfo dinfo)
@@ -99,7 +99,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (lowResourceWarningCooldownTicksLeft > 0)
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            if (currentTick < lowResourceWarningUntilTick)
             {
                 return;
             }
@@ -110,7 +111,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             int maxTicks = Props.lowResourceWarningCooldownTicks > 0 ? Props.lowResourceWarningCooldownTicks : 600;
-            lowResourceWarningCooldownTicksLeft = maxTicks;
+            lowResourceWarningUntilTick = currentTick + maxTicks;
         }
 
         public void Trigger(ref DamageInfo dinfo, ref bool absorbed)

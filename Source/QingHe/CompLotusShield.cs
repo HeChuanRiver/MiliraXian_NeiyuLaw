@@ -52,12 +52,17 @@ namespace MiliraXian.Characters.QingHe
     /// </summary>
     public class CompLotusShield : ThingComp
     {
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
+        private const int RegenUpdateIntervalTicks = 15;
 
         private float energy = 100f;
+        // Retained for compatibility with existing saves; new runtime logic uses resetAtTick.
         private int ticksToReset = -1;
+        private int resetAtTick = -1;
+        private int lastRegenUpdateTick = -1;
 
         private int fullEnergyAccumulatedTicks = 0;
+        private HediffComp_Elegance cachedElegance;
+        private HediffComp_Tempest cachedTempest;
 
         public CompProperties_LotusShield Props => (CompProperties_LotusShield)props;
 
@@ -69,9 +74,9 @@ namespace MiliraXian.Characters.QingHe
 
         public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
 
-        public bool InBreak => ticksToReset > 0;
+        public bool InBreak => resetAtTick > CurrentTick;
 
-        public int BreakTicksLeft => Mathf.Max(0, ticksToReset);
+        public int BreakTicksLeft => Mathf.Max(0, resetAtTick - CurrentTick);
 
         public float CurrentDamagePerShieldPoint => ResolveDamagePerShieldPoint();
 
@@ -94,14 +99,32 @@ namespace MiliraXian.Characters.QingHe
         {
             base.PostPostMake();
             energy = MaxEnergy;
+            lastRegenUpdateTick = CurrentTick;
         }
 
         public override void PostExposeData()
         {
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                ticksToReset = BreakTicksLeft;
+            }
+
             Scribe_Values.Look(ref ticksToReset, "mx_qh_lotus_ticksToReset", -1);
+            Scribe_Values.Look(ref resetAtTick, "mx_qh_lotus_resetAtTick", -1);
             Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (resetAtTick < 0 && ticksToReset > 0)
+                {
+                    resetAtTick = CurrentTick + ticksToReset;
+                }
+
+                lastRegenUpdateTick = CurrentTick;
+                cachedElegance = null;
+                cachedTempest = null;
+            }
         }
 
         public override void CompTick()
@@ -114,26 +137,39 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (ticksToReset > 0)
+            int currentTick = CurrentTick;
+            if (InBreak)
             {
-                ticksToReset--;
                 fullEnergyAccumulatedTicks = 0;
+                lastRegenUpdateTick = currentTick;
                 return;
             }
 
-            float gain = ResolveRegenPerSecond() / 60f;
+            int elapsedTicks = lastRegenUpdateTick < 0 ? RegenUpdateIntervalTicks : currentTick - lastRegenUpdateTick;
+            if (elapsedTicks < RegenUpdateIntervalTicks)
+            {
+                return;
+            }
+
+            ApplyAccumulatedRegen(currentTick, elapsedTicks);
+        }
+
+        private void ApplyAccumulatedRegen(int currentTick, int elapsedTicks)
+        {
+            float gain = ResolveRegenPerSecond() * Mathf.Max(1, elapsedTicks) / 60f;
             if (gain > 0f)
             {
                 energy = Mathf.Min(MaxEnergy, energy + gain);
             }
 
+            lastRegenUpdateTick = currentTick;
             if (Energy < MaxEnergy - 0.0001f)
             {
                 fullEnergyAccumulatedTicks = 0;
             }
             else
             {
-                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + 1, 1000000);
+                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + Mathf.Max(1, elapsedTicks), 1000000);
             }
         }
 
@@ -145,6 +181,12 @@ namespace MiliraXian.Characters.QingHe
             if (owner == null || owner.Dead)
             {
                 return;
+            }
+
+            int currentTick = CurrentTick;
+            if (!InBreak && lastRegenUpdateTick >= 0 && currentTick > lastRegenUpdateTick)
+            {
+                ApplyAccumulatedRegen(currentTick, currentTick - lastRegenUpdateTick);
             }
 
             if (dinfo.Amount <= 0f)
@@ -243,7 +285,9 @@ namespace MiliraXian.Characters.QingHe
         private void Break()
         {
             energy = 0f;
-            ticksToReset = Mathf.Max(1, Props.breakDisabledTicks);
+            resetAtTick = CurrentTick + Mathf.Max(1, Props.breakDisabledTicks);
+            ticksToReset = 0;
+            lastRegenUpdateTick = CurrentTick;
 
             Pawn owner = PawnOwner;
                 if (owner != null && Props.tempestGainOnBreak > 0f && MX_QHDefOf.MX_QH_Tempest != null)
@@ -270,8 +314,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Material shieldMat = GetShieldMaterial(Props.activeShieldTexPath, ResolveDrawAlpha(), ResolveShieldTintColor());
-            if (shieldMat == null)
+            if (Props.activeShieldTexPath.NullOrEmpty())
             {
                 return;
             }
@@ -286,7 +329,9 @@ namespace MiliraXian.Characters.QingHe
                 Quaternion.identity,
                 new Vector3(drawSize.x, 1f, drawSize.y));
 
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
+            Color tint = ResolveShieldTintColor();
+            tint.a = ResolveDrawAlpha();
+            MiliraXian.Characters.MXShieldRenderUtility.Draw(Props.activeShieldTexPath, matrix, tint);
         }
 
         private float ResolveDrawAlpha()
@@ -302,35 +347,10 @@ namespace MiliraXian.Characters.QingHe
             return Mathf.Clamp01(Props.activeShieldAlpha * (0.35f + 0.65f * shieldFactor) * fullFadeFactor);
         }
 
-        private Material GetShieldMaterial(string texPath, float alpha, Color tintColor)
-        {
-            if (texPath.NullOrEmpty())
-            {
-                return null;
-            }
-
-            float finalAlpha = Mathf.Clamp01(alpha);
-            Color finalColor = tintColor;
-            finalColor.a = finalAlpha;
-
-            string key = texPath
-                         + "|" + finalColor.r.ToString("F2")
-                         + "|" + finalColor.g.ToString("F2")
-                         + "|" + finalColor.b.ToString("F2")
-                         + "|" + finalColor.a.ToString("F2");
-            if (!ShieldMaterialByPath.TryGetValue(key, out Material shieldMat))
-            {
-                shieldMat = MaterialPool.MatFrom(texPath, ShaderDatabase.Transparent, finalColor);
-                ShieldMaterialByPath[key] = shieldMat;
-            }
-
-            return shieldMat;
-        }
-
         private Color ResolveShieldTintColor()
         {
-            float eleganceFactor = EleganceUtility.GetPercent(PawnOwner);
-            float springFactor = TempestUtility.GetPercent(PawnOwner);
+            float eleganceFactor = GetEleganceComp()?.ValuePercent ?? 0f;
+            float springFactor = GetTempestComp()?.ValuePercent ?? 0f;
 
             Color baseColor = new Color(0.82f, 0.92f, 1f, 1f);
             Color pinkColor = new Color(1f, 0.66f, 0.88f, 1f);
@@ -346,20 +366,36 @@ namespace MiliraXian.Characters.QingHe
 
         private float ResolveDamagePerShieldPoint()
         {
-            Pawn owner = PawnOwner;
-            float tempest = TempestUtility.GetCurrent(owner);
-            float tempestMax = Mathf.Max(1f, TempestUtility.GetMax(owner));
-            float factor = Mathf.Clamp01(tempest / tempestMax);
+            float factor = GetTempestComp()?.ValuePercent ?? 0f;
             return Mathf.Max(0.01f, Props.baseDamagePerShieldPoint + Props.bonusDamagePerShieldPointAtMaxTempest * factor);
         }
 
         private float ResolveRegenPerSecond()
         {
-            Pawn owner = PawnOwner;
-            float elegance = EleganceUtility.GetCurrent(owner);
-            float eleganceMax = Mathf.Max(1f, EleganceUtility.GetMax(owner));
-            float factor = Mathf.Clamp01(elegance / eleganceMax);
+            float factor = GetEleganceComp()?.ValuePercent ?? 0f;
             return Mathf.Max(0f, Props.baseRegenPerSecond + Props.bonusRegenPerSecondAtMaxElegance * factor);
+        }
+
+        private HediffComp_Elegance GetEleganceComp()
+        {
+            Pawn owner = PawnOwner;
+            if (cachedElegance == null || cachedElegance.Pawn != owner)
+            {
+                cachedElegance = EleganceUtility.GetComp(owner);
+            }
+
+            return cachedElegance;
+        }
+
+        private HediffComp_Tempest GetTempestComp()
+        {
+            Pawn owner = PawnOwner;
+            if (cachedTempest == null || cachedTempest.Pawn != owner)
+            {
+                cachedTempest = TempestUtility.GetComp(owner);
+            }
+
+            return cachedTempest;
         }
 
         public string BuildShieldTooltip()

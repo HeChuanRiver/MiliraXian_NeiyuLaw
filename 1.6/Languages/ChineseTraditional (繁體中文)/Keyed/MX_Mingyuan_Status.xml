@@ -45,4 +45,11 @@
   <MX_Mingyuan_BurningPillar_NoValidCell>燃燒之柱沒有可用放置格。</MX_Mingyuan_BurningPillar_NoValidCell>
   <MX_Mingyuan_AshesOfSelf_InsufficientCost>明淵無法安全消耗 50% 血液點燃焚我餘燼。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>餘燼領域：半徑 {0}，灼傷 {1}，生命燃燒 +{2}，剩餘 {3} 秒</MX_Mingyuan_AshesField_Inspect>
+  <MX_Mingyuan_Bow_ModeFocus>聚焦形態</MX_Mingyuan_Bow_ModeFocus>
+  <MX_Mingyuan_Bow_ModeRadiation>輻射形態</MX_Mingyuan_Bow_ModeRadiation>
+  <MX_Mingyuan_Bow_ModeCommand>長虹：{0}</MX_Mingyuan_Bow_ModeCommand>
+  <MX_Mingyuan_Bow_ModeDesc>目前：{0}。點擊切換至{1}。&#10;聚焦：全圖視線、固定蓄力 5 秒、必中並立即爆條。&#10;輻射：10 格、108° 穿透扇區、每秒至多一次。</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeBusy>長虹正在蓄力或結算，暫時不能切換形態。</MX_Mingyuan_Bow_ModeBusy>
+  <MX_Mingyuan_Bow_ModeInspect>目前形態：{0}</MX_Mingyuan_Bow_ModeInspect>
+  <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形態只能選擇視線內、可被生命燃燒影響的敵對單位。</MX_Mingyuan_Bow_InvalidFocusTarget>
 </LanguageData>

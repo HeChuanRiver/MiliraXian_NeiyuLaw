@@ -41,8 +41,6 @@ namespace MiliraXian.Characters.QingHe
     
     public class CompAquaMirrorShield : ThingComp
     {
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
-
         private float energy = 100.0f;
         private float energyFactor = 1f;
 
@@ -199,25 +197,12 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Material shieldMat = null;
-            if (!Props.activeShieldTexPath.NullOrEmpty())
-            {
-                var dynamicAlpha = Mathf.Clamp01(Props.activeShieldAlpha * (energy * 0.008f + 0.2f));
-                string cacheKey = Props.activeShieldTexPath + "|" + dynamicAlpha.ToString("F3");
-                if (!ShieldMaterialByPath.TryGetValue(cacheKey, out shieldMat))
-                {
-                    shieldMat = MaterialPool.MatFrom(
-                        Props.activeShieldTexPath,
-                        ShaderDatabase.Transparent,
-                        new Color(0.8f, 0.9f, 1f, dynamicAlpha));
-                    ShieldMaterialByPath[cacheKey] = shieldMat;
-                }
-            }
-
-            if (shieldMat == null)
+            if (Props.activeShieldTexPath.NullOrEmpty())
             {
                 return;
             }
+
+            float dynamicAlpha = Mathf.Clamp01(Props.activeShieldAlpha * (energy * 0.008f + 0.2f));
             Vector3 pos = owner.Drawer.DrawPos;
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
             pos += Altitudes.AltIncVect * Props.activeShieldAltitudeOffset;
@@ -230,7 +215,10 @@ namespace MiliraXian.Characters.QingHe
                 Quaternion.identity,
                 new Vector3(drawSize.x * pulseScale, 1f, drawSize.y * pulseScale));
 
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
+            MiliraXian.Characters.MXShieldRenderUtility.Draw(
+                Props.activeShieldTexPath,
+                matrix,
+                new Color(0.8f, 0.9f, 1f, dynamicAlpha));
         }
 
         public override bool CompAllowVerbCast(Verb verb)

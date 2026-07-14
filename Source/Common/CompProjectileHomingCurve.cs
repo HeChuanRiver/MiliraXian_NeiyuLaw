@@ -530,9 +530,52 @@ namespace MiliraXian.Characters
             float nonPawnWeight,
             Thing excludeTarget = null)
         {
+            List<Thing> candidates = SimplePool<List<Thing>>.Get();
+            HashSet<int> seenIds = SimplePool<HashSet<int>>.Get();
+            try
+            {
+                float totalWeight = GatherHostileTargets(
+                    map,
+                    center,
+                    seeker,
+                    radius,
+                    pawnWeight,
+                    nonPawnWeight,
+                    excludeTarget,
+                    candidates,
+                    seenIds);
+                return PickRandomHostileTarget(candidates, pawnWeight, nonPawnWeight, totalWeight);
+            }
+            finally
+            {
+                candidates.Clear();
+                seenIds.Clear();
+                SimplePool<List<Thing>>.Return(candidates);
+                SimplePool<HashSet<int>>.Return(seenIds);
+            }
+        }
+
+        public static float GatherHostileTargets(
+            Map map,
+            Vector3 center,
+            Thing seeker,
+            float radius,
+            float pawnWeight,
+            float nonPawnWeight,
+            Thing excludeTarget,
+            List<Thing> candidates,
+            HashSet<int> seenIds)
+        {
+            if (candidates == null || seenIds == null)
+            {
+                return 0f;
+            }
+
+            candidates.Clear();
+            seenIds.Clear();
             if (map == null || seeker == null)
             {
-                return null;
+                return 0f;
             }
 
             float searchRadius = Mathf.Max(1f, radius);
@@ -542,11 +585,11 @@ namespace MiliraXian.Characters
                 centerCell = centerCell.ClampInsideMap(map);
             }
 
-            List<Thing> candidates = new List<Thing>();
-            List<float> weights = new List<float>();
-            HashSet<int> seenIds = new HashSet<int>();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(centerCell, searchRadius, true))
+            float totalWeight = 0f;
+            int cellCount = GenRadial.NumCellsInRadius(searchRadius);
+            for (int cellIndex = 0; cellIndex < cellCount; cellIndex++)
             {
+                IntVec3 cell = centerCell + GenRadial.RadialPattern[cellIndex];
                 if (!cell.InBounds(map))
                 {
                     continue;
@@ -573,22 +616,20 @@ namespace MiliraXian.Characters
                     }
 
                     candidates.Add(thing);
-                    weights.Add(weight);
+                    totalWeight += weight;
                 }
             }
 
-            if (candidates.Count == 0)
-            {
-                return null;
-            }
+            return totalWeight;
+        }
 
-            float totalWeight = 0f;
-            for (int i = 0; i < weights.Count; i++)
-            {
-                totalWeight += Mathf.Max(0f, weights[i]);
-            }
-
-            if (totalWeight <= 0.001f)
+        public static Thing PickRandomHostileTarget(
+            List<Thing> candidates,
+            float pawnWeight,
+            float nonPawnWeight,
+            float totalWeight)
+        {
+            if (candidates == null || candidates.Count == 0 || totalWeight <= 0.001f)
             {
                 return null;
             }
@@ -597,7 +638,7 @@ namespace MiliraXian.Characters
             float accum = 0f;
             for (int i = 0; i < candidates.Count; i++)
             {
-                accum += Mathf.Max(0f, weights[i]);
+                accum += GetRetargetWeight(candidates[i], pawnWeight, nonPawnWeight);
                 if (pick <= accum)
                 {
                     return candidates[i];

@@ -31,13 +31,22 @@ namespace MiliraXian.Characters
 
     public class CompProjectileContinuousTrail : ThingComp
     {
-        private const int FadeMaterialSteps = 24;
-        private readonly List<Vector3> trailPoints = new List<Vector3>();
-        private readonly Material[] fadeMaterials = new Material[FadeMaterialSteps];
-        private Color cachedTrailBaseColor = Color.clear;
+        private static readonly MaterialPropertyBlock TrailPropertyBlock = new MaterialPropertyBlock();
+
+        private Vector3[] trailPoints;
+        private int trailStart;
+        private int trailCount;
+        private bool initialized;
+
+        private Mesh trailMesh;
+        private readonly List<Vector3> meshVertices = new List<Vector3>(256);
+        private readonly List<Vector2> meshUvs = new List<Vector2>(256);
+        private readonly List<Color32> meshColors = new List<Color32>(256);
+        private readonly List<int> meshTriangles = new List<int>(384);
+
+        private Material trailMaterial;
         private string cachedTrailTexPath;
         private bool cachedUseGlowShader;
-        private bool initialized;
 
         private CompProperties_ProjectileContinuousTrail Props => (CompProperties_ProjectileContinuousTrail)props;
         private Projectile ProjectileParent => parent as Projectile;
@@ -49,6 +58,7 @@ namespace MiliraXian.Characters
             {
                 ResetTrail();
                 ResetMaterialCache();
+                DestroyMesh();
             }
         }
 
@@ -65,12 +75,14 @@ namespace MiliraXian.Characters
         {
             base.PostDeSpawn(map, mode);
             ResetTrail();
+            DestroyMesh();
         }
 
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
             ResetTrail();
+            DestroyMesh();
         }
 
         public override void CompTick()
@@ -81,6 +93,8 @@ namespace MiliraXian.Characters
                 return;
             }
 
+            EnsureTrailBuffer();
+            Vector3 point = ResolveTrailPosition(projectile);
             if (!initialized)
             {
                 if (projectile.Launcher == null)
@@ -89,12 +103,11 @@ namespace MiliraXian.Characters
                 }
 
                 initialized = true;
-                trailPoints.Clear();
-                trailPoints.Add(ResolveTrailPosition(projectile));
+                AddTrailPoint(point);
                 return;
             }
 
-            RecordTrailPoint(ResolveTrailPosition(projectile));
+            RecordTrailPoint(point);
         }
 
         public override void PostDraw()
@@ -102,7 +115,13 @@ namespace MiliraXian.Characters
             base.PostDraw();
 
             Projectile projectile = ProjectileParent;
-            if (Props == null || projectile == null || trailPoints.Count < 2)
+            if (Props == null || projectile == null || trailCount < 2 || projectile.Map == null)
+            {
+                return;
+            }
+
+            if (Find.CameraDriver != null
+                && !Find.CameraDriver.CurrentViewRect.ExpandedBy(2).Contains(projectile.Position))
             {
                 return;
             }
@@ -110,131 +129,247 @@ namespace MiliraXian.Characters
             DrawContinuousTrail(projectile);
         }
 
+        private void EnsureTrailBuffer()
+        {
+            int capacity = Mathf.Max(4, Props.trailMaxPoints);
+            if (trailPoints != null && trailPoints.Length == capacity)
+            {
+                return;
+            }
+
+            trailPoints = new Vector3[capacity];
+            trailStart = 0;
+            trailCount = 0;
+
+            int subdivisions = Mathf.Clamp(Props.trailSmoothSubdivisions, 1, 6);
+            int maxSegments = (capacity - 1) * subdivisions;
+            EnsureListCapacity(meshVertices, maxSegments * 4);
+            EnsureListCapacity(meshUvs, maxSegments * 4);
+            EnsureListCapacity(meshColors, maxSegments * 4);
+            EnsureListCapacity(meshTriangles, maxSegments * 6);
+        }
+
         private void RecordTrailPoint(Vector3 point)
         {
-            int count = trailPoints.Count;
             float minDist = Mathf.Max(0.01f, Props.trailMinPointDistance);
-            if (count > 0)
+            if (trailCount > 0)
             {
-                Vector3 delta = point - trailPoints[count - 1];
+                Vector3 delta = point - GetTrailPoint(trailCount - 1);
                 if (delta.x * delta.x + delta.z * delta.z < minDist * minDist)
                 {
                     return;
                 }
             }
 
-            trailPoints.Add(point);
-            int maxPoints = Mathf.Max(4, Props.trailMaxPoints);
-            if (trailPoints.Count > maxPoints)
-            {
-                trailPoints.RemoveAt(0);
-            }
+            AddTrailPoint(point);
         }
 
-        private void DrawContinuousTrail(Projectile projectile)
+        private void AddTrailPoint(Vector3 point)
         {
-            int subdivisions = Mathf.Clamp(Props.trailSmoothSubdivisions, 1, 6);
-            float widthStart = Mathf.Max(0.01f, Props.trailWidthStart);
-            float widthEnd = Mathf.Max(0.005f, Props.trailWidthEnd);
-            float altitudeOffset = Mathf.Max(0f, Props.trailAltitudeOffset);
-            float baseAlpha = Mathf.Clamp01(Props.trailAlpha);
-            if (baseAlpha <= 0f)
+            if (trailPoints == null || trailPoints.Length == 0)
             {
                 return;
             }
 
-            int pointsCount = trailPoints.Count;
-
-            for (int i = 0; i < pointsCount - 1; i++)
+            if (trailCount < trailPoints.Length)
             {
-                Vector3 p0 = trailPoints[Mathf.Max(i - 1, 0)];
-                Vector3 p1 = trailPoints[i];
-                Vector3 p2 = trailPoints[i + 1];
-                Vector3 p3 = trailPoints[Mathf.Min(i + 2, pointsCount - 1)];
-
-                Vector3 prev = p1 + Altitudes.AltIncVect * altitudeOffset;
-                for (int s = 1; s <= subdivisions; s++)
-                {
-                    float t = s / (float)subdivisions;
-                    Vector3 cur = CatmullRom(p0, p1, p2, p3, t) + Altitudes.AltIncVect * altitudeOffset;
-                    float progress = (i + t) / Mathf.Max(1f, pointsCount - 1f);
-                    float width = Mathf.Lerp(widthStart, widthEnd, progress);
-                    float alpha = baseAlpha * progress;
-                    Material mat = GetTrailMaterial(projectile, alpha);
-                    if (mat != null)
-                    {
-                        GenDraw.DrawLineBetween(prev, cur, mat, width);
-                    }
-                    prev = cur;
-                }
+                int index = (trailStart + trailCount) % trailPoints.Length;
+                trailPoints[index] = point;
+                trailCount++;
+                return;
             }
+
+            trailPoints[trailStart] = point;
+            trailStart = (trailStart + 1) % trailPoints.Length;
         }
 
-        private Material GetTrailMaterial(Projectile projectile, float alpha)
+        private Vector3 GetTrailPoint(int index)
         {
-            if (alpha <= 0.001f)
+            return trailPoints[(trailStart + index) % trailPoints.Length];
+        }
+
+        private void DrawContinuousTrail(Projectile projectile)
+        {
+            float baseAlpha = Mathf.Clamp01(Props.trailAlpha);
+            if (baseAlpha <= 0.001f || !BuildTrailMesh())
             {
-                return null;
+                return;
             }
 
-            Color color;
-            if (Props.useProjectileGraphicColor && projectile.def.graphicData != null)
+            Material material = GetTrailMaterial();
+            if (material == null)
             {
-                color = projectile.def.graphicData.color;
-            }
-            else
-            {
-                color = Props.trailColor;
+                return;
             }
 
-            color.a = 1f;
-            string texPath = Props.trailTexPath;
-            if (texPath.NullOrEmpty())
-            {
-                texPath = "UI/Overlays/ThingLine";
-            }
+            Color color = Props.useProjectileGraphicColor && projectile.def.graphicData != null
+                ? projectile.def.graphicData.color
+                : Props.trailColor;
+            color.a = baseAlpha;
+            TrailPropertyBlock.SetColor(ShaderPropertyIDs.Color, color);
+            Graphics.DrawMesh(trailMesh, Matrix4x4.identity, material, 0, null, 0, TrailPropertyBlock);
+        }
 
-            if (cachedTrailTexPath != texPath || cachedTrailBaseColor != color || cachedUseGlowShader != Props.useGlowShader)
+        private bool BuildTrailMesh()
+        {
+            meshVertices.Clear();
+            meshUvs.Clear();
+            meshColors.Clear();
+            meshTriangles.Clear();
+
+            int subdivisions = Mathf.Clamp(Props.trailSmoothSubdivisions, 1, 6);
+            float widthStart = Mathf.Max(0.01f, Props.trailWidthStart);
+            float widthEnd = Mathf.Max(0.005f, Props.trailWidthEnd);
+            float altitudeOffset = Mathf.Max(0f, Props.trailAltitudeOffset);
+            Vector3 altitude = Altitudes.AltIncVect * altitudeOffset;
+
+            for (int i = 0; i < trailCount - 1; i++)
             {
-                cachedTrailTexPath = texPath;
-                cachedTrailBaseColor = color;
-                cachedUseGlowShader = Props.useGlowShader;
-                for (int i = 0; i < fadeMaterials.Length; i++)
+                Vector3 p0 = GetTrailPoint(Mathf.Max(i - 1, 0));
+                Vector3 p1 = GetTrailPoint(i);
+                Vector3 p2 = GetTrailPoint(i + 1);
+                Vector3 p3 = GetTrailPoint(Mathf.Min(i + 2, trailCount - 1));
+
+                Vector3 previous = p1 + altitude;
+                float previousProgress = i / Mathf.Max(1f, trailCount - 1f);
+                for (int subdivision = 1; subdivision <= subdivisions; subdivision++)
                 {
-                    fadeMaterials[i] = null;
+                    float t = subdivision / (float)subdivisions;
+                    Vector3 current = CatmullRom(p0, p1, p2, p3, t) + altitude;
+                    float progress = (i + t) / Mathf.Max(1f, trailCount - 1f);
+                    AddRibbonSegment(
+                        previous,
+                        current,
+                        Mathf.Lerp(widthStart, widthEnd, previousProgress),
+                        Mathf.Lerp(widthStart, widthEnd, progress),
+                        previousProgress,
+                        progress);
+                    previous = current;
+                    previousProgress = progress;
                 }
             }
 
-            int step = Mathf.Clamp(Mathf.RoundToInt(Mathf.Clamp01(alpha) * (FadeMaterialSteps - 1)), 1, FadeMaterialSteps - 1);
-            Material mat = fadeMaterials[step];
-            if (mat == null)
+            if (meshVertices.Count == 0)
             {
-                Color matColor = cachedTrailBaseColor;
-                matColor.a = step / (float)(FadeMaterialSteps - 1);
-                mat = MaterialPool.MatFrom(
-                    cachedTrailTexPath,
-                    Props.useGlowShader ? ShaderDatabase.MoteGlow : ShaderDatabase.Transparent,
-                    matColor);
-                fadeMaterials[step] = mat;
+                return false;
             }
 
-            return mat;
+            if (trailMesh == null)
+            {
+                trailMesh = new Mesh
+                {
+                    name = "MX_ProjectileTrail_" + (parent?.thingIDNumber ?? 0)
+                };
+                trailMesh.MarkDynamic();
+            }
+
+            trailMesh.Clear(false);
+            trailMesh.SetVertices(meshVertices);
+            trailMesh.SetUVs(0, meshUvs);
+            trailMesh.SetColors(meshColors);
+            trailMesh.SetTriangles(meshTriangles, 0, false);
+            trailMesh.RecalculateBounds();
+            return true;
+        }
+
+        private void AddRibbonSegment(
+            Vector3 start,
+            Vector3 end,
+            float startWidth,
+            float endWidth,
+            float startAlpha,
+            float endAlpha)
+        {
+            Vector3 direction = (end - start).Yto0();
+            if (direction.sqrMagnitude < 0.000001f)
+            {
+                return;
+            }
+
+            direction.Normalize();
+            Vector3 perpendicular = new Vector3(-direction.z, 0f, direction.x);
+            Vector3 startOffset = perpendicular * (startWidth * 0.5f);
+            Vector3 endOffset = perpendicular * (endWidth * 0.5f);
+            int vertexStart = meshVertices.Count;
+
+            meshVertices.Add(start - startOffset);
+            meshVertices.Add(start + startOffset);
+            meshVertices.Add(end - endOffset);
+            meshVertices.Add(end + endOffset);
+
+            meshUvs.Add(new Vector2(0f, 0f));
+            meshUvs.Add(new Vector2(0f, 1f));
+            meshUvs.Add(new Vector2(1f, 0f));
+            meshUvs.Add(new Vector2(1f, 1f));
+
+            byte startByte = (byte)Mathf.RoundToInt(Mathf.Clamp01(startAlpha) * 255f);
+            byte endByte = (byte)Mathf.RoundToInt(Mathf.Clamp01(endAlpha) * 255f);
+            meshColors.Add(new Color32(255, 255, 255, startByte));
+            meshColors.Add(new Color32(255, 255, 255, startByte));
+            meshColors.Add(new Color32(255, 255, 255, endByte));
+            meshColors.Add(new Color32(255, 255, 255, endByte));
+
+            meshTriangles.Add(vertexStart);
+            meshTriangles.Add(vertexStart + 2);
+            meshTriangles.Add(vertexStart + 1);
+            meshTriangles.Add(vertexStart + 2);
+            meshTriangles.Add(vertexStart + 3);
+            meshTriangles.Add(vertexStart + 1);
+        }
+
+        private Material GetTrailMaterial()
+        {
+            string texturePath = Props.trailTexPath.NullOrEmpty() ? "UI/Overlays/ThingLine" : Props.trailTexPath;
+            if (trailMaterial != null
+                && cachedTrailTexPath == texturePath
+                && cachedUseGlowShader == Props.useGlowShader)
+            {
+                return trailMaterial;
+            }
+
+            cachedTrailTexPath = texturePath;
+            cachedUseGlowShader = Props.useGlowShader;
+            trailMaterial = MaterialPool.MatFrom(
+                texturePath,
+                Props.useGlowShader ? ShaderDatabase.MoteGlow : ShaderDatabase.Transparent,
+                Color.white);
+            return trailMaterial;
         }
 
         private void ResetTrail()
         {
             initialized = false;
-            trailPoints.Clear();
+            trailStart = 0;
+            trailCount = 0;
+            meshVertices.Clear();
+            meshUvs.Clear();
+            meshColors.Clear();
+            meshTriangles.Clear();
         }
 
         private void ResetMaterialCache()
         {
+            trailMaterial = null;
             cachedTrailTexPath = null;
-            cachedTrailBaseColor = Color.clear;
             cachedUseGlowShader = false;
-            for (int i = 0; i < fadeMaterials.Length; i++)
+        }
+
+        private void DestroyMesh()
+        {
+            if (trailMesh == null)
             {
-                fadeMaterials[i] = null;
+                return;
+            }
+
+            Object.Destroy(trailMesh);
+            trailMesh = null;
+        }
+
+        private static void EnsureListCapacity<T>(List<T> list, int capacity)
+        {
+            if (list.Capacity < capacity)
+            {
+                list.Capacity = capacity;
             }
         }
 

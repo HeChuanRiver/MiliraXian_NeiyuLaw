@@ -265,6 +265,7 @@ namespace MiliraXian.Characters.Mingyuan
     public class GameComponent_MingyuanRebirth : GameComponent
     {
         private List<MingyuanPendingRebirth> pendingRebirths = new List<MingyuanPendingRebirth>();
+        private int nextProcessTick = int.MaxValue;
 
         public GameComponent_MingyuanRebirth(Game game)
         {
@@ -291,6 +292,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick, marker));
+            nextProcessTick = Mathf.Min(nextProcessTick, rebirthTick);
         }
 
         public override void GameComponentTick()
@@ -302,6 +304,12 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int tick = Find.TickManager.TicksGame;
+            if (tick < nextProcessTick)
+            {
+                return;
+            }
+
+            nextProcessTick = int.MaxValue;
             for (int i = pendingRebirths.Count - 1; i >= 0; i--)
             {
                 MingyuanPendingRebirth pending = pendingRebirths[i];
@@ -314,6 +322,7 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (tick < pending.rebirthTick)
                 {
+                    nextProcessTick = Mathf.Min(nextProcessTick, pending.rebirthTick);
                     continue;
                 }
 
@@ -325,6 +334,7 @@ namespace MiliraXian.Characters.Mingyuan
                 else
                 {
                     pending.rebirthTick = tick + 60;
+                    nextProcessTick = Mathf.Min(nextProcessTick, pending.rebirthTick);
                 }
             }
         }
@@ -353,6 +363,8 @@ namespace MiliraXian.Characters.Mingyuan
                     pending.rebirthTick = tick + MingyuanRebirthUtility.EternalBurningTicks;
                 }
             }
+
+            RecalculateNextProcessTick();
         }
 
         public override void ExposeData()
@@ -362,6 +374,24 @@ namespace MiliraXian.Characters.Mingyuan
             if (Scribe.mode == LoadSaveMode.PostLoadInit && pendingRebirths == null)
             {
                 pendingRebirths = new List<MingyuanPendingRebirth>();
+            }
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                RecalculateNextProcessTick();
+            }
+        }
+
+        private void RecalculateNextProcessTick()
+        {
+            nextProcessTick = int.MaxValue;
+            for (int index = 0; index < pendingRebirths.Count; index++)
+            {
+                MingyuanPendingRebirth pending = pendingRebirths[index];
+                if (pending != null)
+                {
+                    nextProcessTick = Mathf.Min(nextProcessTick, pending.rebirthTick);
+                }
             }
         }
 

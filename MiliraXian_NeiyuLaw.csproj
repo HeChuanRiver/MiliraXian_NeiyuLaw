@@ -84,5 +84,8 @@
       <None Include="*.md" />
       <None Include="packages.config" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="1.6\Textures\" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

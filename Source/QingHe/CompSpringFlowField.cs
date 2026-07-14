@@ -32,9 +32,9 @@ namespace MiliraXian.Characters.QingHe
                 parent.Destroy();
                 return;
             }
-            if (ticksToNextEffect == 0)
+            if (ticksToNextEffect <= 0)
             {
-                ticksToNextEffect = Props.pulseIntervalTicks;
+                ticksToNextEffect = UnityEngine.Mathf.Max(1, Props.pulseIntervalTicks);
                 AttachEffect();
             }
 
@@ -56,15 +56,26 @@ namespace MiliraXian.Characters.QingHe
         
         private void AttachEffect()
         {
-            var applied = false;
-            foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
+            bool applied = false;
+            float radius = UnityEngine.Mathf.Max(0f, Props.radius);
+            float radiusSquared = radius * radius;
+            float elegance = EleganceUtility.GetCurrent(caster);
+            var pawns = parent.Map.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
             {
-                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Faction != caster.Faction)
+                Pawn pawn = pawns[index];
+                if (pawn == null || pawn.Dead || pawn.Faction != caster.Faction)
                 {
                     continue;
                 }
 
-                var elegance = EleganceUtility.GetCurrent(caster);
+                int dx = pawn.Position.x - parent.Position.x;
+                int dz = pawn.Position.z - parent.Position.z;
+                if (dx * dx + dz * dz > radiusSquared)
+                {
+                    continue;
+                }
+
                 if (pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_SpringFlow) is Hediff_SpringFlow h)
                 {
                     h.Severity = 1.0f + elegance / 100.0f;

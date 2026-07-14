@@ -29,5 +29,5 @@
   <MXZL_ZhaoliRaidState.label>昭離襲擊狀態</MXZL_ZhaoliRaidState.label>
   <MXZL_ZhaoliRaidState.description>敵對昭離襲擊殖民地時使用的臨時狀態，記錄階段、仇恨、轉階段和襲擊行為。</MXZL_ZhaoliRaidState.description>
   <MXZL_ZhaoliShieldLayers.label>&lt;color=#D66BFF&gt;諱亡護盾&lt;/color&gt;</MXZL_ZhaoliShieldLayers.label>
-  <MXZL_ZhaoliShieldLayers.description>昭離每次透過&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸納一個單位，都會獲得5層&lt;color=#B86CFF&gt;諱亡護盾&lt;/color&gt;。護盾可免疫一次傷害，並在命中時消耗1層。持續傷害每次生效也會持續消耗層數。</MXZL_ZhaoliShieldLayers.description>
+  <MXZL_ZhaoliShieldLayers.description>昭離每次透過&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸納一個單位，都會獲得5層&lt;color=#B86CFF&gt;諱亡護盾&lt;/color&gt;。護盾不再免疫傷害；昭離實際受到傷害後消耗1層，持續傷害每次生效也會消耗層數。</MXZL_ZhaoliShieldLayers.description>
 </LanguageData>

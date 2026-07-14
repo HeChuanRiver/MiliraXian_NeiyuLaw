@@ -7,26 +7,6 @@ using Verse;
 
 namespace MiliraXian.Characters.Neiyu
 {
-    [HarmonyPatch(typeof(TickManager), nameof(TickManager.TicksAbs), MethodType.Getter)]
-    internal static class Patch_TickManager_TicksAbs_StartupCompat
-    {
-        public static bool Prefix(TickManager __instance, ref int __result)
-        {
-            if (__instance == null || __instance.gameStartAbsTick != 0)
-            {
-                return true;
-            }
-
-            if (Current.ProgramState != ProgramState.Playing && Find.GameInitData != null && Find.GameInitData.gameToLoad.NullOrEmpty())
-            {
-                __result = GenTicks.ConfiguredTicksAbsAtGameStart + __instance.TicksGame;
-                return false;
-            }
-
-            return true;
-        }
-    }
-
     public class QuestNode_Root_NeiyuProjectionRecruit : QuestNode_Root_WandererJoin
     {
         private const int TimeoutTicks = 60000;

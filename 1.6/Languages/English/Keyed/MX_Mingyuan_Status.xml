@@ -45,4 +45,11 @@ Buildings: 33% max HP per pulse</MX_Mingyuan_BurningPillar_Inspect>
   <MX_Mingyuan_BurningPillar_NoValidCell>No valid cell for Burning Pillar.</MX_Mingyuan_BurningPillar_NoValidCell>
   <MX_Mingyuan_AshesOfSelf_InsufficientCost>Mingyuan cannot safely spend 50% blood to ignite Ashes of Self.</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>Ashes field: radius {0}, burn damage {1}, Life Burn +{2}, remaining {3}s</MX_Mingyuan_AshesField_Inspect>
+  <MX_Mingyuan_Bow_ModeFocus>Focus form</MX_Mingyuan_Bow_ModeFocus>
+  <MX_Mingyuan_Bow_ModeRadiation>Radiation form</MX_Mingyuan_Bow_ModeRadiation>
+  <MX_Mingyuan_Bow_ModeCommand>Long Rainbow: {0}</MX_Mingyuan_Bow_ModeCommand>
+  <MX_Mingyuan_Bow_ModeDesc>Current: {0}. Click to switch to {1}.&#10;Focus: map-wide line of sight, fixed 5-second charge, guaranteed hit and immediate burst.&#10;Radiation: penetrating 10-cell, 108-degree sector, at most once per second.</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeBusy>Long Rainbow is charging or resolving an attack and cannot change form.</MX_Mingyuan_Bow_ModeBusy>
+  <MX_Mingyuan_Bow_ModeInspect>Current form: {0}</MX_Mingyuan_Bow_ModeInspect>
+  <MX_Mingyuan_Bow_InvalidFocusTarget>Focus form can only target a visible hostile that can receive Life Burn.</MX_Mingyuan_Bow_InvalidFocusTarget>
 </LanguageData>

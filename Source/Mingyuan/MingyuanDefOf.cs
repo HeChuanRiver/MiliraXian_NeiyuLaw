@@ -28,6 +28,8 @@ namespace MiliraXian.Characters.Mingyuan
         public static ThingDef MX_Mingyuan_Mote_SelfBurnOverburn;
         public static ThingDef MX_Mingyuan_Mote_ShieldSelfBurnLink;
         public static ThingDef MX_Mingyuan_Mote_LifeBurnBurst;
+        public static ThingDef MX_Mingyuan_Mote_LifeBurnDeathFade;
+        public static ThingDef MX_Mingyuan_Mote_BowFocusTarget;
 
         public static FleckDef MX_Mingyuan_Fleck_AscendantFlameScorch;
         public static FleckDef MX_Mingyuan_Fleck_LifeBurnTransferLine;

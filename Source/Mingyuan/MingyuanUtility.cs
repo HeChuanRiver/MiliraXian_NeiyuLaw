@@ -16,6 +16,9 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool SuppressOnHitLifeBurn;
 
+        private static HediffDef cachedLifeBurnPropsDef;
+        private static HediffCompProperties_MingyuanLifeBurn cachedLifeBurnProps;
+
         public static HediffDef LifeBurnDef => MX_MingyuanDefOf.MX_Mingyuan_LifeBurn ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_LifeBurn");
         public static HediffDef SelfBurnDef => MX_MingyuanDefOf.MX_Mingyuan_SelfBurn ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_SelfBurn");
         public static HediffDef BurningBodyDef => MX_MingyuanDefOf.MX_Mingyuan_BurningBody ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_BurningBody");
@@ -94,6 +97,24 @@ namespace MiliraXian.Characters.Mingyuan
             comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
         }
 
+        public static bool TryTriggerLifeBurnBurst(Pawn target, Pawn instigator)
+        {
+            if (target?.health?.hediffSet == null
+                || target.Dead
+                || target.Destroyed
+                || IsLifeBurnImmunePawn(target)
+                || LifeBurnDef == null)
+            {
+                return false;
+            }
+
+            Hediff hediff = target.health.hediffSet.GetFirstHediffOfDef(LifeBurnDef)
+                            ?? EnsureHediff(target, LifeBurnDef);
+            HediffComp_MingyuanLifeBurn comp =
+                (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
+            return comp != null && comp.TryTriggerBurstNow(instigator);
+        }
+
         public static void AddSelfBurn(Pawn pawn, float layers, bool refreshDecayTimer = true, bool showMote = true)
         {
             if (pawn == null || layers <= 0f || pawn.Dead)
@@ -152,6 +173,67 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             return pawn?.health?.hediffSet?.GetFirstHediffOfDef(LifeBurnDef)?.Severity ?? 0f;
+        }
+
+        public static float GetLifeBurnExecuteThreshold(Pawn pawn)
+        {
+            if (pawn?.health == null)
+            {
+                return 0f;
+            }
+
+            Hediff existing = pawn.health.hediffSet?.GetFirstHediffOfDef(LifeBurnDef);
+            HediffComp_MingyuanLifeBurn existingComp =
+                (existing as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
+            if (existingComp != null)
+            {
+                return existingComp.ExecuteThreshold;
+            }
+
+            float lethalThreshold = pawn.health.LethalDamageThreshold;
+            HediffCompProperties_MingyuanLifeBurn props = GetLifeBurnProps();
+            float multiplier = props?.executeHealthScaleMultiplier ?? 10f;
+            return Mathf.Max(1f, lethalThreshold * Mathf.Max(0.01f, multiplier));
+        }
+
+        public static float GetLifeBurnRemainingToExecute(Pawn pawn)
+        {
+            if (pawn == null || IsLifeBurnImmunePawn(pawn))
+            {
+                return 0f;
+            }
+
+            return Mathf.Max(0f, GetLifeBurnExecuteThreshold(pawn) - GetLifeBurnLayers(pawn));
+        }
+
+        private static HediffCompProperties_MingyuanLifeBurn GetLifeBurnProps()
+        {
+            HediffDef def = LifeBurnDef;
+            if (cachedLifeBurnPropsDef == def)
+            {
+                return cachedLifeBurnProps;
+            }
+
+            cachedLifeBurnPropsDef = def;
+            cachedLifeBurnProps = null;
+            List<HediffCompProperties> comps = def?.comps;
+            if (comps == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < comps.Count; i++)
+            {
+                HediffCompProperties_MingyuanLifeBurn lifeBurnProps =
+                    comps[i] as HediffCompProperties_MingyuanLifeBurn;
+                if (lifeBurnProps != null)
+                {
+                    cachedLifeBurnProps = lifeBurnProps;
+                    break;
+                }
+            }
+
+            return cachedLifeBurnProps;
         }
 
         public static float GetSelfBurnLayers(Pawn pawn)

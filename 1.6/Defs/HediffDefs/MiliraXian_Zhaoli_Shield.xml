@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliShieldLayers</defName>
         <label>&lt;color=#D66BFF&gt;讳亡护盾&lt;/color&gt;</label>
-        <description>昭离每次通过&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸纳一个单位，都会获得5层&lt;color=#B86CFF&gt;讳亡护盾&lt;/color&gt;。护盾可免疫一次伤害，并在命中时消耗1层。持续伤害每次生效也会持续消耗层数。</description>
+        <description>昭离每次通过&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸纳一个单位，都会获得5层&lt;color=#B86CFF&gt;讳亡护盾&lt;/color&gt;。护盾不再免疫伤害；昭离实际受到伤害后消耗1层，持续伤害每次生效也会消耗层数。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.66, 0.10, 0.20)</defaultLabelColor>
         <isBad>false</isBad>

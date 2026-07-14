@@ -30,6 +30,34 @@
     </mote>
   </ThingDef>
 
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_LifeBurnDeathFade</defName>
+    <label>Mingyuan life burn death mark</label>
+    <thingClass>MoteAttached</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+      <color>(1.00, 0.74, 0.30, 0.78)</color>
+      <drawSize>(1.42, 1.42)</drawSize>
+      <shaderParameters>
+        <_Interval>0.18</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <rotatable>false</rotatable>
+    <drawOffscreen>false</drawOffscreen>
+    <mote>
+      <fadeInTime>0</fadeInTime>
+      <solidTime>10</solidTime>
+      <fadeOutTime>2</fadeOutTime>
+    </mote>
+  </ThingDef>
+
   <FleckDef ParentName="FleckBase_Thrown">
     <defName>MX_Mingyuan_Fleck_LifeBurnTransferLine</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>

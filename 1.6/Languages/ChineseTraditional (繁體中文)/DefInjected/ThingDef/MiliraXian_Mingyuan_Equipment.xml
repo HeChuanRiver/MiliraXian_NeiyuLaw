@@ -4,7 +4,7 @@
   <MX_Mingyuan_CinderSword.description>明淵的淡色燼刃。造成 44 點割傷、150% 穿甲，透過 0.5 近戰冷卻倍率在約 3 秒內打出兩次攻擊；明淵的火焰會在命中時追加生命燃燒。</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>塵燼</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>長虹</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>由淡金與赤色火焰構成的明淵長弓。瞄準 4 秒，向全圖距離目標發射 4 支高角箭。每支箭造成 10 傷害，追加 300 層生命燃燒，並會在 5 格內敵人之間最多彈射 6 次；同一目標最多被同一支箭命中 3 次。</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>由淡金與赤色火焰構成的明淵長弓，可在聚焦與輻射形態間切換。聚焦形態固定蓄力 5 秒，瞬時爆掉一個視線內敵人的生命燃燒，不造成普通武器傷害。輻射形態每秒至多發動一次，貫穿 10 格、108° 扇區內全部合法敵人，各造成 1 點灼傷並疊加其爆條閾值的 23%。</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>長虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>燃燒之柱核心</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>焚我餘燼領域</MX_Mingyuan_AshesField.label>

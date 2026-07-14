@@ -13,6 +13,8 @@ namespace MiliraXian.Characters
 
         private List<PendingCultureConversion> pendingConversions = new List<PendingCultureConversion>();
         private List<int> completedPawnIds = new List<int>();
+        private HashSet<int> completedPawnIdSet = new HashSet<int>();
+        private int nextConversionTick = int.MaxValue;
 
         public GameComponent_SpecialPawnPrimaryCultureConversion(Game game)
         {
@@ -26,13 +28,15 @@ namespace MiliraXian.Characters
             }
 
             int currentTick = Find.TickManager.TicksGame;
-            if (currentTick % CheckIntervalTicks != 0)
+            if (currentTick >= nextConversionTick)
             {
-                return;
+                ProcessPendingConversions(currentTick);
             }
 
-            ProcessPendingConversions(currentTick);
-            RegisterPlayerSpecialPawns(currentTick);
+            if (currentTick % CheckIntervalTicks == 0)
+            {
+                NeiyuSpecialPawnIntegration.AuditAllPlayerSpecialPawns(pawn => RegisterIfNeeded(pawn, currentTick));
+            }
         }
 
         public override void ExposeData()
@@ -53,29 +57,20 @@ namespace MiliraXian.Characters
                 }
 
                 pendingConversions.RemoveAll(entry => entry == null || entry.pawn == null);
+                completedPawnIdSet = new HashSet<int>(completedPawnIds);
+                RecalculateNextConversionTick();
             }
         }
 
-        private void RegisterPlayerSpecialPawns(int currentTick)
+        public static void NotifyPawnAvailable(Pawn pawn)
         {
-            List<Pawn> playerPawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction;
-            for (int index = 0; index < playerPawns.Count; index++)
-            {
-                RegisterIfNeeded(playerPawns[index], currentTick);
-            }
-
-            if (Find.WorldPawns == null)
+            if (pawn == null || Find.TickManager == null)
             {
                 return;
             }
 
-            foreach (Pawn pawn in Find.WorldPawns.AllPawnsAlive)
-            {
-                if (pawn?.Faction == Faction.OfPlayer)
-                {
-                    RegisterIfNeeded(pawn, currentTick);
-                }
-            }
+            Current.Game?.GetComponent<GameComponent_SpecialPawnPrimaryCultureConversion>()
+                ?.RegisterIfNeeded(pawn, Find.TickManager.TicksGame);
         }
 
         private void RegisterIfNeeded(Pawn pawn, int currentTick)
@@ -86,7 +81,7 @@ namespace MiliraXian.Characters
             }
 
             int pawnId = pawn.thingIDNumber;
-            if (completedPawnIds.Contains(pawnId))
+            if (completedPawnIdSet.Contains(pawnId))
             {
                 return;
             }
@@ -115,10 +110,12 @@ namespace MiliraXian.Characters
                 pawn = pawn,
                 conversionTick = currentTick + ConversionDelayTicks
             });
+            nextConversionTick = System.Math.Min(nextConversionTick, currentTick + ConversionDelayTicks);
         }
 
         private void ProcessPendingConversions(int currentTick)
         {
+            nextConversionTick = int.MaxValue;
             for (int index = pendingConversions.Count - 1; index >= 0; index--)
             {
                 PendingCultureConversion entry = pendingConversions[index];
@@ -132,6 +129,7 @@ namespace MiliraXian.Characters
                 if (pawn.Faction != Faction.OfPlayer)
                 {
                     completedPawnIds.Remove(pawn.thingIDNumber);
+                    completedPawnIdSet.Remove(pawn.thingIDNumber);
                     pendingConversions.RemoveAt(index);
                     continue;
                 }
@@ -144,12 +142,14 @@ namespace MiliraXian.Characters
 
                 if (currentTick < entry.conversionTick)
                 {
+                    nextConversionTick = System.Math.Min(nextConversionTick, entry.conversionTick);
                     continue;
                 }
 
                 Ideo primaryIdeo = Faction.OfPlayer?.ideos?.PrimaryIdeo;
                 if (primaryIdeo == null || pawn.ideo == null || !pawn.ShouldHaveIdeo)
                 {
+                    nextConversionTick = System.Math.Min(nextConversionTick, currentTick + CheckIntervalTicks);
                     continue;
                 }
 
@@ -208,6 +208,21 @@ namespace MiliraXian.Characters
             if (!completedPawnIds.Contains(pawnId))
             {
                 completedPawnIds.Add(pawnId);
+            }
+
+            completedPawnIdSet.Add(pawnId);
+        }
+
+        private void RecalculateNextConversionTick()
+        {
+            nextConversionTick = int.MaxValue;
+            for (int index = 0; index < pendingConversions.Count; index++)
+            {
+                PendingCultureConversion entry = pendingConversions[index];
+                if (entry != null)
+                {
+                    nextConversionTick = System.Math.Min(nextConversionTick, entry.conversionTick);
+                }
             }
         }
 

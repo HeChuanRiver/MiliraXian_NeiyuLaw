@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
 using RimWorld;
@@ -35,6 +36,28 @@ namespace MiliraXian.Characters.Zhaoli
         private const string MedicalSurgerySuccessChanceStat = "MedicalSurgerySuccessChance";
         private const string MedicalTendQualityStat = "MedicalTendQuality";
         private const string GeneralLaborSpeedStat = "GeneralLaborSpeed";
+
+        private static readonly HashSet<string> AffectedStatNames = new HashSet<string>
+        {
+            IncomingDamageFactorStat,
+            MeleeArmorPenetrationStat,
+            MeleeCooldownFactorStat,
+            MeleeDamageFactorStat,
+            MeleeDodgeChanceStat,
+            MeleeHitChanceStat,
+            PawnTrapSpringChanceStat,
+            StaggerDurationFactorStat,
+            MeleeDoorDamageFactorStat,
+            MoveSpeedStat,
+            CarryingCapacityStat,
+            ImmunityGainSpeedStat,
+            InjuryHealingFactorStat,
+            ToxicEnvironmentResistanceStat,
+            MedicalOperationSpeedStat,
+            MedicalSurgerySuccessChanceStat,
+            MedicalTendQualityStat,
+            GeneralLaborSpeedStat
+        };
 
         public static float GetTransitionRadiusBonus(int phase)
         {
@@ -111,9 +134,14 @@ namespace MiliraXian.Characters.Zhaoli
             return stringBuilder.ToString();
         }
 
+        public static bool IsAffectedStat(StatDef stat)
+        {
+            return stat != null && AffectedStatNames.Contains(stat.defName);
+        }
+
         public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
         {
-            if (pawn == null || stat == null || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+            if (pawn == null || !IsAffectedStat(stat) || !ZhaoliKarmaUtility.IsZhaoli(pawn))
             {
                 return;
             }
@@ -153,7 +181,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            result *= Mathf.Max(0f, 1f - (1f - fullFactor) * deathCount * RecruitGrowthStepRatio);
+            result *= RecruitGrowthFactor(fullFactor, deathCount);
         }
 
         private static void ApplyRecruitBaseBonuses(StatDef stat, ref float result)
@@ -323,8 +351,14 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            float factor = Mathf.Max(0f, 1f - (1f - fullFactor) * deathCount * RecruitGrowthStepRatio);
+            float factor = RecruitGrowthFactor(fullFactor, deathCount);
             AppendFactorLine(stringBuilder, statDefName, factor);
+        }
+
+        private static float RecruitGrowthFactor(float fullFactor, int deathCount)
+        {
+            float progress = Mathf.Clamp01(Mathf.Max(0, deathCount) * RecruitGrowthStepRatio);
+            return Mathf.Lerp(1f, fullFactor, progress);
         }
 
         private static void AppendFactorLine(StringBuilder stringBuilder, string statDefName, float factor)
@@ -371,18 +405,4 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    [HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
-    internal static class Patch_ZhaoliProgression_GetStatValue
-    {
-        [HarmonyPostfix]
-        public static void Postfix(Thing thing, StatDef stat, bool applyPostProcess, int cacheStaleAfterTicks, ref float __result)
-        {
-            if (!(thing is Pawn pawn))
-            {
-                return;
-            }
-
-            ZhaoliProgressionUtility.ApplyStatModifiers(pawn, stat, ref __result);
-        }
-    }
 }

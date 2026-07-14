@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using HarmonyLib;
 using RimWorld;
@@ -158,6 +159,12 @@ namespace MiliraXian.Characters.Neiyu
             weakWasActive = false;
             EnsureRecentLogs();
             phase2RecentHitLogs.Clear();
+        }
+
+        public override void CompPostPostRemoved()
+        {
+            MXNeiyuShieldUtility.Invalidate(Pawn);
+            base.CompPostPostRemoved();
         }
 
         public override void CompExposeData()
@@ -993,6 +1000,23 @@ namespace MiliraXian.Characters.Neiyu
 
     public static class MXNeiyuShieldUtility
     {
+        private const string ShieldHediffDefName = "MXNL_NeiyuShield";
+
+        private sealed class ShieldCacheEntry
+        {
+            public ShieldCacheEntry(HediffComp_MXNeiyuCountShield comp)
+            {
+                Comp = comp;
+            }
+
+            public HediffComp_MXNeiyuCountShield Comp { get; }
+        }
+
+        private static ConditionalWeakTable<Pawn, ShieldCacheEntry> ShieldByPawn =
+            new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+
+        private static HediffDef shieldHediffDef;
+
         public static bool TryGetShieldComp(Pawn pawn, out HediffComp_MXNeiyuCountShield shield)
         {
             shield = null;
@@ -1001,17 +1025,105 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
+            if (ShieldByPawn.TryGetValue(pawn, out ShieldCacheEntry cached) && cached.Comp != null)
             {
-                HediffComp_MXNeiyuCountShield comp = hediffs[i].TryGetComp<HediffComp_MXNeiyuCountShield>();
-                if (comp != null)
+                shield = cached.Comp;
+                return true;
+            }
+
+            HediffDef shieldDef = shieldHediffDef ?? (shieldHediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(ShieldHediffDefName));
+            HediffWithComps hediff = shieldDef == null
+                ? null
+                : pawn.health.hediffSet.GetFirstHediffOfDef(shieldDef) as HediffWithComps;
+            shield = hediff?.GetComp<HediffComp_MXNeiyuCountShield>();
+            if (shield == null)
+            {
+                return false;
+            }
+
+            ShieldByPawn.Remove(pawn);
+            ShieldByPawn.Add(pawn, new ShieldCacheEntry(shield));
+            return true;
+        }
+
+        public static void Invalidate(Pawn pawn)
+        {
+            if (pawn != null)
+            {
+                ShieldByPawn.Remove(pawn);
+            }
+        }
+
+        internal static void ClearCache()
+        {
+            ShieldByPawn = new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+        }
+
+        public static bool IsAffectedStat(StatDef stat)
+        {
+            return stat == StatDefOf.AimingDelayFactor
+                   || stat == StatDefOf.IncomingDamageFactor
+                   || stat == StatDefOf.MoveSpeed
+                   || stat == StatDefOf.InjuryHealingFactor
+                   || stat == StatDefOf.MeleeDodgeChance
+                   || stat == StatDefOf.RestFallRateFactor
+                   || stat == StatDefOf.WorkSpeedGlobal;
+        }
+
+        public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
+        {
+            if (!IsAffectedStat(stat) || !TryGetShieldComp(pawn, out HediffComp_MXNeiyuCountShield shield))
+            {
+                return;
+            }
+
+            bool hasStage3Buff = shield.TryGetStage3Profile(out MXNeiyuStage3Profile profile);
+            bool hasWeakPenalty = shield.TryGetWeakPenaltyFactors(
+                out float weakMoveSpeedFactor,
+                out float weakRestFallRateFactor,
+                out float weakWorkSpeedGlobalFactor);
+
+            if (hasStage3Buff)
+            {
+                if (stat == StatDefOf.AimingDelayFactor)
                 {
-                    shield = comp;
-                    return true;
+                    result *= profile.aimingDelayFactor;
+                }
+                else if (stat == StatDefOf.IncomingDamageFactor)
+                {
+                    result *= profile.incomingDamageFactor;
+                }
+                else if (stat == StatDefOf.MoveSpeed)
+                {
+                    result *= profile.moveSpeedFactor;
+                }
+                else if (stat == StatDefOf.InjuryHealingFactor)
+                {
+                    result *= profile.injuryHealingFactor;
+                }
+                else if (stat == StatDefOf.MeleeDodgeChance)
+                {
+                    result *= profile.meleeDodgeChanceFactor;
                 }
             }
-            return false;
+
+            if (!hasWeakPenalty)
+            {
+                return;
+            }
+
+            if (stat == StatDefOf.MoveSpeed)
+            {
+                result *= weakMoveSpeedFactor;
+            }
+            else if (stat == StatDefOf.RestFallRateFactor)
+            {
+                result *= weakRestFallRateFactor;
+            }
+            else if (stat == StatDefOf.WorkSpeedGlobal)
+            {
+                result *= weakWorkSpeedGlobalFactor;
+            }
         }
 
         public static Pawn TryGetEquipmentOwnerPawn(Thing equipmentThing)
@@ -1030,73 +1142,6 @@ namespace MiliraXian.Characters.Neiyu
             return null;
         }
     }
-
-    [StaticConstructorOnStartup]
-    [HarmonyPatch(typeof(PawnRenderer), nameof(PawnRenderer.RenderPawnAt))]
-    public static class Patch_MXNeiyuShield_Draw
-    {
-        private static readonly AccessTools.FieldRef<PawnRenderer, Pawn> PawnRef =
-            AccessTools.FieldRefAccess<PawnRenderer, Pawn>("pawn");
-
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
-
-        [HarmonyPostfix]
-        public static void Postfix(PawnRenderer __instance, Vector3 drawLoc, Rot4? rotOverride = null, bool neverAimWeapon = false)
-        {
-            if (__instance == null)
-            {
-                return;
-            }
-
-            Pawn pawn = PawnRef(__instance);
-            HediffComp_MXNeiyuCountShield shield;
-            if (pawn == null || !MXNeiyuShieldUtility.TryGetShieldComp(pawn, out shield) || !shield.ShouldDrawActiveShield)
-            {
-                return;
-            }
-
-            string texPath = shield.Props.activeShieldTexPath;
-            if (texPath.NullOrEmpty())
-            {
-                return;
-            }
-
-            Material shieldMat = GetShieldMaterial(texPath, shield.Props.activeShieldAlpha);
-            if (shieldMat == null)
-            {
-                return;
-            }
-
-            float pulseScale = shield.ActiveShieldPulseScale;
-            Vector2 drawSize = shield.Props.activeShieldDrawSize;
-
-            Vector3 pos = drawLoc;
-            pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-            pos += Altitudes.AltIncVect * shield.Props.activeShieldAltitudeOffset;
-
-            Matrix4x4 matrix = Matrix4x4.TRS(
-                pos,
-                Quaternion.identity,
-                new Vector3(drawSize.x * pulseScale, 1f, drawSize.y * pulseScale));
-
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
-        }
-
-        private static Material GetShieldMaterial(string texPath, float alpha)
-        {
-            string cacheKey = texPath + "|" + Mathf.Clamp01(alpha).ToString("F3");
-            Material shieldMat;
-            if (ShieldMaterialByPath.TryGetValue(cacheKey, out shieldMat))
-            {
-                return shieldMat;
-            }
-
-            shieldMat = MaterialPool.MatFrom(texPath, ShaderDatabase.Transparent, new Color(1f, 1f, 1f, Mathf.Clamp01(alpha)));
-            ShieldMaterialByPath[cacheKey] = shieldMat;
-            return shieldMat;
-        }
-    }
-
 
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.PreApplyDamage))]
     public static class Patch_MXNeiyuShield_PreApplyDamage
@@ -1181,77 +1226,6 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             __result = Mathf.Max(1, Mathf.RoundToInt(__result * profile.outgoingDamageFactor));
-        }
-    }
-
-
-    [HarmonyPatch(typeof(StatExtension), nameof(StatExtension.GetStatValue))]
-    public static class Patch_MXNeiyuShield_GetStatValue
-    {
-        [HarmonyPostfix]
-        public static void Postfix(Thing thing, StatDef stat, bool applyPostProcess, int cacheStaleAfterTicks, ref float __result)
-        {
-            Pawn pawn = thing as Pawn;
-            if (pawn == null)
-            {
-                return;
-            }
-
-            HediffComp_MXNeiyuCountShield shield;
-            if (!MXNeiyuShieldUtility.TryGetShieldComp(pawn, out shield))
-            {
-                return;
-            }
-
-            MXNeiyuStage3Profile profile;
-            bool hasStage3Buff = shield.TryGetStage3Profile(out profile);
-
-            float weakMoveSpeedFactor;
-            float weakRestFallRateFactor;
-            float weakWorkSpeedGlobalFactor;
-            bool hasWeakPenalty = shield.TryGetWeakPenaltyFactors(out weakMoveSpeedFactor, out weakRestFallRateFactor, out weakWorkSpeedGlobalFactor);
-
-            if (!hasStage3Buff && !hasWeakPenalty)
-            {
-                return;
-            }
-
-            if (hasStage3Buff && stat == StatDefOf.AimingDelayFactor)
-            {
-                __result *= profile.aimingDelayFactor;
-            }
-            else if (hasStage3Buff && stat == StatDefOf.IncomingDamageFactor)
-            {
-                __result *= profile.incomingDamageFactor;
-            }
-            else if (hasStage3Buff && stat == StatDefOf.MoveSpeed)
-            {
-                __result *= profile.moveSpeedFactor;
-            }
-            else if (hasStage3Buff && stat == StatDefOf.InjuryHealingFactor)
-            {
-                __result *= profile.injuryHealingFactor;
-            }
-            else if (hasStage3Buff && stat == StatDefOf.MeleeDodgeChance)
-            {
-                __result *= profile.meleeDodgeChanceFactor;
-            }
-
-            if (hasWeakPenalty)
-            {
-                if (stat == StatDefOf.MoveSpeed)
-                {
-                    __result *= weakMoveSpeedFactor;
-                }
-                else if (stat == StatDefOf.RestFallRateFactor)
-                {
-                    __result *= weakRestFallRateFactor;
-                }
-                else if (stat == StatDefOf.WorkSpeedGlobal)
-                {
-                    __result *= weakWorkSpeedGlobalFactor;
-                }
-            }
         }
     }
 

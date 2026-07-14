@@ -63,17 +63,12 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
-        public static void TryRegisterAllPlayerSpecialPawns()
+        public static void AuditAllPlayerSpecialPawns(System.Action<Pawn> observer = null)
         {
-            if (!ShouldRunIntegration())
-            {
-                return;
-            }
-
             List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction;
             for (int index = 0; index < pawns.Count; index++)
             {
-                TryRegister(pawns[index]);
+                AuditPawn(pawns[index], observer);
             }
 
             if (Find.WorldPawns == null)
@@ -85,9 +80,20 @@ namespace MiliraXian.Characters.Neiyu
             {
                 if (pawn?.Faction == Faction.OfPlayer)
                 {
-                    TryRegister(pawn);
+                    AuditPawn(pawn, observer);
                 }
             }
+        }
+
+        private static void AuditPawn(Pawn pawn, System.Action<Pawn> observer)
+        {
+            if (pawn == null || pawn.Faction != Faction.OfPlayer || !IsSupportedSpecialPawn(pawn))
+            {
+                return;
+            }
+
+            TryRegister(pawn);
+            observer?.Invoke(pawn);
         }
 
         private static bool IsSupportedSpecialPawn(Pawn pawn)
@@ -118,6 +124,7 @@ namespace MiliraXian.Characters.Neiyu
         public static void Postfix(Pawn __instance)
         {
             NeiyuSpecialPawnIntegration.TryRegister(__instance);
+            GameComponent_SpecialPawnPrimaryCultureConversion.NotifyPawnAvailable(__instance);
         }
     }
 
@@ -129,6 +136,7 @@ namespace MiliraXian.Characters.Neiyu
             if (newFaction == Faction.OfPlayer)
             {
                 NeiyuSpecialPawnIntegration.TryRegister(__instance);
+                GameComponent_SpecialPawnPrimaryCultureConversion.NotifyPawnAvailable(__instance);
             }
         }
     }
@@ -139,19 +147,5 @@ namespace MiliraXian.Characters.Neiyu
         {
         }
 
-        public override void GameComponentTick()
-        {
-            if (Current.ProgramState != ProgramState.Playing || Find.TickManager == null)
-            {
-                return;
-            }
-
-            if (Find.TickManager.TicksGame % NeiyuSpecialPawnIntegration.ValidationIntervalTicks != 0)
-            {
-                return;
-            }
-
-            NeiyuSpecialPawnIntegration.TryRegisterAllPlayerSpecialPawns();
-        }
     }
 }

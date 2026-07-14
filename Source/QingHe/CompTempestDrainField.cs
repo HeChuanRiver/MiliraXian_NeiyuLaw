@@ -43,9 +43,9 @@ namespace MiliraXian.Characters.QingHe
                 parent.Destroy();
                 return;
             }
-            if (ticksToNextEffect == 0)
+            if (ticksToNextEffect <= 0)
             {
-                ticksToNextEffect = Props.pulseIntervalTicks;
+                ticksToNextEffect = Mathf.Max(1, Props.pulseIntervalTicks);
                 AttachEffect();
             }
 
@@ -76,19 +76,31 @@ namespace MiliraXian.Characters.QingHe
                 damagePulse = 0;
             }
 
-            var combat = false;
-            var damageDef = Props.damageDef ?? MX_QHDefOf.MX_Dehydrate ?? DamageDefOf.Blunt;
-            var damageFactor = EleganceUtility.FactorLinear(Props.damageFactorMax, caster);
-            foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, Props.radius, true))
+            bool combat = false;
+            DamageDef damageDef = Props.damageDef ?? MX_QHDefOf.MX_Dehydrate ?? DamageDefOf.Blunt;
+            float damageFactor = EleganceUtility.FactorLinear(Props.damageFactorMax, caster);
+            float radius = Mathf.Max(0.01f, Props.radius);
+            float radiusSquared = radius * radius;
+            var pawns = parent.Map.mapPawns.AllPawnsSpawned;
+            for (int index = 0; index < pawns.Count; index++)
             {
-                if (!(thing is Pawn pawn) || pawn.Dead || !pawn.HostileTo(caster))
+                Pawn pawn = pawns[index];
+                if (pawn == null || pawn.Dead || !pawn.HostileTo(caster))
                 {
                     continue;
                 }
 
-                var d = pawn.Position.DistanceTo(parent.Position);
-                var edge = Mathf.Clamp01(Props.edgeEffect);
-                var distanceFactor = 1 - d / Props.radius * (1 - edge);
+                int dx = pawn.Position.x - parent.Position.x;
+                int dz = pawn.Position.z - parent.Position.z;
+                float distanceSquared = dx * dx + dz * dz;
+                if (distanceSquared > radiusSquared)
+                {
+                    continue;
+                }
+
+                float distance = Mathf.Sqrt(distanceSquared);
+                float edge = Mathf.Clamp01(Props.edgeEffect);
+                float distanceFactor = 1f - distance / radius * (1f - edge);
                 if (dealDamage && Props.damageAmount > 0f)
                 {
                     var result = pawn.TakeDamage(new DamageInfo(damageDef, Props.damageAmount * damageFactor * distanceFactor, Props.armorPenetration, -1f, caster));

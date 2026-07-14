@@ -20,8 +20,15 @@ namespace MiliraXian.Characters.Neiyu
     [HarmonyPatch(typeof(Verb_MeleeAttack), "TryCastShot")]
     public static class Patch_MXNL_MeleeSlashGhost_TryCastShot
     {
-        private static readonly Dictionary<int, int> LastFxTickByPawn = new Dictionary<int, int>();
-        private static readonly Dictionary<int, int> NextCycleIndexByPawn = new Dictionary<int, int>();
+        private sealed class SlashState
+        {
+            public int LastFxTick;
+            public bool HasFxTick;
+            public int NextCycleIndex;
+        }
+
+        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Verb_MeleeAttack, SlashState> StateByVerb =
+            new System.Runtime.CompilerServices.ConditionalWeakTable<Verb_MeleeAttack, SlashState>();
 
         [HarmonyPostfix]
         public static void Postfix(Verb_MeleeAttack __instance, bool __result)
@@ -62,12 +69,14 @@ namespace MiliraXian.Characters.Neiyu
 
             int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
             int minInterval = Mathf.Max(0, ext.minIntervalTicks);
-            if (minInterval > 0 && LastFxTickByPawn.TryGetValue(caster.thingIDNumber, out int lastTick) && now - lastTick < minInterval)
+            SlashState state = StateByVerb.GetValue(__instance, CreateState);
+            if (minInterval > 0 && state.HasFxTick && now - state.LastFxTick < minInterval)
             {
                 return;
             }
 
-            LastFxTickByPawn[caster.thingIDNumber] = now;
+            state.LastFxTick = now;
+            state.HasFxTick = true;
 
             LocalTargetInfo curTarget = __instance.CurrentTarget;
             IntVec3 targetCell = curTarget.IsValid ? curTarget.Cell : caster.Position;
@@ -82,14 +91,9 @@ namespace MiliraXian.Characters.Neiyu
 
             if (ext.cycleFleckDefNames != null && ext.cycleFleckDefNames.Count > 0)
             {
-                int nextIndex;
-                if (!NextCycleIndexByPawn.TryGetValue(caster.thingIDNumber, out nextIndex))
-                {
-                    nextIndex = 0;
-                }
-
+                int nextIndex = state.NextCycleIndex;
                 string fleckName = ext.cycleFleckDefNames[nextIndex % ext.cycleFleckDefNames.Count];
-                NextCycleIndexByPawn[caster.thingIDNumber] = (nextIndex + 1) % Mathf.Max(1, ext.cycleFleckDefNames.Count);
+                state.NextCycleIndex = (nextIndex + 1) % Mathf.Max(1, ext.cycleFleckDefNames.Count);
 
                 FleckDef cycleFleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(fleckName);
                 if (cycleFleckDef != null)
@@ -123,6 +127,11 @@ namespace MiliraXian.Characters.Neiyu
             {
                 SpawnDirectionalFleck(map, spawnPos, fallback, scale, rotation);
             }
+        }
+
+        private static SlashState CreateState(Verb_MeleeAttack verb)
+        {
+            return new SlashState();
         }
 
         private static float ComputeSlashRotation(Pawn caster, LocalTargetInfo target)

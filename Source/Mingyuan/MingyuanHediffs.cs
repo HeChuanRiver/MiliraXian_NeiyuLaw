@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -137,6 +138,27 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 lastExternalStackTick = tick;
             }
+        }
+
+        public bool TryTriggerBurstNow(Pawn burstInstigator)
+        {
+            if (Pawn == null
+                || Pawn.Dead
+                || Pawn.Destroyed
+                || parent == null
+                || MingyuanUtility.IsLifeBurnImmunePawn(Pawn))
+            {
+                return false;
+            }
+
+            SetInstigator(burstInstigator);
+            if (parent.Severity <= 0f)
+            {
+                parent.Severity = Mathf.Max(0.0001f, parent.def.initialSeverity);
+            }
+
+            TriggerBurstDamage();
+            return true;
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -321,6 +343,18 @@ namespace MiliraXian.Characters.Mingyuan
         public override void Notify_PawnDied(DamageInfo? dinfo, Hediff culprit = null)
         {
             base.Notify_PawnDied(dinfo, culprit);
+            try
+            {
+                TransferLifeBurnOnDeath();
+            }
+            finally
+            {
+                MingyuanLifeBurnDeathVisualUtility.ReplacePersistentCorpseMark(Pawn, parent);
+            }
+        }
+
+        private void TransferLifeBurnOnDeath()
+        {
             Map map = Pawn?.MapHeld;
             if (map == null || parent.Severity <= 0f)
             {
@@ -527,6 +561,92 @@ namespace MiliraXian.Characters.Mingyuan
         private static string FormatPercent(float value)
         {
             return value.ToString("F1") + "%";
+        }
+    }
+
+    internal static class MingyuanLifeBurnDeathVisualUtility
+    {
+        private const int SolidTicks = 600;
+        private const int FadeTicks = 120;
+        private const int TotalTicks = SolidTicks + FadeTicks;
+
+        public static void ReplacePersistentCorpseMark(Pawn pawn, Hediff lifeBurn)
+        {
+            if (pawn?.health?.hediffSet == null || lifeBurn == null)
+            {
+                return;
+            }
+
+            Corpse corpse = pawn.Corpse;
+            if (corpse != null && corpse.Spawned && !corpse.Destroyed)
+            {
+                SpawnRemainingDeathMark(corpse);
+            }
+
+            if (pawn.health.hediffSet.hediffs.Contains(lifeBurn))
+            {
+                pawn.health.RemoveHediff(lifeBurn);
+            }
+        }
+
+        public static void CleanupExistingCorpse(Corpse corpse)
+        {
+            Pawn pawn = corpse?.InnerPawn;
+            HediffDef lifeBurnDef = MingyuanUtility.LifeBurnDef;
+            if (pawn?.health?.hediffSet == null || lifeBurnDef == null)
+            {
+                return;
+            }
+
+            Hediff lifeBurn = pawn?.health?.hediffSet?.GetFirstHediffOfDef(lifeBurnDef);
+            if (lifeBurn == null)
+            {
+                return;
+            }
+
+            ReplacePersistentCorpseMark(pawn, lifeBurn);
+        }
+
+        private static void SpawnRemainingDeathMark(Corpse corpse)
+        {
+            int ageTicks = Mathf.Max(0, corpse.Age);
+            if (ageTicks >= TotalTicks)
+            {
+                return;
+            }
+
+            ThingDef moteDef = MX_MingyuanDefOf.MX_Mingyuan_Mote_LifeBurnDeathFade
+                               ?? DefDatabase<ThingDef>.GetNamedSilentFail("MX_Mingyuan_Mote_LifeBurnDeathFade");
+            if (moteDef == null || corpse.MapHeld == null)
+            {
+                return;
+            }
+
+            Mote mote = MoteMaker.MakeAttachedOverlay(corpse, moteDef, Vector3.zero, 1f);
+            if (mote != null && ageTicks > 0)
+            {
+                mote.spawnTick = (Find.TickManager?.TicksGame ?? 0) - ageTicks;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Corpse), nameof(Corpse.SpawnSetup))]
+    internal static class Patch_Corpse_SpawnSetup_MingyuanLifeBurnCleanup
+    {
+        [HarmonyPostfix]
+        private static void Postfix(Corpse __instance, bool respawningAfterLoad)
+        {
+            if (__instance == null || __instance.Destroyed)
+            {
+                return;
+            }
+
+            if (!respawningAfterLoad && __instance.Age <= 1)
+            {
+                return;
+            }
+
+            MingyuanLifeBurnDeathVisualUtility.CleanupExistingCorpse(__instance);
         }
     }
 

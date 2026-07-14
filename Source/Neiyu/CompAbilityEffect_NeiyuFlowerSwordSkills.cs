@@ -1236,12 +1236,10 @@ namespace MiliraXian.Characters.Neiyu
     [HarmonyPatch(typeof(Pawn_DrawTracker), "DrawPos", MethodType.Getter)]
     public static class Patch_MXNeiyuSkyfall_DrawPos
     {
-        private static readonly FieldInfo TrackerPawnField = AccessTools.Field(typeof(Pawn_DrawTracker), "pawn");
-
         [HarmonyPostfix]
-        public static void Postfix(Pawn_DrawTracker __instance, ref Vector3 __result)
+        public static void Postfix(Pawn ___pawn, ref Vector3 __result)
         {
-            Pawn pawn = TrackerPawnField != null ? TrackerPawnField.GetValue(__instance) as Pawn : null;
+            Pawn pawn = ___pawn;
             if (pawn == null || pawn.Destroyed || !pawn.Spawned)
             {
                 return;
@@ -1258,7 +1256,6 @@ namespace MiliraXian.Characters.Neiyu
     public static class Patch_MXNeiyuSword_HungerFloor
     {
         private const float HungerFloorPercent = 0.20f;
-        private static readonly FieldInfo NeedPawnField = AccessTools.Field(typeof(Need), "pawn");
         private static ThingDef cachedSwordDef;
         private static bool swordDefResolved;
 
@@ -1277,14 +1274,14 @@ namespace MiliraXian.Characters.Neiyu
         }
 
         [HarmonyPostfix]
-        public static void Postfix(Need_Food __instance)
+        public static void Postfix(Need_Food __instance, Pawn ___pawn)
         {
             if (__instance == null)
             {
                 return;
             }
 
-            Pawn pawn = NeedPawnField != null ? NeedPawnField.GetValue(__instance) as Pawn : null;
+            Pawn pawn = ___pawn;
             if (pawn == null || pawn.equipment == null || pawn.equipment.Primary == null)
             {
                 return;

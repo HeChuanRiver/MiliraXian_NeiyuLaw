@@ -167,7 +167,7 @@
   <MX_ZL_DeathGrowth>死亡成長：</MX_ZL_DeathGrowth>
   <MX_ZL_NoGrowthStacks>尚未積累成長層數。</MX_ZL_NoGrowthStacks>
   <MX_ZL_ShieldLayersLabel>{0}層</MX_ZL_ShieldLayersLabel>
-  <MX_ZL_ShieldLayersTip>目前層數：{0}。每通過告死吸納一個單位，獲得5層諱亡護盾。護盾會免疫一次傷害，並在命中時消耗1層。持續傷害每次生效也會持續消耗層數。</MX_ZL_ShieldLayersTip>
+  <MX_ZL_ShieldLayersTip>目前層數：{0}。每通過告死吸納一個單位，獲得5層諱亡護盾。傷害會正常生效，隨後消耗1層；持續傷害每次生效也會消耗層數。</MX_ZL_ShieldLayersTip>
   <MX_ZL_DeathFieldExecuted>告死流場已處決 {0} 個目標：{1}。</MX_ZL_DeathFieldExecuted>
   <MX_ZL_HideoutSiteCustomLabel>不存在者藏身處</MX_ZL_HideoutSiteCustomLabel>
   <MX_ZL_HideoutStartedLetterLabel>不存在者藏身處已顯現</MX_ZL_HideoutStartedLetterLabel>

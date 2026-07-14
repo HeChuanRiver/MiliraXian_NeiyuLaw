@@ -167,7 +167,7 @@
   <MX_ZL_DeathGrowth>Death growth:</MX_ZL_DeathGrowth>
   <MX_ZL_NoGrowthStacks>No growth stacks accumulated yet.</MX_ZL_NoGrowthStacks>
   <MX_ZL_ShieldLayersLabel>{0} layers</MX_ZL_ShieldLayersLabel>
-  <MX_ZL_ShieldLayersTip>Current layers: {0}. Each unit absorbed through Death Sentence grants 5 layers of Death-Taboo Shield. The shield negates one instance of damage and consumes 1 layer when hit. Damage over time also consumes layers each time it applies.</MX_ZL_ShieldLayersTip>
+  <MX_ZL_ShieldLayersTip>Current layers: {0}. Each unit absorbed through Death Sentence grants 5 layers of Death-Taboo Shield. Damage is applied normally, then 1 layer is consumed. Damage over time also consumes layers each time it applies.</MX_ZL_ShieldLayersTip>
   <MX_ZL_DeathFieldExecuted>Death Field executed {0} targets: {1}.</MX_ZL_DeathFieldExecuted>
   <MX_ZL_HideoutSiteCustomLabel>Hidden Place of the Nonexistent</MX_ZL_HideoutSiteCustomLabel>
   <MX_ZL_HideoutStartedLetterLabel>Hidden place revealed</MX_ZL_HideoutStartedLetterLabel>
