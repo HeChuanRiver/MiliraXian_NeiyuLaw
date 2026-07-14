@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using HarmonyLib;
 using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
@@ -5,6 +9,124 @@ using Verse;
 
 namespace MiliraXian.Characters.Mingyuan
 {
+    internal static class MingyuanDeveloperDamageContext
+    {
+        [ThreadStatic]
+        private static int activeDepth;
+
+        public static bool Active => Prefs.DevMode && activeDepth > 0;
+
+        public static void Enter()
+        {
+            activeDepth++;
+        }
+
+        public static void Exit()
+        {
+            if (activeDepth > 0)
+            {
+                activeDepth--;
+            }
+        }
+    }
+
+    [HarmonyPatch]
+    internal static class Patch_MingyuanDeveloperDamageCommands
+    {
+        private static readonly string[] GeneralDamageMethods =
+        {
+            "Take10Damage",
+            "Take300Damage",
+            "Take5000Damage"
+        };
+
+        private static readonly string[] PawnDamageMethods =
+        {
+            "DamageUntilDown",
+            "DamageLegs",
+            "DamageUntilIncapableOfManipulation",
+            "DamageToDeath",
+            "CarriedDamageToDeath",
+            "Do10DamageUntilDead",
+            "DamageHeldPawnToDeath"
+        };
+
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            HashSet<MethodBase> methods = new HashSet<MethodBase>();
+            AddNamedMethods(methods, "Verse.DebugToolsGeneral", GeneralDamageMethods);
+            AddNamedMethods(methods, "Verse.DebugToolsPawns", PawnDamageMethods);
+            AddHealthDamageCallbacks(methods);
+
+            foreach (MethodBase method in methods)
+            {
+                yield return method;
+            }
+        }
+
+        private static void AddNamedMethods(HashSet<MethodBase> methods, string typeName, string[] methodNames)
+        {
+            Type type = AccessTools.TypeByName(typeName);
+            if (type == null)
+            {
+                return;
+            }
+
+            MethodInfo[] declaredMethods = type.GetMethods(
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            for (int index = 0; index < declaredMethods.Length; index++)
+            {
+                MethodInfo method = declaredMethods[index];
+                for (int nameIndex = 0; nameIndex < methodNames.Length; nameIndex++)
+                {
+                    if (method.Name == methodNames[nameIndex])
+                    {
+                        methods.Add(method);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private static void AddHealthDamageCallbacks(HashSet<MethodBase> methods)
+        {
+            Type healthTools = AccessTools.TypeByName("Verse.DebugTools_Health");
+            if (healthTools == null)
+            {
+                return;
+            }
+
+            Type[] nestedTypes = healthTools.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
+            for (int typeIndex = 0; typeIndex < nestedTypes.Length; typeIndex++)
+            {
+                MethodInfo[] callbacks = nestedTypes[typeIndex].GetMethods(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                for (int methodIndex = 0; methodIndex < callbacks.Length; methodIndex++)
+                {
+                    MethodInfo callback = callbacks[methodIndex];
+                    if (callback.Name.IndexOf("Options_ApplyDamage", StringComparison.Ordinal) >= 0
+                        || callback.Name.IndexOf("Options_Damage_BodyParts", StringComparison.Ordinal) >= 0)
+                    {
+                        methods.Add(callback);
+                    }
+                }
+            }
+        }
+
+        [HarmonyPrefix]
+        private static void Prefix()
+        {
+            MingyuanDeveloperDamageContext.Enter();
+        }
+
+        [HarmonyFinalizer]
+        private static Exception Finalizer(Exception __exception)
+        {
+            MingyuanDeveloperDamageContext.Exit();
+            return __exception;
+        }
+    }
+
     internal static class MingyuanStatUtility
     {
         public static float LifeBurnPenaltyFactor(float lifeBurn)
@@ -33,6 +155,11 @@ namespace MiliraXian.Characters.Mingyuan
             absorbed = false;
             Pawn pawn = parent as Pawn;
             if (pawn == null || pawn.Dead || pawn.health?.hediffSet == null)
+            {
+                return;
+            }
+
+            if (MingyuanDeveloperDamageContext.Active)
             {
                 return;
             }
