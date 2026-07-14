@@ -41,6 +41,11 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private int fullEnergyAccumulatedTicks = 0;
         private int lastRegenUpdateTick = -1;
+        private int resetUntilTick = -1;
+        private int regenUntilTick = -1;
+        private float cachedMaxEnergy = -1f;
+        private float cachedRegenPerSecond;
+        private bool runtimeStateInitialized;
         private DivineProtectionShieldRenderer renderer;
 
         public CompProperties_DivineProtectionShield Props => (CompProperties_DivineProtectionShield)props;
@@ -51,11 +56,24 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
-        public float MaxEnergy => Mathf.Max(
-            1f,
-            Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldMaxEnergyFactor, 1f));
+        public float MaxEnergy
+        {
+            get
+            {
+                FlushAccumulatedRegen(CurrentTick, force: false);
+                return cachedMaxEnergy > 0f ? cachedMaxEnergy : ResolveMaxEnergy();
+            }
+        }
 
-        public float Energy => Mathf.Clamp(energy, 0f, MaxEnergy);
+        public float Energy
+        {
+            get
+            {
+                FlushAccumulatedRegen(CurrentTick, force: false);
+                float maxEnergy = cachedMaxEnergy > 0f ? cachedMaxEnergy : ResolveMaxEnergy();
+                return Mathf.Clamp(energy, 0f, maxEnergy);
+            }
+        }
 
         public float ShieldDamageCap
         {
@@ -93,25 +111,31 @@ namespace MiliraXian.Characters.QingHe.Things
             }
         }
 
-        public bool InBreak => ticksToReset > 0;
+        public bool InBreak => RuntimeInitialized() && CurrentTick < resetUntilTick;
 
-        public int BreakTicksLeft => Mathf.Max(0, ticksToReset);
+        public int BreakTicksLeft => RuntimeInitialized() ? Mathf.Max(0, resetUntilTick - CurrentTick) : Mathf.Max(0, ticksToReset);
 
-        public bool InRegenDelay => ticksToRegen > 0;
+        public bool InRegenDelay => RuntimeInitialized() && CurrentTick < regenUntilTick;
 
-        public int RegenDelayTicksLeft => Mathf.Max(0, ticksToRegen);
+        public int RegenDelayTicksLeft => RuntimeInitialized() ? Mathf.Max(0, regenUntilTick - CurrentTick) : Mathf.Max(0, ticksToRegen);
 
         public float CurrentRegenPerSecond
         {
             get
             {
-                return Mathf.Max(
-                    0f,
-                    Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldRegenPerSecondFactor, 1f));
+                FlushAccumulatedRegen(CurrentTick, force: false);
+                return Mathf.Max(0f, cachedRegenPerSecond);
             }
         }
 
-        public int FullEnergyAccumulatedTicks => fullEnergyAccumulatedTicks;
+        public int FullEnergyAccumulatedTicks
+        {
+            get
+            {
+                FlushAccumulatedRegen(CurrentTick, force: false);
+                return fullEnergyAccumulatedTicks;
+            }
+        }
 
         /// <summary>
         /// Flash intensity for the shield bar, decaying from 1 to 0 over ~40 ticks after absorbing damage.
@@ -121,8 +145,8 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostPostMake()
         {
             base.PostPostMake();
-            energy = MaxEnergy;
-            lastRegenUpdateTick = CurrentTick;
+            InitializeRuntimeState(useSerializedRemainingTicks: false);
+            energy = cachedMaxEnergy;
         }
 
         public override void PostExposeData()
@@ -130,6 +154,8 @@ namespace MiliraXian.Characters.QingHe.Things
             if (Scribe.mode == LoadSaveMode.Saving)
             {
                 FlushAccumulatedRegen(CurrentTick, force: true);
+                ticksToReset = BreakTicksLeft;
+                ticksToRegen = RegenDelayTicksLeft;
             }
 
             base.PostExposeData();
@@ -139,7 +165,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                lastRegenUpdateTick = CurrentTick;
+                InitializeRuntimeState(useSerializedRemainingTicks: true);
             }
         }
 
@@ -154,18 +180,17 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             int currentTick = CurrentTick;
+            RuntimeInitialized();
 
-            if (ticksToReset > 0)
+            if (currentTick < resetUntilTick)
             {
-                ticksToReset--;
                 fullEnergyAccumulatedTicks = 0;
                 lastRegenUpdateTick = currentTick;
                 return;
             }
 
-            if (ticksToRegen > 0)
+            if (currentTick < regenUntilTick)
             {
-                ticksToRegen--;
                 fullEnergyAccumulatedTicks = 0;
                 lastRegenUpdateTick = currentTick;
                 return;
@@ -176,7 +201,12 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void FlushAccumulatedRegen(int currentTick, bool force)
         {
-            if (PawnOwner == null || InBreak || InRegenDelay)
+            if (!RuntimeInitialized() || PawnOwner == null)
+            {
+                return;
+            }
+
+            if (currentTick < resetUntilTick || currentTick < regenUntilTick)
             {
                 lastRegenUpdateTick = currentTick;
                 return;
@@ -196,9 +226,10 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            float maxEnergy = MaxEnergy;
+            RefreshCachedStats();
+            float maxEnergy = cachedMaxEnergy;
             energy = Mathf.Min(energy, maxEnergy);
-            float gain = CurrentRegenPerSecond * elapsedTicks / 60f;
+            float gain = cachedRegenPerSecond * elapsedTicks / 60f;
             if (gain > 0f)
             {
                 energy = Mathf.Min(maxEnergy, energy + gain);
@@ -250,7 +281,9 @@ namespace MiliraXian.Characters.QingHe.Things
                 energy -= shieldDamage;
             }
 
+            int currentTick = CurrentTick;
             ticksToRegen = ResolveRegenDelayTicks();
+            regenUntilTick = currentTick + ticksToRegen;
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyAbsorbed(owner, CurrentTick);
             dinfo.SetAmount(0f);
@@ -286,12 +319,12 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public void RestoreEnergy(float amount)
         {
+            FlushAccumulatedRegen(CurrentTick, force: true);
             if (amount <= 0f || InBreak)
             {
                 return;
             }
 
-            FlushAccumulatedRegen(CurrentTick, force: true);
             energy = Mathf.Min(MaxEnergy, energy + amount);
         }
 
@@ -305,7 +338,9 @@ namespace MiliraXian.Characters.QingHe.Things
             float energyRatio = Energy / MaxEnergy;
             energy = 0f;
             ticksToRegen = 0;
+            regenUntilTick = -1;
             ticksToReset = ResolveBreakDelayTicks();
+            resetUntilTick = CurrentTick + ticksToReset;
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
         }
@@ -334,6 +369,41 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             return owner.GetStatValue(statDef, true, 1);
+        }
+
+        private bool RuntimeInitialized()
+        {
+            if (!runtimeStateInitialized)
+            {
+                InitializeRuntimeState(useSerializedRemainingTicks: true);
+            }
+
+            return runtimeStateInitialized;
+        }
+
+        private void InitializeRuntimeState(bool useSerializedRemainingTicks)
+        {
+            int currentTick = CurrentTick;
+            resetUntilTick = useSerializedRemainingTicks && ticksToReset > 0 ? currentTick + ticksToReset : -1;
+            regenUntilTick = useSerializedRemainingTicks && ticksToRegen > 0 ? currentTick + ticksToRegen : -1;
+            lastRegenUpdateTick = currentTick;
+            RefreshCachedStats();
+            runtimeStateInitialized = true;
+        }
+
+        private void RefreshCachedStats()
+        {
+            cachedMaxEnergy = ResolveMaxEnergy();
+            cachedRegenPerSecond = Mathf.Max(
+                0f,
+                Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldRegenPerSecondFactor, 1f));
+        }
+
+        private float ResolveMaxEnergy()
+        {
+            return Mathf.Max(
+                1f,
+                Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldMaxEnergyFactor, 1f));
         }
 
         public string BuildShieldTooltip()

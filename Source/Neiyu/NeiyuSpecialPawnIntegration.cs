@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AriandelLibrary;
 using HarmonyLib;
-using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
 using ALVoidPawnManager = AriandelLibrary.AriandelLibrary_GameComponent_VoidPawnManager;
 using RimWorld;
@@ -14,6 +13,7 @@ namespace MiliraXian.Characters.Neiyu
         public const int ValidationIntervalTicks = 600;
 
         private const string AriandelPackageId = "Ariandel.AriandelLibrary";
+        private static readonly HashSet<int> WarnedDuplicatePawnIds = new HashSet<int>();
 
         public static void TryRegister(Pawn pawn)
         {
@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            if (realID != pawn.ThingID)
+            if (realID != pawn.ThingID && WarnedDuplicatePawnIds.Add(pawn.thingIDNumber))
             {
                 Log.Warning("[MiliraXian.Characters.Neiyu] Special pawn staticID already mapped to another pawn. staticID="
                             + staticID + ", existing=" + realID + ", current=" + pawn.ThingID);
@@ -98,7 +98,12 @@ namespace MiliraXian.Characters.Neiyu
 
         private static bool IsSupportedSpecialPawn(Pawn pawn)
         {
-            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
+            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MXCharacterIdentityUtility.IsQinghe(pawn);
+        }
+
+        internal static void ClearRuntimeState()
+        {
+            WarnedDuplicatePawnIds.Clear();
         }
 
         private static bool ShouldRunIntegration()

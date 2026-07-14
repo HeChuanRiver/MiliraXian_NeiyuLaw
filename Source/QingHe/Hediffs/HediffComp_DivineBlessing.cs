@@ -451,12 +451,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        private Hediff GetInvisibilityHediff()
-        {
-            HediffDef invisDef = GetInvisibilityDef();
-            return invisDef == null ? null : Pawn.health.hediffSet.GetFirstHediffOfDef(invisDef);
-        }
-
         private HediffDef GetInvisibilityDef()
         {
             return Props.invisibilityHediffDef ?? MX_QHDefOf.PsychicInvisibility;

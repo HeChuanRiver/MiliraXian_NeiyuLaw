@@ -38,6 +38,12 @@ namespace MiliraXian.Characters.Vfx
                 return;
             }
 
+            if (Find.CameraDriver != null
+                && !Find.CameraDriver.CurrentViewRect.ExpandedBy(2).Contains(drawPos.ToIntVec3()))
+            {
+                return;
+            }
+
             RenderTexture texture = CapturePawnTexture(pawn, facing);
             if (texture == null)
             {

@@ -592,6 +592,7 @@ namespace MiliraXian.Characters.Zhaoli
     }
 
     [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAiming))]
+    [StaticConstructorOnStartup]
     internal static class Patch_ZhaoliDuanzhan_DrawEquipmentAiming
     {
         private const string SlashTexturePath = "MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade_OnHand";

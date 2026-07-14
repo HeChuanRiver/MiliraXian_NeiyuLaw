@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public const string PawnKindDefName = "MiliraXian_Mingyuan";
         public const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
-        public const string QinghePawnKindDefName = "MiliraXian_Qinghe";
+        public const string QinghePawnKindDefName = MXCharacterIdentityUtility.QinghePawnKindDefName;
         public const string ZhaoliPawnKindDefName = "MiliraXian_Zhaoli";
         public const int TicksPerHour = 2500;
         public const float DefaultSelfBurnEffectiveCap = 300f;
@@ -44,7 +44,7 @@ namespace MiliraXian.Characters.Mingyuan
             string defName = pawn.kindDef?.defName;
             return defName == PawnKindDefName
                    || defName == NeiyuPawnKindDefName
-                   || defName == QinghePawnKindDefName
+                   || MXCharacterIdentityUtility.IsQinghe(pawn)
                    || defName == ZhaoliPawnKindDefName
                    || HasHediff(pawn, BurningBodyDef);
         }

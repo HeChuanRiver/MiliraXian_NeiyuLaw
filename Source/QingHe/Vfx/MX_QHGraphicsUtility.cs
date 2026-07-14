@@ -6,6 +6,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
+    [StaticConstructorOnStartup]
     public static class MX_QHGraphicsUtility
     {
         private const string FieldEdgeTexPath = "Misc/FieldEdge";
@@ -14,6 +15,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static readonly List<Matrix4x4> instancingMatrices = new List<Matrix4x4>();
         private static readonly bool[] rotNeeded = new bool[4];
         private static readonly Dictionary<int, Material> fieldEdgeMaterialsByColor = new Dictionary<int, Material>();
+        private static readonly Dictionary<int, List<RelativeFieldEdge>> relativeFieldEdgesByCellCount = new Dictionary<int, List<RelativeFieldEdge>>();
+        private static readonly IntVec3[] cardinalOffsets =
+        {
+            IntVec3.North,
+            IntVec3.East,
+            IntVec3.South,
+            IntVec3.West
+        };
         private static Texture fieldEdgeTexture;
         private static BoolGrid fieldGrid;
         private static bool maxRadiusMessaged;
@@ -157,6 +166,20 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return;
             }
 
+            if (predicate == null && ignoreBorderCells == null)
+            {
+                if (map == null)
+                {
+                    map = Find.CurrentMap;
+                }
+
+                if (map != null)
+                {
+                    DrawCachedRadiusEdges(center, radius, material, map, altOffset);
+                    return;
+                }
+            }
+
             ringDrawCells.Clear();
             int count = GenRadial.NumCellsInRadius(radius);
             for (int i = 0; i < count; i++)
@@ -253,6 +276,80 @@ namespace MiliraXian.Characters.QingHe.Vfx
             if (instancingMatrices.Count > 0)
             {
                 Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices);
+            }
+        }
+
+        private static void DrawCachedRadiusEdges(IntVec3 center, float radius, Material material, Map map, float? altOffset)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            int cellCount = GenRadial.NumCellsInRadius(radius);
+            if (!relativeFieldEdgesByCellCount.TryGetValue(cellCount, out List<RelativeFieldEdge> edges))
+            {
+                edges = BuildRelativeFieldEdges(cellCount);
+                relativeFieldEdgesByCellCount[cellCount] = edges;
+            }
+
+            float y = altOffset ?? (Rand.ValueSeeded(material.color.ToOpaque().GetHashCode()) * 0.03658537f / 10f);
+            instancingMatrices.Clear();
+            for (int i = 0; i < edges.Count; i++)
+            {
+                RelativeFieldEdge edge = edges[i];
+                IntVec3 cell = center + edge.cellOffset;
+                IntVec3 neighbor = cell + cardinalOffsets[edge.rotation];
+                if (!cell.InBounds(map) || !neighbor.InBounds(map))
+                {
+                    continue;
+                }
+
+                instancingMatrices.Add(Matrix4x4.TRS(
+                    cell.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays) + new Vector3(0f, y, 0f),
+                    new Rot4(edge.rotation).AsQuat,
+                    Vector3.one));
+            }
+
+            if (instancingMatrices.Count > 0)
+            {
+                Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices);
+            }
+        }
+
+        private static List<RelativeFieldEdge> BuildRelativeFieldEdges(int cellCount)
+        {
+            HashSet<IntVec3> cells = new HashSet<IntVec3>();
+            for (int i = 0; i < cellCount; i++)
+            {
+                cells.Add(GenRadial.RadialPattern[i]);
+            }
+
+            List<RelativeFieldEdge> edges = new List<RelativeFieldEdge>();
+            for (int i = 0; i < cellCount; i++)
+            {
+                IntVec3 cell = GenRadial.RadialPattern[i];
+                for (int rotation = 0; rotation < cardinalOffsets.Length; rotation++)
+                {
+                    if (!cells.Contains(cell + cardinalOffsets[rotation]))
+                    {
+                        edges.Add(new RelativeFieldEdge(cell, rotation));
+                    }
+                }
+            }
+
+            return edges;
+        }
+
+        private struct RelativeFieldEdge
+        {
+            public readonly IntVec3 cellOffset;
+            public readonly int rotation;
+
+            public RelativeFieldEdge(IntVec3 cellOffset, int rotation)
+            {
+                this.cellOffset = cellOffset;
+                this.rotation = rotation;
             }
         }
     }

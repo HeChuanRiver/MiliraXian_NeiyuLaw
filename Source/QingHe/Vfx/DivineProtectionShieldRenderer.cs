@@ -56,9 +56,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
         };
     }
 
+    [StaticConstructorOnStartup]
     public class DivineProtectionShieldRenderer
     {
+        private static readonly int EffectTimeProperty = Shader.PropertyToID("_EffectTime");
+        private static readonly Dictionary<string, Material> GlowMaterialsByPath = new Dictionary<string, Material>();
+
         private readonly CompDivineProtectionShield shield;
+        private Material shieldMaterial;
         private bool visibleLastFrame;
         private float startRealTime;
         private int lastAbsorbTick = -1;
@@ -160,20 +165,13 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return;
             }
 
-            Color tintColor = new Color(0.82f, 0.92f, 1f, Mathf.Clamp01(drawAlpha));
-            ShaderTypeDef shaderType = Visual.shaderType ?? ShaderTypeDefOf.Transparent;
-            MaterialRequest request = new MaterialRequest(ContentFinder<Texture2D>.Get(Visual.texPath), shaderType.Shader, tintColor)
-            {
-                shaderParameters = Visual.shaderParameters
-            };
-            Material shieldMat = MaterialPool.MatFrom(request);
+            Material shieldMat = ResolveShieldMaterial();
             if (shieldMat == null)
             {
                 return;
             }
 
             float effectTime = Mathf.Max(0f, Time.realtimeSinceStartup - startRealTime);
-            shieldMat.SetFloat("_EffectTime", effectTime);
 
             Vector3 pos = owner.Drawer.DrawPos;
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
@@ -196,6 +194,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             MaterialPropertyBlock propertyBlock = MX_RenderStatics.SharedPropertyBlock;
             propertyBlock.Clear();
+            propertyBlock.SetColor(ShaderPropertyIDs.Color, new Color(0.82f, 0.92f, 1f, Mathf.Clamp01(drawAlpha)));
             if (!Visual.shaderParameters.NullOrEmpty())
             {
                 for (int i = 0; i < Visual.shaderParameters.Count; i++)
@@ -203,7 +202,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     Visual.shaderParameters[i].Apply(propertyBlock);
                 }
             }
-            propertyBlock.SetFloat("_EffectTime", effectTime);
+            propertyBlock.SetFloat(EffectTimeProperty, effectTime);
 
             Matrix4x4 matrix = Matrix4x4.TRS(
                 pos,
@@ -227,6 +226,28 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return Mathf.Clamp01(1f - elapsed / decayTicks);
         }
 
+        private Material ResolveShieldMaterial()
+        {
+            if (shieldMaterial != null)
+            {
+                return shieldMaterial;
+            }
+
+            Texture2D texture = ContentFinder<Texture2D>.Get(Visual.texPath, reportFailure: false);
+            if (texture == null)
+            {
+                return null;
+            }
+
+            ShaderTypeDef shaderType = Visual.shaderType ?? ShaderTypeDefOf.Transparent;
+            MaterialRequest request = new MaterialRequest(texture, shaderType.Shader, Color.white)
+            {
+                shaderParameters = Visual.shaderParameters
+            };
+            shieldMaterial = MaterialPool.MatFrom(request);
+            return shieldMaterial;
+        }
+
         private static void DrawGlow(DivineProtectionShieldGlowProperties glow, Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime, float factor, Quaternion rotation)
         {
             if (glow == null || factor <= 0.001f || glow.texPath.NullOrEmpty() || shieldAlpha <= 0.001f || glow.alpha <= 0.001f)
@@ -244,7 +265,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
             float breath = 0.5f - 0.5f * Mathf.Cos(Mathf.Max(0f, effectTime) * Mathf.Max(0f, glow.breathSpeed) * 6.2831855f);
             float breathFactor = Mathf.Lerp(1f - Mathf.Clamp01(glow.breathAmplitude), 1f + Mathf.Clamp01(glow.breathAmplitude), breath);
             glowColor.a = Mathf.Clamp01(shieldAlpha * glow.alpha * factor * breathFactor);
-            Material glowMat = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, glowColor);
+            if (!GlowMaterialsByPath.TryGetValue(glow.texPath, out Material glowMat))
+            {
+                glowMat = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, Color.white);
+                GlowMaterialsByPath[glow.texPath] = glowMat;
+            }
             if (glowMat == null)
             {
                 return;
@@ -256,7 +281,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 rotation,
                 new Vector3(drawSize.x, 1f, drawSize.y));
 
-            Graphics.DrawMesh(MeshPool.plane10, matrix, glowMat, 0);
+            MaterialPropertyBlock propertyBlock = MX_RenderStatics.SharedPropertyBlock;
+            propertyBlock.Clear();
+            propertyBlock.SetColor(ShaderPropertyIDs.Color, glowColor);
+            propertyBlock.SetFloat(EffectTimeProperty, effectTime);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, glowMat, 0, null, 0, propertyBlock);
+            propertyBlock.Clear();
         }
 
         private static Quaternion PawnBodyRenderRotation(Pawn pawn)

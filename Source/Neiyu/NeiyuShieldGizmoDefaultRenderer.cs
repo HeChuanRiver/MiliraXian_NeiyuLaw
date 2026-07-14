@@ -5,6 +5,7 @@ using Verse;
 
 namespace MiliraXian.Characters.Neiyu
 {
+    [StaticConstructorOnStartup]
     public class NeiyuShieldGizmoDefaultRenderer : INeiyuShieldGizmoRenderer
     {
         private static readonly Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
