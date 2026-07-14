@@ -36,9 +36,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private const int RegenFlushIntervalTicks = 10;
 
         private float energy = 100f;
-        private int ticksToReset = -1;
-        private int ticksToRegen = 0;
-
         private int fullEnergyAccumulatedTicks = 0;
         private int lastRegenUpdateTick = -1;
         private int resetUntilTick = -1;
@@ -113,11 +110,11 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public bool InBreak => RuntimeInitialized() && CurrentTick < resetUntilTick;
 
-        public int BreakTicksLeft => RuntimeInitialized() ? Mathf.Max(0, resetUntilTick - CurrentTick) : Mathf.Max(0, ticksToReset);
+        public int BreakTicksLeft => RuntimeInitialized() ? Mathf.Max(0, resetUntilTick - CurrentTick) : 0;
 
         public bool InRegenDelay => RuntimeInitialized() && CurrentTick < regenUntilTick;
 
-        public int RegenDelayTicksLeft => RuntimeInitialized() ? Mathf.Max(0, regenUntilTick - CurrentTick) : Mathf.Max(0, ticksToRegen);
+        public int RegenDelayTicksLeft => RuntimeInitialized() ? Mathf.Max(0, regenUntilTick - CurrentTick) : 0;
 
         public float CurrentRegenPerSecond
         {
@@ -145,7 +142,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostPostMake()
         {
             base.PostPostMake();
-            InitializeRuntimeState(useSerializedRemainingTicks: false);
+            InitializeRuntimeState();
             energy = cachedMaxEnergy;
         }
 
@@ -154,18 +151,16 @@ namespace MiliraXian.Characters.QingHe.Things
             if (Scribe.mode == LoadSaveMode.Saving)
             {
                 FlushAccumulatedRegen(CurrentTick, force: true);
-                ticksToReset = BreakTicksLeft;
-                ticksToRegen = RegenDelayTicksLeft;
             }
 
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
-            Scribe_Values.Look(ref ticksToReset, "mx_qh_lotus_ticksToReset", -1);
-            Scribe_Values.Look(ref ticksToRegen, "mx_qh_lotus_ticksToRegen", 0);
+            Scribe_Values.Look(ref resetUntilTick, "mx_qh_lotus_resetUntilTick", -1);
+            Scribe_Values.Look(ref regenUntilTick, "mx_qh_lotus_regenUntilTick", -1);
             Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                InitializeRuntimeState(useSerializedRemainingTicks: true);
+                InitializeRuntimeState();
             }
         }
 
@@ -282,8 +277,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             int currentTick = CurrentTick;
-            ticksToRegen = ResolveRegenDelayTicks();
-            regenUntilTick = currentTick + ticksToRegen;
+            regenUntilTick = currentTick + ResolveRegenDelayTicks();
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyAbsorbed(owner, CurrentTick);
             dinfo.SetAmount(0f);
@@ -337,10 +331,8 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             float energyRatio = Energy / MaxEnergy;
             energy = 0f;
-            ticksToRegen = 0;
             regenUntilTick = -1;
-            ticksToReset = ResolveBreakDelayTicks();
-            resetUntilTick = CurrentTick + ticksToReset;
+            resetUntilTick = CurrentTick + ResolveBreakDelayTicks();
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
         }
@@ -375,18 +367,15 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             if (!runtimeStateInitialized)
             {
-                InitializeRuntimeState(useSerializedRemainingTicks: true);
+                InitializeRuntimeState();
             }
 
             return runtimeStateInitialized;
         }
 
-        private void InitializeRuntimeState(bool useSerializedRemainingTicks)
+        private void InitializeRuntimeState()
         {
-            int currentTick = CurrentTick;
-            resetUntilTick = useSerializedRemainingTicks && ticksToReset > 0 ? currentTick + ticksToReset : -1;
-            regenUntilTick = useSerializedRemainingTicks && ticksToRegen > 0 ? currentTick + ticksToRegen : -1;
-            lastRegenUpdateTick = currentTick;
+            lastRegenUpdateTick = CurrentTick;
             RefreshCachedStats();
             runtimeStateInitialized = true;
         }

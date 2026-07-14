@@ -37,56 +37,44 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// </summary>
     public class HediffComp_DivineBlessing : HediffComp
     {
+        private const int ChargeConfigurationRefreshTicks = 60;
+
         private int cooldownTicksLeft;
-        private int cooldownWarningCooldownTicksLeft;
+        private int cooldownWarningEndTick = -1;
         private int currentCharges = -1;
         private HediffComp_SkillTreeState cachedFlowerResonance;
+        private int cachedMaxCharges = 1;
         private int cachedRechargeTicksTotal;
-        private int rechargeTicksCachedAtTick = int.MinValue;
+        private int nextChargeConfigurationRefreshTick;
 
         public HediffCompProperties_DivineBlessing Props => (HediffCompProperties_DivineBlessing)props;
 
-        public int MaxCharges => ResolveMaxCharges();
+        private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
-        public int CurrentCharges => Mathf.Clamp(currentCharges, 0, MaxCharges);
+        public int MaxCharges => cachedMaxCharges;
+
+        public int CurrentCharges => Mathf.Clamp(currentCharges, 0, cachedMaxCharges);
 
         public bool IsRecharging => CurrentCharges < MaxCharges && RechargeTicksTotal > 0;
 
         public int RechargeTicksLeft => IsRecharging ? Mathf.Clamp(cooldownTicksLeft, 0, RechargeTicksTotal) : 0;
 
-        public int RechargeTicksTotal
-        {
-            get
-            {
-                int currentTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
-                if (rechargeTicksCachedAtTick == currentTick)
-                {
-                    return cachedRechargeTicksTotal;
-                }
-
-                float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
-                    ? 1f
-                    : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
-                cachedRechargeTicksTotal = speed <= 0f
-                    ? 0
-                    : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
-                rechargeTicksCachedAtTick = currentTick;
-                return cachedRechargeTicksTotal;
-            }
-        }
+        public int RechargeTicksTotal => cachedRechargeTicksTotal;
 
         public float RechargeProgressPercent => IsRecharging && RechargeTicksTotal > 0 ? 1f - Mathf.Clamp01(RechargeTicksLeft / (float)RechargeTicksTotal) : 0f;
 
         public override void CompPostMake()
         {
             base.CompPostMake();
-            SyncChargeBounds();
+            cooldownWarningEndTick = -1;
+            nextChargeConfigurationRefreshTick = 0;
+            RefreshChargeConfiguration();
         }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            SyncChargeBounds();
+            RefreshChargeConfiguration();
 
             if (cooldownTicksLeft > 0)
             {
@@ -96,26 +84,20 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                     RestoreCharge();
                 }
             }
-
-            if (cooldownWarningCooldownTicksLeft > 0)
-            {
-                cooldownWarningCooldownTicksLeft--;
-            }
-
         }
 
         public override void CompExposeData()
         {
             base.CompExposeData();
-            Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_longBreath_cooldownTicksLeft", 0);
-            Scribe_Values.Look(ref cooldownWarningCooldownTicksLeft, "mx_qh_longBreath_cooldownWarningCooldownTicksLeft", 0);
-            Scribe_Values.Look(ref currentCharges, "mx_qh_longBreath_currentCharges", 1);
+            Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_divineBlessing_cooldownTicksLeft", 0);
+            Scribe_Values.Look(ref cooldownWarningEndTick, "mx_qh_divineBlessing_warningEndTick", -1);
+            Scribe_Values.Look(ref currentCharges, "mx_qh_divineBlessing_currentCharges", 1);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 cachedFlowerResonance = null;
-                rechargeTicksCachedAtTick = int.MinValue;
-                SyncChargeBounds();
+                nextChargeConfigurationRefreshTick = 0;
+                RefreshChargeConfiguration();
             }
         }
 
@@ -151,7 +133,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            if (cooldownWarningCooldownTicksLeft > 0)
+            if (CurrentTick < cooldownWarningEndTick)
             {
                 return;
             }
@@ -162,7 +144,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             int maxTicks = Props.cooldownWarningCooldownTicks > 0 ? Props.cooldownWarningCooldownTicks : 600;
-            cooldownWarningCooldownTicksLeft = maxTicks;
+            cooldownWarningEndTick = CurrentTick + maxTicks;
         }
 
         public void Trigger(ref DamageInfo dinfo, ref bool absorbed)
@@ -311,38 +293,69 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void StartCooldown()
         {
-            currentCharges = Mathf.Max(0, CurrentCharges - 1);
-            if (CurrentCharges < MaxCharges && cooldownTicksLeft <= 0)
+            currentCharges = Mathf.Max(0, currentCharges - 1);
+            if (currentCharges < cachedMaxCharges && cooldownTicksLeft <= 0)
             {
-                cooldownTicksLeft = RechargeTicksTotal;
+                cooldownTicksLeft = cachedRechargeTicksTotal;
             }
         }
 
         private void RestoreCharge()
         {
-            currentCharges = Mathf.Min(MaxCharges, CurrentCharges + 1);
-            cooldownTicksLeft = CurrentCharges < MaxCharges ? RechargeTicksTotal : 0;
+            currentCharges = Mathf.Min(cachedMaxCharges, Mathf.Max(0, currentCharges) + 1);
+            cooldownTicksLeft = currentCharges < cachedMaxCharges ? cachedRechargeTicksTotal : 0;
         }
 
-        private void SyncChargeBounds()
+        private void RefreshChargeConfiguration()
         {
-            int maxCharges = MaxCharges;
-            if (currentCharges < 0)
+            int currentTick = CurrentTick;
+            if (currentTick < nextChargeConfigurationRefreshTick)
             {
-                currentCharges = cooldownTicksLeft > 0 ? Mathf.Max(0, maxCharges - 1) : maxCharges;
-            }
-            else if (currentCharges > maxCharges)
-            {
-                currentCharges = maxCharges;
+                return;
             }
 
-            if (currentCharges >= maxCharges)
+            int previousMaxCharges = cachedMaxCharges;
+            int previousRechargeTicksTotal = cachedRechargeTicksTotal;
+            int newMaxCharges = ResolveMaxCharges();
+            float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
+                ? 1f
+                : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
+            int newRechargeTicksTotal = speed <= 0f
+                ? 0
+                : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+
+            if (currentCharges >= 0
+                && currentCharges < previousMaxCharges
+                && cooldownTicksLeft > 0
+                && previousRechargeTicksTotal > 0
+                && newRechargeTicksTotal != previousRechargeTicksTotal)
+            {
+                float remainingPercent = Mathf.Clamp01(cooldownTicksLeft / (float)previousRechargeTicksTotal);
+                cooldownTicksLeft = newRechargeTicksTotal > 0
+                    ? Mathf.Max(1, Mathf.RoundToInt(newRechargeTicksTotal * remainingPercent))
+                    : 0;
+            }
+
+            cachedMaxCharges = newMaxCharges;
+            cachedRechargeTicksTotal = newRechargeTicksTotal;
+            nextChargeConfigurationRefreshTick = currentTick + ChargeConfigurationRefreshTicks;
+
+            if (currentCharges < 0)
+            {
+                currentCharges = cooldownTicksLeft > 0 ? Mathf.Max(0, cachedMaxCharges - 1) : cachedMaxCharges;
+            }
+            else if (currentCharges > cachedMaxCharges)
+            {
+                currentCharges = cachedMaxCharges;
+            }
+
+            if (currentCharges >= cachedMaxCharges)
             {
                 cooldownTicksLeft = 0;
             }
-            else if (cooldownTicksLeft <= 0 && RechargeTicksTotal > 0)
+            else if (cooldownTicksLeft <= 0 && cachedRechargeTicksTotal > 0)
             {
-                cooldownTicksLeft = RechargeTicksTotal;
+                cooldownTicksLeft = cachedRechargeTicksTotal;
             }
         }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
+using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using UnityEngine;
@@ -269,7 +270,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             return NeiyuEquipmentUtility.IsNeiyu(pawn)
                 || ZhaoliKarmaUtility.IsZhaoli(pawn)
-                || MXCharacterIdentityUtility.IsQinghe(pawn);
+                || MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
         private static float MinimumConsciousnessFromSettings()

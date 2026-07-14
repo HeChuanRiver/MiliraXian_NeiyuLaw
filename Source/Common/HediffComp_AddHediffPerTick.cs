@@ -16,18 +16,19 @@ namespace MiliraXian.Characters
 
     public class HediffComp_AddHediffPerTick : HediffComp
     {
-        private const int FlushIntervalTicks = 10;
-
         private Hediff cachedHediff;
-        private float pendingSeverity;
-        private int pendingTicks;
 
         private HediffCompProperties_AddHediffPerTick PropsAdd => (HediffCompProperties_AddHediffPerTick)props;
 
-        public override void CompPostTick(ref float severityAdjustment)
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
-            base.CompPostTick(ref severityAdjustment);
-            if (Pawn == null || Pawn.Dead || Pawn.health?.hediffSet == null || PropsAdd.addHediff == null || PropsAdd.severityPerTick <= 0f)
+            base.CompPostTickInterval(ref severityAdjustment, delta);
+            if (delta <= 0
+                || Pawn == null
+                || Pawn.Dead
+                || Pawn.health?.hediffSet == null
+                || PropsAdd.addHediff == null
+                || PropsAdd.severityPerTick <= 0f)
             {
                 return;
             }
@@ -37,24 +38,12 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            pendingSeverity += PropsAdd.severityPerTick;
-            pendingTicks++;
-            if (pendingTicks >= FlushIntervalTicks)
-            {
-                FlushPendingSeverity();
-            }
+            AddSeverity(PropsAdd.severityPerTick * delta);
         }
 
         public override void CompExposeData()
         {
-            if (Scribe.mode == LoadSaveMode.Saving)
-            {
-                FlushPendingSeverity();
-            }
-
             base.CompExposeData();
-            Scribe_Values.Look(ref pendingSeverity, "mx_abnormal_pendingAddedHediffSeverity", 0f);
-            Scribe_Values.Look(ref pendingTicks, "mx_abnormal_pendingAddedHediffTicks", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 cachedHediff = null;
@@ -63,17 +52,14 @@ namespace MiliraXian.Characters
 
         public override void CompPostPostRemoved()
         {
-            FlushPendingSeverity();
             cachedHediff = null;
             base.CompPostPostRemoved();
         }
 
-        private void FlushPendingSeverity()
+        private void AddSeverity(float amount)
         {
-            if (pendingSeverity <= 0f)
+            if (amount <= 0f)
             {
-                pendingSeverity = 0f;
-                pendingTicks = 0;
                 return;
             }
 
@@ -94,16 +80,13 @@ namespace MiliraXian.Characters
             if (cachedHediff == null)
             {
                 cachedHediff = HediffMaker.MakeHediff(hediffDef, pawn);
-                cachedHediff.Severity = pendingSeverity;
+                cachedHediff.Severity = amount;
                 pawn.health.AddHediff(cachedHediff);
             }
             else
             {
-                cachedHediff.Severity += pendingSeverity;
+                cachedHediff.Severity += amount;
             }
-
-            pendingSeverity = 0f;
-            pendingTicks = 0;
         }
     }
 }

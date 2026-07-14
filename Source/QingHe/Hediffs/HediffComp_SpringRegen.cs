@@ -42,9 +42,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public HediffCompProperties_SpringRegen Props => (HediffCompProperties_SpringRegen)props;
 
-        public override void CompPostTick(ref float severityAdjustment)
+        public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
-            base.CompPostTick(ref severityAdjustment);
+            base.CompPostTickInterval(ref severityAdjustment, delta);
 
             if (Pawn == null || Pawn.Dead || Pawn.health == null)
             {
@@ -52,7 +52,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             int interval = Props.healIntervalTicks > 0 ? Props.healIntervalTicks : 60;
-            if (!Pawn.IsHashIntervalTick(interval))
+            if (!Pawn.IsHashIntervalTick(interval, delta))
             {
                 return;
             }
