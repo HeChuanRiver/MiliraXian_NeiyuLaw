@@ -8,12 +8,14 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using Verse.Sound;
 
 namespace MiliraXian.Characters.QingHe.Jobs
 {
     public class JobDriver_IllusoryReflectionStance : JobDriver
     {
         private bool stanceActive;
+        private bool stanceSoundPlayed;
         private bool counterQueued;
         private IntVec3 stanceDirectionCell = IntVec3.Invalid;
         private int stanceFacingInt = Rot4.South.AsInt;
@@ -35,6 +37,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         {
             base.Notify_Starting();
             stanceActive = true;
+            stanceSoundPlayed = false;
             counterQueued = false;
             stanceDirectionCell = job.GetTarget(TargetIndex.A).Cell;
             if (!stanceDirectionCell.IsValid || stanceDirectionCell == pawn.Position)
@@ -74,6 +77,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         {
             base.ExposeData();
             Scribe_Values.Look(ref stanceActive, "mx_qh_illusoryReflection_stanceActive", false);
+            Scribe_Values.Look(ref stanceSoundPlayed, "mx_qh_illusoryReflection_stanceSoundPlayed", false);
             Scribe_Values.Look(ref counterQueued, "mx_qh_illusoryReflection_counterQueued", false);
             Scribe_Values.Look(ref stanceDirectionCell, "mx_qh_illusoryReflection_stanceDirectionCell", IntVec3.Invalid);
             Scribe_Values.Look(ref stanceFacingInt, "mx_qh_illusoryReflection_stanceFacing", Rot4.South.AsInt);
@@ -84,6 +88,11 @@ namespace MiliraXian.Characters.QingHe.Jobs
             Toil stance = ToilMaker.MakeToil("IllusoryReflectionStance");
             stance.tickAction = delegate
             {
+                if (!stanceSoundPlayed)
+                {
+                    ResolveProps()?.stanceSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                    stanceSoundPlayed = true;
+                }
                 pawn.Rotation = StanceFacing;
                 if (counterQueued)
                 {
@@ -137,6 +146,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 : pawn.Position + StanceFacing.FacingCell;
             pawn.Rotation = StanceFacing;
             CompProperties_AbilityIllusoryReflection props = ResolveProps();
+            props?.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
             float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(pawn);
             HediffComp_SwordPressure pressure = MX_QH_HediffUtility.EnsureSwordPressure(pawn);
             if (pressure?.TryConsumePoints(1) == true)

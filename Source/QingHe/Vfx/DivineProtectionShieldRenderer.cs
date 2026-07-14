@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Vfx;
 using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
 using UnityEngine;
@@ -193,7 +194,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
             DrawGlow(Visual.hitGlow, pos, Visual.drawSize, drawAlpha, effectTime, hitGlowFactor, rotation);
 
-            MaterialPropertyBlock propertyBlock = MX_QHRenderStatics.SharedPropertyBlock;
+            MaterialPropertyBlock propertyBlock = MX_RenderStatics.SharedPropertyBlock;
             propertyBlock.Clear();
             if (!Visual.shaderParameters.NullOrEmpty())
             {

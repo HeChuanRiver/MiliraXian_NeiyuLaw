@@ -90,6 +90,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public HediffDef invulnerabilityHediff;
         public int invulnerabilityTicks = 120;
         public int eyeOfHeartCooldownReductionTicks = 600;
+        public SoundDef stanceSound;
+        public SoundDef slashSound;
         public FleckDef normalSlashFleck;
         public float normalSlashVisualScale = 3.2f;
         public float normalSlashVisualForwardOffset;

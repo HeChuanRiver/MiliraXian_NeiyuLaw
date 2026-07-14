@@ -4,6 +4,7 @@ using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.Vfx;
+using MiliraXian.Characters.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -13,7 +14,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
 {
     public class CompProperties_AbilityAscentSlash : CompProperties_AbilityEffect
     {
-        public ThingDef knockbackFlyerDef;
         public float range = 22f;
         public float dashSpeedCellsPerSecond = 60f;
         public int dashDurationMinTicks = 8;
@@ -33,11 +33,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public float secondImpactRadius = 2f;
         public float damageAmount = 32f;
         public float armorPenetration = 0.35f;
-        public List<HediffDef_Abnormal> accumulationAbnormals = new List<HediffDef_Abnormal>();
-        public float accumulationAmount = 18f;
         public float buildingDamageMultiplier = 2f;
-        public int stunTicks = 60;
-        public float knockbackDistance = 3f;
         public float empoweredDamagePerPressurePoint = 0.25f;
         public int empoweredSlashCount = 7;
         public int empoweredSlashIntervalTicks = 6;
@@ -51,7 +47,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public int impactDelayTicks = 30;
 
         public string disabledReason = "MX_QH_AscentSlashNotLearned";
-        public string noLineOfSightToLandingMessage = "MX_QH_AscentSlashLandingNoLineOfSight";
         public string invalidLandingMessage = "MX_QH_AscentSlashInvalidLanding";
 
         public string entryEffecter;
@@ -66,8 +61,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public string ascentTrailFleck = "MXNL_Skyfall_FlyBegin_F";
         public Vector2 ascentTrailFleckSize = new Vector2(2.2f, 20.2f);
         public Vector2 ascentTrailFleckOffset = new Vector2(0f, 8f);
-        public string hitFleck = "PsycastAreaEffect";
         public SoundDef castSound;
+        public SoundDef dropSound;
+        public SoundDef slashSound;
 
         public CompProperties_AbilityAscentSlash()
         {
@@ -394,6 +390,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                     float damage = Props.damageAmount * specialFactor * (target is Building ? Props.buildingDamageMultiplier : 1f);
                     for (int i = 0; i < Mathf.Max(1, Props.normalSlashCount); i++)
                     {
+                        Props.slashSound?.PlayOneShot(new TargetInfo(target.Position, map));
                         QingheSwordCombatUtility.ApplySlash(caster, target, damage, Props.armorPenetration, empowered: false);
                         hitCount++;
                     }
@@ -502,6 +499,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             BeginStage(AscentSlashStage.Descending, Props.descentTicks);
+            Props.dropSound?.PlayOneShot(new TargetInfo(caster.Position, map));
             AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(1f));
             MX_QHGraphicsUtility.Fleck(map, secondImpactCell, Props.impactFleck, 1.1f);
         }
@@ -550,6 +548,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             if (target != null)
             {
                 trackedTarget = target;
+                Props.slashSound?.PlayOneShot(new TargetInfo(target.Position, map));
                 PlayEmpoweredSlashFleck(map, target);
                 empoweredSlashHitCount += QingheSwordCombatUtility.ApplyRadius(
                     caster,
@@ -1016,7 +1015,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            map.GetComponent<MapComponent_QingheAfterimages>()?.AddAfterimage(caster, drawPos, caster.Rotation, 24, 0.42f);
+            map.GetComponent<MapComponent_PawnAfterimages>()?.AddAfterimage(
+                caster,
+                drawPos,
+                caster.Rotation,
+                24,
+                0.42f,
+                MX_QHRenderStatics.AfterimageTint);
         }
 
         private void ClearSequence(Pawn caster)
@@ -1140,6 +1145,4 @@ namespace MiliraXian.Characters.QingHe.Abilities
     }
 
 }
-
-
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Vfx;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Jobs;
 using UnityEngine;
@@ -162,7 +163,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             material.SetFloat(HeadIntensityProperty, visual.headIntensity);
             material.SetFloat(AdditiveIntensityProperty, visual.additiveIntensity);
 
-            MaterialPropertyBlock block = MX_QHRenderStatics.SharedPropertyBlock;
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
             block.SetFloat(EffectTimeProperty, effectTime);
             block.SetFloat(RevealDurationProperty, visual.revealSeconds);
@@ -214,7 +215,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             float distortionIntensity,
             float opacity)
         {
-            MaterialPropertyBlock block = MX_QHRenderStatics.SharedPropertyBlock;
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
             block.SetColor(ColorProperty, new Color(1f, 1f, 1f, opacity));
             block.SetTexture(DistortionTexProperty, TexGame.RippleTex);

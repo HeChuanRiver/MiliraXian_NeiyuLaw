@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using MiliraXian.Characters.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -138,12 +139,13 @@ namespace MiliraXian.Characters.QingHe.Vfx
             Pawn flyingPawn = FlyingPawn;
             if (flyingPawn != null && flyingPawn.MapHeld != null)
             {
-                flyingPawn.MapHeld.GetComponent<MapComponent_QingheAfterimages>()?.AddAfterimage(
+                flyingPawn.MapHeld.GetComponent<MapComponent_PawnAfterimages>()?.AddAfterimage(
                     flyingPawn,
                     DrawPos,
                     flyingPawn.Rotation,
                     60,
-                    0.44f);
+                    0.44f,
+                    MX_QHRenderStatics.AfterimageTint);
             }
 
             if (Map != null && Rand.Chance(0.35f))

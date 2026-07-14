@@ -3,37 +3,40 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.QingHe.Vfx
+namespace MiliraXian.Characters.Vfx
 {
-    public class MapComponent_QingheAfterimages : MapComponent
+    public class MapComponent_PawnAfterimages : MapComponent
     {
         private const int MaxAfterimages = 96;
         private const int AfterimageTextureSize = 512;
         private const float AfterimageCameraZoom = 0.5f;
         private const float AfterimageMeshScale = 1f / AfterimageCameraZoom;
-        private const int GhostAlphaSteps = 32;
-        private static readonly Color GhostTint = new Color(1f, 0.94f, 0.97f, 1f);
-
-        private readonly List<QingheAfterimage> afterimages = new List<QingheAfterimage>();
+        private const int AlphaSteps = 32;
+        private readonly List<PawnAfterimage> afterimages = new List<PawnAfterimage>();
         private Mesh afterimageMesh;
 
-        public MapComponent_QingheAfterimages(Map map) : base(map)
+        public MapComponent_PawnAfterimages(Map map) : base(map)
         {
         }
 
         public void AddAfterimage(Pawn pawn, Vector3 drawPos, int durationTicks, float startAlpha)
         {
-            AddAfterimage(pawn, drawPos, pawn?.Rotation ?? Rot4.South, durationTicks, startAlpha);
+            AddAfterimage(pawn, drawPos, pawn?.Rotation ?? Rot4.South, durationTicks, startAlpha, Color.white);
         }
 
         public void AddAfterimage(Pawn pawn, Vector3 drawPos, Rot4 facing, int durationTicks, float startAlpha)
+        {
+            AddAfterimage(pawn, drawPos, facing, durationTicks, startAlpha, Color.white);
+        }
+
+        public void AddAfterimage(Pawn pawn, Vector3 drawPos, Rot4 facing, int durationTicks, float startAlpha, Color tint)
         {
             if (map == null || pawn == null || pawn.Destroyed || pawn.IsHiddenFromPlayer() || pawn.MapHeld != map)
             {
                 return;
             }
 
-            RenderTexture texture = CapturePawnGhostTexture(pawn, facing);
+            RenderTexture texture = CapturePawnTexture(pawn, facing);
             if (texture == null)
             {
                 return;
@@ -51,14 +54,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 afterimages.RemoveAt(0);
             }
 
-            afterimages.Add(new QingheAfterimage
+            afterimages.Add(new PawnAfterimage
             {
                 pawn = pawn,
                 drawPos = drawPos,
-                facing = facing,
                 startTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0,
                 durationTicks = Mathf.Max(1, durationTicks),
                 startAlpha = Mathf.Clamp01(startAlpha),
+                tint = tint,
                 texture = texture,
                 material = material
             });
@@ -83,14 +86,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         private void DrawAfterimages(int now)
         {
-            if (afterimages.Count == 0)
-            {
-                return;
-            }
-
             for (int i = afterimages.Count - 1; i >= 0; i--)
             {
-                QingheAfterimage afterimage = afterimages[i];
+                PawnAfterimage afterimage = afterimages[i];
                 int age = now - afterimage.startTick;
                 if (age < 0 || age > afterimage.durationTicks || afterimage.pawn == null || afterimage.pawn.Destroyed)
                 {
@@ -108,11 +106,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     continue;
                 }
 
-                DrawPawnGhostSnapshot(afterimage, alpha);
+                DrawAfterimage(afterimage, alpha);
             }
         }
 
-        private static RenderTexture CapturePawnGhostTexture(Pawn pawn, Rot4 facing)
+        private static RenderTexture CapturePawnTexture(Pawn pawn, Rot4 facing)
         {
             if (pawn?.Drawer?.renderer == null || Find.PawnCacheRenderer == null)
             {
@@ -120,12 +118,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
 
             RenderTexture texture = new RenderTexture(AfterimageTextureSize, AfterimageTextureSize, 24, RenderTextureFormat.ARGB32);
-            texture.name = "MX_QH_Afterimage";
+            texture.name = "MX_PawnAfterimage";
             Find.PawnCacheRenderer.RenderPawn(pawn, texture, Vector3.zero, AfterimageCameraZoom, 0f, facing, renderHead: true, renderHeadgear: true, renderClothes: true);
             return texture;
         }
 
-        private void DrawPawnGhostSnapshot(QingheAfterimage afterimage, float alpha)
+        private void DrawAfterimage(PawnAfterimage afterimage, float alpha)
         {
             Material material = afterimage.material;
             if (material == null || material == BaseContent.ClearMat)
@@ -141,9 +139,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 afterimageMesh = TextureAtlasHelper.CreateMeshForUV(new Rect(0f, 0f, 1f, 1f), AfterimageMeshScale);
             }
 
-            MaterialPropertyBlock block = MX_QHRenderStatics.SharedPropertyBlock;
-            Color tint = GhostTint;
-            tint.a = QuantizeAlpha(alpha);
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            Color tint = afterimage.tint;
+            tint.a *= QuantizeAlpha(alpha);
             block.SetColor(ShaderPropertyIDs.Color, tint);
             Graphics.DrawMesh(afterimageMesh, matrix, material, 0, null, 0, block);
             block.Clear();
@@ -151,7 +149,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         private static float QuantizeAlpha(float alpha)
         {
-            return Mathf.Clamp01(Mathf.Ceil(Mathf.Clamp01(alpha) * GhostAlphaSteps) / GhostAlphaSteps);
+            return Mathf.Clamp01(Mathf.Ceil(Mathf.Clamp01(alpha) * AlphaSteps) / AlphaSteps);
         }
 
         private void ReleaseAllAfterimages()
@@ -164,7 +162,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             afterimages.Clear();
         }
 
-        private static void ReleaseAfterimage(QingheAfterimage afterimage)
+        private static void ReleaseAfterimage(PawnAfterimage afterimage)
         {
             if (afterimage.texture != null)
             {
@@ -178,14 +176,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
         }
 
-        private struct QingheAfterimage
+        private struct PawnAfterimage
         {
             public Pawn pawn;
             public Vector3 drawPos;
-            public Rot4 facing;
             public int startTick;
             public int durationTicks;
             public float startAlpha;
+            public Color tint;
             public RenderTexture texture;
             public Material material;
         }

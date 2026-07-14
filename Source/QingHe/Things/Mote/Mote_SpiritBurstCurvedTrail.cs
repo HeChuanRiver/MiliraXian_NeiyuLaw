@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using MiliraXian.Characters.QingHe.Vfx;
+using MiliraXian.Characters.Vfx;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Mote
@@ -242,7 +243,7 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
             pos.y = def.altitudeLayer.AltitudeFor();
             Matrix4x4 trs = Matrix4x4.TRS(pos, Quaternion.AngleAxis(rot, Vector3.up), new Vector3(w, 1f, Mathf.Max(MinSegLen, len - 0.002f)));
 
-            MaterialPropertyBlock block = MX_QHRenderStatics.SharedPropertyBlock;
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
             Color c = baseColor;
             c.a *= Mathf.Clamp01(alpha);
