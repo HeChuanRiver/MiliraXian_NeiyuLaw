@@ -6,7 +6,6 @@ using HarmonyLib;
 using LudeonTK;
 using MiliraXian.Characters;
 using MiliraXian.Characters.Neiyu;
-using MiliraXian.Characters.QingHe;
 using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
@@ -204,7 +203,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool IsSpecialPawn(Pawn pawn)
         {
-            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
+            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MXCharacterIdentityUtility.IsQinghe(pawn);
         }
 
         public static bool ShouldDeathFieldAffectTarget(Pawn caster, Pawn target)

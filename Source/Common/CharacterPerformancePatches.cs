@@ -7,6 +7,7 @@ using Verse;
 
 namespace MiliraXian.Characters
 {
+    [StaticConstructorOnStartup]
     internal static class MXShieldRenderUtility
     {
         private static readonly System.Collections.Generic.Dictionary<string, Material> BaseMaterials =
@@ -168,6 +169,7 @@ namespace MiliraXian.Characters
         {
             MXNeiyuShieldUtility.ClearCache();
             ZhaoliShieldLayerUtility.ClearCache();
+            NeiyuSpecialPawnIntegration.ClearRuntimeState();
         }
     }
 

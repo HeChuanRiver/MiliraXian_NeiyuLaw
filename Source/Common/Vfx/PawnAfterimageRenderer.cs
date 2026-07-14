@@ -12,11 +12,17 @@ namespace MiliraXian.Characters.Vfx
         private const float AfterimageCameraZoom = 0.5f;
         private const float AfterimageMeshScale = 1f / AfterimageCameraZoom;
         private const int AlphaSteps = 32;
-        private readonly List<PawnAfterimage> afterimages = new List<PawnAfterimage>();
+        private readonly PawnAfterimageSlot[] afterimages = new PawnAfterimageSlot[MaxAfterimages];
+        private int activeAfterimageCount;
+        private int nextSlotIndex;
         private Mesh afterimageMesh;
 
         public MapComponent_PawnAfterimages(Map map) : base(map)
         {
+            for (int i = 0; i < afterimages.Length; i++)
+            {
+                afterimages[i] = new PawnAfterimageSlot();
+            }
         }
 
         public void AddAfterimage(Pawn pawn, Vector3 drawPos, int durationTicks, float startAlpha)
@@ -31,40 +37,49 @@ namespace MiliraXian.Characters.Vfx
 
         public void AddAfterimage(Pawn pawn, Vector3 drawPos, Rot4 facing, int durationTicks, float startAlpha, Color tint)
         {
-            if (map == null || pawn == null || pawn.Destroyed || pawn.IsHiddenFromPlayer() || pawn.MapHeld != map)
+            if (map == null || pawn == null || pawn.Dead || pawn.Destroyed || pawn.IsHiddenFromPlayer() || pawn.MapHeld != map)
             {
                 return;
             }
 
-            RenderTexture texture = CapturePawnTexture(pawn, facing);
-            if (texture == null)
+            if (Find.CameraDriver != null
+                && !Find.CameraDriver.CurrentViewRect.ExpandedBy(2).Contains(drawPos.ToIntVec3()))
             {
                 return;
             }
 
-            Material material = new Material(ShaderDatabase.Transparent)
+            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+            PruneExpired(now);
+            int loadMultiplier = activeAfterimageCount > 64 ? 4 : activeAfterimageCount > 32 ? 2 : 1;
+            if (loadMultiplier > 1)
             {
-                mainTexture = texture,
-                color = Color.white
-            };
-
-            if (afterimages.Count >= MaxAfterimages)
-            {
-                ReleaseAfterimage(afterimages[0]);
-                afterimages.RemoveAt(0);
+                int stableSample = Gen.HashCombineInt(pawn.thingIDNumber, now) & int.MaxValue;
+                if (stableSample % loadMultiplier != 0)
+                {
+                    return;
+                }
             }
 
-            afterimages.Add(new PawnAfterimage
+            int slotIndex = FindReusableSlot();
+            PawnAfterimageSlot slot = afterimages[slotIndex];
+            if (!EnsureResources(slot) || !CapturePawnTexture(pawn, facing, slot.texture))
             {
-                pawn = pawn,
-                drawPos = drawPos,
-                startTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0,
-                durationTicks = Mathf.Max(1, durationTicks),
-                startAlpha = Mathf.Clamp01(startAlpha),
-                tint = tint,
-                texture = texture,
-                material = material
-            });
+                return;
+            }
+
+            if (!slot.active)
+            {
+                activeAfterimageCount++;
+            }
+
+            slot.active = true;
+            slot.pawn = pawn;
+            slot.drawPos = drawPos;
+            slot.startTick = now;
+            slot.durationTicks = Mathf.Max(1, durationTicks);
+            slot.startAlpha = Mathf.Clamp01(startAlpha);
+            slot.tint = tint;
+            nextSlotIndex = (slotIndex + 1) % MaxAfterimages;
         }
 
         public override void MapRemoved()
@@ -86,14 +101,23 @@ namespace MiliraXian.Characters.Vfx
 
         private void DrawAfterimages(int now)
         {
-            for (int i = afterimages.Count - 1; i >= 0; i--)
+            for (int i = 0; i < afterimages.Length; i++)
             {
-                PawnAfterimage afterimage = afterimages[i];
-                int age = now - afterimage.startTick;
-                if (age < 0 || age > afterimage.durationTicks || afterimage.pawn == null || afterimage.pawn.Destroyed)
+                PawnAfterimageSlot afterimage = afterimages[i];
+                if (!afterimage.active)
                 {
-                    ReleaseAfterimage(afterimage);
-                    afterimages.RemoveAt(i);
+                    continue;
+                }
+
+                int age = now - afterimage.startTick;
+                if (age < 0
+                    || age > afterimage.durationTicks
+                    || afterimage.pawn == null
+                    || afterimage.pawn.Dead
+                    || afterimage.pawn.Destroyed
+                    || afterimage.pawn.MapHeld != map)
+                {
+                    Deactivate(afterimage);
                     continue;
                 }
 
@@ -101,8 +125,7 @@ namespace MiliraXian.Characters.Vfx
                 float alpha = afterimage.startAlpha * (1f - progress);
                 if (alpha <= 0.01f || afterimage.texture == null)
                 {
-                    ReleaseAfterimage(afterimage);
-                    afterimages.RemoveAt(i);
+                    Deactivate(afterimage);
                     continue;
                 }
 
@@ -110,20 +133,18 @@ namespace MiliraXian.Characters.Vfx
             }
         }
 
-        private static RenderTexture CapturePawnTexture(Pawn pawn, Rot4 facing)
+        private static bool CapturePawnTexture(Pawn pawn, Rot4 facing, RenderTexture texture)
         {
-            if (pawn?.Drawer?.renderer == null || Find.PawnCacheRenderer == null)
+            if (pawn?.Drawer?.renderer == null || Find.PawnCacheRenderer == null || texture == null)
             {
-                return null;
+                return false;
             }
 
-            RenderTexture texture = new RenderTexture(AfterimageTextureSize, AfterimageTextureSize, 24, RenderTextureFormat.ARGB32);
-            texture.name = "MX_PawnAfterimage";
             Find.PawnCacheRenderer.RenderPawn(pawn, texture, Vector3.zero, AfterimageCameraZoom, 0f, facing, renderHead: true, renderHeadgear: true, renderClothes: true);
-            return texture;
+            return true;
         }
 
-        private void DrawAfterimage(PawnAfterimage afterimage, float alpha)
+        private void DrawAfterimage(PawnAfterimageSlot afterimage, float alpha)
         {
             Material material = afterimage.material;
             if (material == null || material == BaseContent.ClearMat)
@@ -154,30 +175,101 @@ namespace MiliraXian.Characters.Vfx
 
         private void ReleaseAllAfterimages()
         {
-            for (int i = 0; i < afterimages.Count; i++)
+            for (int i = 0; i < afterimages.Length; i++)
             {
-                ReleaseAfterimage(afterimages[i]);
+                ReleaseSlot(afterimages[i]);
             }
 
-            afterimages.Clear();
+            activeAfterimageCount = 0;
+            nextSlotIndex = 0;
         }
 
-        private static void ReleaseAfterimage(PawnAfterimage afterimage)
+        private static void ReleaseSlot(PawnAfterimageSlot afterimage)
         {
+            afterimage.active = false;
+            afterimage.pawn = null;
             if (afterimage.texture != null)
             {
                 afterimage.texture.Release();
                 Object.Destroy(afterimage.texture);
+                afterimage.texture = null;
             }
 
             if (afterimage.material != null)
             {
                 Object.Destroy(afterimage.material);
+                afterimage.material = null;
             }
         }
 
-        private struct PawnAfterimage
+        private int FindReusableSlot()
         {
+            for (int offset = 0; offset < MaxAfterimages; offset++)
+            {
+                int index = (nextSlotIndex + offset) % MaxAfterimages;
+                if (!afterimages[index].active)
+                {
+                    return index;
+                }
+            }
+
+            return nextSlotIndex;
+        }
+
+        private static bool EnsureResources(PawnAfterimageSlot slot)
+        {
+            if (slot.texture == null)
+            {
+                slot.texture = new RenderTexture(AfterimageTextureSize, AfterimageTextureSize, 24, RenderTextureFormat.ARGB32)
+                {
+                    name = "MX_PawnAfterimage"
+                };
+            }
+
+            if (slot.material == null)
+            {
+                slot.material = new Material(ShaderDatabase.Transparent)
+                {
+                    mainTexture = slot.texture,
+                    color = Color.white
+                };
+            }
+
+            return slot.texture != null && slot.material != null;
+        }
+
+        private void PruneExpired(int now)
+        {
+            for (int i = 0; i < afterimages.Length; i++)
+            {
+                PawnAfterimageSlot slot = afterimages[i];
+                if (slot.active
+                    && (now - slot.startTick > slot.durationTicks
+                        || slot.pawn == null
+                        || slot.pawn.Dead
+                        || slot.pawn.Destroyed
+                        || slot.pawn.MapHeld != map))
+                {
+                    Deactivate(slot);
+                }
+            }
+        }
+
+        private void Deactivate(PawnAfterimageSlot slot)
+        {
+            if (!slot.active)
+            {
+                return;
+            }
+
+            slot.active = false;
+            slot.pawn = null;
+            activeAfterimageCount = Mathf.Max(0, activeAfterimageCount - 1);
+        }
+
+        private sealed class PawnAfterimageSlot
+        {
+            public bool active;
             public Pawn pawn;
             public Vector3 drawPos;
             public int startTick;

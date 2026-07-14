@@ -29,6 +29,7 @@ namespace MiliraXian.Characters
         }
     }
 
+    [StaticConstructorOnStartup]
     public class CompProjectileContinuousTrail : ThingComp
     {
         private static readonly MaterialPropertyBlock TrailPropertyBlock = new MaterialPropertyBlock();

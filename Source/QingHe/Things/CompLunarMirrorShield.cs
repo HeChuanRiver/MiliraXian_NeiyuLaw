@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -121,13 +122,10 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            string cacheKey = Props.shieldTexPath + "|" + Props.shieldColor.ToString() + "|" + alpha.ToString("F3");
-            if (!ShieldMaterialByPath.TryGetValue(cacheKey, out Material shieldMat))
+            if (!ShieldMaterialByPath.TryGetValue(Props.shieldTexPath, out Material shieldMat))
             {
-                Color color = Props.shieldColor;
-                color.a = alpha;
-                shieldMat = MaterialPool.MatFrom(Props.shieldTexPath, ShaderDatabase.Transparent, color);
-                ShieldMaterialByPath[cacheKey] = shieldMat;
+                shieldMat = MaterialPool.MatFrom(Props.shieldTexPath, ShaderDatabase.Transparent, Color.white);
+                ShieldMaterialByPath[Props.shieldTexPath] = shieldMat;
             }
 
             Vector3 pos = parent.DrawPos;
@@ -137,7 +135,13 @@ namespace MiliraXian.Characters.QingHe.Things
                 pos,
                 Quaternion.identity,
                 new Vector3(drawSize, 1f, drawSize));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0);
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            block.Clear();
+            Color color = Props.shieldColor;
+            color.a = alpha;
+            block.SetColor(ShaderPropertyIDs.Color, color);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0, null, 0, block);
+            block.Clear();
         }
 
         public void Init(Pawn newCaster, int duration)

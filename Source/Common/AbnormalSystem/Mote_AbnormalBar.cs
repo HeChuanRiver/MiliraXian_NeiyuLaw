@@ -32,11 +32,14 @@ namespace MiliraXian.Characters
 
     public class Mote_AbnormalBar : MoteDualAttached
     {
-        private static readonly Dictionary<string, Material> MaterialCache = new Dictionary<string, Material>();
+        private static readonly Dictionary<AbnormalBarProperties, MaterialBundle> MaterialCache =
+            new Dictionary<AbnormalBarProperties, MaterialBundle>();
 
         public HediffDef_Abnormal SourceAbnormalDef { get; set; }
 
         public float Progress { get; set; }
+
+        public int StackIndex { get; set; }
 
         protected override void Tick()
         {
@@ -57,49 +60,23 @@ namespace MiliraXian.Characters
             GenDraw.FillableBarRequest request = default(GenDraw.FillableBarRequest);
             request.center = exactPosition;
             request.center.x += props.offsetX;
-            request.center.z += props.offsetZ + GetStackIndex(props) * props.stackSpacing;
+            int stackOffset = props.stackDownward ? -StackIndex : StackIndex;
+            request.center.z += props.offsetZ + stackOffset * props.stackSpacing;
             request.center.y += props.altitudeOffset;
             request.size = props.size;
             request.fillPercent = Mathf.Clamp01(Progress);
-            request.filledMat = BuildMat(props.fillTexPath, props.fillShaderType, props.fillColor);
-            request.unfilledMat = BuildMat(props.backgroundTexPath, props.backgroundShaderType, props.backgroundColor);
+            MaterialBundle materials = GetMaterials(props);
+            request.filledMat = materials.fill;
+            request.unfilledMat = materials.background;
             request.margin = props.margin;
             request.rotation = Rot4.North;
             GenDraw.DrawFillableBar(request);
-            DrawIcon(request.center, props);
+            DrawIcon(request.center, props, materials.icon);
         }
 
-        private int GetStackIndex(AbnormalBarProperties props)
+        private void DrawIcon(Vector3 barCenter, AbnormalBarProperties props, Material iconMaterial)
         {
-            Pawn pawn = link1.Target.Thing as Pawn;
-            if (pawn?.health?.hediffSet?.hediffs == null || SourceAbnormalDef == null)
-            {
-                return 0;
-            }
-
-            int index = 0;
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
-            {
-                if (!(hediffs[i] is Hediff_Abnormal abnormal))
-                {
-                    continue;
-                }
-
-                if (abnormal.def == SourceAbnormalDef)
-                {
-                    return props.stackDownward ? -index : index;
-                }
-
-                index++;
-            }
-
-            return 0;
-        }
-
-        private void DrawIcon(Vector3 barCenter, AbnormalBarProperties props)
-        {
-            if (props.iconTexPath.NullOrEmpty() || props.iconSize <= 0f)
+            if (iconMaterial == null || props.iconSize <= 0f)
             {
                 return;
             }
@@ -108,7 +85,7 @@ namespace MiliraXian.Characters
             iconCenter.x -= props.size.x * 0.5f + props.iconGap + props.iconSize * 0.5f;
             Matrix4x4 matrix = default(Matrix4x4);
             matrix.SetTRS(iconCenter + Vector3.up * props.iconAltitudeOffset, Quaternion.identity, new Vector3(props.iconSize, 1f, props.iconSize));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, BuildMat(props.iconTexPath, props.iconShaderType, props.iconColor), 0);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, iconMaterial, 0);
         }
 
         private void SyncMapPositionToAttachment()
@@ -125,20 +102,38 @@ namespace MiliraXian.Characters
             }
         }
 
-        private static Material BuildMat(string texPath, ShaderTypeDef shaderType, Color color)
+        private static MaterialBundle GetMaterials(AbnormalBarProperties props)
         {
-            string key = $"{texPath}|{shaderType?.defName}|{color}";
-            if (MaterialCache.TryGetValue(key, out Material material))
+            if (MaterialCache.TryGetValue(props, out MaterialBundle materials))
             {
-                return material;
+                return materials;
             }
 
+            materials = new MaterialBundle
+            {
+                background = BuildMat(props.backgroundTexPath, props.backgroundShaderType, props.backgroundColor),
+                fill = BuildMat(props.fillTexPath, props.fillShaderType, props.fillColor),
+                icon = props.iconTexPath.NullOrEmpty()
+                    ? null
+                    : BuildMat(props.iconTexPath, props.iconShaderType, props.iconColor)
+            };
+            MaterialCache[props] = materials;
+            return materials;
+        }
+
+        private static Material BuildMat(string texPath, ShaderTypeDef shaderType, Color color)
+        {
             Shader shader = (shaderType ?? ShaderTypeDefOf.MetaOverlay).Shader;
-            material = !texPath.NullOrEmpty()
+            return !texPath.NullOrEmpty()
                 ? MaterialPool.MatFrom(texPath, shader, color)
                 : SolidColorMaterials.NewSolidColorMaterial(color, shader);
-            MaterialCache[key] = material;
-            return material;
+        }
+
+        private sealed class MaterialBundle
+        {
+            public Material background;
+            public Material fill;
+            public Material icon;
         }
     }
 }

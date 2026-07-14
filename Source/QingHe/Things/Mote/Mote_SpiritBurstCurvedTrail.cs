@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.Vfx;
+using System.Collections.Generic;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Mote
@@ -9,6 +10,7 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
     {
         private const float MinDrawDist = 0.18f;
         private const float MinSegLen = 0.01f;
+        private const int MaxLayerMeshes = 7;
 
         private FleckDef lineDef;
         private FleckDef distortDef;
@@ -35,6 +37,14 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
         private Vector3 fixedStart;
         private Vector3 fixedEnd;
         private bool hasFixedEndpoints;
+        private readonly Mesh[] lineMeshes = new Mesh[MaxLayerMeshes];
+        private Mesh distortMesh;
+        private readonly List<Vector3> meshVertices = new List<Vector3>(1280);
+        private readonly List<Vector2> meshUvs = new List<Vector2>(1280);
+        private readonly List<int> meshTriangles = new List<int>(1920);
+        private readonly List<Vector3> distortVertices = new List<Vector3>(2560);
+        private readonly List<Vector2> distortUvs = new List<Vector2>(2560);
+        private readonly List<int> distortTriangles = new List<int>(3840);
 
         protected override bool EndOfLife
         {
@@ -140,6 +150,11 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
                 return;
             }
 
+            if (!IntersectsView(start, end))
+            {
+                return;
+            }
+
             int segs = Mathf.Clamp(Mathf.CeilToInt(dist * segDensity), minSegs, maxSegs);
             int ageNow = Mathf.Clamp(Mathf.RoundToInt(AgeSecsPausable * 60f), 0, Mathf.Max(1, animTicks));
             int grow = Mathf.Clamp(growTicks, 1, Mathf.Max(1, animTicks - 1));
@@ -171,12 +186,12 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
                 float layerAlpha = Mathf.Clamp01(alpha * alphaMul * Mathf.Pow(afterAlpha, layer));
                 if (layerAlpha > 0.001f)
                 {
-                    DrawLayer(start, end, dist, segs, curve, layerAlpha, age, 1f + 0.035f * layer, layer == 0);
+                    DrawLayer(start, end, dist, segs, curve, layerAlpha, age, 1f + 0.035f * layer, layer == 0, layer);
                 }
             }
         }
 
-        private void DrawLayer(Vector3 start, Vector3 end, float dist, int segs, float curve, float alpha, int ageTicks, float layerWidthMul, bool drawDistort)
+        private void DrawLayer(Vector3 start, Vector3 end, float dist, int segs, float curve, float alpha, int ageTicks, float layerWidthMul, bool drawDistort, int layerIndex)
         {
             float amp = Mathf.Clamp(dist * 0.092f, 0.1f, 0.78f) * curve;
             Vector3 dir = (end - start).normalized;
@@ -195,6 +210,11 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
             float bends = Mathf.Clamp(dist / Mathf.Max(0.8f, waveLen), 0.35f, 24f);
             Vector3 prev = start;
             Vector3 distortFrom = start;
+            ClearGeometry(meshVertices, meshUvs, meshTriangles);
+            if (drawDistort)
+            {
+                ClearGeometry(distortVertices, distortUvs, distortTriangles);
+            }
 
             for (int i = 1; i <= segs; i++)
             {
@@ -204,7 +224,7 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
                 float oscillation = Mathf.Sin(t * Mathf.PI * bends);
                 Vector3 cur = basePoint + perp * (oscillation * amp * envelope);
                 cur.y = y;
-                DrawSeg(prev, cur, lineMat, lineColor, segW, alpha, ageSecs);
+                AddSegmentQuad(prev, cur, segW, meshVertices, meshUvs, meshTriangles);
 
                 if (drawDistort && distortMat != null && (i % distortStep == 0 || i == segs))
                 {
@@ -217,41 +237,168 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
                     distortPerp.Normalize();
 
                     float dw = Mathf.Max(segW * distortWidth * 0.62f, segW + 0.01f);
-                    float da = alpha * distortAlpha;
                     float offset = Mathf.Max(segW * 1.12f, dw * 0.48f);
                     Vector3 sideOffset = distortPerp * offset;
-                    DrawSeg(distortFrom + sideOffset, cur + sideOffset, distortMat, distortColor, dw, da, ageSecs);
-                    DrawSeg(distortFrom - sideOffset, cur - sideOffset, distortMat, distortColor, dw, da, ageSecs);
+                    AddSegmentQuad(distortFrom + sideOffset, cur + sideOffset, dw, distortVertices, distortUvs, distortTriangles);
+                    AddSegmentQuad(distortFrom - sideOffset, cur - sideOffset, dw, distortVertices, distortUvs, distortTriangles);
                     distortFrom = cur;
                 }
 
                 prev = cur;
             }
+
+            UploadAndDraw(GetLineMesh(layerIndex), meshVertices, meshUvs, meshTriangles, lineMat, lineColor, alpha, ageSecs);
+            if (drawDistort && distortMat != null && distortVertices.Count > 0)
+            {
+                if (distortMesh == null)
+                {
+                    distortMesh = CreateDynamicMesh("MX_SpiritBurstDistortionTrail");
+                }
+
+                UploadAndDraw(distortMesh, distortVertices, distortUvs, distortTriangles, distortMat, distortColor, alpha * distortAlpha, ageSecs);
+            }
         }
 
-        private void DrawSeg(Vector3 a, Vector3 b, Material mat, Color baseColor, float w, float alpha, float ageSecs)
+        private static void AddSegmentQuad(
+            Vector3 a,
+            Vector3 b,
+            float segmentWidth,
+            List<Vector3> vertices,
+            List<Vector2> uvs,
+            List<int> triangles)
         {
             Vector3 delta = b - a;
             float len = delta.MagnitudeHorizontal();
-            if (len < MinSegLen || mat == null)
+            if (len < MinSegLen)
             {
                 return;
             }
 
-            float rot = Mathf.Atan2(-delta.z, delta.x) * 57.29578f + 90f;
-            Vector3 pos = a + delta * 0.5f;
-            pos.y = def.altitudeLayer.AltitudeFor();
-            Matrix4x4 trs = Matrix4x4.TRS(pos, Quaternion.AngleAxis(rot, Vector3.up), new Vector3(w, 1f, Mathf.Max(MinSegLen, len - 0.002f)));
+            Vector3 direction = new Vector3(delta.x / len, 0f, delta.z / len);
+            Vector3 side = new Vector3(-direction.z, 0f, direction.x) * (Mathf.Max(0.001f, segmentWidth) * 0.5f);
+            Vector3 trim = direction * Mathf.Min(0.001f, len * 0.25f);
+            a += trim;
+            b -= trim;
+
+            int vertexStart = vertices.Count;
+            vertices.Add(a - side);
+            vertices.Add(a + side);
+            vertices.Add(b + side);
+            vertices.Add(b - side);
+            uvs.Add(new Vector2(0f, 0f));
+            uvs.Add(new Vector2(1f, 0f));
+            uvs.Add(new Vector2(1f, 1f));
+            uvs.Add(new Vector2(0f, 1f));
+            triangles.Add(vertexStart);
+            triangles.Add(vertexStart + 1);
+            triangles.Add(vertexStart + 2);
+            triangles.Add(vertexStart);
+            triangles.Add(vertexStart + 2);
+            triangles.Add(vertexStart + 3);
+        }
+
+        private static void ClearGeometry(List<Vector3> vertices, List<Vector2> uvs, List<int> triangles)
+        {
+            vertices.Clear();
+            uvs.Clear();
+            triangles.Clear();
+        }
+
+        private Mesh GetLineMesh(int layerIndex)
+        {
+            layerIndex = Mathf.Clamp(layerIndex, 0, MaxLayerMeshes - 1);
+            Mesh mesh = lineMeshes[layerIndex];
+            if (mesh == null)
+            {
+                mesh = CreateDynamicMesh("MX_SpiritBurstTrail_" + layerIndex);
+                lineMeshes[layerIndex] = mesh;
+            }
+
+            return mesh;
+        }
+
+        private static Mesh CreateDynamicMesh(string name)
+        {
+            Mesh mesh = new Mesh { name = name };
+            mesh.MarkDynamic();
+            return mesh;
+        }
+
+        private void UploadAndDraw(
+            Mesh mesh,
+            List<Vector3> vertices,
+            List<Vector2> uvs,
+            List<int> triangles,
+            Material material,
+            Color baseColor,
+            float alpha,
+            float ageSecs)
+        {
+            if (mesh == null || material == null || vertices.Count == 0)
+            {
+                return;
+            }
+
+            mesh.Clear(false);
+            mesh.SetVertices(vertices);
+            mesh.SetUVs(0, uvs);
+            mesh.SetTriangles(triangles, 0, true);
+            mesh.RecalculateBounds();
 
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
-            Color c = baseColor;
-            c.a *= Mathf.Clamp01(alpha);
-            block.SetColor(ShaderPropertyIDs.Color, c);
+            baseColor.a *= Mathf.Clamp01(alpha);
+            block.SetColor(ShaderPropertyIDs.Color, baseColor);
             block.SetFloat(ShaderPropertyIDs.AgeSecs, ageSecs);
             block.SetFloat(ShaderPropertyIDs.AgeSecsPausable, ageSecs);
             block.SetFloat(ShaderPropertyIDs.RandomPerObject, rnd);
-            Graphics.DrawMesh(MeshPool.plane10, trs, mat, 0, null, 0, block);
+            Graphics.DrawMesh(mesh, Matrix4x4.identity, material, 0, null, 0, block);
+            block.Clear();
+        }
+
+        private static bool IntersectsView(Vector3 start, Vector3 end)
+        {
+            if (Find.CameraDriver == null)
+            {
+                return true;
+            }
+
+            CellRect view = Find.CameraDriver.CurrentViewRect.ExpandedBy(2);
+            float minX = Mathf.Min(start.x, end.x);
+            float maxX = Mathf.Max(start.x, end.x);
+            float minZ = Mathf.Min(start.z, end.z);
+            float maxZ = Mathf.Max(start.z, end.z);
+            return maxX >= view.minX && minX <= view.maxX && maxZ >= view.minZ && minZ <= view.maxZ;
+        }
+
+        public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
+        {
+            ReleaseMeshes();
+            base.DeSpawn(mode);
+        }
+
+        public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+        {
+            ReleaseMeshes();
+            base.Destroy(mode);
+        }
+
+        private void ReleaseMeshes()
+        {
+            for (int i = 0; i < lineMeshes.Length; i++)
+            {
+                if (lineMeshes[i] != null)
+                {
+                    Object.Destroy(lineMeshes[i]);
+                    lineMeshes[i] = null;
+                }
+            }
+
+            if (distortMesh != null)
+            {
+                Object.Destroy(distortMesh);
+                distortMesh = null;
+            }
         }
 
         private void LoadMats()

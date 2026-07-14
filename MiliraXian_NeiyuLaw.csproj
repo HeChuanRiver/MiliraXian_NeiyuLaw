@@ -71,7 +71,7 @@
       <Compile Include="Source\Common\**\*.cs" />
       <Compile Include="Source\Mingyuan\**\*.cs" />
       <Compile Include="Source\Neiyu\**\*.cs" />
-      <Compile Include="Source\QingHe\**\*.cs" />
+      <Compile Include="Source\QingHe\**\*.cs" Condition="'$(ExcludeQingHe)' != 'true'" />
       <Compile Include="Source\Zhaoli\**\*.cs" />
     </ItemGroup>
     <ItemGroup>

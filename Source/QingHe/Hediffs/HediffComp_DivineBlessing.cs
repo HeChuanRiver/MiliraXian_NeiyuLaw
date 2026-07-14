@@ -41,30 +41,46 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int cooldownWarningCooldownTicksLeft;
         private bool invisibilityEndingEffectPlayed;
         private int currentCharges = -1;
+        private int cooldownEndTick = -1;
+        private int cooldownWarningEndTick = -1;
+        private int nextChargeConfigurationRefreshTick;
+        private int nextInvisibilityEndingCheckTick;
+        private int cachedMaxCharges = 1;
+        private int cachedRechargeTicksTotal;
+        private bool runtimeStateInitialized;
 
         public HediffCompProperties_DivineBlessing Props => (HediffCompProperties_DivineBlessing)props;
 
-        public int MaxCharges => ResolveMaxCharges();
+        private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
-        public int CurrentCharges => Mathf.Clamp(currentCharges, 0, MaxCharges);
+        public int MaxCharges
+        {
+            get
+            {
+                UpdateRuntimeState();
+                return cachedMaxCharges;
+            }
+        }
+
+        public int CurrentCharges
+        {
+            get
+            {
+                UpdateRuntimeState();
+                return Mathf.Clamp(currentCharges, 0, cachedMaxCharges);
+            }
+        }
 
         public bool IsRecharging => CurrentCharges < MaxCharges && RechargeTicksTotal > 0;
 
-        public int RechargeTicksLeft => IsRecharging ? Mathf.Clamp(cooldownTicksLeft, 0, RechargeTicksTotal) : 0;
+        public int RechargeTicksLeft => IsRecharging ? Mathf.Clamp(cooldownEndTick - CurrentTick, 0, RechargeTicksTotal) : 0;
 
         public int RechargeTicksTotal
         {
             get
             {
-                float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
-                    ? 1f
-                    : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
-                if (speed <= 0f)
-                {
-                    return 0;
-                }
-
-                return Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+                UpdateRuntimeState();
+                return cachedRechargeTicksTotal;
             }
         }
 
@@ -73,33 +89,28 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompPostMake()
         {
             base.CompPostMake();
-            SyncChargeBounds();
+            InitializeRuntimeState(useSerializedRemainingTicks: false);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            SyncChargeBounds();
-
-            if (cooldownTicksLeft > 0)
+            UpdateRuntimeState();
+            if (CurrentTick >= nextInvisibilityEndingCheckTick)
             {
-                cooldownTicksLeft--;
-                if (cooldownTicksLeft <= 0)
-                {
-                    RestoreCharge();
-                }
+                TickInvisibilityEndingEffect();
             }
-
-            if (cooldownWarningCooldownTicksLeft > 0)
-            {
-                cooldownWarningCooldownTicksLeft--;
-            }
-
-            TickInvisibilityEndingEffect();
         }
 
         public override void CompExposeData()
         {
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                UpdateRuntimeState();
+                cooldownTicksLeft = Mathf.Max(0, cooldownEndTick - CurrentTick);
+                cooldownWarningCooldownTicksLeft = Mathf.Max(0, cooldownWarningEndTick - CurrentTick);
+            }
+
             base.CompExposeData();
             Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_longBreath_cooldownTicksLeft", 0);
             Scribe_Values.Look(ref cooldownWarningCooldownTicksLeft, "mx_qh_longBreath_cooldownWarningCooldownTicksLeft", 0);
@@ -108,7 +119,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                SyncChargeBounds();
+                InitializeRuntimeState(useSerializedRemainingTicks: true);
             }
         }
 
@@ -144,7 +155,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            if (cooldownWarningCooldownTicksLeft > 0)
+            UpdateRuntimeState();
+            if (CurrentTick < cooldownWarningEndTick)
             {
                 return;
             }
@@ -156,6 +168,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             int maxTicks = Props.cooldownWarningCooldownTicks > 0 ? Props.cooldownWarningCooldownTicks : 600;
             cooldownWarningCooldownTicksLeft = maxTicks;
+            cooldownWarningEndTick = CurrentTick + maxTicks;
         }
 
         public void Trigger(ref DamageInfo dinfo, ref bool absorbed)
@@ -305,39 +318,99 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void StartCooldown()
         {
-            currentCharges = Mathf.Max(0, CurrentCharges - 1);
-            if (CurrentCharges < MaxCharges && cooldownTicksLeft <= 0)
+            UpdateRuntimeState();
+            currentCharges = Mathf.Max(0, currentCharges - 1);
+            if (currentCharges < cachedMaxCharges && CurrentTick >= cooldownEndTick)
             {
-                cooldownTicksLeft = RechargeTicksTotal;
+                cooldownTicksLeft = cachedRechargeTicksTotal;
+                cooldownEndTick = cachedRechargeTicksTotal > 0 ? CurrentTick + cachedRechargeTicksTotal : -1;
             }
         }
 
         private void RestoreCharge()
         {
-            currentCharges = Mathf.Min(MaxCharges, CurrentCharges + 1);
-            cooldownTicksLeft = CurrentCharges < MaxCharges ? RechargeTicksTotal : 0;
+            currentCharges = Mathf.Min(cachedMaxCharges, Mathf.Max(0, currentCharges) + 1);
+            cooldownTicksLeft = currentCharges < cachedMaxCharges ? cachedRechargeTicksTotal : 0;
+            cooldownEndTick = cooldownTicksLeft > 0 ? CurrentTick + cooldownTicksLeft : -1;
         }
 
-        private void SyncChargeBounds()
+        private void SyncChargeBounds(int currentTick)
         {
-            int maxCharges = MaxCharges;
             if (currentCharges < 0)
             {
-                currentCharges = cooldownTicksLeft > 0 ? Mathf.Max(0, maxCharges - 1) : maxCharges;
+                currentCharges = currentTick < cooldownEndTick ? Mathf.Max(0, cachedMaxCharges - 1) : cachedMaxCharges;
             }
-            else if (currentCharges > maxCharges)
+            else if (currentCharges > cachedMaxCharges)
             {
-                currentCharges = maxCharges;
+                currentCharges = cachedMaxCharges;
             }
 
-            if (currentCharges >= maxCharges)
+            if (currentCharges >= cachedMaxCharges)
             {
                 cooldownTicksLeft = 0;
+                cooldownEndTick = -1;
             }
-            else if (cooldownTicksLeft <= 0 && RechargeTicksTotal > 0)
+            else if (currentTick >= cooldownEndTick && cachedRechargeTicksTotal > 0)
             {
-                cooldownTicksLeft = RechargeTicksTotal;
+                cooldownTicksLeft = cachedRechargeTicksTotal;
+                cooldownEndTick = currentTick + cachedRechargeTicksTotal;
             }
+        }
+
+        private void InitializeRuntimeState(bool useSerializedRemainingTicks)
+        {
+            int currentTick = CurrentTick;
+            cooldownEndTick = useSerializedRemainingTicks && cooldownTicksLeft > 0
+                ? currentTick + cooldownTicksLeft
+                : -1;
+            cooldownWarningEndTick = useSerializedRemainingTicks && cooldownWarningCooldownTicksLeft > 0
+                ? currentTick + cooldownWarningCooldownTicksLeft
+                : -1;
+            nextChargeConfigurationRefreshTick = currentTick;
+            nextInvisibilityEndingCheckTick = currentTick;
+            runtimeStateInitialized = true;
+            RefreshChargeConfiguration(force: true);
+        }
+
+        private void UpdateRuntimeState()
+        {
+            if (!runtimeStateInitialized)
+            {
+                InitializeRuntimeState(useSerializedRemainingTicks: true);
+            }
+
+            int currentTick = CurrentTick;
+            if (cooldownEndTick > 0 && currentTick >= cooldownEndTick && currentCharges < cachedMaxCharges)
+            {
+                RestoreCharge();
+            }
+
+            RefreshChargeConfiguration(force: false);
+
+            if (cooldownWarningEndTick > 0 && currentTick >= cooldownWarningEndTick)
+            {
+                cooldownWarningEndTick = -1;
+                cooldownWarningCooldownTicksLeft = 0;
+            }
+        }
+
+        private void RefreshChargeConfiguration(bool force)
+        {
+            int currentTick = CurrentTick;
+            if (!force && currentTick < nextChargeConfigurationRefreshTick)
+            {
+                return;
+            }
+
+            cachedMaxCharges = ResolveMaxCharges();
+            float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
+                ? 1f
+                : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
+            cachedRechargeTicksTotal = speed <= 0f
+                ? 0
+                : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+            nextChargeConfigurationRefreshTick = currentTick + 60;
+            SyncChargeBounds(currentTick);
         }
 
         private int ResolveMaxCharges()
@@ -400,6 +473,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             if (invisibilityEndingEffectPlayed || Pawn?.health?.hediffSet == null)
             {
+                nextInvisibilityEndingCheckTick = CurrentTick + 60;
                 return;
             }
 
@@ -407,12 +481,20 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             if (hediff == null)
             {
                 invisibilityEndingEffectPlayed = false;
+                nextInvisibilityEndingCheckTick = CurrentTick + 60;
                 return;
             }
 
             HediffComp_Disappears disappears = hediff.TryGetComp<HediffComp_Disappears>();
-            if (disappears == null || disappears.ticksToDisappear > 1)
+            if (disappears == null)
             {
+                nextInvisibilityEndingCheckTick = CurrentTick + 60;
+                return;
+            }
+
+            if (disappears.ticksToDisappear > 1)
+            {
+                nextInvisibilityEndingCheckTick = CurrentTick + Mathf.Max(1, disappears.ticksToDisappear - 1);
                 return;
             }
 
@@ -424,6 +506,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             PlayInvisibilityEffect();
             invisibilityEndingEffectPlayed = true;
+            nextInvisibilityEndingCheckTick = CurrentTick + 60;
         }
 
         private void ApplyInvisibility()
@@ -445,6 +528,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             if (disappears != null && Props.invisibilityDurationTicks > 0)
             {
                 disappears.SetDuration(Props.invisibilityDurationTicks);
+                nextInvisibilityEndingCheckTick = CurrentTick + Mathf.Max(1, Props.invisibilityDurationTicks - 1);
+            }
+            else
+            {
+                nextInvisibilityEndingCheckTick = CurrentTick + 60;
             }
         }
 

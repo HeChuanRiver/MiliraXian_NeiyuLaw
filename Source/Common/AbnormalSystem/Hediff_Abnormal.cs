@@ -14,12 +14,15 @@ namespace MiliraXian.Characters
         private int ticksUntilDecay;
         private Pawn source;
         private Mote progressBarMote;
+        private float cachedAccumulationLimit = -1f;
+        private int nextAccumulationLimitRefreshTick;
+        private int cachedStackIndex;
 
         public HediffDef_Abnormal AbnormalDef => def as HediffDef_Abnormal;
 
         public Pawn Source => source;
 
-        public float AccumulationLimit => AbnormalSystem.GetAccumulationLimit(pawn, AbnormalDef);
+        public float AccumulationLimit => GetAccumulationLimit(force: false);
 
         public float Progress
         {
@@ -51,6 +54,8 @@ namespace MiliraXian.Characters
 
             source = newSource;
             ticksUntilDecay = Mathf.Max(0, AbnormalDef?.ticksUntilDecayAfterRefresh ?? 0);
+            cachedAccumulationLimit = accumulationLimit;
+            nextAccumulationLimitRefreshTick = CurrentTick + 60;
             Severity += amount;
             NotifyApplied(amount);
             if (Severity < accumulationLimit)
@@ -65,14 +70,14 @@ namespace MiliraXian.Characters
         public override void Tick()
         {
             base.Tick();
-            if (pawn?.health?.hediffSet == null || !pawn.health.hediffSet.hediffs.Contains(this))
+            if (pawn?.health?.hediffSet == null)
             {
                 return;
             }
 
             if (pawn.IsHashIntervalTick(60))
             {
-                float limit = AccumulationLimit;
+                float limit = GetAccumulationLimit(force: true);
                 if (limit <= 0f)
                 {
                     pawn.health.RemoveHediff(this);
@@ -84,6 +89,8 @@ namespace MiliraXian.Characters
                     Trigger();
                     return;
                 }
+
+                cachedStackIndex = ComputeStackIndex();
             }
 
             MaintainProgressBarMote();
@@ -233,13 +240,56 @@ namespace MiliraXian.Characters
 
                 bar.Attach(pawn, pawn);
                 bar.SourceAbnormalDef = AbnormalDef;
+                cachedStackIndex = ComputeStackIndex();
                 GenSpawn.Spawn(bar, pawn.Position, pawn.MapHeld, WipeMode.Vanish);
                 progressBarMote = bar;
             }
 
             bar.SourceAbnormalDef = AbnormalDef;
+            bar.StackIndex = cachedStackIndex;
             bar.Progress = Progress;
             bar.Maintain();
+        }
+
+        private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+
+        private float GetAccumulationLimit(bool force)
+        {
+            int currentTick = CurrentTick;
+            if (force || cachedAccumulationLimit < 0f || currentTick >= nextAccumulationLimitRefreshTick)
+            {
+                cachedAccumulationLimit = AbnormalSystem.GetAccumulationLimit(pawn, AbnormalDef);
+                nextAccumulationLimitRefreshTick = currentTick + 60;
+            }
+
+            return cachedAccumulationLimit;
+        }
+
+        private int ComputeStackIndex()
+        {
+            if (pawn?.health?.hediffSet?.hediffs == null)
+            {
+                return 0;
+            }
+
+            int index = 0;
+            System.Collections.Generic.List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                if (!(hediffs[i] is Hediff_Abnormal abnormal))
+                {
+                    continue;
+                }
+
+                if (ReferenceEquals(abnormal, this))
+                {
+                    return index;
+                }
+
+                index++;
+            }
+
+            return 0;
         }
     }
 }

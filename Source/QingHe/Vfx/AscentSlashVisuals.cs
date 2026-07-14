@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using MiliraXian.Characters.Vfx;
 using RimWorld;
@@ -29,7 +30,13 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
     internal static class AscentSlashVisualTracker
     {
-        private static readonly Dictionary<int, AscentSlashVisualState> states = new Dictionary<int, AscentSlashVisualState>();
+        private sealed class StateHolder
+        {
+            public AscentSlashVisualState state;
+        }
+
+        private static ConditionalWeakTable<Pawn, StateHolder> states = new ConditionalWeakTable<Pawn, StateHolder>();
+        private static int activeStateCount;
 
         public static void BeginDash(Pawn pawn, int startTick, int endTick, Vector3 startPos, Vector3 endPos)
         {
@@ -63,16 +70,27 @@ namespace MiliraXian.Characters.QingHe.Vfx
         {
             if (pawn != null)
             {
-                states.Remove(pawn.thingIDNumber);
+                if (states.Remove(pawn))
+                {
+                    activeStateCount = Mathf.Max(0, activeStateCount - 1);
+                }
             }
+        }
+
+        public static void ClearAll()
+        {
+            states = new ConditionalWeakTable<Pawn, StateHolder>();
+            activeStateCount = 0;
         }
 
         public static bool TryApply(Pawn pawn, ref Vector3 drawPos)
         {
-            if (pawn == null || !states.TryGetValue(pawn.thingIDNumber, out AscentSlashVisualState state))
+            if (activeStateCount == 0 || pawn == null || !states.TryGetValue(pawn, out StateHolder holder))
             {
                 return false;
             }
+
+            AscentSlashVisualState state = holder.state;
 
             int now = Find.TickManager != null ? Find.TickManager.TicksGame : state.stageEndTick;
             float progress = state.stageEndTick > state.stageStartTick
@@ -140,7 +158,44 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return;
             }
 
-            states[pawn.thingIDNumber] = state;
+            if (states.TryGetValue(pawn, out StateHolder holder))
+            {
+                holder.state = state;
+                return;
+            }
+
+            states.Add(pawn, new StateHolder { state = state });
+            activeStateCount++;
+        }
+    }
+
+    [HarmonyPatch(typeof(Verse.Profile.MemoryUtility), nameof(Verse.Profile.MemoryUtility.ClearAllMapsAndWorld))]
+    internal static class MX_QHAscentSlashClearAllMapsPatch
+    {
+        [HarmonyPostfix]
+        private static void Postfix()
+        {
+            AscentSlashVisualTracker.ClearAll();
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
+    internal static class MX_QHAscentSlashPawnKillPatch
+    {
+        [HarmonyPostfix]
+        private static void Postfix(Pawn __instance)
+        {
+            AscentSlashVisualTracker.Clear(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.DeSpawn), typeof(DestroyMode))]
+    internal static class MX_QHAscentSlashPawnDeSpawnPatch
+    {
+        [HarmonyPostfix]
+        private static void Postfix(Pawn __instance)
+        {
+            AscentSlashVisualTracker.Clear(__instance);
         }
     }
 

@@ -402,6 +402,7 @@ namespace MiliraXian.Characters.Zhaoli
     public class GameComponent_ZhaoliRebirth : GameComponent
     {
         private List<ZhaoliPendingRebirth> pendingRebirths = new List<ZhaoliPendingRebirth>();
+        private int nextRebirthTick = int.MaxValue;
 
         public GameComponent_ZhaoliRebirth(Game game)
         {
@@ -437,11 +438,13 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirths[i]?.pawn == pawn)
                 {
                     pendingRebirths[i].rebirthTick = rebirthTick;
+                    RecalculateNextRebirthTick();
                     return;
                 }
             }
 
             pendingRebirths.Add(new ZhaoliPendingRebirth(pawn, rebirthTick));
+            nextRebirthTick = Mathf.Min(nextRebirthTick, rebirthTick);
         }
 
         public override void GameComponentTick()
@@ -452,6 +455,11 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             int currentTick = Find.TickManager.TicksGame;
+            if (currentTick < nextRebirthTick)
+            {
+                return;
+            }
+
             for (int i = pendingRebirths.Count - 1; i >= 0; i--)
             {
                 ZhaoliPendingRebirth pendingRebirth = pendingRebirths[i];
@@ -510,6 +518,8 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 pendingRebirths.RemoveAt(i);
             }
+
+            RecalculateNextRebirthTick();
         }
 
         public override void ExposeData()
@@ -519,6 +529,20 @@ namespace MiliraXian.Characters.Zhaoli
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Destroyed);
+                RecalculateNextRebirthTick();
+            }
+        }
+
+        private void RecalculateNextRebirthTick()
+        {
+            nextRebirthTick = int.MaxValue;
+            for (int i = 0; i < pendingRebirths.Count; i++)
+            {
+                ZhaoliPendingRebirth entry = pendingRebirths[i];
+                if (entry != null)
+                {
+                    nextRebirthTick = Mathf.Min(nextRebirthTick, entry.rebirthTick);
+                }
             }
         }
     }

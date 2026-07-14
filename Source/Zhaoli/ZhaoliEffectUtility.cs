@@ -183,6 +183,7 @@ namespace MiliraXian.Characters.Zhaoli
     public class GameComponent_ZhaoliVisuals : GameComponent
     {
         private List<ZhaoliPendingAttachedAnimation> pendingAnimations = new List<ZhaoliPendingAttachedAnimation>();
+        private int nextDueTick = int.MaxValue;
 
         public GameComponent_ZhaoliVisuals(Game game)
         {
@@ -202,6 +203,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             int currentTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
             pendingAnimations.Add(new ZhaoliPendingAttachedAnimation(target, kind, frameCount, Mathf.Max(1, ticksPerFrame), currentTick, offset, scale));
+            nextDueTick = Mathf.Min(nextDueTick, currentTick);
         }
 
         public override void GameComponentTick()
@@ -212,6 +214,12 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             int currentTick = Find.TickManager.TicksGame;
+            if (currentTick < nextDueTick)
+            {
+                return;
+            }
+
+            int newNextDueTick = int.MaxValue;
             for (int i = pendingAnimations.Count - 1; i >= 0; i--)
             {
                 ZhaoliPendingAttachedAnimation animation = pendingAnimations[i];
@@ -223,6 +231,7 @@ namespace MiliraXian.Characters.Zhaoli
 
                 if (currentTick < animation.nextFrameTick)
                 {
+                    newNextDueTick = Mathf.Min(newNextDueTick, animation.nextFrameTick);
                     continue;
                 }
 
@@ -236,7 +245,10 @@ namespace MiliraXian.Characters.Zhaoli
                 }
 
                 animation.nextFrameTick = currentTick + animation.ticksPerFrame;
+                newNextDueTick = Mathf.Min(newNextDueTick, animation.nextFrameTick);
             }
+
+            nextDueTick = newNextDueTick;
         }
 
         private static ThingDef ResolveFrameDef(ZhaoliVisualAnimationKind kind, int frameIndex)
