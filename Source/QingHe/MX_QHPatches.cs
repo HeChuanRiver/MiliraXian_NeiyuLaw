@@ -131,8 +131,20 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        public static bool Patch_Pawn_PreApplyDamage_Prefix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        private struct DamageHediffState
         {
+            public HediffComp_EyeOfHeart EyeOfHeart;
+            public HediffComp_DivineBlessing DivineBlessing;
+            public bool Invulnerable;
+        }
+
+        private static bool Patch_Pawn_PreApplyDamage_Prefix(
+            Pawn __instance,
+            ref DamageInfo dinfo,
+            ref bool absorbed,
+            out DamageHediffState __state)
+        {
+            __state = default(DamageHediffState);
             if (__instance?.health?.hediffSet == null)
             {
                 return true;
@@ -143,10 +155,8 @@ namespace MiliraXian.Characters.QingHe
                 return true;
             }
 
-            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
-                ? __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
-                : null;
-            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(dinfo);
+            __state = ScanDamageHediffs(__instance.health.hediffSet.hediffs);
+            __state.EyeOfHeart?.TryTrigger(dinfo);
 
             JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
@@ -154,7 +164,7 @@ namespace MiliraXian.Characters.QingHe
                 return false;
             }
 
-            if (!HasDamageImmunityHediff(__instance))
+            if (!__state.Invulnerable)
             {
                 return true;
             }
@@ -164,30 +174,55 @@ namespace MiliraXian.Characters.QingHe
             return false;
         }
 
-        private static bool HasDamageImmunityHediff(Pawn pawn)
+        private static DamageHediffState ScanDamageHediffs(List<Hediff> hediffs)
         {
-            if (pawn?.health?.hediffSet == null)
+            DamageHediffState state = default(DamageHediffState);
+            if (hediffs == null)
             {
-                return false;
+                return state;
             }
 
-            return (MX_QHDefOf.MX_QH_DivineBlessingImmunity != null
-                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessingImmunity) != null)
-                || (MX_QHDefOf.MX_QH_AscentSlashInvulnerable != null
-                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) != null)
-                || (MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable != null
-                    && pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable) != null);
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                Hediff hediff = hediffs[i];
+                HediffDef hediffDef = hediff?.def;
+                if (hediffDef == null)
+                {
+                    continue;
+                }
+
+                if (hediffDef == MX_QHDefOf.MX_QH_EyeOfHeartState && state.EyeOfHeart == null)
+                {
+                    state.EyeOfHeart = hediff.TryGetComp<HediffComp_EyeOfHeart>();
+                }
+                else if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
+                {
+                    state.DivineBlessing = hediff.TryGetComp<HediffComp_DivineBlessing>();
+                }
+
+                if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessingImmunity
+                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable
+                    || hediffDef == MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable)
+                {
+                    state.Invulnerable = true;
+                }
+            }
+
+            return state;
         }
 
-        public static void Patch_Pawn_PreApplyDamage_Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        private static void Patch_Pawn_PreApplyDamage_Postfix(
+            Pawn __instance,
+            ref DamageInfo dinfo,
+            ref bool absorbed,
+            DamageHediffState __state)
         {
-            if (__instance?.health?.hediffSet == null)
+            if (__instance?.health?.hediffSet == null || absorbed)
             {
                 return;
             }
 
-            Hediff divineBlessing = __instance.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
-            HediffComp_DivineBlessing divineBlessingComp = divineBlessing?.TryGetComp<HediffComp_DivineBlessing>();
+            HediffComp_DivineBlessing divineBlessingComp = __state.DivineBlessing;
             if (divineBlessingComp == null)
             {
                 return;
@@ -195,11 +230,6 @@ namespace MiliraXian.Characters.QingHe
 
             // Lotus shield is processed by pawn ThingComp.PostPreApplyDamage.
             // Divine blessing only checks when damage still reaches the body.
-            if (absorbed)
-            {
-                return;
-            }
-
             divineBlessingComp.NotifyDamageNotAbsorbed(ref dinfo);
 
             if (!divineBlessingComp.CanTrigger(ref dinfo))

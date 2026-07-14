@@ -12,15 +12,19 @@ namespace MiliraXian.Characters
 
     public class Hediff_Abnormal : HediffWithComps
     {
+        private const int AccumulationLimitRefreshTicks = 60;
+
         private int ticksUntilDecay;
         private Pawn source;
         private Mote progressBarMote;
+        private float cachedAccumulationLimit = -1f;
+        private int accumulationLimitCachedAtTick = int.MinValue;
 
         public HediffDef_Abnormal AbnormalDef => def as HediffDef_Abnormal;
 
         public Pawn Source => source;
 
-        public float AccumulationLimit => AbnormalSystem.GetAccumulationLimit(pawn, AbnormalDef);
+        public float AccumulationLimit => GetAccumulationLimit(false);
 
         public float Progress
         {
@@ -52,6 +56,8 @@ namespace MiliraXian.Characters
 
             source = newSource;
             ticksUntilDecay = Mathf.Max(0, AbnormalDef?.ticksUntilDecayAfterRefresh ?? 0);
+            cachedAccumulationLimit = accumulationLimit;
+            accumulationLimitCachedAtTick = CurrentTick;
             Severity += amount;
             NotifyApplied(amount);
             if (Severity < accumulationLimit)
@@ -66,14 +72,14 @@ namespace MiliraXian.Characters
         public override void Tick()
         {
             base.Tick();
-            if (pawn?.health?.hediffSet == null || !pawn.health.hediffSet.hediffs.Contains(this))
+            if (pawn?.health?.hediffSet == null)
             {
                 return;
             }
 
             if (pawn.IsHashIntervalTick(60))
             {
-                float limit = AccumulationLimit;
+                float limit = GetAccumulationLimit(true);
                 if (limit <= 0f)
                 {
                     pawn.health.RemoveHediff(this);
@@ -107,6 +113,11 @@ namespace MiliraXian.Characters
             base.ExposeData();
             Scribe_Values.Look(ref ticksUntilDecay, "abnormalTicksUntilDecay", 0);
             Scribe_References.Look(ref source, "abnormalSource");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                cachedAccumulationLimit = -1f;
+                accumulationLimitCachedAtTick = int.MinValue;
+            }
         }
 
         protected virtual void Trigger()
@@ -270,6 +281,22 @@ namespace MiliraXian.Characters
                 }
                 stackIndex++;
             }
+        }
+
+        private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
+
+        private float GetAccumulationLimit(bool forceRefresh)
+        {
+            int currentTick = CurrentTick;
+            if (forceRefresh
+                || cachedAccumulationLimit < 0f
+                || currentTick - accumulationLimitCachedAtTick >= AccumulationLimitRefreshTicks)
+            {
+                cachedAccumulationLimit = AbnormalSystem.GetAccumulationLimit(pawn, AbnormalDef);
+                accumulationLimitCachedAtTick = currentTick;
+            }
+
+            return cachedAccumulationLimit;
         }
     }
 }

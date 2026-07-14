@@ -19,11 +19,27 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffComp_FlowerDecree : HediffComp_PawnSpecialResource, ISpecialResourceAddHandler, ISpecialResourceValueAdapter
     {
+        private const int RecoveryFlushIntervalTicks = 10;
+
         private int highlightTicksLeft;
+        private int pendingRecoveryTicks;
+        private bool flushingRecovery;
 
         public HediffCompProperties_FlowerDecree PropsDecree => (HediffCompProperties_FlowerDecree)props;
 
         public float ValuePerDecree => Mathf.Max(1f, PropsDecree.valuePerDecree);
+
+        public override float CurrentValue
+        {
+            get
+            {
+                if (!flushingRecovery)
+                {
+                    FlushAccumulatedRecovery();
+                }
+                return base.CurrentValue;
+            }
+        }
 
         public override float MaxValue
         {
@@ -64,8 +80,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public override void CompExposeData()
         {
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                FlushAccumulatedRecovery();
+            }
+
             base.CompExposeData();
             Scribe_Values.Look(ref highlightTicksLeft, "highlightTicksLeft", 0);
+            Scribe_Values.Look(ref pendingRecoveryTicks, "pendingRecoveryTicks", 0);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -76,14 +98,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 highlightTicksLeft--;
             }
 
-            if (Pawn != null && !Pawn.Dead && CurrentValue < MaxValue - 0.0001f)
+            if (Pawn != null && !Pawn.Dead)
             {
-                AddValueWithHighlight(ResolveRecoveryValuePerTick());
+                pendingRecoveryTicks++;
+                if (pendingRecoveryTicks >= RecoveryFlushIntervalTicks)
+                {
+                    FlushAccumulatedRecovery();
+                }
             }
         }
 
         public void AddDecree(float amount)
         {
+            FlushAccumulatedRecovery();
             if (amount <= 0f)
             {
                 return;
@@ -94,16 +121,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void AddRecoveryProgress(float amount)
         {
+            FlushAccumulatedRecovery();
             AddValueWithHighlight(amount);
         }
 
         public bool TryConsumeDecree(float amount)
         {
+            FlushAccumulatedRecovery();
             return TryConsume(Mathf.Max(0f, amount) * ValuePerDecree);
         }
 
         public bool TryConsumeRawValue(float amount)
         {
+            FlushAccumulatedRecovery();
             return TryConsume(amount);
         }
 
@@ -147,6 +177,31 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return Mathf.Max(0f, valuePerSecond) / 60f;
         }
 
+        private void FlushAccumulatedRecovery()
+        {
+            if (flushingRecovery || pendingRecoveryTicks <= 0)
+            {
+                return;
+            }
+
+            int elapsedTicks = pendingRecoveryTicks;
+            pendingRecoveryTicks = 0;
+            flushingRecovery = true;
+            try
+            {
+                if (Pawn == null || Pawn.Dead || base.CurrentValue >= MaxValue - 0.0001f)
+                {
+                    return;
+                }
+
+                AddValueWithHighlight(ResolveRecoveryValuePerTick() * elapsedTicks);
+            }
+            finally
+            {
+                flushingRecovery = false;
+            }
+        }
+
         private float ResolveRecoveryFactor()
         {
             return GetStatValue(MX_QHDefOf.MX_QH_FlowerDecreeRegenFactor, 1f);
@@ -159,7 +214,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return fallback;
             }
 
-            return Pawn.GetStatValue(statDef);
+            return Pawn.GetStatValue(statDef, true, 1);
         }
     }
 }

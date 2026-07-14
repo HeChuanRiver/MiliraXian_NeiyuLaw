@@ -32,7 +32,7 @@ namespace MiliraXian.Characters
 
         public HediffCompProperties_PawnSpecialResource PropsResource => (HediffCompProperties_PawnSpecialResource)props;
 
-        public float CurrentValue
+        public virtual float CurrentValue
         {
             get
             {

@@ -32,13 +32,34 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public class CompFlowerBellResonance : ThingComp
     {
+        private Pawn cachedHolder;
+        private HediffComp_QingheCombatState cachedCombatState;
+
         public CompProperties_FlowerBellResonance Props => (CompProperties_FlowerBellResonance)props;
 
         public ThingDef CurrentProjectileFor(Pawn pawn)
         {
-            HediffComp_QingheCombatState state = MX_QH_HediffUtility.EnsureCombatState(pawn);
+            HediffComp_QingheCombatState state = GetCombatState(pawn, true);
             FlowerBellResonanceProjectileSet set = SetFor(state?.Resonance ?? FlowerBellResonance.Spring);
             return state?.ExtraBuildingDamage == true ? set?.buildingProjectile ?? set?.projectile : set?.projectile;
+        }
+
+        private HediffComp_QingheCombatState GetCombatState(Pawn pawn, bool ensure)
+        {
+            if (cachedHolder != pawn)
+            {
+                cachedHolder = pawn;
+                cachedCombatState = null;
+            }
+
+            if (cachedCombatState == null || cachedCombatState.Pawn != pawn)
+            {
+                cachedCombatState = ensure
+                    ? MX_QH_HediffUtility.EnsureCombatState(pawn)
+                    : MX_QH_HediffUtility.GetCombatState(pawn);
+            }
+
+            return cachedCombatState;
         }
 
         private FlowerBellResonanceProjectileSet SetFor(FlowerBellResonance resonance)
@@ -76,10 +97,10 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 defaultLabel = "MX_QH_FlowerBellBuildingDamageLabel".Translate(),
                 defaultDesc = "MX_QH_FlowerBellBuildingDamageDesc".Translate(),
-                isActive = () => MX_QH_HediffUtility.GetCombatState(pawn)?.ExtraBuildingDamage == true,
+                isActive = () => GetCombatState(pawn, true)?.ExtraBuildingDamage == true,
                 toggleAction = delegate
                 {
-                    MX_QH_HediffUtility.EnsureCombatState(pawn)?.ToggleExtraBuildingDamage();
+                    GetCombatState(pawn, true)?.ToggleExtraBuildingDamage();
                 }
             };
         }

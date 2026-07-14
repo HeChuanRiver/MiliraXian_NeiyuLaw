@@ -17,6 +17,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public class CompQingheResonantWeaponLabel : ThingComp
     {
+        private Pawn cachedHolder;
+        private HediffComp_QingheCombatState cachedCombatState;
+
         public CompProperties_QingheResonantWeaponLabel Props => (CompProperties_QingheResonantWeaponLabel)props;
 
         public override string TransformLabel(string label)
@@ -62,8 +65,24 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private int CurrentResonanceIndex()
         {
             Pawn pawn = ResolveHolderPawn();
-            HediffComp_QingheCombatState state = MX_QH_HediffUtility.GetCombatState(pawn);
+            HediffComp_QingheCombatState state = GetCombatState(pawn);
             return (int)(state?.Resonance ?? FlowerBellResonance.Spring);
+        }
+
+        private HediffComp_QingheCombatState GetCombatState(Pawn pawn)
+        {
+            if (cachedHolder != pawn)
+            {
+                cachedHolder = pawn;
+                cachedCombatState = null;
+            }
+
+            if (cachedCombatState == null || cachedCombatState.Pawn != pawn)
+            {
+                cachedCombatState = MX_QH_HediffUtility.GetCombatState(pawn);
+            }
+
+            return cachedCombatState;
         }
 
         private Pawn ResolveHolderPawn()

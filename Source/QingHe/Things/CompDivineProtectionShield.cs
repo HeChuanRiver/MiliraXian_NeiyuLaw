@@ -333,7 +333,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return fallback;
             }
 
-            return owner.GetStatValue(statDef);
+            return owner.GetStatValue(statDef, true, 1);
         }
 
         public string BuildShieldTooltip()
