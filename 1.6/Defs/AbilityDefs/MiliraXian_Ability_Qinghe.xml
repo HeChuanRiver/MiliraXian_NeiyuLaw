@@ -285,7 +285,6 @@
                 <requireSword>true</requireSword>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
-                <knockbackFlyerDef>MX_QH_AscentSlashKnockbackFlyer</knockbackFlyerDef>
                 <range>19</range>
                 <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
                 <dashDurationMinTicks>8</dashDurationMinTicks>
@@ -305,14 +304,7 @@
                 <secondImpactRadius>2</secondImpactRadius>
                 <damageAmount>32</damageAmount>
                 <armorPenetration>0.35</armorPenetration>
-                <accumulationAbnormals>
-                    <li>MX_AbnormalBleed</li>
-                    <li>MX_AbnormalElectricLeak</li>
-                </accumulationAbnormals>
-                <accumulationAmount>18</accumulationAmount>
                 <buildingDamageMultiplier>2</buildingDamageMultiplier>
-                <stunTicks>60</stunTicks>
-                <knockbackDistance>4</knockbackDistance>
                 <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
                 <empoweredSlashCount>7</empoweredSlashCount>
                 <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>

@@ -189,12 +189,16 @@ namespace MiliraXian.Characters.Neiyu
                     ? commandDesc
                     : "MX_ModeSwitch_CommandFullDesc".Translate(commandDesc, currentFormLabel).ToString(),
                 icon = GetFormIcon(previewIndex) ?? GetFormIcon(context.CurrentIndex) ?? TexCommand.Attack,
-                Disabled = onCooldown || disabledWhileHunting
+                Disabled = onCooldown || pawnBusy || disabledWhileHunting
             };
 
             if (disabledWhileHunting)
             {
                 cmd.disabledReason = "MX_ModeSwitch_DisabledWhileHunting".Translate().ToString();
+            }
+            else if (pawnBusy)
+            {
+                cmd.disabledReason = "MX_ModeSwitch_PawnBusy".Translate().ToString();
             }
             else if (onCooldown)
             {
@@ -358,6 +362,12 @@ namespace MiliraXian.Characters.Neiyu
             if (IsPrimaryWeaponLockedByHunting(context))
             {
                 Messages.Message("MX_ModeSwitch_DisabledWhileHunting".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
+                return;
+            }
+
+            if (Props.blockWhilePawnBusy && PawnUnavailableForSwitch(pawn))
+            {
+                Messages.Message("MX_ModeSwitch_PawnBusy".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
