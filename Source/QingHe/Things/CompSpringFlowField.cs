@@ -140,49 +140,60 @@ namespace MiliraXian.Characters.QingHe.Things
         
         private void AttachEffect()
         {
-            foreach (var thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, CurrentRadius, true))
-            {
-                if (!(thing is Pawn pawn) || pawn.Dead || pawn.Faction != caster.Faction)
-                {
-                    continue;
-                }
-
-                Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
-                if (hediff != null)
-                {
-                    hediff.Severity = Mathf.Max(hediff.Severity, ResolveSpecialEffectFactor());
-                    hediff.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
-                }
-                else
-                {
-                    hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
-                    hediff.Severity = ResolveSpecialEffectFactor();
-                    pawn.health.AddHediff(hediff);
-                }
-            }
-
-            ApplyEnhancedHostileEffects();
-        }
-
-        private void ApplyEnhancedHostileEffects()
-        {
-            if (!enhanced || caster == null || parent?.Map == null)
+            Map map = parent?.Map;
+            if (map == null || caster == null)
             {
                 return;
             }
 
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, CurrentRadius, true))
+            float radius = Mathf.Max(0f, CurrentRadius);
+            float radiusSquared = radius * radius;
+            float effectFactor = ResolveSpecialEffectFactor();
+            IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
+            for (int i = 0; i < pawns.Count; i++)
             {
-                Pawn pawn = thing as Pawn;
-                if (pawn == null || pawn.Dead || !GenHostility.HostileTo(caster, pawn))
+                Pawn pawn = pawns[i];
+                if (pawn == null || pawn.Dead)
                 {
                     continue;
                 }
 
-                float factor = ResolveSpecialEffectFactor();
-                ApplyEnhancedAccumulation(pawn, Props.enhancedBleedAbnormals, Props.enhancedBleedAccumulationAmount * factor);
-                ApplyEnhancedAccumulation(pawn, Props.enhancedToxinAbnormals, Props.enhancedToxinAccumulationAmount * factor);
+                int dx = pawn.Position.x - parent.Position.x;
+                int dz = pawn.Position.z - parent.Position.z;
+                if (dx * dx + dz * dz > radiusSquared)
+                {
+                    continue;
+                }
+
+                if (pawn.Faction == caster.Faction)
+                {
+                    ApplySpringFlow(pawn, effectFactor);
+                    continue;
+                }
+
+                if (!enhanced || !GenHostility.HostileTo(caster, pawn))
+                {
+                    continue;
+                }
+
+                ApplyEnhancedAccumulation(pawn, Props.enhancedBleedAbnormals, Props.enhancedBleedAccumulationAmount * effectFactor);
+                ApplyEnhancedAccumulation(pawn, Props.enhancedToxinAbnormals, Props.enhancedToxinAccumulationAmount * effectFactor);
             }
+        }
+
+        private static void ApplySpringFlow(Pawn pawn, float effectFactor)
+        {
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
+            if (hediff != null)
+            {
+                hediff.Severity = Mathf.Max(hediff.Severity, effectFactor);
+                hediff.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
+                return;
+            }
+
+            hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
+            hediff.Severity = effectFactor;
+            pawn.health.AddHediff(hediff);
         }
 
         private float ResolveSpecialEffectFactor()

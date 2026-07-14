@@ -180,6 +180,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Scribe_Values.Look(ref empoweredSlashDamage, "mx_qh_ascentSlash_empoweredSlashDamage", 0f);
             Scribe_Values.Look(ref empoweredSlashBaseAngle, "mx_qh_ascentSlash_empoweredSlashBaseAngle", 0f);
             stage = (AscentSlashStage)stageValue;
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                RestoreVisualState(parent?.pawn);
+            }
         }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -217,7 +221,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             int dashTicks = ResolveDashDurationTicks(dashStartPos, dashEndPos);
             caster.stances?.stunner?.StunFor(dashTicks + 2, caster, addBattleLog: false, showMote: false);
             BeginStage(AscentSlashStage.Dash, dashTicks);
-            AscentSlashVisualTracker.SetAbsolutePosition(caster, dashStartPos);
+            AscentSlashVisualTracker.BeginDash(caster, stageStartTick, stageEndTick, dashStartPos, dashEndPos);
         }
 
         public override void CompTick()
@@ -440,7 +444,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             previousDashPos = predictedPos;
-            AscentSlashVisualTracker.SetAbsolutePosition(caster, predictedPos);
             TryAddDashAfterimage(caster, map, predictedPos, now);
 
             if (predictedTick >= stageEndTick)
@@ -452,14 +455,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private void TickAscent(Pawn caster, int now)
         {
-            float progress = StageProgress(now);
-            float power = Mathf.Max(1f, Props.ascentDecelerationPower);
-            float height = 1f - Mathf.Pow(1f - progress, power);
-            AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(height));
             if (now >= stageEndTick)
             {
                 BeginStage(AscentSlashStage.Hover, Props.hoverTicks);
-                AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(1f));
+                BeginHoverVisual(caster);
             }
         }
 
@@ -473,12 +472,11 @@ namespace MiliraXian.Characters.QingHe.Abilities
             BreakRoofAt(map, secondStageTakeoffCell, allowThickRoof: false);
             PlayTakeoffVisuals(map, caster.Position);
             BeginStage(AscentSlashStage.Ascending, Props.ascentTicks);
-            AscentSlashVisualTracker.SetOffset(caster, Vector3.zero);
+            BeginAscentVisual(caster);
         }
 
         private void TickHover(Pawn caster, Map map, int now)
         {
-            AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(1f));
             if (now < stageEndTick)
             {
                 return;
@@ -500,15 +498,12 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             BeginStage(AscentSlashStage.Descending, Props.descentTicks);
             Props.dropSound?.PlayOneShot(new TargetInfo(caster.Position, map));
-            AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(1f));
+            BeginDescentVisual(caster);
             MX_QHGraphicsUtility.Fleck(map, secondImpactCell, Props.impactFleck, 1.1f);
         }
 
         private void TickDescent(Pawn caster, Map map, int now)
         {
-            float progress = StageProgress(now);
-            float height = 1f - Mathf.Pow(progress, Mathf.Max(1f, Props.descentAccelerationPower));
-            AscentSlashVisualTracker.SetOffset(caster, ComputeSkyfallOffset(height));
             if (now < stageEndTick)
             {
                 return;
@@ -785,7 +780,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 + Mathf.Max(0, Props.empoweredSlashCount - 1) * Mathf.Max(1, Props.empoweredSlashIntervalTicks);
             caster.stances?.stunner?.StunFor(secondStageTicks + 5, caster, addBattleLog: false, showMote: false);
             BeginStage(AscentSlashStage.TakeoffDelay, Props.takeoffDelayTicks);
-            AscentSlashVisualTracker.SetOffset(caster, Vector3.zero);
         }
 
         private void ResolveDashImpact(Pawn caster, Map map, IntVec3 center, Thing directHitThing)
@@ -1001,11 +995,56 @@ namespace MiliraXian.Characters.QingHe.Abilities
             return Mathf.Clamp01((now - stageStartTick) / (float)(stageEndTick - stageStartTick));
         }
 
-        private Vector3 ComputeSkyfallOffset(float height)
+        private void BeginAscentVisual(Pawn caster)
         {
-            float clampedHeight = Mathf.Clamp01(height);
-            return Altitudes.AltIncVect * (Props.secondStageMaxAltitudeLayers * clampedHeight)
-                + Vector3.forward * (Props.secondStageMaxForwardOffset * clampedHeight);
+            AscentSlashVisualTracker.BeginAscent(
+                caster,
+                stageStartTick,
+                stageEndTick,
+                Props.secondStageMaxAltitudeLayers,
+                Props.secondStageMaxForwardOffset,
+                Props.ascentDecelerationPower);
+        }
+
+        private void BeginHoverVisual(Pawn caster)
+        {
+            AscentSlashVisualTracker.BeginHover(
+                caster,
+                stageStartTick,
+                stageEndTick,
+                Props.secondStageMaxAltitudeLayers,
+                Props.secondStageMaxForwardOffset);
+        }
+
+        private void BeginDescentVisual(Pawn caster)
+        {
+            AscentSlashVisualTracker.BeginDescent(
+                caster,
+                stageStartTick,
+                stageEndTick,
+                Props.secondStageMaxAltitudeLayers,
+                Props.secondStageMaxForwardOffset,
+                Props.descentAccelerationPower);
+        }
+
+        private void RestoreVisualState(Pawn caster)
+        {
+            AscentSlashVisualTracker.Clear(caster);
+            switch (stage)
+            {
+                case AscentSlashStage.Dash:
+                    AscentSlashVisualTracker.BeginDash(caster, stageStartTick, stageEndTick, dashStartPos, dashEndPos);
+                    break;
+                case AscentSlashStage.Ascending:
+                    BeginAscentVisual(caster);
+                    break;
+                case AscentSlashStage.Hover:
+                    BeginHoverVisual(caster);
+                    break;
+                case AscentSlashStage.Descending:
+                    BeginDescentVisual(caster);
+                    break;
+            }
         }
 
         private static void TryAddDashAfterimage(Pawn caster, Map map, Vector3 drawPos, int now)

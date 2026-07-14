@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
 using MiliraXian.Characters.Vfx;
 using RimWorld;
@@ -8,24 +7,56 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
+    internal enum AscentSlashVisualStage
+    {
+        Dash,
+        Ascending,
+        Hover,
+        Descending
+    }
+
     internal struct AscentSlashVisualState
     {
-        public bool absolute;
-        public Vector3 value;
+        public AscentSlashVisualStage stage;
+        public int stageStartTick;
+        public int stageEndTick;
+        public Vector3 dashStartPos;
+        public Vector3 dashEndPos;
+        public float maxAltitudeLayers;
+        public float maxForwardOffset;
+        public float easingPower;
     }
 
     internal static class AscentSlashVisualTracker
     {
         private static readonly Dictionary<int, AscentSlashVisualState> states = new Dictionary<int, AscentSlashVisualState>();
 
-        public static void SetAbsolutePosition(Pawn pawn, Vector3 drawPos)
+        public static void BeginDash(Pawn pawn, int startTick, int endTick, Vector3 startPos, Vector3 endPos)
         {
-            Set(pawn, absolute: true, drawPos);
+            SetState(pawn, new AscentSlashVisualState
+            {
+                stage = AscentSlashVisualStage.Dash,
+                stageStartTick = startTick,
+                stageEndTick = Mathf.Max(startTick + 1, endTick),
+                dashStartPos = startPos,
+                dashEndPos = endPos,
+                easingPower = 2.6f
+            });
         }
 
-        public static void SetOffset(Pawn pawn, Vector3 offset)
+        public static void BeginAscent(Pawn pawn, int startTick, int endTick, float maxAltitudeLayers, float maxForwardOffset, float easingPower)
         {
-            Set(pawn, absolute: false, offset);
+            SetHeightStage(pawn, AscentSlashVisualStage.Ascending, startTick, endTick, maxAltitudeLayers, maxForwardOffset, easingPower);
+        }
+
+        public static void BeginHover(Pawn pawn, int startTick, int endTick, float maxAltitudeLayers, float maxForwardOffset)
+        {
+            SetHeightStage(pawn, AscentSlashVisualStage.Hover, startTick, endTick, maxAltitudeLayers, maxForwardOffset, 1f);
+        }
+
+        public static void BeginDescent(Pawn pawn, int startTick, int endTick, float maxAltitudeLayers, float maxForwardOffset, float easingPower)
+        {
+            SetHeightStage(pawn, AscentSlashVisualStage.Descending, startTick, endTick, maxAltitudeLayers, maxForwardOffset, easingPower);
         }
 
         public static void Clear(Pawn pawn)
@@ -43,34 +74,83 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return false;
             }
 
-            drawPos = state.absolute ? state.value : drawPos + state.value;
+            int now = Find.TickManager != null ? Find.TickManager.TicksGame : state.stageEndTick;
+            float progress = state.stageEndTick > state.stageStartTick
+                ? Mathf.Clamp01((now - state.stageStartTick) / (float)(state.stageEndTick - state.stageStartTick))
+                : 1f;
+
+            if (state.stage == AscentSlashVisualStage.Dash)
+            {
+                int sampledTick = Mathf.Min(now + 1, state.stageEndTick);
+                progress = state.stageEndTick > state.stageStartTick
+                    ? Mathf.Clamp01((sampledTick - state.stageStartTick) / (float)(state.stageEndTick - state.stageStartTick))
+                    : 1f;
+                float easedProgress = 1f - Mathf.Pow(1f - progress, state.easingPower);
+                Vector3 absolutePos = Vector3.Lerp(state.dashStartPos, state.dashEndPos, easedProgress);
+                absolutePos.y = state.dashStartPos.y;
+                drawPos = absolutePos;
+                return true;
+            }
+
+            float height;
+            switch (state.stage)
+            {
+                case AscentSlashVisualStage.Ascending:
+                    height = 1f - Mathf.Pow(1f - progress, state.easingPower);
+                    break;
+                case AscentSlashVisualStage.Hover:
+                    height = 1f;
+                    break;
+                case AscentSlashVisualStage.Descending:
+                    height = 1f - Mathf.Pow(progress, state.easingPower);
+                    break;
+                default:
+                    return false;
+            }
+
+            drawPos += Altitudes.AltIncVect * (state.maxAltitudeLayers * height)
+                + Vector3.forward * (state.maxForwardOffset * height);
             return true;
         }
 
-        private static void Set(Pawn pawn, bool absolute, Vector3 value)
+        private static void SetHeightStage(
+            Pawn pawn,
+            AscentSlashVisualStage stage,
+            int startTick,
+            int endTick,
+            float maxAltitudeLayers,
+            float maxForwardOffset,
+            float easingPower)
+        {
+            SetState(pawn, new AscentSlashVisualState
+            {
+                stage = stage,
+                stageStartTick = startTick,
+                stageEndTick = Mathf.Max(startTick + 1, endTick),
+                maxAltitudeLayers = Mathf.Max(0f, maxAltitudeLayers),
+                maxForwardOffset = Mathf.Max(0f, maxForwardOffset),
+                easingPower = Mathf.Max(1f, easingPower)
+            });
+        }
+
+        private static void SetState(Pawn pawn, AscentSlashVisualState state)
         {
             if (pawn == null)
             {
                 return;
             }
 
-            states[pawn.thingIDNumber] = new AscentSlashVisualState
-            {
-                absolute = absolute,
-                value = value
-            };
+            states[pawn.thingIDNumber] = state;
         }
     }
 
     [HarmonyPatch(typeof(Pawn_DrawTracker), "DrawPos", MethodType.Getter)]
     public static class MX_QHAscentSlashDrawPosPatches
     {
-        private static readonly FieldInfo TrackerPawnField = AccessTools.Field(typeof(Pawn_DrawTracker), "pawn");
-
         [HarmonyPostfix]
-        public static void Patch_DrawPos_Postfix(Pawn_DrawTracker __instance, ref Vector3 __result)
+        public static void Patch_DrawPos_Postfix(Pawn ___pawn, ref Vector3 __result)
         {
-            Pawn pawn = TrackerPawnField?.GetValue(__instance) as Pawn;
+            Pawn pawn = ___pawn;
             if (pawn == null || pawn.Destroyed || !pawn.Spawned)
             {
                 return;

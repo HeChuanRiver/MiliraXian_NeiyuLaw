@@ -33,11 +33,14 @@ namespace MiliraXian.Characters.QingHe.Things
     /// </summary>
     public class CompDivineProtectionShield : ThingComp
     {
+        private const int RegenFlushIntervalTicks = 10;
+
         private float energy = 100f;
         private int ticksToReset = -1;
         private int ticksToRegen = 0;
 
         private int fullEnergyAccumulatedTicks = 0;
+        private int lastRegenUpdateTick = -1;
         private DivineProtectionShieldRenderer renderer;
 
         public CompProperties_DivineProtectionShield Props => (CompProperties_DivineProtectionShield)props;
@@ -119,15 +122,25 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             base.PostPostMake();
             energy = MaxEnergy;
+            lastRegenUpdateTick = CurrentTick;
         }
 
         public override void PostExposeData()
         {
+            if (Scribe.mode == LoadSaveMode.Saving)
+            {
+                FlushAccumulatedRegen(CurrentTick, force: true);
+            }
+
             base.PostExposeData();
             Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
             Scribe_Values.Look(ref ticksToReset, "mx_qh_lotus_ticksToReset", -1);
             Scribe_Values.Look(ref ticksToRegen, "mx_qh_lotus_ticksToRegen", 0);
             Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                lastRegenUpdateTick = CurrentTick;
+            }
         }
 
         public override void CompTick()
@@ -140,12 +153,13 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            energy = Mathf.Min(energy, MaxEnergy);
+            int currentTick = CurrentTick;
 
             if (ticksToReset > 0)
             {
                 ticksToReset--;
                 fullEnergyAccumulatedTicks = 0;
+                lastRegenUpdateTick = currentTick;
                 return;
             }
 
@@ -153,22 +167,51 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 ticksToRegen--;
                 fullEnergyAccumulatedTicks = 0;
+                lastRegenUpdateTick = currentTick;
                 return;
             }
 
-            float gain = CurrentRegenPerSecond / 60f;
-            if (gain > 0f)
+            FlushAccumulatedRegen(currentTick, force: false);
+        }
+
+        private void FlushAccumulatedRegen(int currentTick, bool force)
+        {
+            if (PawnOwner == null || InBreak || InRegenDelay)
             {
-                energy = Mathf.Min(MaxEnergy, energy + gain);
+                lastRegenUpdateTick = currentTick;
+                return;
             }
 
-            if (Energy < MaxEnergy - 0.0001f)
+            int elapsedTicks = lastRegenUpdateTick < 0
+                ? RegenFlushIntervalTicks
+                : Mathf.Max(0, currentTick - lastRegenUpdateTick);
+            if (!force && elapsedTicks < RegenFlushIntervalTicks)
+            {
+                return;
+            }
+
+            if (elapsedTicks <= 0)
+            {
+                lastRegenUpdateTick = currentTick;
+                return;
+            }
+
+            float maxEnergy = MaxEnergy;
+            energy = Mathf.Min(energy, maxEnergy);
+            float gain = CurrentRegenPerSecond * elapsedTicks / 60f;
+            if (gain > 0f)
+            {
+                energy = Mathf.Min(maxEnergy, energy + gain);
+            }
+
+            lastRegenUpdateTick = currentTick;
+            if (energy < maxEnergy - 0.0001f)
             {
                 fullEnergyAccumulatedTicks = 0;
             }
             else
             {
-                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + 1, 1000000);
+                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + elapsedTicks, 1000000);
             }
         }
 
@@ -177,7 +220,13 @@ namespace MiliraXian.Characters.QingHe.Things
             absorbed = false;
 
             Pawn owner = PawnOwner;
-            if (owner == null || owner.Dead || dinfo.Amount <= 0f || InBreak || dinfo.Def.ignoreShields ||energy <= 0f)
+            if (owner == null || owner.Dead)
+            {
+                return;
+            }
+
+            FlushAccumulatedRegen(CurrentTick, force: true);
+            if (dinfo.Amount <= 0f || InBreak || dinfo.Def.ignoreShields || energy <= 0f)
             {
                 return;
             }
@@ -202,6 +251,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             ticksToRegen = ResolveRegenDelayTicks();
+            lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyAbsorbed(owner, CurrentTick);
             dinfo.SetAmount(0f);
             absorbed = true;
@@ -241,6 +291,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
+            FlushAccumulatedRegen(CurrentTick, force: true);
             energy = Mathf.Min(MaxEnergy, energy + amount);
         }
 
@@ -255,6 +306,7 @@ namespace MiliraXian.Characters.QingHe.Things
             energy = 0f;
             ticksToRegen = 0;
             ticksToReset = ResolveBreakDelayTicks();
+            lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
         }
 
