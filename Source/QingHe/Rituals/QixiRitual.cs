@@ -27,24 +27,6 @@ namespace MiliraXian.Characters.QingHe.Rituals
             return ritual;
         }
 
-        public override void ExposeData()
-        {
-            bool needsFill = false;
-            if (Scribe.mode == LoadSaveMode.LoadingVars && sourcePattern == null)
-            {
-                sourcePattern = MX_QHDefOf.MX_QH_QixiRitualPattern;
-                needsFill = sourcePattern != null;
-            }
-
-            base.ExposeData();
-
-            if (Scribe.mode == LoadSaveMode.LoadingVars && needsFill)
-            {
-                obligationTriggers = new List<RitualObligationTrigger>();
-                sourcePattern.Fill(this);
-            }
-        }
-
         private static void EnsureFilled(Precept_Ritual ritual)
         {
             RitualPatternDef pattern = MX_QHDefOf.MX_QH_QixiRitualPattern;
