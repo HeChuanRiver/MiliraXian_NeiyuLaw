@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThoughtDef>
+        <defName>MX_Neiyu_Joyful</defName>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <workerClass>MiliraXian.Characters.Neiyu.ThoughtWorker_NeiyuJoyful</workerClass>
+        <validWhileDespawned>true</validWhileDespawned>
+        <stages>
+            <li>
+                <label>Delighted</label>
+                <description>I love everything here so much!</description>
+                <baseMoodEffect>10</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_Neiyu_RelaxedNearNeiyu</defName>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <workerClass>MiliraXian.Characters.Neiyu.ThoughtWorker_NeiyuRelaxedNearby</workerClass>
+        <nullifiedIfNotColonist>true</nullifiedIfNotColonist>
+        <stages>
+            <li>
+                <label>At ease</label>
+                <description>For some reason, even the air nearby feels fresher~</description>
+                <baseMoodEffect>5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_Neiyu_HungryLightheaded</defName>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <workerClass>MiliraXian.Characters.Neiyu.ThoughtWorker_NeiyuHungryLightheaded</workerClass>
+        <validWhileDespawned>true</validWhileDespawned>
+        <stages>
+            <li>
+                <label>Light-headed</label>
+                <description>Do immortals need to eat too...</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_Neiyu_TiredCultivating</defName>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <workerClass>MiliraXian.Characters.Neiyu.ThoughtWorker_NeiyuTiredCultivating</workerClass>
+        <validWhileDespawned>true</validWhileDespawned>
+        <stages>
+            <li>
+                <label>Cultivating...</label>
+                <description>It's normal for an immortal to cultivate. That's normal... right?</description>
+                <baseMoodEffect>-5</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+
+    <ThoughtDef>
+        <defName>MX_Neiyu_RecreationBored</defName>
+        <thoughtClass>Thought_Situational</thoughtClass>
+        <workerClass>MiliraXian.Characters.Neiyu.ThoughtWorker_NeiyuRecreationBored</workerClass>
+        <validWhileDespawned>true</validWhileDespawned>
+        <stages>
+            <li>
+                <label>Ennui</label>
+                <description>So bored! So bored! Maybe I should go find something fun to do...</description>
+                <baseMoodEffect>-15</baseMoodEffect>
+            </li>
+        </stages>
+    </ThoughtDef>
+</Defs>

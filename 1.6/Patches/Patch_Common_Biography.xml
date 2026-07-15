@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationSequence">
+    <operations>
+      <li Class="PatchOperationConditional">
+        <xpath>/Defs/*[defName="Milira_Race" and not(inspectorTabs)]</xpath>
+        <match Class="PatchOperationAdd">
+          <xpath>/Defs/*[defName="Milira_Race"]</xpath>
+          <value>
+            <inspectorTabs />
+          </value>
+        </match>
+      </li>
+      <li Class="PatchOperationConditional">
+        <xpath>/Defs/*[defName="Milira_Race"]/inspectorTabs[not(li="MiliraXian.Characters.Biography.ITab_Biography")]</xpath>
+        <match Class="PatchOperationAdd">
+          <xpath>/Defs/*[defName="Milira_Race"]/inspectorTabs</xpath>
+          <value>
+            <li>MiliraXian.Characters.Biography.ITab_Biography</li>
+          </value>
+        </match>
+      </li>
+    </operations>
+  </Operation>
+</Patch>
