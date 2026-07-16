@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <HediffDef>
+    <defName>MX_BiographyTracker</defName>
+    <label>biography state</label>
+    <description>Hidden per-pawn state used by the special-character biography framework.</description>
+    <hediffClass>MiliraXian.Characters.Biography.Hediff_BiographyTracker</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <keepOnBodyPartRestoration>true</keepOnBodyPartRestoration>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>1</minSeverity>
+    <maxSeverity>1</maxSeverity>
+  </HediffDef>
+</Defs>

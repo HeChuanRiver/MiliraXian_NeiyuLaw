@@ -312,6 +312,23 @@
                 <replaceWithKind>Milira_Colonist</replaceWithKind>
             </li>
 
+
+            <li Class="MiliraXian.Characters.Biography.BiographyExtension">
+                <stories>
+                    <li>
+                        <storyName>StableStoryId</storyName>
+                        <label>故事测试</label>
+                        <storyText>gpt是个傻逼我是个傻逼大家都是煞笔，嘻嘻嘻嘻嘻</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_RecordValue">
+                            <record>DamageDealt</record>
+                            <minimumValue>100</minimumValue>
+                        </unlockCondition>
+                        <rewards />
+                    </li>
+                </stories>
+            </li>
+            
+            
         </modExtensions>
 
     </PawnKindDef>

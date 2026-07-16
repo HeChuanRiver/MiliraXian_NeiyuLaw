@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Biography_ITab_Label>传记</MX_Biography_ITab_Label>
+  <MX_Biography_StatusComplete>已达成</MX_Biography_StatusComplete>
+  <MX_Biography_StatusIncomplete>未达成</MX_Biography_StatusIncomplete>
+  <MX_Biography_UnlockCondition>解锁条件</MX_Biography_UnlockCondition>
+  <MX_Biography_Rewards>奖励</MX_Biography_Rewards>
+  <MX_Biography_RewardClaimed>已领取</MX_Biography_RewardClaimed>
+  <MX_Biography_RewardUnclaimed>未领取</MX_Biography_RewardUnclaimed>
+  <MX_Biography_ClaimRewards>领取奖励</MX_Biography_ClaimRewards>
+  <MX_Biography_NoRewards>这段故事没有配置奖励。</MX_Biography_NoRewards>
+  <MX_Biography_AllRewardsClaimed>这段故事的奖励已经全部领取。</MX_Biography_AllRewardsClaimed>
+  <MX_Biography_NoStorySelected>没有可显示的故事。</MX_Biography_NoStorySelected>
+  <MX_Biography_DataUnavailable>传记状态不可用。</MX_Biography_DataUnavailable>
+  <MX_Biography_ConditionMissing>缺少解锁条件。</MX_Biography_ConditionMissing>
+  <MX_Biography_ConditionAlways>无前置条件：{0}</MX_Biography_ConditionAlways>
+  <MX_Biography_ConditionAll>需要全部满足：</MX_Biography_ConditionAll>
+  <MX_Biography_ConditionAny>满足任意一项：</MX_Biography_ConditionAny>
+  <MX_Biography_ConditionPlayerFaction>属于玩家阵营：{0}</MX_Biography_ConditionPlayerFaction>
+  <MX_Biography_ConditionColonistDays>忠诚殖民者累计时间：{0}/{1} 天 — {2}</MX_Biography_ConditionColonistDays>
+  <MX_Biography_ConditionRecordValue>{0}：{1}/{2} — {3}</MX_Biography_ConditionRecordValue>
+  <MX_Biography_ConditionHediff>{0}严重度：{1}/{2} — {3}</MX_Biography_ConditionHediff>
+  <MX_Biography_ConditionTrait>特性“{0}”：{1}</MX_Biography_ConditionTrait>
+  <MX_Biography_ConditionTraitDegree>特性“{0}”（程度 {1}）：{2}</MX_Biography_ConditionTraitDegree>
+  <MX_Biography_ConditionAbility>能力“{0}”：{1}</MX_Biography_ConditionAbility>
+  <MX_Biography_ConditionSkill>{0}技能：{1}/{2} — {3}</MX_Biography_ConditionSkill>
+  <MX_Biography_ConditionStoryUnlocked>故事“{0}”已解锁：{1}</MX_Biography_ConditionStoryUnlocked>
+  <MX_Biography_StoryUnlockedMessage>{0}解锁了一段新的传记故事：{1}</MX_Biography_StoryUnlockedMessage>
+  <MX_Biography_ClaimRequiresPlayerFaction>只有属于玩家阵营的角色才能领取奖励。</MX_Biography_ClaimRequiresPlayerFaction>
+  <MX_Biography_ClaimNotUnlocked>这段故事尚未解锁。</MX_Biography_ClaimNotUnlocked>
+  <MX_Biography_ClaimMissingHealth>该角色没有健康追踪器。</MX_Biography_ClaimMissingHealth>
+  <MX_Biography_ClaimMissingAbilities>该角色没有能力追踪器。</MX_Biography_ClaimMissingAbilities>
+  <MX_Biography_ClaimMissingInventory>该角色没有物品栏。</MX_Biography_ClaimMissingInventory>
+  <MX_Biography_ClaimSucceeded>已领取“{0}”的故事奖励。</MX_Biography_ClaimSucceeded>
+  <MX_Biography_ClaimFailed>奖励领取失败：{0}</MX_Biography_ClaimFailed>
+  <MX_Biography_ClaimPartiallyFailed>已成功领取 {0} 项奖励；剩余奖励领取失败，可稍后重试：{1}</MX_Biography_ClaimPartiallyFailed>
+  <MX_Biography_RewardHediff>获得 {0}（严重度 {1}）</MX_Biography_RewardHediff>
+  <MX_Biography_RewardAbility>获得能力：{0}</MX_Biography_RewardAbility>
+  <MX_Biography_RewardItem>{0} ×{1}</MX_Biography_RewardItem>
+  <MX_Biography_RewardItemWithStuff>{1}制 {0} ×{2}</MX_Biography_RewardItemWithStuff>
+  <MX_Biography_RewardInvalidConfiguration>奖励配置无效。</MX_Biography_RewardInvalidConfiguration>
+  <MX_Biography_RewardHediffFailed>无法添加奖励健康状态。</MX_Biography_RewardHediffFailed>
+  <MX_Biography_RewardMissingStuff>物品奖励没有可用的材料。</MX_Biography_RewardMissingStuff>
+  <MX_Biography_RewardInventoryFull>物品栏空间不足，无法完整发放该奖励。</MX_Biography_RewardInventoryFull>
+  <MX_Biography_RewardTooLarge>一项物品奖励最多可包含 {0} 个堆栈。</MX_Biography_RewardTooLarge>
+  <MX_Biography_UnknownDef>未知 Def</MX_Biography_UnknownDef>
+  <MX_Biography_UnknownStory>未知故事</MX_Biography_UnknownStory>
+  <MX_Biography_UnknownFailure>未知原因</MX_Biography_UnknownFailure>
+</LanguageData>

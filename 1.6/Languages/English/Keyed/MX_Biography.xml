@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Biography_ITab_Label>Biography</MX_Biography_ITab_Label>
+  <MX_Biography_StatusComplete>complete</MX_Biography_StatusComplete>
+  <MX_Biography_StatusIncomplete>incomplete</MX_Biography_StatusIncomplete>
+  <MX_Biography_UnlockCondition>Unlock condition</MX_Biography_UnlockCondition>
+  <MX_Biography_Rewards>Rewards</MX_Biography_Rewards>
+  <MX_Biography_RewardClaimed>claimed</MX_Biography_RewardClaimed>
+  <MX_Biography_RewardUnclaimed>unclaimed</MX_Biography_RewardUnclaimed>
+  <MX_Biography_ClaimRewards>Claim rewards</MX_Biography_ClaimRewards>
+  <MX_Biography_NoRewards>No rewards are configured for this story.</MX_Biography_NoRewards>
+  <MX_Biography_AllRewardsClaimed>All rewards from this story have already been claimed.</MX_Biography_AllRewardsClaimed>
+  <MX_Biography_NoStorySelected>No story is available.</MX_Biography_NoStorySelected>
+  <MX_Biography_DataUnavailable>Biography state is unavailable.</MX_Biography_DataUnavailable>
+  <MX_Biography_ConditionMissing>The unlock condition is missing.</MX_Biography_ConditionMissing>
+  <MX_Biography_ConditionAlways>No prerequisite: {0}</MX_Biography_ConditionAlways>
+  <MX_Biography_ConditionAll>All of the following:</MX_Biography_ConditionAll>
+  <MX_Biography_ConditionAny>Any one of the following:</MX_Biography_ConditionAny>
+  <MX_Biography_ConditionPlayerFaction>Member of the player's faction: {0}</MX_Biography_ConditionPlayerFaction>
+  <MX_Biography_ConditionColonistDays>Loyal colonist time: {0}/{1} days — {2}</MX_Biography_ConditionColonistDays>
+  <MX_Biography_ConditionRecordValue>{0}: {1}/{2} — {3}</MX_Biography_ConditionRecordValue>
+  <MX_Biography_ConditionHediff>{0} severity: {1}/{2} — {3}</MX_Biography_ConditionHediff>
+  <MX_Biography_ConditionTrait>Trait {0}: {1}</MX_Biography_ConditionTrait>
+  <MX_Biography_ConditionTraitDegree>Trait {0} (degree {1}): {2}</MX_Biography_ConditionTraitDegree>
+  <MX_Biography_ConditionAbility>Ability {0}: {1}</MX_Biography_ConditionAbility>
+  <MX_Biography_ConditionSkill>{0} skill: {1}/{2} — {3}</MX_Biography_ConditionSkill>
+  <MX_Biography_ConditionStoryUnlocked>Story “{0}” unlocked: {1}</MX_Biography_ConditionStoryUnlocked>
+  <MX_Biography_StoryUnlockedMessage>{0} has unlocked a new biography story: {1}</MX_Biography_StoryUnlockedMessage>
+  <MX_Biography_ClaimRequiresPlayerFaction>Only a pawn in the player's faction can claim rewards.</MX_Biography_ClaimRequiresPlayerFaction>
+  <MX_Biography_ClaimNotUnlocked>This story has not been unlocked.</MX_Biography_ClaimNotUnlocked>
+  <MX_Biography_ClaimMissingHealth>This pawn has no health tracker.</MX_Biography_ClaimMissingHealth>
+  <MX_Biography_ClaimMissingAbilities>This pawn has no ability tracker.</MX_Biography_ClaimMissingAbilities>
+  <MX_Biography_ClaimMissingInventory>This pawn has no inventory.</MX_Biography_ClaimMissingInventory>
+  <MX_Biography_ClaimSucceeded>Claimed the rewards from “{0}”.</MX_Biography_ClaimSucceeded>
+  <MX_Biography_ClaimFailed>Could not claim the reward: {0}</MX_Biography_ClaimFailed>
+  <MX_Biography_ClaimPartiallyFailed>{0} reward(s) were claimed. The remaining reward failed and can be retried: {1}</MX_Biography_ClaimPartiallyFailed>
+  <MX_Biography_RewardHediff>Gain {0} (severity {1})</MX_Biography_RewardHediff>
+  <MX_Biography_RewardAbility>Gain ability: {0}</MX_Biography_RewardAbility>
+  <MX_Biography_RewardItem>{0} ×{1}</MX_Biography_RewardItem>
+  <MX_Biography_RewardItemWithStuff>{1} {0} ×{2}</MX_Biography_RewardItemWithStuff>
+  <MX_Biography_RewardInvalidConfiguration>The reward configuration is invalid.</MX_Biography_RewardInvalidConfiguration>
+  <MX_Biography_RewardHediffFailed>The hediff could not be added.</MX_Biography_RewardHediffFailed>
+  <MX_Biography_RewardMissingStuff>No valid material is available for the item reward.</MX_Biography_RewardMissingStuff>
+  <MX_Biography_RewardInventoryFull>There is not enough inventory space for the complete item reward.</MX_Biography_RewardInventoryFull>
+  <MX_Biography_RewardTooLarge>An item reward may contain at most {0} stacks.</MX_Biography_RewardTooLarge>
+  <MX_Biography_UnknownDef>unknown def</MX_Biography_UnknownDef>
+  <MX_Biography_UnknownStory>unknown story</MX_Biography_UnknownStory>
+  <MX_Biography_UnknownFailure>unknown failure</MX_Biography_UnknownFailure>
+</LanguageData>
