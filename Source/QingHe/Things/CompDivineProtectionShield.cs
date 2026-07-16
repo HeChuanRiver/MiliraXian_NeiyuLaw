@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public bool breakOnEmp = true;
         public float shieldDamageCap = 20f;
 
-        public DivineProtectionShieldVisualProperties visual = new DivineProtectionShieldVisualProperties();
+        public DivineProtectionShieldVisualProperties visual = new();
 
         public CompProperties_DivineProtectionShield()
         {
@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public CompProperties_DivineProtectionShield Props => (CompProperties_DivineProtectionShield)props;
 
-        private DivineProtectionShieldRenderer Renderer => renderer ?? (renderer = new DivineProtectionShieldRenderer(this));
+        private DivineProtectionShieldRenderer Renderer => renderer ??= new DivineProtectionShieldRenderer(this);
 
         private Pawn PawnOwner => parent as Pawn;
 

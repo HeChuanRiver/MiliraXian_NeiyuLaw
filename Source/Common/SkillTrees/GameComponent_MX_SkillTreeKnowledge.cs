@@ -72,10 +72,7 @@ namespace MiliraXian.Characters
 
         private void Normalize()
         {
-            if (extractedNodes == null)
-            {
-                extractedNodes = new List<SkillNodeDef>();
-            }
+            extractedNodes ??= new();
 
             extractedNodes.RemoveAll(node => node == null);
         }

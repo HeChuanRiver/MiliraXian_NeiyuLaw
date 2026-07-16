@@ -63,7 +63,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            Listing_Standard listing = new Listing_Standard();
+            Listing_Standard listing = new();
             listing.Begin(inRect);
             listing.CheckboxLabeled(
                 "MX_NL_EnableSpecialPawnIntegrationLabel".Translate().ToString(),
@@ -131,7 +131,7 @@ namespace MiliraXian.Characters.Neiyu
     {
         public const string CurrentVersion = "v1.1.103";
 
-        private static readonly List<NeiyuLawUpdateLogEntry> Entries = new List<NeiyuLawUpdateLogEntry>
+        private static readonly List<NeiyuLawUpdateLogEntry> Entries = new()
         {
             new NeiyuLawUpdateLogEntry(CurrentVersion, "MX_NL_UpdateLog_v1_1_103_Body", true),
             new NeiyuLawUpdateLogEntry("v1.1.010", "MX_NL_UpdateLog_v1_1_010_Body", true),
@@ -166,7 +166,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public static TaggedString AllUpdateLogsText()
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             for (int index = 0; index < Entries.Count; index++)
             {
                 NeiyuLawUpdateLogEntry entry = Entries[index];
@@ -281,15 +281,12 @@ namespace MiliraXian.Characters.Neiyu
                 return 0f;
             }
 
-            switch (settings.ConsciousnessLockMode)
+            return settings.ConsciousnessLockMode switch
             {
-                case SpecialPawnConsciousnessLockMode.Lock100:
-                    return 1f;
-                case SpecialPawnConsciousnessLockMode.Lock35:
-                    return 0.35f;
-                default:
-                    return 0f;
-            }
+                SpecialPawnConsciousnessLockMode.Lock100 => 1f,
+                SpecialPawnConsciousnessLockMode.Lock35 => 0.35f,
+                _ => 0f,
+            };
         }
     }
 }

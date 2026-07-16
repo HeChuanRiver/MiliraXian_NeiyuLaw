@@ -216,7 +216,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            LocalTargetInfo retargetInfo = new LocalTargetInfo(newTarget);
+            LocalTargetInfo retargetInfo = new(newTarget);
             projectile.intendedTarget = retargetInfo;
             projectile.usedTarget = retargetInfo;
             retargetCount++;

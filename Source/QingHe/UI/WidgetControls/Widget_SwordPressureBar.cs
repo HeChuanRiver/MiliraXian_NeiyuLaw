@@ -14,12 +14,12 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private readonly Pawn pawn;
         private HediffComp_SwordPressure cachedPressure;
 
-        private static readonly Color EmptyColor = new Color(0.16f, 0.17f, 0.18f, 1f);
-        private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color LowPressureColor = new Color(0.58f, 0.60f, 0.62f, 1f);
-        private static readonly Color OnePressureColor = new Color(0.95f, 0.95f, 0.95f, 1f);
-        private static readonly Color TwoPressureColor = new Color(1f, 0.90f, 0.55f, 1f);
-        private static readonly Color FullPressureColor = new Color(1f, 0.58f, 0.58f, 1f);
+        private static readonly Color EmptyColor = new(0.16f, 0.17f, 0.18f, 1f);
+        private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color LowPressureColor = new(0.58f, 0.60f, 0.62f, 1f);
+        private static readonly Color OnePressureColor = new(0.95f, 0.95f, 0.95f, 1f);
+        private static readonly Color TwoPressureColor = new(1f, 0.90f, 0.55f, 1f);
+        private static readonly Color FullPressureColor = new(1f, 0.58f, 0.58f, 1f);
 
         public Widget_SwordPressureBar(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         protected override void DrawContents(Rect rect)
         {
             HediffComp_SwordPressure pressure = GetSwordPressureComp();
-            Rect barRect = new Rect(rect.x + 10f, rect.y + (rect.height - 9f) * 0.5f, Mathf.Min(150f, rect.width - 18f), 9f);
+            Rect barRect = new(rect.x + 10f, rect.y + (rect.height - 9f) * 0.5f, Mathf.Min(150f, rect.width - 18f), 9f);
             DrawSegments(barRect, pressure);
             TooltipHandler.TipRegion(barRect, () => BuildTip(pressure), Gen.HashCombineInt(pawn?.thingIDNumber ?? 0, TipSalt));
             if (Mouse.IsOver(barRect))
@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             float segmentWidth = (barRect.width - SegmentGap * (max - 1)) / max;
             for (int i = 0; i < max; i++)
             {
-                Rect segment = new Rect(barRect.x + i * (segmentWidth + SegmentGap), barRect.y, segmentWidth, barRect.height);
+                Rect segment = new(barRect.x + i * (segmentWidth + SegmentGap), barRect.y, segmentWidth, barRect.height);
                 Widgets.DrawBoxSolid(segment, BorderColor);
                 Rect content = segment.ContractedBy(1f);
                 Widgets.DrawBoxSolid(content, EmptyColor);

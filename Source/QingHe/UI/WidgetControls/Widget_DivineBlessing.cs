@@ -17,10 +17,10 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private readonly Pawn pawn;
         private HediffComp_DivineBlessing cachedComp;
 
-        private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color EmptyColor = new Color(0.035f, 0.04f, 0.045f, 1f);
-        private static readonly Color ChargedColor = new Color(0.45f, 0.90f, 0.42f, 1f);
-        private static readonly Color RechargingColor = new Color(1f, 0.82f, 0.24f, 1f);
+        private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color EmptyColor = new(0.035f, 0.04f, 0.045f, 1f);
+        private static readonly Color ChargedColor = new(0.45f, 0.90f, 0.42f, 1f);
+        private static readonly Color RechargingColor = new(1f, 0.82f, 0.24f, 1f);
 
         public Widget_DivineBlessing(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
@@ -39,7 +39,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             Rect blocksRect = GetAlignedRect(rect, new Vector2(maxCharges * blockSize + (maxCharges - 1) * BlockGap, blockSize), null);
             for (int i = 0; i < maxCharges; i++)
             {
-                Rect blockRect = new Rect(blocksRect.x + i * (blockSize + BlockGap), blocksRect.y, blockSize, blockSize);
+                Rect blockRect = new(blocksRect.x + i * (blockSize + BlockGap), blocksRect.y, blockSize, blockSize);
                 DrawBlock(blockRect, ResolveFillPercent(i, currentCharges, maxCharges, rechargeProgress), ResolveFillColor(i, currentCharges));
             }
 
@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                 return;
             }
 
-            Rect fillRect = new Rect(innerRect.x, innerRect.y, innerRect.width * fillPercent, innerRect.height);
+            Rect fillRect = new(innerRect.x, innerRect.y, innerRect.width * fillPercent, innerRect.height);
             Widgets.DrawBoxSolid(fillRect, fillColor);
         }
 

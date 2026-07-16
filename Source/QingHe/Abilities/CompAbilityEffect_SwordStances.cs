@@ -69,12 +69,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            Hediff state = caster.health.hediffSet.GetFirstHediffOfDef(stateDef);
-            if (state == null)
-            {
-                state = caster.health.AddHediff(stateDef);
-            }
-
+            Hediff state = caster.health.hediffSet.GetFirstHediffOfDef(stateDef) ?? caster.health.AddHediff(stateDef);
             state?.TryGetComp<HediffComp_Disappears>()?.SetDuration(Mathf.Max(1, Props.durationTicks));
         }
     }
@@ -120,8 +115,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
     public class CompAbilityEffect_IllusoryReflection : CompAbilityEffect
     {
-        private static readonly Color PreviewColor = new Color(0.72f, 0.9f, 1f, 0.7f);
-        private readonly List<IntVec3> previewCells = new List<IntVec3>();
+        private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
+        private readonly List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
 

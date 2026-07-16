@@ -53,14 +53,14 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public string exitEffecter;
         public string impactEffecter = "ImpactSmallDustCloud";
         public string takeoffGroundFleck = "MXNL_Skyfall_FlyBegin_G";
-        public Vector2 takeoffGroundFleckSize = new Vector2(9.6f, 3.8f);
+        public Vector2 takeoffGroundFleckSize = new(9.6f, 3.8f);
         public Vector2 takeoffGroundFleckOffset = Vector2.zero;
         public string entryFleck;
         public string exitFleck;
         public string impactFleck = "ExplosionFlash";
         public string ascentTrailFleck = "MXNL_Skyfall_FlyBegin_F";
-        public Vector2 ascentTrailFleckSize = new Vector2(2.2f, 20.2f);
-        public Vector2 ascentTrailFleckOffset = new Vector2(0f, 8f);
+        public Vector2 ascentTrailFleckSize = new(2.2f, 20.2f);
+        public Vector2 ascentTrailFleckOffset = new(0f, 8f);
         public SoundDef castSound;
         public SoundDef dropSound;
         public SoundDef slashSound;
@@ -85,7 +85,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             ImpactSlashes
         }
 
-        private static readonly Color ConePreviewColor = new Color(1f, 0.45f, 0.65f, 0.55f);
+        private static readonly Color ConePreviewColor = new(1f, 0.45f, 0.65f, 0.55f);
         private AscentSlashStage stage;
         private IntVec3 originCell = IntVec3.Invalid;
         private IntVec3 dashEndCell = IntVec3.Invalid;
@@ -794,8 +794,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Props.castSound?.PlayOneShot(new TargetInfo(center, map));
 
             float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
-            List<Thing> victims = new List<Thing>();
-            HashSet<Thing> unique = new HashSet<Thing>();
+            List<Thing> victims = new();
+            HashSet<Thing> unique = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, Props.dashImpactRadius, true))
             {
                 if (!cell.InBounds(map))
@@ -1087,12 +1087,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
-            if (hediff == null)
-            {
-                hediff = caster.health.AddHediff(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
-            }
-
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AscentSlashInvulnerable) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_AscentSlashInvulnerable);
             hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
         }
 

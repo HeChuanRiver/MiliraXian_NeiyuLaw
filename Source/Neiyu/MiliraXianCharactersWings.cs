@@ -102,7 +102,7 @@ namespace MiliraXian.Characters.Neiyu
         private const string RightWingBehindLabel = "right wing behind";
 
         private static readonly Dictionary<string, MiliraXianCharacterWingEntry> Entries =
-            new Dictionary<string, MiliraXianCharacterWingEntry>
+            new()
             {
                 {
                     "MiliraXian_Neiyu",
@@ -194,26 +194,14 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            string defName;
-            switch ((facingOverride ?? pawn.Rotation).AsInt)
+            string defName = (facingOverride ?? pawn.Rotation).AsInt switch
             {
-                case 0:
-                    defName = entry.FlyNorthDefName;
-                    break;
-                case 1:
-                    defName = entry.FlyEastDefName;
-                    break;
-                case 2:
-                    defName = entry.FlySouthDefName;
-                    break;
-                case 3:
-                    defName = entry.FlyWestDefName;
-                    break;
-                default:
-                    defName = entry.FlyEastDefName;
-                    break;
-            }
-
+                0 => entry.FlyNorthDefName,
+                1 => entry.FlyEastDefName,
+                2 => entry.FlySouthDefName,
+                3 => entry.FlyWestDefName,
+                _ => entry.FlyEastDefName,
+            };
             animationDef = DefDatabase<AnimationDef>.GetNamedSilentFail(defName);
             return animationDef != null;
         }

@@ -11,9 +11,9 @@ namespace MiliraXian.Characters
         private const int CheckIntervalTicks = 600;
         private const int ConversionDelayTicks = GenDate.TicksPerDay / 2;
 
-        private List<PendingCultureConversion> pendingConversions = new List<PendingCultureConversion>();
-        private List<int> completedPawnIds = new List<int>();
-        private HashSet<int> completedPawnIdSet = new HashSet<int>();
+        private List<PendingCultureConversion> pendingConversions = new();
+        private List<int> completedPawnIds = new();
+        private HashSet<int> completedPawnIdSet = new();
         private int nextConversionTick = int.MaxValue;
 
         public GameComponent_SpecialPawnPrimaryCultureConversion(Game game)
@@ -46,15 +46,9 @@ namespace MiliraXian.Characters
             Scribe_Collections.Look(ref completedPawnIds, "completedSpecialPawnPrimaryCultureConversions", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (pendingConversions == null)
-                {
-                    pendingConversions = new List<PendingCultureConversion>();
-                }
+                pendingConversions ??= new();
 
-                if (completedPawnIds == null)
-                {
-                    completedPawnIds = new List<int>();
-                }
+                completedPawnIds ??= new();
 
                 pendingConversions.RemoveAll(entry => entry == null || entry.pawn == null);
                 completedPawnIdSet = new HashSet<int>(completedPawnIds);

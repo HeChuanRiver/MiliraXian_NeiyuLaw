@@ -11,11 +11,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
     {
         private const string FieldEdgeTexPath = "Misc/FieldEdge";
         private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-        private static readonly List<IntVec3> ringDrawCells = new List<IntVec3>();
-        private static readonly List<Matrix4x4> instancingMatrices = new List<Matrix4x4>();
+        private static readonly List<IntVec3> ringDrawCells = new();
+        private static readonly List<Matrix4x4> instancingMatrices = new();
         private static readonly bool[] rotNeeded = new bool[4];
-        private static readonly Dictionary<int, Material> fieldEdgeMaterialsByColor = new Dictionary<int, Material>();
-        private static readonly Dictionary<int, List<RelativeFieldEdge>> relativeFieldEdgesByCellCount = new Dictionary<int, List<RelativeFieldEdge>>();
+        private static readonly Dictionary<int, Material> fieldEdgeMaterialsByColor = new();
+        private static readonly Dictionary<int, List<RelativeFieldEdge>> relativeFieldEdgesByCellCount = new();
         private static readonly IntVec3[] cardinalOffsets =
         {
             IntVec3.North,
@@ -218,7 +218,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             if (fieldGrid == null)
             {
-                fieldGrid = new BoolGrid(map);
+                fieldGrid = new(map);
             }
             else
             {
@@ -319,13 +319,13 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         private static List<RelativeFieldEdge> BuildRelativeFieldEdges(int cellCount)
         {
-            HashSet<IntVec3> cells = new HashSet<IntVec3>();
+            HashSet<IntVec3> cells = new();
             for (int i = 0; i < cellCount; i++)
             {
                 cells.Add(GenRadial.RadialPattern[i]);
             }
 
-            List<RelativeFieldEdge> edges = new List<RelativeFieldEdge>();
+            List<RelativeFieldEdge> edges = new();
             for (int i = 0; i < cellCount; i++)
             {
                 IntVec3 cell = GenRadial.RadialPattern[i];

@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public static HashSet<Pawn> CollectPawnsInRadius(Map map, IntVec3 center, float radius)
         {
-            HashSet<Pawn> result = new HashSet<Pawn>();
+            HashSet<Pawn> result = new();
             if (map == null || !center.IsValid)
             {
                 return result;
@@ -240,7 +240,7 @@ namespace MiliraXian.Characters.Neiyu
 
     internal static class NeiyuSkyfallVisualTracker
     {
-        private static readonly Dictionary<int, NeiyuSkyfallVisualState> states = new Dictionary<int, NeiyuSkyfallVisualState>();
+        private static readonly Dictionary<int, NeiyuSkyfallVisualState> states = new();
 
         public static void BeginAscent(Pawn pawn, int startTick, int endTick)
         {
@@ -287,23 +287,13 @@ namespace MiliraXian.Characters.Neiyu
                 t = Mathf.Clamp01((now - state.stageStartTick) / (float)(state.stageEndTick - state.stageStartTick));
             }
 
-            float h;
-            switch (state.stage)
+            var h = state.stage switch
             {
-                case NeiyuSkyfallVisualStage.Ascending:
-                    h = Mathf.Pow(t, 0.22f);
-                    break;
-                case NeiyuSkyfallVisualStage.Warning:
-                    h = 1f;
-                    break;
-                case NeiyuSkyfallVisualStage.Descending:
-                    h = 1f - Mathf.Pow(t, 1.2f);
-                    break;
-                default:
-                    h = 0f;
-                    break;
-            }
-
+                NeiyuSkyfallVisualStage.Ascending => Mathf.Pow(t, 0.22f),
+                NeiyuSkyfallVisualStage.Warning => 1f,
+                NeiyuSkyfallVisualStage.Descending => 1f - Mathf.Pow(t, 1.2f),
+                _ => 0f,
+            };
             if (h <= 0.001f)
             {
                 if (now > state.stageEndTick + 5)
@@ -978,7 +968,7 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
-                DamageInfo dinfo = new DamageInfo(damageDef, Props.impactDamage, Props.impactArmorPen, -1f, caster);
+                DamageInfo dinfo = new(damageDef, Props.impactDamage, Props.impactArmorPen, -1f, caster);
                 dinfo.SetIgnoreArmor(true);
                 pawn.TakeDamage(dinfo);
 
@@ -1174,7 +1164,7 @@ namespace MiliraXian.Characters.Neiyu
 
             if (!headRemoved && !victim.Dead && Props.dashDamage > 0)
             {
-                DamageInfo finisher = new DamageInfo(DamageDefOf.Cut, Props.dashDamage, 999f, -1f, caster);
+                DamageInfo finisher = new(DamageDefOf.Cut, Props.dashDamage, 999f, -1f, caster);
                 finisher.SetIgnoreArmor(true);
                 victim.TakeDamage(finisher);
             }

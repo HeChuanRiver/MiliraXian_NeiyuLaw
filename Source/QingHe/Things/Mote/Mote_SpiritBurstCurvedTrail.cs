@@ -39,12 +39,12 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
         private bool hasFixedEndpoints;
         private readonly Mesh[] lineMeshes = new Mesh[MaxLayerMeshes];
         private Mesh distortMesh;
-        private readonly List<Vector3> meshVertices = new List<Vector3>(1280);
-        private readonly List<Vector2> meshUvs = new List<Vector2>(1280);
-        private readonly List<int> meshTriangles = new List<int>(1920);
-        private readonly List<Vector3> distortVertices = new List<Vector3>(2560);
-        private readonly List<Vector2> distortUvs = new List<Vector2>(2560);
-        private readonly List<int> distortTriangles = new List<int>(3840);
+        private readonly List<Vector3> meshVertices = new(1280);
+        private readonly List<Vector2> meshUvs = new(1280);
+        private readonly List<int> meshTriangles = new(1920);
+        private readonly List<Vector3> distortVertices = new(2560);
+        private readonly List<Vector2> distortUvs = new(2560);
+        private readonly List<int> distortTriangles = new(3840);
 
         protected override bool EndOfLife
         {
@@ -274,7 +274,7 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
                 return;
             }
 
-            Vector3 direction = new Vector3(delta.x / len, 0f, delta.z / len);
+            Vector3 direction = new(delta.x / len, 0f, delta.z / len);
             Vector3 side = new Vector3(-direction.z, 0f, direction.x) * (Mathf.Max(0.001f, segmentWidth) * 0.5f);
             Vector3 trim = direction * Mathf.Min(0.001f, len * 0.25f);
             a += trim;
@@ -319,7 +319,7 @@ namespace MiliraXian.Characters.QingHe.Things.Mote
 
         private static Mesh CreateDynamicMesh(string name)
         {
-            Mesh mesh = new Mesh { name = name };
+            Mesh mesh = new() { name = name };
             mesh.MarkDynamic();
             return mesh;
         }

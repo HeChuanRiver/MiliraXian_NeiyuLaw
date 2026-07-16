@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.Neiyu
 
 
         public ThingDef featherThingDef;
-        public IntRange featherCountRange = new IntRange(4, 8);
+        public IntRange featherCountRange = new(4, 8);
 
         public CompProperties_AbilityNeiyuWarpFeather()
         {

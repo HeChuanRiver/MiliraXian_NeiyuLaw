@@ -55,10 +55,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (comp.verbTracker == null)
-            {
-                comp.verbTracker = new VerbTracker(comp);
-            }
+            comp.verbTracker ??= new VerbTracker(comp);
 
             if (force || NeedsReinit(comp))
             {
@@ -83,8 +80,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return true;
             }
 
-            HashSet<string> expected = new HashSet<string>(expectedLoadIds);
-            HashSet<string> seen = new HashSet<string>();
+            HashSet<string> expected = new(expectedLoadIds);
+            HashSet<string> seen = new();
             for (int i = 0; i < verbs.Count; i++)
             {
                 Verb verb = verbs[i];
@@ -104,7 +101,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static List<string> BuildExpectedLoadIds(CompEquippable comp)
         {
-            List<string> expectedLoadIds = new List<string>();
+            List<string> expectedLoadIds = new();
             IVerbOwner owner = comp;
             List<VerbProperties> verbProperties = comp.VerbProperties;
             if (verbProperties != null)
@@ -162,7 +159,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool Prefix(LoadedObjectDirectory __instance, ILoadReferenceable reffable)
         {
-            if (!(reffable is Verb verb))
+            if (reffable is not Verb verb)
             {
                 return true;
             }

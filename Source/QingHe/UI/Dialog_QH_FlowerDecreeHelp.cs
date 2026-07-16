@@ -9,10 +9,10 @@ namespace MiliraXian.Characters.QingHe.UI
         private const float WindowWidth = 520f;
         private const float WindowHeight = 430f;
 
-        private static readonly Color HeaderColor = new Color(0.72f, 0.86f, 0.76f, 1f);
-        private static readonly Color BodyColor = new Color(0.86f, 0.88f, 0.86f, 1f);
+        private static readonly Color HeaderColor = new(0.72f, 0.86f, 0.76f, 1f);
+        private static readonly Color BodyColor = new(0.86f, 0.88f, 0.86f, 1f);
 
-        public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
+        public override Vector2 InitialSize => new(WindowWidth, WindowHeight);
 
         public Dialog_QH_FlowerDecreeHelp()
         {

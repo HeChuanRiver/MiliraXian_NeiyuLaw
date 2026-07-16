@@ -15,8 +15,8 @@ namespace MiliraXian.Characters
         public int interruptCooldownTicks = 30;
         public float energyLossPercent = 0.20f;
         public FleckDef steamFleckDef;
-        public IntRange steamIntervalTicks = new IntRange(45, 90);
-        public FloatRange steamScaleRange = new FloatRange(0.55f, 0.9f);
+        public IntRange steamIntervalTicks = new(45, 90);
+        public FloatRange steamScaleRange = new(0.55f, 0.9f);
         public float steamPositionJitter = 0.28f;
 
         public HediffCompProperties_AbnormalShortCircuit()

@@ -52,14 +52,14 @@ namespace MiliraXian.Characters.Neiyu
 
 
         public string absorbFleckDefName = "ExplosionFlash";
-        public List<string> hurtFleckDefNames = new List<string>();
+        public List<string> hurtFleckDefNames = new();
         public float absorbFleckScale = 1.2f;
         public string absorbEffecterDefName = null;
 
 
         public bool drawActiveShield = true;
         public string activeShieldTexPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
-        public Vector2 activeShieldDrawSize = new Vector2(3.6f, 3.6f);
+        public Vector2 activeShieldDrawSize = new(3.6f, 3.6f);
         public float activeShieldAlpha = 0.55f;
         public float activeShieldAltitudeOffset = 0f;
         public float activeShieldPulseMin = 0.96f;
@@ -94,7 +94,7 @@ namespace MiliraXian.Characters.Neiyu
         private bool weakWasActive;
 
 
-        private List<string> phase2RecentHitLogs = new List<string>();
+        private List<string> phase2RecentHitLogs = new();
 
         public HediffCompProperties_MXNeiyuCountShield Props => (HediffCompProperties_MXNeiyuCountShield)props;
 
@@ -513,7 +513,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 sb.AppendLine("MX_NL_ShieldTipStage".Translate(stage, InWeak ? "MX_NL_ShieldTipWeakSuffix".Translate().ToString() : "").ToString());
 
                 if (stage == 2)
@@ -730,11 +730,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            BodyPartRecord part = dinfo.HitPart;
-            if (part == null)
-            {
-                part = Pawn.RaceProps != null ? Pawn.RaceProps.body.corePart : null;
-            }
+            BodyPartRecord part = dinfo.HitPart ?? (Pawn.RaceProps != null ? Pawn.RaceProps.body.corePart : null);
             if (part == null)
             {
                 return false;
@@ -795,7 +791,7 @@ namespace MiliraXian.Characters.Neiyu
                 if (effecterDef != null)
                 {
                     Effecter effecter = effecterDef.Spawn(Pawn.Position, Pawn.Map);
-                    TargetInfo t = new TargetInfo(Pawn.Position, Pawn.Map);
+                    TargetInfo t = new(Pawn.Position, Pawn.Map);
                     effecter.EffectTick(t, t);
                     effecter.Cleanup();
                 }
@@ -832,10 +828,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private void EnsureRecentLogs()
         {
-            if (phase2RecentHitLogs == null)
-            {
-                phase2RecentHitLogs = new List<string>();
-            }
+            phase2RecentHitLogs ??= new();
         }
 
         private void RecordPhase2Hit(float damage, int consumed, int before, int after)
@@ -944,7 +937,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private string BuildStage3BuffLines(MXNeiyuStage3Profile profile)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             float outgoing = (profile.outgoingDamageFactor - 1f) * 100f;
             if (Mathf.Abs(outgoing) > 0.01f)
@@ -1013,7 +1006,7 @@ namespace MiliraXian.Characters.Neiyu
         }
 
         private static ConditionalWeakTable<Pawn, ShieldCacheEntry> ShieldByPawn =
-            new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+            new();
 
         private static HediffDef shieldHediffDef;
 

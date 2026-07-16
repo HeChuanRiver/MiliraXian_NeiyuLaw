@@ -15,15 +15,15 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float ResourceBarWidth = 150f;
         private const float BarHeight = 9f;
         private const float SegmentGap = 2f;
-        private static readonly RectOffset BarMargin = new RectOffset((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
+        private static readonly RectOffset BarMargin = new((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
 
         private readonly Pawn pawn;
         private HediffComp_FlowerDecree cachedComp;
 
-        private static readonly Color SegmentEmptyColor = new Color(0.16f, 0.17f, 0.18f, 1f);
-        private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color FlowerDecreeBaseColor = new Color(0.88f, 0.42f, 0.62f, 1f);
-        private static readonly Color FlowerDecreeHighlightColor = new Color(1f, 0.90f, 0.74f, 1f);
+        private static readonly Color SegmentEmptyColor = new(0.16f, 0.17f, 0.18f, 1f);
+        private static readonly Color OuterBorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color FlowerDecreeBaseColor = new(0.88f, 0.42f, 0.62f, 1f);
+        private static readonly Color FlowerDecreeHighlightColor = new(1f, 0.90f, 0.74f, 1f);
 
         public Widget_FlowerDecreeBar(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
@@ -57,7 +57,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
             for (int i = 0; i < max; i++)
             {
-                Rect segmentRect = new Rect(barRect.x + i * (segmentWidth + SegmentGap), barRect.y, segmentWidth, barRect.height);
+                Rect segmentRect = new(barRect.x + i * (segmentWidth + SegmentGap), barRect.y, segmentWidth, barRect.height);
                 Widgets.DrawBoxSolid(segmentRect, OuterBorderColor);
                 Rect contentRect = segmentRect.ContractedBy(1f);
                 Widgets.DrawBoxSolid(contentRect, SegmentEmptyColor);
@@ -70,7 +70,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                 }
                 else if (i == fullSegments && i < max && partialPercent > 0.0001f)
                 {
-                    Rect progressRect = new Rect(contentRect.x, contentRect.y, contentRect.width * partialPercent, contentRect.height);
+                    Rect progressRect = new(contentRect.x, contentRect.y, contentRect.width * partialPercent, contentRect.height);
                     Color progress = FlowerDecreeBaseColor;
                     progress.a = 0.65f;
                     Widgets.DrawBoxSolid(progressRect, progress);

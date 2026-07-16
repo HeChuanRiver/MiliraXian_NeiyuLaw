@@ -167,7 +167,7 @@ namespace MiliraXian.Characters.Neiyu
                         scatterCell = mapRect.ClosestCellTo(scatterCell);
                     }
 
-                    LocalTargetInfo usedTarget = new LocalTargetInfo(scatterCell);
+                    LocalTargetInfo usedTarget = new(scatterCell);
                     LocalTargetInfo homingTarget = intendedTarget.IsValid ? intendedTarget : usedTarget;
                     if (canRetarget
                         && retargetTotalWeight > 0.001f

@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class CompAbilityEffect_ZhaoliDeathField : CompAbilityEffect
     {
-        private static readonly Color PreviewColor = new Color(0.48f, 0.08f, 0.1f);
+        private static readonly Color PreviewColor = new(0.48f, 0.08f, 0.1f);
 
         private new CompProperties_AbilityZhaoliDeathField Props => (CompProperties_AbilityZhaoliDeathField)props;
         public float PropsRadius => Props.radius;
@@ -90,8 +90,8 @@ namespace MiliraXian.Characters.Zhaoli
     internal static class Patch_ZhaoliDeathFieldWarmup_StanceDraw
     {
         private const float WarningPulseCyclesPerSecond = 2f;
-        private static readonly Color WarningColorDim = new Color(0.25f, 0f, 0.1f);
-        private static readonly Color WarningColorBright = new Color(0.46f, 0.04f, 0.04f);
+        private static readonly Color WarningColorDim = new(0.25f, 0f, 0.1f);
+        private static readonly Color WarningColorBright = new(0.46f, 0.04f, 0.04f);
 
         private static void Postfix(Stance_Warmup __instance)
         {
@@ -129,7 +129,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private HediffCompProperties_ZhaoliDeathField PropsField => (HediffCompProperties_ZhaoliDeathField)props;
 
-        private IntVec3 FieldCenter => new IntVec3(fieldCenterX, 0, fieldCenterZ);
+        private IntVec3 FieldCenter => new(fieldCenterX, 0, fieldCenterZ);
         public float DefaultRadius => PropsField.radius;
         private float CurrentRadius => activeRadius > 0f ? activeRadius : PropsField.radius;
 

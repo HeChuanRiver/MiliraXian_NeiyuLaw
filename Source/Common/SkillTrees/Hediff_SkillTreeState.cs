@@ -49,8 +49,8 @@ namespace MiliraXian.Characters
         {
             stageDirty = false;
 
-            Dictionary<StatDef, float> offsets = new Dictionary<StatDef, float>();
-            Dictionary<StatDef, float> factors = new Dictionary<StatDef, float>();
+            Dictionary<StatDef, float> offsets = new();
+            Dictionary<StatDef, float> factors = new();
 
             HediffStage baseStage = base.CurStage;
             AddOffsets(offsets, baseStage?.statOffsets, 1f);
@@ -73,7 +73,7 @@ namespace MiliraXian.Characters
                     AddPerLevelFactors(factors, node.statFactorsPerLevel, level);
                 }
 
-                HashSet<SkillNodeCollectionDef> collections = new HashSet<SkillNodeCollectionDef>();
+                HashSet<SkillNodeCollectionDef> collections = new();
                 foreach (SkillNodeDef node in state.LearnedNodes)
                 {
                     if (node?.collection != null)
@@ -165,7 +165,7 @@ namespace MiliraXian.Characters
                 return null;
             }
 
-            List<StatModifier> result = new List<StatModifier>(values.Count);
+            List<StatModifier> result = new(values.Count);
             foreach (KeyValuePair<StatDef, float> pair in values)
             {
                 result.Add(new StatModifier { stat = pair.Key, value = pair.Value });

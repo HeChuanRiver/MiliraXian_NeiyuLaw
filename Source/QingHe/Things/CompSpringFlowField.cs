@@ -17,9 +17,9 @@ namespace MiliraXian.Characters.QingHe.Things
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
         public int ambientVisualFlecksPerBurst = 2;
-        public List<HediffDef_Abnormal> enhancedBleedAbnormals = new List<HediffDef_Abnormal>();
+        public List<HediffDef_Abnormal> enhancedBleedAbnormals = new();
         public float enhancedBleedAccumulationAmount = 8f;
-        public List<HediffDef_Abnormal> enhancedToxinAbnormals = new List<HediffDef_Abnormal>();
+        public List<HediffDef_Abnormal> enhancedToxinAbnormals = new();
         public float enhancedToxinAccumulationAmount = 8f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;

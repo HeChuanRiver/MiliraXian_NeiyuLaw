@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             public AscentSlashVisualState state;
         }
 
-        private static ConditionalWeakTable<Pawn, StateHolder> states = new ConditionalWeakTable<Pawn, StateHolder>();
+        private static ConditionalWeakTable<Pawn, StateHolder> states = new();
         private static int activeStateCount;
 
         public static void BeginDash(Pawn pawn, int startTick, int endTick, Vector3 startPos, Vector3 endPos)
@@ -348,7 +348,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static Material lightningMaterial;
         private static bool triedLoadLightningMaterial;
 
-        private readonly List<AscentSlashLightningBolt> lightningBolts = new List<AscentSlashLightningBolt>();
+        private readonly List<AscentSlashLightningBolt> lightningBolts = new();
 
         public MapComponent_QingheAscentSlashVisuals(Map map) : base(map)
         {

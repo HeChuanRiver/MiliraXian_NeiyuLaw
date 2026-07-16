@@ -73,8 +73,8 @@ namespace MiliraXian.Characters.Biography
             GUI.color = Color.white;
 
             Rect contentRect = new Rect(0f, 20f, size.x, size.y - 20f).ContractedBy(10f);
-            Rect leftPanel = new Rect(contentRect.x, contentRect.y, LeftPanelWidth, contentRect.height);
-            Rect rightPanel = new Rect(
+            Rect leftPanel = new(contentRect.x, contentRect.y, LeftPanelWidth, contentRect.height);
+            Rect rightPanel = new(
                 leftPanel.xMax + PanelGap,
                 contentRect.y,
                 contentRect.width - LeftPanelWidth - PanelGap,
@@ -148,7 +148,7 @@ namespace MiliraXian.Characters.Biography
             Widgets.DrawMenuSection(panelRect);
             Rect outRect = panelRect.ContractedBy(6f);
             float viewHeight = Mathf.Max(outRect.height, extension.stories.Count * StoryRowHeight);
-            Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, viewHeight);
+            Rect viewRect = new(0f, 0f, outRect.width - 16f, viewHeight);
 
             Widgets.BeginScrollView(outRect, ref leftScrollPosition, viewRect);
             for (int i = 0; i < extension.stories.Count; i++)
@@ -159,7 +159,7 @@ namespace MiliraXian.Characters.Biography
                     continue;
                 }
 
-                Rect rowRect = new Rect(0f, i * StoryRowHeight, viewRect.width, StoryRowHeight - 2f);
+                Rect rowRect = new(0f, i * StoryRowHeight, viewRect.width, StoryRowHeight - 2f);
                 bool selected = story.storyName == selectedStoryName;
                 bool unlocked = tracker != null && tracker.IsStoryUnlocked(story.storyName);
                 if (selected)
@@ -201,7 +201,7 @@ namespace MiliraXian.Characters.Biography
             Widgets.DrawMenuSection(panelRect);
             Rect outRect = panelRect.ContractedBy(10f);
             float viewWidth = outRect.width - 16f;
-            Rect viewRect = new Rect(0f, 0f, viewWidth, Mathf.Max(outRect.height, rightContentHeight));
+            Rect viewRect = new(0f, 0f, viewWidth, Mathf.Max(outRect.height, rightContentHeight));
             Widgets.BeginScrollView(outRect, ref rightScrollPosition, viewRect);
 
             float curY = 0f;
@@ -268,7 +268,7 @@ namespace MiliraXian.Characters.Biography
 
             curY += 6f;
             bool canClaim = tracker.CanClaimRewards(story, out string disabledReason);
-            Rect buttonRect = new Rect(0f, curY, Mathf.Min(220f, width), 32f);
+            Rect buttonRect = new(0f, curY, Mathf.Min(220f, width), 32f);
             if (Widgets.ButtonText(
                     buttonRect,
                     "MX_Biography_ClaimRewards".Translate(),

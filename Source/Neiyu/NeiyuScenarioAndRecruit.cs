@@ -220,7 +220,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            if (!(parms.target is Map map) || !map.IsPlayerHome)
+            if (parms.target is not Map map || !map.IsPlayerHome)
             {
                 return false;
             }
@@ -246,7 +246,7 @@ namespace MiliraXian.Characters.Neiyu
 
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
-            if (!(parms.target is Map map))
+            if (parms.target is not Map map)
             {
                 return false;
             }
@@ -257,7 +257,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            Slate slate = new Slate();
+            Slate slate = new();
             slate.Set("points", parms.points);
             slate.Set("map", map);
 
@@ -342,7 +342,7 @@ namespace MiliraXian.Characters.Neiyu
                     yield break;
                 }
 
-                DiaOption accept = new DiaOption("MX_NL_RecruitAccept".Translate().ToString());
+                DiaOption accept = new("MX_NL_RecruitAccept".Translate().ToString());
                 accept.resolveTree = true;
                 Map map = targetMap ?? Find.AnyPlayerHomeMap;
                 if (map == null)
@@ -380,7 +380,7 @@ namespace MiliraXian.Characters.Neiyu
                 };
                 yield return accept;
 
-                DiaOption reject = new DiaOption("MX_NL_RecruitReject".Translate().ToString());
+                DiaOption reject = new("MX_NL_RecruitReject".Translate().ToString());
                 reject.resolveTree = true;
                 reject.action = delegate
                 {
@@ -430,7 +430,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private bool eventTriggered;
         private bool initialTriggerCheckDone;
-        private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new List<PendingLoadoutFinalize>();
+        private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new();
 
         public bool EventAlreadyTriggered => eventTriggered;
 
@@ -587,7 +587,7 @@ namespace MiliraXian.Characters.Neiyu
         private const string DefaultInnerClothingDefName = "MiliraXian_NeiyuInner";
         private const string DefaultClothingDefName = "MiliraXian_NeiyuNormal";
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
-        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
+        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
 
         public static bool IsNeiyu(Pawn pawn)
         {
@@ -686,11 +686,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            Apparel earrings = FindDroppedEarringsOnMap(pawn, apparelDef);
-            if (earrings == null)
-            {
-                earrings = ThingMaker.MakeThing(apparelDef) as Apparel;
-            }
+            Apparel earrings = FindDroppedEarringsOnMap(pawn, apparelDef) ?? ThingMaker.MakeThing(apparelDef) as Apparel;
             if (earrings == null)
             {
                 Log.Error("[MiliraXian.Characters.Neiyu] Default earrings are not Apparel: " + DefaultEarringDefName);
@@ -724,11 +720,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            Apparel clothing = FindDroppedApparelOnMap(pawn, apparelDef);
-            if (clothing == null)
-            {
-                clothing = ThingMaker.MakeThing(apparelDef) as Apparel;
-            }
+            Apparel clothing = FindDroppedApparelOnMap(pawn, apparelDef) ?? ThingMaker.MakeThing(apparelDef) as Apparel;
             if (clothing == null)
             {
                 Log.Error("[MiliraXian.Characters.Neiyu] Default clothing is not Apparel: " + DefaultClothingDefName);
@@ -761,11 +753,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            Apparel innerClothing = FindDroppedApparelOnMap(pawn, apparelDef);
-            if (innerClothing == null)
-            {
-                innerClothing = ThingMaker.MakeThing(apparelDef) as Apparel;
-            }
+            Apparel innerClothing = FindDroppedApparelOnMap(pawn, apparelDef) ?? ThingMaker.MakeThing(apparelDef) as Apparel;
             if (innerClothing == null)
             {
                 Log.Error("[MiliraXian.Characters.Neiyu] Default inner clothing is not Apparel: " + DefaultInnerClothingDefName);
@@ -813,7 +801,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            List<Thing> things = new List<Thing>(pawn.MapHeld.listerThings.ThingsOfDef(apparelDef));
+            List<Thing> things = new(pawn.MapHeld.listerThings.ThingsOfDef(apparelDef));
             for (int index = things.Count - 1; index >= 0; index--)
             {
                 Apparel apparel = things[index] as Apparel;
@@ -943,7 +931,7 @@ namespace MiliraXian.Characters.Neiyu
 
             Faction ancientsFaction = ResolveAncientsFaction();
 
-            PawnGenerationRequest request = new PawnGenerationRequest(
+            PawnGenerationRequest request = new(
                 neiyuKind,
                 ancientsFaction,
                 PawnGenerationContext.NonPlayer,

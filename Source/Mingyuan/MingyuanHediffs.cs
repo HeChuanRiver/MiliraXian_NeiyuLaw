@@ -38,13 +38,13 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class HediffComp_MingyuanLifeBurn : HediffComp
     {
-        private static readonly List<Pawn> TransferTargets = new List<Pawn>(64);
+        private static readonly List<Pawn> TransferTargets = new(64);
         private static int burstBudgetTick = -1;
         private static int burstExecutionsThisTick;
         private static int deathTransferBudgetTick = -1;
         private static int deathTransfersThisTick;
-        private static readonly Dictionary<int, int> DeathTransferLastReceivedTicks = new Dictionary<int, int>(256);
-        private static readonly List<int> DeathTransferCooldownCleanupKeys = new List<int>(64);
+        private static readonly Dictionary<int, int> DeathTransferLastReceivedTicks = new(256);
+        private static readonly List<int> DeathTransferCooldownCleanupKeys = new(64);
 
         private Pawn instigator;
         private int ticksToNextDamage;
@@ -91,7 +91,7 @@ namespace MiliraXian.Characters.Mingyuan
                 int equipmentLoss = HitPointLossFor(layers);
                 int decaySeconds = Mathf.CeilToInt(Mathf.Max(0, PropsLifeBurn.decayDelayTicks) / 60f);
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipCurrentLayers".Translate(FormatNumber(layers)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipExecuteThreshold".Translate(FormatNumber(ExecuteThreshold)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipRemaining".Translate(FormatNumber(RemainingToExecute)));
@@ -719,7 +719,7 @@ namespace MiliraXian.Characters.Mingyuan
                 float rangedLifeBurn = per100 * (body?.PropsBody.rangedSelfBurnBonusPer100 ?? 2f);
                 int ticksRemaining = Mathf.Max(0, ticksToDecay);
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 builder.AppendLine("MX_Mingyuan_SelfBurn_TipCurrentLayers".Translate(wholeLayers.ToStringCached()));
                 builder.AppendLine("MX_Mingyuan_SelfBurn_TipEffectiveLayers".Translate(FormatNumber(effectiveLayers), FormatNumber(PropsSelfBurn.effectiveBonusCap)));
                 builder.AppendLine("MX_Mingyuan_SelfBurn_TipOverburn".Translate(FormatNumber(overburnLayers), FormatNumber(PropsSelfBurn.overburnThreshold), overburning ? "MX_Mingyuan_Enabled".Translate() : "MX_Mingyuan_Disabled".Translate()));
@@ -1016,7 +1016,7 @@ namespace MiliraXian.Characters.Mingyuan
                 bool overburning = MingyuanUtility.IsOverburning(Pawn);
                 bool canRefill = !overburning && MingyuanUtility.GetSelfBurnLayers(Pawn) >= PropsShield.selfBurnPerEnergy && Energy < PropsShield.maxEnergy;
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 builder.AppendLine("MX_Mingyuan_Shield_TipStatus".Translate(FormatNumber(Energy), FormatNumber(PropsShield.maxEnergy)));
                 builder.AppendLine("MX_Mingyuan_Shield_TipRepair".Translate(TicksToSeconds(ticksToRepair).ToString()));
                 builder.AppendLine("MX_Mingyuan_Shield_TipRefill".Translate(

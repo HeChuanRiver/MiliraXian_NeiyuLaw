@@ -53,7 +53,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private static IEnumerable<MethodBase> TargetMethods()
         {
-            HashSet<MethodBase> methods = new HashSet<MethodBase>();
+            HashSet<MethodBase> methods = new();
             AddNamedMethods(methods, "Verse.DebugToolsGeneral", GeneralDamageMethods);
             AddNamedMethods(methods, "Verse.DebugToolsPawns", PawnDamageMethods);
             AddHealthDamageCallbacks(methods);

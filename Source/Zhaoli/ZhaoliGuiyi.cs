@@ -250,7 +250,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static int RemoveNegativeHediffs(Pawn pawn)
         {
-            System.Collections.Generic.List<Hediff> hediffsToRemove = new System.Collections.Generic.List<Hediff>();
+            System.Collections.Generic.List<Hediff> hediffsToRemove = new();
             for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; i++)
             {
                 Hediff hediff = pawn.health.hediffSet.hediffs[i];

@@ -93,17 +93,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public static ThingDef ProjectileFor(FlowerBellResonance resonance)
         {
-            switch (resonance)
+            return resonance switch
             {
-                case FlowerBellResonance.Summer:
-                    return MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Summer;
-                case FlowerBellResonance.Autumn:
-                    return MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Autumn;
-                case FlowerBellResonance.Winter:
-                    return MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Winter;
-                default:
-                    return MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Spring;
-            }
+                FlowerBellResonance.Summer => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Summer,
+                FlowerBellResonance.Autumn => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Autumn,
+                FlowerBellResonance.Winter => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Winter,
+                _ => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Spring,
+            };
         }
 
         public static void ApplySlash(Pawn caster, Thing target, float damage, float armorPenetration, bool empowered)
@@ -130,8 +126,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return 0;
             }
 
-            HashSet<Thing> hit = new HashSet<Thing>();
-            List<IntVec3> cells = new List<IntVec3>();
+            HashSet<Thing> hit = new();
+            List<IntVec3> cells = new();
             FillConeCells(caster, center, targetCell, radius, angleDegrees, cells);
             for (int cellIndex = 0; cellIndex < cells.Count; cellIndex++)
             {
@@ -192,7 +188,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
 
             hitTargets?.Clear();
-            HashSet<Thing> hit = new HashSet<Thing>();
+            HashSet<Thing> hit = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, Mathf.Max(0f, radius), true))
             {
                 if (!cell.InBounds(map))
@@ -222,11 +218,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
-            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
-            if (hediff == null)
-            {
-                hediff = caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlow);
-            }
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlow);
             hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
         }
     }

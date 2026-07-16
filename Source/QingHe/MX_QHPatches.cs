@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.QingHe
     [StaticConstructorOnStartup]
     public static class MX_QHPatches
     {
-        private static readonly Harmony patcher = new Harmony("MiliraXian.Characters.QingHe");
+        private static readonly Harmony patcher = new("MiliraXian.Characters.QingHe");
 
         static MX_QHPatches()
         {

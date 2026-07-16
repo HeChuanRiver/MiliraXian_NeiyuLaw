@@ -34,7 +34,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     internal static class DuanzhanVisualTracker
     {
-        private static readonly Dictionary<int, DuanzhanVisualState> States = new Dictionary<int, DuanzhanVisualState>();
+        private static readonly Dictionary<int, DuanzhanVisualState> States = new();
 
         public static void SetState(
             Pawn pawn,
@@ -548,7 +548,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             IEnumerable<BodyPartRecord> parts = target.health?.hediffSet?.GetNotMissingParts();
             BodyPartRecord torso = parts != null ? parts.FirstOrDefault(part => part.def == BodyPartDefOf.Torso) : null;
-            DamageInfo damageInfo = new DamageInfo(DamageDefOf.Cut, damageAmount, Props.armorPenetration, -1f, caster, torso, weapon != null ? weapon.def : null);
+            DamageInfo damageInfo = new(DamageDefOf.Cut, damageAmount, Props.armorPenetration, -1f, caster, torso, weapon != null ? weapon.def : null);
             damageInfo.SetBodyRegion(BodyPartHeight.Middle, BodyPartDepth.Outside);
             target.TakeDamage(damageInfo);
         }
@@ -563,7 +563,7 @@ namespace MiliraXian.Characters.Zhaoli
             IEnumerable<BodyPartRecord> parts = target.health?.hediffSet?.GetNotMissingParts();
             BodyPartRecord torso = parts != null ? parts.FirstOrDefault(part => part.def == BodyPartDefOf.Torso) : null;
             float flameDamage = Mathf.Max(1f, baseDamageAmount * minghuoComp.PropsMinghuo.fireDamageFactor * Props.minghuoFlameDamageFactor);
-            DamageInfo damageInfo = new DamageInfo(DamageDefOf.Flame, flameDamage, 0f, -1f, caster, torso, weapon != null ? weapon.def : null);
+            DamageInfo damageInfo = new(DamageDefOf.Flame, flameDamage, 0f, -1f, caster, torso, weapon != null ? weapon.def : null);
             damageInfo.SetBodyRegion(BodyPartHeight.Middle, BodyPartDepth.Outside);
             target.TakeDamage(damageInfo);
             if (target.Spawned)
@@ -618,7 +618,7 @@ namespace MiliraXian.Characters.Zhaoli
             public int tick;
         }
 
-        private static readonly Dictionary<int, List<SlashTrailSample>> TrailSamplesByWeapon = new Dictionary<int, List<SlashTrailSample>>();
+        private static readonly Dictionary<int, List<SlashTrailSample>> TrailSamplesByWeapon = new();
         private static Material slashMaterial;
         private static Material slashGlowMaterial;
         private static Vector2 slashBaseDrawSize = Vector2.one;
@@ -763,7 +763,7 @@ namespace MiliraXian.Characters.Zhaoli
                 for (int subdivision = 1; subdivision <= TrailInterpolationSubdivisions; subdivision++)
                 {
                     float t = subdivision / (float)(TrailInterpolationSubdivisions + 1);
-                    SlashTrailSample interpolated = new SlashTrailSample
+                    SlashTrailSample interpolated = new()
                     {
                         drawLoc = Vector3.Lerp(from.drawLoc, to.drawLoc, t),
                         aimAngle = Mathf.LerpAngle(from.aimAngle, to.aimAngle, t),

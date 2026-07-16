@@ -8,13 +8,13 @@ namespace MiliraXian.Characters
     {
         public static List<Pawn> CollectHostilePawns(Map map, IntVec3 center, Pawn caster, float radius)
         {
-            List<Pawn> result = new List<Pawn>();
+            List<Pawn> result = new();
             if (map == null || caster == null)
             {
                 return result;
             }
 
-            HashSet<Pawn> unique = new HashSet<Pawn>();
+            HashSet<Pawn> unique = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
             {
                 if (!cell.InBounds(map))
@@ -48,13 +48,13 @@ namespace MiliraXian.Characters
 
         public static List<Pawn> CollectAllPawns(Map map, IntVec3 center, float radius)
         {
-            List<Pawn> result = new List<Pawn>();
+            List<Pawn> result = new();
             if (map == null)
             {
                 return result;
             }
 
-            HashSet<Pawn> unique = new HashSet<Pawn>();
+            HashSet<Pawn> unique = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
             {
                 if (!cell.InBounds(map))

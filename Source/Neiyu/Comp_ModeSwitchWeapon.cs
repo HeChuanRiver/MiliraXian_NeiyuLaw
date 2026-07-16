@@ -180,7 +180,7 @@ namespace MiliraXian.Characters.Neiyu
             string commandDesc = ResolveText(Props.commandDesc, "MX_ModeSwitch_CommandDesc");
             string currentFormLabel = GetFormLabel(context.CurrentIndex);
 
-            Command_Action cmd = new Command_Action
+            Command_Action cmd = new()
             {
                 defaultLabel = directSwitch
                     ? commandLabel
@@ -228,7 +228,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            List<FloatMenuOption> options = new List<FloatMenuOption>();
+            List<FloatMenuOption> options = new();
             for (int i = 0; i < Props.formWeaponDefs.Count; i++)
             {
                 if (i == context.CurrentIndex)

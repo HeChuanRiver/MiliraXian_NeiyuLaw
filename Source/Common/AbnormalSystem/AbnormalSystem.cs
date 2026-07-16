@@ -37,7 +37,7 @@ namespace MiliraXian.Characters
             HediffDef_Abnormal abnormalDef,
             float amount)
         {
-            AbnormalApplyResult result = new AbnormalApplyResult
+            AbnormalApplyResult result = new()
             {
                 status = AbnormalApplyStatus.InvalidTarget,
                 requestedAmount = amount,

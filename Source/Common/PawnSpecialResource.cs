@@ -16,8 +16,8 @@ namespace MiliraXian.Characters
         public bool clampToMax = true;
         public bool showGizmo = true;
         public bool hideOnHealthTab = true;
-        public Color barColor = new Color(0.72f, 0.18f, 0.24f, 1f);
-        public Color barHighlightColor = new Color(0.9f, 0.35f, 0.42f, 1f);
+        public Color barColor = new(0.72f, 0.18f, 0.24f, 1f);
+        public Color barHighlightColor = new(0.9f, 0.35f, 0.42f, 1f);
 
         public HediffCompProperties_PawnSpecialResource()
         {

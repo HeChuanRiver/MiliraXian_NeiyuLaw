@@ -104,14 +104,9 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             MX_InterpretLostScorebookExtension extension = recipe.GetModExtension<MX_InterpretLostScorebookExtension>();
-            Thing result = Rand.Chance(extension?.skillBookChance ?? 0.35f)
+            Thing result = (Rand.Chance(extension?.skillBookChance ?? 0.35f)
                 ? MakeSkillBook(billDoer)
-                : MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook);
-            if (result == null)
-            {
-                result = MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook);
-            }
-
+                : MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook)) ?? MakePlainBook(extension?.plainBookDef ?? ThingDefOf.TextBook);
             if (result == null)
             {
                 return;

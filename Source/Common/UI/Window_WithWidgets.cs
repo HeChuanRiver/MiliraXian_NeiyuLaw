@@ -6,7 +6,7 @@ namespace MiliraXian.Characters.UI
 {
     public abstract class Window_WithWidgets : Window
     {
-        private readonly List<Widget_Base> widgets = new List<Widget_Base>();
+        private readonly List<Widget_Base> widgets = new();
         private bool widgetsBuilt;
         private bool widgetsOpened;
 
@@ -98,7 +98,7 @@ namespace MiliraXian.Characters.UI
             }
 
             BuildWidgets(widgets);
-            WidgetHost host = new WidgetHost(WidgetHostKind.Window, this);
+            WidgetHost host = new(WidgetHostKind.Window, this);
             for (int i = 0; i < widgets.Count; i++)
             {
                 widgets[i].Notify_Attached(host);

@@ -89,7 +89,7 @@ namespace MiliraXian.Characters.Mingyuan
                 : MingyuanBowMode.Focus;
             bool busy = PrimaryVerb?.WarmingUp == true || PrimaryVerb?.Bursting == true;
 
-            Command_Action command = new Command_Action
+            Command_Action command = new()
             {
                 defaultLabel = "MX_Mingyuan_Bow_ModeCommand".Translate(ModeLabel(mode)).ToString(),
                 defaultDesc = "MX_Mingyuan_Bow_ModeDesc".Translate(ModeLabel(mode), ModeLabel(nextMode)).ToString(),
@@ -160,7 +160,7 @@ namespace MiliraXian.Characters.Mingyuan
         private bool castModeLocked;
         private bool automaticFocusTarget;
         private Vector3 castDirection;
-        private readonly List<Pawn> radiationTargets = new List<Pawn>(32);
+        private readonly List<Pawn> radiationTargets = new(32);
 
         private CompEquippable_MingyuanRainbowBow BowComp =>
             EquipmentCompSource as CompEquippable_MingyuanRainbowBow;
@@ -547,7 +547,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            DamageInfo damageInfo = new DamageInfo(
+            DamageInfo damageInfo = new(
                 DamageDefOf.Burn,
                 damage,
                 0f,
@@ -880,9 +880,9 @@ namespace MiliraXian.Characters.Mingyuan
         private const int AlphaSteps = 8;
         private const string LineTexturePath = "UI/Overlays/ThingLine";
 
-        private static readonly Color FocusColor = new Color(1f, 0.94f, 0.72f, 0.92f);
-        private static readonly Color FlameColor = new Color(1f, 0.46f, 0.20f, 0.82f);
-        private static readonly Color SmokeColor = new Color(0.44f, 0.20f, 0.11f, 0.52f);
+        private static readonly Color FocusColor = new(1f, 0.94f, 0.72f, 0.92f);
+        private static readonly Color FlameColor = new(1f, 0.46f, 0.20f, 0.82f);
+        private static readonly Color SmokeColor = new(0.44f, 0.20f, 0.11f, 0.52f);
 
         private static Material[] focusMaterials;
         private static Material[] flameMaterials;
@@ -1050,7 +1050,7 @@ namespace MiliraXian.Characters.Mingyuan
                 for (int i = 0; i < cache.Length; i++)
                 {
                     float stepAlpha = baseColor.a * ((i + 1f) / cache.Length);
-                    Color color = new Color(baseColor.r, baseColor.g, baseColor.b, stepAlpha);
+                    Color color = new(baseColor.r, baseColor.g, baseColor.b, stepAlpha);
                     cache[i] = MaterialPool.MatFrom(LineTexturePath, shader, color);
                 }
             }
