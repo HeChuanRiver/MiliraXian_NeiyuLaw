@@ -62,8 +62,8 @@ namespace MiliraXian.Characters.QingHe.Things
 
             float pulse = 0.28f + Mathf.Sin(Find.TickManager.TicksGame * 0.06666667f) * 0.08f;
             var color = new Color(1f, 0.68f, 0.82f, pulse * VisualAlpha);
-            var material = MX_QHGraphicsUtility.FieldEdgeMaterial(color);
-            MX_QHGraphicsUtility.DrawRadiusRingWithMaterial(parent.Position, CurrentRadius, material, parent.Map);
+            var material = MX_QHGraphicsUtility.FieldEdgeMaterial();
+            MX_QHGraphicsUtility.DrawRadiusRingWithMaterial(parent.Position, CurrentRadius, material, color, parent.Map);
         }
 
         public override void CompTick()
