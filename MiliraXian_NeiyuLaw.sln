@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXian_NeiyuLaw", "MiliraXian_NeiyuLaw.csproj", "{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXIanMA", "MiliraXIanMA.csproj", "{0B3E6A2C-575A-4A5D-8CA8-3E097C82347E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXian_MACompat", "MiliraXian_MACompat.csproj", "{0B3E6A2C-575A-4A5D-8CA8-3E097C82347E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
