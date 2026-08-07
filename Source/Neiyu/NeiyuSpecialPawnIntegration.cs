@@ -18,12 +18,17 @@ namespace MiliraXian.Characters.Neiyu
 
         public static void TryRegister(Pawn pawn)
         {
-            if (pawn == null || pawn.Dead || pawn.DestroyedOrNull())
+            if (pawn == null || pawn.DestroyedOrNull())
             {
                 return;
             }
 
             if (!IsSupportedSpecialPawn(pawn))
+            {
+                return;
+            }
+
+            if (!SpecialPawnCoreStateRepair.EnsureValidState(pawn, pawn.Spawned, logRepair: true) || pawn.Dead)
             {
                 return;
             }
@@ -102,6 +107,16 @@ namespace MiliraXian.Characters.Neiyu
             return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
         }
 
+        internal static void RepairBeforeSpawn(Pawn pawn)
+        {
+            if (pawn == null || pawn.DestroyedOrNull() || !IsSupportedSpecialPawn(pawn))
+            {
+                return;
+            }
+
+            SpecialPawnCoreStateRepair.EnsureValidState(pawn, includeSpawnComponents: false, logRepair: true);
+        }
+
         internal static void ClearRuntimeState()
         {
             WarnedDuplicatePawnIds.Clear();
@@ -127,6 +142,11 @@ namespace MiliraXian.Characters.Neiyu
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.SpawnSetup))]
     internal static class Patch_Pawn_SpawnSetup_SpecialPawnRegistration
     {
+        public static void Prefix(Pawn __instance)
+        {
+            NeiyuSpecialPawnIntegration.RepairBeforeSpawn(__instance);
+        }
+
         public static void Postfix(Pawn __instance)
         {
             NeiyuSpecialPawnIntegration.TryRegister(__instance);
