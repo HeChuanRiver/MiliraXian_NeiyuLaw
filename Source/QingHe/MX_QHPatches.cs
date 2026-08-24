@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things;
@@ -91,6 +92,47 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(Pawn_RelationsTracker), nameof(Pawn_RelationsTracker.TryRemoveDirectRelation)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnRelationsTracker_TryRemoveDirectRelation_Postfix)));
 
+            patcher.Patch(
+                AccessTools.Method(typeof(Verse.Profile.MemoryUtility), nameof(Verse.Profile.MemoryUtility.ClearAllMapsAndWorld)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MemoryUtility_ClearAllMapsAndWorld_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Pawn), nameof(Pawn.Kill)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_Kill_Postfix)));
+
+            patcher.Patch(
+                AccessTools.Method(typeof(Pawn), nameof(Pawn.DeSpawn), new[] { typeof(DestroyMode) }),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_DeSpawn_Postfix)));
+
+            patcher.Patch(
+                AccessTools.PropertyGetter(typeof(Pawn_DrawTracker), "DrawPos"),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnDrawTracker_DrawPos_Postfix)));
+
+        }
+
+        public static void Patch_MemoryUtility_ClearAllMapsAndWorld_Postfix()
+        {
+            CompAbilityEffect_AscentSlash.ClearActiveManagers();
+        }
+
+        public static void Patch_Pawn_Kill_Postfix(Pawn __instance)
+        {
+            CompAbilityEffect_AscentSlash.NotifyPawnUnavailable(__instance);
+        }
+
+        public static void Patch_Pawn_DeSpawn_Postfix(Pawn __instance)
+        {
+            CompAbilityEffect_AscentSlash.NotifyPawnUnavailable(__instance);
+        }
+
+        public static void Patch_PawnDrawTracker_DrawPos_Postfix(Pawn ___pawn, ref Vector3 __result)
+        {
+            if (___pawn == null || ___pawn.Destroyed || !___pawn.Spawned)
+            {
+                return;
+            }
+
+            CompAbilityEffect_AscentSlash.ApplyActiveActionDrawPos(___pawn, ref __result);
         }
 
         public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
