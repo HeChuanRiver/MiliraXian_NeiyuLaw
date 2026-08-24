@@ -10,11 +10,11 @@ namespace MiliraXian.Characters.Neiyu
     {
         public string effecterDefName = "MXNL_Effecter_NeiyuSwordSlashGhost";
         public string fallbackFleckDefName = "ExplosionFlash";
-        public FloatRange scaleRange = new FloatRange(4.6f, 6.2f);
+        public FloatRange scaleRange = new(4.6f, 6.2f);
         public int minIntervalTicks = 5;
         public bool playOnMiss = false;
         public float facingAngleOffset = 0f;
-        public List<string> cycleFleckDefNames = new List<string>();
+        public List<string> cycleFleckDefNames = new();
     }
 
     [HarmonyPatch(typeof(Verb_MeleeAttack), "TryCastShot")]
@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.Neiyu
         }
 
         private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Verb_MeleeAttack, SlashState> StateByVerb =
-            new System.Runtime.CompilerServices.ConditionalWeakTable<Verb_MeleeAttack, SlashState>();
+            new();
 
         [HarmonyPostfix]
         public static void Postfix(Verb_MeleeAttack __instance, bool __result)
@@ -109,8 +109,8 @@ namespace MiliraXian.Characters.Neiyu
 
             if (fxDef != null)
             {
-                TargetInfo source = new TargetInfo(caster.Position, map);
-                TargetInfo target = new TargetInfo(targetCell, map);
+                TargetInfo source = new(caster.Position, map);
+                TargetInfo target = new(targetCell, map);
                 Effecter fx = fxDef.Spawn(source, target, scale);
                 if (fx != null)
                 {

@@ -218,7 +218,7 @@ namespace MiliraXian.Characters.QingHe.Rituals
                 .Where(pawn => pawn?.mindState?.inspirationHandler != null && !pawn.Inspired)
                 .InRandomOrder()
                 .ToList();
-            List<Pawn> inspiredPawns = new List<Pawn>();
+            List<Pawn> inspiredPawns = new();
 
             for (int i = 0; i < candidates.Count && inspiredPawns.Count < count; i++)
             {

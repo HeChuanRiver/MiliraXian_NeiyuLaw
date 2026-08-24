@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public string shieldTexPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
         public float shieldDrawSizeFactor = 1.1601562f;
         public float shieldAlpha = 0.34f;
-        public Color shieldColor = new Color(0.70f, 0.90f, 1f, 1f);
+        public Color shieldColor = new(0.70f, 0.90f, 1f, 1f);
         public string absorbFleckDefName = "ExplosionFlash";
         public float absorbFleckScale = 1.0f;
         public float breakEffectScale = 3.6f;
@@ -37,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
     public class CompLunarMirrorShield : ThingComp
     {
-        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new Dictionary<string, Material>();
+        private static readonly Dictionary<string, Material> ShieldMaterialByPath = new();
 
         private Pawn caster;
         private Faction casterFaction;
@@ -319,9 +319,9 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private Vector3 GetImpactPointOnShield(Vector3 lastExactPos, Vector3 newExactPos, Vector3 center)
         {
-            Vector2 circleCenter = new Vector2(center.x, center.z);
-            Vector2 start = new Vector2(lastExactPos.x, lastExactPos.z);
-            Vector2 end = new Vector2(newExactPos.x, newExactPos.z);
+            Vector2 circleCenter = new(center.x, center.z);
+            Vector2 start = new(lastExactPos.x, lastExactPos.z);
+            Vector2 end = new(newExactPos.x, newExactPos.z);
             Vector2 movement = end - start;
             float movementSqr = movement.sqrMagnitude;
             if (movementSqr <= 0.0001f)

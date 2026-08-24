@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public bool breakOnEmp = true;
         public float shieldDamageCap = 20f;
 
-        public DivineProtectionShieldVisualProperties visual = new DivineProtectionShieldVisualProperties();
+        public DivineProtectionShieldVisualProperties visual = new();
 
         public CompProperties_DivineProtectionShield()
         {
@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public CompProperties_DivineProtectionShield Props => (CompProperties_DivineProtectionShield)props;
 
-        private DivineProtectionShieldRenderer Renderer => renderer ?? (renderer = new DivineProtectionShieldRenderer(this));
+        private DivineProtectionShieldRenderer Renderer => renderer ??= new DivineProtectionShieldRenderer(this);
 
         private Pawn PawnOwner => parent as Pawn;
 
@@ -129,8 +129,18 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                FlushAccumulatedRegen(CurrentTick, force: false);
-                return fullEnergyAccumulatedTicks;
+                int currentTick = CurrentTick;
+                FlushAccumulatedRegen(currentTick, force: false);
+
+                int visualTicks = fullEnergyAccumulatedTicks;
+                if (lastRegenUpdateTick >= 0
+                    && cachedMaxEnergy > 0f
+                    && energy >= cachedMaxEnergy - 0.0001f)
+                {
+                    visualTicks += Mathf.Max(0, currentTick - lastRegenUpdateTick);
+                }
+
+                return Mathf.Min(visualTicks, 1000000);
             }
         }
 
@@ -224,7 +234,9 @@ namespace MiliraXian.Characters.QingHe.Things
             RefreshCachedStats();
             float maxEnergy = cachedMaxEnergy;
             energy = Mathf.Min(energy, maxEnergy);
-            float gain = cachedRegenPerSecond * elapsedTicks / 60f;
+            float energyBeforeGain = energy;
+            float regenPerTick = cachedRegenPerSecond / 60f;
+            float gain = regenPerTick * elapsedTicks;
             if (gain > 0f)
             {
                 energy = Mathf.Min(maxEnergy, energy + gain);
@@ -237,7 +249,14 @@ namespace MiliraXian.Characters.QingHe.Things
             }
             else
             {
-                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + elapsedTicks, 1000000);
+                int ticksAtFullEnergy = elapsedTicks;
+                if (energyBeforeGain < maxEnergy - 0.0001f && regenPerTick > 0f)
+                {
+                    int ticksToReachFull = Mathf.CeilToInt((maxEnergy - energyBeforeGain) / regenPerTick);
+                    ticksAtFullEnergy = Mathf.Clamp(elapsedTicks - ticksToReachFull, 0, elapsedTicks);
+                }
+
+                fullEnergyAccumulatedTicks = Mathf.Min(fullEnergyAccumulatedTicks + ticksAtFullEnergy, 1000000);
             }
         }
 

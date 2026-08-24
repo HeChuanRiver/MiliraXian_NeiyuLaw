@@ -9,11 +9,11 @@ namespace MiliraXian.Characters.Neiyu
     public class HediffCompProperties_NeiyuShieldGizmo : HediffCompProperties
     {
         public bool onlyWhenSelected = true;
-        public Color stageIColor = new Color(0.47f, 0.80f, 1.00f, 1f);
-        public Color stageIIColor = new Color(0.36f, 0.61f, 0.84f, 1f);
-        public Color stageIIIAbsorbColor = new Color(0.85f, 0.65f, 0.13f, 1f);
-        public Color stageIIIBuffColor = new Color(1.00f, 0.55f, 0.00f, 1f);
-        public Color weakColor = new Color(0.55f, 0.00f, 0.00f, 1f);
+        public Color stageIColor = new(0.47f, 0.80f, 1.00f, 1f);
+        public Color stageIIColor = new(0.36f, 0.61f, 0.84f, 1f);
+        public Color stageIIIAbsorbColor = new(0.85f, 0.65f, 0.13f, 1f);
+        public Color stageIIIBuffColor = new(1.00f, 0.55f, 0.00f, 1f);
+        public Color weakColor = new(0.55f, 0.00f, 0.00f, 1f);
         public float thresholdLineAlpha = 0.6f;
         public string rendererClass;
 
@@ -54,8 +54,7 @@ namespace MiliraXian.Characters.Neiyu
                 }
                 catch { }
             }
-            if (cachedDefaultRenderer == null)
-                cachedDefaultRenderer = new NeiyuShieldGizmoDefaultRenderer();
+            cachedDefaultRenderer ??= new NeiyuShieldGizmoDefaultRenderer();
             return cachedDefaultRenderer;
         }
     }
@@ -72,14 +71,14 @@ namespace MiliraXian.Characters.Neiyu
         private const float BadgeWidth = 28f;
         private const float BadgeHeight = 20f;
 
-        private static readonly Color WeakBarColor = new Color(0.55f, 0.05f, 0.05f, 1f);
-        private static readonly Color HintGrayColor = new Color(0.6f, 0.6f, 0.6f, 1f);
-        private static readonly Color AbsorbInvincibleColor = new Color(1f, 0.85f, 0.2f, 1f);
-        private static readonly Color BuffSummaryColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+        private static readonly Color WeakBarColor = new(0.55f, 0.05f, 0.05f, 1f);
+        private static readonly Color HintGrayColor = new(0.6f, 0.6f, 0.6f, 1f);
+        private static readonly Color AbsorbInvincibleColor = new(1f, 0.85f, 0.2f, 1f);
+        private static readonly Color BuffSummaryColor = new(0.9f, 0.9f, 0.9f, 1f);
 
         private const int FlashDurationTicks = 15;
-        private static readonly Color FlashColor = new Color(1f, 0.25f, 0.25f, 1f);
-        private static readonly Color FlashWhiteColor = new Color(1f, 1f, 1f, 1f);
+        private static readonly Color FlashColor = new(1f, 0.25f, 0.25f, 1f);
+        private static readonly Color FlashWhiteColor = new(1f, 1f, 1f, 1f);
 
         private readonly HediffComp_MXNeiyuCountShield shield;
         private readonly INeiyuShieldGizmoRenderer renderer;
@@ -187,12 +186,12 @@ namespace MiliraXian.Characters.Neiyu
         }
 
         // 各阶颜色——压暗以便白色文字在条上清晰可读
-        private static readonly Color TierAColor = new Color(0.35f, 0.52f, 0.60f, 1f);
-        private static readonly Color TierBColor = new Color(0.45f, 0.38f, 0.55f, 1f);
-        private static readonly Color TierCColor = new Color(0.65f, 0.35f, 0.45f, 1f);
+        private static readonly Color TierAColor = new(0.35f, 0.52f, 0.60f, 1f);
+        private static readonly Color TierBColor = new(0.45f, 0.38f, 0.55f, 1f);
+        private static readonly Color TierCColor = new(0.65f, 0.35f, 0.45f, 1f);
         // D阶起始暖橙→亮金，保证前几层肉眼可辨
-        private static readonly Color TierDBaseColor = new Color(0.70f, 0.40f, 0.20f, 1f);
-        private static readonly Color TierDDeepColor = new Color(0.95f, 0.85f, 0.05f, 1f);
+        private static readonly Color TierDBaseColor = new(0.70f, 0.40f, 0.20f, 1f);
+        private static readonly Color TierDDeepColor = new(0.95f, 0.85f, 0.05f, 1f);
 
         private void DrawStage3Absorb(Rect inner)
         {

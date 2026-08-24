@@ -14,7 +14,7 @@ namespace MiliraXian.Characters.Biography
 
     public sealed class BiographyExtension : DefModExtension
     {
-        public List<BiographyStory> stories = new List<BiographyStory>();
+        public List<BiographyStory> stories = new();
 
         [Unsaved(false)]
         private PawnKindDef parentPawnKind;
@@ -85,7 +85,7 @@ namespace MiliraXian.Characters.Biography
                 yield break;
             }
 
-            HashSet<string> storyNames = new HashSet<string>(StringComparer.Ordinal);
+            HashSet<string> storyNames = new(StringComparer.Ordinal);
             for (int i = 0; i < stories.Count; i++)
             {
                 BiographyStory story = stories[i];
@@ -132,7 +132,7 @@ namespace MiliraXian.Characters.Biography
                     continue;
                 }
 
-                HashSet<string> rewardNames = new HashSet<string>(StringComparer.Ordinal);
+                HashSet<string> rewardNames = new(StringComparer.Ordinal);
                 for (int rewardIndex = 0; rewardIndex < story.rewards.Count; rewardIndex++)
                 {
                     BiographyReward reward = story.rewards[rewardIndex];
@@ -167,7 +167,7 @@ namespace MiliraXian.Characters.Biography
 
         private IEnumerable<string> StoryDependencyConfigErrors(string owner)
         {
-            Dictionary<string, List<string>> graph = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+            Dictionary<string, List<string>> graph = new(StringComparer.Ordinal);
             for (int i = 0; i < stories.Count; i++)
             {
                 BiographyStory story = stories[i];
@@ -176,13 +176,13 @@ namespace MiliraXian.Characters.Biography
                     continue;
                 }
 
-                List<string> dependencies = new List<string>();
+                List<string> dependencies = new();
                 story.unlockCondition?.CollectReferencedStoryNames(dependencies);
                 graph[story.storyName] = dependencies;
             }
 
-            Dictionary<string, int> states = new Dictionary<string, int>(StringComparer.Ordinal);
-            List<string> path = new List<string>();
+            Dictionary<string, int> states = new(StringComparer.Ordinal);
+            List<string> path = new();
             foreach (string storyName in graph.Keys)
             {
                 if (!states.TryGetValue(storyName, out int state) || state == 0)
@@ -250,7 +250,7 @@ namespace MiliraXian.Characters.Biography
         public string storyText;
 
         public BiographyUnlockCondition unlockCondition;
-        public List<BiographyReward> rewards = new List<BiographyReward>();
+        public List<BiographyReward> rewards = new();
         public bool notifyOnUnlock = true;
     }
 
@@ -339,7 +339,7 @@ namespace MiliraXian.Characters.Biography
 
         public static void Rebuild()
         {
-            Dictionary<PawnKindDef, BiographyExtension> rebuilt = new Dictionary<PawnKindDef, BiographyExtension>();
+            Dictionary<PawnKindDef, BiographyExtension> rebuilt = new();
             List<PawnKindDef> pawnKinds = DefDatabase<PawnKindDef>.AllDefsListForReading;
             ThingDef supportedRace = BiographyDefOf.Milira_Race;
             for (int i = 0; i < pawnKinds.Count; i++)

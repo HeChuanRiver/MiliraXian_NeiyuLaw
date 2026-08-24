@@ -25,7 +25,7 @@ namespace MiliraXian.Characters
         public Color triggerTextColor = Color.white;
         public float triggerTextDuration = 1.2f;
         public ThingDef triggerMoteDef;
-        public Vector3 triggerMoteOffset = new Vector3(0f, 0f, 0.85f);
+        public Vector3 triggerMoteOffset = new(0f, 0f, 0.85f);
         public float triggerMoteScale = 1f;
 
         public HediffDef_Abnormal()

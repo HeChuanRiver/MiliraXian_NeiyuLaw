@@ -60,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            CompDivineProtectionShield comp = new CompDivineProtectionShield
+            CompDivineProtectionShield comp = new()
             {
                 parent = Pawn
             };

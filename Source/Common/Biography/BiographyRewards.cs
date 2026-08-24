@@ -181,7 +181,7 @@ namespace MiliraXian.Characters.Biography
                 return false;
             }
 
-            List<Thing> addedThings = new List<Thing>();
+            List<Thing> addedThings = new();
             int remaining = count;
             Thing currentItem = null;
             try

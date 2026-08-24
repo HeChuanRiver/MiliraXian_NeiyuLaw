@@ -13,16 +13,16 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float BarRightPadding = 8f;
         private const float ResourceBarWidth = 150f;
         private const float BarHeight = 9f;
-        private static readonly RectOffset BarMargin = new RectOffset((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
+        private static readonly RectOffset BarMargin = new((int)BarLeftPadding, (int)BarRightPadding, 0, 0);
 
         private readonly Pawn pawn;
 
-        private static readonly Color SeasonColor = new Color(0.72f, 0.86f, 0.76f, 1f);
-        private static readonly Color OuterBorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color ShieldBackgroundColor = new Color(0.16f, 0.17f, 0.18f, 1f);
-        private static readonly Color ShieldBaseColor = new Color(0.55f, 0.7f, 1f, 1f);
-        private static readonly Color ShieldBreakDarkColor = new Color(0.22f, 0.05f, 0.06f, 1f);
-        private static readonly Color ShieldBreakBrightColor = new Color(1f, 0.95f, 0.95f, 1f);
+        private static readonly Color SeasonColor = new(0.72f, 0.86f, 0.76f, 1f);
+        private static readonly Color OuterBorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color ShieldBackgroundColor = new(0.16f, 0.17f, 0.18f, 1f);
+        private static readonly Color ShieldBaseColor = new(0.55f, 0.7f, 1f, 1f);
+        private static readonly Color ShieldBreakDarkColor = new(0.22f, 0.05f, 0.06f, 1f);
+        private static readonly Color ShieldBreakBrightColor = new(1f, 0.95f, 0.95f, 1f);
 
         public Widget_DivineProtectionShieldBar(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
@@ -60,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             float fillPercent = shield?.MaxEnergy > 0f ? Mathf.Clamp01(shield.Energy / shield.MaxEnergy) : 0f;
             if (fillPercent > 0.0001f)
             {
-                Rect fillRect = new Rect(barRect.x, barRect.y, barRect.width * fillPercent, barRect.height);
+                Rect fillRect = new(barRect.x, barRect.y, barRect.width * fillPercent, barRect.height);
                 Widgets.DrawBoxSolid(fillRect, ResolveShieldBarColor());
             }
 
@@ -69,8 +69,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                 float flash = shield.AbsorbFlashPercent;
                 if (flash > 0.001f)
                 {
-                    Rect flashRect = new Rect(barRect.x, barRect.y, barRect.width * fillPercent, barRect.height);
-                    Color flashColor = new Color(1f, 0.3f, 0.3f, 0.35f * flash);
+                    Rect flashRect = new(barRect.x, barRect.y, barRect.width * fillPercent, barRect.height);
+                    Color flashColor = new(1f, 0.3f, 0.3f, 0.35f * flash);
                     Widgets.DrawBoxSolid(flashRect, flashColor);
                 }
             }

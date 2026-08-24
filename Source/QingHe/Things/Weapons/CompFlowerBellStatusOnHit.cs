@@ -7,7 +7,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     public class CompProperties_FlowerBellStatusOnHit : CompProperties
     {
-        public List<HediffDef_Abnormal> abnormals = new List<HediffDef_Abnormal>();
+        public List<HediffDef_Abnormal> abnormals = new();
         public float accumulationAmount;
         public float chance = 1f;
         public float yangchunMultiplier = 1.5f;

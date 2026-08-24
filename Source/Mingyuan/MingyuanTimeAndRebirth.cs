@@ -36,7 +36,7 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class GameComponent_MingyuanTimeLock : GameComponent
     {
-        private List<MingyuanTimeLockRecord> locks = new List<MingyuanTimeLockRecord>();
+        private List<MingyuanTimeLockRecord> locks = new();
 
         public GameComponent_MingyuanTimeLock(Game game)
         {
@@ -103,9 +103,9 @@ namespace MiliraXian.Characters.Mingyuan
         {
             base.ExposeData();
             Scribe_Collections.Look(ref locks, "mingyuanTimeLocks", LookMode.Deep);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit && locks == null)
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                locks = new List<MingyuanTimeLockRecord>();
+                locks ??= new();
             }
         }
     }
@@ -264,7 +264,7 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class GameComponent_MingyuanRebirth : GameComponent
     {
-        private List<MingyuanPendingRebirth> pendingRebirths = new List<MingyuanPendingRebirth>();
+        private List<MingyuanPendingRebirth> pendingRebirths = new();
         private int nextProcessTick = int.MaxValue;
 
         public GameComponent_MingyuanRebirth(Game game)
@@ -371,9 +371,9 @@ namespace MiliraXian.Characters.Mingyuan
         {
             base.ExposeData();
             Scribe_Collections.Look(ref pendingRebirths, "mingyuanPendingRebirths", LookMode.Deep);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit && pendingRebirths == null)
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                pendingRebirths = new List<MingyuanPendingRebirth>();
+                pendingRebirths ??= new();
             }
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)

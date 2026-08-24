@@ -345,7 +345,7 @@ namespace MiliraXian.Characters.Mingyuan
                 amount *= GetOverburnDamageFactor(instigator);
             }
 
-            DamageInfo dinfo = new DamageInfo(damageDef ?? DamageDefOf.Burn, amount, 999f, -1f, instigator, hitPart);
+            DamageInfo dinfo = new(damageDef ?? DamageDefOf.Burn, amount, 999f, -1f, instigator, hitPart);
             dinfo.SetIgnoreArmor(true);
             dinfo.SetIgnoreInstantKillProtection(true);
             dinfo.SetApplyAllDamage(true);
@@ -446,7 +446,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            List<Hediff_MissingPart> missingParts = new List<Hediff_MissingPart>();
+            List<Hediff_MissingPart> missingParts = new();
             foreach (Hediff_MissingPart missingPart in pawn.health.hediffSet.GetMissingPartsCommonAncestors())
             {
                 if (missingPart.Part != null)
@@ -460,7 +460,7 @@ namespace MiliraXian.Characters.Mingyuan
                 pawn.health.RestorePart(missingParts[i].Part);
             }
 
-            List<Hediff> toRemove = new List<Hediff>();
+            List<Hediff> toRemove = new();
             List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
             HediffDef lifeBurn = LifeBurnDef;
             for (int i = 0; i < hediffs.Count; i++)

@@ -32,7 +32,7 @@ namespace MiliraXian.Characters
     [StaticConstructorOnStartup]
     public class CompProjectileContinuousTrail : ThingComp
     {
-        private static readonly MaterialPropertyBlock TrailPropertyBlock = new MaterialPropertyBlock();
+        private static readonly MaterialPropertyBlock TrailPropertyBlock = new();
 
         private Vector3[] trailPoints;
         private int trailStart;
@@ -40,10 +40,10 @@ namespace MiliraXian.Characters
         private bool initialized;
 
         private Mesh trailMesh;
-        private readonly List<Vector3> meshVertices = new List<Vector3>(256);
-        private readonly List<Vector2> meshUvs = new List<Vector2>(256);
-        private readonly List<Color32> meshColors = new List<Color32>(256);
-        private readonly List<int> meshTriangles = new List<int>(384);
+        private readonly List<Vector3> meshVertices = new(256);
+        private readonly List<Vector2> meshUvs = new(256);
+        private readonly List<Color32> meshColors = new(256);
+        private readonly List<int> meshTriangles = new(384);
 
         private Material trailMaterial;
         private string cachedTrailTexPath;
@@ -288,7 +288,7 @@ namespace MiliraXian.Characters
             }
 
             direction.Normalize();
-            Vector3 perpendicular = new Vector3(-direction.z, 0f, direction.x);
+            Vector3 perpendicular = new(-direction.z, 0f, direction.x);
             Vector3 startOffset = perpendicular * (startWidth * 0.5f);
             Vector3 endOffset = perpendicular * (endWidth * 0.5f);
             int vertexStart = meshVertices.Count;

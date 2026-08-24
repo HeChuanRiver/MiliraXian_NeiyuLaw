@@ -13,7 +13,7 @@ namespace MiliraXian.Characters.Neiyu
         public const int ValidationIntervalTicks = 600;
 
         private const string AriandelPackageId = "Ariandel.AriandelLibrary";
-        private static readonly HashSet<int> WarnedDuplicatePawnIds = new HashSet<int>();
+        private static readonly HashSet<int> WarnedDuplicatePawnIds = new();
 
         public static void TryRegister(Pawn pawn)
         {

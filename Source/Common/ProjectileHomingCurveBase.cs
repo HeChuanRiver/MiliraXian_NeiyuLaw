@@ -7,8 +7,8 @@ namespace MiliraXian.Characters
 {
     public abstract class ProjectileHomingCurveBase : Bullet, IProjectileHomingCurveHost
     {
-        private static readonly CompProperties_ProjectileHomingCurve FallbackHomingSettings = new CompProperties_ProjectileHomingCurve();
-        private static readonly List<IntVec3> ManualCheckedCells = new List<IntVec3>();
+        private static readonly CompProperties_ProjectileHomingCurve FallbackHomingSettings = new();
+        private static readonly List<IntVec3> ManualCheckedCells = new();
 
         private Vector3 visualMoveDirection = Vector3.forward;
         private bool hasVisualMoveDirection;

@@ -6,7 +6,7 @@ namespace MiliraXian.Characters.UI
 {
     public abstract class Gizmo_WithWidgets : Gizmo
     {
-        private readonly List<Widget_Base> widgets = new List<Widget_Base>();
+        private readonly List<Widget_Base> widgets = new();
         private bool widgetsBuilt;
         private bool widgetsOpened;
 
@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.UI
         public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
         {
             EnsureWidgetsOpen();
-            Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), GizmoHeight);
+            Rect rect = new(topLeft.x, topLeft.y, GetWidth(maxWidth), GizmoHeight);
             DrawBackground(rect);
             DrawWidgets(rect);
             return new GizmoResult(GizmoState.Clear);
@@ -87,7 +87,7 @@ namespace MiliraXian.Characters.UI
             }
 
             BuildWidgets(widgets);
-            WidgetHost host = new WidgetHost(WidgetHostKind.Gizmo, this);
+            WidgetHost host = new(WidgetHostKind.Gizmo, this);
             for (int i = 0; i < widgets.Count; i++)
             {
                 widgets[i].Notify_Attached(host);

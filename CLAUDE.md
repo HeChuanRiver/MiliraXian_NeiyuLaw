@@ -21,7 +21,7 @@ Output goes to `1.6/Assemblies/`.
 
 Melee Animation compat assembly (separate project, hard-coded local paths):
 ```powershell
-dotnet msbuild .\MiliraXIanMA.csproj /p:Configuration=Debug
+dotnet msbuild .\MiliraXian_MACompat.csproj /p:Configuration=Debug
 ```
 Output goes to `1.6/Mods/co.uk.epicguru.meleeanimation/Assemblies/`.
 
@@ -123,9 +123,9 @@ GenDraw.DrawFieldEdges(cells, new Color(0.44f, 0.12f, 0.16f));
 | `UnityEngine.*` | RimWorld `Managed/` | Rendering/IMGUI |
 | `0Harmony` | NuGet (`packages/`) | Bundled 2.4.2 |
 | `AriandelLibrary` | Workshop `3665997350` | Required for `NeiyuSpecialPawnIntegration`; if missing, build fails on that file |
-| `zAnimationMod` | Workshop `2944488802` | Only for `MiliraXIanMA.csproj` |
+| `zAnimationMod` | Workshop `2944488802` | Only for `MiliraXian_MACompat.csproj` |
 
-The main `.csproj` uses `..\..\..\..\workshop\content\294100\...` relative paths for RimWorld and AriandelLibrary. `MiliraXIanMA.csproj` still contains hard-coded `E:\` paths and will not build on a different machine without editing.
+The main `.csproj` uses `..\..\..\..\workshop\content\294100\...` relative paths for RimWorld and AriandelLibrary. `MiliraXian_MACompat.csproj` still contains hard-coded `E:\` paths and will not build on a different machine without editing.
 
 ## Conditional Loading
 

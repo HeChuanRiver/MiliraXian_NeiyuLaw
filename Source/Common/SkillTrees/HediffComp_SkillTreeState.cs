@@ -341,8 +341,8 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            HashSet<AbilityDef> allGranted = new HashSet<AbilityDef>();
-            HashSet<AbilityDef> activeGranted = new HashSet<AbilityDef>();
+            HashSet<AbilityDef> allGranted = new();
+            HashSet<AbilityDef> activeGranted = new();
             for (int i = 0; i < relevantNodes.Count; i++)
             {
                 SkillNodeDef node = relevantNodes[i];
@@ -391,7 +391,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            Dictionary<HediffDef, int> grantedLevels = new Dictionary<HediffDef, int>();
+            Dictionary<HediffDef, int> grantedLevels = new();
             for (int i = 0; i < relevantNodes.Count; i++)
             {
                 SkillNodeDef node = relevantNodes[i];
@@ -438,15 +438,9 @@ namespace MiliraXian.Characters
 
         private void NormalizeCollections()
         {
-            if (nodeLevels == null)
-            {
-                nodeLevels = new Dictionary<SkillNodeDef, int>();
-            }
+            nodeLevels ??= new();
 
-            if (nodeReadingProgress == null)
-            {
-                nodeReadingProgress = new Dictionary<SkillNodeDef, float>();
-            }
+            nodeReadingProgress ??= new();
         }
     }
 

@@ -6,8 +6,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     public class CompProperties_QingheResonantWeaponLabel : CompProperties
     {
-        public List<string> resonanceLabels = new List<string>();
-        public List<string> resonanceDescriptions = new List<string>();
+        public List<string> resonanceLabels = new();
+        public List<string> resonanceDescriptions = new();
 
         public CompProperties_QingheResonantWeaponLabel()
         {

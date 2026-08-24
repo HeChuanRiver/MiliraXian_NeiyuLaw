@@ -7,7 +7,7 @@ namespace MiliraXian.Characters.QingHe
 {
     public static class MX_QHCharacterUtility
     {
-        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
+        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
 
         public static bool IsQinghe(Pawn pawn)
         {

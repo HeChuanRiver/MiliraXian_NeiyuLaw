@@ -75,8 +75,8 @@ namespace MiliraXian.Characters.UI
                 return;
             }
 
-            Rect fillRect = new Rect(rect.x, rect.yMax - height, rect.width, height);
-            Rect texCoords = new Rect(0f, 0f, 1f, fillPercent);
+            Rect fillRect = new(rect.x, rect.yMax - height, rect.width, height);
+            Rect texCoords = new(0f, 0f, 1f, fillPercent);
             Color oldColor = GUI.color;
             GUI.color = color;
             GUI.DrawTextureWithTexCoords(fillRect, texture, texCoords, true);

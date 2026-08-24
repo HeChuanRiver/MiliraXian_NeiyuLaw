@@ -68,7 +68,7 @@ namespace MiliraXian.Characters
 
         public override IEnumerable<Rule_String> GetTopicRuleStrings()
         {
-            if (!(Book is Thing_MX_SkillBook skillBook) || GetDoers(Book).FirstOrDefault() != this)
+            if (Book is not Thing_MX_SkillBook skillBook || GetDoers(Book).FirstOrDefault() != this)
             {
                 return null;
             }

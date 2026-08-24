@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         public override bool PlayerInterruptable => false;
 
-        public Rot4 StanceFacing => new Rot4(stanceFacingInt);
+        public Rot4 StanceFacing => new(stanceFacingInt);
 
         public bool StanceActive => stanceActive;
 

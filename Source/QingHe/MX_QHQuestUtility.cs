@@ -115,7 +115,7 @@ namespace MiliraXian.Characters.QingHe
                 return null;
             }
 
-            PawnGenerationRequest request = new PawnGenerationRequest(
+            PawnGenerationRequest request = new(
                 qingheKind,
                 ResolveAncientsFaction(),
                 PawnGenerationContext.NonPlayer,
@@ -379,7 +379,7 @@ namespace MiliraXian.Characters.QingHe
     {
         protected override bool CanFireNowSub(IncidentParms parms)
         {
-            if (!base.CanFireNowSub(parms) || !(parms.target is Map map) || !map.IsPlayerHome)
+            if (!base.CanFireNowSub(parms) || parms.target is not Map map || !map.IsPlayerHome)
             {
                 return false;
             }
@@ -396,7 +396,7 @@ namespace MiliraXian.Characters.QingHe
 
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
-            if (!(parms.target is Map map))
+            if (parms.target is not Map map)
             {
                 return false;
             }
@@ -407,7 +407,7 @@ namespace MiliraXian.Characters.QingHe
                 return false;
             }
 
-            Slate slate = new Slate();
+            Slate slate = new();
             slate.Set("points", parms.points);
             slate.Set("map", map);
             slate.Set("qingheStart", false);
@@ -569,7 +569,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Slate slate = new Slate();
+            Slate slate = new();
             slate.Set("points", StorytellerUtility.DefaultThreatPointsNow(map));
             slate.Set("map", map);
             slate.Set("qingheStart", true);
