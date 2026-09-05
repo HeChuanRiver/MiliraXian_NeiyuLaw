@@ -1,287 +1,211 @@
-# MiliraXian_Characters
+# 米莉拉角色拓展
 
-`MiliraXian_Characters` 是一个面向 RimWorld 1.6 的角色扩展工程。  
-从当前仓库实际内容来看，它已经不再是早期只围绕“霓羽”维护的单角色项目，而是以同一套主工程同时承载：
+**Milira Character Expansion · RimWorld 1.6 · master 分支**
 
-- `Neiyu / 霓羽`
-- `QingHe / 清荷`
-- `Zhaoli / 昭离`
-- `Common` 通用战斗与资源底层
+![米莉拉角色拓展封面](About/Preview.png)
 
-需要注意的是，仓库名已经体现出“多角色工程”的方向，但主程序集、解决方案和部分历史文件仍保留了早期命名，例如 `MiliraXian_NeiyuLaw.sln`、`MiliraXian_NeiyuLaw.csproj`。这是当前工程状态的一部分，并不代表仓库内容仍然只有霓羽。
+为殖民地带来拥有独立故事、专属装备与战斗机制的米莉拉角色。
 
-## 工程状态速览
+本模组基于 **Milira Race** 与 **Ariandel Library**。当前 `master` 以 **霓羽、昭离** 的角色玩法和招募流程为主要游玩内容，仓库中另包含开发中的 **清荷** 角色实现。角色拥有较高的原始强度，适合希望体验专属技能、角色剧情与高强度战斗的玩家。
 
-| 模块 | 当前状态 | 备注 |
-| --- | --- | --- |
-| `Neiyu / 霓羽` | 完成度最高 | 已具备独立玩法入口、较完整资源和兼容模块 |
-| `QingHe / 清荷` | 玩法逻辑已成型 | C#、Def、武器形态和核心机制已接入，但美术、图标、VFX、语言仍大量占位 |
-| `Zhaoli / 昭离` | 核心机制已落地 | 主要技能与被动系统已写入工程，但人物外观、专属资源和部分 Def 细节尚未收口 |
-| `Common` | 已投入使用 | 提供专属资源、追踪弹道、持续拖尾、装备保护等通用能力 |
-| `1.6/Defs` | 三角色均已接入 | 霓羽额外拥有剧本、任务和事件入口 |
-| `1.6/Languages` | 部分完成 | 霓羽覆盖较完整，清荷与昭离仍主要依赖 Def 内中文文本 |
-| `Content/Textures` | 资源层偏早期 | 当前仓库内正式贴图仍以 `MiliraXianNeiyu` 为主 |
-| `About/About.xml` | 未同步到当前范围 | 仍按“霓羽单角色模组”描述，与现有仓库内容不完全一致 |
-| 构建链路 | 可维护但不够可移植 | 依赖本地 RimWorld、Workshop 和第三方模组 DLL 路径 |
+[Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594) · [下载 master](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/archive/refs/heads/master.zip) · [问题反馈](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) · [开发分支说明](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/blob/dev/README.md)
 
-## 当前角色状态
+> 本文只描述 `master` 分支。明渊、三档强度开关、清荷新版花庭／技能树，以及 SDK 风格与 C# 10 工程迁移属于 `dev` 内容，尚未包含在本分支中。不要混用两个分支的 DLL、定义与资源文件。
 
-### 霓羽 `Neiyu`
+## 内容导航
 
-霓羽是当前仓库中最成熟、最接近完整交付形态的角色模块，代码、Def、语言和贴图都比较齐全。结合现有源码、Def 和既有 README，可以确认目前已经具备：
+- [角色与玩法](#角色与玩法)
+- [安装与依赖](#安装与依赖)
+- [模组设置](#模组设置)
+- [兼容性与存档](#兼容性与存档)
+- [反馈问题](#反馈问题)
+- [开发与构建](#开发与构建)
+- [贡献与致谢](#贡献与致谢)
 
-- 三形态武器切换
-- 七个主动技能
-- 三阶段计数护盾
-- 翅膀与飞行动画
-- 独立剧本
-- 招募事件与招募任务
-- 特殊角色管理器接入
-- `Facial Animation` 条件兼容
-- `Melee Animation` 条件兼容
+## 角色与玩法
 
-霓羽目前仍是整个工程里“玩法入口最完整、资源最完整、对外说明最接近真实状态”的部分。
+### 霓羽
 
-### 清荷 `QingHe`
+围绕多形态武器、机动技能和阶段护盾展开战斗。
 
-清荷已经不是“概念稿”阶段，而是进入了“玩法逻辑基本成型、表现层待补齐”的阶段。当前仓库中已存在完整目录 `Source/QingHe`，并已纳入主项目编译。
+- 花、剑、弓三形态装备与近远程技能。
+- 多阶段计数护盾及配套状态显示。
+- 专属服装、翅膀、飞行动画与技能特效。
+- 专属开局「界外羽痕」与「异界羽影」投影招募任务。
 
-已经落地的内容包括：
+### 昭离
 
-- 双资源循环：`激流 / Tempest` 与 `雅乐 / Elegance`
-- 保命机制：`长息`
-- 护盾机制：`花神护体`、`水镜`
-- 主要主动技能：
-  - `涌泉`
-  - `水镜`
-  - `扼流`
-  - `横指`
-  - `断魂`
-  - `阳春`
-- 三形态武器：
-  - `琵琶`
-  - `竹笛`
-  - `琴`
-- 持续场系统、状态面板、投射物、曲线追踪与拖尾表现
-- 调试技能：
-  - `Max Tempest`
-  - `Max Elegance`
+围绕死亡、因果与归返建立自己的资源循环。
 
-但清荷当前仍有明显缺口：
+- 专武「离断」及武器技能「断斩」。
+- 告死流场、诡医、定数、冥火、泯神等主动技能。
+- 因果资源、因果链接、替死、死亡成长与离场复活机制。
+- 「亡者说」与「归亡者」任务链，包含藏身处交涉、后续选择和敌对遭遇。
+- 敌对形态具有阶段变化、仇恨与专用施法逻辑。
 
-- 大量技能图标仍复用霓羽资源
-- 多个技能的施法前摇、脉冲和收束 VFX 仍不足
-- `Thing_SpawnedField.cs` 中仍保留周期图形效果的 TODO
-- PawnKind 仍复用霓羽服装、头像、头型等占位资源
-- `Content/Textures` 下尚未看到独立的清荷正式贴图目录
-- 现有文档与 `ISSUES.md` 显示，`水镜` 的文本描述与当前实际实现存在偏差
+昭离的任务并非无条件招募。接取前请阅读期限与后果；放任限时交涉不处理可能导致袭击，原始强度下的敌对昭离具有很高威胁。
 
-整体上，清荷已经具备“可继续打磨”的主干，不再是从零开始的角色。
+### 清荷：开发中的角色内容
 
-### 昭离 `Zhaoli`
+`master` 保留的是以 **激流／雅乐** 双资源为核心的版本，而非 `dev` 中的新版花庭体系。
 
-昭离当前处于“核心系统已经落地，但角色资料和资源层尚未完全收口”的状态。她的源码目录、Def、Hediff 和武器文件都已进入主工程。
+当前实现包含琵琶、竹笛、琴形装备，涌泉、水镜、扼流、横指、断魂、阳春等技能，以及长息、花神护体和相关持续场机制。部分视觉资源仍为占位内容，本分支也未提供清荷专属开局与花庭招募任务，不应把她视作与霓羽、昭离同等完整的游玩流程。
 
-已经实现或已明确接入的内容包括：
+模组提供简体中文、繁体中文和英文文本。具体技能效果请以所安装版本的游戏内说明和实际属性为准。
 
-- 因果资源系统
-- 因果链接网络
-- 因果溢出与沉眠
-- 讳亡护盾
-- 替死复苏与归亡者重生
-- 主动技能：
-  - `告死流场`
-  - `诡医`
-  - `冥火`
-  - `泯神`
-- 专武技能：
-  - `断斩`
+## 安装与依赖
 
-目前昭离的主要待完善点也很明确：
+### 运行环境
 
-- `PawnKindDef` 中仍有大量 TODO
-- 服装、头型、头像、特质等仍复用或占位自霓羽
-- `SpecialPawnExtension` 中与角色管理器相关的头像与说明仍未正式启用
-- 技能图标仍大量复用霓羽资源
-- 飞行动画、光环、头发、FA 眼睛/眼皮等资源仍待替换
-- 当前仓库内尚未看到独立的昭离正式贴图目录
+- **RimWorld 1.6**。
+- **Royalty、Biotech**：当前 Milira Race 的前置要求。
+- 使用与你的 RimWorld 版本相匹配的前置模组。
 
-也就是说，昭离的“玩法 C#”明显先于“角色资源和包装层”推进。
+### 必需模组
 
-## 通用层与兼容模块
+| 模组 | 用途 |
+| --- | --- |
+| [Milira Race](https://steamcommunity.com/sharedfiles/filedetails/?id=3256974620) | 米莉拉种族及基础定义。 |
+| [Ariandel Library](https://steamcommunity.com/sharedfiles/filedetails/?id=3665997350) | 特殊角色管理和共用功能。 |
 
-### `Source/Common`
+还需要安装它们自身要求的 [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077)、[Humanoid Alien Races](https://steamcommunity.com/sharedfiles/filedetails/?id=839005762) 与 [Ancot Library](https://steamcommunity.com/sharedfiles/filedetails/?id=2988801276)。完整依赖及版本要求请以各前置页面和游戏的依赖提示为准。
 
-`Common` 已经不只是一个预留目录，而是在主项目中实际承载多角色复用逻辑。当前可见的通用能力包括：
+### 安装步骤
 
-- 专属资源底座：`PawnSpecialResource`、`PawnSpecialResourceUtility`
-- 不可破坏装备：`CompUnbreakableEquipment`
-- 调试资源补满能力：`CompAbilityEffect_DebugMaxResource`
-- 曲线追踪弹道：`CompProjectileHomingCurve`、`ProjectileHomingCurveBase`
-- 连续拖尾：`CompProjectileContinuousTrail`
-- 若干基础工具类与通用组件
+1. 下载本页上方的 `master` 分支 ZIP，或使用创意工坊发布版本；两者内容可能不同。
+2. 手动安装时，将模组文件夹放入 `RimWorld/Mods/`。文件夹中应直接包含 `About/`、`1.6/`、`Content/` 和 `LoadFolders.xml`，不要多套一层解压目录。
+3. 在游戏模组列表启用前置与本模组，处理依赖和排序提示后重启游戏。当前元数据中的显示名称为「米莉拉角色拓展 v1.1dev」。
+4. 第一次测试建议使用新存档，或先备份现有存档并使用副本。
 
-从现在的结构看，后续若再加入新角色，继续复用 `Common` 是比较自然的方向。
+仓库包含游戏运行所需的主 DLL。**只游玩不需要安装开发工具，也不需要自己编译。**请安装完整文件夹，不要只替换 DLL 而遗漏贴图、XML 和语言文件。
 
-### 条件兼容
+不要同时启用本模组的工坊版与本地版，避免同名 Def、人物和补丁重复加载。
 
-当前 `LoadFolders.xml` 已配置两个条件加载模块：
+### 加载顺序
 
-- `1.6/Mods/Nals.FacialAnimation`
-- `1.6/Mods/co.uk.epicguru.meleeanimation`
+基础原则是先加载被依赖项，再加载依赖它们的模组。Harmony 位于依赖它的模组之前，本模组位于 **Milira Race** 与 **Ariandel Library** 之后。
 
-其中：
+若同时使用米莉拉基因补丁、米莉拉面部动画补丁、Milira Imperium 或 `HeChuanRiver.MiliraXian`，也应将本模组放在它们之后。这些额外排序对象不是全部必装前置，具体声明见 [About/About.xml](About/About.xml)。
 
-- `Facial Animation` 主要通过额外 Def 文件接入
-- `Melee Animation` 额外使用了独立兼容工程 `MiliraXIanMA.csproj`
+## 模组设置
 
-## 数据与资源层状态
+入口：**选项 → 模组设置 → 米莉拉角色拓展**。
 
-### `1.6/Defs`
+| 设置 | 当前行为 |
+| --- | --- |
+| 特殊角色管理器集成 | 默认开启，用于角色加入与读档时的注册和状态修复。 |
+| 更新来信 | 控制是否接收更新说明来信，也可以在设置页查看更新记录。 |
+| 特殊角色意识保底 | 可选最低 100%、最低 35% 或不锁定；默认最低 100%。 |
 
-当前 Def 层已经覆盖三名角色，主要目录包括：
+**master 没有原始／适中／观赏三档开关。**角色技能、装备和被动仍使用本分支的原始数值，意识保底设置也不是整体战斗强度调节器。
 
-- `AbilityDefs`
-- `AnimaitionDefs`
-- `ApparelDefs`
-- `BackStoryDef`
-- `DamageDefs`
-- `Effects`
-- `GraphicStateDefs`
-- `HeadDefs`
-- `HediffDefs`
-- `JobDefs`
-- `PawnkindDef`
-- `QuestScriptDefs`
-- `ScenarioDefs`
-- `Storyteller`
-- `ThingDefs`
-- `TraitDef`
+## 兼容性与存档
 
-其中一个很明显的现状是：
+### 可选联动
 
-- 霓羽拥有更完整的玩法入口 Def，包括 `ScenarioDefs`、`QuestScriptDefs`、`Storyteller`
-- 清荷与昭离已经补齐了能力、PawnKind、Hediff、GraphicState、飞行动画和武器相关 Def
-- 清荷与昭离的部分 Def 仍含 TODO、占位文本或占位资源路径
+- **Facial Animation**：按是否启用该模组加载专用眼睛与眼睑定义。
+- **Melee Animation**：按是否启用该模组加载独立兼容目录，源码位于 `Source/Compat/MeleeAnimation/`。
 
-### `1.6/Languages`
+上述目录由 [LoadFolders.xml](LoadFolders.xml) 条件加载，无需手动复制到主定义目录。条件兼容内容不等于对所有版本和模组组合的兼容保证。
 
-当前保留三套语言目录：
+本分支没有提供 Combat Extended 专用兼容层。修改死亡、复活、伤害结算、人物渲染或特殊角色唯一性的模组，建议先在测试存档中检查组合效果。
 
-- `ChineseSimplified (简体中文)`
-- `ChineseTraditional (繁體中文)`
-- `English`
+### 更新与移除
 
-但从仓库现状来看，真正比较完整的翻译覆盖仍主要集中在霓羽相关内容。清荷和昭离的大量文本目前仍直接写在 Def 内，尚未完全整理进语言文件。
+- 更新前备份存档并记录模组版本或 Git 提交号。
+- 不要混装不同分支、不同版本的程序集与 XML。
+- 本模组包含自定义人物状态、Hediff 和任务数据；已经产生相关角色或任务的存档，不建议中途直接卸载。
+- 回退更新时，应同时恢复匹配的模组版本与更新前存档，不要仅替换旧 DLL。
+- 角色注册和复活保护不能替代存档备份，也不代表任意版本之间都能安全切换。
 
-### `Content/Textures`
+## 反馈问题
 
-当前仓库内正式可见的贴图目录仍主要是：
+请通过 [GitHub Issues](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) 提供可复现的问题，尽量附上：
 
-- `Content/Textures/MiliraXianNeiyu`
+1. RimWorld 版本、启用的 DLC，以及使用的是 `master`、`dev` 还是工坊版。
+2. Git 提交号或模组版本、完整模组列表与加载顺序。
+3. 涉及的角色、装备、设置和操作步骤。
+4. 预期结果、实际结果，以及日志中第一次出现的错误与完整堆栈。
+5. 必要的截图或可复现存档副本。
 
-这说明目前的资源层状态更接近：
-
-- 霓羽：正式资源较完整
-- 清荷：逻辑已进仓，正式资源大多待补
-- 昭离：逻辑已进仓，正式资源大多待补
-
-这也和 `RW_Codex` 中关于清荷 VFX 缺口、清荷 GUI/图标待绘、昭离资源替换 TODO 等文档结论一致。
-
-## 目前最明显的未同步点
-
-结合仓库代码、现有 README 和 `D:\RimworldSourceCode\RW_Codex` 中的文档，可以把当前最明显的未同步点整理为以下几类：
-
-1. **仓库真实范围已经扩大，但元数据仍停留在霓羽单角色时期**  
-   `About/About.xml` 里的说明仍主要描述“独立角色 + 新剧本 + 招募事件”，没有体现清荷与昭离已经进入工程主线。
-
-2. **玩法逻辑推进明显快于资源层**  
-   清荷与昭离的代码、Def、Hediff、武器、飞行动画入口都已经建立，但图标、贴图、肖像、头型、面部动画资源仍大量占位或复用霓羽资源。
-
-3. **语言整理没有追上功能扩展**  
-   现有多语言目录仍以霓羽为主，清荷与昭离不少文本直接写在 Def 中，后续如果继续扩展对外发布，需要补做语言收口。
-
-4. **构建依赖仍强绑定开发者本地环境**  
-   主工程依赖本地 RimWorld 与 Workshop 中的 DLL 路径；兼容工程 `MiliraXIanMA.csproj` 仍保留硬编码盘符路径。
-
-5. **部分说明文案与实际实现存在偏差**  
-   例如 `RW_Codex/ISSUES.md` 中已记录清荷 `水镜` 的文本与当前实现不完全一致，这类内容后续应统一整理。
-
-## 仓库结构
+Windows 日志通常位于：
 
 ```text
-MiliraXian_Characters/
-├─ 1.6/
-│  ├─ Assemblies/                      # 主工程输出
-│  ├─ Defs/                            # 三角色主 Def
-│  ├─ Languages/                       # 多语言文本
-│  ├─ Mods/                            # 条件兼容子模组
-│  └─ Patches/                         # XML Patch
-├─ About/                              # About.xml / Preview / PublishedFileId
-├─ Content/                            # 贴图与资源
-├─ Source/
-│  ├─ Common/                          # 通用资源与通用战斗底层
-│  ├─ Neiyu/                           # 霓羽
-│  ├─ QingHe/                          # 清荷
-│  ├─ Zhaoli/                          # 昭离
-│  └─ Compat/
-│     └─ MeleeAnimation/               # Melee Animation 兼容源码
-├─ LoadFolders.xml                     # 条件加载入口
-├─ MiliraXian_NeiyuLaw.sln             # 主解决方案
-├─ MiliraXian_NeiyuLaw.csproj          # 主工程
-├─ MiliraXIanMA.csproj                 # Melee Animation 兼容工程
-├─ packages.config                     # NuGet 包配置
-└─ README.md
+%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Player.log
 ```
 
-## 构建与调试
+上传日志和存档前，请检查其中是否包含不希望公开的用户名、路径等信息。反馈性能问题时，请同时说明地图规模、参战人数、游戏速度，以及问题是否只在特定技能或特效出现时发生。
 
-### 主工程
+## 开发与构建
 
-主工程输出目录为：
+### 目录结构
 
-- `1.6/Assemblies`
+```text
+About/                       模组信息、封面与工坊 ID
+1.6/
+  Assemblies/                主程序集
+  Defs/                      角色、技能、装备与任务定义
+  Languages/                 简体中文、繁体中文、英文
+  Mods/                      按需加载的兼容内容
+  Patches/                   XML 补丁
+Content/Textures/            游戏贴图
+Source/
+  Common/                    共用资源、异常状态与战斗工具
+  Neiyu/                     霓羽
+  QingHe/                    清荷的激流／雅乐版本
+  Zhaoli/                    昭离
+  Compat/MeleeAnimation/     Melee Animation 兼容源码
+Directory.Build.props        默认程序集路径与本地配置导入
+LoadFolders.xml              版本与条件加载入口
+MiliraXian_NeiyuLaw.csproj    主工程
+MiliraXIanMA.csproj          Melee Animation 兼容工程
+```
 
-常用构建命令：
+### 编译主程序集
+
+`master` 使用**传统 MSBuild 项目格式**，目标框架为 **.NET Framework 4.8.1**，尚未迁移为 SDK 风格工程。以下以 Windows 为基准。
+
+准备好 MSBuild／.NET SDK、.NET Framework 4.8.1 Developer Pack、NuGet CLI，以及本机 RimWorld 与前置模组程序集。
+
+在仓库根目录，根据 [Directory.Build.local.props.example](Directory.Build.local.props.example) 创建 `Directory.Build.local.props`，填写自己的安装位置，例如：
+
+```xml
+<Project>
+  <PropertyGroup>
+    <RimWorldInstallDir>C:\Games\Steam\steamapps\common\RimWorld</RimWorldInstallDir>
+    <RimWorldWorkshopDir>C:\Games\Steam\steamapps\workshop\content\294100</RimWorldWorkshopDir>
+  </PropertyGroup>
+</Project>
+```
+
+本地配置文件已被 Git 忽略，不应提交个人安装路径。必要时可在其中覆盖 `RimWorldManagedDir`、`AriandelLibraryDll` 和 `ZAnimationModDll`；路径解析规则见 [Directory.Build.props](Directory.Build.props)。
+
+在仓库根目录运行：
 
 ```powershell
-dotnet msbuild .\MiliraXian_NeiyuLaw.sln /p:Configuration=Debug
+nuget restore .\packages.config -PackagesDirectory .\packages
+
+dotnet msbuild .\MiliraXian_NeiyuLaw.csproj /t:Build /p:Configuration=Release
 ```
 
-当前仓库已经自带 `Lib.Harmony 2.4.2` 包，但仍依赖以下本地环境：
+Harmony 2.4.2 由 `packages.config` 恢复到 `packages/`，其他游戏和前置程序集由本机安装提供。输出为 `1.6/Assemblies/MiliraXian_NeiyuLaw.dll`；使用 `Configuration=Debug` 可构建调试版本。
 
-- RimWorld `Managed` DLL
-- Workshop 中的 `AriandelLibrary.dll`
+如需构建可选的 Melee Animation 兼容层，先配置 `ZAnimationModDll`，再运行：
 
-在当前检查环境下，主工程构建失败的直接原因是：
+```powershell
+dotnet msbuild .\MiliraXIanMA.csproj /t:Build /p:Configuration=Release
+```
 
-- `AriandelLibrary.dll` 的引用路径不存在，导致 `NeiyuSpecialPawnIntegration.cs` 无法解析 `AriandelLibrary` 命名空间
+兼容程序集输出到 `1.6/Mods/co.uk.epicguru.meleeanimation/Assemblies/`。不要把 `dev` 的工程文件名或构建步骤直接用于本分支，也不要在游戏运行时覆盖程序集。
 
-### `Melee Animation` 兼容工程
+编译通过后仍应测试游戏加载、读档、招募、战斗和角色返回流程。如提示缺少程序集引用，请先核对前置安装情况与本地路径配置。
 
-兼容工程输出目录为：
+## 贡献与致谢
 
-- `1.6/Mods/co.uk.epicguru.meleeanimation/Assemblies`
+项目作者：**HeChuanRiver**。
 
-但需要注意，`MiliraXIanMA.csproj` 目前仍使用硬编码的本地路径引用，例如：
+感谢 Milira Race、Ancot Library、Ariandel Library、Humanoid Alien Races、Harmony 及可选联动模组的作者，也感谢提供角色美术、封面、测试与反馈的贡献者。美术与社区致谢可参见 [创意工坊页面](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594)，代码贡献记录见 [Contributors](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/graphs/contributors)。
 
-- `E:\SteamLibrary\...`
-- `E:\下载\HarmonyMod\...`
+提交问题或补丁时，请明确目标分支；功能开发通常在 `dev` 进行，不应把仅适用于开发分支的说明、资源或工程配置直接覆盖到 `master`。涉及玩家可见文本时，请同步检查三种语言，不要提交临时产物、游戏存档或第三方游戏程序集。
 
-这说明该兼容工程目前更偏向作者本地开发环境，尚未整理成可直接迁移的通用构建配置。
-
-## 建议的下一步整理方向
-
-如果后续要继续把这个仓库整理成更适合长期维护和对外协作的形态，优先级比较高的事情大致有：
-
-1. 更新 `About/About.xml` 与对外描述，使其与“三角色工程”的实际范围一致。
-2. 为清荷、昭离补齐独立图标、贴图、肖像、头型和面部动画资源，减少对霓羽资源的占位复用。
-3. 收口清荷、昭离的语言文件，把现在写在 Def 里的文本迁移到 `Languages`。
-4. 清理 `PawnKindDef`、`GraphicStateDefs`、`AnimationDefs` 和 Patch 中遗留的 TODO。
-5. 整理工程引用路径，让主工程与兼容工程都更容易在新环境中直接构建。
-
----
-
-如果只用一句话概括当前状态，那么这个仓库现在更像是：
-
-> 一个已经从“霓羽单角色模组”演进成“三角色共仓开发”的 RimWorld 角色工程，其中霓羽最成熟，清荷和昭离的玩法逻辑已经明显成型，但资源、语言、元数据与构建配置仍在追赶代码进度。
+仓库目前未附统一的 `LICENSE` 文件。复用代码、美术或其他资源前，请向维护者确认相应内容的授权范围；本 README 不额外授予第三方素材的使用许可。
