@@ -54,7 +54,7 @@
 
     <FacialAnimation.EyeballTypeDef>
         <defName>MiliraXian_Eye_Mingyuan</defName>
-        <texPath>MiliraXianNeiyu/PawnNeiyu/EyeNeiyu</texPath>
+        <texPath>MiliraXianMingyuan/PawnMingyuan/EyeMingyuan</texPath>
         <altMaskPath>Things/Pawn/Milira/Eyes/Common</altMaskPath>
         <shader>Map/CutoutSkinOverlay</shader>
         <raceName>Milira_Race</raceName>

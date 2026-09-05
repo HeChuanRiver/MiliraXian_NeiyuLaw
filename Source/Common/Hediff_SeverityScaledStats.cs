@@ -10,6 +10,7 @@ namespace MiliraXian.Characters
         private HediffStage cachedStage;
         private float cachedSeverity = float.NaN;
         private int cachedStageIndex = -1;
+        private HediffStage cachedBaseStage;
 
         public override HediffStage CurStage
         {
@@ -23,7 +24,7 @@ namespace MiliraXian.Characters
                 }
 
                 int stageIndex = base.CurStageIndex;
-                if (cachedStage == null || cachedStageIndex != stageIndex || Math.Abs(cachedSeverity - Severity) > float.Epsilon)
+                if (cachedStage == null || cachedBaseStage != baseStage || cachedStageIndex != stageIndex || Math.Abs(cachedSeverity - Severity) > float.Epsilon)
                 {
                     RebuildCachedStage(baseStage, stageIndex);
                 }
@@ -45,6 +46,7 @@ namespace MiliraXian.Characters
 
         private void RebuildCachedStage(HediffStage baseStage, int stageIndex)
         {
+            cachedBaseStage = baseStage;
             cachedSeverity = Severity;
             cachedStageIndex = stageIndex;
 

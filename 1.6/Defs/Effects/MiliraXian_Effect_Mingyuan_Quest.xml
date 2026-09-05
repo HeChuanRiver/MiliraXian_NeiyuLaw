@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestLandingSigil</defName>
+    <label>white flame landing sigil</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+      <color>(1.00, 0.93, 0.72, 0.88)</color>
+      <drawSize>(7.5,7.5)</drawSize>
+      <shaderParameters>
+        <_Interval>0.16</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.15</fadeInTime>
+      <solidTime>5.4</solidTime>
+      <fadeOutTime>1.2</fadeOutTime>
+      <growthRate>0.10</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestWhiteAsh</defName>
+    <label>white flame ash</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnBurst</texPath>
+      <color>(1.00, 0.98, 0.90, 0.82)</color>
+      <drawSize>(0.55,0.55)</drawSize>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.08</fadeInTime>
+      <solidTime>1.15</solidTime>
+      <fadeOutTime>1.35</fadeOutTime>
+      <growthRate>0.12</growthRate>
+      <speedPerTime>0.86</speedPerTime>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestWavePortal</defName>
+    <label>machine incursion aperture</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnStart</texPath>
+      <color>(0.58, 0.88, 1.00, 0.90)</color>
+      <drawSize>(5.8,5.8)</drawSize>
+      <shaderParameters>
+        <_Interval>0.07</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.04</fadeInTime>
+      <solidTime>0.48</solidTime>
+      <fadeOutTime>0.90</fadeOutTime>
+      <growthRate>1.75</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestReformation</defName>
+    <label>white flame reconstruction</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnBurst</texPath>
+      <color>(1.00, 0.76, 0.38, 0.95)</color>
+      <drawSize>(9.5,9.5)</drawSize>
+      <shaderParameters>
+        <_Interval>0.08</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.10</fadeInTime>
+      <solidTime>1.65</solidTime>
+      <fadeOutTime>1.30</fadeOutTime>
+      <growthRate>1.05</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestPulseRing</defName>
+    <label>white flame pulse</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/AshesPulse</texPath>
+      <color>(1.00, 0.94, 0.74, 0.82)</color>
+      <drawSize>(6.2,6.2)</drawSize>
+      <shaderParameters>
+        <_Interval>0.10</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.03</fadeInTime>
+      <solidTime>0.24</solidTime>
+      <fadeOutTime>0.78</fadeOutTime>
+      <growthRate>2.25</growthRate>
+    </mote>
+  </ThingDef>
+
+  <ThingDef>
+    <defName>MX_Mingyuan_Mote_QuestCollapse</defName>
+    <label>white flame collapse</label>
+    <thingClass>MoteThrown</thingClass>
+    <category>Mote</category>
+    <graphicData>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteGlowPulse</shaderType>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnCollapse</texPath>
+      <color>(0.92, 0.90, 0.82, 0.88)</color>
+      <drawSize>(8.5,8.5)</drawSize>
+      <shaderParameters>
+        <_Interval>0.06</_Interval>
+      </shaderParameters>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.02</fadeInTime>
+      <solidTime>0.30</solidTime>
+      <fadeOutTime>1.05</fadeOutTime>
+      <growthRate>-0.75</growthRate>
+    </mote>
+  </ThingDef>
+
+</Defs>

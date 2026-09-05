@@ -16,12 +16,13 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect_ZhaoliPowerLimited
     {
         private new CompProperties_AbilityZhaoliGuiyi Props => (CompProperties_AbilityZhaoliGuiyi)props;
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (base.GizmoDisabled(out reason)) return true;
             ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
             reason = null;
             return false;
@@ -73,6 +74,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -113,8 +115,9 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            int restoredParts = RestoreMissingParts(targetPawn);
-            int removedHediffs = RemoveNegativeHediffs(targetPawn);
+            int restoredParts = ZhaoliPowerBalance.IsOriginal ? RestoreMissingParts(targetPawn) : 0;
+            int removedHediffs = ZhaoliPowerBalance.IsOriginal ? RemoveNegativeHediffs(targetPawn)
+                : (CharacterPowerProfile.HealOrdinaryInjuries(targetPawn, 20f) > 0f ? 1 : 0);
             if (restoredParts + removedHediffs > 0)
             {
                 SpawnLinkPulse(targetPawn, ZhaoliEffectUtility.GuiyiLinkPulseMoteDef);
@@ -213,6 +216,9 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 return false;
             }
+
+            if (ZhaoliPowerBalance.IsBalanced)
+                return pawn.health.hediffSet.hediffs.Exists(h => h is Hediff_Injury injury && !injury.IsPermanent() && injury.Severity > 0f);
 
             if (pawn.health.hediffSet.GetMissingPartsCommonAncestors().Count > 0)
             {

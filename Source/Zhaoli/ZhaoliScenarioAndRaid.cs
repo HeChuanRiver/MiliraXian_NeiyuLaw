@@ -2802,7 +2802,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public bool IsTransitionInvulnerable()
         {
-            return IsInTransition();
+            return !ZhaoliPowerBalance.Sealed && IsInTransition();
         }
 
         private void MaintainTransition()
@@ -2835,6 +2835,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void ActivateTransitionField()
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             if (Pawn?.health == null || MXZL_ZhaoliDefOf.MXZL_ZhaoliDeathFieldActive == null)
             {
                 return;
@@ -2955,6 +2956,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void PrepareInitialLinks()
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             if (Pawn?.MapHeld == null)
             {
                 return;
@@ -3011,6 +3013,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryPhaseTeleport(int currentTick)
         {
+            if (!ZhaoliPowerBalance.IsOriginal) return false;
             if (currentTick < nextPhaseTeleportTick)
             {
                 return false;
@@ -3734,6 +3737,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryStartRaidAbilityJob(Ability ability, LocalTargetInfo targetInfo, string source, int currentTick)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
             if (!CanStartRaidAbilityJob(ability, targetInfo, source))
             {
                 return false;
@@ -4318,6 +4322,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public static bool Prefix(Pawn pawn, float value)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
             if (!ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(pawn))
             {
                 return true;

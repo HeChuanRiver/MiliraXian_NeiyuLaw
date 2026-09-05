@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         public int fullEnergyFadeOutTicks = 90;
         public string texPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
-        public ShaderTypeDef shaderType = ShaderTypeDefOf.Transparent;
+        public ShaderTypeDef shaderType;
         public List<ShaderParameter> shaderParameters;
         public Vector2 drawSize = new Vector2(1.9f, 1.9f);
         public float alpha = 0.45f;

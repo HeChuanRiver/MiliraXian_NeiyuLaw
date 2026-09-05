@@ -21,9 +21,17 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void NotifyApplied(Pawn source, float amount)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.NotifyApplied(source, amount);
             if (Pawn == null || Pawn.Dead || Pawn.Destroyed || amount <= 0f)
             {
+                return;
+            }
+
+            if (ZhaoliPowerBalance.IsBalanced)
+            {
+                Pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, PropsDeathSentence.cutSeverity, .15f, -1f, source));
+                ShowRemainingCount();
                 return;
             }
 
@@ -99,6 +107,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             resolved = true;
+            if (ZhaoliPowerBalance.Sealed) return;
             Pawn target = pawn;
             if (target == null || target.Dead || target.Destroyed)
             {
@@ -106,6 +115,13 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             PlayExecutionVisuals(target);
+            if (ZhaoliPowerBalance.IsBalanced)
+            {
+                // A normal armored hit, not a guaranteed kill or deletion of the corpse.
+                target.TakeDamage(new DamageInfo(DamageDefOf.Cut, 22f, .30f, -1f, instigator));
+                ZhaoliKarmaUtility.GetLinkComp(instigator)?.RewardBalancedSentence();
+                return;
+            }
             if (ZhaoliKarmaUtility.IsZhaoli(instigator))
             {
                 ZhaoliKarmaUtility.AddKarma(instigator, KarmaPerExecution);

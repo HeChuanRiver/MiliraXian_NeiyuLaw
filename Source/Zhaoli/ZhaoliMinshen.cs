@@ -25,7 +25,7 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliMinshen : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliMinshen : CompAbilityEffect_ZhaoliPowerLimited
     {
         private const string DazedMentalStateDefName = "WanderConfused";
         private static readonly Color PreviewColor = new Color(0.44f, 0.12f, 0.16f);
@@ -37,6 +37,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (base.GizmoDisabled(out reason)) return true;
             ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
             reason = null;
             return false;
@@ -61,9 +62,18 @@ namespace MiliraXian.Characters.Zhaoli
                         return;
                     }
 
-                    SpawnMinshenAreaPulse(target.Cell, caster.Map);
                     float areaScale = Mathf.Max(2.2f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.34f);
-                    FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
+                    bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                        MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen,
+                        caster.Map,
+                        target.Cell,
+                        1f,
+                        Mathf.Max(1, warmupTicks));
+                    if (!usingUnityVfx)
+                    {
+                        SpawnMinshenAreaPulse(target.Cell, caster.Map);
+                        FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
+                    }
                     FleckMaker.Static(caster.Position, caster.Map, FleckDefOf.FeedbackShoot, 1f);
                 }
             };
@@ -82,7 +92,11 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        SpawnMinshenAreaPulse(target.Cell, caster.Map);
+                        if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
+                                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen))
+                        {
+                            SpawnMinshenAreaPulse(target.Cell, caster.Map);
+                        }
                     }
                 };
             }
@@ -101,7 +115,11 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        SpawnMinshenParticles(target.Cell, caster.Map, 7);
+                        if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
+                                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen))
+                        {
+                            SpawnMinshenParticles(target.Cell, caster.Map, 7);
+                        }
                     }
                 };
             }
@@ -109,6 +127,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -143,10 +162,19 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (caster.Spawned)
             {
-                float areaScale = Mathf.Max(2.5f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.35f);
-                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
-                FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.ExplosionFlash, 1.8f);
-                SpawnMinshenParticles(target.Cell, caster.Map, 10);
+                bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshenImpact,
+                    caster.Map,
+                    target.Cell,
+                    1f,
+                    36);
+                if (!usingUnityVfx)
+                {
+                    float areaScale = Mathf.Max(2.5f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.35f);
+                    FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
+                    FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.ExplosionFlash, 1.8f);
+                    SpawnMinshenParticles(target.Cell, caster.Map, 10);
+                }
             }
 
             foreach (Pawn pawn in tmpTargets)
@@ -324,6 +352,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 handler.CurState.forceRecoverAfterTicks = Props.mentalStateDurationTicks;
                 handler.CurState.sourceFaction = caster.Faction;
+                if (!ZhaoliPowerBalance.IsOriginal) handler.CurState.causedByPawn = caster;
             }
 
             if (pawn.Spawned)
@@ -378,6 +407,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompPostTick(ref float severityAdjustment)
         {
+            if (ZhaoliPowerBalance.Sealed) { Pawn?.health?.RemoveHediff(parent); return; }
             if (Pawn == null || Pawn.Dead)
             {
                 return;
@@ -418,6 +448,10 @@ namespace MiliraXian.Characters.Zhaoli
 
             DamageInfo dinfo = new DamageInfo(DamageDefOf.Blunt, PropsDamage.damagePerTick, 999f, -1f, caster, torso, null, DamageInfo.SourceCategory.ThingOrUnknown, Pawn, instigatorGuilty: false, spawnFilth: false);
             dinfo.SetIgnoreArmor(true);
+            if (!ZhaoliPowerBalance.IsOriginal)
+            {
+                dinfo = new DamageInfo(DamageDefOf.Blunt, PropsDamage.damagePerTick, .1f, -1f, caster);
+            }
             Pawn.TakeDamage(dinfo);
         }
 

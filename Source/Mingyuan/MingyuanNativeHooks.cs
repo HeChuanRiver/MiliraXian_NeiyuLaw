@@ -131,6 +131,7 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public static float LifeBurnPenaltyFactor(float lifeBurn)
         {
+            if (!MingyuanPowerBalance.IsOriginal) return MingyuanPowerBalance.Sealed ? 1f : Mathf.Max(.9f, 1f - lifeBurn * .001f);
             if (lifeBurn <= 0f)
             {
                 return 1f;
@@ -172,6 +173,13 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
+            if (!MingyuanPowerBalance.IsOriginal)
+            {
+                if (MingyuanPowerBalance.IsBalanced && MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
+                    dinfo.SetAmount(dinfo.Amount * (dinfo.Def.isExplosive ? .7f : .5f));
+                return;
+            }
+
             if (body.Invulnerable)
             {
                 absorbed = true;
@@ -191,6 +199,7 @@ namespace MiliraXian.Characters.Mingyuan
         public override void Notify_PawnDamagedThing(Thing thing, DamageInfo dinfo, DamageWorker.DamageResult result)
         {
             base.Notify_PawnDamagedThing(thing, dinfo, result);
+            if (MingyuanPowerBalance.Sealed) return;
             if (MingyuanUtility.SuppressOnHitLifeBurn || result == null || result.totalDamageDealt <= 0f)
             {
                 return;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Power_Zhaoli>昭离：强度档位（独立设置）</MX_Power_Zhaoli>
+  <MX_Power_Mingyuan>明渊：强度档位（独立设置）</MX_Power_Mingyuan>
+  <MX_Power_AbilitiesSealed>第三档已封禁角色技能。</MX_Power_AbilitiesSealed>
+  <MX_Power_SealedDescription>当前为第三档：技能与核心被动已封禁，专属装备使用低强度数值。角色身份、外观、剧情与存档保护不变。已进入离场复活流程的角色仍会安全返回；不会触发新的自动复活。</MX_Power_SealedDescription>
+  <MX_Power_Zhaoli_Original>默认：保持昭离原有效果和数值。</MX_Power_Zhaoli_Original>
+  <MX_Power_Mingyuan_Original>默认：保持明渊原有效果和数值。</MX_Power_Mingyuan_Original>
+  <MX_Power_Zhaoli_Balanced>第二档：原版偏强。保留断斩、告死、诡医、定数、冥火、泯神与因果链接；限制范围、冷却、处决、成长和替死频率。点击后生效，不影响其他角色。</MX_Power_Zhaoli_Balanced>
+  <MX_Power_Mingyuan_Balanced>第二档：原版偏强。保留燃命、自燃、过燃、护焰修复、双形态弓和全部技能；普通伤害受护甲影响，移除年龄必杀与巨额连锁。护焰仍有实用续航。</MX_Power_Mingyuan_Balanced>
+  <MX_Power_Zhaoli_Decorative>第三档：技能、成长、因果收益、链接替死与新的自动复活封禁，武器和防具进一步降低。旧力场和附魔会结束。</MX_Power_Zhaoli_Decorative>
+  <MX_Power_Mingyuan_Decorative>第三档：技能、燃命、自燃加成、护焰修复、反伤、特殊抗性与新的自动复活封禁；长虹仅保留普通低强度单发。旧持续效果会结束。</MX_Power_Mingyuan_Decorative>
+  <MX_Power_Zhaoli_Duanzhan>第二档·断斩：半径3格、直线5格。造成26点斩伤，直线中心×1.15，破甲30%；受护甲影响，不再固定击中躯干。保留冥火联动。冷却12000刻（游戏4.8小时）。</MX_Power_Zhaoli_Duanzhan>
+  <MX_Power_Zhaoli_DeathField>第二档·告死流场：半径4.9格，持续9秒；每秒积累1点告死并造成1点普通斩伤。9点结算为22点斩伤、30%破甲，不必杀、不删除尸体。每10秒最多获得3点因果。冷却18000刻。</MX_Power_Zhaoli_DeathField>
+  <MX_Power_Zhaoli_Guiyi>第二档·诡医：消耗2点因果，治疗友方最多20点普通伤口，建立因果链接。不能治疗自己；不再清除疾病、成瘾、旧伤或恢复肢体。射程20格，冷却15000刻。</MX_Power_Zhaoli_Guiyi>
+  <MX_Power_Zhaoli_Dingshu>第二档·定数：消耗8点因果，引导5000刻（游戏2小时）复活目标。保留12天定数标记及链接，但附加原版复活虚弱，不额外全身净化。冷却3天。</MX_Power_Zhaoli_Dingshu>
+  <MX_Power_Zhaoli_Minghuo>第二档·冥火：消耗3点因果，持续5000刻。伤害与破甲×1.10，命中×1.05，攻速×1.08，攻击距离+0.5格，附加基础武器威力10%的火焰伤害。冷却30000刻。</MX_Power_Zhaoli_Minghuo>
+  <MX_Power_Zhaoli_Minshen>第二档·泯神：消耗3点因果，作用7×7区域。减速35%、持续6秒，8%概率改为失神6秒；5秒内每秒1点受护甲影响的钝伤。机械体承受10点EMP。冷却18000刻。</MX_Power_Zhaoli_Minshen>
+  <MX_Power_Zhaoli_Passives>第二档：最多3条链接，持续5天；链接替死最多每天1次。死亡成长仅保留原增幅的25%，原成长层数上限不变。保留招募后的生活小加成和10天离场复活。告死结算仍可取得因果，不要求直接杀死目标。</MX_Power_Zhaoli_Passives>
+  <MX_Power_Mingyuan_Bow>第二档·长虹：聚焦蓄力3秒、射程30.9格，24点箭伤、30%破甲，按命中与掩体判定；命中增加15燃命，仅满100层才爆发。辐射：9格90度扇区，每2秒最多命中4人，各2点伤害与5燃命。均不能隔墙命中。</MX_Power_Mingyuan_Bow>
+  <MX_Power_Mingyuan_Sword>第二档·烬灰：基础威力24、破甲30%、基础攻击间隔2.2秒。闪避偏移+3%。仍与自燃和燃命联动，最终攻速与伤害还受角色状态影响。</MX_Power_Mingyuan_Sword>
+  <MX_Power_Mingyuan_AscendantFlameDash>第二档：最多跨越24格，路径造成8点受护甲影响的烧伤、12燃命、0.75秒眩晕和1格击退；自身获得20自燃。灼痕持续5秒，每2秒增加3燃命。冷却2500刻。</MX_Power_Mingyuan_AscendantFlameDash>
+  <MX_Power_Mingyuan_InstantCombustion>第二档：半径8格，造成一次8点普通烧伤，不再定点伤脑伤眼；增加现有燃命的50%（最少10、最多25层），眩晕1.5秒。冷却30000刻。</MX_Power_Mingyuan_InstantCombustion>
+  <MX_Power_Mingyuan_BurningPillar>第二档：半径从1长到4.5格，持续15秒，3秒后可移动，核心80→160耐久。每2秒造成合计4点斩伤/烧伤，保留中心偏火、边缘偏斩和燃命联动。每次对建筑伤害不超过6点。冷却45000刻。</MX_Power_Mingyuan_BurningPillar>
+  <MX_Power_Mingyuan_TimeBurn>第二档：单体时间禁锢4秒，期间每秒4点烧伤，结束12点烧伤；不修改年龄、不必杀、不生成材料。建筑改为一次40点烧伤。蓄力3秒，射程25格，冷却45000刻。</MX_Power_Mingyuan_TimeBurn>
+  <MX_Power_Mingyuan_AshesOfSelf>第二档：消耗12%失血，获得80自燃；保留随身领域10秒，每2秒造成1点烧伤与3燃命（每100自燃额外+1），自身治疗0.5点普通伤口。每次脉冲最多回收3自燃。不拆建筑、不秒杀动物。冷却12000刻。</MX_Power_Mingyuan_AshesOfSelf>
+  <MX_Power_Mingyuan_LifeBurn>第二档：燃命上限/爆发阈值固定100层；每2秒造成0.5＋每100层1点普通烧伤，满层爆发18点烧伤并清除。相关能力最多削弱10%，不再自增长、损坏装备、抽干需求或烧灼年龄。10秒未刷新后衰减；死亡向6格内最多3个敌人各转移10层。</MX_Power_Mingyuan_LifeBurn>
+  <MX_Power_Mingyuan_SelfBurn>第二档：0—300层渐增，满层近战/技能伤害+18%、远程武器伤害+12%、攻速+12%、移速+10%、工作速度+15%。超过300层仍可过燃：伤害再×1.08、主动燃命×1.15，但护焰储备流失。征召时每2秒自然+1层。</MX_Power_Mingyuan_SelfBurn>
+  <MX_Power_Mingyuan_BurningBody>第二档：承伤×0.90；热伤另×0.50、爆炸另×0.70，不再免疫或受火回满。无受击无敌、意识额外提升或需求免除。每2500刻治疗2点普通伤口。受伤增加3自燃；反伤为实际伤害12%、最高3点，附2燃命。近战/远程命中附4/2燃命，每100自燃额外+1/+0.5。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_ProtectiveFlameShield>第二档：80点护焰储备，不直接挡伤。每10秒消耗1点，治疗最多3点普通伤口；每4自燃可换1储备，每次最多消耗60自燃，冷却2500刻。非征召且脱战2500刻后，每天最多花20储备修复1处缺失肢体或旧伤。过燃仍消耗储备。</MX_Power_Mingyuan_ProtectiveFlameShield>
+  <MX_Power_Mingyuan_RebirthFlame>第二档：死亡仅在2.4格内对敌人造成12点普通烧伤，不再造成巨额爆炸或长时间眩晕；1天后返回。第三档禁止新的自动复活，已登记的离场返回会安全完成。</MX_Power_Mingyuan_RebirthFlame>
+  <MX_Power_Zhaoli_Shield>第二档：告死结算每次给予1层护盾计数，最多6层；受伤后消耗1层。沿用原设定：此计数不直接吸收伤害，不应当视作额外免伤。</MX_Power_Zhaoli_Shield>
+  <MX_Power_BalancedEquipment>当前使用第二档装备数值。保留专属外观和装备身份，护甲、温度适应及附加属性已按整套装备与角色被动共同调整；请以信息面板中的实际属性为准。</MX_Power_BalancedEquipment>
+</LanguageData>

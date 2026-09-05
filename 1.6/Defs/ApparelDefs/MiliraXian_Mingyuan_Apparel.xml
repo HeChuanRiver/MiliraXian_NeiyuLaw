@@ -3,12 +3,12 @@
 
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_Mingyuan_InfernoArmor</defName>
-        <label>Molten Inferno Armor</label>
-        <description>Armor cooled from Mingyuan's pale inferno. It covers the body and wings, resists all common damage types, grants extreme heat insulation, adds carrying capacity, improves movement and dodge, and reduces incoming damage while remaining unbreakable.</description>
+        <label>Rosy Flamefeather Raiment</label>
+        <description>Mingyuan's raiment, woven from pale extradimensional flame and burning feathers, with gold and scarlet light flowing through its rosy plumes. Though seemingly delicate, it protects her body and wings, resists common damage, provides extreme insulation, carrying capacity, movement and dodge, halves incoming damage, and never breaks.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</texPath>
+            <texPath>MiliraXianMingyuan/Apparel/Mingyuan/Naked</texPath>
         </graphicData>
         <statBases>
             <Mass>2.0</Mass>
@@ -24,7 +24,7 @@
             <DeteriorationRate>0</DeteriorationRate>
         </statBases>
         <apparel>
-            <useWornGraphicMask>true</useWornGraphicMask>
+            <useWornGraphicMask>false</useWornGraphicMask>
             <developmentalStageFilter>Adult</developmentalStageFilter>
             <bodyPartGroups Inherit="False">
                 <li>Torso</li>
@@ -36,7 +36,7 @@
                 <li>Hands</li>
                 <li>Milira_Wings</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/Neiyu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianMingyuan/Apparel/Mingyuan/Naked</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanArmor</li>
             </tags>
@@ -66,11 +66,11 @@
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <texPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>1.0</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+        <uiIconPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</uiIconPath>
 
         <statBases>
             <Mass>0.5</Mass>
@@ -92,13 +92,18 @@
             <bodyPartGroups Inherit="False">
                 <li>UpperHead</li>
             </bodyPartGroups>
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianMingyuan/Apparel/BurningFeatherCrown</wornGraphicPath>
             <tags Inherit="False">
                 <li>MX_MingyuanCrown</li>
             </tags>
             <layers Inherit="False">
                 <li>Overhead</li>
             </layers>
+            <drawData>
+                <dataNorth>
+                    <layer>61</layer>
+                </dataNorth>
+            </drawData>
         </apparel>
 
         <comps>

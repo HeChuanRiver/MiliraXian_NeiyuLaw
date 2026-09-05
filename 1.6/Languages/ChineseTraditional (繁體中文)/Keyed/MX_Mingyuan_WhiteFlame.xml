@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_QuestDescription>白色灰燼、無源熱浪與短暫的天光在殖民地反覆出現。某個被淡色火焰包裹的重生標記正在靠近這個世界。若允許它墜落，你必須守住火焰十二小時。未知機械智能會派出三輪機械體，強度約為目前威脅點數的 0.7、1.0 與 1.3 倍；最後一輪還會出現一個精英單位。任務沒有接取期限。</MX_Mingyuan_QuestDescription>
+  <MX_Mingyuan_QuestDialogue_Neiyu>霓羽接住一片白灰，指尖沒有留下溫度。她說這不是死亡後的餘燼，而是有人正從火裡尋找落腳之處。</MX_Mingyuan_QuestDialogue_Neiyu>
+  <MX_Mingyuan_QuestDialogue_Qinghe>清荷察覺這些熱流彼此呼應，像一朵尚未展開的花。她認為火中封著完整的生命，而非誘餌。</MX_Mingyuan_QuestDialogue_Qinghe>
+  <MX_Mingyuan_QuestDialogue_Zhaoli>昭離聽了一會兒火裡的回聲，只說：「她已經死過太多次。這一次，有東西不想讓她回來。」</MX_Mingyuan_QuestDialogue_Zhaoli>
+  <MX_Mingyuan_OmenAshLabel>白色灰燼</MX_Mingyuan_OmenAshLabel>
+  <MX_Mingyuan_OmenAshText>沒有火災，也沒有燃燒後的氣味，白色灰燼卻開始在殖民地各處飄落。它們落地前便會消失，只留下極淡的熱。</MX_Mingyuan_OmenAshText>
+  <MX_Mingyuan_OmenHeatLabel>無源熱浪</MX_Mingyuan_OmenHeatLabel>
+  <MX_Mingyuan_OmenHeatText>熱源開始在室外與屋頂上短暫出現，測量結果彼此矛盾。天空偶爾被蒼白閃光照亮，某個墜落軌跡正在逐漸變得清晰。</MX_Mingyuan_OmenHeatText>
+  <MX_Mingyuan_DefenseStartedLabel>重生之焰墜落</MX_Mingyuan_DefenseStartedLabel>
+  <MX_Mingyuan_DefenseStartedText>天空被白光撕開，墜落座標已經標記。一團淡色火焰正在穿過大氣層；火中生命仍被封存，無法提前協助你。重生之焰落地後，守住它十二小時。</MX_Mingyuan_DefenseStartedText>
+  <MX_Mingyuan_MarkerLandedMessage>重生之焰已經落地並穩定。十二小時守衛計時現在開始。</MX_Mingyuan_MarkerLandedMessage>
+  <MX_Mingyuan_IncomingProgress>重生之焰正在墜落。地面白焰陣列已經鎖定其落點。</MX_Mingyuan_IncomingProgress>
+  <MX_Mingyuan_WaveWarningLabel>機械鎖定：第 {0} 波</MX_Mingyuan_WaveWarningLabel>
+  <MX_Mingyuan_WaveWarningText>重生之焰捕捉到一組正在展開的機械傳送座標。第 {0} 波將在約 {1} 秒後抵達；白焰核心周圍的冷色光束標出了敵方鎖定線路。</MX_Mingyuan_WaveWarningText>
+  <MX_Mingyuan_WaveLabel>白焰守衛戰：第 {0} 波</MX_Mingyuan_WaveLabel>
+  <MX_Mingyuan_WaveText>第 {0} 波機械體已從地圖邊緣進入。它們的總強度約為目前威脅點數的 {1} 倍，並會優先摧毀重生之焰。</MX_Mingyuan_WaveText>
+  <MX_Mingyuan_WaveFinalText>最終波機械體已從地圖邊緣進入。它們的基礎強度約為目前威脅點數的 {1} 倍，隊伍中還有一台精英百足。它們會優先摧毀重生之焰。</MX_Mingyuan_WaveFinalText>
+  <MX_Mingyuan_DefenseProgress>守衛階段：已出現 {0}/3 波；至少還需守衛 {1} 小時，並清除所有來襲單位。</MX_Mingyuan_DefenseProgress>
+  <MX_Mingyuan_AwaitingDecisionProgress>重塑已經完成。明淵暫時保持中立，正在等待你的答覆。選擇一名己方殖民者並右鍵點擊明淵即可交談。</MX_Mingyuan_AwaitingDecisionProgress>
+  <MX_Mingyuan_MarkerInspect>白焰守衛戰：{0}/3 波；剩餘守衛時間 {1} 小時。重生之焰被摧毀將導致任務失敗。</MX_Mingyuan_MarkerInspect>
+  <MX_Mingyuan_ReformationLabel>白焰展開</MX_Mingyuan_ReformationLabel>
+  <MX_Mingyuan_ReformationText>最後一組敵對信號已經消失。重生之焰不再收束自身，層疊的火環正在解開封印並重塑其中的生命。重塑完成前，火焰不會再受到傷害。</MX_Mingyuan_ReformationText>
+  <MX_Mingyuan_ReformationProgress>餘燼歸人：明淵的重塑預計還需 {0} 秒。</MX_Mingyuan_ReformationProgress>
+  <MX_Mingyuan_ArrivalLabel>餘燼歸人</MX_Mingyuan_ArrivalLabel>
+  <MX_Mingyuan_ArrivalText>最後的機械體倒下後，淡色火焰向外舒展。一個身影在餘燼中完成重塑，卻沒有立刻要求加入。&#10;&#10;「我已經厭倦那些世界了。如果這裡允許一個人安靜地活著，我願意留下。」&#10;&#10;她目前保持中立。你可以在這裡作出決定，也可以稍後選擇一名己方殖民者並右鍵點擊明淵，與她交談。</MX_Mingyuan_ArrivalText>
+  <MX_Mingyuan_ArrivalDialogue_Neiyu>霓羽朝她揮了揮手。明淵看了她片刻，緊繃的肩膀終於稍稍放鬆。</MX_Mingyuan_ArrivalDialogue_Neiyu>
+  <MX_Mingyuan_ArrivalDialogue_Qinghe>清荷將一片沒有燒盡的白灰收進掌心，說這裡足夠容下一團不再逃亡的火。</MX_Mingyuan_ArrivalDialogue_Qinghe>
+  <MX_Mingyuan_ArrivalDialogue_Zhaoli>昭離沒有詢問她死過幾次，只向旁邊讓出了一條路。明淵似乎明白這就是歡迎。</MX_Mingyuan_ArrivalDialogue_Zhaoli>
+  <MX_Mingyuan_Welcome>歡迎她留下（加入殖民地）</MX_Mingyuan_Welcome>
+  <MX_Mingyuan_Defer>暫時拒絕</MX_Mingyuan_Defer>
+  <MX_Mingyuan_Talk>與明淵交談</MX_Mingyuan_Talk>
+  <MX_Mingyuan_TalkUnavailable>明淵已經不再等待答覆。</MX_Mingyuan_TalkUnavailable>
+  <MX_Mingyuan_NoPlayerHomeMap>目前沒有可供明淵抵達的玩家基地。</MX_Mingyuan_NoPlayerHomeMap>
+  <MX_Mingyuan_JoinedLabel>明淵留下</MX_Mingyuan_JoinedLabel>
+  <MX_Mingyuan_JoinedText>明淵正式加入了殖民地。她攜帶固定武裝，並保有完整的白焰能力。</MX_Mingyuan_JoinedText>
+  <MX_Mingyuan_DeferredLabel>白焰遠去</MX_Mingyuan_DeferredLabel>
+  <MX_Mingyuan_DeferredText>明淵接受了你的答覆，隨後沿著餘燼離開。新的白焰徵兆會在約 {0} 天後再次出現；你不會永久失去她。</MX_Mingyuan_DeferredText>
+  <MX_Mingyuan_FailedLabel>重生之焰熄滅</MX_Mingyuan_FailedLabel>
+  <MX_Mingyuan_FlameDestroyedText>重生之焰已被摧毀。火中的生命在完成重塑前撤離了這個世界；明淵沒有因此死亡或被刪除。</MX_Mingyuan_FlameDestroyedText>
+  <MX_Mingyuan_MapLostText>承載重生之焰的地圖已經不可用，本輪守衛無法繼續。明淵沒有因此死亡或被刪除。</MX_Mingyuan_MapLostText>
+  <MX_Mingyuan_RetryTwentyDays>二十天後，白焰徵兆會再次尋找你的殖民地。</MX_Mingyuan_RetryTwentyDays>
+  <MX_Mingyuan_QuestConcludedLabel>白焰徵兆消散</MX_Mingyuan_QuestConcludedLabel>
+  <MX_Mingyuan_QuestConcludedText>世界中已經存在明淵。白焰任務自動結束，所有臨時敵人與標記均已清理，不會生成複製體。</MX_Mingyuan_QuestConcludedText>
+  <MX_Mingyuan_QuestAbandoned>白焰任務已放棄；臨時敵人、標記和候選角色已經清理。二十天後可以再次遇到徵兆。</MX_Mingyuan_QuestAbandoned>
+  <MX_Mingyuan_QuestRetryScheduled>白焰徵兆已經進入重試冷卻。</MX_Mingyuan_QuestRetryScheduled>
+</LanguageData>

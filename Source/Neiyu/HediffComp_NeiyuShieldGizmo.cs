@@ -33,6 +33,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
+            if (NeiyuPowerBalance.PassivesDisabled) yield break;
             if (Pawn == null || Pawn.Dead) yield break;
             if (Props.onlyWhenSelected && Find.Selector.SingleSelectedThing != Pawn) yield break;
             var shield = parent.TryGetComp<HediffComp_MXNeiyuCountShield>();

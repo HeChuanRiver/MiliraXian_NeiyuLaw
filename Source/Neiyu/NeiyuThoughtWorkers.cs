@@ -55,7 +55,7 @@ namespace MiliraXian.Characters.Neiyu
     {
         protected override ThoughtState CurrentStateInternal(Pawn p)
         {
-            if (!NeiyuEquipmentUtility.IsNeiyu(p))
+            if (NeiyuPowerBalance.PassivesDisabled || !NeiyuEquipmentUtility.IsNeiyu(p))
             {
                 return ThoughtState.Inactive;
             }
@@ -72,7 +72,8 @@ namespace MiliraXian.Characters.Neiyu
 
         protected override ThoughtState CurrentStateInternal(Pawn p)
         {
-            if (p == null || !p.Spawned || !p.IsFreeNonSlaveColonist || p.IsQuestLodger()
+            if (NeiyuPowerBalance.PassivesDisabled
+                || p == null || !p.Spawned || !p.IsFreeNonSlaveColonist || p.IsQuestLodger()
                 || NeiyuEquipmentUtility.IsNeiyu(p))
             {
                 return ThoughtState.Inactive;

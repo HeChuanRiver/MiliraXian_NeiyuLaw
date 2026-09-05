@@ -134,13 +134,13 @@ namespace MiliraXian.Characters.Zhaoli
 
         public HediffCompProperties_ZhaoliShieldLayers PropsShield => (HediffCompProperties_ZhaoliShieldLayers)props;
 
-        public int ShieldLayers => shieldLayers;
+        public int ShieldLayers => ZhaoliPowerBalance.Sealed ? 0 : ZhaoliPowerBalance.IsBalanced ? Mathf.Min(6, shieldLayers) : shieldLayers;
 
         public bool ShouldDrawActiveShield
         {
             get
             {
-                if (!PropsShield.drawActiveShield || Pawn == null || !Pawn.Spawned || Pawn.Dead || shieldLayers <= 0)
+                if (ZhaoliPowerBalance.Sealed || !PropsShield.drawActiveShield || Pawn == null || !Pawn.Spawned || Pawn.Dead || shieldLayers <= 0)
                 {
                     return false;
                 }
@@ -194,12 +194,16 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void AddLayers(int layerCount)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             shieldLayers = Mathf.Max(0, shieldLayers + layerCount);
+            if (ZhaoliPowerBalance.IsBalanced) shieldLayers = Mathf.Min(6, shieldLayers);
         }
 
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+            if (ZhaoliPowerBalance.Sealed) return;
+            if (ZhaoliPowerBalance.IsBalanced) shieldLayers = Mathf.Min(6, shieldLayers);
             if (Pawn == null || Pawn.Dead || shieldLayers <= 0 || totalDamageDealt <= 0f)
             {
                 return;
@@ -233,7 +237,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             get
             {
-            return "MX_ZL_ShieldLayersTip".Translate(shieldLayers).ToString();
+                return ZhaoliPowerBalance.IsOriginal ? "MX_ZL_ShieldLayersTip".Translate(shieldLayers).ToString() : parent.def.description;
             }
         }
     }

@@ -150,6 +150,15 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            if (MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayAttached(
+                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliGuiyi,
+                    target,
+                    Mathf.Max(0.1f, scale),
+                    18))
+            {
+                return;
+            }
+
             GameComponent_ZhaoliVisuals component = Current.Game?.GetComponent<GameComponent_ZhaoliVisuals>();
             if (component == null)
             {

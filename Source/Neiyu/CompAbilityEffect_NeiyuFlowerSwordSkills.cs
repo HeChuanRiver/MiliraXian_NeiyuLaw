@@ -142,6 +142,29 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
+        public static void HealInjuries(Pawn pawn, float maxTotalHealing)
+        {
+            if (pawn == null || pawn.health == null || pawn.health.hediffSet == null || maxTotalHealing <= 0f)
+            {
+                return;
+            }
+
+            float remaining = maxTotalHealing;
+            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+            for (int index = hediffs.Count - 1; index >= 0 && remaining > 0.001f; index--)
+            {
+                Hediff_Injury injury = hediffs[index] as Hediff_Injury;
+                if (injury == null || injury.Severity <= 0f)
+                {
+                    continue;
+                }
+
+                float amount = Mathf.Min(injury.Severity, remaining);
+                injury.Heal(amount);
+                remaining -= amount;
+            }
+        }
+
         public static bool IsHostile(Pawn caster, Pawn target)
         {
             if (caster == null || target == null)
@@ -368,6 +391,12 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -381,6 +410,11 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -391,8 +425,17 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             IntVec3 center = target.Cell;
-            NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, center, Props.areaEffecterDefName, 1f);
-            NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, center, Props.areaFleckDefName, Props.areaFleckScale);
+            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+                map,
+                center,
+                Mathf.Max(0.1f, Props.areaFleckScale),
+                66);
+            if (!usingUnityVfx)
+            {
+                NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, center, Props.areaEffecterDefName, 1f);
+                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, center, Props.areaFleckDefName, Props.areaFleckScale);
+            }
 
             int affected = 0;
             HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Props.radius);
@@ -457,7 +500,14 @@ namespace MiliraXian.Characters.Neiyu
                 NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(buff, Props.buffDurationTicks);
             }
 
-            NeiyuFlowerSwordSkillUtility.HealAllInjuries(pawn);
+            if (NeiyuPowerBalance.IsOriginal)
+            {
+                NeiyuFlowerSwordSkillUtility.HealAllInjuries(pawn);
+            }
+            else
+            {
+                NeiyuFlowerSwordSkillUtility.HealInjuries(pawn, NeiyuPowerBalance.FlowerHealingCap);
+            }
 
             if (Props.moodThought != null && pawn.needs != null && pawn.needs.mood != null)
             {
@@ -502,6 +552,12 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -515,6 +571,11 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -525,8 +586,17 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             IntVec3 center = target.Cell;
-            NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, center, Props.areaEffecterDefName, 1f);
-            NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, center, Props.areaFleckDefName, Props.areaFleckScale);
+            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+                map,
+                center,
+                Mathf.Max(0.1f, Props.areaFleckScale),
+                66);
+            if (!usingUnityVfx)
+            {
+                NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, center, Props.areaEffecterDefName, 1f);
+                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, center, Props.areaFleckDefName, Props.areaFleckScale);
+            }
 
             int affected = 0;
             HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Props.radius);
@@ -661,6 +731,12 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -680,6 +756,15 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message(NeiyuPowerBalance.AbilitiesDisabledReason, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -718,6 +803,11 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -744,12 +834,21 @@ namespace MiliraXian.Characters.Neiyu
                 caster.stances.stunner.StunFor(lockTicks, caster, addBattleLog: false, showMote: false);
             }
 
-            NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, originCell, Props.takeoffGroundEffectDefName, 1f);
-            if (!Props.ascentTrailFleckDefName.NullOrEmpty())
+            bool usingUnityTakeoff = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallTakeoff,
+                map,
+                originCell,
+                1f,
+                Mathf.Max(16, Props.ascendVisualTicks + 12));
+            if (!usingUnityTakeoff)
             {
-                Vector3 originPos = originCell.ToVector3Shifted();
-                Vector3 trailPos = originPos + new Vector3(Props.ascentTrailOffsetX, 0f, Props.ascentTrailOffsetZ);
-                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, trailPos, Props.ascentTrailFleckDefName, Props.ascentTrailFleckScale);
+                NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, originCell, Props.takeoffGroundEffectDefName, 1f);
+                if (!Props.ascentTrailFleckDefName.NullOrEmpty())
+                {
+                    Vector3 originPos = originCell.ToVector3Shifted();
+                    Vector3 trailPos = originPos + new Vector3(Props.ascentTrailOffsetX, 0f, Props.ascentTrailOffsetZ);
+                    NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, trailPos, Props.ascentTrailFleckDefName, Props.ascentTrailFleckScale);
+                }
             }
             NeiyuWeaponVisualHooks.Notify(caster, "SwordSkyfall_TakeoffTipUp", originCell, Props.launchWeaponScale, Props.launchWeaponAngle);
         }
@@ -757,6 +856,15 @@ namespace MiliraXian.Characters.Neiyu
         public override void CompTick()
         {
             base.CompTick();
+
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (stage != SkyfallStage.None)
+                {
+                    ClearStage();
+                }
+                return;
+            }
 
             if (stage == SkyfallStage.None)
             {
@@ -811,8 +919,17 @@ namespace MiliraXian.Characters.Neiyu
             {
                 BeginStage(SkyfallStage.Warning, Props.warningDelayTicks);
                 NeiyuSkyfallVisualTracker.BeginWarning(caster, stageStartTick, stageEndTick);
-                NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, landingCell, Props.warningEffectDefName, 1f);
-                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.warningFleckDefName, Props.warningFleckScale);
+                bool usingUnityWarning = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallWarning,
+                    map,
+                    landingCell,
+                    Mathf.Max(0.1f, Props.impactRadius / 3f),
+                    Mathf.Max(1, Props.warningDelayTicks));
+                if (!usingUnityWarning)
+                {
+                    NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, landingCell, Props.warningEffectDefName, 1f);
+                    NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.warningFleckDefName, Props.warningFleckScale);
+                }
                 NeiyuWeaponVisualHooks.Notify(caster, "SwordSkyfall_TargetWarning", landingCell, Props.landWeaponScale, Props.landWeaponAngle);
             }
         }
@@ -822,11 +939,15 @@ namespace MiliraXian.Characters.Neiyu
             int interval = Mathf.Max(1, Props.warningPulseIntervalTicks);
             if (now - lastPulseTick >= interval)
             {
-                float pulse = 0.95f + 0.55f * Mathf.Abs(Mathf.Sin((now - stageStartTick) * 0.35f));
-                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.warningFleckDefName, Props.warningFleckScale * pulse);
-                if ((now - stageStartTick) % (interval * 2) == 0)
+                if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
+                        MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallWarning))
                 {
-                    NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, landingCell, Props.warningEffectDefName, 1f);
+                    float pulse = 0.95f + 0.55f * Mathf.Abs(Mathf.Sin((now - stageStartTick) * 0.35f));
+                    NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.warningFleckDefName, Props.warningFleckScale * pulse);
+                    if ((now - stageStartTick) % (interval * 2) == 0)
+                    {
+                        NeiyuFlowerSwordSkillUtility.PlayEffecterAt(map, landingCell, Props.warningEffectDefName, 1f);
+                    }
                 }
                 lastPulseTick = now;
             }
@@ -835,6 +956,12 @@ namespace MiliraXian.Characters.Neiyu
             {
                 BeginStage(SkyfallStage.Descending, Props.descendVisualTicks);
                 NeiyuSkyfallVisualTracker.BeginDescending(caster, stageStartTick, stageEndTick);
+                MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallImpact,
+                    map,
+                    landingCell,
+                    Mathf.Max(0.1f, Props.impactRadius / 3f),
+                    Mathf.Max(1, Props.descendVisualTicks + 30));
 
                 IntVec3 dropCell = FindLandingCell(map, landingCell, caster);
                 if (caster.Spawned && caster.MapHeld == map && dropCell.IsValid && dropCell.InBounds(map) && dropCell != caster.Position)
@@ -852,8 +979,12 @@ namespace MiliraXian.Characters.Neiyu
             if (now - lastPulseTick >= interval)
             {
                 float progress = StageProgress(now);
-                float scale = Mathf.Lerp(1.6f, 0.95f, progress);
-                NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.landFleckDefName, scale);
+                if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
+                        MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallImpact))
+                {
+                    float scale = Mathf.Lerp(1.6f, 0.95f, progress);
+                    NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.landFleckDefName, scale);
+                }
                 NeiyuWeaponVisualHooks.Notify(caster, "SwordSkyfall_DescendLoop", landingCell, Mathf.Lerp(Props.landWeaponScale + 0.5f, Props.landWeaponScale, progress), Props.landWeaponAngle);
                 lastPulseTick = now;
             }
@@ -979,7 +1110,10 @@ namespace MiliraXian.Characters.Neiyu
                 }
 
                 DamageInfo dinfo = new DamageInfo(damageDef, Props.impactDamage, Props.impactArmorPen, -1f, caster);
-                dinfo.SetIgnoreArmor(true);
+                if (NeiyuPowerBalance.IsOriginal)
+                {
+                    dinfo.SetIgnoreArmor(true);
+                }
                 pawn.TakeDamage(dinfo);
 
                 if (Props.vulnerabilityHediff != null)
@@ -1034,6 +1168,12 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -1047,6 +1187,15 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message(NeiyuPowerBalance.AbilitiesDisabledReason, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(caster, Props.requiredWeapon))
             {
@@ -1081,6 +1230,11 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -1161,6 +1315,16 @@ namespace MiliraXian.Characters.Neiyu
         {
             if (victim == null || victim.health == null || victim.health.hediffSet == null)
             {
+                return;
+            }
+
+            if (!NeiyuPowerBalance.IsOriginal)
+            {
+                if (!victim.Dead && Props.dashDamage > 0)
+                {
+                    DamageInfo reducedStrike = new DamageInfo(DamageDefOf.Cut, Props.dashDamage, NeiyuPowerBalance.ExecutionArmorPenetration, -1f, caster);
+                    victim.TakeDamage(reducedStrike);
+                }
                 return;
             }
 
@@ -1255,8 +1419,7 @@ namespace MiliraXian.Characters.Neiyu
     [HarmonyPatch(typeof(Need_Food), nameof(Need_Food.NeedInterval))]
     public static class Patch_MXNeiyuSword_HungerFloor
     {
-        private const float HungerFloorPercent = 0.20f;
-        private static ThingDef cachedSwordDef;
+            private static ThingDef cachedSwordDef;
         private static bool swordDefResolved;
 
         private static ThingDef SwordDef
@@ -1293,9 +1456,10 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            if (__instance.CurLevelPercentage < HungerFloorPercent)
+            float hungerFloor = NeiyuPowerBalance.HungerFloorPercent;
+            if (hungerFloor > 0f && __instance.CurLevelPercentage < hungerFloor)
             {
-                __instance.CurLevelPercentage = HungerFloorPercent;
+                __instance.CurLevelPercentage = hungerFloor;
             }
         }
     }

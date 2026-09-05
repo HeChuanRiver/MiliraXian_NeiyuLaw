@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AriandelLibrary;
 using HarmonyLib;
+using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
@@ -104,7 +105,10 @@ namespace MiliraXian.Characters.Neiyu
 
         private static bool IsSupportedSpecialPawn(Pawn pawn)
         {
-            return NeiyuEquipmentUtility.IsNeiyu(pawn) || ZhaoliKarmaUtility.IsZhaoli(pawn) || MX_QHCharacterUtility.IsQinghe(pawn);
+            return NeiyuEquipmentUtility.IsNeiyu(pawn)
+                   || ZhaoliKarmaUtility.IsZhaoli(pawn)
+                   || MX_QHCharacterUtility.IsQinghe(pawn)
+                   || MingyuanUtility.IsMingyuan(pawn);
         }
 
         internal static void RepairBeforeSpawn(Pawn pawn)

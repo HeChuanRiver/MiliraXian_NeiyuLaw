@@ -55,6 +55,18 @@
   <MX_NL_SpecialPawnConsciousnessLock35Desc>特殊角色的意识最低保持为35%。</MX_NL_SpecialPawnConsciousnessLock35Desc>
   <MX_NL_SpecialPawnConsciousnessLockNoneLabel>不锁定</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>特殊角色的意识会按伤病、状态和其他 Mod 的效果正常变化。</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
+  <MX_NL_NeiyuPowerLevelLabel>霓羽强度档位（仅影响霓羽）</MX_NL_NeiyuPowerLevelLabel>
+  <MX_NL_NeiyuPowerLevelOriginalLabel>第一档：原始强度（默认）</MX_NL_NeiyuPowerLevelOriginalLabel>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>完整保留霓羽当前的技能、武器、护盾、服装加成、饥饿保护和意识保底效果，数值与改动前一致。</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>第二档：适中平衡</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>保留霓羽的战斗特色并适度降低强度：武器约为原版高阶装备水平，主动技能明显削弱但仍值得使用，护盾提供有限而可靠的防护；专属装备与多数被动受到温和削弱。</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeLabel>第三档：观赏模式</MX_NL_NeiyuPowerLevelDecorativeLabel>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>封禁全部主动技能；武器低于第二档；关闭护盾、饥饿保护、意识保底与专属装备数值加成。身份、外观、招募及特殊角色管理器兼容不受影响。</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuAbilitiesSealed>当前强度档位已封禁霓羽的主动技能。</MX_NL_NeiyuAbilitiesSealed>
+  <MX_NL_NeiyuAbilityBalancedNotice>&lt;color=#FFB86C&gt;【第二档覆盖】&lt;/color&gt;上方说明保留第一档的原始数值；当前伤害、范围、次数、产量、治疗与冷却均已按“适中平衡”档自动调整。</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>&lt;color=#FF6A6A&gt;【第三档封禁】&lt;/color&gt;当前为观赏模式，此技能无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
+  <MX_NL_NeiyuPassiveSealedDesc>当前为观赏模式，霓羽的护身被动不会生效。</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>需要装备花形态。</MX_NL_NeedFlowerForm>
   <MX_NL_NeedSwordForm>需要装备剑形态。</MX_NL_NeedSwordForm>
   <MX_NL_NeedBowForm>需要装备弓形态。</MX_NL_NeedBowForm>
@@ -99,7 +111,7 @@
   <MX_NL_ShieldTipCurrentTier>当前档位: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>当前增益:</MX_NL_ShieldTipCurrentBuffs>
   <MX_NL_ShieldTipWeakRemaining>虚弱剩余: {0}h</MX_NL_ShieldTipWeakRemaining>
-  <MX_NL_ShieldTipWeakPenalty>虚弱惩罚: 移速-50%，休息下降+50%，全局工作效率-80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldTipWeakPenalty>虚弱惩罚: 移速-{0}%，休息下降+{1}%，全局工作效率-{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>近战/远程伤害 +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>瞄准时间 {0}{1}%</MX_NL_ShieldBuffAimingTime>
   <MX_NL_ShieldBuffIncomingDamage>承伤系数 {0}{1}%</MX_NL_ShieldBuffIncomingDamage>

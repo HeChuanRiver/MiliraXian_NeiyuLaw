@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliDeathField : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliDeathField : CompAbilityEffect_ZhaoliPowerLimited
     {
         private static readonly Color PreviewColor = new Color(0.48f, 0.08f, 0.1f);
 
@@ -27,6 +27,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -131,10 +132,11 @@ namespace MiliraXian.Characters.Zhaoli
 
         private IntVec3 FieldCenter => new IntVec3(fieldCenterX, 0, fieldCenterZ);
         public float DefaultRadius => PropsField.radius;
-        private float CurrentRadius => activeRadius > 0f ? activeRadius : PropsField.radius;
+        private float CurrentRadius => ZhaoliPowerBalance.IsOriginal ? (activeRadius > 0f ? activeRadius : PropsField.radius) : PropsField.radius;
 
         public void ActivateAt(IntVec3 center, float radiusOverride = -1f)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             fieldCenterX = center.x;
             fieldCenterZ = center.z;
             activeRadius = radiusOverride > 0f ? radiusOverride : PropsField.radius;
@@ -158,6 +160,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompPostTick(ref float severityAdjustment)
         {
+            if (ZhaoliPowerBalance.Sealed) { active = false; Pawn?.health?.RemoveHediff(parent); return; }
             if (!active || Pawn == null || Pawn.Dead)
             {
                 return;
@@ -170,14 +173,24 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            MaintainFieldArea(map, center);
-            MaintainFieldParticles(map, center);
-            if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
+            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryMaintainWorld(
+                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliDeathField,
+                Pawn,
+                map,
+                center,
+                CurrentRadius / 9f,
+                360);
+            if (!usingUnityVfx)
             {
-                FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
-                if (deathPulse != null)
+                MaintainFieldArea(map, center);
+                MaintainFieldParticles(map, center);
+                if (Find.TickManager != null && Find.TickManager.TicksGame % 60 == 0)
                 {
-                    FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, CurrentRadius * 0.55f));
+                    FleckDef deathPulse = ZhaoliEffectUtility.DeathRefusalPulseFleckDef;
+                    if (deathPulse != null)
+                    {
+                        FleckMaker.Static(center, map, deathPulse, Mathf.Max(2f, CurrentRadius * 0.55f));
+                    }
                 }
             }
 

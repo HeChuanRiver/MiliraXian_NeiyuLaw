@@ -33,6 +33,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool HasDeadRevivalLock(Pawn pawn)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
             HediffDef markDef = DingshuMarkHediffDef;
             return pawn != null && pawn.Dead && markDef != null && (pawn.health?.hediffSet?.HasHediff(markDef) ?? false);
         }
@@ -232,7 +233,7 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliDingshu : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliDingshu : CompAbilityEffect_ZhaoliPowerLimited
     {
         private new CompProperties_AbilityZhaoliDingshu Props => (CompProperties_AbilityZhaoliDingshu)props;
 
@@ -302,6 +303,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -357,7 +359,11 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            ZhaoliDingshuUtility.RestorePawnCompletely(targetPawn, out int restoredParts, out int removedHediffs);
+            int restoredParts = 0, removedHediffs = 0;
+            if (ZhaoliPowerBalance.IsOriginal)
+                ZhaoliDingshuUtility.RestorePawnCompletely(targetPawn, out restoredParts, out removedHediffs);
+            else
+                targetPawn.health.GetOrAddHediff(DefDatabase<HediffDef>.GetNamed("ResurrectionSickness"));
             if (ZhaoliKarmaUtility.IsZhaoli(targetPawn))
             {
                 ZhaoliRebirthUtility.NotifyApparelResurrected(targetPawn);
@@ -438,7 +444,7 @@ namespace MiliraXian.Characters.Zhaoli
             this.FailOn(() =>
             {
                 Corpse corpse = TargetCorpse;
-                return corpse == null || corpse.InnerPawn == null || !corpse.InnerPawn.Dead;
+                return ZhaoliPowerBalance.Sealed || corpse == null || corpse.InnerPawn == null || !corpse.InnerPawn.Dead;
             });
 
             AddFinishAction(delegate

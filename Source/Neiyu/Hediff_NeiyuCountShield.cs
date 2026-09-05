@@ -89,6 +89,7 @@ namespace MiliraXian.Characters.Neiyu
         private bool weakShieldExhaustedAnnounced;
         private int lastAbsorbTick = -1;
         private int lastPenetrateTick = -1;
+        private CharacterPowerLevel observedPowerLevel = (CharacterPowerLevel)(-1);
 
         private int weakUntilTick = -1;
         private bool weakWasActive;
@@ -188,6 +189,13 @@ namespace MiliraXian.Characters.Neiyu
             base.CompPostTick(ref severityAdjustment);
 
             int now = CurrentTick;
+            NormalizeForPowerLevelChange(now);
+
+            if (NeiyuPowerBalance.PassivesDisabled)
+            {
+                return;
+            }
+
             UpdateWeakTransition(now);
             NormalizeStage3Ticks(now);
 
@@ -221,7 +229,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool TryAbsorb(ref DamageInfo dinfo, ref bool absorbed)
         {
-            if (absorbed || Pawn == null || Pawn.Dead || dinfo.Amount <= 0f)
+            if (NeiyuPowerBalance.PassivesDisabled || absorbed || Pawn == null || Pawn.Dead || dinfo.Amount <= 0f)
             {
                 return false;
             }
@@ -347,6 +355,11 @@ namespace MiliraXian.Characters.Neiyu
         public bool TryGetStage3Profile(out MXNeiyuStage3Profile profile)
         {
             profile = default(MXNeiyuStage3Profile);
+            if (NeiyuPowerBalance.PassivesDisabled)
+            {
+                return false;
+            }
+
             NormalizeStage3Ticks(CurrentTick);
 
             if (!IsInStage3BuffWindow(CurrentTick))
@@ -368,6 +381,7 @@ namespace MiliraXian.Characters.Neiyu
 
             if (d <= Props.stage3TierA_MaxDamage)
             {
+                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -380,6 +394,7 @@ namespace MiliraXian.Characters.Neiyu
                 profile.meleeArmorPenetrationFactor = 1.10f;
                 profile.meleeDodgeChanceFactor = 1.10f;
                 profile.rangedDodgeBonusPct = 0.10f;
+                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -394,6 +409,7 @@ namespace MiliraXian.Characters.Neiyu
                 profile.meleeArmorPenetrationFactor = 1.10f;
                 profile.meleeDodgeChanceFactor = 1.10f;
                 profile.rangedDodgeBonusPct = 0.10f;
+                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -407,7 +423,7 @@ namespace MiliraXian.Characters.Neiyu
             profile.meleeDodgeChanceFactor = 1f + 0.10f * stacks;
             profile.rangedDodgeBonusPct = 0.10f * stacks;
 
-
+            NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
             return true;
         }
 
@@ -417,7 +433,7 @@ namespace MiliraXian.Characters.Neiyu
             restFallRateFactor = 1f;
             workSpeedGlobalFactor = 1f;
 
-            if (!InWeak)
+            if (NeiyuPowerBalance.PassivesDisabled || !InWeak)
             {
                 return false;
             }
@@ -426,9 +442,7 @@ namespace MiliraXian.Characters.Neiyu
 
 
 
-            moveSpeedFactor = 0.5f;
-            restFallRateFactor = 1.5f;
-            workSpeedGlobalFactor = 0.2f;
+            NeiyuPowerBalance.GetWeakPenaltyFactors(out moveSpeedFactor, out restFallRateFactor, out workSpeedGlobalFactor);
             return true;
         }
 
@@ -437,6 +451,11 @@ namespace MiliraXian.Characters.Neiyu
             get
             {
                 if (!Props.drawActiveShield || Pawn == null || !Pawn.Spawned || Pawn.Dead)
+                {
+                    return false;
+                }
+
+                if (NeiyuPowerBalance.PassivesDisabled)
                 {
                     return false;
                 }
@@ -466,6 +485,11 @@ namespace MiliraXian.Characters.Neiyu
         {
             get
             {
+                if (NeiyuPowerBalance.PassivesDisabled)
+                {
+                    return "MX_NL_NeiyuPassiveSealedLabel".Translate().ToString();
+                }
+
                 if (!Props.showDebugLabel)
                 {
                     return null;
@@ -513,6 +537,11 @@ namespace MiliraXian.Characters.Neiyu
         {
             get
             {
+                if (NeiyuPowerBalance.PassivesDisabled)
+                {
+                    return "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString();
+                }
+
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("MX_NL_ShieldTipStage".Translate(stage, InWeak ? "MX_NL_ShieldTipWeakSuffix".Translate().ToString() : "").ToString());
 
@@ -574,7 +603,14 @@ namespace MiliraXian.Characters.Neiyu
                 {
                     int weakRemain = Math.Max(0, weakUntilTick - CurrentTick);
                     sb.AppendLine("MX_NL_ShieldTipWeakRemaining".Translate((weakRemain / 2500f).ToString("F1")).ToString());
-                    sb.AppendLine("MX_NL_ShieldTipWeakPenalty".Translate().ToString());
+                    NeiyuPowerBalance.GetWeakPenaltyFactors(
+                        out float moveSpeedFactor,
+                        out float restFallRateFactor,
+                        out float workSpeedGlobalFactor);
+                    sb.AppendLine("MX_NL_ShieldTipWeakPenalty".Translate(
+                        Mathf.RoundToInt((1f - moveSpeedFactor) * 100f),
+                        Mathf.RoundToInt((restFallRateFactor - 1f) * 100f),
+                        Mathf.RoundToInt((1f - workSpeedGlobalFactor) * 100f)).ToString());
                 }
 
                 return sb.ToString().TrimEnd();
@@ -669,6 +705,38 @@ namespace MiliraXian.Characters.Neiyu
             weakWasActive = weakNow;
         }
 
+        private void NormalizeForPowerLevelChange(int now)
+        {
+            CharacterPowerLevel currentPowerLevel = NeiyuPowerBalance.CurrentLevel;
+            if (observedPowerLevel == currentPowerLevel)
+            {
+                return;
+            }
+
+            observedPowerLevel = currentPowerLevel;
+            if (currentPowerLevel != CharacterPowerLevel.Balanced)
+            {
+                return;
+            }
+
+            phase2Charges = Mathf.Min(phase2Charges, InWeak ? Props.phase2MaxChargesWeak : Props.phase2MaxChargesNormal);
+            if (weakUntilTick > now)
+            {
+                weakUntilTick = Math.Min(weakUntilTick, now + Mathf.Max(1, Props.weakDurationTicks));
+            }
+
+            if (stage == 3)
+            {
+                if (phase3AbsorbUntilTick > now)
+                {
+                    phase3AbsorbUntilTick = Math.Min(phase3AbsorbUntilTick, now + Mathf.Max(1, Props.stage3AbsorbTicks));
+                }
+
+                int buffStartTick = Math.Max(now, phase3AbsorbUntilTick);
+                phase3EndTick = Math.Min(phase3EndTick, buffStartTick + Mathf.Max(1, Props.stage3BuffTicks));
+            }
+        }
+
         private void ApplyStage3BloodLoss()
         {
             if (Pawn == null || Pawn.Dead)
@@ -701,6 +769,11 @@ namespace MiliraXian.Characters.Neiyu
         private int CalculatePhase2Cost(float damageAmount)
         {
             float t = Mathf.Max(0.1f, Props.phase2Threshold);
+
+            if (NeiyuPowerBalance.IsBalanced)
+            {
+                return Mathf.Max(1, Mathf.CeilToInt(damageAmount / t));
+            }
 
             if (damageAmount < t)
             {
@@ -1072,7 +1145,9 @@ namespace MiliraXian.Characters.Neiyu
 
         public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
         {
-            if (!IsAffectedStat(stat) || !TryGetShieldComp(pawn, out HediffComp_MXNeiyuCountShield shield))
+            if (NeiyuPowerBalance.PassivesDisabled
+                || !IsAffectedStat(stat)
+                || !TryGetShieldComp(pawn, out HediffComp_MXNeiyuCountShield shield))
             {
                 return;
             }

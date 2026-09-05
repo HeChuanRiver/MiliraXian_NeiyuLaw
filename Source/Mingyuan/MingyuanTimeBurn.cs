@@ -11,17 +11,20 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public static void Register(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             if (pawn == null || pawn.Destroyed || pawn.Dead || props == null)
             {
                 return;
             }
 
+            if (MingyuanPowerBalance.IsBalanced) pawn.stances?.stunner?.StunFor(props.durationTicks, caster, false, true, false);
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.TimeBurnFrozenDef);
             Current.Game?.GetComponent<GameComponent_MingyuanTimeBurn>()?.Register(pawn, caster, props);
         }
 
         public static void DissolveBuilding(Thing thing, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             if (thing == null || thing.Destroyed || thing.def?.category != ThingCategory.Building)
             {
                 return;
@@ -36,6 +39,12 @@ namespace MiliraXian.Characters.Mingyuan
 
             PlayEffectSound(props?.effectSoundDef, position, map);
             TryMakeStaticMote(position, map, props?.collapseMoteDef, props?.collapseMoteScale ?? 1f);
+
+            if (MingyuanPowerBalance.IsBalanced)
+            {
+                MingyuanUtility.ApplyTrueDamage(thing, DamageDefOf.Burn, 40f, caster);
+                return;
+            }
 
             List<ThingDefCountClass> costs = (thing as Frame)?.TotalMaterialCost() ?? thing.CostListAdjusted();
             DropCostList(costs, position, map);
@@ -104,6 +113,7 @@ namespace MiliraXian.Characters.Mingyuan
         public int durationTicks;
         public int tickIntervalTicks;
         public long startAgeTicks;
+        public bool reducedCast;
         public HediffDef markerHediff;
         public ThingDef collapseMoteDef;
         public SoundDef effectSoundDef;
@@ -124,6 +134,7 @@ namespace MiliraXian.Characters.Mingyuan
         {
             this.pawn = pawn;
             this.caster = caster;
+            reducedCast = MingyuanPowerBalance.IsBalanced;
             startTick = tick;
             durationTicks = Mathf.Max(1, props.durationTicks);
             endTick = tick + durationTicks;
@@ -148,6 +159,7 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref durationTicks, "durationTicks", 2500);
             Scribe_Values.Look(ref tickIntervalTicks, "tickIntervalTicks", 60);
             Scribe_Values.Look(ref startAgeTicks, "startAgeTicks", 0L);
+            Scribe_Values.Look(ref reducedCast, "power_reducedCast", false);
             Scribe_Defs.Look(ref markerHediff, "markerHediff");
             Scribe_Defs.Look(ref collapseMoteDef, "collapseMoteDef");
             Scribe_Defs.Look(ref effectSoundDef, "effectSoundDef");
@@ -210,6 +222,38 @@ namespace MiliraXian.Characters.Mingyuan
                 if (record?.pawn == null || record.pawn.Destroyed || record.pawn.Discarded || record.pawn.Dead)
                 {
                     records.RemoveAt(i);
+                    continue;
+                }
+
+                if (MingyuanPowerBalance.Sealed || (!MingyuanPowerBalance.IsOriginal && !record.reducedCast))
+                {
+                    // Cancel an original-mode erasure safely; do not leave a frozen infant behind.
+                    if (!record.reducedCast && record.pawn.ageTracker != null)
+                        record.pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
+                    RemoveMarker(record.pawn, record.markerHediff);
+                    record.pawn.stances?.stunner?.StopStun();
+                    records.RemoveAt(i);
+                    continue;
+                }
+
+                if (record.reducedCast)
+                {
+                    // A cast never becomes a lethal original-mode erasure when toggling upward.
+                    if (tick >= record.endTick)
+                    {
+                        RemoveMarker(record.pawn, record.markerHediff);
+                        MingyuanUtility.ApplyTrueDamage(record.pawn, DamageDefOf.Burn, 12f, record.caster);
+                        records.RemoveAt(i);
+                    }
+                    else
+                    {
+                        if (tick >= record.nextAgeTick)
+                        {
+                            MingyuanUtility.ApplyTrueDamage(record.pawn, DamageDefOf.Burn, 4f, record.caster);
+                            record.nextAgeTick = tick + 60;
+                        }
+                        nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
+                    }
                     continue;
                 }
 

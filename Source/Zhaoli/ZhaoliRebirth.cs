@@ -85,6 +85,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void RegisterRecruitGrowthDeath(Pawn pawn)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             if (!ShouldUseRecruitGrowth(pawn))
             {
                 return;
@@ -95,6 +96,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool TryScheduleRebirth(Pawn pawn)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
+            if (ZhaoliPowerBalance.IsBalanced && ZhaoliDingshuUtility.HasDeadRevivalLock(pawn)) return false;
             if (pawn == null || pawn.Discarded || !pawn.Dead || !ZhaoliKarmaUtility.IsZhaoli(pawn))
             {
                 return false;

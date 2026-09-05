@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public CompProperties_MingyuanRainbowBow PropsBow => (CompProperties_MingyuanRainbowBow)props;
 
-        public MingyuanBowMode Mode => mode;
+        public MingyuanBowMode Mode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : mode;
 
         public override void PostExposeData()
         {
@@ -78,6 +78,7 @@ namespace MiliraXian.Characters.Mingyuan
                 yield return gizmo;
             }
 
+            if (MingyuanPowerBalance.Sealed) yield break;
             Pawn holder = Holder;
             if (holder == null || holder.Faction != Faction.OfPlayer)
             {
@@ -92,7 +93,8 @@ namespace MiliraXian.Characters.Mingyuan
             Command_Action command = new Command_Action
             {
                 defaultLabel = "MX_Mingyuan_Bow_ModeCommand".Translate(ModeLabel(mode)).ToString(),
-                defaultDesc = "MX_Mingyuan_Bow_ModeDesc".Translate(ModeLabel(mode), ModeLabel(nextMode)).ToString(),
+                defaultDesc = MingyuanPowerBalance.IsOriginal ? "MX_Mingyuan_Bow_ModeDesc".Translate(ModeLabel(mode), ModeLabel(nextMode)).ToString()
+                    : "MX_Power_Mingyuan_Bow".Translate().ToString(),
                 icon = ModeIcon ?? TexCommand.Attack,
                 Disabled = busy,
                 disabledReason = busy ? "MX_Mingyuan_Bow_ModeBusy".Translate().ToString() : null,
@@ -167,7 +169,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private CompProperties_MingyuanRainbowBow PropsBow => BowComp?.PropsBow;
 
-        private MingyuanBowMode ActiveMode => castModeLocked && (WarmingUp || Bursting)
+        private MingyuanBowMode ActiveMode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : castModeLocked && (WarmingUp || Bursting)
             ? modeAtCastStart
             : BowComp?.Mode ?? MingyuanBowMode.Focus;
 
@@ -185,6 +187,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
 
                 Map map = caster?.MapHeld;
+                if (!MingyuanPowerBalance.IsOriginal) return PropsBow?.focusRange ?? 30.9f;
                 if (map == null)
                 {
                     return Mathf.Max(1f, PropsBow?.focusRange ?? 999f);
@@ -294,7 +297,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (modeAtCastStart == MingyuanBowMode.Focus && WarmupStance != null)
             {
-                WarmupStance.ticksLeft = 300;
+                WarmupStance.ticksLeft = MingyuanPowerBalance.IsOriginal ? 300 : Mathf.RoundToInt(WarmupTime * 60f);
             }
 
             Vector3 direction = castDirection;
@@ -395,7 +398,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         protected override bool TryCastShot()
         {
-            bool result = modeAtCastStart == MingyuanBowMode.Focus
+            bool result = (MingyuanPowerBalance.Sealed || modeAtCastStart == MingyuanBowMode.Focus)
                 ? TryCastFocusShot()
                 : TryCastRadiationShot();
             if (result)
@@ -430,9 +433,34 @@ namespace MiliraXian.Characters.Mingyuan
             Vector3 targetPosition = target.DrawPos;
             Vector3 direction = DirectionTo(target.Position);
             Vector3 emitter = MingyuanBowVisualDrawer.EmitterPosition(CasterPawn.DrawPos, direction);
-            if (!MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn))
+            if (MingyuanPowerBalance.IsOriginal && !MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn))
             {
                 return false;
+            }
+
+            if (!MingyuanPowerBalance.IsOriginal)
+            {
+                // Use RimWorld's aim/cover report; this is no longer a guaranteed burst hit.
+                ShotReport report = ShotReport.HitReportFor(CasterPawn, this, target);
+                if (Rand.Chance(report.AimOnTargetChance_IgnoringPosture * report.PassCoverChance))
+                {
+                    float amount = MingyuanPowerBalance.Sealed ? 17f : 24f;
+                    if (!MingyuanPowerBalance.Sealed)
+                        amount *= MingyuanUtility.GetSelfBurnRangedWeaponDamageFactor(CasterPawn) * MingyuanUtility.GetOverburnDamageFactor(CasterPawn);
+                    bool suppression = MingyuanUtility.SuppressOnHitLifeBurn;
+                    try
+                    {
+                        MingyuanUtility.SuppressOnHitLifeBurn = true;
+                        target.TakeDamage(new DamageInfo(MingyuanPowerBalance.ArrowDamage, amount, MingyuanPowerBalance.Sealed ? .1f : .3f,
+                            -1f, CasterPawn, null, EquipmentSource?.def));
+                    }
+                    finally { MingyuanUtility.SuppressOnHitLifeBurn = suppression; }
+                    if (!MingyuanPowerBalance.Sealed && !target.Dead)
+                    {
+                        MingyuanUtility.AddLifeBurn(target, CasterPawn, 15f);
+                        MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn);
+                    }
+                }
             }
 
             if (PropsBow?.focusBeamFleck != null)
@@ -504,7 +532,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             try
             {
-                for (int i = 0; i < radiationTargets.Count; i++)
+                for (int i = 0; i < radiationTargets.Count && (MingyuanPowerBalance.IsOriginal || i < 4); i++)
                 {
                     Pawn target = radiationTargets[i];
                     ApplyRadiationHit(target);
@@ -537,6 +565,8 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void ApplyRadiationHit(Pawn target)
         {
+            if (MingyuanPowerBalance.Sealed) return;
+            if (!MingyuanPowerBalance.IsOriginal && !GenSight.LineOfSight(CasterPawn.Position, target.Position, CasterPawn.Map)) return;
             float threshold = MingyuanUtility.GetLifeBurnExecuteThreshold(target);
             int layers = Mathf.Max(1, Mathf.CeilToInt(threshold * Mathf.Max(0f, PropsBow.radiationLayerFraction)));
             MingyuanUtility.AddLifeBurn(target, CasterPawn, layers);
@@ -624,7 +654,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool IsValidFocusTarget(Pawn target)
         {
-            return IsHostileEnemy(target) && !MingyuanUtility.IsLifeBurnImmunePawn(target);
+            return IsHostileEnemy(target) && (!MingyuanPowerBalance.IsOriginal || !MingyuanUtility.IsLifeBurnImmunePawn(target));
         }
 
         private bool IsHostileEnemy(Pawn target)

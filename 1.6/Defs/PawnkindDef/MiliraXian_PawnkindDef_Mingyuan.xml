@@ -102,7 +102,7 @@
                 <forcedAgeYears>180</forcedAgeYears>
                 <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
 
-                <forcedHeadTypeDef>MiliraNeiyuHead</forcedHeadTypeDef>
+                <forcedHeadTypeDef>MiliraMingyuanHead</forcedHeadTypeDef>
 
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>

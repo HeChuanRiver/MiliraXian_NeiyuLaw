@@ -124,6 +124,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void AddKarma(Pawn pawn, float value)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             HediffComp_PawnSpecialResource comp = EnsureKarmaComp(pawn);
             if (comp == null)
             {
@@ -136,6 +137,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool TryConsumeKarma(Pawn pawn, float value)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
             HediffComp_PawnSpecialResource comp = EnsureKarmaComp(pawn);
             return comp != null && comp.TryConsume(value);
         }

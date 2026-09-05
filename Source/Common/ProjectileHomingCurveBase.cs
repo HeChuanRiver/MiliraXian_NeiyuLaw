@@ -272,6 +272,11 @@ namespace MiliraXian.Characters
                 comp.CompTickInterval(delta);
             }
 
+            if (Destroyed || !Spawned)
+            {
+                return;
+            }
+
             lifetime -= delta;
             manualTicksLeft -= delta;
             ticksToImpact = Mathf.Max(0, manualTicksLeft);
@@ -294,14 +299,25 @@ namespace MiliraXian.Characters
             UpdateVisualMoveDirection(after - before);
 
             Map map = Map;
-            if (map == null || !after.InBounds(map))
+            if (map == null)
             {
-                Position = after.ToIntVec3();
                 Destroy(DestroyMode.Vanish);
                 return;
             }
 
-            Position = after.ToIntVec3();
+            IntVec3 nextCell = after.ToIntVec3();
+            if (!nextCell.InBounds(map))
+            {
+                Destroy(DestroyMode.Vanish);
+                return;
+            }
+
+            Position = nextCell;
+            if (Destroyed)
+            {
+                return;
+            }
+
             if (CheckManualFreeInterceptBetween(before, after))
             {
                 return;

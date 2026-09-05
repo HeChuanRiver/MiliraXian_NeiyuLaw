@@ -55,6 +55,18 @@
   <MX_NL_SpecialPawnConsciousnessLock35Desc>Special characters keep Consciousness at a minimum of 35%.</MX_NL_SpecialPawnConsciousnessLock35Desc>
   <MX_NL_SpecialPawnConsciousnessLockNoneLabel>No lock</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>Injuries, hediffs, and other mod effects can change special character Consciousness normally.</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
+  <MX_NL_NeiyuPowerLevelLabel>Neiyu power level (Neiyu only)</MX_NL_NeiyuPowerLevelLabel>
+  <MX_NL_NeiyuPowerLevelOriginalLabel>Level 1: Original (default)</MX_NL_NeiyuPowerLevelOriginalLabel>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>Preserves Neiyu's current abilities, weapons, shield, apparel bonuses, hunger protection, and Consciousness floor exactly as before this setting was added.</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>Level 2: Moderate balance</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>Preserves Neiyu's combat identity at a moderated power level: weapons perform like high-end vanilla gear, abilities are clearly reduced but remain worth using, and the shield offers limited but reliable protection. Unique gear and most passives receive gentler reductions.</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeLabel>Level 3: Decorative</MX_NL_NeiyuPowerLevelDecorativeLabel>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>Seals every active ability, lowers weapons below level 2, and disables shield, hunger protection, Consciousness floor, and unique-apparel stat bonuses. Identity, visuals, recruitment, and special-pawn-manager compatibility remain intact.</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuAbilitiesSealed>Neiyu's active abilities are sealed at the current power level.</MX_NL_NeiyuAbilitiesSealed>
+  <MX_NL_NeiyuAbilityBalancedNotice>&lt;color=#FFB86C&gt;[Level 2 override]&lt;/color&gt; The text above retains level 1's original values. Damage, area, volume, resource output, healing, and cooldown are currently adjusted by Moderate balance mode.</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>&lt;color=#FF6A6A&gt;[Level 3 sealed]&lt;/color&gt; Decorative mode is active, so this ability cannot be used.</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
+  <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>Requires flower form.</MX_NL_NeedFlowerForm>
   <MX_NL_NeedSwordForm>Requires sword form.</MX_NL_NeedSwordForm>
   <MX_NL_NeedBowForm>Requires bow form.</MX_NL_NeedBowForm>
@@ -99,7 +111,7 @@
   <MX_NL_ShieldTipCurrentTier>Current tier: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>Current buffs:</MX_NL_ShieldTipCurrentBuffs>
   <MX_NL_ShieldTipWeakRemaining>Weakened remaining: {0}h</MX_NL_ShieldTipWeakRemaining>
-  <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -50%, rest fall rate +50%, global work speed -80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -{0}%, rest fall rate +{1}%, global work speed -{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>Melee/ranged damage +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>Aiming time {0}{1}%</MX_NL_ShieldBuffAimingTime>
   <MX_NL_ShieldBuffIncomingDamage>Incoming damage factor {0}{1}%</MX_NL_ShieldBuffIncomingDamage>

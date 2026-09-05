@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>MX_Mingyuan_QuestRebirthFlame</defName>
+    <label>重生之焰</label>
+    <description>一道将尚未重塑完成的生命封存在内的淡色火焰。未知机械智能正试图摧毁它。</description>
+    <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanQuestRebirthFlame</thingClass>
+    <category>Building</category>
+    <selectable>true</selectable>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>true</drawOffscreen>
+    <graphicData>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(3.2,3.2)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <altitudeLayer>BuildingOnTop</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>35</pathCost>
+    <fillPercent>0.18</fillPercent>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <filthLeaving IsNull="True" />
+    <statBases>
+      <MaxHitPoints>1200</MaxHitPoints>
+      <WorkToBuild>1</WorkToBuild>
+      <Flammability>0</Flammability>
+      <MarketValue>0</MarketValue>
+    </statBases>
+    <building>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <alwaysDeconstructible>false</alwaysDeconstructible>
+      <displayAttackToDestroyOnInspectPane>true</displayAttackToDestroyOnInspectPane>
+      <isInert>true</isInert>
+      <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
+    </building>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <glowRadius>11</glowRadius>
+        <glowColor>(255,235,210,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MeteoriteIncoming">
+    <defName>MX_Mingyuan_QuestRebirthFlameIncoming</defName>
+    <label>重生之焰（坠落中）</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.Skyfaller_MingyuanQuestRebirthFlame</thingClass>
+    <drawOffscreen>true</drawOffscreen>
+    <size>(1,1)</size>
+    <graphicData>
+      <texPath>MiliraXianMingyuan/Effect/LifeBurnMark</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>TransparentPostLight</shaderType>
+      <drawSize>(9.5,9.5)</drawSize>
+    </graphicData>
+    <skyfaller>
+      <shadowSize>(4.5,4.5)</shadowSize>
+      <explosionRadius>2.4</explosionRadius>
+      <explosionDamage>Flame</explosionDamage>
+      <explosionDamageFactor>0.18</explosionDamageFactor>
+      <damageSpawnedThings>false</damageSpawnedThings>
+      <cameraShake>1.2</cameraShake>
+      <motesPerCell>5</motesPerCell>
+      <ticksToImpactRange>360~480</ticksToImpactRange>
+      <speed>1.05</speed>
+      <floatingSound>DropPod_Fall</floatingSound>
+      <anticipationSound>Bombardment_PreImpact</anticipationSound>
+      <anticipationSoundTicks>150</anticipationSoundTicks>
+      <impactSound>Explosion_Flame</impactSound>
+    </skyfaller>
+  </ThingDef>
+</Defs>
