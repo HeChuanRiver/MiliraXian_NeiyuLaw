@@ -171,7 +171,7 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class GameComponent_MingyuanTimeBurn : GameComponent
     {
-        private List<MingyuanTimeBurnRecord> records = new List<MingyuanTimeBurnRecord>();
+        private List<MingyuanTimeBurnRecord> records = new();
         private int nextProcessTick;
 
         public GameComponent_MingyuanTimeBurn(Game game)
@@ -296,9 +296,9 @@ namespace MiliraXian.Characters.Mingyuan
             base.ExposeData();
             Scribe_Collections.Look(ref records, "mingyuanTimeBurnRecords", LookMode.Deep);
             Scribe_Values.Look(ref nextProcessTick, "nextProcessTick", 0);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit && records == null)
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                records = new List<MingyuanTimeBurnRecord>();
+                records ??= new();
             }
         }
 
@@ -346,7 +346,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(DamageDefOf.Burn, 1f, 999f, -1f, record.caster);
+            DamageInfo dinfo = new(DamageDefOf.Burn, 1f, 999f, -1f, record.caster);
             dinfo.SetIgnoreArmor(true);
             dinfo.SetIgnoreInstantKillProtection(true);
             pawn.Kill(dinfo);

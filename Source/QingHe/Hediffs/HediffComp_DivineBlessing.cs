@@ -378,7 +378,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void RestoreAllDamage()
         {
-            List<Hediff> hediffs = new List<Hediff>(Pawn.health.hediffSet.hediffs);
+            List<Hediff> hediffs = new(Pawn.health.hediffSet.hediffs);
 
             for (int i = 0; i < hediffs.Count; i++)
             {
@@ -406,16 +406,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            FleckDef fleck = MX_QHDefOf.PsycastPsychicEffect;
-            if (fleck == null)
-            {
-                fleck = MX_QHDefOf.PsycastSkipFlashExit;
-            }
-
-            if (fleck == null)
-            {
-                fleck = FleckDefOf.ExplosionFlash;
-            }
+            FleckDef fleck = MX_QHDefOf.PsycastPsychicEffect
+                ?? MX_QHDefOf.PsycastSkipFlashExit
+                ?? FleckDefOf.ExplosionFlash;
 
             FleckMaker.Static(Pawn.Position, Pawn.MapHeld, fleck, 1f);
         }

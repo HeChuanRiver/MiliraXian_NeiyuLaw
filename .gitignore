@@ -5,6 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 1.6/Assemblies/*
 !1.6/Assemblies/MiliraXian_NeiyuLaw.dll
+.agents/
 .cache/
 .vscode/
 .idea/
@@ -16,3 +17,4 @@ riderModule.iml
 Documents
 References.md
 Directory.Build.local.props
+AGENTS.md

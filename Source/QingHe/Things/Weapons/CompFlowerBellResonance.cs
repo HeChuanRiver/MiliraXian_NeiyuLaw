@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public class CompProperties_FlowerBellResonance : CompProperties
     {
-        public List<FlowerBellResonanceProjectileSet> settings = new List<FlowerBellResonanceProjectileSet>();
+        public List<FlowerBellResonanceProjectileSet> settings = new();
 
         public CompProperties_FlowerBellResonance()
         {
@@ -107,17 +107,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public static string LabelFor(FlowerBellResonance value)
         {
-            switch (value)
+            return value switch
             {
-                case FlowerBellResonance.Summer:
-                    return "MX_QH_FlowerBellResonanceSummer".Translate();
-                case FlowerBellResonance.Autumn:
-                    return "MX_QH_FlowerBellResonanceAutumn".Translate();
-                case FlowerBellResonance.Winter:
-                    return "MX_QH_FlowerBellResonanceWinter".Translate();
-                default:
-                    return "MX_QH_FlowerBellResonanceSpring".Translate();
-            }
+                FlowerBellResonance.Summer => (string)"MX_QH_FlowerBellResonanceSummer".Translate(),
+                FlowerBellResonance.Autumn => (string)"MX_QH_FlowerBellResonanceAutumn".Translate(),
+                FlowerBellResonance.Winter => (string)"MX_QH_FlowerBellResonanceWinter".Translate(),
+                _ => (string)"MX_QH_FlowerBellResonanceSpring".Translate(),
+            };
         }
     }
 

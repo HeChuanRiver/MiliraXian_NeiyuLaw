@@ -13,7 +13,7 @@ namespace MiliraXian.Characters.Vfx
         private const float AfterimageMeshScale = 1f / AfterimageCameraZoom;
         private const int AlphaSteps = 32;
         private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-        private readonly List<PawnAfterimage> afterimages = new List<PawnAfterimage>();
+        private readonly List<PawnAfterimage> afterimages = new();
         private Mesh afterimageMesh;
         private Material afterimageMaterial;
 
@@ -167,16 +167,11 @@ namespace MiliraXian.Characters.Vfx
         {
             get
             {
-                if (afterimageMaterial == null)
+                return afterimageMaterial ??= new Material(ShaderDatabase.Transparent)
                 {
-                    afterimageMaterial = new Material(ShaderDatabase.Transparent)
-                    {
-                        mainTexture = BaseContent.WhiteTex,
-                        color = Color.white
-                    };
-                }
-
-                return afterimageMaterial;
+                    mainTexture = BaseContent.WhiteTex,
+                    color = Color.white
+                };
             }
         }
 

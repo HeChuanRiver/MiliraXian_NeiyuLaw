@@ -12,8 +12,8 @@ namespace MiliraXian.Characters
         public float damageAmount = 2f;
         public float armorPenetration = 0f;
         public FleckDef poisonFleckDef;
-        public IntRange poisonFleckIntervalTicks = new IntRange(35, 80);
-        public FloatRange poisonFleckScaleRange = new FloatRange(0.45f, 0.75f);
+        public IntRange poisonFleckIntervalTicks = new(35, 80);
+        public FloatRange poisonFleckScaleRange = new(0.45f, 0.75f);
         public float poisonFleckPositionJitter = 0.35f;
 
         public HediffCompProperties_AbnormalCorroded()
@@ -86,7 +86,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(PropsCorroded.damageDef, PropsCorroded.damageAmount, PropsCorroded.armorPenetration);
+            DamageInfo dinfo = new(PropsCorroded.damageDef, PropsCorroded.damageAmount, PropsCorroded.armorPenetration);
             dinfo.SetAllowDamagePropagation(false);
             Pawn.TakeDamage(dinfo);
         }

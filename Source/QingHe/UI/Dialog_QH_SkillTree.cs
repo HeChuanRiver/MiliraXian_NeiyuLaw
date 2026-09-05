@@ -29,25 +29,25 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private readonly Pawn pawn;
         private readonly HediffComp_SkillTreeState state;
-        private readonly List<SkillNodeCollectionDef> collections = new List<SkillNodeCollectionDef>();
-        private readonly Dictionary<SkillNodeCollectionDef, List<SkillNodeDef>> nodesByCollection = new Dictionary<SkillNodeCollectionDef, List<SkillNodeDef>>();
-        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionLearned = new Dictionary<SkillNodeCollectionDef, bool>();
-        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionHasUnrevealed = new Dictionary<SkillNodeCollectionDef, bool>();
-        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionCompletionActive = new Dictionary<SkillNodeCollectionDef, bool>();
-        private readonly Dictionary<SkillNodeDef, SkillNodeUiState> nodeStates = new Dictionary<SkillNodeDef, SkillNodeUiState>();
+        private readonly List<SkillNodeCollectionDef> collections = new();
+        private readonly Dictionary<SkillNodeCollectionDef, List<SkillNodeDef>> nodesByCollection = new();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionLearned = new();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionHasUnrevealed = new();
+        private readonly Dictionary<SkillNodeCollectionDef, bool> collectionCompletionActive = new();
+        private readonly Dictionary<SkillNodeDef, SkillNodeUiState> nodeStates = new();
         private SkillNodeCollectionDef selectedCollection;
         private SkillNodeDef selectedNode;
         private Vector2 scrollPosition;
         private Vector2 detailScrollPosition;
 
-        private static readonly Color LearnedNodeColor = new Color(0.46f, 0.68f, 0.54f, 1f);
-        private static readonly Color CanLearnNodeColor = new Color(0.34f, 0.42f, 0.48f, 1f);
-        private static readonly Color LockedNodeColor = new Color(0.16f, 0.17f, 0.18f, 1f);
-        private static readonly Color ImportantNodeColor = new Color(0.54f, 0.42f, 0.27f, 1f);
-        private static readonly Color ProgressFillColor = new Color(0.62f, 0.78f, 0.66f, 0.72f);
-        private static readonly Color ThinNodeBorderColor = new Color(0f, 0f, 0f, 0.82f);
+        private static readonly Color LearnedNodeColor = new(0.46f, 0.68f, 0.54f, 1f);
+        private static readonly Color CanLearnNodeColor = new(0.34f, 0.42f, 0.48f, 1f);
+        private static readonly Color LockedNodeColor = new(0.16f, 0.17f, 0.18f, 1f);
+        private static readonly Color ImportantNodeColor = new(0.54f, 0.42f, 0.27f, 1f);
+        private static readonly Color ProgressFillColor = new(0.62f, 0.78f, 0.66f, 0.72f);
+        private static readonly Color ThinNodeBorderColor = new(0f, 0f, 0f, 0.82f);
 
-        public override Vector2 InitialSize => new Vector2(WindowWidth, WindowHeight);
+        public override Vector2 InitialSize => new(WindowWidth, WindowHeight);
 
         public Dialog_QH_SkillTree(Pawn pawn, HediffComp_SkillTreeState state)
         {
@@ -67,7 +67,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 Close();
             }
 
-            Rect panelRect = new Rect(inRect.x, inRect.y + TabAreaHeight, inRect.width, inRect.height - TabAreaHeight);
+            Rect panelRect = new(inRect.x, inRect.y + TabAreaHeight, inRect.width, inRect.height - TabAreaHeight);
             DrawCollectionTabsAndPanel(panelRect);
         }
 
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 scrollPosition = Vector2.zero;
             }
 
-            List<TabRecord> tabRecords = new List<TabRecord>();
+            List<TabRecord> tabRecords = new();
             for (int i = 0; i < collections.Count; i++)
             {
                 SkillNodeCollectionDef collection = collections[i];
@@ -94,7 +94,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 }, selectedCollection == collection));
             }
 
-            Rect tabRect = new Rect(rect.x, rect.y, rect.width - CloseButtonReserveWidth, rect.height);
+            Rect tabRect = new(rect.x, rect.y, rect.width - CloseButtonReserveWidth, rect.height);
             TabDrawer.DrawTabs(tabRect, tabRecords, 200f);
             Widgets.DrawMenuSection(rect);
 
@@ -128,7 +128,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Rect treeRect = collectionLearned
                 ? new Rect(rect.x, rect.y, rect.width - DetailPanelWidth - PanelGap, rect.height)
                 : rect;
-            Rect detailRect = new Rect(treeRect.xMax + PanelGap, rect.y, DetailPanelWidth, rect.height);
+            Rect detailRect = new(treeRect.xMax + PanelGap, rect.y, DetailPanelWidth, rect.height);
             Rect viewRect = BuildTreeViewRect(treeRect, nodes);
 
             Widgets.BeginScrollView(treeRect, ref scrollPosition, viewRect);
@@ -224,7 +224,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 return;
             }
 
-            Rect viewRect = new Rect(0f, 0f, innerRect.width - 16f, Mathf.Max(innerRect.height, 360f));
+            Rect viewRect = new(0f, 0f, innerRect.width - 16f, Mathf.Max(innerRect.height, 360f));
             float y = 0f;
             Widgets.BeginScrollView(innerRect, ref detailScrollPosition, viewRect);
 
@@ -244,7 +244,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Text.Font = GameFont.Small;
             Widgets.Label(new Rect(0f, y, viewRect.width, 24f), "MX_QH_SkillTreeUnlockProgress".Translate());
             y += 24f;
-            Rect progressRect = new Rect(0f, y, viewRect.width, 22f);
+            Rect progressRect = new(0f, y, viewRect.width, 22f);
             Widgets.DrawBoxSolid(progressRect, LockedNodeColor);
             Rect fillRect = progressRect;
             fillRect.width *= Mathf.Clamp01(progress);
@@ -470,7 +470,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private class SkillNodeUiState
         {
-            public static readonly SkillNodeUiState Empty = new SkillNodeUiState();
+            public static readonly SkillNodeUiState Empty = new();
 
             public int level;
             public bool learned;

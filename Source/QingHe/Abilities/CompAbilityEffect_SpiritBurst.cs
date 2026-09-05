@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public float brainDestroyChance = 0.08f;
         public float enhancedPsychicSensitivityThreshold = 1f;
         public float enhancedPsychicDamageMultiplier = 10f;
-        public List<HediffDef_Abnormal> enhancedFearAbnormals = new List<HediffDef_Abnormal>();
+        public List<HediffDef_Abnormal> enhancedFearAbnormals = new();
         public float enhancedFearAccumulationAmount = 150f;
 
         public string warmupCasterFx = "MX_QH_Effecter_SpiritBurstWarmupCaster";

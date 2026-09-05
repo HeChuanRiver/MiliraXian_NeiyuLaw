@@ -285,7 +285,6 @@
                 <requireSword>true</requireSword>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
-                <range>19</range>
                 <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
                 <dashDurationMinTicks>8</dashDurationMinTicks>
                 <dashCollisionRadius>1.35</dashCollisionRadius>

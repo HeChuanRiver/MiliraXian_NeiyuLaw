@@ -176,7 +176,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            DamageInfo damageInfo = new DamageInfo(
+            DamageInfo damageInfo = new(
                 abnormalDef.fullDamageDef,
                 abnormalDef.fullDamageAmount,
                 abnormalDef.fullDamageArmorPenetration,

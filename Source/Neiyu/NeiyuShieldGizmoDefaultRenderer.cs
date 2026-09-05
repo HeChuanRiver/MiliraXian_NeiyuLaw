@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.Neiyu
     public class NeiyuShieldGizmoDefaultRenderer : INeiyuShieldGizmoRenderer
     {
         private static readonly Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
-        private static readonly Dictionary<Color32, Texture2D> FillBarTexCache = new Dictionary<Color32, Texture2D>();
+        private static readonly Dictionary<Color32, Texture2D> FillBarTexCache = new();
 
         public void DrawBackground(Rect rect, HediffComp_MXNeiyuCountShield shield)
         {

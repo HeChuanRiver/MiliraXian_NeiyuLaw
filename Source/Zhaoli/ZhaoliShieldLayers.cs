@@ -24,7 +24,7 @@ namespace MiliraXian.Characters.Zhaoli
         }
 
         private static ConditionalWeakTable<Pawn, ShieldCacheEntry> ShieldByPawn =
-            new ConditionalWeakTable<Pawn, ShieldCacheEntry>();
+            new();
 
         private static HediffDef shieldHediffDef;
 
@@ -114,7 +114,7 @@ namespace MiliraXian.Characters.Zhaoli
         public bool drawActiveShield = true;
         public bool drawOnlyInCombat = true;
         public string activeShieldTexPath = "MiliraXianZhaoli/Effect/Zhaoli_Shield/Shield";
-        public Vector2 activeShieldDrawSize = new Vector2(1.55f, 1.55f);
+        public Vector2 activeShieldDrawSize = new(1.55f, 1.55f);
         public float activeShieldAlpha = 0.62f;
         public float activeShieldAltitudeOffset = 0.5f;
         public float activeShieldPulseMin = 0.98f;

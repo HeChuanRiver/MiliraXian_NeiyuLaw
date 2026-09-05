@@ -409,7 +409,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             Vector3 direction = (target.Thing.Position - verb.CasterPawn.Position).ToVector3();
-            DamageInfo fireInfo = new DamageInfo(DamageDefOf.Flame, Rand.Range(fireDamageAmount * 0.8f, fireDamageAmount * 1.2f), fireDamageAmount * 0.015f, -1f, verb.caster, null, sourceDef);
+            DamageInfo fireInfo = new(DamageDefOf.Flame, Rand.Range(fireDamageAmount * 0.8f, fireDamageAmount * 1.2f), fireDamageAmount * 0.015f, -1f, verb.caster, null, sourceDef);
             fireInfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
             fireInfo.SetWeaponBodyPartGroup(bodyPartGroupDef);
             fireInfo.SetWeaponHediff(hediffDef);

@@ -17,7 +17,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static PawnKindDef MiliraXian_Neiyu;
 
         public static ThingDef SpringFlowField;
-        public static ThingDef MX_QH_AscentSlashKnockbackFlyer;
         public static ThingDef MX_QH_LunarMirror;
         public static ThingDef MX_QH_LotusPond;
         public static ThingDef MX_QH_SkillBook;

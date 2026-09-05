@@ -11,9 +11,9 @@ namespace MiliraXian.Characters
     internal static class MXShieldRenderUtility
     {
         private static readonly System.Collections.Generic.Dictionary<string, Material> BaseMaterials =
-            new System.Collections.Generic.Dictionary<string, Material>();
+            new();
 
-        private static readonly MaterialPropertyBlock PropertyBlock = new MaterialPropertyBlock();
+        private static readonly MaterialPropertyBlock PropertyBlock = new();
 
         public static void Draw(string texturePath, Matrix4x4 matrix, Color color)
         {

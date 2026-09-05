@@ -11,11 +11,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
     {
         private const string FieldEdgeTexPath = "Misc/FieldEdge";
         private static readonly int MainTex = Shader.PropertyToID("_MainTex");
-        private static readonly List<IntVec3> ringDrawCells = new List<IntVec3>();
-        private static readonly List<Matrix4x4> instancingMatrices = new List<Matrix4x4>();
+        private static readonly List<IntVec3> ringDrawCells = new();
+        private static readonly List<Matrix4x4> instancingMatrices = new();
         private static readonly bool[] rotNeeded = new bool[4];
-        private static readonly Dictionary<int, Material> fieldEdgeMaterialsByColor = new Dictionary<int, Material>();
-        private static readonly Dictionary<int, List<RelativeFieldEdge>> relativeFieldEdgesByCellCount = new Dictionary<int, List<RelativeFieldEdge>>();
+        private static readonly Dictionary<int, Material> fieldEdgeMaterialsByRenderQueue = new();
+        private static readonly MaterialPropertyBlock fieldEdgePropertyBlock = new();
+        private static readonly Dictionary<int, List<RelativeFieldEdge>> relativeFieldEdgesByCellCount = new();
         private static readonly IntVec3[] cardinalOffsets =
         {
             IntVec3.North,
@@ -109,10 +110,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return true;
         }
 
-        public static Material FieldEdgeMaterial(Color color, int renderQueue = 2900)
+        public static Material FieldEdgeMaterial(int renderQueue = 2900)
         {
-            color.a = Mathf.Round(Mathf.Clamp01(color.a) * 31f) / 31f;
-
             if (fieldEdgeTexture == null)
             {
                 var baseMaterial = MatLoader.LoadMat(FieldEdgeTexPath, renderQueue);
@@ -125,22 +124,16 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 fieldEdgeTexture.wrapMode = TextureWrapMode.Clamp;
             }
 
-            Color32 color32 = color;
-            int key = Gen.HashCombineInt(renderQueue, color32.r);
-            key = Gen.HashCombineInt(key, color32.g);
-            key = Gen.HashCombineInt(key, color32.b);
-            key = Gen.HashCombineInt(key, color32.a);
-
-            if (!fieldEdgeMaterialsByColor.TryGetValue(key, out Material material))
+            if (!fieldEdgeMaterialsByRenderQueue.TryGetValue(renderQueue, out Material material))
             {
                 material = new Material(ShaderDatabase.Transparent)
                 {
                     mainTexture = fieldEdgeTexture,
-                    color = color32,
+                    color = Color.white,
                     renderQueue = renderQueue,
                     enableInstancing = true
                 };
-                fieldEdgeMaterialsByColor[key] = material;
+                fieldEdgeMaterialsByRenderQueue[renderQueue] = material;
             }
 
             return material;
@@ -150,6 +143,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             IntVec3 center,
             float radius,
             Material material,
+            Color color,
             Map map = null,
             Func<IntVec3, bool> predicate = null,
             float? altOffset = null,
@@ -175,7 +169,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
                 if (map != null)
                 {
-                    DrawCachedRadiusEdges(center, radius, material, map, altOffset);
+                    DrawCachedRadiusEdges(center, radius, material, color, map, altOffset);
                     return;
                 }
             }
@@ -191,12 +185,13 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 }
             }
 
-            DrawFieldEdgesWithMaterial(ringDrawCells, material, map, altOffset, ignoreBorderCells, renderQueue);
+            DrawFieldEdgesWithMaterial(ringDrawCells, material, color, map, altOffset, ignoreBorderCells, renderQueue);
         }
 
         public static void DrawFieldEdgesWithMaterial(
             List<IntVec3> cells,
             Material material,
+            Color color,
             Map map = null,
             float? altOffset = null,
             HashSet<IntVec3> ignoreBorderCells = null,
@@ -218,7 +213,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             if (fieldGrid == null)
             {
-                fieldGrid = new BoolGrid(map);
+                fieldGrid = new(map);
             }
             else
             {
@@ -275,11 +270,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             if (instancingMatrices.Count > 0)
             {
-                Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices);
+                fieldEdgePropertyBlock.Clear();
+                fieldEdgePropertyBlock.SetColor(ShaderPropertyIDs.Color, color);
+                Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices, fieldEdgePropertyBlock);
+                fieldEdgePropertyBlock.Clear();
             }
         }
 
-        private static void DrawCachedRadiusEdges(IntVec3 center, float radius, Material material, Map map, float? altOffset)
+        private static void DrawCachedRadiusEdges(IntVec3 center, float radius, Material material, Color color, Map map, float? altOffset)
         {
             if (material == null)
             {
@@ -313,19 +311,22 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             if (instancingMatrices.Count > 0)
             {
-                Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices);
+                fieldEdgePropertyBlock.Clear();
+                fieldEdgePropertyBlock.SetColor(ShaderPropertyIDs.Color, color);
+                Graphics.DrawMeshInstanced(MeshPool.plane10, 0, material, instancingMatrices, fieldEdgePropertyBlock);
+                fieldEdgePropertyBlock.Clear();
             }
         }
 
         private static List<RelativeFieldEdge> BuildRelativeFieldEdges(int cellCount)
         {
-            HashSet<IntVec3> cells = new HashSet<IntVec3>();
+            HashSet<IntVec3> cells = new();
             for (int i = 0; i < cellCount; i++)
             {
                 cells.Add(GenRadial.RadialPattern[i]);
             }
 
-            List<RelativeFieldEdge> edges = new List<RelativeFieldEdge>();
+            List<RelativeFieldEdge> edges = new();
             for (int i = 0; i < cellCount; i++)
             {
                 IntVec3 cell = GenRadial.RadialPattern[i];

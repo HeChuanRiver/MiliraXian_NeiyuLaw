@@ -12,8 +12,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private readonly Pawn pawn;
 
-        private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color FillColor = new Color(0.08f, 0.09f, 0.09f, 0.95f);
+        private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color FillColor = new(0.08f, 0.09f, 0.09f, 0.95f);
 
         public Widget_FlowerDecreeHelpButton(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)

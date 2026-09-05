@@ -33,7 +33,7 @@ namespace MiliraXian.Characters
                     return base.DescriptionDetailed;
                 }
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 builder.AppendLine((customTitle.NullOrEmpty() ? base.LabelNoParenthesis : customTitle).Colorize(ColoredText.TipSectionTitleColor)
                     + GenLabel.LabelExtras(this, includeHp: false, includeQuality: true)
                     + "\n");

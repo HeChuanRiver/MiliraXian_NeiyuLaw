@@ -11,9 +11,9 @@ namespace MiliraXian.Characters.Neiyu
     public class CompProperties_AbilityNeiyuThunderSigil : CompProperties_AbilityEffect
     {
         public float radius = 3f;
-        public IntRange strikeCountRange = new IntRange(3, 5);
-        public IntRange firstDelayTicksRange = new IntRange(120, 180);
-        public IntRange strikeIntervalTicksRange = new IntRange(45, 75);
+        public IntRange strikeCountRange = new(3, 5);
+        public IntRange firstDelayTicksRange = new(120, 180);
+        public IntRange strikeIntervalTicksRange = new(45, 75);
         public int damageAmount = 60;
         public int empDamageAmount = 20;
         public HediffDef markerHediff;
@@ -309,8 +309,8 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
-        private List<ThunderTask> thunderTasks = new List<ThunderTask>();
-        private List<BarrageTask> barrageTasks = new List<BarrageTask>();
+        private List<ThunderTask> thunderTasks = new();
+        private List<BarrageTask> barrageTasks = new();
 
         public NeiyuCombatMapComponent(Map map) : base(map)
         {
@@ -324,15 +324,9 @@ namespace MiliraXian.Characters.Neiyu
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (thunderTasks == null)
-                {
-                    thunderTasks = new List<ThunderTask>();
-                }
+                thunderTasks ??= new();
 
-                if (barrageTasks == null)
-                {
-                    barrageTasks = new List<BarrageTask>();
-                }
+                barrageTasks ??= new();
             }
         }
 
@@ -343,7 +337,7 @@ namespace MiliraXian.Characters.Neiyu
                 return 0;
             }
 
-            HashSet<Pawn> affected = new HashSet<Pawn>();
+            HashSet<Pawn> affected = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, props.radius, true))
             {
                 if (!cell.InBounds(map))
@@ -372,7 +366,7 @@ namespace MiliraXian.Characters.Neiyu
 
                     TryApplyMarker(pawn, props.markerHediff);
 
-                    ThunderTask task = new ThunderTask();
+                    ThunderTask task = new();
                     task.caster = caster;
                     task.target = pawn;
                     task.remainingStrikes = Mathf.Max(1, props.strikeCountRange.RandomInRange);
@@ -396,7 +390,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            BarrageTask task = new BarrageTask();
+            BarrageTask task = new();
             task.caster = caster;
             task.aimCell = aimCell;
             task.fireDirection = GetFireDirection(caster, aimCell);
@@ -468,7 +462,7 @@ namespace MiliraXian.Characters.Neiyu
 
             if (task.damageAmount > 0)
             {
-                DamageInfo main = new DamageInfo(DamageDefOf.Burn, task.damageAmount, 999f, -1f, task.caster);
+                DamageInfo main = new(DamageDefOf.Burn, task.damageAmount, 999f, -1f, task.caster);
                 main.SetIgnoreArmor(true);
 
                 DamageWorker.DamageResult result = task.target.TakeDamage(main);
@@ -476,7 +470,7 @@ namespace MiliraXian.Characters.Neiyu
 
                 if (result == null || result.totalDamageDealt <= 0.01f)
                 {
-                    DamageInfo fallback = new DamageInfo(DamageDefOf.Bomb, task.damageAmount, 999f, -1f, task.caster);
+                    DamageInfo fallback = new(DamageDefOf.Bomb, task.damageAmount, 999f, -1f, task.caster);
                     fallback.SetIgnoreArmor(true);
                     task.target.TakeDamage(fallback);
                 }
@@ -484,7 +478,7 @@ namespace MiliraXian.Characters.Neiyu
 
             if (task.empDamageAmount > 0)
             {
-                DamageInfo emp = new DamageInfo(DamageDefOf.EMP, task.empDamageAmount, 0f, -1f, task.caster);
+                DamageInfo emp = new(DamageDefOf.EMP, task.empDamageAmount, 0f, -1f, task.caster);
                 task.target.TakeDamage(emp);
             }
 
@@ -561,7 +555,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 forward = GetFireDirection(task.caster, task.aimCell);
             }
-            Vector3 perp = new Vector3(-forward.z, 0f, forward.x);
+            Vector3 perp = new(-forward.z, 0f, forward.x);
 
             float edgeDistance = GetDistanceToMapEdge(map, origin, forward);
             float maxDistance = task.maxDistance > 0f ? Mathf.Min(task.maxDistance, edgeDistance) : edgeDistance;
@@ -590,8 +584,8 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             Thing equipment = task.caster.equipment != null ? task.caster.equipment.Primary : null;
-            LocalTargetInfo usedTarget = new LocalTargetInfo(hitCell);
-            LocalTargetInfo intendedTarget = new LocalTargetInfo(hitCell);
+            LocalTargetInfo usedTarget = new(hitCell);
+            LocalTargetInfo intendedTarget = new(hitCell);
             projectile.Launch(task.caster, origin, usedTarget, intendedTarget, ProjectileHitFlags.All, preventFriendlyFire: false, equipment: equipment, targetCoverDef: null);
         }
 

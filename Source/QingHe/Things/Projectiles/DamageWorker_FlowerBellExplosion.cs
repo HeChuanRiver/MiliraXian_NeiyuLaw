@@ -22,7 +22,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             int damageAmount = explosion.GetDamageAmountAt(cell);
             if (damageAmount > 0)
             {
-                DamageInfo dinfo = new DamageInfo(
+                DamageInfo dinfo = new(
                     def,
                     damageAmount,
                     explosion.GetArmorPenetrationAt(cell),

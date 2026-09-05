@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         protected override float GizmoHeight => 75f;
 
-        protected override Rect WidgetRootRect => new Rect(6f, 6f, GizmoWidth - 12f, GizmoHeight - 12f);
+        protected override Rect WidgetRootRect => new(6f, 6f, GizmoWidth - 12f, GizmoHeight - 12f);
 
         public Gizmo_QH_FlowerDecree(Pawn pawn)
         {

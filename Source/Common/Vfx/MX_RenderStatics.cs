@@ -6,6 +6,6 @@ namespace MiliraXian.Characters.Vfx
     [StaticConstructorOnStartup]
     public static class MX_RenderStatics
     {
-        public static readonly MaterialPropertyBlock SharedPropertyBlock = new MaterialPropertyBlock();
+        public static readonly MaterialPropertyBlock SharedPropertyBlock = new();
     }
 }

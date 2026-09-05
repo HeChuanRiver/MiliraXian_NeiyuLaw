@@ -20,19 +20,19 @@ namespace MiliraXian.Characters.Mingyuan
         public float bounceRepeatPenalty = 18f;
         public float visualArcHeight = 0.9f;
         public float glowScale = 1.28f;
-        public Color glowColor = new Color(1f, 0.62f, 0.24f, 0.58f);
+        public Color glowColor = new(1f, 0.62f, 0.24f, 0.58f);
     }
 
     [StaticConstructorOnStartup]
     public class Projectile_MingyuanRainbowArrow : ProjectileHomingCurveBase, IProjectileVisualPositionProvider
     {
-        private static readonly List<Pawn> CandidatePawns = new List<Pawn>(32);
+        private static readonly List<Pawn> CandidatePawns = new(32);
         private static Texture2D cachedGlowTexture;
         private static Material cachedGlowMaterial;
 
         private int remainingBounces = -1;
-        private List<Pawn> hitPawns = new List<Pawn>(8);
-        private List<int> hitCounts = new List<int>(8);
+        private List<Pawn> hitPawns = new(8);
+        private List<int> hitCounts = new(8);
         private int visualArcDurationTicks;
         private int visualArcElapsedTicks;
 
@@ -50,15 +50,9 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Collections.Look(ref hitCounts, "hitCounts", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (hitPawns == null)
-                {
-                    hitPawns = new List<Pawn>(8);
-                }
+                hitPawns ??= new(8);
 
-                if (hitCounts == null)
-                {
-                    hitCounts = new List<int>(hitPawns.Count);
-                }
+                hitCounts ??= new(hitPawns.Count);
             }
         }
 
@@ -169,7 +163,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             nextArrow.CopyBounceStateFrom(this, remainingBounces - 1);
-            LocalTargetInfo targetInfo = new LocalTargetInfo(nextTarget);
+            LocalTargetInfo targetInfo = new(nextTarget);
             nextArrow.Launch(launcherThing, impactOrigin, targetInfo, targetInfo, hitFlags, preventFriendlyFire, equipmentThing, coverDef);
         }
 
@@ -222,12 +216,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
             }
 
-            Pawn best = BestCandidate(centerCell, centerPosition, incomingDirection, currentTarget, false);
-            if (best == null)
-            {
-                best = BestCandidate(centerCell, centerPosition, incomingDirection, currentTarget, true);
-            }
-
+            Pawn best = BestCandidate(centerCell, centerPosition, incomingDirection, currentTarget, false) ?? BestCandidate(centerCell, centerPosition, incomingDirection, currentTarget, true);
             CandidatePawns.Clear();
             return best;
         }

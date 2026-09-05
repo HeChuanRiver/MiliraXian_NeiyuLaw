@@ -28,11 +28,11 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class CompAbilityEffect_MingyuanAscendantFlameDash : CompAbilityEffect_MingyuanPowerLimited, ICompAbilityEffectOnJumpCompleted
     {
-        private static readonly Color PreviewColor = new Color(1f, 0.52f, 0.18f, 0.72f);
+        private static readonly Color PreviewColor = new(1f, 0.52f, 0.18f, 0.72f);
 
-        private readonly List<IntVec3> tmpPathCells = new List<IntVec3>(512);
-        private readonly HashSet<IntVec3> tmpPathCellSet = new HashSet<IntVec3>();
-        private readonly HashSet<IntVec3> tmpScorchCellSet = new HashSet<IntVec3>();
+        private readonly List<IntVec3> tmpPathCells = new(512);
+        private readonly HashSet<IntVec3> tmpPathCellSet = new();
+        private readonly HashSet<IntVec3> tmpScorchCellSet = new();
 
         public new CompProperties_AbilityMingyuanAscendantFlameDash Props => (CompProperties_AbilityMingyuanAscendantFlameDash)props;
 
@@ -182,7 +182,7 @@ namespace MiliraXian.Characters.Mingyuan
 
                 for (int offset = -halfWidth; offset <= halfWidth; offset++)
                 {
-                    IntVec3 cell = new IntVec3(
+                    IntVec3 cell = new(
                         Mathf.RoundToInt(center.x + perpX * offset),
                         center.y,
                         Mathf.RoundToInt(center.z + perpZ * offset));
@@ -267,7 +267,7 @@ namespace MiliraXian.Characters.Mingyuan
             IntVec3 destination = pawn.Position;
             for (int step = 1; step <= maxCells; step++)
             {
-                IntVec3 candidate = new IntVec3(pawn.Position.x + dx * step, pawn.Position.y, pawn.Position.z + dz * step);
+                IntVec3 candidate = new(pawn.Position.x + dx * step, pawn.Position.y, pawn.Position.z + dz * step);
                 if (!candidate.InBounds(map) || !candidate.Standable(map))
                 {
                     break;
@@ -313,13 +313,13 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class CompMingyuanAscendantFlameScorch : ThingComp
     {
-        private static readonly HashSet<IntVec3> OccupiedCells = new HashSet<IntVec3>();
+        private static readonly HashSet<IntVec3> OccupiedCells = new();
 
         private Pawn caster;
         private int expireTick;
         private int ticksToPulse;
-        private List<IntVec3> pathCells = new List<IntVec3>(256);
-        private readonly HashSet<IntVec3> pathCellSet = new HashSet<IntVec3>();
+        private List<IntVec3> pathCells = new(256);
+        private readonly HashSet<IntVec3> pathCellSet = new();
         private FleckDef visualFleckDef;
         private float visualFleckScale = 1f;
         private int visualFleckLimit = 32;

@@ -55,7 +55,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void ShowRemainingCount()
         {
-            if (!(parent is Hediff_Abnormal abnormal))
+            if (parent is not Hediff_Abnormal abnormal)
             {
                 return;
             }
@@ -128,7 +128,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliShieldLayerUtility.AddLayers(instigator, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
             }
 
-            DamageInfo damageInfo = new DamageInfo(
+            DamageInfo damageInfo = new(
                 DamageDefOf.ExecutionCut,
                 99999f,
                 999f,

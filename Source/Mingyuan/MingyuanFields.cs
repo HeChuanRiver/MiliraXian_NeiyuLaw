@@ -552,7 +552,7 @@ namespace MiliraXian.Characters.Mingyuan
     [StaticConstructorOnStartup]
     public class Graphic_MingyuanBurningPillarTornado : Graphic_Single
     {
-        private static readonly MaterialPropertyBlock TornadoPropertyBlock = new MaterialPropertyBlock();
+        private static readonly MaterialPropertyBlock TornadoPropertyBlock = new();
 
         public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
         {
@@ -566,7 +566,7 @@ namespace MiliraXian.Characters.Mingyuan
             float scale = pillar?.VisualScale ?? 1f;
             float drawRotation = pillar?.VisualRotation ?? extraRotation;
             Vector3 offset = data != null ? data.drawOffset : Vector3.zero;
-            Vector3 drawScale = new Vector3(drawSize.x * scale, 1f, drawSize.y * scale);
+            Vector3 drawScale = new(drawSize.x * scale, 1f, drawSize.y * scale);
             Matrix4x4 matrix = default(Matrix4x4);
             matrix.SetTRS(loc + offset, Quaternion.AngleAxis(drawRotation, Vector3.up), drawScale);
             Color drawColor = Color;
@@ -594,7 +594,7 @@ namespace MiliraXian.Characters.Mingyuan
         public float selfBurnLifeBurnPer100 = 20f;
         public float selfHealAmount = 1f;
         public float maxSelfBurnGainPerPulse = 20f;
-        public Color previewRingColor = new Color(1f, 0.75f, 0.34f, 0.64f);
+        public Color previewRingColor = new(1f, 0.75f, 0.34f, 0.64f);
 
         public CompProperties_MingyuanBurningField()
         {
@@ -740,7 +740,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (PropsField.destroyAnimals && pawn.RaceProps != null && pawn.RaceProps.Animal)
             {
-                DamageInfo killInfo = new DamageInfo(DamageDefOf.Burn, 99999f, 999f, -1f, caster);
+                DamageInfo killInfo = new(DamageDefOf.Burn, 99999f, 999f, -1f, caster);
                 killInfo.SetIgnoreArmor(true);
                 killInfo.SetIgnoreInstantKillProtection(true);
                 killInfo.SetApplyAllDamage(true);

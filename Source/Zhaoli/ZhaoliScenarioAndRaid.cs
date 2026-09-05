@@ -73,7 +73,7 @@ namespace MiliraXian.Characters.Zhaoli
         private const string DefaultClothingDefName = "MX_ZhaoliNormal";
         private const string DefaultHoodDefName = "MX_ZhaoliHood";
         private const string HostileAncientsFactionDefName = "AncientsHostile";
-        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new HashSet<int>();
+        private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
 
         public static bool QuestExists(string questDefName)
         {
@@ -349,7 +349,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            PawnGenerationRequest request = new PawnGenerationRequest(
+            PawnGenerationRequest request = new(
                 zhaoliKind,
                 faction,
                 PawnGenerationContext.NonPlayer,
@@ -445,7 +445,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return null;
             }
 
-            PawnGenerationRequest request = new PawnGenerationRequest(
+            PawnGenerationRequest request = new(
                 kindDef,
                 faction,
                 PawnGenerationContext.NonPlayer,
@@ -596,11 +596,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            Apparel apparel = FindDroppedApparelOnMap(pawn, apparelDef);
-            if (apparel == null)
-            {
-                apparel = ThingMaker.MakeThing(apparelDef) as Apparel;
-            }
+            Apparel apparel = FindDroppedApparelOnMap(pawn, apparelDef) ?? ThingMaker.MakeThing(apparelDef) as Apparel;
             if (apparel == null)
             {
                 Log.Error("[MiliraXian.Characters.Zhaoli] " + missingLabel + " is not Apparel: " + defName);
@@ -681,7 +677,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            List<Thing> sources = new List<Thing>();
+            List<Thing> sources = new();
             List<Thing> spawnedThings = map.listerThings.ThingsOfDef(ThingDefOf.MedicineHerbal);
             for (int index = 0; index < spawnedThings.Count; index++)
             {
@@ -1066,7 +1062,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         protected override bool CanFireNowSub(IncidentParms parms)
         {
-            if (!base.CanFireNowSub(parms) || !(parms.target is Map map) || !map.IsPlayerHome)
+            if (!base.CanFireNowSub(parms) || parms.target is not Map map || !map.IsPlayerHome)
             {
                 return false;
             }
@@ -1083,7 +1079,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
-            if (!(parms.target is Map map))
+            if (parms.target is not Map map)
             {
                 return false;
             }
@@ -1094,7 +1090,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            Slate slate = new Slate();
+            Slate slate = new();
             slate.Set("points", parms.points);
             slate.Set("map", map);
 
@@ -1118,7 +1114,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         protected override bool CanFireNowSub(IncidentParms parms)
         {
-            if (!base.CanFireNowSub(parms) || !(parms.target is Map map) || !map.IsPlayerHome)
+            if (!base.CanFireNowSub(parms) || parms.target is not Map map || !map.IsPlayerHome)
             {
                 return false;
             }
@@ -1135,7 +1131,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
-            if (!(parms.target is Map map))
+            if (parms.target is not Map map)
             {
                 return false;
             }
@@ -1146,7 +1142,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            Slate slate = new Slate();
+            Slate slate = new();
             slate.Set("points", parms.points);
             slate.Set("map", map);
 
@@ -1176,7 +1172,7 @@ namespace MiliraXian.Characters.Zhaoli
         private bool murmurOffered;
         private bool returnOffered;
         private int qualifyingPawnDeathCount;
-        private List<int> qualifyingPawnDeathIds = new List<int>();
+        private List<int> qualifyingPawnDeathIds = new();
         private int scheduledRaidTick = -1;
         private int scheduledReturnTick = -1;
         private Map scenarioHomeMap;
@@ -1187,7 +1183,7 @@ namespace MiliraXian.Characters.Zhaoli
         private bool cachedMurmurQuestExists;
         private bool cachedReturnQuestExists;
         private bool cachedMurmurQuestWasNeverAccepted;
-        private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new List<PendingLoadoutFinalize>();
+        private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new();
 
         private class PendingLoadoutFinalize
         {
@@ -1680,10 +1676,7 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_References.Look(ref currentRaidPawn, "currentRaidPawn");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (qualifyingPawnDeathIds == null)
-                {
-                    qualifyingPawnDeathIds = new List<int>();
-                }
+                qualifyingPawnDeathIds ??= new();
 
                 qualifyingPawnDeathCount = Mathf.Max(qualifyingPawnDeathCount, qualifyingPawnDeathIds.Count);
                 if (activeHideoutSite != null && activeHideoutSite.Destroyed)
@@ -1711,10 +1704,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            if (qualifyingPawnDeathIds == null)
-            {
-                qualifyingPawnDeathIds = new List<int>();
-            }
+            qualifyingPawnDeathIds ??= new();
 
             int pawnId = pawn.thingIDNumber;
             if (qualifyingPawnDeathIds.Contains(pawnId))
@@ -1729,10 +1719,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void BackfillTrackedPawnDeaths()
         {
-            if (qualifyingPawnDeathIds == null)
-            {
-                qualifyingPawnDeathIds = new List<int>();
-            }
+            qualifyingPawnDeathIds ??= new();
 
             foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
             {
@@ -1993,7 +1980,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            List<Pawn> raidPawns = new List<Pawn> { pawn };
+            List<Pawn> raidPawns = new() { pawn };
             PawnsArrivalModeDefOf.EdgeWalkIn.Worker.Arrive(raidPawns, parms);
             pawn.SetFaction(faction);
             LordMaker.MakeNewLord(
@@ -2286,7 +2273,7 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 for (int z = 0; z < map.Size.z; z++)
                 {
-                    IntVec3 cell = new IntVec3(x, 0, z);
+                    IntVec3 cell = new(x, 0, z);
                     if (!validator(cell))
                     {
                         continue;
@@ -2486,8 +2473,8 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliRaidState : HediffComp
     {
-        private List<ZhaoliHateEntry> hateEntries = new List<ZhaoliHateEntry>();
-        private List<Thing> retaliatoryThings = new List<Thing>();
+        private List<ZhaoliHateEntry> hateEntries = new();
+        private List<Thing> retaliatoryThings = new();
         private Pawn primaryHatredTarget;
         private Thing currentAttackTarget;
         private int lastTargetSwitchTick = -99999;
@@ -2523,7 +2510,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             get
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new();
                 stringBuilder.Append("MX_ZL_RaidSubstituteTriggered".Translate().ToString());
                 stringBuilder.Append(substituteDeathsUsed);
                 stringBuilder.Append("/3");
@@ -2548,7 +2535,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             get
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new();
                 stringBuilder.Append("MX_ZL_RaidCurrentPhase".Translate().ToString());
                 stringBuilder.Append(Mathf.Clamp(substituteDeathsUsed, 0, 3) + 1);
                 stringBuilder.Append("/4");
@@ -2686,15 +2673,9 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref linksPrepared, "linksPrepared", defaultValue: false);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (hateEntries == null)
-                {
-                    hateEntries = new List<ZhaoliHateEntry>();
-                }
+                hateEntries ??= new();
 
-                if (retaliatoryThings == null)
-                {
-                    retaliatoryThings = new List<Thing>();
-                }
+                retaliatoryThings ??= new();
             }
         }
 
@@ -2962,7 +2943,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            List<Pawn> candidates = new List<Pawn>();
+            List<Pawn> candidates = new();
             List<Pawn> colonists = Pawn.MapHeld.mapPawns.FreeColonistsSpawned;
             for (int index = 0; index < colonists.Count; index++)
             {
@@ -3405,7 +3386,7 @@ namespace MiliraXian.Characters.Zhaoli
             for (int index = 0; index < retaliatoryThings.Count; index++)
             {
                 Thing candidate = retaliatoryThings[index];
-                if (!(candidate is Building building) || !IsValidRetaliatoryBuilding(building))
+                if (candidate is not Building building || !IsValidRetaliatoryBuilding(building))
                 {
                     continue;
                 }
@@ -3525,7 +3506,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            LocalTargetInfo targetInfo = new LocalTargetInfo(center);
+            LocalTargetInfo targetInfo = new(center);
             if (!ability.CanApplyOn(targetInfo))
             {
                 return;
@@ -3548,7 +3529,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private DeathFieldClusterInfo AnalyzeDeathFieldCluster(IntVec3 center, Pawn preferredTarget)
         {
-            DeathFieldClusterInfo info = new DeathFieldClusterInfo();
+            DeathFieldClusterInfo info = new();
             if (Pawn?.MapHeld == null || !center.IsValid)
             {
                 return info;
@@ -3649,7 +3630,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            LocalTargetInfo self = new LocalTargetInfo(Pawn);
+            LocalTargetInfo self = new(Pawn);
             return TryStartRaidAbilityJob(ability, self, "Minghuo", currentTick);
         }
 
@@ -3673,7 +3654,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            LocalTargetInfo targetInfo = new LocalTargetInfo(bestCenter);
+            LocalTargetInfo targetInfo = new(bestCenter);
             if (!TryStartRaidAbilityJob(ability, targetInfo, "DeathField", currentTick))
             {
                 return false;
@@ -3697,7 +3678,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            LocalTargetInfo targetInfo = new LocalTargetInfo(target.Position);
+            LocalTargetInfo targetInfo = new(target.Position);
             int nearbyHostiles = CountHostilePawnsAround(target.Position, 6.5f);
             if (nearbyHostiles < 2 && !target.RaceProps.Humanlike)
             {
@@ -3709,7 +3690,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryUseGapCloser(Thing target, int currentTick)
         {
-            if (!(target is Pawn targetPawn) || !CanUseRaidSkill(currentTick))
+            if (target is not Pawn targetPawn || !CanUseRaidSkill(currentTick))
             {
                 return false;
             }
@@ -3731,7 +3712,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            LocalTargetInfo targetInfo = new LocalTargetInfo(targetPawn.Position);
+            LocalTargetInfo targetInfo = new(targetPawn.Position);
             return TryStartRaidAbilityJob(ability, targetInfo, "Duanzhan", currentTick);
         }
 
@@ -3871,7 +3852,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override StateGraph CreateGraph()
         {
-            StateGraph stateGraph = new StateGraph();
+            StateGraph stateGraph = new();
             stateGraph.AddToil(new LordToil_ZhaoliRaidAnchor());
             return stateGraph;
         }
@@ -4210,7 +4191,7 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public static void Postfix(Thing __instance, DamageInfo dinfo, DamageWorker.DamageResult __result)
         {
-            if (__instance == null || __result.totalDamageDealt <= 0f || !(dinfo.Instigator is Pawn pawn))
+            if (__instance == null || __result.totalDamageDealt <= 0f || dinfo.Instigator is not Pawn pawn)
             {
                 return;
             }

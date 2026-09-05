@@ -34,7 +34,7 @@ namespace MiliraXian.Characters.Biography
 
     public sealed class BiographyCondition_All : BiographyUnlockCondition
     {
-        public List<BiographyUnlockCondition> conditions = new List<BiographyUnlockCondition>();
+        public List<BiographyUnlockCondition> conditions = new();
 
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Biography
 
         public override string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             builder.AppendLine("MX_Biography_ConditionAll".Translate());
             if (conditions != null)
             {
@@ -119,7 +119,7 @@ namespace MiliraXian.Characters.Biography
 
     public sealed class BiographyCondition_Any : BiographyUnlockCondition
     {
-        public List<BiographyUnlockCondition> conditions = new List<BiographyUnlockCondition>();
+        public List<BiographyUnlockCondition> conditions = new();
 
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -141,7 +141,7 @@ namespace MiliraXian.Characters.Biography
 
         public override string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new();
             builder.AppendLine("MX_Biography_ConditionAny".Translate());
             if (conditions != null)
             {

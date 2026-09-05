@@ -118,7 +118,7 @@ namespace MiliraXian.Characters
                 return null;
             }
 
-            List<StatModifier> result = new List<StatModifier>(modifiers.Count);
+            List<StatModifier> result = new(modifiers.Count);
             for (int i = 0; i < modifiers.Count; i++)
             {
                 StatModifier modifier = modifiers[i];
@@ -135,10 +135,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            if (modifiers == null)
-            {
-                modifiers = new List<StatModifier>();
-            }
+            modifiers ??= new();
 
             for (int i = 0; i < modifiers.Count; i++)
             {
@@ -177,10 +174,7 @@ namespace MiliraXian.Characters
                 return;
             }
 
-            if (modifiers == null)
-            {
-                modifiers = new List<StatModifier>();
-            }
+            modifiers ??= new();
 
             for (int i = 0; i < modifiers.Count; i++)
             {

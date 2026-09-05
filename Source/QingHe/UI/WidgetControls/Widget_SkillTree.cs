@@ -20,10 +20,10 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private HediffComp_SkillTreeState cachedState;
         private HediffComp_MeditativeStillness cachedStillness;
 
-        private static readonly Color BorderColor = new Color(0.42f, 0.44f, 0.44f, 1f);
-        private static readonly Color EmptyFillColor = new Color(0.08f, 0.09f, 0.09f, 0.9f);
-        private static readonly Color CenterBorderColor = new Color(0.50f, 0.52f, 0.52f, 1f);
-        private static readonly Color StillnessFillColor = new Color(0.44f, 0.92f, 0.58f, 1f);
+        private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
+        private static readonly Color EmptyFillColor = new(0.08f, 0.09f, 0.09f, 0.9f);
+        private static readonly Color CenterBorderColor = new(0.50f, 0.52f, 0.52f, 1f);
+        private static readonly Color StillnessFillColor = new(0.44f, 0.92f, 0.58f, 1f);
 
         public Widget_SkillTree(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)

@@ -37,7 +37,7 @@ namespace MiliraXian.Characters.Zhaoli
         private const string MedicalTendQualityStat = "MedicalTendQuality";
         private const string GeneralLaborSpeedStat = "GeneralLaborSpeed";
 
-        private static readonly HashSet<string> AffectedStatNames = new HashSet<string>
+        private static readonly HashSet<string> AffectedStatNames = new()
         {
             IncomingDamageFactorStat,
             MeleeArmorPenetrationStat,
@@ -61,23 +61,19 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static float GetTransitionRadiusBonus(int phase)
         {
-            switch (Mathf.Clamp(phase, 0, 3))
+            return Mathf.Clamp(phase, 0, 3) switch
             {
-                case 1:
-                    return 5f;
-                case 2:
-                    return 10f;
-                case 3:
-                    return 20f;
-                default:
-                    return 0f;
-            }
+                1 => 5f,
+                2 => 10f,
+                3 => 20f,
+                _ => 0f,
+            };
         }
 
         public static string BuildRaidBossSummary(int phase)
         {
             if (!ZhaoliPowerBalance.IsOriginal) return (ZhaoliPowerBalance.Sealed ? "MX_Power_SealedDescription" : "MX_Power_Zhaoli_Passives").Translate();
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentPhaseBonuses".Translate().ToString());
             if (phase <= 0)
             {
@@ -105,7 +101,7 @@ namespace MiliraXian.Characters.Zhaoli
         public static string BuildRecruitGrowthSummary(int deathCount)
         {
             if (!ZhaoliPowerBalance.IsOriginal) return (ZhaoliPowerBalance.Sealed ? "MX_Power_SealedDescription" : "MX_Power_Zhaoli_Passives").Translate();
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentGrowthBonuses".Translate().ToString());
             AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
             AppendOffsetLine(stringBuilder, ToxicEnvironmentResistanceStat, RecruitToxicResistanceOffset, usePercent: true);

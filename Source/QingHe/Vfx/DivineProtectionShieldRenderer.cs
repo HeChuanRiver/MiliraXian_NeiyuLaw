@@ -22,21 +22,21 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
     public class DivineProtectionShieldVisualProperties
     {
-        public static readonly DivineProtectionShieldVisualProperties Default = new DivineProtectionShieldVisualProperties();
+        public static readonly DivineProtectionShieldVisualProperties Default = new();
 
         public int fullEnergyFadeOutTicks = 90;
         public string texPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
         public ShaderTypeDef shaderType;
         public List<ShaderParameter> shaderParameters;
-        public Vector2 drawSize = new Vector2(1.9f, 1.9f);
+        public Vector2 drawSize = new(1.9f, 1.9f);
         public float alpha = 0.45f;
         public Vector3 drawOffset = Vector3.zero;
-        public Vector2 breakScale = new Vector2(1.0f, 1.2f);
+        public Vector2 breakScale = new(1.0f, 1.2f);
         public string absorbFleckDefName = "ExplosionFlash";
-        public List<string> hurtFleckDefNames = new List<string>();
+        public List<string> hurtFleckDefNames = new();
         public float absorbFleckScale = 1.2f;
         public string absorbEffecterDefName = null;
-        public DivineProtectionShieldGlowProperties farGlow = new DivineProtectionShieldGlowProperties
+        public DivineProtectionShieldGlowProperties farGlow = new()
         {
             texPath = "Things/Mote/FireGlow",
             color = new Color(1f, 0.8117647f, 0.9294118f, 1f),
@@ -45,7 +45,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             breathAmplitude = 0.25f,
             breathSpeed = 1f
         };
-        public DivineProtectionShieldGlowProperties hitGlow = new DivineProtectionShieldGlowProperties
+        public DivineProtectionShieldGlowProperties hitGlow = new()
         {
             texPath = "Things/Mote/PsychicDistortionRing",
             color = new Color(1f, 0.72f, 0.92f, 1f),
@@ -60,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
     public class DivineProtectionShieldRenderer
     {
         private static readonly int EffectTimeProperty = Shader.PropertyToID("_EffectTime");
-        private static readonly Dictionary<string, Material> GlowMaterialsByPath = new Dictionary<string, Material>();
+        private static readonly Dictionary<string, Material> GlowMaterialsByPath = new();
 
         private readonly CompDivineProtectionShield shield;
         private Material shieldMaterial;
@@ -121,7 +121,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 if (effecterDef != null)
                 {
                     Effecter effecter = effecterDef.Spawn(owner.Position, owner.Map);
-                    TargetInfo t = new TargetInfo(owner.Position, owner.Map);
+                    TargetInfo t = new(owner.Position, owner.Map);
                     effecter.EffectTick(t, t);
                     effecter.Cleanup();
                 }
@@ -240,7 +240,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
 
             ShaderTypeDef shaderType = Visual.shaderType ?? ShaderTypeDefOf.Transparent;
-            MaterialRequest request = new MaterialRequest(texture, shaderType.Shader, Color.white)
+            MaterialRequest request = new(texture, shaderType.Shader, Color.white)
             {
                 shaderParameters = Visual.shaderParameters
             };

@@ -8,41 +8,41 @@ namespace MiliraXian.Characters.Zhaoli
 {
     internal static class ZhaoliEffectUtility
     {
-        private static readonly Lazy<ThingDef> GuiyiLinkLineMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkLine"));
-        private static readonly Lazy<ThingDef> GuiyiLinkPulseMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkPulse"));
-        private static readonly Lazy<ThingDef> GuiyiLinkStripeMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkStripe"));
-        private static readonly Lazy<ThingDef> GuiyiHealGlowMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealGlow"));
-        private static readonly Lazy<ThingDef> DingshuLinkLineMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkLine"));
-        private static readonly Lazy<ThingDef> DingshuLinkPulseMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkPulse"));
-        private static readonly Lazy<ThingDef> DingshuLinkStripeMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkStripe"));
-        private static readonly Lazy<ThingDef> DingshuReviveGlowMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuReviveGlow"));
-        private static readonly Lazy<ThingDef> DeathFieldAreaMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldArea"));
-        private static readonly Lazy<ThingDef> DeathFieldMarkMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldMark"));
-        private static readonly Lazy<ThingDef> SoulAbsorbPulseMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_SoulAbsorbPulse"));
-        private static readonly Lazy<ThingDef> MinshenWarnAreaMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinshenWarnArea"));
+        private static readonly Lazy<ThingDef> GuiyiLinkLineMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkLine"));
+        private static readonly Lazy<ThingDef> GuiyiLinkPulseMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkPulse"));
+        private static readonly Lazy<ThingDef> GuiyiLinkStripeMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiLinkStripe"));
+        private static readonly Lazy<ThingDef> GuiyiHealGlowMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealGlow"));
+        private static readonly Lazy<ThingDef> DingshuLinkLineMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkLine"));
+        private static readonly Lazy<ThingDef> DingshuLinkPulseMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkPulse"));
+        private static readonly Lazy<ThingDef> DingshuLinkStripeMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuLinkStripe"));
+        private static readonly Lazy<ThingDef> DingshuReviveGlowMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DingshuReviveGlow"));
+        private static readonly Lazy<ThingDef> DeathFieldAreaMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldArea"));
+        private static readonly Lazy<ThingDef> DeathFieldMarkMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldMark"));
+        private static readonly Lazy<ThingDef> SoulAbsorbPulseMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_SoulAbsorbPulse"));
+        private static readonly Lazy<ThingDef> MinshenWarnAreaMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinshenWarnArea"));
         private static readonly Lazy<ThingDef>[] DeathFieldParticleMoteDefsLazy =
         {
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleA")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleB")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleC"))
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleA")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleB")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_DeathFieldParticleC"))
         };
         private static readonly Lazy<ThingDef>[] GuiyiHealFrameMoteDefsLazy =
         {
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameA")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameB")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameC"))
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameA")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameB")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_GuiyiHealFrameC"))
         };
         private static readonly Lazy<ThingDef>[] MinghuoAuraFrameMoteDefsLazy =
         {
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameA")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameB")),
-            new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameC"))
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameA")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameB")),
+            new(() => DefDatabase<ThingDef>.GetNamedSilentFail("MXZL_Mote_MinghuoAuraFrameC"))
         };
-        private static readonly Lazy<ThingDef> GroundCrackHugeMoteDefLazy = new Lazy<ThingDef>(() => DefDatabase<ThingDef>.GetNamedSilentFail("GroundCrackHuge"));
-        private static readonly Lazy<FleckDef> DeathRefusalBubbleFleckDefLazy = new Lazy<FleckDef>(() => DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalBubble"));
-        private static readonly Lazy<FleckDef> DeathRefusalPulseFleckDefLazy = new Lazy<FleckDef>(() => DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalPulse"));
-        private static readonly Lazy<HediffDef> MinghuoHediffDefLazy = new Lazy<HediffDef>(() => DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliMinghuoUtility.MinghuoHediffDefName));
-        private static readonly Lazy<HediffDef> DormancyHediffDefLazy = new Lazy<HediffDef>(() => DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliKarmaUtility.DormancyHediffDefName));
+        private static readonly Lazy<ThingDef> GroundCrackHugeMoteDefLazy = new(() => DefDatabase<ThingDef>.GetNamedSilentFail("GroundCrackHuge"));
+        private static readonly Lazy<FleckDef> DeathRefusalBubbleFleckDefLazy = new(() => DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalBubble"));
+        private static readonly Lazy<FleckDef> DeathRefusalPulseFleckDefLazy = new(() => DefDatabase<FleckDef>.GetNamedSilentFail("DeathRefusalPulse"));
+        private static readonly Lazy<HediffDef> MinghuoHediffDefLazy = new(() => DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliMinghuoUtility.MinghuoHediffDefName));
+        private static readonly Lazy<HediffDef> DormancyHediffDefLazy = new(() => DefDatabase<HediffDef>.GetNamedSilentFail(ZhaoliKarmaUtility.DormancyHediffDefName));
 
         public static ThingDef GuiyiLinkLineMoteDef => GuiyiLinkLineMoteDefLazy.Value;
 
@@ -191,7 +191,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class GameComponent_ZhaoliVisuals : GameComponent
     {
-        private List<ZhaoliPendingAttachedAnimation> pendingAnimations = new List<ZhaoliPendingAttachedAnimation>();
+        private List<ZhaoliPendingAttachedAnimation> pendingAnimations = new();
         private int nextDueTick = int.MaxValue;
 
         public GameComponent_ZhaoliVisuals(Game game)
@@ -205,10 +205,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (pendingAnimations == null)
-            {
-                pendingAnimations = new List<ZhaoliPendingAttachedAnimation>();
-            }
+            pendingAnimations ??= new();
 
             int currentTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
             pendingAnimations.Add(new ZhaoliPendingAttachedAnimation(target, kind, frameCount, Mathf.Max(1, ticksPerFrame), currentTick, offset, scale));
@@ -262,13 +259,11 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static ThingDef ResolveFrameDef(ZhaoliVisualAnimationKind kind, int frameIndex)
         {
-            switch (kind)
+            return kind switch
             {
-                case ZhaoliVisualAnimationKind.GuiyiHeal:
-                    return ZhaoliEffectUtility.GuiyiHealFrameMoteDef(frameIndex);
-                default:
-                    return null;
-            }
+                ZhaoliVisualAnimationKind.GuiyiHeal => ZhaoliEffectUtility.GuiyiHealFrameMoteDef(frameIndex),
+                _ => null,
+            };
         }
     }
 

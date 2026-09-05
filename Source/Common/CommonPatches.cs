@@ -8,7 +8,7 @@ namespace MiliraXian.Characters
     [StaticConstructorOnStartup]
     public static class CommonPatches
     {
-        private static readonly Harmony patcher = new Harmony("MiliraXian.Characters.Common");
+        private static readonly Harmony patcher = new("MiliraXian.Characters.Common");
 
         static CommonPatches()
         {
@@ -41,7 +41,7 @@ namespace MiliraXian.Characters
 
         public static bool Patch_Book_PawnReadNow_Prefix(Book __instance, Pawn pawn)
         {
-            if (!(__instance is Thing_MX_SkillBook) || MX_CommonDefOf.MX_ReadSkillBook == null)
+            if (__instance is not Thing_MX_SkillBook || MX_CommonDefOf.MX_ReadSkillBook == null)
             {
                 return true;
             }

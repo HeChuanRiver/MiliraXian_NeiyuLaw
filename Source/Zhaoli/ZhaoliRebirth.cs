@@ -274,7 +274,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static bool TryFindCellOnMap(Map map, out IntVec3 cell)
         {
-            List<IntVec3> homeCells = new List<IntVec3>();
+            List<IntVec3> homeCells = new();
             Area homeArea = map.areaManager?.Home;
             if (homeArea != null)
             {
@@ -404,7 +404,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class GameComponent_ZhaoliRebirth : GameComponent
     {
-        private List<ZhaoliPendingRebirth> pendingRebirths = new List<ZhaoliPendingRebirth>();
+        private List<ZhaoliPendingRebirth> pendingRebirths = new();
         private int nextRebirthTick = int.MaxValue;
 
         public GameComponent_ZhaoliRebirth(Game game)

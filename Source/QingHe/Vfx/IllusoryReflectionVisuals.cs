@@ -40,7 +40,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static string loadedTexPath;
         private static bool warnedMissingShader;
 
-        private readonly List<MirrorSlashVisual> visuals = new List<MirrorSlashVisual>();
+        private readonly List<MirrorSlashVisual> visuals = new();
 
         public MapComponent_QingheMirrorSlashVisuals(Map map) : base(map)
         {
@@ -254,7 +254,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 visual.distortionOuterTriangles = new int[ribbonTriangleCount + capTrianglesPerEndPerHalf * 2];
             }
 
-            Vector2 arcCenter = new Vector2(ArcCenterX, ArcCenterY);
+            Vector2 arcCenter = new(ArcCenterX, ArcCenterY);
             float startDegrees = visual.reverse
                 ? ArcStartDegrees + ArcSweepDegrees + DistortionAnglePaddingDegrees
                 : ArcStartDegrees - DistortionAnglePaddingDegrees;
@@ -265,7 +265,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             {
                 float angle = startDegrees + sweepDegrees * i / DistortionMeshSegments;
                 float radians = angle * Mathf.Deg2Rad;
-                Vector2 direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+                Vector2 direction = new(Mathf.Cos(radians), Mathf.Sin(radians));
                 float maxRadius = DistanceToUnitSquare(arcCenter, direction);
                 Vector2 innerUv = arcCenter + direction * Mathf.Min(DistortionInnerRadius, maxRadius);
                 Vector2 outerUv = arcCenter + direction * Mathf.Min(DistortionOuterRadius, maxRadius);

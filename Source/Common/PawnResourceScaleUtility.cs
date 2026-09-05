@@ -7,12 +7,10 @@ namespace MiliraXian.Characters
     {
         public static float Evaluate(float baseValue, float min, float max, float percent, string method)
         {
-            switch (method?.ToLower() ?? "linear")
+            return (method?.ToLower() ?? "linear") switch
             {
-                case "linear":
-                default:
-                    return baseValue * Mathf.Lerp(min, max, percent);
-            }
+                _ => baseValue * Mathf.Lerp(min, max, percent),
+            };
         }
     }
 }

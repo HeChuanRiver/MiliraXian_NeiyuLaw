@@ -29,7 +29,7 @@ namespace MiliraXian.Characters
         {
             get
             {
-                StringBuilder builder = new StringBuilder();
+                StringBuilder builder = new();
                 builder.AppendLine(BookTitle.Colorize(ColoredText.TipSectionTitleColor)
                     + GenLabel.LabelExtras(this, includeHp: false, includeQuality: true)
                     + "\n");

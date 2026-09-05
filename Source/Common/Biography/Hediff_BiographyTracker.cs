@@ -8,9 +8,9 @@ namespace MiliraXian.Characters.Biography
 {
     public sealed class Hediff_BiographyTracker : Hediff
     {
-        private List<string> unlockedStoryNames = new List<string>();
-        private List<string> claimedRewardKeys = new List<string>();
-        private Dictionary<string, float> customProgress = new Dictionary<string, float>();
+        private List<string> unlockedStoryNames = new();
+        private List<string> claimedRewardKeys = new();
+        private Dictionary<string, float> customProgress = new();
 
         [Unsaved(false)]
         private HashSet<string> unlockedStoryLookup;
@@ -38,10 +38,7 @@ namespace MiliraXian.Characters.Biography
             {
                 unlockedStoryNames = SanitizeStableIds(unlockedStoryNames);
                 claimedRewardKeys = SanitizeStableIds(claimedRewardKeys);
-                if (customProgress == null)
-                {
-                    customProgress = new Dictionary<string, float>();
-                }
+                customProgress ??= new();
 
                 RebuildLookups();
             }
@@ -77,10 +74,7 @@ namespace MiliraXian.Characters.Biography
                 return;
             }
 
-            if (customProgress == null)
-            {
-                customProgress = new Dictionary<string, float>();
-            }
+            customProgress ??= new();
 
             if (!customProgress.TryGetValue(progressName, out float existing) || !Mathf.Approximately(existing, value))
             {
@@ -307,15 +301,9 @@ namespace MiliraXian.Characters.Biography
 
         private void RebuildLookups()
         {
-            if (unlockedStoryNames == null)
-            {
-                unlockedStoryNames = new List<string>();
-            }
+            unlockedStoryNames ??= new();
 
-            if (claimedRewardKeys == null)
-            {
-                claimedRewardKeys = new List<string>();
-            }
+            claimedRewardKeys ??= new();
 
             unlockedStoryLookup = new HashSet<string>(unlockedStoryNames, StringComparer.Ordinal);
             claimedRewardLookup = new HashSet<string>(claimedRewardKeys, StringComparer.Ordinal);
@@ -328,7 +316,7 @@ namespace MiliraXian.Characters.Biography
                 return new List<string>();
             }
 
-            HashSet<string> seen = new HashSet<string>(StringComparer.Ordinal);
+            HashSet<string> seen = new(StringComparer.Ordinal);
             for (int i = values.Count - 1; i >= 0; i--)
             {
                 if (values[i].NullOrEmpty() || !seen.Add(values[i]))

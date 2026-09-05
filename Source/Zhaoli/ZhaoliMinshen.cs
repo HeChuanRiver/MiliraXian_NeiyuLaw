@@ -28,10 +28,10 @@ namespace MiliraXian.Characters.Zhaoli
     public class CompAbilityEffect_ZhaoliMinshen : CompAbilityEffect_ZhaoliPowerLimited
     {
         private const string DazedMentalStateDefName = "WanderConfused";
-        private static readonly Color PreviewColor = new Color(0.44f, 0.12f, 0.16f);
+        private static readonly Color PreviewColor = new(0.44f, 0.12f, 0.16f);
 
-        private readonly HashSet<Pawn> tmpTargets = new HashSet<Pawn>();
-        private readonly List<IntVec3> tmpPreviewCells = new List<IntVec3>();
+        private readonly HashSet<Pawn> tmpTargets = new();
+        private readonly List<IntVec3> tmpPreviewCells = new();
 
         private new CompProperties_AbilityZhaoliMinshen Props => (CompProperties_AbilityZhaoliMinshen)props;
 
@@ -446,7 +446,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            DamageInfo dinfo = new DamageInfo(DamageDefOf.Blunt, PropsDamage.damagePerTick, 999f, -1f, caster, torso, null, DamageInfo.SourceCategory.ThingOrUnknown, Pawn, instigatorGuilty: false, spawnFilth: false);
+            DamageInfo dinfo = new(DamageDefOf.Blunt, PropsDamage.damagePerTick, 999f, -1f, caster, torso, null, DamageInfo.SourceCategory.ThingOrUnknown, Pawn, instigatorGuilty: false, spawnFilth: false);
             dinfo.SetIgnoreArmor(true);
             if (!ZhaoliPowerBalance.IsOriginal)
             {

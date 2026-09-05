@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffComp_ZhaoliKarmaLinks : HediffComp
     {
-        private List<Pawn> linkedPawns = new List<Pawn>();
+        private List<Pawn> linkedPawns = new();
         private int nextBalancedSubstituteTick;
         private int balancedRewardWindow;
         private int balancedRewards;
@@ -241,7 +241,7 @@ namespace MiliraXian.Characters.Zhaoli
         public Pawn GetRandomLiveLinkedPawn()
         {
             if (ZhaoliPowerBalance.Sealed) return null;
-            List<Pawn> liveLinkedPawns = new List<Pawn>();
+            List<Pawn> liveLinkedPawns = new();
             CleanupInvalidLinks();
             for (int i = 0; i < linkedPawns.Count; i++)
             {
@@ -264,7 +264,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private List<Pawn> GetEligibleOverflowPawns()
         {
-            List<Pawn> eligiblePawns = new List<Pawn>();
+            List<Pawn> eligiblePawns = new();
             CleanupInvalidLinks();
             for (int i = 0; i < linkedPawns.Count; i++)
             {
@@ -287,7 +287,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void CleanupInvalidLinks()
         {
-            HashSet<Pawn> seenPawns = new HashSet<Pawn>();
+            HashSet<Pawn> seenPawns = new();
             for (int i = linkedPawns.Count - 1; i >= 0; i--)
             {
                 Pawn linkedPawn = linkedPawns[i];
@@ -306,7 +306,7 @@ namespace MiliraXian.Characters.Zhaoli
         private string BuildLinkSummary()
         {
             CleanupInvalidLinks();
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_LinkTipExtra".Translate(ActiveLinkCount, PropsLinks.maxLinks).ToString());
             if (linkedPawns.Count == 0)
             {
@@ -392,9 +392,9 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class GameComponent_ZhaoliKarma : GameComponent
     {
-        private List<Pawn> pendingResurrectionPawns = new List<Pawn>();
-        private List<ZhaoliPendingDingshuLink> pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
-        private List<ZhaoliPendingRebirth> pendingRebirths = new List<ZhaoliPendingRebirth>();
+        private List<Pawn> pendingResurrectionPawns = new();
+        private List<ZhaoliPendingDingshuLink> pendingDingshuLinks = new();
+        private List<ZhaoliPendingRebirth> pendingRebirths = new();
         private int nextRebirthCheckTick = int.MaxValue;
 
         public GameComponent_ZhaoliKarma(Game game)
@@ -403,10 +403,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void RegisterPendingResurrection(Pawn pawn)
         {
-            if (pendingResurrectionPawns == null)
-            {
-                pendingResurrectionPawns = new List<Pawn>();
-            }
+            pendingResurrectionPawns ??= new();
 
             if (pawn == null || pendingResurrectionPawns.Contains(pawn))
             {
@@ -418,10 +415,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void RegisterPendingDingshuLink(Pawn zhaoli, Pawn targetPawn, int expireTick)
         {
-            if (pendingDingshuLinks == null)
-            {
-                pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
-            }
+            pendingDingshuLinks ??= new();
 
             if (zhaoli == null || targetPawn == null)
             {
@@ -466,10 +460,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void RegisterPendingRebirth(Pawn pawn, int rebirthTick)
         {
-            if (pendingRebirths == null)
-            {
-                pendingRebirths = new List<ZhaoliPendingRebirth>();
-            }
+            pendingRebirths ??= new();
 
             if (pawn == null)
             {
@@ -497,20 +488,11 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (pendingResurrectionPawns == null)
-            {
-                pendingResurrectionPawns = new List<Pawn>();
-            }
+            pendingResurrectionPawns ??= new();
 
-            if (pendingDingshuLinks == null)
-            {
-                pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
-            }
+            pendingDingshuLinks ??= new();
 
-            if (pendingRebirths == null)
-            {
-                pendingRebirths = new List<ZhaoliPendingRebirth>();
-            }
+            pendingRebirths ??= new();
 
             if (pendingResurrectionPawns.Count == 0 && pendingDingshuLinks.Count == 0 && pendingRebirths.Count == 0)
             {
@@ -634,20 +616,11 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Collections.Look(ref pendingRebirths, "pendingRebirths", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                if (pendingResurrectionPawns == null)
-                {
-                    pendingResurrectionPawns = new List<Pawn>();
-                }
+                pendingResurrectionPawns ??= new();
 
-                if (pendingDingshuLinks == null)
-                {
-                    pendingDingshuLinks = new List<ZhaoliPendingDingshuLink>();
-                }
+                pendingDingshuLinks ??= new();
 
-                if (pendingRebirths == null)
-                {
-                    pendingRebirths = new List<ZhaoliPendingRebirth>();
-                }
+                pendingRebirths ??= new();
 
                 pendingResurrectionPawns.RemoveAll(pawn => pawn == null || pawn.Discarded);
                 pendingDingshuLinks.RemoveAll(entry => entry == null || entry.zhaoli == null || entry.targetPawn == null || entry.zhaoli.Discarded || entry.targetPawn.Discarded);
@@ -710,7 +683,7 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
     public static class Patch_Pawn_Kill_ZhaoliSubstitute
     {
-        private static readonly Dictionary<Pawn, Pawn> pendingSubstitutePawns = new Dictionary<Pawn, Pawn>();
+        private static readonly Dictionary<Pawn, Pawn> pendingSubstitutePawns = new();
 
         public static bool HasPendingSubstitute(Pawn pawn)
         {
