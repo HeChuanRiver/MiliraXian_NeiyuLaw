@@ -17,7 +17,6 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (MingyuanPowerBalance.IsBalanced) pawn.stances?.stunner?.StunFor(props.durationTicks, caster, false, true, false);
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.TimeBurnFrozenDef);
             Current.Game?.GetComponent<GameComponent_MingyuanTimeBurn>()?.Register(pawn, caster, props);
         }
@@ -39,12 +38,6 @@ namespace MiliraXian.Characters.Mingyuan
 
             PlayEffectSound(props?.effectSoundDef, position, map);
             TryMakeStaticMote(position, map, props?.collapseMoteDef, props?.collapseMoteScale ?? 1f);
-
-            if (MingyuanPowerBalance.IsBalanced)
-            {
-                MingyuanUtility.ApplyTrueDamage(thing, DamageDefOf.Burn, 40f, caster);
-                return;
-            }
 
             List<ThingDefCountClass> costs = (thing as Frame)?.TotalMaterialCost() ?? thing.CostListAdjusted();
             DropCostList(costs, position, map);
@@ -134,7 +127,8 @@ namespace MiliraXian.Characters.Mingyuan
         {
             this.pawn = pawn;
             this.caster = caster;
-            reducedCast = MingyuanPowerBalance.IsBalanced;
+            // Retain reducedCast only to finish old saves safely; new tier-two casts use age erasure.
+            reducedCast = false;
             startTick = tick;
             durationTicks = Mathf.Max(1, props.durationTicks);
             endTick = tick + durationTicks;
@@ -225,7 +219,7 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                if (MingyuanPowerBalance.Sealed || (!MingyuanPowerBalance.IsOriginal && !record.reducedCast))
+                if (MingyuanPowerBalance.Sealed)
                 {
                     // Cancel an original-mode erasure safely; do not leave a frozen infant behind.
                     if (!record.reducedCast && record.pawn.ageTracker != null)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXNL_NeiyuProjectionStart.label>界外羽痕</MXNL_NeiyuProjectionStart.label>
-  <MXNL_NeiyuProjectionStart.description>你並不是完整降臨於此界的「她」。你只是隔壁成仙米莉拉投下的一道羽影。記憶並不完整，力量也並非本體，但那份輕快、鮮活、坐不住的性子，卻一併落了下來。這片邊緣世界對你而言既陌生又新鮮。你沒有打算擺出什麼高高在上的姿態，也沒興趣當一尊被人供起來的影子。既然投影已經落穩，那就先在這裡站住腳，給自己搭出一個能繼續存在下去的地方。你帶著專屬武裝而來，但除此之外，一切都要從頭開始。</MXNL_NeiyuProjectionStart.description>
+  <MXNL_NeiyuProjectionStart.description>你是仙人米莉拉投向此界的一道羽影，名為霓羽。你帶著零散的記憶和一部分力量，也帶著對陌生世界的好奇。隨身的專屬武裝是你最可靠的依靠。接下來，找一處落腳之地，搭起住所，再慢慢認識這里的人。</MXNL_NeiyuProjectionStart.description>
   <MXNL_NeiyuProjectionStart.scenario.summary>一位異界投影霓羽，獨自攜帶專屬武裝開局。</MXNL_NeiyuProjectionStart.scenario.summary>
-  <MXNL_NeiyuProjectionStart.scenario.parts.0.text>你並不是完整降臨於此界的「她」。\n\n你只是仙人米莉拉投下的一道羽影。記憶並不完整，力量也並非本體，但那份輕快、鮮活、坐不住的性子，卻一併落了下來。\n\n這片邊緣世界對你而言既陌生又新鮮。你沒有打算擺出什麼高高在上的姿態，也沒興趣當一尊被人供起來的影子。既然投影已經落穩，那就先在這裡站住腳，給自己搭出一個能繼續存在下去的地方。\n\n你帶著專屬武裝而來，但除此之外，一切都要從頭開始。\n警告：該劇本可能會使得遊戲變得非常簡單，不建議新玩家直接遊玩。</MXNL_NeiyuProjectionStart.scenario.parts.0.text>
+  <MXNL_NeiyuProjectionStart.scenario.parts.0.text>你是仙人米莉拉投向此界的一道羽影，名為霓羽。你帶著零散的記憶和一部分力量，也帶著對陌生世界的好奇。隨身的專屬武裝是你最可靠的依靠。接下來，找一處落腳之地，搭起住所，再慢慢認識這里的人。&#10;&#10;警告：該劇本會顯著降低遊戲難度，不建議新玩家首次遊玩時選擇。</MXNL_NeiyuProjectionStart.scenario.parts.0.text>
 </LanguageData>

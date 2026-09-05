@@ -132,7 +132,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private IntVec3 FieldCenter => new(fieldCenterX, 0, fieldCenterZ);
         public float DefaultRadius => PropsField.radius;
-        private float CurrentRadius => ZhaoliPowerBalance.IsOriginal ? (activeRadius > 0f ? activeRadius : PropsField.radius) : PropsField.radius;
+        private float CurrentRadius => activeRadius > 0f ? activeRadius : PropsField.radius;
 
         public void ActivateAt(IntVec3 center, float radiusOverride = -1f)
         {

@@ -93,7 +93,6 @@ namespace MiliraXian.Characters.Mingyuan
                 layers *= GetOverburnLifeBurnFactor(instigator);
             }
 
-            if (MingyuanPowerBalance.IsBalanced) layers = Mathf.Min(layers, Mathf.Max(0f, 100f - GetLifeBurnLayers(target)));
             Hediff hediff = EnsureHediff(target, LifeBurnDef, layers);
             HediffComp_MingyuanLifeBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
             comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
@@ -180,7 +179,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetLifeBurnExecuteThreshold(Pawn pawn)
         {
-            if (!MingyuanPowerBalance.IsOriginal) return 100f;
+            if (MingyuanPowerBalance.Sealed) return 100f;
             if (pawn?.health == null)
             {
                 return 0f;
@@ -309,7 +308,8 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetSelfBurnSkillDamageFactor(Pawn pawn)
         {
-            if (!MingyuanPowerBalance.IsOriginal) return 1f + GetSelfBurnEffectiveLayers(pawn) * .0006f;
+            if (MingyuanPowerBalance.Sealed) return 1f;
+            if (MingyuanPowerBalance.IsBalanced) return 1f + GetSelfBurnEffectiveLayers(pawn) * (.01f * ConservativePowerTuning.Bonus);
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
             return selfBurn > 0f ? 1f + selfBurn * 0.01f : 1f;
         }
@@ -357,11 +357,6 @@ namespace MiliraXian.Characters.Mingyuan
             dinfo.SetIgnoreArmor(true);
             dinfo.SetIgnoreInstantKillProtection(true);
             dinfo.SetApplyAllDamage(true);
-            if (MingyuanPowerBalance.IsBalanced)
-            {
-                // Reduced modes use ordinary armor and random body-part selection.
-                dinfo = new DamageInfo(damageDef ?? DamageDefOf.Burn, amount, .20f, -1f, instigator);
-            }
             bool previousSuppression = SuppressOnHitLifeBurn;
             try
             {
@@ -454,11 +449,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static void RestorePawnToBestCondition(Pawn pawn, bool keepLifeBurn)
         {
-            if (!MingyuanPowerBalance.IsOriginal)
-            {
-                if (MingyuanPowerBalance.IsBalanced) CharacterPowerProfile.HealOrdinaryInjuries(pawn, 2f);
-                return;
-            }
+            if (MingyuanPowerBalance.Sealed) return;
             if (pawn?.health?.hediffSet == null || pawn.Dead)
             {
                 return;

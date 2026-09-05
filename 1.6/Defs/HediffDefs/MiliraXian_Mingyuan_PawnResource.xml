@@ -177,7 +177,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
         <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
-        <description>A 100-point pale flame reserve. It no longer blocks damage directly; instead, every second it spends 1 reserve to restore one missing body part or fully heal all wounds and scars on one body part. Stable Self Burn can be converted back into reserve, but Overburn drains the reserve away.</description>
+        <description>A 100-point pale flame reserve. Each second, 1 point restores one missing body part or heals all wounds and scars on one part. Stable Self Burn can replenish the reserve; Overburn drains it. The reserve does not absorb damage.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>

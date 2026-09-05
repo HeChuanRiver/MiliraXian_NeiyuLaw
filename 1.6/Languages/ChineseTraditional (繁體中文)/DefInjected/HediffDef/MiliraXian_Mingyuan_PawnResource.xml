@@ -10,7 +10,7 @@
   <MX_Mingyuan_BurningBody.description>被淡色異界火重塑的身體。承受傷害降至 1%，意識提升，熱能與爆炸轉化為恢復，攻擊者會被反灼，控制狀態會被清除，每次真實受傷都會獲得 5 層自我燃燒。</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label></MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;護身火盾&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
-  <MX_Mingyuan_ProtectiveFlameShield.description>100 點淡色火焰修復儲備。它不再直接格擋傷害，而是每秒消耗 1 點，恢復一個缺失部位，或完全治療一個部位上的全部傷口與舊傷疤痕。穩定自我燃燒可以轉回儲備；過燃會使儲備持續流失。</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_ProtectiveFlameShield.description>100點淡色火焰修復儲備。每秒消耗1點，恢復一個缺失部位，或治癒一個部位的全部傷口與舊傷。穩定自我燃燒可兌換儲備，過燃會持續消耗儲備。護焰不吸收傷害。</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;重生之焰&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
   <MX_Mingyuan_RebirthFlame.description>明淵倒下時，埋在體內的火會爆開並留下重生火標記，30 秒後完成重塑。</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;永恆燃燒&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>

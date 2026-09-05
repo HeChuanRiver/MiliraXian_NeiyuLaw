@@ -490,13 +490,9 @@ namespace MiliraXian.Characters.Neiyu
                 NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(buff, Props.buffDurationTicks);
             }
 
-            if (NeiyuPowerBalance.IsOriginal)
+            if (!NeiyuPowerBalance.AbilitiesDisabled)
             {
                 NeiyuFlowerSwordSkillUtility.HealAllInjuries(pawn);
-            }
-            else
-            {
-                NeiyuFlowerSwordSkillUtility.HealInjuries(pawn, NeiyuPowerBalance.FlowerHealingCap);
             }
 
             if (Props.moodThought != null && pawn.needs != null && pawn.needs.mood != null)
@@ -1100,7 +1096,7 @@ namespace MiliraXian.Characters.Neiyu
                 }
 
                 DamageInfo dinfo = new(damageDef, Props.impactDamage, Props.impactArmorPen, -1f, caster);
-                if (NeiyuPowerBalance.IsOriginal)
+                if (!NeiyuPowerBalance.AbilitiesDisabled)
                 {
                     dinfo.SetIgnoreArmor(true);
                 }
@@ -1308,15 +1304,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            if (!NeiyuPowerBalance.IsOriginal)
-            {
-                if (!victim.Dead && Props.dashDamage > 0)
-                {
-                    DamageInfo reducedStrike = new DamageInfo(DamageDefOf.Cut, Props.dashDamage, NeiyuPowerBalance.ExecutionArmorPenetration, -1f, caster);
-                    victim.TakeDamage(reducedStrike);
-                }
-                return;
-            }
+            if (NeiyuPowerBalance.AbilitiesDisabled) return;
 
             bool headRemoved = false;
             BodyPartRecord head = victim.health.hediffSet.GetNotMissingParts().FirstOrDefault(p => p.def == BodyPartDefOf.Head);

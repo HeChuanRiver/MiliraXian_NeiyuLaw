@@ -28,13 +28,6 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (ZhaoliPowerBalance.IsBalanced)
-            {
-                Pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, PropsDeathSentence.cutSeverity, .15f, -1f, source));
-                ShowRemainingCount();
-                return;
-            }
-
             BodyPartRecord part = Pawn.health?.hediffSet?.GetRandomNotMissingPart(
                 DamageDefOf.Cut,
                 BodyPartHeight.Undefined,
@@ -115,13 +108,6 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             PlayExecutionVisuals(target);
-            if (ZhaoliPowerBalance.IsBalanced)
-            {
-                // A normal armored hit, not a guaranteed kill or deletion of the corpse.
-                target.TakeDamage(new DamageInfo(DamageDefOf.Cut, 22f, .30f, -1f, instigator));
-                ZhaoliKarmaUtility.GetLinkComp(instigator)?.RewardBalancedSentence();
-                return;
-            }
             if (ZhaoliKarmaUtility.IsZhaoli(instigator))
             {
                 ZhaoliKarmaUtility.AddKarma(instigator, KarmaPerExecution);

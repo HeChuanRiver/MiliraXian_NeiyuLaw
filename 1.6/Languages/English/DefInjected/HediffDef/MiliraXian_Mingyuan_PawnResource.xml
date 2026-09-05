@@ -10,7 +10,7 @@
   <MX_Mingyuan_BurningBody.description>A body remade by pale extradimensional fire. Incoming damage is reduced to 1%, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and each true wound grants 5 Self Burn.</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label></MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
-  <MX_Mingyuan_ProtectiveFlameShield.description>A 100-point pale flame reserve. It no longer blocks damage directly; instead, every second it spends 1 reserve to restore one missing body part or fully heal all wounds and scars on one body part. Stable Self Burn can be converted back into reserve, but Overburn drains the reserve away.</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_ProtectiveFlameShield.description>A 100-point pale flame reserve. Each second, 1 point restores one missing body part or heals all wounds and scars on one part. Stable Self Burn can replenish the reserve; Overburn drains it. The reserve does not absorb damage.</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
   <MX_Mingyuan_RebirthFlame.description>When Mingyuan falls, the flame buried in her body detonates, leaves a rebirth flame, and restores her after 30 seconds.</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>

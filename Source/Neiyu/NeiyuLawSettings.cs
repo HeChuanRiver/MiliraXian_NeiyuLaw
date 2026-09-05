@@ -340,8 +340,8 @@ namespace MiliraXian.Characters.Neiyu
             {
                 minimumConsciousness = NeiyuPowerBalance.LimitConsciousnessMinimum(minimumConsciousness);
             }
-            if (ZhaoliKarmaUtility.IsZhaoli(pawn) && !ZhaoliPowerBalance.IsOriginal)
-                minimumConsciousness = ZhaoliPowerBalance.Sealed ? 0f : Mathf.Min(minimumConsciousness, .2f);
+            if (ZhaoliKarmaUtility.IsZhaoli(pawn) && ZhaoliPowerBalance.Sealed)
+                minimumConsciousness = 0f;
             if (minimumConsciousness <= 0f || __result >= minimumConsciousness)
             {
                 return;

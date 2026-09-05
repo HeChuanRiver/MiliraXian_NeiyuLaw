@@ -131,13 +131,14 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public static float LifeBurnPenaltyFactor(float lifeBurn)
         {
-            if (!MingyuanPowerBalance.IsOriginal) return MingyuanPowerBalance.Sealed ? 1f : Mathf.Max(.9f, 1f - lifeBurn * .001f);
+            if (MingyuanPowerBalance.Sealed) return 1f;
             if (lifeBurn <= 0f)
             {
                 return 1f;
             }
 
-            return Mathf.Max(0.05f, 1f - lifeBurn * 0.0001f);
+            float original = Mathf.Max(0.05f, 1f - lifeBurn * 0.0001f);
+            return MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Scale(original, ConservativePowerTuning.Bonus, 1f) : original;
         }
     }
 
@@ -173,12 +174,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (!MingyuanPowerBalance.IsOriginal)
-            {
-                if (MingyuanPowerBalance.IsBalanced && MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
-                    dinfo.SetAmount(dinfo.Amount * (dinfo.Def.isExplosive ? .7f : .5f));
-                return;
-            }
+            if (MingyuanPowerBalance.Sealed) return;
 
             if (body.Invulnerable)
             {

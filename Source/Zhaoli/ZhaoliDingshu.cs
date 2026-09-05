@@ -360,10 +360,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             int restoredParts = 0, removedHediffs = 0;
-            if (ZhaoliPowerBalance.IsOriginal)
-                ZhaoliDingshuUtility.RestorePawnCompletely(targetPawn, out restoredParts, out removedHediffs);
-            else
-                targetPawn.health.GetOrAddHediff(DefDatabase<HediffDef>.GetNamed("ResurrectionSickness"));
+            ZhaoliDingshuUtility.RestorePawnCompletely(targetPawn, out restoredParts, out removedHediffs);
             if (ZhaoliKarmaUtility.IsZhaoli(targetPawn))
             {
                 ZhaoliRebirthUtility.NotifyApparelResurrected(targetPawn);

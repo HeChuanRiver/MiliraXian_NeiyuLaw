@@ -27,5 +27,5 @@
   <MXZL_ZhaoliRaidState.label>Zhaoli Raid State</MXZL_ZhaoliRaidState.label>
   <MXZL_ZhaoliRaidState.description>Temporary state used when hostile Zhaoli raids the colony. Records phase, hatred, transition, and raid behavior.</MXZL_ZhaoliRaidState.description>
   <MXZL_ZhaoliShieldLayers.label>&lt;color=#D66BFF&gt;Deathward Shield&lt;/color&gt;</MXZL_ZhaoliShieldLayers.label>
-  <MXZL_ZhaoliShieldLayers.description>Each time Zhaoli absorbs a unit through &lt;color=#E85A7A&gt;death pronouncement&lt;/color&gt;, she gains 5 layers of &lt;color=#B86CFF&gt;Deathward Shield&lt;/color&gt;. The shield no longer negates damage; 1 layer is consumed after Zhaoli actually takes damage. Damage over time also consumes layers each time it takes effect.</MXZL_ZhaoliShieldLayers.description>
+  <MXZL_ZhaoliShieldLayers.description>Each unit absorbed through &lt;color=#E85A7A&gt;Death Pronouncement&lt;/color&gt; grants Zhaoli 5 &lt;color=#B86CFF&gt;Deathward Shield&lt;/color&gt; layers. Taking damage consumes 1 layer, including each damage-over-time tick. Layers record accumulated pronouncements and do not absorb damage.</MXZL_ZhaoliShieldLayers.description>
 </LanguageData>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_CinderSword.label>塵燼</MX_Mingyuan_CinderSword.label>
-  <MX_Mingyuan_CinderSword.description>明淵的淡色燼刃。造成 44 點割傷、150% 穿甲，透過 0.5 近戰冷卻倍率在約 3 秒內打出兩次攻擊；明淵的火焰會在命中時追加生命燃燒。</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.description>明淵的余燼長劍，劍身流淌著灼熱的赤焰。基礎割傷44點，破甲150%，近戰冷卻系數0.5；明淵的火焰會在命中時施加生命燃燒。</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>塵燼</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>長虹</MX_Mingyuan_RainbowBow.label>
   <MX_Mingyuan_RainbowBow.description>由淡金與赤色火焰構成的明淵長弓，可在聚焦與輻射形態間切換。聚焦形態固定蓄力 5 秒，瞬時爆掉一個視線內敵人的生命燃燒，不造成普通武器傷害。輻射形態每秒至多發動一次，貫穿 10 格、108° 扇區內全部合法敵人，各造成 1 點灼傷並疊加其爆條閾值的 23%。</MX_Mingyuan_RainbowBow.description>

@@ -72,7 +72,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static string BuildRaidBossSummary(int phase)
         {
-            if (!ZhaoliPowerBalance.IsOriginal) return (ZhaoliPowerBalance.Sealed ? "MX_Power_SealedDescription" : "MX_Power_Zhaoli_Passives").Translate();
+            if (ZhaoliPowerBalance.Sealed) return null;
             StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentPhaseBonuses".Translate().ToString());
             if (phase <= 0)
@@ -100,7 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static string BuildRecruitGrowthSummary(int deathCount)
         {
-            if (!ZhaoliPowerBalance.IsOriginal) return (ZhaoliPowerBalance.Sealed ? "MX_Power_SealedDescription" : "MX_Power_Zhaoli_Passives").Translate();
+            if (ZhaoliPowerBalance.Sealed) return null;
             StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentGrowthBonuses".Translate().ToString());
             AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
@@ -328,7 +328,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            float factor = GetRaidBossFactor(stat, phase);
+            float factor = ZhaoliPowerBalance.GrowthFactor(GetRaidBossFactor(stat, phase));
             if (Mathf.Abs(factor - 1f) < 0.0001f)
             {
                 return;

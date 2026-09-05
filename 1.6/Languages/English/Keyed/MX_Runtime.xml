@@ -57,14 +57,14 @@
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>Injuries, hediffs, and other mod effects can change special character Consciousness normally.</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
   <MX_NL_NeiyuPowerLevelLabel>Neiyu power level (Neiyu only)</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>Level 1: Original (default)</MX_NL_NeiyuPowerLevelOriginalLabel>
-  <MX_NL_NeiyuPowerLevelOriginalDesc>Preserves Neiyu's current abilities, weapons, shield, apparel bonuses, hunger protection, and Consciousness floor exactly as before this setting was added.</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>Level 2: Moderate balance</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>Preserves Neiyu's combat identity at a moderated power level: weapons perform like high-end vanilla gear, abilities are clearly reduced but remain worth using, and the shield offers limited but reliable protection. Unique gear and most passives receive gentler reductions.</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>Neiyu's full abilities, weapons, shield and equipment bonuses, with hunger protection and a consciousness floor.</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>Tier 2: moderate power</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>All weapon forms, decapitation, group healing and shield phases, with moderate damage, bonuses and cooldowns.</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>Level 3: Decorative</MX_NL_NeiyuPowerLevelDecorativeLabel>
-  <MX_NL_NeiyuPowerLevelDecorativeDesc>Seals every active ability, lowers weapons below level 2, and disables shield, hunger protection, Consciousness floor, and unique-apparel stat bonuses. Identity, visuals, recruitment, and special-pawn-manager compatibility remain intact.</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>Focused on companionship, appearance and story. Abilities, shield, hunger protection, consciousness floor and special equipment bonuses are inactive. Equipment provides basic combat capability.</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>Neiyu's active abilities are sealed at the current power level.</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>&lt;color=#FFB86C&gt;[Level 2 override]&lt;/color&gt; The text above retains level 1's original values. Damage, area, volume, resource output, healing, and cooldown are currently adjusted by Moderate balance mode.</MX_NL_NeiyuAbilityBalancedNotice>
-  <MX_NL_NeiyuAbilityDecorativeNotice>&lt;color=#FF6A6A&gt;[Level 3 sealed]&lt;/color&gt; Decorative mode is active, so this ability cannot be used.</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuAbilityBalancedNotice>See the description for effects and the information panel for stats and cooldowns.</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>This ability is unavailable.</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>Requires flower form.</MX_NL_NeedFlowerForm>
@@ -80,7 +80,7 @@
   <MX_NL_TargetMustBeHostile>The target must be hostile.</MX_NL_TargetMustBeHostile>
   <MX_NL_FlowerToxinMentalStateReason>Neiyu's flower miasma drove them into a frenzy.</MX_NL_FlowerToxinMentalStateReason>
   <MX_NL_RecruitLetterTitle>Otherworldly Feather Shadow</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>A stable feather-shaped projection has appeared near the colony. The newcomer calls herself Neiyu. She is not the original, but a lively shadow cast into this world by a Milira. Rather than some lofty divine fragment, she feels more like a laughing breeze that wandered in. She says she can stay, or fade away here. The choice is yours.</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitLetterText>A feather-shaped projection has appeared near the colony. She introduces herself as Neiyu, a Milira's projection in this world. Looking around with curiosity, she smiles and asks whether she may stay. You may welcome her or let the projection disperse.</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>Accept Neiyu</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>Not now</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>No player home map is available.</MX_NL_NoPlayerHomeMap>

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
@@ -21,131 +22,131 @@ namespace MiliraXian.Characters.Mingyuan
             ArrowDamage = DefDatabase<DamageDef>.GetNamed("Arrow");
             var p = Profile;
             p.LibraryPassives("MiliraXian_Mingyuan");
-            p.Weapon("MX_Mingyuan_CinderSword", 24f, .30f, 2.2f, 16f);
+            p.Weapon("MX_Mingyuan_CinderSword", 16f, 2.5f);
             var sword = Thing("MX_Mingyuan_CinderSword");
-            p.Stat(sword, "MeleeDodgeChance", .03f, 0f, true);
-            p.Stat(sword, "MeleeWeapon_DamageMultiplier", 0f, 0f, true);
-            p.Armor("MX_Mingyuan_InfernoArmor", .8f, .4f, .65f);
-            p.Armor("MX_Mingyuan_BurningFeatherCrown", .55f, .3f, .5f);
+            p.ScaleStat(sword, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(sword, "MeleeWeapon_DamageMultiplier", ConservativePowerTuning.Bonus, 0f, true);
+            p.Armor("MX_Mingyuan_InfernoArmor");
+            p.Armor("MX_Mingyuan_BurningFeatherCrown");
             var armor = Thing("MX_Mingyuan_InfernoArmor");
-            p.Stat(armor, "CarryingCapacity", 12f, 0f, true);
-            p.Stat(armor, "MoveSpeed", .10f, 0f, true);
-            p.Stat(armor, "MeleeDodgeChance", .04f, 0f, true);
-            p.Stat(armor, "IncomingDamageFactor", 0f, 0f, true);
+            p.ScaleStat(armor, "CarryingCapacity", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(armor, "MoveSpeed", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(armor, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(armor, "IncomingDamageFactor", ConservativePowerTuning.Bonus, 0f, true);
             var crown = Thing("MX_Mingyuan_BurningFeatherCrown");
-            p.Stat(crown, "MeleeDodgeChance", .02f, 0f, true);
-            p.Stat(crown, "IncomingDamageFactor", 0f, 0f, true);
-            p.Stat(crown, "AimingDelayFactor", -.05f, 0f, true);
-            p.Stat(crown, "RangedCooldownFactor", 0f, 0f, true);
+            p.ScaleStat(crown, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(crown, "IncomingDamageFactor", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(crown, "AimingDelayFactor", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(crown, "RangedCooldownFactor", ConservativePowerTuning.Bonus, 0f, true);
 
             var bow = ThingComp<CompProperties_MingyuanRainbowBow>("MX_Mingyuan_RainbowBow");
-            p.Field(bow, "focusWarmupSeconds", 3f, 3.2f);
-            p.Field(bow, "focusRange", 30.9f, 25.9f);
-            p.Field(bow, "radiationRange", 9f, 9f);
-            p.Field(bow, "radiationArcDegrees", 90f, 90f);
-            p.Field(bow, "radiationMinIntervalTicks", 120, 120);
-            p.Field(bow, "radiationDamage", 2f, 0f);
-            p.Field(bow, "radiationLayerFraction", .05f, 0f);
+            p.ScaleField(bow, "focusWarmupSeconds", ConservativePowerTuning.Cooldown, 3.2f);
+            p.KeepField(bow, "focusRange", 25.9f);
+            p.KeepField(bow, "radiationRange", 9f);
+            p.KeepField(bow, "radiationArcDegrees", 90f);
+            p.KeepField(bow, "radiationMinIntervalTicks", 120);
+            p.ScaleField(bow, "radiationDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(bow, "radiationLayerFraction", .9f, 0f);
             var bowDef = Thing("MX_Mingyuan_RainbowBow");
-            p.Field(bowDef.Verbs[0], "range", 30.9f, 25.9f);
-            p.Field(bowDef.Verbs[0], "warmupTime", 3f, 3.2f);
-            p.Stat(bowDef, "AccuracyTouch", .8f, .7f);
-            p.Stat(bowDef, "AccuracyShort", .8f, .7f);
-            p.Stat(bowDef, "AccuracyMedium", .85f, .7f);
-            p.Stat(bowDef, "AccuracyLong", .7f, .6f);
+            p.KeepField(bowDef.Verbs[0], "range", 25.9f);
+            p.ScaleField(bowDef.Verbs[0], "warmupTime", ConservativePowerTuning.Cooldown, 3.2f);
+            p.ScaleStat(bowDef, "AccuracyTouch", 1f, .7f);
+            p.ScaleStat(bowDef, "AccuracyShort", 1f, .7f);
+            p.ScaleStat(bowDef, "AccuracyMedium", 1f, .7f);
+            p.ScaleStat(bowDef, "AccuracyLong", 1f, .6f);
             p.Description(bowDef, "MX_Power_Mingyuan_Bow");
             p.Description(sword, "MX_Power_Mingyuan_Sword");
             p.Description(armor, "MX_Power_BalancedEquipment");
             p.Description(crown, "MX_Power_BalancedEquipment");
-            p.Field(Thing("MX_Bullet_Mingyuan_RainbowArrow").projectile, "armorPenetrationBase", .3f, .1f);
+            p.ScaleField(Thing("MX_Bullet_Mingyuan_RainbowArrow").projectile, "armorPenetrationBase", ConservativePowerTuning.Defense, .1f);
 
             p.Ability("MX_Mingyuan_AscendantFlameDash", 2500, 24f);
             var dash = AbilityComp<CompProperties_AbilityMingyuanAscendantFlameDash>("MX_Mingyuan_AscendantFlameDash");
-            p.Field(dash, "maxDistance", 24f, 24f);
-            p.Field(dash, "pathDamage", 8f, 0f);
-            p.Field(dash, "lifeBurnLayers", 12f, 0f);
-            p.Field(dash, "selfLifeBurnLayers", 20f, 0f);
-            p.Field(dash, "stunTicks", 45, 0);
+            p.KeepField(dash, "maxDistance", 24f);
+            p.ScaleField(dash, "pathDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(dash, "lifeBurnLayers", .9f, 0f);
+            p.KeepField(dash, "selfLifeBurnLayers", 0f);
+            p.KeepField(dash, "stunTicks", 0);
             var scorch = ThingComp<CompProperties_MingyuanAscendantFlameScorch>("MX_Mingyuan_AscendantFlameScorchController");
-            p.Field(scorch, "durationTicks", 300, 0);
-            p.Field(scorch, "pulseIntervalTicks", 120, 120);
-            p.Field(scorch, "lifeBurnLayers", 3f, 0f);
+            p.KeepField(scorch, "durationTicks", 0);
+            p.KeepField(scorch, "pulseIntervalTicks", 120);
+            p.ScaleField(scorch, "lifeBurnLayers", .9f, 0f);
 
             p.Ability("MX_Mingyuan_InstantCombustion", 30000, 8f);
             var flash = AbilityComp<CompProperties_AbilityMingyuanInstantCombustion>("MX_Mingyuan_InstantCombustion");
-            p.Field(flash, "radius", 8f, 0f);
-            p.Field(flash, "partDamage", 8f, 0f);
-            p.Field(flash, "stunTicks", 90, 0);
-            p.Field(flash, "minimumLifeBurnLayers", 10f, 0f);
+            p.KeepField(flash, "radius", 0f);
+            p.ScaleField(flash, "partDamage", ConservativePowerTuning.Damage, 0f);
+            p.KeepField(flash, "stunTicks", 0);
+            p.ScaleField(flash, "minimumLifeBurnLayers", .9f, 0f);
 
             p.Ability("MX_Mingyuan_BurningPillar", 45000, 25f);
             var pillar = ThingComp<CompProperties_MingyuanBurningPillarTornado>("MX_Mingyuan_BurningPillarField");
-            p.Field(pillar, "maxRadius", 4.5f, 0f);
-            p.Field(pillar, "durationTicks", 900, 0);
-            p.Field(pillar, "radiusGrowTicks", 180, 180);
-            p.Field(pillar, "controlUnlockTicks", 180, 180);
-            p.Field(pillar, "coreGrowTicks", 300, 300);
-            p.Field(pillar, "initialHitPoints", 80, 1);
-            p.Field(pillar, "maxHitPoints", 160, 1);
-            p.Field(pillar, "pulseIntervalTicks", 120, 120);
-            p.Field(pillar, "centerBurnDamage", 3f, 0f);
-            p.Field(pillar, "edgeBurnDamage", 1f, 0f);
-            p.Field(pillar, "centerCutDamage", 1f, 0f);
-            p.Field(pillar, "edgeCutDamage", 3f, 0f);
-            p.Field(pillar, "buildingDamageFraction", .01f, 0f);
+            p.KeepField(pillar, "maxRadius", 0f);
+            p.KeepField(pillar, "durationTicks", 0);
+            p.KeepField(pillar, "radiusGrowTicks", 180);
+            p.KeepField(pillar, "controlUnlockTicks", 180);
+            p.KeepField(pillar, "coreGrowTicks", 300);
+            p.ScaleField(pillar, "initialHitPoints", .9f, 1);
+            p.ScaleField(pillar, "maxHitPoints", .9f, 1);
+            p.KeepField(pillar, "pulseIntervalTicks", 120);
+            p.ScaleField(pillar, "centerBurnDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(pillar, "edgeBurnDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(pillar, "centerCutDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(pillar, "edgeCutDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(pillar, "buildingDamageFraction", ConservativePowerTuning.Damage, 0f);
 
             p.Ability("MX_Mingyuan_TimeBurn", 45000, 25f);
-            p.Field(AbilityDef("MX_Mingyuan_TimeBurn").verbProperties, "warmupTime", 3f, 3f);
-            p.Field(AbilityComp<CompProperties_AbilityMingyuanTimeBurn>("MX_Mingyuan_TimeBurn"), "durationTicks", 240, 0);
+            p.ScaleField(AbilityDef("MX_Mingyuan_TimeBurn").verbProperties, "warmupTime", ConservativePowerTuning.Cooldown, 3f);
+            p.KeepField(AbilityComp<CompProperties_AbilityMingyuanTimeBurn>("MX_Mingyuan_TimeBurn"), "durationTicks", 0);
 
             p.Ability("MX_Mingyuan_AshesOfSelf", 12000, 0f);
             var ashes = AbilityComp<CompProperties_AbilityMingyuanAshesOfSelf>("MX_Mingyuan_AshesOfSelf");
-            p.Field(ashes, "bloodLossCost", .12f, 0f);
-            p.Field(ashes, "selfBurnLayers", 80f, 0f);
-            p.Field(ashes, "fieldDurationTicks", 600, 0);
+            p.ScaleField(ashes, "bloodLossCost", 1f, 0f);
+            p.KeepField(ashes, "selfBurnLayers", 0f);
+            p.KeepField(ashes, "fieldDurationTicks", 0);
             var aura = ThingComp<CompProperties_MingyuanBurningField>("MX_Mingyuan_AshesField");
-            p.Field(aura, "durationTicks", 600, 0);
-            p.Field(aura, "pulseIntervalTicks", 120, 120);
-            p.Field(aura, "damageAmount", 1f, 0f);
-            p.Field(aura, "lifeBurnLayers", 3f, 0f);
-            p.Field(aura, "selfBurnLifeBurnPer100", 1f, 0f);
-            p.Field(aura, "selfHealAmount", .5f, 0f);
-            p.Field(aura, "maxSelfBurnGainPerPulse", 3f, 0f);
-            p.Field(aura, "destroyBuildings", false, false);
-            p.Field(aura, "destroyAnimals", false, false);
+            p.KeepField(aura, "durationTicks", 0);
+            p.KeepField(aura, "pulseIntervalTicks", 120);
+            p.ScaleField(aura, "damageAmount", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(aura, "lifeBurnLayers", .9f, 0f);
+            p.ScaleField(aura, "selfBurnLifeBurnPer100", ConservativePowerTuning.Bonus, 0f);
+            p.ScaleField(aura, "selfHealAmount", .9f, 0f);
+            p.KeepField(aura, "maxSelfBurnGainPerPulse", 0f);
+            p.KeepField(aura, "destroyBuildings", false);
+            p.KeepField(aura, "destroyAnimals", false);
 
             var life = HediffComp<HediffCompProperties_MingyuanLifeBurn>("MX_Mingyuan_LifeBurn");
-            p.Field(life, "damagePer100Layers", 1f, 0f);
-            p.Field(life, "baseDamage", .5f, 0f);
-            p.Field(life, "ageTicksPerLayer", 0f, 0f);
-            p.Field(life, "needDrainPer100Layers", 0f, 0f);
-            p.Field(life, "burnSelfStackFraction", 0f, 0f);
-            p.Field(life, "decayDelayTicks", 600, 0);
-            p.Field(life, "transferRadius", 6f, 0f);
-            p.Field(life, "maxTransferTargets", 3, 0);
+            p.ScaleField(life, "damagePer100Layers", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(life, "baseDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(life, "ageTicksPerLayer", ConservativePowerTuning.Bonus, 0f);
+            p.ScaleField(life, "needDrainPer100Layers", ConservativePowerTuning.Bonus, 0f);
+            p.KeepField(life, "burnSelfStackFraction", 0f);
+            p.KeepField(life, "decayDelayTicks", 0);
+            p.KeepField(life, "transferRadius", 0f);
+            p.KeepField(life, "maxTransferTargets", 0);
             var self = HediffComp<HediffCompProperties_MingyuanSelfBurn>("MX_Mingyuan_SelfBurn");
-            p.Field(self, "overburnDamageFactor", 1.08f, 1f);
-            p.Field(self, "overburnLifeBurnFactor", 1.15f, 1f);
-            p.Field(self, "rangedWeaponDamagePerLayer", .0004f, 0f);
-            p.Field(self, "rangedWeaponDamageBonusCap", .12f, 0f);
-            p.Field(self, "combatRegenIntervalTicks", 120, 120);
-            p.Field(self, "combatRegenLayers", 1f, 0f);
-            p.Field(self, "overburnDecayLayers", 2f, 0f);
+            p.ScaleField(self, "overburnDamageFactor", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(self, "overburnLifeBurnFactor", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(self, "rangedWeaponDamagePerLayer", ConservativePowerTuning.Bonus, 0f);
+            p.ScaleField(self, "rangedWeaponDamageBonusCap", ConservativePowerTuning.Bonus, 0f);
+            p.KeepField(self, "combatRegenIntervalTicks", 120);
+            p.KeepField(self, "combatRegenLayers", 0f);
+            p.KeepField(self, "overburnDecayLayers", 0f);
             var body = HediffComp<HediffCompProperties_MingyuanBurningBody>("MX_Mingyuan_BurningBody");
-            p.Field(body, "restoreIntervalTicks", 2500, 2500);
-            p.Field(body, "invulnerableTicks", 0, 0);
-            p.Field(body, "reflectLifeBurnLayers", 2f, 0f);
-            p.Field(body, "selfBurnOnHit", 3f, 0f);
-            p.Field(body, "meleeLifeBurnLayers", 4f, 0f);
-            p.Field(body, "rangedLifeBurnLayers", 2f, 0f);
-            p.Field(body, "meleeSelfBurnBonusPer100", 1f, 0f);
-            p.Field(body, "rangedSelfBurnBonusPer100", .5f, 0f);
+            p.ScaleField(body, "restoreIntervalTicks", ConservativePowerTuning.Cooldown, 2500);
+            p.ScaleField(body, "invulnerableTicks", .9f, 0);
+            p.ScaleField(body, "reflectLifeBurnLayers", .9f, 0f);
+            p.KeepField(body, "selfBurnOnHit", 0f);
+            p.ScaleField(body, "meleeLifeBurnLayers", .9f, 0f);
+            p.ScaleField(body, "rangedLifeBurnLayers", .9f, 0f);
+            p.ScaleField(body, "meleeSelfBurnBonusPer100", ConservativePowerTuning.Bonus, 0f);
+            p.ScaleField(body, "rangedSelfBurnBonusPer100", ConservativePowerTuning.Bonus, 0f);
             var shield = HediffComp<HediffCompProperties_MingyuanProtectiveFlameShield>("MX_Mingyuan_ProtectiveFlameShield");
-            p.Field(shield, "maxEnergy", 80f, 0f);
-            p.Field(shield, "repairIntervalTicks", 600, 600);
-            p.Field(shield, "selfBurnPerEnergy", 4f, 4f);
-            p.Field(shield, "selfBurnRefillMaxFractionOfCap", .2f, 0f);
-            p.Field(shield, "selfBurnRefillCooldownTicks", 2500, 2500);
+            p.ScaleField(shield, "maxEnergy", .9f, 0f);
+            p.ScaleField(shield, "repairIntervalTicks", ConservativePowerTuning.Cooldown, 600);
+            p.KeepField(shield, "selfBurnPerEnergy", 4f);
+            p.KeepField(shield, "selfBurnRefillMaxFractionOfCap", 0f);
+            p.ScaleField(shield, "selfBurnRefillCooldownTicks", ConservativePowerTuning.Cooldown, 2500);
 
             ConfigureStages();
             foreach (string name in new[] { "AscendantFlameDash", "InstantCombustion", "BurningPillar", "TimeBurn", "AshesOfSelf" })
@@ -155,38 +156,61 @@ namespace MiliraXian.Characters.Mingyuan
             p.Apply();
         }
 
-        private static StatModifier Factor(string name, float value) => new StatModifier { stat = DefDatabase<StatDef>.GetNamed(name), value = value };
-        private static StatModifierBySeverity Curve(string name, float end)
-        {
-            return new StatModifierBySeverity { stat = DefDatabase<StatDef>.GetNamed(name),
-                valueBySeverity = new SimpleCurve { new CurvePoint(0f, 1f), new CurvePoint(300f, end) } };
-        }
-
         private static void ConfigureStages()
         {
-            var body = Hediff("MX_Mingyuan_BurningBody");
-            Profile.Field(body, "stages", new List<HediffStage> { new HediffStage {
-                statFactors = new List<StatModifier> { Factor("IncomingDamageFactor", .9f) } } },
-                new List<HediffStage> { new HediffStage() });
-            var self = Hediff("MX_Mingyuan_SelfBurn");
-            Profile.Field(self, "stages", new List<HediffStage> {
-                new HediffStage { statFactorsBySeverity = new List<StatModifierBySeverity> {
-                    Curve("MoveSpeed", 1.10f), Curve("WorkSpeedGlobal", 1.15f), Curve("MeleeDamageFactor", 1.18f),
-                    Curve("MeleeCooldownFactor", 1f / 1.12f), Curve("RangedCooldownFactor", 1f / 1.12f) } },
-                new HediffStage { minSeverity = 300.01f, statFactors = new List<StatModifier> {
-                    Factor("MoveSpeed", 1.10f), Factor("WorkSpeedGlobal", 1.15f), Factor("MeleeDamageFactor", 1.18f * 1.08f),
-                    Factor("MeleeCooldownFactor", 1f / 1.12f), Factor("RangedCooldownFactor", 1f / 1.12f) } } },
-                new List<HediffStage> { new HediffStage() });
-            // 100 layers are an absolute burst threshold, not a percentage of target health.
-            var stage = new HediffStage { statFactorsBySeverity = new List<StatModifierBySeverity>() };
-            foreach (string name in new[] { "MoveSpeed", "MeleeHitChance", "ShootingAccuracyPawn", "WorkSpeedGlobal", "MeleeDamageFactor" })
+            // Copy the loaded stages instead of replacing them with a featureless profile.
+            // Capacity modifiers, need exemptions, thresholds and every curve axis survive.
+            foreach (string name in new[] { "BurningBody", "SelfBurn", "LifeBurn" })
             {
-                var curve = Curve(name, .9f);
-                curve.valueBySeverity = new SimpleCurve { new CurvePoint(0f, 1f), new CurvePoint(100f, .9f) };
-                stage.statFactorsBySeverity.Add(curve);
+                HediffDef def = Hediff("MX_Mingyuan_" + name);
+                var balanced = new List<HediffStage>();
+                var selfProps = name == "SelfBurn" ? HediffComp<HediffCompProperties_MingyuanSelfBurn>(def.defName) : null;
+                foreach (HediffStage original in def.stages)
+                {
+                    HediffStage stage = (HediffStage)AccessTools.Method(typeof(object), "MemberwiseClone").Invoke(original, null);
+                    if (original.statFactors != null)
+                    {
+                        stage.statFactors = new List<StatModifier>();
+                        foreach (StatModifier stat in original.statFactors)
+                        {
+                            float value = StageFactor(name, stat.stat.defName, stat.value);
+                            if (selfProps != null && original.minSeverity > selfProps.overburnThreshold
+                                && stat.stat.defName == "MeleeDamageFactor" && selfProps.overburnDamageFactor > 0f)
+                            {
+                                // Keep melee and skill Overburn multipliers in agreement.
+                                value = ConservativePowerTuning.Scale(stat.value / selfProps.overburnDamageFactor, ConservativePowerTuning.Bonus, 1f)
+                                    * ConservativePowerTuning.Scale(selfProps.overburnDamageFactor, ConservativePowerTuning.Bonus, 1f);
+                            }
+                            stage.statFactors.Add(new StatModifier { stat = stat.stat, value = value });
+                        }
+                    }
+                    if (original.statFactorsBySeverity != null)
+                    {
+                        stage.statFactorsBySeverity = new List<StatModifierBySeverity>();
+                        foreach (StatModifierBySeverity stat in original.statFactorsBySeverity)
+                        {
+                            var curve = new SimpleCurve();
+                            foreach (CurvePoint point in stat.valueBySeverity.Points)
+                                curve.Add(new CurvePoint(point.x, StageFactor(name, stat.stat.defName, point.y)));
+                            stage.statFactorsBySeverity.Add(new StatModifierBySeverity { stat = stat.stat, valueBySeverity = curve });
+                        }
+                    }
+                    balanced.Add(stage);
+                }
+                Profile.Field(def, "stages", balanced, new List<HediffStage> { new HediffStage() });
             }
-            Profile.Field(Hediff("MX_Mingyuan_LifeBurn"), "stages", new List<HediffStage> { stage }, new List<HediffStage> { new HediffStage() });
         }
+
+        private static float StageFactor(string hediff, string stat, float original)
+        {
+            if (original == 0f) return original; // Immunity is a mechanic, not a small bonus.
+            if (hediff == "BurningBody" && stat == "IncomingDamageFactor")
+                return Mathf.Min(1f, original * 1.5f);
+            if (hediff == "SelfBurn" && (stat == "MeleeCooldownFactor" || stat == "RangedCooldownFactor"))
+                return 1f / ConservativePowerTuning.Scale(1f / original, ConservativePowerTuning.Bonus, 1f);
+            return ConservativePowerTuning.Scale(original, ConservativePowerTuning.Bonus, 1f);
+        }
+
     }
 
     public abstract class CompAbilityEffect_MingyuanPowerLimited : CompAbilityEffect_CharacterPowerLimited

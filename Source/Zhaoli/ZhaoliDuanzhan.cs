@@ -551,7 +551,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             IEnumerable<BodyPartRecord> parts = target.health?.hediffSet?.GetNotMissingParts();
             BodyPartRecord torso = parts != null ? parts.FirstOrDefault(part => part.def == BodyPartDefOf.Torso) : null;
-            if (!ZhaoliPowerBalance.IsOriginal) torso = null;
+            if (ZhaoliPowerBalance.Sealed) return;
             DamageInfo damageInfo = new(DamageDefOf.Cut, damageAmount, Props.armorPenetration, -1f, caster, torso, weapon != null ? weapon.def : null);
             damageInfo.SetBodyRegion(BodyPartHeight.Middle, BodyPartDepth.Outside);
             target.TakeDamage(damageInfo);

@@ -448,10 +448,6 @@ namespace MiliraXian.Characters.Zhaoli
 
             DamageInfo dinfo = new(DamageDefOf.Blunt, PropsDamage.damagePerTick, 999f, -1f, caster, torso, null, DamageInfo.SourceCategory.ThingOrUnknown, Pawn, instigatorGuilty: false, spawnFilth: false);
             dinfo.SetIgnoreArmor(true);
-            if (!ZhaoliPowerBalance.IsOriginal)
-            {
-                dinfo = new DamageInfo(DamageDefOf.Blunt, PropsDamage.damagePerTick, .1f, -1f, caster);
-            }
             Pawn.TakeDamage(dinfo);
         }
 

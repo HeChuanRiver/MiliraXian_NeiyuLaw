@@ -157,7 +157,6 @@ namespace MiliraXian.Characters.Zhaoli
         private const int AuraFrameIntervalTicks = 6;
 
         private ThingWithComps boundWeapon;
-        private int balanceRevision = -1;
 
         public HediffCompProperties_ZhaoliMinghuo PropsMinghuo => (HediffCompProperties_ZhaoliMinghuo)props;
 
@@ -202,15 +201,6 @@ namespace MiliraXian.Characters.Zhaoli
         public override void CompPostTick(ref float severityAdjustment)
         {
             if (ZhaoliPowerBalance.Sealed) { Pawn?.health?.RemoveHediff(parent); return; }
-            if (balanceRevision != ZhaoliPowerBalance.Profile.Revision)
-            {
-                balanceRevision = ZhaoliPowerBalance.Profile.Revision;
-                if (ZhaoliPowerBalance.IsBalanced)
-                {
-                    var duration = parent.TryGetComp<HediffComp_Disappears>();
-                    if (duration != null && duration.ticksToDisappear > 5000) duration.SetDuration(5000);
-                }
-            }
             if (boundWeapon == null || Pawn == null || Pawn.Dead || !Pawn.Spawned || Find.TickManager == null)
             {
                 return;

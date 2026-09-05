@@ -770,11 +770,6 @@ namespace MiliraXian.Characters.Neiyu
         {
             float t = Mathf.Max(0.1f, Props.phase2Threshold);
 
-            if (NeiyuPowerBalance.IsBalanced)
-            {
-                return Mathf.Max(1, Mathf.CeilToInt(damageAmount / t));
-            }
-
             if (damageAmount < t)
             {
                 return 0;

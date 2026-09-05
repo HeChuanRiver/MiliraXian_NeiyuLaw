@@ -2994,7 +2994,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool TryPhaseTeleport(int currentTick)
         {
-            if (!ZhaoliPowerBalance.IsOriginal) return false;
+            if (ZhaoliPowerBalance.Sealed) return false;
             if (currentTick < nextPhaseTeleportTick)
             {
                 return false;

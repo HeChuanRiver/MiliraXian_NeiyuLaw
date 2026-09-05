@@ -57,45 +57,63 @@ namespace MiliraXian.Characters
             return value == null || type.IsInstanceOfType(value) ? value : Convert.ChangeType(value, type);
         }
 
-        public void Stat(ThingDef def, string name, float balanced, float decorative, bool equipped = false)
+        public void ScaleField(object target, string name, float scale, object decorative, float neutral = 0f)
+        {
+            if (target == null) throw new InvalidOperationException("Missing balance target for " + name);
+            FieldInfo field = AccessTools.Field(target.GetType(), name);
+            if (field == null) throw new MissingFieldException(target.GetType().FullName, name);
+            Field(target, name, ConservativePowerTuning.Number(field.GetValue(target), scale, neutral), decorative);
+        }
+
+        public void KeepField(object target, string name, object decorative)
+        {
+            if (target == null) throw new InvalidOperationException("Missing balance target for " + name);
+            FieldInfo field = AccessTools.Field(target.GetType(), name);
+            if (field == null) throw new MissingFieldException(target.GetType().FullName, name);
+            Field(target, name, field.GetValue(target), decorative);
+        }
+
+        public void ScaleStat(ThingDef def, string name, float scale, float decorative, bool equipped = false)
         {
             List<StatModifier> list = equipped ? def.equippedStatOffsets : def.statBases;
             StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(name);
             if (stat == null) return; // DLC-dependent stats.
             StatModifier modifier = list?.Find(item => item.stat == stat);
-            if (modifier != null) Field(modifier, "value", balanced, decorative);
+            if (modifier != null) ScaleField(modifier, "value", scale, decorative);
         }
 
-        public void Weapon(string name, float damage, float penetration, float interval, float decorativeDamage)
+        public void Weapon(string name, float decorativeDamage, float decorativeInterval)
         {
             ThingDef def = Thing(name);
-            Field(def.tools[0], "power", damage, decorativeDamage);
-            Field(def.tools[0], "armorPenetration", penetration, .1f);
-            Field(def.tools[0], "cooldownTime", interval, interval + .3f);
-            Stat(def, "MeleeWeapon_CooldownMultiplier", 1f, 1f);
+            ScaleField(def.tools[0], "power", ConservativePowerTuning.Damage, decorativeDamage);
+            ScaleField(def.tools[0], "armorPenetration", ConservativePowerTuning.Defense, .1f);
+            KeepField(def.tools[0], "cooldownTime", decorativeInterval);
+            ScaleStat(def, "MeleeWeapon_CooldownMultiplier", 1f, 1f);
         }
 
-        public void Armor(string name, float sharp, float blunt, float heat)
+        public void Armor(string name)
         {
             ThingDef def = Thing(name);
-            Stat(def, "ArmorRating_Sharp", sharp, .18f);
-            Stat(def, "ArmorRating_Blunt", blunt, .08f);
-            Stat(def, "ArmorRating_Heat", heat, .1f);
-            Stat(def, "Insulation_Cold", 30f, 8f);
-            Stat(def, "Insulation_Heat", 20f, 5f);
+            ScaleStat(def, "ArmorRating_Sharp", ConservativePowerTuning.Defense, .18f);
+            ScaleStat(def, "ArmorRating_Blunt", ConservativePowerTuning.Defense, .08f);
+            ScaleStat(def, "ArmorRating_Heat", ConservativePowerTuning.Defense, .1f);
+            ScaleStat(def, "Insulation_Cold", 1f, 8f);
+            ScaleStat(def, "Insulation_Heat", 1f, 5f);
         }
 
         public void Ability(string name, int cooldown, float range)
         {
             AbilityDef def = AbilityDef(name);
-            Field(def, "cooldownTicksRange", new IntRange(cooldown, cooldown), new IntRange(cooldown, cooldown));
-            Field(def.verbProperties, "range", range, range);
+            ScaleField(def, "cooldownTicksRange", ConservativePowerTuning.Cooldown, new IntRange(cooldown, cooldown));
+            KeepField(def.verbProperties, "range", range);
         }
 
         public void Description(Def def, string key)
         {
+            string inactiveKey = def is AbilityDef ? "MX_Power_SealedDescription"
+                : def is ThingDef ? "MX_Power_EquipmentInactive" : "MX_Power_PassiveInactive";
             Value(() => def.description, value => def.description = value,
-                key.Translate().ToString(), "MX_Power_SealedDescription".Translate().ToString());
+                key.Translate().ToString(), inactiveKey.Translate().ToString());
         }
 
         public void LibraryPassives(string kindName)
@@ -108,17 +126,17 @@ namespace MiliraXian.Characters
             Value(() => runWild, enabled => {
                 if (enabled) AL_MentalBreak_Cache.RunWildImmuneKinds.Add(kind);
                 else AL_MentalBreak_Cache.RunWildImmuneKinds.Remove(kind);
-            }, false, false);
+            }, runWild, false);
             Value(() => mapped, enabled => {
                 if (enabled) AL_MentalBreak_Cache.KindExtensionMapping[kind] = originalMental;
                 else AL_MentalBreak_Cache.KindExtensionMapping.Remove(kind);
-            }, false, false);
-            if (mental != null) Field(mental, "blockMentalBreak", false, false);
+            }, mapped, false);
+            if (mental != null) KeepField(mental, "blockMentalBreak", false);
             bool voidKill = AL_Kill_Manager_Cache.VoidKillKinds.Contains(kind);
             Value(() => voidKill, enabled => {
                 if (enabled) AL_Kill_Manager_Cache.VoidKillKinds.Add(kind);
                 else AL_Kill_Manager_Cache.VoidKillKinds.Remove(kind);
-            }, false, false);
+            }, voidKill, false);
         }
 
         public static ThingDef Thing(string name) => DefDatabase<ThingDef>.GetNamed(name);

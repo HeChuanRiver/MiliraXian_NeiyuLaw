@@ -115,9 +115,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            int restoredParts = ZhaoliPowerBalance.IsOriginal ? RestoreMissingParts(targetPawn) : 0;
-            int removedHediffs = ZhaoliPowerBalance.IsOriginal ? RemoveNegativeHediffs(targetPawn)
-                : (CharacterPowerProfile.HealOrdinaryInjuries(targetPawn, 20f) > 0f ? 1 : 0);
+            int restoredParts = RestoreMissingParts(targetPawn);
+            int removedHediffs = RemoveNegativeHediffs(targetPawn);
             if (restoredParts + removedHediffs > 0)
             {
                 SpawnLinkPulse(targetPawn, ZhaoliEffectUtility.GuiyiLinkPulseMoteDef);
@@ -216,9 +215,6 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 return false;
             }
-
-            if (ZhaoliPowerBalance.IsBalanced)
-                return pawn.health.hediffSet.hediffs.Exists(h => h is Hediff_Injury injury && !injury.IsPermanent() && injury.Severity > 0f);
 
             if (pawn.health.hediffSet.GetMissingPartsCommonAncestors().Count > 0)
             {

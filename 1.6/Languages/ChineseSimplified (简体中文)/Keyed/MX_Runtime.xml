@@ -57,14 +57,14 @@
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>特殊角色的意识会按伤病、状态和其他 Mod 的效果正常变化。</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
   <MX_NL_NeiyuPowerLevelLabel>霓羽强度档位（仅影响霓羽）</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>第一档：原始强度（默认）</MX_NL_NeiyuPowerLevelOriginalLabel>
-  <MX_NL_NeiyuPowerLevelOriginalDesc>完整保留霓羽当前的技能、武器、护盾、服装加成、饥饿保护和意识保底效果，数值与改动前一致。</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>第二档：适中平衡</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>保留霓羽的战斗特色并适度降低强度：武器约为原版高阶装备水平，主动技能明显削弱但仍值得使用，护盾提供有限而可靠的防护；专属装备与多数被动受到温和削弱。</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>霓羽的完整技能、武器、护盾与穿戴加成，以及饥饿保护和意识保底。</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>第二档：适度强度</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>完整的武器形态、斩首、群体治疗与多阶段护盾，搭配适中的伤害、增益和技能冷却。</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>第三档：观赏模式</MX_NL_NeiyuPowerLevelDecorativeLabel>
-  <MX_NL_NeiyuPowerLevelDecorativeDesc>封禁全部主动技能；武器低于第二档；关闭护盾、饥饿保护、意识保底与专属装备数值加成。身份、外观、招募及特殊角色管理器兼容不受影响。</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>以陪伴、外观和剧情为主。主动技能、护盾、饥饿保护、意识保底与专属装备加成停用，装备提供基础战斗能力。</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>当前强度档位已封禁霓羽的主动技能。</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>&lt;color=#FFB86C&gt;【第二档覆盖】&lt;/color&gt;上方说明保留第一档的原始数值；当前伤害、范围、次数、产量、治疗与冷却均已按“适中平衡”档自动调整。</MX_NL_NeiyuAbilityBalancedNotice>
-  <MX_NL_NeiyuAbilityDecorativeNotice>&lt;color=#FF6A6A&gt;【第三档封禁】&lt;/color&gt;当前为观赏模式，此技能无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuAbilityBalancedNotice>技能效果见说明，属性与冷却见信息面板。</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>此技能当前无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>当前为观赏模式，霓羽的护身被动不会生效。</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>需要装备花形态。</MX_NL_NeedFlowerForm>
@@ -80,7 +80,7 @@
   <MX_NL_TargetMustBeHostile>目标必须为敌对单位。</MX_NL_TargetMustBeHostile>
   <MX_NL_FlowerToxinMentalStateReason>霓羽的花瘴使其陷入狂乱。</MX_NL_FlowerToxinMentalStateReason>
   <MX_NL_RecruitLetterTitle>异界羽影</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>殖民地附近出现了一道稳定下来的羽状投影。来者自称霓羽，她并非本体，而是一位米莉拉在此界投下的一道轻快分影。与其说她像某种高高在上的神性残片，不如说更像一阵带着笑意闯进来的风。她表示自己可以留下，也可以就此散去。选择权在你。</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitLetterText>殖民地附近出现了一道羽状投影。来者自称霓羽，是一位米莉拉在此界的分影。她好奇地打量着四周，笑着询问能否在这里住下。若你愿意接纳她，她便留下；若不愿，她也可以自行散去。</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>接纳霓羽</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>暂不接纳</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>没有可用的玩家基地地图。</MX_NL_NoPlayerHomeMap>

@@ -21,31 +21,10 @@ namespace MiliraXian.Characters.Zhaoli
     public class HediffComp_ZhaoliKarmaLinks : HediffComp
     {
         private List<Pawn> linkedPawns = new();
-        private int nextBalancedSubstituteTick;
-        private int balancedRewardWindow;
-        private int balancedRewards;
         private int balanceRevision = -1;
 
-        public bool TryUseBalancedSubstitute()
-        {
-            if (ZhaoliPowerBalance.Sealed) return false;
-            if (ZhaoliPowerBalance.IsOriginal) return true;
-            int tick = Find.TickManager.TicksGame;
-            if (tick < nextBalancedSubstituteTick) return false;
-            nextBalancedSubstituteTick = tick + 60000;
-            return true;
-        }
-
-        public void RewardBalancedSentence()
-        {
-            if (!ZhaoliPowerBalance.IsBalanced) return;
-            int tick = Find.TickManager.TicksGame;
-            if (tick >= balancedRewardWindow + 600) { balancedRewardWindow = tick; balancedRewards = 0; }
-            if (balancedRewards >= 3) return;
-            balancedRewards++;
-            ZhaoliKarmaUtility.AddKarma(Pawn, 1f);
-            ZhaoliShieldLayerUtility.AddLayers(Pawn, 1);
-        }
+        // Tier two uses the same link-sacrifice rules as the original character.
+        public bool TryUseBalancedSubstitute() => !ZhaoliPowerBalance.Sealed;
 
         public HediffCompProperties_ZhaoliKarmaLinks PropsLinks => (HediffCompProperties_ZhaoliKarmaLinks)props;
 
@@ -66,9 +45,6 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompExposeData()
         {
-            Scribe_Values.Look(ref nextBalancedSubstituteTick, "power_nextSubstitute", 0);
-            Scribe_Values.Look(ref balancedRewardWindow, "power_rewardWindow", 0);
-            Scribe_Values.Look(ref balancedRewards, "power_rewards", 0);
             Scribe_Collections.Look(ref linkedPawns, "linkedPawns", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -81,7 +57,7 @@ namespace MiliraXian.Characters.Zhaoli
             if (balanceRevision != ZhaoliPowerBalance.Profile.Revision)
             {
                 balanceRevision = ZhaoliPowerBalance.Profile.Revision;
-                if (!ZhaoliPowerBalance.IsOriginal)
+                if (ZhaoliPowerBalance.Sealed)
                 {
                     // Expire surplus old links on the setting change only, never scan the map each tick.
                     while (linkedPawns.Count > PropsLinks.maxLinks)

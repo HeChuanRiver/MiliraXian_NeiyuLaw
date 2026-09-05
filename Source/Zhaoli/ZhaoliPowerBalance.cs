@@ -18,59 +18,62 @@ namespace MiliraXian.Characters.Zhaoli
         {
             var p = Profile;
             p.LibraryPassives("MiliraXian_Zhaoli");
-            p.Weapon("MX_Zhaoli_DuanzhanBlade", 24f, .30f, 2.2f, 16f);
-            p.Armor("MX_ZhaoliNormal", .85f, .4f, .5f);
-            p.Armor("MX_ZhaoliHood", .4f, .3f, .3f);
+            p.Weapon("MX_Zhaoli_DuanzhanBlade", 16f, 2.5f);
+            p.Armor("MX_ZhaoliNormal");
+            p.Armor("MX_ZhaoliHood");
             var clothes = Thing("MX_ZhaoliNormal");
-            p.Stat(clothes, "CarryingCapacity", 12f, 0f, true);
-            p.Stat(clothes, "MeleeDodgeChance", .06f, 0f, true);
-            p.Stat(clothes, "MoveSpeed", .15f, 0f, true);
-            p.Stat(Thing("MX_ZhaoliHood"), "MentalBreakThreshold", -.05f, 0f, true);
+            p.ScaleStat(clothes, "CarryingCapacity", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(clothes, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(clothes, "MoveSpeed", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(Thing("MX_ZhaoliHood"), "MentalBreakThreshold", ConservativePowerTuning.Bonus, 0f, true);
 
             p.Ability("MX_Zhaoli_Duanzhan", 12000, 5f);
             var slash = AbilityComp<CompProperties_AbilityDuanzhan>("MX_Zhaoli_Duanzhan");
-            p.Field(slash, "damageAmount", 26f, 0f);
-            p.Field(slash, "lineDamageMultiplier", 1.15f, 1f);
-            p.Field(slash, "armorPenetration", .3f, 0f);
-            p.Field(slash, "impactRadius", 3f, 0f);
-            p.Field(slash, "lineLengthCells", 5f, 0f);
+            p.ScaleField(slash, "damageAmount", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(slash, "lineDamageMultiplier", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(slash, "armorPenetration", ConservativePowerTuning.Defense, 0f);
+            p.KeepField(slash, "impactRadius", 0f);
+            p.KeepField(slash, "lineLengthCells", 0f);
 
             p.Ability("MX_Zhaoli_DeathField", 18000, 24f);
-            p.Field(AbilityComp<CompProperties_AbilityZhaoliDeathField>("MX_Zhaoli_DeathField"), "radius", 4.9f, 0f);
+            p.KeepField(AbilityComp<CompProperties_AbilityZhaoliDeathField>("MX_Zhaoli_DeathField"), "radius", 0f);
             var field = HediffComp<HediffCompProperties_ZhaoliDeathField>("MXZL_ZhaoliDeathFieldActive");
-            p.Field(field, "radius", 4.9f, 0f);
-            // Disappears ticks before the field comp; keep the ninth pulse even on a 60-tick boundary.
-            p.Field(field, "fieldDurationTicks", 541, 0);
-            p.Field(HediffComp<HediffCompProperties_ZhaoliDeathSentence>("MX_AbnormalDeathSentence"), "cutSeverity", 1f, 0f);
+            p.KeepField(field, "radius", 0f);
+            // Preserve the complete field, sentence and link cycles; only scale damage/cost.
+            p.KeepField(field, "fieldDurationTicks", 0);
+            p.ScaleField(HediffComp<HediffCompProperties_ZhaoliDeathSentence>("MX_AbnormalDeathSentence"), "cutSeverity", ConservativePowerTuning.Damage, 0f);
 
             p.Ability("MX_Zhaoli_Guiyi", 15000, 20f);
-            p.Field(AbilityComp<CompProperties_AbilityZhaoliGuiyi>("MX_Zhaoli_Guiyi"), "karmaCost", 2f, 2f);
+            p.ScaleField(AbilityComp<CompProperties_AbilityZhaoliGuiyi>("MX_Zhaoli_Guiyi"), "karmaCost", ConservativePowerTuning.Cooldown, 2f);
             p.Ability("MX_Zhaoli_Dingshu", 180000, 15f);
             var revive = AbilityComp<CompProperties_AbilityZhaoliDingshu>("MX_Zhaoli_Dingshu");
-            p.Field(revive, "karmaCost", 8f, 8f);
-            p.Field(revive, "channelDurationTicks", 5000, 5000);
+            p.ScaleField(revive, "karmaCost", ConservativePowerTuning.Cooldown, 8f);
+            p.ScaleField(revive, "channelDurationTicks", ConservativePowerTuning.Cooldown, 5000);
             var links = HediffComp<HediffCompProperties_ZhaoliKarmaLinks>("MXZL_ZhaoliKarma");
-            p.Field(links, "maxLinks", 3, 0);
-            p.Field(links, "linkDurationTicks", 300000, 300000);
+            p.KeepField(links, "maxLinks", 0);
+            p.KeepField(links, "linkDurationTicks", 300000);
 
             p.Ability("MX_Zhaoli_Minghuo", 30000, 1.9f);
-            p.Field(AbilityComp<CompProperties_AbilityZhaoliMinghuo>("MX_Zhaoli_Minghuo"), "durationTicks", 5000, 0);
+            p.KeepField(AbilityComp<CompProperties_AbilityZhaoliMinghuo>("MX_Zhaoli_Minghuo"), "durationTicks", 0);
             var flame = HediffComp<HediffCompProperties_ZhaoliMinghuo>("MXZL_ZhaoliMinghuo");
-            p.Field(flame, "damageMultiplier", 1.10f, 1f);
-            p.Field(flame, "armorPenetrationMultiplier", 1.10f, 1f);
-            p.Field(flame, "hitChanceMultiplier", 1.05f, 1f);
-            p.Field(flame, "attackSpeedMultiplier", 1.08f, 1f);
-            p.Field(flame, "rangeOffset", .5f, 0f);
-            p.Field(flame, "fireDamageFactor", .10f, 0f);
+            p.ScaleField(flame, "damageMultiplier", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(flame, "armorPenetrationMultiplier", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(flame, "hitChanceMultiplier", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(flame, "attackSpeedMultiplier", ConservativePowerTuning.Bonus, 1f, 1f);
+            p.ScaleField(flame, "rangeOffset", ConservativePowerTuning.Bonus, 0f);
+            p.ScaleField(flame, "fireDamageFactor", ConservativePowerTuning.Damage, 0f);
 
             p.Ability("MX_Zhaoli_Minshen", 18000, 24f);
             var mind = AbilityComp<CompProperties_AbilityZhaoliMinshen>("MX_Zhaoli_Minshen");
-            p.Field(mind, "areaWidth", 7, 0);
-            p.Field(mind, "areaHeight", 7, 0);
-            p.Field(mind, "dazeChance", .08f, 0f);
-            p.Field(mind, "mentalStateDurationTicks", 360, 0);
-            p.Field(mind, "empDamage", 10f, 0f);
-            p.Field(Hediff("MXZL_ZhaoliMinshenSlow").stages[0].statFactors[0], "value", .65f, 1f);
+            p.KeepField(mind, "areaWidth", 0);
+            p.KeepField(mind, "areaHeight", 0);
+            p.ScaleField(mind, "dazeChance", ConservativePowerTuning.Bonus, 0f);
+            p.KeepField(mind, "mentalStateDurationTicks", 0);
+            p.ScaleField(mind, "empDamage", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(Hediff("MXZL_ZhaoliMinshenSlow").stages[0].statFactors[0], "value", ConservativePowerTuning.Bonus, 1f, 1f);
+
+            var mindDamage = HediffComp<HediffCompProperties_ZhaoliMinshenDamage>("MXZL_ZhaoliMinshenDamage");
+            p.ScaleField(mindDamage, "damagePerTick", ConservativePowerTuning.Damage, mindDamage.damagePerTick);
 
             foreach (string name in new[] { "Duanzhan", "DeathField", "Guiyi", "Dingshu", "Minghuo", "Minshen" })
                 p.Description(AbilityDef("MX_Zhaoli_" + name), "MX_Power_Zhaoli_" + name);
@@ -88,7 +91,7 @@ namespace MiliraXian.Characters.Zhaoli
             p.Apply();
         }
 
-        public static float GrowthFactor(float original) => IsOriginal ? original : Sealed ? 1f : Mathf.Lerp(1f, original, .25f);
+        public static float GrowthFactor(float original) => IsOriginal ? original : Sealed ? 1f : original == 0f ? 0f : Mathf.Lerp(1f, original, ConservativePowerTuning.Bonus);
     }
 
     public abstract class CompAbilityEffect_ZhaoliPowerLimited : CompAbilityEffect_CharacterPowerLimited

@@ -143,7 +143,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             if (MingyuanPowerBalance.Sealed) return;
-            if (MingyuanPowerBalance.IsBalanced) remainingBounces = Mathf.Min(remainingBounces, 1);
             ApplyExtraLifeBurn(hitPawn, launcherThing as Pawn);
             if (remainingBounces <= 0)
             {
@@ -188,7 +187,7 @@ namespace MiliraXian.Characters.Mingyuan
         private void ApplyExtraLifeBurn(Pawn pawn, Pawn instigator)
         {
             MingyuanRainbowArrowExtension ext = Ext;
-            float layers = MingyuanPowerBalance.IsOriginal ? (ext?.lifeBurnLayers ?? 300f) : 5f;
+            float layers = (ext?.lifeBurnLayers ?? 300f) * (MingyuanPowerBalance.IsBalanced ? .9f : 1f);
             if (pawn == null || pawn.Dead || layers <= 0f)
             {
                 return;

@@ -219,7 +219,8 @@ namespace MiliraXian.Characters.Mingyuan
                 parent.HitPoints.ToStringCached(),
                 CurrentCoreCapacity.ToStringCached(),
                 remainingSeconds.ToString(),
-                ControlStateLabel()).ToString();
+                ControlStateLabel(),
+                (PropsTornado.buildingDamageFraction * 100f).ToString("0.##")).ToString();
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -388,7 +389,6 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void HandlePawn(Pawn pawn, float radius)
         {
-            if (!MingyuanPowerBalance.IsOriginal && !GenSight.LineOfSight(parent.Position, pawn.Position, parent.Map)) return;
             float edgeFactor = Mathf.Clamp01((pawn.Position - parent.Position).LengthHorizontal / Mathf.Max(0.1f, radius));
             float burnDamage = Mathf.Lerp(PropsTornado.centerBurnDamage, PropsTornado.edgeBurnDamage, edgeFactor);
             float cutDamage = Mathf.Lerp(PropsTornado.centerCutDamage, PropsTornado.edgeCutDamage, edgeFactor);
@@ -406,7 +406,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             float desiredDamage = Mathf.Max(1f, Mathf.Ceil(building.MaxHitPoints * Mathf.Clamp01(PropsTornado.buildingDamageFraction)));
-            if (!MingyuanPowerBalance.IsOriginal) desiredDamage = Mathf.Min(desiredDamage, 6f);
             MingyuanUtility.ApplyTrueDamage(building, DamageDefOf.Burn, AdjustBurnDamageForBuilding(building, desiredDamage), caster, scaleWithSelfBurn: false);
         }
 
@@ -753,7 +752,6 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (!MingyuanPowerBalance.IsOriginal && !GenSight.LineOfSight(CenterCell, pawn.Position, parent.Map)) return;
             float selfBurn = PropsField.scalesWithSelfBurn ? MingyuanUtility.GetSelfBurnEffectiveLayers(caster) : 0f;
             float damage = PropsField.damageAmount;
             float layers = PropsField.lifeBurnLayers + (selfBurn / 100f) * PropsField.selfBurnLifeBurnPer100;
@@ -780,8 +778,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (MingyuanPowerBalance.IsOriginal) MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
-            else if (!MingyuanPowerBalance.Sealed) CharacterPowerProfile.HealOrdinaryInjuries(caster, Mathf.Max(0f, PropsField.selfHealAmount));
+            if (!MingyuanPowerBalance.Sealed) MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
         }
     }
 }

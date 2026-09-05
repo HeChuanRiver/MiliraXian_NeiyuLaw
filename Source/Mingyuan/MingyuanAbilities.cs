@@ -220,7 +220,7 @@ namespace MiliraXian.Characters.Mingyuan
                 if (!pawn.Dead && pawn.Spawned)
                 {
                     pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
-                    KnockbackPawn(caster, pawn, map, MingyuanPowerBalance.IsOriginal ? 3 : 1);
+                    KnockbackPawn(caster, pawn, map, MingyuanPowerBalance.Sealed ? 1 : 3);
                 }
             }
 
@@ -528,10 +528,9 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                if (!MingyuanPowerBalance.IsOriginal && !GenSight.LineOfSight(caster.Position, pawn.Position, caster.Map)) continue;
                 DamageBrainAndEyes(pawn, caster);
                 float currentLayers = MingyuanUtility.GetLifeBurnLayers(pawn);
-                float layersToAdd = MingyuanPowerBalance.IsOriginal ? Mathf.Max(Props.minimumLifeBurnLayers, currentLayers) : Mathf.Max(10f, Mathf.Min(25f, currentLayers * .5f));
+                float layersToAdd = Mathf.Max(Props.minimumLifeBurnLayers, currentLayers);
                 if (layersToAdd > 0f)
                 {
                     MingyuanUtility.AddLifeBurn(pawn, caster, layersToAdd);
@@ -590,11 +589,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void DamageBrainAndEyes(Pawn pawn, Pawn caster)
         {
-            if (!MingyuanPowerBalance.IsOriginal)
-            {
-                MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.partDamage, caster);
-                return;
-            }
+            if (MingyuanPowerBalance.Sealed) return;
             BodyPartRecord brain = pawn.health.hediffSet.GetBrain();
             if (brain != null)
             {

@@ -117,8 +117,6 @@ namespace MiliraXian.Characters.Mingyuan
         public static bool TryScheduleRebirth(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return false;
-            // Check before detaching the corpse, otherwise a revival lock would strand this pawn.
-            if (MingyuanPowerBalance.IsBalanced && Zhaoli.ZhaoliDingshuUtility.HasDeadRevivalLock(pawn)) return false;
             if (pawn == null || pawn.Discarded || !pawn.Dead || !MingyuanUtility.IsMingyuan(pawn))
             {
                 return false;
@@ -140,31 +138,21 @@ namespace MiliraXian.Characters.Mingyuan
             DoRebirthExplosion(pawn, map, cell);
             PreparePawnForPendingRebirth(pawn);
             Thing marker = SpawnRebirthMarker(map, cell);
-            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + (MingyuanPowerBalance.IsBalanced ? 60000 : EternalBurningTicks), marker);
+            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + (MingyuanPowerBalance.IsBalanced ? 2160 : EternalBurningTicks), marker);
             return true;
         }
 
         private static void DoRebirthExplosion(Pawn pawn, Map map, IntVec3 cell)
         {
-            if (!MingyuanPowerBalance.IsOriginal)
-            {
-                if (MingyuanPowerBalance.Sealed) return;
-                FleckMaker.Static(cell, map, FleckDefOf.ExplosionFlash, 2.4f);
-                foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 2.4f, true))
-                {
-                    if (thing is Pawn enemy && !enemy.Dead && enemy.HostileTo(pawn))
-                        MingyuanUtility.ApplyTrueDamage(enemy, DamageDefOf.Burn, 12f, pawn);
-                }
-                return;
-            }
-            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, 999, 999f);
+            if (MingyuanPowerBalance.Sealed) return;
+            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, MingyuanPowerBalance.IsBalanced ? 849 : 999, 999f);
 
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 8f, true))
             {
                 Pawn target = thing as Pawn;
                 if (target != null && target != pawn && !target.Dead && target.HostileTo(pawn))
                 {
-                    target.stances?.stunner?.StunFor(600, pawn, false, true, false);
+                    target.stances?.stunner?.StunFor(MingyuanPowerBalance.IsBalanced ? 510 : 600, pawn, false, true, false);
                 }
             }
         }
@@ -330,7 +318,12 @@ namespace MiliraXian.Characters.Mingyuan
                     if (pending != null && !pending.reducedDelay && !MingyuanPowerBalance.IsOriginal)
                     {
                         pending.reducedDelay = true;
-                        pending.rebirthTick = Mathf.Max(pending.rebirthTick, tick + 60000);
+                        pending.rebirthTick = Mathf.Max(pending.rebirthTick, tick + (MingyuanPowerBalance.Sealed ? 60000 : 2160));
+                    }
+                    else if (pending != null && pending.reducedDelay && MingyuanPowerBalance.IsBalanced)
+                    {
+                        // Old tier-two saves used a full-day delay; migrate only that pending return.
+                        pending.rebirthTick = Mathf.Min(pending.rebirthTick, tick + 2160);
                     }
                 }
                 RecalculateNextProcessTick();
