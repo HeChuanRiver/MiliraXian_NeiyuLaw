@@ -116,6 +116,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool TryScheduleRebirth(Pawn pawn)
         {
+            if (MingyuanPowerBalance.Sealed) return false;
             if (pawn == null || pawn.Discarded || !pawn.Dead || !MingyuanUtility.IsMingyuan(pawn))
             {
                 return false;
@@ -137,20 +138,21 @@ namespace MiliraXian.Characters.Mingyuan
             DoRebirthExplosion(pawn, map, cell);
             PreparePawnForPendingRebirth(pawn);
             Thing marker = SpawnRebirthMarker(map, cell);
-            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + EternalBurningTicks, marker);
+            component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + (MingyuanPowerBalance.IsBalanced ? 2160 : EternalBurningTicks), marker);
             return true;
         }
 
         private static void DoRebirthExplosion(Pawn pawn, Map map, IntVec3 cell)
         {
-            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, 999, 999f);
+            if (MingyuanPowerBalance.Sealed) return;
+            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, MingyuanPowerBalance.IsBalanced ? 849 : 999, 999f);
 
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 8f, true))
             {
                 Pawn target = thing as Pawn;
                 if (target != null && target != pawn && !target.Dead && target.HostileTo(pawn))
                 {
-                    target.stances?.stunner?.StunFor(600, pawn, false, true, false);
+                    target.stances?.stunner?.StunFor(MingyuanPowerBalance.IsBalanced ? 510 : 600, pawn, false, true, false);
                 }
             }
         }
@@ -238,6 +240,7 @@ namespace MiliraXian.Characters.Mingyuan
         public IntVec3 cell;
         public int rebirthTick;
         public Thing marker;
+        public bool reducedDelay;
 
         public MingyuanPendingRebirth()
         {
@@ -250,6 +253,7 @@ namespace MiliraXian.Characters.Mingyuan
             this.cell = cell;
             this.rebirthTick = rebirthTick;
             this.marker = marker;
+            reducedDelay = !MingyuanPowerBalance.IsOriginal;
         }
 
         public void ExposeData()
@@ -259,6 +263,7 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref cell, "cell");
             Scribe_Values.Look(ref rebirthTick, "rebirthTick", 0);
             Scribe_References.Look(ref marker, "marker");
+            Scribe_Values.Look(ref reducedDelay, "power_reducedDelay", false);
         }
     }
 
@@ -266,6 +271,7 @@ namespace MiliraXian.Characters.Mingyuan
     {
         private List<MingyuanPendingRebirth> pendingRebirths = new();
         private int nextProcessTick = int.MaxValue;
+        private int balanceRevision = -1;
 
         public GameComponent_MingyuanRebirth(Game game)
         {
@@ -304,6 +310,24 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int tick = Find.TickManager.TicksGame;
+            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
+            {
+                balanceRevision = MingyuanPowerBalance.Profile.Revision;
+                foreach (var pending in pendingRebirths)
+                {
+                    if (pending != null && !pending.reducedDelay && !MingyuanPowerBalance.IsOriginal)
+                    {
+                        pending.reducedDelay = true;
+                        pending.rebirthTick = Mathf.Max(pending.rebirthTick, tick + (MingyuanPowerBalance.Sealed ? 60000 : 2160));
+                    }
+                    else if (pending != null && pending.reducedDelay && MingyuanPowerBalance.IsBalanced)
+                    {
+                        // Old tier-two saves used a full-day delay; migrate only that pending return.
+                        pending.rebirthTick = Mathf.Min(pending.rebirthTick, tick + 2160);
+                    }
+                }
+                RecalculateNextProcessTick();
+            }
             if (tick < nextProcessTick)
             {
                 return;

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_CinderSword.label>Cinder Ash</MX_Mingyuan_CinderSword.label>
-  <MX_Mingyuan_CinderSword.description>Mingyuan's pale cinder blade. It strikes for 44 cut damage with 150% armor penetration, attacks twice in roughly 3 seconds through a 0.5 melee cooldown multiplier, and Mingyuan's flame adds Life Burn on each hit.</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.description>Mingyuan's cinder blade, filled with searing scarlet flame. It has 44 base cut damage, 150% armor penetration and a 0.5 melee cooldown multiplier. Mingyuan's flame applies Life Burn on hit.</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>Cinder Ash</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>Long Rainbow</MX_Mingyuan_RainbowBow.label>
   <MX_Mingyuan_RainbowBow.description>Mingyuan's pale-gold and scarlet longbow can switch between Focus and Radiation forms. Focus charges for exactly 5 seconds, then instantly bursts one visible enemy's Life Burn without ordinary weapon damage. Radiation fires at most once per second and pierces every legal enemy in a 10-cell, 108-degree sector, dealing 1 burn damage and adding 23% of each target's own burst threshold.</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>Long Rainbow Arrow</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>burning pillar core</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>ashes of self field</MX_Mingyuan_AshesField.label>
-  <MX_Mingyuan_InfernoArmor.label>Molten Inferno Armor</MX_Mingyuan_InfernoArmor.label>
-  <MX_Mingyuan_InfernoArmor.description>Armor cooled from Mingyuan's pale inferno. It covers the body and wings, resists all common damage types, grants extreme heat insulation, adds carrying capacity, improves movement and dodge, and reduces incoming damage while remaining unbreakable.</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_InfernoArmor.label>Rosy Flamefeather Raiment</MX_Mingyuan_InfernoArmor.label>
+  <MX_Mingyuan_InfernoArmor.description>Mingyuan's raiment, woven from pale extradimensional flame and burning feathers, with gold and scarlet light flowing through its rosy plumes. Though seemingly delicate, it protects her body and wings, resists common damage, provides extreme insulation, carrying capacity, movement and dodge, halves incoming damage, and never breaks.</MX_Mingyuan_InfernoArmor.description>
   <MX_Mingyuan_BurningFeatherCrown.label>Turbid Burning Feather Crown</MX_Mingyuan_BurningFeatherCrown.label>
   <MX_Mingyuan_BurningFeatherCrown.description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and turns part of incoming harm aside.</MX_Mingyuan_BurningFeatherCrown.description>
 </LanguageData>

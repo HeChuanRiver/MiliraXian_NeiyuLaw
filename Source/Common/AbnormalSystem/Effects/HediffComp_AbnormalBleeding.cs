@@ -7,7 +7,13 @@ namespace MiliraXian.Characters
     {
         public int woundCount = 2;
         public float woundSeverity = 3f;
-        public ThingDef bloodFilthDef = ThingDefOf.Filth_Blood;
+        public ThingDef bloodFilthDef;
+
+        public override void ResolveReferences(HediffDef parentDef)
+        {
+            base.ResolveReferences(parentDef);
+            bloodFilthDef = bloodFilthDef ?? DefDatabase<ThingDef>.GetNamedSilentFail("Filth_Blood");
+        }
         public int bloodFilthCount = 3;
 
         public HediffCompProperties_AbnormalBleeding()

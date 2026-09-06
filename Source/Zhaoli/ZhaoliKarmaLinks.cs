@@ -21,6 +21,10 @@ namespace MiliraXian.Characters.Zhaoli
     public class HediffComp_ZhaoliKarmaLinks : HediffComp
     {
         private List<Pawn> linkedPawns = new();
+        private int balanceRevision = -1;
+
+        // Tier two uses the same link-sacrifice rules as the original character.
+        public bool TryUseBalancedSubstitute() => !ZhaoliPowerBalance.Sealed;
 
         public HediffCompProperties_ZhaoliKarmaLinks PropsLinks => (HediffCompProperties_ZhaoliKarmaLinks)props;
 
@@ -50,6 +54,28 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompPostTick(ref float severityAdjustment)
         {
+            if (balanceRevision != ZhaoliPowerBalance.Profile.Revision)
+            {
+                balanceRevision = ZhaoliPowerBalance.Profile.Revision;
+                if (ZhaoliPowerBalance.Sealed)
+                {
+                    // Expire surplus old links on the setting change only, never scan the map each tick.
+                    while (linkedPawns.Count > PropsLinks.maxLinks)
+                    {
+                        Pawn target = linkedPawns[linkedPawns.Count - 1];
+                        if (target == null) linkedPawns.RemoveAt(linkedPawns.Count - 1);
+                        else BreakLink(target);
+                    }
+                    foreach (Pawn target in linkedPawns)
+                    {
+                        var duration = target?.health?.hediffSet?.GetFirstHediffOfDef(
+                            DefDatabase<HediffDef>.GetNamed(ZhaoliKarmaUtility.LinkTargetHediffDefName))?.TryGetComp<HediffComp_Disappears>();
+                        if (duration != null && duration.ticksToDisappear > PropsLinks.linkDurationTicks)
+                            duration.SetDuration(PropsLinks.linkDurationTicks);
+                    }
+                }
+            }
+            if (ZhaoliPowerBalance.Sealed) return;
             if (Pawn != null && Pawn.IsHashIntervalTick(250))
             {
                 CleanupInvalidLinks();
@@ -64,6 +90,7 @@ namespace MiliraXian.Characters.Zhaoli
         public bool CanLinkTarget(Pawn target, out string failureReason)
         {
             failureReason = null;
+            if (ZhaoliPowerBalance.Sealed) { failureReason = "MX_Power_AbilitiesSealed".Translate(); return false; }
             CleanupInvalidLinks();
             if (target == null || target.Dead || target.Destroyed)
             {
@@ -189,6 +216,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public Pawn GetRandomLiveLinkedPawn()
         {
+            if (ZhaoliPowerBalance.Sealed) return null;
             List<Pawn> liveLinkedPawns = new();
             CleanupInvalidLinks();
             for (int i = 0; i < linkedPawns.Count; i++)
@@ -592,6 +620,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static void ProcessPendingResurrection(Pawn pawn)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             if (pawn == null || pawn.Discarded || !pawn.Dead)
             {
                 return;
@@ -604,6 +633,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
+            if (!linkComp.TryUseBalancedSubstitute()) return;
             linkComp.BreakLink(sacrificePawn);
             sacrificePawn.Kill(null);
 
@@ -650,6 +680,8 @@ namespace MiliraXian.Characters.Zhaoli
                 pendingSubstitutePawns.Remove(__instance);
                 return;
             }
+
+            if (!linkComp.TryUseBalancedSubstitute()) return;
 
             pendingSubstitutePawns[__instance] = sacrificePawn;
         }

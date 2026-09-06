@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using MiliraXian.Characters.Mingyuan;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -142,8 +143,8 @@ namespace MiliraXian.Characters.Neiyu
                     "MiliraXian_Mingyuan",
                     new MiliraXianCharacterWingEntry(
                         "MiliraXian_Mingyuan",
-                        "MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu",
-                        "MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu",
+                        "MiliraXianMingyuan/PawnMingyuan/LeftWingNew_Mingyuan",
+                        "MiliraXianMingyuan/PawnMingyuan/RightWingNew_Mingyuan",
                         "Milira_FlyNorth_Mingyuan",
                         "Milira_FlyEast_Mingyuan",
                         "Milira_FlySouth_Mingyuan",
@@ -194,7 +195,14 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            string defName = (facingOverride ?? pawn.Rotation).AsInt switch
+            Rot4 facing = facingOverride ?? pawn.Rotation;
+            if (entry.PawnKindDefName == "MiliraXian_Mingyuan"
+                && MingyuanWingUnityAnimationRuntime.TryGetFlyAnimation(pawn, facing, out animationDef))
+            {
+                return true;
+            }
+
+            string defName = facing.AsInt switch
             {
                 0 => entry.FlyNorthDefName,
                 1 => entry.FlyEastDefName,

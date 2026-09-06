@@ -31,8 +31,39 @@ namespace MiliraXian.Characters.Neiyu
             get { return (CompProperties_AbilityNeiyuThunderSigil)props; }
         }
 
+        public override bool GizmoDisabled(out string reason)
+        {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
+            reason = null;
+            return false;
+        }
+
+        public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
+        {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message(NeiyuPowerBalance.AbilitiesDisabledReason, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+
+            return base.Valid(target, throwMessages);
+        }
+
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -109,6 +140,12 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
             if (!HasRequiredWeapon(parent != null ? parent.pawn : null))
             {
                 reason = "MX_NL_NeedBowForm".Translate().ToString();
@@ -127,6 +164,15 @@ namespace MiliraXian.Characters.Neiyu
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message(NeiyuPowerBalance.AbilitiesDisabledReason, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+
             Pawn caster = parent != null ? parent.pawn : null;
             if (!HasRequiredWeapon(caster))
             {
@@ -151,6 +197,11 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -359,6 +410,12 @@ namespace MiliraXian.Characters.Neiyu
         {
             base.MapComponentTick();
 
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                CancelPendingAbilities();
+                return;
+            }
+
             if (!thunderTasks.NullOrEmpty())
             {
                 for (int i = thunderTasks.Count - 1; i >= 0; i--)
@@ -395,6 +452,10 @@ namespace MiliraXian.Characters.Neiyu
             {
                 return true;
             }
+
+            task.remainingStrikes = Mathf.Min(task.remainingStrikes, NeiyuPowerBalance.ThunderStrikeCap);
+            task.damageAmount = Mathf.Min(task.damageAmount, NeiyuPowerBalance.ThunderDamageCap);
+            task.empDamageAmount = Mathf.Min(task.empDamageAmount, NeiyuPowerBalance.ThunderEmpDamageCap);
 
             IntVec3 strikeCell = task.target.Position;
             PlayLightningVisual(strikeCell);
@@ -450,6 +511,8 @@ namespace MiliraXian.Characters.Neiyu
                 return true;
             }
 
+            task.remainingShots = Mathf.Min(task.remainingShots, NeiyuPowerBalance.BarrageShotCap);
+
             LaunchBarrageProjectile(task);
 
             task.firedShots++;
@@ -461,6 +524,27 @@ namespace MiliraXian.Characters.Neiyu
 
             task.nextShotTick = now + task.shotIntervalTicks;
             return true;
+        }
+
+        private void CancelPendingAbilities()
+        {
+            if (!thunderTasks.NullOrEmpty())
+            {
+                for (int index = 0; index < thunderTasks.Count; index++)
+                {
+                    ThunderTask task = thunderTasks[index];
+                    if (task != null)
+                    {
+                        TryRemoveMarker(task.target, task.markerHediff);
+                    }
+                }
+                thunderTasks.Clear();
+            }
+
+            if (!barrageTasks.NullOrEmpty())
+            {
+                barrageTasks.Clear();
+            }
         }
 
         private void LaunchBarrageProjectile(BarrageTask task)

@@ -35,8 +35,39 @@ namespace MiliraXian.Characters.Neiyu
             base.CompTick();
         }
 
+        public override bool GizmoDisabled(out string reason)
+        {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                reason = NeiyuPowerBalance.AbilitiesDisabledReason;
+                return true;
+            }
+
+            reason = null;
+            return false;
+        }
+
+        public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
+        {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                if (throwMessages)
+                {
+                    Messages.Message(NeiyuPowerBalance.AbilitiesDisabledReason, MessageTypeDefOf.RejectInput, false);
+                }
+                return false;
+            }
+
+            return base.Valid(target, throwMessages);
+        }
+
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (NeiyuPowerBalance.AbilitiesDisabled)
+            {
+                return;
+            }
+
             base.Apply(target, dest);
 
             Pawn caster = parent != null ? parent.pawn : null;
@@ -46,7 +77,12 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            FleckDef flashDef = ResolveFinishFlashFleckDef();
+            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayAttached(
+                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+                caster,
+                1f,
+                66);
+            FleckDef flashDef = usingUnityVfx ? null : ResolveFinishFlashFleckDef();
             if (flashDef != null)
             {
                 FleckMaker.Static(caster.Position, map, flashDef, 1f);

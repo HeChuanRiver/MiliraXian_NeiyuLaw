@@ -16,12 +16,13 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect_ZhaoliPowerLimited
     {
         private new CompProperties_AbilityZhaoliGuiyi Props => (CompProperties_AbilityZhaoliGuiyi)props;
 
         public override bool GizmoDisabled(out string reason)
         {
+            if (base.GizmoDisabled(out reason)) return true;
             ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
             reason = null;
             return false;
@@ -73,6 +74,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;

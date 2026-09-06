@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public CompProperties_MingyuanRainbowBow PropsBow => (CompProperties_MingyuanRainbowBow)props;
 
-        public MingyuanBowMode Mode => mode;
+        public MingyuanBowMode Mode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : mode;
 
         public override void PostExposeData()
         {
@@ -78,6 +78,7 @@ namespace MiliraXian.Characters.Mingyuan
                 yield return gizmo;
             }
 
+            if (MingyuanPowerBalance.Sealed) yield break;
             Pawn holder = Holder;
             if (holder == null || holder.Faction != Faction.OfPlayer)
             {
@@ -92,7 +93,10 @@ namespace MiliraXian.Characters.Mingyuan
             Command_Action command = new()
             {
                 defaultLabel = "MX_Mingyuan_Bow_ModeCommand".Translate(ModeLabel(mode)).ToString(),
-                defaultDesc = "MX_Mingyuan_Bow_ModeDesc".Translate(ModeLabel(mode), ModeLabel(nextMode)).ToString(),
+                defaultDesc = "MX_Mingyuan_Bow_ModeDesc".Translate(
+                    ModeLabel(mode), ModeLabel(nextMode), PropsBow.focusWarmupSeconds.ToString("0.##"),
+                    PropsBow.radiationRange.ToString("0.##"), PropsBow.radiationArcDegrees.ToString("0.##"),
+                    (PropsBow.radiationMinIntervalTicks / 60f).ToString("0.##")).ToString(),
                 icon = ModeIcon ?? TexCommand.Attack,
                 Disabled = busy,
                 disabledReason = busy ? "MX_Mingyuan_Bow_ModeBusy".Translate().ToString() : null,
@@ -167,7 +171,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private CompProperties_MingyuanRainbowBow PropsBow => BowComp?.PropsBow;
 
-        private MingyuanBowMode ActiveMode => castModeLocked && (WarmingUp || Bursting)
+        private MingyuanBowMode ActiveMode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : castModeLocked && (WarmingUp || Bursting)
             ? modeAtCastStart
             : BowComp?.Mode ?? MingyuanBowMode.Focus;
 
@@ -185,6 +189,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
 
                 Map map = caster?.MapHeld;
+                if (MingyuanPowerBalance.Sealed) return PropsBow?.focusRange ?? 30.9f;
                 if (map == null)
                 {
                     return Mathf.Max(1f, PropsBow?.focusRange ?? 999f);
@@ -294,7 +299,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (modeAtCastStart == MingyuanBowMode.Focus && WarmupStance != null)
             {
-                WarmupStance.ticksLeft = 300;
+                WarmupStance.ticksLeft = MingyuanPowerBalance.IsOriginal ? 300 : Mathf.RoundToInt(WarmupTime * 60f);
             }
 
             Vector3 direction = castDirection;
@@ -395,7 +400,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         protected override bool TryCastShot()
         {
-            bool result = modeAtCastStart == MingyuanBowMode.Focus
+            bool result = (MingyuanPowerBalance.Sealed || modeAtCastStart == MingyuanBowMode.Focus)
                 ? TryCastFocusShot()
                 : TryCastRadiationShot();
             if (result)
@@ -430,9 +435,27 @@ namespace MiliraXian.Characters.Mingyuan
             Vector3 targetPosition = target.DrawPos;
             Vector3 direction = DirectionTo(target.Position);
             Vector3 emitter = MingyuanBowVisualDrawer.EmitterPosition(CasterPawn.DrawPos, direction);
-            if (!MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn))
+            if (!MingyuanPowerBalance.Sealed && !MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn))
             {
                 return false;
+            }
+
+            if (MingyuanPowerBalance.Sealed)
+            {
+                // Only tier three substitutes an ordinary low-power shot for the burst.
+                ShotReport report = ShotReport.HitReportFor(CasterPawn, this, target);
+                if (Rand.Chance(report.AimOnTargetChance_IgnoringPosture * report.PassCoverChance))
+                {
+                    float amount = 17f;
+                    bool suppression = MingyuanUtility.SuppressOnHitLifeBurn;
+                    try
+                    {
+                        MingyuanUtility.SuppressOnHitLifeBurn = true;
+                        target.TakeDamage(new DamageInfo(MingyuanPowerBalance.ArrowDamage, amount, .1f,
+                            -1f, CasterPawn, null, EquipmentSource?.def));
+                    }
+                    finally { MingyuanUtility.SuppressOnHitLifeBurn = suppression; }
+                }
             }
 
             if (PropsBow?.focusBeamFleck != null)
@@ -440,6 +463,8 @@ namespace MiliraXian.Characters.Mingyuan
                 FleckMaker.ConnectingLine(emitter, targetPosition, PropsBow.focusBeamFleck, map, 0.12f);
             }
 
+            // Visual flight only: focus damage has already resolved above.
+            SpawnVisual(MingyuanBowVisualKind.FocusShot, direction, 12, null, null, targetPosition);
             SpawnMoteAt(emitter, PropsBow?.focusMuzzleFlashMote, PropsBow?.focusMuzzleFlashScale ?? 0.24f);
             PlaySound(PropsBow?.focusFireSound);
             return true;
@@ -537,6 +562,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void ApplyRadiationHit(Pawn target)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             float threshold = MingyuanUtility.GetLifeBurnExecuteThreshold(target);
             int layers = Mathf.Max(1, Mathf.CeilToInt(threshold * Mathf.Max(0f, PropsBow.radiationLayerFraction)));
             MingyuanUtility.AddLifeBurn(target, CasterPawn, layers);
@@ -624,7 +650,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool IsValidFocusTarget(Pawn target)
         {
-            return IsHostileEnemy(target) && !MingyuanUtility.IsLifeBurnImmunePawn(target);
+            return IsHostileEnemy(target) && (MingyuanPowerBalance.Sealed || !MingyuanUtility.IsLifeBurnImmunePawn(target));
         }
 
         private bool IsHostileEnemy(Pawn target)
@@ -656,7 +682,8 @@ namespace MiliraXian.Characters.Mingyuan
             Vector3 direction,
             int durationTicks,
             Verb sourceVerb,
-            Pawn focusTarget)
+            Pawn focusTarget,
+            Vector3? shotEnd = null)
         {
             ThingDef visualDef = PropsBow?.visualControllerDef;
             Pawn source = CasterPawn;
@@ -683,6 +710,8 @@ namespace MiliraXian.Characters.Mingyuan
                 focusTarget,
                 PropsBow.focusTargetMote,
                 PropsBow.focusTargetMoteScale);
+            if (shotEnd.HasValue)
+                visual.SetShotPath(MingyuanBowVisualDrawer.EmitterPosition(source.DrawPos, direction), shotEnd.Value);
         }
 
         private void SpawnMoteAt(Vector3 position, ThingDef moteDef, float scale)
@@ -719,7 +748,8 @@ namespace MiliraXian.Characters.Mingyuan
     {
         FocusCharge,
         RadiationWarning,
-        RadiationBlast
+        RadiationBlast,
+        FocusShot
     }
 
     public class Thing_MingyuanBowVisual : Thing
@@ -736,6 +766,14 @@ namespace MiliraXian.Characters.Mingyuan
         private float range;
         private float arcDegrees;
         private Mote focusTargetMote;
+        private Vector3 shotStart;
+        private Vector3 shotEnd;
+
+        public void SetShotPath(Vector3 start, Vector3 end)
+        {
+            shotStart = start;
+            shotEnd = end;
+        }
 
         public override void ExposeData()
         {
@@ -751,6 +789,8 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref durationTicks, "durationTicks", 1);
             Scribe_Values.Look(ref range, "range", 1f);
             Scribe_Values.Look(ref arcDegrees, "arcDegrees", 108f);
+            Scribe_Values.Look(ref shotStart, "shotStart", Vector3.zero);
+            Scribe_Values.Look(ref shotEnd, "shotEnd", Vector3.zero);
         }
 
         public void Init(
@@ -870,6 +910,9 @@ namespace MiliraXian.Characters.Mingyuan
                 case MingyuanBowVisualKind.RadiationBlast:
                     MingyuanBowVisualDrawer.DrawSectorBlast(source.DrawPos, direction, range, arcDegrees, progress);
                     break;
+                case MingyuanBowVisualKind.FocusShot:
+                    MingyuanBowVisualDrawer.DrawFocusArrow(shotStart, shotEnd, progress);
+                    break;
             }
         }
     }
@@ -887,6 +930,18 @@ namespace MiliraXian.Characters.Mingyuan
         private static Material[] focusMaterials;
         private static Material[] flameMaterials;
         private static Material[] smokeMaterials;
+        private static readonly Material ArrowMaterial = MaterialPool.MatFrom(
+            "MiliraXianMingyuan/Projectile/RainbowArrow", ShaderDatabase.Cutout);
+
+        public static void DrawFocusArrow(Vector3 start, Vector3 end, float progress)
+        {
+            Vector3 direction = (end - start).Yto0();
+            if (direction.sqrMagnitude < 0.001f) return;
+            Vector3 position = Vector3.Lerp(start, end, progress);
+            position.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
+            Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(direction), new Vector3(1.8f, 1f, 1.8f));
+            Graphics.DrawMesh(MeshPool.plane10, matrix, ArrowMaterial, 0);
+        }
 
         public static Vector3 EmitterPosition(Vector3 pawnDrawPos, Vector3 direction)
         {

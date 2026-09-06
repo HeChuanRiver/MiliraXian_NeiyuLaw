@@ -38,6 +38,18 @@
   <MX_NL_SpecialPawnConsciousnessLock35Desc>特殊角色的意识最低保持为35%。</MX_NL_SpecialPawnConsciousnessLock35Desc>
   <MX_NL_SpecialPawnConsciousnessLockNoneLabel>不锁定</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>特殊角色的意识会按伤病、状态和其他 Mod 的效果正常变化。</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
+  <MX_NL_NeiyuPowerLevelLabel>霓羽强度档位（仅影响霓羽）</MX_NL_NeiyuPowerLevelLabel>
+  <MX_NL_NeiyuPowerLevelOriginalLabel>第一档：原始强度（默认）</MX_NL_NeiyuPowerLevelOriginalLabel>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>霓羽的完整技能、武器、护盾与穿戴加成，以及饥饿保护和意识保底。</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>第二档：适度强度</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>完整的武器形态、斩首、群体治疗与多阶段护盾，搭配适中的伤害、增益和技能冷却。</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeLabel>第三档：观赏模式</MX_NL_NeiyuPowerLevelDecorativeLabel>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>以陪伴、外观和剧情为主。主动技能、护盾、饥饿保护、意识保底与专属装备加成停用，装备提供基础战斗能力。</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuAbilitiesSealed>当前强度档位已封禁霓羽的主动技能。</MX_NL_NeiyuAbilitiesSealed>
+  <MX_NL_NeiyuAbilityBalancedNotice>技能效果见说明，属性与冷却见信息面板。</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>此技能当前无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
+  <MX_NL_NeiyuPassiveSealedDesc>当前为观赏模式，霓羽的护身被动不会生效。</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>需要装备花形态。</MX_NL_NeedFlowerForm>
   <MX_NL_NeedSwordForm>需要装备剑形态。</MX_NL_NeedSwordForm>
   <MX_NL_NeedBowForm>需要装备弓形态。</MX_NL_NeedBowForm>
@@ -51,7 +63,7 @@
   <MX_NL_TargetMustBeHostile>目标必须为敌对单位。</MX_NL_TargetMustBeHostile>
   <MX_NL_FlowerToxinMentalStateReason>霓羽的花瘴使其陷入狂乱。</MX_NL_FlowerToxinMentalStateReason>
   <MX_NL_RecruitLetterTitle>异界羽影</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>殖民地附近出现了一道稳定下来的羽状投影。来者自称霓羽，她并非本体，而是一位米莉拉在此界投下的一道轻快分影。与其说她像某种高高在上的神性残片，不如说更像一阵带着笑意闯进来的风。她表示自己可以留下，也可以就此散去。选择权在你。</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitLetterText>殖民地附近出现了一道羽状投影。来者自称霓羽，是一位米莉拉在此界的分影。她好奇地打量着四周，笑着询问能否在这里住下。若你愿意接纳她，她便留下；若不愿，她也可以自行散去。</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>接纳霓羽</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>暂不接纳</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>没有可用的玩家基地地图。</MX_NL_NoPlayerHomeMap>
@@ -82,7 +94,7 @@
   <MX_NL_ShieldTipCurrentTier>当前档位: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>当前增益:</MX_NL_ShieldTipCurrentBuffs>
   <MX_NL_ShieldTipWeakRemaining>虚弱剩余: {0}h</MX_NL_ShieldTipWeakRemaining>
-  <MX_NL_ShieldTipWeakPenalty>虚弱惩罚: 移速-50%，休息下降+50%，全局工作效率-80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldTipWeakPenalty>虚弱惩罚: 移速-{0}%，休息下降+{1}%，全局工作效率-{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>近战/远程伤害 +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>瞄准时间 {0}{1}%</MX_NL_ShieldBuffAimingTime>
   <MX_NL_ShieldBuffIncomingDamage>承伤系数 {0}{1}%</MX_NL_ShieldBuffIncomingDamage>

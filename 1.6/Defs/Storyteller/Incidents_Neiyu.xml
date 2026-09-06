@@ -12,7 +12,7 @@
     <questScriptDef>MXNL_NeiyuProjectionRecruitQuest</questScriptDef>
     <baseChance>1.0</baseChance>
     <letterLabel>异界羽影</letterLabel>
-    <letterText><![CDATA[殖民地附近出现了一道稳定下来的羽状投影。来者自称霓羽，她并非本体，而是一位米莉拉在此界投下的一道轻快分影。与其说她像某种高高在上的神性残片，不如说更像一阵带着笑意闯进来的风——好奇、活泼，而且显然并不打算装得很严肃。她表示自己可以留下，也可以就此散去。选择权在你。]]></letterText>
+    <letterText>殖民地附近出现了一道羽状投影。来者自称霓羽，是一位米莉拉在此界的分影。她好奇地打量着四周，笑着询问能否在这里住下。若你愿意接纳她，她便留下；若不愿，她也可以自行散去。</letterText>
   </IncidentDef>
 
 </Defs>

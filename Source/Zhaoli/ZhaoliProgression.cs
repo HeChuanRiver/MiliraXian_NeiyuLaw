@@ -72,6 +72,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static string BuildRaidBossSummary(int phase)
         {
+            if (ZhaoliPowerBalance.Sealed) return null;
             StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentPhaseBonuses".Translate().ToString());
             if (phase <= 0)
@@ -99,6 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static string BuildRecruitGrowthSummary(int deathCount)
         {
+            if (ZhaoliPowerBalance.Sealed) return null;
             StringBuilder stringBuilder = new();
             stringBuilder.Append("MX_ZL_CurrentGrowthBonuses".Translate().ToString());
             AppendOffsetLine(stringBuilder, CarryingCapacityStat, RecruitCarryOffset);
@@ -137,6 +139,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void ApplyStatModifiers(Pawn pawn, StatDef stat, ref float result)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             if (pawn == null || !IsAffectedStat(stat) || !ZhaoliKarmaUtility.IsZhaoli(pawn))
             {
                 return;
@@ -155,7 +158,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            float factor = GetRaidBossFactor(stat, phase);
+            float factor = ZhaoliPowerBalance.GrowthFactor(GetRaidBossFactor(stat, phase));
             if (Mathf.Abs(factor - 1f) > 0.0001f)
             {
                 result *= factor;
@@ -325,7 +328,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            float factor = GetRaidBossFactor(stat, phase);
+            float factor = ZhaoliPowerBalance.GrowthFactor(GetRaidBossFactor(stat, phase));
             if (Mathf.Abs(factor - 1f) < 0.0001f)
             {
                 return;
@@ -354,7 +357,7 @@ namespace MiliraXian.Characters.Zhaoli
         private static float RecruitGrowthFactor(float fullFactor, int deathCount)
         {
             float progress = Mathf.Clamp01(Mathf.Max(0, deathCount) * RecruitGrowthStepRatio);
-            return Mathf.Lerp(1f, fullFactor, progress);
+            return ZhaoliPowerBalance.GrowthFactor(Mathf.Lerp(1f, fullFactor, progress));
         }
 
         private static void AppendFactorLine(StringBuilder stringBuilder, string statDefName, float factor)

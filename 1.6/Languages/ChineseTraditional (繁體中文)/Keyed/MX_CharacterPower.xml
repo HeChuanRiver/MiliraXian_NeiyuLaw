@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Power_Zhaoli>昭離：強度設置</MX_Power_Zhaoli>
+  <MX_Power_Mingyuan>明淵：強度設置</MX_Power_Mingyuan>
+  <MX_Power_AbilitiesSealed>此技能當前無法施放。</MX_Power_AbilitiesSealed>
+  <MX_Power_SealedDescription>此技能當前無法施放。</MX_Power_SealedDescription>
+  <MX_Power_Zhaoli_Original>昭離的完整能力與默認戰鬥數值。</MX_Power_Zhaoli_Original>
+  <MX_Power_Mingyuan_Original>明淵的完整能力與默認戰鬥數值。</MX_Power_Mingyuan_Original>
+  <MX_Power_Zhaoli_Balanced>完整的處決、治療、復活、因果鏈接與成長能力，搭配適中的傷害、增益和技能消耗。</MX_Power_Zhaoli_Balanced>
+  <MX_Power_Mingyuan_Balanced>完整的燃命、自燃、過燃、長虹雙形態、燃時、護焰與重生能力，搭配適中的傷害、疊層速度和技能冷卻。</MX_Power_Mingyuan_Balanced>
+  <MX_Power_Zhaoli_Decorative>以陪伴、外觀和劇情為主。主動技能、成長、因果收益、鏈接替死與自動復活停用；裝備提供基礎戰鬥能力。已有力場和附魔會結束。</MX_Power_Zhaoli_Decorative>
+  <MX_Power_Mingyuan_Decorative>以陪伴、外觀和劇情為主。主動技能與戰鬥被動停用，長虹發射普通單箭。已有持續效果會結束，已開始的重生流程會完成。</MX_Power_Mingyuan_Decorative>
+  <MX_Power_Zhaoli_Duanzhan>揮出圓形斬擊，并沿前方直線追加更強的追斬，優先命中軀干。武器附有冥火時，斬擊會追加火焰傷害。</MX_Power_Zhaoli_Duanzhan>
+  <MX_Power_Zhaoli_DeathField>創造直徑18格的圓形力場。昭離以外的單位在範圍內移動速度降低20%，每秒受到流血傷口并積累1點告死。離開範圍后，告死快速衰減；積累至9點時，最后施加告死的角色處決目標，獲得1點因果和5層諱亡護盾。</MX_Power_Zhaoli_DeathField>
+  <MX_Power_Zhaoli_Guiyi>消耗1.2點因果，治癒目標的疾病與損傷，恢復缺失肢體，清除成癮、機械損傷、永久舊傷及其他可治療的負面健康狀態，并建立持續30天的因果鏈接。無法對昭離自己或敵對目標使用。</MX_Power_Zhaoli_Guiyi>
+  <MX_Power_Zhaoli_Dingshu>消耗2.4點因果，持續引導1小時，將尸體完整復活并治癒損傷。目標會與昭離建立因果鏈接，并獲得持續12天的定數標記；在標記期間再次死亡的目標無法復活。襲擊期間無法使用。</MX_Power_Zhaoli_Dingshu>
+  <MX_Power_Zhaoli_Minghuo>消耗3點因果，為當前主武器附上持續1日的冥火。武器傷害、破甲、命中與攻擊速度提升42.5%，攻擊距離增加1.7格，近戰命中時追加火焰傷害。</MX_Power_Zhaoli_Minghuo>
+  <MX_Power_Zhaoli_Minshen>消耗3點因果，壓制目標點13×13範圍內的敵人。血肉目標受到持續5秒的蝕命，每秒對軀干造成0.85點無視護甲的鈍擊傷害；其中8.5%會失神30秒，其余移動速度降低68%。機械體受到EMP沖擊。</MX_Power_Zhaoli_Minshen>
+  <MX_Power_Zhaoli_Passives>昭離通過告死收集因果，并與接受詭醫或定數的目標建立因果鏈接。鏈接最多同時存在20條，持續30天，可替昭離承受致命結局。死亡會推動昭離的成長；沒有可用鏈接時，她會在離場后重返此界。</MX_Power_Zhaoli_Passives>
+  <MX_Power_Mingyuan_Bow>明淵的赤金長弓。聚焦形態蓄力6秒，引爆視線內敵人的生命燃燒；射程覆蓋全圖。輻射形態每秒掃過10格、108°扇區，造成0.85點灼傷，并按每個目標燃命閾值的20.7%施加生命燃燒。</MX_Power_Mingyuan_Bow>
+  <MX_Power_Mingyuan_Sword>明淵的余燼長劍，劍身流淌著灼熱的赤焰。攻擊可與自燃、過燃和生命燃燒聯動，并提高持有者的近戰閃避與武器傷害。具體屬性見裝備信息面板。</MX_Power_Mingyuan_Sword>
+  <MX_Power_Mingyuan_AscendantFlameDash>化作升焰，無視視線跨越最多150格，留下3格寬、持續15秒的灼痕。路徑敵人受到8.5點基礎灼傷和27層生命燃燒，被擊退并眩暈3秒。灼痕每0.5秒向其中的敵人施加生命燃燒。</MX_Power_Mingyuan_AscendantFlameDash>
+  <MX_Power_Mingyuan_InstantCombustion>釋放半徑30格的強光，對敵人的大腦與每只眼睛各造成0.85點基礎灼傷，并使其眩暈12秒。目標已有的生命燃燒層數翻倍，尚未燃燒的目標會被點燃。</MX_Power_Mingyuan_InstantCombustion>
+  <MX_Power_Mingyuan_BurningPillar>放置燃燒核心，10分鐘內從半徑1格成長到15格，持續3小時。中心灼傷較高，邊緣割傷較高，灼傷會施加生命燃燒。每次脈沖對建筑造成最大生命值28.05%的基礎傷害。10分鐘后可指令核心移動。</MX_Power_Mingyuan_BurningPillar>
+  <MX_Power_Mingyuan_TimeBurn>在1小時內燒盡目標的生物年齡，年齡歸零時目標死亡。機械體崩解后留下鋼鐵與玻璃鋼，建筑分解后返還全部原材料。蓄力9.6秒。</MX_Power_Mingyuan_TimeBurn>
+  <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，獲得100層自我燃燒，并展開持續15秒、跟隨明淵移動的5×5余燼領域。每0.5秒造成0.85點基礎灼傷并施加生命燃燒，焚毀範圍內的建筑與動物，為明淵治療傷口與舊傷并回收自燃。自我燃燒超過300層時進入過燃。</MX_Power_Mingyuan_AshesOfSelf>
+  <MX_Power_Mingyuan_LifeBurn>不斷增長的生命之火，持續灼傷身體、損壞裝備、消耗需求并燒去年齡。爆發閾值由目標的生命規模決定，長虹可提前引爆。宿主死亡時，火焰會向附近目標傳播。</MX_Power_Mingyuan_LifeBurn>
+  <MX_Power_Mingyuan_SelfBurn>積累自燃可提高近戰、技能與遠程傷害，以及移動、攻擊和工作速度。征召時自動積累，非征召時逐漸衰減。超過300層進入過燃，進一步強化直接傷害和生命燃燒疊層，同時消耗護焰儲備。</MX_Power_Mingyuan_SelfBurn>
+  <MX_Power_Mingyuan_BurningBody>燃燒之軀提升意識并免除生理需求，普通傷害承受系數為1.5%。免疫火焰與爆炸傷害并恢復身體，清除控制效果；受擊后短暫無敵并積累自燃。攻擊和反擊會施加生命燃燒，身體會定期完整修復。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_ProtectiveFlameShield>用于修復身體的淡色火焰儲備，不吸收傷害。每次消耗1點，恢復一個缺失部位，或治癒一個部位的全部傷口與舊傷。穩定自燃可兌換儲備，過燃會持續消耗儲備。</MX_Power_Mingyuan_ProtectiveFlameShield>
+  <MX_Power_Mingyuan_RebirthFlame>明淵瀕死時爆發重生之焰，對周圍敵人造成爆炸傷害與眩暈，隨后暫時離場。火焰重新凝聚后，明淵以完整狀態返回。</MX_Power_Mingyuan_RebirthFlame>
+  <MX_Power_Zhaoli_Shield>每通過告死吸納一個單位，獲得5層諱亡護盾。實際受傷后消耗1層，持續傷害每次生效也會消耗層數。層數用于記錄告死積累，本身不吸收傷害。</MX_Power_Zhaoli_Shield>
+  <MX_Power_BalancedEquipment>專屬防具，提供防護與穿戴加成。具體屬性見裝備信息面板。</MX_Power_BalancedEquipment>
+  <MX_Power_MX_Neiyu_WarpFeather>短暫蓄力后在腳下閃光，生成84～128個米莉拉之羽。</MX_Power_MX_Neiyu_WarpFeather>
+  <MX_Power_MX_Neiyu_ThunderMarkedStorm>標記半徑3格區域內的敵對目標。數秒后，每個目標受到3～5次雷擊，每次造成51點基礎傷害并附加17點EMP傷害。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
+  <MX_Power_MX_Neiyu_Sword_ExecuteHead>劍形態下可用。短暫后撤后高速突進，對選中的目標執行斬首。目標無法被斬首時，改為一次高傷斬擊。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
+  <MX_Power_MX_Neiyu_Flower_ToxinGarden>花形態下可用。對目標區域內的敵人施加食物中毒，并有8.5%概率使其陷入狂暴。</MX_Power_MX_Neiyu_Flower_ToxinGarden>
+  <MX_Power_MX_Neiyu_Sword_Skyfall>劍形態下可用。躍入高空，在目標區域顯示落點預警后高速墜下，造成無視護甲的範圍傷害，并使敵人易傷。</MX_Power_MX_Neiyu_Sword_Skyfall>
+  <MX_Power_MX_Neiyu_Flower_BlessingField>花形態下可用。治療目標區域內友方的全部傷口與舊傷，并提升心情、移動速度和免疫速度，降低承受的傷害。</MX_Power_MX_Neiyu_Flower_BlessingField>
+  <MX_Power_MX_Neiyu_Bow_ArrowBarrage>弓形態下可用。蓄力5秒后，沿目標方向連續射出64發流羽矢，覆蓋前方戰場。</MX_Power_MX_Neiyu_Bow_ArrowBarrage>
+  <MX_Power_EquipmentInactive>專屬裝備的戰鬥強化已停用，仍可用于普通戰鬥。具體屬性見信息面板。</MX_Power_EquipmentInactive>
+  <MX_Power_PassiveInactive>此效果當前未生效。</MX_Power_PassiveInactive>
+</LanguageData>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using HarmonyLib;
 using MiliraXian.Characters.QingHe;
+using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using UnityEngine;
@@ -21,6 +22,9 @@ namespace MiliraXian.Characters.Neiyu
         public bool EnableAriandelSpecialPawnIntegration = true;
         public bool EnableUpdateLogLetters = true;
         public SpecialPawnConsciousnessLockMode ConsciousnessLockMode = SpecialPawnConsciousnessLockMode.Lock100;
+        public CharacterPowerLevel NeiyuPowerLevel = CharacterPowerLevel.Original;
+        public CharacterPowerLevel ZhaoliPowerLevel = CharacterPowerLevel.Original;
+        public CharacterPowerLevel MingyuanPowerLevel = CharacterPowerLevel.Original;
         private bool legacyLockSpecialPawnConsciousness = true;
 
         public override void ExposeData()
@@ -28,6 +32,13 @@ namespace MiliraXian.Characters.Neiyu
             base.ExposeData();
             Scribe_Values.Look(ref EnableAriandelSpecialPawnIntegration, "EnableAriandelSpecialPawnIntegration", true);
             Scribe_Values.Look(ref EnableUpdateLogLetters, "EnableUpdateLogLetters", true);
+            Scribe_Values.Look(ref NeiyuPowerLevel, "NeiyuPowerLevel", CharacterPowerLevel.Original);
+            Scribe_Values.Look(ref ZhaoliPowerLevel, "ZhaoliPowerLevel", CharacterPowerLevel.Original);
+            Scribe_Values.Look(ref MingyuanPowerLevel, "MingyuanPowerLevel", CharacterPowerLevel.Original);
+            if (ZhaoliPowerLevel < CharacterPowerLevel.Original || ZhaoliPowerLevel > CharacterPowerLevel.Decorative)
+                ZhaoliPowerLevel = CharacterPowerLevel.Original;
+            if (MingyuanPowerLevel < CharacterPowerLevel.Original || MingyuanPowerLevel > CharacterPowerLevel.Decorative)
+                MingyuanPowerLevel = CharacterPowerLevel.Original;
 
             bool hasNewConsciousnessLockMode = Scribe.mode != LoadSaveMode.LoadingVars
                 || Scribe.loader.curXmlParent["SpecialPawnConsciousnessLockMode"] != null;
@@ -40,6 +51,13 @@ namespace MiliraXian.Characters.Neiyu
                     ? SpecialPawnConsciousnessLockMode.Lock100
                     : SpecialPawnConsciousnessLockMode.None;
             }
+
+            if (NeiyuPowerLevel != CharacterPowerLevel.Original
+                && NeiyuPowerLevel != CharacterPowerLevel.Balanced
+                && NeiyuPowerLevel != CharacterPowerLevel.Decorative)
+            {
+                NeiyuPowerLevel = CharacterPowerLevel.Original;
+            }
         }
     }
 
@@ -48,12 +66,17 @@ namespace MiliraXian.Characters.Neiyu
         public static NeiyuLawMod Instance { get; private set; }
 
         public NeiyuLawSettings Settings;
+        private Vector2 settingsScroll;
+        private float settingsHeight = 950f;
 
         public NeiyuLawMod(ModContentPack content)
             : base(content)
         {
             Settings = GetSettings<NeiyuLawSettings>();
             Instance = this;
+            NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
+            ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
+            MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
         }
 
         public override string SettingsCategory()
@@ -64,7 +87,9 @@ namespace MiliraXian.Characters.Neiyu
         public override void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listing = new();
-            listing.Begin(inRect);
+            Rect viewRect = new(0f, 0f, inRect.width - 20f, settingsHeight);
+            Widgets.BeginScrollView(inRect, ref settingsScroll, viewRect);
+            listing.Begin(viewRect);
             listing.CheckboxLabeled(
                 "MX_NL_EnableSpecialPawnIntegrationLabel".Translate().ToString(),
                 ref Settings.EnableAriandelSpecialPawnIntegration,
@@ -81,6 +106,25 @@ namespace MiliraXian.Characters.Neiyu
                     title: "MX_NL_UpdateLogDialogTitle".Translate().ToString()));
             }
             listing.Gap();
+            listing.Label("MX_NL_NeiyuPowerLevelLabel".Translate().ToString());
+            DrawNeiyuPowerLevelOption(
+                listing,
+                CharacterPowerLevel.Original,
+                "MX_NL_NeiyuPowerLevelOriginalLabel",
+                "MX_NL_NeiyuPowerLevelOriginalDesc");
+            DrawNeiyuPowerLevelOption(
+                listing,
+                CharacterPowerLevel.Balanced,
+                "MX_NL_NeiyuPowerLevelBalancedLabel",
+                "MX_NL_NeiyuPowerLevelBalancedDesc");
+            DrawNeiyuPowerLevelOption(
+                listing,
+                CharacterPowerLevel.Decorative,
+                "MX_NL_NeiyuPowerLevelDecorativeLabel",
+                "MX_NL_NeiyuPowerLevelDecorativeDesc");
+            listing.Gap();
+            DrawCharacterPowerOptions(listing, "MX_Power_Zhaoli", ref Settings.ZhaoliPowerLevel, ZhaoliPowerBalance.SetLevel);
+            DrawCharacterPowerOptions(listing, "MX_Power_Mingyuan", ref Settings.MingyuanPowerLevel, MingyuanPowerBalance.SetLevel);
             listing.Label("MX_NL_SpecialPawnConsciousnessLockLabel".Translate().ToString());
             DrawConsciousnessLockOption(
                 listing,
@@ -97,7 +141,25 @@ namespace MiliraXian.Characters.Neiyu
                 SpecialPawnConsciousnessLockMode.None,
                 "MX_NL_SpecialPawnConsciousnessLockNoneLabel",
                 "MX_NL_SpecialPawnConsciousnessLockNoneDesc");
+            settingsHeight = listing.CurHeight + 20f;
             listing.End();
+            Widgets.EndScrollView();
+        }
+
+        private static void DrawCharacterPowerOptions(Listing_Standard listing, string key, ref CharacterPowerLevel selected, System.Action<CharacterPowerLevel> apply)
+        {
+            listing.Label(key.Translate());
+            for (int i = 0; i < 3; i++)
+            {
+                var level = (CharacterPowerLevel)i;
+                if (listing.RadioButton(("MX_NL_NeiyuPowerLevel" + level + "Label").Translate(), selected == level,
+                    24f, (key + "_" + level).Translate()))
+                {
+                    selected = level;
+                    apply(level);
+                }
+            }
+            listing.Gap();
         }
 
         private void DrawConsciousnessLockOption(Listing_Standard listing, SpecialPawnConsciousnessLockMode mode, string labelKey, string tooltipKey)
@@ -110,6 +172,27 @@ namespace MiliraXian.Characters.Neiyu
             {
                 Settings.ConsciousnessLockMode = mode;
             }
+        }
+
+        private void DrawNeiyuPowerLevelOption(Listing_Standard listing, CharacterPowerLevel level, string labelKey, string tooltipKey)
+        {
+            if (listing.RadioButton(
+                labelKey.Translate().ToString(),
+                Settings.NeiyuPowerLevel == level,
+                24f,
+                tooltipKey.Translate().ToString()))
+            {
+                Settings.NeiyuPowerLevel = level;
+                NeiyuPowerBalance.SetLevel(level);
+            }
+        }
+
+        public override void WriteSettings()
+        {
+            NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
+            ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
+            MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
+            base.WriteSettings();
         }
     }
 
@@ -251,13 +334,19 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            Pawn pawn = diffSet?.pawn;
             float minimumConsciousness = MinimumConsciousnessFromSettings();
+            if (pawn != null && NeiyuEquipmentUtility.IsNeiyu(pawn))
+            {
+                minimumConsciousness = NeiyuPowerBalance.LimitConsciousnessMinimum(minimumConsciousness);
+            }
+            if (ZhaoliKarmaUtility.IsZhaoli(pawn) && ZhaoliPowerBalance.Sealed)
+                minimumConsciousness = 0f;
             if (minimumConsciousness <= 0f || __result >= minimumConsciousness)
             {
                 return;
             }
 
-            Pawn pawn = diffSet?.pawn;
             if (pawn == null || pawn.Dead || !IsSupportedSpecialPawn(pawn))
             {
                 return;

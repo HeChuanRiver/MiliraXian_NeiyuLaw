@@ -94,6 +94,7 @@ namespace MiliraXian.Characters.Mingyuan
         private IntVec3 drawToCell = IntVec3.Invalid;
         private int drawMoveStartTick;
         private int grantedCoreHitPoints;
+        private int balanceRevision = -1;
 
         public CompProperties_MingyuanBurningPillarTornado PropsTornado => (CompProperties_MingyuanBurningPillarTornado)props;
 
@@ -189,7 +190,16 @@ namespace MiliraXian.Characters.Mingyuan
 
             EnsureInitialized();
             int currentTick = Find.TickManager.TicksGame;
-            if (currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead)
+            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
+            {
+                balanceRevision = MingyuanPowerBalance.Profile.Revision;
+                if (!MingyuanPowerBalance.IsOriginal)
+                {
+                    expireTick = Mathf.Min(expireTick, currentTick + PropsTornado.durationTicks);
+                    parent.HitPoints = Mathf.Min(parent.HitPoints, PropsTornado.maxHitPoints);
+                }
+            }
+            if (MingyuanPowerBalance.Sealed || currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead)
             {
                 parent.Destroy(DestroyMode.Vanish);
                 return;
@@ -209,7 +219,8 @@ namespace MiliraXian.Characters.Mingyuan
                 parent.HitPoints.ToStringCached(),
                 CurrentCoreCapacity.ToStringCached(),
                 remainingSeconds.ToString(),
-                ControlStateLabel()).ToString();
+                ControlStateLabel(),
+                (PropsTornado.buildingDamageFraction * 100f).ToString("0.##")).ToString();
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -369,7 +380,7 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                if (thing.def.category == ThingCategory.Building)
+                if (thing.def.category == ThingCategory.Building && thing.HostileTo(caster))
                 {
                     HandleBuilding(thing);
                 }
@@ -596,6 +607,7 @@ namespace MiliraXian.Characters.Mingyuan
         private int expireTick;
         private int ticksToPulse;
         private float selfBurnGainedThisPulse;
+        private int balanceRevision = -1;
 
         public CompProperties_MingyuanBurningField PropsField => (CompProperties_MingyuanBurningField)props;
 
@@ -648,7 +660,12 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (Find.TickManager.TicksGame >= expireTick || caster == null || caster.Destroyed || caster.Dead)
+            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
+            {
+                balanceRevision = MingyuanPowerBalance.Profile.Revision;
+                if (!MingyuanPowerBalance.IsOriginal) expireTick = Mathf.Min(expireTick, Find.TickManager.TicksGame + PropsField.durationTicks);
+            }
+            if (MingyuanPowerBalance.Sealed || Find.TickManager.TicksGame >= expireTick || caster == null || caster.Destroyed || caster.Dead)
             {
                 parent.Destroy(DestroyMode.Vanish);
                 return;
@@ -761,7 +778,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
+            if (!MingyuanPowerBalance.Sealed) MingyuanUtility.HealInjuriesIncludingScars(caster, Mathf.Max(0f, PropsField.selfHealAmount));
         }
     }
 }

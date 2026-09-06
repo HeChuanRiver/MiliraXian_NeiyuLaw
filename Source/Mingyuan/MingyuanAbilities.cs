@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class CompAbilityEffect_MingyuanAscendantFlameDash : CompAbilityEffect, ICompAbilityEffectOnJumpCompleted
+    public class CompAbilityEffect_MingyuanAscendantFlameDash : CompAbilityEffect_MingyuanPowerLimited, ICompAbilityEffectOnJumpCompleted
     {
         private static readonly Color PreviewColor = new(1f, 0.52f, 0.18f, 0.72f);
 
@@ -82,6 +82,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             Pawn caster = parent.pawn;
             if (caster == null || caster.Map == null || !caster.Spawned || !target.Cell.IsValid)
             {
@@ -198,6 +199,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void AffectDashCells(Pawn caster, Map map, List<IntVec3> cells)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             tmpScorchCellSet.Clear();
             for (int i = 0; i < cells.Count; i++)
             {
@@ -218,7 +220,7 @@ namespace MiliraXian.Characters.Mingyuan
                 if (!pawn.Dead && pawn.Spawned)
                 {
                     pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
-                    KnockbackPawn(caster, pawn, map, 3);
+                    KnockbackPawn(caster, pawn, map, MingyuanPowerBalance.Sealed ? 1 : 3);
                 }
             }
 
@@ -321,6 +323,7 @@ namespace MiliraXian.Characters.Mingyuan
         private FleckDef visualFleckDef;
         private float visualFleckScale = 1f;
         private int visualFleckLimit = 32;
+        private int balanceRevision = -1;
 
         public CompProperties_MingyuanAscendantFlameScorch PropsScorch => (CompProperties_MingyuanAscendantFlameScorch)props;
 
@@ -407,7 +410,12 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int currentTick = Find.TickManager.TicksGame;
-            if (currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead || !HasPathCells)
+            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
+            {
+                balanceRevision = MingyuanPowerBalance.Profile.Revision;
+                if (!MingyuanPowerBalance.IsOriginal) expireTick = Mathf.Min(expireTick, currentTick + PropsScorch.durationTicks);
+            }
+            if (MingyuanPowerBalance.Sealed || currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead || !HasPathCells)
             {
                 parent.Destroy(DestroyMode.Vanish);
                 return;
@@ -495,12 +503,13 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect
+    public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect_MingyuanPowerLimited
     {
         public new CompProperties_AbilityMingyuanInstantCombustion Props => (CompProperties_AbilityMingyuanInstantCombustion)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             base.Apply(target, dest);
             Pawn caster = parent.pawn;
             if (caster == null || caster.Map == null || !caster.Spawned)
@@ -580,6 +589,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void DamageBrainAndEyes(Pawn pawn, Pawn caster)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             BodyPartRecord brain = pawn.health.hediffSet.GetBrain();
             if (brain != null)
             {
@@ -606,12 +616,13 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class CompAbilityEffect_MingyuanBurningPillar : CompAbilityEffect
+    public class CompAbilityEffect_MingyuanBurningPillar : CompAbilityEffect_MingyuanPowerLimited
     {
         public new CompProperties_AbilityMingyuanBurningPillar Props => (CompProperties_AbilityMingyuanBurningPillar)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             base.Apply(target, dest);
             Pawn caster = parent.pawn;
             if (caster == null || caster.Map == null || Props.fieldDef == null || !target.Cell.IsValid)
@@ -682,12 +693,13 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect
+    public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowerLimited
     {
         public new CompProperties_AbilityMingyuanTimeBurn Props => (CompProperties_AbilityMingyuanTimeBurn)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             base.Apply(target, dest);
             Pawn caster = parent.pawn;
             if (caster == null)
@@ -729,7 +741,7 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class CompAbilityEffect_MingyuanAshesOfSelf : CompAbilityEffect
+    public class CompAbilityEffect_MingyuanAshesOfSelf : CompAbilityEffect_MingyuanPowerLimited
     {
         public new CompProperties_AbilityMingyuanAshesOfSelf Props => (CompProperties_AbilityMingyuanAshesOfSelf)props;
 
@@ -746,6 +758,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             base.Apply(target, dest);
             Pawn caster = parent.pawn;
             if (caster == null || caster.Map == null || !caster.Spawned)

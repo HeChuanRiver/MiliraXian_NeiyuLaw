@@ -82,6 +82,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             if (target == null || layers <= 0f || target.Dead || IsLifeBurnImmunePawn(target))
             {
                 return;
@@ -117,6 +118,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static void AddSelfBurn(Pawn pawn, float layers, bool refreshDecayTimer = true, bool showMote = true)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             if (pawn == null || layers <= 0f || pawn.Dead)
             {
                 return;
@@ -177,6 +179,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetLifeBurnExecuteThreshold(Pawn pawn)
         {
+            if (MingyuanPowerBalance.Sealed) return 100f;
             if (pawn?.health == null)
             {
                 return 0f;
@@ -238,11 +241,13 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetSelfBurnLayers(Pawn pawn)
         {
+            if (MingyuanPowerBalance.Sealed) return 0f;
             return pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef)?.Severity ?? 0f;
         }
 
         public static float GetSelfBurnEffectiveLayers(Pawn pawn)
         {
+            if (MingyuanPowerBalance.Sealed) return 0f;
             Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(SelfBurnDef);
             float layers = hediff?.Severity ?? 0f;
             if (layers <= 0f)
@@ -303,6 +308,8 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetSelfBurnSkillDamageFactor(Pawn pawn)
         {
+            if (MingyuanPowerBalance.Sealed) return 1f;
+            if (MingyuanPowerBalance.IsBalanced) return 1f + GetSelfBurnEffectiveLayers(pawn) * (.01f * ConservativePowerTuning.Bonus);
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
             return selfBurn > 0f ? 1f + selfBurn * 0.01f : 1f;
         }
@@ -334,6 +341,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static DamageWorker.DamageResult ApplyTrueDamage(Thing target, DamageDef damageDef, float amount, Pawn instigator = null, BodyPartRecord hitPart = null, bool scaleWithSelfBurn = false)
         {
+            if (MingyuanPowerBalance.Sealed) return null;
             if (target == null || target.Destroyed || amount <= 0f)
             {
                 return null;
@@ -441,6 +449,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static void RestorePawnToBestCondition(Pawn pawn, bool keepLifeBurn)
         {
+            if (MingyuanPowerBalance.Sealed) return;
             if (pawn?.health?.hediffSet == null || pawn.Dead)
             {
                 return;

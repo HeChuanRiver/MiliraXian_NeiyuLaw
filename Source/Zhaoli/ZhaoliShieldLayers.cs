@@ -134,13 +134,13 @@ namespace MiliraXian.Characters.Zhaoli
 
         public HediffCompProperties_ZhaoliShieldLayers PropsShield => (HediffCompProperties_ZhaoliShieldLayers)props;
 
-        public int ShieldLayers => shieldLayers;
+        public int ShieldLayers => ZhaoliPowerBalance.Sealed ? 0 : shieldLayers;
 
         public bool ShouldDrawActiveShield
         {
             get
             {
-                if (!PropsShield.drawActiveShield || Pawn == null || !Pawn.Spawned || Pawn.Dead || shieldLayers <= 0)
+                if (ZhaoliPowerBalance.Sealed || !PropsShield.drawActiveShield || Pawn == null || !Pawn.Spawned || Pawn.Dead || shieldLayers <= 0)
                 {
                     return false;
                 }
@@ -194,12 +194,14 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void AddLayers(int layerCount)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             shieldLayers = Mathf.Max(0, shieldLayers + layerCount);
         }
 
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
         {
             base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+            if (ZhaoliPowerBalance.Sealed) return;
             if (Pawn == null || Pawn.Dead || shieldLayers <= 0 || totalDamageDealt <= 0f)
             {
                 return;
@@ -233,7 +235,8 @@ namespace MiliraXian.Characters.Zhaoli
         {
             get
             {
-            return "MX_ZL_ShieldLayersTip".Translate(shieldLayers).ToString();
+                // The base Hediff already displays def.description. Extra text is live state only.
+                return ZhaoliPowerBalance.IsOriginal ? "MX_ZL_ShieldLayersTip".Translate(shieldLayers).ToString() : null;
             }
         }
     }

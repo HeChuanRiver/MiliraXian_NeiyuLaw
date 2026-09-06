@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Power_Zhaoli>昭离：强度设置</MX_Power_Zhaoli>
+  <MX_Power_Mingyuan>明渊：强度设置</MX_Power_Mingyuan>
+  <MX_Power_AbilitiesSealed>此技能当前无法施放。</MX_Power_AbilitiesSealed>
+  <MX_Power_SealedDescription>此技能当前无法施放。</MX_Power_SealedDescription>
+  <MX_Power_EquipmentInactive>专属装备的战斗强化已停用，仍可用于普通战斗。具体属性见信息面板。</MX_Power_EquipmentInactive>
+  <MX_Power_PassiveInactive>此效果当前未生效。</MX_Power_PassiveInactive>
+  <MX_Power_Zhaoli_Original>昭离的完整能力与默认战斗数值。</MX_Power_Zhaoli_Original>
+  <MX_Power_Mingyuan_Original>明渊的完整能力与默认战斗数值。</MX_Power_Mingyuan_Original>
+  <MX_Power_Zhaoli_Balanced>完整的处决、治疗、复活、因果链接与成长能力，搭配适中的伤害、增益和技能消耗。</MX_Power_Zhaoli_Balanced>
+  <MX_Power_Mingyuan_Balanced>完整的燃命、自燃、过燃、长虹双形态、燃时、护焰与重生能力，搭配适中的伤害、叠层速度和技能冷却。</MX_Power_Mingyuan_Balanced>
+  <MX_Power_Zhaoli_Decorative>以陪伴、外观和剧情为主。主动技能、成长、因果收益、链接替死与自动复活停用；装备提供基础战斗能力。已有力场和附魔会结束。</MX_Power_Zhaoli_Decorative>
+  <MX_Power_Mingyuan_Decorative>以陪伴、外观和剧情为主。主动技能与战斗被动停用，长虹发射普通单箭。已有持续效果会结束，已开始的重生流程会完成。</MX_Power_Mingyuan_Decorative>
+  <MX_Power_Zhaoli_Duanzhan>挥出圆形斩击，并沿前方直线追加更强的追斩，优先命中躯干。武器附有冥火时，斩击会追加火焰伤害。</MX_Power_Zhaoli_Duanzhan>
+  <MX_Power_Zhaoli_DeathField>创造直径18格的圆形力场。昭离以外的单位在范围内移动速度降低20%，每秒受到流血伤口并积累1点告死。离开范围后，告死快速衰减；积累至9点时，最后施加告死的角色处决目标，获得1点因果和5层讳亡护盾。</MX_Power_Zhaoli_DeathField>
+  <MX_Power_Zhaoli_Guiyi>消耗1.2点因果，治愈目标的疾病与损伤，恢复缺失肢体，清除成瘾、机械损伤、永久旧伤及其他可治疗的负面健康状态，并建立持续30天的因果链接。无法对昭离自己或敌对目标使用。</MX_Power_Zhaoli_Guiyi>
+  <MX_Power_Zhaoli_Dingshu>消耗2.4点因果，持续引导1小时，将尸体完整复活并治愈损伤。目标会与昭离建立因果链接，并获得持续12天的定数标记；在标记期间再次死亡的目标无法复活。袭击期间无法使用。</MX_Power_Zhaoli_Dingshu>
+  <MX_Power_Zhaoli_Minghuo>消耗3点因果，为当前主武器附上持续1日的冥火。武器伤害、破甲、命中与攻击速度提升42.5%，攻击距离增加1.7格，近战命中时追加火焰伤害。</MX_Power_Zhaoli_Minghuo>
+  <MX_Power_Zhaoli_Minshen>消耗3点因果，压制目标点13×13范围内的敌人。血肉目标受到持续5秒的蚀命，每秒对躯干造成0.85点无视护甲的钝击伤害；其中8.5%会失神30秒，其余移动速度降低68%。机械体受到EMP冲击。</MX_Power_Zhaoli_Minshen>
+  <MX_Power_Zhaoli_Passives>昭离通过告死收集因果，并与接受诡医或定数的目标建立因果链接。链接最多同时存在20条，持续30天，可替昭离承受致命结局。死亡会推动昭离的成长；没有可用链接时，她会在离场后重返此界。</MX_Power_Zhaoli_Passives>
+  <MX_Power_Mingyuan_Bow>明渊的赤金长弓。聚焦形态蓄力6秒，引爆视线内敌人的生命燃烧；射程覆盖全图。辐射形态每秒扫过10格、108°扇区，造成0.85点灼伤，并按每个目标燃命阈值的20.7%施加生命燃烧。</MX_Power_Mingyuan_Bow>
+  <MX_Power_Mingyuan_Sword>明渊的余烬长剑，剑身流淌着灼热的赤焰。攻击可与自燃、过燃和生命燃烧联动，并提高持有者的近战闪避与武器伤害。具体属性见装备信息面板。</MX_Power_Mingyuan_Sword>
+  <MX_Power_Mingyuan_AscendantFlameDash>化作升焰，无视视线跨越最多150格，留下3格宽、持续15秒的灼痕。路径敌人受到8.5点基础灼伤和27层生命燃烧，被击退并眩晕3秒。灼痕每0.5秒向其中的敌人施加生命燃烧。</MX_Power_Mingyuan_AscendantFlameDash>
+  <MX_Power_Mingyuan_InstantCombustion>释放半径30格的强光，对敌人的大脑与每只眼睛各造成0.85点基础灼伤，并使其眩晕12秒。目标已有的生命燃烧层数翻倍，尚未燃烧的目标会被点燃。</MX_Power_Mingyuan_InstantCombustion>
+  <MX_Power_Mingyuan_BurningPillar>放置燃烧核心，10分钟内从半径1格成长到15格，持续3小时。中心灼伤较高，边缘割伤较高，灼伤会施加生命燃烧。每次脉冲对建筑造成最大生命值28.05%的基础伤害。10分钟后可指令核心移动。</MX_Power_Mingyuan_BurningPillar>
+  <MX_Power_Mingyuan_TimeBurn>在1小时内烧尽目标的生物年龄，年龄归零时目标死亡。机械体崩解后留下钢铁与玻璃钢，建筑分解后返还全部原材料。蓄力9.6秒。</MX_Power_Mingyuan_TimeBurn>
+  <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，获得100层自我燃烧，并展开持续15秒、跟随明渊移动的5×5余烬领域。每0.5秒造成0.85点基础灼伤并施加生命燃烧，焚毁范围内的建筑与动物，为明渊治疗伤口与旧伤并回收自燃。自我燃烧超过300层时进入过燃。</MX_Power_Mingyuan_AshesOfSelf>
+  <MX_Power_Mingyuan_LifeBurn>不断增长的生命之火，持续灼伤身体、损坏装备、消耗需求并烧去年龄。爆发阈值由目标的生命规模决定，长虹可提前引爆。宿主死亡时，火焰会向附近目标传播。</MX_Power_Mingyuan_LifeBurn>
+  <MX_Power_Mingyuan_SelfBurn>积累自燃可提高近战、技能与远程伤害，以及移动、攻击和工作速度。征召时自动积累，非征召时逐渐衰减。超过300层进入过燃，进一步强化直接伤害和生命燃烧叠层，同时消耗护焰储备。</MX_Power_Mingyuan_SelfBurn>
+  <MX_Power_Mingyuan_BurningBody>燃烧之躯提升意识并免除生理需求，普通伤害承受系数为1.5%。免疫火焰与爆炸伤害并恢复身体，清除控制效果；受击后短暂无敌并积累自燃。攻击和反击会施加生命燃烧，身体会定期完整修复。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_ProtectiveFlameShield>用于修复身体的淡色火焰储备，不吸收伤害。每次消耗1点，恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。稳定自燃可兑换储备，过燃会持续消耗储备。</MX_Power_Mingyuan_ProtectiveFlameShield>
+  <MX_Power_Mingyuan_RebirthFlame>明渊濒死时爆发重生之焰，对周围敌人造成爆炸伤害与眩晕，随后暂时离场。火焰重新凝聚后，明渊以完整状态返回。</MX_Power_Mingyuan_RebirthFlame>
+  <MX_Power_Zhaoli_Shield>每通过告死吸纳一个单位，获得5层讳亡护盾。实际受伤后消耗1层，持续伤害每次生效也会消耗层数。层数用于记录告死积累，本身不吸收伤害。</MX_Power_Zhaoli_Shield>
+  <MX_Power_BalancedEquipment>专属防具，提供防护与穿戴加成。具体属性见装备信息面板。</MX_Power_BalancedEquipment>
+  <MX_Power_MX_Neiyu_WarpFeather>短暂蓄力后在脚下闪光，生成84～128个米莉拉之羽。</MX_Power_MX_Neiyu_WarpFeather>
+  <MX_Power_MX_Neiyu_ThunderMarkedStorm>标记半径3格区域内的敌对目标。数秒后，每个目标受到3～5次雷击，每次造成51点基础伤害并附加17点EMP伤害。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
+  <MX_Power_MX_Neiyu_Bow_ArrowBarrage>弓形态下可用。蓄力5秒后，沿目标方向连续射出64发流羽矢，覆盖前方战场。</MX_Power_MX_Neiyu_Bow_ArrowBarrage>
+  <MX_Power_MX_Neiyu_Flower_BlessingField>花形态下可用。治疗目标区域内友方的全部伤口与旧伤，并提升心情、移动速度和免疫速度，降低承受的伤害。</MX_Power_MX_Neiyu_Flower_BlessingField>
+  <MX_Power_MX_Neiyu_Flower_ToxinGarden>花形态下可用。对目标区域内的敌人施加食物中毒，并有8.5%概率使其陷入狂暴。</MX_Power_MX_Neiyu_Flower_ToxinGarden>
+  <MX_Power_MX_Neiyu_Sword_Skyfall>剑形态下可用。跃入高空，在目标区域显示落点预警后高速坠下，造成无视护甲的范围伤害，并使敌人易伤。</MX_Power_MX_Neiyu_Sword_Skyfall>
+  <MX_Power_MX_Neiyu_Sword_ExecuteHead>剑形态下可用。短暂后撤后高速突进，对选中的目标执行斩首。目标无法被斩首时，改为一次高伤斩击。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
+</LanguageData>

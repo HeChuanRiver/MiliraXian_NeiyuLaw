@@ -26,14 +26,10 @@
 - Overburn: every {3} ticks -{5}
 - Next change: {6} ticks</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>Repair reserve: {0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRepair>Every second, spends 1 reserve to restore one missing body part or heal all wounds and scars on one body part. Next check in {0}s.</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRepair>Checks for injuries every {1} seconds. Spends 1 reserve to restore a missing part or heal all wounds and scars on one part. Next check in {0} seconds.</MX_Mingyuan_Shield_TipRepair>
   <MX_Mingyuan_Shield_TipRefill>Self Burn refill check in {0}s. Ratio: {1} Self Burn = 1 reserve; max spend per success: {2}. Refill cooldown: {3}s. Allowed: {4}</MX_Mingyuan_Shield_TipRefill>
   <MX_Mingyuan_Shield_TipOverburnDrain>Overburn drain: {0}. While active, reserve loses {1} every 5s. Next drain in {2}s.</MX_Mingyuan_Shield_TipOverburnDrain>
-  <MX_Mingyuan_BurningPillar_Inspect>Radius: {0}
-Core stability: {1}/{2}
-Remaining: {3}s
-Control: {4}
-Buildings: 33% max HP per pulse</MX_Mingyuan_BurningPillar_Inspect>
+  <MX_Mingyuan_BurningPillar_Inspect>Radius: {0}&#10;Core stability: {1}/{2}&#10;Remaining: {3} seconds&#10;Control: {4}&#10;Base building damage: {5}% of maximum health per pulse</MX_Mingyuan_BurningPillar_Inspect>
   <MX_Mingyuan_BurningPillar_ControlLocked>locked</MX_Mingyuan_BurningPillar_ControlLocked>
   <MX_Mingyuan_BurningPillar_ControlStopped>stopped</MX_Mingyuan_BurningPillar_ControlStopped>
   <MX_Mingyuan_BurningPillar_ControlMoving>moving to {0}</MX_Mingyuan_BurningPillar_ControlMoving>
@@ -48,7 +44,7 @@ Buildings: 33% max HP per pulse</MX_Mingyuan_BurningPillar_Inspect>
   <MX_Mingyuan_Bow_ModeFocus>Focus form</MX_Mingyuan_Bow_ModeFocus>
   <MX_Mingyuan_Bow_ModeRadiation>Radiation form</MX_Mingyuan_Bow_ModeRadiation>
   <MX_Mingyuan_Bow_ModeCommand>Long Rainbow: {0}</MX_Mingyuan_Bow_ModeCommand>
-  <MX_Mingyuan_Bow_ModeDesc>Current: {0}. Click to switch to {1}.&#10;Focus: map-wide line of sight, fixed 5-second charge, guaranteed hit and immediate burst.&#10;Radiation: penetrating 10-cell, 108-degree sector, at most once per second.</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeDesc>Current: {0}. Click to switch to {1}.&#10;Focus: targets visible enemies across the map and detonates Life Burn after charging for {2} seconds.&#10;Radiation: sweeps a {3}-cell, {4}° sector, at most once every {5} seconds.</MX_Mingyuan_Bow_ModeDesc>
   <MX_Mingyuan_Bow_ModeBusy>Long Rainbow is charging or resolving an attack and cannot change form.</MX_Mingyuan_Bow_ModeBusy>
   <MX_Mingyuan_Bow_ModeInspect>Current form: {0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>Focus form can only target a visible hostile that can receive Life Burn.</MX_Mingyuan_Bow_InvalidFocusTarget>

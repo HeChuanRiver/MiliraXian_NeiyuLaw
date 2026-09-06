@@ -26,14 +26,10 @@
 - 过燃：每 {3} tick -{5}
 - 下次变化：{6} tick</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>修复储备：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRepair>每秒消耗 1 点储备，恢复一个缺失部位，或治疗一个部位上的全部伤口与旧伤疤痕。下次检查：{0} 秒后。</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRepair>每{1}秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。下次检查：{0}秒后。</MX_Mingyuan_Shield_TipRepair>
   <MX_Mingyuan_Shield_TipRefill>自燃补盾检查：{0} 秒后。比例：{1} 自我燃烧 = 1 储备；每次最多消耗 {2}。补充冷却：{3} 秒。当前允许：{4}</MX_Mingyuan_Shield_TipRefill>
   <MX_Mingyuan_Shield_TipOverburnDrain>过燃流失：{0}。过燃时每 5 秒失去 {1} 储备。下次流失：{2} 秒后。</MX_Mingyuan_Shield_TipOverburnDrain>
-  <MX_Mingyuan_BurningPillar_Inspect>半径：{0}
-核心稳定：{1}/{2}
-剩余：{3} 秒
-控制：{4}
-建筑：每次脉冲造成最大生命 33%</MX_Mingyuan_BurningPillar_Inspect>
+  <MX_Mingyuan_BurningPillar_Inspect>半径：{0}&#10;核心稳定：{1}/{2}&#10;剩余：{3}秒&#10;控制：{4}&#10;建筑基础伤害：每次脉冲为最大生命值的{5}%</MX_Mingyuan_BurningPillar_Inspect>
   <MX_Mingyuan_BurningPillar_ControlLocked>未解锁</MX_Mingyuan_BurningPillar_ControlLocked>
   <MX_Mingyuan_BurningPillar_ControlStopped>停止</MX_Mingyuan_BurningPillar_ControlStopped>
   <MX_Mingyuan_BurningPillar_ControlMoving>移动至 {0}</MX_Mingyuan_BurningPillar_ControlMoving>
@@ -48,7 +44,7 @@
   <MX_Mingyuan_Bow_ModeFocus>聚焦形态</MX_Mingyuan_Bow_ModeFocus>
   <MX_Mingyuan_Bow_ModeRadiation>辐射形态</MX_Mingyuan_Bow_ModeRadiation>
   <MX_Mingyuan_Bow_ModeCommand>长虹：{0}</MX_Mingyuan_Bow_ModeCommand>
-  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。&#10;聚焦：全图视线、固定蓄力 5 秒、必中并立即爆条。&#10;辐射：10 格、108° 穿透扇区、每秒至多一次。</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。&#10;聚焦：全图视线内选敌，蓄力{2}秒后引爆生命燃烧。&#10;辐射：扫过{3}格、{4}°扇区，每{5}秒最多一次。</MX_Mingyuan_Bow_ModeDesc>
   <MX_Mingyuan_Bow_ModeBusy>长虹正在蓄力或结算，暂时不能切换形态。</MX_Mingyuan_Bow_ModeBusy>
   <MX_Mingyuan_Bow_ModeInspect>当前形态：{0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形态只能选择视线内、可被生命燃烧影响的敌对单位。</MX_Mingyuan_Bow_InvalidFocusTarget>

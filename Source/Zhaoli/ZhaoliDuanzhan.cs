@@ -179,7 +179,7 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_Duanzhan : CompAbilityEffect
+    public class CompAbilityEffect_Duanzhan : CompAbilityEffect_ZhaoliPowerLimited
     {
         private const string RequiredWeaponDefName = "MX_Zhaoli_DuanzhanBlade";
 
@@ -232,6 +232,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -277,6 +278,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             Pawn caster = parent?.pawn;
             Map map = caster?.MapHeld;
+            if (ZhaoliPowerBalance.Sealed) { ClearSequence(caster); return; }
             if (caster == null || map == null)
             {
                 ClearSequence(caster);
@@ -476,6 +478,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         private void DoDuanzhan(Pawn caster, Map map, IntVec3 center, Vector3 forward)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             ThingWithComps weapon = caster.equipment?.Primary;
             HediffComp_ZhaoliMinghuo minghuoComp = GetActiveMinghuoComp(caster, weapon);
             float searchRadius = Mathf.Max(Props.impactRadius, Props.lineLengthCells + Props.lineWidthCells);
@@ -548,6 +551,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             IEnumerable<BodyPartRecord> parts = target.health?.hediffSet?.GetNotMissingParts();
             BodyPartRecord torso = parts != null ? parts.FirstOrDefault(part => part.def == BodyPartDefOf.Torso) : null;
+            if (ZhaoliPowerBalance.Sealed) return;
             DamageInfo damageInfo = new(DamageDefOf.Cut, damageAmount, Props.armorPenetration, -1f, caster, torso, weapon != null ? weapon.def : null);
             damageInfo.SetBodyRegion(BodyPartHeight.Middle, BodyPartDepth.Outside);
             target.TakeDamage(damageInfo);

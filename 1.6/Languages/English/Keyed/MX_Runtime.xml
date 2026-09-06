@@ -38,6 +38,18 @@
   <MX_NL_SpecialPawnConsciousnessLock35Desc>Special characters keep Consciousness at a minimum of 35%.</MX_NL_SpecialPawnConsciousnessLock35Desc>
   <MX_NL_SpecialPawnConsciousnessLockNoneLabel>No lock</MX_NL_SpecialPawnConsciousnessLockNoneLabel>
   <MX_NL_SpecialPawnConsciousnessLockNoneDesc>Injuries, hediffs, and other mod effects can change special character Consciousness normally.</MX_NL_SpecialPawnConsciousnessLockNoneDesc>
+  <MX_NL_NeiyuPowerLevelLabel>Neiyu power level (Neiyu only)</MX_NL_NeiyuPowerLevelLabel>
+  <MX_NL_NeiyuPowerLevelOriginalLabel>Level 1: Original (default)</MX_NL_NeiyuPowerLevelOriginalLabel>
+  <MX_NL_NeiyuPowerLevelOriginalDesc>Neiyu's full abilities, weapons, shield and equipment bonuses, with hunger protection and a consciousness floor.</MX_NL_NeiyuPowerLevelOriginalDesc>
+  <MX_NL_NeiyuPowerLevelBalancedLabel>Tier 2: moderate power</MX_NL_NeiyuPowerLevelBalancedLabel>
+  <MX_NL_NeiyuPowerLevelBalancedDesc>All weapon forms, decapitation, group healing and shield phases, with moderate damage, bonuses and cooldowns.</MX_NL_NeiyuPowerLevelBalancedDesc>
+  <MX_NL_NeiyuPowerLevelDecorativeLabel>Level 3: Decorative</MX_NL_NeiyuPowerLevelDecorativeLabel>
+  <MX_NL_NeiyuPowerLevelDecorativeDesc>Focused on companionship, appearance and story. Abilities, shield, hunger protection, consciousness floor and special equipment bonuses are inactive. Equipment provides basic combat capability.</MX_NL_NeiyuPowerLevelDecorativeDesc>
+  <MX_NL_NeiyuAbilitiesSealed>Neiyu's active abilities are sealed at the current power level.</MX_NL_NeiyuAbilitiesSealed>
+  <MX_NL_NeiyuAbilityBalancedNotice>See the description for effects and the information panel for stats and cooldowns.</MX_NL_NeiyuAbilityBalancedNotice>
+  <MX_NL_NeiyuAbilityDecorativeNotice>This ability is unavailable.</MX_NL_NeiyuAbilityDecorativeNotice>
+  <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
+  <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>
   <MX_NL_NeedFlowerForm>Requires flower form.</MX_NL_NeedFlowerForm>
   <MX_NL_NeedSwordForm>Requires sword form.</MX_NL_NeedSwordForm>
   <MX_NL_NeedBowForm>Requires bow form.</MX_NL_NeedBowForm>
@@ -51,7 +63,7 @@
   <MX_NL_TargetMustBeHostile>The target must be hostile.</MX_NL_TargetMustBeHostile>
   <MX_NL_FlowerToxinMentalStateReason>Neiyu's flower miasma drove them into a frenzy.</MX_NL_FlowerToxinMentalStateReason>
   <MX_NL_RecruitLetterTitle>Otherworldly Feather Shadow</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>A stable feather-shaped projection has appeared near the colony. The newcomer calls herself Neiyu. She is not the original, but a lively shadow cast into this world by a Milira. Rather than some lofty divine fragment, she feels more like a laughing breeze that wandered in. She says she can stay, or fade away here. The choice is yours.</MX_NL_RecruitLetterText>
+  <MX_NL_RecruitLetterText>A feather-shaped projection has appeared near the colony. She introduces herself as Neiyu, a Milira's projection in this world. Looking around with curiosity, she smiles and asks whether she may stay. You may welcome her or let the projection disperse.</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>Accept Neiyu</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>Not now</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>No player home map is available.</MX_NL_NoPlayerHomeMap>
@@ -82,7 +94,7 @@
   <MX_NL_ShieldTipCurrentTier>Current tier: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>Current buffs:</MX_NL_ShieldTipCurrentBuffs>
   <MX_NL_ShieldTipWeakRemaining>Weakened remaining: {0}h</MX_NL_ShieldTipWeakRemaining>
-  <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -50%, rest fall rate +50%, global work speed -80%</MX_NL_ShieldTipWeakPenalty>
+  <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -{0}%, rest fall rate +{1}%, global work speed -{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>Melee/ranged damage +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>Aiming time {0}{1}%</MX_NL_ShieldBuffAimingTime>
   <MX_NL_ShieldBuffIncomingDamage>Incoming damage factor {0}{1}%</MX_NL_ShieldBuffIncomingDamage>

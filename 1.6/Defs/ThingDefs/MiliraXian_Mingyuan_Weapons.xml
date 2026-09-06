@@ -4,7 +4,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Mingyuan_CinderSword</defName>
         <label>Cinder Ash</label>
-        <description>Mingyuan's pale cinder blade. It strikes for 44 cut damage with 150% armor penetration, attacks twice in roughly 3 seconds through a 0.5 melee cooldown multiplier, and Mingyuan's flame adds Life Burn on each hit.</description>
+        <description>Mingyuan's cinder blade, filled with searing scarlet flame. It has 44 base cut damage, 150% armor penetration and a 0.5 melee cooldown multiplier. Mingyuan's flame applies Life Burn on hit.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -13,6 +13,7 @@
             <drawSize>(2,2)</drawSize>
         </graphicData>
         <uiIconPath>MiliraXianMingyuan/Items/CinderSword</uiIconPath>
+        <equippedAngleOffset>90</equippedAngleOffset>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>
@@ -179,7 +180,7 @@
         <graphicData>
             <texPath>MiliraXianMingyuan/Projectile/RainbowArrow</texPath>
             <graphicClass>Graphic_Single</graphicClass>
-            <drawSize>(0.45,1.8)</drawSize>
+            <drawSize>(1.8,1.8)</drawSize>
             <shaderType>TransparentPostLight</shaderType>
             <color>(255,215,130)</color>
         </graphicData>

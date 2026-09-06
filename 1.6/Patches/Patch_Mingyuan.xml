@@ -2,13 +2,34 @@
 <Patch>
 
     <!-- Mingyuan body addons -->
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            <li Class="PatchOperationTest">
+                <xpath>/Defs/*[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira highlight']/conditions</xpath>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>/Defs/*[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons/li[name='milira highlight']/conditions</xpath>
+                <value>
+                    <Not>
+                        <Or>
+                            <Backstory>
+                                <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                            </Backstory>
+                        </Or>
+                    </Not>
+                </value>
+            </li>
+        </operations>
+    </Operation>
+
     <Operation Class="PatchOperationAdd">
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
         <value>
             <li>
                 <name>milira halo Mingyuan</name>
                 <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/Halo/MiliraXianHaloNeiyu</path>
+                <path>MiliraXianMingyuan/PawnMingyuan/Halo/MiliraXianHaloMingyuan</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>true</layerInvert>
                 <shaderType>MoteGlow</shaderType>
@@ -83,7 +104,7 @@
             <li>
                 <name>milira hair Mingyuan</name>
                 <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHair/MiliraHairNeiyu</path>
+                <path>MiliraXianMingyuan/PawnMingyuan/Hair/MiliraHairMingyuan</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>false</layerInvert>
                 <colorChannel>hair</colorChannel>
@@ -126,54 +147,48 @@
         </value>
     </Operation>
 
-    <Operation Class="PatchOperationAdd">
-        <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
-        <value>
-            <li>
-                <name>milira hair BG Mingyuan</name>
-                <userCustomizable>false</userCustomizable>
-                <path>MiliraXianNeiyu/PawnNeiyu/MiliraXianHairBG/MiliraHairBGNeiyu</path>
-                <inFrontOfBody>false</inFrontOfBody>
-                <layerInvert>false</layerInvert>
-                <colorChannel>hair</colorChannel>
-                <defaultOffset>Center</defaultOffset>
-                <drawSize>1</drawSize>
-                <alignWithHead>true</alignWithHead>
-                <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
-                <linkVariantIndexWithPrevious>true</linkVariantIndexWithPrevious>
-                <useSkipFlags>
-                    <li>Ancot_Hair</li>
-                </useSkipFlags>
-                <conditions>
-                    <BodyPart>
-                        <bodyPart>Head</bodyPart>
-                    </BodyPart>
-                    <Posture>
-                        <drawnStanding>true</drawnStanding>
-                        <drawnInBed>false</drawnInBed>
-                        <drawnLaying>true</drawnLaying>
-                    </Posture>
-                    <RotStage>Fresh,Rotting</RotStage>
-                    <Backstory>
-                        <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
-                    </Backstory>
-                </conditions>
-                <offsets>
-                    <west>
-                        <layerOffset>-0.275</layerOffset>
-                    </west>
-                    <south>
-                        <layerOffset>-0.299</layerOffset>
-                    </south>
-                    <north>
-                        <layerOffset>-0.275</layerOffset>
-                    </north>
-                    <east>
-                        <layerOffset>-0.275</layerOffset>
-                    </east>
-                </offsets>
-            </li>
-        </value>
+    <!-- Facial Animation draws this highlight as part of the eyeball and hides it
+         together with closed eyes. Use the HAR body addon only as a fallback when
+         Facial Animation is not active, otherwise the same texture is drawn twice. -->
+    <Operation Class="PatchOperationConditional">
+        <xpath>/Defs/FacialAnimation.EyeballTypeDef</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName='Milira_Race']/alienRace/generalSettings/alienPartGenerator/bodyAddons</xpath>
+            <value>
+                <li>
+                    <name>milira highlight Mingyuan</name>
+                    <userCustomizable>false</userCustomizable>
+                    <path>MiliraXianMingyuan/PawnMingyuan/BattleHighlight/BattleHighlight</path>
+                    <inFrontOfBody>true</inFrontOfBody>
+                    <layerInvert>true</layerInvert>
+                    <colorChannel>haloMingyuan</colorChannel>
+                    <defaultOffset>Center</defaultOffset>
+                    <drawSize>1</drawSize>
+                    <alignWithHead>true</alignWithHead>
+                    <scaleWithPawnDrawsize>true</scaleWithPawnDrawsize>
+                    <conditions>
+                        <BodyPart>
+                            <bodyPart>Head</bodyPart>
+                        </BodyPart>
+                        <Drafted>true</Drafted>
+                        <Posture>
+                            <drawnStanding>true</drawnStanding>
+                            <drawnInBed>true</drawnInBed>
+                            <drawnLaying>true</drawnLaying>
+                        </Posture>
+                        <Backstory>
+                            <backstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</backstory>
+                        </Backstory>
+                    </conditions>
+                    <offsets>
+                        <west><layerOffset>-0.275</layerOffset></west>
+                        <south><layerOffset>-0.275</layerOffset></south>
+                        <north><layerOffset>-0.275</layerOffset></north>
+                        <east><layerOffset>-0.275</layerOffset></east>
+                    </offsets>
+                </li>
+            </value>
+        </nomatch>
     </Operation>
 
     <Operation Class="PatchOperationAdd">

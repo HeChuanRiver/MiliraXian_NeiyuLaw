@@ -176,6 +176,9 @@ namespace MiliraXian.Characters
             MXNeiyuShieldUtility.ClearCache();
             ZhaoliShieldLayerUtility.ClearCache();
             NeiyuSpecialPawnIntegration.ClearRuntimeState();
+            NeiyuEarAnimationRuntime.Reset();
+            SpecialHaloAnimationRuntime.Reset();
+            CharacterUnityVfxRuntime.Reset();
         }
     }
 

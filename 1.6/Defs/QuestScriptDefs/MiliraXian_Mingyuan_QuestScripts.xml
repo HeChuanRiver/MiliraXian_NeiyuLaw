@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <QuestScriptDef>
+    <defName>MX_Mingyuan_WhiteFlameQuest</defName>
+    <autoAccept>false</autoAccept>
+    <defaultHidden>false</defaultHidden>
+    <expireDaysRange>-1~-1</expireDaysRange>
+    <isRootSpecial>true</isRootSpecial>
+    <sendAvailableLetter>true</sendAvailableLetter>
+    <questAvailableLetterTextIsDescription>true</questAvailableLetterTextIsDescription>
+    <endOnColonyMove>false</endOnColonyMove>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->白焰征兆</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->白色灰烬、无源热浪与短暂的天光在殖民地反复出现。某个被淡色火焰包裹的重生标记正在靠近这个世界。若允许它坠落，你必须守住火焰十二小时。</li>
+      </rulesStrings>
+    </questDescriptionRules>
+    <root Class="MiliraXian.Characters.Mingyuan.QuestNode_Root_MingyuanWhiteFlame" />
+  </QuestScriptDef>
+</Defs>

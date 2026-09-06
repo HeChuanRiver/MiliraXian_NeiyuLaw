@@ -21,6 +21,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void NotifyApplied(Pawn source, float amount)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.NotifyApplied(source, amount);
             if (Pawn == null || Pawn.Dead || Pawn.Destroyed || amount <= 0f)
             {
@@ -99,6 +100,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             resolved = true;
+            if (ZhaoliPowerBalance.Sealed) return;
             Pawn target = pawn;
             if (target == null || target.Dead || target.Destroyed)
             {

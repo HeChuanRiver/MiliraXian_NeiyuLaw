@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Mingyuan;
 using RimWorld;
 using Verse;
 
@@ -44,6 +45,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             RepairNeiyuVisualIdentity(pawn, repairedParts);
+            RepairMingyuanVisualIdentity(pawn, repairedParts);
 
             if (includeSpawnComponents && (pawn.pather == null || pawn.rotationTracker == null))
             {
@@ -123,6 +125,23 @@ namespace MiliraXian.Characters.Neiyu
             {
                 repairedParts.Add("Neiyu visual identity");
             }
+        }
+
+        private static void RepairMingyuanVisualIdentity(Pawn pawn, List<string> repairedParts)
+        {
+            if (!MingyuanUtility.IsMingyuan(pawn) || pawn.story == null)
+            {
+                return;
+            }
+
+            HeadTypeDef headType = DefDatabase<HeadTypeDef>.GetNamedSilentFail("MiliraMingyuanHead");
+            if (headType == null || pawn.story.headType == headType)
+            {
+                return;
+            }
+
+            pawn.story.headType = headType;
+            repairedParts.Add("Mingyuan visual identity");
         }
 
         private static void RepairHealthGraph(Pawn pawn, List<string> repairedParts)

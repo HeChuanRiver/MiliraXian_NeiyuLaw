@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_CinderSword.label>尘烬</MX_Mingyuan_CinderSword.label>
-  <MX_Mingyuan_CinderSword.description>明渊的淡色烬刃。造成 44 点割伤、150% 穿甲，通过 0.5 近战冷却倍率在约 3 秒内打出两次攻击；明渊的火焰会在命中时追加生命燃烧。</MX_Mingyuan_CinderSword.description>
+  <MX_Mingyuan_CinderSword.description>明渊的余烬长剑，剑身流淌着灼热的赤焰。基础割伤44点，破甲150%，近战冷却系数0.5；明渊的火焰会在命中时施加生命燃烧。</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>尘烬</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>长虹</MX_Mingyuan_RainbowBow.label>
   <MX_Mingyuan_RainbowBow.description>由淡金与赤色火焰构成的明渊长弓，可在聚焦与辐射形态间切换。聚焦形态固定蓄力 5 秒，瞬时爆掉一个视线内敌人的生命燃烧，不造成普通武器伤害。辐射形态每秒至多发动一次，贯穿 10 格、108° 扇区内全部合法敌人，各造成 1 点灼伤并叠加其爆条阈值的 23%。</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>长虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>燃烧之柱核心</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>焚我余烬领域</MX_Mingyuan_AshesField.label>
-  <MX_Mingyuan_InfernoArmor.label>熔狱战甲</MX_Mingyuan_InfernoArmor.label>
-  <MX_Mingyuan_InfernoArmor.description>由明渊淡色狱火冷却而成的战甲。覆盖身体与羽翼，抵御常见伤害，提供极高隔热、承载、移速、闪避与承伤减免，且不会损坏。</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_InfernoArmor.label>霞焰羽裳</MX_Mingyuan_InfernoArmor.label>
+  <MX_Mingyuan_InfernoArmor.description>明渊以淡色异界火与燃羽织成的常服，羽摆间流淌着如霞光般的金赤辉彩。看似轻薄，却能覆护身体与羽翼，抵御常见伤害，提供极高的冷热隔绝、承载、移速、闪避与承伤减免，且永不损坏。</MX_Mingyuan_InfernoArmor.description>
   <MX_Mingyuan_BurningFeatherCrown.label>燃浊羽冠</MX_Mingyuan_BurningFeatherCrown.label>
   <MX_Mingyuan_BurningFeatherCrown.description>以白金羽片与赤色燃羽织成的冠饰。它稳定明渊的视线，加快远程攻击，提升闪避，并偏转部分伤害。</MX_Mingyuan_BurningFeatherCrown.description>
 </LanguageData>

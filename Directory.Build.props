@@ -7,6 +7,7 @@
     <RimWorldWorkshopDir Condition="'$(RimWorldWorkshopDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\workshop\content\294100</RimWorldWorkshopDir>
     <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">$(RimWorldInstallDir)\RimWorldWin64_Data\Managed</RimWorldManagedDir>
     <AriandelLibraryDll Condition="'$(AriandelLibraryDll)' == ''">$(RimWorldWorkshopDir)\3665997350\1.6\Assemblies\AriandelLibrary.dll</AriandelLibraryDll>
+    <AlienRaceDll Condition="'$(AlienRaceDll)' == ''">$(RimWorldWorkshopDir)\839005762\1.6\Assemblies\AlienRace.dll</AlienRaceDll>
     <ZAnimationModDll Condition="'$(ZAnimationModDll)' == ''">$(RimWorldWorkshopDir)\2944488802\1.6\Assemblies\zAnimationMod.dll</ZAnimationModDll>
   </PropertyGroup>
 </Project>

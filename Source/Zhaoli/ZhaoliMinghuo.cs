@@ -34,12 +34,13 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    public class CompAbilityEffect_ZhaoliMinghuo : CompAbilityEffect
+    public class CompAbilityEffect_ZhaoliMinghuo : CompAbilityEffect_ZhaoliPowerLimited
     {
         private new CompProperties_AbilityZhaoliMinghuo Props => (CompProperties_AbilityZhaoliMinghuo)props;
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            if (ZhaoliPowerBalance.Sealed) return;
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -168,6 +169,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public bool IsActiveFor(Pawn pawn, ThingWithComps weapon)
         {
+            if (ZhaoliPowerBalance.Sealed) return false;
             if (pawn == null || weapon == null || boundWeapon == null)
             {
                 return false;
@@ -198,7 +200,17 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void CompPostTick(ref float severityAdjustment)
         {
+            if (ZhaoliPowerBalance.Sealed) { Pawn?.health?.RemoveHediff(parent); return; }
             if (boundWeapon == null || Pawn == null || Pawn.Dead || !Pawn.Spawned || Find.TickManager == null)
+            {
+                return;
+            }
+
+            if (MiliraXian.Characters.CharacterUnityVfxRuntime.TryMaintainAttached(
+                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinghuo,
+                    Pawn,
+                    1f,
+                    AuraFrameCount * AuraFrameIntervalTicks))
             {
                 return;
             }
