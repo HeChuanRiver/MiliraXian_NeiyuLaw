@@ -60,10 +60,10 @@
     <StatDef>
         <defName>MX_QH_LotusShieldDamageCapFactor</defName>
         <label>护盾最大单次消耗乘数</label>
-        <description>清荷莲华护盾单次承伤上限的倍率修正。数值为 0 时关闭限伤。</description>
+        <description>清荷莲华护盾单次承伤上限的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
-        <defaultBaseValue>0</defaultBaseValue>
+        <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
             <li>MX_QH_DivineProtection</li>

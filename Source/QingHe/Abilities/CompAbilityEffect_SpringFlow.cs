@@ -1,7 +1,6 @@
-﻿using RimWorld;
+using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
-using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things;
 using UnityEngine;
 using Verse;
@@ -55,7 +54,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             var field = GenSpawn.Spawn(Props.fieldDef, cell, map);
             CompSpringFlowField fieldComp = field.TryGetComp<CompSpringFlowField>();
             fieldComp?.Init(parent.pawn, Props.fieldDurationTicks);
-            fieldComp?.SetEnhanced(MX_QHSkillUtility.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(parent.pawn)));
             PlaySummonVisual(map, cell, ResolveRadius());
         }
 

@@ -3,6 +3,6 @@
   <MX_QH_QixiRitualPattern.ritualExpectedDesc>每年在{DATE}，{MEMBERS}可以在荷池旁举行乞巧仪式。</MX_QH_QixiRitualPattern.ritualExpectedDesc>
   <MX_QH_QixiRitualPattern.ritualExpectedDescNoAdjective>{MEMBERS}可以在荷池旁举行乞巧仪式。</MX_QH_QixiRitualPattern.ritualExpectedDescNoAdjective>
   <MX_QH_QixiRitualPattern.shortDescOverride>在荷池旁举行七夕节的庆祝仪式。</MX_QH_QixiRitualPattern.shortDescOverride>
-  <MX_QH_QixiRitualPattern.ritualExplanation>乞巧仪式必须由清荷在荷池旁主持。仪式品质会影响参与者的心情；完成后会获得失传的曲谱残页，较好的结果还可能带来手工或艺术灵感。</MX_QH_QixiRitualPattern.ritualExplanation>
+  <MX_QH_QixiRitualPattern.ritualExplanation>乞巧仪式必须由清荷在荷池旁主持。仪式品质会影响参与者的心情；完成后会获得一本《荷雨亭曲艺》，较好的结果还可能带来手工或艺术灵感。</MX_QH_QixiRitualPattern.ritualExplanation>
   <MX_QH_QixiRitualPattern.beginRitualOverride>开始乞巧仪式</MX_QH_QixiRitualPattern.beginRitualOverride>
 </LanguageData>

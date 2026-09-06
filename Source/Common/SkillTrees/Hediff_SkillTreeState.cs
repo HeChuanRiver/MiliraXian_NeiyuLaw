@@ -61,34 +61,13 @@ namespace MiliraXian.Characters
             {
                 foreach (SkillNodeDef node in state.LearnedNodes)
                 {
-                    int level = state.GetNodeLevel(node);
-                    if (level <= 0)
+                    if (state.GetNodeLevel(node) <= 0)
                     {
                         continue;
                     }
 
                     AddOffsets(offsets, node.statOffsets, 1f);
                     AddFactors(factors, node.statFactors, 1f);
-                    AddOffsets(offsets, node.statOffsetsPerLevel, level);
-                    AddPerLevelFactors(factors, node.statFactorsPerLevel, level);
-                }
-
-                HashSet<SkillNodeCollectionDef> collections = new();
-                foreach (SkillNodeDef node in state.LearnedNodes)
-                {
-                    if (node?.collection != null)
-                    {
-                        collections.Add(node.collection);
-                    }
-                }
-
-                foreach (SkillNodeCollectionDef collection in collections)
-                {
-                    if (state.IsCollectionCompleted(collection))
-                    {
-                        AddOffsets(offsets, collection.statOffsets, 1f);
-                        AddFactors(factors, collection.statFactors, 1f);
-                    }
                 }
             }
 
@@ -151,11 +130,6 @@ namespace MiliraXian.Characters
                     values[modifier.stat] = factor;
                 }
             }
-        }
-
-        private static void AddPerLevelFactors(Dictionary<StatDef, float> values, List<StatModifier> modifiers, int level)
-        {
-            AddFactors(values, modifiers, Mathf.Max(0, level));
         }
 
         private static List<StatModifier> ToStatModifierList(Dictionary<StatDef, float> values)

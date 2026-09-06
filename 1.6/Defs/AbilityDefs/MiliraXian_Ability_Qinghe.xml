@@ -7,7 +7,7 @@
     <AbilityDef>
         <defName>MX_QH_SpringFlow</defName>
         <label>春泉涌流</label>
-        <description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果。效果持续15秒。</description>
+        <description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>201</displayOrder>
@@ -46,74 +46,9 @@
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_SpiritBurst</defName>
-        <label>断魂</label>
-        <description>消耗2点花令，演奏出强力声波，对目标区域内的敌人造成伤害并使其眩晕。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-        <category>MX_QingheSkill</category>
-        <displayOrder>203</displayOrder>
-        <cooldownTicksRange>1200</cooldownTicksRange>
-        <targetRequired>true</targetRequired>
-        <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>true</targetable>
-            <range>55</range>
-            <warmupTime>1.2</warmupTime>
-            <requireLineOfSight>true</requireLineOfSight>
-            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
-            <targetParams>
-                <canTargetSelf>false</canTargetSelf>
-                <canTargetPawns>true</canTargetPawns>
-                <canTargetLocations>true</canTargetLocations>
-                <canTargetBuildings>true</canTargetBuildings>
-                <canTargetItems>false</canTargetItems>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
-                <requireSword>false</requireSword>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpiritBurst">
-                <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-                <resourceCost>2</resourceCost>
-                <missingResourceMessage>MX_QH_SpiritBurstMissingResource</missingResourceMessage>
-                <radius>2.5</radius>
-                <damageDef>MX_QH_NoteImpact</damageDef>
-                <damageAmount>75</damageAmount>
-                <armorPenetration>1.75</armorPenetration>
-                <stunDamageAmount>8</stunDamageAmount>
-                <brainDestroyChance>0.01</brainDestroyChance>
-                <enhancedPsychicSensitivityThreshold>1.0</enhancedPsychicSensitivityThreshold>
-                <enhancedPsychicDamageMultiplier>10</enhancedPsychicDamageMultiplier>
-                <enhancedFearAbnormals>
-                    <li>MX_AbnormalFear</li>
-                    <li>MX_AbnormalOverload</li>
-                </enhancedFearAbnormals>
-                <enhancedFearAccumulationAmount>150</enhancedFearAccumulationAmount>
-                <curveMote>MX_QH_Mote_SpiritBurstCurvedTrail</curveMote>
-                <curveDistortWidth>4.2</curveDistortWidth>
-                <curveDistortAlpha>0.68</curveDistortAlpha>
-                <curveWidth>3.1</curveWidth>
-                <curveDensity>8.8</curveDensity>
-                <curveWaveLen>4.8</curveWaveLen>
-                <curveAlpha>2.1</curveAlpha>
-                <curveAfterLayers>9</curveAfterLayers>
-                <curveAfterGap>1</curveAfterGap>
-                <curveAfterAlpha>0.62</curveAfterAlpha>
-                <curveMinSegs>28</curveMinSegs>
-                <curveMaxSegs>96</curveMaxSegs>
-                <curveDistortStep>3</curveDistortStep>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <AbilityDef>
         <defName>MX_QH_LunarMirror</defName>
         <label>霜月镜</label>
-        <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。护盾持续20秒，最多吸收300点伤害。</description>
+        <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，最多吸收300点伤害。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>204</displayOrder>
@@ -153,42 +88,9 @@
     </AbilityDef>
 
     <AbilityDef>
-        <defName>MX_QH_EyeOfHeart</defName>
-        <label>心眼</label>
-        <description>凝神持续1秒。期间遭到任何敌对攻击时，无论攻击是否命中或造成伤害，立即回复10%的莲华护盾并获得1点剑压。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-        <category>MX_QingheSkill</category>
-        <displayOrder>220</displayOrder>
-        <cooldownTicksRange>900</cooldownTicksRange>
-        <targetRequired>false</targetRequired>
-        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>false</targetable>
-            <range>1</range>
-            <warmupTime>0</warmupTime>
-            <nonInterruptingSelfCast>true</nonInterruptingSelfCast>
-            <targetParams>
-                <canTargetSelf>true</canTargetSelf>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
-                <requireSword>true</requireSword>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityEyeOfHeart">
-                <stateHediff>MX_QH_EyeOfHeartState</stateHediff>
-                <durationTicks>60</durationTicks>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <AbilityDef>
         <defName>MX_QH_IllusoryReflection</defName>
         <label>镜花水月</label>
-        <description>向所选方向举刀进入持续5秒且无法主动中断的防御架势，受到范围内的任意攻击时，化解此次攻击并立即消耗一层剑压发动高威力斩击。剑压不足1层时也能发动，但斩击威力将大幅削弱。\n\n防御架势期间受到范围外的攻击伤害降低60%。\n\n——镜花水月，如梦似幻。</description>
+        <description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即消耗剑压向目标方向发动强力反击，剑压不足也可发动，但斩击的威力将大幅削弱。\n\n——镜花水月，如梦似幻。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
         <category>MX_QingheSkill</category>
         <displayOrder>225</displayOrder>
@@ -227,7 +129,6 @@
                 <coneAngleDegrees>180</coneAngleDegrees>
                 <invulnerabilityHediff>MX_QH_IllusoryReflectionInvulnerable</invulnerabilityHediff>
                 <invulnerabilityTicks>120</invulnerabilityTicks>
-                <eyeOfHeartCooldownReductionTicks>600</eyeOfHeartCooldownReductionTicks>
                 <stanceSound>MX_QH_MirrorSlash_Stance</stanceSound>
                 <slashSound>MX_QH_MirrorSlash_Slash</slashSound>
                 <normalSlashFleck>MX_QH_Fleck_MirrorSlashNormal</normalSlashFleck>
@@ -323,60 +224,6 @@
                 <ascentTrailFleck>MXNL_Skyfall_FlyBegin_F</ascentTrailFleck>
                 <ascentTrailFleckSize>(1.1,10.1)</ascentTrailFleckSize>
                 <ascentTrailFleckOffset>(0,4)</ascentTrailFleckOffset>
-            </li>
-        </comps>
-    </AbilityDef>
-
-    <AbilityDef>
-        <defName>MX_QH_LuoshenRibbon</defName>
-        <label>洛神的缎带</label>
-        <description>习得洛神赋后可使用。选择两名清醒的人，以洛神的缎带牵引彼此心意，大幅提升双方互相的看法。</description>
-        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-        <category>MX_QingheSkill</category>
-        <displayOrder>240</displayOrder>
-        <cooldownTicksRange>360000</cooldownTicksRange>
-        <targetRequired>true</targetRequired>
-        <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-        <warmupMote>Mote_WarmupWordOf</warmupMote>
-        <warmupSound>Psycast_WordOf_Warmup</warmupSound>
-        <stunTargetWhileCasting>true</stunTargetWhileCasting>
-        <showPsycastEffects>false</showPsycastEffects>
-        <moteOffsetAmountTowardsTarget>0.5</moteOffsetAmountTowardsTarget>
-        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
-        <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
-            <targetable>true</targetable>
-            <range>24</range>
-            <warmupTime>1.5</warmupTime>
-            <requireLineOfSight>true</requireLineOfSight>
-            <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
-            <targetParams>
-                <canTargetSelf>true</canTargetSelf>
-                <canTargetPawns>true</canTargetPawns>
-                <canTargetAnimals>false</canTargetAnimals>
-                <canTargetMechs>false</canTargetMechs>
-                <canTargetBuildings>false</canTargetBuildings>
-                <canTargetItems>false</canTargetItems>
-            </targetParams>
-        </verbProperties>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityQingheWeaponMode">
-                <requireSword>false</requireSword>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLuoshenRibbon">
-                <destination>Selected</destination>
-                <psychic>true</psychic>
-                <applicableToMechs>false</applicableToMechs>
-                <range>24</range>
-                <requiresLineOfSight>true</requiresLineOfSight>
-                <opinionThoughtDef>MX_QH_LuoshenRibbonGrace</opinionThoughtDef>
-                <invalidTargetMessage>MX_QH_LuoshenRibbonInvalidTarget</invalidTargetMessage>
-                <successMessage>MX_QH_LuoshenRibbonApplied</successMessage>
-            </li>
-            <li Class="CompProperties_AbilityFleckOnTarget">
-                <fleckDef>WordOfApply</fleckDef>
-                <sound>Psycast_WordOf_Effect</sound>
             </li>
         </comps>
     </AbilityDef>

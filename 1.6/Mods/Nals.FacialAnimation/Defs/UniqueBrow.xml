@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <FacialAnimation.BrowTypeDef>
+        <defName>MiliraXian_Brow_Qinghe</defName>
+        <texPath>MiliraXianQinghe/Pawn/FA_Components/Brow</texPath>
+        <raceName>Milira_Race</raceName>
+        <shader>Map/Transparent</shader>
+        <enableUnisexTexPath>True</enableUnisexTexPath>
+        <probability>0.0001</probability>
+        <modExtensions>
+            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
+                <forNPC>Qinghe</forNPC>
+            </li>
+        </modExtensions>
+    </FacialAnimation.BrowTypeDef>
+</Defs>

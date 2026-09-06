@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_QixiOutcome.description>Depending on ritual quality, participants gain a mood thought lasting {MOODDAYS} days, between {MINMOOD} and {MAXMOOD}. Completing the Qixi rite also grants lost score fragments, and better outcomes may inspire participants.</MX_QH_QixiOutcome.description>
+  <MX_QH_QixiOutcome.description>Depending on ritual quality, participants gain a mood thought lasting {MOODDAYS} days, between {MINMOOD} and {MAXMOOD}. Completing the Qixi rite also grants a copy of "Lotus Rain Pavilion Artistry", and better outcomes may inspire participants.</MX_QH_QixiOutcome.description>
   <MX_QH_QixiOutcome.comps.1.label>Qinghe present</MX_QH_QixiOutcome.comps.1.label>
   <MX_QH_QixiOutcome.comps.2.label>participant count</MX_QH_QixiOutcome.comps.2.label>
   <MX_QH_QixiOutcome.comps.3.label>started by lotus pond</MX_QH_QixiOutcome.comps.3.label>

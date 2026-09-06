@@ -5,24 +5,7 @@
   <MX_Common_ResourceOverflowing>当前数值已超过上限。</MX_Common_ResourceOverflowing>
   <MX_Common_Unknown>未知</MX_Common_Unknown>
   <MX_Common_UnknownTarget>未知目标</MX_Common_UnknownTarget>
-  <MX_Common_SkillTreeStateAlreadyLearned>已经达到最高等级。</MX_Common_SkillTreeStateAlreadyLearned>
-  <MX_Common_SkillBookMissingState>缺少技能状态。</MX_Common_SkillBookMissingState>
-  <MX_Common_SkillBookDataMissing>技能书数据缺失。</MX_Common_SkillBookDataMissing>
-  <MX_Common_SkillBookNoLearnableContent>这本技能书对当前读者没有可学习内容。</MX_Common_SkillBookNoLearnableContent>
-  <MX_Common_SkillBookBenefitNodes>提升技能节点：{0}</MX_Common_SkillBookBenefitNodes>
-  <MX_Common_SkillBookBenefitNodeLine> - 可习得：{0} (+{1}技能点/小时)</MX_Common_SkillBookBenefitNodeLine>
-  <MX_Common_SkillBookQualitySummary_Awful>纸页脆裂发黄，墨迹晕成斑痕，许多段落只能从残句中勉强推读。</MX_Common_SkillBookQualitySummary_Awful>
-  <MX_Common_SkillBookQualitySummary_Poor>装订尚未散开，但墨痕杂乱、旁批潦草，读起来颇费心神。</MX_Common_SkillBookQualitySummary_Poor>
-  <MX_Common_SkillBookQualitySummary_Normal>纸面平整，字迹清楚，足以让读者按部就班地研读其中法门。</MX_Common_SkillBookQualitySummary_Normal>
-  <MX_Common_SkillBookQualitySummary_Good>纸墨保存良好，注解也颇有章法，疑难处多能顺势读通。</MX_Common_SkillBookQualitySummary_Good>
-  <MX_Common_SkillBookQualitySummary_Excellent>此卷制作用心，图解精细，批注层次分明，翻阅间自有引导之意。</MX_Common_SkillBookQualitySummary_Excellent>
-  <MX_Common_SkillBookQualitySummary_Masterwork>每一道折痕、每一笔墨色都恰到好处，仿佛书卷本身也懂得授业。</MX_Common_SkillBookQualitySummary_Masterwork>
-  <MX_Common_SkillBookQualitySummary_Legendary>书页间自有沉静气韵，目光稍驻，便似能触及字里行间潜藏的真意。</MX_Common_SkillBookQualitySummary_Legendary>
   <MX_Common_Parentheses>（{0}）</MX_Common_Parentheses>
-  <MX_Common_SkillNodesLearnedLetterLabel>习得新技能</MX_Common_SkillNodesLearnedLetterLabel>
-  <MX_Common_SkillNodesLearnedLetterText>{0} 已完成研读，获得：{1}</MX_Common_SkillNodesLearnedLetterText>
-  <MX_Common_SkillTreeStateLevel>{0}/{1}</MX_Common_SkillTreeStateLevel>
-  <MX_Common_SkillBookStatCategory>技能书内容</MX_Common_SkillBookStatCategory>
 
   <MX_ModeSwitch_CommandLabel>切换形态</MX_ModeSwitch_CommandLabel>
   <MX_ModeSwitch_CommandDesc>切换为其他形态</MX_ModeSwitch_CommandDesc>
@@ -118,15 +101,21 @@
   <MX_QH_NeedRequiredWeapon>需要对应武器。</MX_QH_NeedRequiredWeapon>
   <MX_QH_LongBreathLowResourceWarning>【警告】清荷已无可用的花神之垂怜充能，受到伤害可能会致命！</MX_QH_LongBreathLowResourceWarning>
   <MX_QH_LongBreathTriggered>【花神之垂怜】已触发：抵消了一次可能致命的伤害。</MX_QH_LongBreathTriggered>
-  <MX_QH_DevLearnAllNodesLabel>DEV：习得全部清荷节点</MX_QH_DevLearnAllNodesLabel>
-  <MX_QH_DevLearnAllNodesDesc>用于测试清荷技能树与当前已迁移技能联动。</MX_QH_DevLearnAllNodesDesc>
-  <MX_QH_DevLearnAllNodesMessage>清荷已习得所有当前定义的节点。</MX_QH_DevLearnAllNodesMessage>
   <MX_QH_DevAddDivineGraceLevelLabel>DEV：花神之恩典 +1</MX_QH_DevAddDivineGraceLevelLabel>
   <MX_QH_DevAddDivineGraceLevelDesc>直接令花神之恩典提高 1 级，用于测试 staged stat 生效路径。</MX_QH_DevAddDivineGraceLevelDesc>
-  <MX_QH_DevAddDivineGraceLevelMessage>花神之恩典已提升至 {0} 级。</MX_QH_DevAddDivineGraceLevelMessage>
+  <MX_QH_DivineGraceGainedMessage>清荷的花神之恩典提升至 {0} 级。</MX_QH_DivineGraceGainedMessage>
+  <MX_QH_FlowerCourtTuneTitle>四时调谐</MX_QH_FlowerCourtTuneTitle>
+  <MX_QH_FlowerCourtGraceLine>花神之恩典：{0} / {1}</MX_QH_FlowerCourtGraceLine>
+  <MX_QH_ResonanceTab_Label>调谐共鸣</MX_QH_ResonanceTab_Label>
+  <MX_QH_SkillTreeTab_Label>技能树信息</MX_QH_SkillTreeTab_Label>
+  <MX_QH_GraceProgressLine>进度：{0} / {1}（{2}）</MX_QH_GraceProgressLine>
+  <MX_QH_GraceProgressMax>已达最高恩典等级</MX_QH_GraceProgressMax>
+  <MX_QH_FlowerCourtTraitsTitle>特性说明</MX_QH_FlowerCourtTraitsTitle>
+  <MX_QH_FlowerCourtNodeLevel>Lv.{0}</MX_QH_FlowerCourtNodeLevel>
+  <MX_QH_FlowerCourtNodeLearned>已习得</MX_QH_FlowerCourtNodeLearned>
+  <MX_QH_FlowerCourtNodeLocked>需要恩典等级 {0}</MX_QH_FlowerCourtNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
   <MX_QH_SpringFlowMissingResource>花令不足，无法施放春泉涌流。</MX_QH_SpringFlowMissingResource>
-  <MX_QH_SpiritBurstMissingResource>花令不足，无法施放断魂。</MX_QH_SpiritBurstMissingResource>
   <MX_QH_LunarMirrorMissingResource>花令不足，无法施放霜月镜。</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresSwordMode>需要装备散华。</MX_QH_RequiresSwordMode>
   <MX_QH_RequiresBellMode>需要装备花信风铃。</MX_QH_RequiresBellMode>
@@ -141,21 +130,14 @@
   <MX_QH_AscentSlashInProgress>剑势·绝影仍在施展中。</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashLandingNoLineOfSight>剑势·绝影的落点需要在清荷视线内。</MX_QH_AscentSlashLandingNoLineOfSight>
   <MX_QH_AscentSlashInvalidLanding>无法在该位置施展剑势·绝影。</MX_QH_AscentSlashInvalidLanding>
-  <MX_QH_LuoshenRibbonInvalidTarget>洛神的缎带只能连接两名清醒的人。</MX_QH_LuoshenRibbonInvalidTarget>
-  <MX_QH_LuoshenRibbonChooseFirst>选择洛神缎带的一端</MX_QH_LuoshenRibbonChooseFirst>
-  <MX_QH_LuoshenRibbonChooseSecond>选择洛神缎带的另一端</MX_QH_LuoshenRibbonChooseSecond>
-  <MX_QH_LuoshenRibbonApplied>洛神的缎带牵起了{0}与{1}之间的心意。</MX_QH_LuoshenRibbonApplied>
   <MX_QH_LotusPondAssignQingheOnly>荷池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>
   <MX_QH_OpenFlowerCourtRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenFlowerCourtRequiresQinghe>
   <MX_QH_OpenFlowerCourt>打开修习面板</MX_QH_OpenFlowerCourt>
   <MX_QH_LotusPondCannotReach>清荷现在无法接近荷池。</MX_QH_LotusPondCannotReach>
   <MX_QH_FlowerCourtMissing>地图上找不到荷池。</MX_QH_FlowerCourtMissing>
-  <MX_QH_TuneFlowerBellRequiresWeapon>调谐花信铃（需要装备花信铃）</MX_QH_TuneFlowerBellRequiresWeapon>
-  <MX_QH_TuneFlowerBellOption>调谐花信铃：{0}</MX_QH_TuneFlowerBellOption>
   <MX_QH_CurrentSuffix>（当前）</MX_QH_CurrentSuffix>
-  <MX_QH_TuneFlowerBellNoWeapon>花信铃不在清荷手中。（你是怎么把它弄丢的？丢了就只能开发者刷一个了）</MX_QH_TuneFlowerBellNoWeapon>
-  <MX_QH_FlowerBellBuildingDamageLabel>共振模式</MX_QH_FlowerBellBuildingDamageLabel>
-  <MX_QH_FlowerBellBuildingDamageDesc>允许花信铃的攻击对建筑造成额外伤害，提供此切换功能主要是考虑到友伤问题。</MX_QH_FlowerBellBuildingDamageDesc>
+  <MX_QH_TuneConfirmText>清荷需要静心调律片刻，之后24小时内无法再次调谐。确认切换到「{0}」？</MX_QH_TuneConfirmText>
+  <MX_QH_TuneCooldownRemaining>调谐冷却中（剩余 {0} 小时）</MX_QH_TuneCooldownRemaining>
   <MX_QH_FlowerBellResonanceSpring>春</MX_QH_FlowerBellResonanceSpring>
   <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
   <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
@@ -172,22 +154,6 @@
   <MX_QH_SwordResonanceDescriptionSummer>荷雨共鸣：攻击命中时获得的剑压提高50%，并积累剧毒与腐蚀。</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>无常共鸣：攻击的穿甲能力提高50%，并积累恐惧与过载。</MX_QH_SwordResonanceDescriptionAutumn>
   <MX_QH_SwordResonanceDescriptionWinter>凝霜共鸣：每次攻击命中后回复8点莲华护盾，并积累冻结。</MX_QH_SwordResonanceDescriptionWinter>
-  <MX_QH_SkillTreeNoScores>尚未发现</MX_QH_SkillTreeNoScores>
-  <MX_QH_SkillTreeStateLearned>已习得</MX_QH_SkillTreeStateLearned>
-  <MX_QH_SkillTreeStateAlreadyLearned>已经达到最高等级。</MX_QH_SkillTreeStateAlreadyLearned>
-  <MX_QH_SkillTreeStateLevel>{0}/{1} 级</MX_QH_SkillTreeStateLevel>
-  <MX_QH_SkillTreeStateReading>研习中</MX_QH_SkillTreeStateReading>
-  <MX_QH_SkillTreeStateReadingWithProgress>研习中 {0}</MX_QH_SkillTreeStateReadingWithProgress>
-  <MX_QH_SkillTreeStatePending>尚未开始学习</MX_QH_SkillTreeStatePending>
-  <MX_QH_SkillTreeNoNodeSelected>未选择节点。</MX_QH_SkillTreeNoNodeSelected>
-  <MX_QH_SkillTreeUnlockProgress>研习进度</MX_QH_SkillTreeUnlockProgress>
-  <MX_QH_SkillTreeStatusLine>{0}</MX_QH_SkillTreeStatusLine>
-  <MX_QH_SkillTreeEffects>效果：</MX_QH_SkillTreeEffects>
-  <MX_QH_SkillTreeCollectionCompletionActive>{0}（已生效）</MX_QH_SkillTreeCollectionCompletionActive>
-  <MX_QH_SkillTreeCollectionCompletionLocked>{0}（全部习得后生效）</MX_QH_SkillTreeCollectionCompletionLocked>
-  <MX_QH_SkillTreeSourceScores>-删除此显示-</MX_QH_SkillTreeSourceScores>
-  <MX_QH_SkillTreeImportantNode>-删除此显示-</MX_QH_SkillTreeImportantNode>
-  <MX_QH_SkillTreeSourceScoreEntry>《{0}》</MX_QH_SkillTreeSourceScoreEntry>
   <MX_QH_FlowerPanelHelpTitle>清荷面板说明</MX_QH_FlowerPanelHelpTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeTitle>花令</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeBody>用于释放飞花令，分段显示当前花令数量和恢复进度。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
@@ -198,41 +164,14 @@
   <MX_QH_FlowerPanelHelpFlowerCourtTitle>花神庭</MX_QH_FlowerPanelHelpFlowerCourtTitle>
   <MX_QH_FlowerPanelHelpFlowerCourtBody>显示技能节点与静思进度，点击打开花神庭面板。</MX_QH_FlowerPanelHelpFlowerCourtBody>
   <MX_QH_Parentheses>（{0}）</MX_QH_Parentheses>
-  <MX_QH_MusicScoreStatCategory>秘传·花舞</MX_QH_MusicScoreStatCategory>
-  <MX_QH_SkillBookAcquiredLetterLabel>新曲谱入卷</MX_QH_SkillBookAcquiredLetterLabel>
-  <MX_QH_SkillBookAcquiredLetterText>装订出了一本新的曲谱书：《{0}》。&#10;&#10;清荷研读它时，可学习或推进对应曲谱节点。</MX_QH_SkillBookAcquiredLetterText>
-  <MX_QH_Book_LostScore_Label>失传的曲谱</MX_QH_Book_LostScore_Label>
-  <MX_QH_Book_LostScore_Desc>记载了失传已久的{0}曲目的曲谱。拥有对应技能树的小人研读后，可推进这些曲谱节点。</MX_QH_Book_LostScore_Desc>
-  <MX_QH_Book_FeihuaJueyu_Label>飞花绝语</MX_QH_Book_FeihuaJueyu_Label>
-  <MX_QH_Book_FeihuaJueyu_Desc>一卷以飞花化音为旨的曲谱。拥有对应技能树的小人研读后可解锁穿魂，并提升花令上限。</MX_QH_Book_FeihuaJueyu_Desc>
-  <MX_QH_Book_DuanqiaoCanxue_Label>断桥残雪</MX_QH_Book_DuanqiaoCanxue_Label>
-  <MX_QH_Book_DuanqiaoCanxue_Desc>一卷寒意未散的残谱。拥有对应技能树的小人研读后可解锁霜月镜，并提升花令上限。</MX_QH_Book_DuanqiaoCanxue_Desc>
-  <MX_QH_Book_Gaoshan_Label>高山</MX_QH_Book_Gaoshan_Label>
-  <MX_QH_Book_Gaoshan_Desc>一卷沉静如山的曲谱。研读后可提高护盾容量。</MX_QH_Book_Gaoshan_Desc>
-  <MX_QH_Book_Liushui_Label>流水</MX_QH_Book_Liushui_Label>
-  <MX_QH_Book_Liushui_Desc>一卷行云流水般的曲谱。研读后可提高护盾回充速度。</MX_QH_Book_Liushui_Desc>
-  <MX_QH_Book_Chunjiang_Label>春江</MX_QH_Book_Chunjiang_Label>
-  <MX_QH_Book_Chunjiang_Desc>一卷春水初涨的曲谱。研读后可缩短花神之眷顾被击碎后的失效延迟。</MX_QH_Book_Chunjiang_Desc>
-  <MX_QH_Book_DivineGrace_Label>神恩</MX_QH_Book_DivineGrace_Label>
-  <MX_QH_Book_DivineGrace_Desc>一卷整理过的清荷修行札记。研读后可提升一级“花神之恩典”。</MX_QH_Book_DivineGrace_Desc>
-  <MX_QH_Book_Yingyue_Label>映月</MX_QH_Book_Yingyue_Label>
-  <MX_QH_Book_Yingyue_Desc>一卷月影清澈的曲谱。研读后可提高花神之垂怜的可用次数。</MX_QH_Book_Yingyue_Desc>
-  <MX_QH_Book_Jueying_Label>绝影</MX_QH_Book_Jueying_Label>
-  <MX_QH_Book_Jueying_Desc>一卷动若流影的曲谱（也许是从霓羽那偷来的）。研读后可解锁剑势·绝影。</MX_QH_Book_Jueying_Desc>
-  <MX_QH_Book_Luoshenfu_Label>洛神赋</MX_QH_Book_Luoshenfu_Label>
-  <MX_QH_Book_Luoshenfu_Desc>一卷写尽牵系与归来的赋谱。研读后可开启洛神赋相关效果。</MX_QH_Book_Luoshenfu_Desc>
-  <MX_QH_UnknownNode>未知节点。</MX_QH_UnknownNode>
-  <MX_QH_SkillNodesLearnedLetterLabel>曲谱节点习得</MX_QH_SkillNodesLearnedLetterLabel>
-  <MX_QH_SkillNodesLearnedLetterText>《{0}》的一次研读提升了：{1}。</MX_QH_SkillNodesLearnedLetterText>
   <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
-  <MX_QH_LongNightStillnessDescription>清荷已积蓄圆满的静思。下一次进行需要品质的建造、制作或艺术创作时，将消耗大部分静思并获得更稳定的品质提升。</MX_QH_LongNightStillnessDescription>
+  <MX_QH_LongNightStillnessDescription>清荷已积蓄圆满的静思。下一次进行需要品质的建造、制作或艺术创作时，将消耗全部静思并使品质 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>清荷的静思已经积蓄圆满。</MX_QH_MeditativeStillnessFullMessage>
   <MX_QH_LotusShieldTooltipTitle>花神之眷顾</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>护盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>回复速率：{0} /秒</MX_QH_LotusShieldRegenLine>
   <MX_QH_LotusShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_LotusShieldRegenDelayLine>
   <MX_QH_FlowerCourtTitle>花神庭</MX_QH_FlowerCourtTitle>
-  <MX_QH_FlowerCourtUnlockedTreesLine>已解读曲谱集：{0}</MX_QH_FlowerCourtUnlockedTreesLine>
   <MX_QH_FlowerCourtLearnedNodesLine>已习得节点：{0}</MX_QH_FlowerCourtLearnedNodesLine>
   <MX_QH_FlowerCourtStillnessLine>静思：{0} % / {1} %</MX_QH_FlowerCourtStillnessLine>
   <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
@@ -249,7 +188,7 @@
   <MX_QH_RecoverySpeedLine>恢复速度：{0} /秒</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧仪式。</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>乞巧仪式仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
-  <MX_QH_QixiOutcomeFragments>获得了 {0} 份失传的清荷曲谱残页。</MX_QH_QixiOutcomeFragments>
+  <MX_QH_QixiOutcomeBook>获得了一本《荷雨亭曲艺》。</MX_QH_QixiOutcomeBook>
   <MX_QH_QixiOutcomeInspirations>获得灵感的参与者：{0}。</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>受乞巧仪式启发。</MX_QH_QixiInspirationReason>
   <MX_QH_FlowerCourtDesignLocked>尚未获得荷池设计图。</MX_QH_FlowerCourtDesignLocked>
@@ -258,9 +197,9 @@
   <MX_QH_FlowerCourtQingheArrivedLetterLabel>清荷抵达</MX_QH_FlowerCourtQingheArrivedLetterLabel>
   <MX_QH_FlowerCourtQingheArrivedLetterText>荷池中的水纹静了下来，清荷循着这处新庭院来到殖民地，并愿意在此留下。她还需要一处观感看得过去的荷雨亭，才好真正安顿下来。</MX_QH_FlowerCourtQingheArrivedLetterText>
   <MX_QH_FlowerCourtSecondStageLetterLabel>整理荷雨亭</MX_QH_FlowerCourtSecondStageLetterLabel>
-  <MX_QH_FlowerCourtSecondStageLetterText>荷池已经建成。请将荷池所在的房间整理成观感看得过去的荷雨亭。完成后会获得1个失传的曲谱残片，可在艺创台解读。</MX_QH_FlowerCourtSecondStageLetterText>
+  <MX_QH_FlowerCourtSecondStageLetterText>荷池已经建成。请将荷池所在的房间整理成观感看得过去的荷雨亭。完成后会获得一本《荷雨亭曲艺》。</MX_QH_FlowerCourtSecondStageLetterText>
   <MX_QH_FlowerCourtCompletedLetterLabel>花神庭初成</MX_QH_FlowerCourtCompletedLetterLabel>
-  <MX_QH_FlowerCourtCompletedLetterText>荷雨亭终于安定下来。作为回响，荷池旁凝出了一份失传的曲谱残片。可以在艺创台由清荷解读它。</MX_QH_FlowerCourtCompletedLetterText>
+  <MX_QH_FlowerCourtCompletedLetterText>荷雨亭终于安定下来。作为回响，荷池旁出现了一本《荷雨亭曲艺》。</MX_QH_FlowerCourtCompletedLetterText>
   <MX_QH_FlowerCourtAutoAcceptedLetterLabel>荷雨亭</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
   <MX_QH_FlowerCourtAutoAcceptedLetterText>清荷整理出了荷池设计图。现在可以在杂项分类中建造荷池，并以此作为新花神庭的核心。</MX_QH_FlowerCourtAutoAcceptedLetterText>
   <MX_QH_RecipeRequiresQinghe>只有清荷可以执行这个配方。</MX_QH_RecipeRequiresQinghe>

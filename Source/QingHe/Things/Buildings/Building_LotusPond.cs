@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using System.Linq;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Rituals;
-using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
 using UnityEngine;
@@ -184,32 +183,6 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         qixiRitual.Icon,
                         Color.white);
                 }
-            }
-
-            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.EnsureCombatState(interactor);
-
-            foreach (FlowerBellResonance resonance in System.Enum.GetValues(typeof(FlowerBellResonance)))
-            {
-                FlowerBellResonance targetResonance = resonance;
-                string label = "MX_QH_TuneFlowerBellOption".Translate(CompFlowerBellResonance.LabelFor(targetResonance));
-                if (combatState?.Resonance == targetResonance)
-                {
-                    yield return new FloatMenuOption(label + "MX_QH_CurrentSuffix".Translate(), null);
-                    continue;
-                }
-
-                yield return new FloatMenuOption(label, delegate
-                {
-                    if (!interactor.CanReserveAndReach(clickedThing, PathEndMode.InteractionCell, Danger.Deadly))
-                    {
-                        Messages.Message("MX_QH_LotusPondCannotReach".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);
-                        return;
-                    }
-
-                    Job job = JobMaker.MakeJob(MX_QHDefOf.MX_QH_TuneBell, clickedThing);
-                    job.count = (int)targetResonance;
-                    interactor.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-                });
             }
         }
     }

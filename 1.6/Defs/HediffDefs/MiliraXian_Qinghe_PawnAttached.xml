@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
         <defName>MX_QH_FlowerDecree</defName>
@@ -52,7 +52,7 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SwordPressure">
                 <resourceLabel>剑压</resourceLabel>
-                <resourceDescription>挥剑命中敌人或成功发动心眼时积累。未完成的一段剑压会在停止获取后逐渐消退。</resourceDescription>
+                <resourceDescription>挥剑命中敌人时积累。未完成的一段剑压会在停止获取后逐渐消退。</resourceDescription>
                 <initialValue>0</initialValue>
                 <maxValue>300</maxValue>
                 <valuePerPoint>100</valuePerPoint>
@@ -70,7 +70,7 @@
     <HediffDef>
         <defName>MX_QH_MeditativeStillness</defName>
         <label>静思</label>
-        <description>冥想或者读书可以积累静思，清荷进行艺术创作和手工制作都会基于当前积累的量消耗静思，并给予一定品质加成。</description>
+        <description>冥想或者读书可以积累静思，清荷进行需要品质的建造、制作或艺术创作时，会基于当前静思获得品质加成：静思未满时不消耗静思、有概率使品质 +1；静思蓄满时会消耗全部静思并使品质 +2。</description>
         <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_MeditativeStillness</hediffClass>
         <defaultLabelColor>(0.48, 0.90, 0.58)</defaultLabelColor>
         <isBad>false</isBad>
@@ -88,11 +88,8 @@
                 <meditationGainPerDay>100</meditationGainPerDay>
                 <readingGainPerDay>100</readingGainPerDay>
                 <sleepGainPerDay>100</sleepGainPerDay>
-                <partialQualityConsumeFactor>0.3</partialQualityConsumeFactor>
-                <fullQualityConsumeFactor>0.8</fullQualityConsumeFactor>
-                <qualityBonusChancePerFullStillness>1</qualityBonusChancePerFullStillness>
-                <maxNormalQualityBonusLevels>1</maxNormalQualityBonusLevels>
-                <fullQualityBonusLevels>1</fullQualityBonusLevels>
+                <partialQualityBonusChancePerFull>0.5</partialQualityBonusChancePerFull>
+                <fullQualityBonusLevels>2</fullQualityBonusLevels>
                 <longNightLabel>MX_QH_LongNightStillnessLabel</longNightLabel>
                 <longNightDescription>MX_QH_LongNightStillnessDescription</longNightDescription>
                 <clampToMax>true</clampToMax>
@@ -109,7 +106,7 @@
         <label>涓流</label>
         <description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.64, 0.36, 0.76)</defaultLabelColor>
+        <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
@@ -140,7 +137,6 @@
         <maxSeverity>1.0</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.HediffCompProperties_SkillTreeState">
-                <alreadyLearnedReasonKey>MX_QH_SkillTreeStateAlreadyLearned</alreadyLearnedReasonKey>
                 <categories>
                     <li>MX_QH_Category_Qinghe</li>
                 </categories>
@@ -226,15 +222,16 @@
         <isBad>false</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
         <everCurableByItem>false</everCurableByItem>
-        <initialSeverity>1</initialSeverity>
-        <minSeverity>1</minSeverity>
+        <initialSeverity>0</initialSeverity>
+        <minSeverity>0</minSeverity>
         <maxSeverity>24</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.HediffCompProperties_SeverityLevelLabel" />
+            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheGraceSync" />
         </comps>
         <stages>
             <li>
-                <minSeverity>1</minSeverity>
+                <minSeverity>0</minSeverity>
                 <statOffsetsBySeverity>
                     <li>
                         <stat>MoveSpeed</stat>
@@ -372,7 +369,7 @@
     <HediffDef>
         <defName>MX_QH_DivineProtection</defName>
         <label>花神之眷顾</label>
-        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</description>
+        <description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。护盾单次承伤最多消耗20点。\n\n护盾被击碎时会失效3秒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
         <isBad>false</isBad>
@@ -381,10 +378,10 @@
         <comps>
             <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineProtection">
                 <shieldCompProperties>
-                    <maxEnergy>200</maxEnergy>
-                    <baseRegenPerSecond>5</baseRegenPerSecond>
+                    <maxEnergy>500</maxEnergy>
+                    <baseRegenPerSecond>15</baseRegenPerSecond>
                     <hitRegenDelayTicks>120</hitRegenDelayTicks>
-                    <breakDisabledTicks>600</breakDisabledTicks>
+                    <breakDisabledTicks>180</breakDisabledTicks>
                     <breakOnEmp>false</breakOnEmp>
                     <shieldDamageCap>20</shieldDamageCap>
                     <visual>

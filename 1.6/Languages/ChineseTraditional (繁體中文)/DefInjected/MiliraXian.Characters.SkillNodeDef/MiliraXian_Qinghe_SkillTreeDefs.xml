@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Node_SpringFlow.label>春泉</MX_QH_Node_SpringFlow.label>
-  <MX_QH_Node_SpringFlow.description>——習得飛花令：春泉湧流\n\n可召喚泉水持續治療區域內的友方目標</MX_QH_Node_SpringFlow.description>
-  <MX_QH_Node_Chuanhun.label>破魂絕音</MX_QH_Node_Chuanhun.label>
-  <MX_QH_Node_Chuanhun.description>——習得飛花令：斷魂\n\n可發動超遠距離音爆，擊暈小範圍內的敵人並造成傷害（額外效果：花令的積累上限 +1）</MX_QH_Node_Chuanhun.description>
-  <MX_QH_Node_Shuangyuejing.label>霜華</MX_QH_Node_Shuangyuejing.label>
-  <MX_QH_Node_Shuangyuejing.description>——習得飛花令：霜月鏡\n\n可召喚一面護盾，攔截一段時間內經過的所有敵對投射物（額外效果：花令的積累上限 +1）</MX_QH_Node_Shuangyuejing.description>
-  <MX_QH_Node_Gaoshan.label>剛峻之意</MX_QH_Node_Gaoshan.label>
-  <MX_QH_Node_Gaoshan.description>——習得被動特性：令自身的護盾最大值 +150%。</MX_QH_Node_Gaoshan.description>
-  <MX_QH_Node_Liushui.label>柔韌之意</MX_QH_Node_Liushui.label>
-  <MX_QH_Node_Liushui.description>——習得被動特性：令自身的護盾回復速率 +200%。</MX_QH_Node_Liushui.description>
-  <MX_QH_Node_Chunjiang.label>風月之意</MX_QH_Node_Chunjiang.label>
-  <MX_QH_Node_Chunjiang.description>——習得被動特性：令護盾被擊破後的失效時間縮短至 3秒。</MX_QH_Node_Chunjiang.description>
-  <MX_QH_Node_DivineGrace.label>花神之恩典</MX_QH_Node_DivineGrace.label>
-  <MX_QH_Node_DivineGrace.description>——習得可重複提升的被動特性，每級都可提升一定基礎屬性和護盾屬性、花令回復速度。</MX_QH_Node_DivineGrace.description>
-  <MX_QH_Node_Yingyue.label>映月殘章</MX_QH_Node_Yingyue.label>
-  <MX_QH_Node_Yingyue.description>——習得心眼，並令花神之垂憐的可積累次數 +1</MX_QH_Node_Yingyue.description>
-  <MX_QH_Node_IllusoryReflection.label>鏡花水月</MX_QH_Node_IllusoryReflection.label>
-  <MX_QH_Node_IllusoryReflection.description>——習得劍技：鏡花水月，進入無法中斷的水月架勢，反擊近距離攻擊並減輕遠距離攻擊傷害。</MX_QH_Node_IllusoryReflection.description>
-  <MX_QH_Node_Jueying.label>劍勢·絕影</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>清荷與老師霓羽交流後領悟的劍技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。\n\n——習得劍技：劍勢·絕影。向指定方向高速衝刺，命中目標後借力躍起並追擊；落下時可消耗全部劍壓強化為7次範圍斬擊，否則造成3次單體斬擊。</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_FlowerEnvoy.label>花神使</MX_QH_Node_FlowerEnvoy.label>
+  <MX_QH_Node_FlowerEnvoy.description>清荷身為花神使的根基：蓮華護盾常伴身側，涓流撫平舊傷，花神之垂憐守候於將殞之際。\n\n——初始習得飛花令：春泉湧流、霜月鏡，與劍技：鏡花水月。</MX_QH_Node_FlowerEnvoy.description>
+  <MX_QH_Node_Jueying.label>劍舞</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>清荷與老師霓羽交流後領悟的劍技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。\n\n——習得劍技：必殺劍：落櫻。向指定方向高速衝刺，命中目標後借力躍起並追擊；落下時消耗全部劍壓發動7次強力斬擊，劍壓不足1層時也可發動，但斬擊的次數和威力將大幅削弱。</MX_QH_Node_Jueying.description>
   <MX_QH_Node_Luoshenfu.label>洛水之儀</MX_QH_Node_Luoshenfu.label>
-  <MX_QH_Node_Luoshenfu.description>——習得主動能力：洛神的緞帶，可以大幅改善任意兩個殖民者之間的看法\n\n——習得被動特性：洛水之儀，提高自身的魅力和心情，如擁有配偶，還會建立心靈綁定</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_Luoshenfu.description>洛水之上，神女證誓。\n\n——習得被動特性：洛水之儀。清荷若已有配偶，將與對方締結洛神契，雙方心緒安寧；緣分未至時，亦心有所待。</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_FlowerMandate1.label>花令強化I</MX_QH_Node_FlowerMandate1.label>
+  <MX_QH_Node_FlowerMandate1.description>——花令的積累上限 +1。</MX_QH_Node_FlowerMandate1.description>
+  <MX_QH_Node_FlowerMandate2.label>花令強化II</MX_QH_Node_FlowerMandate2.label>
+  <MX_QH_Node_FlowerMandate2.description>——花令的積累上限 +1。</MX_QH_Node_FlowerMandate2.description>
+  <MX_QH_Node_BlessingCharge1.label>花神的憐惜I</MX_QH_Node_BlessingCharge1.label>
+  <MX_QH_Node_BlessingCharge1.description>——花神之垂憐的可積累次數 +1。</MX_QH_Node_BlessingCharge1.description>
+  <MX_QH_Node_BlessingCharge2.label>花神的憐惜II</MX_QH_Node_BlessingCharge2.label>
+  <MX_QH_Node_BlessingCharge2.description>——花神之垂憐的可積累次數 +1。</MX_QH_Node_BlessingCharge2.description>
+  <MX_QH_Trait_LotusShield.label>蓮華護盾</MX_QH_Trait_LotusShield.label>
+  <MX_QH_Trait_LotusShield.description>清荷受到十二花神的庇護，能自然產生一面蓮華護盾（容量500，每秒回充15，破碎後失效3秒）。護盾單次承傷最多消耗20點，超出的傷害會被直接攔下。</MX_QH_Trait_LotusShield.description>
+  <MX_QH_Trait_DivineBlessing.label>花神之垂憐</MX_QH_Trait_DivineBlessing.label>
+  <MX_QH_Trait_DivineBlessing.description>受到致命或可能摧毀身體部位的傷害時自動觸發：抵消此次傷害、修復全部損傷，並短暫獲得心靈隱形與無敵。基礎可積累1次充能，恩典節點可提升至3次。</MX_QH_Trait_DivineBlessing.description>
+  <MX_QH_Trait_Trickle.label>涓流</MX_QH_Trait_Trickle.label>
+  <MX_QH_Trait_Trickle.description>清荷會持續緩慢恢復傷口，並逐步修復永久損傷與缺失的身體部件。</MX_QH_Trait_Trickle.description>
+  <MX_QH_Trait_FlowerDecree.label>花令</MX_QH_Trait_FlowerDecree.label>
+  <MX_QH_Trait_FlowerDecree.description>釋放飛花令技能所需的層數資源，會隨時間恢復。恩典節點可將上限提升至5層。</MX_QH_Trait_FlowerDecree.description>
+  <MX_QH_Trait_SwordPressure.label>劍壓</MX_QH_Trait_SwordPressure.label>
+  <MX_QH_Trait_SwordPressure.description>裝備散華後揮劍命中敵人時積累的資源，可用於強化鏡花水月與必殺劍：落櫻。</MX_QH_Trait_SwordPressure.description>
+  <MX_QH_Trait_Stillness.label>靜思</MX_QH_Trait_Stillness.label>
+  <MX_QH_Trait_Stillness.description>冥想、讀書與睡眠都會積累靜思。清荷進行需要品質的工作時：靜思未滿則不消耗，並有機率使品質+1；靜思蓄滿則消耗全部並使品質+2。</MX_QH_Trait_Stillness.description>
+  <MX_QH_Trait_DivineGrace.label>花神之恩典</MX_QH_Trait_DivineGrace.label>
+  <MX_QH_Trait_DivineGrace.description>清荷製作出大師級或傳奇級物品時，恩典等級+1（上限24級）。恩典會逐步提升清荷的基礎屬性，並按下方時間軸自動解鎖節點。</MX_QH_Trait_DivineGrace.description>
+  <MX_QH_Trait_QixiRitual.label>乞巧儀式</MX_QH_Trait_QixiRitual.label>
+  <MX_QH_Trait_QixiRitual.description>每年可在荷池舉行一次乞巧儀式，參與者有機會獲得靈感，清荷還會得到一本《荷雨亭曲藝》。</MX_QH_Trait_QixiRitual.description>
 </LanguageData>

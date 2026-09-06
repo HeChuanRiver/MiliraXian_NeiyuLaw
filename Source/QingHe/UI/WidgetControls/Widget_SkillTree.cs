@@ -1,4 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.UI;
@@ -97,7 +97,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return cachedStillness;
         }
 
-        private static string BuildTip(HediffComp_SkillTreeState state, HediffComp_PawnSpecialResource stillness)
+        private string BuildTip(HediffComp_SkillTreeState state, HediffComp_PawnSpecialResource stillness)
         {
             if (state == null)
             {
@@ -105,7 +105,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
 
             return "MX_QH_FlowerCourtTitle".Translate() + "\n\n"
-                   + "MX_QH_FlowerCourtUnlockedTreesLine".Translate(state.UnlockedCollectionCount) + "\n"
+                   + "MX_QH_FlowerCourtGraceLine".Translate(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), 24) + "\n"
                    + "MX_QH_FlowerCourtLearnedNodesLine".Translate(state.LearnedNodeCount) + "\n"
                    + "MX_QH_FlowerCourtStillnessLine".Translate((stillness?.CurrentValue ?? 0f).ToString("0"), (stillness?.MaxValue ?? 100f).ToString("0"));
         }

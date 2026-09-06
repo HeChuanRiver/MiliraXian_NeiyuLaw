@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
@@ -114,10 +114,106 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureCombatState(pawn);
             EnsureSwordPressure(pawn);
             EnsureMeditativeStillness(pawn);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineGrace);
 
             GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();
         }
 
+        public static int GetDivineGraceLevel(Pawn pawn)
+        {
+            Hediff grace = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineGrace);
+            return grace == null ? 0 : Mathf.Clamp(Mathf.RoundToInt(grace.Severity), 0, 24);
+        }
+
+        public static void AddDivineGraceLevel(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_DivineGrace == null)
+            {
+                return;
+            }
+
+            Hediff grace = EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+            if (grace == null || grace.Severity >= grace.def.maxSeverity - 0.0001f)
+            {
+                return;
+            }
+
+            grace.Severity = Mathf.Min(grace.def.maxSeverity, Mathf.Floor(grace.Severity) + 1f);
+            Messages.Message(
+                "MX_QH_DivineGraceGainedMessage".Translate(Mathf.RoundToInt(grace.Severity)),
+                pawn,
+                MessageTypeDefOf.PositiveEvent,
+                historical: false);
+            MX_QHSkillUtility.SyncChoices(pawn);
+        }
+
+        public static HediffComp_QingheGraceSync GetDivineGraceComp(Pawn pawn)
+        {
+            return GetHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+        }
+
+        public static HediffComp_QingheGraceSync EnsureDivineGraceComp(Pawn pawn)
+        {
+            return EnsureHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+        }
+
+        public static float GetDivineGraceProgress(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.Progress ?? 0f;
+        }
+
+        public static float GetDivineGraceProgressRequired(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.RequiredProgressForCurrentLevel ?? 0f;
+        }
+
+        public static float GetDivineGraceProgressPercent(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.ProgressPercent ?? 0f;
+        }
+
+        public static void AddDivineGraceProgress(Pawn pawn, float amount)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || amount <= 0f)
+            {
+                return;
+            }
+
+            EnsureDivineGraceComp(pawn)?.AddProgress(amount);
+        }
+
+        public static void AddDivineGraceProgressFromCraft(Pawn pawn, RecipeDef recipe, Thing product)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn)
+                || !IsGraceCraftRecipe(recipe)
+                || product == null
+                || product.def?.category != ThingCategory.Item)
+            {
+                return;
+            }
+
+            float amount = CalculateDivineGraceProgressFromCraft(product);
+            if (amount > 0f)
+            {
+                AddDivineGraceProgress(pawn, amount);
+            }
+        }
+
+        private static bool IsGraceCraftRecipe(RecipeDef recipe)
+        {
+            return recipe != null
+                && recipe.workSkillLearnFactor > 0f
+                && (recipe.workSkill == SkillDefOf.Crafting || recipe.workSkill == SkillDefOf.Artistic);
+        }
+
+        private static float CalculateDivineGraceProgressFromCraft(Thing product)
+        {
+            CompQuality compQuality = product.TryGetComp<CompQuality>();
+            float qualityFactor = compQuality == null ? 0.9f : 0.7f + 0.28f * (int)compQuality.Quality;
+            float marketValue = Mathf.Max(0f, product.MarketValue * Mathf.Max(1, product.stackCount));
+            float cappedValue = Mathf.Min(marketValue, 60000f);
+            return (12f + cappedValue * 0.045f) * qualityFactor;
+        }
         private static T EnsureHediffComp<T>(Pawn pawn, HediffDef hediffDef) where T : HediffComp
         {
             Hediff hediff = EnsureHediff(pawn, hediffDef);

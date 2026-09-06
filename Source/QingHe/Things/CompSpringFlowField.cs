@@ -1,4 +1,4 @@
-﻿using Verse;
+using Verse;
 
 using System.Collections.Generic;
 using MiliraXian.Characters;
@@ -37,7 +37,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private int lifetimeTicks;
         private int ageTicks;
         private int ticksToNextAmbientVisual;
-        private bool enhanced;
         private Verse.Mote fieldMote;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
@@ -105,7 +104,6 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look<int>(ref lifetimeTicks, "lifetimeTicks", 0, false);
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
-            Scribe_Values.Look(ref enhanced, "enhanced", false);
             Scribe_References.Look<Verse.Mote>(ref fieldMote, "fieldMote", false);
         }
 
@@ -126,11 +124,6 @@ namespace MiliraXian.Characters.QingHe.Things
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
-        }
-
-        public void SetEnhanced(bool value)
-        {
-            enhanced = value;
         }
 
         public override bool DontDrawParent()
@@ -171,7 +164,7 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                if (!enhanced || !GenHostility.HostileTo(caster, pawn))
+                if (!GenHostility.HostileTo(caster, pawn))
                 {
                     continue;
                 }

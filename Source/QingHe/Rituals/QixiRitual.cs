@@ -183,33 +183,32 @@ namespace MiliraXian.Characters.QingHe.Rituals
         protected override void ApplyExtraOutcome(Dictionary<Pawn, int> totalPresence, LordJob_Ritual jobRitual, RitualOutcomePossibility outcome, out string extraOutcomeDesc, ref LookTargets letterLookTargets)
         {
             Current.Game?.GetComponent<GameComponent_QingheQixiRitual>()?.NotifyRitualCompleted();
-            int fragmentCount = SpawnFragments(jobRitual, ref letterLookTargets);
+            bool bookGranted = SpawnOperaBook(jobRitual, ref letterLookTargets);
             List<Pawn> inspiredPawns = outcome.Positive ? GiveInspirations(totalPresence, outcome.BestPositiveOutcome(jobRitual) ? 2 : 1) : new List<Pawn>();
 
-            extraOutcomeDesc = "MX_QH_QixiOutcomeFragments".Translate(fragmentCount);
+            extraOutcomeDesc = bookGranted ? "MX_QH_QixiOutcomeBook".Translate() : null;
             if (inspiredPawns.Count > 0)
             {
-                extraOutcomeDesc += "\n" + "MX_QH_QixiOutcomeInspirations".Translate(inspiredPawns.Select(pawn => pawn.LabelShortCap).ToCommaList());
+                string inspirationText = "MX_QH_QixiOutcomeInspirations".Translate(inspiredPawns.Select(pawn => pawn.LabelShortCap).ToCommaList());
+                extraOutcomeDesc = extraOutcomeDesc.NullOrEmpty() ? inspirationText : extraOutcomeDesc + "\n" + inspirationText;
             }
         }
 
-        private int SpawnFragments(LordJob_Ritual jobRitual, ref LookTargets letterLookTargets)
+        private bool SpawnOperaBook(LordJob_Ritual jobRitual, ref LookTargets letterLookTargets)
         {
-            if (jobRitual?.Map == null || MX_QHDefOf.MX_QH_LostMusicScoreFragment == null)
+            if (jobRitual?.Map == null || MX_QHDefOf.MX_QH_Book == null)
             {
-                return 0;
+                return false;
             }
 
-            int count = Rand.RangeInclusive(2, 4);
-            Thing fragments = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_LostMusicScoreFragment);
-            fragments.stackCount = count;
-            GenPlace.TryPlaceThing(fragments, jobRitual.selectedTarget.Cell, jobRitual.Map, ThingPlaceMode.Near);
-            if (fragments.Spawned)
+            Thing book = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_Book);
+            GenPlace.TryPlaceThing(book, jobRitual.selectedTarget.Cell, jobRitual.Map, ThingPlaceMode.Near);
+            if (book.Spawned)
             {
-                letterLookTargets = fragments;
+                letterLookTargets = book;
             }
 
-            return count;
+            return true;
         }
 
         private List<Pawn> GiveInspirations(Dictionary<Pawn, int> totalPresence, int count)

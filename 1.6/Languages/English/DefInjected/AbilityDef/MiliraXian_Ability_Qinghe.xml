@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_SpringFlow.label>Spring Flow</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>Spend 1 Flower Decree to summon a spring at the target point, briefly healing allies in range and applying Spring Flow Baptism. Lasts 15 seconds.</MX_QH_SpringFlow.description>
-  <MX_QH_SpiritBurst.label>Spirit Burst</MX_QH_SpiritBurst.label>
-  <MX_QH_SpiritBurst.description>Spend 2 Flower Decree to play a powerful sonic wave, damaging and stunning enemies in the target area.</MX_QH_SpiritBurst.description>
+  <MX_QH_SpringFlow.description>Spend 1 Flower Decree to summon a spring at the target point, briefly healing allies in range and applying Spring Flow Baptism; enemies caught in the spring steadily accumulate abnormal effects. Lasts 15 seconds.</MX_QH_SpringFlow.description>
   <MX_QH_LunarMirror.label>Lunar Mirror</MX_QH_LunarMirror.label>
-  <MX_QH_LunarMirror.description>Spend 2 Flower Decree to summon a snow-like shield at the target point, briefly intercepting hostile projectiles that cross its boundary. The shield lasts 20 seconds and absorbs up to 300 damage.</MX_QH_LunarMirror.description>
-  <MX_QH_EyeOfHeart.label>Eye of Heart</MX_QH_EyeOfHeart.label>
-  <MX_QH_EyeOfHeart.description>Focus for 1 second. Any hostile attack attempt triggers the effect, whether it hits or deals damage, restoring 10% of the lotus shield and granting 1 Sword Pressure.</MX_QH_EyeOfHeart.description>
+  <MX_QH_LunarMirror.description>Spend 2 Flower Decree to summon a snow-like shield at the target point, briefly intercepting hostile projectiles that cross its boundary and answering each interception with a retaliating frost bullet. The shield lasts 20 seconds and absorbs up to 300 damage.</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>Illusory Reflection</MX_QH_IllusoryReflection.label>
-  <MX_QH_IllusoryReflection.description>Enter an uninterruptible stance for 5 seconds. Hostile attacks originating within 4 cells are negated and immediately countered; hostile attacks from outside the area deal 60% less damage. With at least 1 Sword Pressure, consume 1 point to unleash a powerful cone slash toward the attack source and reduce Eye of Heart's cooldown by 10 seconds; otherwise perform a normal attack.</MX_QH_IllusoryReflection.description>
+  <MX_QH_IllusoryReflection.description>Raise the blade in the chosen direction and enter a 5-second defensive stance. If attacked during the stance, negate the blow and immediately spend Sword Pressure to unleash a powerful counter toward the target; it works even without Sword Pressure, but the slash is greatly weakened.\n\n—Flowers in the mirror, the moon on the water: naught but a dream.</MX_QH_IllusoryReflection.description>
   <MX_QH_AscentSlash.label>Finishing Sword: Falling Blossoms</MX_QH_AscentSlash.label>
   <MX_QH_AscentSlash.description>Dash rapidly in the chosen direction, dealing minor kick damage to the first target struck. If the kick hits a hostile unit or building, leap into the air and use the momentum to consume all Sword Pressure for a powerful series of slashes. The technique can still be used with less than 1 full point of Sword Pressure, but its slash count and power are greatly reduced.\n\n"Hm... You think you've seen this move somewhere before? Maybe. Wait, I'm not that... What do you mean by 'shrimp-head'?"</MX_QH_AscentSlash.description>
-  <MX_QH_LuoshenRibbon.label>Luoshen's Ribbon</MX_QH_LuoshenRibbon.label>
-  <MX_QH_LuoshenRibbon.description>Unlocked by Luoshenfu. Choose two conscious people and bind their thoughts with Luoshen's ribbon, greatly improving their opinion of each other.</MX_QH_LuoshenRibbon.description>
 </LanguageData>

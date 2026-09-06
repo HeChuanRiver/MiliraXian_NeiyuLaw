@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_Node_SpringFlow.label>spring flow</MX_QH_Node_SpringFlow.label>
-  <MX_QH_Node_SpringFlow.description>Unlocks Flower Decree: Spring Flow.\n\nSummon spring water to continuously heal allied targets in the area.</MX_QH_Node_SpringFlow.description>
-  <MX_QH_Node_Chuanhun.label>soulbreak absolute note</MX_QH_Node_Chuanhun.label>
-  <MX_QH_Node_Chuanhun.description>Unlocks Flower Decree: Spirit Burst.\n\nUnleash an extremely long-range sonic burst, stunning enemies in a small area and dealing damage. Extra effect: Flower Decree maximum +1.</MX_QH_Node_Chuanhun.description>
-  <MX_QH_Node_Shuangyuejing.label>frost bloom</MX_QH_Node_Shuangyuejing.label>
-  <MX_QH_Node_Shuangyuejing.description>Unlocks Flower Decree: Lunar Mirror.\n\nSummon a shield that intercepts all hostile projectiles passing through it for a time. Extra effect: Flower Decree maximum +1.</MX_QH_Node_Shuangyuejing.description>
-  <MX_QH_Node_Gaoshan.label>mountain resolve</MX_QH_Node_Gaoshan.label>
-  <MX_QH_Node_Gaoshan.description>Unlocks passive: increases personal shield maximum by 150%.</MX_QH_Node_Gaoshan.description>
-  <MX_QH_Node_Liushui.label>flowing resilience</MX_QH_Node_Liushui.label>
-  <MX_QH_Node_Liushui.description>Unlocks passive: increases personal shield recharge rate by 200%.</MX_QH_Node_Liushui.description>
-  <MX_QH_Node_Chunjiang.label>river moon intent</MX_QH_Node_Chunjiang.label>
-  <MX_QH_Node_Chunjiang.description>Unlocks passive: reduces the shield downtime after breaking to 2 seconds.</MX_QH_Node_Chunjiang.description>
-  <MX_QH_Node_DivineGrace.label>Flower-God Benediction</MX_QH_Node_DivineGrace.label>
-  <MX_QH_Node_DivineGrace.description>Unlocks a repeatable passive. Each level improves base stats, shield stats, and Flower Decree recovery speed.</MX_QH_Node_DivineGrace.description>
-  <MX_QH_Node_Yingyue.label>moon-reflection fragment</MX_QH_Node_Yingyue.label>
-  <MX_QH_Node_Yingyue.description>Unlocks Eye of Heart and allows Flower-God Mercy to store 1 additional charge.</MX_QH_Node_Yingyue.description>
-  <MX_QH_Node_IllusoryReflection.label>Illusory Reflection</MX_QH_Node_IllusoryReflection.label>
-  <MX_QH_Node_IllusoryReflection.description>Unlocks Illusory Reflection, an uninterruptible sword stance that counters nearby attacks and mitigates attacks from farther away.</MX_QH_Node_IllusoryReflection.description>
-  <MX_QH_Node_Jueying.label>Sword Form: Jueying</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>A sword technique Qinghe developed after exchanging forms with her teacher Neiyu. Bell tones become sword qi, combining the breathtaking speed of Sword Form: Skyfall with Qinghe's own cutting art.\n\nUnlocks Sword Form: Jueying. Dash in the chosen direction, then leap and pursue after hitting a target. On landing, consume all Sword Pressure to empower the attack into seven area slashes; without Sword Pressure, perform three single-target slashes.</MX_QH_Node_Jueying.description>
-  <MX_QH_Node_Luoshenfu.label>Luoshui rite</MX_QH_Node_Luoshenfu.label>
-  <MX_QH_Node_Luoshenfu.description>Unlocks active ability: Luoshen's Ribbon, greatly improving the opinion between any two colonists.\n\nUnlocks passive: Luoshui Rite, improving Qinghe's social impact and mood. If she has a spouse, it also establishes a psychic bond.</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_FlowerEnvoy.label>Flower Envoy</MX_QH_Node_FlowerEnvoy.label>
+  <MX_QH_Node_FlowerEnvoy.description>The foundation of Qinghe as the Flower Envoy: the lotus shield ever at her side, a trickle that soothes old wounds, and the flower gods' mercy watching over her final breath.\n\n—Starts with Flower Decree: Spring Flow and Lunar Mirror, plus the sword art: Illusory Reflection.</MX_QH_Node_FlowerEnvoy.description>
+  <MX_QH_Node_Jueying.label>Sword Dance</MX_QH_Node_Jueying.label>
+  <MX_QH_Node_Jueying.description>A sword art Qinghe grasped after training with her teacher Neiyu, turning bell tones into sword qi—combining the startling speed of Sword Form: Skyfall with Qinghe's own cutting art.\n\n—Unlocks the sword art: Finishing Sword: Falling Blossoms. Dash in the chosen direction; on hit, leap off the target and pursue. On landing, spend all Sword Pressure to unleash 7 powerful slashes; with less than 1 stack it still works, but slash count and power are greatly reduced.</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_Luoshenfu.label>Luoshui Rite</MX_QH_Node_Luoshenfu.label>
+  <MX_QH_Node_Luoshenfu.description>Upon the Luo waters, the goddess bears witness.\n\n—Unlocks the passive: Luoshui Rite. If Qinghe already has a spouse, the two form a Luoshen contract, bringing peace to both hearts; until fate arrives, she waits in quiet hope.</MX_QH_Node_Luoshenfu.description>
+  <MX_QH_Node_FlowerMandate1.label>Flower Mandate I</MX_QH_Node_FlowerMandate1.label>
+  <MX_QH_Node_FlowerMandate1.description>Flower Decree maximum +1.</MX_QH_Node_FlowerMandate1.description>
+  <MX_QH_Node_FlowerMandate2.label>Flower Mandate II</MX_QH_Node_FlowerMandate2.label>
+  <MX_QH_Node_FlowerMandate2.description>Flower Decree maximum +1.</MX_QH_Node_FlowerMandate2.description>
+  <MX_QH_Node_BlessingCharge1.label>Mercy I</MX_QH_Node_BlessingCharge1.label>
+  <MX_QH_Node_BlessingCharge1.description>Flower-God Mercy can store 1 additional charge.</MX_QH_Node_BlessingCharge1.description>
+  <MX_QH_Node_BlessingCharge2.label>Mercy II</MX_QH_Node_BlessingCharge2.label>
+  <MX_QH_Node_BlessingCharge2.description>Flower-God Mercy can store 1 additional charge.</MX_QH_Node_BlessingCharge2.description>
+  <MX_QH_Trait_LotusShield.label>Lotus Shield</MX_QH_Trait_LotusShield.label>
+  <MX_QH_Trait_LotusShield.description>Qinghe is protected by the twelve flower gods and naturally generates a lotus shield (500 capacity, 15/s regen, down for 3s after breaking). A single hit against the shield never costs more than 20 energy; the excess is blocked.</MX_QH_Trait_LotusShield.description>
+  <MX_QH_Trait_DivineBlessing.label>Flower-God Mercy</MX_QH_Trait_DivineBlessing.label>
+  <MX_QH_Trait_DivineBlessing.description>Triggers automatically against lethal or part-destroying damage: the hit is negated, all injuries are restored, and Qinghe briefly becomes invisible and invulnerable. Starts with 1 charge; grace nodes raise it to 3.</MX_QH_Trait_DivineBlessing.description>
+  <MX_QH_Trait_Trickle.label>Trickle</MX_QH_Trait_Trickle.label>
+  <MX_QH_Trait_Trickle.description>Qinghe slowly mends wounds over time, and gradually restores permanent injuries and missing body parts.</MX_QH_Trait_Trickle.description>
+  <MX_QH_Trait_FlowerDecree.label>Flower Decree</MX_QH_Trait_FlowerDecree.label>
+  <MX_QH_Trait_FlowerDecree.description>The charge resource used to cast Flower Mandates, recovering over time. Grace nodes raise the cap to 5.</MX_QH_Trait_FlowerDecree.description>
+  <MX_QH_Trait_SwordPressure.label>Sword Pressure</MX_QH_Trait_SwordPressure.label>
+  <MX_QH_Trait_SwordPressure.description>Built by melee hits while Sanhua is equipped; spent to empower Illusory Reflection and Finishing Sword: Falling Blossoms.</MX_QH_Trait_SwordPressure.description>
+  <MX_QH_Trait_Stillness.label>Stillness</MX_QH_Trait_Stillness.label>
+  <MX_QH_Trait_Stillness.description>Meditation, reading, and sleep build Stillness. On quality-bearing work: while Stillness is not full, nothing is consumed and there is a chance to raise quality by 1; when full, all Stillness is consumed to raise quality by 2.</MX_QH_Trait_Stillness.description>
+  <MX_QH_Trait_DivineGrace.label>Flower-God Grace</MX_QH_Trait_DivineGrace.label>
+  <MX_QH_Trait_DivineGrace.description>When Qinghe crafts a masterwork or legendary item, her grace level rises by 1 (max 24). Grace improves her base stats and automatically unlocks the nodes on the timeline below.</MX_QH_Trait_DivineGrace.description>
+  <MX_QH_Trait_QixiRitual.label>Qixi Rite</MX_QH_Trait_QixiRitual.label>
+  <MX_QH_Trait_QixiRitual.description>Once per year, a Qixi rite can be held at the lotus pond. Participants may gain inspiration, and Qinghe receives a copy of "Lotus Rain Pavilion Artistry".</MX_QH_Trait_QixiRitual.description>
 </LanguageData>

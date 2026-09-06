@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe.Defs;
@@ -76,12 +76,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 0f);
-                if (Mathf.Approximately(factor, 0f))
-                {
-                    return 0f;
-                }
-
+                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 1f);
                 float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 0f);
                 float afterOffset = Mathf.Max(1f, Props.shieldDamageCap + offset);
                 return Mathf.Max(1f, afterOffset * factor);
@@ -275,8 +270,7 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
-            float damageCap = ShieldDamageCap;
-            float shieldDamage = damageCap > 0f ? Mathf.Min(dinfo.Amount, damageCap) : Mathf.Max(0f, dinfo.Amount);
+            float shieldDamage = Mathf.Min(dinfo.Amount, ShieldDamageCap);
             if (QingHe.Things.Weapons.QingheSwordCombatUtility.IsSwordMode(owner))
             {
                 shieldDamage *= 0.5f;

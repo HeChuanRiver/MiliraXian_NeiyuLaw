@@ -1,25 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <RulePackDef>
-        <defName>Namer_MX_QH_SkillBook</defName>
-        <rulePack>
-            <rulesStrings>
-                <li>title->失传的曲谱</li>
-                <li>title->古旧曲谱</li>
-                <li>title->残篇曲谱</li>
-            </rulesStrings>
-        </rulePack>
-    </RulePackDef>
-
-    <RulePackDef>
-        <defName>Description_MX_QH_SkillBook</defName>
-        <rulePack>
-            <rulesStrings>
-                <li>desc->[mx_skillbook_paragraphs]&#10;&#10;[mx_skillbook_quality_summary]</li>
-            </rulesStrings>
-        </rulePack>
-    </RulePackDef>
-
     <RulePackDef>
         <defName>Namer_MX_QH_CustomBook</defName>
         <rulePack>
@@ -43,129 +23,9 @@
     </RulePackDef>
 
     <ThingDef>
-        <defName>MX_QH_LostMusicScoreFragment</defName>
-        <label>失传的曲谱残片</label>
-        <description>残缺而难辨的清荷曲谱碎片。可在艺创台拼合成一本随机的书。有几率获得失传的技能书（清荷专属）</description>
-        <thingClass>ThingWithComps</thingClass>
-        <category>Item</category>
-        <tradeability>All</tradeability>
-        <selectable>true</selectable>
-        <rotatable>false</rotatable>
-        <drawerType>MapMeshOnly</drawerType>
-        <altitudeLayer>Item</altitudeLayer>
-        <alwaysHaulable>true</alwaysHaulable>
-        <useHitPoints>true</useHitPoints>
-        <healthAffectsPrice>true</healthAffectsPrice>
-        <drawGUIOverlay>true</drawGUIOverlay>
-        <stackLimit>75</stackLimit>
-        <graphicData>
-            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
-            <graphicClass>Graphic_Single</graphicClass>
-            <drawSize>0.45</drawSize>
-        </graphicData>
-        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
-        <thingCategories>
-            <li>Books</li>
-        </thingCategories>
-        <tradeTags>
-            <li>ExoticMisc</li>
-        </tradeTags>
-        <thingSetMakerTags>
-            <li>RewardStandardMidFreq</li>
-        </thingSetMakerTags>
-        <statBases>
-            <MaxHitPoints>40</MaxHitPoints>
-            <DeteriorationRate>3</DeteriorationRate>
-            <Mass>0.05</Mass>
-            <Flammability>1</Flammability>
-            <MarketValue>80</MarketValue>
-        </statBases>
-    </ThingDef>
-
-    <ThingDef>
-        <defName>MX_QH_SkillBook</defName>
-        <label>清荷技能书</label>
-        <description>记录旧曲谱的书。清荷阅读时可学习对应技能节点；其他读者也可以像普通书一样阅读。</description>
-        <thingClass>MiliraXian.Characters.Thing_MX_SkillBook</thingClass>
-        <category>Item</category>
-        <selectable>true</selectable>
-        <rotatable>false</rotatable>
-        <drawerType>MapMeshOnly</drawerType>
-        <altitudeLayer>Item</altitudeLayer>
-        <alwaysHaulable>true</alwaysHaulable>
-        <burnableByRecipe>false</burnableByRecipe>
-        <useHitPoints>true</useHitPoints>
-        <healthAffectsPrice>true</healthAffectsPrice>
-        <drawGUIOverlay>true</drawGUIOverlay>
-        <tradeNeverStack>true</tradeNeverStack>
-        <tradeNeverGenerateStacked>true</tradeNeverGenerateStacked>
-        <neverMultiSelect>true</neverMultiSelect>
-        <stackLimit>1</stackLimit>
-        <graphicData>
-            <texPath>Things/Item/Book/Textbook/Textbook</texPath>
-            <graphicClass>Graphic_Single</graphicClass>
-            <drawSize>0.8</drawSize>
-        </graphicData>
-        <uiIconPath>Things/Item/Book/Textbook/Textbook</uiIconPath>
-        <thingCategories>
-            <li>Books</li>
-        </thingCategories>
-        <comps>
-            <li Class="CompProperties_Forbiddable" />
-            <li>
-                <compClass>CompQuality</compClass>
-            </li>
-            <li Class="CompProperties_Book">
-                <nameMaker>Namer_MX_QH_SkillBook</nameMaker>
-                <descriptionMaker>Description_MX_QH_SkillBook</descriptionMaker>
-                <ageYearsRange>100~200</ageYearsRange>
-                <openGraphic>
-                    <texPath>Things/Item/Book/Textbook/Textbook_Open</texPath>
-                    <graphicClass>Graphic_Multi</graphicClass>
-                    <drawSize>0.7</drawSize>
-                </openGraphic>
-                <verticalGraphic>
-                    <texPath>Things/Item/Book/Textbook/Textbook_Vertical</texPath>
-                    <graphicClass>Graphic_Multi</graphicClass>
-                    <addTopAltitudeBias>true</addTopAltitudeBias>
-                </verticalGraphic>
-                <doers>
-                    <li Class="MiliraXian.Characters.BookOutcomeProperties_SkillTreeUnlock">
-                        <skillCategory>MX_QH_Category_Qinghe</skillCategory>
-                        <learningSpeed>1</learningSpeed>
-                        <extraNodeChance>0.15</extraNodeChance>
-                        <extractedNodeAcquireWeightFactor>0.35</extractedNodeAcquireWeightFactor>
-                        <combinedBookName>MX_QH_Book_LostScore_Label</combinedBookName>
-                    </li>
-                    <li Class="MiliraXian.Characters.BookOutcomeProperties_SkillTreeUnlock">
-                        <skillCategory>MX_QH_Category_Qinghe</skillCategory>
-                        <learningSpeed>1</learningSpeed>
-                        <extractedNodeAcquireWeightFactor>0.35</extractedNodeAcquireWeightFactor>
-                    </li>
-                    <li Class="BookOutcomeProperties_GainSkillExp" />
-                    <li Class="BookOutcomeProperties_GiveQuest">
-                        <questChance>0.01</questChance>
-                    </li>
-                </doers>
-            </li>
-        </comps>
-        <statBases>
-            <MaxHitPoints>60</MaxHitPoints>
-            <DeteriorationRate>5</DeteriorationRate>
-            <Mass>0.50</Mass>
-            <Flammability>1</Flammability>
-            <Beauty>1</Beauty>
-            <MarketValue>600</MarketValue>
-        </statBases>
-        <inspectorTabs>
-            <li>ITab_Book</li>
-        </inspectorTabs>
-    </ThingDef>
-
-    <ThingDef>
         <defName>MX_QH_Book</defName>
         <label>荷雨亭曲艺</label>
-        <description>清荷相关书卷。</description>
+        <description>清荷亲手辑录的曲艺书卷，记满了荷雨亭的花影与水声。</description>
         <thingClass>MiliraXian.Characters.Thing_MX_CustomBook</thingClass>
         <category>Item</category>
         <selectable>true</selectable>
@@ -250,52 +110,9 @@
     </ThingDef>
 
     <RecipeDef>
-        <defName>MX_QH_AssembleLostMusicScore</defName>
-        <label>尝试修复失传的曲谱</label>
-        <description>将失传的曲谱残片整理成书卷。50%概率得到随机技能书，否则得到普通书。技能书有15%概率额外记录第二个不同技能。</description>
-        <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_InterpretLostScorebook</workerClass>
-        <jobString>正在修复失传的曲谱。</jobString>
-        <workAmount>300</workAmount>
-        <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-        <workSkill>Artistic</workSkill>
-        <effectWorking>Sculpt</effectWorking>
-        <soundWorking>Recipe_Sculpt</soundWorking>
-        <recipeUsers>
-            <li>TableSculpting</li>
-        </recipeUsers>
-        <ingredients>
-            <li>
-                <filter>
-                    <thingDefs>
-                        <li>MX_QH_LostMusicScoreFragment</li>
-                    </thingDefs>
-                </filter>
-                <count>1</count>
-            </li>
-        </ingredients>
-        <fixedIngredientFilter>
-            <thingDefs>
-                <li>MX_QH_LostMusicScoreFragment</li>
-            </thingDefs>
-        </fixedIngredientFilter>
-        <modExtensions>
-            <li Class="MiliraXian.Characters.QingHe.Things.MX_QingheRecipeRequirementExtension">
-                <allowedPawnKinds>
-                    <li>MiliraXian_Qinghe</li>
-                </allowedPawnKinds>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Things.MX_InterpretLostScorebookExtension">
-                <skillBookChance>0.5</skillBookChance>
-                <plainBookDef>TextBook</plainBookDef>
-            </li>
-        </modExtensions>
-        <displayPriority>1200</displayPriority>
-    </RecipeDef>
-
-    <RecipeDef>
         <defName>MX_QH_WriteLotusRainPavilionOpera</defName>
         <label>撰写《荷雨亭曲艺》</label>
-        <description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。25%概率附有清荷的技能相关内容。</description>
+        <description>由清荷将荷雨亭中的花影、水声与曲调写成书卷。</description>
         <workerClass>MiliraXian.Characters.QingHe.Things.RecipeWorker_MX_WriteQingheCustomBook</workerClass>
         <jobString>正在撰写《荷雨亭曲艺》。</jobString>
         <workAmount>6000</workAmount>
@@ -339,7 +156,6 @@
                 </allowedPawnKinds>
             </li>
             <li Class="MiliraXian.Characters.QingHe.Things.MX_WriteQingheCustomBookExtension">
-                <skillBookChance>0.25</skillBookChance>
                 <bookDef>MX_QH_Book</bookDef>
                 <variants>
                     <li>
@@ -361,24 +177,10 @@
                     <li>
                         <title>荷雨亭曲艺：羽衣听荷</title>
                         <content>清荷把荷雨亭中的水声写成底韵，又在页边记下霓羽起势时衣袂掠风的轻响。整卷读来像一场隔水相和的短曲。</content>
-                        <spawnConditions>
-                            <li>
-                                <relatedColonistPawnKinds>
-                                    <li>MiliraXian_Neiyu</li>
-                                </relatedColonistPawnKinds>
-                            </li>
-                        </spawnConditions>
                     </li>
                     <li>
                         <title>荷雨亭曲艺：离火照雨</title>
                         <content>这卷手稿写雨夜灯火与弦声相映。清荷将昭离谈及的余烬、命火与回声化作曲中转折，使荷亭旧调多了一分明亮锋芒。</content>
-                        <spawnConditions>
-                            <li>
-                                <relatedColonistPawnKinds>
-                                    <li>MiliraXian_Zhaoli</li>
-                                </relatedColonistPawnKinds>
-                            </li>
-                        </spawnConditions>
                     </li>
                 </variants>
             </li>

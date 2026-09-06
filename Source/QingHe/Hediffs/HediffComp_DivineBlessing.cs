@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
@@ -368,7 +368,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             HediffComp_SkillTreeState state = cachedFlowerResonance;
-            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Yingyue))
+            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge1))
+            {
+                maxCharges++;
+            }
+            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge2))
             {
                 maxCharges++;
             }

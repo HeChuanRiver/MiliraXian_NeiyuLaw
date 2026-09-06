@@ -9,11 +9,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public float meditationGainPerDay = 100f;
         public float readingGainPerDay = 100f;
         public float sleepGainPerDay = 100f;
-        public float partialQualityConsumeFactor = 0.3f;
-        public float fullQualityConsumeFactor = 0.8f;
-        public float qualityBonusChancePerFullStillness = 1f;
-        public int maxNormalQualityBonusLevels = 1;
-        public int fullQualityBonusLevels = 1;
+        public float partialQualityBonusChancePerFull = 0.5f;
+        public int fullQualityBonusLevels = 2;
         public string longNightLabel = "MX_QH_LongNightStillnessLabel";
         public string longNightDescription = "MX_QH_LongNightStillnessDescription";
 
@@ -110,37 +107,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (LongNightReady)
             {
-                float fullConsumed = MaxValue * Mathf.Clamp01(PropsStillness.fullQualityConsumeFactor);
-                SetValue(CurrentValue - fullConsumed);
+                SetValue(0f);
                 return Mathf.Max(0, PropsStillness.fullQualityBonusLevels);
             }
 
-            float consumed = CurrentValue * Mathf.Clamp01(PropsStillness.partialQualityConsumeFactor);
-            if (consumed <= 0.001f)
-            {
-                return 0;
-            }
-
-            SetValue(CurrentValue - consumed);
-            return RollQualityBonusLevels(consumed / Mathf.Max(1f, MaxValue) * PropsStillness.qualityBonusChancePerFullStillness);
-        }
-
-        private int RollQualityBonusLevels(float expectedLevels)
-        {
-            int maxLevels = Mathf.Max(0, PropsStillness.maxNormalQualityBonusLevels);
-            if (maxLevels <= 0 || expectedLevels <= 0f)
-            {
-                return 0;
-            }
-
-            int levels = Mathf.FloorToInt(expectedLevels);
-            float fractional = expectedLevels - levels;
-            if (fractional > 0f && Rand.Value < fractional)
-            {
-                levels++;
-            }
-
-            return Mathf.Clamp(levels, 0, maxLevels);
+            float chance = Mathf.Clamp01(PropsStillness.partialQualityBonusChancePerFull * ValuePercent);
+            return chance > 0f && Rand.Value < chance ? 1 : 0;
         }
     }
 }

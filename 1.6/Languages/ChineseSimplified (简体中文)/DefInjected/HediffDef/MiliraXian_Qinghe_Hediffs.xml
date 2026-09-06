@@ -9,9 +9,9 @@
   <MX_QH_SwordPressure.label>剑压</MX_QH_SwordPressure.label>
   <MX_QH_SwordPressure.description>隐藏状态：清荷近战模式使用的战斗资源。</MX_QH_SwordPressure.description>
   <MX_QH_SwordPressure.comps.0.resourceLabel>剑压</MX_QH_SwordPressure.comps.0.resourceLabel>
-  <MX_QH_SwordPressure.comps.0.resourceDescription>挥剑命中敌人或成功发动心眼时积累。未完成的一段剑压会在停止获取后逐渐消退。</MX_QH_SwordPressure.comps.0.resourceDescription>
+  <MX_QH_SwordPressure.comps.0.resourceDescription>挥剑命中敌人时积累。未完成的一段剑压会在停止获取后逐渐消退。</MX_QH_SwordPressure.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>静思</MX_QH_MeditativeStillness.label>
-  <MX_QH_MeditativeStillness.description>冥想或者读书可以积累静思，清荷进行艺术创作和手工制作都会基于当前积累的量消耗静思，并给予一定品质加成。</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.description>冥想或者读书可以积累静思，清荷进行需要品质的建造、制作或艺术创作时，会基于当前静思获得品质加成：静思未满时不消耗静思、有概率使品质 +1；静思蓄满时会消耗全部静思并使品质 +2。</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>静思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>和鸣</MX_QH_FlowerResonance.label>
@@ -25,13 +25,11 @@
   <MX_QH_DivineGrace.label>花神之恩典</MX_QH_DivineGrace.label>
   <MX_QH_DivineGrace.description>清荷精通修行的显化。随着花神之恩典等级提高，清荷的基础能力会逐步增强。</MX_QH_DivineGrace.description>
   <MX_QH_DivineProtection.label>花神之眷顾</MX_QH_DivineProtection.label>
-  <MX_QH_DivineProtection.description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。\n\n护盾被击碎时会失效10秒。</MX_QH_DivineProtection.description>
+  <MX_QH_DivineProtection.description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。护盾单次承伤最多消耗20点。\n\n护盾被击碎时会失效3秒。</MX_QH_DivineProtection.description>
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗礼</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</MX_QH_SpringFlow.description>
-  <MX_QH_EyeOfHeartState.label>心眼</MX_QH_EyeOfHeartState.label>
-  <MX_QH_EyeOfHeartState.description>清荷正凝神观察来袭的攻击。</MX_QH_EyeOfHeartState.description>
 </LanguageData>

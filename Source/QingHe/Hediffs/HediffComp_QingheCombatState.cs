@@ -1,4 +1,5 @@
 using MiliraXian.Characters.QingHe.Things.Weapons;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -13,12 +14,15 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffComp_QingheCombatState : HediffComp
     {
+        private const int TuneCooldownTicks = 60000;
+
         private FlowerBellResonance resonance = FlowerBellResonance.Spring;
-        private bool extraBuildingDamage;
+        private int pendingTuneResonance = -1;
+        private int tuneCooldownUntilTick = -1;
 
         public FlowerBellResonance Resonance => resonance;
 
-        public bool ExtraBuildingDamage => extraBuildingDamage;
+        public int TuneCooldownRemainingTicks => Mathf.Max(0, tuneCooldownUntilTick - Find.TickManager.TicksGame);
 
         public override bool CompDisallowVisible()
         {
@@ -29,7 +33,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             base.CompExposeData();
             Scribe_Values.Look(ref resonance, "mx_qh_resonance", FlowerBellResonance.Spring);
-            Scribe_Values.Look(ref extraBuildingDamage, "mx_qh_extraBuildingDamage", false);
+            Scribe_Values.Look(ref pendingTuneResonance, "mx_qh_pendingTuneResonance", -1);
+            Scribe_Values.Look(ref tuneCooldownUntilTick, "mx_qh_tuneCooldownUntilTick", -1);
         }
 
         public void SetResonance(FlowerBellResonance value)
@@ -37,9 +42,21 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             resonance = value;
         }
 
-        public void ToggleExtraBuildingDamage()
+        public void BeginTuning(FlowerBellResonance value)
         {
-            extraBuildingDamage = !extraBuildingDamage;
+            pendingTuneResonance = (int)value;
+        }
+
+        public void CompleteTuning()
+        {
+            if (pendingTuneResonance < 0)
+            {
+                return;
+            }
+
+            resonance = (FlowerBellResonance)pendingTuneResonance;
+            pendingTuneResonance = -1;
+            tuneCooldownUntilTick = Find.TickManager.TicksGame + TuneCooldownTicks;
         }
     }
 }

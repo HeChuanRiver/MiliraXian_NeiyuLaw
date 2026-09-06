@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -81,6 +81,8 @@ namespace MiliraXian.Characters.QingHe
 
             patcher.Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn), new[] { typeof(Pawn), typeof(SkillDef), typeof(bool) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix)));
+            patcher.Patch(AccessTools.Method(typeof(GenRecipe), "PostProcessProduct"),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_GenRecipe_PostProcessProduct_Postfix)));
 
             patcher.Patch(
                 AccessTools.Method(typeof(Projectile), "CheckForFreeInterceptBetween", new[] { typeof(Vector3), typeof(Vector3) }),
@@ -175,7 +177,6 @@ namespace MiliraXian.Characters.QingHe
 
         private struct DamageHediffState
         {
-            public HediffComp_EyeOfHeart EyeOfHeart;
             public HediffComp_DivineBlessing DivineBlessing;
             public bool Invulnerable;
         }
@@ -198,7 +199,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             __state = ScanDamageHediffs(__instance.health.hediffSet.hediffs);
-            __state.EyeOfHeart?.TryTrigger(dinfo);
 
             JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
@@ -233,11 +233,7 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                if (hediffDef == MX_QHDefOf.MX_QH_EyeOfHeartState && state.EyeOfHeart == null)
-                {
-                    state.EyeOfHeart = hediff.TryGetComp<HediffComp_EyeOfHeart>();
-                }
-                else if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
+                if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
                 {
                     state.DivineBlessing = hediff.TryGetComp<HediffComp_DivineBlessing>();
                 }
@@ -424,11 +420,6 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
-                ? target.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
-                : null;
-            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(instigator);
-
             JobDriver_IllusoryReflectionStance reflection = target.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             reflection?.TryHandleAttackAttempt(instigator);
         }
@@ -545,6 +536,10 @@ namespace MiliraXian.Characters.QingHe
             MX_QH_HediffUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
         }
 
+        public static void Patch_GenRecipe_PostProcessProduct_Postfix(Thing __result, RecipeDef recipeDef, Pawn worker)
+        {
+            MX_QH_HediffUtility.AddDivineGraceProgressFromCraft(worker, recipeDef, __result);
+        }
         private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
         {
             Pawn pawn = driver?.pawn;

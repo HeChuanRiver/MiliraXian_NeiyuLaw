@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果。效果持续15秒。</MX_QH_SpringFlow.description>
-  <MX_QH_SpiritBurst.label>断魂</MX_QH_SpiritBurst.label>
-  <MX_QH_SpiritBurst.description>消耗2点花令，演奏出强力声波，对目标区域内的敌人造成伤害并使其眩晕。</MX_QH_SpiritBurst.description>
+  <MX_QH_SpringFlow.description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。</MX_QH_SpringFlow.description>
   <MX_QH_LunarMirror.label>霜月镜</MX_QH_LunarMirror.label>
-  <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物。护盾持续20秒，最多吸收300点伤害。</MX_QH_LunarMirror.description>
-  <MX_QH_EyeOfHeart.label>心眼</MX_QH_EyeOfHeart.label>
-  <MX_QH_EyeOfHeart.description>凝神持续1秒。期间遭到任何敌对攻击时，无论攻击是否命中或造成伤害，立即回复10%的莲华护盾并获得1点剑压。</MX_QH_EyeOfHeart.description>
+  <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，最多吸收300点伤害。</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>镜花水月</MX_QH_IllusoryReflection.label>
-  <MX_QH_IllusoryReflection.description>进入持续5秒且无法主动中断的水月架势。来源位于4格内的敌对攻击会被无效，并立即向攻击来源反击；来源位于范围外的敌对攻击伤害降低60%。拥有至少1点剑压时，消耗1点向攻击来源发动强力扇形斩击，并缩短心眼10秒冷却；否则进行一次普通攻击。</MX_QH_IllusoryReflection.description>
+  <MX_QH_IllusoryReflection.description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即消耗剑压向目标方向发动强力反击，剑压不足也可发动，但斩击的威力将大幅削弱。\n\n——镜花水月，如梦似幻。</MX_QH_IllusoryReflection.description>
   <MX_QH_AscentSlash.label>必杀剑：落樱</MX_QH_AscentSlash.label>
-  <MX_QH_AscentSlash.description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动高威力斩击。剑压不足1档时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</MX_QH_AscentSlash.description>
-  <MX_QH_LuoshenRibbon.label>洛神的缎带</MX_QH_LuoshenRibbon.label>
-  <MX_QH_LuoshenRibbon.description>习得洛神赋后可使用。选择两名清醒的人，以洛神的缎带牵引彼此心意，大幅提升双方互相的看法。</MX_QH_LuoshenRibbon.description>
+  <MX_QH_AscentSlash.description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动数次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</MX_QH_AscentSlash.description>
 </LanguageData>

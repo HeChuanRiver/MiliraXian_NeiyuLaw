@@ -12,7 +12,7 @@
             </li>
             <li>
                 <label>洛水之仪</label>
-                <description>洛神的话语仍在心中回响，我理应接受这份好意。</description>
+                <description>洛神的话语仍在心中回响，良缘尚待。</description>
                 <baseMoodEffect>8</baseMoodEffect>
             </li>
         </stages>
@@ -28,21 +28,6 @@
                 <label>洛神契破碎 ({0})</label>
                 <description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的声音只余空响。</description>
                 <baseMoodEffect>-24</baseMoodEffect>
-            </li>
-        </stages>
-    </ThoughtDef>
-
-    <ThoughtDef>
-        <defName>MX_QH_LuoshenRibbonGrace</defName>
-        <thoughtClass>Thought_MemorySocial</thoughtClass>
-        <durationDays>30</durationDays>
-        <stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
-        <lerpOpinionToZeroAfterDurationPct>0.75</lerpOpinionToZeroAfterDurationPct>
-        <stages>
-            <li>
-                <label>洛神缎带 ({0})</label>
-                <description>洛神的缎带曾牵起我与{OTHERPAWN_nameDef}之间的心意，这份温柔仍在心中回响。</description>
-                <baseOpinionOffset>50</baseOpinionOffset>
             </li>
         </stages>
     </ThoughtDef>

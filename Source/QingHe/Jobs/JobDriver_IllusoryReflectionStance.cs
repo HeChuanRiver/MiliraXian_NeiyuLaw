@@ -161,7 +161,6 @@ namespace MiliraXian.Characters.QingHe.Jobs
                     (props?.empoweredDamage ?? 48f) * specialFactor,
                     props?.armorPenetration ?? 0.45f,
                     empowered: true);
-                ReduceEyeOfHeartCooldown(props?.eyeOfHeartCooldownReductionTicks ?? 600);
             }
             else
             {
@@ -243,25 +242,6 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 props.mirrorSlashDistortionScrollY,
                 props.mirrorSlashDistortionOpacity,
                 directionCell.x < pawn.Position.x);
-        }
-
-        private void ReduceEyeOfHeartCooldown(int ticks)
-        {
-            Ability ability = pawn.abilities?.GetAbility(MX_QHDefOf.MX_QH_EyeOfHeartAbility);
-            if (ability == null || !ability.OnCooldown || ticks <= 0)
-            {
-                return;
-            }
-
-            int remaining = ability.CooldownTicksRemaining - ticks;
-            if (remaining <= 0)
-            {
-                ability.ResetCooldown();
-            }
-            else
-            {
-                ability.StartCooldown(remaining);
-            }
         }
 
     }

@@ -37,7 +37,7 @@
                     <li>MX_AbnormalToxin</li>
                     <li>MX_AbnormalCorrosion</li>
                 </enhancedToxinAbnormals>
-                <enhancedToxinAccumulationAmount>8</enhancedToxinAccumulationAmount>
+                <enhancedToxinAccumulationAmount>4</enhancedToxinAccumulationAmount>
                 <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
                 <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
             </li>
@@ -166,6 +166,15 @@
                     <li>MX_AbnormalCold</li>
                 </abnormals>
                 <accumulationAmount>8</accumulationAmount>
+                <requireHostileTarget>false</requireHostileTarget>
+                <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+            </li>
+            <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
+                <abnormals>
+                    <li>MX_AbnormalFear</li>
+                    <li>MX_AbnormalOverload</li>
+                </abnormals>
+                <accumulationAmount>3</accumulationAmount>
                 <requireHostileTarget>false</requireHostileTarget>
                 <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
             </li>

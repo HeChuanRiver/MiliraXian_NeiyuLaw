@@ -84,23 +84,4 @@
         </comps>
     </HediffDef>
 
-    <HediffDef>
-        <defName>MX_QH_EyeOfHeartState</defName>
-        <label>心眼</label>
-        <description>清荷正凝神观察来袭的攻击。</description>
-        <hediffClass>Verse.HediffWithComps</hediffClass>
-        <defaultLabelColor>(0.62,0.90,1.0)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <comps>
-            <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>60</disappearsAfterTicks>
-            </li>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_EyeOfHeart">
-                <shieldRestoreFraction>0.1</shieldRestoreFraction>
-                <swordPressureGain>1</swordPressureGain>
-            </li>
-        </comps>
-    </HediffDef>
 </Defs>

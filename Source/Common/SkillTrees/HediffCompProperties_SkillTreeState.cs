@@ -12,7 +12,6 @@ namespace MiliraXian.Characters
     public class HediffCompProperties_SkillTreeState : HediffCompProperties
     {
         public List<SkillNodeCategoryDef> categories;
-        public string alreadyLearnedReasonKey = "MX_Common_SkillTreeStateAlreadyLearned";
 
         public HediffCompProperties_SkillTreeState()
         {
