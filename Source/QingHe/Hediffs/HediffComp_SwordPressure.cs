@@ -69,6 +69,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void AddProgress(float amount)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return;
+            }
+
             if (amount <= 0f)
             {
                 return;

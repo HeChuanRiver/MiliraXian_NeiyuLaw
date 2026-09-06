@@ -103,6 +103,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public bool CanTrigger(ref DamageInfo dinfo)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return false;
+            }
+
             if (Pawn == null || Pawn.Dead || Pawn.health == null)
             {
                 return false;

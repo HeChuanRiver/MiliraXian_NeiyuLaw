@@ -11,7 +11,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompProperties_AbilityIllusoryReflection : CompProperties_AbilityEffect
     {
         public int durationTicks = 300;
-        public float normalDamage = 32f;
         public float empoweredDamage = 48f;
         public float armorPenetration = 0.45f;
         public float coneRadius = 5.5f;
@@ -20,10 +19,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public int invulnerabilityTicks = 120;
         public SoundDef stanceSound;
         public SoundDef slashSound;
-        public FleckDef normalSlashFleck;
-        public float normalSlashVisualScale = 3.2f;
-        public float normalSlashVisualForwardOffset;
-        public float normalSlashVisualAngleOffsetDegrees;
         public string mirrorSlashTexPath = "MiliraXianQinghe/Effect/flower_divination_slash_2";
         public float mirrorSlashRevealSeconds = 0.24f;
         public float mirrorSlashHoldSeconds = 0.1f;

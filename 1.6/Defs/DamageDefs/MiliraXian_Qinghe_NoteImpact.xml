@@ -7,13 +7,12 @@
     <armorCategory>Sharp</armorCategory>
     <isRanged>true</isRanged>
     <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.DamageWorker_FlowerBellExplosion</workerClass>
-    <deathMessage>{0}被花信铃的声音击倒了。</deathMessage>
+    <deathMessage>{0}被花信铃带有灵力的声音击倒了。</deathMessage>
     <hediff>PsychicInjury</hediff>
     <explosionCellFleck>BlastEMP</explosionCellFleck>
     <explosionColorCenter>(0.95, 0.78, 1.00, 0.85)</explosionColorCenter>
     <explosionColorEdge>(0.85, 0.30, 0.50, 0.15)</explosionColorEdge>
   </DamageDef>
-
   <DamageDef Name="MX_QH_SlashBase" Abstract="True">
     <workerClass>MiliraXian.Characters.QingHe.Things.Weapons.DamageWorker_QingheSlash</workerClass>
     <externalViolence>true</externalViolence>
@@ -21,7 +20,6 @@
     <hediff>Cut</hediff>
     <deathMessage>{0}被清荷的剑势斩倒了。</deathMessage>
   </DamageDef>
-
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_Slash</defName>
     <label>散华斩击</label>
@@ -33,10 +31,9 @@
       </li>
     </modExtensions>
   </DamageDef>
-
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_SlashSkill</defName>
-    <label>散华剑势</label>
+    <label>散华剑技</label>
     <buildingDamageFactor>2</buildingDamageFactor>
     <modExtensions>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">

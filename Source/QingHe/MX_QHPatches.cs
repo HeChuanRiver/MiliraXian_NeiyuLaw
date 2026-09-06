@@ -20,6 +20,9 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
+            patcher.Patch(AccessTools.Method(typeof(Thing), nameof(Thing.TakeDamage)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Thing_TakeDamage_Prefix)));
+
             patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
 
@@ -27,7 +30,10 @@ namespace MiliraXian.Characters.QingHe
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnGenerator_GeneratePawn_Postfix)));
 
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix)));
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix))
+                {
+                    priority = Priority.Last
+                });
 
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage)),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_PreApplyDamage_Prefix))
@@ -146,6 +152,7 @@ namespace MiliraXian.Characters.QingHe
 
             MX_QHCharacterUtility.MarkForLoadoutStabilization(__result);
             MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+            __result.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
@@ -156,6 +163,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+            __result.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
@@ -168,6 +176,7 @@ namespace MiliraXian.Characters.QingHe
             EnsureQingheCoreTraits(__instance);
             MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
             MX_QHSkillUtility.SyncChoices(__instance);
+            __instance.Drawer?.renderer?.SetAllGraphicsDirty();
             if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
             {
                 MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
@@ -389,6 +398,20 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
             return false;
+        }
+
+        public static void Patch_Thing_TakeDamage_Prefix(Thing __instance, DamageInfo dinfo)
+        {
+            // Melee misses and dodges never reach TakeDamage; shields and armor resolve inside it.
+            if (__instance == null || __instance.Destroyed
+                || dinfo.Instigator is not Pawn caster
+                || !MX_QHCharacterUtility.IsQinghe(caster)
+                || dinfo.Def?.Worker is not DamageWorker_QingheSlash)
+            {
+                return;
+            }
+
+            QingheSwordCombatUtility.NotifySwordPressureHit(caster, __instance, dinfo.Def.GetModExtension<QingheSlashExtension>());
         }
 
         public static void Patch_VerbMeleeAttack_SoundDodge_Postfix(Verb_MeleeAttack __instance, Thing target)

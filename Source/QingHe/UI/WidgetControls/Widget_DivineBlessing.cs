@@ -11,7 +11,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
     public class Widget_DivineBlessing : Widget_Base
     {
         private const int TipSalt = 910205;
-        private const int MaxDisplayBlocks = 2;
+        private const int MaxDisplayBlocks = 3;
         private const float BlockGap = 3f;
 
         private readonly Pawn pawn;

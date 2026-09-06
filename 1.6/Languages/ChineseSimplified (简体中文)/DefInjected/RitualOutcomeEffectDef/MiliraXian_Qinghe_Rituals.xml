@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_QixiOutcome.description>根据仪式品质，参与者会获得持续{MOODDAYS}天、介于{MINMOOD}到{MAXMOOD}之间的心情影响。完成乞巧仪式还会获得一本《荷雨亭曲艺》，较好的结果可能激发参与者的灵感。</MX_QH_QixiOutcome.description>
+  <MX_QH_QixiOutcome.description>根据仪式品质，参与者会获得持续{MOODDAYS}天、介于{MINMOOD}到{MAXMOOD}之间的心情影响。完成乞巧仪式还会为所有参与者提供手工和艺术经验，较好的结果可能激发参与者的灵感。</MX_QH_QixiOutcome.description>
   <MX_QH_QixiOutcome.comps.1.label>清荷在场</MX_QH_QixiOutcome.comps.1.label>
   <MX_QH_QixiOutcome.comps.2.label>参与者数量</MX_QH_QixiOutcome.comps.2.label>
   <MX_QH_QixiOutcome.comps.3.label>在荷池旁开始</MX_QH_QixiOutcome.comps.3.label>
@@ -13,6 +13,6 @@
   <MX_QH_QixiOutcome.outcomeChances.2.description>{0}颇为雅致。安静的祈愿让众人心中一片安宁。</MX_QH_QixiOutcome.outcomeChances.2.description>
   <MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>一名参与者可能获得工作狂热或创作灵感。</MX_QH_QixiOutcome.outcomeChances.2.potentialExtraOutcomeDesc>
   <MX_QH_QixiOutcome.outcomeChances.3.label>灵感涌现</MX_QH_QixiOutcome.outcomeChances.3.label>
-  <MX_QH_QixiOutcome.outcomeChances.3.description>{0}令人灵感涌现。仪式仿佛得到了旧日旋律的短暂回应。</MX_QH_QixiOutcome.outcomeChances.3.description>
+  <MX_QH_QixiOutcome.outcomeChances.3.description>{0}令人灵感涌现。仪式仿佛得到了七仙女的短暂回应。</MX_QH_QixiOutcome.outcomeChances.3.description>
   <MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>两名参与者可能获得工作狂热或创作灵感。</MX_QH_QixiOutcome.outcomeChances.3.potentialExtraOutcomeDesc>
 </LanguageData>

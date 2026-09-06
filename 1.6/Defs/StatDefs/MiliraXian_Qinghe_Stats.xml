@@ -136,7 +136,7 @@
         <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineGrace</li>
+            <li>MX_QH_AuraMastery</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>

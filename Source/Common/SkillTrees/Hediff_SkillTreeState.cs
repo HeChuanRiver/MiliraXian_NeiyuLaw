@@ -10,8 +10,6 @@ namespace MiliraXian.Characters
         private HediffStage cachedStage;
         private bool stageDirty = true;
 
-        public override bool Visible => true;
-
         public override HediffStage CurStage
         {
             get

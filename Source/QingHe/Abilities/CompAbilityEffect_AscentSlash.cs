@@ -1,6 +1,4 @@
 using System.Runtime.CompilerServices;
-using MiliraXian.Characters.QingHe.Defs;
-using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -41,7 +39,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public int postHitRecoveryTicks = 300;
         public int impactDelayTicks = 30;
 
-        public string disabledReason = "MX_QH_AscentSlashNotLearned";
         public string invalidLandingMessage = "MX_QH_AscentSlashInvalidLanding";
 
         public string entryEffecter;
@@ -87,12 +84,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public override bool GizmoDisabled(out string reason)
         {
-            if (!HasLearnedJueying(parent?.pawn))
-            {
-                reason = Props.disabledReason.Translate();
-                return true;
-            }
-
             if (ActionInProgress)
             {
                 reason = "MX_QH_AscentSlashInProgress".Translate();
@@ -110,15 +101,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             Pawn caster = parent?.pawn;
-            if (!HasLearnedJueying(caster))
-            {
-                if (throwMessages)
-                {
-                    Messages.Message(Props.disabledReason.Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-                return false;
-            }
-
             return !ActionInProgress && ValidateAim(caster, target, throwMessages);
         }
 
@@ -328,9 +310,5 @@ namespace MiliraXian.Characters.QingHe.Abilities
             return AscentSlashActionUtility.ClampToMap(desired.ToIntVec3(), map);
         }
 
-        private static bool HasLearnedJueying(Pawn pawn)
-        {
-            return MX_QH_HediffUtility.EnsureFlowerResonance(pawn)?.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_Jueying) == true;
-        }
     }
 }

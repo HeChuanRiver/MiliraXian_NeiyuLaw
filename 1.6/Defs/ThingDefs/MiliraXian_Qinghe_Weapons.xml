@@ -90,6 +90,23 @@
         </comps>
 
         <modExtensions>
+            <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
+                <effecterDefName>MXNL_Effecter_NeiyuSwordSlashGhost</effecterDefName>
+                <fallbackFleckDefName>ExplosionFlash</fallbackFleckDefName>
+                <scaleRange>4.6~6.2</scaleRange>
+                <minIntervalTicks>5</minIntervalTicks>
+                <playOnMiss>false</playOnMiss>
+                <cycleFleckDefNames>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_A</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_B</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_C</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_D</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_E</li>
+                    <li>MXNL_Fleck_BladeLight_Neiyu_F</li>
+                </cycleFleckDefNames>
+            </li>
+        </modExtensions>
+        <modExtensions>
             <li Class="AncotLibrary.ExtraGraphicData_Extension">
                 <graphicData>
                     <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>

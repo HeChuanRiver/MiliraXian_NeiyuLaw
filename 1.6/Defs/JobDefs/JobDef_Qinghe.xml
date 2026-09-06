@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-    <JobDef>
-        <defName>MX_QH_IllusoryReflection</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_IllusoryReflectionStance</driverClass>
-        <reportString>正在维持水月架势。</reportString>
-        <playerInterruptible>false</playerInterruptible>
-        <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
-        <casualInterruptible>false</casualInterruptible>
-        <suspendable>false</suspendable>
-        <alwaysShowWeapon>true</alwaysShowWeapon>
-        <checkOverrideOnDamage>Never</checkOverrideOnDamage>
-    </JobDef>
-
-    <JobDef>
-        <defName>MX_QH_TuneResonance</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneResonance</driverClass>
-        <reportString>正在调谐四时共鸣。</reportString>
-    </JobDef>
-
+  <JobDef>
+    <defName>MX_QH_IllusoryReflection</defName>
+    <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_IllusoryReflectionStance</driverClass>
+    <reportString>正在维持反击架势。</reportString>
+    <playerInterruptible>false</playerInterruptible>
+    <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+  </JobDef>
+  <JobDef>
+    <defName>MX_QH_TuneResonance</defName>
+    <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneResonance</driverClass>
+    <reportString>正在调谐四时共鸣。</reportString>
+  </JobDef>
 </Defs>

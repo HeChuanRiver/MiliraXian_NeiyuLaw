@@ -104,6 +104,15 @@ namespace MiliraXian.Characters
             currentValue = NormalizeValue(value);
         }
 
+        protected void ClampCurrentValueTo(float maxValue)
+        {
+            EnsureInitialized();
+            if (PropsResource.clampToMax && maxValue > 0f && currentValue > maxValue)
+            {
+                currentValue = maxValue;
+            }
+        }
+
         public void AddValue(float value)
         {
             if (Mathf.Approximately(value, 0f))

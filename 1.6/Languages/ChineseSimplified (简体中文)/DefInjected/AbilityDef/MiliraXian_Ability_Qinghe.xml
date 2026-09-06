@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>消耗1点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。\n\n此效果可以驱散由告死流场施加的死亡宣告。</MX_QH_SpringFlow.description>
   <MX_QH_LunarMirror.label>霜月镜</MX_QH_LunarMirror.label>
   <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，最多吸收300点伤害。</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>镜花水月</MX_QH_IllusoryReflection.label>
-  <MX_QH_IllusoryReflection.description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即消耗剑压向目标方向发动强力反击，剑压不足也可发动，但斩击的威力将大幅削弱。\n\n——镜花水月，如梦似幻。</MX_QH_IllusoryReflection.description>
+  <MX_QH_IllusoryReflection.description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即向目标方向发动强力反击，命中目标时额外积累剑压。\n\n——镜花水月，如梦似幻。</MX_QH_IllusoryReflection.description>
   <MX_QH_AscentSlash.label>必杀剑：落樱</MX_QH_AscentSlash.label>
   <MX_QH_AscentSlash.description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动数次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</MX_QH_AscentSlash.description>
 </LanguageData>

@@ -7,7 +7,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     public enum FlowerBellResonance
     {
-        Spring,
+        None = -1,
+        Spring = 0,
         Summer,
         Autumn,
         Winter
@@ -31,33 +32,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public class CompFlowerBellResonance : ThingComp
     {
-        private Pawn cachedHolder;
-        private HediffComp_QingheCombatState cachedCombatState;
-
         public CompProperties_FlowerBellResonance Props => (CompProperties_FlowerBellResonance)props;
 
         public ThingDef CurrentProjectileFor(Pawn pawn)
         {
-            HediffComp_QingheCombatState state = GetCombatState(pawn, true);
-            return SetFor(state?.Resonance ?? FlowerBellResonance.Spring)?.projectile;
-        }
-
-        private HediffComp_QingheCombatState GetCombatState(Pawn pawn, bool ensure)
-        {
-            if (cachedHolder != pawn)
-            {
-                cachedHolder = pawn;
-                cachedCombatState = null;
-            }
-
-            if (cachedCombatState == null || cachedCombatState.Pawn != pawn)
-            {
-                cachedCombatState = ensure
-                    ? MX_QH_HediffUtility.EnsureCombatState(pawn)
-                    : MX_QH_HediffUtility.GetCombatState(pawn);
-            }
-
-            return cachedCombatState;
+            FlowerBellResonance resonance = MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
+            return resonance == FlowerBellResonance.None ? null : SetFor(resonance)?.projectile;
         }
 
         private FlowerBellResonanceProjectileSet SetFor(FlowerBellResonance resonance)
@@ -76,13 +56,14 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
             }
 
-            return Props.settings.Count > 0 ? Props.settings[0] : null;
+            return null;
         }
 
         public static string LabelFor(FlowerBellResonance value)
         {
             return value switch
             {
+                FlowerBellResonance.None => string.Empty,
                 FlowerBellResonance.Summer => (string)"MX_QH_FlowerBellResonanceSummer".Translate(),
                 FlowerBellResonance.Autumn => (string)"MX_QH_FlowerBellResonanceAutumn".Translate(),
                 FlowerBellResonance.Winter => (string)"MX_QH_FlowerBellResonanceWinter".Translate(),

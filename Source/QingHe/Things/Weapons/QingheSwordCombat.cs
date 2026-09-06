@@ -45,12 +45,29 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
         {
-            return MX_QH_HediffUtility.EnsureCombatState(pawn)?.Resonance ?? FlowerBellResonance.Spring;
+            return MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
         }
 
         public static void NotifySlashHit(Pawn caster, Thing target, QingheSlashExtension extension)
         {
             if (caster == null || target == null || !GenHostility.HostileTo(caster, target))
+            {
+                return;
+            }
+
+            ApplyResonanceEffect(caster, target as Pawn, ResonanceFor(caster), Mathf.Max(0f, extension?.resonanceAccumulationMultiplier ?? 1f));
+        }
+
+        public static bool IsSwordPressureTarget(Pawn caster, Thing target)
+        {
+            return caster != null && target != null && !target.Destroyed
+                && (target is Pawn || target is Building)
+                && GenHostility.HostileTo(caster, target);
+        }
+
+        public static void NotifySwordPressureHit(Pawn caster, Thing target, QingheSlashExtension extension)
+        {
+            if (!IsSwordPressureTarget(caster, target))
             {
                 return;
             }
@@ -66,13 +83,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 MX_QH_HediffUtility.EnsureSwordPressure(caster)?.AddProgress(gain);
             }
-
-            ApplyResonanceEffect(caster, target as Pawn, resonance, Mathf.Max(0f, extension?.resonanceAccumulationMultiplier ?? 1f));
         }
 
         public static void ApplyResonanceEffect(Pawn caster, Pawn target, FlowerBellResonance resonance, float accumulationMultiplier)
         {
-            if (caster == null)
+            if (caster == null || resonance == FlowerBellResonance.None)
             {
                 return;
             }
@@ -95,6 +110,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         {
             return resonance switch
             {
+                FlowerBellResonance.None => null,
                 FlowerBellResonance.Summer => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Summer,
                 FlowerBellResonance.Autumn => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Autumn,
                 FlowerBellResonance.Winter => MX_QHDefOf.MX_Bullet_Qinghe_FlowerBell_Winter,
@@ -102,11 +118,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             };
         }
 
-        public static void ApplySlash(Pawn caster, Thing target, float damage, float armorPenetration, bool empowered)
+        public static bool ApplySlash(Pawn caster, Thing target, float damage, float armorPenetration, bool empowered)
         {
             if (caster == null || target == null || target.Destroyed)
             {
-                return;
+                return false;
             }
 
             if (ResonanceFor(caster) == FlowerBellResonance.Autumn)
@@ -115,7 +131,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
 
             DamageDef damageDef = empowered ? MX_QHDefOf.MX_QH_SlashSkill : MX_QHDefOf.MX_QH_Slash;
+            bool hit = IsSwordPressureTarget(caster, target);
             target.TakeDamage(new DamageInfo(damageDef ?? DamageDefOf.Cut, damage, armorPenetration, -1f, caster, null, MX_QHDefOf.MX_QH_Weapon_Sword));
+            return hit;
         }
 
         public static int ApplyCone(Pawn caster, IntVec3 center, IntVec3 targetCell, float radius, float angleDegrees, float damage, float armorPenetration, bool empowered)
@@ -136,14 +154,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 for (int i = 0; i < things.Count; i++)
                 {
                     Thing thing = things[i];
-                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing) && hit.Add(thing))
+                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing))
                     {
-                        ApplySlash(caster, thing, damage, armorPenetration, empowered);
+                        hit.Add(thing);
                     }
                 }
             }
 
-            return hit.Count;
+            // Collect targets before damage can remove them from the map's cell lists.
+            int successfulHits = 0;
+            foreach (Thing thing in hit)
+            {
+                if (ApplySlash(caster, thing, damage, armorPenetration, empowered))
+                {
+                    successfulHits++;
+                }
+            }
+            return successfulHits;
         }
 
         public static void FillConeCells(Pawn caster, IntVec3 center, IntVec3 targetCell, float radius, float angleDegrees, List<IntVec3> cells)
@@ -200,15 +227,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 for (int i = 0; i < things.Count; i++)
                 {
                     Thing thing = things[i];
-                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing) && hit.Add(thing))
+                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing))
                     {
-                        hitTargets?.Add(thing);
-                        ApplySlash(caster, thing, damage, armorPenetration, empowered);
+                        hit.Add(thing);
                     }
                 }
             }
 
-            return hit.Count;
+            int successfulHits = 0;
+            foreach (Thing thing in hit)
+            {
+                if (ApplySlash(caster, thing, damage, armorPenetration, empowered))
+                {
+                    hitTargets?.Add(thing);
+                    successfulHits++;
+                }
+            }
+            return successfulHits;
         }
 
         private static void ApplySpringBlessing(Pawn caster)

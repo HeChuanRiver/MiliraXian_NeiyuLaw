@@ -46,6 +46,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
 
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return;
+            }
+
             if (Pawn == null || Pawn.Dead || Pawn.health == null)
             {
                 return;

@@ -11,21 +11,21 @@
   <MX_QH_SwordPressure.comps.0.resourceLabel>剑压</MX_QH_SwordPressure.comps.0.resourceLabel>
   <MX_QH_SwordPressure.comps.0.resourceDescription>挥剑命中敌人时积累。未完成的一段剑压会在停止获取后逐渐消退。</MX_QH_SwordPressure.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>静思</MX_QH_MeditativeStillness.label>
-  <MX_QH_MeditativeStillness.description>冥想或者读书可以积累静思，清荷进行需要品质的建造、制作或艺术创作时，会基于当前静思获得品质加成：静思未满时不消耗静思、有概率使品质 +1；静思蓄满时会消耗全部静思并使品质 +2。</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.description>清荷专心创作的能力显化。进行冥想、阅读或休息时可以积累，进行任意带有品质要求的建造、手工或艺术创作时，会基于当前积累的静思获得品质加成（最多+1）。静思累计满后，下一次制作将必定获得品质等级+2，并消耗所积累的全部静思。</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>静思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
-  <MX_QH_MeditativeStillness.comps.0.resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</MX_QH_MeditativeStillness.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.comps.0.resourceDescription>隐藏资源，不直接显示</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>和鸣</MX_QH_FlowerResonance.label>
-  <MX_QH_FlowerResonance.description>隐藏 Hediff：角色技能数据</MX_QH_FlowerResonance.description>
-  <MX_QH_AscentSlashInvulnerable.label>伤害免疫（绝影）</MX_QH_AscentSlashInvulnerable.label>
-  <MX_QH_AscentSlashInvulnerable.description>清荷施展剑势·绝影期间跃入空中，暂时免疫所有伤害。</MX_QH_AscentSlashInvulnerable.description>
-  <MX_QH_DivineBlessing.label>花神之垂怜</MX_QH_DivineBlessing.label>
-  <MX_QH_DivineBlessing.description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。此效果每120秒只可触发一次。</MX_QH_DivineBlessing.description>
+  <MX_QH_FlowerResonance.description>隐藏Hediff：清荷技能数据</MX_QH_FlowerResonance.description>
+  <MX_QH_AscentSlashInvulnerable.label>伤害免疫（落樱）</MX_QH_AscentSlashInvulnerable.label>
+  <MX_QH_AscentSlashInvulnerable.description>跃入空中，暂时免疫所有伤害。</MX_QH_AscentSlashInvulnerable.description>
+  <MX_QH_DivineBlessing.label>流水之形</MX_QH_DivineBlessing.label>
+  <MX_QH_DivineBlessing.description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。充能耗尽时无法使用。\n\n——形如流水，意似清风。</MX_QH_DivineBlessing.description>
   <MX_QH_DivineBlessingImmunity.label>神应</MX_QH_DivineBlessingImmunity.label>
   <MX_QH_DivineBlessingImmunity.description>受到花神的垂怜，暂时免疫所有伤害。</MX_QH_DivineBlessingImmunity.description>
   <MX_QH_DivineGrace.label>花神之恩典</MX_QH_DivineGrace.label>
-  <MX_QH_DivineGrace.description>清荷精通修行的显化。随着花神之恩典等级提高，清荷的基础能力会逐步增强。</MX_QH_DivineGrace.description>
-  <MX_QH_DivineProtection.label>花神之眷顾</MX_QH_DivineProtection.label>
-  <MX_QH_DivineProtection.description>清荷受到十二花神的保护，能自然产生一面抵挡伤害的护盾。护盾单次承伤最多消耗20点。\n\n护盾被击碎时会失效3秒。</MX_QH_DivineProtection.description>
+  <MX_QH_DivineGrace.description>清荷精通修行的显化。随着花神之恩典等级提高，清荷的基础能力会逐步增强。完成任意带有品质要求的制作、艺术创造时，可根据成品的价值和品质等级获得精通经验值。</MX_QH_DivineGrace.description>
+  <MX_QH_DivineProtection.label>灵气加护</MX_QH_DivineProtection.label>
+  <MX_QH_DivineProtection.description>清荷与自然之息共鸣，能调动灵气形成一面无法穿透的护盾，抵挡所有来袭的伤害。护盾被击碎时，需要20秒时间重新充能，期间她会失去防护能力。</MX_QH_DivineProtection.description>
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>

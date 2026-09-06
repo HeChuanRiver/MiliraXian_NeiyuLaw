@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe.Things
         // After breaking, shield is disabled for these ticks.
         public int breakDisabledTicks = 600;
         public bool breakOnEmp = true;
-        public float shieldDamageCap = 20f;
+        public float shieldDamageCap;
 
         public DivineProtectionShieldVisualProperties visual = new();
 
@@ -78,7 +78,11 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 1f);
                 float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 0f);
-                float afterOffset = Mathf.Max(1f, Props.shieldDamageCap + offset);
+                float afterOffset = Props.shieldDamageCap + offset;
+                if (afterOffset <= 0f)
+                {
+                    return float.PositiveInfinity;
+                }
                 return Mathf.Max(1f, afterOffset * factor);
             }
         }
@@ -172,6 +176,12 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void CompTick()
         {
             base.CompTick();
+
+            if (QinghePowerBalance.Sealed)
+            {
+                PawnOwner?.AllComps?.Remove(this);
+                return;
+            }
 
             if (PawnOwner == null)
             {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_NoteImpact.label>音击</MX_QH_NoteImpact.label>
-  <MX_QH_NoteImpact.deathMessage>{0}被花信铃的声音击倒了。</MX_QH_NoteImpact.deathMessage>
+  <MX_QH_NoteImpact.deathMessage>{0}被花信铃带有灵力的声音击倒了。</MX_QH_NoteImpact.deathMessage>
   <MX_QH_Slash.label>散华斩击</MX_QH_Slash.label>
-  <MX_QH_Slash.deathMessage>{0}被清荷的剑势斩倒了。</MX_QH_Slash.deathMessage>
-  <MX_QH_SlashSkill.label>散华剑势</MX_QH_SlashSkill.label>
-  <MX_QH_SlashSkill.deathMessage>{0}被清荷的剑势斩倒了。</MX_QH_SlashSkill.deathMessage>
+  <MX_QH_Slash.deathMessage>{0}死于散华的刀刃之下。</MX_QH_Slash.deathMessage>
+  <MX_QH_SlashSkill.label>散华剑技</MX_QH_SlashSkill.label>
+  <MX_QH_SlashSkill.deathMessage>{0}被清荷华丽的剑技击倒了。</MX_QH_SlashSkill.deathMessage>
 </LanguageData>

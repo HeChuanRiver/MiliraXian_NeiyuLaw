@@ -99,8 +99,17 @@ namespace MiliraXian.Characters.QingHe.UI
 
             Rect contentRect = new(inRect.x, inRect.y, inRect.width - CloseButtonReserveWidth, inRect.height);
             Rect tabBar = new(contentRect.x, contentRect.y, contentRect.width, TabBarHeight);
-            DrawTabButton(new Rect(tabBar.x, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.Resonance, "MX_QH_ResonanceTab_Label".Translate());
-            DrawTabButton(new Rect(tabBar.x + TabWidth + 4f, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.SkillTree, "MX_QH_SkillTreeTab_Label".Translate());
+            bool resonanceUnlocked = MX_QHSkillUtility.HasSeasonalResonance(pawn);
+            if (!resonanceUnlocked)
+            {
+                currentTab = FlowerCourtTab.SkillTree;
+            }
+            if (resonanceUnlocked)
+            {
+                DrawTabButton(new Rect(tabBar.x, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.Resonance, "MX_QH_ResonanceTab_Label".Translate());
+            }
+            float skillTabX = tabBar.x + (resonanceUnlocked ? TabWidth + 4f : 0f);
+            DrawTabButton(new Rect(skillTabX, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.SkillTree, "MX_QH_SkillTreeTab_Label".Translate());
 
             Rect pageRect = new(contentRect.x, tabBar.yMax + 6f, contentRect.width, contentRect.height - TabBarHeight - 6f);
             if (currentTab == FlowerCourtTab.Resonance)
@@ -143,8 +152,8 @@ namespace MiliraXian.Characters.QingHe.UI
         private void DrawResonancePage(Rect rect)
         {
             HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.GetCombatState(pawn);
-            bool hasSelection = combatState != null;
-            FlowerBellResonance current = combatState?.Resonance ?? FlowerBellResonance.Spring;
+            FlowerBellResonance current = MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
+            bool hasSelection = current != FlowerBellResonance.None;
             int cooldownRemaining = combatState?.TuneCooldownRemainingTicks ?? 0;
 
             float cardSize = Mathf.Min(ResonanceCardWidth, Mathf.Max(136f, Mathf.Min(rect.width, rect.height) * 0.24f));
@@ -289,6 +298,10 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void StartTuning(FlowerBellResonance resonance)
         {
+            if (!MX_QHSkillUtility.HasSeasonalResonance(pawn))
+            {
+                return;
+            }
             HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.EnsureCombatState(pawn);
             if (combatState == null || combatState.TuneCooldownRemainingTicks > 0)
             {
@@ -338,14 +351,18 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawGraceTopBar(Rect rect, HediffComp_QingheGraceSync grace)
         {
-            int level = grace?.CurrentLevel ?? MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int actualLevel = grace?.CurrentLevel ?? MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int maxLevel = QinghePowerBalance.MaxEffectiveLevel;
+            int level = Mathf.Min(actualLevel, maxLevel);
             float required = grace?.RequiredProgressForCurrentLevel ?? 0f;
             float progress = grace?.Progress ?? 0f;
             float percent = grace?.ProgressPercent ?? 0f;
 
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(new Rect(rect.x, rect.y, 260f, 24f), "MX_QH_FlowerCourtGraceLine".Translate(level, HediffComp_QingheGraceSync.MaxGraceLevel));
+            GUI.color = Color.white;
+            Widgets.Label(new Rect(rect.x, rect.y, 260f, 24f), "MX_QH_FlowerCourtGraceLine".Translate(level, maxLevel));
+            GUI.color = Color.white;
 
             Rect barRect = new(rect.x, rect.y + 28f, rect.width, 16f);
             Widgets.DrawBoxSolid(barRect, RailBackColor);
@@ -358,10 +375,13 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.DrawBox(barRect, 1);
 
             Text.Anchor = TextAnchor.MiddleCenter;
-            string progressText = grace != null && grace.IsMaxLevel
-                ? "MX_QH_GraceProgressMax".Translate()
+            bool reachedCurrentMax = actualLevel >= maxLevel;
+            string progressText = reachedCurrentMax || (grace != null && grace.IsMaxLevel)
+                ? "已达当前最大等级"
                 : "MX_QH_GraceProgressLine".Translate(progress.ToString("0"), required.ToString("0"), percent.ToStringPercent());
+            GUI.color = percent < 0.4f ? Color.white : Color.black;
             Widgets.Label(barRect, progressText);
+            GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
@@ -375,31 +395,17 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.BeginScrollView(outRect, ref levelScrollPosition, viewRect);
 
             int currentLevel = grace?.CurrentLevel ?? MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int effectiveLevel = Mathf.Min(currentLevel, QinghePowerBalance.MaxEffectiveLevel);
             float fillPercent = Mathf.Clamp01((currentLevel + (grace?.ProgressPercent ?? 0f)) / HediffComp_QingheGraceSync.MaxGraceLevel);
-            Rect railFrame = new(26f, 0f, 4f, viewHeight);
-            Widgets.DrawBoxSolid(railFrame, new Color(1f, 1f, 1f, 0.04f));
-            Rect railFill = new(railFrame.x + 1f, railFrame.y, Mathf.Max(1f, railFrame.width - 2f), railFrame.height * fillPercent);
-            if (railFill.height > 0.5f)
-            {
-                Widgets.DrawBoxSolid(railFill, RailFillColor);
-            }
-            Widgets.DrawBox(railFrame, 1);
-
             for (int i = 0; i < unlockLevels.Count; i++)
             {
                 int level = unlockLevels[i];
                 float y = level * LevelRowHeight;
-                if (i > 0)
-                {
-                    float boundaryY = (unlockLevels[i - 1] + level) * 0.5f * LevelRowHeight;
-                    Widgets.DrawLine(new Vector2(LevelRailWidth, boundaryY), new Vector2(viewWidth, boundaryY), new Color(1f, 1f, 1f, 0.10f), 1f);
-                }
-
                 bool reached = level <= currentLevel;
                 Text.Font = GameFont.Tiny;
                 Text.Anchor = TextAnchor.MiddleLeft;
                 GUI.color = reached ? Color.white : LockedLabelColor;
-                Widgets.Label(new Rect(40f, y + 6f, LevelRailWidth - 44f, 18f), "MX_QH_FlowerCourtNodeLevel".Translate(level));
+                Widgets.Label(new Rect(8f, y + 6f, LevelRailWidth - 12f, 18f), "MX_QH_FlowerCourtNodeLevel".Translate(level));
                 GUI.color = Color.white;
 
                 List<SkillNodeDef> rowNodes = nodesByLevel[level];
@@ -407,7 +413,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 for (int nodeIndex = 0; nodeIndex < rowNodes.Count; nodeIndex++)
                 {
                     Rect nodeRect = new(nodeX, y + (LevelRowHeight - LevelNodeHeight) * 0.5f, LevelNodeWidth, LevelNodeHeight);
-                    DrawNodeCard(rowNodes[nodeIndex], nodeRect, currentLevel, compact: false);
+                    DrawNodeCard(rowNodes[nodeIndex], nodeRect, effectiveLevel, compact: false);
                     nodeX += LevelNodeWidth + 8f;
                 }
             }
@@ -425,8 +431,6 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawSpecialArea(Rect rect)
         {
-            Widgets.DrawLine(new Vector2(rect.x, rect.y), new Vector2(rect.xMax, rect.y), new Color(1f, 1f, 1f, 0.10f), 1f);
-
             float step = SpecialNodeIconSize + SpecialNodeGap;
             int columns = Mathf.Max(1, Mathf.FloorToInt((rect.width + SpecialNodeGap) / step));
             int rows = Mathf.Max(1, Mathf.CeilToInt(specialNodes.Count / (float)columns));
@@ -444,7 +448,10 @@ namespace MiliraXian.Characters.QingHe.UI
                 float x = (viewRect.width - rowWidth) * 0.5f + column * step;
                 float y = row * step;
                 Rect nodeRect = new(x, y, SpecialNodeIconSize, SpecialNodeIconSize);
-                DrawNodeCard(specialNodes[i], nodeRect, HediffComp_QingheGraceSync.MaxGraceLevel, compact: true);
+                int effectiveLevel = Mathf.Min(
+                    MX_QH_HediffUtility.GetDivineGraceLevel(pawn),
+                    QinghePowerBalance.MaxEffectiveLevel);
+                DrawNodeCard(specialNodes[i], nodeRect, effectiveLevel, compact: true);
             }
 
             Widgets.EndScrollView();
@@ -452,7 +459,10 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawNodeCard(SkillNodeDef node, Rect rect, int currentLevel, bool compact)
         {
-            bool learned = state != null && state.HasNode(node);
+            bool locked = node.requiredGraceLevel > currentLevel;
+            bool learned = state != null
+                && !locked
+                && state.HasNode(node);
             Rect iconRect = compact
                 ? new Rect(rect.x + (rect.width - NodeIconSize) * 0.5f, rect.y + 6f, NodeIconSize, NodeIconSize)
                 : new Rect(rect.x + 6f, rect.y + (rect.height - NodeIconSize) * 0.5f, NodeIconSize, NodeIconSize);
@@ -478,23 +488,29 @@ namespace MiliraXian.Characters.QingHe.UI
                 Text.Anchor = TextAnchor.MiddleLeft;
                 Rect labelRect = new(iconRect.xMax + 6f, rect.y + 5f, rect.width - iconRect.width - 18f, rect.height - 10f);
                 string label = node.LabelCap.ToString();
-                if (!learned && node.requiredGraceLevel > currentLevel)
+                if (locked)
                 {
-                    label += "\n" + "MX_QH_FlowerCourtNodeLocked".Translate(node.requiredGraceLevel);
+                    label += "\n已锁定";
+                }
+                else if (!learned)
+                {
+                    label += "\n未习得";
                 }
                 Widgets.Label(labelRect, label);
             }
 
-            TooltipHandler.TipRegion(rect, BuildNodeTip(node, learned));
+            TooltipHandler.TipRegion(rect, BuildNodeTip(node, learned, locked));
             ResetGui();
         }
 
-        private static string BuildNodeTip(SkillNodeDef node, bool learned)
+        private static string BuildNodeTip(SkillNodeDef node, bool learned, bool locked)
         {
             string tip = node.LabelCap.ToString() + "\n\n" + node.description;
             string stateText = learned
                 ? "MX_QH_FlowerCourtNodeLearned".Translate()
-                : "MX_QH_FlowerCourtNodeLocked".Translate(node.requiredGraceLevel);
+                : locked
+                    ? "MX_QH_FlowerCourtNodeLocked".Translate(node.requiredGraceLevel)
+                    : "未习得";
             return tip + "\n\n" + stateText;
         }
 

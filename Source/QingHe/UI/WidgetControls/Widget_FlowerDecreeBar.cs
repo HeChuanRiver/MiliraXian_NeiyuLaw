@@ -11,7 +11,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
     {
         private const int TipSalt = 910202;
         private const float BarLeftPadding = 10f;
-        private const float BarRightPadding = 8f;
+        private const float BarRightPadding = 7f;
         private const float ResourceBarWidth = 150f;
         private const float BarHeight = 9f;
         private const float SegmentGap = 2f;

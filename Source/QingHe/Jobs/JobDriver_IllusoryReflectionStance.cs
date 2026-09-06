@@ -148,63 +148,20 @@ namespace MiliraXian.Characters.QingHe.Jobs
             CompProperties_AbilityIllusoryReflection props = ResolveProps();
             props?.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
             float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(pawn);
-            HediffComp_SwordPressure pressure = MX_QH_HediffUtility.EnsureSwordPressure(pawn);
-            if (pressure?.TryConsumePoints(1) == true)
+            PlayEmpoweredCounterSlash(directionCell, props);
+            int hitCount = QingheSwordCombatUtility.ApplyCone(
+                pawn,
+                pawn.Position,
+                directionCell,
+                props?.coneRadius ?? 5.5f,
+                props?.coneAngleDegrees ?? 90f,
+                (props?.empoweredDamage ?? 48f) * specialFactor,
+                props?.armorPenetration ?? 0.45f,
+                empowered: true);
+            if (hitCount > 0)
             {
-                PlayEmpoweredCounterSlash(directionCell, props);
-                QingheSwordCombatUtility.ApplyCone(
-                    pawn,
-                    pawn.Position,
-                    directionCell,
-                    props?.coneRadius ?? 5.5f,
-                    props?.coneAngleDegrees ?? 90f,
-                    (props?.empoweredDamage ?? 48f) * specialFactor,
-                    props?.armorPenetration ?? 0.45f,
-                    empowered: true);
+                MX_QH_HediffUtility.EnsureSwordPressure(pawn)?.AddPoints(1f);
             }
-            else
-            {
-                PlayNormalCounterSlash(directionCell, props);
-                QingheSwordCombatUtility.ApplyCone(
-                    pawn,
-                    pawn.Position,
-                    directionCell,
-                    props?.coneRadius ?? 5.5f,
-                    props?.coneAngleDegrees ?? 90f,
-                    (props?.normalDamage ?? 32f) * specialFactor,
-                    props?.armorPenetration ?? 0.45f,
-                    empowered: false);
-            }
-        }
-
-        private void PlayNormalCounterSlash(IntVec3 directionCell, CompProperties_AbilityIllusoryReflection props)
-        {
-            Map map = pawn.MapHeld;
-            FleckDef fleckDef = props?.normalSlashFleck;
-            if (map == null || fleckDef == null)
-            {
-                return;
-            }
-
-            Vector3 forward = (directionCell - pawn.Position).ToVector3().Yto0();
-            if (forward.sqrMagnitude < 0.001f)
-            {
-                forward = pawn.Rotation.FacingCell.ToVector3();
-            }
-            forward.Normalize();
-
-            Vector3 spawnPos = pawn.DrawPos
-                + forward * (Mathf.Max(0f, props.coneRadius) * 0.5f + props.normalSlashVisualForwardOffset);
-            float rotation = Mathf.Atan2(0f - forward.z, forward.x) * Mathf.Rad2Deg
-                + props.normalSlashVisualAngleOffsetDegrees;
-            FleckCreationData data = FleckMaker.GetDataStatic(
-                spawnPos,
-                map,
-                fleckDef,
-                Mathf.Max(0.01f, props.normalSlashVisualScale));
-            data.rotation = rotation;
-            data.rotationRate = 0f;
-            map.flecks.CreateFleck(data);
         }
 
         private void PlayEmpoweredCounterSlash(IntVec3 directionCell, CompProperties_AbilityIllusoryReflection props)

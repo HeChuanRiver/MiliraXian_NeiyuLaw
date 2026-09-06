@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
     {
         private const int TipSalt = 910203;
         private const float BarLeftPadding = 10f;
-        private const float BarRightPadding = 8f;
+        private const float BarRightPadding = 7f;
         private const float ResourceBarWidth = 150f;
         private const float BarHeight = 9f;
         private static readonly RectOffset BarMargin = new((int)BarLeftPadding, (int)BarRightPadding, 0, 0);

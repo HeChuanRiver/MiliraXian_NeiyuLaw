@@ -118,6 +118,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void AddDecree(float amount)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled) return;
             FlushRecovery(force: true);
             if (amount <= 0f)
             {
@@ -129,6 +130,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void AddRecoveryProgress(float amount)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled) return;
             FlushRecovery(force: true);
             AddValueWithHighlight(amount);
         }
@@ -194,6 +196,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void FlushRecovery(bool force)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return;
+            }
+
             int currentTick = CurrentTick;
             if (lastRecoveryTick < 0)
             {
@@ -219,6 +226,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private void RefreshCachedRates()
         {
             cachedMaxValue = ResolveMaxValue();
+            ClampCurrentValueTo(cachedMaxValue);
+
             cachedRecoveryValuePerTick = ResolveRecoveryValuePerTick();
         }
 

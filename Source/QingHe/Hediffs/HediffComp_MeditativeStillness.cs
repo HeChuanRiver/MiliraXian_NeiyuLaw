@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 
-    public class Hediff_MeditativeStillness : HediffWithComps
+    public class Hediff_MeditativeStillness : Hediff_QingheZeroLevelPassive
     {
         private HediffComp_MeditativeStillness StillnessComp => GetComp<HediffComp_MeditativeStillness>();
 
@@ -69,6 +69,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffComp_MeditativeStillness : HediffComp_PawnSpecialResource
     {
+        private const int GainIntervalTicks = 300;
+
+        private float pendingGain;
+        private int gainIntervalTicks;
+
         public HediffCompProperties_MeditativeStillness PropsStillness => (HediffCompProperties_MeditativeStillness)props;
 
         public bool LongNightReady => MaxValue > 0f && CurrentValue >= MaxValue - 0.001f;
@@ -76,6 +81,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompExposeData()
         {
             base.CompExposeData();
+            Scribe_Values.Look(ref pendingGain, "pendingGain", 0f);
+            Scribe_Values.Look(ref gainIntervalTicks, "gainIntervalTicks", 0);
         }
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
@@ -83,15 +90,65 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompPostPostAdd(dinfo);
         }
 
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                pendingGain = 0f;
+                gainIntervalTicks = 0;
+                return;
+            }
+
+            gainIntervalTicks++;
+            if (gainIntervalTicks >= GainIntervalTicks)
+            {
+                gainIntervalTicks = 0;
+                FlushPendingGain();
+            }
+        }
+
         public void AddStillness(float amount)
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return;
+            }
+
             if (amount <= 0f)
             {
                 return;
             }
 
+            pendingGain += amount;
+        }
+
+        private void FlushPendingGain()
+        {
+            if (pendingGain <= 0f)
+            {
+                return;
+            }
+
+            float amount = pendingGain;
+            pendingGain = 0f;
             bool wasReady = LongNightReady;
+            float oldValue = CurrentValue;
             AddValue(amount);
+            float applied = CurrentValue - oldValue;
+            if (applied > 0f && Pawn?.Spawned == true && Pawn.Map != null)
+            {
+                float percent = MaxValue <= 0f ? 0f : applied / MaxValue * 100f;
+                Color hediffColor = parent?.def?.defaultLabelColor ?? BarColor;
+                Color textColor = Color.Lerp(hediffColor, Color.black, 0.3f);
+                MoteMaker.ThrowText(
+                    Pawn.DrawPos,
+                    Pawn.Map,
+                    $"静思 +{percent:0.##}%",
+                    textColor,
+                    1.1f);
+            }
+
             if (!wasReady && LongNightReady && Pawn != null)
             {
                 Messages.Message("MX_QH_MeditativeStillnessFullMessage".Translate(), Pawn, MessageTypeDefOf.PositiveEvent, historical: false);
@@ -100,6 +157,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public int ConsumeForQualityBonus()
         {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+            {
+                return 0;
+            }
+
             if (CurrentValue <= 0.001f)
             {
                 return 0;

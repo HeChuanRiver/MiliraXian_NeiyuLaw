@@ -97,7 +97,7 @@
       <li>
         <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
-        <defaultProjectile>MX_Bullet_Qinghe_FlowerBell_Spring</defaultProjectile>
+        <defaultProjectile>MX_Bullet_Qinghe_FlowerBell_None</defaultProjectile>
         <warmupTime>0.80</warmupTime>
         <range>26</range>
         <burstShotCount>3</burstShotCount>
@@ -121,7 +121,6 @@
       <armorPenetrationBase>1.40</armorPenetrationBase>
       <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
-      <soundExplode>Explosion_Bomb</soundExplode>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
@@ -147,6 +146,14 @@
         <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
       </li>
     </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
+    <defName>MX_Bullet_Qinghe_FlowerBell_None</defName>
+    <label>铃音</label>
+    <projectile>
+      <damageAmountBase>16</damageAmountBase>
+    </projectile>
   </ThingDef>
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet" Name="MX_Bullet_Qinghe_FlowerBell_Spring_Base">

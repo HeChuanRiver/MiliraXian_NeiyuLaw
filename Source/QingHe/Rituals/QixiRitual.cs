@@ -171,6 +171,10 @@ namespace MiliraXian.Characters.QingHe.Rituals
 
     public class RitualOutcomeEffectWorker_Qixi : RitualOutcomeEffectWorker_FromQuality
     {
+        private const float SkillXpGood = 2500f;
+        private const float SkillXpBest = 5000f;
+        private const float SkillXpBad = 1000f;
+
         public RitualOutcomeEffectWorker_Qixi()
         {
         }
@@ -183,32 +187,23 @@ namespace MiliraXian.Characters.QingHe.Rituals
         protected override void ApplyExtraOutcome(Dictionary<Pawn, int> totalPresence, LordJob_Ritual jobRitual, RitualOutcomePossibility outcome, out string extraOutcomeDesc, ref LookTargets letterLookTargets)
         {
             Current.Game?.GetComponent<GameComponent_QingheQixiRitual>()?.NotifyRitualCompleted();
-            bool bookGranted = SpawnOperaBook(jobRitual, ref letterLookTargets);
+            float skillXp = !outcome.Positive
+                ? SkillXpBad
+                : outcome.BestPositiveOutcome(jobRitual) ? SkillXpBest : SkillXpGood;
+            foreach (Pawn pawn in totalPresence.Keys)
+            {
+                pawn?.skills?.Learn(SkillDefOf.Crafting, skillXp);
+                pawn?.skills?.Learn(SkillDefOf.Artistic, skillXp);
+            }
+
             List<Pawn> inspiredPawns = outcome.Positive ? GiveInspirations(totalPresence, outcome.BestPositiveOutcome(jobRitual) ? 2 : 1) : new List<Pawn>();
 
-            extraOutcomeDesc = bookGranted ? "MX_QH_QixiOutcomeBook".Translate() : null;
+            extraOutcomeDesc = null;
             if (inspiredPawns.Count > 0)
             {
                 string inspirationText = "MX_QH_QixiOutcomeInspirations".Translate(inspiredPawns.Select(pawn => pawn.LabelShortCap).ToCommaList());
                 extraOutcomeDesc = extraOutcomeDesc.NullOrEmpty() ? inspirationText : extraOutcomeDesc + "\n" + inspirationText;
             }
-        }
-
-        private bool SpawnOperaBook(LordJob_Ritual jobRitual, ref LookTargets letterLookTargets)
-        {
-            if (jobRitual?.Map == null || MX_QHDefOf.MX_QH_Book == null)
-            {
-                return false;
-            }
-
-            Thing book = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_Book);
-            GenPlace.TryPlaceThing(book, jobRitual.selectedTarget.Cell, jobRitual.Map, ThingPlaceMode.Near);
-            if (book.Spawned)
-            {
-                letterLookTargets = book;
-            }
-
-            return true;
         }
 
         private List<Pawn> GiveInspirations(Dictionary<Pawn, int> totalPresence, int count)

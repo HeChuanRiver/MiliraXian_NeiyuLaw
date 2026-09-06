@@ -108,27 +108,25 @@
   <MX_QH_ShieldInactive>护盾未激活</MX_QH_ShieldInactive>
   <MX_QH_LotusShieldStatusActive>已激活</MX_QH_LotusShieldStatusActive>
   <MX_QH_LotusShieldStatusDown>！！已失效！！（剩余 {0}s）</MX_QH_LotusShieldStatusDown>
-  <MX_QH_LotusShieldCapacity>护盾容量：{0}</MX_QH_LotusShieldCapacity>
-  <MX_QH_LotusShieldRegen>护盾回复速率：{0} /s</MX_QH_LotusShieldRegen>
+  <MX_QH_LotusShieldCapacity>灵气容量：{0}</MX_QH_LotusShieldCapacity>
+  <MX_QH_LotusShieldRegen>回复速率：{0} /s</MX_QH_LotusShieldRegen>
   <MX_QH_NeedRequiredWeapon>需要对应武器。</MX_QH_NeedRequiredWeapon>
-  <MX_QH_LongBreathLowResourceWarning>【警告】清荷已无可用的花神之垂怜充能，受到伤害可能会致命！</MX_QH_LongBreathLowResourceWarning>
-  <MX_QH_LongBreathTriggered>【花神之垂怜】已触发：抵消了一次可能致命的伤害。</MX_QH_LongBreathTriggered>
+  <MX_QH_LongBreathLowResourceWarning>【警告】清荷已无可用的流水之形充能，受到伤害可能会致命！</MX_QH_LongBreathLowResourceWarning>
+  <MX_QH_LongBreathTriggered>【流水之形】已触发：抵消了一次可能致命的伤害。</MX_QH_LongBreathTriggered>
   <MX_QH_DevAddDivineGraceLevelLabel>DEV：花神之恩典 +1</MX_QH_DevAddDivineGraceLevelLabel>
-  <MX_QH_DevAddDivineGraceLevelDesc>直接令花神之恩典提高 1 级，用于测试 staged stat 生效路径。</MX_QH_DevAddDivineGraceLevelDesc>
-  <MX_QH_DivineGraceGainedMessage>清荷的花神之恩典提升至 {0} 级。</MX_QH_DivineGraceGainedMessage>
+  <MX_QH_DevAddDivineGraceLevelDesc>直接令花神之恩典提高 1 级。</MX_QH_DevAddDivineGraceLevelDesc>
+  <MX_QH_DivineGraceGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_DivineGraceGainedMessage>
   <MX_QH_FlowerCourtTuneTitle>四时调谐</MX_QH_FlowerCourtTuneTitle>
   <MX_QH_FlowerCourtGraceLine>花神之恩典：{0} / {1}</MX_QH_FlowerCourtGraceLine>
   <MX_QH_ResonanceTab_Label>调谐共鸣</MX_QH_ResonanceTab_Label>
   <MX_QH_SkillTreeTab_Label>技能树信息</MX_QH_SkillTreeTab_Label>
-  <MX_QH_GraceProgressLine>进度：{0} / {1}（{2}）</MX_QH_GraceProgressLine>
-  <MX_QH_GraceProgressMax>已达最高恩典等级</MX_QH_GraceProgressMax>
+  <MX_QH_GraceProgressLine>经验：{0} / {1}（{2}）</MX_QH_GraceProgressLine>
+  <MX_QH_GraceProgressMax>已达最高等级</MX_QH_GraceProgressMax>
   <MX_QH_FlowerCourtTraitsTitle>特性说明</MX_QH_FlowerCourtTraitsTitle>
   <MX_QH_FlowerCourtNodeLevel>Lv.{0}</MX_QH_FlowerCourtNodeLevel>
   <MX_QH_FlowerCourtNodeLearned>已习得</MX_QH_FlowerCourtNodeLearned>
-  <MX_QH_FlowerCourtNodeLocked>需要恩典等级 {0}</MX_QH_FlowerCourtNodeLocked>
+  <MX_QH_FlowerCourtNodeLocked>习得等级：Lv.{0}</MX_QH_FlowerCourtNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_SpringFlowMissingResource>花令不足，无法施放春泉涌流。</MX_QH_SpringFlowMissingResource>
-  <MX_QH_LunarMirrorMissingResource>花令不足，无法施放霜月镜。</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresSwordMode>需要装备散华。</MX_QH_RequiresSwordMode>
   <MX_QH_RequiresBellMode>需要装备花信风铃。</MX_QH_RequiresBellMode>
   <MX_QH_WeaponFormFlowerBell>花信风铃</MX_QH_WeaponFormFlowerBell>
@@ -179,16 +177,16 @@
   <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>清荷已积蓄圆满的静思。下一次进行需要品质的建造、制作或艺术创作时，将消耗全部静思并使品质 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>清荷的静思已经积蓄圆满。</MX_QH_MeditativeStillnessFullMessage>
-  <MX_QH_LotusShieldTooltipTitle>花神之眷顾</MX_QH_LotusShieldTooltipTitle>
-  <MX_QH_LotusShieldEnergyLine>护盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
+  <MX_QH_LotusShieldTooltipTitle>灵气加护</MX_QH_LotusShieldTooltipTitle>
+  <MX_QH_LotusShieldEnergyLine>灵气值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>回复速率：{0} /秒</MX_QH_LotusShieldRegenLine>
   <MX_QH_LotusShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_LotusShieldRegenDelayLine>
-  <MX_QH_FlowerCourtTitle>花神庭</MX_QH_FlowerCourtTitle>
-  <MX_QH_FlowerCourtLearnedNodesLine>已习得节点：{0}</MX_QH_FlowerCourtLearnedNodesLine>
+  <MX_QH_FlowerCourtTitle>修习面板</MX_QH_FlowerCourtTitle>
+  <MX_QH_FlowerCourtLearnedNodesLine>当前精通等级：{0}</MX_QH_FlowerCourtLearnedNodesLine>
   <MX_QH_FlowerCourtStillnessLine>静思：{0} % / {1} %</MX_QH_FlowerCourtStillnessLine>
   <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
-  <MX_QH_LotusShieldLabel>护盾</MX_QH_LotusShieldLabel>
-  <MX_QH_LongBreathChargesLine>花神之垂怜：{0} / {1} 可用</MX_QH_LongBreathChargesLine>
+  <MX_QH_LotusShieldLabel>灵气</MX_QH_LotusShieldLabel>
+  <MX_QH_LongBreathChargesLine>流水之形：{0} / {1} 可用</MX_QH_LongBreathChargesLine>
   <MX_QH_StatusLine>{0}</MX_QH_StatusLine>
   <MX_QH_LongBreathStateRecharging>正在回充</MX_QH_LongBreathStateRecharging>
   <MX_QH_LongBreathStateReady>已充满</MX_QH_LongBreathStateReady>
@@ -196,8 +194,8 @@
   <MX_QH_RechargeProgressLine>恢复进度：{0}</MX_QH_RechargeProgressLine>
   <MX_QH_RemainingTimeLine>剩余时间：{0}</MX_QH_RemainingTimeLine>
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
-  <MX_QH_RecoveryProgressLine>恢复进度：{0} / {1}</MX_QH_RecoveryProgressLine>
-  <MX_QH_RecoverySpeedLine>恢复速度：{0} /秒</MX_QH_RecoverySpeedLine>
+  <MX_QH_RecoveryProgressLine>下个充能：{0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoverySpeedLine>充能速度：{0} /秒</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧仪式。</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>乞巧仪式仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
   <MX_QH_QixiOutcomeBook>获得了一本《荷雨亭曲艺》。</MX_QH_QixiOutcomeBook>

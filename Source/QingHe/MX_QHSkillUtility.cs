@@ -24,9 +24,18 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            state.SyncNodesByGraceLevel(MX_QH_HediffUtility.GetDivineGraceLevel(pawn));
+            int effectiveLevel = Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel);
+            state.SyncNodesByGraceLevel(effectiveLevel);
             state.SyncGrantedDefs();
             HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
+        }
+
+        public static bool HasSeasonalResonance(Pawn pawn)
+        {
+            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_SeasonalResonance;
+            return node != null
+                && Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel) >= node.requiredGraceLevel
+                && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.HasNode(node) == true;
         }
 
         public static float GetSpecialAbilityEffectFactor(Pawn pawn)
@@ -46,7 +55,11 @@ namespace MiliraXian.Characters.QingHe
                 yield break;
             }
 
-            yield return new Gizmo_QH_FlowerDecree(pawn);
+            if (!QinghePowerBalance.Sealed
+                && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlyingFlowerDecree))
+            {
+                yield return new Gizmo_QH_FlowerDecree(pawn);
+            }
 
             if (!Prefs.DevMode)
             {

@@ -35,7 +35,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
+            return HediffComp_QingheCombatState.GetFor(pawn);
+        }
+
+        public static Hediff_SeasonalResonance GetSeasonalResonance(Pawn pawn)
+        {
+            return GetCombatState(pawn)?.CurrentResonance;
         }
 
         public static HediffComp_SwordPressure EnsureSwordPressure(Pawn pawn)
@@ -56,6 +61,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             return EnsureHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
+        }
+
+        public static void SyncDivineProtectionForPowerLevel(Pawn pawn)
+        {
+            HediffComp_DivineProtection protection = GetHediffComp<HediffComp_DivineProtection>(
+                pawn,
+                MX_QHDefOf.MX_QH_DivineProtection);
+            protection?.SyncForPowerLevel();
         }
 
         public static void AddMeditativeStillnessFromLotusPond(Pawn pawn, Building lotusPond)
@@ -114,33 +127,32 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureCombatState(pawn);
             EnsureSwordPressure(pawn);
             EnsureMeditativeStillness(pawn);
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+            EnsureDivineGraceComp(pawn);
 
             GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();
         }
 
         public static int GetDivineGraceLevel(Pawn pawn)
         {
-            Hediff grace = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineGrace);
-            return grace == null ? 0 : Mathf.Clamp(Mathf.RoundToInt(grace.Severity), 0, 24);
+            return GetDivineGraceComp(pawn)?.EffectiveLevel ?? 0;
         }
 
         public static void AddDivineGraceLevel(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || MX_QHDefOf.MX_QH_DivineGrace == null)
+            if (pawn?.health?.hediffSet == null)
             {
                 return;
             }
 
-            Hediff grace = EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineGrace);
-            if (grace == null || grace.Severity >= grace.def.maxSeverity - 0.0001f)
+            HediffComp_QingheGraceSync comp = EnsureDivineGraceComp(pawn);
+            if (comp == null || comp.IsMaxLevel)
             {
                 return;
             }
 
-            grace.Severity = Mathf.Min(grace.def.maxSeverity, Mathf.Floor(grace.Severity) + 1f);
+            comp.AddProgress(comp.RequiredProgressForCurrentLevel);
             Messages.Message(
-                "MX_QH_DivineGraceGainedMessage".Translate(Mathf.RoundToInt(grace.Severity)),
+                "MX_QH_DivineGraceGainedMessage".Translate(comp.CurrentLevel),
                 pawn,
                 MessageTypeDefOf.PositiveEvent,
                 historical: false);
@@ -149,12 +161,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static HediffComp_QingheGraceSync GetDivineGraceComp(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+            return GetHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
         public static HediffComp_QingheGraceSync EnsureDivineGraceComp(Pawn pawn)
         {
-            return EnsureHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_DivineGrace);
+            return EnsureHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
         public static float GetDivineGraceProgress(Pawn pawn)

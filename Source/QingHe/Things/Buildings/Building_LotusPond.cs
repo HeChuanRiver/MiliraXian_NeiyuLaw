@@ -12,6 +12,10 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Buildings
 {
+    public class Building_LotusPond : Building
+    {
+    }
+
     public class RoomRoleWorker_QingheLotusRainPavilion : RoomRoleWorker
     {
         private const float LotusPondScore = 3000f;

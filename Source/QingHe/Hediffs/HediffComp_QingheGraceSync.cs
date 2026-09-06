@@ -1,4 +1,5 @@
 using RimWorld;
+using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
 
@@ -25,11 +26,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private const float QuadraticProgressRequirement = 10f;
 
         private float progress;
+        private int level;
         private float lastSyncedSeverity = float.NaN;
 
-        public int CurrentLevel => parent == null
-            ? 0
-            : Mathf.Clamp(Mathf.RoundToInt(parent.Severity), 0, MaxGraceLevel);
+        public int CurrentLevel => Mathf.Clamp(level, 0, MaxGraceLevel);
+
+        public int EffectiveLevel
+        {
+            get
+            {
+                Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
+                return effect == null ? 0 : Mathf.Clamp(Mathf.RoundToInt(effect.Severity), 0, QinghePowerBalance.MaxEffectiveLevel);
+            }
+        }
 
         public bool IsMaxLevel => CurrentLevel >= MaxGraceLevel;
 
@@ -82,12 +91,22 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 }
 
                 progress -= required;
-                parent.Severity = Mathf.Min(parent.def?.maxSeverity ?? MaxGraceLevel, CurrentLevel + 1f);
+                level = Mathf.Min(MaxGraceLevel, level + 1);
             }
 
             if (IsMaxLevel)
             {
                 progress = 0f;
+            }
+
+            if (Pawn?.Spawned == true && Pawn.Map != null)
+            {
+                MoteMaker.ThrowText(
+                    Pawn.DrawPos,
+                    Pawn.Map,
+                    $"灵气精通 +{amount:0.##}经验",
+                    new Color(1f, 0.35f, 0.8f),
+                    1.1f);
             }
 
             if (CurrentLevel != oldLevel)
@@ -107,6 +126,28 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             TrySync(force: true);
         }
 
+        public void SyncForPowerLevel()
+        {
+            if (parent == null || !MX_QHCharacterUtility.IsQinghe(Pawn))
+            {
+                return;
+            }
+
+            EnsureEffectiveHediff();
+            MX_QHSkillUtility.SyncChoices(Pawn);
+        }
+
+        public override void CompPostPostRemoved()
+        {
+            Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
+            if (effect != null)
+            {
+                Pawn.health.RemoveHediff(effect);
+            }
+
+            base.CompPostPostRemoved();
+        }
+
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
@@ -117,6 +158,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         {
             base.CompExposeData();
             Scribe_Values.Look(ref progress, "mx_qh_graceProgress", 0f);
+            Scribe_Values.Look(ref level, "mx_qh_auraMasteryLevel", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 progress = Mathf.Max(0f, progress);
@@ -127,16 +169,29 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void TrySync(bool force = false)
         {
-            if (parent == null || (!force && parent.Severity == lastSyncedSeverity))
+            if (parent == null || (!force && level == lastSyncedSeverity))
             {
                 return;
             }
 
-            lastSyncedSeverity = parent.Severity;
+            lastSyncedSeverity = level;
             if (MX_QHCharacterUtility.IsQinghe(Pawn))
             {
+                EnsureEffectiveHediff();
                 MX_QHSkillUtility.SyncChoices(Pawn);
             }
+        }
+
+        private void EnsureEffectiveHediff()
+        {
+            Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
+            if (effect == null)
+            {
+                effect = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_AuraMastery, Pawn);
+                Pawn.health.AddHediff(effect);
+            }
+
+            effect.Severity = Mathf.Min(CurrentLevel, QinghePowerBalance.MaxEffectiveLevel);
         }
     }
 }

@@ -43,12 +43,16 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_IllusoryReflectionInvulnerable;
         public static HediffDef MX_QH_DivineBlessing;
         public static HediffDef MX_QH_DivineBlessingImmunity;
-        public static HediffDef MX_QH_DivineGrace;
+        public static HediffDef MX_QH_AuraMastery;
         public static HediffDef MX_QH_DivineProtection;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_SwordPressure;
         public static HediffDef MX_QH_CombatState;
+        public static HediffDef MX_QH_ResonanceSpring;
+        public static HediffDef MX_QH_ResonanceSummer;
+        public static HediffDef MX_QH_ResonanceAutumn;
+        public static HediffDef MX_QH_ResonanceWinter;
         public static HediffDef MX_QH_MeditativeStillness;
         public static HediffDef MX_QH_LuoshenContract;
         public static HediffDef MX_QH_Trickle;

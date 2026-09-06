@@ -69,6 +69,23 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             Pawn.AllComps.Add(comp);
         }
 
+        public void DisableShield()
+        {
+            RemoveShieldComp();
+        }
+
+        public void SyncForPowerLevel()
+        {
+            if (QinghePowerBalance.Sealed)
+            {
+                DisableShield();
+            }
+            else
+            {
+                EnsureShieldBound();
+            }
+        }
+
         private void RemoveShieldComp()
         {
             if (Pawn == null || Pawn.AllComps == null)

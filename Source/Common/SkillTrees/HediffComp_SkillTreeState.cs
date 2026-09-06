@@ -82,6 +82,13 @@ namespace MiliraXian.Characters
             int learnedCount = 0;
             foreach (SkillNodeDef node in RelevantNodes())
             {
+                if (node.requiredGraceLevel > graceLevel && GetNodeLevel(node) > 0)
+                {
+                    nodeLevels.Remove(node);
+                    learnedCount++;
+                    continue;
+                }
+
                 if (node.requiredGraceLevel <= graceLevel && GetNodeLevel(node) <= 0)
                 {
                     nodeLevels[node] = 1;
