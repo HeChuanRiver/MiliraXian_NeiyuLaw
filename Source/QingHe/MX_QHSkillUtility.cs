@@ -55,13 +55,14 @@ namespace MiliraXian.Characters.QingHe
                 yield break;
             }
 
-            if (!QinghePowerBalance.Sealed
-                && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlyingFlowerDecree))
+            if (QinghePowerBalance.Sealed)
             {
-                yield return new Gizmo_QH_FlowerDecree(pawn);
+                yield break;
             }
 
-            if (!Prefs.DevMode)
+            yield return new Gizmo_QH_FlowerDecree(pawn);
+
+            if (!Prefs.DevMode || !DebugSettings.ShowDevGizmos)
             {
                 yield break;
             }

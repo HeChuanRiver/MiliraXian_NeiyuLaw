@@ -43,6 +43,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             return pawn?.equipment?.Primary?.def == MX_QHDefOf.MX_QH_Weapon_FlowerBell;
         }
 
+        public static bool HasQingheExclusiveWeapon(Pawn pawn)
+        {
+            return IsSwordMode(pawn) || IsBellMode(pawn);
+        }
+
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
         {
             return MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;

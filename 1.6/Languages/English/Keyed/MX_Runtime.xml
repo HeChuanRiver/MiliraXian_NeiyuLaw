@@ -211,17 +211,6 @@
   <MX_QH_QixiOutcomeBook>Received a copy of "Lotus Rain Pavilion Artistry".</MX_QH_QixiOutcomeBook>
   <MX_QH_QixiOutcomeInspirations>Inspired participant(s): {0}.</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>Inspired by Qinghe's Qixi rite.</MX_QH_QixiInspirationReason>
-  <MX_QH_FlowerCourtDesignLocked>The lotus pond design has not been acquired.</MX_QH_FlowerCourtDesignLocked>
-  <MX_QH_FlowerCourtDesignUnlockedMessage>Lotus pond design acquired.</MX_QH_FlowerCourtDesignUnlockedMessage>
-  <MX_QH_FlowerCourtLotusPondBuiltMessage>The lotus pond is complete.</MX_QH_FlowerCourtLotusPondBuiltMessage>
-  <MX_QH_FlowerCourtQingheArrivedLetterLabel>Qinghe arrives</MX_QH_FlowerCourtQingheArrivedLetterLabel>
-  <MX_QH_FlowerCourtQingheArrivedLetterText>The water in the lotus pond has stilled. Qinghe has followed this new court to the colony and is willing to stay. She still needs a decent Lotus Rain Pavilion before she can truly settle in.</MX_QH_FlowerCourtQingheArrivedLetterText>
-  <MX_QH_FlowerCourtSecondStageLetterLabel>Prepare the pavilion</MX_QH_FlowerCourtSecondStageLetterLabel>
-  <MX_QH_FlowerCourtSecondStageLetterText>The lotus pond has been built. Arrange its room into a decent Lotus Rain Pavilion. When it is ready, you will receive a copy of "Lotus Rain Pavilion Artistry".</MX_QH_FlowerCourtSecondStageLetterText>
-  <MX_QH_FlowerCourtCompletedLetterLabel>Flower Court established</MX_QH_FlowerCourtCompletedLetterLabel>
-  <MX_QH_FlowerCourtCompletedLetterText>The Lotus Rain Pavilion has settled into place. In response, a copy of "Lotus Rain Pavilion Artistry" has appeared beside the lotus pond.</MX_QH_FlowerCourtCompletedLetterText>
-  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>Flower Court</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
-  <MX_QH_FlowerCourtAutoAcceptedLetterText>Qinghe has prepared the lotus pond design. You can now build a lotus pond from the Misc category and use it as the core of the new Flower Court.</MX_QH_FlowerCourtAutoAcceptedLetterText>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>

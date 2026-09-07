@@ -9,6 +9,7 @@ namespace MiliraXian.Characters.QingHe.Defs
     {
         public static SkillNodeDef MX_QH_Node_FlowerEnvoy;
         public static SkillNodeDef MX_QH_Node_FlyingFlowerDecree;
+        public static SkillNodeDef MX_QH_Node_SwordDance;
         public static SkillNodeDef MX_QH_Node_SeasonalResonance;
         public static SkillNodeDef MX_QH_Node_Jueying;
         public static SkillNodeDef MX_QH_Node_Luoshenfu;

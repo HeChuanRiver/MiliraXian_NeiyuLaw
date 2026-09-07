@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_FlowerCourtDesignLocked>尚未获得荷池设计图。</MX_QH_FlowerCourtDesignLocked>
+  <MX_QH_FlowerCourtDesignUnlockedMessage>已获得荷池设计图。</MX_QH_FlowerCourtDesignUnlockedMessage>
+  <MX_QH_FlowerCourtLotusPondBuiltMessage>荷池已建成。</MX_QH_FlowerCourtLotusPondBuiltMessage>
+  <MX_QH_FlowerCourtQingheArrivedLetterLabel>清荷抵达</MX_QH_FlowerCourtQingheArrivedLetterLabel>
+  <MX_QH_FlowerCourtQingheArrivedLetterText>荷池中的水纹静了下来，清荷循着这处新庭院来到殖民地，并愿意在此留下。她还需要一处观感看得过去的荷雨亭，才好真正安顿下来。</MX_QH_FlowerCourtQingheArrivedLetterText>
+  <MX_QH_FlowerCourtSecondStageLetterLabel>整理荷雨亭</MX_QH_FlowerCourtSecondStageLetterLabel>
+  <MX_QH_FlowerCourtSecondStageLetterText>荷池已经建成。请将荷池所在的房间整理成观感看得过去的荷雨亭。完成后会获得一本《荷雨亭曲艺》。</MX_QH_FlowerCourtSecondStageLetterText>
+  <MX_QH_FlowerCourtCompletedLetterLabel>花神庭初成</MX_QH_FlowerCourtCompletedLetterLabel>
+  <MX_QH_FlowerCourtCompletedLetterText>荷雨亭终于安定下来。作为回响，荷池旁出现了一本《荷雨亭曲艺》。</MX_QH_FlowerCourtCompletedLetterText>
+  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>荷雨亭</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
+  <MX_QH_FlowerCourtAutoAcceptedLetterText>清荷整理出了荷池设计图。现在可以在杂项分类中建造荷池，并以此作为新花神庭的核心。</MX_QH_FlowerCourtAutoAcceptedLetterText>
+</LanguageData>

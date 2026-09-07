@@ -1,6 +1,7 @@
 using MiliraXian.Characters.QingHe.Things;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Vfx;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -27,6 +28,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_LunarMirror : CompAbilityEffect
     {
         public new CompProperties_AbilityLunarMirror Props => (CompProperties_AbilityLunarMirror)props;
+
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
 
         public override bool GizmoDisabled(out string reason)
         {

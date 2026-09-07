@@ -5,8 +5,8 @@
   </AbilityCategoryDef>
   <AbilityDef>
     <defName>MX_QH_SpringFlow</defName>
-    <label>春泉洗礼</label>
-    <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</description>
+    <label>春泉涌流</label>
+    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>201</displayOrder>
@@ -38,14 +38,14 @@
         <fieldDef>SpringFlowField</fieldDef>
         <fieldDurationTicks>900</fieldDurationTicks>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-        <resourceCost>1</resourceCost>
+        <resourceCost>2</resourceCost>
         <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
       </li>
     </comps>
   </AbilityDef>
   <AbilityDef>
     <defName>MX_QH_LunarMirror</defName>
-    <label>霜月镜护盾</label>
+    <label>霜月镜</label>
     <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，最多吸收300点伤害。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>

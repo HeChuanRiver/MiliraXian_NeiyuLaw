@@ -72,7 +72,7 @@
   <HediffDef>
     <defName>MX_QH_SwordPressure</defName>
     <label>剑压</label>
-    <description>隐藏状态：清荷近战模式使用的战斗资源。</description>
+    <description>隐藏Hediff：资源计数器</description>
     <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHiddenResource</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
