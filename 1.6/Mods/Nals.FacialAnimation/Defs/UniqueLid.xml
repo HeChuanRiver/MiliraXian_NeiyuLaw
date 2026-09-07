@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <FacialAnimation.LidTypeDef>
         <defName>Milira_Lid_Neiyu</defName>
@@ -30,8 +30,7 @@
 
     <FacialAnimation.LidTypeDef>
         <defName>Milira_Lid_Qinghe</defName>
-        <!-- TODO：清荷在这里如果有眼皮之类的要改记得改 -->
-        <texPath>Things/Pawn/Milira/Lids/NormalD</texPath>
+        <texPath>MiliraXianQinghe/Pawn/FA_Components/Lid</texPath>
         <raceName>Milira_Race</raceName>
         <shader>Map/Transparent</shader>
         <enableUnisexTexPath>True</enableUnisexTexPath>

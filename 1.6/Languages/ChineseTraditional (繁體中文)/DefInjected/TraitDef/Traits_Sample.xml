@@ -2,8 +2,8 @@
 <LanguageData>
   <MiliraXianNeiyu_Love.degreeDatas.0.label>霓羽仙</MiliraXianNeiyu_Love.degreeDatas.0.label>
   <MiliraXianNeiyu_Love.degreeDatas.0.description>她愛著世人，她願世間飄落霓裳花。</MiliraXianNeiyu_Love.degreeDatas.0.description>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.label>涓流長息</MX_QH_Trait_LongBreath.degreeDatas.0.label>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.description>「梨花帶雨，潤物無聲。」（開啟效果：花神之垂憐、涓流）</MX_QH_Trait_LongBreath.degreeDatas.0.description>
-  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>霓羽仙</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
-  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>「出淤泥而不染，濯清漣而不妖。」</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.label>&lt;color=#99CCFF&gt;涓流長息&lt;/color&gt;</MX_QH_Trait_LongBreath.degreeDatas.0.label>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.description>「梨花帶雨，潤物無聲。」\n\n清荷的傷口會隨時間自行癒合，即使是永久性損傷與失去的身體部位，也能在細水長流中慢慢復原。</MX_QH_Trait_LongBreath.degreeDatas.0.description>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>&lt;color=#FFCDE1&gt;霓羽仙&lt;/color&gt;</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>「出淤泥而不染，濯清漣而不妖。」\n\n霓羽仙是米莉拉修行者的至高境界，清荷亦已臻此境。當清荷受到致命或足以摧毀身體部位的傷害時，花神的垂憐將抵消此次傷害，讓她的身體在花光中復原，並短暫遁入心靈隱形的庇護。（消耗一層充能，隨時間恢復）</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
 </LanguageData>

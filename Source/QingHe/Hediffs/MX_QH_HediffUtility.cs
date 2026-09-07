@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
@@ -35,7 +35,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
+            return HediffComp_QingheCombatState.GetFor(pawn);
+        }
+
+        public static Hediff_SeasonalResonance GetSeasonalResonance(Pawn pawn)
+        {
+            return GetCombatState(pawn)?.CurrentResonance;
         }
 
         public static HediffComp_SwordPressure EnsureSwordPressure(Pawn pawn)
@@ -56,6 +61,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             return EnsureHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
+        }
+
+        public static void SyncDivineProtectionForPowerLevel(Pawn pawn)
+        {
+            HediffComp_DivineProtection protection = GetHediffComp<HediffComp_DivineProtection>(
+                pawn,
+                MX_QHDefOf.MX_QH_DivineProtection);
+            protection?.SyncForPowerLevel();
         }
 
         public static void AddMeditativeStillnessFromLotusPond(Pawn pawn, Building lotusPond)
@@ -114,10 +127,105 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             EnsureCombatState(pawn);
             EnsureSwordPressure(pawn);
             EnsureMeditativeStillness(pawn);
+            EnsureDivineGraceComp(pawn);
 
             GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();
         }
 
+        public static int GetDivineGraceLevel(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.EffectiveLevel ?? 0;
+        }
+
+        public static void AddDivineGraceLevel(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet == null)
+            {
+                return;
+            }
+
+            HediffComp_QingheGraceSync comp = EnsureDivineGraceComp(pawn);
+            if (comp == null || comp.IsMaxLevel)
+            {
+                return;
+            }
+
+            comp.AddProgress(comp.RequiredProgressForCurrentLevel);
+            Messages.Message(
+                "MX_QH_DivineGraceGainedMessage".Translate(comp.CurrentLevel),
+                pawn,
+                MessageTypeDefOf.PositiveEvent,
+                historical: false);
+            MX_QHSkillUtility.SyncChoices(pawn);
+        }
+
+        public static HediffComp_QingheGraceSync GetDivineGraceComp(Pawn pawn)
+        {
+            return GetHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+        }
+
+        public static HediffComp_QingheGraceSync EnsureDivineGraceComp(Pawn pawn)
+        {
+            return EnsureHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+        }
+
+        public static float GetDivineGraceProgress(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.Progress ?? 0f;
+        }
+
+        public static float GetDivineGraceProgressRequired(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.RequiredProgressForCurrentLevel ?? 0f;
+        }
+
+        public static float GetDivineGraceProgressPercent(Pawn pawn)
+        {
+            return GetDivineGraceComp(pawn)?.ProgressPercent ?? 0f;
+        }
+
+        public static void AddDivineGraceProgress(Pawn pawn, float amount)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn) || amount <= 0f)
+            {
+                return;
+            }
+
+            EnsureDivineGraceComp(pawn)?.AddProgress(amount);
+        }
+
+        public static void AddDivineGraceProgressFromCraft(Pawn pawn, RecipeDef recipe, Thing product)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn)
+                || !IsGraceCraftRecipe(recipe)
+                || product == null
+                || product.def?.category != ThingCategory.Item)
+            {
+                return;
+            }
+
+            float amount = CalculateDivineGraceProgressFromCraft(product);
+            if (amount > 0f)
+            {
+                AddDivineGraceProgress(pawn, amount);
+            }
+        }
+
+        private static bool IsGraceCraftRecipe(RecipeDef recipe)
+        {
+            return recipe != null
+                && recipe.workSkillLearnFactor > 0f
+                && (recipe.workSkill == SkillDefOf.Crafting || recipe.workSkill == SkillDefOf.Artistic);
+        }
+
+        private static float CalculateDivineGraceProgressFromCraft(Thing product)
+        {
+            CompQuality compQuality = product.TryGetComp<CompQuality>();
+            float qualityFactor = compQuality == null ? 0.9f : 0.7f + 0.28f * (int)compQuality.Quality;
+            float marketValue = Mathf.Max(0f, product.MarketValue * Mathf.Max(1, product.stackCount));
+            float cappedValue = Mathf.Min(marketValue, 60000f);
+            return (12f + cappedValue * 0.045f) * qualityFactor;
+        }
         private static T EnsureHediffComp<T>(Pawn pawn, HediffDef hediffDef) where T : HediffComp
         {
             Hediff hediff = EnsureHediff(pawn, hediffDef);

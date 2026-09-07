@@ -2,7 +2,6 @@
 <LanguageData>
   <MX_QH_NoteImpact.label>音擊</MX_QH_NoteImpact.label>
   <MX_QH_NoteImpact.deathMessage>{0}被花信鈴的聲音擊倒了。</MX_QH_NoteImpact.deathMessage>
-  <MX_QH_NoteImpact_Building.label>破城音擊</MX_QH_NoteImpact_Building.label>
   <MX_QH_Slash.label>散華斬擊</MX_QH_Slash.label>
   <MX_QH_Slash.deathMessage>{0}被清荷的劍勢斬倒了。</MX_QH_Slash.deathMessage>
   <MX_QH_SlashSkill.label>散華劍勢</MX_QH_SlashSkill.label>

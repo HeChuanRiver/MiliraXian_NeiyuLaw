@@ -53,7 +53,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                     doVisualEffects: true,
                     propagationSpeed: 1f,
                     excludeRadius: 0f,
-                    doSoundEffects: true);
+                    doSoundEffects: false);
             }
 
             base.Impact(null, blockedByShield);

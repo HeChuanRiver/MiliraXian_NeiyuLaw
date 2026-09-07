@@ -44,7 +44,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private float energy;
         private int ticksLeft;
         private int ageTicks;
-        private bool enhanced;
 
         public CompProperties_LunarMirrorShield Props => (CompProperties_LunarMirrorShield)props;
 
@@ -98,7 +97,6 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look(ref energy, "energy", Props.startingEnergy);
             Scribe_Values.Look(ref ticksLeft, "ticksLeft", Props.durationTicks);
             Scribe_Values.Look(ref ageTicks, "ageTicks", 0);
-            Scribe_Values.Look(ref enhanced, "enhanced", false);
         }
 
         public override Color? ForceColor()
@@ -151,11 +149,6 @@ namespace MiliraXian.Characters.QingHe.Things
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
             energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
             ageTicks = 0;
-        }
-
-        public void SetEnhanced(bool value)
-        {
-            enhanced = value;
         }
 
         public bool TryInterceptProjectile(Projectile projectile, Vector3 lastExactPos, Vector3 newExactPos)
@@ -283,7 +276,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void TryFireEnhancedRetaliation(Projectile absorbedProjectile, Vector3 launchPos)
         {
-            if (!enhanced || Props.enhancedRetaliationProjectileDef == null || parent?.Spawned != true || parent.Map == null)
+            if (Props.enhancedRetaliationProjectileDef == null || parent?.Spawned != true || parent.Map == null)
             {
                 return;
             }

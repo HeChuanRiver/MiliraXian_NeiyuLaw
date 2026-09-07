@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_AssembleLostMusicScore.label>嘗試修復失傳的曲譜</MX_QH_AssembleLostMusicScore.label>
-  <MX_QH_AssembleLostMusicScore.description>將失傳的曲譜殘片整理成書卷。50%機率得到隨機技能書，否則得到普通書。技能書有15%機率額外記錄第二個不同技能。</MX_QH_AssembleLostMusicScore.description>
-  <MX_QH_AssembleLostMusicScore.jobString>正在修復失傳的曲譜。</MX_QH_AssembleLostMusicScore.jobString>
   <MX_QH_WriteLotusRainPavilionOpera.label>撰寫《荷雨亭曲藝》</MX_QH_WriteLotusRainPavilionOpera.label>
-  <MX_QH_WriteLotusRainPavilionOpera.description>由清荷將荷雨亭中的花影、水聲與曲調寫成書卷。25%機率附有清荷的技能相關內容。</MX_QH_WriteLotusRainPavilionOpera.description>
+  <MX_QH_WriteLotusRainPavilionOpera.description>由清荷將荷雨亭中的花影、水聲與曲調寫成書卷。</MX_QH_WriteLotusRainPavilionOpera.description>
   <MX_QH_WriteLotusRainPavilionOpera.jobString>正在撰寫《荷雨亭曲藝》。</MX_QH_WriteLotusRainPavilionOpera.jobString>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>荷雨亭曲藝：春水調</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>清荷記下荷雨初歇時的水聲與輕拍。讀到此卷時，彷彿能聽見春水漫過石階，細碎花影隨聲搖動。</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>

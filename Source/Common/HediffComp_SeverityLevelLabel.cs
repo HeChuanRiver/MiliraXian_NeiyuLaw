@@ -6,6 +6,7 @@ namespace MiliraXian.Characters
     public class HediffCompProperties_SeverityLevelLabel : HediffCompProperties
     {
         public bool showMaxSeverity = true;
+        public bool useQingheEffectiveMax;
 
         public HediffCompProperties_SeverityLevelLabel()
         {
@@ -27,7 +28,9 @@ namespace MiliraXian.Characters
                     return level.ToString();
                 }
 
-                int maxLevel = Mathf.Max(1, Mathf.RoundToInt(parent?.def?.maxSeverity ?? 1f));
+                int maxLevel = Props.useQingheEffectiveMax
+                    ? MiliraXian.Characters.QingHe.QinghePowerBalance.MaxEffectiveLevel
+                    : Mathf.Max(1, Mathf.RoundToInt(parent?.def?.maxSeverity ?? 1f));
                 return level + "/" + maxLevel;
             }
         }

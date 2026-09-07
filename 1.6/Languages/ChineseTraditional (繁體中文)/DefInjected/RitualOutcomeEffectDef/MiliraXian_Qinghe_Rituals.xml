@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_QixiOutcome.description>根據儀式品質，參與者會獲得持續{MOODDAYS}天、介於{MINMOOD}到{MAXMOOD}之間的心情影響。完成乞巧儀式還會獲得失傳的曲譜殘片，較好的結果可能激發參與者的靈感。</MX_QH_QixiOutcome.description>
+  <MX_QH_QixiOutcome.description>根據儀式品質，參與者會獲得持續{MOODDAYS}天、介於{MINMOOD}到{MAXMOOD}之間的心情影響。完成乞巧儀式還會獲得一本《荷雨亭曲藝》，較好的結果可能激發參與者的靈感。</MX_QH_QixiOutcome.description>
   <MX_QH_QixiOutcome.comps.1.label>清荷在場</MX_QH_QixiOutcome.comps.1.label>
   <MX_QH_QixiOutcome.comps.2.label>參與者數量</MX_QH_QixiOutcome.comps.2.label>
   <MX_QH_QixiOutcome.comps.3.label>在荷池旁開始</MX_QH_QixiOutcome.comps.3.label>

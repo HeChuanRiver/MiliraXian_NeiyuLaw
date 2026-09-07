@@ -286,8 +286,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 for (int i = 0; i < Mathf.Max(1, props.normalSlashCount); i++)
                 {
                     props.slashSound?.PlayOneShot(new TargetInfo(target.Position, map));
-                    QingheSwordCombatUtility.ApplySlash(caster, target, damage, props.armorPenetration, empowered: false);
-                    hitCount++;
+                    if (QingheSwordCombatUtility.ApplySlash(caster, target, damage, props.armorPenetration, empowered: false))
+                    {
+                        hitCount++;
+                    }
                 }
             }
 

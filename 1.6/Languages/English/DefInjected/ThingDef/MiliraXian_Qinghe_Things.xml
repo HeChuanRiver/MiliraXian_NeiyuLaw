@@ -4,30 +4,21 @@
   <MX_QH_LotusPond.label>lotus pond</MX_QH_LotusPond.label>
   <MX_QH_LotusPond.description>The core of Qinghe's Flower Court, used to tune Four-Season Resonance. Qinghe herself can establish the current resonance with the Four-Season Flower Gods here.</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
-  <MX_QH_LostMusicScoreFragment.label>lost score fragment</MX_QH_LostMusicScoreFragment.label>
-  <MX_QH_LostMusicScoreFragment.description>A damaged and difficult-to-read Qinghe score fragment. It can be assembled at an art bench into a random book, with a chance to become a lost Qinghe skill book.</MX_QH_LostMusicScoreFragment.description>
-  <MX_QH_SkillBook.label>Qinghe skill book</MX_QH_SkillBook.label>
-  <MX_QH_SkillBook.description>A book recording old scores. When Qinghe reads it, she can learn the matching skill node; other readers can still read it like an ordinary book.</MX_QH_SkillBook.description>
   <MX_QH_Book.label>Lotus Rain Pavilion artistry</MX_QH_Book.label>
-  <MX_QH_Book.description>A book related to Qinghe.</MX_QH_Book.description>
+  <MX_QH_Book.description>A music score collection compiled by Qinghe herself, filled with the flowers and waters of the Lotus Rain Pavilion.</MX_QH_Book.description>
   <MX_QH_UnfinishedLotusRainPavilionOpera.label>unfinished Lotus Rain Pavilion verse</MX_QH_UnfinishedLotusRainPavilionOpera.label>
   <MX_QH_UnfinishedLotusRainPavilionOpera.description>An unfinished Lotus Rain Pavilion verse manuscript.</MX_QH_UnfinishedLotusRainPavilionOpera.description>
   <MX_QH_Weapon_FlowerBell.label>Flower-Tiding Bell</MX_QH_Weapon_FlowerBell.label>
-  <MX_QH_Weapon_FlowerBell.description>An instrument that has accompanied Qinghe since childhood. Its sound can pierce the mind, and infusing it with flower language grants it special power.\n\nResonant notes deal triple damage to buildings, compensating for buildings' immunity to abnormal statuses.</MX_QH_Weapon_FlowerBell.description>
+  <MX_QH_Weapon_FlowerBell.description>An instrument that has accompanied Qinghe since childhood. Its sound can pierce the mind, and infusing it with flower language grants it special power.</MX_QH_Weapon_FlowerBell.description>
   <MX_QH_Weapon_Sword.label>Sanhua</MX_QH_Weapon_Sword.label>
   <MX_QH_Weapon_Sword.description>Qinghe's personal sword. So elegant that it resembles a delicate work of art more than a weapon.</MX_QH_Weapon_Sword.description>
   <MX_QH_Weapon_Sword.tools.0.label>Qinghe's blade</MX_QH_Weapon_Sword.tools.0.label>
   <MX_Bullet_Qinghe_FlowerBell_Spring.label>bell note: spring</MX_Bullet_Qinghe_FlowerBell_Spring.label>
-  <MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>bell note: spring (resonance)</MX_Bullet_Qinghe_FlowerBell_Spring_Building.label>
   <MX_Bullet_Qinghe_FlowerBell_Summer.label>bell note: summer</MX_Bullet_Qinghe_FlowerBell_Summer.label>
-  <MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>bell note: summer (resonance)</MX_Bullet_Qinghe_FlowerBell_Summer_Building.label>
   <MX_Bullet_Qinghe_FlowerBell_Autumn.label>bell note: autumn</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
-  <MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>bell note: autumn (resonance)</MX_Bullet_Qinghe_FlowerBell_Autumn_Building.label>
   <MX_Bullet_Qinghe_FlowerBell_Winter.label>bell note: winter</MX_Bullet_Qinghe_FlowerBell_Winter.label>
-  <MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>bell note: winter (resonance)</MX_Bullet_Qinghe_FlowerBell_Winter_Building.label>
   <MX_Bullet_QH_LunarMirrorRetaliation.label>wintersweet retaliation shot</MX_Bullet_QH_LunarMirrorRetaliation.label>
   <MX_QH_LunarMirror.label>wintersweet shield</MX_QH_LunarMirror.label>
-  <MX_QH_Mote_SpiritBurstCurvedTrail.label>Qinghe effect</MX_QH_Mote_SpiritBurstCurvedTrail.label>
   <MX_QH_Mote_FlowerDivinationBurst.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBurst.label>
   <MX_QH_Mote_FlowerDivinationBokeh.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBokeh.label>
   <MX_QH_Mote_FlowerDivinationFootRing.label>Qinghe effect</MX_QH_Mote_FlowerDivinationFootRing.label>

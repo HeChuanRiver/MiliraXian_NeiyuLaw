@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -20,6 +20,9 @@ namespace MiliraXian.Characters.QingHe
 
         static MX_QHPatches()
         {
+            patcher.Patch(AccessTools.Method(typeof(Thing), nameof(Thing.TakeDamage)),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Thing_TakeDamage_Prefix)));
+
             patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
 
@@ -27,7 +30,10 @@ namespace MiliraXian.Characters.QingHe
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnGenerator_GeneratePawn_Postfix)));
 
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix)));
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix))
+                {
+                    priority = Priority.Last
+                });
 
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage)),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_PreApplyDamage_Prefix))
@@ -81,6 +87,8 @@ namespace MiliraXian.Characters.QingHe
 
             patcher.Patch(AccessTools.Method(typeof(QualityUtility), nameof(QualityUtility.GenerateQualityCreatedByPawn), new[] { typeof(Pawn), typeof(SkillDef), typeof(bool) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_QualityUtility_GenerateQualityCreatedByPawn_Postfix)));
+            patcher.Patch(AccessTools.Method(typeof(GenRecipe), "PostProcessProduct"),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_GenRecipe_PostProcessProduct_Postfix)));
 
             patcher.Patch(
                 AccessTools.Method(typeof(Projectile), "CheckForFreeInterceptBetween", new[] { typeof(Vector3), typeof(Vector3) }),
@@ -144,6 +152,7 @@ namespace MiliraXian.Characters.QingHe
 
             MX_QHCharacterUtility.MarkForLoadoutStabilization(__result);
             MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+            __result.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
@@ -154,6 +163,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
+            __result.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
@@ -166,6 +176,7 @@ namespace MiliraXian.Characters.QingHe
             EnsureQingheCoreTraits(__instance);
             MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
             MX_QHSkillUtility.SyncChoices(__instance);
+            __instance.Drawer?.renderer?.SetAllGraphicsDirty();
             if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
             {
                 MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
@@ -175,7 +186,6 @@ namespace MiliraXian.Characters.QingHe
 
         private struct DamageHediffState
         {
-            public HediffComp_EyeOfHeart EyeOfHeart;
             public HediffComp_DivineBlessing DivineBlessing;
             public bool Invulnerable;
         }
@@ -198,7 +208,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             __state = ScanDamageHediffs(__instance.health.hediffSet.hediffs);
-            __state.EyeOfHeart?.TryTrigger(dinfo);
 
             JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
@@ -233,11 +242,7 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                if (hediffDef == MX_QHDefOf.MX_QH_EyeOfHeartState && state.EyeOfHeart == null)
-                {
-                    state.EyeOfHeart = hediff.TryGetComp<HediffComp_EyeOfHeart>();
-                }
-                else if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
+                if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
                 {
                     state.DivineBlessing = hediff.TryGetComp<HediffComp_DivineBlessing>();
                 }
@@ -395,6 +400,20 @@ namespace MiliraXian.Characters.QingHe
             return false;
         }
 
+        public static void Patch_Thing_TakeDamage_Prefix(Thing __instance, DamageInfo dinfo)
+        {
+            // Melee misses and dodges never reach TakeDamage; shields and armor resolve inside it.
+            if (__instance == null || __instance.Destroyed
+                || dinfo.Instigator is not Pawn caster
+                || !MX_QHCharacterUtility.IsQinghe(caster)
+                || dinfo.Def?.Worker is not DamageWorker_QingheSlash)
+            {
+                return;
+            }
+
+            QingheSwordCombatUtility.NotifySwordPressureHit(caster, __instance, dinfo.Def.GetModExtension<QingheSlashExtension>());
+        }
+
         public static void Patch_VerbMeleeAttack_SoundDodge_Postfix(Verb_MeleeAttack __instance, Thing target)
         {
             NotifyHostileAttackAttempt(target as Pawn, __instance?.CasterPawn);
@@ -423,11 +442,6 @@ namespace MiliraXian.Characters.QingHe
             {
                 return;
             }
-
-            Hediff eyeState = MX_QHDefOf.MX_QH_EyeOfHeartState != null
-                ? target.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_EyeOfHeartState)
-                : null;
-            eyeState?.TryGetComp<HediffComp_EyeOfHeart>()?.TryTrigger(instigator);
 
             JobDriver_IllusoryReflectionStance reflection = target.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             reflection?.TryHandleAttackAttempt(instigator);
@@ -545,6 +559,10 @@ namespace MiliraXian.Characters.QingHe
             MX_QH_HediffUtility.ApplyMeditativeStillnessQualityBonus(pawn, ref __result);
         }
 
+        public static void Patch_GenRecipe_PostProcessProduct_Postfix(Thing __result, RecipeDef recipeDef, Pawn worker)
+        {
+            MX_QH_HediffUtility.AddDivineGraceProgressFromCraft(worker, recipeDef, __result);
+        }
         private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
         {
             Pawn pawn = driver?.pawn;

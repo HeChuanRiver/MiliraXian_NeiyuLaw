@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <FacialAnimation.EyeballTypeDef>
         <defName>MiliraXian_Eye_Neiyu</defName>
@@ -36,11 +36,10 @@
 
     <FacialAnimation.EyeballTypeDef>
         <defName>MiliraXian_Eye_Qinghe</defName>
-        <!-- TODO:这里记得换清荷的眼睛tex -->
-        <texPath>MiliraXianNeiyu/PawnNeiyu/EyeNeiyu</texPath>
+        <texPath>MiliraXianQinghe/Pawn/FA_Components/Eye</texPath>
         <altMaskPath>Things/Pawn/Milira/Eyes/Common</altMaskPath>
         <shader>Map/CutoutSkinOverlay</shader>
-        <!-- <enableUnisexTexPath>True</enableUnisexTexPath> -->
+        <enableUnisexTexPath>True</enableUnisexTexPath>
         <raceName>Milira_Race</raceName>
         <minColor>RGB(255,255,255)</minColor>
         <maxColor>RGB(255,255,255)</maxColor>

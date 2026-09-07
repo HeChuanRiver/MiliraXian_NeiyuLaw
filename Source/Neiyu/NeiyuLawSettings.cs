@@ -25,6 +25,7 @@ namespace MiliraXian.Characters.Neiyu
         public CharacterPowerLevel NeiyuPowerLevel = CharacterPowerLevel.Original;
         public CharacterPowerLevel ZhaoliPowerLevel = CharacterPowerLevel.Original;
         public CharacterPowerLevel MingyuanPowerLevel = CharacterPowerLevel.Original;
+        public CharacterPowerLevel QinghePowerLevel = CharacterPowerLevel.Original;
         private bool legacyLockSpecialPawnConsciousness = true;
 
         public override void ExposeData()
@@ -35,10 +36,13 @@ namespace MiliraXian.Characters.Neiyu
             Scribe_Values.Look(ref NeiyuPowerLevel, "NeiyuPowerLevel", CharacterPowerLevel.Original);
             Scribe_Values.Look(ref ZhaoliPowerLevel, "ZhaoliPowerLevel", CharacterPowerLevel.Original);
             Scribe_Values.Look(ref MingyuanPowerLevel, "MingyuanPowerLevel", CharacterPowerLevel.Original);
+            Scribe_Values.Look(ref QinghePowerLevel, "QinghePowerLevel", CharacterPowerLevel.Original);
             if (ZhaoliPowerLevel < CharacterPowerLevel.Original || ZhaoliPowerLevel > CharacterPowerLevel.Decorative)
                 ZhaoliPowerLevel = CharacterPowerLevel.Original;
             if (MingyuanPowerLevel < CharacterPowerLevel.Original || MingyuanPowerLevel > CharacterPowerLevel.Decorative)
                 MingyuanPowerLevel = CharacterPowerLevel.Original;
+            if (QinghePowerLevel < CharacterPowerLevel.Original || QinghePowerLevel > CharacterPowerLevel.Decorative)
+                QinghePowerLevel = CharacterPowerLevel.Original;
 
             bool hasNewConsciousnessLockMode = Scribe.mode != LoadSaveMode.LoadingVars
                 || Scribe.loader.curXmlParent["SpecialPawnConsciousnessLockMode"] != null;
@@ -77,6 +81,7 @@ namespace MiliraXian.Characters.Neiyu
             NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
             ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
             MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
+            QinghePowerBalance.SetLevel(Settings.QinghePowerLevel);
         }
 
         public override string SettingsCategory()
@@ -125,6 +130,7 @@ namespace MiliraXian.Characters.Neiyu
             listing.Gap();
             DrawCharacterPowerOptions(listing, "MX_Power_Zhaoli", ref Settings.ZhaoliPowerLevel, ZhaoliPowerBalance.SetLevel);
             DrawCharacterPowerOptions(listing, "MX_Power_Mingyuan", ref Settings.MingyuanPowerLevel, MingyuanPowerBalance.SetLevel);
+            DrawCharacterPowerOptions(listing, "MX_Power_Qinghe", ref Settings.QinghePowerLevel, QinghePowerBalance.SetLevel);
             listing.Label("MX_NL_SpecialPawnConsciousnessLockLabel".Translate().ToString());
             DrawConsciousnessLockOption(
                 listing,
@@ -192,6 +198,7 @@ namespace MiliraXian.Characters.Neiyu
             NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
             ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
             MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
+            QinghePowerBalance.SetLevel(Settings.QinghePowerLevel);
             base.WriteSettings();
         }
     }

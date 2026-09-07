@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_AssembleLostMusicScore.label>try to restore a lost score</MX_QH_AssembleLostMusicScore.label>
-  <MX_QH_AssembleLostMusicScore.description>Arrange lost score fragments into a book. This has a 50% chance to produce a random skill book; otherwise it produces an ordinary book. Skill books have a 15% chance to include a second different skill.</MX_QH_AssembleLostMusicScore.description>
-  <MX_QH_AssembleLostMusicScore.jobString>restoring a lost score.</MX_QH_AssembleLostMusicScore.jobString>
   <MX_QH_WriteLotusRainPavilionOpera.label>write "Lotus Rain Pavilion Artistry"</MX_QH_WriteLotusRainPavilionOpera.label>
-  <MX_QH_WriteLotusRainPavilionOpera.description>Qinghe writes the flower shadows, water sounds, and melodies of the Lotus Rain Pavilion into a volume. There is a 25% chance it includes Qinghe skill-related content.</MX_QH_WriteLotusRainPavilionOpera.description>
+  <MX_QH_WriteLotusRainPavilionOpera.description>Qinghe writes the flower shadows, water sounds, and melodies of the Lotus Rain Pavilion into a volume.</MX_QH_WriteLotusRainPavilionOpera.description>
   <MX_QH_WriteLotusRainPavilionOpera.jobString>writing "Lotus Rain Pavilion Artistry."</MX_QH_WriteLotusRainPavilionOpera.jobString>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>Lotus Rain Pavilion Verse: Spring Water Tune</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.title>
   <MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>Qinghe records the water sounds and soft beats after lotus rain has cleared. Reading this volume feels like hearing spring water slip over stone steps while scattered flower shadows sway with the sound.</MX_QH_WriteLotusRainPavilionOpera.modExtensions.1.variants.0.content>

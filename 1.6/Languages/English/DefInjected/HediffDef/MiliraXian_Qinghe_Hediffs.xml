@@ -9,9 +9,9 @@
   <MX_QH_SwordPressure.label>Sword Pressure</MX_QH_SwordPressure.label>
   <MX_QH_SwordPressure.description>Hidden state: the combat resource used by Qinghe's melee form.</MX_QH_SwordPressure.description>
   <MX_QH_SwordPressure.comps.0.resourceLabel>Sword Pressure</MX_QH_SwordPressure.comps.0.resourceLabel>
-  <MX_QH_SwordPressure.comps.0.resourceDescription>Builds when Qinghe strikes enemies with her sword or successfully triggers Eye of Heart. Incomplete Sword Pressure gradually decays after she stops gaining it.</MX_QH_SwordPressure.comps.0.resourceDescription>
+  <MX_QH_SwordPressure.comps.0.resourceDescription>Builds when Qinghe strikes enemies with her sword. Incomplete Sword Pressure gradually decays after she stops gaining it.</MX_QH_SwordPressure.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>Stillness</MX_QH_MeditativeStillness.label>
-  <MX_QH_MeditativeStillness.description>Meditating or reading can accumulate Stillness. When Qinghe makes art or crafts, she consumes Stillness based on the amount accumulated and gains a quality bonus.</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.description>Meditating or reading accumulates Stillness. When Qinghe performs quality-bearing construction, crafting, or art: while Stillness is not full, nothing is consumed and there is a chance (scaling with current Stillness) to raise quality by 1; when full, all Stillness is consumed to raise quality by 2.</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>Stillness</MX_QH_MeditativeStillness.comps.0.resourceLabel>
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>Qinghe's meditative reserve, accumulated while meditating at the lotus pond.</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>Resonance</MX_QH_FlowerResonance.label>
@@ -25,13 +25,11 @@
   <MX_QH_DivineGrace.label>Flower-God Benediction</MX_QH_DivineGrace.label>
   <MX_QH_DivineGrace.description>The visible sign of Qinghe's mastery. As its level rises, Qinghe's base abilities improve.</MX_QH_DivineGrace.description>
   <MX_QH_DivineProtection.label>Flower-God Ward</MX_QH_DivineProtection.label>
-  <MX_QH_DivineProtection.description>Qinghe is protected by the Twelve Flower Gods and naturally generates a shield that blocks damage.\n\nWhen broken, the shield is disabled for 10 seconds.</MX_QH_DivineProtection.description>
+  <MX_QH_DivineProtection.description>Qinghe is protected by the Twelve Flower Gods and naturally generates a shield that blocks damage. A single hit never drains more than 20 energy.\n\nWhen broken, the shield is disabled for 3 seconds.</MX_QH_DivineProtection.description>
   <MX_QH_Trickle.label>Trickle</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>Qinghe slowly recovers from wounds over time, eventually restoring permanent injuries and missing body parts.</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>Luoshen contract</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, reduced pain, and immunity to Death Sentence accumulation&lt;/color&gt;.</MX_QH_SpringFlow.description>
-  <MX_QH_EyeOfHeartState.label>Eye of Heart</MX_QH_EyeOfHeartState.label>
-  <MX_QH_EyeOfHeartState.description>Qinghe is focusing on the next incoming attack.</MX_QH_EyeOfHeartState.description>
 </LanguageData>

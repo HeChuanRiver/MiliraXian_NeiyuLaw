@@ -2,8 +2,8 @@
 <LanguageData>
   <MiliraXianNeiyu_Love.degreeDatas.0.label>Neiyu Xian</MiliraXianNeiyu_Love.degreeDatas.0.label>
   <MiliraXianNeiyu_Love.degreeDatas.0.description>She loves the people of the world, and wishes for rainbow-hued flowers to fall across it.</MiliraXianNeiyu_Love.degreeDatas.0.description>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.label>Trickle Long Breath</MX_QH_Trait_LongBreath.degreeDatas.0.label>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.description>"Pear blossoms in rain, nourishing all without a sound." Enables Flower-God Mercy and Trickle.</MX_QH_Trait_LongBreath.degreeDatas.0.description>
-  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>Neiyu Xian</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
-  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>"Rising from the mud unstained, washed by clear ripples and never gaudy."</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.label>&lt;color=#99CCFF&gt;Trickle Long Breath&lt;/color&gt;</MX_QH_Trait_LongBreath.degreeDatas.0.label>
+  <MX_QH_Trait_LongBreath.degreeDatas.0.description>"Pear blossoms in rain, nourishing all without a sound."\n\nQinghe's wounds mend on their own over time; even permanent injuries and lost body parts slowly return, like a stream that never stops.</MX_QH_Trait_LongBreath.degreeDatas.0.description>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.label>&lt;color=#FFCDE1&gt;Neiyu Xian&lt;/color&gt;</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>"Rising from the mud unstained, washed by clear ripples and never gaudy."\n\nNeiyu Xian is the highest attainment of Milira cultivation, and Qinghe has reached it. When Qinghe suffers lethal or part-destroying damage, the flower gods' mercy negates it: her body is restored in a bloom of light, and she briefly slips into psychic invisibility. (Consumes one charge; recharges over time.)</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
 </LanguageData>

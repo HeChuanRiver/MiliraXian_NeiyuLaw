@@ -171,6 +171,10 @@ namespace MiliraXian.Characters.QingHe.Rituals
 
     public class RitualOutcomeEffectWorker_Qixi : RitualOutcomeEffectWorker_FromQuality
     {
+        private const float SkillXpGood = 2500f;
+        private const float SkillXpBest = 5000f;
+        private const float SkillXpBad = 1000f;
+
         public RitualOutcomeEffectWorker_Qixi()
         {
         }
@@ -183,33 +187,23 @@ namespace MiliraXian.Characters.QingHe.Rituals
         protected override void ApplyExtraOutcome(Dictionary<Pawn, int> totalPresence, LordJob_Ritual jobRitual, RitualOutcomePossibility outcome, out string extraOutcomeDesc, ref LookTargets letterLookTargets)
         {
             Current.Game?.GetComponent<GameComponent_QingheQixiRitual>()?.NotifyRitualCompleted();
-            int fragmentCount = SpawnFragments(jobRitual, ref letterLookTargets);
+            float skillXp = !outcome.Positive
+                ? SkillXpBad
+                : outcome.BestPositiveOutcome(jobRitual) ? SkillXpBest : SkillXpGood;
+            foreach (Pawn pawn in totalPresence.Keys)
+            {
+                pawn?.skills?.Learn(SkillDefOf.Crafting, skillXp);
+                pawn?.skills?.Learn(SkillDefOf.Artistic, skillXp);
+            }
+
             List<Pawn> inspiredPawns = outcome.Positive ? GiveInspirations(totalPresence, outcome.BestPositiveOutcome(jobRitual) ? 2 : 1) : new List<Pawn>();
 
-            extraOutcomeDesc = "MX_QH_QixiOutcomeFragments".Translate(fragmentCount);
+            extraOutcomeDesc = null;
             if (inspiredPawns.Count > 0)
             {
-                extraOutcomeDesc += "\n" + "MX_QH_QixiOutcomeInspirations".Translate(inspiredPawns.Select(pawn => pawn.LabelShortCap).ToCommaList());
+                string inspirationText = "MX_QH_QixiOutcomeInspirations".Translate(inspiredPawns.Select(pawn => pawn.LabelShortCap).ToCommaList());
+                extraOutcomeDesc = extraOutcomeDesc.NullOrEmpty() ? inspirationText : extraOutcomeDesc + "\n" + inspirationText;
             }
-        }
-
-        private int SpawnFragments(LordJob_Ritual jobRitual, ref LookTargets letterLookTargets)
-        {
-            if (jobRitual?.Map == null || MX_QHDefOf.MX_QH_LostMusicScoreFragment == null)
-            {
-                return 0;
-            }
-
-            int count = Rand.RangeInclusive(2, 4);
-            Thing fragments = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_LostMusicScoreFragment);
-            fragments.stackCount = count;
-            GenPlace.TryPlaceThing(fragments, jobRitual.selectedTarget.Cell, jobRitual.Map, ThingPlaceMode.Near);
-            if (fragments.Spawned)
-            {
-                letterLookTargets = fragments;
-            }
-
-            return count;
         }
 
         private List<Pawn> GiveInspirations(Dictionary<Pawn, int> totalPresence, int count)

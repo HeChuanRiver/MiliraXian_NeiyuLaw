@@ -1,5 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Things;
-using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Things;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
@@ -69,7 +68,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Thing thing = GenSpawn.Spawn(Props.shieldDef, cell, caster.Map, WipeMode.Vanish);
             CompLunarMirrorShield shield = thing.TryGetComp<CompLunarMirrorShield>();
             shield?.Init(caster, Props.durationTicks);
-            shield?.SetEnhanced(MX_QHSkillUtility.HasAllFlowerMandates(MX_QH_HediffUtility.GetFlowerResonance(caster)));
             PlaySummonVisual(caster.Map, cell, ResolveShieldRadius(), Props.summonEffecterDefName, Props.fallbackSummonFleckDefName, Props.summonEffectScale);
         }
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
     <!-- 清荷 -->
     <PawnKindDef ParentName="Milira_PawnBase">
@@ -230,7 +230,6 @@
             <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
             “npcTag”是用来给“[NL] Facial Animation - Experimentals”（面部动画）这个mod生成固定面部特征用的。-->
             <li Class="AriandelLibrary.NPCKindTag">
-                <!-- TODO: Add Face Animation for QingHe -->
                 <npcTag>Qinghe</npcTag>
             </li>
 

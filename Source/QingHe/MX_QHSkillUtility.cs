@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -24,13 +24,18 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
+            int effectiveLevel = Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel);
+            state.SyncNodesByGraceLevel(effectiveLevel);
             state.SyncGrantedDefs();
             HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
         }
 
-        public static bool HasAllFlowerMandates(HediffComp_SkillTreeState state)
+        public static bool HasSeasonalResonance(Pawn pawn)
         {
-            return state?.IsCollectionCompleted(MX_QHSkillNodeDefOf.MX_QH_Tree_FlowerMandate) == true;
+            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_SeasonalResonance;
+            return node != null
+                && Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel) >= node.requiredGraceLevel
+                && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.HasNode(node) == true;
         }
 
         public static float GetSpecialAbilityEffectFactor(Pawn pawn)
@@ -50,7 +55,11 @@ namespace MiliraXian.Characters.QingHe
                 yield break;
             }
 
-            yield return new Gizmo_QH_FlowerDecree(pawn);
+            if (!QinghePowerBalance.Sealed
+                && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_FlyingFlowerDecree))
+            {
+                yield return new Gizmo_QH_FlowerDecree(pawn);
+            }
 
             if (!Prefs.DevMode)
             {
@@ -59,48 +68,14 @@ namespace MiliraXian.Characters.QingHe
 
             yield return new Command_Action
             {
-                defaultLabel = "MX_QH_DevLearnAllNodesLabel".Translate(),
-                defaultDesc = "MX_QH_DevLearnAllNodesDesc".Translate(),
-                action = delegate
-                {
-                    foreach (SkillNodeCollectionDef collectionDef in DefDatabase<SkillNodeCollectionDef>.AllDefsListForReading)
-                    {
-                        state.LearnAllNodesInCollection(collectionDef);
-                    }
-                    Messages.Message("MX_QH_DevLearnAllNodesMessage".Translate(), pawn, MessageTypeDefOf.NeutralEvent, historical: false);
-                }
-            };
-
-            yield return new Command_Action
-            {
                 defaultLabel = "MX_QH_DevAddDivineGraceLevelLabel".Translate(),
                 defaultDesc = "MX_QH_DevAddDivineGraceLevelDesc".Translate(),
                 action = delegate
                 {
-                    AddDivineGraceLevel(pawn, state);
+                    MX_QH_HediffUtility.AddDivineGraceLevel(pawn);
                 }
             };
 
-        }
-
-        private static void AddDivineGraceLevel(Pawn pawn, HediffComp_SkillTreeState state)
-        {
-            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_DivineGrace;
-            if (pawn == null || state == null || node == null)
-            {
-                return;
-            }
-
-            if (!state.TryLearn(node, out string reason))
-            {
-                if (!reason.NullOrEmpty())
-                {
-                    Messages.Message(reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
-                }
-                return;
-            }
-
-            Messages.Message("MX_QH_DevAddDivineGraceLevelMessage".Translate(state.GetNodeLevel(node).ToString("0")), pawn, MessageTypeDefOf.NeutralEvent, historical: false);
         }
 
     }

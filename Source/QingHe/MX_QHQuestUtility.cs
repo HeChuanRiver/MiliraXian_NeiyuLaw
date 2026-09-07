@@ -334,7 +334,7 @@ namespace MiliraXian.Characters.QingHe
 
         private void CompleteFlowerCourt(Building lotusPond)
         {
-            Thing reward = MakeLostScoreFragmentReward();
+            Thing reward = MakeOperaBookReward();
             if (reward != null)
             {
                 GenPlace.TryPlaceThing(reward, lotusPond.Position, lotusPond.Map, ThingPlaceMode.Near);
@@ -349,17 +349,15 @@ namespace MiliraXian.Characters.QingHe
             quest.End(QuestEndOutcome.Success, sendLetter: false, playSound: true);
         }
 
-        private static Thing MakeLostScoreFragmentReward()
+        private static Thing MakeOperaBookReward()
         {
-            if (MX_QHDefOf.MX_QH_LostMusicScoreFragment == null)
+            if (MX_QHDefOf.MX_QH_Book == null)
             {
-                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe lost score fragment ThingDef.");
+                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe opera book ThingDef.");
                 return null;
             }
 
-            Thing reward = ThingMaker.MakeThing(MX_QHDefOf.MX_QH_LostMusicScoreFragment);
-            reward.stackCount = 1;
-            return reward;
+            return ThingMaker.MakeThing(MX_QHDefOf.MX_QH_Book);
         }
 
         public override void ExposeData()
