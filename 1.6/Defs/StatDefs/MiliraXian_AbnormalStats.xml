@@ -203,7 +203,11 @@
     <StatDef ParentName="MX_AbnormalFactorBase">
         <defName>MX_AbnormalDeathSentenceLimitFactor</defName>
         <label>告死积累上限乘数</label>
-        <description>触发告死效果所需异常积累量的乘数。数值为0时，告死异常无效。</description>
+        <description>触发告死效果所需异常积累量的乘数。数值为0时，告死异常无效。
+霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</description>
+        <parts>
+            <li Class="MiliraXian.Characters.Zhaoli.StatPart_ZhaoliDeathSentenceImmunity" />
+        </parts>
     </StatDef>
 
     <StatDef ParentName="MX_AbnormalFactorBase">

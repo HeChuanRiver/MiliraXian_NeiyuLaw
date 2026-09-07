@@ -4,7 +4,8 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内除自身外的一切单位施加告死。目标离开范围后，告死积累会快速衰减。</description>
+        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内未免疫告死的单位施加告死。目标离开范围后，告死积累会快速衰减。
+霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
@@ -30,7 +31,8 @@
     <MiliraXian.Characters.HediffDef_Abnormal>
         <defName>MX_AbnormalDeathSentence</defName>
         <label>告死</label>
-        <description>昭离以流场侵蚀目标的生机。积累期间目标行动受阻，并会周期性受到割伤；积累达到上限时，最后一次施加告死的角色将完成处决。</description>
+        <description>昭离以流场侵蚀目标的生机。积累期间目标行动受阻，并会周期性受到割伤；积累达到上限时，最后一次施加告死的角色将完成处决。
+霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</description>
         <defaultLabelColor>(0.58, 0.08, 0.16)</defaultLabelColor>
         <isBad>true</isBad>
         <scenarioCanAdd>false</scenarioCanAdd>
