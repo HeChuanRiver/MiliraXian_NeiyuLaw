@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXZL_ZhaoliDeathFieldActive.label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</MXZL_ZhaoliDeathFieldActive.label>
-  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内除自身外的一切单位施加告死。目标离开范围后，告死积累会快速衰减。</MXZL_ZhaoliDeathFieldActive.description>
+  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内未免疫告死的单位施加告死。目标离开范围后，告死积累会快速衰减。
+霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</MXZL_ZhaoliDeathFieldActive.description>
   <MXZL_ZhaoliDormancy.label>&lt;color=#C77DFF&gt;诸事无常·沉眠&lt;/color&gt;</MXZL_ZhaoliDormancy.label>
   <MXZL_ZhaoliDormancy.description>因果溢出后引发的&lt;color=#C77DFF&gt;强制沉眠&lt;/color&gt;。&lt;color=#E85A7A&gt;昭离&lt;/color&gt;会持续陷入沉睡状态，无法正常行动，直到三十日后才会自然苏醒。</MXZL_ZhaoliDormancy.description>
   <MXZL_ZhaoliKarma.label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</MXZL_ZhaoliKarma.label>

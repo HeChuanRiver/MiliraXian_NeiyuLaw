@@ -15,6 +15,7 @@ riderModule.iml
 .modpack/
 .tools/
 Documents
+/Docs/明渊完整设计与机制数值.md
 References.md
 Directory.Build.local.props
 AGENTS.md

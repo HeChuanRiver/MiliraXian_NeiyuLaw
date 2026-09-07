@@ -366,24 +366,34 @@ namespace MiliraXian.Characters.Mingyuan
         private void Pulse()
         {
             float radius = CurrentRadius;
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(parent.Position, parent.Map, radius, true))
+            Map map = parent.Map;
+            List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(parent.Position, map, radius, true));
+            try
             {
-                if (thing == parent || thing.Destroyed || !thing.Spawned || thing.def.category == ThingCategory.Mote)
+                for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
                 {
-                    continue;
-                }
+                    Thing thing = targets[targetIndex];
+                    if (thing == parent || thing.Destroyed || !thing.Spawned || thing.Map != map || thing.def.category == ThingCategory.Mote)
+                    {
+                        continue;
+                    }
 
-                Pawn pawn;
-                if (MingyuanUtility.IsHostilePawn(thing, caster, out pawn))
-                {
-                    HandlePawn(pawn, radius);
-                    continue;
-                }
+                    Pawn pawn;
+                    if (MingyuanUtility.IsHostilePawn(thing, caster, out pawn))
+                    {
+                        HandlePawn(pawn, radius);
+                        continue;
+                    }
 
-                if (thing.def.category == ThingCategory.Building && thing.HostileTo(caster))
-                {
-                    HandleBuilding(thing);
+                    if (thing.def.category == ThingCategory.Building && thing.HostileTo(caster))
+                    {
+                        HandleBuilding(thing);
+                    }
                 }
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(targets);
             }
         }
 
@@ -703,24 +713,34 @@ namespace MiliraXian.Characters.Mingyuan
         private void Pulse()
         {
             selfBurnGainedThisPulse = 0f;
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(CenterCell, parent.Map, PropsField.radius, true))
+            Map map = parent.Map;
+            List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(CenterCell, map, PropsField.radius, true));
+            try
             {
-                if (thing == parent || thing.Destroyed)
+                for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
                 {
-                    continue;
-                }
+                    Thing thing = targets[targetIndex];
+                    if (thing == parent || thing.Destroyed || !thing.Spawned || thing.Map != map)
+                    {
+                        continue;
+                    }
 
-                Pawn pawn = thing as Pawn;
-                if (pawn != null)
-                {
-                    HandlePawn(pawn);
-                    continue;
-                }
+                    Pawn pawn = thing as Pawn;
+                    if (pawn != null)
+                    {
+                        HandlePawn(pawn);
+                        continue;
+                    }
 
-                if (PropsField.destroyBuildings && thing.def.category == ThingCategory.Building && thing.Spawned)
-                {
-                    thing.Destroy(DestroyMode.Deconstruct);
+                    if (PropsField.destroyBuildings && thing.def.category == ThingCategory.Building && thing.Spawned)
+                    {
+                        thing.Destroy(DestroyMode.Deconstruct);
+                    }
                 }
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(targets);
             }
         }
 

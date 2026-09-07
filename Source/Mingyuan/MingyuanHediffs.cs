@@ -38,7 +38,6 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class HediffComp_MingyuanLifeBurn : HediffComp
     {
-        private static readonly List<Pawn> TransferTargets = new(64);
         private static int burstBudgetTick = -1;
         private static int burstExecutionsThisTick;
         private static int deathTransferBudgetTick = -1;
@@ -379,68 +378,79 @@ namespace MiliraXian.Characters.Mingyuan
 
             IntVec3 originCell = Pawn.PositionHeld;
             int radiusSquared = Mathf.CeilToInt(PropsLifeBurn.transferRadius * PropsLifeBurn.transferRadius);
-            IReadOnlyList<Pawn> spawnedPawns = map.mapPawns.AllPawnsSpawned;
-            TransferTargets.Clear();
-
-            for (int i = 0; i < spawnedPawns.Count; i++)
+            List<Pawn> transferTargets = CombatTargetSnapshot.Rent(System.Array.Empty<Pawn>());
+            try
             {
-                Pawn target = spawnedPawns[i];
-                if (target == null || target == Pawn || target.Dead || !target.Spawned)
+                IReadOnlyList<Pawn> spawnedPawns = map.mapPawns.AllPawnsSpawned;
+
+                for (int i = 0; i < spawnedPawns.Count; i++)
                 {
-                    continue;
+                    Pawn target = spawnedPawns[i];
+                    if (target == null || target == Pawn || target.Dead || !target.Spawned)
+                    {
+                        continue;
+                    }
+
+                    if (target.PositionHeld.DistanceToSquared(originCell) <= radiusSquared
+                        && MingyuanUtility.IsHostilePawn(target, instigator, out Pawn hostileTarget))
+                    {
+                        transferTargets.Add(hostileTarget);
+                    }
                 }
 
-                if (target.PositionHeld.DistanceToSquared(originCell) <= radiusSquared
-                    && MingyuanUtility.IsHostilePawn(target, instigator, out Pawn hostileTarget))
+                if (transferTargets.Count == 0)
                 {
-                    TransferTargets.Add(hostileTarget);
+                    return;
+                }
+
+                if (!burstVisualSpawnedForDeath)
+                {
+                    SpawnBurstMote(map, originCell);
+                }
+                transferTargets.Sort(delegate(Pawn left, Pawn right)
+                {
+                    int leftDistance = left.PositionHeld.DistanceToSquared(originCell);
+                    int rightDistance = right.PositionHeld.DistanceToSquared(originCell);
+                    return leftDistance.CompareTo(rightDistance);
+                });
+
+                int currentTick = CurrentTick;
+                for (int i = transferTargets.Count - 1; i >= 0; i--)
+                {
+                    if (!CanReceiveDeathTransfer(transferTargets[i], currentTick))
+                    {
+                        transferTargets.RemoveAt(i);
+                    }
+                }
+
+                if (transferTargets.Count == 0)
+                {
+                    return;
+                }
+
+                int transferCount = Mathf.Min(transferTargets.Count, Mathf.Max(1, PropsLifeBurn.maxTransferTargets));
+                int visualCount = Mathf.Min(transferCount, Mathf.Max(0, PropsLifeBurn.transferVisualLimit));
+                for (int i = 0; i < transferCount; i++)
+                {
+                    Pawn target = transferTargets[i];
+                    if (target.Dead || target.Destroyed || !target.Spawned || target.Map != map
+                        || !CanReceiveDeathTransfer(target, currentTick))
+                    {
+                        continue;
+                    }
+
+                    MarkDeathTransferReceived(target, currentTick);
+                    MingyuanUtility.AddLifeBurn(target, instigator, ExecuteThresholdFor(target) * transferProgress);
+                    if (i < visualCount)
+                    {
+                        SpawnTransferTrail(map, originCell, target);
+                    }
                 }
             }
-
-            if (TransferTargets.Count == 0)
+            finally
             {
-                return;
+                CombatTargetSnapshot.Return(transferTargets);
             }
-
-            if (!burstVisualSpawnedForDeath)
-            {
-                SpawnBurstMote(map, originCell);
-            }
-            TransferTargets.Sort(delegate(Pawn left, Pawn right)
-            {
-                int leftDistance = left.PositionHeld.DistanceToSquared(originCell);
-                int rightDistance = right.PositionHeld.DistanceToSquared(originCell);
-                return leftDistance.CompareTo(rightDistance);
-            });
-
-            int currentTick = CurrentTick;
-            for (int i = TransferTargets.Count - 1; i >= 0; i--)
-            {
-                if (!CanReceiveDeathTransfer(TransferTargets[i], currentTick))
-                {
-                    TransferTargets.RemoveAt(i);
-                }
-            }
-
-            if (TransferTargets.Count == 0)
-            {
-                return;
-            }
-
-            int transferCount = Mathf.Min(TransferTargets.Count, Mathf.Max(1, PropsLifeBurn.maxTransferTargets));
-            int visualCount = Mathf.Min(transferCount, Mathf.Max(0, PropsLifeBurn.transferVisualLimit));
-            for (int i = 0; i < transferCount; i++)
-            {
-                Pawn target = TransferTargets[i];
-                MingyuanUtility.AddLifeBurn(target, instigator, ExecuteThresholdFor(target) * transferProgress);
-                MarkDeathTransferReceived(target, currentTick);
-                if (i < visualCount)
-                {
-                    SpawnTransferTrail(map, originCell, target);
-                }
-            }
-
-            TransferTargets.Clear();
         }
 
         private void SpawnBurstMote(Map map, IntVec3 cell)
@@ -532,6 +542,14 @@ namespace MiliraXian.Characters.Mingyuan
                 DeathTransferLastReceivedTicks.Remove(DeathTransferCooldownCleanupKeys[i]);
             }
 
+            DeathTransferCooldownCleanupKeys.Clear();
+        }
+
+        internal static void ClearRuntimeState()
+        {
+            burstBudgetTick = deathTransferBudgetTick = -1;
+            burstExecutionsThisTick = deathTransfersThisTick = 0;
+            DeathTransferLastReceivedTicks.Clear();
             DeathTransferCooldownCleanupKeys.Clear();
         }
 

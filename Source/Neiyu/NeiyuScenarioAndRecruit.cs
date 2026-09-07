@@ -14,6 +14,11 @@ namespace MiliraXian.Characters.Neiyu
         private string signalAccept;
         private string signalReject;
 
+        protected override bool TestRunInt(Slate slate)
+        {
+            return NeiyuRecruitUtility.CanOfferRecruitment() && base.TestRunInt(slate);
+        }
+
         public override Pawn GeneratePawn()
         {
             Pawn pawn = NeiyuRecruitUtility.GenerateRecruitPawn();
@@ -110,6 +115,11 @@ namespace MiliraXian.Characters.Neiyu
 
         protected override bool TestRunInt(Slate slate)
         {
+            if (!NeiyuRecruitUtility.CanOfferRecruitment())
+            {
+                return false;
+            }
+
             if (!slate.TryGet("map", out Map _))
             {
                 return QuestGen_Get.GetMap(mustBeInfestable: false, null, canBeSpace: false) != null;
@@ -201,21 +211,7 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            GameComponent_NeiyuProjectionRecruit component = Current.Game?.GetComponent<GameComponent_NeiyuProjectionRecruit>();
-            if (component != null)
-            {
-                if (component.EventAlreadyTriggered)
-                {
-                    return false;
-                }
-
-                if (component.IsBlockedByScenario())
-                {
-                    return false;
-                }
-            }
-
-            if (NeiyuRecruitUtility.NeiyuRecruitQuestExists())
+            if (!NeiyuRecruitUtility.CanOfferRecruitment())
             {
                 return false;
             }
@@ -241,11 +237,17 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
-            return !NeiyuRecruitUtility.NeiyuExistsAnywhere();
+            return true;
         }
 
         protected override bool TryExecuteWorker(IncidentParms parms)
         {
+            // Queued/forced incidents can reach execution without another CanFireNow check.
+            if (!NeiyuRecruitUtility.CanOfferRecruitment())
+            {
+                return false;
+            }
+
             if (parms.target is not Map map)
             {
                 return false;
@@ -421,7 +423,6 @@ namespace MiliraXian.Characters.Neiyu
     public class GameComponent_NeiyuProjectionRecruit : GameComponent
     {
         private const string RecruitIncidentDefName = "MXNL_NeiyuProjectionRecruit";
-        private const string RecruitScenarioDefName = "MXNL_NeiyuProjectionStart";
         private const string RecruitQuestDefName = "MXNL_NeiyuProjectionRecruitQuest";
         private const int GuaranteedTick = 8 * GenDate.TicksPerDay;
         private const int TickCheckInterval = 250;
@@ -430,6 +431,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private bool eventTriggered;
         private bool initialTriggerCheckDone;
+        private bool scenarioStateChecked;
         private readonly List<PendingLoadoutFinalize> pendingLoadoutFinalizations = new();
 
         public bool EventAlreadyTriggered => eventTriggered;
@@ -446,7 +448,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public override void GameComponentTick()
         {
-            if (eventTriggered || Current.ProgramState != ProgramState.Playing || Find.TickManager == null)
+            if (Current.ProgramState != ProgramState.Playing || Find.TickManager == null)
             {
                 ProcessPendingLoadoutFinalizations();
                 return;
@@ -454,21 +456,36 @@ namespace MiliraXian.Characters.Neiyu
 
             ProcessPendingLoadoutFinalizations();
 
+            // This runtime-only check also runs on old saves whose event was already offered.
+            if (!scenarioStateChecked)
+            {
+                scenarioStateChecked = true;
+                if (IsBlockedByScenario())
+                {
+                    eventTriggered = true;
+                    WithdrawScenarioRecruitOffers();
+                }
+            }
+
+            if (eventTriggered)
+            {
+                return;
+            }
+
+            bool shouldCheckNow = !initialTriggerCheckDone || Find.TickManager.TicksGame % TickCheckInterval == 0;
+            initialTriggerCheckDone = true;
+            if (!shouldCheckNow)
+            {
+                return;
+            }
+
             if (NeiyuRecruitUtility.NeiyuRecruitQuestExists(RecruitQuestDefName))
             {
                 eventTriggered = true;
                 return;
             }
 
-            if (IsBlockedByScenario())
-            {
-                eventTriggered = true;
-                return;
-            }
-
-            bool shouldCheckNow = !initialTriggerCheckDone || Find.TickManager.TicksGame % TickCheckInterval == 0;
-            initialTriggerCheckDone = true;
-            if (!shouldCheckNow || Find.TickManager.TicksGame < GuaranteedTick)
+            if (Find.TickManager.TicksGame < GuaranteedTick)
             {
                 return;
             }
@@ -529,8 +546,40 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool IsBlockedByScenario()
         {
-            ScenarioDef scenarioDef = DefDatabase<ScenarioDef>.GetNamedSilentFail(RecruitScenarioDefName);
-            return scenarioDef?.scenario != null && Find.Scenario == scenarioDef.scenario;
+            return NeiyuRecruitUtility.IsNeiyuStartingScenario(Find.Scenario);
+        }
+
+        private static void WithdrawScenarioRecruitOffers()
+        {
+            List<Quest> quests = Find.QuestManager?.QuestsListForReading;
+            if (quests == null)
+            {
+                return;
+            }
+
+            // Leave accepted quests and historical outcomes intact. Only obsolete offers expire.
+            foreach (Quest quest in new List<Quest>(quests))
+            {
+                if (quest?.root?.defName != RecruitQuestDefName || quest.State != QuestState.NotYetAccepted)
+                {
+                    continue;
+                }
+
+                quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
+                if (Find.LetterStack == null)
+                {
+                    continue;
+                }
+
+                for (int index = Find.LetterStack.LettersListForReading.Count - 1; index >= 0; index--)
+                {
+                    Letter letter = Find.LetterStack.LettersListForReading[index];
+                    if (letter is ChoiceLetter choice && choice.quest == quest)
+                    {
+                        Find.LetterStack.RemoveLetter(letter);
+                    }
+                }
+            }
         }
 
         public override void ExposeData()
@@ -588,6 +637,11 @@ namespace MiliraXian.Characters.Neiyu
         private const string DefaultClothingDefName = "MiliraXian_NeiyuNormal";
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
+
+        internal static void ClearRuntimeState()
+        {
+            PendingLoadoutStabilizationPawnIds.Clear();
+        }
 
         public static bool IsNeiyu(Pawn pawn)
         {
@@ -880,6 +934,43 @@ namespace MiliraXian.Characters.Neiyu
     internal static class NeiyuRecruitUtility
     {
         private const string NeiyuPawnKindDefName = "MiliraXian_Neiyu";
+
+        public static bool IsNeiyuStartingScenario(Scenario scenario)
+        {
+            if (scenario == null)
+            {
+                return false;
+            }
+
+            // Scenario instances are copied for play/editing and deep-loaded from saves.
+            // Required starting kinds survive both, unlike reference identity or translated names.
+            foreach (ScenPart part in scenario.AllParts)
+            {
+                if (part is not ScenPart_ConfigPage_ConfigureStartingPawns_KindDefs startingPawns
+                    || startingPawns.kindCounts == null)
+                {
+                    continue;
+                }
+
+                foreach (PawnKindCount kind in startingPawns.kindCounts)
+                {
+                    if (kind?.kindDef?.defName == NeiyuPawnKindDefName && kind.count > 0 && kind.requiredAtStart)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool CanOfferRecruitment()
+        {
+            return !IsNeiyuStartingScenario(Find.Scenario)
+                   && Current.Game?.GetComponent<GameComponent_NeiyuProjectionRecruit>()?.EventAlreadyTriggered != true
+                   && !NeiyuRecruitQuestExists()
+                   && !NeiyuExistsAnywhere();
+        }
 
         public static bool NeiyuExistsAnywhere()
         {

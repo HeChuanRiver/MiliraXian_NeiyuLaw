@@ -206,25 +206,32 @@ namespace MiliraXian.Characters.Mingyuan
                 tmpScorchCellSet.Add(cells[i]);
             }
 
-            IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
-            for (int i = 0; i < pawns.Count; i++)
+            List<Pawn> pawns = CombatTargetSnapshot.Rent(map.mapPawns.AllPawnsSpawned);
+            try
             {
-                Pawn pawn;
-                if (!MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn) || !tmpScorchCellSet.Contains(pawn.Position))
+                for (int i = 0; i < pawns.Count; i++)
                 {
-                    continue;
-                }
+                    Pawn pawn;
+                    if (!MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn)
+                        || !pawn.Spawned || pawn.Map != map || !tmpScorchCellSet.Contains(pawn.Position))
+                    {
+                        continue;
+                    }
 
-                MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.pathDamage, caster, scaleWithSelfBurn: true);
-                MingyuanUtility.AddLifeBurn(pawn, caster, Props.lifeBurnLayers, scaleWithOverburn: true);
-                if (!pawn.Dead && pawn.Spawned)
-                {
-                    pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
-                    KnockbackPawn(caster, pawn, map, MingyuanPowerBalance.Sealed ? 1 : 3);
+                    MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, Props.pathDamage, caster, scaleWithSelfBurn: true);
+                    MingyuanUtility.AddLifeBurn(pawn, caster, Props.lifeBurnLayers, scaleWithOverburn: true);
+                    if (!pawn.Dead && pawn.Spawned)
+                    {
+                        pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
+                        KnockbackPawn(caster, pawn, map, MingyuanPowerBalance.Sealed ? 1 : 3);
+                    }
                 }
             }
-
-            tmpScorchCellSet.Clear();
+            finally
+            {
+                CombatTargetSnapshot.Return(pawns);
+                tmpScorchCellSet.Clear();
+            }
         }
 
         private void SpawnScorchController(Pawn caster, IntVec3 destination, Map map, List<IntVec3> pathCells)
@@ -452,14 +459,23 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            IReadOnlyList<Pawn> pawns = parent.Map.mapPawns.AllPawnsSpawned;
-            for (int i = 0; i < pawns.Count; i++)
+            Map map = parent.Map;
+            List<Pawn> pawns = CombatTargetSnapshot.Rent(map.mapPawns.AllPawnsSpawned);
+            try
             {
-                Pawn pawn;
-                if (MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn) && pathCellSet.Contains(pawn.Position))
+                for (int i = 0; i < pawns.Count; i++)
                 {
-                    MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers, scaleWithOverburn: PropsScorch.scaleWithOverburn);
+                    Pawn pawn;
+                    if (MingyuanUtility.IsHostilePawn(pawns[i], caster, out pawn)
+                        && pawn.Spawned && pawn.Map == map && pathCellSet.Contains(pawn.Position))
+                    {
+                        MingyuanUtility.AddLifeBurn(pawn, caster, PropsScorch.lifeBurnLayers, scaleWithOverburn: PropsScorch.scaleWithOverburn);
+                    }
                 }
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(pawns);
             }
         }
 
@@ -520,27 +536,37 @@ namespace MiliraXian.Characters.Mingyuan
             SpawnFlashMote(caster);
             int spawnedTargetMotes = 0;
             int maxTargetMotes = Mathf.Max(0, Props.maxTargetMotes);
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(caster.Position, caster.Map, Props.radius, true))
+            Map map = caster.Map;
+            List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(caster.Position, map, Props.radius, true));
+            try
             {
-                Pawn pawn;
-                if (!MingyuanUtility.IsHostilePawn(thing, caster, out pawn))
+                for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
                 {
-                    continue;
-                }
+                    Thing thing = targets[targetIndex];
+                    Pawn pawn;
+                    if (!MingyuanUtility.IsHostilePawn(thing, caster, out pawn) || !pawn.Spawned || pawn.Map != map)
+                    {
+                        continue;
+                    }
 
-                DamageBrainAndEyes(pawn, caster);
-                float currentLayers = MingyuanUtility.GetLifeBurnLayers(pawn);
-                float layersToAdd = Mathf.Max(Props.minimumLifeBurnLayers, currentLayers);
-                if (layersToAdd > 0f)
-                {
-                    MingyuanUtility.AddLifeBurn(pawn, caster, layersToAdd);
-                }
+                    DamageBrainAndEyes(pawn, caster);
+                    float currentLayers = MingyuanUtility.GetLifeBurnLayers(pawn);
+                    float layersToAdd = Mathf.Max(Props.minimumLifeBurnLayers, currentLayers);
+                    if (layersToAdd > 0f)
+                    {
+                        MingyuanUtility.AddLifeBurn(pawn, caster, layersToAdd);
+                    }
 
-                pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
-                if (spawnedTargetMotes < maxTargetMotes && SpawnTargetMote(pawn))
-                {
-                    spawnedTargetMotes++;
+                    pawn.stances?.stunner?.StunFor(Props.stunTicks, caster, false, true, false);
+                    if (spawnedTargetMotes < maxTargetMotes && SpawnTargetMote(pawn))
+                    {
+                        spawnedTargetMotes++;
+                    }
                 }
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(targets);
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using HarmonyLib;
@@ -1324,30 +1323,15 @@ namespace MiliraXian.Characters.Neiyu
     [HarmonyPatch(typeof(ShotReport), nameof(ShotReport.HitReportFor))]
     public static class Patch_MXNeiyuShield_RangedDodge
     {
-        private static readonly FieldInfo ShotReportTargetField = AccessTools.Field(typeof(ShotReport), "target");
-        private static readonly FieldInfo ShotReportFactorFromTargetSizeField = AccessTools.Field(typeof(ShotReport), "factorFromTargetSize");
+        private static readonly AccessTools.StructFieldRef<ShotReport, TargetInfo> ShotReportTarget =
+            AccessTools.StructFieldRefAccess<ShotReport, TargetInfo>("target");
+        private static readonly AccessTools.StructFieldRef<ShotReport, float> ShotReportFactorFromTargetSize =
+            AccessTools.StructFieldRefAccess<ShotReport, float>("factorFromTargetSize");
 
         [HarmonyPostfix]
         public static void Postfix(ref ShotReport __result)
         {
-            if (ShotReportTargetField == null || ShotReportFactorFromTargetSizeField == null)
-            {
-                return;
-            }
-
-            object boxed = __result;
-
-            TargetInfo targetInfo;
-            try
-            {
-                targetInfo = (TargetInfo)ShotReportTargetField.GetValue(boxed);
-            }
-            catch
-            {
-                return;
-            }
-
-            Pawn targetPawn = targetInfo.Thing as Pawn;
+            Pawn targetPawn = ShotReportTarget(ref __result).Thing as Pawn;
             if (targetPawn == null)
             {
                 return;
@@ -1365,21 +1349,8 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            float sizeFactor;
-            try
-            {
-                sizeFactor = (float)ShotReportFactorFromTargetSizeField.GetValue(boxed);
-            }
-            catch
-            {
-                return;
-            }
-
             float hitChanceFactor = Mathf.Clamp01(1f - profile.rangedDodgeBonusPct);
-            sizeFactor *= hitChanceFactor;
-
-            ShotReportFactorFromTargetSizeField.SetValue(boxed, sizeFactor);
-            __result = (ShotReport)boxed;
+            ShotReportFactorFromTargetSize(ref __result) *= hitChanceFactor;
         }
     }
 }

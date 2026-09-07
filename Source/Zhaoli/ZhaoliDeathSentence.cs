@@ -5,6 +5,25 @@ using Verse;
 
 namespace MiliraXian.Characters.Zhaoli
 {
+    internal static class ZhaoliDeathSentenceUtility
+    {
+        // Immunity belongs to the character, independent of faction, power level,
+        // or registration in AL's special-pawn manager.
+        public static bool IsImmune(Pawn pawn)
+        {
+            return pawn?.kindDef?.defName is "MiliraXian_Neiyu" or "MiliraXian_Qinghe"
+                or "MiliraXian_Zhaoli" or "MiliraXian_Mingyuan";
+        }
+    }
+
+    public class StatPart_ZhaoliDeathSentenceImmunity : AbnormalLimitFactor
+    {
+        protected override float FactorFor(Pawn pawn)
+        {
+            return ZhaoliDeathSentenceUtility.IsImmune(pawn) ? 0f : 1f;
+        }
+    }
+
     public class HediffCompProperties_ZhaoliDeathSentence : HediffCompProperties_OnAbnormalApplied
     {
         public float cutSeverity = 3f;
@@ -19,9 +38,12 @@ namespace MiliraXian.Characters.Zhaoli
     {
         private HediffCompProperties_ZhaoliDeathSentence PropsDeathSentence => (HediffCompProperties_ZhaoliDeathSentence)props;
 
+        // Also removes accumulation already present in older saves.
+        public override bool CompShouldRemove => ZhaoliDeathSentenceUtility.IsImmune(Pawn);
+
         public override void NotifyApplied(Pawn source, float amount)
         {
-            if (ZhaoliPowerBalance.Sealed) return;
+            if (ZhaoliPowerBalance.Sealed || ZhaoliDeathSentenceUtility.IsImmune(Pawn)) return;
             base.NotifyApplied(source, amount);
             if (Pawn == null || Pawn.Dead || Pawn.Destroyed || amount <= 0f)
             {
@@ -71,6 +93,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override bool Visible => false;
 
+        public override bool ShouldRemove => ZhaoliDeathSentenceUtility.IsImmune(pawn) || base.ShouldRemove;
+
         public void Initialize(Pawn newInstigator, HediffDef_Abnormal sourceAbnormalDef)
         {
             instigator = newInstigator;
@@ -100,7 +124,9 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             resolved = true;
-            if (ZhaoliPowerBalance.Sealed) return;
+            // PostRemoved also runs when AL heals bad hediffs or an old save is
+            // cleaned up. Removing an immune character's result must never kill it.
+            if (ZhaoliPowerBalance.Sealed || ZhaoliDeathSentenceUtility.IsImmune(pawn)) return;
             Pawn target = pawn;
             if (target == null || target.Dead || target.Destroyed)
             {
@@ -161,9 +187,22 @@ namespace MiliraXian.Characters.Zhaoli
 
         private static void DiscardExecutedPawn(Pawn target)
         {
+            // Pawn.Kill can be cancelled by AL void recovery or another death
+            // protection. Never discard a survivor or a pawn owned by a container.
+            if (target == null || target.Discarded || !target.Dead || target.Spawned
+                || (target.ParentHolder != null && target.Corpse == null))
+            {
+                return;
+            }
+
             Corpse corpse = target.Corpse;
             if (corpse != null && !corpse.Destroyed)
             {
+                if (corpse.Spawned)
+                {
+                    corpse.DeSpawn();
+                }
+
                 corpse.InnerPawn = null;
                 corpse.Destroy(DestroyMode.Vanish);
             }

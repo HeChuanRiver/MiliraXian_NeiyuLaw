@@ -75,6 +75,11 @@ namespace MiliraXian.Characters.Zhaoli
         private const string HostileAncientsFactionDefName = "AncientsHostile";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
 
+        internal static void ClearRuntimeState()
+        {
+            PendingLoadoutStabilizationPawnIds.Clear();
+        }
+
         public static bool QuestExists(string questDefName)
         {
             if (Find.QuestManager == null)
@@ -3976,11 +3981,6 @@ namespace MiliraXian.Characters.Zhaoli
             return (thing.def?.defName ?? "null") + "/" + thing.ThingID + " pos=" + thing.PositionHeld;
         }
 
-        public static Pawn GetTrackedPawn(Pawn_JobTracker tracker)
-        {
-            return Traverse.Create(tracker).Field("pawn").GetValue<Pawn>();
-        }
-
         private static string DescribeLocalTarget(LocalTargetInfo target)
         {
             if (!target.IsValid)
@@ -4234,18 +4234,20 @@ namespace MiliraXian.Characters.Zhaoli
             public string previousJob;
         }
 
-        public static void Prefix(Pawn_JobTracker __instance, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue, out StartJobLogState __state)
+        public static void Prefix(Pawn ___pawn, Job newJob, JobCondition lastJobEndCondition, ThinkNode jobGiver, ThinkTreeDef thinkTree, JobTag? tag, bool fromQueue, out StartJobLogState __state)
         {
-            Pawn pawn = ZhaoliRaidDebugUtility.GetTrackedPawn(__instance);
-            __state = new StartJobLogState
-            {
-                pawn = pawn,
-                previousJob = ZhaoliRaidDebugUtility.DescribeJob(pawn?.CurJob)
-            };
+            __state = null;
+            Pawn pawn = ___pawn;
             if (!ZhaoliRaidDebugUtility.ShouldLog(pawn))
             {
                 return;
             }
+
+            __state = new StartJobLogState
+            {
+                pawn = pawn,
+                previousJob = ZhaoliRaidDebugUtility.DescribeJob(pawn.CurJob)
+            };
 
             ZhaoliRaidDebugUtility.Log(
                 pawn,
@@ -4260,9 +4262,9 @@ namespace MiliraXian.Characters.Zhaoli
                 " duty=" + ZhaoliRaidDebugUtility.DescribeDuty(pawn));
         }
 
-        public static void Postfix(Pawn_JobTracker __instance, StartJobLogState __state)
+        public static void Postfix(Pawn ___pawn, StartJobLogState __state)
         {
-            Pawn pawn = __state?.pawn ?? ZhaoliRaidDebugUtility.GetTrackedPawn(__instance);
+            Pawn pawn = __state?.pawn ?? ___pawn;
             if (!ZhaoliRaidDebugUtility.ShouldLog(pawn))
             {
                 return;
@@ -4280,9 +4282,9 @@ namespace MiliraXian.Characters.Zhaoli
     [HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.EndCurrentJob))]
     internal static class Patch_Pawn_JobTracker_EndCurrentJob_ZhaoliRaidLog
     {
-        public static void Prefix(Pawn_JobTracker __instance, JobCondition condition, bool startNewJob)
+        public static void Prefix(Pawn ___pawn, JobCondition condition, bool startNewJob)
         {
-            Pawn pawn = ZhaoliRaidDebugUtility.GetTrackedPawn(__instance);
+            Pawn pawn = ___pawn;
             if (!ZhaoliRaidDebugUtility.ShouldLog(pawn))
             {
                 return;

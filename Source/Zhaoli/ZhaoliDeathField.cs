@@ -199,24 +199,31 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            IReadOnlyList<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
-            for (int i = 0; i < allPawnsSpawned.Count; i++)
+            List<Pawn> allPawnsSpawned = CombatTargetSnapshot.Rent(map.mapPawns.AllPawnsSpawned);
+            try
             {
-                Pawn pawn = allPawnsSpawned[i];
-                if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead)
+                for (int i = 0; i < allPawnsSpawned.Count; i++)
                 {
-                    continue;
-                }
+                    Pawn pawn = allPawnsSpawned[i];
+                    if (pawn == null || pawn == Pawn || pawn.Destroyed || pawn.Dead || !pawn.Spawned || pawn.Map != map)
+                    {
+                        continue;
+                    }
 
-                if (!ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, pawn))
-                {
-                    continue;
-                }
+                    if (!ZhaoliScenarioUtility.ShouldDeathFieldAffectTarget(Pawn, pawn))
+                    {
+                        continue;
+                    }
 
-                if (pawn.Position.InHorDistOf(center, CurrentRadius))
-                {
-                    AbnormalSystem.ApplyAccumulation(Pawn, pawn, PropsField.abnormal, PropsField.accumulationPerApplication);
+                    if (pawn.Position.InHorDistOf(center, CurrentRadius))
+                    {
+                        AbnormalSystem.ApplyAccumulation(Pawn, pawn, PropsField.abnormal, PropsField.accumulationPerApplication);
+                    }
                 }
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(allPawnsSpawned);
             }
         }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXZL_ZhaoliDeathFieldActive.label>&lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt;</MXZL_ZhaoliDeathFieldActive.label>
-  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt;'s sustained &lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt; continuously applies Death Sentence to every unit in range except herself. Death Sentence accumulation decays rapidly after a target leaves the field.</MXZL_ZhaoliDeathFieldActive.description>
+  <MXZL_ZhaoliDeathFieldActive.description>&lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt;'s sustained &lt;color=#E85A7A&gt;Deathflow Field&lt;/color&gt; continuously applies Death Sentence to units in range that are not immune to Death Sentence. Death Sentence accumulation decays rapidly after a target leaves the field.
+Neiyu, Qinghe, Zhaoli and Mingyuan are immune to Death Sentence, including its slow, cuts and execution.</MXZL_ZhaoliDeathFieldActive.description>
   <MXZL_ZhaoliDormancy.label>&lt;color=#C77DFF&gt;All Things Impermanent: Dormancy&lt;/color&gt;</MXZL_ZhaoliDormancy.label>
   <MXZL_ZhaoliDormancy.description>Forced &lt;color=#C77DFF&gt;dormancy&lt;/color&gt; caused by overflowing karma. &lt;color=#E85A7A&gt;Zhaoli&lt;/color&gt; remains asleep and cannot act normally until she wakes naturally after thirty days.</MXZL_ZhaoliDormancy.description>
   <MXZL_ZhaoliKarma.label>&lt;color=#E85A7A&gt;Karma&lt;/color&gt;</MXZL_ZhaoliKarma.label>

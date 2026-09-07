@@ -11,7 +11,8 @@
   <MX_Power_Zhaoli_Decorative>以陪伴、外觀和劇情為主。主動技能、成長、因果收益、鏈接替死與自動復活停用；裝備提供基礎戰鬥能力。已有力場和附魔會結束。</MX_Power_Zhaoli_Decorative>
   <MX_Power_Mingyuan_Decorative>以陪伴、外觀和劇情為主。主動技能與戰鬥被動停用，長虹發射普通單箭。已有持續效果會結束，已開始的重生流程會完成。</MX_Power_Mingyuan_Decorative>
   <MX_Power_Zhaoli_Duanzhan>揮出圓形斬擊，并沿前方直線追加更強的追斬，優先命中軀干。武器附有冥火時，斬擊會追加火焰傷害。</MX_Power_Zhaoli_Duanzhan>
-  <MX_Power_Zhaoli_DeathField>創造直徑18格的圓形力場。昭離以外的單位在範圍內移動速度降低20%，每秒受到流血傷口并積累1點告死。離開範圍后，告死快速衰減；積累至9點時，最后施加告死的角色處決目標，獲得1點因果和5層諱亡護盾。</MX_Power_Zhaoli_DeathField>
+  <MX_Power_Zhaoli_DeathField>創造直徑18格的圓形力場。昭離以外的單位在範圍內移動速度降低20%，每秒受到流血傷口并積累1點告死。離開範圍后，告死快速衰減；積累至9點時，最后施加告死的角色處決目標，獲得1點因果和5層諱亡護盾。
+霓羽、清荷、昭離和明淵免疫告死，不會因告死受到減速、割傷或處決。</MX_Power_Zhaoli_DeathField>
   <MX_Power_Zhaoli_Guiyi>消耗1.2點因果，治癒目標的疾病與損傷，恢復缺失肢體，清除成癮、機械損傷、永久舊傷及其他可治療的負面健康狀態，并建立持續30天的因果鏈接。無法對昭離自己或敵對目標使用。</MX_Power_Zhaoli_Guiyi>
   <MX_Power_Zhaoli_Dingshu>消耗2.4點因果，持續引導1小時，將尸體完整復活并治癒損傷。目標會與昭離建立因果鏈接，并獲得持續12天的定數標記；在標記期間再次死亡的目標無法復活。襲擊期間無法使用。</MX_Power_Zhaoli_Dingshu>
   <MX_Power_Zhaoli_Minghuo>消耗3點因果，為當前主武器附上持續1日的冥火。武器傷害、破甲、命中與攻擊速度提升42.5%，攻擊距離增加1.7格，近戰命中時追加火焰傷害。</MX_Power_Zhaoli_Minghuo>

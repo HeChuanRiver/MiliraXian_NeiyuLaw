@@ -36,6 +36,12 @@ namespace MiliraXian.Characters.Zhaoli
     {
         private static readonly Dictionary<int, DuanzhanVisualState> States = new();
 
+        internal static void ClearRuntimeState()
+        {
+            States.Clear();
+            Patch_ZhaoliDuanzhan_DrawEquipmentAiming.ClearRuntimeState();
+        }
+
         public static void SetState(
             Pawn pawn,
             ThingWithComps weapon,
@@ -82,7 +88,11 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            States.Remove(pawn.thingIDNumber);
+            if (States.TryGetValue(pawn.thingIDNumber, out DuanzhanVisualState state))
+            {
+                Patch_ZhaoliDuanzhan_DrawEquipmentAiming.ClearTrail(state.weaponThingId);
+                States.Remove(pawn.thingIDNumber);
+            }
         }
 
         public static bool TryGetWeaponVisual(Thing eq, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages)
@@ -112,6 +122,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (now < state.sequenceStartTick || now >= recoverEndTick)
             {
+                Clear(pawn);
                 return false;
             }
 
@@ -623,6 +634,16 @@ namespace MiliraXian.Characters.Zhaoli
         }
 
         private static readonly Dictionary<int, List<SlashTrailSample>> TrailSamplesByWeapon = new();
+
+        internal static void ClearRuntimeState()
+        {
+            TrailSamplesByWeapon.Clear();
+        }
+
+        internal static void ClearTrail(int weaponThingId)
+        {
+            TrailSamplesByWeapon.Remove(weaponThingId);
+        }
         private static Material slashMaterial;
         private static Material slashGlowMaterial;
         private static Vector2 slashBaseDrawSize = Vector2.one;
