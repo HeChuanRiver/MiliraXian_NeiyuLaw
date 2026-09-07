@@ -153,6 +153,11 @@ namespace MiliraXian.Characters
         {
             MXNeiyuShieldUtility.Invalidate(__instance);
             ZhaoliShieldLayerUtility.Invalidate(__instance);
+            if (__instance != null && (__instance.Dead || __instance.Destroyed))
+            {
+                NeiyuSkyfallVisualTracker.Clear(__instance);
+                DuanzhanVisualTracker.Clear(__instance);
+            }
         }
     }
 
@@ -164,6 +169,8 @@ namespace MiliraXian.Characters
         {
             MXNeiyuShieldUtility.Invalidate(__instance);
             ZhaoliShieldLayerUtility.Invalidate(__instance);
+            NeiyuSkyfallVisualTracker.Clear(__instance);
+            DuanzhanVisualTracker.Clear(__instance);
         }
     }
 
@@ -179,6 +186,11 @@ namespace MiliraXian.Characters
             NeiyuEarAnimationRuntime.Reset();
             SpecialHaloAnimationRuntime.Reset();
             CharacterUnityVfxRuntime.Reset();
+            NeiyuSkyfallVisualTracker.ClearRuntimeState();
+            DuanzhanVisualTracker.ClearRuntimeState();
+            MiliraXian.Characters.Mingyuan.HediffComp_MingyuanLifeBurn.ClearRuntimeState();
+            NeiyuEquipmentUtility.ClearRuntimeState();
+            ZhaoliScenarioUtility.ClearRuntimeState();
         }
     }
 

@@ -265,6 +265,11 @@ namespace MiliraXian.Characters.Neiyu
     {
         private static readonly Dictionary<int, NeiyuSkyfallVisualState> states = new();
 
+        internal static void ClearRuntimeState()
+        {
+            states.Clear();
+        }
+
         public static void BeginAscent(Pawn pawn, int startTick, int endTick)
         {
             SetState(pawn, NeiyuSkyfallVisualStage.Ascending, startTick, endTick, 74f, 30f);

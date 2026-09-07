@@ -160,7 +160,8 @@ namespace MiliraXian.Characters.Mingyuan
         public static Thing SpawnRebirthMarker(Map map, IntVec3 cell)
         {
             ThingDef markerDef = MX_MingyuanDefOf.MX_Mingyuan_RebirthMarker;
-            if (map == null || markerDef == null || !cell.IsValid || !cell.InBounds(map))
+            if (map == null || Current.Game?.Maps.Contains(map) != true
+                || markerDef == null || !cell.IsValid || !cell.InBounds(map))
             {
                 return null;
             }
@@ -185,7 +186,11 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool TryFinishRebirth(Pawn pawn, Map map, IntVec3 cell)
         {
-            if (pawn == null || map == null)
+            // Validate before resurrection/removing the world-pawn entry. A
+            // pending return may outlive its map or be taken over by AL recovery.
+            if (pawn == null || pawn.Destroyed || map == null
+                || Current.Game?.Maps.Contains(map) != true || !cell.IsValid || !cell.InBounds(map)
+                || (pawn.ParentHolder != null && pawn.ParentHolder is not Corpse))
             {
                 return false;
             }

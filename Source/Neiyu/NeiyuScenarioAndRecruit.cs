@@ -638,6 +638,11 @@ namespace MiliraXian.Characters.Neiyu
         private const string DefaultEarringDefName = "MX_Apparel_EarringsZhenzhu";
         private static readonly HashSet<int> PendingLoadoutStabilizationPawnIds = new();
 
+        internal static void ClearRuntimeState()
+        {
+            PendingLoadoutStabilizationPawnIds.Clear();
+        }
+
         public static bool IsNeiyu(Pawn pawn)
         {
             return pawn?.kindDef?.defName == NeiyuPawnKindDefName;
