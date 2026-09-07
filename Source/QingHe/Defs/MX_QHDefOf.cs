@@ -19,7 +19,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static ThingDef SpringFlowField;
         public static ThingDef MX_QH_LunarMirror;
         public static ThingDef MX_QH_LotusPond;
-        public static ThingDef MX_QH_Book;
         public static ThingDef MX_QingheNormal;
         public static ThingDef MX_QingheHeaddress;
 

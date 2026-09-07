@@ -53,8 +53,8 @@
 
     <StatDef ParentName="MX_AbnormalFactorBase">
         <defName>MX_AbnormalElectricLeakLimitFactor</defName>
-        <label>电漏积累上限乘数</label>
-        <description>触发短路效果所需异常积累量的乘数。数值为0时，电漏异常无效。</description>
+        <label>漏电积累上限乘数</label>
+        <description>触发短路效果所需异常积累量的乘数。数值为0时，漏电异常无效。</description>
         <parts>
             <li Class="MiliraXian.Characters.FactorIfNotMechanoid"><factor>0</factor></li>
             <li Class="MiliraXian.Characters.FactorIfMilian"><factor>3.3333333</factor></li>
@@ -73,8 +73,8 @@
 
     <StatDef ParentName="MX_AbnormalFactorBase">
         <defName>MX_AbnormalElectricLeakEfficiencyFactor</defName>
-        <label>电漏附加效率乘数</label>
-        <description>该角色施加电漏异常积累量时使用的效率乘数。</description>
+        <label>漏电附加效率乘数</label>
+        <description>该角色施加漏电异常积累量时使用的效率乘数。</description>
     </StatDef>
 
     <StatDef ParentName="MX_AbnormalFactorBase">

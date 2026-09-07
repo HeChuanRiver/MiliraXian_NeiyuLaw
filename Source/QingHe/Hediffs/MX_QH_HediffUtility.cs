@@ -151,11 +151,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             comp.AddProgress(comp.RequiredProgressForCurrentLevel);
-            Messages.Message(
-                "MX_QH_DivineGraceGainedMessage".Translate(comp.CurrentLevel),
-                pawn,
-                MessageTypeDefOf.PositiveEvent,
-                historical: false);
             MX_QHSkillUtility.SyncChoices(pawn);
         }
 

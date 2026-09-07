@@ -43,9 +43,8 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
 
         private static void ApplyAbnormals(Explosion explosion, Pawn pawn)
         {
-            CompProperties_FlowerBellStatusOnHit props = CompFlowerBellStatusOnHit.PropsFor(explosion.projectile);
             Pawn caster = explosion.instigator as Pawn;
-            CompFlowerBellStatusOnHit.ApplyAbnormals(caster, pawn, props);
+            CompFlowerBellStatusOnHit.ApplyProjectileAbnormals(caster, pawn, explosion.projectile);
         }
     }
 }

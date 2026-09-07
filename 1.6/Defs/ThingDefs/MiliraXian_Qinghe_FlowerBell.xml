@@ -173,6 +173,7 @@
         </abnormals>
         <accumulationAmount>21</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
+        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
       </li>
     </comps>
   </ThingDef>
@@ -194,6 +195,7 @@
         </abnormals>
         <accumulationAmount>16</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
+        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
       </li>
     </comps>
   </ThingDef>
@@ -215,6 +217,7 @@
         </abnormals>
         <accumulationAmount>5</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
+        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
       </li>
     </comps>
   </ThingDef>
@@ -235,6 +238,7 @@
         </abnormals>
         <accumulationAmount>12</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
+        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
       </li>
     </comps>
   </ThingDef>

@@ -124,6 +124,7 @@
   <MX_QH_DevAddDivineGraceLevelLabel>DEV：花神之恩典 +1</MX_QH_DevAddDivineGraceLevelLabel>
   <MX_QH_DevAddDivineGraceLevelDesc>直接令花神之恩典提高 1 級，用於測試 staged stat 生效路徑。</MX_QH_DevAddDivineGraceLevelDesc>
   <MX_QH_DivineGraceGainedMessage>清荷的花神之恩典提升至 {0} 級。</MX_QH_DivineGraceGainedMessage>
+  <MX_QH_DivineGraceGainedLetterLabel>靈氣精通提升</MX_QH_DivineGraceGainedLetterLabel>
   <MX_QH_FlowerCourtTuneTitle>四時調諧</MX_QH_FlowerCourtTuneTitle>
   <MX_QH_FlowerCourtGraceLine>花神之恩典：{0} / {1}</MX_QH_FlowerCourtGraceLine>
   <MX_QH_ResonanceTab_Label>調諧共鳴</MX_QH_ResonanceTab_Label>
@@ -208,7 +209,6 @@
   <MX_QH_RecoverySpeedLine>恢復速度：{0} /秒</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧儀式。</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>乞巧儀式仍在冷卻中，剩餘時間：{0}。</MX_QH_QixiCooldown>
-  <MX_QH_QixiOutcomeBook>獲得了一本《荷雨亭曲藝》。</MX_QH_QixiOutcomeBook>
   <MX_QH_QixiOutcomeInspirations>獲得靈感的參與者：{0}。</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>受清荷的乞巧儀式啟發。</MX_QH_QixiInspirationReason>
 
@@ -294,6 +294,4 @@
   <MX_ZL_RaidTransitionRemaining>轉階段剩餘：</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>下次躍遷：</MX_ZL_RaidNextWarp>
   <MX_ZL_RaidPhaseTransitionStarted>{0}正在轉入第{1}階段！轉階段期間處於無敵狀態，並獲得{2}層諱亡護盾。</MX_ZL_RaidPhaseTransitionStarted>
-  <MX_QH_RecipeRequiresQinghe>只有清荷可以執行這個配方。</MX_QH_RecipeRequiresQinghe>
-  <MX_QH_CustomBookThoughtBenefit> - 閱讀時獲得心情：讀過荷雨亭曲藝</MX_QH_CustomBookThoughtBenefit>
 </LanguageData>

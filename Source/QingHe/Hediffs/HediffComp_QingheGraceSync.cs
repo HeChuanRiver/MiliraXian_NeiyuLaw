@@ -111,11 +111,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (CurrentLevel != oldLevel)
             {
-                Messages.Message(
+                Find.LetterStack.ReceiveLetter(
+                    "MX_QH_DivineGraceGainedLetterLabel".Translate(),
                     "MX_QH_DivineGraceGainedMessage".Translate(CurrentLevel),
-                    Pawn,
-                    MessageTypeDefOf.PositiveEvent,
-                    historical: false);
+                    LetterDefOf.PositiveEvent,
+                    Pawn);
                 TrySync(force: true);
             }
         }

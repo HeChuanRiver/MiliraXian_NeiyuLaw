@@ -48,21 +48,6 @@
     </ThoughtDef>
 
     <ThoughtDef>
-        <defName>MX_QH_LotusRainPavilionOperaRead</defName>
-        <thoughtClass>Thought_Memory</thoughtClass>
-        <durationDays>0.2</durationDays>
-        <stackLimit>1</stackLimit>
-        <showBubble>false</showBubble>
-        <stages>
-            <li>
-                <label>读过荷雨亭曲艺</label>
-                <description>荷雨亭曲艺的文字清雅舒缓，像是在雨后的亭中听了一段温柔的旧曲。</description>
-                <baseMoodEffect>4</baseMoodEffect>
-            </li>
-        </stages>
-    </ThoughtDef>
-
-    <ThoughtDef>
         <defName>MX_QH_NoLotusPond</defName>
         <workerClass>MiliraXian.Characters.QingHe.Thoughts.ThoughtWorker_QingheNoLotusPond</workerClass>
         <thoughtClass>Thought_Situational</thoughtClass>

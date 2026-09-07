@@ -66,22 +66,20 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
         }
 
-        public static CompProperties_FlowerBellStatusOnHit PropsFor(ThingDef projectileDef)
+        public static void ApplyProjectileAbnormals(Pawn caster, Pawn target, ThingDef projectileDef, float amountMultiplier = 1f)
         {
             if (projectileDef?.comps == null)
             {
-                return null;
+                return;
             }
 
             for (int i = 0; i < projectileDef.comps.Count; i++)
             {
                 if (projectileDef.comps[i] is CompProperties_FlowerBellStatusOnHit props)
                 {
-                    return props;
+                    ApplyAbnormals(caster, target, props, amountMultiplier);
                 }
             }
-
-            return null;
         }
 
         public static float ResolveSpecialAbilityEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)

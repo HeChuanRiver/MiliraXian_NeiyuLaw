@@ -3,8 +3,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldMaxEnergyFactor</defName>
-        <label>护盾容量乘数</label>
-        <description>清荷莲华护盾最大容量的倍率修正。</description>
+        <label>灵气容量乘数</label>
+        <description>灵气加护最大容量的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -17,8 +17,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldRegenPerSecondFactor</defName>
-        <label>护盾回充乘数</label>
-        <description>清荷莲华护盾每秒回复量的倍率修正。</description>
+        <label>灵气回复乘数</label>
+        <description>灵气每秒回复量的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -31,8 +31,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldHitRegenDelayFactor</defName>
-        <label>护盾回充延迟乘数</label>
-        <description>清荷莲华护盾受击后回复延迟的倍率修正。</description>
+        <label>灵气回复延迟乘数</label>
+        <description>受击后灵气回复延迟的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -45,8 +45,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldBreakDelayOffset</defName>
-        <label>护盾回充延迟偏移</label>
-        <description>清荷莲华护盾破碎后恢复延迟的固定加值修正。</description>
+        <label>灵气加护重启延迟偏移</label>
+        <description>灵气耗尽后重新开始恢复的延迟加值修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_TicksToSeconds</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
@@ -59,8 +59,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldDamageCapFactor</defName>
-        <label>护盾最大单次消耗乘数</label>
-        <description>清荷莲华护盾单次承伤上限的倍率修正。</description>
+        <label>灵气最大单次消耗乘数</label>
+        <description>灵气单次消耗上限的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -73,8 +73,8 @@
 
     <StatDef>
         <defName>MX_QH_LotusShieldDamageCapOffset</defName>
-        <label>护盾最大单次消耗偏移</label>
-        <description>清荷莲华护盾单次承伤上限的固定加值修正。此属性先于倍率应用。</description>
+        <label>灵气最大单次消耗偏移</label>
+        <description>灵气单次消耗上限的加值修正。此属性先于倍率应用。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
@@ -88,7 +88,7 @@
     <StatDef>
         <defName>MX_QH_FlowerDecreeMaxOffset</defName>
         <label>花令上限偏移</label>
-        <description>清荷花令上限的固定加值修正。</description>
+        <description>花令上限的加值修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
@@ -102,7 +102,7 @@
     <StatDef>
         <defName>MX_QH_FlowerDecreeRegenFactor</defName>
         <label>花令回复速度乘数</label>
-        <description>清荷花令回复速度的倍率修正。</description>
+        <description>花令回复速度的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -115,8 +115,8 @@
 
     <StatDef>
         <defName>MX_QH_DivineBlessingRechargeSpeedFactor</defName>
-        <label>花神之垂怜充能速度乘数</label>
-        <description>清荷花神之垂怜充能速度的倍率修正。</description>
+        <label>流水之形充能速度乘数</label>
+        <description>流水之形充能速度的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
@@ -130,7 +130,7 @@
     <StatDef>
         <defName>MX_QH_SpecialAbilityEffectFactor</defName>
         <label>法术效果系数</label>
-        <description>清荷特殊术法效果的倍率修正。</description>
+        <description>特殊法术效果的倍率修正。影响清荷的技能伤害、通过技能和共鸣附加异常状态的效率和技能增益产生的效果量。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>

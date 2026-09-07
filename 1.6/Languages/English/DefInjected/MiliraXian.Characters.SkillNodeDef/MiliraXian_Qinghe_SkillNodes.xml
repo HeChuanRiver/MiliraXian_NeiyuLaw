@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <MX_QH_Node_SpellEffectEnhancement1.label>Spell Effect Enhancement I</MX_QH_Node_SpellEffectEnhancement1.label>
+  <MX_QH_Node_SpellEffectEnhancement1.description>Passive effect: Spell effect factor +50%.</MX_QH_Node_SpellEffectEnhancement1.description>
+  <MX_QH_Node_SpellEffectEnhancement2.label>Spell Effect Enhancement II</MX_QH_Node_SpellEffectEnhancement2.label>
+  <MX_QH_Node_SpellEffectEnhancement2.description>Passive effect: Spell effect factor +50%.</MX_QH_Node_SpellEffectEnhancement2.description>
   <MX_QH_Node_FlowerEnvoy.label>Flower Envoy</MX_QH_Node_FlowerEnvoy.label>
   <MX_QH_Node_FlowerEnvoy.description>The foundation of Qinghe as the Flower Envoy: the lotus shield ever at her side, a trickle that soothes old wounds, and the flower gods' mercy watching over her final breath.\n\n—Starts with Flower Decree: Spring Flow and Lunar Mirror, plus the sword art: Illusory Reflection.</MX_QH_Node_FlowerEnvoy.description>
   <MX_QH_Node_Jueying.label>Sword Dance</MX_QH_Node_Jueying.label>
@@ -29,5 +33,5 @@
   <MX_QH_Trait_DivineGrace.label>Flower-God Grace</MX_QH_Trait_DivineGrace.label>
   <MX_QH_Trait_DivineGrace.description>When Qinghe crafts a masterwork or legendary item, her grace level rises by 1 (max 24). Grace improves her base stats and automatically unlocks the nodes on the timeline below.</MX_QH_Trait_DivineGrace.description>
   <MX_QH_Trait_QixiRitual.label>Qixi Rite</MX_QH_Trait_QixiRitual.label>
-  <MX_QH_Trait_QixiRitual.description>Once per year, a Qixi rite can be held at the lotus pond. Participants may gain inspiration, and Qinghe receives a copy of "Lotus Rain Pavilion Artistry".</MX_QH_Trait_QixiRitual.description>
+  <MX_QH_Trait_QixiRitual.description>Once per year, a Qixi rite can be held at the lotus pond. Participants gain Crafting and Artistic experience and may receive inspiration.</MX_QH_Trait_QixiRitual.description>
 </LanguageData>

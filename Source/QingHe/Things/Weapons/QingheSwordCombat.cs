@@ -55,7 +55,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public static void NotifySlashHit(Pawn caster, Thing target, QingheSlashExtension extension)
         {
-            if (caster == null || target == null || !GenHostility.HostileTo(caster, target))
+            if (caster == null || target == null || target.Destroyed
+                || (target is not Pawn && target is not Building))
             {
                 return;
             }
@@ -66,8 +67,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public static bool IsSwordPressureTarget(Pawn caster, Thing target)
         {
             return caster != null && target != null && !target.Destroyed
-                && (target is Pawn || target is Building)
-                && GenHostility.HostileTo(caster, target);
+                && (target is Pawn || target is Building);
         }
 
         public static void NotifySwordPressureHit(Pawn caster, Thing target, QingheSlashExtension extension)
@@ -107,8 +107,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
 
             ThingDef projectile = ProjectileFor(resonance);
-            CompProperties_FlowerBellStatusOnHit props = CompFlowerBellStatusOnHit.PropsFor(projectile);
-            CompFlowerBellStatusOnHit.ApplyAbnormals(caster, target, props, accumulationMultiplier);
+            CompFlowerBellStatusOnHit.ApplyProjectileAbnormals(caster, target, projectile, accumulationMultiplier);
         }
 
         public static ThingDef ProjectileFor(FlowerBellResonance resonance)
@@ -159,7 +158,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 for (int i = 0; i < things.Count; i++)
                 {
                     Thing thing = things[i];
-                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing))
+                    if (thing != caster && thing != null && thing.Spawned
+                        && GenHostility.HostileTo(caster, thing))
                     {
                         hit.Add(thing);
                     }
@@ -232,7 +232,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 for (int i = 0; i < things.Count; i++)
                 {
                     Thing thing = things[i];
-                    if (thing != caster && thing != null && thing.Spawned && GenHostility.HostileTo(caster, thing))
+                    if (thing != caster && thing != null && thing.Spawned
+                        && GenHostility.HostileTo(caster, thing))
                     {
                         hit.Add(thing);
                     }

@@ -260,7 +260,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,0)</li>
-                <li>(24,0.48)</li>
+                <li>(24,0.9)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -269,7 +269,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,0)</li>
-                <li>(24,0.12)</li>
+                <li>(24,0.36)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -280,7 +280,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,1.36)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -289,7 +289,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,1.5)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -298,7 +298,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,1.5)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -307,7 +307,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,1.20)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -316,7 +316,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,2.20)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -325,7 +325,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,0.88)</li>
+                <li>(24,0.64)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -334,7 +334,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.72)</li>
+                <li>(24,4.0)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -343,7 +343,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.72)</li>
+                <li>(24,2.8)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -352,7 +352,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,1.5)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -370,7 +370,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.24)</li>
+                <li>(24,2.0)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -393,7 +393,7 @@
           <maxEnergy>500</maxEnergy>
           <baseRegenPerSecond>15</baseRegenPerSecond>
           <hitRegenDelayTicks>120</hitRegenDelayTicks>
-          <breakDisabledTicks>180</breakDisabledTicks>
+          <breakDisabledTicks>1200</breakDisabledTicks>
           <breakOnEmp>false</breakOnEmp>
           <visual>
             <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>

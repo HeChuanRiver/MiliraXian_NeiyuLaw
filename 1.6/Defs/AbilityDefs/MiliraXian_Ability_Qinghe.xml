@@ -46,7 +46,7 @@
   <AbilityDef>
     <defName>MX_QH_LunarMirror</defName>
     <label>霜月镜</label>
-    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，最多吸收300点伤害。</description>
+    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>204</displayOrder>
@@ -147,8 +147,8 @@
   </AbilityDef>
   <AbilityDef>
     <defName>MX_QH_AscentSlash</defName>
-    <label>必杀剑：落樱</label>
-    <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动数次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
+    <label>落樱</label>
+    <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动多次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>230</displayOrder>

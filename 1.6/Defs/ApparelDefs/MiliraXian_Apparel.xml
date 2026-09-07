@@ -344,7 +344,7 @@
         
     </ThingDef>
 
-    <!-- 清荷占位头饰：暂时复用霓羽珠饰纹理 -->
+    <!-- 清荷头饰 -->
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_QingheHeaddress</defName>
         <label>荷花头花</label>
@@ -354,11 +354,11 @@
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <texPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female_south</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(1,1)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+        <uiIconPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female_south</uiIconPath>
 
         <statBases>
             <Mass>0.05</Mass>
@@ -380,10 +380,19 @@
                 <li>Overhead</li>
             </layers>
 
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female</wornGraphicPath>
             <tags>
                 <li>MX_QingheHeaddress</li>
             </tags>
+
+            <drawData>
+                <dataNorth>
+                    <layer>49</layer>
+                </dataNorth>
+                <dataWest>
+                    <layer>49</layer>
+                </dataWest>
+            </drawData>
 
             <renderNodeProperties>
             </renderNodeProperties>

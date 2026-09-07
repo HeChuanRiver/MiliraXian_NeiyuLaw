@@ -413,7 +413,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 for (int nodeIndex = 0; nodeIndex < rowNodes.Count; nodeIndex++)
                 {
                     Rect nodeRect = new(nodeX, y + (LevelRowHeight - LevelNodeHeight) * 0.5f, LevelNodeWidth, LevelNodeHeight);
-                    DrawNodeCard(rowNodes[nodeIndex], nodeRect, effectiveLevel, compact: false);
+                    DrawNodeCard(rowNodes[nodeIndex], nodeRect, currentLevel, effectiveLevel, compact: false);
                     nodeX += LevelNodeWidth + 8f;
                 }
             }
@@ -439,6 +439,8 @@ namespace MiliraXian.Characters.QingHe.UI
             Rect viewRect = new(0f, 0f, contentRect.width - 16f, contentHeight);
             Widgets.BeginScrollView(contentRect, ref specialScrollPosition, viewRect);
 
+            int actualLevel = MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int effectiveLevel = Mathf.Min(actualLevel, QinghePowerBalance.MaxEffectiveLevel);
             for (int i = 0; i < specialNodes.Count; i++)
             {
                 int row = i / columns;
@@ -448,21 +450,16 @@ namespace MiliraXian.Characters.QingHe.UI
                 float x = (viewRect.width - rowWidth) * 0.5f + column * step;
                 float y = row * step;
                 Rect nodeRect = new(x, y, SpecialNodeIconSize, SpecialNodeIconSize);
-                int effectiveLevel = Mathf.Min(
-                    MX_QH_HediffUtility.GetDivineGraceLevel(pawn),
-                    QinghePowerBalance.MaxEffectiveLevel);
-                DrawNodeCard(specialNodes[i], nodeRect, effectiveLevel, compact: true);
+                DrawNodeCard(specialNodes[i], nodeRect, actualLevel, effectiveLevel, compact: true);
             }
 
             Widgets.EndScrollView();
         }
 
-        private void DrawNodeCard(SkillNodeDef node, Rect rect, int currentLevel, bool compact)
+        private void DrawNodeCard(SkillNodeDef node, Rect rect, int actualLevel, int effectiveLevel, bool compact)
         {
-            bool locked = node.requiredGraceLevel > currentLevel;
-            bool learned = state != null
-                && !locked
-                && state.HasNode(node);
+            bool learned = node.requiredGraceLevel <= effectiveLevel;
+            bool locked = !learned && node.requiredGraceLevel <= actualLevel;
             Rect iconRect = compact
                 ? new Rect(rect.x + (rect.width - NodeIconSize) * 0.5f, rect.y + 6f, NodeIconSize, NodeIconSize)
                 : new Rect(rect.x + 6f, rect.y + (rect.height - NodeIconSize) * 0.5f, NodeIconSize, NodeIconSize);

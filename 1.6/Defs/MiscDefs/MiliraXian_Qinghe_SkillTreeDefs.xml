@@ -7,6 +7,42 @@
     <displayOrder>0</displayOrder>
   </MiliraXian.Characters.SkillNodeCategoryDef>
   <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraEnhancement1</defName>
+    <label>灵气强化I</label>
+    <description>——被动效果：灵气护盾容量 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>55</displayOrder>
+    <requiredGraceLevel>6</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldMaxEnergyFactor>0.5</MX_QH_LotusShieldMaxEnergyFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraEnhancement2</defName>
+    <label>灵气强化II</label>
+    <description>——被动效果：灵气护盾容量 +100%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>75</displayOrder>
+    <requiredGraceLevel>13</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldMaxEnergyFactor>1.0</MX_QH_LotusShieldMaxEnergyFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraCirculation</defName>
+    <label>灵气流转</label>
+    <description>——被动效果：灵气护盾受击回复延迟变为0秒。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>85</displayOrder>
+    <requiredGraceLevel>15</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldHitRegenDelayFactor>-1.0</MX_QH_LotusShieldHitRegenDelayFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerEnvoy</defName>
     <label>花中仙</label>
     <description>我与盛花之景本为一体。随风而动，随水而居，此为仙境之灵气。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
@@ -55,7 +91,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>25</displayOrder>
-    <requiredGraceLevel>4</requiredGraceLevel>
+    <requiredGraceLevel>5</requiredGraceLevel>
     <grantedAbilities>
       <li>MX_QH_LunarMirror</li>
     </grantedAbilities>
@@ -79,7 +115,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>40</displayOrder>
-    <requiredGraceLevel>1</requiredGraceLevel>
+    <requiredGraceLevel>2</requiredGraceLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerMandate1</defName>
@@ -115,6 +151,18 @@
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_SpellEffectEnhancement1</defName>
+    <label>法术效果强化I</label>
+    <description>——被动效果：法术效果系数 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>66</displayOrder>
+    <requiredGraceLevel>16</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerMandate2</defName>
     <label>花令强化II</label>
     <description>——被动效果：花令的积累上限 +1。</description>
@@ -124,6 +172,18 @@
     <requiredGraceLevel>18</requiredGraceLevel>
     <statOffsets>
       <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_SpellEffectEnhancement2</defName>
+    <label>法术效果强化II</label>
+    <description>——被动效果：法术效果系数 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>78</displayOrder>
+    <requiredGraceLevel>22</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>

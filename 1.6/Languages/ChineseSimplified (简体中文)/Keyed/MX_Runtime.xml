@@ -114,6 +114,7 @@
   <MX_QH_DevAddDivineGraceLevelLabel>DEV：精通等级 +1</MX_QH_DevAddDivineGraceLevelLabel>
   <MX_QH_DevAddDivineGraceLevelDesc>直接令灵气精通等级提高 1 级。</MX_QH_DevAddDivineGraceLevelDesc>
   <MX_QH_DivineGraceGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_DivineGraceGainedMessage>
+  <MX_QH_DivineGraceGainedLetterLabel>灵气精通提升</MX_QH_DivineGraceGainedLetterLabel>
   <MX_QH_FlowerCourtGraceLine>灵气精通：{0} / {1}</MX_QH_FlowerCourtGraceLine>
   <MX_QH_ResonanceTab_Label>调谐</MX_QH_ResonanceTab_Label>
   <MX_QH_SkillTreeTab_Label>修行</MX_QH_SkillTreeTab_Label>
@@ -193,8 +194,6 @@
   <MX_QH_QixiCooldown>乞巧仪式仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
   <MX_QH_QixiOutcomeInspirations>获得灵感的参与者：{0}。</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>受乞巧仪式启发。</MX_QH_QixiInspirationReason>
-  <MX_QH_RecipeRequiresQinghe>只有清荷可以执行这个配方。</MX_QH_RecipeRequiresQinghe>
-  <MX_QH_CustomBookThoughtBenefit> - 阅读时获得心情：读过荷雨亭曲艺</MX_QH_CustomBookThoughtBenefit>
 
   <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>开发者测试用：手动为昭离增加10点因果。</MX_ZL_DebugAddKarmaDesc>
