@@ -464,7 +464,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             // Visual flight only: focus damage has already resolved above.
-            SpawnVisual(MingyuanBowVisualKind.FocusShot, direction, 12, null, null, targetPosition);
+            SpawnVisual(MingyuanBowVisualKind.FocusShot, direction, 18, null, null, targetPosition);
             SpawnMoteAt(emitter, PropsBow?.focusMuzzleFlashMote, PropsBow?.focusMuzzleFlashScale ?? 0.24f);
             PlaySound(PropsBow?.focusFireSound);
             return true;
@@ -896,7 +896,8 @@ namespace MiliraXian.Characters.Mingyuan
                     MingyuanBowVisualDrawer.DrawFocusCharge(source.DrawPos, focusDirection, progress);
                     if (focusTarget != null)
                     {
-                        MingyuanBowVisualDrawer.DrawFocusAim(source.DrawPos, focusTarget.DrawPos, focusDirection);
+                        MingyuanBowVisualDrawer.DrawFocusAim(
+                            source.DrawPos, focusTarget.DrawPos, focusDirection, progress, age / 60f);
                     }
                     break;
                 case MingyuanBowVisualKind.RadiationWarning:
@@ -926,10 +927,12 @@ namespace MiliraXian.Characters.Mingyuan
         private static readonly Color FocusColor = new(1f, 0.94f, 0.72f, 0.92f);
         private static readonly Color FlameColor = new(1f, 0.46f, 0.20f, 0.82f);
         private static readonly Color SmokeColor = new(0.44f, 0.20f, 0.11f, 0.52f);
+        private static readonly Color FocusLinkColor = new(0.68f, 0.075f, 0.025f, 0.96f);
 
         private static Material[] focusMaterials;
         private static Material[] flameMaterials;
         private static Material[] smokeMaterials;
+        private static Material[] focusLinkMaterials;
         private static readonly Material ArrowMaterial = MaterialPool.MatFrom(
             "MiliraXianMingyuan/Projectile/RainbowArrow", ShaderDatabase.Cutout);
 
@@ -937,10 +940,38 @@ namespace MiliraXian.Characters.Mingyuan
         {
             Vector3 direction = (end - start).Yto0();
             if (direction.sqrMagnitude < 0.001f) return;
-            Vector3 position = Vector3.Lerp(start, end, progress);
-            position.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
-            Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(direction), new Vector3(1.8f, 1f, 1.8f));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, ArrowMaterial, 0);
+            float distance = direction.magnitude;
+            direction /= distance;
+            start.y = end.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
+            // Six ticks of flight, then twelve ticks of fading trail/arrival sparks.
+            // This is presentation only; it never launches a damaging Projectile.
+            float flight = Mathf.Clamp01(progress * 3f);
+            float fade = 1f - Mathf.InverseLerp(1f / 3f, 1f, progress);
+            if (fade <= 0.001f) return;
+            Vector3 position = Vector3.Lerp(start, end, flight);
+            float tailLength = Mathf.Min(distance * flight, Mathf.Lerp(3f, 8f, flight));
+            Vector3 tail = position - direction * tailLength;
+            DrawFocusStroke(tail, position, 0.42f * fade, fade);
+            if (flight < 1f)
+            {
+                Matrix4x4 matrix = Matrix4x4.TRS(position + Vector3.up * 0.025f,
+                    Quaternion.LookRotation(direction), new Vector3(2.3f, 1f, 3.4f));
+                Graphics.DrawMesh(MeshPool.plane10, matrix, ArrowMaterial, 0);
+                DrawFocusSpark(position, direction, 0.5f, 1f);
+            }
+            else
+            {
+                float burst = Mathf.InverseLerp(1f / 3f, 1f, progress);
+                Vector3 center = end + Vector3.up * 0.03f;
+                DrawArc(center, direction, 0.25f + burst * 1.1f, 360f, 16,
+                    GetFlameMaterial(fade), 0.13f * fade);
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector3 ray = Rotate(direction, i * 45f);
+                    Vector3 spark = center + ray * (0.2f + burst * 1.45f);
+                    DrawFocusSpark(spark, ray, (0.22f + burst * 0.12f) * fade, fade);
+                }
+            }
         }
 
         public static Vector3 EmitterPosition(Vector3 pawnDrawPos, Vector3 direction)
@@ -950,11 +981,64 @@ namespace MiliraXian.Characters.Mingyuan
             return result;
         }
 
-        public static void DrawFocusAim(Vector3 origin, Vector3 target, Vector3 direction)
+        public static void DrawFocusAim(
+            Vector3 origin, Vector3 target, Vector3 direction, float progress = 0f, float ageSeconds = -1f)
         {
             Vector3 emitter = EmitterPosition(origin, direction);
             target.y = emitter.y;
-            GenDraw.DrawLineBetween(emitter, target, GetFlameMaterial(0.96f), 0.09f);
+            Vector3 path = (target - emitter).Yto0();
+            float distance = path.magnitude;
+            if (distance < 0.05f) return;
+            direction = path / distance;
+            float charge = Mathf.SmoothStep(0f, 1f, progress);
+            DrawFocusStroke(emitter, target, 0.20f + charge * 0.10f, 1f);
+            // Target previews show the line only. Charging adds deterministic mesh
+            // particles driven by game ticks, so pause/save/load do not desync them.
+            if (ageSeconds < 0f) return;
+            Vector3 side = new Vector3(direction.z, 0f, -direction.x);
+            int count = Mathf.Clamp(Mathf.CeilToInt(distance / 2.5f), 4, 18);
+            float phase = ageSeconds * (5f + 4f * charge) / distance;
+            for (int i = 0; i < count; i++)
+            {
+                float t = Mathf.Repeat(i / (float)count + phase, 1f);
+                float envelope = Mathf.Sin(t * Mathf.PI);
+                float orbit = ageSeconds * 7f + i * 2.4f;
+                Vector3 point = Vector3.Lerp(emitter, target, t)
+                    + side * (Mathf.Sin(orbit) * (0.10f + charge * 0.10f) * envelope);
+                point.y += 0.035f;
+                DrawFocusSpark(point, direction, 0.14f + charge * 0.11f,
+                    0.45f + envelope * 0.55f);
+            }
+            Vector3 targetCenter = target + Vector3.up * 0.035f;
+            DrawArc(targetCenter, direction, 0.65f - charge * 0.23f, 360f, 16,
+                GetFocusMaterial(0.5f + charge * 0.5f), 0.06f + charge * 0.025f);
+        }
+
+        private static void DrawFocusStroke(Vector3 start, Vector3 end, float width, float alpha)
+        {
+            if ((end - start).sqrMagnitude < 0.0001f || width <= 0.001f) return;
+            // Alpha blending keeps the saturated red silhouette visible on bright
+            // terrain; separate raised glow layers provide the hot gold center.
+            Material outline = GetMaterial(ref focusLinkMaterials, FocusLinkColor, ShaderDatabase.Transparent, alpha);
+            GenDraw.DrawLineBetween(start, end, outline, width);
+            start.y += 0.012f;
+            end.y += 0.012f;
+            GenDraw.DrawLineBetween(start, end, GetFlameMaterial(alpha), width * 0.52f);
+            start.y += 0.012f;
+            end.y += 0.012f;
+            GenDraw.DrawLineBetween(start, end, GetFocusMaterial(alpha), width * 0.18f);
+        }
+
+        private static void DrawFocusSpark(Vector3 point, Vector3 direction, float size, float alpha)
+        {
+            if (size <= 0.001f || alpha <= 0.001f) return;
+            Vector3 along = direction * size;
+            Vector3 across = new Vector3(direction.z, 0f, -direction.x) * size * 0.38f;
+            GenDraw.DrawLineBetween(point - along, point + along, GetFlameMaterial(alpha), size * 0.46f);
+            point.y += 0.006f;
+            Material core = GetFocusMaterial(alpha);
+            GenDraw.DrawLineBetween(point - along * 0.65f, point + along * 0.65f, core, size * 0.2f);
+            GenDraw.DrawLineBetween(point - across, point + across, core, size * 0.2f);
         }
 
         public static void DrawFocusCharge(Vector3 origin, Vector3 direction, float progress)
