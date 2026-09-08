@@ -3,15 +3,13 @@
   <MX_QH_LuoshenContractMaintained.stages.0.label>洛神契：相守</MX_QH_LuoshenContractMaintained.stages.0.label>
   <MX_QH_LuoshenContractMaintained.stages.0.description>与{PAWN_nameDef}在洛神的见证下结下了良缘，和{PAWN_nameDef}在一起的感觉令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
   <MX_QH_LuoshenContractMaintained.stages.1.label>洛水之仪</MX_QH_LuoshenContractMaintained.stages.1.label>
-  <MX_QH_LuoshenContractMaintained.stages.1.description>“髣髴兮若轻云之蔽月，飘飖兮若流风之回雪”</MX_QH_LuoshenContractMaintained.stages.1.description>
+  <MX_QH_LuoshenContractMaintained.stages.1.description>——“髣髴兮若轻云之蔽月，飘飖兮若流风之回雪”</MX_QH_LuoshenContractMaintained.stages.1.description>
   <MX_QH_LuoshenContractBroken.stages.0.label>洛神契破碎 ({0})</MX_QH_LuoshenContractBroken.stages.0.label>
   <MX_QH_LuoshenContractBroken.stages.0.description>我与{OTHERPAWN_nameDef}维系的契约已经破碎，曾经共鸣的声音只余空响。</MX_QH_LuoshenContractBroken.stages.0.description>
   <MX_QH_QingheInstrumentPerformance.stages.0.label>倾听清荷的演奏</MX_QH_QingheInstrumentPerformance.stages.0.label>
-  <MX_QH_QingheInstrumentPerformance.stages.0.description>清荷的乐声在屋内缓缓流转，令人心绪安宁。</MX_QH_QingheInstrumentPerformance.stages.0.description>
-  <MX_QH_LotusRainPavilionOperaRead.stages.0.label>读过荷雨亭曲艺</MX_QH_LotusRainPavilionOperaRead.stages.0.label>
-  <MX_QH_LotusRainPavilionOperaRead.stages.0.description>荷雨亭曲艺的文字清雅舒缓，让我的心情也变得舒展开了。</MX_QH_LotusRainPavilionOperaRead.stages.0.description>
-  <MX_QH_NoLotusPond.stages.0.label>没有荷池</MX_QH_NoLotusPond.stages.0.label>
+  <MX_QH_QingheInstrumentPerformance.stages.0.description>清荷婉转的乐声在屋内缓缓流转，令人心绪安宁。</MX_QH_QingheInstrumentPerformance.stages.0.description>
+  <MX_QH_NoLotusPond.stages.0.label>缺少荷池</MX_QH_NoLotusPond.stages.0.label>
   <MX_QH_NoLotusPond.stages.0.description>我需要一个合适的修行之所。</MX_QH_NoLotusPond.stages.0.description>
-  <MX_QH_LotusPavilionBeautyLow.stages.0.label>荷雨亭不够雅致</MX_QH_LotusPavilionBeautyLow.stages.0.label>
+  <MX_QH_LotusPavilionBeautyLow.stages.0.label>荷雨亭不够美观</MX_QH_LotusPavilionBeautyLow.stages.0.label>
   <MX_QH_LotusPavilionBeautyLow.stages.0.description>我的修行地点环境非常糟糕，这让我很难过。</MX_QH_LotusPavilionBeautyLow.stages.0.description>
 </LanguageData>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_FlowerCourtDesignLocked>The lotus pond design has not been acquired.</MX_QH_FlowerCourtDesignLocked>
+  <MX_QH_FlowerCourtDesignUnlockedMessage>Lotus pond design acquired.</MX_QH_FlowerCourtDesignUnlockedMessage>
+  <MX_QH_FlowerCourtLotusPondBuiltMessage>The lotus pond is complete.</MX_QH_FlowerCourtLotusPondBuiltMessage>
+  <MX_QH_FlowerCourtQingheArrivedLetterLabel>Qinghe arrives</MX_QH_FlowerCourtQingheArrivedLetterLabel>
+  <MX_QH_FlowerCourtQingheArrivedLetterText>The water in the lotus pond has stilled. Qinghe has followed this new court to the colony and is willing to stay. She still needs a decent Lotus Rain Pavilion before she can truly settle in.</MX_QH_FlowerCourtQingheArrivedLetterText>
+  <MX_QH_FlowerCourtSecondStageLetterLabel>Prepare the pavilion</MX_QH_FlowerCourtSecondStageLetterLabel>
+  <MX_QH_FlowerCourtSecondStageLetterText>The lotus pond has been built. Arrange its room into a decent Lotus Rain Pavilion where Qinghe can settle in.</MX_QH_FlowerCourtSecondStageLetterText>
+  <MX_QH_FlowerCourtCompletedLetterLabel>Flower Court established</MX_QH_FlowerCourtCompletedLetterLabel>
+  <MX_QH_FlowerCourtCompletedLetterText>The Lotus Rain Pavilion is complete. Qinghe now has a new home in this land.</MX_QH_FlowerCourtCompletedLetterText>
+  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>Flower Court</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
+  <MX_QH_FlowerCourtAutoAcceptedLetterText>Qinghe has prepared the lotus pond design. You can now build a lotus pond from the Misc category and use it as the core of the new Flower Court.</MX_QH_FlowerCourtAutoAcceptedLetterText>
+</LanguageData>

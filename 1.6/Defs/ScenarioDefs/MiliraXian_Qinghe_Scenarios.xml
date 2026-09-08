@@ -4,11 +4,11 @@
     <ScenarioDef ParentName="ScenarioBase">
         <defName>MXNL_QingheFlowerCourtStart</defName>
         <label>花庭初绽</label>
-        <description><![CDATA[日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，清荷离开熟悉的庭院，独自来到这片与世隔绝的地面，想要亲手让花神的恩泽在陌生的土地上生根。
+        <description><![CDATA[日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，你离开熟悉的庭院，独自来到这片与世隔绝的地面，想要追寻她的足迹。
 
-这一次，只有清荷自己、随身的少量行装，以及一片尚未开辟的土地。]]></description>
+这一次，只有你自己、随身的少量行装，以及一片尚未开辟的土地。]]></description>
         <scenario>
-            <summary><![CDATA[一位花神使来到边缘世界，尝试让花神的恩泽在这片陌生的土地上生根。]]></summary>
+            <summary><![CDATA[花丛中的仙子来到边缘世界，尝试让百花的恩泽在这片陌生的土地上生根。]]></summary>
             <playerFaction Inherit="false">
                 <def>PlayerFaction</def>
                 <factionDef>Milira_PlayerFaction</factionDef>

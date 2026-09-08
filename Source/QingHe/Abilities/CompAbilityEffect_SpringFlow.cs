@@ -2,6 +2,7 @@ using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Things;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 using UnityEngine;
 using Verse;
 
@@ -24,6 +25,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_SpringFlow : CompAbilityEffect
     {
         public new CompProperties_AbilitySpringFlow Props => (CompProperties_AbilitySpringFlow)props;
+
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
 
         public override bool GizmoDisabled(out string reason)
         {

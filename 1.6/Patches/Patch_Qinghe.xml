@@ -10,8 +10,7 @@
                 <name>milira halo Qinghe</name>
                 <userCustomizable>false</userCustomizable>
                 <!-- 改 -->
-                <!--TODO: 改清荷的光环 -->
-                <path>MiliraXianNeiyu/PawnNeiyu/Halo/MiliraXianHaloNeiyu</path>
+                <path>MiliraXianQinghe/Pawn/Addon/qinghe_halo</path>
                 <inFrontOfBody>true</inFrontOfBody>
                 <layerInvert>true</layerInvert>
                 <shaderType>MoteGlow</shaderType>

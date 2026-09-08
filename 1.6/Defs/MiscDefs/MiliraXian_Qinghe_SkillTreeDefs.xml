@@ -2,14 +2,50 @@
 <Defs>
   <MiliraXian.Characters.SkillNodeCategoryDef>
     <defName>MX_QH_Category_Qinghe</defName>
-    <label>花神恩典</label>
-    <description>清荷的技能类别，随花神之恩典等级自动解锁。</description>
+    <label>花之舞</label>
+    <description>清荷的专属技能类别。</description>
     <displayOrder>0</displayOrder>
   </MiliraXian.Characters.SkillNodeCategoryDef>
   <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraEnhancement1</defName>
+    <label>灵气强化I</label>
+    <description>——被动效果：灵气护盾容量 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>55</displayOrder>
+    <requiredGraceLevel>6</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldMaxEnergyFactor>0.5</MX_QH_LotusShieldMaxEnergyFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraEnhancement2</defName>
+    <label>灵气强化II</label>
+    <description>——被动效果：灵气护盾容量 +100%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>75</displayOrder>
+    <requiredGraceLevel>13</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldMaxEnergyFactor>1.0</MX_QH_LotusShieldMaxEnergyFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_AuraCirculation</defName>
+    <label>灵气流转</label>
+    <description>——被动效果：灵气护盾受击回复延迟变为0秒。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>85</displayOrder>
+    <requiredGraceLevel>15</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_LotusShieldHitRegenDelayFactor>-1.0</MX_QH_LotusShieldHitRegenDelayFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerEnvoy</defName>
-    <label>花神使</label>
-    <description>清荷身为花神使的根基：莲华护盾常伴身侧，涓流抚平旧伤，花神之垂怜守候于将殒之际。\n\n——初始习得飞花令：春泉涌流、霜月镜，与剑技：镜花水月。</description>
+    <label>花中仙</label>
+    <description>我与盛花之景本为一体。随风而动，随水而居，此为仙境之灵气。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>0</displayOrder>
@@ -18,13 +54,24 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlyingFlowerDecree</defName>
     <label>飞花令</label>
-    <description>习得春泉涌流与镜花水月，并开启清荷的资源面板。</description>
+    <description>习得春泉涌流。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>10</displayOrder>
     <requiredGraceLevel>1</requiredGraceLevel>
     <grantedAbilities>
       <li>MX_QH_SpringFlow</li>
+    </grantedAbilities>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_SwordDance</defName>
+    <label>剑舞</label>
+    <description>习得镜花水月。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>15</displayOrder>
+    <requiredGraceLevel>1</requiredGraceLevel>
+    <grantedAbilities>
       <li>MX_QH_IllusoryReflection</li>
     </grantedAbilities>
   </MiliraXian.Characters.SkillNodeDef>
@@ -44,15 +91,15 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>25</displayOrder>
-    <requiredGraceLevel>4</requiredGraceLevel>
+    <requiredGraceLevel>5</requiredGraceLevel>
     <grantedAbilities>
       <li>MX_QH_LunarMirror</li>
     </grantedAbilities>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_Jueying</defName>
-    <label>剑舞</label>
-    <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：必杀剑：落樱。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时消耗全部剑压发动7次强力斩击，剑压不足1层时也可发动，但斩击的次数和威力将大幅削弱。</description>
+    <label>落樱</label>
+    <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：剑舞：落樱。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时消耗全部剑压发动7次强力斩击，剑压不足1层时也可发动，但斩击的次数和威力将大幅削弱。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>30</displayOrder>
@@ -64,16 +111,16 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_Luoshenfu</defName>
     <label>洛水之仪</label>
-    <description>洛水之上，神女证誓。\n\n——习得被动特性：洛水之仪。清荷若已有配偶，将与对方缔结洛神契，双方心绪安宁；缘分未至时，亦心有所待。</description>
+    <description>洛水之上，神女证誓。\n\n——习得被动特性：洛水之仪。清荷会与伴侣建立契约，大幅提升双方的心情，若关系被破坏，心情将大幅下降一段时间。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>40</displayOrder>
-    <requiredGraceLevel>1</requiredGraceLevel>
+    <requiredGraceLevel>2</requiredGraceLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerMandate1</defName>
     <label>花令强化I</label>
-    <description>——花令的积累上限 +1。</description>
+    <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>50</displayOrder>
@@ -85,7 +132,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_BlessingCharge1</defName>
     <label>花神的怜惜I</label>
-    <description>——花神之垂怜的可积累次数 +1。</description>
+    <description>——被动效果：流水之形的充能次数 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>60</displayOrder>
@@ -94,7 +141,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_HardSoftBalance</defName>
     <label>刚柔并济</label>
-    <description>莲华护盾单次承伤最多消耗20点能量。剑模式的扣能减半效果仍然生效。</description>
+    <description>——被动效果：灵气护盾单次承受伤害最多消耗20点能量。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>65</displayOrder>
@@ -104,9 +151,21 @@
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_SpellEffectEnhancement1</defName>
+    <label>法术效果强化I</label>
+    <description>——被动效果：法术效果系数 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>66</displayOrder>
+    <requiredGraceLevel>16</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerMandate2</defName>
     <label>花令强化II</label>
-    <description>——花令的积累上限 +1。</description>
+    <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>70</displayOrder>
@@ -116,9 +175,21 @@
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
+    <defName>MX_QH_Node_SpellEffectEnhancement2</defName>
+    <label>法术效果强化II</label>
+    <description>——被动效果：法术效果系数 +50%。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <displayOrder>78</displayOrder>
+    <requiredGraceLevel>22</requiredGraceLevel>
+    <statOffsets>
+      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
+    </statOffsets>
+  </MiliraXian.Characters.SkillNodeDef>
+  <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_BlessingCharge2</defName>
     <label>花神的怜惜II</label>
-    <description>——花神之垂怜的可积累次数 +1。</description>
+    <description>——被动效果：流水之形的充能次数 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>80</displayOrder>
@@ -126,8 +197,8 @@
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_LotusShield</defName>
-    <label>莲华护盾</label>
-    <description>清荷受到十二花神的庇护，能自然产生一面莲华护盾（容量500，每秒回充15，破碎后失效3秒）。护盾单次承伤最多消耗20点，超出的伤害会被直接拦下。</description>
+    <label>灵气加护</label>
+    <description>——被动效果：启用常驻护盾能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>100</displayOrder>
@@ -136,8 +207,8 @@
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_DivineBlessing</defName>
-    <label>花神之垂怜</label>
-    <description>受到致命或可能摧毁身体部位的伤害时自动触发：抵消此次伤害、修复全部损伤，并短暂获得心灵隐形与无敌。基础可积累1次充能，恩典节点可提升至3次。</description>
+    <label>流水之形</label>
+    <description>——被动效果：启用受可能致命或损失部位的伤害时的免伤能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>101</displayOrder>
@@ -147,7 +218,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_Trickle</defName>
     <label>涓流</label>
-    <description>清荷会持续缓慢恢复伤口，并逐步修复永久损伤与缺失的身体部位。</description>
+    <description>——被动效果：启用伤口持续恢复能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>102</displayOrder>
@@ -157,7 +228,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_Stillness</defName>
     <label>静思</label>
-    <description>冥想、读书与睡眠都会积累静思。清荷进行需要品质的工作时：静思未满则不消耗，并有概率使品质+1；静思蓄满则消耗全部并使品质+2。</description>
+    <description>——被动效果：启用积累静思和使用静思提高制作品质的能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>105</displayOrder>
@@ -166,8 +237,8 @@
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_QixiRitual</defName>
-    <label>乞巧仪式</label>
-    <description>每年可在荷池举行一次乞巧仪式，参与者有机会获得灵感，清荷还会得到一本《荷雨亭曲艺》。</description>
+    <label>七夕节庆</label>
+    <description>每年可在荷池举行一次乞巧仪式，参与者可以获得手工和艺术经验，并有机会获得灵感。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>107</displayOrder>

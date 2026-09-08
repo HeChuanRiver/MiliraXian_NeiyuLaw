@@ -82,10 +82,10 @@
         </equippedStatOffsets>
     </ThingDef>
 
-    <!-- 清荷占位常服：暂时复用霓羽常服纹理 -->
+    <!-- 清荷：常服 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_QingheNormal</defName>
-        <label>清荷·常服</label>
+        <label>花仙子的襦裙</label>
         <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
@@ -344,21 +344,21 @@
         
     </ThingDef>
 
-    <!-- 清荷占位头饰：暂时复用霓羽珠饰纹理 -->
+    <!-- 清荷头饰 -->
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_QingheHeaddress</defName>
-        <label>清荷·花饰</label>
+        <label>荷花头花</label>
         <description>清荷日常佩戴的花饰。样式是她最爱的荷花，典雅而不失清新，散发出一缕让人安心的清香。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/EarringsZhenzhu</texPath>
+            <texPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female_south</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(1,1)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/EarringsZhenzhu</uiIconPath>
+        <uiIconPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female_south</uiIconPath>
 
         <statBases>
             <Mass>0.05</Mass>
@@ -380,10 +380,19 @@
                 <li>Overhead</li>
             </layers>
 
-            <wornGraphicPath>MiliraXianNeiyu/ApparelNeiyu/EarringsZhenzhu</wornGraphicPath>
+            <wornGraphicPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female</wornGraphicPath>
             <tags>
                 <li>MX_QingheHeaddress</li>
             </tags>
+
+            <drawData>
+                <dataNorth>
+                    <layer>49</layer>
+                </dataNorth>
+                <dataWest>
+                    <layer>49</layer>
+                </dataWest>
+            </drawData>
 
             <renderNodeProperties>
             </renderNodeProperties>

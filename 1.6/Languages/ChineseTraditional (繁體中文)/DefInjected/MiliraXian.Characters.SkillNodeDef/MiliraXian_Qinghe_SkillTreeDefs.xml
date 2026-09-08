@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <MX_QH_Node_SpellEffectEnhancement1.label>法術效果強化I</MX_QH_Node_SpellEffectEnhancement1.label>
+  <MX_QH_Node_SpellEffectEnhancement1.description>——被動效果：法術效果係數 +50%。</MX_QH_Node_SpellEffectEnhancement1.description>
+  <MX_QH_Node_SpellEffectEnhancement2.label>法術效果強化II</MX_QH_Node_SpellEffectEnhancement2.label>
+  <MX_QH_Node_SpellEffectEnhancement2.description>——被動效果：法術效果係數 +50%。</MX_QH_Node_SpellEffectEnhancement2.description>
   <MX_QH_Node_FlowerEnvoy.label>花神使</MX_QH_Node_FlowerEnvoy.label>
   <MX_QH_Node_FlowerEnvoy.description>清荷身為花神使的根基：蓮華護盾常伴身側，涓流撫平舊傷，花神之垂憐守候於將殞之際。\n\n——初始習得飛花令：春泉湧流、霜月鏡，與劍技：鏡花水月。</MX_QH_Node_FlowerEnvoy.description>
   <MX_QH_Node_Jueying.label>劍舞</MX_QH_Node_Jueying.label>
@@ -29,5 +33,5 @@
   <MX_QH_Trait_DivineGrace.label>花神之恩典</MX_QH_Trait_DivineGrace.label>
   <MX_QH_Trait_DivineGrace.description>清荷製作出大師級或傳奇級物品時，恩典等級+1（上限24級）。恩典會逐步提升清荷的基礎屬性，並按下方時間軸自動解鎖節點。</MX_QH_Trait_DivineGrace.description>
   <MX_QH_Trait_QixiRitual.label>乞巧儀式</MX_QH_Trait_QixiRitual.label>
-  <MX_QH_Trait_QixiRitual.description>每年可在荷池舉行一次乞巧儀式，參與者有機會獲得靈感，清荷還會得到一本《荷雨亭曲藝》。</MX_QH_Trait_QixiRitual.description>
+  <MX_QH_Trait_QixiRitual.description>每年可在荷池舉行一次乞巧儀式，參與者可以獲得手工和藝術經驗，並有機會獲得靈感。</MX_QH_Trait_QixiRitual.description>
 </LanguageData>

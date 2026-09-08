@@ -3,6 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using MiliraXian.Characters.QingHe.Things.Weapons;
 
 namespace MiliraXian.Characters.QingHe.Abilities
 {
@@ -77,6 +78,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         private ASSlash slashAction;
 
         public new CompProperties_AbilityAscentSlash Props => (CompProperties_AbilityAscentSlash)props;
+
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
 
         private float AbilityRange => Mathf.Max(0f, parent?.def?.verbProperties?.range ?? 0f);
 

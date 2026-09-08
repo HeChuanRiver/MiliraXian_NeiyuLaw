@@ -124,6 +124,7 @@
   <MX_QH_DevAddDivineGraceLevelLabel>DEV: Divine Grace +1</MX_QH_DevAddDivineGraceLevelLabel>
   <MX_QH_DevAddDivineGraceLevelDesc>Directly raises Divine Grace by 1 level to test the staged stat path.</MX_QH_DevAddDivineGraceLevelDesc>
   <MX_QH_DivineGraceGainedMessage>Qinghe's Flower-God Grace has risen to level {0}.</MX_QH_DivineGraceGainedMessage>
+  <MX_QH_DivineGraceGainedLetterLabel>Aura Mastery Increased</MX_QH_DivineGraceGainedLetterLabel>
   <MX_QH_FlowerCourtTuneTitle>Four-Season Tuning</MX_QH_FlowerCourtTuneTitle>
   <MX_QH_FlowerCourtGraceLine>Flower-God Grace: {0} / {1}</MX_QH_FlowerCourtGraceLine>
   <MX_QH_ResonanceTab_Label>Resonance</MX_QH_ResonanceTab_Label>
@@ -208,20 +209,8 @@
   <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>Only Qinghe can host the Qixi rite.</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>The Qixi rite is still on cooldown. Time remaining: {0}.</MX_QH_QixiCooldown>
-  <MX_QH_QixiOutcomeBook>Received a copy of "Lotus Rain Pavilion Artistry".</MX_QH_QixiOutcomeBook>
   <MX_QH_QixiOutcomeInspirations>Inspired participant(s): {0}.</MX_QH_QixiOutcomeInspirations>
   <MX_QH_QixiInspirationReason>Inspired by Qinghe's Qixi rite.</MX_QH_QixiInspirationReason>
-  <MX_QH_FlowerCourtDesignLocked>The lotus pond design has not been acquired.</MX_QH_FlowerCourtDesignLocked>
-  <MX_QH_FlowerCourtDesignUnlockedMessage>Lotus pond design acquired.</MX_QH_FlowerCourtDesignUnlockedMessage>
-  <MX_QH_FlowerCourtLotusPondBuiltMessage>The lotus pond is complete.</MX_QH_FlowerCourtLotusPondBuiltMessage>
-  <MX_QH_FlowerCourtQingheArrivedLetterLabel>Qinghe arrives</MX_QH_FlowerCourtQingheArrivedLetterLabel>
-  <MX_QH_FlowerCourtQingheArrivedLetterText>The water in the lotus pond has stilled. Qinghe has followed this new court to the colony and is willing to stay. She still needs a decent Lotus Rain Pavilion before she can truly settle in.</MX_QH_FlowerCourtQingheArrivedLetterText>
-  <MX_QH_FlowerCourtSecondStageLetterLabel>Prepare the pavilion</MX_QH_FlowerCourtSecondStageLetterLabel>
-  <MX_QH_FlowerCourtSecondStageLetterText>The lotus pond has been built. Arrange its room into a decent Lotus Rain Pavilion. When it is ready, you will receive a copy of "Lotus Rain Pavilion Artistry".</MX_QH_FlowerCourtSecondStageLetterText>
-  <MX_QH_FlowerCourtCompletedLetterLabel>Flower Court established</MX_QH_FlowerCourtCompletedLetterLabel>
-  <MX_QH_FlowerCourtCompletedLetterText>The Lotus Rain Pavilion has settled into place. In response, a copy of "Lotus Rain Pavilion Artistry" has appeared beside the lotus pond.</MX_QH_FlowerCourtCompletedLetterText>
-  <MX_QH_FlowerCourtAutoAcceptedLetterLabel>Flower Court</MX_QH_FlowerCourtAutoAcceptedLetterLabel>
-  <MX_QH_FlowerCourtAutoAcceptedLetterText>Qinghe has prepared the lotus pond design. You can now build a lotus pond from the Misc category and use it as the core of the new Flower Court.</MX_QH_FlowerCourtAutoAcceptedLetterText>
 
   <MX_ZL_DebugAddKarmaLabel>DEV: +10 Karma</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>Developer test: manually add 10 Karma to Zhaoli.</MX_ZL_DebugAddKarmaDesc>
@@ -305,6 +294,4 @@
   <MX_ZL_RaidTransitionRemaining>Phase transition remaining:</MX_ZL_RaidTransitionRemaining>
   <MX_ZL_RaidNextWarp>Next warp:</MX_ZL_RaidNextWarp>
   <MX_ZL_RaidPhaseTransitionStarted>{0} is shifting into phase {1}! She is invulnerable during the transition and gains {2} layers of Deathward Shield.</MX_ZL_RaidPhaseTransitionStarted>
-  <MX_QH_RecipeRequiresQinghe>Only Qinghe can do this recipe.</MX_QH_RecipeRequiresQinghe>
-  <MX_QH_CustomBookThoughtBenefit> - Reading grants mood: read Lotus Rain Pavilion opera</MX_QH_CustomBookThoughtBenefit>
 </LanguageData>

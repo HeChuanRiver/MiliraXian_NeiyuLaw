@@ -64,9 +64,6 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(InspirationWorker), nameof(InspirationWorker.CommonalityFor)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_InspirationWorker_CommonalityFor_Postfix)));
 
-            patcher.Patch(AccessTools.Method(typeof(Bill), nameof(Bill.PawnAllowedToStartAnew)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Bill_PawnAllowedToStartAnew_Postfix)));
-
             patcher.Patch(AccessTools.Method(typeof(MeditationUtility), nameof(MeditationUtility.AllMeditationSpotCandidates)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix)));
 
@@ -297,28 +294,6 @@ namespace MiliraXian.Characters.QingHe
             {
                 __result *= 2f;
             }
-        }
-
-        public static void Patch_Bill_PawnAllowedToStartAnew_Postfix(Bill __instance, Pawn p, ref bool __result)
-        {
-            if (!__result || __instance?.recipe == null)
-            {
-                return;
-            }
-
-            MX_QingheRecipeRequirementExtension extension = __instance.recipe.GetModExtension<MX_QingheRecipeRequirementExtension>();
-            if (extension?.allowedPawnKinds.NullOrEmpty() != false)
-            {
-                return;
-            }
-
-            if (p?.kindDef != null && extension.allowedPawnKinds.Contains(p.kindDef))
-            {
-                return;
-            }
-
-            JobFailReason.Is(extension.failureReasonKey.Translate());
-            __result = false;
         }
 
         public static void Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix(

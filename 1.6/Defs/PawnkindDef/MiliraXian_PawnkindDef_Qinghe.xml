@@ -5,7 +5,7 @@
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
         <!-- Lotus Rosalia -->
-        <label>花神使</label>
+        <label>花中仙子</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -159,6 +159,59 @@
 
         <!-- modExtensions是用来使用的非官方类的地方 -->
         <modExtensions>
+            <li Class="MiliraXian.Characters.Biography.BiographyExtension">
+                <stories>
+                    <li>
+                        <storyName>SpringWaterTune</storyName>
+                        <label>春水调</label>
+                        <storyText>清荷记下荷雨初歇时的水声与轻拍。读到此卷时，仿佛能听见春水漫过石阶，细碎花影随声摇动。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                    <li>
+                        <storyName>FlowerShadowNotes</storyName>
+                        <label>花影记</label>
+                        <storyText>这卷手稿写的是花影、步法与短曲之间的呼应。句子不求铺张，却处处留下清荷对庭中草木的细致观察。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                    <li>
+                        <storyName>ListeningToRain</storyName>
+                        <label>听雨小谱</label>
+                        <storyText>清荷把雨落荷叶的节拍拆成数段短谱，又在页边附上演奏时的心得。文字安静，读来却有微雨入亭的回响。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                    <li>
+                        <storyName>LotusSteps</storyName>
+                        <label>莲步散声</label>
+                        <storyText>这是一篇兼记舞步与曲调的书卷。清荷以很轻的笔触描摹衣袂、铃音和水面涟漪，使寻常曲艺多了几分雅致。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                    <li>
+                        <storyName>FeatherRobeByTheLotus</storyName>
+                        <label>羽衣听荷</label>
+                        <storyText>清荷把荷雨亭中的水声写成底韵，又在页边记下霓羽起势时衣袂掠风的轻响。整卷读来像一场隔水相和的短曲。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                    <li>
+                        <storyName>FlameThroughRain</storyName>
+                        <label>离火照雨</label>
+                        <storyText>这卷手稿写雨夜灯火与弦声相映。清荷将昭离谈及的余烬、命火与回声化作曲中转折，使荷亭旧调多了一分明亮锋芒。</storyText>
+                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_PlayerFaction" />
+                        <rewards />
+                        <notifyOnUnlock>false</notifyOnUnlock>
+                    </li>
+                </stories>
+            </li>
+
             <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
             <!-- The Following classes must be included!!! ↓↓↓ -->
             <!-- 以下class必须全部填写，绝对不能漏任何一个 ↓↓↓ -->

@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MiliraXian_Qinghe.label>花神使</MiliraXian_Qinghe.label>
+  <MiliraXian_Qinghe.label>花中仙子</MiliraXian_Qinghe.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.0.label>春水调</MiliraXian_Qinghe.modExtensions.0.stories.0.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.0.storyText>清荷记下荷雨初歇时的水声与轻拍。读到此卷时，仿佛能听见春水漫过石阶，细碎花影随声摇动。</MiliraXian_Qinghe.modExtensions.0.stories.0.storyText>
+  <MiliraXian_Qinghe.modExtensions.0.stories.1.label>花影记</MiliraXian_Qinghe.modExtensions.0.stories.1.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.1.storyText>这卷手稿写的是花影、步法与短曲之间的呼应。句子不求铺张，却处处留下清荷对庭中草木的细致观察。</MiliraXian_Qinghe.modExtensions.0.stories.1.storyText>
+  <MiliraXian_Qinghe.modExtensions.0.stories.2.label>听雨小谱</MiliraXian_Qinghe.modExtensions.0.stories.2.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.2.storyText>清荷把雨落荷叶的节拍拆成数段短谱，又在页边附上演奏时的心得。文字安静，读来却有微雨入亭的回响。</MiliraXian_Qinghe.modExtensions.0.stories.2.storyText>
+  <MiliraXian_Qinghe.modExtensions.0.stories.3.label>莲步散声</MiliraXian_Qinghe.modExtensions.0.stories.3.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.3.storyText>这是一篇兼记舞步与曲调的书卷。清荷以很轻的笔触描摹衣袂、铃音和水面涟漪，使寻常曲艺多了几分雅致。</MiliraXian_Qinghe.modExtensions.0.stories.3.storyText>
+  <MiliraXian_Qinghe.modExtensions.0.stories.4.label>羽衣听荷</MiliraXian_Qinghe.modExtensions.0.stories.4.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.4.storyText>清荷把荷雨亭中的水声写成底韵，又在页边记下霓羽起势时衣袂掠风的轻响。整卷读来像一场隔水相和的短曲。</MiliraXian_Qinghe.modExtensions.0.stories.4.storyText>
+  <MiliraXian_Qinghe.modExtensions.0.stories.5.label>离火照雨</MiliraXian_Qinghe.modExtensions.0.stories.5.label>
+  <MiliraXian_Qinghe.modExtensions.0.stories.5.storyText>这卷手稿写雨夜灯火与弦声相映。清荷将昭离谈及的余烬、命火与回声化作曲中转折，使荷亭旧调多了一分明亮锋芒。</MiliraXian_Qinghe.modExtensions.0.stories.5.storyText>
 </LanguageData>

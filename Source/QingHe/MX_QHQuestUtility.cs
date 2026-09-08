@@ -334,30 +334,13 @@ namespace MiliraXian.Characters.QingHe
 
         private void CompleteFlowerCourt(Building lotusPond)
         {
-            Thing reward = MakeOperaBookReward();
-            if (reward != null)
-            {
-                GenPlace.TryPlaceThing(reward, lotusPond.Position, lotusPond.Map, ThingPlaceMode.Near);
-            }
-
             Find.LetterStack.ReceiveLetter(
                 "MX_QH_FlowerCourtCompletedLetterLabel".Translate(),
                 "MX_QH_FlowerCourtCompletedLetterText".Translate(),
                 LetterDefOf.PositiveEvent,
-                reward ?? lotusPond);
+                lotusPond);
             Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.MarkCompleted();
             quest.End(QuestEndOutcome.Success, sendLetter: false, playSound: true);
-        }
-
-        private static Thing MakeOperaBookReward()
-        {
-            if (MX_QHDefOf.MX_QH_Book == null)
-            {
-                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe opera book ThingDef.");
-                return null;
-            }
-
-            return ThingMaker.MakeThing(MX_QHDefOf.MX_QH_Book);
         }
 
         public override void ExposeData()
