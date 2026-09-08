@@ -901,15 +901,12 @@ namespace MiliraXian.Characters.Mingyuan
                     }
                     break;
                 case MingyuanBowVisualKind.RadiationWarning:
-                    MingyuanBowVisualDrawer.DrawSectorWarning(
-                        source.DrawPos,
-                        direction,
-                        range,
-                        arcDegrees,
-                        0.55f + 0.45f * Mathf.PingPong(progress * 4f, 1f));
+                    MingyuanBowVisualDrawer.DrawScatterCharge(source.DrawPos, direction, arcDegrees, progress);
                     break;
                 case MingyuanBowVisualKind.RadiationBlast:
-                    MingyuanBowVisualDrawer.DrawSectorBlast(source.DrawPos, direction, range, arcDegrees, progress);
+                    // Released arrows stay anchored to the saved controller position,
+                    // rather than sliding across the map when the archer moves.
+                    MingyuanBowVisualDrawer.DrawSectorBlast(drawLoc, direction, range, arcDegrees, progress);
                     break;
                 case MingyuanBowVisualKind.FocusShot:
                     MingyuanBowVisualDrawer.DrawFocusArrow(shotStart, shotEnd, progress);
@@ -926,12 +923,11 @@ namespace MiliraXian.Characters.Mingyuan
 
         private static readonly Color FocusColor = new(1f, 0.94f, 0.72f, 0.92f);
         private static readonly Color FlameColor = new(1f, 0.46f, 0.20f, 0.82f);
-        private static readonly Color SmokeColor = new(0.44f, 0.20f, 0.11f, 0.52f);
         private static readonly Color FocusLinkColor = new(0.68f, 0.075f, 0.025f, 0.96f);
 
         private static Material[] focusMaterials;
         private static Material[] flameMaterials;
-        private static Material[] smokeMaterials;
+        private static Material[] scatterArrowMaterials;
         private static Material[] focusLinkMaterials;
         private static readonly Material ArrowMaterial = MaterialPool.MatFrom(
             "MiliraXianMingyuan/Projectile/RainbowArrow", ShaderDatabase.Cutout);
@@ -1087,43 +1083,124 @@ namespace MiliraXian.Characters.Mingyuan
             origin.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
             direction.y = 0f;
             direction.Normalize();
-            float fade = 1f - Mathf.SmoothStep(0.58f, 1f, progress);
-            if (fade <= 0.01f)
+            if (direction.sqrMagnitude < 0.001f || radius <= 0f || progress >= 1f) return;
+            Vector3 emitter = EmitterPosition(origin, direction);
+            // Two interleaved volleys: eleven long arrows define the whole fan,
+            // eight later arrows fill its gaps and middle distance. No gameplay RNG.
+            for (int wave = 0; wave < 2; wave++)
             {
-                return;
-            }
-
-            for (int band = 0; band < 3; band++)
-            {
-                float bandProgress = Mathf.Clamp01(progress * 1.22f - band * 0.13f);
-                if (bandProgress <= 0.01f)
+                int count = wave == 0 ? 11 : 8;
+                for (int i = 0; i < count; i++)
                 {
-                    continue;
-                }
+                    float spread = wave == 0 ? i / 10f * 2f - 1f : (i + 0.5f) / 8f * 2f - 1f;
+                    float delay = wave * 0.13f + Mathf.Abs(spread) * 0.055f + (i % 3) * 0.012f;
+                    float travel = 0.57f + (i % 4) * 0.022f + wave * 0.035f;
+                    float age = (progress - delay) / travel;
+                    if (age <= 0f || age >= 1.28f) continue;
+                    float fade = 1f - Mathf.SmoothStep(0.88f, 1.28f, age);
+                    float angle = spread * Mathf.Clamp(arcDegrees, 2f, 358f) * 0.5f;
+                    float reach = wave == 0 ? 0.96f + 0.04f * Mathf.Cos(i * 1.7f) : 0.76f + 0.09f * Mathf.Sin(i * 2.1f);
+                    Vector3 end = origin + Rotate(direction, angle) * (radius * reach);
+                    // Bezier handles start almost parallel at the bow, then open
+                    // outward. The tip follows the tangent, not the final ray.
+                    Vector3 handle1 = emitter + Rotate(direction, angle * 0.12f) * (radius * 0.25f);
+                    Vector3 handle2 = origin + Rotate(direction, angle * 0.72f) * (radius * reach * 0.72f);
+                    float headT = ScatterTravel(age);
+                    Vector3 head = ScatterPoint(emitter, handle1, handle2, end, headT);
+                    Vector3 tangent = ScatterTangent(emitter, handle1, handle2, end, headT);
+                    float size = (wave == 0 ? 1.5f : 1.25f) * (0.92f + 0.08f * Mathf.Sin(i * 2.4f));
 
-                float bandRadius = radius * Mathf.SmoothStep(0f, 1f, bandProgress);
-                float bandAlpha = fade * (1f - band * 0.18f);
-                Material flame = GetFlameMaterial(bandAlpha);
-                Material smoke = GetSmokeMaterial(bandAlpha * 0.7f);
-                DrawArc(origin, direction, bandRadius, arcDegrees, 18, flame, 0.16f - band * 0.025f);
-                if (bandRadius > 0.65f)
-                {
-                    DrawArc(origin, direction, bandRadius - 0.55f, arcDegrees, 18, smoke, 0.22f);
+                    // Sample the recent trajectory into a tapered ribbon; the tail
+                    // continues catching up after the arrow tip has dissolved.
+                    const int segments = 5;
+                    float tailAge = Mathf.Max(0f, age - 0.26f);
+                    Vector3 previous = ScatterPoint(emitter, handle1, handle2, end, ScatterTravel(tailAge));
+                    for (int segment = 1; segment <= segments; segment++)
+                    {
+                        float fraction = segment / (float)segments;
+                        float sampleAge = Mathf.Lerp(tailAge, age, fraction);
+                        Vector3 point = ScatterPoint(emitter, handle1, handle2, end, ScatterTravel(sampleAge));
+                        float width = (0.025f + fraction * 0.105f) * size * fade;
+                        float alpha = fade * fraction * (wave == 0 ? 0.9f : 0.7f);
+                        DrawScatterTrailSegment(previous, point, width, alpha);
+                        previous = point;
+                    }
+
+                    float arrowAlpha = 1f - Mathf.SmoothStep(0.94f, 1.07f, age);
+                    if (arrowAlpha > 0.01f)
+                        DrawScatterArrow(head, tangent, size, arrowAlpha);
+
+                    // A detached ember drifts off each ribbon, instead of ending
+                    // every arrow in a rigid spoke or a synchronized blast ring.
+                    float emberT = ScatterTravel(Mathf.Max(0f, age - 0.16f));
+                    Vector3 ember = ScatterPoint(emitter, handle1, handle2, end, emberT);
+                    Vector3 side = new Vector3(tangent.z, 0f, -tangent.x);
+                    ember += side * (Mathf.Sin(i * 2.4f + age * 5f) * 0.16f * Mathf.Sin(emberT * Mathf.PI));
+                    ember.y += 0.03f;
+                    DrawFocusSpark(ember, tangent, 0.09f * size * fade, fade * 0.8f);
                 }
             }
+            float release = 1f - Mathf.SmoothStep(0f, 0.22f, progress);
+            if (release > 0.01f)
+                DrawFocusSpark(emitter, direction, 0.45f * release, release);
+        }
 
-            float frontRadius = radius * Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 1.18f));
-            Material spokeMaterial = GetFlameMaterial(fade * 0.62f);
+        public static void DrawScatterCharge(Vector3 origin, Vector3 direction, float arcDegrees, float progress)
+        {
+            direction = direction.Yto0().normalized;
+            if (direction.sqrMagnitude < 0.001f) return;
+            Vector3 emitter = EmitterPosition(origin, direction);
+            float charge = Mathf.SmoothStep(0f, 1f, progress);
+            Vector3 side = new Vector3(direction.z, 0f, -direction.x);
+            // Ghost arrows gather close to the drawn bow, then the volley opens
+            // into the full fan on release. Range geometry is only a target preview.
             for (int i = -2; i <= 2; i++)
             {
-                Vector3 spoke = Rotate(direction, arcDegrees * 0.25f * i);
-                float innerRadius = Mathf.Max(0f, frontRadius - 1.35f);
-                GenDraw.DrawLineBetween(
-                    origin + spoke * innerRadius,
-                    origin + spoke * frontRadius,
-                    spokeMaterial,
-                    0.08f);
+                float spread = i / 2f;
+                Vector3 aim = Rotate(direction, spread * arcDegrees * 0.13f);
+                Vector3 point = emitter + side * (spread * (0.22f + charge * 0.16f))
+                    + direction * (0.38f - charge * 0.28f + Mathf.Abs(spread) * 0.1f);
+                DrawScatterArrow(point, aim, 0.65f + charge * 0.25f, 0.2f + charge * 0.65f);
+                Vector3 spark = point - aim * (0.65f - charge * 0.4f);
+                DrawFocusSpark(spark, aim, 0.08f + charge * 0.06f, 0.3f + charge * 0.6f);
             }
+        }
+
+        private static float ScatterTravel(float age)
+        {
+            return 1f - Mathf.Pow(1f - Mathf.Clamp01(age), 1.35f);
+        }
+
+        private static Vector3 ScatterPoint(Vector3 start, Vector3 handle1, Vector3 handle2, Vector3 end, float t)
+        {
+            float u = 1f - t;
+            return u * u * u * start + 3f * u * u * t * handle1 + 3f * u * t * t * handle2 + t * t * t * end;
+        }
+
+        private static Vector3 ScatterTangent(Vector3 start, Vector3 handle1, Vector3 handle2, Vector3 end, float t)
+        {
+            float u = 1f - t;
+            return (3f * u * u * (handle1 - start) + 6f * u * t * (handle2 - handle1)
+                + 3f * t * t * (end - handle2)).Yto0().normalized;
+        }
+
+        private static void DrawScatterArrow(Vector3 point, Vector3 direction, float size, float alpha)
+        {
+            if (direction.sqrMagnitude < 0.001f || alpha <= 0.01f) return;
+            point.y += 0.025f;
+            Material material = GetMaterial(ref scatterArrowMaterials, Color.white, ShaderDatabase.Transparent, alpha,
+                "MiliraXianMingyuan/Projectile/RainbowArrow");
+            Matrix4x4 matrix = Matrix4x4.TRS(point, Quaternion.LookRotation(direction), new Vector3(size, 1f, size * 1.35f));
+            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
+        }
+
+        private static void DrawScatterTrailSegment(Vector3 start, Vector3 end, float width, float alpha)
+        {
+            if ((end - start).sqrMagnitude < 0.0001f || alpha <= 0.01f || width <= 0.001f) return;
+            GenDraw.DrawLineBetween(start, end, GetFlameMaterial(alpha * 0.7f), width);
+            start.y += 0.012f;
+            end.y += 0.012f;
+            GenDraw.DrawLineBetween(start, end, GetFocusMaterial(alpha), width * 0.32f);
         }
 
         private static void DrawArc(
@@ -1172,16 +1249,12 @@ namespace MiliraXian.Characters.Mingyuan
             return GetMaterial(ref flameMaterials, FlameColor, ShaderDatabase.MoteGlow, alpha);
         }
 
-        private static Material GetSmokeMaterial(float alpha)
-        {
-            return GetMaterial(ref smokeMaterials, SmokeColor, ShaderDatabase.Transparent, alpha);
-        }
-
         private static Material GetMaterial(
             ref Material[] cache,
             Color baseColor,
             Shader shader,
-            float alpha)
+            float alpha,
+            string texturePath = LineTexturePath)
         {
             if (cache == null)
             {
@@ -1190,7 +1263,7 @@ namespace MiliraXian.Characters.Mingyuan
                 {
                     float stepAlpha = baseColor.a * ((i + 1f) / cache.Length);
                     Color color = new(baseColor.r, baseColor.g, baseColor.b, stepAlpha);
-                    cache[i] = MaterialPool.MatFrom(LineTexturePath, shader, color);
+                    cache[i] = MaterialPool.MatFrom(texturePath, shader, color);
                 }
             }
 
