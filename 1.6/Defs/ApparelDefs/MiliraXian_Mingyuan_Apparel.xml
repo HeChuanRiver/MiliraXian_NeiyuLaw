@@ -4,7 +4,7 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_Mingyuan_InfernoArmor</defName>
         <label>Rosy Flamefeather Raiment</label>
-        <description>Mingyuan's raiment, woven from pale extradimensional flame and burning feathers, with gold and scarlet light flowing through its rosy plumes. Though seemingly delicate, it protects her body and wings, resists common damage, provides extreme insulation, carrying capacity, movement and dodge, halves incoming damage, and never breaks.</description>
+        <description>Mingyuan's raiment, woven from pale extradimensional flame and burning feathers, with gold and scarlet light flowing through its rosy plumes. Though seemingly delicate, it protects her body and wings, resists common damage, provides extreme insulation, carrying capacity, movement and dodge, reduces incoming damage by 25 percentage points, and never breaks.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -53,14 +53,14 @@
             <CarryingCapacity>+100</CarryingCapacity>
             <MeleeDodgeChance>0.20</MeleeDodgeChance>
             <MoveSpeed>1.00</MoveSpeed>
-            <IncomingDamageFactor>-0.50</IncomingDamageFactor>
+            <IncomingDamageFactor>-0.25</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Mingyuan_BurningFeatherCrown</defName>
         <label>Turbid Burning Feather Crown</label>
-        <description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and turns part of incoming harm aside.</description>
+        <description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and reduces ordinary incoming damage by 10 percentage points.</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
@@ -113,7 +113,7 @@
             <MeleeDodgeChance>0.20</MeleeDodgeChance>
             <AimingDelayFactor>-0.50</AimingDelayFactor>
             <RangedCooldownFactor>-0.50</RangedCooldownFactor>
-            <IncomingDamageFactor>-0.44</IncomingDamageFactor>
+            <IncomingDamageFactor>-0.10</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 

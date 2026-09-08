@@ -76,8 +76,8 @@
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_RebirthMarker</defName>
     <label>Mingyuan rebirth flame</label>
-    <thingClass>Thing</thingClass>
-    <selectable>false</selectable>
+    <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanRebirthMarker</thingClass>
+    <selectable>true</selectable>
     <tickerType>Never</tickerType>
     <drawerType>RealtimeOnly</drawerType>
     <altitudeLayer>MoteLow</altitudeLayer>

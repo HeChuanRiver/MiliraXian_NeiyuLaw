@@ -9,7 +9,7 @@
   <MX_Mingyuan_BurningPillarField.label>燃烧之柱核心</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>焚我余烬领域</MX_Mingyuan_AshesField.label>
   <MX_Mingyuan_InfernoArmor.label>霞焰羽裳</MX_Mingyuan_InfernoArmor.label>
-  <MX_Mingyuan_InfernoArmor.description>明渊以淡色异界火与燃羽织成的常服，羽摆间流淌着如霞光般的金赤辉彩。看似轻薄，却能覆护身体与羽翼，抵御常见伤害，提供极高的冷热隔绝、承载、移速、闪避与承伤减免，且永不损坏。</MX_Mingyuan_InfernoArmor.description>
+  <MX_Mingyuan_InfernoArmor.description>明渊以淡色异界火与燃羽织成的常服，羽摆间流淌着如霞光般的金赤辉彩。覆护身体与羽翼，提供冷热隔绝，并提升承载、移速与闪避。装备时使普通承伤倍率降低 25 个百分点，且永不损坏。</MX_Mingyuan_InfernoArmor.description>
   <MX_Mingyuan_BurningFeatherCrown.label>燃浊羽冠</MX_Mingyuan_BurningFeatherCrown.label>
-  <MX_Mingyuan_BurningFeatherCrown.description>以白金羽片与赤色燃羽织成的冠饰。它稳定明渊的视线，加快远程攻击，提升闪避，并偏转部分伤害。</MX_Mingyuan_BurningFeatherCrown.description>
+  <MX_Mingyuan_BurningFeatherCrown.description>以白金羽片与赤色燃羽织成的冠饰。它稳定明渊的视线，加快远程攻击，提升闪避，并使普通承伤倍率降低 10 个百分点。</MX_Mingyuan_BurningFeatherCrown.description>
 </LanguageData>

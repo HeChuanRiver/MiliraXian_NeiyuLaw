@@ -23,7 +23,6 @@
   <MX_Mingyuan_SelfBurn_TipRhythm>變化：
 - 徵召：每 {0} tick +{1}，自然上限 {2}
 - 非徵召：每 {3} tick -{4}，明淵保留 1 層
-- 過燃：每 {3} tick -{5}
 - 下次變化：{6} tick</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>修復儲備：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
   <MX_Mingyuan_Shield_TipRepair>每{1}秒檢查一次傷勢，消耗1點儲備恢復一個缺失部位，或治癒一個部位的全部傷口與舊傷。下次檢查：{0}秒后。</MX_Mingyuan_Shield_TipRepair>
@@ -48,4 +47,6 @@
   <MX_Mingyuan_Bow_ModeBusy>長虹正在蓄力或結算，暫時不能切換形態。</MX_Mingyuan_Bow_ModeBusy>
   <MX_Mingyuan_Bow_ModeInspect>目前形態：{0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形態只能選擇視線內、可被生命燃燒影響的敵對單位。</MX_Mingyuan_Bow_InvalidFocusTarget>
+  <MX_Mingyuan_SelfBurn_TipRelease>增益每滿 10 層結算。過燃時每 10 秒消耗超出 300 的全部層數，在自身半徑 5 格內爆炸，每層造成 1 點傷害。可傷及友軍，不傷及明淵自身。距離下次釋放：{0} 秒。</MX_Mingyuan_SelfBurn_TipRelease>
+  <MX_Mingyuan_Rebirth_Countdown>距離重生：{0} 秒。</MX_Mingyuan_Rebirth_Countdown>
 </LanguageData>

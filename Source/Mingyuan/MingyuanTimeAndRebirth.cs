@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using AriandelLibrary;
+using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -114,6 +116,34 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public const int EternalBurningTicks = 1800;
 
+        public static bool TryInterceptALRecovery(Pawn pawn)
+        {
+            if (MingyuanPowerBalance.Sealed || pawn == null || pawn.Dead || pawn.Discarded
+                || pawn.Faction != Faction.OfPlayer || !pawn.Spawned || pawn.Map == null
+                || !MingyuanUtility.IsMingyuan(pawn) || !MingyuanUtility.HasHediff(pawn, MingyuanUtility.RebirthDef)) return false;
+            string id = SpecialPawnRegistry.GetStaticID(pawn.kindDef);
+            string realID = string.IsNullOrEmpty(id) ? null : AriandelLibrary_GameComponent.Instance?.SpecialPawns.GetRealID(id);
+            // Leave AL's duplicate/fake-pawn protection and off-map recovery intact.
+            if (string.IsNullOrEmpty(realID) || realID != pawn.ThingID) return false;
+            GameComponent_MingyuanRebirth component = Current.Game?.GetComponent<GameComponent_MingyuanRebirth>();
+            if (component == null) return false;
+            if (component.IsPending(pawn)) return true;
+            Map map = pawn.Map;
+            IntVec3 cell = pawn.Position;
+            Thing marker = SpawnRebirthMarker(map, cell);
+            if (marker == null) return false;
+            // Reserve before restoring health: another fatal condition can call
+            // Kill again while the first set of injuries is being removed.
+            component.RegisterPendingRebirth(pawn, map, cell,
+                Find.TickManager.TicksGame + (MingyuanPowerBalance.IsBalanced ? 2160 : EternalBurningTicks), marker);
+            MingyuanUtility.RestorePawnToBestCondition(pawn, false);
+            pawn.jobs?.StopAll();
+            pawn.DeSpawn();
+            if (!pawn.IsWorldPawn()) Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
+            DoRebirthExplosion(pawn, map, cell);
+            return true;
+        }
+
         public static bool TryScheduleRebirth(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return false;
@@ -135,16 +165,17 @@ namespace MiliraXian.Characters.Mingyuan
                 return false;
             }
 
-            DoRebirthExplosion(pawn, map, cell);
             PreparePawnForPendingRebirth(pawn);
             Thing marker = SpawnRebirthMarker(map, cell);
             component.RegisterPendingRebirth(pawn, map, cell, Find.TickManager.TicksGame + (MingyuanPowerBalance.IsBalanced ? 2160 : EternalBurningTicks), marker);
+            DoRebirthExplosion(pawn, map, cell);
             return true;
         }
 
         private static void DoRebirthExplosion(Pawn pawn, Map map, IntVec3 cell)
         {
             if (MingyuanPowerBalance.Sealed) return;
+            MingyuanSkillVfx.Play(map, cell.ToVector3Shifted(), MingyuanSkillVisualKind.Rebirth, 8f);
             GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, MingyuanPowerBalance.IsBalanced ? 849 : 999, 999f);
 
             foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 8f, true))
@@ -234,6 +265,7 @@ namespace MiliraXian.Characters.Mingyuan
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.ShieldDef);
             MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.RebirthDef);
             MingyuanUtility.RestorePawnToBestCondition(pawn, false);
+            MingyuanSkillVfx.Play(map, pawn.DrawPos, MingyuanSkillVisualKind.Rebirth, 2.5f);
             return true;
         }
     }
@@ -303,6 +335,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick, marker));
+            (marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(rebirthTick);
             nextProcessTick = Mathf.Min(nextProcessTick, rebirthTick);
         }
 
@@ -330,6 +363,7 @@ namespace MiliraXian.Characters.Mingyuan
                         // Old tier-two saves used a full-day delay; migrate only that pending return.
                         pending.rebirthTick = Mathf.Min(pending.rebirthTick, tick + 2160);
                     }
+                    (pending?.marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(pending.rebirthTick);
                 }
                 RecalculateNextProcessTick();
             }
@@ -363,6 +397,7 @@ namespace MiliraXian.Characters.Mingyuan
                 else
                 {
                     pending.rebirthTick = tick + 60;
+                    (pending.marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(pending.rebirthTick);
                     nextProcessTick = Mathf.Min(nextProcessTick, pending.rebirthTick);
                 }
             }
@@ -380,17 +415,21 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
-                bool missingMarker = pending.marker == null || pending.marker.Destroyed;
+                bool missingMarker = pending.marker == null || pending.marker.Destroyed
+                    || pending.marker is not Thing_MingyuanRebirthMarker;
                 if (!missingMarker)
                 {
+                    (pending.marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(pending.rebirthTick);
                     continue;
                 }
 
+                DestroyMarker(pending.marker);
                 pending.marker = MingyuanRebirthUtility.SpawnRebirthMarker(pending.map, pending.cell);
                 if (pending.pawn.Dead && pending.rebirthTick <= tick + 1)
                 {
                     pending.rebirthTick = tick + MingyuanRebirthUtility.EternalBurningTicks;
                 }
+                (pending.marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(pending.rebirthTick);
             }
 
             RecalculateNextProcessTick();
@@ -430,6 +469,20 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 marker.Destroy(DestroyMode.Vanish);
             }
+        }
+    }
+
+    // AL cancels Pawn.Kill before Notify_PawnDied ever runs. Intercept its verified
+    // recovery prefix only for the real, on-map player Mingyuan who can rebirth.
+    [HarmonyPatch(typeof(AriandelLibrary_Pawn_Kill_Patch), nameof(AriandelLibrary_Pawn_Kill_Patch.Prefix))]
+    internal static class Patch_ALKill_MingyuanRebirth
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(Pawn __0, ref bool __result)
+        {
+            if (!MingyuanRebirthUtility.TryInterceptALRecovery(__0)) return true;
+            __result = false;
+            return false;
         }
     }
 }

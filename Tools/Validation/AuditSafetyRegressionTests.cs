@@ -63,6 +63,7 @@ internal static class AuditSafetyRegressionTests
             TestSkyfallReset();
             TestLoadoutReset();
             TestRebirthGuards();
+            TestMingyuanMechanics();
             TestRaidJobLogging();
         }
     }
@@ -313,6 +314,42 @@ internal static class AuditSafetyRegressionTests
         pawn.holdingOwner = holder.GetDirectlyHeldThings();
         Check(!MingyuanRebirthUtility.TryFinishRebirth(pawn, map, cell) && pawn.ParentHolder == holder,
             "pending return cannot steal a pawn from AL's recovery container");
+    }
+
+    private static void TestMingyuanMechanics()
+    {
+        float[] inputs = { -1f, 0f, 9.99f, 10f, 19.99f, 20f, 299.99f, 300f, 301f, 500f };
+        float[] expected = { 0f, 0f, 0f, 10f, 10f, 20f, 290f, 300f, 300f, 300f };
+        for (int i = 0; i < inputs.Length; i++)
+            Check(MingyuanUtility.QuantizeSelfBurn(inputs[i]) == expected[i], "Self Burn decade boundary: " + inputs[i]);
+        Check(MingyuanUtility.QuantizeSelfBurn(99, 25) == 20, "custom cap cannot award an incomplete decade");
+
+        Pawn absorbed = BarePawn();
+        Pawn other = BarePawn();
+        // No health tracker side effects: this fixture checks the production queue
+        // cancellation, including duplicate/legacy records and unrelated victims.
+        absorbed.health = null;
+        var timer = new GameComponent_MingyuanTimeBurn(null);
+        FieldInfo recordsField = typeof(GameComponent_MingyuanTimeBurn).GetField("records", BindingFlags.NonPublic | BindingFlags.Instance);
+        var records = (List<MingyuanTimeBurnRecord>)recordsField.GetValue(timer);
+        records.Add(new MingyuanTimeBurnRecord { pawn = absorbed, endTick = 100 });
+        records.Add(new MingyuanTimeBurnRecord { pawn = other, endTick = 150 });
+        records.Add(new MingyuanTimeBurnRecord { pawn = absorbed, endTick = 200, reducedCast = true });
+        HediffDef oldMarker = MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen;
+        MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen = new HediffDef();
+        try
+        {
+            Check(timer.Cancel(absorbed), "absorption cancels pending Time Burn");
+            Check(records.Count == 1 && records[0].pawn == other, "all target records removed; unrelated target preserved");
+            Check(!timer.Cancel(absorbed), "cancellation is idempotent and cannot schedule late damage");
+            Check(!timer.Cancel(null), "missing absorption target cannot mutate the queue");
+        }
+        finally { MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen = oldMarker; }
+        Check(!MingyuanRebirthUtility.TryInterceptALRecovery(null), "AL keeps handling null/noneligible recovery");
+
+        var comp = new HediffComp_MingyuanSelfBurn { props = new HediffCompProperties_MingyuanSelfBurn() };
+        FieldInfo release = comp.GetType().GetField("ticksToOverburnRelease", BindingFlags.NonPublic | BindingFlags.Instance);
+        Check((int)release.GetValue(comp) == 600, "new Overburn timer starts at ten seconds, not immediate release");
     }
 
     private delegate void JobLogPrefix<TState>(Pawn pawn, Job job, JobCondition condition, ThinkNode giver,

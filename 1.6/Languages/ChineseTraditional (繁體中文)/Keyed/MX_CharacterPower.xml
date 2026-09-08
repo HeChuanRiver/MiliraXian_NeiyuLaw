@@ -26,8 +26,8 @@
   <MX_Power_Mingyuan_TimeBurn>在1小時內燒盡目標的生物年齡，年齡歸零時目標死亡。機械體崩解后留下鋼鐵與玻璃鋼，建筑分解后返還全部原材料。蓄力9.6秒。</MX_Power_Mingyuan_TimeBurn>
   <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，獲得100層自我燃燒，并展開持續15秒、跟隨明淵移動的5×5余燼領域。每0.5秒造成0.85點基礎灼傷并施加生命燃燒，焚毀範圍內的建筑與動物，為明淵治療傷口與舊傷并回收自燃。自我燃燒超過300層時進入過燃。</MX_Power_Mingyuan_AshesOfSelf>
   <MX_Power_Mingyuan_LifeBurn>不斷增長的生命之火，持續灼傷身體、損壞裝備、消耗需求并燒去年齡。爆發閾值由目標的生命規模決定，長虹可提前引爆。宿主死亡時，火焰會向附近目標傳播。</MX_Power_Mingyuan_LifeBurn>
-  <MX_Power_Mingyuan_SelfBurn>積累自燃可提高近戰、技能與遠程傷害，以及移動、攻擊和工作速度。征召時自動積累，非征召時逐漸衰減。超過300層進入過燃，進一步強化直接傷害和生命燃燒疊層，同時消耗護焰儲備。</MX_Power_Mingyuan_SelfBurn>
-  <MX_Power_Mingyuan_BurningBody>燃燒之軀提升意識并免除生理需求，普通傷害承受系數為1.5%。免疫火焰與爆炸傷害并恢復身體，清除控制效果；受擊后短暫無敵并積累自燃。攻擊和反擊會施加生命燃燒，身體會定期完整修復。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_SelfBurn>徵召時緩慢積累自燃。增益每滿 10 層結算，最多計算 300 層。過燃強化直接傷害與生命燃燒輸出並消耗護焰儲備；每隔 10 秒消耗全部超出層數，在自身半徑 5 格內爆炸，每層造成 1 點傷害，可傷及友軍。</MX_Power_Mingyuan_SelfBurn>
+  <MX_Power_Mingyuan_BurningBody>被淡色異界火重塑的身體。意識提升，熱能與爆炸轉化為恢復，攻擊者會被反灼，控制狀態會被清除，每次受傷獲得 5 層自燃。此被動不降低普通承傷倍率。</MX_Power_Mingyuan_BurningBody>
   <MX_Power_Mingyuan_ProtectiveFlameShield>用于修復身體的淡色火焰儲備，不吸收傷害。每次消耗1點，恢復一個缺失部位，或治癒一個部位的全部傷口與舊傷。穩定自燃可兌換儲備，過燃會持續消耗儲備。</MX_Power_Mingyuan_ProtectiveFlameShield>
   <MX_Power_Mingyuan_RebirthFlame>明淵瀕死時爆發重生之焰，對周圍敵人造成爆炸傷害與眩暈，隨后暫時離場。火焰重新凝聚后，明淵以完整狀態返回。</MX_Power_Mingyuan_RebirthFlame>
   <MX_Power_Zhaoli_Shield>每通過告死吸納一個單位，獲得5層諱亡護盾。實際受傷后消耗1層，持續傷害每次生效也會消耗層數。層數用于記錄告死積累，本身不吸收傷害。</MX_Power_Zhaoli_Shield>

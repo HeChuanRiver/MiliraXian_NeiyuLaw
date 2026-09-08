@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <AbilityDef>
+    <defName>MX_Mingyuan_Absorb</defName>
+    <label>Absorb</label>
+    <description>Absorb Life Burn from enemies in a 108-degree cone extending 10 cells toward the selected point. Remove all Life Burn layers and deal 0.3 burn damage per layer. Cancel Time Burn and restore the age recorded before it. Cooldown: 15 seconds. No resource cost.</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconPath>
+    <category>MX_MingyuanSkill</category>
+    <displayOrder>150</displayOrder>
+    <cooldownTicksRange>900</cooldownTicksRange>
+    <targetRequired>true</targetRequired>
+    <hostile>true</hostile>
+    <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <range>10</range>
+      <requireLineOfSight>false</requireLineOfSight>
+      <warmupTime>0.35</warmupTime>
+      <soundCast>FireSpew_Resolve</soundCast>
+      <targetParams>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetSelf>false</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAbsorb">
+        <radius>10</radius>
+        <arcDegrees>108</arcDegrees>
+        <damagePerLayer>0.3</damagePerLayer>
+      </li>
+    </comps>
+  </AbilityDef>
+</Defs>
