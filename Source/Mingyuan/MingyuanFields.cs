@@ -385,7 +385,7 @@ namespace MiliraXian.Characters.Mingyuan
                         continue;
                     }
 
-                    if (thing.def.category == ThingCategory.Building && thing.HostileTo(caster))
+                    if (CanDamageBuilding(thing))
                     {
                         HandleBuilding(thing);
                     }
@@ -418,6 +418,15 @@ namespace MiliraXian.Characters.Mingyuan
             float desiredDamage = Mathf.Max(1f, Mathf.Ceil(building.MaxHitPoints * Mathf.Clamp01(PropsTornado.buildingDamageFraction)));
             // Structural scorching is independent of flammability (stone/steel included).
             MingyuanUtility.ApplyTrueDamage(building, MX_MingyuanDefOf.MX_Mingyuan_StructuralBurn, desiredDamage, caster);
+        }
+
+        private bool CanDamageBuilding(Thing building)
+        {
+            // Ruins and unclaimed walls have no faction; HostileTo alone excludes
+            // them before structural damage can ever reach the damage worker.
+            return caster != null && building != null && building != parent && !building.Destroyed
+                && building.def.category == ThingCategory.Building && building.def.useHitPoints
+                && (building.Faction == null || building.HostileTo(caster.Faction));
         }
 
         private void TryMoveOneCell()

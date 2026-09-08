@@ -24,7 +24,7 @@
   <MX_Power_Mingyuan_Sword>明渊的余烬长剑，剑身流淌着灼热的赤焰。攻击可与自燃、过燃和生命燃烧联动，并提高持有者的近战闪避与武器伤害。具体属性见装备信息面板。</MX_Power_Mingyuan_Sword>
   <MX_Power_Mingyuan_AscendantFlameDash>化作升焰，无视视线跨越最多150格，留下3格宽、持续15秒的灼痕。路径敌人受到8.5点基础灼伤和27层生命燃烧，被击退并眩晕3秒。灼痕每0.5秒向其中的敌人施加生命燃烧。</MX_Power_Mingyuan_AscendantFlameDash>
   <MX_Power_Mingyuan_InstantCombustion>释放半径30格的强光，对敌人的大脑与每只眼睛各造成0.85点基础灼伤，并使其眩晕12秒。目标已有的生命燃烧层数翻倍，尚未燃烧的目标会被点燃。</MX_Power_Mingyuan_InstantCombustion>
-  <MX_Power_Mingyuan_BurningPillar>放置燃烧核心，10分钟内从半径1格成长到15格，持续3小时。中心灼伤较高，边缘割伤较高，灼伤会施加生命燃烧。每次脉冲对建筑造成最大生命值28.05%的基础伤害。10分钟后可指令核心移动。</MX_Power_Mingyuan_BurningPillar>
+  <MX_Power_Mingyuan_BurningPillar>放置燃烧核心，10分钟内从半径1格成长到15格，持续3小时。中心灼伤较高，边缘割伤较高，灼伤会施加生命燃烧。每次脉冲对敌对及无阵营建筑造成最大生命值28.05%的基础伤害。己方、中立及盟友势力的建筑不受影响。10分钟后可指令核心移动。</MX_Power_Mingyuan_BurningPillar>
   <MX_Power_Mingyuan_TimeBurn>在1小时内烧尽目标的生物年龄，年龄归零时目标死亡。机械体崩解后留下钢铁与玻璃钢，建筑分解后返还全部原材料。蓄力9.6秒。</MX_Power_Mingyuan_TimeBurn>
   <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，获得100层自我燃烧，并展开持续15秒、跟随明渊移动的5×5余烬领域。每0.5秒造成0.85点基础灼伤并施加生命燃烧，焚毁范围内的建筑与动物，为明渊治疗伤口与旧伤并回收自燃。自我燃烧超过300层时进入过燃。</MX_Power_Mingyuan_AshesOfSelf>
   <MX_Power_Mingyuan_LifeBurn>不断增长的生命之火，持续灼伤身体、损坏装备、消耗需求并烧去年龄。爆发阈值由目标的生命规模决定，长虹可提前引爆。宿主死亡时，火焰会向附近目标传播。</MX_Power_Mingyuan_LifeBurn>

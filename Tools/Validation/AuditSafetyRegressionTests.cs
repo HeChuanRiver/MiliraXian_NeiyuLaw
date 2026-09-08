@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -55,6 +56,7 @@ internal static class AuditSafetyRegressionTests
             TestMutationAndNestedSnapshots();
             TestRadialSnapshot();
             TestFieldPulse(2);
+            TestPillarBuildings();
         }
         else
         {
@@ -350,6 +352,42 @@ internal static class AuditSafetyRegressionTests
         var comp = new HediffComp_MingyuanSelfBurn { props = new HediffCompProperties_MingyuanSelfBurn() };
         FieldInfo release = comp.GetType().GetField("ticksToOverburnRelease", BindingFlags.NonPublic | BindingFlags.Instance);
         Check((int)release.GetValue(comp) == 600, "new Overburn timer starts at ten seconds, not immediate release");
+    }
+
+    private static void TestPillarBuildings()
+    {
+        Pawn caster = BarePawn();
+        var own = (Faction)FormatterServices.GetUninitializedObject(typeof(Faction));
+        own.def = new FactionDef();
+        Set(caster, "factionInt", own, typeof(Thing));
+        var comp = new CompMingyuanBurningPillarTornado();
+        Set(comp, "caster", caster);
+        MethodInfo eligible = comp.GetType().GetMethod("CanDamageBuilding", BindingFlags.NonPublic | BindingFlags.Instance);
+        var def = (ThingDef)FormatterServices.GetUninitializedObject(typeof(ThingDef));
+        def.category = ThingCategory.Building;
+        def.useHitPoints = true;
+        def.passability = Traversability.Impassable;
+        var wall = new Thing { def = def, HitPoints = 100 };
+        Check(!wall.HostileTo(own), "unclaimed ruins reproduce the original hostility-filter exclusion");
+        Check((bool)eligible.Invoke(comp, new object[] { wall }), "production pillar filter accepts unclaimed walls");
+        Set(wall, "factionInt", own, typeof(Thing));
+        Check(!(bool)eligible.Invoke(comp, new object[] { wall }), "claimed colony walls remain protected");
+        foreach (FactionRelationKind relation in new[] { FactionRelationKind.Ally, FactionRelationKind.Neutral, FactionRelationKind.Hostile })
+        {
+            var faction = (Faction)FormatterServices.GetUninitializedObject(typeof(Faction));
+            faction.def = new FactionDef();
+            Set(faction, "relations", new List<FactionRelation> { new FactionRelation { other = own, kind = relation } });
+            Set(wall, "factionInt", faction, typeof(Thing));
+            Check((bool)eligible.Invoke(comp, new object[] { wall }) == (relation == FactionRelationKind.Hostile),
+                "production pillar building filter respects " + relation + " ownership");
+        }
+        Set(wall, "factionInt", null, typeof(Thing));
+        def.useHitPoints = false;
+        Check(!(bool)eligible.Invoke(comp, new object[] { wall }), "non-damageable ruins are skipped safely");
+        def.useHitPoints = true;
+        comp.parent = new ThingWithComps { def = def };
+        Check(!(bool)eligible.Invoke(comp, new object[] { comp.parent }), "pillar never damages its own core");
+
     }
 
     private delegate void JobLogPrefix<TState>(Pawn pawn, Job job, JobCondition condition, ThinkNode giver,
