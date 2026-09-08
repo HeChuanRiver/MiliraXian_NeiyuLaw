@@ -950,7 +950,7 @@ namespace MiliraXian.Characters.Mingyuan
     public class HediffCompProperties_MingyuanBurningBody : HediffCompProperties
     {
         public int restoreIntervalTicks = 1800;
-        public int invulnerableTicks = 90;
+        public int invulnerableTicks = 12;
         public float reflectLifeBurnLayers = 20f;
         public float selfBurnOnHit = 5f;
         public float meleeLifeBurnLayers = 10f;

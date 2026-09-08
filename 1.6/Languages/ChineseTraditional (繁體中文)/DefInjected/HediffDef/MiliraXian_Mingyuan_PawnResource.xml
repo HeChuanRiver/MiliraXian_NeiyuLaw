@@ -8,7 +8,7 @@
 超過 300 層進入過燃，直接傷害與生命燃燒輸出翻倍，並消耗護焰儲備。每隔 10 秒消耗全部超出層數，在自身半徑 5 格內爆炸，每層造成 1 點傷害。爆炸可傷及友軍和建築，不傷及明淵自身。</MX_Mingyuan_SelfBurn.description>
   <MX_Mingyuan_SelfBurn.stages.0.label></MX_Mingyuan_SelfBurn.stages.0.label>
   <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;燃燒之軀&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
-  <MX_Mingyuan_BurningBody.description>被淡色異界火重塑的身體。意識提升，熱能與爆炸轉化為恢復，攻擊者會被反灼，控制狀態會被清除，每次受傷獲得 5 層自燃。此被動不降低普通承傷倍率。</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.description>被淡色異界火重塑的身體。意識提升，熱能與爆炸轉化為恢復，攻擊者會被反灼，控制狀態會被清除，每次受傷獲得 5 層自燃與 0.2 秒無敵。此被動不降低普通承傷倍率。</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label></MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;護身火盾&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
   <MX_Mingyuan_ProtectiveFlameShield.description>100點淡色火焰修復儲備。每10秒消耗1點，恢復一個缺失部位，或治癒一個部位的全部傷口與舊傷。穩定自我燃燒可兌換儲備，過燃會持續消耗儲備。護焰不吸收傷害。</MX_Mingyuan_ProtectiveFlameShield.description>

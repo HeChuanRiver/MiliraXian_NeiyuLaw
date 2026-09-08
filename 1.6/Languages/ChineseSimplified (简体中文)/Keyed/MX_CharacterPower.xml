@@ -29,7 +29,7 @@
   <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，获得100层自我燃烧，并展开持续15秒、跟随明渊移动的5×5余烬领域。每0.5秒造成0.85点基础灼伤并施加生命燃烧，焚毁范围内的建筑与动物，为明渊治疗伤口与旧伤并回收自燃。自我燃烧超过300层时进入过燃。</MX_Power_Mingyuan_AshesOfSelf>
   <MX_Power_Mingyuan_LifeBurn>不断增长的生命之火，持续灼伤身体、损坏装备、消耗需求并烧去年龄。爆发阈值由目标的生命规模决定，长虹可提前引爆。宿主死亡时，火焰会向附近目标传播。</MX_Power_Mingyuan_LifeBurn>
   <MX_Power_Mingyuan_SelfBurn>征召时缓慢积累自燃。增益每满 10 层结算，最多计算 300 层。过燃强化直接伤害与生命燃烧输出并消耗护焰储备；每隔 10 秒消耗全部超出层数，在自身半径 5 格内爆炸，每层造成 1 点伤害，可伤及友军。</MX_Power_Mingyuan_SelfBurn>
-  <MX_Power_Mingyuan_BurningBody>被淡色异界火重塑的身体。意识提升，热能与爆炸转化为恢复，攻击者会被反灼，控制状态会被清除，每次受伤获得 5 层自燃。此被动不降低普通承伤倍率。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_BurningBody>被淡色异界火重塑的身体。意识提升，热能与爆炸转化为恢复，攻击者会被反灼，控制状态会被清除，每次受伤获得 5 层自燃与 0.2 秒无敌。此被动不降低普通承伤倍率。</MX_Power_Mingyuan_BurningBody>
   <MX_Power_Mingyuan_ProtectiveFlameShield>用于修复身体的淡色火焰储备，不吸收伤害。每次消耗1点，恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。稳定自燃可兑换储备，过燃会持续消耗储备。</MX_Power_Mingyuan_ProtectiveFlameShield>
   <MX_Power_Mingyuan_RebirthFlame>明渊濒死时爆发重生之焰，对周围敌人造成爆炸伤害与眩晕，随后暂时离场。火焰重新凝聚后，明渊以完整状态返回。</MX_Power_Mingyuan_RebirthFlame>
   <MX_Power_Zhaoli_Shield>每通过告死吸纳一个单位，获得5层讳亡护盾。实际受伤后消耗1层，持续伤害每次生效也会消耗层数。层数用于记录告死积累，本身不吸收伤害。</MX_Power_Zhaoli_Shield>

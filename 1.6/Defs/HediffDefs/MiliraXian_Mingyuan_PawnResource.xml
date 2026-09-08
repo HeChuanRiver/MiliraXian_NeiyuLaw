@@ -424,7 +424,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>A body remade by pale fire. Consciousness rises; heat and explosions restore the body, attackers are burned in return, control states are cleared, and each wound grants 5 Self Burn. This passive does not reduce ordinary incoming damage.</description>
+        <description>A body remade by pale fire. Consciousness rises; heat and explosions restore the body, attackers are burned in return, control states are cleared, and each wound grants 5 Self Burn and 0.2 seconds of invulnerability. This passive does not reduce ordinary incoming damage.</description>
         <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -461,7 +461,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanBurningBody">
                 <restoreIntervalTicks>1800</restoreIntervalTicks>
-                <invulnerableTicks>90</invulnerableTicks>
+                <invulnerableTicks>12</invulnerableTicks>
                 <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
                 <selfBurnOnHit>5</selfBurnOnHit>
                 <meleeLifeBurnLayers>10</meleeLifeBurnLayers>
