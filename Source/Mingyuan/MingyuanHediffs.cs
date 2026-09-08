@@ -1037,7 +1037,7 @@ namespace MiliraXian.Characters.Mingyuan
     public class HediffCompProperties_MingyuanProtectiveFlameShield : HediffCompProperties
     {
         public float maxEnergy = 100f;
-        public int repairIntervalTicks = 60;
+        public int repairIntervalTicks = 600;
         public int selfBurnRefillIntervalTicks = 300;
         public int selfBurnRefillCooldownTicks = 1800;
         public float selfBurnPerEnergy = 3f;
