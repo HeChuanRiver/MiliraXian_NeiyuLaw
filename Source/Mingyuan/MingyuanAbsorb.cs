@@ -48,17 +48,10 @@ namespace MiliraXian.Characters.Mingyuan
                     Vector3 offset = (victim.Position.ToVector3Shifted() - origin).Yto0();
                     if (offset.sqrMagnitude <= 0.001f || offset.sqrMagnitude > PropsAbsorb.radius * PropsAbsorb.radius
                         || Vector3.Dot(direction, offset.normalized) + 0.0001f < minimumDot) continue;
-                    float layers = 0f;
                     bool hadTimeBurn = MingyuanUtility.HasHediff(victim, MingyuanUtility.TimeBurnFrozenDef);
-                    var hediffs = victim.health.hediffSet.hediffs;
                     // Remove every matching instance before damage can trigger death,
                     // transfer, or a queued Time Burn execution.
-                    for (int i = hediffs.Count - 1; i >= 0; i--)
-                        if (hediffs[i].def == MingyuanUtility.LifeBurnDef)
-                        {
-                            layers += Mathf.Max(0f, hediffs[i].Severity);
-                            victim.health.RemoveHediff(hediffs[i]);
-                        }
+                    float layers = MingyuanUtility.ConsumeLifeBurn(victim);
                     bool cancelled = Current.Game?.GetComponent<GameComponent_MingyuanTimeBurn>()?.Cancel(victim) == true;
                     if (layers <= 0f && !hadTimeBurn && !cancelled) continue;
                     if (visualCount++ < 12)

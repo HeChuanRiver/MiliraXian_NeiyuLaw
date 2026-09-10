@@ -38,21 +38,21 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningPillarTornado">
                 <startRadius>1</startRadius>
-                <maxRadius>15</maxRadius>
-                <durationTicks>7500</durationTicks>
-                <radiusGrowTicks>417</radiusGrowTicks>
-                <controlUnlockTicks>417</controlUnlockTicks>
-                <coreGrowTicks>417</coreGrowTicks>
+                <maxRadius>10</maxRadius>
+                <durationTicks>1800</durationTicks>
+                <radiusGrowTicks>180</radiusGrowTicks>
+                <controlUnlockTicks>180</controlUnlockTicks>
+                <coreGrowTicks>180</coreGrowTicks>
                 <pulseIntervalTicks>60</pulseIntervalTicks>
                 <moveIntervalTicks>60</moveIntervalTicks>
-                <initialHitPoints>500</initialHitPoints>
-                <maxHitPoints>2000</maxHitPoints>
-                <centerBurnDamage>30</centerBurnDamage>
-                <edgeBurnDamage>5</edgeBurnDamage>
-                <centerCutDamage>5</centerCutDamage>
-                <edgeCutDamage>30</edgeCutDamage>
+                <initialHitPoints>300</initialHitPoints>
+                <maxHitPoints>800</maxHitPoints>
+                <centerBurnDamage>12</centerBurnDamage>
+                <edgeBurnDamage>3</edgeBurnDamage>
+                <centerCutDamage>3</centerCutDamage>
+                <edgeCutDamage>12</edgeCutDamage>
                 <lifeBurnLayersPerBurnDamage>1</lifeBurnLayersPerBurnDamage>
-                <buildingDamageFraction>0.33</buildingDamageFraction>
+                <buildingDamageFraction>0.06</buildingDamageFraction>
                 <targetPriorityFactor>0.65</targetPriorityFactor>
                 <visualRotationDegreesPerTick>2.25</visualRotationDegreesPerTick>
                 <visualFadeTicks>120</visualFadeTicks>
@@ -86,7 +86,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
                 <radius>2.4</radius>
-                <durationTicks>900</durationTicks>
+                <durationTicks>600</durationTicks>
                 <pulseIntervalTicks>30</pulseIntervalTicks>
                 <damageAmount>1</damageAmount>
                 <lifeBurnLayers>20</lifeBurnLayers>

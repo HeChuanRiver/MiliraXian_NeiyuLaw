@@ -76,24 +76,24 @@
   <MX_NL_ShieldDamageTypeLethal>致命/倒地</MX_NL_ShieldDamageTypeLethal>
   <MX_NL_ShieldDamageTypeNonLethal>非致命</MX_NL_ShieldDamageTypeNonLethal>
   <MX_NL_ShieldDebugName>护身</MX_NL_ShieldDebugName>
-  <MX_NL_ShieldDebugStage3AbsorbLabel>III-蓄伤 蓄伤:{0} 剩余:{1}h</MX_NL_ShieldDebugStage3AbsorbLabel>
-  <MX_NL_ShieldDebugStage3BuffLabel>III-增益 档位:{0} 剩余:{1}h</MX_NL_ShieldDebugStage3BuffLabel>
-  <MX_NL_ShieldDebugWeakLabel>[虚弱 {0}h]</MX_NL_ShieldDebugWeakLabel>
+  <MX_NL_ShieldDebugStage3AbsorbLabel>III-蓄伤 蓄伤:{0} 剩余:{1}s</MX_NL_ShieldDebugStage3AbsorbLabel>
+  <MX_NL_ShieldDebugStage3BuffLabel>III-增益 档位:{0} 剩余:{1}s</MX_NL_ShieldDebugStage3BuffLabel>
+  <MX_NL_ShieldDebugWeakLabel>[虚弱 {0}s]</MX_NL_ShieldDebugWeakLabel>
   <MX_NL_ShieldTipStage>阶段: {0}{1}</MX_NL_ShieldTipStage>
   <MX_NL_ShieldTipWeakSuffix> (虚弱中)</MX_NL_ShieldTipWeakSuffix>
   <MX_NL_ShieldTipStage2Charges>二阶段次数: {0}/{1}</MX_NL_ShieldTipStage2Charges>
-  <MX_NL_ShieldTipThreshold>阈值: {0}</MX_NL_ShieldTipThreshold>
+  <MX_NL_ShieldTipThreshold>每{0}点伤害消耗1层，向上取整且至少1层。</MX_NL_ShieldTipThreshold>
   <MX_NL_ShieldTipRecentHits>最近5次受击(伤害 -&gt; 消耗次数):</MX_NL_ShieldTipRecentHits>
   <MX_NL_ShieldTipStage3Absorb>阶段3-蓄伤(无敌)</MX_NL_ShieldTipStage3Absorb>
-  <MX_NL_ShieldTipAbsorbRemaining>蓄伤剩余: {0}h</MX_NL_ShieldTipAbsorbRemaining>
+  <MX_NL_ShieldTipAbsorbRemaining>蓄伤剩余: {0}s</MX_NL_ShieldTipAbsorbRemaining>
   <MX_NL_ShieldTipStoredDamage>当前蓄伤: {0}</MX_NL_ShieldTipStoredDamage>
   <MX_NL_ShieldTipBuffAfterAbsorb>增益将于蓄伤结束后开启。</MX_NL_ShieldTipBuffAfterAbsorb>
   <MX_NL_ShieldTipStage3Buff>阶段3-增益(可受伤)</MX_NL_ShieldTipStage3Buff>
-  <MX_NL_ShieldTipBuffRemaining>增益剩余: {0}h</MX_NL_ShieldTipBuffRemaining>
+  <MX_NL_ShieldTipBuffRemaining>增益剩余: {0}s</MX_NL_ShieldTipBuffRemaining>
   <MX_NL_ShieldTipLockedDamage>锁定蓄伤: {0}</MX_NL_ShieldTipLockedDamage>
   <MX_NL_ShieldTipCurrentTier>当前档位: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>当前增益:</MX_NL_ShieldTipCurrentBuffs>
-  <MX_NL_ShieldTipWeakRemaining>虚弱剩余: {0}h</MX_NL_ShieldTipWeakRemaining>
+  <MX_NL_ShieldTipWeakRemaining>虚弱剩余: {0}s</MX_NL_ShieldTipWeakRemaining>
   <MX_NL_ShieldTipWeakPenalty>虚弱惩罚: 移速-{0}%，休息下降+{1}%，全局工作效率-{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>近战/远程伤害 +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>瞄准时间 {0}{1}%</MX_NL_ShieldBuffAimingTime>

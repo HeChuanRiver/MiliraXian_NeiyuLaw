@@ -314,6 +314,8 @@ namespace MiliraXian.Characters.Neiyu
             AddThoughtMood(DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_RelaxedNearNeiyu"), 0f);
 
             HediffDef shieldDef = HediffDefNamed("MXNL_NeiyuShield");
+            Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
+                "MX_Power_Neiyu_Shield".Translate().ToString(), "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
             HediffCompProperties_MXNeiyuCountShield shieldProps = HediffComp<HediffCompProperties_MXNeiyuCountShield>(shieldDef);
             AddScaled(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f, 1f);
             AddScaled(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, .9f, 0);

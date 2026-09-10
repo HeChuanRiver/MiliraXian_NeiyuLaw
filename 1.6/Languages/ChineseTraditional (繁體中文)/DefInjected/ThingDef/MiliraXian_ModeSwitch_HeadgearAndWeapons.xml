@@ -7,7 +7,7 @@
   <MX_Neiyu_Form_Weapon.description>由花形轉化而來的劍形兵裝。鋒芒凝練，氣勢凌厲，是霓羽在正面斬擊與高速突進時最具壓迫感的一種姿態。</MX_Neiyu_Form_Weapon.description>
   <MX_Neiyu_Form_Weapon.tools.0.label>霓刃</MX_Neiyu_Form_Weapon.tools.0.label>
   <MX_Neiyu_Form_Bow.label>霓羽·弓形</MX_Neiyu_Form_Bow.label>
-  <MX_Neiyu_Form_Bow.description>由花形轉化而來的弓形兵裝。羽輝聚弦，流矢如雨，更擅長在中遠距離維持持續而華麗的壓制。</MX_Neiyu_Form_Bow.description>
+  <MX_Neiyu_Form_Bow.description>霓羽的弓形態。主矢分裂為16支追蹤碎矢，可切換為花或劍形態。</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
   <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>

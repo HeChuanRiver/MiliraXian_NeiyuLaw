@@ -185,7 +185,9 @@ namespace MiliraXian.Characters.Mingyuan
             if (MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
             {
                 absorbed = true;
-                MingyuanUtility.RestorePawnToBestCondition(pawn, true);
+                if (dinfo.Amount > 0f)
+                    (pawn.health.hediffSet.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)
+                        ?.GetComp<HediffComp_MingyuanProtectiveFlameShield>()?.TryRefillFromHeat();
             }
         }
     }

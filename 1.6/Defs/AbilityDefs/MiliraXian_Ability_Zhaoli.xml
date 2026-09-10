@@ -9,13 +9,13 @@
     <AbilityDef>
         <defName>MX_Zhaoli_DeathField</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>创造一个直径18格的圆形&lt;color=#C9A2FF&gt;力场&lt;/color&gt;。力场内除&lt;color=#E85A7A&gt;昭离&lt;/color&gt;自身外的单位会受到&lt;color=#B86CFF&gt;20%减速&lt;/color&gt;；每1秒形成一次&lt;color=#E85A7A&gt;流血&lt;/color&gt;并积累1点告死。目标离开范围后，告死会快速衰减；积累至9点时，最后一次施加告死的角色将处决目标。
-霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</description>
+        <description>Creates a radius-9 Death Sentence field for 9 seconds. Non-immune units other than the caster are slowed by 20%, receive cuts and gain 1 accumulation each second. At 9 points they are executed; a successful execution grants 1 Karma and 5 Deathward counters. Accumulation rapidly decays outside the field. Cooldown: 40 seconds.
+Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts and execution.</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_DeathField</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>100</displayOrder>
-        <cooldownTicksRange>1200</cooldownTicksRange>
+        <cooldownTicksRange>2400</cooldownTicksRange>
         <jobDef>MX_Zhaoli_CastAbility_Uninterruptible</jobDef>
 
         <targetRequired>true</targetRequired>
@@ -52,7 +52,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Guiyi</defName>
         <label>&lt;color=#C77DFF&gt;诡医&lt;/color&gt;</label>
-        <description>消耗&lt;color=#E85A7A&gt;1点因果&lt;/color&gt;，治愈目标一切疾病与损伤。该效果会恢复缺失肢体，清除成瘾、机械损伤、永久旧伤与其他负面健康状态。&lt;color=#C77DFF&gt;诡医&lt;/color&gt;无法对昭离自己或敌对目标使用，并会在目标身上建立持续30天的&lt;color=#D66BFF&gt;因果链接&lt;/color&gt;。</description>
+        <description>Costs 3 Karma to restore missing parts, wounds and treatable harmful conditions, and creates a 30-day Karma Link. At most 6 targets can be linked. Cannot target the caster or enemies. Cooldown: 15 seconds.</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Guiyi</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -65,6 +65,7 @@
         <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 
+        <cooldownTicksRange>900</cooldownTicksRange>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -84,7 +85,7 @@
 
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliGuiyi">
-                <karmaCost>1</karmaCost>
+                <karmaCost>3</karmaCost>
                 <overlayScale>1.5</overlayScale>
             </li>
         </comps>
@@ -93,7 +94,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Dingshu</defName>
         <label>&lt;color=#C9A2FF&gt;定数&lt;/color&gt;</label>
-        <description>消耗&lt;color=#E85A7A&gt;2点因果&lt;/color&gt;，由昭离对尸体持续注入&lt;color=#C9A2FF&gt;50分钟&lt;/color&gt;的黑色因果，将其完整复活并治愈所有损伤，不产生复活后遗症。复活目标会与昭离建立因果链接，并获得持续&lt;color=#C77DFF&gt;12天&lt;/color&gt;的&lt;color=#C9A2FF&gt;定数标记&lt;/color&gt;；若目标在该标记持续期间再次死亡，则无法再被复活。该技能不会在袭击状态下生效。</description>
+        <description>Costs 8 Karma and channels for about 34.7 seconds to resurrect and repair a corpse, creating a Karma Link and a 3-day Destiny Mark. A target that dies again while marked cannot be resurrected again. Unavailable during raids.</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Dingshu</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -128,8 +129,8 @@
 
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliDingshu">
-                <karmaCost>2</karmaCost>
-                <markDurationTicks>720000</markDurationTicks>
+                <karmaCost>8</karmaCost>
+                <markDurationTicks>180000</markDurationTicks>
                 <channelDurationTicks>2083</channelDurationTicks>
                 <overlayScale>1.75</overlayScale>
                 <lineMoteIntervalTicks>30</lineMoteIntervalTicks>
@@ -141,12 +142,12 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Minghuo</defName>
         <label>&lt;color=#FF6A6A&gt;冥火&lt;/color&gt;</label>
-        <description>消耗&lt;color=#E85A7A&gt;3点因果&lt;/color&gt;，将死者因果附着于昭离当前主武器之上，持续1日。附魔期间，武器伤害、破甲、命中与攻击速度提升至原本的&lt;color=#FF6A6A&gt;1.5倍&lt;/color&gt;，攻击距离额外增加2格，并在每次近战命中时附加一段&lt;color=#FF8A66&gt;火焰伤害&lt;/color&gt;。</description>
+        <description>Costs 3 Karma to enchant the current primary weapon for 60 seconds. Damage, armor penetration, hit chance and attack speed increase by 25%, melee reach increases by 1 cell, and melee hits add fire damage. Cooldown: 150 seconds.</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minghuo</iconPath>
 
         <category>MX_ZhaoliSkill</category>
         <displayOrder>102</displayOrder>
-        <cooldownTicksRange>60000</cooldownTicksRange>
+        <cooldownTicksRange>9000</cooldownTicksRange>
         <jobDef>MX_Zhaoli_CastAbility_Uninterruptible</jobDef>
 
         <targetRequired>true</targetRequired>
@@ -174,7 +175,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliMinghuo">
                 <karmaCost>3</karmaCost>
-                <durationTicks>60000</durationTicks>
+                <durationTicks>3600</durationTicks>
                 <overlayScale>1.8</overlayScale>
             </li>
         </comps>
@@ -183,7 +184,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Minshen</defName>
         <label>&lt;color=#C77DFF&gt;泯神&lt;/color&gt;</label>
-        <description>消耗&lt;color=#E85A7A&gt;3点因果&lt;/color&gt;，对目标点&lt;color=#B86CFF&gt;13x13&lt;/color&gt;范围内的敌方单位施加压制。血肉目标会受到持续5秒的蚀命，每秒对躯干造成1点无视护甲的钝击伤害；其中90%还会陷入&lt;color=#C77DFF&gt;80%减速&lt;/color&gt;，10%会陷入&lt;color=#D66BFF&gt;失神30秒&lt;/color&gt;。机械体不承受失神与减速，改为直接承受&lt;color=#E85A7A&gt;EMP&lt;/color&gt;冲击。</description>
+        <description>Costs 3 Karma and affects enemies in a 13×13 area. Flesh targets take 1 armor-ignoring damage to the torso each second for 5 seconds, and have a 10% chance to become dazed for 7 seconds; otherwise their movement falls by 45% for 7 seconds. Non-flesh targets receive EMP. Cooldown: 15 seconds.</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minshen</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -198,6 +199,7 @@
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
 
+        <cooldownTicksRange>900</cooldownTicksRange>
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
@@ -218,7 +220,7 @@
                 <areaWidth>13</areaWidth>
                 <areaHeight>13</areaHeight>
                 <dazeChance>0.1</dazeChance>
-                <mentalStateDurationTicks>1800</mentalStateDurationTicks>
+                <mentalStateDurationTicks>420</mentalStateDurationTicks>
                 <damageDurationTicks>300</damageDurationTicks>
                 <empDamage>15</empDamage>
                 <slowHediff>MXZL_ZhaoliMinshenSlow</slowHediff>

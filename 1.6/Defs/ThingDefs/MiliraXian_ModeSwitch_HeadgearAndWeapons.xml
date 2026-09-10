@@ -200,7 +200,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Neiyu_Form_Bow</defName>
         <label>霓羽·弓形</label>
-        <description>由花形转化而来的弓形兵装。羽辉聚弦，流矢如雨，更擅长在中远距离维持持续而华丽的压制。</description>
+        <description>Neiyu's bow form. The main arrow splits into 16 homing shards. Can switch to flower or sword form.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>        <!--科技时代-->
@@ -294,14 +294,14 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>90</damageAmountBase>
+            <damageAmountBase>36</damageAmountBase>
             <speed>45</speed>
             <arcHeightFactor>0.10</arcHeightFactor>
         </projectile>
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.SplitArrowExtension">
                 <splitProjectileDef>MX_Bullet_HomingShard</splitProjectileDef>
-                <splitCount>27</splitCount>
+                <splitCount>16</splitCount>
                 <splitDelayTicks>8</splitDelayTicks>
                 <scatterAngle>120</scatterAngle>
                 <scatterDistance>14</scatterDistance>
@@ -328,7 +328,7 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>18</damageAmountBase>
+            <damageAmountBase>12</damageAmountBase>
             <speed>54</speed>
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>
@@ -375,7 +375,7 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>60</damageAmountBase>
+            <damageAmountBase>30</damageAmountBase>
             <speed>56</speed>
             <arcHeightFactor>0.20</arcHeightFactor>
         </projectile>

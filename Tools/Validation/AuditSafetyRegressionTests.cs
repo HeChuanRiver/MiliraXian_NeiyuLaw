@@ -66,6 +66,8 @@ internal static class AuditSafetyRegressionTests
             TestLoadoutReset();
             TestRebirthGuards();
             TestMingyuanMechanics();
+            TestNeiyuShieldBalance();
+            TestMingyuanDamageAndRecoveryBudget();
             TestRaidJobLogging();
         }
     }
@@ -428,6 +430,122 @@ internal static class AuditSafetyRegressionTests
         long bytes = allocated() - before;
         Check(bytes == 0, "rejected job log prefix has no per-call managed allocations");
         Console.WriteLine("Job log rejected-prefix allocation: " + bytes + " bytes / 10000 calls (desktop CLR, not Dubs PA).");
+    }
+
+    private static void TestNeiyuShieldBalance()
+    {
+        MethodInfo format = typeof(Gizmo_NeiyuShieldStatus).GetMethod("FormatTicks", BindingFlags.NonPublic | BindingFlags.Static);
+        Check((string)format.Invoke(null, new object[] { 600 }) == "10s"
+            && (string)format.Invoke(null, new object[] { 9000 }) == "150s",
+            "shield timers display game ticks as seconds");
+        Current.Game = (Game)FormatterServices.GetUninitializedObject(typeof(Game));
+        Current.Game.tickManager = (TickManager)FormatterServices.GetUninitializedObject(typeof(TickManager));
+        Set(Current.Game.tickManager, "ticksGameInt", 200);
+        var shield = new HediffComp_MXNeiyuCountShield {
+            parent = new HediffWithComps { pawn = BarePawn() },
+            props = new HediffCompProperties_MXNeiyuCountShield()
+        };
+        Set(shield.Pawn.health, "healthState", PawnHealthState.Mobile);
+        Set(shield, "stage", 2);
+        Set(shield, "phase2Charges", 48);
+        MethodInfo cost = shield.GetType().GetMethod("CalculatePhase2Cost", BindingFlags.NonPublic | BindingFlags.Instance);
+        float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
+        int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
+        for (int i = 0; i < amounts.Length; i++)
+            Check((int)cost.Invoke(shield, new object[] { amounts[i] }) == costs[i], "shield cost at " + amounts[i] + " damage");
+
+        bool absorbed = false;
+        var damage = new DamageInfo(new DamageDef(), .01f);
+        bool handled = shield.TryAbsorb(ref damage, ref absorbed);
+        Check(handled && absorbed && shield.Phase2Charges == 47,
+            "an actual low-damage hit consumes a shield charge");
+        Set(shield, "weakUntilTick", 1000);
+        Set(shield, "phase2Charges", 0);
+        Set(shield, "weakShieldExhaustedAnnounced", true);
+        absorbed = false;
+        Check(!shield.TryAbsorb(ref damage, ref absorbed) && !absorbed,
+            "an empty weak shield lets low damage through");
+
+        MethodInfo normalize = shield.GetType().GetMethod("NormalizeForPowerLevelChange", BindingFlags.NonPublic | BindingFlags.Instance);
+        Set(shield, "phase2Charges", 1000);
+        Set(shield, "weakUntilTick", 300000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase2Charges == 24 && shield.WeakUntilTick == 9200,
+            "legacy weak charges and duration are clipped on first observation");
+        Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
+        Set(shield, "weakUntilTick", 0);
+        Set(shield, "phase2Charges", 1000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase2Charges == 48, "legacy normal charges are clipped in original mode too");
+        Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
+        Set(shield, "stage", 3);
+        Set(shield, "phase3AbsorbUntilTick", 5000);
+        Set(shield, "phase3EndTick", 60000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase3AbsorbUntilTick == 800 && shield.Phase3EndTick == 3200,
+            "legacy absorption and buff windows fit the new durations");
+
+        Type balance = mod.GetType("MiliraXian.Characters.Neiyu.NeiyuPowerBalance", true);
+        MethodInfo setLevel = balance.GetMethod("SetLevel");
+        try
+        {
+            foreach (CharacterPowerLevel level in new[] { CharacterPowerLevel.Original, CharacterPowerLevel.Balanced })
+            {
+                setLevel.Invoke(null, new object[] { level });
+                Set(shield, "phase3AbsorbUntilTick", 100);
+                Set(shield, "phase3EndTick", 4000);
+                MXNeiyuStage3Profile previous = default(MXNeiyuStage3Profile);
+                bool first = true;
+                foreach (float stored in new[] { 500f, 1000f, 1001f, 1500f, 2000f, 3000f, 50000f })
+                {
+                    Set(shield, "phase3StoredDamage", stored);
+                    MXNeiyuStage3Profile actual;
+                    Check(shield.TryGetStage3Profile(out actual), "active buff profile in " + level);
+                    Check(actual.outgoingDamageFactor <= 2f && actual.incomingDamageFactor >= .5f
+                        && actual.rangedDodgeBonusPct <= .3f, "absorption bonuses remain bounded in " + level);
+                    if (!first)
+                        Check(actual.outgoingDamageFactor >= previous.outgoingDamageFactor
+                            && actual.moveSpeedFactor >= previous.moveSpeedFactor
+                            && actual.injuryHealingFactor >= previous.injuryHealingFactor
+                            && actual.aimingDelayFactor <= previous.aimingDelayFactor
+                            && actual.incomingDamageFactor <= previous.incomingDamageFactor,
+                            "absorbing more damage cannot weaken the current profile");
+                    first = false;
+                    previous = actual;
+                }
+                Check(shield.GetStage3TierLabel() == "D x5", "tier label respects the bonus cap");
+            }
+        }
+        finally { setLevel.Invoke(null, new object[] { CharacterPowerLevel.Original }); }
+    }
+
+    private static void TestMingyuanDamageAndRecoveryBudget()
+    {
+        var bow = new CompProperties_MingyuanRainbowBow();
+        Check(bow.FocusDamageFor(0f) == 40f && bow.FocusDamageFor(-100f) == 40f,
+            "focus without existing layers deals only base arrow damage");
+        Check(bow.FocusDamageFor(100f) == 100f && bow.FocusDamageFor(300f) == 220f
+            && bow.FocusDamageFor(1000000f) == 220f, "focus consumes layer value with a bounded payoff");
+        Check(bow.RadiationLayersFor(0f) == 50 && bow.RadiationLayersFor(1500f) == 110
+            && bow.RadiationLayersFor(1000000f) == 120, "scatter stops scaling with extreme target durability");
+        Check(MingyuanUtility.ConsumeLifeBurn(null) == 0f, "consuming a missing target is harmless");
+
+        var reserve = new HediffComp_MingyuanProtectiveFlameShield {
+            props = new HediffCompProperties_MingyuanProtectiveFlameShield()
+        };
+        Set(Current.Game.tickManager, "ticksGameInt", 200);
+        Set(reserve, "energy", 95f);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 97f, "heat adds only two repair reserve");
+        for (int i = 0; i < 10; i++)
+            Check(!reserve.TryRefillFromHeat() && reserve.Energy == 97f, "same-tick heat cannot bypass the refill budget");
+        Set(Current.Game.tickManager, "ticksGameInt", 259);
+        Check(!reserve.TryRefillFromHeat(), "refill cooldown lasts a full second");
+        Set(Current.Game.tickManager, "ticksGameInt", 260);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 99f, "refill resumes at the cooldown boundary");
+        Set(Current.Game.tickManager, "ticksGameInt", 320);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 100f, "heat refill cannot exceed reserve capacity");
+        Set(Current.Game.tickManager, "ticksGameInt", 380);
+        Check(!reserve.TryRefillFromHeat(), "full reserve does not accept additional heat healing");
     }
 
     private static void Set(object obj, string field, object value, Type declaringType = null)

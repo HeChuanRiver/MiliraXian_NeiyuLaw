@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXNL_NeiyuShield.label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</MXNL_NeiyuShield.label>
-  <MXNL_NeiyuShield.description>&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;护身&lt;/color&gt;次数盾，会随阶段变化展现不同防护能力，并在危急时转入更强的守护形态。</MXNL_NeiyuShield.description>
+  <MXNL_NeiyuShield.description>第一阶段抵消一次攻击，随后进入第二阶段；致命攻击会直接触发第三阶段。
+第二阶段拥有48层护盾，每36点伤害消耗1层，向上取整，每次至少消耗1层。60秒未消耗盾层时回到第一阶段。盾层耗尽后进入第三阶段。
+第三阶段吸收伤害10秒，再根据吸收量获得40秒增益，高额吸收的增益最多叠加5层。结束后虚弱150秒，期间护盾仅有24层，耗尽后无法抵挡伤害，也无法触发第三阶段。</MXNL_NeiyuShield.description>
 </LanguageData>

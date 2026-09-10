@@ -229,7 +229,13 @@ namespace MiliraXian.Characters.Neiyu
             if (d <= tierAMax) { currentTier = 0; currentFill = Mathf.Clamp01(d / tierAMax); }
             else if (d <= tierBMax) { currentTier = 1; currentFill = Mathf.Clamp01((d - tierAMax) / Mathf.Max(1f, tierBMax - tierAMax)); }
             else if (d <= tierCMax) { currentTier = 2; currentFill = Mathf.Clamp01((d - tierBMax) / Mathf.Max(1f, tierCMax - tierBMax)); }
-            else { float aboveC = d - tierCMax; int fullStacks = Mathf.FloorToInt(aboveC / tierDStep); currentTier = 3 + fullStacks; currentFill = Mathf.Clamp01((aboveC - fullStacks * tierDStep) / tierDStep); }
+            else
+            {
+                float aboveC = d - tierCMax;
+                int fullStacks = Mathf.Clamp(Mathf.FloorToInt(aboveC / tierDStep), 0, 4);
+                currentTier = 3 + fullStacks;
+                currentFill = fullStacks == 4 ? 1f : Mathf.Clamp01((aboveC - fullStacks * tierDStep) / tierDStep);
+            }
 
             Color currentColor;
             if (currentTier >= 3) { int dIdx = currentTier - 3; float t = dIdx / Mathf.Max(1f, dIdx + 2f); currentColor = Color.Lerp(TierDBaseColor, TierDDeepColor, t); }
@@ -330,11 +336,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private static string FormatTicks(int ticks)
         {
-            if (ticks <= 0) return "0s";
-            float hours = ticks / 2500f;
-            if (hours >= 1f) return hours.ToString("F1") + "h";
-            float minutes = ticks / 60f;
-            return Mathf.CeilToInt(minutes) + "m";
+            return (Mathf.Max(0, ticks) / 60f).ToString("0.#") + "s";
         }
 
         private string BuildFullTooltip()
@@ -353,7 +355,10 @@ namespace MiliraXian.Characters.Neiyu
         private string BuildWeakBadgeTip()
         {
             int remain = Mathf.Max(0, shield.WeakUntilTick - shield.CurrentTickForDisplay);
-            return "MX_NL_WeakBadgeTip".Translate(FormatTicks(remain));
+            NeiyuPowerBalance.GetWeakPenaltyFactors(out float move, out float rest, out float work);
+            return "MX_NL_WeakBadgeTip".Translate(FormatTicks(remain),
+                Mathf.RoundToInt((1f - move) * 100f), Mathf.RoundToInt((rest - 1f) * 100f),
+                Mathf.RoundToInt((1f - work) * 100f));
         }
     }
 }

@@ -4,7 +4,8 @@
   <MX_Mingyuan_CinderSword.description>明渊的余烬长剑，剑身流淌着灼热的赤焰。基础割伤44点，破甲150%，近战冷却系数0.5；明渊的火焰会在命中时施加生命燃烧。</MX_Mingyuan_CinderSword.description>
   <MX_Mingyuan_CinderSword.tools.0.label>尘烬</MX_Mingyuan_CinderSword.tools.0.label>
   <MX_Mingyuan_RainbowBow.label>长虹</MX_Mingyuan_RainbowBow.label>
-  <MX_Mingyuan_RainbowBow.description>由淡金与赤色火焰构成的明渊长弓，可在聚焦与辐射形态间切换。聚焦形态固定蓄力 5 秒，瞬时爆掉一个视线内敌人的生命燃烧，不造成普通武器伤害。辐射形态每秒至多发动一次，贯穿 10 格、108° 扇区内全部合法敌人，各造成 1 点灼伤并叠加其爆条阈值的 23%。</MX_Mingyuan_RainbowBow.description>
+  <MX_Mingyuan_RainbowBow.description>聚焦：射程50格，需要视线，蓄力2.5秒。消耗目标全部生命燃烧，造成40点无视护甲伤害，每层额外造成0.6点，单次伤害上限220点。
+散射：向前方10格、108°扇形区域散射，每1.5秒最多发射一次。对敌人造成1点燃烧伤害，并附加50层生命燃烧，额外层数为其引爆阈值的4%，最多附加120层。过燃时附加层数进一步提高。</MX_Mingyuan_RainbowBow.description>
   <MX_Bullet_Mingyuan_RainbowArrow.label>长虹箭</MX_Bullet_Mingyuan_RainbowArrow.label>
   <MX_Mingyuan_BurningPillarField.label>燃烧之柱核心</MX_Mingyuan_BurningPillarField.label>
   <MX_Mingyuan_AshesField.label>焚我余烬领域</MX_Mingyuan_AshesField.label>

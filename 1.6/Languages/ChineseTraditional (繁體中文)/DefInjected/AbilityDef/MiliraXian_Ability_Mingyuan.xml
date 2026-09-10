@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_AscendantFlameDash.label>&lt;color=#FFB25C&gt;升焰疾行&lt;/color&gt;</MX_Mingyuan_AscendantFlameDash.label>
-  <MX_Mingyuan_AscendantFlameDash.description>明淵化作淡色升焰，無視視線跨越最多 150 格，留下 3 格寬、持續 15 秒的灼痕。路徑敵人受到 10 點灼傷，獲得 30 層生命燃燒，被擊退並眩暈 3 秒。站在灼痕上的敵人每 0.5 秒繼續獲得生命燃燒。冷卻：3 秒。</MX_Mingyuan_AscendantFlameDash.description>
+  <MX_Mingyuan_AscendantFlameDash.description>化為火焰，沿3格寬路徑沖刺至多35格，無需視線。沿途敵人受到10點基礎燃燒傷害、30層生命燃燒、擊退和1秒眩暈。灼痕持續5秒，每秒附加6層生命燃燒。冷卻8秒。</MX_Mingyuan_AscendantFlameDash.description>
   <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;瞬時燃燒&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
-  <MX_Mingyuan_InstantCombustion.description>明淵釋放 30 格淡色強光。敵對小人的大腦與每隻眼睛各受 1 點灼傷，生命燃燒層數翻倍或被點燃，並眩暈 12 秒。前搖：3 秒。冷卻：18 小時。</MX_Mingyuan_InstantCombustion.description>
+  <MX_Mingyuan_InstantCombustion.description>對半徑12格內敵人的大腦和眼睛分別造成1點基礎燃燒傷害，并眩暈3秒。已有生命燃燒翻倍，沒有層數的目標會被點燃。蓄力3秒，冷卻120秒。</MX_Mingyuan_InstantCombustion.description>
   <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;燃燒之柱&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
-  <MX_Mingyuan_BurningPillar.description>放置一枚燃燒核心，10 分鐘內從半徑 1 成長到 15，持續 3 小時。越靠近邊緣割傷越高，越靠近中心灼傷越高；灼傷決定生命燃燒疊層。敵對及無陣營建築每次脈衝受到最大生命 33% 傷害。己方、中立及盟友勢力的建築不受影響。10 分鐘後可指令核心移動。</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_BurningPillar.description>蓄力3秒，在40格內放置燃燒核心。核心3秒內擴大至半徑10格，隨后可控制移動，持續30秒。每秒對敵人造成合計15點基礎燃燒與切割傷害，并附加生命燃燒。對敵方及無陣營建筑，每秒造成其最大生命值6%的基礎傷害。冷卻240秒。</MX_Mingyuan_BurningPillar.description>
   <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;時間燃燒&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
-  <MX_Mingyuan_TimeBurn.description>在 1 小時內把目標生物年齡燃盡為 0；歸零時目標死亡。機械族會坍縮為鋼鐵與玻璃鋼，建築會分解為 100% 原材料。前搖：8 秒。冷卻：48 小時。</MX_Mingyuan_TimeBurn.description>
+  <MX_Mingyuan_TimeBurn.description>蓄力3秒，在20秒內燃盡目標的生物年齡并將其處決。機械體分解為鋼鐵和塑鋼，建筑分解為原料。冷卻300秒。</MX_Mingyuan_TimeBurn.description>
   <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;焚我餘燼&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>
-  <MX_Mingyuan_AshesOfSelf.description>消耗 50% 血液，獲得 100 層自我燃燒，並展開持續 15 秒的 5x5 餘燼領域。領域跟隨明淵，每 0.5 秒造成 1 點灼傷並疊加生命燃燒。自我燃燒超過 300 時進入過燃。冷卻：15 秒。</MX_Mingyuan_AshesOfSelf.description>
+  <MX_Mingyuan_AshesOfSelf.description>增加20%失血并獲得100層自燃。在自身周圍形成半徑2.4格、持續10秒的火場，每0.5秒灼燒敵人并附加生命燃燒，同時治療自身傷口和舊傷、積累自燃。冷卻30秒。</MX_Mingyuan_AshesOfSelf.description>
 </LanguageData>

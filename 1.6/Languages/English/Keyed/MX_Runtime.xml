@@ -76,24 +76,24 @@
   <MX_NL_ShieldDamageTypeLethal>lethal/downing</MX_NL_ShieldDamageTypeLethal>
   <MX_NL_ShieldDamageTypeNonLethal>non-lethal</MX_NL_ShieldDamageTypeNonLethal>
   <MX_NL_ShieldDebugName>Shield</MX_NL_ShieldDebugName>
-  <MX_NL_ShieldDebugStage3AbsorbLabel>III-absorb stored:{0} left:{1}h</MX_NL_ShieldDebugStage3AbsorbLabel>
-  <MX_NL_ShieldDebugStage3BuffLabel>III-buff tier:{0} left:{1}h</MX_NL_ShieldDebugStage3BuffLabel>
-  <MX_NL_ShieldDebugWeakLabel>[weakened {0}h]</MX_NL_ShieldDebugWeakLabel>
+  <MX_NL_ShieldDebugStage3AbsorbLabel>III-absorb stored:{0} left:{1}s</MX_NL_ShieldDebugStage3AbsorbLabel>
+  <MX_NL_ShieldDebugStage3BuffLabel>III-buff tier:{0} left:{1}s</MX_NL_ShieldDebugStage3BuffLabel>
+  <MX_NL_ShieldDebugWeakLabel>[weakened {0}s]</MX_NL_ShieldDebugWeakLabel>
   <MX_NL_ShieldTipStage>Stage: {0}{1}</MX_NL_ShieldTipStage>
   <MX_NL_ShieldTipWeakSuffix> (weakened)</MX_NL_ShieldTipWeakSuffix>
   <MX_NL_ShieldTipStage2Charges>Stage II charges: {0}/{1}</MX_NL_ShieldTipStage2Charges>
-  <MX_NL_ShieldTipThreshold>Threshold: {0}</MX_NL_ShieldTipThreshold>
+  <MX_NL_ShieldTipThreshold>Consumes 1 charge per {0} damage, rounded up, at least 1.</MX_NL_ShieldTipThreshold>
   <MX_NL_ShieldTipRecentHits>Last 5 hits (damage -&gt; charges spent):</MX_NL_ShieldTipRecentHits>
   <MX_NL_ShieldTipStage3Absorb>Stage III - absorb (invincible)</MX_NL_ShieldTipStage3Absorb>
-  <MX_NL_ShieldTipAbsorbRemaining>Absorb remaining: {0}h</MX_NL_ShieldTipAbsorbRemaining>
+  <MX_NL_ShieldTipAbsorbRemaining>Absorb remaining: {0}s</MX_NL_ShieldTipAbsorbRemaining>
   <MX_NL_ShieldTipStoredDamage>Current stored damage: {0}</MX_NL_ShieldTipStoredDamage>
   <MX_NL_ShieldTipBuffAfterAbsorb>The buff will begin after the absorb window ends.</MX_NL_ShieldTipBuffAfterAbsorb>
   <MX_NL_ShieldTipStage3Buff>Stage III - buff (vulnerable)</MX_NL_ShieldTipStage3Buff>
-  <MX_NL_ShieldTipBuffRemaining>Buff remaining: {0}h</MX_NL_ShieldTipBuffRemaining>
+  <MX_NL_ShieldTipBuffRemaining>Buff remaining: {0}s</MX_NL_ShieldTipBuffRemaining>
   <MX_NL_ShieldTipLockedDamage>Locked stored damage: {0}</MX_NL_ShieldTipLockedDamage>
   <MX_NL_ShieldTipCurrentTier>Current tier: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>Current buffs:</MX_NL_ShieldTipCurrentBuffs>
-  <MX_NL_ShieldTipWeakRemaining>Weakened remaining: {0}h</MX_NL_ShieldTipWeakRemaining>
+  <MX_NL_ShieldTipWeakRemaining>Weakened remaining: {0}s</MX_NL_ShieldTipWeakRemaining>
   <MX_NL_ShieldTipWeakPenalty>Weakened penalty: move speed -{0}%, rest fall rate +{1}%, global work speed -{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>Melee/ranged damage +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>Aiming time {0}{1}%</MX_NL_ShieldBuffAimingTime>

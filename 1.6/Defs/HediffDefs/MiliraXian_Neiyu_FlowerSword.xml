@@ -18,7 +18,7 @@
     <HediffDef>
         <defName>MX_Neiyu_FlowerBlessed</defName>
         <label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</label>
-        <description>来自&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;&lt;color=#F39AD9&gt;花形态&lt;/color&gt;技能的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;，会在短时间内强化自身状态。</description>
+        <description>Blessing lasts 60 seconds, improving movement and immunity gain while reducing incoming damage.</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.96, 0.60, 0.92)</defaultLabelColor>
         <isBad>false</isBad>
@@ -38,7 +38,7 @@
         </stages>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>18000</disappearsAfterTicks>
+                <disappearsAfterTicks>3600</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
         </comps>
@@ -47,7 +47,7 @@
     <HediffDef>
         <defName>MX_Neiyu_SwordVulnerability</defName>
         <label>&lt;color=#C7A2F8&gt;剑坠易伤&lt;/color&gt;</label>
-        <description>受到&lt;color=#8BD5FF&gt;剑落冲击&lt;/color&gt;后，短时间内会承受更高伤害，并被&lt;color=#C7A2F8&gt;易伤&lt;/color&gt;余波缠绕。</description>
+        <description>Skyfall increases damage taken for 25 seconds.</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.86, 0.52, 0.88)</defaultLabelColor>
         <isBad>true</isBad>
@@ -65,7 +65,7 @@
         </stages>
         <comps>
             <li Class="HediffCompProperties_Disappears">
-                <disappearsAfterTicks>9000</disappearsAfterTicks>
+                <disappearsAfterTicks>1500</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
         </comps>

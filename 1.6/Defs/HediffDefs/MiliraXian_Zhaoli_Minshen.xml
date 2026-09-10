@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinshenSlow</defName>
         <label>&lt;color=#C77DFF&gt;泯神压制&lt;/color&gt;</label>
-        <description>&lt;color=#C77DFF&gt;泯神&lt;/color&gt;压制了该目标的行动能力，使其移动速度仅剩原本的20%。</description>
+        <description>Minshen reduces movement by 45% for 7 seconds.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.48, 0.12, 0.38)</defaultLabelColor>
         <isBad>true</isBad>
@@ -16,13 +16,13 @@
             <li>
                 <minSeverity>0</minSeverity>
                 <statFactors>
-                    <MoveSpeed>0.20</MoveSpeed>
+                    <MoveSpeed>0.55</MoveSpeed>
                 </statFactors>
             </li>
         </stages>
         <comps>
             <li Class="Verse.HediffCompProperties_Disappears">
-                <disappearsAfterTicks>1800</disappearsAfterTicks>
+                <disappearsAfterTicks>420</disappearsAfterTicks>
                 <showRemainingTime>true</showRemainingTime>
             </li>
         </comps>

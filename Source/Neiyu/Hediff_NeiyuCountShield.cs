@@ -26,17 +26,17 @@ namespace MiliraXian.Characters.Neiyu
     public class HediffCompProperties_MXNeiyuCountShield : HediffCompProperties
     {
 
-        public float phase2Threshold = 18f;
+        public float phase2Threshold = 36f;
 
-        public int phase2MaxChargesNormal = 1000;
-        public int phase2MaxChargesWeak = 250;
+        public int phase2MaxChargesNormal = 48;
+        public int phase2MaxChargesWeak = 24;
         
-        public int phase2RecoverTicksNoChange = 30000;
+        public int phase2RecoverTicksNoChange = 3600;
         
-        public int stage3AbsorbTicks = 5000;
-        public int stage3BuffTicks = 55000;
-        public int stage3DurationTicks = 60000;
-        public int weakDurationTicks = 300000;
+        public int stage3AbsorbTicks = 600;
+        public int stage3BuffTicks = 2400;
+        public int stage3DurationTicks = 3000;
+        public int weakDurationTicks = 9000;
 
 
         public float stage3TierA_MaxDamage = 100f;
@@ -278,14 +278,6 @@ namespace MiliraXian.Characters.Neiyu
                 int before = phase2Charges;
                 int cost = CalculatePhase2Cost(dinfo.Amount);
 
-                if (cost <= 0)
-                {
-                    absorbed = true;
-                    PlayAbsorbFx(dinfo);
-                    RecordPhase2Hit(dinfo.Amount, 0, before, before);
-                    return true;
-                }
-
                 if (before <= 0)
                 {
                     if (InWeak)
@@ -413,14 +405,15 @@ namespace MiliraXian.Characters.Neiyu
             }
 
 
-            int stacks = 1 + Mathf.FloorToInt((d - Props.stage3TierC_MaxDamage) / Mathf.Max(1f, Props.stage3TierD_ExtraStepDamage));
-            profile.outgoingDamageFactor = 1f + 0.35f * stacks;
-            profile.moveSpeedFactor = 1f + 0.10f * stacks;
-            profile.injuryHealingFactor = 1f + 0.35f * stacks;
-            profile.incomingDamageFactor = Mathf.Max(0.10f, 1f - 0.10f * stacks);
+            int stacks = Stage3Stacks(d);
+            profile.outgoingDamageFactor = Mathf.Min(2f, 1f + 0.35f * stacks);
+            profile.aimingDelayFactor = 0.80f;
+            profile.moveSpeedFactor = Mathf.Max(1.20f, 1f + 0.10f * stacks);
+            profile.injuryHealingFactor = Mathf.Max(1.70f, 1f + 0.35f * stacks);
+            profile.incomingDamageFactor = Mathf.Max(0.50f, 1f - 0.10f * stacks);
             profile.meleeArmorPenetrationFactor = 1f + 0.10f * stacks;
             profile.meleeDodgeChanceFactor = 1f + 0.10f * stacks;
-            profile.rangedDodgeBonusPct = 0.10f * stacks;
+            profile.rangedDodgeBonusPct = Mathf.Min(0.30f, 0.10f * stacks);
 
             NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
             return true;
@@ -511,21 +504,21 @@ namespace MiliraXian.Characters.Neiyu
                         int remainAbsorb = Math.Max(0, phase3AbsorbUntilTick - now);
                         txt += " " + "MX_NL_ShieldDebugStage3AbsorbLabel".Translate(
                             phase3StoredDamage.ToString("F0"),
-                            (remainAbsorb / 2500f).ToString("F1")).ToString();
+                            (remainAbsorb / 60f).ToString("F1")).ToString();
                     }
                     else
                     {
                         int remainBuff = Math.Max(0, phase3EndTick - now);
                         txt += " " + "MX_NL_ShieldDebugStage3BuffLabel".Translate(
                             GetStage3TierLabel(),
-                            (remainBuff / 2500f).ToString("F1")).ToString();
+                            (remainBuff / 60f).ToString("F1")).ToString();
                     }
                 }
 
                 if (InWeak)
                 {
                     int weakRemain = Math.Max(0, weakUntilTick - CurrentTick);
-                    txt += " " + "MX_NL_ShieldDebugWeakLabel".Translate((weakRemain / 2500f).ToString("F1")).ToString();
+                    txt += " " + "MX_NL_ShieldDebugWeakLabel".Translate((weakRemain / 60f).ToString("F1")).ToString();
                 }
 
                 return txt;
@@ -569,7 +562,7 @@ namespace MiliraXian.Characters.Neiyu
                     {
                         int remainAbsorb = Math.Max(0, phase3AbsorbUntilTick - now);
                         sb.AppendLine("MX_NL_ShieldTipStage3Absorb".Translate().ToString());
-                        sb.AppendLine("MX_NL_ShieldTipAbsorbRemaining".Translate((remainAbsorb / 2500f).ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipAbsorbRemaining".Translate((remainAbsorb / 60f).ToString("F1")).ToString());
                         sb.AppendLine("MX_NL_ShieldTipStoredDamage".Translate(phase3StoredDamage.ToString("F1")).ToString());
                         sb.AppendLine("MX_NL_ShieldTipBuffAfterAbsorb".Translate().ToString());
                     }
@@ -577,7 +570,7 @@ namespace MiliraXian.Characters.Neiyu
                     {
                         int remainBuff = Math.Max(0, phase3EndTick - now);
                         sb.AppendLine("MX_NL_ShieldTipStage3Buff".Translate().ToString());
-                        sb.AppendLine("MX_NL_ShieldTipBuffRemaining".Translate((remainBuff / 2500f).ToString("F1")).ToString());
+                        sb.AppendLine("MX_NL_ShieldTipBuffRemaining".Translate((remainBuff / 60f).ToString("F1")).ToString());
                         sb.AppendLine("MX_NL_ShieldTipLockedDamage".Translate(phase3StoredDamage.ToString("F1")).ToString());
                         sb.AppendLine("MX_NL_ShieldTipCurrentTier".Translate(GetStage3TierLabel()).ToString());
 
@@ -601,7 +594,7 @@ namespace MiliraXian.Characters.Neiyu
                 if (InWeak)
                 {
                     int weakRemain = Math.Max(0, weakUntilTick - CurrentTick);
-                    sb.AppendLine("MX_NL_ShieldTipWeakRemaining".Translate((weakRemain / 2500f).ToString("F1")).ToString());
+                    sb.AppendLine("MX_NL_ShieldTipWeakRemaining".Translate((weakRemain / 60f).ToString("F1")).ToString());
                     NeiyuPowerBalance.GetWeakPenaltyFactors(
                         out float moveSpeedFactor,
                         out float restFallRateFactor,
@@ -713,7 +706,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             observedPowerLevel = currentPowerLevel;
-            if (currentPowerLevel != CharacterPowerLevel.Balanced)
+            if (currentPowerLevel == CharacterPowerLevel.Decorative)
             {
                 return;
             }
@@ -767,27 +760,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private int CalculatePhase2Cost(float damageAmount)
         {
-            float t = Mathf.Max(0.1f, Props.phase2Threshold);
-
-            if (damageAmount < t)
-            {
-                return 0;
-            }
-            if (damageAmount < t * 3f)
-            {
-                return 1;
-            }
-            if (damageAmount < t * 6f)
-            {
-                return 10;
-            }
-            if (damageAmount < t * 15f)
-            {
-                return 100;
-            }
-
-
-            return Mathf.Max(1, phase2Charges);
+            return Mathf.Max(1, Mathf.CeilToInt(damageAmount / Mathf.Max(0.1f, Props.phase2Threshold)));
         }
 
         private bool IsLethalOrDowning(DamageInfo dinfo)
@@ -928,9 +901,13 @@ namespace MiliraXian.Characters.Neiyu
             if (d <= Props.stage3TierB_MaxDamage) return "B";
             if (d <= Props.stage3TierC_MaxDamage) return "C";
 
-            int stacks = 1 + Mathf.FloorToInt((d - Props.stage3TierC_MaxDamage) / Mathf.Max(1f, Props.stage3TierD_ExtraStepDamage));
+            int stacks = Stage3Stacks(d);
             return "D x" + stacks;
         }
+
+        private int Stage3Stacks(float storedDamage)
+            => Mathf.Clamp(1 + Mathf.FloorToInt((storedDamage - Props.stage3TierC_MaxDamage)
+                / Mathf.Max(1f, Props.stage3TierD_ExtraStepDamage)), 1, 5);
 
         private void NormalizeStage3Ticks(int now)
         {

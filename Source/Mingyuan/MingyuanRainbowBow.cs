@@ -17,8 +17,11 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public string modeIconPath = "MiliraXianMingyuan/Items/RainbowBow";
 
-        public float focusWarmupSeconds = 5f;
-        public float focusRange = 999f;
+        public float focusWarmupSeconds = 2.5f;
+        public float focusRange = 50f;
+        public float focusBaseDamage = 40f;
+        public float focusDamagePerLayer = 0.6f;
+        public float focusMaxDamage = 220f;
         public SoundDef focusChargeSound;
         public SoundDef focusFireSound;
         public FleckDef focusBeamFleck;
@@ -30,9 +33,11 @@ namespace MiliraXian.Characters.Mingyuan
         public float radiationWarmupSeconds = 0.35f;
         public float radiationRange = 10f;
         public float radiationArcDegrees = 108f;
-        public int radiationMinIntervalTicks = 60;
+        public int radiationMinIntervalTicks = 90;
         public float radiationDamage = 1f;
-        public float radiationLayerFraction = 0.23f;
+        public float radiationLayerFraction = 0.04f;
+        public float radiationBaseLayers = 50f;
+        public float radiationMaxLayers = 120f;
         public SoundDef radiationWarmupSound;
         public SoundDef radiationFireSound;
         public ThingDef radiationHitMote;
@@ -46,6 +51,13 @@ namespace MiliraXian.Characters.Mingyuan
         {
             compClass = typeof(CompEquippable_MingyuanRainbowBow);
         }
+
+        public float FocusDamageFor(float layers)
+            => Mathf.Clamp(focusBaseDamage + Mathf.Max(0f, layers) * focusDamagePerLayer, 0f, focusMaxDamage);
+
+        public int RadiationLayersFor(float threshold)
+            => Mathf.Max(1, Mathf.CeilToInt(Mathf.Min(radiationMaxLayers,
+                radiationBaseLayers + Mathf.Max(0f, threshold) * radiationLayerFraction)));
     }
 
     public class CompEquippable_MingyuanRainbowBow : CompEquippable
@@ -176,7 +188,7 @@ namespace MiliraXian.Characters.Mingyuan
             : BowComp?.Mode ?? MingyuanBowMode.Focus;
 
         public override float WarmupTime => ActiveMode == MingyuanBowMode.Focus
-            ? Mathf.Max(0f, PropsBow?.focusWarmupSeconds ?? 5f)
+            ? Mathf.Max(0f, PropsBow?.focusWarmupSeconds ?? 2.5f)
             : Mathf.Max(0f, PropsBow?.radiationWarmupSeconds ?? 0.35f);
 
         public override float EffectiveRange
@@ -188,14 +200,7 @@ namespace MiliraXian.Characters.Mingyuan
                     return Mathf.Max(1f, PropsBow?.radiationRange ?? 10f);
                 }
 
-                Map map = caster?.MapHeld;
-                if (MingyuanPowerBalance.Sealed) return PropsBow?.focusRange ?? 30.9f;
-                if (map == null)
-                {
-                    return Mathf.Max(1f, PropsBow?.focusRange ?? 999f);
-                }
-
-                return Mathf.Sqrt((float)map.Size.x * map.Size.x + (float)map.Size.z * map.Size.z) + 2f;
+                return Mathf.Max(1f, PropsBow?.focusRange ?? 50f);
             }
         }
 
@@ -435,9 +440,11 @@ namespace MiliraXian.Characters.Mingyuan
             Vector3 targetPosition = target.DrawPos;
             Vector3 direction = DirectionTo(target.Position);
             Vector3 emitter = MingyuanBowVisualDrawer.EmitterPosition(CasterPawn.DrawPos, direction);
-            if (!MingyuanPowerBalance.Sealed && !MingyuanUtility.TryTriggerLifeBurnBurst(target, CasterPawn))
+            if (!MingyuanPowerBalance.Sealed)
             {
-                return false;
+                float layers = MingyuanUtility.ConsumeLifeBurn(target);
+                MingyuanUtility.ApplyTrueDamage(target, MingyuanPowerBalance.ArrowDamage,
+                    PropsBow.FocusDamageFor(layers), CasterPawn);
             }
 
             if (MingyuanPowerBalance.Sealed)
@@ -564,7 +571,7 @@ namespace MiliraXian.Characters.Mingyuan
         {
             if (MingyuanPowerBalance.Sealed) return;
             float threshold = MingyuanUtility.GetLifeBurnExecuteThreshold(target);
-            int layers = Mathf.Max(1, Mathf.CeilToInt(threshold * Mathf.Max(0f, PropsBow.radiationLayerFraction)));
+            int layers = PropsBow.RadiationLayersFor(threshold);
             MingyuanUtility.AddLifeBurn(target, CasterPawn, layers);
 
             float damage = Mathf.Max(0f, PropsBow.radiationDamage);

@@ -4,7 +4,7 @@
   <MX_Power_Mingyuan>明渊：强度设置</MX_Power_Mingyuan>
   <MX_Power_AbilitiesSealed>此技能当前无法施放。</MX_Power_AbilitiesSealed>
   <MX_Power_SealedDescription>此技能当前无法施放。</MX_Power_SealedDescription>
-  <MX_Power_EquipmentInactive>专属装备的战斗强化已停用，仍可用于普通战斗。具体属性见信息面板。</MX_Power_EquipmentInactive>
+  <MX_Power_EquipmentInactive>专属装备的战斗强化已停用，仍可用于普通战斗。</MX_Power_EquipmentInactive>
   <MX_Power_PassiveInactive>此效果当前未生效。</MX_Power_PassiveInactive>
   <MX_Power_Zhaoli_Original>昭离的完整能力与默认战斗数值。</MX_Power_Zhaoli_Original>
   <MX_Power_Mingyuan_Original>明渊的完整能力与默认战斗数值。</MX_Power_Mingyuan_Original>
@@ -13,32 +13,36 @@
   <MX_Power_Zhaoli_Decorative>以陪伴、外观和剧情为主。主动技能、成长、因果收益、链接替死与自动复活停用；装备提供基础战斗能力。已有力场和附魔会结束。</MX_Power_Zhaoli_Decorative>
   <MX_Power_Mingyuan_Decorative>以陪伴、外观和剧情为主。主动技能与战斗被动停用，长虹发射普通单箭。已有持续效果会结束，已开始的重生流程会完成。</MX_Power_Mingyuan_Decorative>
   <MX_Power_Zhaoli_Duanzhan>挥出圆形斩击，并沿前方直线追加更强的追斩，优先命中躯干。武器附有冥火时，斩击会追加火焰伤害。</MX_Power_Zhaoli_Duanzhan>
-  <MX_Power_Zhaoli_DeathField>创造直径18格的圆形力场。昭离以外的单位在范围内移动速度降低20%，每秒受到流血伤口并积累1点告死。离开范围后，告死快速衰减；积累至9点时，最后施加告死的角色处决目标，获得1点因果和5层讳亡护盾。
-霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</MX_Power_Zhaoli_DeathField>
-  <MX_Power_Zhaoli_Guiyi>消耗1.2点因果，治愈目标的疾病与损伤，恢复缺失肢体，清除成瘾、机械损伤、永久旧伤及其他可治疗的负面健康状态，并建立持续30天的因果链接。无法对昭离自己或敌对目标使用。</MX_Power_Zhaoli_Guiyi>
-  <MX_Power_Zhaoli_Dingshu>消耗2.4点因果，持续引导1小时，将尸体完整复活并治愈损伤。目标会与昭离建立因果链接，并获得持续12天的定数标记；在标记期间再次死亡的目标无法复活。袭击期间无法使用。</MX_Power_Zhaoli_Dingshu>
-  <MX_Power_Zhaoli_Minghuo>消耗3点因果，为当前主武器附上持续1日的冥火。武器伤害、破甲、命中与攻击速度提升42.5%，攻击距离增加1.7格，近战命中时追加火焰伤害。</MX_Power_Zhaoli_Minghuo>
-  <MX_Power_Zhaoli_Minshen>消耗3点因果，压制目标点13×13范围内的敌人。血肉目标受到持续5秒的蚀命，每秒对躯干造成0.85点无视护甲的钝击伤害；其中8.5%会失神30秒，其余移动速度降低68%。机械体受到EMP冲击。</MX_Power_Zhaoli_Minshen>
-  <MX_Power_Zhaoli_Passives>昭离通过告死收集因果，并与接受诡医或定数的目标建立因果链接。链接最多同时存在20条，持续30天，可替昭离承受致命结局。死亡会推动昭离的成长；没有可用链接时，她会在离场后重返此界。</MX_Power_Zhaoli_Passives>
-  <MX_Power_Mingyuan_Bow>明渊的赤金长弓。聚焦形态蓄力6秒，引爆视线内敌人的生命燃烧；射程覆盖全图。辐射形态每秒扫过10格、108°扇区，造成0.85点灼伤，并按每个目标燃命阈值的20.7%施加生命燃烧。</MX_Power_Mingyuan_Bow>
-  <MX_Power_Mingyuan_Sword>明渊的余烬长剑，剑身流淌着灼热的赤焰。攻击可与自燃、过燃和生命燃烧联动，并提高持有者的近战闪避与武器伤害。具体属性见装备信息面板。</MX_Power_Mingyuan_Sword>
-  <MX_Power_Mingyuan_AscendantFlameDash>化作升焰，无视视线跨越最多150格，留下3格宽、持续15秒的灼痕。路径敌人受到8.5点基础灼伤和27层生命燃烧，被击退并眩晕3秒。灼痕每0.5秒向其中的敌人施加生命燃烧。</MX_Power_Mingyuan_AscendantFlameDash>
-  <MX_Power_Mingyuan_InstantCombustion>释放半径30格的强光，对敌人的大脑与每只眼睛各造成0.85点基础灼伤，并使其眩晕12秒。目标已有的生命燃烧层数翻倍，尚未燃烧的目标会被点燃。</MX_Power_Mingyuan_InstantCombustion>
-  <MX_Power_Mingyuan_BurningPillar>放置燃烧核心，10分钟内从半径1格成长到15格，持续3小时。中心灼伤较高，边缘割伤较高，灼伤会施加生命燃烧。每次脉冲对敌对及无阵营建筑造成最大生命值28.05%的基础伤害。己方、中立及盟友势力的建筑不受影响。10分钟后可指令核心移动。</MX_Power_Mingyuan_BurningPillar>
-  <MX_Power_Mingyuan_TimeBurn>在1小时内烧尽目标的生物年龄，年龄归零时目标死亡。机械体崩解后留下钢铁与玻璃钢，建筑分解后返还全部原材料。蓄力9.6秒。</MX_Power_Mingyuan_TimeBurn>
-  <MX_Power_Mingyuan_AshesOfSelf>消耗50%血液，获得100层自我燃烧，并展开持续15秒、跟随明渊移动的5×5余烬领域。每0.5秒造成0.85点基础灼伤并施加生命燃烧，焚毁范围内的建筑与动物，为明渊治疗伤口与旧伤并回收自燃。自我燃烧超过300层时进入过燃。</MX_Power_Mingyuan_AshesOfSelf>
-  <MX_Power_Mingyuan_LifeBurn>不断增长的生命之火，持续灼伤身体、损坏装备、消耗需求并烧去年龄。爆发阈值由目标的生命规模决定，长虹可提前引爆。宿主死亡时，火焰会向附近目标传播。</MX_Power_Mingyuan_LifeBurn>
+  <MX_Power_Zhaoli_DeathField>建立半径9格、持续9秒的告死流场。范围内除自身外的非免疫单位减速20%，每秒受割伤并积累1点告死。积累达到9点时处决；成功处决后获得1因果和5层讳亡计数。离场后积累快速衰减。冷却48秒。
+霓羽、清荷、昭离和明渊免疫告死的积累、减速、割伤及处决。</MX_Power_Zhaoli_DeathField>
+  <MX_Power_Zhaoli_Guiyi>消耗3.6点因果，修复目标缺失部位、伤口和可治疗的负面状态，并建立30天的因果链接，最多保留6人。不能对自身或敌人使用。冷却18秒。</MX_Power_Zhaoli_Guiyi>
+  <MX_Power_Zhaoli_Dingshu>消耗9.6点因果，引导约41.7秒复活并修复尸体，建立因果链接及3天的定数标记。标记期间再次死亡不能再次复活。袭击状态不可使用。</MX_Power_Zhaoli_Dingshu>
+  <MX_Power_Zhaoli_Minghuo>消耗3点因果，为当前主武器附魔60秒。伤害、穿甲、命中与攻速提高21.25%，近战范围增加0.85格，近战命中附加火焰伤害。冷却180秒。</MX_Power_Zhaoli_Minghuo>
+  <MX_Power_Zhaoli_Minshen>消耗3点因果，影响13×13格内敌人。血肉目标的躯干每秒受到0.85点无视护甲伤害，持续5秒；另有8.5%概率迷乱7秒，否则7秒内移速降低38.25%。非血肉目标受到EMP效果。冷却18秒。</MX_Power_Zhaoli_Minshen>
+  <MX_Power_Zhaoli_Passives>通过告死积累因果。治疗和复活可建立因果链接，最多6人，持续30天，活链接可作为死亡替身。招募后死亡成长在10次封顶；没有可用替身时，10天后归来。</MX_Power_Zhaoli_Passives>
+  <MX_Power_Mingyuan_Bow>聚焦：射程50格，需要视线，蓄力3秒。消耗目标全部生命燃烧，造成34点无视护甲伤害，每层额外造成0.51点，单次伤害上限187点。
+散射：向前方10格、108°扇形区域散射，每1.5秒最多发射一次。对敌人造成0.85点燃烧伤害，并附加45层生命燃烧，额外层数为其引爆阈值的3.6%，最多附加108层。过燃时附加层数进一步提高。</MX_Power_Mingyuan_Bow>
+  <MX_Power_Mingyuan_Sword>明渊的余烬长剑，剑身流淌着灼热的赤焰。攻击可与自燃、过燃和生命燃烧联动，并提高持有者的近战闪避与武器伤害。</MX_Power_Mingyuan_Sword>
+  <MX_Power_Mingyuan_AscendantFlameDash>化为火焰，沿3格宽路径冲刺至多35格，无需视线。沿途敌人受到8.5点基础燃烧伤害、27层生命燃烧、击退和1秒眩晕。灼痕持续5秒，每秒附加5.4层生命燃烧。冷却9.6秒。</MX_Power_Mingyuan_AscendantFlameDash>
+  <MX_Power_Mingyuan_InstantCombustion>对半径12格内敌人的大脑和眼睛分别造成0.85点基础燃烧伤害，并眩晕3秒。已有生命燃烧翻倍，没有层数的目标会被点燃。蓄力3秒，冷却144秒。</MX_Power_Mingyuan_InstantCombustion>
+  <MX_Power_Mingyuan_BurningPillar>蓄力3秒，在40格内放置燃烧核心。核心3秒内扩大至半径10格，随后可控制移动，持续30秒。每秒对敌人造成合计12.75点基础燃烧与切割伤害，并附加生命燃烧。对敌方及无阵营建筑，每秒造成其最大生命值5.1%的基础伤害。冷却288秒。</MX_Power_Mingyuan_BurningPillar>
+  <MX_Power_Mingyuan_TimeBurn>蓄力3.6秒，在20秒内燃尽目标的生物年龄并将其处决。机械体分解为钢铁和塑钢，建筑分解为原料。冷却360秒。</MX_Power_Mingyuan_TimeBurn>
+  <MX_Power_Mingyuan_AshesOfSelf>增加20%失血并获得100层自燃。在自身周围形成半径2.4格、持续10秒的火场，每0.5秒灼烧敌人并附加生命燃烧，同时治疗自身伤口和旧伤、积累自燃。冷却36秒。</MX_Power_Mingyuan_AshesOfSelf>
+  <MX_Power_Mingyuan_LifeBurn>生命燃烧每2秒造成伤害、消耗需求、增长年龄并损耗装备，叠至目标阈值时爆发。死亡时可传播至附近敌人。聚焦和吸收可以消耗已有层数造成伤害。</MX_Power_Mingyuan_LifeBurn>
   <MX_Power_Mingyuan_SelfBurn>征召时缓慢积累自燃。增益每满 10 层结算，最多计算 300 层。过燃强化直接伤害与生命燃烧输出并消耗护焰储备；每隔 10 秒消耗全部超出层数，在自身半径 5 格内爆炸，每层造成 1 点伤害，可伤及友军。</MX_Power_Mingyuan_SelfBurn>
-  <MX_Power_Mingyuan_BurningBody>被淡色异界火重塑的身体。意识提升，热能与爆炸转化为恢复，攻击者会被反灼，控制状态会被清除，每次受伤获得 5 层自燃与 0.2 秒无敌。此被动不降低普通承伤倍率。</MX_Power_Mingyuan_BurningBody>
-  <MX_Power_Mingyuan_ProtectiveFlameShield>用于修复身体的淡色火焰储备，不吸收伤害。每次消耗1点，恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。稳定自燃可兑换储备，过燃会持续消耗储备。</MX_Power_Mingyuan_ProtectiveFlameShield>
+  <MX_Power_Mingyuan_BurningBody>提高意识。免疫热能和爆炸伤害，这类命中每秒最多补充一次2点修复储备。每72秒最多治疗13.5点普通伤口。实际受伤后获得5层自燃与0.2秒无敌，并反灼敌对攻击者。</MX_Power_Mingyuan_BurningBody>
+  <MX_Power_Mingyuan_ProtectiveFlameShield>每10秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的伤口与旧伤。稳定自燃与热能命中可补充储备，过燃会消耗储备。储备本身不吸收伤害。</MX_Power_Mingyuan_ProtectiveFlameShield>
   <MX_Power_Mingyuan_RebirthFlame>明渊濒死时爆发重生之焰，对周围敌人造成爆炸伤害与眩晕，随后暂时离场。火焰重新凝聚后，明渊以完整状态返回。</MX_Power_Mingyuan_RebirthFlame>
   <MX_Power_Zhaoli_Shield>每通过告死吸纳一个单位，获得5层讳亡护盾。实际受伤后消耗1层，持续伤害每次生效也会消耗层数。层数用于记录告死积累，本身不吸收伤害。</MX_Power_Zhaoli_Shield>
-  <MX_Power_BalancedEquipment>专属防具，提供防护与穿戴加成。具体属性见装备信息面板。</MX_Power_BalancedEquipment>
-  <MX_Power_MX_Neiyu_WarpFeather>短暂蓄力后在脚下闪光，生成84～128个米莉拉之羽。</MX_Power_MX_Neiyu_WarpFeather>
-  <MX_Power_MX_Neiyu_ThunderMarkedStorm>标记半径3格区域内的敌对目标。数秒后，每个目标受到3～5次雷击，每次造成51点基础伤害并附加17点EMP伤害。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
-  <MX_Power_MX_Neiyu_Bow_ArrowBarrage>弓形态下可用。蓄力5秒后，沿目标方向连续射出64发流羽矢，覆盖前方战场。</MX_Power_MX_Neiyu_Bow_ArrowBarrage>
-  <MX_Power_MX_Neiyu_Flower_BlessingField>花形态下可用。治疗目标区域内友方的全部伤口与旧伤，并提升心情、移动速度和免疫速度，降低承受的伤害。</MX_Power_MX_Neiyu_Flower_BlessingField>
-  <MX_Power_MX_Neiyu_Flower_ToxinGarden>花形态下可用。对目标区域内的敌人施加食物中毒，并有8.5%概率使其陷入狂暴。</MX_Power_MX_Neiyu_Flower_ToxinGarden>
-  <MX_Power_MX_Neiyu_Sword_Skyfall>剑形态下可用。跃入高空，在目标区域显示落点预警后高速坠下，造成无视护甲的范围伤害，并使敌人易伤。</MX_Power_MX_Neiyu_Sword_Skyfall>
-  <MX_Power_MX_Neiyu_Sword_ExecuteHead>剑形态下可用。短暂后撤后高速突进，对选中的目标执行斩首。目标无法被斩首时，改为一次高伤斩击。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
+  <MX_Power_BalancedEquipment>专属防具，提供防护与穿戴加成。</MX_Power_BalancedEquipment>
+  <MX_Power_MX_Neiyu_WarpFeather>短暂施法后生成12–24根米莉拉羽毛。冷却360秒。</MX_Power_MX_Neiyu_WarpFeather>
+  <MX_Power_MX_Neiyu_ThunderMarkedStorm>标记半径3格内的敌人。延迟后每个目标受到3次雷击，每次造成30点基础伤害，并附加13点EMP效果。冷却96秒。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
+  <MX_Power_MX_Neiyu_Bow_ArrowBarrage>需要弓形态。蓄力5秒，沿选定方向发射32支箭，每支基础伤害26点，射程55格。冷却144秒。</MX_Power_MX_Neiyu_Bow_ArrowBarrage>
+  <MX_Power_MX_Neiyu_Flower_BlessingField>需要花形态。治愈半径6格内非敌对血肉目标的伤口与旧伤，并提高心情。随后60秒内移动速度提高17%，承伤降低8.5%，免疫增长速度提高59.5%。冷却108秒。</MX_Power_MX_Neiyu_Flower_BlessingField>
+  <MX_Power_MX_Neiyu_Flower_ToxinGarden>需要花形态。使半径7格内敌人食物中毒，并有8.5%概率使其狂暴。冷却144秒。</MX_Power_MX_Neiyu_Flower_ToxinGarden>
+  <MX_Power_MX_Neiyu_Sword_Skyfall>需要剑形态。跃起并预警落点，对半径3格内敌人造成102点无视护甲伤害，随后25秒内使其承伤提高21.25%。冷却180秒。</MX_Power_MX_Neiyu_Sword_Skyfall>
+  <MX_Power_MX_Neiyu_Sword_ExecuteHead>需要剑形态。短暂后撤后冲向目标。目标倒地或总体健康不高于25%时斩去头部；无法斩首时，造成64点无视护甲斩击伤害。冷却90秒。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
+  <MX_Power_Neiyu_Shield>第一阶段抵消一次攻击，随后进入第二阶段；致命攻击会直接触发第三阶段。
+第二阶段拥有43层护盾，每36点伤害消耗1层，向上取整，每次至少消耗1层。72秒未消耗盾层时回到第一阶段。盾层耗尽后进入第三阶段。
+第三阶段吸收伤害10秒，再根据吸收量获得40秒增益，高额吸收的增益最多叠加5层。结束后虚弱150秒，期间护盾仅有22层，耗尽后无法抵挡伤害，也无法触发第三阶段。</MX_Power_Neiyu_Shield>
 </LanguageData>

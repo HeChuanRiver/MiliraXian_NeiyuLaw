@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliKarma</defName>
         <label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;专属资源。通过&lt;color=#C77DFF&gt;告死&lt;/color&gt;处决积累，并由后续主动技能进行消耗。该 Hediff 还会记录当前已经建立的&lt;color=#D66BFF&gt;因果链接&lt;/color&gt;名单。</description>
+        <description>Gains Karma through Death Sentence. Healing and resurrection create up to 6 Karma Links lasting 30 days; living links can substitute for death. Recruited death growth caps at 10 deaths. Without a substitute, returns after 10 days.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.74, 0.10, 0.18)</defaultLabelColor>
         <isBad>false</isBad>
@@ -25,7 +25,7 @@
                 <barHighlightColor>(1.00, 0.22, 0.24, 1)</barHighlightColor>
             </li>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliKarmaLinks">
-                <maxLinks>20</maxLinks>
+                <maxLinks>6</maxLinks>
                 <linkDurationTicks>1800000</linkDurationTicks>
             </li>
         </comps>

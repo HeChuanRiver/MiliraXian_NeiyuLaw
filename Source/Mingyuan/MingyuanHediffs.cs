@@ -949,7 +949,8 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class HediffCompProperties_MingyuanBurningBody : HediffCompProperties
     {
-        public int restoreIntervalTicks = 1800;
+        public int restoreIntervalTicks = 3600;
+        public float restoreHealAmount = 15f;
         public int invulnerableTicks = 12;
         public float reflectLifeBurnLayers = 20f;
         public float selfBurnOnHit = 5f;
@@ -1008,7 +1009,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             ticksToRestore = Mathf.Max(1, PropsBody.restoreIntervalTicks);
-            MingyuanUtility.RestorePawnToBestCondition(Pawn, true);
+            CharacterPowerProfile.HealOrdinaryInjuries(Pawn, PropsBody.restoreHealAmount);
         }
 
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
@@ -1038,6 +1039,8 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public float maxEnergy = 100f;
         public int repairIntervalTicks = 600;
+        public float heatRefillEnergy = 2f;
+        public int heatRefillCooldownTicks = 60;
         public int selfBurnRefillIntervalTicks = 300;
         public int selfBurnRefillCooldownTicks = 1800;
         public float selfBurnPerEnergy = 3f;
@@ -1062,6 +1065,7 @@ namespace MiliraXian.Characters.Mingyuan
         private int ticksToSelfBurnRefill;
         private int ticksToOverburnDrain;
         private int selfBurnRefillCooldownTicksLeft;
+        private int nextHeatRefillTick;
 
         public HediffCompProperties_MingyuanProtectiveFlameShield PropsShield => (HediffCompProperties_MingyuanProtectiveFlameShield)props;
 
@@ -1110,6 +1114,17 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref ticksToSelfBurnRefill, "ticksToSelfBurnRefill", 0);
             Scribe_Values.Look(ref ticksToOverburnDrain, "ticksToOverburnDrain", 0);
             Scribe_Values.Look(ref selfBurnRefillCooldownTicksLeft, "selfBurnRefillCooldownTicksLeft", 0);
+            Scribe_Values.Look(ref nextHeatRefillTick, "nextHeatRefillTick", 0);
+        }
+
+        public bool TryRefillFromHeat()
+        {
+            if (MingyuanPowerBalance.Sealed || Find.TickManager == null) return false;
+            int now = Find.TickManager.TicksGame;
+            if (now < nextHeatRefillTick || Energy >= PropsShield.maxEnergy) return false;
+            energy = Mathf.Min(PropsShield.maxEnergy, Energy + Mathf.Max(0f, PropsShield.heatRefillEnergy));
+            nextHeatRefillTick = now + Mathf.Max(1, PropsShield.heatRefillCooldownTicks);
+            return true;
         }
 
         public override void CompPostTick(ref float severityAdjustment)
