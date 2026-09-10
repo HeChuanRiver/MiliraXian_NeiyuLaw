@@ -13,5 +13,5 @@
   <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;Sword Art: Skyfall&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
   <MX_Neiyu_Sword_Skyfall.description>Requires sword form. Rises and marks the landing zone, dealing 120 armor-ignoring damage to enemies within 3 cells. They take 25% more damage for 25 seconds. Cooldown: 150 seconds.</MX_Neiyu_Sword_Skyfall.description>
   <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;Sword Art: Beheading&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>Requires sword form. Retreats briefly, then dashes to the target. Decapitates a target that is downed or at no more than 25% overall health. If decapitation is not possible, deals 75 armor-ignoring cut damage. Cooldown: 75 seconds.</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_Sword_ExecuteHead.description>Requires sword form. Retreats briefly, then dashes to the target and severs its head. Targets without a head take 75 armor-ignoring cut damage. Cooldown: 75 seconds.</MX_Neiyu_Sword_ExecuteHead.description>
 </LanguageData>

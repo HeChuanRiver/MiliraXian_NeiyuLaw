@@ -294,7 +294,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_Sword_ExecuteHead</defName>
         <label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</label>
-        <description>Requires sword form. Retreats briefly, then dashes to the target. Decapitates a target that is downed or at no more than 25% overall health. If decapitation is not possible, deals 75 armor-ignoring cut damage. Cooldown: 75 seconds.</description>
+        <description>Requires sword form. Retreats briefly, then dashes to the target and severs its head. Targets without a head take 75 armor-ignoring cut damage. Cooldown: 75 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
 
         <category>MX_NeiyuSkill</category>

@@ -1313,7 +1313,7 @@ namespace MiliraXian.Characters.Neiyu
 
             bool headRemoved = false;
             BodyPartRecord head = victim.health.hediffSet.GetNotMissingParts().FirstOrDefault(p => p.def == BodyPartDefOf.Head);
-            if (head != null && (victim.Downed || victim.health.summaryHealth.SummaryHealthPercent <= 0.25f))
+            if (head != null)
             {
                 victim.health.AddHediff(HediffDefOf.MissingBodyPart, head);
                 headRemoved = true;

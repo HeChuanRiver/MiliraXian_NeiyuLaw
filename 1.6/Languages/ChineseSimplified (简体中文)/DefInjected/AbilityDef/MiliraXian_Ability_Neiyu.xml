@@ -13,5 +13,5 @@
   <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;剑势·天坠&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
   <MX_Neiyu_Sword_Skyfall.description>需要剑形态。跃起并预警落点，对半径3格内敌人造成120点无视护甲伤害，随后25秒内使其承伤提高25%。冷却150秒。</MX_Neiyu_Sword_Skyfall.description>
   <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>需要剑形态。短暂后撤后冲向目标。目标倒地或总体健康不高于25%时斩去头部；无法斩首时，造成75点无视护甲斩击伤害。冷却75秒。</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_Sword_ExecuteHead.description>需要剑形态。短暂后撤后冲向目标，斩去头部。目标没有头部时，造成75点无视护甲斩击伤害。冷却75秒。</MX_Neiyu_Sword_ExecuteHead.description>
 </LanguageData>

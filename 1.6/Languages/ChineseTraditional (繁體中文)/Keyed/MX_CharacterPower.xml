@@ -35,7 +35,7 @@
   <MX_Power_BalancedEquipment>專屬防具，提供防護與穿戴加成。</MX_Power_BalancedEquipment>
   <MX_Power_MX_Neiyu_WarpFeather>短暫施法后生成12–24根米莉拉羽毛。冷卻360秒。</MX_Power_MX_Neiyu_WarpFeather>
   <MX_Power_MX_Neiyu_ThunderMarkedStorm>標記半徑3格內的敵人。延遲后每個目標受到3次雷擊，每次造成30點基礎傷害，并附加13點EMP效果。冷卻96秒。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
-  <MX_Power_MX_Neiyu_Sword_ExecuteHead>需要劍形態。短暫后撤后沖向目標。目標倒地或總體健康不高于25%時斬去頭部；無法斬首時，造成64點無視護甲斬擊傷害。冷卻90秒。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
+  <MX_Power_MX_Neiyu_Sword_ExecuteHead>需要劍形態。短暫後撤後衝向目標，斬去頭部。目標沒有頭部時，造成64點無視護甲斬擊傷害。冷卻90秒。</MX_Power_MX_Neiyu_Sword_ExecuteHead>
   <MX_Power_MX_Neiyu_Flower_ToxinGarden>需要花形態。使半徑7格內敵人食物中毒，并有8.5%概率使其狂暴。冷卻144秒。</MX_Power_MX_Neiyu_Flower_ToxinGarden>
   <MX_Power_MX_Neiyu_Sword_Skyfall>需要劍形態。躍起并預警落點，對半徑3格內敵人造成102點無視護甲傷害，隨后25秒內使其承傷提高21.25%。冷卻180秒。</MX_Power_MX_Neiyu_Sword_Skyfall>
   <MX_Power_MX_Neiyu_Flower_BlessingField>需要花形態。治愈半徑6格內非敵對血肉目標的傷口與舊傷，并提高心情。隨后60秒內移動速度提高17%，承傷降低8.5%，免疫增長速度提高59.5%。冷卻108秒。</MX_Power_MX_Neiyu_Flower_BlessingField>

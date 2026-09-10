@@ -13,5 +13,5 @@
   <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;劍勢·天墜&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
   <MX_Neiyu_Sword_Skyfall.description>需要劍形態。躍起并預警落點，對半徑3格內敵人造成120點無視護甲傷害，隨后25秒內使其承傷提高25%。冷卻150秒。</MX_Neiyu_Sword_Skyfall.description>
   <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;劍勢·斷首&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>需要劍形態。短暫后撤后沖向目標。目標倒地或總體健康不高于25%時斬去頭部；無法斬首時，造成75點無視護甲斬擊傷害。冷卻75秒。</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_Sword_ExecuteHead.description>需要劍形態。短暫後撤後衝向目標，斬去頭部。目標沒有頭部時，造成75點無視護甲斬擊傷害。冷卻75秒。</MX_Neiyu_Sword_ExecuteHead.description>
 </LanguageData>
