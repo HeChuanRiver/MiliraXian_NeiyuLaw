@@ -705,6 +705,11 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             wavePawns.RemoveAll(pawn => pawn == null);
+            if (stage == MingyuanWhiteFlameStage.Waiting || stage == MingyuanWhiteFlameStage.Omen
+                || stage == MingyuanWhiteFlameStage.Offered)
+            {
+                TryTrackOfferedQuest(activeQuest ?? MingyuanWhiteFlameUtility.FindBlockingQuest(), null);
+            }
         }
 
         public override void ExposeData()
@@ -743,9 +748,49 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
+        private bool TryTrackOfferedQuest(Quest quest, Map map)
+        {
+            if (quest?.root?.defName != MingyuanWhiteFlameUtility.QuestDefName
+                || (quest.State != QuestState.NotYetAccepted && quest.State != QuestState.Ongoing))
+            {
+                return false;
+            }
+
+            if (stage != MingyuanWhiteFlameStage.Waiting && stage != MingyuanWhiteFlameStage.Omen
+                && stage != MingyuanWhiteFlameStage.Offered)
+            {
+                return false;
+            }
+
+            if (activeQuest != null && activeQuest != quest
+                && (activeQuest.State == QuestState.NotYetAccepted || activeQuest.State == QuestState.Ongoing))
+            {
+                return false;
+            }
+
+            // Developer-generated quests bypass TryOfferQuest. Recover their own
+            // map before the acceptance signal starts the existing defense flow.
+            if (map == null)
+            {
+                foreach (QuestPart part in quest.PartsListForReading)
+                {
+                    if (part is QuestPart_MingyuanWhiteFlame whiteFlame && whiteFlame.map != null)
+                    {
+                        map = whiteFlame.map;
+                        break;
+                    }
+                }
+            }
+
+            activeQuest = quest;
+            targetMap = map ?? targetMap;
+            stage = MingyuanWhiteFlameStage.Offered;
+            return true;
+        }
+
         public void BeginDefense(Quest quest, Map map)
         {
-            if (quest == null || stage != MingyuanWhiteFlameStage.Offered || activeQuest != quest)
+            if (!TryTrackOfferedQuest(quest, map))
             {
                 return;
             }
@@ -1125,23 +1170,20 @@ namespace MiliraXian.Characters.Mingyuan
         private void ProcessWaiting(int currentTick)
         {
             nextProcessTick = currentTick + WaitingCheckInterval;
-            if (currentTick < nextOfferTick
-                || currentTick < MinimumDaysPassed * GenDate.TicksPerDay
-                || MingyuanWhiteFlameUtility.MingyuanExistsAnywhere())
-            {
-                return;
-            }
-
             Quest existingQuest = MingyuanWhiteFlameUtility.FindBlockingQuest();
-            if (existingQuest != null)
+            if (existingQuest != null && TryTrackOfferedQuest(existingQuest, null))
             {
-                activeQuest = existingQuest;
-                targetMap = Find.AnyPlayerHomeMap;
-                stage = MingyuanWhiteFlameStage.Offered;
                 if (existingQuest.State == QuestState.Ongoing)
                 {
                     BeginDefense(existingQuest, targetMap);
                 }
+                return;
+            }
+
+            if (currentTick < nextOfferTick
+                || currentTick < MinimumDaysPassed * GenDate.TicksPerDay
+                || MingyuanWhiteFlameUtility.MingyuanExistsAnywhere())
+            {
                 return;
             }
 
@@ -1446,9 +1488,10 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             quest.description = MingyuanWhiteFlameUtility.BuildQuestDescription();
-            activeQuest = quest;
-            targetMap = map;
-            stage = MingyuanWhiteFlameStage.Offered;
+            if (!TryTrackOfferedQuest(quest, map))
+            {
+                return false;
+            }
             nextProcessTick = Find.TickManager.TicksGame + WaitingCheckInterval;
             if (!quest.hidden && questDef.sendAvailableLetter)
             {
