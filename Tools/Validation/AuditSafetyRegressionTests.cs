@@ -447,7 +447,7 @@ internal static class AuditSafetyRegressionTests
         };
         Set(shield.Pawn.health, "healthState", PawnHealthState.Mobile);
         Set(shield, "stage", 2);
-        Set(shield, "phase2Charges", 48);
+        Set(shield, "phase2Charges", 108);
         MethodInfo cost = shield.GetType().GetMethod("CalculatePhase2Cost", BindingFlags.NonPublic | BindingFlags.Instance);
         float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
         int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
@@ -457,7 +457,7 @@ internal static class AuditSafetyRegressionTests
         bool absorbed = false;
         var damage = new DamageInfo(new DamageDef(), .01f);
         bool handled = shield.TryAbsorb(ref damage, ref absorbed);
-        Check(handled && absorbed && shield.Phase2Charges == 47,
+        Check(handled && absorbed && shield.Phase2Charges == 107,
             "an actual low-damage hit consumes a shield charge");
         Set(shield, "weakUntilTick", 1000);
         Set(shield, "phase2Charges", 0);
@@ -476,7 +476,7 @@ internal static class AuditSafetyRegressionTests
         Set(shield, "weakUntilTick", 0);
         Set(shield, "phase2Charges", 1000);
         normalize.Invoke(shield, new object[] { 200 });
-        Check(shield.Phase2Charges == 48, "legacy normal charges are clipped in original mode too");
+        Check(shield.Phase2Charges == 108, "legacy normal charges are clipped in original mode too");
         Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
         Set(shield, "stage", 3);
         Set(shield, "phase3AbsorbUntilTick", 5000);

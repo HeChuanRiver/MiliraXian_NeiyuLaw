@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public float phase2Threshold = 36f;
 
-        public int phase2MaxChargesNormal = 48;
+        public int phase2MaxChargesNormal = 108;
         public int phase2MaxChargesWeak = 24;
         
         public int phase2RecoverTicksNoChange = 3600;

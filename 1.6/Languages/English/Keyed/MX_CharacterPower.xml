@@ -43,6 +43,6 @@ Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds.
   <MX_Power_MX_Neiyu_Sword_Skyfall>Requires sword form. Rises and marks the landing zone, dealing 102 armor-ignoring damage to enemies within 3 cells. They take 21.25% more damage for 25 seconds. Cooldown: 180 seconds.</MX_Power_MX_Neiyu_Sword_Skyfall>
   <MX_Power_MX_Neiyu_Sword_ExecuteHead>Requires sword form. Retreats briefly, then dashes to the target. Decapitates a target that is downed or at no more than 25% overall health. If decapitation is not possible, deals 64 armor-ignoring cut damage. Cooldown: 90 seconds.</MX_Power_MX_Neiyu_Sword_ExecuteHead>
   <MX_Power_Neiyu_Shield>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
-Stage II has 43 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 72 seconds without losing charges. Depleting the shield triggers Stage III.
+Stage II has 36 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 72 seconds without losing charges. Depleting the shield triggers Stage III.
 Stage III absorbs damage for 10 seconds, then grants buffs based on the amount absorbed for 40 seconds. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 22 charges and cannot block when empty or trigger Stage III.</MX_Power_Neiyu_Shield>
 </LanguageData>
