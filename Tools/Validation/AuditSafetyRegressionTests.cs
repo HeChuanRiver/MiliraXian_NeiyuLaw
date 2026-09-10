@@ -479,10 +479,10 @@ internal static class AuditSafetyRegressionTests
         Check(shield.Phase2Charges == 108, "legacy normal charges are clipped in original mode too");
         Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
         Set(shield, "stage", 3);
-        Set(shield, "phase3AbsorbUntilTick", 5000);
+        Set(shield, "phase3AbsorbUntilTick", 50000);
         Set(shield, "phase3EndTick", 60000);
         normalize.Invoke(shield, new object[] { 200 });
-        Check(shield.Phase3AbsorbUntilTick == 800 && shield.Phase3EndTick == 3200,
+        Check(shield.Phase3AbsorbUntilTick == 7700 && shield.Phase3EndTick == 37700,
             "legacy absorption and buff windows fit the new durations");
 
         Type balance = mod.GetType("MiliraXian.Characters.Neiyu.NeiyuPowerBalance", true);

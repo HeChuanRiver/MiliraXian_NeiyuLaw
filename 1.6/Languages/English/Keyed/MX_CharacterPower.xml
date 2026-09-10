@@ -44,5 +44,5 @@ Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds.
   <MX_Power_MX_Neiyu_Sword_ExecuteHead>Requires sword form. Retreats briefly, then dashes to the target and severs its head. Targets without a head take 64 armor-ignoring cut damage. Cooldown: 90 seconds.</MX_Power_MX_Neiyu_Sword_ExecuteHead>
   <MX_Power_Neiyu_Shield>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
 Stage II has 36 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 72 seconds without losing charges. Depleting the shield triggers Stage III.
-Stage III absorbs damage for 10 seconds, then grants buffs based on the amount absorbed for 40 seconds. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 22 charges and cannot block when empty or trigger Stage III.</MX_Power_Neiyu_Shield>
+Stage III grants invulnerability and absorbs damage for 3 hours, then grants buffs based on the amount absorbed for 12 hours. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 22 charges and cannot block when empty or trigger Stage III.</MX_Power_Neiyu_Shield>
 </LanguageData>

@@ -6,7 +6,7 @@
         <label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</label>
         <description>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
 Stage II has 108 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 60 seconds without losing charges. Depleting the shield triggers Stage III.
-Stage III absorbs damage for 10 seconds, then grants buffs based on the amount absorbed for 40 seconds. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 24 charges and cannot block when empty or trigger Stage III.</description>
+Stage III grants invulnerability and absorbs damage for 3 hours, then grants buffs based on the amount absorbed for 12 hours. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 24 charges and cannot block when empty or trigger Stage III.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.44, 0.80, 1.00)</defaultLabelColor>
         <isBad>false</isBad>
@@ -25,12 +25,12 @@ Stage III absorbs damage for 10 seconds, then grants buffs based on the amount a
                 <phase2MaxChargesNormal>108</phase2MaxChargesNormal>
                 <phase2MaxChargesWeak>24</phase2MaxChargesWeak>
                 <phase2RecoverTicksNoChange>3600</phase2RecoverTicksNoChange>
-                <!-- 第三阶段：前10秒吸收伤害 -->
-                <stage3AbsorbTicks>600</stage3AbsorbTicks>
-                <!-- 第三阶段：后40秒增益 -->
-                <stage3BuffTicks>2400</stage3BuffTicks>
+                <!-- 第三阶段：前3小时吸收伤害 -->
+                <stage3AbsorbTicks>7500</stage3AbsorbTicks>
+                <!-- 第三阶段：后12小时增益 -->
+                <stage3BuffTicks>30000</stage3BuffTicks>
                 <!-- 旧字段，保留做兼容兜底 -->
-                <stage3DurationTicks>3000</stage3DurationTicks>
+                <stage3DurationTicks>37500</stage3DurationTicks>
                 <weakDurationTicks>9000</weakDurationTicks>
                 <stage3TierA_MaxDamage>100</stage3TierA_MaxDamage>
                 <stage3TierB_MaxDamage>500</stage3TierB_MaxDamage>

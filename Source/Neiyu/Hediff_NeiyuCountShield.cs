@@ -33,9 +33,9 @@ namespace MiliraXian.Characters.Neiyu
         
         public int phase2RecoverTicksNoChange = 3600;
         
-        public int stage3AbsorbTicks = 600;
-        public int stage3BuffTicks = 2400;
-        public int stage3DurationTicks = 3000;
+        public int stage3AbsorbTicks = 7500;
+        public int stage3BuffTicks = 30000;
+        public int stage3DurationTicks = 37500;
         public int weakDurationTicks = 9000;
 
 
