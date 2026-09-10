@@ -19,6 +19,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             Toil tune = ToilMaker.MakeToil("TuneResonance");
             tune.defaultDuration = TuneDurationTicks;
             tune.defaultCompleteMode = ToilCompleteMode.Delay;
+            tune.WithProgressBarToilDelay(TargetIndex.None);
             tune.AddFinishAction(delegate
             {
                 HediffComp_QingheCombatState state = MX_QH_HediffUtility.GetCombatState(pawn);

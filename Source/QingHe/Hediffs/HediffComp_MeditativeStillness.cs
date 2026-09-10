@@ -6,9 +6,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class HediffCompProperties_MeditativeStillness : HediffCompProperties_PawnSpecialResource
     {
-        public float meditationGainPerDay = 100f;
-        public float readingGainPerDay = 100f;
-        public float sleepGainPerDay = 100f;
+        public float meditationGainPerDay = 600f;
+        public float readingGainPerDay = 480f;
+        public float sleepGainPerDay = 120f;
         public float partialQualityBonusChancePerFull = 0.5f;
         public int fullQualityBonusLevels = 2;
         public string longNightLabel = "MX_QH_LongNightStillnessLabel";

@@ -117,8 +117,8 @@
     </graphicData>
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
-      <damageAmountBase>5</damageAmountBase>
-      <armorPenetrationBase>1.40</armorPenetrationBase>
+      <damageAmountBase>12</damageAmountBase>
+      <armorPenetrationBase>2.00</armorPenetrationBase>
       <speed>30</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
     </projectile>
@@ -152,7 +152,7 @@
     <defName>MX_Bullet_Qinghe_FlowerBell_None</defName>
     <label>铃音</label>
     <projectile>
-      <damageAmountBase>16</damageAmountBase>
+      <damageAmountBase>12</damageAmountBase>
     </projectile>
   </ThingDef>
 
@@ -163,7 +163,7 @@
       <color>(255,130,150)</color>
     </graphicData>
     <projectile>
-      <damageAmountBase>16</damageAmountBase>
+      <damageAmountBase>12</damageAmountBase>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
@@ -185,7 +185,7 @@
       <color>(160,245,110)</color>
     </graphicData>
     <projectile>
-      <damageAmountBase>25</damageAmountBase>
+      <damageAmountBase>12</damageAmountBase>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
@@ -207,7 +207,7 @@
       <color>(230,185,255)</color>
     </graphicData>
     <projectile>
-      <damageAmountBase>36</damageAmountBase>
+      <damageAmountBase>12</damageAmountBase>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
@@ -229,7 +229,7 @@
       <color>(170,225,255)</color>
     </graphicData>
     <projectile>
-      <damageAmountBase>18</damageAmountBase>
+      <damageAmountBase>12</damageAmountBase>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">

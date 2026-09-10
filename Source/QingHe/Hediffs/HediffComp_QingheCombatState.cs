@@ -101,12 +101,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             {
                 pendingTuneResonance = -1;
                 RemoveCurrentResonance();
-                return;
-            }
-
-            if (currentResonance == null)
-            {
-                currentResonance = (Hediff_SeasonalResonance)Pawn.health.AddHediff(MX_QHDefOf.MX_QH_ResonanceSpring);
             }
         }
 

@@ -112,9 +112,9 @@
         <resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</resourceDescription>
         <initialValue>0</initialValue>
         <maxValue>100</maxValue>
-        <meditationGainPerDay>100</meditationGainPerDay>
-        <readingGainPerDay>100</readingGainPerDay>
-        <sleepGainPerDay>100</sleepGainPerDay>
+        <meditationGainPerDay>600</meditationGainPerDay>
+        <readingGainPerDay>480</readingGainPerDay>
+        <sleepGainPerDay>120</sleepGainPerDay>
         <partialQualityBonusChancePerFull>0.5</partialQualityBonusChancePerFull>
         <fullQualityBonusLevels>2</fullQualityBonusLevels>
         <longNightLabel>MX_QH_LongNightStillnessLabel</longNightLabel>
@@ -214,7 +214,7 @@
         <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
         <invisibilityDurationTicks>600</invisibilityDurationTicks>
         <damageImmunityDurationTicks>180</damageImmunityDurationTicks>
-        <retriggerCooldownTicks>7200</retriggerCooldownTicks>
+        <retriggerCooldownTicks>60000</retriggerCooldownTicks>
         <cooldownWarningCooldownTicks>600</cooldownWarningCooldownTicks>
       </li>
     </comps>

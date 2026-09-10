@@ -88,6 +88,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 MX_QH_HediffUtility.EnsureSwordPressure(caster)?.AddProgress(gain);
             }
+
+            // Hit rewards precede target defenses, including for empowered slashes.
+            if (resonance == FlowerBellResonance.Spring)
+            {
+                ApplySpringBlessing(caster);
+            }
+            else if (resonance == FlowerBellResonance.Winter)
+            {
+                CompDivineProtectionShield shield = caster.GetComp<CompDivineProtectionShield>();
+                if (shield != null)
+                {
+                    float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
+                    // Linearly map spell factors 1..5 to recovery factors 1..2.5.
+                    float recoveryFactor = 1f + (specialFactor - 1f) * 0.375f;
+                    shield.RestoreEnergy(shield.CurrentRegenPerSecond * 0.5f * recoveryFactor);
+                }
+            }
         }
 
         public static void ApplyResonanceEffect(Pawn caster, Pawn target, FlowerBellResonance resonance, float accumulationMultiplier)
@@ -95,15 +112,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             if (caster == null || resonance == FlowerBellResonance.None)
             {
                 return;
-            }
-
-            if (resonance == FlowerBellResonance.Spring)
-            {
-                ApplySpringBlessing(caster);
-            }
-            else if (resonance == FlowerBellResonance.Winter)
-            {
-                caster.GetComp<CompDivineProtectionShield>()?.RestoreEnergy(8f);
             }
 
             ThingDef projectile = ProjectileFor(resonance);

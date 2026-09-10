@@ -76,10 +76,10 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 1f);
-                float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 0f);
+                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 0f);
+                float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 20f);
                 float afterOffset = Props.shieldDamageCap + offset;
-                if (afterOffset <= 0f)
+                if (factor <= 0f || afterOffset <= 0f)
                 {
                     return float.PositiveInfinity;
                 }
@@ -280,13 +280,17 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
-            float shieldDamage = Mathf.Min(dinfo.Amount, ShieldDamageCap);
-            if (QingHe.Things.Weapons.QingheSwordCombatUtility.IsSwordMode(owner))
-            {
-                shieldDamage *= 0.5f;
-            }
+            float incomingDamageFactor = Mathf.Max(0f, GetStatValue(StatDefOf.IncomingDamageFactor, 1f));
+            // Scale only the shield cost; unabsorbed damage keeps its normal body damage processing.
+            float shieldDamage = Mathf.Min(dinfo.Amount * incomingDamageFactor, ShieldDamageCap);
+            float hardening = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_LotusShieldHardening, 0f));
+            float hardeningFactor = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_LotusShieldHardeningFactor, 0f));
+            shieldDamage -= hardening * hardeningFactor;
             if (shieldDamage <= 0f)
             {
+                Renderer.NotifyAbsorbed(owner, CurrentTick);
+                dinfo.SetAmount(0f);
+                absorbed = true;
                 return;
             }
 

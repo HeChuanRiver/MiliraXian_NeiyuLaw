@@ -295,7 +295,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             if (hitCount > 0)
             {
-                pressure?.StartRecovery(props.postHitRecoveryPoints, props.postHitRecoveryTicks);
+                const float normalRecoveryFactor = 0.25f;
+                pressure?.StartRecovery(
+                    props.postHitRecoveryPoints * normalRecoveryFactor,
+                    Mathf.RoundToInt(props.postHitRecoveryTicks * normalRecoveryFactor));
             }
             Complete(caster);
         }

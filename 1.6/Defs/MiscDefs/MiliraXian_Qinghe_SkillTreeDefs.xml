@@ -141,13 +141,14 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_HardSoftBalance</defName>
     <label>刚柔并济</label>
-    <description>——被动效果：灵气护盾单次承受伤害最多消耗20点能量。</description>
+    <description>——被动效果：灵气最大单次消耗乘数与灵气硬化乘数各增加100%。默认启用20点单次消耗上限，并使灵气硬化按完整数值抵扣消耗。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>65</displayOrder>
     <requiredGraceLevel>16</requiredGraceLevel>
     <statOffsets>
-      <MX_QH_LotusShieldDamageCapOffset>20</MX_QH_LotusShieldDamageCapOffset>
+      <MX_QH_LotusShieldDamageCapFactor>1</MX_QH_LotusShieldDamageCapFactor>
+      <MX_QH_LotusShieldHardeningFactor>1</MX_QH_LotusShieldHardeningFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>

@@ -174,7 +174,7 @@
   <MX_QH_SwordResonanceDescriptionSpring>春曉共鳴：攻擊命中後為清荷附加春泉洗禮，並累積流血與漏電。</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>荷雨共鳴：攻擊命中時獲得的劍壓提高50%，並累積劇毒與腐蝕。</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>無常共鳴：攻擊的穿甲能力提高50%，並累積恐懼與過載。</MX_QH_SwordResonanceDescriptionAutumn>
-  <MX_QH_SwordResonanceDescriptionWinter>凝霜共鳴：每次攻擊命中後回復8點蓮華護盾，並累積凍結。</MX_QH_SwordResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionWinter>凝霜共鳴：每次攻擊命中時，回復當前每秒護盾恢復量的50%，再乘以修正後的法術係數：法術係數1～5線性對應恢復倍率1～2.5。攻擊被護盾或護甲阻擋也可回復，破盾等待期間無法回復。造成實際傷害時累積凍結異常。</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_FlowerPanelHelpTitle>清荷面板說明</MX_QH_FlowerPanelHelpTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeTitle>花令</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeBody>用於釋放飛花令，分段顯示當前花令數量和恢復進度。</MX_QH_FlowerPanelHelpFlowerDecreeBody>

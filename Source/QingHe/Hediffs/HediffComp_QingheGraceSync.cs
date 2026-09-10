@@ -21,9 +21,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public const int MaxGraceLevel = 24;
 
-        private const float BaseProgressRequirement = 120f;
-        private const float LinearProgressRequirement = 55f;
-        private const float QuadraticProgressRequirement = 10f;
+        // Each row covers six destination levels: early, established, advanced, endgame.
+        private static readonly float[] ProgressRequirements =
+        {
+            60f, 80f, 110f, 140f, 180f, 230f,
+            400f, 500f, 600f, 750f, 900f, 1050f,
+            2000f, 2800f, 3600f, 4400f, 5500f, 6700f,
+            15000f, 22000f, 30000f, 38000f, 45000f, 60000f
+        };
 
         private float progress;
         private int level;
@@ -68,9 +73,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             int level = Mathf.Clamp(graceLevel, 0, MaxGraceLevel - 1);
-            return BaseProgressRequirement
-                + LinearProgressRequirement * level
-                + QuadraticProgressRequirement * level * level;
+            return ProgressRequirements[level];
         }
 
         public void AddProgress(float amount)

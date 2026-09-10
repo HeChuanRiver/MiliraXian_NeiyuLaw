@@ -45,9 +45,9 @@
                 <capacities>
                     <li>MX_QH_SwordCut</li>
                 </capacities>
-                <power>32</power>
-                <armorPenetration>0.3</armorPenetration>
-                <cooldownTime>1.6</cooldownTime>
+                <power>10</power>
+                <armorPenetration>1.2</armorPenetration>
+                <cooldownTime>0.8</cooldownTime>
             </li>
         </tools>
 

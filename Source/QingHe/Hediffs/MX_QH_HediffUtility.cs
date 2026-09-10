@@ -199,7 +199,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float amount = CalculateDivineGraceProgressFromCraft(product);
+            float amount = CalculateDivineGraceProgressFromCraft(recipe, product);
             if (amount > 0f)
             {
                 AddDivineGraceProgress(pawn, amount);
@@ -213,13 +213,41 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 && (recipe.workSkill == SkillDefOf.Crafting || recipe.workSkill == SkillDefOf.Artistic);
         }
 
-        private static float CalculateDivineGraceProgressFromCraft(Thing product)
+        private static float CalculateDivineGraceProgressFromCraft(RecipeDef recipe, Thing product)
         {
-            CompQuality compQuality = product.TryGetComp<CompQuality>();
+            // Crafted sculptures and instruments arrive wrapped in a MinifiedThing.
+            Thing innerProduct = product.GetInnerIfMinified();
+            CompQuality compQuality = innerProduct?.TryGetComp<CompQuality>();
             float qualityFactor = compQuality == null ? 0.9f : 0.7f + 0.28f * (int)compQuality.Quality;
             float marketValue = Mathf.Max(0f, product.MarketValue * Mathf.Max(1, product.stackCount));
             float cappedValue = Mathf.Min(marketValue, 60000f);
-            return (12f + cappedValue * 0.045f) * qualityFactor;
+
+            // GenRecipe returns one result per declared product entry, not per item in its stack.
+            // Share recipe work across those results; dynamic byproducts get only value-based XP.
+            int declaredResults = 0;
+            bool isDeclaredProduct = false;
+            if (recipe.products != null)
+            {
+                foreach (ThingDefCountClass entry in recipe.products)
+                {
+                    if (entry?.thingDef == null || entry.count <= 0)
+                    {
+                        continue;
+                    }
+
+                    declaredResults++;
+                    isDeclaredProduct |= entry.thingDef == innerProduct?.def;
+                }
+            }
+
+            float workReward = 0f;
+            if (isDeclaredProduct)
+            {
+                float work = Mathf.Clamp(recipe.WorkAmountTotal(innerProduct), 0f, 250000f);
+                workReward = (10f + work * 0.01f) / declaredResults;
+            }
+
+            return (workReward + cappedValue * 0.3f) * qualityFactor;
         }
         private static T EnsureHediffComp<T>(Pawn pawn, HediffDef hediffDef) where T : HediffComp
         {

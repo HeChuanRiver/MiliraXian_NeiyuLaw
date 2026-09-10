@@ -32,6 +32,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_LotusShieldBreakDelayOffset;
         public static StatDef MX_QH_LotusShieldDamageCapFactor;
         public static StatDef MX_QH_LotusShieldDamageCapOffset;
+        public static StatDef MX_QH_LotusShieldHardening;
+        public static StatDef MX_QH_LotusShieldHardeningFactor;
         public static StatDef MX_QH_FlowerDecreeMaxOffset;
         public static StatDef MX_QH_FlowerDecreeRegenFactor;
         public static StatDef MX_QH_DivineBlessingRechargeSpeedFactor;

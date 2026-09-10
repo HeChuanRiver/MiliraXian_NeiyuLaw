@@ -158,7 +158,7 @@
   <MX_QH_SwordResonanceDescriptionSpring>和鸣【春晓】：\n附有能引起流血或漏电异常的魔力，攻击命中后还会为清荷附加春泉洗礼效果。</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>和鸣【荷雨】：\n附有能引起剧毒或腐蚀异常的魔力，攻击命中后回复的剑压+50%。</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>和鸣【无常】：\n附有能引起恐惧或过载异常的魔力，近战攻击的穿甲能力提升50%。</MX_QH_SwordResonanceDescriptionAutumn>
-  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n附有能引起冻结异常的魔力，攻击命中后还会额外回复灵气。</MX_QH_SwordResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n每次攻击命中时，回复当前每秒灵气恢复量的50%，再乘以修正后的法术系数：法术系数1～5线性对应恢复倍率1～2.5。攻击被护盾或护甲阻挡也可回复，破盾等待期间无法回复。造成实际伤害时累积冻结异常。</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_FlowerPanelHelpTitle>面板说明</MX_QH_FlowerPanelHelpTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeTitle>资源条</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeBody>显示清荷当前所使用武器的资源状态。若没有使用专属武器，则不会显示任何东西。</MX_QH_FlowerPanelHelpFlowerDecreeBody>

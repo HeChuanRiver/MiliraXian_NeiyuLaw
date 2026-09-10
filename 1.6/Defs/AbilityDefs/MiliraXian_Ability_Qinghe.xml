@@ -152,7 +152,7 @@
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>230</displayOrder>
-    <cooldownTicksRange>360</cooldownTicksRange>
+    <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>
     <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
     <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>

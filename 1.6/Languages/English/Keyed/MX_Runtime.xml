@@ -174,7 +174,7 @@
   <MX_QH_SwordResonanceDescriptionSpring>Spring Dawn resonance: Hits grant Qinghe Spring Flow Baptism and build Bleeding and Electric Leakage.</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>Lotus Rain resonance: Sword Pressure gained from hits is increased by 50%, and hits build Toxin and Corrosion.</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>Impermanence resonance: Attacks gain 50% armor penetration and build Fear and Overload.</MX_QH_SwordResonanceDescriptionAutumn>
-  <MX_QH_SwordResonanceDescriptionWinter>Condensing Frost resonance: Each hit restores 8 points of Lotus Shield and builds Freeze.</MX_QH_SwordResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionWinter>Condensing Frost resonance: Each hit restores 50% of current Lotus Shield regeneration per second, multiplied by an adjusted spell effect factor. Spell effect factors 1 to 5 map linearly to recovery multipliers 1 to 2.5. Hits blocked by shields or armor still restore the shield, but restoration is disabled during its break recovery period. Freeze builds only when the attack deals actual damage.</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_FlowerPanelHelpTitle>Qinghe panel help</MX_QH_FlowerPanelHelpTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeTitle>Flower Decree</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeBody>Used to cast Flower Mandates. Segments show current charges and recovery progress.</MX_QH_FlowerPanelHelpFlowerDecreeBody>

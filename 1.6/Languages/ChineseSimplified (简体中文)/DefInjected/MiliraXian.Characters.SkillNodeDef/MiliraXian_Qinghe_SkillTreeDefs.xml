@@ -31,7 +31,7 @@
   <MX_QH_Node_BlessingCharge1.label>花神的怜惜I</MX_QH_Node_BlessingCharge1.label>
   <MX_QH_Node_BlessingCharge1.description>——被动效果：流水之形的充能次数 +1。</MX_QH_Node_BlessingCharge1.description>
   <MX_QH_Node_HardSoftBalance.label>刚柔并济</MX_QH_Node_HardSoftBalance.label>
-  <MX_QH_Node_HardSoftBalance.description>——被动效果：灵气护盾单次承受伤害最多消耗20点能量。</MX_QH_Node_HardSoftBalance.description>
+  <MX_QH_Node_HardSoftBalance.description>——被动效果：灵气最大单次消耗乘数与灵气硬化乘数各增加100%。默认启用20点单次消耗上限，并使灵气硬化按完整数值抵扣消耗。</MX_QH_Node_HardSoftBalance.description>
   <MX_QH_Node_BlessingCharge2.label>花神的怜惜II</MX_QH_Node_BlessingCharge2.label>
   <MX_QH_Node_BlessingCharge2.description>——被动效果：流水之形的充能次数 +1。</MX_QH_Node_BlessingCharge2.description>
   <MX_QH_Trait_LotusShield.label>灵气加护</MX_QH_Trait_LotusShield.label>
