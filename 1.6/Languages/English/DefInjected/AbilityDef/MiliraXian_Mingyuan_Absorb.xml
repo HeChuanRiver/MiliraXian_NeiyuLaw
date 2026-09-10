@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_Absorb.label>Absorb</MX_Mingyuan_Absorb.label>
+  <MX_Mingyuan_Absorb.description>Absorb Life Burn from all hostile pawns in a 108° cone extending 10 cells toward the selected point. Remove every Life Burn layer and deal 0.3 burn damage per layer. Also cancel Time Burn, remove its frozen state and restore the age recorded before that effect. Time Burn grants no additional layer damage. Cooldown: 15 seconds. No resource cost.</MX_Mingyuan_Absorb.description>
+</LanguageData>

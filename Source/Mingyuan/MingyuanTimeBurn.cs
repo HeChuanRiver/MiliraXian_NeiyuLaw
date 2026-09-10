@@ -172,6 +172,25 @@ namespace MiliraXian.Characters.Mingyuan
         {
         }
 
+        public bool Cancel(Pawn pawn)
+        {
+            if (pawn == null) return false;
+            bool removed = false;
+            for (int i = records.Count - 1; i >= 0; i--)
+            {
+                MingyuanTimeBurnRecord record = records[i];
+                if (record?.pawn != pawn) continue;
+                if (!record.reducedCast && pawn.ageTracker != null)
+                    pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
+                RemoveMarker(pawn, record.markerHediff);
+                records.RemoveAt(i);
+                removed = true;
+            }
+            RemoveMarker(pawn, MingyuanUtility.TimeBurnFrozenDef);
+            nextProcessTick = 0;
+            return removed;
+        }
+
         public void Register(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
         {
             if (pawn == null || props == null)
@@ -215,6 +234,16 @@ namespace MiliraXian.Characters.Mingyuan
                 MingyuanTimeBurnRecord record = records[i];
                 if (record?.pawn == null || record.pawn.Destroyed || record.pawn.Discarded || record.pawn.Dead)
                 {
+                    records.RemoveAt(i);
+                    continue;
+                }
+
+                // Cleansing/rebirth may remove the marker outside this component.
+                // Never leave an invisible erasure queued against that pawn.
+                if (record.markerHediff != null && !MingyuanUtility.HasHediff(record.pawn, record.markerHediff))
+                {
+                    if (!record.reducedCast && record.pawn.ageTracker != null)
+                        record.pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
                     records.RemoveAt(i);
                     continue;
                 }
@@ -265,6 +294,9 @@ namespace MiliraXian.Characters.Mingyuan
                 }
 
                 long newAge = CalculateAge(record, tick);
+                if (record.pawn.Spawned)
+                    MingyuanSkillVfx.Play(record.pawn.Map, record.pawn.DrawPos, MingyuanSkillVisualKind.TimeErosion,
+                        Mathf.Lerp(1.2f, 0.35f, Mathf.Clamp01((tick - record.startTick) / (float)Mathf.Max(1, record.durationTicks))));
                 if (record.pawn.ageTracker.AgeBiologicalTicks > newAge)
                 {
                     record.pawn.ageTracker.AgeBiologicalTicks = newAge;
@@ -387,11 +419,9 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(markerHediff);
-            if (hediff != null)
-            {
-                pawn.health.RemoveHediff(hediff);
-            }
+            var hediffs = pawn.health.hediffSet.hediffs;
+            for (int i = hediffs.Count - 1; i >= 0; i--)
+                if (hediffs[i].def == markerHediff) pawn.health.RemoveHediff(hediffs[i]);
         }
     }
 }

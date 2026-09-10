@@ -5,7 +5,7 @@
   <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
   <MX_Mingyuan_InstantCombustion.description>明渊释放 30 格淡色强光。敌对小人的大脑与每只眼睛各受 1 点灼伤，生命燃烧层数翻倍或被点燃，并眩晕 12 秒。前摇：3 秒。冷却：18 小时。</MX_Mingyuan_InstantCombustion.description>
   <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;燃烧之柱&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
-  <MX_Mingyuan_BurningPillar.description>放置一枚燃烧核心，10 分钟内从半径 1 成长到 15，持续 3 小时。越靠近边缘割伤越高，越靠近中心灼伤越高；灼伤决定生命燃烧叠层。建筑每次脉冲受到最大生命 33% 伤害。10 分钟后可指令核心移动。</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_BurningPillar.description>放置一枚燃烧核心，10 分钟内从半径 1 成长到 15，持续 3 小时。越靠近边缘割伤越高，越靠近中心灼伤越高；灼伤决定生命燃烧叠层。敌对及无阵营建筑每次脉冲受到最大生命 33% 伤害。己方、中立及盟友势力的建筑不受影响。10 分钟后可指令核心移动。</MX_Mingyuan_BurningPillar.description>
   <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
   <MX_Mingyuan_TimeBurn.description>在 1 小时内把目标生物年龄燃尽为 0；归零时目标死亡。机械族会坍缩为钢铁与玻璃钢，建筑会分解为 100% 原材料。前摇：8 秒。冷却：48 小时。</MX_Mingyuan_TimeBurn.description>
   <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;焚我余烬&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>

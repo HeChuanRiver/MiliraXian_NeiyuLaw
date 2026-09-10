@@ -385,7 +385,7 @@ namespace MiliraXian.Characters.Mingyuan
                         continue;
                     }
 
-                    if (thing.def.category == ThingCategory.Building && thing.HostileTo(caster))
+                    if (CanDamageBuilding(thing))
                     {
                         HandleBuilding(thing);
                     }
@@ -416,20 +416,17 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             float desiredDamage = Mathf.Max(1f, Mathf.Ceil(building.MaxHitPoints * Mathf.Clamp01(PropsTornado.buildingDamageFraction)));
-            MingyuanUtility.ApplyTrueDamage(building, DamageDefOf.Burn, AdjustBurnDamageForBuilding(building, desiredDamage), caster, scaleWithSelfBurn: false);
+            // Structural scorching is independent of flammability (stone/steel included).
+            MingyuanUtility.ApplyTrueDamage(building, MX_MingyuanDefOf.MX_Mingyuan_StructuralBurn, desiredDamage, caster);
         }
 
-        private float AdjustBurnDamageForBuilding(Thing building, float desiredDamage)
+        private bool CanDamageBuilding(Thing building)
         {
-            DamageDef burn = DamageDefOf.Burn;
-            float multiplier = burn.buildingDamageFactor;
-            multiplier *= building.def.passability != Traversability.Impassable ? burn.buildingDamageFactorPassable : burn.buildingDamageFactorImpassable;
-            if (burn.scaleDamageToBuildingsBasedOnFlammability)
-            {
-                multiplier *= Mathf.Max(0.05f, building.GetStatValue(StatDefOf.Flammability));
-            }
-
-            return multiplier > 0.0001f ? desiredDamage / multiplier : desiredDamage;
+            // Ruins and unclaimed walls have no faction; HostileTo alone excludes
+            // them before structural damage can ever reach the damage worker.
+            return caster != null && building != null && building != parent && !building.Destroyed
+                && building.def.category == ThingCategory.Building && building.def.useHitPoints
+                && (building.Faction == null || building.HostileTo(caster.Faction));
         }
 
         private void TryMoveOneCell()
@@ -774,7 +771,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             float selfBurn = PropsField.scalesWithSelfBurn ? MingyuanUtility.GetSelfBurnEffectiveLayers(caster) : 0f;
             float damage = PropsField.damageAmount;
-            float layers = PropsField.lifeBurnLayers + (selfBurn / 100f) * PropsField.selfBurnLifeBurnPer100;
+            float layers = PropsField.lifeBurnLayers + (selfBurn / 100f) * PropsField.selfBurnLifeBurnPer100 * MingyuanUtility.SelfBurnBonusScale;
 
             MingyuanUtility.ApplyTrueDamage(pawn, DamageDefOf.Burn, damage, caster);
             MingyuanUtility.AddLifeBurn(pawn, caster, layers, scaleWithOverburn: true);

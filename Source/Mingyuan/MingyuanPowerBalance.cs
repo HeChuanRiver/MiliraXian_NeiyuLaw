@@ -134,7 +134,7 @@ namespace MiliraXian.Characters.Mingyuan
             p.KeepField(self, "overburnDecayLayers", 0f);
             var body = HediffComp<HediffCompProperties_MingyuanBurningBody>("MX_Mingyuan_BurningBody");
             p.ScaleField(body, "restoreIntervalTicks", ConservativePowerTuning.Cooldown, 2500);
-            p.ScaleField(body, "invulnerableTicks", .9f, 0);
+            p.KeepField(body, "invulnerableTicks", 0);
             p.ScaleField(body, "reflectLifeBurnLayers", .9f, 0f);
             p.KeepField(body, "selfBurnOnHit", 0f);
             p.ScaleField(body, "meleeLifeBurnLayers", .9f, 0f);
@@ -143,7 +143,7 @@ namespace MiliraXian.Characters.Mingyuan
             p.ScaleField(body, "rangedSelfBurnBonusPer100", ConservativePowerTuning.Bonus, 0f);
             var shield = HediffComp<HediffCompProperties_MingyuanProtectiveFlameShield>("MX_Mingyuan_ProtectiveFlameShield");
             p.ScaleField(shield, "maxEnergy", .9f, 0f);
-            p.ScaleField(shield, "repairIntervalTicks", ConservativePowerTuning.Cooldown, 600);
+            p.KeepField(shield, "repairIntervalTicks", 600);
             p.KeepField(shield, "selfBurnPerEnergy", 4f);
             p.KeepField(shield, "selfBurnRefillMaxFractionOfCap", 0f);
             p.ScaleField(shield, "selfBurnRefillCooldownTicks", ConservativePowerTuning.Cooldown, 2500);

@@ -23,7 +23,6 @@
   <MX_Mingyuan_SelfBurn_TipRhythm>变化：
 - 征召：每 {0} tick +{1}，自然上限 {2}
 - 非征召：每 {3} tick -{4}，明渊保留 1 层
-- 过燃：每 {3} tick -{5}
 - 下次变化：{6} tick</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>修复储备：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
   <MX_Mingyuan_Shield_TipRepair>每{1}秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。下次检查：{0}秒后。</MX_Mingyuan_Shield_TipRepair>
@@ -48,4 +47,6 @@
   <MX_Mingyuan_Bow_ModeBusy>长虹正在蓄力或结算，暂时不能切换形态。</MX_Mingyuan_Bow_ModeBusy>
   <MX_Mingyuan_Bow_ModeInspect>当前形态：{0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形态只能选择视线内、可被生命燃烧影响的敌对单位。</MX_Mingyuan_Bow_InvalidFocusTarget>
+  <MX_Mingyuan_SelfBurn_TipRelease>增益每满 10 层结算。过燃时每 10 秒消耗超出 300 的全部层数，在自身半径 5 格内爆炸，每层造成 1 点伤害。可伤及友军，不伤及明渊自身。距离下次释放：{0} 秒。</MX_Mingyuan_SelfBurn_TipRelease>
+  <MX_Mingyuan_Rebirth_Countdown>距离重生：{0} 秒。</MX_Mingyuan_Rebirth_Countdown>
 </LanguageData>

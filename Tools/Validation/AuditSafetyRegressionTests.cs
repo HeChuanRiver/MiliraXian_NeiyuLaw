@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -55,6 +56,7 @@ internal static class AuditSafetyRegressionTests
             TestMutationAndNestedSnapshots();
             TestRadialSnapshot();
             TestFieldPulse(2);
+            TestPillarBuildings();
         }
         else
         {
@@ -63,6 +65,7 @@ internal static class AuditSafetyRegressionTests
             TestSkyfallReset();
             TestLoadoutReset();
             TestRebirthGuards();
+            TestMingyuanMechanics();
             TestRaidJobLogging();
         }
     }
@@ -313,6 +316,78 @@ internal static class AuditSafetyRegressionTests
         pawn.holdingOwner = holder.GetDirectlyHeldThings();
         Check(!MingyuanRebirthUtility.TryFinishRebirth(pawn, map, cell) && pawn.ParentHolder == holder,
             "pending return cannot steal a pawn from AL's recovery container");
+    }
+
+    private static void TestMingyuanMechanics()
+    {
+        float[] inputs = { -1f, 0f, 9.99f, 10f, 19.99f, 20f, 299.99f, 300f, 301f, 500f };
+        float[] expected = { 0f, 0f, 0f, 10f, 10f, 20f, 290f, 300f, 300f, 300f };
+        for (int i = 0; i < inputs.Length; i++)
+            Check(MingyuanUtility.QuantizeSelfBurn(inputs[i]) == expected[i], "Self Burn decade boundary: " + inputs[i]);
+        Check(MingyuanUtility.QuantizeSelfBurn(99, 25) == 20, "custom cap cannot award an incomplete decade");
+
+        Pawn absorbed = BarePawn();
+        Pawn other = BarePawn();
+        // No health tracker side effects: this fixture checks the production queue
+        // cancellation, including duplicate/legacy records and unrelated victims.
+        absorbed.health = null;
+        var timer = new GameComponent_MingyuanTimeBurn(null);
+        FieldInfo recordsField = typeof(GameComponent_MingyuanTimeBurn).GetField("records", BindingFlags.NonPublic | BindingFlags.Instance);
+        var records = (List<MingyuanTimeBurnRecord>)recordsField.GetValue(timer);
+        records.Add(new MingyuanTimeBurnRecord { pawn = absorbed, endTick = 100 });
+        records.Add(new MingyuanTimeBurnRecord { pawn = other, endTick = 150 });
+        records.Add(new MingyuanTimeBurnRecord { pawn = absorbed, endTick = 200, reducedCast = true });
+        HediffDef oldMarker = MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen;
+        MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen = new HediffDef();
+        try
+        {
+            Check(timer.Cancel(absorbed), "absorption cancels pending Time Burn");
+            Check(records.Count == 1 && records[0].pawn == other, "all target records removed; unrelated target preserved");
+            Check(!timer.Cancel(absorbed), "cancellation is idempotent and cannot schedule late damage");
+            Check(!timer.Cancel(null), "missing absorption target cannot mutate the queue");
+        }
+        finally { MX_MingyuanDefOf.MX_Mingyuan_TimeBurnFrozen = oldMarker; }
+        Check(!MingyuanRebirthUtility.TryInterceptALRecovery(null), "AL keeps handling null/noneligible recovery");
+
+        var comp = new HediffComp_MingyuanSelfBurn { props = new HediffCompProperties_MingyuanSelfBurn() };
+        FieldInfo release = comp.GetType().GetField("ticksToOverburnRelease", BindingFlags.NonPublic | BindingFlags.Instance);
+        Check((int)release.GetValue(comp) == 600, "new Overburn timer starts at ten seconds, not immediate release");
+    }
+
+    private static void TestPillarBuildings()
+    {
+        Pawn caster = BarePawn();
+        var own = (Faction)FormatterServices.GetUninitializedObject(typeof(Faction));
+        own.def = new FactionDef();
+        Set(caster, "factionInt", own, typeof(Thing));
+        var comp = new CompMingyuanBurningPillarTornado();
+        Set(comp, "caster", caster);
+        MethodInfo eligible = comp.GetType().GetMethod("CanDamageBuilding", BindingFlags.NonPublic | BindingFlags.Instance);
+        var def = (ThingDef)FormatterServices.GetUninitializedObject(typeof(ThingDef));
+        def.category = ThingCategory.Building;
+        def.useHitPoints = true;
+        def.passability = Traversability.Impassable;
+        var wall = new Thing { def = def, HitPoints = 100 };
+        Check(!wall.HostileTo(own), "unclaimed ruins reproduce the original hostility-filter exclusion");
+        Check((bool)eligible.Invoke(comp, new object[] { wall }), "production pillar filter accepts unclaimed walls");
+        Set(wall, "factionInt", own, typeof(Thing));
+        Check(!(bool)eligible.Invoke(comp, new object[] { wall }), "claimed colony walls remain protected");
+        foreach (FactionRelationKind relation in new[] { FactionRelationKind.Ally, FactionRelationKind.Neutral, FactionRelationKind.Hostile })
+        {
+            var faction = (Faction)FormatterServices.GetUninitializedObject(typeof(Faction));
+            faction.def = new FactionDef();
+            Set(faction, "relations", new List<FactionRelation> { new FactionRelation { other = own, kind = relation } });
+            Set(wall, "factionInt", faction, typeof(Thing));
+            Check((bool)eligible.Invoke(comp, new object[] { wall }) == (relation == FactionRelationKind.Hostile),
+                "production pillar building filter respects " + relation + " ownership");
+        }
+        Set(wall, "factionInt", null, typeof(Thing));
+        def.useHitPoints = false;
+        Check(!(bool)eligible.Invoke(comp, new object[] { wall }), "non-damageable ruins are skipped safely");
+        def.useHitPoints = true;
+        comp.parent = new ThingWithComps { def = def };
+        Check(!(bool)eligible.Invoke(comp, new object[] { comp.parent }), "pillar never damages its own core");
+
     }
 
     private delegate void JobLogPrefix<TState>(Pawn pawn, Job job, JobCondition condition, ThinkNode giver,

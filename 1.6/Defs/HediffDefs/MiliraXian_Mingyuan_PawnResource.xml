@@ -70,7 +70,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_SelfBurn</defName>
         <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
-        <description>Mingyuan turns the burning inside herself into momentum. Layers from 0 to 300 improve melee and skill damage, give a capped bonus to ranged weapon damage, improve movement, attack speed, work speed, and Life Burn output. Layers above 300 become Overburn: direct damage and active Life Burn stacking are doubled, but her protective flame reserve starts draining.</description>
+        <description>Self Burn bonuses apply once per complete 10 layers, up to 300 layers. Each 10 layers grants +4% melee and skill damage, +0.8% ranged damage, +2% movement, and +4% attack and work speed. Above 300 layers, Overburn doubles direct damage and Life Burn output and drains the flame reserve. Every 10 seconds, all excess layers are consumed in a radius-5 explosion centered on Mingyuan, dealing 1 damage per layer. Nearby allies and buildings can be hit; Mingyuan is excluded.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
         <isBad>false</isBad>
@@ -80,24 +80,322 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label></label>
-                <statFactorsBySeverity>
-                    <li><stat>MoveSpeed</stat><valueBySeverity><points><li>(0,1)</li><li>(300,2.5)</li></points></valueBySeverity></li>
-                    <li><stat>WorkSpeedGlobal</stat><valueBySeverity><points><li>(0,1)</li><li>(300,4)</li></points></valueBySeverity></li>
-                    <li><stat>MeleeDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(300,4)</li></points></valueBySeverity></li>
-                    <li><stat>MeleeCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(50,0.6667)</li><li>(100,0.5)</li><li>(150,0.4)</li><li>(200,0.3333)</li><li>(250,0.2857)</li><li>(300,0.25)</li></points></valueBySeverity></li>
-                    <li><stat>RangedCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(50,0.6667)</li><li>(100,0.5)</li><li>(150,0.4)</li><li>(200,0.3333)</li><li>(250,0.2857)</li><li>(300,0.25)</li></points></valueBySeverity></li>
-                </statFactorsBySeverity>
+                <statFactors>
+                    <MoveSpeed>1</MoveSpeed>
+                    <WorkSpeedGlobal>1</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1</MeleeDamageFactor>
+                    <MeleeCooldownFactor>1</MeleeCooldownFactor>
+                    <RangedCooldownFactor>1</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>10</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.02</MoveSpeed>
+                    <WorkSpeedGlobal>1.04</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.04</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.96153846</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.96153846</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>20</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.04</MoveSpeed>
+                    <WorkSpeedGlobal>1.08</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.08</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.92592593</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.92592593</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>30</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.06</MoveSpeed>
+                    <WorkSpeedGlobal>1.12</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.12</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.89285714</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.89285714</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>40</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.08</MoveSpeed>
+                    <WorkSpeedGlobal>1.16</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.16</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.86206897</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.86206897</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>50</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.1</MoveSpeed>
+                    <WorkSpeedGlobal>1.2</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.2</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.83333333</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.83333333</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>60</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.12</MoveSpeed>
+                    <WorkSpeedGlobal>1.24</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.24</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.80645161</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.80645161</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>70</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.14</MoveSpeed>
+                    <WorkSpeedGlobal>1.28</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.28</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.78125</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.78125</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>80</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.16</MoveSpeed>
+                    <WorkSpeedGlobal>1.32</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.32</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.75757576</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.75757576</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>90</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.18</MoveSpeed>
+                    <WorkSpeedGlobal>1.36</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.36</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.73529412</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.73529412</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>100</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.2</MoveSpeed>
+                    <WorkSpeedGlobal>1.4</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.4</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.71428571</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.71428571</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>110</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.22</MoveSpeed>
+                    <WorkSpeedGlobal>1.44</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.44</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.69444444</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.69444444</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>120</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.24</MoveSpeed>
+                    <WorkSpeedGlobal>1.48</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.48</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.67567568</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.67567568</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>130</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.26</MoveSpeed>
+                    <WorkSpeedGlobal>1.52</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.52</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.65789474</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.65789474</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>140</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.28</MoveSpeed>
+                    <WorkSpeedGlobal>1.56</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.56</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.64102564</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.64102564</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>150</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.3</MoveSpeed>
+                    <WorkSpeedGlobal>1.6</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.6</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.625</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.625</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>160</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.32</MoveSpeed>
+                    <WorkSpeedGlobal>1.64</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.64</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.6097561</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.6097561</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>170</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.34</MoveSpeed>
+                    <WorkSpeedGlobal>1.68</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.68</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.5952381</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.5952381</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>180</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.36</MoveSpeed>
+                    <WorkSpeedGlobal>1.72</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.72</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.58139535</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.58139535</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>190</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.38</MoveSpeed>
+                    <WorkSpeedGlobal>1.76</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.76</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.56818182</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.56818182</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>200</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.4</MoveSpeed>
+                    <WorkSpeedGlobal>1.8</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.8</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.55555556</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.55555556</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>210</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.42</MoveSpeed>
+                    <WorkSpeedGlobal>1.84</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.84</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.54347826</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.54347826</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>220</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.44</MoveSpeed>
+                    <WorkSpeedGlobal>1.88</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.88</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.53191489</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.53191489</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>230</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.46</MoveSpeed>
+                    <WorkSpeedGlobal>1.92</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.92</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.52083333</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.52083333</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>240</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.48</MoveSpeed>
+                    <WorkSpeedGlobal>1.96</WorkSpeedGlobal>
+                    <MeleeDamageFactor>1.96</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.51020408</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.51020408</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>250</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.5</MoveSpeed>
+                    <WorkSpeedGlobal>2</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.5</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.5</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>260</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.52</MoveSpeed>
+                    <WorkSpeedGlobal>2.04</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2.04</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.49019608</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.49019608</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>270</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.54</MoveSpeed>
+                    <WorkSpeedGlobal>2.08</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2.08</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.48076923</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.48076923</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>280</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.56</MoveSpeed>
+                    <WorkSpeedGlobal>2.12</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2.12</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.47169811</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.47169811</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>290</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.58</MoveSpeed>
+                    <WorkSpeedGlobal>2.16</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2.16</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.46296296</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.46296296</RangedCooldownFactor>
+                </statFactors>
+            </li>
+            <li>
+                <minSeverity>300</minSeverity>
+                <statFactors>
+                    <MoveSpeed>1.6</MoveSpeed>
+                    <WorkSpeedGlobal>2.2</WorkSpeedGlobal>
+                    <MeleeDamageFactor>2.2</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.45454545</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.45454545</RangedCooldownFactor>
+                </statFactors>
             </li>
             <li>
                 <minSeverity>300.0001</minSeverity>
-                <label></label>
                 <statFactors>
-                    <MoveSpeed>2.5</MoveSpeed>
-                    <WorkSpeedGlobal>4</WorkSpeedGlobal>
-                    <MeleeDamageFactor>8</MeleeDamageFactor>
-                    <MeleeCooldownFactor>0.25</MeleeCooldownFactor>
-                    <RangedCooldownFactor>0.25</RangedCooldownFactor>
+                    <MoveSpeed>1.6</MoveSpeed>
+                    <WorkSpeedGlobal>2.2</WorkSpeedGlobal>
+                    <MeleeDamageFactor>4.4</MeleeDamageFactor>
+                    <MeleeCooldownFactor>0.45454545</MeleeCooldownFactor>
+                    <RangedCooldownFactor>0.45454545</RangedCooldownFactor>
                 </statFactors>
             </li>
         </stages>
@@ -116,7 +414,7 @@
                 <combatRegenLayers>1</combatRegenLayers>
                 <nonCombatDecayIntervalTicks>60</nonCombatDecayIntervalTicks>
                 <nonCombatDecayLayers>1</nonCombatDecayLayers>
-                <overburnDecayLayers>1</overburnDecayLayers>
+                <overburnDecayLayers>0</overburnDecayLayers>
                 <overburnMoteDef>MX_Mingyuan_Mote_SelfBurnOverburn</overburnMoteDef>
                 <overburnMoteScale>1.35</overburnMoteScale>
             </li>
@@ -126,7 +424,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>A body remade by pale extradimensional fire. Incoming damage is reduced to 1%, consciousness rises, heat and explosions are converted into recovery, attackers are burned in return, control states are cleared, and real wounds feed 5 Self Burn.</description>
+        <description>A body remade by pale fire. Consciousness rises; heat and explosions restore the body, attackers are burned in return, control states are cleared, and each wound grants 5 Self Burn and 0.2 seconds of invulnerability. This passive does not reduce ordinary incoming damage.</description>
         <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -140,7 +438,7 @@
                 <minSeverity>0</minSeverity>
                 <label></label>
                 <statFactors>
-                    <IncomingDamageFactor>0.01</IncomingDamageFactor>
+                    <IncomingDamageFactor>1</IncomingDamageFactor>
                 </statFactors>
                 <capMods>
                     <li>
@@ -163,7 +461,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanBurningBody">
                 <restoreIntervalTicks>1800</restoreIntervalTicks>
-                <invulnerableTicks>90</invulnerableTicks>
+                <invulnerableTicks>12</invulnerableTicks>
                 <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
                 <selfBurnOnHit>5</selfBurnOnHit>
                 <meleeLifeBurnLayers>10</meleeLifeBurnLayers>
@@ -177,7 +475,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
         <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
-        <description>A 100-point pale flame reserve. Each second, 1 point restores one missing body part or heals all wounds and scars on one part. Stable Self Burn can replenish the reserve; Overburn drains it. The reserve does not absorb damage.</description>
+        <description>A 100-point pale flame reserve. Every 10 seconds, 1 point restores one missing body part or heals all wounds and scars on one part. Stable Self Burn can replenish the reserve; Overburn drains it. The reserve does not absorb damage.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>
@@ -189,7 +487,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanProtectiveFlameShield">
                 <maxEnergy>100</maxEnergy>
-                <repairIntervalTicks>60</repairIntervalTicks>
+                <repairIntervalTicks>600</repairIntervalTicks>
                 <selfBurnRefillIntervalTicks>300</selfBurnRefillIntervalTicks>
                 <selfBurnRefillCooldownTicks>1800</selfBurnRefillCooldownTicks>
                 <selfBurnPerEnergy>3</selfBurnPerEnergy>

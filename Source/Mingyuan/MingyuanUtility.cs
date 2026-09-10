@@ -13,6 +13,7 @@ namespace MiliraXian.Characters.Mingyuan
         public const string ZhaoliPawnKindDefName = "MiliraXian_Zhaoli";
         public const int TicksPerHour = 2500;
         public const float DefaultSelfBurnEffectiveCap = 300f;
+        public const float SelfBurnBonusScale = 0.4f;
 
         public static bool SuppressOnHitLifeBurn;
 
@@ -257,8 +258,11 @@ namespace MiliraXian.Characters.Mingyuan
 
             HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
             float cap = comp?.PropsSelfBurn.effectiveBonusCap ?? DefaultSelfBurnEffectiveCap;
-            return Mathf.Min(layers, Mathf.Max(0f, cap));
+            return QuantizeSelfBurn(layers, cap);
         }
+
+        public static float QuantizeSelfBurn(float layers, float cap = DefaultSelfBurnEffectiveCap)
+            => Mathf.Floor(Mathf.Min(Mathf.Max(0f, layers), Mathf.Max(0f, cap)) / 10f) * 10f;
 
         public static float GetSelfBurnOverburnThreshold(Pawn pawn)
         {
@@ -303,15 +307,15 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static float GetLifeBurnBonusStep(Pawn pawn)
         {
-            return Mathf.Floor(GetSelfBurnEffectiveLayers(pawn) / 100f);
+            return GetSelfBurnEffectiveLayers(pawn) / 100f * SelfBurnBonusScale;
         }
 
         public static float GetSelfBurnSkillDamageFactor(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return 1f;
-            if (MingyuanPowerBalance.IsBalanced) return 1f + GetSelfBurnEffectiveLayers(pawn) * (.01f * ConservativePowerTuning.Bonus);
+            if (MingyuanPowerBalance.IsBalanced) return 1f + GetSelfBurnEffectiveLayers(pawn) * (.004f * ConservativePowerTuning.Bonus);
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
-            return selfBurn > 0f ? 1f + selfBurn * 0.01f : 1f;
+            return selfBurn > 0f ? 1f + selfBurn * 0.004f : 1f;
         }
 
         public static float GetSelfBurnRangedWeaponDamageFactor(Pawn pawn)
@@ -326,7 +330,7 @@ namespace MiliraXian.Characters.Mingyuan
             HediffComp_MingyuanSelfBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanSelfBurn>();
             float perLayer = Mathf.Max(0f, comp?.PropsSelfBurn.rangedWeaponDamagePerLayer ?? 0.002f);
             float cap = Mathf.Max(0f, comp?.PropsSelfBurn.rangedWeaponDamageBonusCap ?? 0.6f);
-            return 1f + Mathf.Min(selfBurn * perLayer, cap);
+            return 1f + Mathf.Min(selfBurn * perLayer, cap) * SelfBurnBonusScale;
         }
 
         public static bool IsHostilePawn(Thing thing, Pawn caster, out Pawn pawn)

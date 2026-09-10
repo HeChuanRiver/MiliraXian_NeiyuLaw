@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mingyuan_Absorb.label>吸收</MX_Mingyuan_Absorb.label>
+  <MX_Mingyuan_Absorb.description>朝選定方向吸取 10 格、108° 扇形內所有敵人的生命燃燒。清除全部生命燃燒層數，每層對原目標造成 0.3 點灼傷。
+同時取消時間燃燒、解除其凍結狀態，並恢復施加時間燃燒前記錄的年齡；時間燃燒不計入額外層數傷害。
+冷卻 15 秒，無資源消耗。</MX_Mingyuan_Absorb.description>
+</LanguageData>

@@ -5,7 +5,7 @@
   <MX_Mingyuan_InstantCombustion.label>&lt;color=#FFD37A&gt;瞬時燃燒&lt;/color&gt;</MX_Mingyuan_InstantCombustion.label>
   <MX_Mingyuan_InstantCombustion.description>明淵釋放 30 格淡色強光。敵對小人的大腦與每隻眼睛各受 1 點灼傷，生命燃燒層數翻倍或被點燃，並眩暈 12 秒。前搖：3 秒。冷卻：18 小時。</MX_Mingyuan_InstantCombustion.description>
   <MX_Mingyuan_BurningPillar.label>&lt;color=#FF7A45&gt;燃燒之柱&lt;/color&gt;</MX_Mingyuan_BurningPillar.label>
-  <MX_Mingyuan_BurningPillar.description>放置一枚燃燒核心，10 分鐘內從半徑 1 成長到 15，持續 3 小時。越靠近邊緣割傷越高，越靠近中心灼傷越高；灼傷決定生命燃燒疊層。建築每次脈衝受到最大生命 33% 傷害。10 分鐘後可指令核心移動。</MX_Mingyuan_BurningPillar.description>
+  <MX_Mingyuan_BurningPillar.description>放置一枚燃燒核心，10 分鐘內從半徑 1 成長到 15，持續 3 小時。越靠近邊緣割傷越高，越靠近中心灼傷越高；灼傷決定生命燃燒疊層。敵對及無陣營建築每次脈衝受到最大生命 33% 傷害。己方、中立及盟友勢力的建築不受影響。10 分鐘後可指令核心移動。</MX_Mingyuan_BurningPillar.description>
   <MX_Mingyuan_TimeBurn.label>&lt;color=#C95CFF&gt;時間燃燒&lt;/color&gt;</MX_Mingyuan_TimeBurn.label>
   <MX_Mingyuan_TimeBurn.description>在 1 小時內把目標生物年齡燃盡為 0；歸零時目標死亡。機械族會坍縮為鋼鐵與玻璃鋼，建築會分解為 100% 原材料。前搖：8 秒。冷卻：48 小時。</MX_Mingyuan_TimeBurn.description>
   <MX_Mingyuan_AshesOfSelf.label>&lt;color=#FF5C3A&gt;焚我餘燼&lt;/color&gt;</MX_Mingyuan_AshesOfSelf.label>

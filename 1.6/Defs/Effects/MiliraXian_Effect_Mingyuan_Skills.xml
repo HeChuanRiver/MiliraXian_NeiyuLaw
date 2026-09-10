@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <DamageDef ParentName="Flame">
+    <defName>MX_Mingyuan_StructuralBurn</defName>
+    <label>structural scorching</label>
+    <workerClass>DamageWorker_AddInjury</workerClass>
+    <scaleDamageToBuildingsBasedOnFlammability>false</scaleDamageToBuildingsBasedOnFlammability>
+    <buildingDamageFactor>1</buildingDamageFactor>
+    <buildingDamageFactorPassable>1</buildingDamageFactorPassable>
+    <buildingDamageFactorImpassable>1</buildingDamageFactorImpassable>
+  </DamageDef>
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>MX_Mingyuan_SkillVisual</defName>
+    <label>Mingyuan flame visual</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanSkillVisual</thingClass>
+    <drawerType>RealtimeOnly</drawerType>
+    <tickerType>Normal</tickerType>
+    <selectable>false</selectable>
+    <isSaveable>false</isSaveable>
+    <drawOffscreen>false</drawOffscreen>
+  </ThingDef>
+</Defs>

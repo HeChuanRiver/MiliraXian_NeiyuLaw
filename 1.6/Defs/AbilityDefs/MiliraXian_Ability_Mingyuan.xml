@@ -93,7 +93,7 @@
     <AbilityDef>
         <defName>MX_Mingyuan_BurningPillar</defName>
         <label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</label>
-        <description>Place a burning core that grows from radius 1 to 15 over 10 minutes and lasts 3 hours. The edge cuts harder while the center burns harder; burn damage adds Life Burn layers. Buildings take 33% of maximum hit points per pulse. After 10 minutes the core can be ordered to move.</description>
+        <description>Place a burning core that grows from radius 1 to 15 over 10 minutes and lasts 3 hours. The edge cuts harder while the center burns harder; burn damage adds Life Burn layers. Hostile and factionless buildings take 33% of maximum hit points per pulse. Owned, non-hostile buildings are unaffected. After 10 minutes the core can be ordered to move.</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>120</displayOrder>
