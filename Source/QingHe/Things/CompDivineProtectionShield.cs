@@ -276,7 +276,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             FlushAccumulatedRegen(CurrentTick, force: true);
-            if (dinfo.Amount <= 0f || InBreak || dinfo.Def.ignoreShields || energy <= 0f)
+            if (dinfo.Amount <= 0f || InBreak || energy <= 0f)
             {
                 return;
             }

@@ -4,8 +4,8 @@
     <PawnKindDef ParentName="Milira_PawnBase">
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
-        <!-- Lotus Rosalia -->
-        <label>花中仙子</label>
+        <!-- Lotaris Ryselia -->
+        <label>仙域米莉拉</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -245,7 +245,7 @@
                  禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>
-                    <li><def>MX_QH_Trait_LongBreath</def></li>
+                    <li><def>MX_QH_Trait_SpringFall</def></li>
                     <li><def>MX_QH_Trait_WaterFairy</def></li>
                     <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
                     <li>
@@ -364,7 +364,7 @@
              填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
             <li Class="AriandelLibrary.AL_TraitLock_Extension">
                 <requiredTraits>
-                    <li>MX_QH_Trait_LongBreath</li>
+                    <li>MX_QH_Trait_SpringFall</li>
                     <li>MX_QH_Trait_WaterFairy</li>
                 </requiredTraits>
             </li>

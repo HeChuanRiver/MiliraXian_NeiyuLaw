@@ -12,7 +12,7 @@
             </li>
             <li>
                 <label>洛水之仪</label>
-                <description>洛神的话语仍在心中回响，良缘尚待。</description>
+                <description>——“髣髴兮若轻云之蔽月，飘飖兮若流风之回雪”</description>
                 <baseMoodEffect>8</baseMoodEffect>
             </li>
         </stages>
@@ -40,8 +40,8 @@
         <showBubble>false</showBubble>
         <stages>
             <li>
-                <label>听见清荷演奏</label>
-                <description>清荷的乐声在屋内缓缓流转，令人心绪舒展。</description>
+                <label>倾听清荷的演奏</label>
+                <description>清荷婉转的乐声在屋内缓缓流转，令人心绪安宁。</description>
                 <baseMoodEffect>5</baseMoodEffect>
             </li>
         </stages>
@@ -53,8 +53,8 @@
         <thoughtClass>Thought_Situational</thoughtClass>
         <stages>
             <li>
-                <label>没有荷池</label>
-                <description>清荷身边没有可供栖心的荷池，水意无处安放。</description>
+                <label>缺少荷池</label>
+                <description>我需要一个合适的修行之所。</description>
                 <baseMoodEffect>-6</baseMoodEffect>
             </li>
         </stages>
@@ -66,8 +66,8 @@
         <thoughtClass>Thought_Situational</thoughtClass>
         <stages>
             <li>
-                <label>荷雨亭不够雅致</label>
-                <description>荷池所在的屋舍还不够清雅，难以让清荷真正静下心来。</description>
+                <label>荷雨亭不够美观</label>
+                <description>我的修行地点环境非常糟糕，这让我很难过。</description>
                 <baseMoodEffect>-4</baseMoodEffect>
             </li>
         </stages>

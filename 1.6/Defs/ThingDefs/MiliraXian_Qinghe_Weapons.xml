@@ -41,13 +41,13 @@
 
         <tools>
             <li>
-                <label>清荷剑刃</label>
+                <label>斩击</label>
                 <capacities>
                     <li>MX_QH_SwordCut</li>
                 </capacities>
-                <power>10</power>
+                <power>8</power>
                 <armorPenetration>1.2</armorPenetration>
-                <cooldownTime>0.8</cooldownTime>
+                <cooldownTime>1.0</cooldownTime>
             </li>
         </tools>
 

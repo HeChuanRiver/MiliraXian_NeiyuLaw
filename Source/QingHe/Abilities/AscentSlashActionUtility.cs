@@ -77,6 +77,35 @@ namespace MiliraXian.Characters.QingHe.Abilities
             return fallback.IsValid && fallback.InBounds(map) ? fallback : caster.Position;
         }
 
+        public static IntVec3 FindNearestLandingCell(
+            Map map, IntVec3 desired, Pawn caster, IntVec3 fallback, IntVec3 origin, float maxDistance)
+        {
+            if (map == null)
+            {
+                return fallback;
+            }
+
+            IntVec3 nearest = fallback;
+            float nearestDistanceSquared = float.PositiveInfinity;
+            // Select legal cells inside the limit so landing clearance cannot extend the pursuit.
+            foreach (IntVec3 cell in GenRadial.RadialCellsAround(origin, Mathf.Max(0f, maxDistance), true))
+            {
+                if (!cell.InBounds(map) || !ValidLandingCell(map, cell, caster))
+                {
+                    continue;
+                }
+
+                float distanceSquared = cell.DistanceToSquared(desired);
+                if (distanceSquared < nearestDistanceSquared)
+                {
+                    nearest = cell;
+                    nearestDistanceSquared = distanceSquared;
+                }
+            }
+
+            return nearest;
+        }
+
         public static IntVec3 ClampToMap(IntVec3 cell, Map map)
         {
             if (map == null)

@@ -45,7 +45,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlowerEnvoy</defName>
     <label>花中仙</label>
-    <description>我与盛花之景本为一体。随风而动，随水而居，此为仙境之灵气。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
+    <description>我与盛花之景本为一体。随风而动，随水而居。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>0</displayOrder>
@@ -54,7 +54,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlyingFlowerDecree</defName>
     <label>飞花令</label>
-    <description>习得春泉涌流。</description>
+    <description>——习得飞花令：春泉涌流。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>10</displayOrder>
@@ -66,7 +66,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_SwordDance</defName>
     <label>剑舞</label>
-    <description>习得镜花水月。</description>
+    <description>——习得剑技：镜花水月。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>15</displayOrder>
@@ -78,7 +78,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_SeasonalResonance</defName>
     <label>四时和鸣</label>
-    <description>习得此特性后，可在花庭中选择四时共鸣，使散华与花信铃获得对应季节的附加效果。</description>
+    <description>习得调谐自身灵气律动的能力，可为自身和武器附加不同的和鸣效果。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>20</displayOrder>
@@ -87,7 +87,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_LingeringSnow</defName>
     <label>残雪</label>
-    <description>习得霜月镜。</description>
+    <description>——习得技能：霜月镜。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>25</displayOrder>

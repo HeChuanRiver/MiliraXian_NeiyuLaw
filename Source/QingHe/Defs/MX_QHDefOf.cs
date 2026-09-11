@@ -64,7 +64,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static ThoughtDef MX_QH_NoLotusPond;
         public static ThoughtDef MX_QH_LotusPavilionBeautyLow;
 
-        public static TraitDef MX_QH_Trait_LongBreath;
+        public static TraitDef MX_QH_Trait_SpringFall;
         public static TraitDef MX_QH_Trait_WaterFairy;
 
         public static InspirationDef Frenzy_Work;

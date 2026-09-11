@@ -15,7 +15,7 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowerDecree">
         <resourceLabel>花令</resourceLabel>
-        <resourceDescription>清荷的充能型层数资源，用于释放四时飞花令。</resourceDescription>
+        <resourceDescription>用于施放飞花令的充能资源。</resourceDescription>
         <initialValue>0</initialValue>
         <maxValue>300</maxValue>
         <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
@@ -77,10 +77,33 @@
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+      </li>
+      <li>
+        <minSeverity>1</minSeverity>
+        <statFactors>
+          <MeleeDamageFactor>1.1</MeleeDamageFactor>
+        </statFactors>
+      </li>
+      <li>
+        <minSeverity>2</minSeverity>
+        <statFactors>
+          <MeleeDamageFactor>1.2</MeleeDamageFactor>
+        </statFactors>
+      </li>
+      <li>
+        <minSeverity>3</minSeverity>
+        <statFactors>
+          <MeleeDamageFactor>1.33</MeleeDamageFactor>
+        </statFactors>
+      </li>
+    </stages>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SwordPressure">
         <resourceLabel>剑压</resourceLabel>
-        <resourceDescription>挥剑命中敌人时积累。未完成的一段剑压会在停止获取后逐渐消退。</resourceDescription>
+        <resourceDescription>挥剑命中敌人时积累。未积累的一段剑压会在停止获取后逐渐流失。</resourceDescription>
         <initialValue>0</initialValue>
         <maxValue>300</maxValue>
         <valuePerPoint>100</valuePerPoint>
@@ -109,7 +132,7 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_MeditativeStillness">
         <resourceLabel>静思</resourceLabel>
-        <resourceDescription>清荷在荷池处冥想时积累的静心沉淀。</resourceDescription>
+        <resourceDescription>隐藏资源，不直接显示</resourceDescription>
         <initialValue>0</initialValue>
         <maxValue>100</maxValue>
         <meditationGainPerDay>600</meditationGainPerDay>
@@ -289,7 +312,7 @@
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,1.5)</li>
+                <li>(24,2.0)</li>
               </points>
             </valueBySeverity>
           </li>

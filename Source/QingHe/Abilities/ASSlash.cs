@@ -37,11 +37,12 @@ namespace MiliraXian.Characters.QingHe.Abilities
         private int slashIndex;
         private int slashHitCount;
         private float slashDamage;
+        private bool slashEmpowered = true;
         private float slashBaseAngle;
 
         public bool Active => stage != SlashStage.None;
 
-        private int SlashTotalCount => Mathf.Max(1, props.empoweredSlashCount);
+        private int SlashTotalCount => Mathf.Max(1, slashEmpowered ? props.empoweredSlashCount : props.normalSlashCount);
 
         private int NextSlashTick => stageStartTick
             + slashIndex * Mathf.Max(1, props.empoweredSlashIntervalTicks);
@@ -121,6 +122,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             int stageValue = (int)stage;
             Scribe_Values.Look(ref stageValue, "mx_qh_asSlash_stage", 0);
             Scribe_Values.Look(ref firstImpactCell, "mx_qh_asSlash_firstImpactCell", IntVec3.Invalid);
+            Scribe_Values.Look(ref takeoffCell, "mx_qh_asSlash_takeoffCell", IntVec3.Invalid);
             Scribe_Values.Look(ref impactCell, "mx_qh_asSlash_impactCell", IntVec3.Invalid);
             Scribe_Values.Look(ref landingCell, "mx_qh_asSlash_landingCell", IntVec3.Invalid);
             Scribe_Values.Look(ref directionCell, "mx_qh_asSlash_directionCell", IntVec3.Invalid);
@@ -129,6 +131,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Scribe_Values.Look(ref stageEndTick, "mx_qh_asSlash_stageEndTick", -1);
             Scribe_Values.Look(ref slashIndex, "mx_qh_asSlash_index", 0);
             Scribe_Values.Look(ref slashHitCount, "mx_qh_asSlash_hitCount", 0);
+            Scribe_Values.Look(ref slashDamage, "mx_qh_asSlash_damage", 0f);
+            Scribe_Values.Look(ref slashEmpowered, "mx_qh_asSlash_empowered", true);
             stage = (SlashStage)stageValue;
         }
 
@@ -139,14 +143,15 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            if (stage is SlashStage.TakeoffDelay
-                or SlashStage.Ascending
-                or SlashStage.Hover
-                or SlashStage.Descending)
+            if (!takeoffCell.IsValid)
             {
                 takeoffCell = caster.Position;
             }
 
+            if (stage is SlashStage.ImpactDelay or SlashStage.ImpactSlashes)
+            {
+                landingCell = impactCell = caster.Position;
+            }
         }
 
         public bool TryApplyDrawPos(ref Vector3 drawPos)
@@ -209,16 +214,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             ResolveDestination(caster, map);
-            if (!impactCell.IsValid || !impactCell.InBounds(map))
-            {
-                impactCell = firstImpactCell.InBounds(map) ? firstImpactCell : caster.Position;
-            }
-
-            landingCell = AscentSlashActionUtility.FindNearestLandingCell(map, impactCell, caster, caster.Position);
             AscentSlashActionUtility.BreakRoofAt(map, landingCell, allowThickRoof: true);
             BeginStage(SlashStage.Descending, props.descentTicks);
             props.dropSound?.PlayOneShot(new TargetInfo(landingCell, map));
-            MX_QHGraphicsUtility.Fleck(map, impactCell, props.impactFleck, 1.1f);
+            MX_QHGraphicsUtility.Fleck(map, landingCell, props.impactFleck, 1.1f);
         }
 
         private void TickDescent(Pawn caster, Map map, int now)
@@ -228,14 +227,16 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            IntVec3 resolvedLanding = AscentSlashActionUtility.FindNearestLandingCell(map, landingCell, caster, caster.Position);
+            IntVec3 resolvedLanding = AscentSlashActionUtility.FindNearestLandingCell(
+                map, landingCell, caster, caster.Position, takeoffCell, props.secondStageTrackingRange);
             if (resolvedLanding.IsValid && resolvedLanding.InBounds(map) && resolvedLanding != caster.Position)
             {
-                landingCell = resolvedLanding;
                 caster.Position = resolvedLanding;
                 caster.Notify_Teleported(endCurrentJob: false);
             }
 
+            // All slashes stay centered on the actual landing, even if the target moves away.
+            landingCell = impactCell = caster.Position;
             BeginStage(SlashStage.ImpactDelay, Mathf.Max(1, props.impactDelayTicks));
         }
 
@@ -263,47 +264,16 @@ namespace MiliraXian.Characters.QingHe.Abilities
             props.castSound?.PlayOneShot(new TargetInfo(center, map));
 
             HediffComp_SwordPressure pressure = MX_QH_HediffUtility.EnsureSwordPressure(caster);
+            // Keep the pre-consumption stat for the entire slash sequence.
+            float meleeFactor = caster.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             float consumedPressure = pressure != null && pressure.CompletedPoints >= 1 ? pressure.ConsumeAll() : 0f;
             float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
-            if (consumedPressure >= 1f)
-            {
-                float damage = props.damageAmount * specialFactor
-                    * (1f + consumedPressure * Mathf.Max(0f, props.empoweredDamagePerPressurePoint));
-                BeginEmpoweredSlashes(caster, map, center, damage);
-                return;
-            }
-
-            Thing target = trackedTarget;
-            if (target == null || target.Destroyed || !target.Spawned || target.MapHeld != map)
-            {
-                target = FindNearestTarget(caster, map, center, 1.5f, requireLineOfSight: true);
-            }
-
-            int hitCount = 0;
-            if (target != null)
-            {
-                float damage = props.damageAmount * specialFactor * (target is Building ? props.buildingDamageMultiplier : 1f);
-                for (int i = 0; i < Mathf.Max(1, props.normalSlashCount); i++)
-                {
-                    props.slashSound?.PlayOneShot(new TargetInfo(target.Position, map));
-                    if (QingheSwordCombatUtility.ApplySlash(caster, target, damage, props.armorPenetration, empowered: false))
-                    {
-                        hitCount++;
-                    }
-                }
-            }
-
-            if (hitCount > 0)
-            {
-                const float normalRecoveryFactor = 0.25f;
-                pressure?.StartRecovery(
-                    props.postHitRecoveryPoints * normalRecoveryFactor,
-                    Mathf.RoundToInt(props.postHitRecoveryTicks * normalRecoveryFactor));
-            }
-            Complete(caster);
+            float damage = props.damageAmount * specialFactor * meleeFactor
+                * (1f + consumedPressure * Mathf.Max(0f, props.empoweredDamagePerPressurePoint));
+            BeginSlashes(caster, map, center, damage, consumedPressure >= 1f);
         }
 
-        private void BeginEmpoweredSlashes(Pawn caster, Map map, IntVec3 center, float damage)
+        private void BeginSlashes(Pawn caster, Map map, IntVec3 center, float damage, bool empowered)
         {
             if (caster == null || map == null || !center.IsValid)
             {
@@ -314,6 +284,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             slashIndex = 0;
             slashHitCount = 0;
             slashDamage = damage;
+            slashEmpowered = empowered;
             slashBaseAngle = Rand.Range(0f, 360f / SlashTotalCount);
             BeginStage(
                 SlashStage.ImpactSlashes,
@@ -341,15 +312,23 @@ namespace MiliraXian.Characters.QingHe.Abilities
             if (target != null)
             {
                 trackedTarget = target;
-                props.slashSound?.PlayOneShot(new TargetInfo(target.Position, map));
-                PlaySlashFleck(map, target);
+            }
+            props.slashSound?.PlayOneShot(new TargetInfo(impactCell, map));
+            PlaySlashFleck(map);
+            if (slashEmpowered)
+            {
                 slashHitCount += QingheSwordCombatUtility.ApplyRadius(
                     caster,
-                    target.Position,
+                    impactCell,
                     Mathf.Max(0f, props.empoweredSlashRadius),
                     slashDamage,
                     props.armorPenetration,
                     empowered: true);
+            }
+            else if (target != null && QingheSwordCombatUtility.ApplySlash(
+                caster, target, slashDamage, props.armorPenetration, empowered: true))
+            {
+                slashHitCount++;
             }
 
             slashIndex++;
@@ -357,7 +336,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
             {
                 if (slashHitCount > 0)
                 {
-                    MX_QH_HediffUtility.EnsureSwordPressure(caster)?.StartRecovery(props.postHitRecoveryPoints, props.postHitRecoveryTicks);
+                    MX_QH_HediffUtility.EnsureSwordPressure(caster)?.StartRecovery(
+                        slashEmpowered ? props.postHitRecoveryPoints : props.normalPostHitRecoveryPoints,
+                        slashEmpowered ? props.postHitRecoveryTicks : props.normalPostHitRecoveryTicks);
                 }
                 Complete(caster);
                 return;
@@ -425,47 +406,24 @@ namespace MiliraXian.Characters.QingHe.Abilities
         private void ResolveDestination(Pawn caster, Map map)
         {
             IntVec3 start = takeoffCell.IsValid && takeoffCell.InBounds(map) ? takeoffCell : caster.Position;
-            IntVec3 desired = start;
-            Vector3 trackingDirection = AscentSlashActionUtility.ComputeForward(firstImpactCell, directionCell);
-
-            if (trackedTarget != null && !trackedTarget.Destroyed && trackedTarget.Spawned && trackedTarget.MapHeld == map)
-            {
-                IntVec3 currentTargetCell = trackedTarget.Position;
-                Vector3 moved = (currentTargetCell - firstImpactCell).ToVector3().Yto0();
-                if (moved.sqrMagnitude > 0.001f)
-                {
-                    trackingDirection = moved.normalized;
-                }
-
-                desired = firstImpactCell.DistanceTo(currentTargetCell) <= props.secondStageTrackingRange
-                    ? start + moved.ToIntVec3()
-                    : start + (trackingDirection * props.secondStageLimitedFollowDistance).ToIntVec3();
-            }
-
-            impactCell = AscentSlashActionUtility.ClampToMap(desired, map);
-            AscentSlashActionUtility.BreakRoofAt(map, impactCell, allowThickRoof: true);
-            if (trackingDirection.sqrMagnitude < 0.001f)
-            {
-                trackingDirection = AscentSlashActionUtility.ComputeForward(takeoffCell, firstImpactCell);
-            }
-
-            directionCell = impactCell + trackingDirection.ToIntVec3();
-            if (directionCell == impactCell)
-            {
-                directionCell = AscentSlashActionUtility.ComputeDirectionCell(takeoffCell, impactCell);
-            }
+            bool hasTarget = AscentSlashActionUtility.CanHit(caster, trackedTarget) && trackedTarget.MapHeld == map;
+            IntVec3 desired = hasTarget ? trackedTarget.Position : start;
+            landingCell = AscentSlashActionUtility.FindNearestLandingCell(
+                map, desired, caster, start, start, props.secondStageTrackingRange);
+            directionCell = AscentSlashActionUtility.ComputeDirectionCell(
+                landingCell, hasTarget ? desired : firstImpactCell);
         }
 
-        private void PlaySlashFleck(Map map, Thing target)
+        private void PlaySlashFleck(Map map)
         {
-            if (map == null || props.empoweredSlashFleck == null || target == null)
+            if (map == null || props.empoweredSlashFleck == null || !impactCell.IsValid)
             {
                 return;
             }
 
             float angleStep = 360f / SlashTotalCount;
             FleckCreationData data = FleckMaker.GetDataStatic(
-                target.DrawPos,
+                impactCell.ToVector3Shifted(),
                 map,
                 props.empoweredSlashFleck,
                 Mathf.Max(0.01f, props.empoweredSlashVisualScale));
@@ -497,6 +455,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             slashIndex = 0;
             slashHitCount = 0;
             slashDamage = 0f;
+            slashEmpowered = true;
             slashBaseAngle = 0f;
         }
 

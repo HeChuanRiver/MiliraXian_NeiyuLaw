@@ -23,6 +23,7 @@
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_Slash</defName>
     <label>散华斩击</label>
+    <deathMessage>{0}死于散华的刀刃之下。</deathMessage>
     <modExtensions>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
         <canGainSwordPressure>true</canGainSwordPressure>
@@ -34,6 +35,7 @@
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_SlashSkill</defName>
     <label>散华剑技</label>
+    <deathMessage>{0}被清荷华丽的剑技击倒了。</deathMessage>
     <buildingDamageFactor>2</buildingDamageFactor>
     <modExtensions>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">

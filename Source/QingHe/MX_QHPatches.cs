@@ -687,10 +687,10 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (MX_QHDefOf.MX_QH_Trait_LongBreath != null
-                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_LongBreath))
+            if (MX_QHDefOf.MX_QH_Trait_SpringFall != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_SpringFall))
             {
-                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_LongBreath));
+                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_SpringFall));
             }
 
             if (MX_QHDefOf.MX_QH_Trait_WaterFairy != null

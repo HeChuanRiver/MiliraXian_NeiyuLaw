@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_LuoshenContractMaintained.stages.0.label>洛神契：相守</MX_QH_LuoshenContractMaintained.stages.0.label>
-  <MX_QH_LuoshenContractMaintained.stages.0.description>与{PAWN_nameDef}在洛神的见证下结下了良缘，和{PAWN_nameDef}在一起的感觉令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
+  <MX_QH_LuoshenContractMaintained.stages.0.description>与{PAWN_nameDef}在洛神的见证下结下了契约，和{PAWN_nameDef}在一起的感觉令我感到安心。</MX_QH_LuoshenContractMaintained.stages.0.description>
   <MX_QH_LuoshenContractMaintained.stages.1.label>洛水之仪</MX_QH_LuoshenContractMaintained.stages.1.label>
   <MX_QH_LuoshenContractMaintained.stages.1.description>——“髣髴兮若轻云之蔽月，飘飖兮若流风之回雪”</MX_QH_LuoshenContractMaintained.stages.1.description>
   <MX_QH_LuoshenContractBroken.stages.0.label>洛神契破碎 ({0})</MX_QH_LuoshenContractBroken.stages.0.label>

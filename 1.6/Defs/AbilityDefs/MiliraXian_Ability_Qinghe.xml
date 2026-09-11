@@ -189,7 +189,6 @@
         <ascentDecelerationPower>2.2</ascentDecelerationPower>
         <descentAccelerationPower>2.4</descentAccelerationPower>
         <secondStageTrackingRange>4</secondStageTrackingRange>
-        <secondStageLimitedFollowDistance>1.5</secondStageLimitedFollowDistance>
         <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
         <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
         <secondImpactRadius>2</secondImpactRadius>
@@ -199,13 +198,15 @@
         <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
         <empoweredSlashCount>7</empoweredSlashCount>
         <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>
-        <empoweredSlashRadius>1</empoweredSlashRadius>
+        <empoweredSlashRadius>2</empoweredSlashRadius>
         <empoweredSlashFleck>MX_QH_Fleck_MirrorSlashNormal</empoweredSlashFleck>
         <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
         <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
         <normalSlashCount>3</normalSlashCount>
-        <postHitRecoveryPoints>2</postHitRecoveryPoints>
+        <postHitRecoveryPoints>1</postHitRecoveryPoints>
         <postHitRecoveryTicks>600</postHitRecoveryTicks>
+        <normalPostHitRecoveryPoints>0.5</normalPostHitRecoveryPoints>
+        <normalPostHitRecoveryTicks>300</normalPostHitRecoveryTicks>
         <impactDelayTicks>30</impactDelayTicks>
         <dropSound>MX_QH_AscentSlash_Drop</dropSound>
         <slashSound>MX_QH_AscentSlash_Slash</slashSound>

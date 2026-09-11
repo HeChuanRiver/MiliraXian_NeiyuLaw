@@ -314,7 +314,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
             MX_QHGraphicsUtility.Fleck(map, center, props.impactFleck, 0.85f);
             props.castSound?.PlayOneShot(new TargetInfo(center, map));
 
-            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
+            float damageFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster)
+                * caster.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             List<Thing> victims = new();
             HashSet<Thing> unique = new();
             foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, props.dashImpactRadius, true))
@@ -335,7 +336,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             foreach (Thing victim in victims)
             {
-                ApplyImpactDamage(caster, victim, specialFactor);
+                ApplyImpactDamage(caster, victim, damageFactor);
             }
 
             if (directHitThing != null
@@ -344,13 +345,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 && directHitThing.MapHeld == map
                 && unique.Add(directHitThing))
             {
-                ApplyImpactDamage(caster, directHitThing, specialFactor);
+                ApplyImpactDamage(caster, directHitThing, damageFactor);
             }
         }
 
-        private void ApplyImpactDamage(Pawn caster, Thing target, float specialFactor)
+        private void ApplyImpactDamage(Pawn caster, Thing target, float damageFactor)
         {
-            float damage = props.dashDamageAmount * specialFactor;
+            float damage = props.dashDamageAmount * damageFactor;
             if (target is Building)
             {
                 damage *= props.buildingDamageMultiplier;
