@@ -27,9 +27,9 @@
     <passability>Standable</passability>
     <comps>
       <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanAscendantFlameScorch">
-        <durationTicks>900</durationTicks>
-        <pulseIntervalTicks>30</pulseIntervalTicks>
-        <lifeBurnLayers>8</lifeBurnLayers>
+        <durationTicks>300</durationTicks>
+        <pulseIntervalTicks>60</pulseIntervalTicks>
+        <lifeBurnLayers>6</lifeBurnLayers>
         <scaleWithOverburn>true</scaleWithOverburn>
       </li>
     </comps>

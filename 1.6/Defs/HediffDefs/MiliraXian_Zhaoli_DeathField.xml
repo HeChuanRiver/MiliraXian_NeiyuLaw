@@ -4,8 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDeathFieldActive</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;维持中的&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;，会持续向范围内未免疫告死的单位施加告死。目标离开范围后，告死积累会快速衰减。
-霓羽、清荷、昭离和明渊免疫告死，不会因告死受到减速、割伤或处决。</description>
+        <description>Death Sentence field lasts 9 seconds within a 9-cell radius. Non-immune targets accumulate once per second; accumulation rapidly decays outside.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.72, 0.06, 0.12)</defaultLabelColor>
         <isBad>false</isBad>

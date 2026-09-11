@@ -134,12 +134,6 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             PlayExecutionVisuals(target);
-            if (ZhaoliKarmaUtility.IsZhaoli(instigator))
-            {
-                ZhaoliKarmaUtility.AddKarma(instigator, KarmaPerExecution);
-                ZhaoliShieldLayerUtility.AddLayers(instigator, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
-            }
-
             DamageInfo damageInfo = new(
                 DamageDefOf.ExecutionCut,
                 99999f,
@@ -156,6 +150,11 @@ namespace MiliraXian.Characters.Zhaoli
             damageInfo.SetIgnoreArmor(true);
             damageInfo.SetIgnoreInstantKillProtection(true);
             target.Kill(damageInfo);
+            if (target.Dead && ZhaoliKarmaUtility.IsZhaoli(instigator))
+            {
+                ZhaoliKarmaUtility.AddKarma(instigator, KarmaPerExecution);
+                ZhaoliShieldLayerUtility.AddLayers(instigator, ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
+            }
             DiscardExecutedPawn(target);
         }
 

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Mingyuan_LifeBurn.label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</MX_Mingyuan_LifeBurn.label>
-  <MX_Mingyuan_LifeBurn.description>A foreign flame fastened to the target's life. It drains needs and age, weakens combat and work, deals true burning damage, and gives nearby enemies 10% of their own burst threshold when the host dies.</MX_Mingyuan_LifeBurn.description>
+  <MX_Mingyuan_LifeBurn.description>Every 2 seconds, Life Burn deals damage, drains needs, advances age and wears equipment. It bursts at the target's threshold and can spread to nearby enemies on death. Focus and Absorb consume existing layers to deal damage.</MX_Mingyuan_LifeBurn.description>
   <MX_Mingyuan_LifeBurn.stages.0.label></MX_Mingyuan_LifeBurn.stages.0.label>
   <MX_Mingyuan_SelfBurn.label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</MX_Mingyuan_SelfBurn.label>
   <MX_Mingyuan_SelfBurn.description>Self Burn bonuses apply once per complete 10 layers, up to 300 layers. Each 10 layers grants +4% melee and skill damage, +0.8% ranged damage, +2% movement, and +4% attack and work speed. Above 300 layers, Overburn doubles direct damage and Life Burn output and drains the flame reserve. Every 10 seconds, all excess layers are consumed in a radius-5 explosion centered on Mingyuan, dealing 1 damage per layer. Nearby allies and buildings can be hit; Mingyuan is excluded.</MX_Mingyuan_SelfBurn.description>
   <MX_Mingyuan_SelfBurn.stages.0.label></MX_Mingyuan_SelfBurn.stages.0.label>
   <MX_Mingyuan_BurningBody.label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</MX_Mingyuan_BurningBody.label>
-  <MX_Mingyuan_BurningBody.description>A body remade by pale fire. Consciousness rises; heat and explosions restore the body, attackers are burned in return, control states are cleared, and each wound grants 5 Self Burn and 0.2 seconds of invulnerability. This passive does not reduce ordinary incoming damage.</MX_Mingyuan_BurningBody.description>
+  <MX_Mingyuan_BurningBody.description>Improves consciousness. Immune to heat and explosion damage; these hits replenish 2 repair reserve at most once per second. Heals up to 15 points of ordinary injuries every 60 seconds. Taking actual damage grants 5 Self Burn and 0.2 seconds of invulnerability and burns hostile attackers in return.</MX_Mingyuan_BurningBody.description>
   <MX_Mingyuan_BurningBody.stages.0.label></MX_Mingyuan_BurningBody.stages.0.label>
   <MX_Mingyuan_ProtectiveFlameShield.label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</MX_Mingyuan_ProtectiveFlameShield.label>
-  <MX_Mingyuan_ProtectiveFlameShield.description>A 100-point pale flame reserve. Every 10 seconds, 1 point restores one missing body part or heals all wounds and scars on one part. Stable Self Burn can replenish the reserve; Overburn drains it. The reserve does not absorb damage.</MX_Mingyuan_ProtectiveFlameShield.description>
+  <MX_Mingyuan_ProtectiveFlameShield.description>Checks injuries every 10 seconds. Spends 1 reserve to restore one missing part or heal wounds and scars on one part. Stable Self Burn and heat hits replenish reserve; Overburn drains it. The reserve itself does not absorb damage.</MX_Mingyuan_ProtectiveFlameShield.description>
   <MX_Mingyuan_RebirthFlame.label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</MX_Mingyuan_RebirthFlame.label>
   <MX_Mingyuan_RebirthFlame.description>When Mingyuan falls, the flame buried in her body detonates, leaves a rebirth flame, and restores her after 30 seconds.</MX_Mingyuan_RebirthFlame.description>
   <MX_Mingyuan_EternalBurning.label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</MX_Mingyuan_EternalBurning.label>

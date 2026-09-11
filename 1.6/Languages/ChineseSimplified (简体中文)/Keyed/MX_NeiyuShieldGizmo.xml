@@ -10,7 +10,7 @@
     <MX_NL_ShieldStage3Short>三阶</MX_NL_ShieldStage3Short>
     <MX_NL_ShieldReady>就绪</MX_NL_ShieldReady>
     <MX_NL_ShieldStage1Hint>下次受击触发护身效果</MX_NL_ShieldStage1Hint>
-    <MX_NL_ShieldStage2Hint>伤害 &lt; {0} 不消耗次数</MX_NL_ShieldStage2Hint>
+    <MX_NL_ShieldStage2Hint>每{0}伤害扣1层，向上取整</MX_NL_ShieldStage2Hint>
     <MX_NL_ShieldWeakSuffix>  ·  虚弱中</MX_NL_ShieldWeakSuffix>
     <MX_NL_ShieldAbsorbInfo>蓄伤 {0} · 剩 {1}</MX_NL_ShieldAbsorbInfo>
     <MX_NL_ShieldInvincible>无敌</MX_NL_ShieldInvincible>
@@ -24,6 +24,6 @@
     <MX_NL_TooltipStage>护身 · {0}</MX_NL_TooltipStage>
     <MX_NL_TooltipWeak> (虚弱中)</MX_NL_TooltipWeak>
     <MX_NL_WeakBadgeTip>虚弱 · 剩余 {0}
-移速-50%  休息下降+50%  工作速度-80%</MX_NL_WeakBadgeTip>
+移速降低{1}%，休息下降速度提高{2}%，工作速度降低{3}%。</MX_NL_WeakBadgeTip>
     <MX_NL_ShieldWeakExhausted>[{0}] 护盾能量耗尽！伤害将直接穿透护盾。</MX_NL_ShieldWeakExhausted>
 </LanguageData>

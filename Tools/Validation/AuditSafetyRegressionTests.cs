@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -66,6 +67,9 @@ internal static class AuditSafetyRegressionTests
             TestLoadoutReset();
             TestRebirthGuards();
             TestMingyuanMechanics();
+            TestNeiyuShieldBalance();
+            TestZhaoliCountShield();
+            TestMingyuanDamageAndRecoveryBudget();
             TestRaidJobLogging();
         }
     }
@@ -428,6 +432,211 @@ internal static class AuditSafetyRegressionTests
         long bytes = allocated() - before;
         Check(bytes == 0, "rejected job log prefix has no per-call managed allocations");
         Console.WriteLine("Job log rejected-prefix allocation: " + bytes + " bytes / 10000 calls (desktop CLR, not Dubs PA).");
+    }
+
+    private static void TestZhaoliCountShield()
+    {
+        Type power = mod.GetType("MiliraXian.Characters.Zhaoli.ZhaoliPowerBalance", true);
+        MethodInfo setLevel = power.GetMethod("SetLevel");
+        object profile = power.GetField("Profile", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+        object previousLevel = profile.GetType().GetProperty("Level").GetValue(profile, null);
+        FieldInfo cachedDef = typeof(ZhaoliShieldLayerUtility).GetField("shieldHediffDef", BindingFlags.NonPublic | BindingFlags.Static);
+        object previousDef = cachedDef.GetValue(null);
+        var shieldDef = new HediffDef { defName = ZhaoliShieldLayerUtility.ShieldHediffDefName };
+        cachedDef.SetValue(null, shieldDef);
+        try
+        {
+            foreach (CharacterPowerLevel level in new[] { CharacterPowerLevel.Original, CharacterPowerLevel.Balanced })
+            {
+                setLevel.Invoke(null, new object[] { level });
+                foreach (bool player in new[] { true, false })
+                {
+                    Pawn pawn = BarePawn();
+                    pawn.kindDef = new PawnKindDef { defName = ZhaoliKarmaUtility.ZhaoliPawnKindDefName };
+                    var faction = new Faction { def = new FactionDef { isPlayer = player } };
+                    Set(pawn, "factionInt", faction, typeof(Thing));
+                    Set(pawn.health, "healthState", PawnHealthState.Mobile);
+                    var hediff = new HediffWithComps { pawn = pawn, def = shieldDef };
+                    var shield = new HediffComp_ZhaoliShieldLayers {
+                        parent = hediff, props = new HediffCompProperties_ZhaoliShieldLayers()
+                    };
+                    hediff.comps = new List<HediffComp> { shield };
+                    pawn.health.hediffSet = new HediffSet(pawn);
+                    pawn.health.hediffSet.hediffs.Add(hediff);
+                    string context = level + (player ? " player" : " hostile");
+                    float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
+                    int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
+                    for (int i = 0; i < amounts.Length; i++)
+                    {
+                        Set(shield, "shieldLayers", 500);
+                        var hit = new DamageInfo(new DamageDef(), amounts[i]);
+                        bool absorbed = false;
+                        Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref hit, ref absorbed);
+                        Check(absorbed && shield.ShieldLayers == 500 - costs[i],
+                            context + " blocks the hit and spends ceil(damage/36) at " + amounts[i]);
+                        int remaining = shield.ShieldLayers;
+                        shield.Notify_PawnPostApplyDamage(hit, amounts[i]);
+                        Check(shield.ShieldLayers == remaining, context + " post-damage notification never spends a second time");
+                    }
+
+                    Set(shield, "shieldLayers", 1);
+                    var heavyHit = new DamageInfo(new DamageDef(), 360f);
+                    bool blocked = false;
+                    Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref heavyHit, ref blocked);
+                    Check(blocked && shield.ShieldLayers == 0, context + " final layer blocks the whole oversized hit");
+                    blocked = false;
+                    Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref heavyHit, ref blocked);
+                    Check(!blocked && shield.ShieldLayers == 0, context + " empty shield lets the next hit through");
+
+                    shield.AddLayers(ZhaoliShieldLayerUtility.ShieldLayersPerExecution);
+                    Check(shield.ShieldLayers == 5, context + " Death Sentence still grants five usable layers");
+                    blocked = true;
+                    Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref heavyHit, ref blocked);
+                    Check(blocked && shield.ShieldLayers == 5, context + " existing absorption/transition immunity costs no layers");
+                    foreach (float amount in new[] { 0f, -1f })
+                    {
+                        var hit = new DamageInfo(new DamageDef(), amount);
+                        blocked = false;
+                        Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref hit, ref blocked);
+                        Check(!blocked && shield.ShieldLayers == 5, context + " nonpositive damage costs no layers");
+                    }
+                    pawn.kindDef = new PawnKindDef { defName = "UnrelatedPawn" };
+                    blocked = false;
+                    Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref heavyHit, ref blocked);
+                    Check(!blocked && shield.ShieldLayers == 5, "unrelated pawns are not intercepted");
+                    pawn.kindDef.defName = ZhaoliKarmaUtility.ZhaoliPawnKindDefName;
+                    setLevel.Invoke(null, new object[] { CharacterPowerLevel.Decorative });
+                    blocked = false;
+                    Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref heavyHit, ref blocked);
+                    Check(!blocked && (int)shield.GetType().GetField("shieldLayers", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(shield) == 5,
+                        "decorative mode remains disabled without consuming saved layers");
+                    setLevel.Invoke(null, new object[] { level });
+                    Check(shield.ShieldLayers == 5, "returning to a combat tier restores access to existing layers");
+                    ZhaoliShieldLayerUtility.Invalidate(pawn);
+                }
+            }
+        }
+        finally
+        {
+            setLevel.Invoke(null, new[] { previousLevel });
+            cachedDef.SetValue(null, previousDef);
+        }
+    }
+
+    private static void TestNeiyuShieldBalance()
+    {
+        MethodInfo format = typeof(Gizmo_NeiyuShieldStatus).GetMethod("FormatTicks", BindingFlags.NonPublic | BindingFlags.Static);
+        Check((string)format.Invoke(null, new object[] { 600 }) == "10s"
+            && (string)format.Invoke(null, new object[] { 9000 }) == "150s",
+            "shield timers display game ticks as seconds");
+        Current.Game = (Game)FormatterServices.GetUninitializedObject(typeof(Game));
+        Current.Game.tickManager = (TickManager)FormatterServices.GetUninitializedObject(typeof(TickManager));
+        Set(Current.Game.tickManager, "ticksGameInt", 200);
+        var shield = new HediffComp_MXNeiyuCountShield {
+            parent = new HediffWithComps { pawn = BarePawn() },
+            props = new HediffCompProperties_MXNeiyuCountShield()
+        };
+        Set(shield.Pawn.health, "healthState", PawnHealthState.Mobile);
+        Set(shield, "stage", 2);
+        Set(shield, "phase2Charges", 108);
+        MethodInfo cost = shield.GetType().GetMethod("CalculatePhase2Cost", BindingFlags.NonPublic | BindingFlags.Instance);
+        float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
+        int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
+        for (int i = 0; i < amounts.Length; i++)
+            Check((int)cost.Invoke(shield, new object[] { amounts[i] }) == costs[i], "shield cost at " + amounts[i] + " damage");
+
+        bool absorbed = false;
+        var damage = new DamageInfo(new DamageDef(), .01f);
+        bool handled = shield.TryAbsorb(ref damage, ref absorbed);
+        Check(handled && absorbed && shield.Phase2Charges == 107,
+            "an actual low-damage hit consumes a shield charge");
+        Set(shield, "weakUntilTick", 1000);
+        Set(shield, "phase2Charges", 0);
+        Set(shield, "weakShieldExhaustedAnnounced", true);
+        absorbed = false;
+        Check(!shield.TryAbsorb(ref damage, ref absorbed) && !absorbed,
+            "an empty weak shield lets low damage through");
+
+        MethodInfo normalize = shield.GetType().GetMethod("NormalizeForPowerLevelChange", BindingFlags.NonPublic | BindingFlags.Instance);
+        Set(shield, "phase2Charges", 1000);
+        Set(shield, "weakUntilTick", 300000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase2Charges == 24 && shield.WeakUntilTick == 9200,
+            "legacy weak charges and duration are clipped on first observation");
+        Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
+        Set(shield, "weakUntilTick", 0);
+        Set(shield, "phase2Charges", 1000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase2Charges == 108, "legacy normal charges are clipped in original mode too");
+        Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
+        Set(shield, "stage", 3);
+        Set(shield, "phase3AbsorbUntilTick", 50000);
+        Set(shield, "phase3EndTick", 60000);
+        normalize.Invoke(shield, new object[] { 200 });
+        Check(shield.Phase3AbsorbUntilTick == 7700 && shield.Phase3EndTick == 37700,
+            "legacy absorption and buff windows fit the new durations");
+
+        Type balance = mod.GetType("MiliraXian.Characters.Neiyu.NeiyuPowerBalance", true);
+        MethodInfo setLevel = balance.GetMethod("SetLevel");
+        try
+        {
+            foreach (CharacterPowerLevel level in new[] { CharacterPowerLevel.Original, CharacterPowerLevel.Balanced })
+            {
+                setLevel.Invoke(null, new object[] { level });
+                Set(shield, "phase3AbsorbUntilTick", 100);
+                Set(shield, "phase3EndTick", 4000);
+                MXNeiyuStage3Profile previous = default(MXNeiyuStage3Profile);
+                bool first = true;
+                foreach (float stored in new[] { 500f, 1000f, 1001f, 1500f, 2000f, 3000f, 50000f })
+                {
+                    Set(shield, "phase3StoredDamage", stored);
+                    MXNeiyuStage3Profile actual;
+                    Check(shield.TryGetStage3Profile(out actual), "active buff profile in " + level);
+                    Check(actual.outgoingDamageFactor <= 2f && actual.incomingDamageFactor >= .5f
+                        && actual.rangedDodgeBonusPct <= .3f, "absorption bonuses remain bounded in " + level);
+                    if (!first)
+                        Check(actual.outgoingDamageFactor >= previous.outgoingDamageFactor
+                            && actual.moveSpeedFactor >= previous.moveSpeedFactor
+                            && actual.injuryHealingFactor >= previous.injuryHealingFactor
+                            && actual.aimingDelayFactor <= previous.aimingDelayFactor
+                            && actual.incomingDamageFactor <= previous.incomingDamageFactor,
+                            "absorbing more damage cannot weaken the current profile");
+                    first = false;
+                    previous = actual;
+                }
+                Check(shield.GetStage3TierLabel() == "D x5", "tier label respects the bonus cap");
+            }
+        }
+        finally { setLevel.Invoke(null, new object[] { CharacterPowerLevel.Original }); }
+    }
+
+    private static void TestMingyuanDamageAndRecoveryBudget()
+    {
+        var bow = new CompProperties_MingyuanRainbowBow();
+        Check(bow.FocusDamageFor(0f) == 40f && bow.FocusDamageFor(-100f) == 40f,
+            "focus without existing layers deals only base arrow damage");
+        Check(bow.FocusDamageFor(100f) == 100f && bow.FocusDamageFor(300f) == 220f
+            && bow.FocusDamageFor(1000000f) == 220f, "focus consumes layer value with a bounded payoff");
+        Check(bow.RadiationLayersFor(0f) == 50 && bow.RadiationLayersFor(1500f) == 110
+            && bow.RadiationLayersFor(1000000f) == 120, "scatter stops scaling with extreme target durability");
+        Check(MingyuanUtility.ConsumeLifeBurn(null) == 0f, "consuming a missing target is harmless");
+
+        var reserve = new HediffComp_MingyuanProtectiveFlameShield {
+            props = new HediffCompProperties_MingyuanProtectiveFlameShield()
+        };
+        Set(Current.Game.tickManager, "ticksGameInt", 200);
+        Set(reserve, "energy", 95f);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 97f, "heat adds only two repair reserve");
+        for (int i = 0; i < 10; i++)
+            Check(!reserve.TryRefillFromHeat() && reserve.Energy == 97f, "same-tick heat cannot bypass the refill budget");
+        Set(Current.Game.tickManager, "ticksGameInt", 259);
+        Check(!reserve.TryRefillFromHeat(), "refill cooldown lasts a full second");
+        Set(Current.Game.tickManager, "ticksGameInt", 260);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 99f, "refill resumes at the cooldown boundary");
+        Set(Current.Game.tickManager, "ticksGameInt", 320);
+        Check(reserve.TryRefillFromHeat() && reserve.Energy == 100f, "heat refill cannot exceed reserve capacity");
+        Set(Current.Game.tickManager, "ticksGameInt", 380);
+        Check(!reserve.TryRefillFromHeat(), "full reserve does not accept additional heat healing");
     }
 
     private static void Set(object obj, string field, object value, Type declaringType = null)

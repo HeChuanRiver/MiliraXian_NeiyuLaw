@@ -36,7 +36,7 @@
       <deconstructible>false</deconstructible>
       <alwaysDeconstructible>false</alwaysDeconstructible>
       <displayAttackToDestroyOnInspectPane>true</displayAttackToDestroyOnInspectPane>
-      <isInert>true</isInert>
+      <isInert>false</isInert>
       <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
     </building>
     <comps>

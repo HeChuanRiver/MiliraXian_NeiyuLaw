@@ -42,11 +42,16 @@ namespace MiliraXian.Characters.Mingyuan
             var bow = ThingComp<CompProperties_MingyuanRainbowBow>("MX_Mingyuan_RainbowBow");
             p.ScaleField(bow, "focusWarmupSeconds", ConservativePowerTuning.Cooldown, 3.2f);
             p.KeepField(bow, "focusRange", 25.9f);
+            p.ScaleField(bow, "focusBaseDamage", ConservativePowerTuning.Damage, 17f);
+            p.ScaleField(bow, "focusDamagePerLayer", ConservativePowerTuning.Damage, 0f);
+            p.ScaleField(bow, "focusMaxDamage", ConservativePowerTuning.Damage, 17f);
             p.KeepField(bow, "radiationRange", 9f);
             p.KeepField(bow, "radiationArcDegrees", 90f);
             p.KeepField(bow, "radiationMinIntervalTicks", 120);
             p.ScaleField(bow, "radiationDamage", ConservativePowerTuning.Damage, 0f);
             p.ScaleField(bow, "radiationLayerFraction", .9f, 0f);
+            p.ScaleField(bow, "radiationBaseLayers", .9f, 0f);
+            p.ScaleField(bow, "radiationMaxLayers", .9f, 0f);
             var bowDef = Thing("MX_Mingyuan_RainbowBow");
             p.KeepField(bowDef.Verbs[0], "range", 25.9f);
             p.ScaleField(bowDef.Verbs[0], "warmupTime", ConservativePowerTuning.Cooldown, 3.2f);
@@ -134,6 +139,7 @@ namespace MiliraXian.Characters.Mingyuan
             p.KeepField(self, "overburnDecayLayers", 0f);
             var body = HediffComp<HediffCompProperties_MingyuanBurningBody>("MX_Mingyuan_BurningBody");
             p.ScaleField(body, "restoreIntervalTicks", ConservativePowerTuning.Cooldown, 2500);
+            p.ScaleField(body, "restoreHealAmount", .9f, 0f);
             p.KeepField(body, "invulnerableTicks", 0);
             p.ScaleField(body, "reflectLifeBurnLayers", .9f, 0f);
             p.KeepField(body, "selfBurnOnHit", 0f);

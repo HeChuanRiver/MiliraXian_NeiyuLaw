@@ -76,24 +76,24 @@
   <MX_NL_ShieldDamageTypeLethal>致命/倒地</MX_NL_ShieldDamageTypeLethal>
   <MX_NL_ShieldDamageTypeNonLethal>非致命</MX_NL_ShieldDamageTypeNonLethal>
   <MX_NL_ShieldDebugName>護身</MX_NL_ShieldDebugName>
-  <MX_NL_ShieldDebugStage3AbsorbLabel>III-蓄傷 蓄傷:{0} 剩餘:{1}h</MX_NL_ShieldDebugStage3AbsorbLabel>
-  <MX_NL_ShieldDebugStage3BuffLabel>III-增益 檔位:{0} 剩餘:{1}h</MX_NL_ShieldDebugStage3BuffLabel>
-  <MX_NL_ShieldDebugWeakLabel>[虛弱 {0}h]</MX_NL_ShieldDebugWeakLabel>
+  <MX_NL_ShieldDebugStage3AbsorbLabel>III-蓄傷 蓄傷:{0} 剩餘:{1}s</MX_NL_ShieldDebugStage3AbsorbLabel>
+  <MX_NL_ShieldDebugStage3BuffLabel>III-增益 檔位:{0} 剩餘:{1}s</MX_NL_ShieldDebugStage3BuffLabel>
+  <MX_NL_ShieldDebugWeakLabel>[虛弱 {0}s]</MX_NL_ShieldDebugWeakLabel>
   <MX_NL_ShieldTipStage>階段: {0}{1}</MX_NL_ShieldTipStage>
   <MX_NL_ShieldTipWeakSuffix> (虛弱中)</MX_NL_ShieldTipWeakSuffix>
   <MX_NL_ShieldTipStage2Charges>二階段次數: {0}/{1}</MX_NL_ShieldTipStage2Charges>
-  <MX_NL_ShieldTipThreshold>閾值: {0}</MX_NL_ShieldTipThreshold>
+  <MX_NL_ShieldTipThreshold>每{0}點傷害消耗1層，向上取整且至少1層。</MX_NL_ShieldTipThreshold>
   <MX_NL_ShieldTipRecentHits>最近5次受擊(傷害 -&gt; 消耗次數):</MX_NL_ShieldTipRecentHits>
   <MX_NL_ShieldTipStage3Absorb>階段3-蓄傷(無敵)</MX_NL_ShieldTipStage3Absorb>
-  <MX_NL_ShieldTipAbsorbRemaining>蓄傷剩餘: {0}h</MX_NL_ShieldTipAbsorbRemaining>
+  <MX_NL_ShieldTipAbsorbRemaining>蓄傷剩餘: {0}s</MX_NL_ShieldTipAbsorbRemaining>
   <MX_NL_ShieldTipStoredDamage>目前蓄傷: {0}</MX_NL_ShieldTipStoredDamage>
   <MX_NL_ShieldTipBuffAfterAbsorb>增益將於蓄傷結束後開啟。</MX_NL_ShieldTipBuffAfterAbsorb>
   <MX_NL_ShieldTipStage3Buff>階段3-增益(可受傷)</MX_NL_ShieldTipStage3Buff>
-  <MX_NL_ShieldTipBuffRemaining>增益剩餘: {0}h</MX_NL_ShieldTipBuffRemaining>
+  <MX_NL_ShieldTipBuffRemaining>增益剩餘: {0}s</MX_NL_ShieldTipBuffRemaining>
   <MX_NL_ShieldTipLockedDamage>鎖定蓄傷: {0}</MX_NL_ShieldTipLockedDamage>
   <MX_NL_ShieldTipCurrentTier>目前檔位: {0}</MX_NL_ShieldTipCurrentTier>
   <MX_NL_ShieldTipCurrentBuffs>目前增益:</MX_NL_ShieldTipCurrentBuffs>
-  <MX_NL_ShieldTipWeakRemaining>虛弱剩餘: {0}h</MX_NL_ShieldTipWeakRemaining>
+  <MX_NL_ShieldTipWeakRemaining>虛弱剩餘: {0}s</MX_NL_ShieldTipWeakRemaining>
   <MX_NL_ShieldTipWeakPenalty>虛弱懲罰: 移速-{0}%，休息下降+{1}%，全域工作效率-{2}%</MX_NL_ShieldTipWeakPenalty>
   <MX_NL_ShieldBuffOutgoingDamage>近戰/遠程傷害 +{0}%</MX_NL_ShieldBuffOutgoingDamage>
   <MX_NL_ShieldBuffAimingTime>瞄準時間 {0}{1}%</MX_NL_ShieldBuffAimingTime>
@@ -271,7 +271,7 @@
   <MX_ZL_DeathGrowth>死亡成長：</MX_ZL_DeathGrowth>
   <MX_ZL_NoGrowthStacks>尚未積累成長層數。</MX_ZL_NoGrowthStacks>
   <MX_ZL_ShieldLayersLabel>{0}層</MX_ZL_ShieldLayersLabel>
-  <MX_ZL_ShieldLayersTip>目前層數：{0}。每通過告死吸納一個單位，獲得5層諱亡護盾。傷害會正常生效，隨後消耗1層；持續傷害每次生效也會消耗層數。</MX_ZL_ShieldLayersTip>
+  <MX_ZL_ShieldLayersTip>目前層數：{0}。</MX_ZL_ShieldLayersTip>
   <MX_ZL_DeathFieldExecuted>告死流場已處決 {0} 個目標：{1}。</MX_ZL_DeathFieldExecuted>
   <MX_ZL_HideoutSiteCustomLabel>不存在者藏身處</MX_ZL_HideoutSiteCustomLabel>
   <MX_ZL_HideoutStartedLetterLabel>不存在者藏身處已顯現</MX_ZL_HideoutStartedLetterLabel>

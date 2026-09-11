@@ -73,7 +73,8 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>Long Rainbow</label>
-        <description>Mingyuan's pale-gold and scarlet longbow. Focus form charges for 5 seconds, then instantly bursts one visible enemy's Life Burn without ordinary weapon damage. Radiation form sweeps a 10-cell, 108-degree sector once per second, dealing 1 burn damage and adding 23% of each target's own Life Burn threshold.</description>
+        <description>Focus: 50-cell range, line of sight required, 2.5-second charge. Consumes all Life Burn on the target, dealing 40 armor-ignoring damage plus 0.6 per layer, capped at 220 damage per shot.
+Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds. Enemies take 1 burn damage and gain 50 Life Burn plus 4% of their burst threshold, capped at 120 layers. Overburn further increases the layers applied.</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -124,8 +125,8 @@
                 <violent>true</violent>
                 <ai_IsWeapon>true</ai_IsWeapon>
                 <targetable>true</targetable>
-                <warmupTime>5.0</warmupTime>
-                <range>999</range>
+                <warmupTime>2.5</warmupTime>
+                <range>50</range>
                 <burstShotCount>1</burstShotCount>
                 <ticksBetweenBurstShots>1</ticksBetweenBurstShots>
                 <requireLineOfSight>false</requireLineOfSight>
@@ -143,8 +144,11 @@
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanRainbowBow">
                 <modeIconPath>MiliraXianMingyuan/Items/RainbowBow</modeIconPath>
 
-                <focusWarmupSeconds>5</focusWarmupSeconds>
-                <focusRange>999</focusRange>
+                <focusWarmupSeconds>2.5</focusWarmupSeconds>
+                <focusRange>50</focusRange>
+                <focusBaseDamage>40</focusBaseDamage>
+                <focusDamagePerLayer>0.6</focusDamagePerLayer>
+                <focusMaxDamage>220</focusMaxDamage>
                 <focusChargeSound>Psycast_Skip_Entry</focusChargeSound>
                 <focusFireSound>ChargeLance_Fire</focusFireSound>
                 <focusBeamFleck>MX_Mingyuan_Fleck_LifeBurnTransferLine</focusBeamFleck>
@@ -156,9 +160,11 @@
                 <radiationWarmupSeconds>0.35</radiationWarmupSeconds>
                 <radiationRange>10</radiationRange>
                 <radiationArcDegrees>108</radiationArcDegrees>
-                <radiationMinIntervalTicks>60</radiationMinIntervalTicks>
+                <radiationMinIntervalTicks>90</radiationMinIntervalTicks>
                 <radiationDamage>1</radiationDamage>
-                <radiationLayerFraction>0.23</radiationLayerFraction>
+                <radiationLayerFraction>0.04</radiationLayerFraction>
+                <radiationBaseLayers>50</radiationBaseLayers>
+                <radiationMaxLayers>120</radiationMaxLayers>
                 <radiationWarmupSound>FireSpew_Warmup</radiationWarmupSound>
                 <radiationFireSound>FireSpew_Resolve</radiationFireSound>
                 <radiationHitMote>MX_Mingyuan_Mote_InstantCombustionMark</radiationHitMote>

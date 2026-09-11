@@ -3,20 +3,33 @@ param([string]$ModPath = (Join-Path $PSScriptRoot '../..'))
 $ErrorActionPreference = 'Stop'
 $ModPath = (Resolve-Path -LiteralPath $ModPath).Path
 $languages = @('ChineseSimplified (简体中文)', 'ChineseTraditional (繁體中文)', 'English')
-$files = @('MX_CharacterPower.xml', 'MX_Mingyuan_Status.xml')
+$files = @(
+    'Keyed/MX_CharacterPower.xml', 'Keyed/MX_Mingyuan_Status.xml', 'Keyed/MX_NeiyuShieldGizmo.xml',
+    'DefInjected/AbilityDef/MiliraXian_Ability_Neiyu.xml',
+    'DefInjected/AbilityDef/MiliraXian_Ability_Mingyuan.xml',
+    'DefInjected/AbilityDef/MiliraXian_Ability_Zhaoli.xml',
+    'DefInjected/HediffDef/MiliraXian_Neiyu_FlowerSword.xml',
+    'DefInjected/HediffDef/MiliraXian_Neiyu_Shield.xml',
+    'DefInjected/HediffDef/MiliraXian_Mingyuan_PawnResource.xml',
+    'DefInjected/HediffDef/MiliraXian_Zhaoli_Hediffs.xml',
+    'DefInjected/ThingDef/MiliraXian_Mingyuan_Equipment.xml',
+    'DefInjected/ThingDef/MiliraXian_ModeSwitch_HeadgearAndWeapons.xml'
+)
 foreach ($file in $files) {
     $reference = $null
     foreach ($language in $languages) {
-        [xml]$xml = Get-Content -LiteralPath (Join-Path $ModPath "1.6/Languages/$language/Keyed/$file") -Raw -Encoding UTF8
+        [xml]$xml = Get-Content -LiteralPath (Join-Path $ModPath "1.6/Languages/$language/$file") -Raw -Encoding UTF8
         $entries = @{}
         foreach ($node in $xml.LanguageData.ChildNodes | Where-Object NodeType -EQ 'Element') {
             if ($entries.ContainsKey($node.Name)) { throw "Duplicate key: $($node.Name)" }
             $text = $node.InnerText
             if ($text.Contains([char]0xFFFD)) { throw "Broken encoding: $($node.Name)" }
             if ($text -match '\\n|\r|\n[ \t]+|\n{3,}') { throw "Unexpected line-break format: $($node.Name)" }
+            $lines = @($text -split '\n' | Where-Object { $_.Trim().Length -gt 0 })
+            if (@($lines | Group-Object | Where-Object Count -gt 1).Count) { throw "Repeated tooltip line: $($node.Name)" }
             $entries[$node.Name] = (@([regex]::Matches($text, '\{\d+\}') | ForEach-Object Value | Sort-Object -Unique) -join ',')
             $isSetting = $node.Name -match '^MX_Power_(Zhaoli|Mingyuan)(_(Original|Balanced|Decorative))?$'
-            if ($file -eq 'MX_CharacterPower.xml' -and !$isSetting -and $text -match '第[一二三123][档檔]|第一階|第二階|Tier\s*[123]|tier\s*(one|two|three)|原来的|原來的|沿用原|不再|不是.*而是') {
+            if ($file -eq 'Keyed/MX_CharacterPower.xml' -and !$isSetting -and $text -match '第[一二三123][档檔]|第[一二]階(?!段)|Tier\s*[123]|tier\s*(one|two|three)|原来的|原來的|沿用原|不再|不是.*而是') {
                 throw "Balance commentary in gameplay tooltip: $($node.Name)"
             }
         }

@@ -314,9 +314,11 @@ namespace MiliraXian.Characters.Neiyu
             AddThoughtMood(DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_RelaxedNearNeiyu"), 0f);
 
             HediffDef shieldDef = HediffDefNamed("MXNL_NeiyuShield");
+            Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
+                "MX_Power_Neiyu_Shield".Translate().ToString(), "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
             HediffCompProperties_MXNeiyuCountShield shieldProps = HediffComp<HediffCompProperties_MXNeiyuCountShield>(shieldDef);
             AddScaled(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f, 1f);
-            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, .9f, 0);
+            Add(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 36, 0);
             AddScaled(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, .9f, 0);
             AddScaled(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, ConservativePowerTuning.Cooldown, 60000);
             AddScaled(shieldProps, () => shieldProps.stage3AbsorbTicks, value => shieldProps.stage3AbsorbTicks = value, 1f, 1);

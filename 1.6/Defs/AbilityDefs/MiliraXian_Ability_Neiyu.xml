@@ -9,12 +9,12 @@
     <AbilityDef>
         <defName>MX_Neiyu_WarpFeather</defName>
         <label>&lt;color=#79CBFF&gt;折跃引羽&lt;/color&gt;</label>
-        <description>短暂蓄力后在脚下闪光，并直接生成84~128个&lt;color=#79CBFF&gt;米莉拉之羽&lt;/color&gt;。 \n米莉拉之羽的来源霓羽念叨着什么物质法则的呈现、什么你知道现在的羽毛都得五十万白银了吗之类的。令人忍俊不禁。</description>
+        <description>After a brief cast, creates 12–24 Milira feathers. Cooldown: 300 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_WarpFeather</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>100</displayOrder>
-        <cooldownTicksRange>3000</cooldownTicksRange>
+        <cooldownTicksRange>18000</cooldownTicksRange>
 
         <targetRequired>false</targetRequired>
         <hostile>false</hostile>
@@ -40,7 +40,7 @@
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuWarpFeather">
                 <finishFlashFleckDefName>PsycastSkipFlashExit</finishFlashFleckDefName>
                 <featherThingDef>Milira_Feather</featherThingDef>
-                <featherCountRange>84~128</featherCountRange>
+                <featherCountRange>12~24</featherCountRange>
             </li>
         </comps>
     </AbilityDef>
@@ -48,7 +48,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_ThunderMarkedStorm</defName>
         <label>&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;</label>
-        <description>选定半径3格区域，标记其中敌对目标。数秒后每个被&lt;color=#8BD5FF&gt;雷锁印记&lt;/color&gt;标记者将承受3~5次高伤&lt;color=#C7B8FF&gt;雷击&lt;/color&gt;，并附加&lt;color=#79CBFF&gt;EMP&lt;/color&gt;伤害。\n "这招其实是有一天发现了一个奇特的种族，他们身上蕴含着满满的死亡的气息，生机活力却不比我曾经修行生命的小辈要差，然后曾经有些古书写着什么雷克邪祟什么的，我就搓了这招"</description>
+        <description>Marks enemies within 3 cells. After a delay, each target receives 3 strikes, each dealing 35 base damage plus a 15-point EMP effect. Cooldown: 80 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -78,11 +78,11 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuThunderSigil">
                 <radius>3</radius>
-                <strikeCountRange>3~5</strikeCountRange>
+                <strikeCountRange>3~3</strikeCountRange>
                 <firstDelayTicksRange>120~180</firstDelayTicksRange>
                 <strikeIntervalTicksRange>45~75</strikeIntervalTicksRange>
-                <damageAmount>60</damageAmount>
-                <empDamageAmount>20</empDamageAmount>
+                <damageAmount>35</damageAmount>
+                <empDamageAmount>15</empDamageAmount>
                 <markerHediff>MX_Neiyu_ThunderMark</markerHediff>
             </li>
         </comps>
@@ -91,7 +91,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_Bow_ArrowBarrage</defName>
         <label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</label>
-        <description>仅在装备&lt;color=#79CBFF&gt;弓形态&lt;/color&gt;时可用。蓄力5秒后，沿目标方向连续倾泻64发&lt;color=#8BD5FF&gt;流羽矢&lt;/color&gt;，覆盖整幅战场前方区域。\n "曾经喜欢玩一些游戏//"</description>
+        <description>Requires bow form. Charges for 5 seconds, then fires 32 arrows in the selected direction, each with 30 base damage and a 55-cell range. Cooldown: 120 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -107,7 +107,7 @@
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
-            <range>999</range>
+            <range>55</range>
             <warmupTime>5.0</warmupTime>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
@@ -123,9 +123,9 @@
                 <requiredWeapon>MX_Neiyu_Form_Bow</requiredWeapon>
                 <projectileDef>MX_Bullet_BarrageArrow</projectileDef>
                 <!-- 数值：此处为该技能的释放弹丸数量 -->
-                <shotCount>64</shotCount>
+                <shotCount>32</shotCount>
                 <shotIntervalTicks>2</shotIntervalTicks>
-                <maxDistance>999</maxDistance>
+                <maxDistance>55</maxDistance>
                 <lateralSpread>5</lateralSpread>
             </li>
         </comps>
@@ -134,7 +134,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_Flower_BlessingField</defName>
         <label>&lt;color=#F39AD9&gt;花阵·祈生&lt;/color&gt;</label>
-        <description>仅&lt;color=#F39AD9&gt;花形态&lt;/color&gt;可用。对目标区域施放群体增益，范围内友方获得&lt;color=#F39AD9&gt;心情提升&lt;/color&gt;、&lt;color=#79CBFF&gt;移速提升&lt;/color&gt;、&lt;color=#8BD5FF&gt;承伤降低&lt;/color&gt;、&lt;color=#F39AD9&gt;免疫速度提升&lt;/color&gt;；若存在受伤部位则立即治疗至满。\n "不要... 我不能失去你们..."</description>
+        <description>Requires flower form. Heals wounds and scars on non-hostile flesh targets within 6 cells and improves mood. For 60 seconds, movement increases by 20%, incoming damage falls by 10%, and immunity gain increases by 70%. Cooldown: 90 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -167,7 +167,7 @@
                 <radius>6</radius>
                 <buffHediff>MX_Neiyu_FlowerBlessed</buffHediff>
                 <moodThought>MX_Neiyu_FlowerBlessedThought</moodThought>
-                <buffDurationTicks>18000</buffDurationTicks>
+                <buffDurationTicks>3600</buffDurationTicks>
                 <includeCaster>true</includeCaster>
                 <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
                 <areaFleckDefName>MXNL_ForFeatherCircle</areaFleckDefName>
@@ -179,7 +179,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_Flower_ToxinGarden</defName>
         <label>&lt;color=#D786E8&gt;花阵·瘴庭&lt;/color&gt;</label>
-        <description>仅&lt;color=#F39AD9&gt;花形态&lt;/color&gt;可用。对大范围目标区域施放敌对效果，范围内敌方将被强制施加&lt;color=#D786E8&gt;重度食物中毒&lt;/color&gt;，并有10%概率陷入&lt;color=#F39AD9&gt;狂暴&lt;/color&gt;。 \n "其实这招的实现效果是先暂停时间然后给他们每个人喂了一口前几天熬的粥，这招在对付起纹境以下的普通米莉拉特别好用// 他们生气和我有什么关系?"</description>
+        <description>Requires flower form. Inflicts food poisoning on enemies within 7 cells, with a 10% chance to cause berserk rage. Cooldown: 120 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -209,7 +209,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuFlowerToxinField">
                 <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
-                <radius>10</radius>
+                <radius>7</radius>
                 <severeFoodPoisoningSeverity>0.25</severeFoodPoisoningSeverity>
                 <berserkChance>0.10</berserkChance>
                 <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
@@ -222,7 +222,7 @@
     <AbilityDef>
         <defName>MX_Neiyu_Sword_Skyfall</defName>
         <label>&lt;color=#8BD5FF&gt;剑势·天坠&lt;/color&gt;</label>
-        <description>仅&lt;color=#8BD5FF&gt;剑形态&lt;/color&gt;可用。施放后先于原地直线高速升空至高空，再在目标区域生成落点预警，随后于该区域上空直线高速坠落，造成高额范围伤害并附加&lt;color=#C7A2F8&gt;易伤&lt;/color&gt;。\n "有人说我胖// 我说这不对// 关键是竟然说我...说我那里小... 我靠吃我一坠！！！"</description>
+        <description>Requires sword form. Rises and marks the landing zone, dealing 120 armor-ignoring damage to enemies within 3 cells. They take 25% more damage for 25 seconds. Cooldown: 150 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -256,10 +256,10 @@
                 <descendFlyerDef>MX_Neiyu_SwordSkyfallFlyer</descendFlyerDef>
                 <impactDamageDef>Bomb</impactDamageDef>
                 <impactRadius>3</impactRadius>
-                <impactDamage>361</impactDamage>
+                <impactDamage>120</impactDamage>
                 <impactArmorPen>999</impactArmorPen>
                 <vulnerabilityHediff>MX_Neiyu_SwordVulnerability</vulnerabilityHediff>
-                <vulnerabilityDurationTicks>9000</vulnerabilityDurationTicks>
+                <vulnerabilityDurationTicks>1500</vulnerabilityDurationTicks>
                 <ascendVisualTicks>8</ascendVisualTicks>
                 <warningDelayTicks>36</warningDelayTicks>
                 <descendVisualTicks>16</descendVisualTicks>
@@ -294,12 +294,12 @@
     <AbilityDef>
         <defName>MX_Neiyu_Sword_ExecuteHead</defName>
         <label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</label>
-        <description>仅&lt;color=#8BD5FF&gt;剑形态&lt;/color&gt;可用。选中单体后先反向后撤，再以极高速度突进至目标附近并执行&lt;color=#F39AD9&gt;斩首&lt;/color&gt;。\n "教导我这招的老师是舰船上少数的剑法大师，据她所说曾经的大混战中只有她和几位同袍保持着手刃敌人的习惯，老师教导我这招后没几年就去世了，所以我依然记得老师说的：'对敌要稳快准狠'只是小羽愚钝，只得学会其半招。"</description>
+        <description>Requires sword form. Retreats briefly, then dashes to the target and severs its head. Targets without a head take 75 armor-ignoring cut damage. Cooldown: 75 seconds.</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>170</displayOrder>
-        <cooldownTicksRange>6000</cooldownTicksRange>
+        <cooldownTicksRange>4500</cooldownTicksRange>
 
         <targetRequired>true</targetRequired>
         <hostile>true</hostile>
@@ -326,7 +326,7 @@
                 <requiredWeapon>MX_Neiyu_Form_Weapon</requiredWeapon>
                 <flyerDef>MX_Neiyu_SwordDashFlyer</flyerDef>
                 <backstepCells>2</backstepCells>
-                <dashDamage>991</dashDamage>
+                <dashDamage>75</dashDamage>
                 <!-- TODO: effect A/B/C placeholders -->
                 <effectADefName>Skip_EntryNoDelay</effectADefName>
                 <effectBDefName>ImpactSmallDustCloud</effectBDefName>

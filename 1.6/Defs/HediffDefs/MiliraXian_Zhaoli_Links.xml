@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliKarmaLink</defName>
         <label>&lt;color=#E85A7A&gt;因果相连&lt;/color&gt;</label>
-        <description>该目标与&lt;color=#E85A7A&gt;昭离&lt;/color&gt;建立了&lt;color=#D66BFF&gt;因果链接&lt;/color&gt;。链接持续30天，在此期间可为昭离承担溢出的因果，或在昭离死亡时替其赴死。</description>
+        <description>Gains Karma through Death Sentence. Healing and resurrection create up to 6 Karma Links lasting 30 days; living links can substitute for death. Recruited death growth caps at 10 deaths. Without a substitute, returns after 10 days.</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.84, 0.18, 0.24)</defaultLabelColor>
         <isBad>false</isBad>

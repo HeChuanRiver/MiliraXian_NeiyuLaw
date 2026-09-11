@@ -43,9 +43,9 @@
         <statBases>
             <Mass>1.2</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>2.0</ArmorRating_Sharp>
-            <ArmorRating_Blunt>2.0</ArmorRating_Blunt>
-            <ArmorRating_Heat>2.0</ArmorRating_Heat>
+            <ArmorRating_Sharp>1.35</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.2</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.5</ArmorRating_Heat>
             <Insulation_Cold>1200</Insulation_Cold>
             <Insulation_Heat>1200</Insulation_Heat>
         </statBases>
@@ -172,8 +172,8 @@
         <statBases>
             <Mass>1.1</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>1.65</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.35</ArmorRating_Blunt>
+            <ArmorRating_Sharp>1.4</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.2</ArmorRating_Blunt>
             <ArmorRating_Heat>1.6</ArmorRating_Heat>
             <Insulation_Cold>900</Insulation_Cold>
             <Insulation_Heat>900</Insulation_Heat>

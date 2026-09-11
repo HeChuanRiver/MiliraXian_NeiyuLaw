@@ -117,6 +117,20 @@ namespace MiliraXian.Characters.Mingyuan
             return comp != null && comp.TryTriggerBurstNow(instigator);
         }
 
+        public static float ConsumeLifeBurn(Pawn target)
+        {
+            if (target?.health?.hediffSet == null) return 0f;
+            float layers = 0f;
+            List<Hediff> hediffs = target.health.hediffSet.hediffs;
+            for (int i = hediffs.Count - 1; i >= 0; i--)
+            {
+                if (hediffs[i].def != LifeBurnDef) continue;
+                layers += Mathf.Max(0f, hediffs[i].Severity);
+                target.health.RemoveHediff(hediffs[i]);
+            }
+            return layers;
+        }
+
         public static void AddSelfBurn(Pawn pawn, float layers, bool refreshDecayTimer = true, bool showMote = true)
         {
             if (MingyuanPowerBalance.Sealed) return;

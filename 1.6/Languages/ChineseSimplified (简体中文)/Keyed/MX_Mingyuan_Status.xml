@@ -43,7 +43,9 @@
   <MX_Mingyuan_Bow_ModeFocus>聚焦形态</MX_Mingyuan_Bow_ModeFocus>
   <MX_Mingyuan_Bow_ModeRadiation>辐射形态</MX_Mingyuan_Bow_ModeRadiation>
   <MX_Mingyuan_Bow_ModeCommand>长虹：{0}</MX_Mingyuan_Bow_ModeCommand>
-  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。&#10;聚焦：全图视线内选敌，蓄力{2}秒后引爆生命燃烧。&#10;辐射：扫过{3}格、{4}°扇区，每{5}秒最多一次。</MX_Mingyuan_Bow_ModeDesc>
+  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。
+聚焦：50格视线内选敌，蓄力{2}秒，消耗已有生命燃烧提高箭伤。
+散射：扫过{3}格、{4}°扇区，每{5}秒最多一次，附加生命燃烧。</MX_Mingyuan_Bow_ModeDesc>
   <MX_Mingyuan_Bow_ModeBusy>长虹正在蓄力或结算，暂时不能切换形态。</MX_Mingyuan_Bow_ModeBusy>
   <MX_Mingyuan_Bow_ModeInspect>当前形态：{0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形态只能选择视线内、可被生命燃烧影响的敌对单位。</MX_Mingyuan_Bow_InvalidFocusTarget>

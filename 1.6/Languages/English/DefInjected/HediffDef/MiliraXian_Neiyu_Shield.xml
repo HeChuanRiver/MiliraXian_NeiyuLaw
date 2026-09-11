@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXNL_NeiyuShield.label>&lt;color=#79CBFF&gt;Guarding Ward&lt;/color&gt;</MXNL_NeiyuShield.label>
-  <MXNL_NeiyuShield.description>&lt;color=#79CBFF&gt;Neiyu&lt;/color&gt;'s &lt;color=#F39AD9&gt;three-phase&lt;/color&gt; charge-based protective ward.</MXNL_NeiyuShield.description>
+  <MXNL_NeiyuShield.description>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
+Stage II has 108 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 60 seconds without losing charges. Depleting the shield triggers Stage III.
+Stage III grants invulnerability and absorbs damage for 3 hours, then grants buffs based on the amount absorbed for 12 hours. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 24 charges and cannot block when empty or trigger Stage III.</MXNL_NeiyuShield.description>
 </LanguageData>

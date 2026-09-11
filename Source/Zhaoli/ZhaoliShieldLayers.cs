@@ -110,6 +110,7 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffCompProperties_ZhaoliShieldLayers : HediffCompProperties
     {
+        public float damagePerLayer = 36f;
         public bool showGizmo = true;
         public bool drawActiveShield = true;
         public bool drawOnlyInCombat = true;
@@ -198,17 +199,21 @@ namespace MiliraXian.Characters.Zhaoli
             shieldLayers = Mathf.Max(0, shieldLayers + layerCount);
         }
 
-        public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+        public bool TryAbsorb(ref DamageInfo dinfo, ref bool absorbed)
         {
-            base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-            if (ZhaoliPowerBalance.Sealed) return;
-            if (Pawn == null || Pawn.Dead || shieldLayers <= 0 || totalDamageDealt <= 0f)
+            if (ZhaoliPowerBalance.Sealed || absorbed || Pawn == null || Pawn.Dead
+                || shieldLayers <= 0 || dinfo.Amount <= 0f)
             {
-                return;
+                return false;
             }
 
-            shieldLayers = Mathf.Max(0, shieldLayers - 1);
+            int cost = CountShieldUtility.CalculateCost(dinfo.Amount, PropsShield.damagePerLayer);
+            // As with Neiyu's normal count shield, the final layers block the
+            // entire hit even when its cost exceeds the remaining layers.
+            shieldLayers = Mathf.Max(0, shieldLayers - cost);
+            absorbed = true;
             PlayShieldHitFx();
+            return true;
         }
 
         private void PlayShieldHitFx()
@@ -236,9 +241,22 @@ namespace MiliraXian.Characters.Zhaoli
             get
             {
                 // The base Hediff already displays def.description. Extra text is live state only.
-                return ZhaoliPowerBalance.IsOriginal ? "MX_ZL_ShieldLayersTip".Translate(shieldLayers).ToString() : null;
+                return "MX_ZL_ShieldLayersTip".Translate(ShieldLayers).ToString();
             }
         }
     }
 
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.PreApplyDamage))]
+    public static class Patch_ZhaoliShieldLayers_PreApplyDamage
+    {
+        [HarmonyPostfix]
+        [HarmonyPriority(Priority.Last)]
+        public static void Postfix(Pawn __instance, ref DamageInfo dinfo, ref bool absorbed)
+        {
+            // Existing absorption (including raid transition immunity) takes
+            // precedence and must not spend shield layers. Applies to both factions.
+            if (absorbed || !ZhaoliKarmaUtility.IsZhaoli(__instance)) return;
+            ZhaoliShieldLayerUtility.GetShieldComp(__instance)?.TryAbsorb(ref dinfo, ref absorbed);
+        }
+    }
 }

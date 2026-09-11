@@ -99,6 +99,14 @@ foreach ($check in $mechanicMethods) {
     }
 }
 $reset = $types['MingyuanTimeBurnRecord'].Methods | Where-Object Name -EQ 'Reset'
+$decapitate = $types['CompAbilityEffect_NeiyuSwordExecution'].Methods | Where-Object Name -EQ 'DecapitateTarget'
+$decapitateOperands = @($decapitate.Body.Instructions | Where-Object Operand | ForEach-Object { $_.Operand.ToString() })
+if ($decapitateOperands -match 'get_Downed|get_SummaryHealthPercent') {
+    throw 'Decapitation must not require a downed or low-health target.'
+}
+if (!($decapitateOperands -match 'HediffDefOf::MissingBodyPart') -or !($decapitateOperands -match 'Pawn_HealthTracker::AddHediff')) {
+    throw 'Decapitation must directly remove the head instead of relying on damage.'
+}
 $castFlag = $reset.Body.Instructions | Where-Object { $_.OpCode.Name -eq 'stfld' -and $_.Operand.Name -eq 'reducedCast' }
 if (-not $castFlag -or $castFlag.Previous.OpCode.Name -ne 'ldc.i4.0') { throw 'New Time Burn casts still use the legacy damage-only mode' }
 foreach ($typeName in 'HediffComp_ZhaoliShieldLayers','HediffComp_MingyuanLifeBurn','HediffComp_MingyuanSelfBurn','HediffComp_MingyuanProtectiveFlameShield') {
