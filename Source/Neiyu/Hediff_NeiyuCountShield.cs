@@ -760,7 +760,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private int CalculatePhase2Cost(float damageAmount)
         {
-            return Mathf.Max(1, Mathf.CeilToInt(damageAmount / Mathf.Max(0.1f, Props.phase2Threshold)));
+            return CountShieldUtility.CalculateCost(damageAmount, Props.phase2Threshold);
         }
 
         private bool IsLethalOrDowning(DamageInfo dinfo)

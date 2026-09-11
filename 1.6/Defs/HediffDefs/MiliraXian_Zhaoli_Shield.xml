@@ -4,7 +4,8 @@
     <HediffDef>
         <defName>MXZL_ZhaoliShieldLayers</defName>
         <label>&lt;color=#D66BFF&gt;讳亡护盾&lt;/color&gt;</label>
-        <description>昭离每次通过&lt;color=#E85A7A&gt;告死&lt;/color&gt;吸纳一个单位，获得5层&lt;color=#B86CFF&gt;讳亡护盾&lt;/color&gt;。实际受伤后消耗1层，持续伤害每次生效也会消耗层数。层数用于记录告死积累，本身不吸收伤害。</description>
+        <description>每通过告死吸纳一个单位，获得5层讳亡护盾。
+护盾抵挡伤害，每36点消耗1层，向上取整，至少消耗1层。剩余层数不足时，耗尽护盾并抵挡本次伤害。持续伤害每次生效时单独计算。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.66, 0.10, 0.20)</defaultLabelColor>
         <isBad>false</isBad>
@@ -14,6 +15,7 @@
         <maxSeverity>1</maxSeverity>
         <comps>
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliShieldLayers">
+                <damagePerLayer>36</damagePerLayer>
                 <showGizmo>false</showGizmo>
                 <drawActiveShield>true</drawActiveShield>
                 <activeShieldTexPath>MiliraXianZhaoli/Effect/Zhaoli_Shield/Shield</activeShieldTexPath>

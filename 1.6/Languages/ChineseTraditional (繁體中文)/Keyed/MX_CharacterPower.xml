@@ -31,7 +31,8 @@
   <MX_Power_Mingyuan_BurningBody>提高意識。免疫熱能和爆炸傷害，這類命中每秒最多補充一次2點修復儲備。每72秒最多治療13.5點普通傷口。實際受傷后獲得5層自燃與0.2秒無敵，并反灼敵對攻擊者。</MX_Power_Mingyuan_BurningBody>
   <MX_Power_Mingyuan_ProtectiveFlameShield>每10秒檢查一次傷勢，消耗1點儲備恢復一個缺失部位，或治愈一個部位的傷口與舊傷。穩定自燃與熱能命中可補充儲備，過燃會消耗儲備。儲備本身不吸收傷害。</MX_Power_Mingyuan_ProtectiveFlameShield>
   <MX_Power_Mingyuan_RebirthFlame>明淵瀕死時爆發重生之焰，對周圍敵人造成爆炸傷害與眩暈，隨后暫時離場。火焰重新凝聚后，明淵以完整狀態返回。</MX_Power_Mingyuan_RebirthFlame>
-  <MX_Power_Zhaoli_Shield>每通過告死吸納一個單位，獲得5層諱亡護盾。實際受傷后消耗1層，持續傷害每次生效也會消耗層數。層數用于記錄告死積累，本身不吸收傷害。</MX_Power_Zhaoli_Shield>
+  <MX_Power_Zhaoli_Shield>每通過告死吸納一個單位，獲得5層諱亡護盾。
+護盾抵擋傷害，每36點消耗1層，向上取整，至少消耗1層。剩餘層數不足時，耗盡護盾並抵擋本次傷害。持續傷害每次生效時單獨計算。</MX_Power_Zhaoli_Shield>
   <MX_Power_BalancedEquipment>專屬防具，提供防護與穿戴加成。</MX_Power_BalancedEquipment>
   <MX_Power_MX_Neiyu_WarpFeather>短暫施法后生成12–24根米莉拉羽毛。冷卻360秒。</MX_Power_MX_Neiyu_WarpFeather>
   <MX_Power_MX_Neiyu_ThunderMarkedStorm>標記半徑3格內的敵人。延遲后每個目標受到3次雷擊，每次造成30點基礎傷害，并附加13點EMP效果。冷卻96秒。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
