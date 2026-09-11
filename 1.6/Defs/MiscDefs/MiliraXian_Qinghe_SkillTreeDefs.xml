@@ -9,25 +9,25 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_AuraEnhancement1</defName>
     <label>灵气强化I</label>
-    <description>——被动效果：灵气护盾容量 +50%。</description>
+    <description>——被动效果：灵气护盾容量 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>55</displayOrder>
-    <requiredGraceLevel>6</requiredGraceLevel>
+    <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_LotusShieldMaxEnergyFactor>0.5</MX_QH_LotusShieldMaxEnergyFactor>
+      <MX_QH_AuraShieldMaxEnergyFactor>0.25</MX_QH_AuraShieldMaxEnergyFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_AuraEnhancement2</defName>
     <label>灵气强化II</label>
-    <description>——被动效果：灵气护盾容量 +100%。</description>
+    <description>——被动效果：灵气护盾容量 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>75</displayOrder>
-    <requiredGraceLevel>13</requiredGraceLevel>
+    <requiredAuraMasteryLevel>13</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_LotusShieldMaxEnergyFactor>1.0</MX_QH_LotusShieldMaxEnergyFactor>
+      <MX_QH_AuraShieldMaxEnergyFactor>0.25</MX_QH_AuraShieldMaxEnergyFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
@@ -37,19 +37,19 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>85</displayOrder>
-    <requiredGraceLevel>15</requiredGraceLevel>
+    <requiredAuraMasteryLevel>15</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_LotusShieldHitRegenDelayFactor>-1.0</MX_QH_LotusShieldHitRegenDelayFactor>
+      <MX_QH_AuraShieldHitRegenDelayFactor>-1.0</MX_QH_AuraShieldHitRegenDelayFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Node_FlowerEnvoy</defName>
+    <defName>MX_QH_Node_FlowerFairy</defName>
     <label>花中仙</label>
     <description>我与盛花之景本为一体。随风而动，随水而居。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>0</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_FlyingFlowerDecree</defName>
@@ -58,7 +58,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>10</displayOrder>
-    <requiredGraceLevel>1</requiredGraceLevel>
+    <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
       <li>MX_QH_SpringFlow</li>
     </grantedAbilities>
@@ -67,10 +67,14 @@
     <defName>MX_QH_Node_SwordDance</defName>
     <label>剑舞</label>
     <description>——习得剑技：镜花水月。</description>
+    <unlockLetter>
+      <title>剑舞姿态</title>
+      <text></text>
+    </unlockLetter>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>15</displayOrder>
-    <requiredGraceLevel>1</requiredGraceLevel>
+    <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
       <li>MX_QH_IllusoryReflection</li>
     </grantedAbilities>
@@ -78,11 +82,11 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_SeasonalResonance</defName>
     <label>四时和鸣</label>
-    <description>习得调谐自身灵气律动的能力，可为自身和武器附加不同的和鸣效果。</description>
+    <description>调谐自身灵气律动，为自身和武器附加不同的和鸣效果。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>20</displayOrder>
-    <requiredGraceLevel>3</requiredGraceLevel>
+    <requiredAuraMasteryLevel>3</requiredAuraMasteryLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_LingeringSnow</defName>
@@ -91,19 +95,19 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>25</displayOrder>
-    <requiredGraceLevel>5</requiredGraceLevel>
+    <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
       <li>MX_QH_LunarMirror</li>
     </grantedAbilities>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Node_Jueying</defName>
+    <defName>MX_QH_Node_AscentSlash</defName>
     <label>落樱</label>
     <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：剑舞：落樱。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时消耗全部剑压发动7次强力斩击，剑压不足1层时也可发动，但斩击的次数和威力将大幅削弱。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>30</displayOrder>
-    <requiredGraceLevel>5</requiredGraceLevel>
+    <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
       <li>MX_QH_AscentSlash</li>
     </grantedAbilities>
@@ -115,16 +119,16 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>40</displayOrder>
-    <requiredGraceLevel>2</requiredGraceLevel>
+    <requiredAuraMasteryLevel>2</requiredAuraMasteryLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Node_FlowerMandate1</defName>
+    <defName>MX_QH_Node_FlowerDecree1</defName>
     <label>花令强化I</label>
     <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>50</displayOrder>
-    <requiredGraceLevel>6</requiredGraceLevel>
+    <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
       <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
     </statOffsets>
@@ -136,7 +140,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>60</displayOrder>
-    <requiredGraceLevel>12</requiredGraceLevel>
+    <requiredAuraMasteryLevel>12</requiredAuraMasteryLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_HardSoftBalance</defName>
@@ -145,32 +149,32 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>65</displayOrder>
-    <requiredGraceLevel>16</requiredGraceLevel>
+    <requiredAuraMasteryLevel>16</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_LotusShieldDamageCapFactor>1</MX_QH_LotusShieldDamageCapFactor>
-      <MX_QH_LotusShieldHardeningFactor>1</MX_QH_LotusShieldHardeningFactor>
+      <MX_QH_AuraShieldDamageCapFactor>1</MX_QH_AuraShieldDamageCapFactor>
+      <MX_QH_AuraShieldHardeningFactor>1</MX_QH_AuraShieldHardeningFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_SpellEffectEnhancement1</defName>
     <label>法术效果强化I</label>
-    <description>——被动效果：法术效果系数 +50%。</description>
+    <description>——被动效果：法术效果系数 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>66</displayOrder>
-    <requiredGraceLevel>16</requiredGraceLevel>
+    <requiredAuraMasteryLevel>16</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
+      <MX_QH_SpellEffectFactor>0.25</MX_QH_SpellEffectFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Node_FlowerMandate2</defName>
+    <defName>MX_QH_Node_FlowerDecree2</defName>
     <label>花令强化II</label>
     <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>70</displayOrder>
-    <requiredGraceLevel>18</requiredGraceLevel>
+    <requiredAuraMasteryLevel>18</requiredAuraMasteryLevel>
     <statOffsets>
       <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
     </statOffsets>
@@ -178,13 +182,13 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_SpellEffectEnhancement2</defName>
     <label>法术效果强化II</label>
-    <description>——被动效果：法术效果系数 +50%。</description>
+    <description>——被动效果：法术效果系数 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>78</displayOrder>
-    <requiredGraceLevel>22</requiredGraceLevel>
+    <requiredAuraMasteryLevel>22</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_SpecialAbilityEffectFactor>0.5</MX_QH_SpecialAbilityEffectFactor>
+      <MX_QH_SpellEffectFactor>0.25</MX_QH_SpellEffectFactor>
     </statOffsets>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
@@ -194,26 +198,26 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>80</displayOrder>
-    <requiredGraceLevel>24</requiredGraceLevel>
+    <requiredAuraMasteryLevel>24</requiredAuraMasteryLevel>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Trait_LotusShield</defName>
+    <defName>MX_QH_Trait_AuraShield</defName>
     <label>灵气加护</label>
     <description>——被动效果：启用常驻护盾能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>100</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <traitNode>true</traitNode>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
-    <defName>MX_QH_Trait_DivineBlessing</defName>
+    <defName>MX_QH_Trait_FlowingForm</defName>
     <label>流水之形</label>
     <description>——被动效果：启用受可能致命或损失部位的伤害时的免伤能力。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>101</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <traitNode>true</traitNode>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
@@ -223,7 +227,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>102</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <traitNode>true</traitNode>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
@@ -233,7 +237,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>105</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <traitNode>true</traitNode>
   </MiliraXian.Characters.SkillNodeDef>
   <MiliraXian.Characters.SkillNodeDef>
@@ -243,7 +247,7 @@
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>107</displayOrder>
-    <requiredGraceLevel>0</requiredGraceLevel>
+    <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <traitNode>true</traitNode>
   </MiliraXian.Characters.SkillNodeDef>
 </Defs>

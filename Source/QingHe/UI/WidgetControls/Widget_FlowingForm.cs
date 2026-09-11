@@ -8,21 +8,21 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 {
-    public class Widget_DivineBlessing : Widget_Base
+    public class Widget_FlowingForm : Widget_Base
     {
         private const int TipSalt = 910205;
         private const int MaxDisplayBlocks = 3;
         private const float BlockGap = 3f;
 
         private readonly Pawn pawn;
-        private HediffComp_DivineBlessing cachedComp;
+        private HediffComp_FlowingForm cachedComp;
 
         private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
         private static readonly Color EmptyColor = new(0.035f, 0.04f, 0.045f, 1f);
         private static readonly Color ChargedColor = new(0.45f, 0.90f, 0.42f, 1f);
         private static readonly Color RechargingColor = new(1f, 0.82f, 0.24f, 1f);
 
-        public Widget_DivineBlessing(Pawn pawn, Rect localRect, TextAnchor alignment)
+        public Widget_FlowingForm(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
         {
             this.pawn = pawn;
@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_DivineBlessing comp = GetLongBreathComp();
+            HediffComp_FlowingForm comp = GetFlowingFormComp();
             int maxCharges = Mathf.Clamp(comp?.MaxCharges ?? 1, 1, MaxDisplayBlocks);
             int currentCharges = Mathf.Clamp(comp?.CurrentCharges ?? maxCharges, 0, maxCharges);
             float rechargeProgress = comp?.RechargeProgressPercent ?? 0f;
@@ -82,38 +82,38 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return index < currentCharges ? ChargedColor : RechargingColor;
         }
 
-        private HediffComp_DivineBlessing GetLongBreathComp()
+        private HediffComp_FlowingForm GetFlowingFormComp()
         {
             if (cachedComp == null || cachedComp.Pawn != pawn)
             {
-                Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_DivineBlessing);
-                cachedComp = (hediff as HediffWithComps)?.GetComp<HediffComp_DivineBlessing>();
+                Hediff hediff = pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_FlowingForm);
+                cachedComp = (hediff as HediffWithComps)?.GetComp<HediffComp_FlowingForm>();
             }
 
             return cachedComp;
         }
 
-        private static string BuildTip(HediffComp_DivineBlessing comp)
+        private static string BuildTip(HediffComp_FlowingForm comp)
         {
             if (comp == null)
             {
-                return "MX_QH_LongBreathChargesLine".Translate(0, 1);
+                return "MX_QH_FlowingFormChargesLine".Translate(0, 1);
             }
 
-            string tip = "MX_QH_LongBreathChargesLine".Translate(comp.CurrentCharges, comp.MaxCharges);
+            string tip = "MX_QH_FlowingFormChargesLine".Translate(comp.CurrentCharges, comp.MaxCharges);
             if (comp.IsRecharging)
             {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_LongBreathStateRecharging".Translate());
+                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateRecharging".Translate());
                 tip += "\n" + "MX_QH_RechargeProgressLine".Translate(comp.RechargeProgressPercent.ToStringPercent());
                 tip += "\n" + "MX_QH_RemainingTimeLine".Translate(comp.RechargeTicksLeft.ToStringTicksToPeriod(true, false, true, true, false));
             }
             else if (comp.CurrentCharges > 0)
             {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_LongBreathStateReady".Translate());
+                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateReady".Translate());
             }
             else
             {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_LongBreathStateEmpty".Translate());
+                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateEmpty".Translate());
             }
 
             return tip;

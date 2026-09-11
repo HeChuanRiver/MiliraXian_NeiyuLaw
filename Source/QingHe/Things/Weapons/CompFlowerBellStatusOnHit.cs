@@ -12,7 +12,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public float chance = 1f;
         public float yangchunMultiplier = 1.5f;
         public bool requireHostileTarget = true;
-        public bool scaleWithQingheSpecialAbilityEffect;
+        public bool scaleWithQingheSpellEffect;
 
         public CompProperties_FlowerBellStatusOnHit()
         {
@@ -45,6 +45,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
+            if (!MX_QHSkillUtility.HasSeasonalResonance(caster))
+            {
+                return;
+            }
+
             if (props.requireHostileTarget && !GenHostility.HostileTo(caster, target))
             {
                 return;
@@ -55,7 +60,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
-            float amount = props.accumulationAmount * ResolveSpecialAbilityEffectFactor(caster, props) * Mathf.Max(0f, amountMultiplier);
+            float amount = props.accumulationAmount * ResolveSpellEffectFactor(caster, props) * Mathf.Max(0f, amountMultiplier);
             for (int i = 0; i < props.abnormals.Count; i++)
             {
                 HediffDef_Abnormal abnormal = props.abnormals[i];
@@ -82,10 +87,10 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
         }
 
-        public static float ResolveSpecialAbilityEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)
+        public static float ResolveSpellEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)
         {
-            return props?.scaleWithQingheSpecialAbilityEffect == true
-                ? MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster)
+            return props?.scaleWithQingheSpellEffect == true
+                ? MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpellEffectFactor(caster)
                 : 1f;
         }
     }

@@ -13,8 +13,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             : FlowerBellResonance.None;
 
         public override string Description => base.Description + "\n\n"
-            + ("MX_QH_SwordResonanceDescription" + Resonance).Translate() + "\n\n"
-            + ("MX_QH_FlowerBellResonanceDescription" + Resonance).Translate();
+            + ("MX_QH_FlowerBellResonanceDescription" + Resonance).Translate() + "\n\n"
+            + ("MX_QH_SwordResonanceDescription" + Resonance).Translate();
 
         public override void PostRemoved()
         {

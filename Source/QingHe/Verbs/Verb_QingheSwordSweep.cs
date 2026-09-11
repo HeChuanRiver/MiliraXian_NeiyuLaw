@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                         || thing is not Pawn && thing is not Building
                         || thing is Pawn victim && victim.Dead
                         || !GenHostility.HostileTo(pawn, thing)
-                        || !CanHitTarget(thing) || !seen.Add(thing))
+                        || !seen.Add(thing))
                     {
                         continue;
                     }
@@ -87,7 +87,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                     }
                     if (target.Destroyed || !target.Spawned || target.MapHeld != map
                         || target is Pawn victim && victim.Dead
-                        || !GenHostility.HostileTo(pawn, target) || !CanHitTarget(target))
+                        || !GenHostility.HostileTo(pawn, target))
                     {
                         continue;
                     }

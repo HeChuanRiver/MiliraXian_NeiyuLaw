@@ -3,8 +3,22 @@
   <ThingDef ParentName="BaseWeapon">
     <defName>MX_QH_Weapon_FlowerBell</defName>
     <label>花信风铃</label>
-    <description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。</description>
-    <recipeMaker Inherit="False" IsNull="True" />
+    <description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。\n\n只可由清荷使用。带有特殊的追踪效果，无视射击精度和掩体效果。</description>
+    <recipeMaker Inherit="False">
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Smith</effectWorking>
+      <soundWorking>Recipe_Smith</soundWorking>
+      <recipeUsers>
+        <li>ElectricSmithy</li>
+        <li>FueledSmithy</li>
+      </recipeUsers>
+      <unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+      <skillRequirements>
+        <Crafting>16</Crafting>
+        <Artistic>16</Artistic>
+      </skillRequirements>
+    </recipeMaker>
     <techLevel>Archotech</techLevel>
     <smeltable>false</smeltable>
     <graphicData>
@@ -22,14 +36,19 @@
     <weaponClasses>
       <li>Ranged</li>
     </weaponClasses>
+    <costList>
+      <WoodLog>40</WoodLog>
+      <Steel>40</Steel>
+    </costList>
     <statBases>
-      <MarketValue>2600</MarketValue>
+      <WorkToMake>120000</WorkToMake>
+      <MarketValue>260</MarketValue>
       <Mass>1.0</Mass>
       <AccuracyTouch>1.0</AccuracyTouch>
       <AccuracyShort>1.0</AccuracyShort>
       <AccuracyMedium>1.0</AccuracyMedium>
       <AccuracyLong>1.0</AccuracyLong>
-      <RangedWeapon_Cooldown>2.5</RangedWeapon_Cooldown>
+      <RangedWeapon_Cooldown>4.5</RangedWeapon_Cooldown>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -71,27 +90,12 @@
           </li>
         </settings>
       </li>
-      <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
-        <formWeaponDefs>
-          <li>MX_QH_Weapon_FlowerBell</li>
-          <li>MX_QH_Weapon_Sword</li>
-        </formWeaponDefs>
-        <formLabels>
-          <li>MX_QH_WeaponFormFlowerBell</li>
-          <li>MX_QH_WeaponFormSword</li>
-        </formLabels>
-        <formIconPaths>
-          <li>MiliraXianNeiyu/Items/FlowerStick</li>
-          <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
-        </formIconPaths>
-        <commandLabel>MX_QH_ModeSwitchCommandLabel</commandLabel>
-        <commandDesc>MX_QH_ModeSwitchCommandDesc</commandDesc>
-        <destroyOldWeapon>true</destroyOldWeapon>
-        <requirePrimary>true</requirePrimary>
-        <blockWhilePawnBusy>true</blockWhilePawnBusy>
-        <cooldownTicks>300</cooldownTicks>
-      </li>
       <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+      <li Class="MiliraXian.Characters.CompProperties_PawnKindRestrictedWeapon">
+        <allowedPawnKinds>
+          <li>MiliraXian_Qinghe</li>
+        </allowedPawnKinds>
+      </li>
     </comps>
     <verbs>
       <li>
@@ -171,9 +175,9 @@
           <li>MX_AbnormalBleed</li>
           <li>MX_AbnormalElectricLeak</li>
         </abnormals>
-        <accumulationAmount>21</accumulationAmount>
+        <accumulationAmount>24</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+        <scaleWithQingheSpellEffect>true</scaleWithQingheSpellEffect>
       </li>
     </comps>
   </ThingDef>
@@ -195,7 +199,7 @@
         </abnormals>
         <accumulationAmount>16</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+        <scaleWithQingheSpellEffect>true</scaleWithQingheSpellEffect>
       </li>
     </comps>
   </ThingDef>
@@ -215,9 +219,9 @@
           <li>MX_AbnormalFear</li>
           <li>MX_AbnormalOverload</li>
         </abnormals>
-        <accumulationAmount>5</accumulationAmount>
+        <accumulationAmount>8</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+        <scaleWithQingheSpellEffect>true</scaleWithQingheSpellEffect>
       </li>
     </comps>
   </ThingDef>
@@ -238,7 +242,7 @@
         </abnormals>
         <accumulationAmount>12</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+        <scaleWithQingheSpellEffect>true</scaleWithQingheSpellEffect>
       </li>
     </comps>
   </ThingDef>

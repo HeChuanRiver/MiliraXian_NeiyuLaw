@@ -62,6 +62,11 @@
             <max>99999</max>
         </weaponMoney>
 
+        <inventoryOptions>
+            <thingDef>MX_QH_Weapon_Sword</thingDef>
+            <countRange>1</countRange>
+        </inventoryOptions>
+
         <!-- 生成时装备的耐久度区间，1-1则为100% -->
         <gearHealthRange Inherit="False">
             <min>1</min>
@@ -109,11 +114,11 @@
         <skills>
             <li>
                 <skill>Shooting</skill>
-                <range>3~3</range>
+                <range>5~5</range>
             </li>
             <li>
                 <skill>Melee</skill>
-                <range>2~2</range>
+                <range>11~11</range>
             </li>
             <li>
                 <skill>Construction</skill>
@@ -145,15 +150,15 @@
             </li>
             <li>
                 <skill>Medicine</skill>
-                <range>8~8</range>
+                <range>18~18</range>
             </li>
             <li>
                 <skill>Social</skill>
-                <range>8~8</range>
+                <range>1~1</range>
             </li>
             <li>
                 <skill>Intellectual</skill>
-                <range>17~17</range>
+                <range>14~14</range>
             </li>
         </skills>
 
@@ -258,12 +263,12 @@
                  生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
                 <extraForcedHediffs>
                     <li>
-                        <def>MX_QH_DivineBlessing</def>
+                        <def>MX_QH_FlowingForm</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_DivineProtection</def>
+                        <def>MX_QH_AuraShield</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>

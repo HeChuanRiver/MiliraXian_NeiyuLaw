@@ -24,8 +24,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            int effectiveLevel = Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel);
-            state.SyncNodesByGraceLevel(effectiveLevel);
+            int effectiveLevel = Mathf.Min(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), QinghePowerBalance.MaxEffectiveLevel);
+            state.SyncNodesByAuraMasteryLevel(effectiveLevel);
             state.SyncGrantedDefs();
             HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
         }
@@ -34,18 +34,18 @@ namespace MiliraXian.Characters.QingHe
         {
             SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_SeasonalResonance;
             return node != null
-                && Mathf.Min(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), QinghePowerBalance.MaxEffectiveLevel) >= node.requiredGraceLevel
+                && Mathf.Min(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), QinghePowerBalance.MaxEffectiveLevel) >= node.requiredAuraMasteryLevel
                 && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.HasNode(node) == true;
         }
 
-        public static float GetSpecialAbilityEffectFactor(Pawn pawn)
+        public static float GetSpellEffectFactor(Pawn pawn)
         {
-            if (pawn == null || MX_QHDefOf.MX_QH_SpecialAbilityEffectFactor == null)
+            if (pawn == null || MX_QHDefOf.MX_QH_SpellEffectFactor == null)
             {
                 return 1f;
             }
 
-            return Mathf.Max(0f, pawn.GetStatValue(MX_QHDefOf.MX_QH_SpecialAbilityEffectFactor));
+            return Mathf.Max(0f, pawn.GetStatValue(MX_QHDefOf.MX_QH_SpellEffectFactor));
         }
 
         public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_SkillTreeState state)
@@ -69,11 +69,11 @@ namespace MiliraXian.Characters.QingHe
 
             yield return new Command_Action
             {
-                defaultLabel = "MX_QH_DevAddDivineGraceLevelLabel".Translate(),
-                defaultDesc = "MX_QH_DevAddDivineGraceLevelDesc".Translate(),
+                defaultLabel = "MX_QH_DevAddAuraMasteryLevelLabel".Translate(),
+                defaultDesc = "MX_QH_DevAddAuraMasteryLevelDesc".Translate(),
                 action = delegate
                 {
-                    MX_QH_HediffUtility.AddDivineGraceLevel(pawn);
+                    MX_QH_HediffUtility.AddAuraMasteryLevel(pawn);
                 }
             };
 

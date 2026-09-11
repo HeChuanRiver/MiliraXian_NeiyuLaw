@@ -48,7 +48,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {

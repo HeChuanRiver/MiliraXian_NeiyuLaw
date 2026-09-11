@@ -34,8 +34,8 @@ namespace MiliraXian.Characters.QingHe.UI
             float y = inRect.y + 48f;
             DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpFlowerDecreeTitle".Translate(), "MX_QH_FlowerPanelHelpFlowerDecreeBody".Translate());
             DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpShieldTitle".Translate(), "MX_QH_FlowerPanelHelpShieldBody".Translate());
-            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpLongBreathTitle".Translate(), "MX_QH_FlowerPanelHelpLongBreathBody".Translate());
-            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpFlowerCourtTitle".Translate(), "MX_QH_FlowerPanelHelpFlowerCourtBody".Translate());
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpFlowingFormTitle".Translate(), "MX_QH_FlowerPanelHelpFlowingFormBody".Translate());
+            DrawItem(inRect, ref y, "MX_QH_FlowerPanelHelpSkillTreeTitle".Translate(), "MX_QH_FlowerPanelHelpSkillTreeBody".Translate());
 
             GUI.color = Color.white;
         }

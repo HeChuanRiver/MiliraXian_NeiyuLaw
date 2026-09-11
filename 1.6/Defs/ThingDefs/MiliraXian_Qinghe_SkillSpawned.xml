@@ -28,16 +28,10 @@
         <fadeOutTicks>45</fadeOutTicks>
         <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
         <ambientVisualFlecksPerBurst>2</ambientVisualFlecksPerBurst>
-        <enhancedBleedAbnormals>
-          <li>MX_AbnormalBleed</li>
-          <li>MX_AbnormalElectricLeak</li>
-        </enhancedBleedAbnormals>
-        <enhancedBleedAccumulationAmount>8</enhancedBleedAccumulationAmount>
-        <enhancedToxinAbnormals>
-          <li>MX_AbnormalToxin</li>
-          <li>MX_AbnormalCorrosion</li>
-        </enhancedToxinAbnormals>
-        <enhancedToxinAccumulationAmount>4</enhancedToxinAccumulationAmount>
+        <bleedAccumulationPerSecond>20</bleedAccumulationPerSecond>
+        <toxinAccumulationPerSecond>15</toxinAccumulationPerSecond>
+        <corrosionAccumulationPerSecond>15</corrosionAccumulationPerSecond>
+        <electricLeakAccumulationPerSecond>20</electricLeakAccumulationPerSecond>
         <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
         <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
       </li>
@@ -164,16 +158,7 @@
         </abnormals>
         <accumulationAmount>8</accumulationAmount>
         <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
-      </li>
-      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
-        <abnormals>
-          <li>MX_AbnormalFear</li>
-          <li>MX_AbnormalOverload</li>
-        </abnormals>
-        <accumulationAmount>3</accumulationAmount>
-        <requireHostileTarget>false</requireHostileTarget>
-        <scaleWithQingheSpecialAbilityEffect>true</scaleWithQingheSpecialAbilityEffect>
+        <scaleWithQingheSpellEffect>true</scaleWithQingheSpellEffect>
       </li>
     </comps>
   </ThingDef>
@@ -220,6 +205,8 @@
         <breakEffectScale>3.6</breakEffectScale>
         <breakFlashScale>8.0</breakFlashScale>
         <enhancedRetaliationProjectileDef>MX_Bullet_QH_LunarMirrorRetaliation</enhancedRetaliationProjectileDef>
+        <fearAccumulationPerSecond>15</fearAccumulationPerSecond>
+        <overloadAccumulationPerSecond>15</overloadAccumulationPerSecond>
       </li>
     </comps>
   </ThingDef>

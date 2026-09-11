@@ -1,43 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_Node_SpellEffectEnhancement1.label>法术效果强化I</MX_QH_Node_SpellEffectEnhancement1.label>
-  <MX_QH_Node_SpellEffectEnhancement1.description>——被动效果：法术效果系数 +50%。</MX_QH_Node_SpellEffectEnhancement1.description>
+  <MX_QH_Node_SpellEffectEnhancement1.description>——被动效果：法术效果系数 +25%。</MX_QH_Node_SpellEffectEnhancement1.description>
   <MX_QH_Node_SpellEffectEnhancement2.label>法术效果强化II</MX_QH_Node_SpellEffectEnhancement2.label>
-  <MX_QH_Node_SpellEffectEnhancement2.description>——被动效果：法术效果系数 +50%。</MX_QH_Node_SpellEffectEnhancement2.description>
+  <MX_QH_Node_SpellEffectEnhancement2.description>——被动效果：法术效果系数 +25%。</MX_QH_Node_SpellEffectEnhancement2.description>
   <MX_QH_Node_AuraEnhancement1.label>灵气强化I</MX_QH_Node_AuraEnhancement1.label>
-  <MX_QH_Node_AuraEnhancement1.description>——被动效果：灵气护盾容量 +50%。</MX_QH_Node_AuraEnhancement1.description>
+  <MX_QH_Node_AuraEnhancement1.description>——被动效果：灵气护盾容量 +25%。</MX_QH_Node_AuraEnhancement1.description>
   <MX_QH_Node_AuraEnhancement2.label>灵气强化II</MX_QH_Node_AuraEnhancement2.label>
-  <MX_QH_Node_AuraEnhancement2.description>——被动效果：灵气护盾容量 +100%。</MX_QH_Node_AuraEnhancement2.description>
+  <MX_QH_Node_AuraEnhancement2.description>——被动效果：灵气护盾容量 +25%。</MX_QH_Node_AuraEnhancement2.description>
   <MX_QH_Node_AuraCirculation.label>灵气流转</MX_QH_Node_AuraCirculation.label>
   <MX_QH_Node_AuraCirculation.description>——被动效果：灵气护盾受击回复延迟变为0秒。</MX_QH_Node_AuraCirculation.description>
-  <MX_QH_Node_FlowerEnvoy.label>花中仙</MX_QH_Node_FlowerEnvoy.label>
-  <MX_QH_Node_FlowerEnvoy.description>我与盛花之景本为一体。随风而动，随水而居。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</MX_QH_Node_FlowerEnvoy.description>
+  <MX_QH_Node_FlowerFairy.label>花中仙</MX_QH_Node_FlowerFairy.label>
+  <MX_QH_Node_FlowerFairy.description>我与盛花之景本为一体。随风而动，随水而居。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</MX_QH_Node_FlowerFairy.description>
   <MX_QH_Node_FlyingFlowerDecree.label>飞花令</MX_QH_Node_FlyingFlowerDecree.label>
   <MX_QH_Node_FlyingFlowerDecree.description>——习得飞花令：春泉涌流。</MX_QH_Node_FlyingFlowerDecree.description>
   <MX_QH_Node_SwordDance.label>剑舞</MX_QH_Node_SwordDance.label>
   <MX_QH_Node_SwordDance.description>——习得剑技：镜花水月。</MX_QH_Node_SwordDance.description>
+  <MX_QH_Node_SwordDance.unlockLetter.title>剑舞姿态</MX_QH_Node_SwordDance.unlockLetter.title>
   <MX_QH_Node_SeasonalResonance.label>四时和鸣</MX_QH_Node_SeasonalResonance.label>
-  <MX_QH_Node_SeasonalResonance.description>习得调谐自身灵气律动的能力，可为自身和武器附加不同的和鸣效果。</MX_QH_Node_SeasonalResonance.description>
+  <MX_QH_Node_SeasonalResonance.description>调谐自身灵气律动，为自身和武器附加不同的和鸣效果。</MX_QH_Node_SeasonalResonance.description>
   <MX_QH_Node_LingeringSnow.label>残雪</MX_QH_Node_LingeringSnow.label>
   <MX_QH_Node_LingeringSnow.description>——习得技能：霜月镜。</MX_QH_Node_LingeringSnow.description>
-  <MX_QH_Node_Jueying.label>落樱</MX_QH_Node_Jueying.label>
-  <MX_QH_Node_Jueying.description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</MX_QH_Node_Jueying.description>
+  <MX_QH_Node_AscentSlash.label>落樱</MX_QH_Node_AscentSlash.label>
+  <MX_QH_Node_AscentSlash.description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</MX_QH_Node_AscentSlash.description>
   <MX_QH_Node_Luoshenfu.label>洛水之仪</MX_QH_Node_Luoshenfu.label>
   <MX_QH_Node_Luoshenfu.description>洛水之上，神女证誓。\n\n——习得被动特性：洛水之仪。清荷会与伴侣建立契约，大幅提升双方的心情，若关系被破坏，心情将大幅下降一段时间。</MX_QH_Node_Luoshenfu.description>
-  <MX_QH_Node_FlowerMandate1.label>花令强化I</MX_QH_Node_FlowerMandate1.label>
-  <MX_QH_Node_FlowerMandate1.description>——被动效果：花令的积累上限 +1。</MX_QH_Node_FlowerMandate1.description>
-  <MX_QH_Node_FlowerMandate2.label>花令强化II</MX_QH_Node_FlowerMandate2.label>
-  <MX_QH_Node_FlowerMandate2.description>——被动效果：花令的积累上限 +1。</MX_QH_Node_FlowerMandate2.description>
+  <MX_QH_Node_FlowerDecree1.label>花令强化I</MX_QH_Node_FlowerDecree1.label>
+  <MX_QH_Node_FlowerDecree1.description>——被动效果：花令的积累上限 +1。</MX_QH_Node_FlowerDecree1.description>
+  <MX_QH_Node_FlowerDecree2.label>花令强化II</MX_QH_Node_FlowerDecree2.label>
+  <MX_QH_Node_FlowerDecree2.description>——被动效果：花令的积累上限 +1。</MX_QH_Node_FlowerDecree2.description>
   <MX_QH_Node_BlessingCharge1.label>花神的怜惜I</MX_QH_Node_BlessingCharge1.label>
   <MX_QH_Node_BlessingCharge1.description>——被动效果：流水之形的充能次数 +1。</MX_QH_Node_BlessingCharge1.description>
   <MX_QH_Node_HardSoftBalance.label>刚柔并济</MX_QH_Node_HardSoftBalance.label>
   <MX_QH_Node_HardSoftBalance.description>——被动效果：灵气最大单次消耗乘数与灵气硬化乘数各增加100%。默认启用20点单次消耗上限，并使灵气硬化按完整数值抵扣消耗。</MX_QH_Node_HardSoftBalance.description>
   <MX_QH_Node_BlessingCharge2.label>花神的怜惜II</MX_QH_Node_BlessingCharge2.label>
   <MX_QH_Node_BlessingCharge2.description>——被动效果：流水之形的充能次数 +1。</MX_QH_Node_BlessingCharge2.description>
-  <MX_QH_Trait_LotusShield.label>灵气加护</MX_QH_Trait_LotusShield.label>
-  <MX_QH_Trait_LotusShield.description>——被动效果：启用常驻护盾能力。</MX_QH_Trait_LotusShield.description>
-  <MX_QH_Trait_DivineBlessing.label>流水之形</MX_QH_Trait_DivineBlessing.label>
-  <MX_QH_Trait_DivineBlessing.description>——被动效果：启用受可能致命或损失部位的伤害时的免伤能力。</MX_QH_Trait_DivineBlessing.description>
+  <MX_QH_Trait_AuraShield.label>灵气加护</MX_QH_Trait_AuraShield.label>
+  <MX_QH_Trait_AuraShield.description>——被动效果：启用常驻护盾能力。</MX_QH_Trait_AuraShield.description>
+  <MX_QH_Trait_FlowingForm.label>流水之形</MX_QH_Trait_FlowingForm.label>
+  <MX_QH_Trait_FlowingForm.description>——被动效果：启用受可能致命或损失部位的伤害时的免伤能力。</MX_QH_Trait_FlowingForm.description>
   <MX_QH_Trait_Trickle.label>涓流</MX_QH_Trait_Trickle.label>
   <MX_QH_Trait_Trickle.description>——被动效果：启用伤口持续恢复能力。</MX_QH_Trait_Trickle.description>
   <MX_QH_Trait_Stillness.label>静思</MX_QH_Trait_Stillness.label>

@@ -84,6 +84,7 @@ namespace MiliraXian.Characters
             }
 
             DamageInfo dinfo = new(PropsVenom.damageDef, PropsVenom.damageAmount, PropsVenom.armorPenetration);
+            dinfo.SetIgnoreArmor(true);
             dinfo.SetAllowDamagePropagation(false);
             Pawn.TakeDamage(dinfo);
         }

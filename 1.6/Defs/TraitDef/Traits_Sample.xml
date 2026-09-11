@@ -41,6 +41,7 @@
           <FoodPoisonChance>0</FoodPoisonChance>
           <MedicalSurgerySuccessChance>1.5</MedicalSurgerySuccessChance>
           <MedicalTendQuality>1.5</MedicalTendQuality>
+          <PlantWorkSpeed>1.25</PlantWorkSpeed>
         </statFactors>
       </li>
     </degreeDatas>
@@ -54,11 +55,12 @@
         <description>"出淤泥而不染，濯清涟而不妖。"\n\n免疫在水中或雨中的心情惩罚。</description>
         <statFactors>
           <IncomingDamageFactor>0.99</IncomingDamageFactor>
-          <PlantWorkSpeed>1.25</PlantWorkSpeed>
+          <WorkSpeedGlobal>1.25</WorkSpeedGlobal>
         </statFactors>
         <statOffsets>
           <ToxicResistance>1</ToxicResistance>
           <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+          <ImmunityGainSpeed>0.5</ImmunityGainSpeed>
         </statOffsets>
       </li>
     </degreeDatas>

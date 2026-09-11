@@ -3,8 +3,22 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_QH_Weapon_Sword</defName>
         <label>散华</label>
-        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。</description>
-        <recipeMaker Inherit="False" IsNull="True" />
+        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。</description>
+        <recipeMaker Inherit="False">
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Smith</effectWorking>
+            <soundWorking>Recipe_Smith</soundWorking>
+            <recipeUsers>
+                <li>ElectricSmithy</li>
+                <li>FueledSmithy</li>
+            </recipeUsers>
+            <unfinishedThingDef>UnfinishedWeapon</unfinishedThingDef>
+            <skillRequirements>
+                <Crafting>16</Crafting>
+                <Artistic>16</Artistic>
+            </skillRequirements>
+        </recipeMaker>
 
         <graphicData>
             <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
@@ -29,13 +43,14 @@
         </weaponClasses>
 
         <costList>
-            <Steel>140</Steel>
-            <Jade>30</Jade>
+            <WoodLog>15</WoodLog>
+            <Steel>75</Steel>
         </costList>
 
         <statBases>
+            <WorkToMake>120000</WorkToMake>
             <MarketValue>3000</MarketValue>
-            <Mass>0.8</Mass>
+            <Mass>1.8</Mass>
             <MeleeWeapon_CooldownMultiplier>0.75</MeleeWeapon_CooldownMultiplier>
         </statBases>
 
@@ -66,27 +81,12 @@
                     <li>MX_QH_SwordResonanceDescriptionWinter</li>
                 </resonanceDescriptions>
             </li>
-            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
-                <formWeaponDefs>
-                    <li>MX_QH_Weapon_FlowerBell</li>
-                    <li>MX_QH_Weapon_Sword</li>
-                </formWeaponDefs>
-                <formLabels>
-                    <li>MX_QH_WeaponFormFlowerBell</li>
-                    <li>MX_QH_WeaponFormSword</li>
-                </formLabels>
-                <formIconPaths>
-                    <li>MiliraXianNeiyu/Items/FlowerStick</li>
-                    <li>MiliraXianNeiyu/Items/SwordForNeiyu</li>
-                </formIconPaths>
-                <commandLabel>MX_QH_ModeSwitchCommandLabel</commandLabel>
-                <commandDesc>MX_QH_ModeSwitchCommandDesc</commandDesc>
-                <destroyOldWeapon>true</destroyOldWeapon>
-                <requirePrimary>true</requirePrimary>
-                <blockWhilePawnBusy>true</blockWhilePawnBusy>
-                <cooldownTicks>300</cooldownTicks>
-            </li>
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.CompProperties_PawnKindRestrictedWeapon">
+                <allowedPawnKinds>
+                    <li>MiliraXian_Qinghe</li>
+                </allowedPawnKinds>
+            </li>
         </comps>
 
         <modExtensions>

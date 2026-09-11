@@ -189,7 +189,7 @@
           <li>MX_QH_Category_Qinghe</li>
         </categories>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheGraceSync" />
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheAuraMasterySync" />
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SkillTreeStateGizmos" />
     </comps>
   </HediffDef>
@@ -223,7 +223,7 @@
     </comps>
   </HediffDef>
   <HediffDef>
-    <defName>MX_QH_DivineBlessing</defName>
+    <defName>MX_QH_FlowingForm</defName>
     <label>流水之形</label>
     <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。充能耗尽时无法使用。\n\n——形如流水，意似清风。</description>
     <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheZeroLevelPassive</hediffClass>
@@ -232,7 +232,7 @@
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineBlessing">
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_FlowingForm">
         <lethalTriggerHealthPercent>0.12</lethalTriggerHealthPercent>
         <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
         <invisibilityDurationTicks>600</invisibilityDurationTicks>
@@ -243,7 +243,7 @@
     </comps>
   </HediffDef>
   <HediffDef>
-    <defName>MX_QH_DivineBlessingImmunity</defName>
+    <defName>MX_QH_FlowingFormImmunity</defName>
     <label>神应</label>
     <description>受到花神的垂怜，暂时免疫所有伤害。</description>
     <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -260,7 +260,7 @@
   <HediffDef>
     <defName>MX_QH_AuraMastery</defName>
     <label>灵气精通</label>
-    <description>清荷灵气精通的实际生效效果。等级与经验由技能树记录。</description>
+    <description>清荷精通修行的显化。随着精通等级提高，清荷的基础能力会逐步增强。\n\n完成任意带有品质要求的制作、艺术创造时，可根据成品的价值和品质等级获得精通经验值。</description>
     <hediffClass>MiliraXian.Characters.Hediff_SeverityScaledStats</hediffClass>
     <defaultLabelColor>(1.0, 0.78, 0.92)</defaultLabelColor>
     <isBad>false</isBad>
@@ -353,16 +353,17 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_LotusShieldMaxEnergyFactor</stat>
+            <stat>MX_QH_AuraShieldMaxEnergyFactor</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,4.0)</li>
+                <li>(12,1.6)</li>
+                <li>(24,3)</li>
               </points>
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_LotusShieldRegenPerSecondFactor</stat>
+            <stat>MX_QH_AuraShieldRegenPerSecondFactor</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
@@ -380,7 +381,7 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_DivineBlessingRechargeSpeedFactor</stat>
+            <stat>MX_QH_FlowingFormRechargeSpeedFactor</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
@@ -389,11 +390,11 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_SpecialAbilityEffectFactor</stat>
+            <stat>MX_QH_SpellEffectFactor</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
-                <li>(24,2.0)</li>
+                <li>(24,1.6)</li>
               </points>
             </valueBySeverity>
           </li>
@@ -402,26 +403,27 @@
     </stages>
   </HediffDef>
   <HediffDef>
-    <defName>MX_QH_DivineProtection</defName>
+    <defName>MX_QH_AuraShield</defName>
     <label>灵气加护</label>
-    <description>清荷与自然之息共鸣，能调动灵气形成一面无法穿透的护盾，抵挡所有来袭的伤害。护盾被击碎时，需要20秒时间重新充能，期间她会失去防护能力。</description>
+    <description>清荷与自然之息共鸣，能调动灵气形成一面无法穿透的护盾，抵挡所有来袭的伤害。护盾激活时，受到的抑止时间减少90%。护盾被击碎时，需要20秒时间重新充能，期间她会失去防护能力。</description>
     <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheZeroLevelPassive</hediffClass>
     <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_DivineProtection">
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AuraShield">
         <shieldCompProperties>
           <maxEnergy>500</maxEnergy>
-          <baseRegenPerSecond>15</baseRegenPerSecond>
+          <baseRegenPerSecond>7.5</baseRegenPerSecond>
           <hitRegenDelayTicks>120</hitRegenDelayTicks>
           <breakDisabledTicks>1200</breakDisabledTicks>
           <breakOnEmp>false</breakOnEmp>
+          <staggerDurationFactor>0.1</staggerDurationFactor>
           <visual>
             <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
             <texPath>MiliraXianQinghe/Effect/lotus_shield</texPath>
-            <shaderType>MX_QH_LotusShieldDistortion</shaderType>
+            <shaderType>MX_QH_AuraShieldDistortion</shaderType>
             <shaderParameters>
               <_FlowMap>/MiliraXianQinghe/Effect/lotus_shield_flowmap</_FlowMap>
               <_BaseLayerAlpha>1.0</_BaseLayerAlpha>

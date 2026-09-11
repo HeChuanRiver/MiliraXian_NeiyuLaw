@@ -17,7 +17,7 @@
     <progressBarMoteDef>MX_Mote_AbnormalBleedBar</progressBarMoteDef>
     <triggerMoteDef>MX_Mote_AbnormalBleedBurstIcon</triggerMoteDef>
     <effectHediff>MX_AbnormalBleeding</effectHediff>
-    <effectDurationTicks>1200</effectDurationTicks>
+    <effectDurationTicks>2400</effectDurationTicks>
     <triggerText>流血</triggerText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(1.00, 0.36, 0.42)</triggerTextColor>
@@ -68,7 +68,7 @@
     <everCurableByItem>false</everCurableByItem>
     <stages>
       <li>
-        <painOffset>0.20</painOffset>
+        <painOffset>0.50</painOffset>
         <statFactors>
           <MoveSpeed>0.70</MoveSpeed>
         </statFactors>
@@ -76,7 +76,7 @@
     </stages>
     <comps>
       <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>1200</disappearsAfterTicks>
+        <disappearsAfterTicks>2400</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
       <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalBleeding">
@@ -87,7 +87,7 @@
       </li>
       <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
         <addHediff>BloodLoss</addHediff>
-        <severityPerTick>0.00008</severityPerTick>
+        <severityPerTick>0.00016666667</severityPerTick>
         <fleshOnly>true</fleshOnly>
       </li>
     </comps>
@@ -122,6 +122,9 @@
         <stunTicks>180</stunTicks>
         <interruptCooldownTicks>30</interruptCooldownTicks>
         <energyLossPercent>0.20</energyLossPercent>
+        <bonusDamageDef>MX_AbnormalShortCircuitDamage</bonusDamageDef>
+        <maxHealthDamageFactor>0.10</maxHealthDamageFactor>
+        <bonusArmorPenetration>2</bonusArmorPenetration>
         <steamFleckDef>Steam</steamFleckDef>
         <steamIntervalTicks>35~80</steamIntervalTicks>
         <steamScaleRange>0.45~0.75</steamScaleRange>
@@ -146,7 +149,7 @@
     <progressBarMoteDef>MX_Mote_AbnormalToxinBar</progressBarMoteDef>
     <triggerMoteDef>MX_Mote_AbnormalToxinBurstIcon</triggerMoteDef>
     <effectHediff>MX_AbnormalVenom</effectHediff>
-    <effectDurationTicks>2400</effectDurationTicks>
+    <effectDurationTicks>3600</effectDurationTicks>
     <triggerText>中毒</triggerText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.62, 0.95, 0.42)</triggerTextColor>
@@ -175,7 +178,7 @@
     <progressBarMoteDef>MX_Mote_AbnormalCorrosionBar</progressBarMoteDef>
     <triggerMoteDef>MX_Mote_AbnormalCorrosionBurstIcon</triggerMoteDef>
     <effectHediff>MX_AbnormalCorroded</effectHediff>
-    <effectDurationTicks>2500</effectDurationTicks>
+    <effectDurationTicks>1440</effectDurationTicks>
     <triggerText>腐蚀</triggerText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.66, 0.90, 0.58)</triggerTextColor>
@@ -193,11 +196,20 @@
     <stages>
       <li>
         <vomitMtbDays>0.25</vomitMtbDays>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <postFactor>0.80</postFactor>
+          </li>
+        </capMods>
+        <statFactors>
+          <MoveSpeed>0.25</MoveSpeed>
+        </statFactors>
       </li>
     </stages>
     <comps>
       <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>2400</disappearsAfterTicks>
+        <disappearsAfterTicks>3600</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
       <li Class="MiliraXian.Characters.HediffCompProperties_AddHediffPerTick">
@@ -208,8 +220,8 @@
       <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalVenom">
         <damageDef>MX_AbnormalVenomDamage</damageDef>
         <damageIntervalTicks>120</damageIntervalTicks>
-        <damageAmount>4</damageAmount>
-        <armorPenetration>0</armorPenetration>
+        <damageAmount>8</damageAmount>
+        <armorPenetration>2</armorPenetration>
         <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
         <poisonFleckIntervalTicks>30~70</poisonFleckIntervalTicks>
         <poisonFleckScaleRange>0.55~0.95</poisonFleckScaleRange>
@@ -228,15 +240,16 @@
     <everCurableByItem>false</everCurableByItem>
     <comps>
       <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>2500</disappearsAfterTicks>
+        <disappearsAfterTicks>1440</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
       <li Class="MiliraXian.Characters.HediffCompProperties_AbnormalCorroded">
-        <armorMultiplier>0.70</armorMultiplier>
+        <physicalArmorMultiplier>0</physicalArmorMultiplier>
+        <heatArmorMultiplier>0.50</heatArmorMultiplier>
         <damageDef>MX_AbnormalVenomDamage</damageDef>
-        <damageIntervalTicks>240</damageIntervalTicks>
-        <damageAmount>2</damageAmount>
-        <armorPenetration>0</armorPenetration>
+        <damageIntervalTicks>120</damageIntervalTicks>
+        <damageAmount>8</damageAmount>
+        <armorPenetration>2</armorPenetration>
         <poisonFleckDef>Fleck_ToxGasSmall</poisonFleckDef>
         <poisonFleckIntervalTicks>35~80</poisonFleckIntervalTicks>
         <poisonFleckScaleRange>0.45~0.75</poisonFleckScaleRange>
@@ -390,6 +403,13 @@
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <statFactors>
+          <IncomingDamageFactor>1.5</IncomingDamageFactor>
+        </statFactors>
+      </li>
+    </stages>
     <comps>
       <li Class="HediffCompProperties_Disappears">
         <disappearsAfterTicks>300</disappearsAfterTicks>

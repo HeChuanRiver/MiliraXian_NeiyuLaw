@@ -11,11 +11,28 @@
         <externalViolence>true</externalViolence>
         <armorCategory>Sharp</armorCategory>
         <isRanged>true</isRanged>
+        <ignoreShields>true</ignoreShields>
         <hediff>AcidBurn</hediff>
         <impactSoundType>Toxic</impactSoundType>
         <damageEffecter>Impact_Toxic</damageEffecter>
-        <defaultDamage>4</defaultDamage>
-        <defaultArmorPenetration>0</defaultArmorPenetration>
+        <defaultDamage>8</defaultDamage>
+        <defaultArmorPenetration>2</defaultArmorPenetration>
         <deathMessage>{0}死于花信铃的剧毒。</deathMessage>
+    </DamageDef>
+    <DamageDef>
+        <defName>MX_AbnormalShortCircuitDamage</defName>
+        <label>短路放电</label>
+        <description>机械体短路时，内部放电造成的损伤。</description>
+        <workerClass>DamageWorker_AddInjury</workerClass>
+        <hasForcefulImpact>false</hasForcefulImpact>
+        <makesBlood>false</makesBlood>
+        <canInterruptJobs>false</canInterruptJobs>
+        <externalViolence>true</externalViolence>
+        <armorCategory>Heat</armorCategory>
+        <isRanged>true</isRanged>
+        <ignoreShields>true</ignoreShields>
+        <hediff>Burn</hediff>
+        <defaultArmorPenetration>2</defaultArmorPenetration>
+        <deathMessage>{0}死于短路放电。</deathMessage>
     </DamageDef>
 </Defs>

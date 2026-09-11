@@ -6,6 +6,8 @@
   <MX_Common_Unknown>未知</MX_Common_Unknown>
   <MX_Common_UnknownTarget>未知目标</MX_Common_UnknownTarget>
   <MX_Common_Parentheses>（{0}）</MX_Common_Parentheses>
+  <MX_WeaponPawnKindRestricted>此武器仅限指定角色装备。</MX_WeaponPawnKindRestricted>
+  <MX_WeaponPawnKindRejected>{0}无法装备{1}，武器已卸下。</MX_WeaponPawnKindRejected>
 
   <MX_ModeSwitch_CommandLabel>切换形态</MX_ModeSwitch_CommandLabel>
   <MX_ModeSwitch_CommandDesc>切换为其他形态</MX_ModeSwitch_CommandDesc>
@@ -105,41 +107,37 @@
   <MX_NL_ShieldBuffRangedDodge>远程闪避 +{0}%</MX_NL_ShieldBuffRangedDodge>
 
   <MX_QH_ShieldInactive>未激活</MX_QH_ShieldInactive>
-  <MX_QH_LotusShieldStatusActive>已激活</MX_QH_LotusShieldStatusActive>
-  <MX_QH_LotusShieldStatusDown>！！已失效！！（剩余 {0}s）</MX_QH_LotusShieldStatusDown>
-  <MX_QH_LotusShieldCapacity>灵气容量：{0}</MX_QH_LotusShieldCapacity>
-  <MX_QH_LotusShieldRegen>回复速率：{0} /s</MX_QH_LotusShieldRegen>
-  <MX_QH_LongBreathLowResourceWarning>【警告】清荷已无可用的流水之形充能，受到伤害可能会致命！</MX_QH_LongBreathLowResourceWarning>
-  <MX_QH_LongBreathTriggered>【流水之形】已触发：抵消了一次可能致命或损坏部位的伤害。</MX_QH_LongBreathTriggered>
-  <MX_QH_DevAddDivineGraceLevelLabel>DEV：精通等级 +1</MX_QH_DevAddDivineGraceLevelLabel>
-  <MX_QH_DevAddDivineGraceLevelDesc>直接令灵气精通等级提高 1 级。</MX_QH_DevAddDivineGraceLevelDesc>
-  <MX_QH_DivineGraceGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_DivineGraceGainedMessage>
-  <MX_QH_DivineGraceGainedLetterLabel>灵气精通提升</MX_QH_DivineGraceGainedLetterLabel>
-  <MX_QH_FlowerCourtGraceLine>灵气精通：{0} / {1}</MX_QH_FlowerCourtGraceLine>
+  <MX_QH_AuraShieldStatusActive>已激活</MX_QH_AuraShieldStatusActive>
+  <MX_QH_AuraShieldStatusDown>！！已失效！！（剩余 {0}s）</MX_QH_AuraShieldStatusDown>
+  <MX_QH_AuraShieldCapacity>灵气容量：{0}</MX_QH_AuraShieldCapacity>
+  <MX_QH_AuraShieldRegen>回复速率：{0} /s</MX_QH_AuraShieldRegen>
+  <MX_QH_FlowingFormLowResourceWarning>【警告】清荷已无可用的流水之形充能，受到伤害可能会致命！</MX_QH_FlowingFormLowResourceWarning>
+  <MX_QH_FlowingFormTriggered>【流水之形】已触发：抵消了一次可能致命或损坏部位的伤害。</MX_QH_FlowingFormTriggered>
+  <MX_QH_DevAddAuraMasteryLevelLabel>DEV：精通等级 +1</MX_QH_DevAddAuraMasteryLevelLabel>
+  <MX_QH_DevAddAuraMasteryLevelDesc>直接令灵气精通等级提高 1 级。</MX_QH_DevAddAuraMasteryLevelDesc>
+  <MX_QH_AuraMasteryGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_AuraMasteryGainedMessage>
+  <MX_QH_AuraMasteryGainedLetterLabel>灵气精通提升</MX_QH_AuraMasteryGainedLetterLabel>
+  <MX_QH_SkillTreeAuraMasteryLine>灵气精通：{0} / {1}</MX_QH_SkillTreeAuraMasteryLine>
   <MX_QH_ResonanceTab_Label>调谐</MX_QH_ResonanceTab_Label>
   <MX_QH_SkillTreeTab_Label>修行</MX_QH_SkillTreeTab_Label>
-  <MX_QH_GraceProgressLine>经验：{0} / {1}（{2}）</MX_QH_GraceProgressLine>
-  <MX_QH_GraceProgressMax>已达最高等级</MX_QH_GraceProgressMax>
-  <MX_QH_FlowerCourtNodeLevel>Lv.{0}</MX_QH_FlowerCourtNodeLevel>
-  <MX_QH_FlowerCourtNodeLearned>已习得</MX_QH_FlowerCourtNodeLearned>
-  <MX_QH_FlowerCourtNodeLocked>习得等级：Lv.{0}</MX_QH_FlowerCourtNodeLocked>
+  <MX_QH_AuraMasteryProgressLine>经验：{0} / {1}（{2}）</MX_QH_AuraMasteryProgressLine>
+  <MX_QH_AuraMasteryProgressMax>已达最高等级</MX_QH_AuraMasteryProgressMax>
+  <MX_QH_SkillTreeNodeLevel>Lv.{0}</MX_QH_SkillTreeNodeLevel>
+  <MX_QH_SkillTreeNodeLearned>已习得</MX_QH_SkillTreeNodeLearned>
+  <MX_QH_SkillTreeNodeLocked>习得等级：Lv.{0}</MX_QH_SkillTreeNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_RequiresSwordMode>需要装备散华。</MX_QH_RequiresSwordMode>
-  <MX_QH_RequiresBellMode>需要装备花信风铃。</MX_QH_RequiresBellMode>
-  <MX_QH_WeaponFormFlowerBell>花信风铃</MX_QH_WeaponFormFlowerBell>
-  <MX_QH_WeaponFormSword>散华</MX_QH_WeaponFormSword>
-  <MX_QH_ModeSwitchCommandLabel>切换武器</MX_QH_ModeSwitchCommandLabel>
-  <MX_QH_ModeSwitchCommandDesc>在花信风铃与散华之间切换武器。</MX_QH_ModeSwitchCommandDesc>
+  <MX_QH_RequiresSwordMode>需要装备近战武器，进入剑姿态。</MX_QH_RequiresSwordMode>
+  <MX_QH_RequiresBellMode>需要装备远程武器，进入铃姿态。</MX_QH_RequiresBellMode>
   <MX_QH_SwordPressureLabel>剑压</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>剑压：{0} / {1}</MX_QH_SwordPressureValueLine>
   <MX_QH_SwordModeDodgeExplanation>剑舞姿态：近战闪避大幅提升</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashInProgress>正在施放此技能，无法再次施放。</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashInvalidLanding>无法在该位置施放。</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LotusPondAssignQingheOnly>荷池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>
-  <MX_QH_OpenFlowerCourtRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenFlowerCourtRequiresQinghe>
-  <MX_QH_OpenFlowerCourt>打开修习面板</MX_QH_OpenFlowerCourt>
+  <MX_QH_OpenSkillTreeRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenSkillTreeRequiresQinghe>
+  <MX_QH_OpenSkillTree>打开修习面板</MX_QH_OpenSkillTree>
   <MX_QH_LotusPondCannotReach>清荷现在无法接近荷池。</MX_QH_LotusPondCannotReach>
-  <MX_QH_FlowerCourtMissing>地图上找不到荷池。</MX_QH_FlowerCourtMissing>
+  <MX_QH_SkillTreeMissing>地图上找不到荷池。</MX_QH_SkillTreeMissing>
   <MX_QH_CurrentSuffix>（当前）</MX_QH_CurrentSuffix>
   <MX_QH_TuneConfirmText>清荷需要静心调律片刻，之后24小时内无法再次调谐。确认切换到「{0}」？</MX_QH_TuneConfirmText>
   <MX_QH_TuneCooldownRemaining>调谐冷却中（剩余 {0} 小时）</MX_QH_TuneCooldownRemaining>
@@ -151,40 +149,47 @@
   <MX_QH_SwordResonanceSummer>荷雨</MX_QH_SwordResonanceSummer>
   <MX_QH_SwordResonanceAutumn>无常</MX_QH_SwordResonanceAutumn>
   <MX_QH_SwordResonanceWinter>凝霜</MX_QH_SwordResonanceWinter>
+  <!-- 调谐界面的四季共鸣说明 -->
+  <MX_QH_TuneResonanceDescriptionSpring>和鸣【春】：\n附有能引起流血或漏电异常的魔力。</MX_QH_TuneResonanceDescriptionSpring>
+  <MX_QH_TuneResonanceDescriptionSummer>和鸣【夏】：\n附有能引起剧毒或腐蚀异常的魔力。</MX_QH_TuneResonanceDescriptionSummer>
+  <MX_QH_TuneResonanceDescriptionAutumn>和鸣【秋】：\n附有能引起恐惧或过载异常的魔力。</MX_QH_TuneResonanceDescriptionAutumn>
+  <MX_QH_TuneResonanceDescriptionWinter>和鸣【冬】：\n附有能引起冻结异常的魔力。</MX_QH_TuneResonanceDescriptionWinter>
+  <!-- 花信风铃的四季共鸣效果 -->
   <MX_QH_FlowerBellResonanceDescriptionSpring>和鸣【春】：\n附有能引起流血或漏电异常的魔力。</MX_QH_FlowerBellResonanceDescriptionSpring>
   <MX_QH_FlowerBellResonanceDescriptionSummer>和鸣【夏】：\n附有能引起剧毒或腐蚀异常的魔力。</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>和鸣【秋】：\n附有能引起恐惧或过载异常的魔力。</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>和鸣【冬】：\n附有能引起冻结异常的魔力。</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <!-- 散华的四季共鸣效果 -->
   <MX_QH_SwordResonanceDescriptionSpring>和鸣【春晓】：\n附有能引起流血或漏电异常的魔力，攻击命中后还会为清荷附加春泉洗礼效果。</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>和鸣【荷雨】：\n附有能引起剧毒或腐蚀异常的魔力，攻击命中后回复的剑压+50%。</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>和鸣【无常】：\n附有能引起恐惧或过载异常的魔力，近战攻击的穿甲能力提升50%。</MX_QH_SwordResonanceDescriptionAutumn>
-  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n每次攻击命中时，回复当前每秒灵气恢复量的50%，再乘以修正后的法术系数：法术系数1～5线性对应恢复倍率1～2.5。攻击被护盾或护甲阻挡也可回复，破盾等待期间无法回复。造成实际伤害时累积冻结异常。</MX_QH_SwordResonanceDescriptionWinter>
+  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n每次攻击命中时，回复4点灵气加上当前每秒护盾回复量的20%，两者之和再乘以修正后的法术系数：法术系数1～5线性对应恢复倍率1～2.5。攻击被护盾或护甲阻挡也可回复，破盾等待期间无法回复。造成实际伤害时累积冻结异常。</MX_QH_SwordResonanceDescriptionWinter>
   <MX_QH_FlowerPanelHelpTitle>面板说明</MX_QH_FlowerPanelHelpTitle>
   <MX_QH_FlowerPanelHelpFlowerDecreeTitle>资源条</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
-  <MX_QH_FlowerPanelHelpFlowerDecreeBody>显示清荷当前所使用武器的资源状态。若没有使用专属武器，则不会显示任何东西。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
+  <MX_QH_FlowerPanelHelpFlowerDecreeBody>装备近战武器时进入剑姿态，显示剑压；装备远程武器时进入铃姿态，显示花令。未装备武器或无法识别武器类型时，不显示姿态资源。四季共鸣的追加效果仅在装备散华或花信风铃时生效，普通近战武器命中仍可获得剑压。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
   <MX_QH_FlowerPanelHelpShieldTitle>灵气条</MX_QH_FlowerPanelHelpShieldTitle>
   <MX_QH_FlowerPanelHelpShieldBody>显示灵气加护的状态。</MX_QH_FlowerPanelHelpShieldBody>
-  <MX_QH_FlowerPanelHelpLongBreathTitle>流水之形</MX_QH_FlowerPanelHelpLongBreathTitle>
-  <MX_QH_FlowerPanelHelpLongBreathBody>绿色方块表示可用充能，黄色填充表示正在恢复。</MX_QH_FlowerPanelHelpLongBreathBody>
-  <MX_QH_FlowerPanelHelpFlowerCourtTitle>修行面板</MX_QH_FlowerPanelHelpFlowerCourtTitle>
-  <MX_QH_FlowerPanelHelpFlowerCourtBody>点击可以随时打开修行面板。外侧的绿线指示静思的积累进度。</MX_QH_FlowerPanelHelpFlowerCourtBody>
+  <MX_QH_FlowerPanelHelpFlowingFormTitle>流水之形</MX_QH_FlowerPanelHelpFlowingFormTitle>
+  <MX_QH_FlowerPanelHelpFlowingFormBody>绿色方块表示可用充能，黄色填充表示正在恢复。</MX_QH_FlowerPanelHelpFlowingFormBody>
+  <MX_QH_FlowerPanelHelpSkillTreeTitle>修行面板</MX_QH_FlowerPanelHelpSkillTreeTitle>
+  <MX_QH_FlowerPanelHelpSkillTreeBody>点击可以随时打开修行面板。外侧的绿线指示静思的积累进度。</MX_QH_FlowerPanelHelpSkillTreeBody>
   <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>下一次进行涉及品质的建造、制作或艺术创作时，将消耗全部静思并使品质等级 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>【静思】已积累到上限。</MX_QH_MeditativeStillnessFullMessage>
-  <MX_QH_LotusShieldTooltipTitle>灵气加护</MX_QH_LotusShieldTooltipTitle>
-  <MX_QH_LotusShieldEnergyLine>灵气值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
-  <MX_QH_LotusShieldRegenLine>回复速率：{0} /秒</MX_QH_LotusShieldRegenLine>
-  <MX_QH_LotusShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_LotusShieldRegenDelayLine>
-  <MX_QH_FlowerCourtTitle>修习面板</MX_QH_FlowerCourtTitle>
-  <MX_QH_FlowerCourtLearnedNodesLine>当前精通等级：{0}</MX_QH_FlowerCourtLearnedNodesLine>
-  <MX_QH_FlowerCourtStillnessLine>静思：{0} % / {1} %</MX_QH_FlowerCourtStillnessLine>
+  <MX_QH_AuraShieldTooltipTitle>灵气加护</MX_QH_AuraShieldTooltipTitle>
+  <MX_QH_AuraShieldEnergyLine>灵气值：{0} / {1}</MX_QH_AuraShieldEnergyLine>
+  <MX_QH_AuraShieldRegenLine>回复速率：{0} /秒</MX_QH_AuraShieldRegenLine>
+  <MX_QH_AuraShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_AuraShieldRegenDelayLine>
+  <MX_QH_SkillTreeTitle>修习面板</MX_QH_SkillTreeTitle>
+  <MX_QH_SkillTreeCurrentAuraMasteryLevelLine>当前精通等级：{0}</MX_QH_SkillTreeCurrentAuraMasteryLevelLine>
+  <MX_QH_SkillTreeStillnessLine>静思：{0} % / {1} %</MX_QH_SkillTreeStillnessLine>
   <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
-  <MX_QH_LotusShieldLabel>灵气</MX_QH_LotusShieldLabel>
-  <MX_QH_LongBreathChargesLine>流水之形：{0} / {1} 可用</MX_QH_LongBreathChargesLine>
+  <MX_QH_AuraShieldLabel>灵气</MX_QH_AuraShieldLabel>
+  <MX_QH_FlowingFormChargesLine>流水之形：{0} / {1} 可用</MX_QH_FlowingFormChargesLine>
   <MX_QH_StatusLine>{0}</MX_QH_StatusLine>
-  <MX_QH_LongBreathStateRecharging>正在回充</MX_QH_LongBreathStateRecharging>
-  <MX_QH_LongBreathStateReady>已充满</MX_QH_LongBreathStateReady>
-  <MX_QH_LongBreathStateEmpty>充能耗尽</MX_QH_LongBreathStateEmpty>
+  <MX_QH_FlowingFormStateRecharging>正在回充</MX_QH_FlowingFormStateRecharging>
+  <MX_QH_FlowingFormStateReady>已充满</MX_QH_FlowingFormStateReady>
+  <MX_QH_FlowingFormStateEmpty>充能耗尽</MX_QH_FlowingFormStateEmpty>
   <MX_QH_RechargeProgressLine>恢复进度：{0}</MX_QH_RechargeProgressLine>
   <MX_QH_RemainingTimeLine>剩余时间：{0}</MX_QH_RemainingTimeLine>
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>

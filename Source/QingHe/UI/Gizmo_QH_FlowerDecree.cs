@@ -27,9 +27,9 @@ namespace MiliraXian.Characters.QingHe.UI
         protected override void BuildWidgets(List<Widget_Base> outWidgets)
         {
             outWidgets.Add(new Widget_SkillTree(pawn, new Rect(124f, 13f, 47f, 47f), TextAnchor.MiddleCenter));
-            outWidgets.Add(new Widget_DivineBlessing(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
+            outWidgets.Add(new Widget_FlowingForm(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
             outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(160f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
-            bool resourcesUnlocked = MX_QH_HediffUtility.GetDivineGraceLevel(pawn) >= 1;
+            bool resourcesUnlocked = MX_QH_HediffUtility.GetAuraMasteryLevel(pawn) >= 1;
             if (resourcesUnlocked && QingheSwordCombatUtility.IsSwordMode(pawn))
             {
                 outWidgets.Add(new TextWidget("MX_QH_SwordPressureLabel".Translate(), new Rect(8f, 2f, 40f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
@@ -40,8 +40,8 @@ namespace MiliraXian.Characters.QingHe.UI
                 outWidgets.Add(new TextWidget("MX_QH_FlowerDecreeLabel".Translate(), new Rect(8f, 2f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
                 outWidgets.Add(new Widget_FlowerDecreeBar(pawn, new Rect(0f, 12f, 120f, 24f), TextAnchor.MiddleLeft));
             }
-            outWidgets.Add(new TextWidget("MX_QH_LotusShieldLabel".Translate(), new Rect(8f, 28f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
-            outWidgets.Add(new Widget_DivineProtectionShieldBar(pawn, new Rect(0f, 38, 120f, 24f), TextAnchor.MiddleLeft));
+            outWidgets.Add(new TextWidget("MX_QH_AuraShieldLabel".Translate(), new Rect(8f, 28f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
+            outWidgets.Add(new Widget_AuraShieldBar(pawn, new Rect(0f, 38, 120f, 24f), TextAnchor.MiddleLeft));
         }
     }
 }

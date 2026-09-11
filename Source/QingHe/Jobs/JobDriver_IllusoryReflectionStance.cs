@@ -155,7 +155,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             CompProperties_AbilityIllusoryReflection props = ResolveProps();
             job.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.AddInvulnerability(pawn);
             props?.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
-            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(pawn);
+            float specialFactor = MX_QHSkillUtility.GetSpellEffectFactor(pawn);
             // Snapshot before any target hit can grant pressure or other on-hit buffs.
             float meleeFactor = pawn.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             PlayEmpoweredCounterSlash(directionCell, props);

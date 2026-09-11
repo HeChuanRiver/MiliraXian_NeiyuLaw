@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using RimWorld;
-using MiliraXian.Characters.QingHe.Hediffs;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Weapons
@@ -36,7 +35,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public ThingDef CurrentProjectileFor(Pawn pawn)
         {
-            FlowerBellResonance resonance = MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
+            FlowerBellResonance resonance = QingheSwordCombatUtility.ResonanceFor(pawn);
             return resonance == FlowerBellResonance.None ? null : SetFor(resonance)?.projectile;
         }
 

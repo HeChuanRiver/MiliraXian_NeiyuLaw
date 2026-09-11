@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。\n\n此效果可以驱散由告死流场施加的死亡宣告。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累20点流血；若已处于流血状态，则改为积累15点毒素。机械敌人先积累15点腐蚀；若已处于腐蚀状态，则改为积累20点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</MX_QH_SpringFlow.description>
   <MX_QH_LunarMirror.label>霜月镜</MX_QH_LunarMirror.label>
-  <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。</MX_QH_LunarMirror.description>
+  <MX_QH_LunarMirror.description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。\n\n习得“四时和鸣”后，每秒为护盾内的非机械敌人积累15点恐惧，为机械敌人积累15点过载；冰霜子弹命中时仅积累寒冷，达到上限后触发冻结。积累量受法术效果系数与对应异常附加效率影响。</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>镜花水月</MX_QH_IllusoryReflection.label>
   <MX_QH_IllusoryReflection.description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即向目标方向发动强力反击，命中目标时额外积累剑压。\n\n——镜花水月，如梦似幻。</MX_QH_IllusoryReflection.description>
   <MX_QH_AscentSlash.label>落樱</MX_QH_AscentSlash.label>

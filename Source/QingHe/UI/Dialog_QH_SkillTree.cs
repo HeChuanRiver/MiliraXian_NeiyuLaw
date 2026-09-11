@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.QingHe.UI
 {
     public class Dialog_QH_SkillTree : Window
     {
-        private enum FlowerCourtTab
+        private enum SkillTreeTab
         {
             Resonance,
             SkillTree
@@ -59,7 +59,7 @@ namespace MiliraXian.Characters.QingHe.UI
         private readonly Dictionary<int, List<SkillNodeDef>> nodesByLevel = new();
         private List<SkillNodeDef> levelNodes = new();
         private List<SkillNodeDef> specialNodes = new();
-        private FlowerCourtTab currentTab = FlowerCourtTab.SkillTree;
+        private SkillTreeTab currentTab = SkillTreeTab.SkillTree;
         private Vector2 levelScrollPosition;
         private Vector2 specialScrollPosition;
 
@@ -82,7 +82,7 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             this.pawn = pawn;
             this.state = state ?? MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
-            MX_QH_HediffUtility.EnsureDivineGraceComp(pawn);
+            MX_QH_HediffUtility.EnsureAuraMasteryComp(pawn);
             forcePause = true;
             absorbInputAroundWindow = true;
             closeOnClickedOutside = true;
@@ -102,17 +102,17 @@ namespace MiliraXian.Characters.QingHe.UI
             bool resonanceUnlocked = MX_QHSkillUtility.HasSeasonalResonance(pawn);
             if (!resonanceUnlocked)
             {
-                currentTab = FlowerCourtTab.SkillTree;
+                currentTab = SkillTreeTab.SkillTree;
             }
             if (resonanceUnlocked)
             {
-                DrawTabButton(new Rect(tabBar.x, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.Resonance, "MX_QH_ResonanceTab_Label".Translate());
+                DrawTabButton(new Rect(tabBar.x, tabBar.y, TabWidth, TabBarHeight), SkillTreeTab.Resonance, "MX_QH_ResonanceTab_Label".Translate());
             }
             float skillTabX = tabBar.x + (resonanceUnlocked ? TabWidth + 4f : 0f);
-            DrawTabButton(new Rect(skillTabX, tabBar.y, TabWidth, TabBarHeight), FlowerCourtTab.SkillTree, "MX_QH_SkillTreeTab_Label".Translate());
+            DrawTabButton(new Rect(skillTabX, tabBar.y, TabWidth, TabBarHeight), SkillTreeTab.SkillTree, "MX_QH_SkillTreeTab_Label".Translate());
 
             Rect pageRect = new(contentRect.x, tabBar.yMax + 6f, contentRect.width, contentRect.height - TabBarHeight - 6f);
-            if (currentTab == FlowerCourtTab.Resonance)
+            if (currentTab == SkillTreeTab.Resonance)
             {
                 DrawResonancePage(pageRect);
             }
@@ -124,7 +124,7 @@ namespace MiliraXian.Characters.QingHe.UI
             ResetGui();
         }
 
-        private void DrawTabButton(Rect rect, FlowerCourtTab tab, string label)
+        private void DrawTabButton(Rect rect, SkillTreeTab tab, string label)
         {
             bool selected = currentTab == tab;
             Widgets.DrawBoxSolid(rect, selected ? TabSelectedColor : TabBackColor);
@@ -315,14 +315,14 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawSkillTreePage(Rect rect)
         {
-            HediffComp_QingheGraceSync grace = MX_QH_HediffUtility.EnsureDivineGraceComp(pawn);
+            HediffComp_QingheAuraMasterySync auraMastery = MX_QH_HediffUtility.EnsureAuraMasteryComp(pawn);
             Rect topBar = new(rect.x, rect.y, rect.width, TopBarHeight);
             float specialAreaHeight = GetSpecialAreaHeight(rect.width);
             Rect specialArea = new(rect.x, rect.yMax - specialAreaHeight - SkillTreeBottomPadding, rect.width, specialAreaHeight);
             Rect mainArea = new(rect.x, topBar.yMax + 6f, rect.width, specialArea.y - topBar.yMax - 12f);
 
-            DrawGraceTopBar(topBar, grace);
-            DrawLevelArea(mainArea, grace);
+            DrawAuraMasteryTopBar(topBar, auraMastery);
+            DrawLevelArea(mainArea, auraMastery);
             DrawSpecialArea(specialArea);
         }
 
@@ -330,7 +330,7 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             List<SkillNodeDef> all = DefDatabase<SkillNodeDef>.AllDefsListForReading
                 .Where(node => state == null || state.IsRelevantNode(node))
-                .OrderBy(node => node.requiredGraceLevel)
+                .OrderBy(node => node.requiredAuraMasteryLevel)
                 .ThenBy(node => node.displayOrder)
                 .ToList();
             levelNodes = all.Where(node => !node.traitNode).ToList();
@@ -338,7 +338,7 @@ namespace MiliraXian.Characters.QingHe.UI
             nodesByLevel.Clear();
             foreach (SkillNodeDef node in levelNodes)
             {
-                int level = Mathf.Clamp(node.requiredGraceLevel, 0, HediffComp_QingheGraceSync.MaxGraceLevel);
+                int level = Mathf.Clamp(node.requiredAuraMasteryLevel, 0, HediffComp_QingheAuraMasterySync.MaxAuraMasteryLevel);
                 if (!nodesByLevel.TryGetValue(level, out List<SkillNodeDef> list))
                 {
                     list = new List<SkillNodeDef>();
@@ -349,19 +349,19 @@ namespace MiliraXian.Characters.QingHe.UI
             }
         }
 
-        private void DrawGraceTopBar(Rect rect, HediffComp_QingheGraceSync grace)
+        private void DrawAuraMasteryTopBar(Rect rect, HediffComp_QingheAuraMasterySync auraMastery)
         {
-            int actualLevel = grace?.CurrentLevel ?? MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int actualLevel = auraMastery?.CurrentLevel ?? MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
             int maxLevel = QinghePowerBalance.MaxEffectiveLevel;
             int level = Mathf.Min(actualLevel, maxLevel);
-            float required = grace?.RequiredProgressForCurrentLevel ?? 0f;
-            float progress = grace?.Progress ?? 0f;
-            float percent = grace?.ProgressPercent ?? 0f;
+            float required = auraMastery?.RequiredProgressForCurrentLevel ?? 0f;
+            float progress = auraMastery?.Progress ?? 0f;
+            float percent = auraMastery?.ProgressPercent ?? 0f;
 
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleLeft;
             GUI.color = Color.white;
-            Widgets.Label(new Rect(rect.x, rect.y, 260f, 24f), "MX_QH_FlowerCourtGraceLine".Translate(level, maxLevel));
+            Widgets.Label(new Rect(rect.x, rect.y, 260f, 24f), "MX_QH_SkillTreeAuraMasteryLine".Translate(level, maxLevel));
             GUI.color = Color.white;
 
             Rect barRect = new(rect.x, rect.y + 28f, rect.width, 16f);
@@ -376,27 +376,27 @@ namespace MiliraXian.Characters.QingHe.UI
 
             Text.Anchor = TextAnchor.MiddleCenter;
             bool reachedCurrentMax = actualLevel >= maxLevel;
-            string progressText = reachedCurrentMax || (grace != null && grace.IsMaxLevel)
+            string progressText = reachedCurrentMax || (auraMastery != null && auraMastery.IsMaxLevel)
                 ? "已达当前最大等级"
-                : "MX_QH_GraceProgressLine".Translate(progress.ToString("0"), required.ToString("0"), percent.ToStringPercent());
+                : "MX_QH_AuraMasteryProgressLine".Translate(progress.ToString("0"), required.ToString("0"), percent.ToStringPercent());
             GUI.color = percent < 0.4f ? Color.white : Color.black;
             Widgets.Label(barRect, progressText);
             GUI.color = Color.white;
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        private void DrawLevelArea(Rect rect, HediffComp_QingheGraceSync grace)
+        private void DrawLevelArea(Rect rect, HediffComp_QingheAuraMasterySync auraMastery)
         {
             Rect outRect = rect;
             List<int> unlockLevels = nodesByLevel.Keys.OrderBy(level => level).ToList();
             float viewWidth = outRect.width - 16f;
-            float viewHeight = (HediffComp_QingheGraceSync.MaxGraceLevel + 1) * LevelRowHeight;
+            float viewHeight = (HediffComp_QingheAuraMasterySync.MaxAuraMasteryLevel + 1) * LevelRowHeight;
             Rect viewRect = new(0f, 0f, viewWidth, viewHeight);
             Widgets.BeginScrollView(outRect, ref levelScrollPosition, viewRect);
 
-            int currentLevel = grace?.CurrentLevel ?? MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int currentLevel = auraMastery?.CurrentLevel ?? MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
             int effectiveLevel = Mathf.Min(currentLevel, QinghePowerBalance.MaxEffectiveLevel);
-            float fillPercent = Mathf.Clamp01((currentLevel + (grace?.ProgressPercent ?? 0f)) / HediffComp_QingheGraceSync.MaxGraceLevel);
+            float fillPercent = Mathf.Clamp01((currentLevel + (auraMastery?.ProgressPercent ?? 0f)) / HediffComp_QingheAuraMasterySync.MaxAuraMasteryLevel);
             for (int i = 0; i < unlockLevels.Count; i++)
             {
                 int level = unlockLevels[i];
@@ -405,7 +405,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 Text.Font = GameFont.Tiny;
                 Text.Anchor = TextAnchor.MiddleLeft;
                 GUI.color = reached ? Color.white : LockedLabelColor;
-                Widgets.Label(new Rect(8f, y + 6f, LevelRailWidth - 12f, 18f), "MX_QH_FlowerCourtNodeLevel".Translate(level));
+                Widgets.Label(new Rect(8f, y + 6f, LevelRailWidth - 12f, 18f), "MX_QH_SkillTreeNodeLevel".Translate(level));
                 GUI.color = Color.white;
 
                 List<SkillNodeDef> rowNodes = nodesByLevel[level];
@@ -439,7 +439,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Rect viewRect = new(0f, 0f, contentRect.width - 16f, contentHeight);
             Widgets.BeginScrollView(contentRect, ref specialScrollPosition, viewRect);
 
-            int actualLevel = MX_QH_HediffUtility.GetDivineGraceLevel(pawn);
+            int actualLevel = MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
             int effectiveLevel = Mathf.Min(actualLevel, QinghePowerBalance.MaxEffectiveLevel);
             for (int i = 0; i < specialNodes.Count; i++)
             {
@@ -458,8 +458,8 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawNodeCard(SkillNodeDef node, Rect rect, int actualLevel, int effectiveLevel, bool compact)
         {
-            bool learned = node.requiredGraceLevel <= effectiveLevel;
-            bool locked = !learned && node.requiredGraceLevel <= actualLevel;
+            bool learned = node.requiredAuraMasteryLevel <= effectiveLevel;
+            bool locked = !learned && node.requiredAuraMasteryLevel <= actualLevel;
             Rect iconRect = compact
                 ? new Rect(rect.x + (rect.width - NodeIconSize) * 0.5f, rect.y + 6f, NodeIconSize, NodeIconSize)
                 : new Rect(rect.x + 6f, rect.y + (rect.height - NodeIconSize) * 0.5f, NodeIconSize, NodeIconSize);
@@ -504,9 +504,9 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             string tip = node.LabelCap.ToString() + "\n\n" + node.description;
             string stateText = learned
-                ? "MX_QH_FlowerCourtNodeLearned".Translate()
+                ? "MX_QH_SkillTreeNodeLearned".Translate()
                 : locked
-                    ? "MX_QH_FlowerCourtNodeLocked".Translate(node.requiredGraceLevel)
+                    ? "MX_QH_SkillTreeNodeLocked".Translate(node.requiredAuraMasteryLevel)
                     : "未习得";
             return tip + "\n\n" + stateText;
         }
@@ -515,10 +515,10 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             string tip = resonance switch
             {
-                FlowerBellResonance.Spring => "MX_QH_FlowerBellResonanceDescriptionSpring".Translate(),
-                FlowerBellResonance.Summer => "MX_QH_FlowerBellResonanceDescriptionSummer".Translate(),
-                FlowerBellResonance.Autumn => "MX_QH_FlowerBellResonanceDescriptionAutumn".Translate(),
-                FlowerBellResonance.Winter => "MX_QH_FlowerBellResonanceDescriptionWinter".Translate(),
+                FlowerBellResonance.Spring => "MX_QH_TuneResonanceDescriptionSpring".Translate(),
+                FlowerBellResonance.Summer => "MX_QH_TuneResonanceDescriptionSummer".Translate(),
+                FlowerBellResonance.Autumn => "MX_QH_TuneResonanceDescriptionAutumn".Translate(),
+                FlowerBellResonance.Winter => "MX_QH_TuneResonanceDescriptionWinter".Translate(),
                 _ => null,
             };
             if (cooldownRemainingTicks > 0)

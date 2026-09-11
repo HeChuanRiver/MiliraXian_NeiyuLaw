@@ -9,13 +9,26 @@ namespace MiliraXian.Characters
     {
         public SkillNodeCategoryDef category;
         public int displayOrder;
-        public int requiredGraceLevel;
+        public int requiredAuraMasteryLevel;
         public string iconPath;
         public bool traitNode;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
         public List<AbilityDef> grantedAbilities;
         public List<HediffDef> grantedHediffs;
+        public SkillNodeUnlockLetter unlockLetter;
+
+        public virtual void Notify_Unlocked(Pawn pawn)
+        {
+            if (unlockLetter != null)
+            {
+                Find.LetterStack.ReceiveLetter(
+                    unlockLetter.title.Formatted(pawn.Named("PAWN")),
+                    unlockLetter.text.Formatted(pawn.Named("PAWN")),
+                    LetterDefOf.PositiveEvent,
+                    pawn);
+            }
+        }
 
         public Texture2D ResolveIcon()
         {
@@ -32,4 +45,12 @@ namespace MiliraXian.Characters
         }
     }
 
+    public class SkillNodeUnlockLetter
+    {
+        [MustTranslate]
+        public string title;
+
+        [MustTranslate]
+        public string text;
+    }
 }

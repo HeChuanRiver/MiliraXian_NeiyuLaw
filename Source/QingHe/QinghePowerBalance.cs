@@ -24,8 +24,8 @@ namespace MiliraXian.Characters.QingHe
             {
                 if (MX_QHCharacterUtility.IsQinghe(pawns[i]))
                 {
-                    MX_QH_HediffUtility.GetDivineGraceComp(pawns[i])?.SyncForPowerLevel();
-                    MX_QH_HediffUtility.SyncDivineProtectionForPowerLevel(pawns[i]);
+                    MX_QH_HediffUtility.GetAuraMasteryComp(pawns[i])?.SyncForPowerLevel();
+                    MX_QH_HediffUtility.SyncAuraShieldForPowerLevel(pawns[i]);
                 }
             }
         }

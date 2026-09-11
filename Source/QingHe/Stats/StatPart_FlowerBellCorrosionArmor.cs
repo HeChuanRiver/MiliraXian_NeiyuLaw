@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.QingHe.Stats
                 return;
             }
 
-            val *= comp.ArmorMultiplier;
+            val *= comp.GetArmorMultiplier(parentStat);
         }
 
         public override string ExplanationPart(StatRequest req)
@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.QingHe.Stats
                 return null;
             }
 
-            return $"{hediff.LabelCap}: x{comp.ArmorMultiplier.ToStringPercent()}";
+            return $"{hediff.LabelCap}: x{comp.GetArmorMultiplier(parentStat).ToStringPercent()}";
         }
 
         private static Pawn GetAffectedPawn(StatRequest req)

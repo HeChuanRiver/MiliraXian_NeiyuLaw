@@ -8,7 +8,7 @@ using Verse.Sound;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
-    public class DivineProtectionShieldGlowProperties
+    public class AuraShieldGlowProperties
     {
         public string texPath;
         public Color color = Color.white;
@@ -20,9 +20,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public Vector3 drawOffset = Vector3.zero;
     }
 
-    public class DivineProtectionShieldVisualProperties
+    public class AuraShieldVisualProperties
     {
-        public static readonly DivineProtectionShieldVisualProperties Default = new();
+        public static readonly AuraShieldVisualProperties Default = new();
 
         public int fullEnergyFadeOutTicks = 90;
         public string texPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
@@ -36,7 +36,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public List<string> hurtFleckDefNames = new();
         public float absorbFleckScale = 1.2f;
         public string absorbEffecterDefName = null;
-        public DivineProtectionShieldGlowProperties farGlow = new()
+        public AuraShieldGlowProperties farGlow = new()
         {
             texPath = "Things/Mote/FireGlow",
             color = new Color(1f, 0.8117647f, 0.9294118f, 1f),
@@ -45,7 +45,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             breathAmplitude = 0.25f,
             breathSpeed = 1f
         };
-        public DivineProtectionShieldGlowProperties hitGlow = new()
+        public AuraShieldGlowProperties hitGlow = new()
         {
             texPath = "Things/Mote/PsychicDistortionRing",
             color = new Color(1f, 0.72f, 0.92f, 1f),
@@ -57,23 +57,23 @@ namespace MiliraXian.Characters.QingHe.Vfx
     }
 
     [StaticConstructorOnStartup]
-    public class DivineProtectionShieldRenderer
+    public class AuraShieldRenderer
     {
         private static readonly int EffectTimeProperty = Shader.PropertyToID("_EffectTime");
         private static readonly Dictionary<string, Material> GlowMaterialsByPath = new();
 
-        private readonly CompDivineProtectionShield shield;
+        private readonly CompAuraShield shield;
         private Material shieldMaterial;
         private bool visibleLastFrame;
         private float startRealTime;
         private int lastAbsorbTick = -1;
 
-        public DivineProtectionShieldRenderer(CompDivineProtectionShield shield)
+        public AuraShieldRenderer(CompAuraShield shield)
         {
             this.shield = shield;
         }
 
-        private DivineProtectionShieldVisualProperties Visual => shield.Props.visual ?? DivineProtectionShieldVisualProperties.Default;
+        private AuraShieldVisualProperties Visual => shield.Props.visual ?? AuraShieldVisualProperties.Default;
 
         public void NotifyHidden()
         {
@@ -248,7 +248,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return shieldMaterial;
         }
 
-        private static void DrawGlow(DivineProtectionShieldGlowProperties glow, Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime, float factor, Quaternion rotation)
+        private static void DrawGlow(AuraShieldGlowProperties glow, Vector3 pos, Vector2 shieldDrawSize, float shieldAlpha, float effectTime, float factor, Quaternion rotation)
         {
             if (glow == null || factor <= 0.001f || glow.texPath.NullOrEmpty() || shieldAlpha <= 0.001f || glow.alpha <= 0.001f)
             {
