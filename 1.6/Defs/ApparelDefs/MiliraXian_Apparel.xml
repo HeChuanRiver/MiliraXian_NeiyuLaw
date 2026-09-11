@@ -117,9 +117,9 @@
             <DeteriorationRate>1</DeteriorationRate>
             <Mass>1.2</Mass>
             <WorkToMake>300000</WorkToMake>
-            <ArmorRating_Sharp>0.8</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.15</ArmorRating_Blunt>
-            <ArmorRating_Heat>0.5</ArmorRating_Heat>
+            <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.05</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.15</ArmorRating_Heat>
             <Insulation_Cold>24</Insulation_Cold>
             <Insulation_Heat>12</Insulation_Heat>
         </statBases>

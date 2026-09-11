@@ -65,7 +65,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             get
             {
                 FlushRecovery(force: false);
-                if (CurrentValue >= MaxValue - 0.0001f)
+                if (CurrentValue >= MaxValue)
                 {
                     return 0f;
                 }
@@ -217,7 +217,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             RefreshCachedRates();
             lastRecoveryTick = currentTick;
-            if (elapsedTicks > 0 && Pawn != null && !Pawn.Dead && CurrentValue < cachedMaxValue - 0.0001f)
+            // Reach the exact cap so flooring the displayed decree count cannot lose a full decree.
+            if (elapsedTicks > 0 && Pawn != null && !Pawn.Dead && CurrentValue < cachedMaxValue)
             {
                 AddValueWithHighlight(cachedRecoveryValuePerTick * elapsedTicks);
             }

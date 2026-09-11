@@ -103,7 +103,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Node_AscentSlash</defName>
     <label>落樱</label>
-    <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：剑舞：落樱。向指定方向高速冲刺，命中目标后借力跃起并追击；落下时消耗全部剑压发动7次强力斩击，剑压不足1层时也可发动，但斩击的次数和威力将大幅削弱。</description>
+    <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>30</displayOrder>

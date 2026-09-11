@@ -5,9 +5,9 @@
   <MX_QH_LotusPond.description>清荷的修行场所。她会在这里进行冥想，最好为她准备一个安静、漂亮的环境。</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>荷池只可分配给清荷。</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
   <MX_QH_Weapon_FlowerBell.label>花信风铃</MX_QH_Weapon_FlowerBell.label>
-  <MX_QH_Weapon_FlowerBell.description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。</MX_QH_Weapon_FlowerBell.description>
+  <MX_QH_Weapon_FlowerBell.description>自幼时一直陪伴清荷的乐器。能敲出穿透心灵的声音，注入花语后还可附加特殊的魔力。\n\n只可由清荷使用。带有特殊的追踪效果，无视射击精度和掩体效果。</MX_QH_Weapon_FlowerBell.description>
   <MX_QH_Weapon_Sword.label>散华</MX_QH_Weapon_Sword.label>
-  <MX_QH_Weapon_Sword.description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。</MX_QH_Weapon_Sword.description>
+  <MX_QH_Weapon_Sword.description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。</MX_QH_Weapon_Sword.description>
   <MX_QH_Weapon_Sword.tools.0.label>斩击</MX_QH_Weapon_Sword.tools.0.label>
   <MX_Bullet_Qinghe_FlowerBell_Spring.label>铃音·春</MX_Bullet_Qinghe_FlowerBell_Spring.label>
   <MX_Bullet_Qinghe_FlowerBell_Summer.label>铃音·夏</MX_Bullet_Qinghe_FlowerBell_Summer.label>
