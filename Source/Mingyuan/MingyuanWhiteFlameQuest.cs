@@ -705,10 +705,33 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             wavePawns.RemoveAll(pawn => pawn == null);
+            RestoreWaveAssaults();
             if (stage == MingyuanWhiteFlameStage.Waiting || stage == MingyuanWhiteFlameStage.Omen
                 || stage == MingyuanWhiteFlameStage.Offered)
             {
                 TryTrackOfferedQuest(activeQuest ?? MingyuanWhiteFlameUtility.FindBlockingQuest(), null);
+            }
+        }
+
+        private void RestoreWaveAssaults()
+        {
+            if (stage != MingyuanWhiteFlameStage.Defending || marker?.Spawned != true) return;
+
+            // Migrate only this quest's old assault lords, once after loading.
+            // New lords already restore their target and duties through vanilla saving.
+            foreach (Pawn pawn in wavePawns)
+            {
+                if (pawn.Dead || !pawn.Spawned || pawn.Map != marker.Map || !pawn.HostileTo(marker)) continue;
+                Lord lord = pawn.GetLord();
+                if (lord?.LordJob is LordJob_AssaultThings)
+                {
+                    lord.SetJob(new LordJob_MingyuanAssaultFlame(marker));
+                    foreach (Pawn member in lord.ownedPawns)
+                    {
+                        member.mindState.duty = new PawnDuty(MX_MingyuanDefOf.MX_Mingyuan_AssaultRebirthFlame, marker);
+                        if (!member.Downed) member.jobs?.EndCurrentJob(JobCondition.InterruptForced);
+                    }
+                }
             }
         }
 
@@ -1589,7 +1612,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             LordMaker.MakeNewLord(
                 mechanoids,
-                new LordJob_AssaultThings(mechanoids, new List<Thing> { marker }),
+                new LordJob_MingyuanAssaultFlame(marker),
                 targetMap,
                 pawns);
             wavePawns.AddRange(pawns);

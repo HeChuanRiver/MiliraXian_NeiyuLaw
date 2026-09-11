@@ -1,11 +1,13 @@
 using RimWorld;
 using Verse;
+using Verse.AI;
 
 namespace MiliraXian.Characters.Mingyuan
 {
     [DefOf]
     public static class MX_MingyuanDefOf
     {
+        public static DutyDef MX_Mingyuan_AssaultRebirthFlame;
         public static DamageDef MX_Mingyuan_StructuralBurn;
         public static AbilityDef MX_Mingyuan_Absorb;
         public static ThingDef MX_Mingyuan_SkillVisual;

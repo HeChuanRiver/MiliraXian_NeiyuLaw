@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <DutyDef>
+    <defName>MX_Mingyuan_AssaultRebirthFlame</defName>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <thinkNode Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="MiliraXian.Characters.Mingyuan.JobGiver_MingyuanAttackFlame" />
+        <li Class="JobGiver_AIFightEnemies">
+          <targetAcquireRadius>20</targetAcquireRadius>
+          <targetKeepRadius>23</targetKeepRadius>
+        </li>
+        <li Class="JobGiver_AITrashDutyFocus" />
+        <li Class="JobGiver_AISapper" />
+      </subNodes>
+    </thinkNode>
+  </DutyDef>
+</Defs>

@@ -7,6 +7,9 @@ using HarmonyLib;
 using MiliraXian.Characters.Mingyuan;
 using RimWorld;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
+using System.Xml;
 
 // Exercises registration and acceptance with real Quest/GameComponent types.
 // Stop at map resolution, before Unity spawning and visual effects are required.
@@ -31,7 +34,7 @@ internal static class MingyuanQuestRegressionTests
                 return null;
             };
             Run();
-            Console.WriteLine("PASS: " + checks + " Mingyuan quest registration/acceptance checks; Unity spawning is not exercised.");
+            Console.WriteLine("PASS: " + checks + " Mingyuan quest/assault checks; Unity spawning and live combat are not exercised.");
             return 0;
         }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
@@ -116,15 +119,110 @@ internal static class MingyuanQuestRegressionTests
         Call(component, "ProcessWaiting", 1000);
         Check(State(component) == "Waiting", "natural offers still require their original age threshold");
         Console.WriteLine("Acceptance/recovery reached the defense spawn boundary " + spawnAttempts + " times.");
+        TestFlameAssault(harmony);
+    }
+
+    private static Job vanillaCombatJob;
+
+    private sealed class FlameJobProbe : JobGiver_MingyuanAttackFlame
+    {
+        public Job GiveJob(Pawn pawn) { return TryGiveJob(pawn); }
+        public Thing SelectTarget(Pawn pawn) { return FindAttackTarget(pawn); }
+    }
+
+    private static bool SupplyVanillaCombatJob(ref Job __result)
+    {
+        __result = vanillaCombatJob;
+        return false;
+    }
+
+    private static bool MakeJobWithoutUnityPool(JobDef __0, LocalTargetInfo __1, ref Job __result)
+    {
+        // The game's pool uses Queue.TryDequeue, absent in the desktop CLR used
+        // by this Harmony fixture. Keep real Job construction and target fields.
+        __result = new Job(__0, __1);
+        return false;
+    }
+
+    private static void TestFlameAssault(Harmony harmony)
+    {
+        Setup();
+        Set(Current.Game, "maps", new List<Map> { Bare<Map>() });
+        var pawn = Bare<Pawn>();
+        pawn.mindState = Bare<Pawn_MindState>();
+        var marker = new Thing_MingyuanQuestRebirthFlame();
+        var probe = new FlameJobProbe();
+        Check(probe.SelectTarget(pawn) == null, "missing duty cannot select a flame");
+        MX_MingyuanDefOf.MX_Mingyuan_AssaultRebirthFlame = new DutyDef { defName = "MX_Mingyuan_AssaultRebirthFlame" };
+        pawn.mindState.duty = new PawnDuty(MX_MingyuanDefOf.MX_Mingyuan_AssaultRebirthFlame, marker);
+        Check(probe.SelectTarget(pawn) == null, "despawned flame cannot be attacked");
+
+        var graph = new LordJob_MingyuanAssaultFlame(marker).CreateGraph();
+        Check(graph.lordToils.Count == 2 && graph.lordToils[0] is LordToil_MingyuanAssaultFlame
+            && graph.lordToils[1] is LordToil_ExitMapAndDefendSelf,
+            "assault keeps the vanilla leave-after-objective lifecycle");
+        Check(graph.transitions.Count == 1, "assault includes its objective-loss transition");
+        var lord = Bare<Lord>();
+        lord.ownedPawns = new List<Pawn> { pawn };
+        var toil = (LordToil_MingyuanAssaultFlame)graph.lordToils[0];
+        toil.lord = lord;
+        AccessTools.Field(typeof(Thing), "mapIndexOrState").SetValue(marker, (sbyte)0);
+        pawn.mindState.duty = null;
+        toil.UpdateAllDuties();
+        Check(pawn.mindState.duty != null && pawn.mindState.duty.def == MX_MingyuanDefOf.MX_Mingyuan_AssaultRebirthFlame
+            && pawn.mindState.duty.focus.Thing == marker, "wave duty targets the actual flame Thing");
+        PawnDuty duty = pawn.mindState.duty;
+        toil.UpdateAllDuties();
+        Check(pawn.mindState.duty == duty, "unchanged duties are retained across periodic updates");
+        pawn.mindState.duty = new PawnDuty(MX_MingyuanDefOf.MX_Mingyuan_AssaultRebirthFlame, new Thing());
+        toil.UpdateAllDuties();
+        Check(pawn.mindState.duty.focus.Thing == marker, "a stale focus is restored to the flame");
+
+        // Isolate Unity's firing-position search. The production adapter must retain
+        // vanilla movement/melee and turn a shooting-position wait into a fixed shot.
+        MethodInfo baseGive = AccessTools.Method(typeof(JobGiver_AIFightEnemy), "TryGiveJob");
+        harmony.Patch(baseGive, prefix: new HarmonyMethod(typeof(MingyuanQuestRegressionTests), "SupplyVanillaCombatJob"));
+        MethodInfo makeJob = AccessTools.Method(typeof(JobMaker), "MakeJob", new[] { typeof(JobDef), typeof(LocalTargetInfo) });
+        harmony.Patch(makeJob, prefix: new HarmonyMethod(typeof(MingyuanQuestRegressionTests), "MakeJobWithoutUnityPool"));
+        JobDefOf.Wait_Combat = new JobDef { defName = "Wait_Combat" };
+        JobDefOf.AttackStatic = new JobDef { defName = "AttackStatic" };
+        pawn.mindState.enemyTarget = marker;
+        vanillaCombatJob = new Job(JobDefOf.Wait_Combat) { expiryInterval = 487 };
+        Job attack = probe.GiveJob(pawn);
+        Check(attack.def == JobDefOf.AttackStatic && attack.targetA.Thing == marker,
+            "ranged attackers shoot the flame instead of running Wait_Combat's generic target scan");
+        Check(attack.expiryInterval == 487 && attack.checkOverrideOnExpire
+            && attack.endIfCantShootTargetFromCurPos,
+            "ranged attack retains reevaluation timing and replans when firing is obstructed");
+        vanillaCombatJob = new Job(new JobDef { defName = "Goto" });
+        Check(probe.GiveJob(pawn) == vanillaCombatJob, "vanilla movement to weapon range is preserved");
+        vanillaCombatJob = new Job(new JobDef { defName = "AttackMelee" }, marker);
+        Check(probe.GiveJob(pawn) == vanillaCombatJob, "vanilla melee attack against the flame is preserved");
+        vanillaCombatJob = null;
+        Check(probe.GiveJob(pawn) == null, "unreachable attack lets the duty use combat/sapper fallback");
+        harmony.Unpatch(baseGive, HarmonyPatchType.Prefix, harmony.Id);
+        harmony.Unpatch(makeJob, HarmonyPatchType.Prefix, harmony.Id);
+
+        string defs = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(GameComponent_MingyuanWhiteFlameQuest).Assembly.Location), "../Defs"));
+        var xml = new XmlDocument();
+        xml.Load(Path.Combine(defs, "ThingDefs/MiliraXian_Mingyuan_Quest.xml"));
+        Check(xml.SelectSingleNode("/Defs/ThingDef[defName='MX_Mingyuan_QuestRebirthFlame']/building/isInert").InnerText == "false",
+            "the flame is not inert, so vanilla TrashJob can also attack it");
+        xml.Load(Path.Combine(defs, "DutyDefs/MiliraXian_Mingyuan_Quest.xml"));
+        Check(xml.SelectSingleNode("/Defs/DutyDef/thinkNode/subNodes/li[1]").Attributes["Class"].Value
+            == typeof(JobGiver_MingyuanAttackFlame).FullName,
+            "flame attack has priority over nearby-enemy combat in the duty tree");
     }
 
     private static GameComponent_MingyuanWhiteFlameQuest Setup()
     {
+        AccessTools.Field(typeof(DefOfHelper), "bindingNow").SetValue(null, true);
         var game = Bare<Game>();
         game.components = new List<GameComponent>();
         game.tickManager = Bare<TickManager>();
         Set(game.tickManager, "ticksGameInt", 1000);
         game.questManager = new QuestManager();
+        game.uniqueIDsManager = new UniqueIDsManager();
         Current.Game = game;
         Current.ProgramState = ProgramState.Playing;
         var component = new GameComponent_MingyuanWhiteFlameQuest(game);
