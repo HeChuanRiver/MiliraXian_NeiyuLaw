@@ -299,8 +299,8 @@ namespace MiliraXian.Characters
             meshVertices.Add(end + endOffset);
 
             meshUvs.Add(new Vector2(0f, 0f));
-            meshUvs.Add(new Vector2(0f, 1f));
             meshUvs.Add(new Vector2(1f, 0f));
+            meshUvs.Add(new Vector2(0f, 1f));
             meshUvs.Add(new Vector2(1f, 1f));
 
             byte startByte = (byte)Mathf.RoundToInt(Mathf.Clamp01(startAlpha) * 255f);
@@ -311,11 +311,11 @@ namespace MiliraXian.Characters
             meshColors.Add(new Color32(255, 255, 255, endByte));
 
             meshTriangles.Add(vertexStart);
-            meshTriangles.Add(vertexStart + 2);
             meshTriangles.Add(vertexStart + 1);
             meshTriangles.Add(vertexStart + 2);
+            meshTriangles.Add(vertexStart + 2);
+            meshTriangles.Add(vertexStart + 1);
             meshTriangles.Add(vertexStart + 3);
-            meshTriangles.Add(vertexStart + 1);
         }
 
         private Material GetTrailMaterial()
