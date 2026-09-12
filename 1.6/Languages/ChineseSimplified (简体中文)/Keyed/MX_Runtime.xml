@@ -134,6 +134,10 @@
   <MX_QH_AscentSlashInProgress>正在施放此技能，无法再次施放。</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashInvalidLanding>无法在该位置施放。</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LotusPondAssignQingheOnly>荷池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>
+  <MX_QH_LotusPondOnlyOne>每个殖民地只能建造一座荷池。</MX_QH_LotusPondOnlyOne>
+  <MX_QH_LotusPondBeauty>美观度：{0}　清洁度：{1}</MX_QH_LotusPondBeauty>
+  <MX_QH_LotusPondStillnessBonus>静思获取加成（依据房间印象）：{0}</MX_QH_LotusPondStillnessBonus>
+  <MX_QH_LotusPondRitualQualityBonus>七夕节质量加成：{0}</MX_QH_LotusPondRitualQualityBonus>
   <MX_QH_OpenSkillTreeRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenSkillTreeRequiresQinghe>
   <MX_QH_OpenSkillTree>打开修习面板</MX_QH_OpenSkillTree>
   <MX_QH_LotusPondCannotReach>清荷现在无法接近荷池。</MX_QH_LotusPondCannotReach>

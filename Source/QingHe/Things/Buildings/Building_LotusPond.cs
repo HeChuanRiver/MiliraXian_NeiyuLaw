@@ -14,6 +14,42 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 {
     public class Building_LotusPond : Building
     {
+        public static float StillnessFactorFor(Room room)
+        {
+            return room == null
+                ? 1f
+                : Mathf.Lerp(0.75f, 1.5f, Mathf.InverseLerp(0f, 100f, room.GetStat(RoomStatDefOf.Impressiveness)));
+        }
+
+        public override string GetInspectString()
+        {
+            string text = base.GetInspectString();
+            if (!Spawned)
+            {
+                return text;
+            }
+
+            Room room = this.GetRoom();
+            if (!text.NullOrEmpty())
+            {
+                text += "\n";
+            }
+
+            string beauty = room == null ? "—" : room.GetStat(RoomStatDefOf.Beauty).ToString("0.##");
+            string cleanliness = room == null ? "—" : room.GetStat(RoomStatDefOf.Cleanliness).ToString("0.##");
+            text += "MX_QH_LotusPondBeauty".Translate(beauty, cleanliness);
+            text += "\n" + "MX_QH_LotusPondStillnessBonus".Translate((StillnessFactorFor(room) - 1f).ToStringPercentSigned());
+            if (ModsConfig.IdeologyActive)
+            {
+                RitualOutcomeComp_RoomStat beautyComp = MX_QHDefOf.MX_QH_QixiRitualPattern.ritualOutcomeEffect.comps
+                    .OfType<RitualOutcomeComp_RoomStat>()
+                    .Single(comp => comp.statDef == RoomStatDefOf.Impressiveness);
+                float qualityBonus = beautyComp.GetQualityFactor(null, this, null, null, null).quality;
+                text += "\n" + "MX_QH_LotusPondRitualQualityBonus".Translate(qualityBonus.ToStringPercentSigned());
+            }
+
+            return text;
+        }
     }
 
     public class RoomRoleWorker_QingheLotusRainPavilion : RoomRoleWorker
@@ -66,6 +102,12 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
         {
             if (Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.LotusPondDesignUnlocked == true)
             {
+                if (map.listerBuildings.AllBuildingsColonistOfDef(MX_QHDefOf.MX_QH_LotusPond)
+                    .Any(building => building != thingToIgnore))
+                {
+                    return "MX_QH_LotusPondOnlyOne".Translate();
+                }
+
                 return true;
             }
 

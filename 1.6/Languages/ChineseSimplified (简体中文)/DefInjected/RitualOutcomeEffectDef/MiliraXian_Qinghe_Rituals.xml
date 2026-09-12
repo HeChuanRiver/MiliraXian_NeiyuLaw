@@ -5,6 +5,7 @@
   <MX_QH_QixiOutcome.comps.2.label>参与者数量</MX_QH_QixiOutcome.comps.2.label>
   <MX_QH_QixiOutcome.comps.3.label>在荷池旁开始</MX_QH_QixiOutcome.comps.3.label>
   <MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>一座荷池</MX_QH_QixiOutcome.comps.3.expectedThingLabelTip>
+  <MX_QH_QixiOutcome.comps.4.label>荷池印象</MX_QH_QixiOutcome.comps.4.label>
   <MX_QH_QixiOutcome.outcomeChances.0.label>糟糕</MX_QH_QixiOutcome.outcomeChances.0.label>
   <MX_QH_QixiOutcome.outcomeChances.0.description>{0}十分糟糕。祈愿散落在尴尬的沉默里。</MX_QH_QixiOutcome.outcomeChances.0.description>
   <MX_QH_QixiOutcome.outcomeChances.1.label>乏味</MX_QH_QixiOutcome.outcomeChances.1.label>

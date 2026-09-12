@@ -35,7 +35,9 @@ namespace MiliraXian.Characters.QingHe
             for (int index = 0; index < quests.Count; index++)
             {
                 Quest quest = quests[index];
-                if (quest?.root == MX_QHDefOf.MX_QH_FlowerCourtQuestScript && QuestBlocksNewOffer(quest))
+                if ((quest.root == MX_QHDefOf.MX_QH_FlowerCourtQuestScript
+                    || quest.root == MX_QHDefOf.MX_QH_FlowerCourtStartQuestScript)
+                    && QuestBlocksNewOffer(quest))
                 {
                     return true;
                 }
@@ -44,17 +46,17 @@ namespace MiliraXian.Characters.QingHe
             return false;
         }
 
-        public static bool PlayerHasQinghe()
+        public static Pawn FindPlayerQinghe()
         {
             foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
             {
                 if (pawn != null && !pawn.Dead && pawn.Faction == Faction.OfPlayer && MX_QHCharacterUtility.IsQinghe(pawn))
                 {
-                    return true;
+                    return pawn;
                 }
             }
 
-            return false;
+            return null;
         }
 
         public static bool PlayerHasNeiyu()
@@ -76,12 +78,6 @@ namespace MiliraXian.Characters.QingHe
             return scenarioDef?.scenario != null && Find.Scenario == scenarioDef.scenario;
         }
 
-        public static bool IsLotusPondBuildSignal(Signal signal)
-        {
-            Frame frame = signal.args.GetArg<Frame>("SUBJECT");
-            return frame?.BuildDef == MX_QHDefOf.MX_QH_LotusPond;
-        }
-
         public static Building FindLotusPond(Map map)
         {
             if (map == null || MX_QHDefOf.MX_QH_LotusPond == null)
@@ -98,12 +94,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             return null;
-        }
-
-        public static bool LotusPavilionReady(Building lotusPond)
-        {
-            Room room = lotusPond?.GetRoom();
-            return room != null && room.GetStat(RoomStatDefOf.Impressiveness) >= RequiredImpressiveness;
         }
 
         public static Pawn GenerateQinghePawn()
@@ -179,6 +169,8 @@ namespace MiliraXian.Characters.QingHe
 
     public class QuestNode_Root_QingheFlowerCourt_AvailableQuest : QuestNode
     {
+        public bool qingheStart;
+
         protected override void RunInt()
         {
             Quest quest = QuestGen.quest;
@@ -193,17 +185,14 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            slate.Set("playerFaction", Faction.OfPlayer);
             quest.AcceptanceRequirementNotSpace(map.Parent);
 
-            bool qingheStart = slate.Get("qingheStart", defaultValue: false);
-            string builtBuildingSignal = QuestGenUtility.HardcodedSignalWithQuestID("playerFaction.BuiltBuilding");
             quest.AddPart(new QuestPart_QingheFlowerCourt
             {
                 inSignalEnable = quest.InitiateSignal,
-                builtBuildingSignal = builtBuildingSignal,
                 mapParent = map.Parent,
-                qingheStart = qingheStart
+                qingheStart = qingheStart,
+                qinghe = qingheStart ? MX_QHQuestUtility.FindPlayerQinghe() : null
             });
         }
 
@@ -222,12 +211,11 @@ namespace MiliraXian.Characters.QingHe
     {
         private const int CheckInterval = 250;
 
-        public string builtBuildingSignal;
         public MapParent mapParent;
         public bool qingheStart;
-        private bool lotusPondBuilt;
-        private bool qingheArrived;
-        private bool secondStageMessageSent;
+        public Pawn qinghe;
+        private Quest pavilionQuest;
+        private Quest masteryQuest;
         private int nextCheckTick = -1;
 
         public override IEnumerable<GlobalTargetInfo> QuestLookTargets
@@ -239,7 +227,7 @@ namespace MiliraXian.Characters.QingHe
                     yield return target;
                 }
 
-                Map map = mapParent?.Map ?? Find.AnyPlayerHomeMap;
+                Map map = mapParent?.Map;
                 Building lotusPond = MX_QHQuestUtility.FindLotusPond(map);
                 if (lotusPond != null)
                 {
@@ -252,31 +240,15 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        public override void PreQuestAccept()
+        protected override void Enable(SignalArgs receivedArgs)
         {
-            base.PreQuestAccept();
-            Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.UnlockLotusPondDesign();
-        }
-
-        protected override void ProcessQuestSignal(Signal signal)
-        {
-            base.ProcessQuestSignal(signal);
-            if (signal.tag == builtBuildingSignal && MX_QHQuestUtility.IsLotusPondBuildSignal(signal))
-            {
-                lotusPondBuilt = true;
-                nextCheckTick = -1;
-                Messages.Message("MX_QH_FlowerCourtLotusPondBuiltMessage".Translate(), MessageTypeDefOf.PositiveEvent, historical: false);
-            }
+            base.Enable(receivedArgs);
+            Current.Game.GetComponent<GameComponent_QingheFlowerCourtQuest>().UnlockLotusPondDesign();
         }
 
         public override void QuestPartTick()
         {
             base.QuestPartTick();
-            if (!lotusPondBuilt || Find.TickManager == null)
-            {
-                return;
-            }
-
             int currentTick = Find.TickManager.TicksGame;
             if (nextCheckTick >= 0 && currentTick < nextCheckTick)
             {
@@ -284,74 +256,58 @@ namespace MiliraXian.Characters.QingHe
             }
 
             nextCheckTick = currentTick + CheckInterval;
-            Map map = mapParent?.Map ?? Find.AnyPlayerHomeMap;
+            Map map = mapParent?.Map;
+            if (map == null || (qingheStart && (qinghe == null || qinghe.Dead || qinghe.Destroyed)))
+            {
+                quest.End(QuestEndOutcome.Fail);
+                return;
+            }
+
             Building lotusPond = MX_QHQuestUtility.FindLotusPond(map);
             if (lotusPond == null)
             {
                 return;
             }
 
-            if (!qingheStart && !qingheArrived)
+            if (!qingheStart && qinghe == null)
             {
-                if (!MX_QHQuestUtility.TrySpawnQinghe(map, out Pawn pawn))
+                if (!MX_QHQuestUtility.TrySpawnQinghe(map, out qinghe))
                 {
                     return;
                 }
 
-                qingheArrived = true;
                 Find.LetterStack.ReceiveLetter(
                     "MX_QH_FlowerCourtQingheArrivedLetterLabel".Translate(),
                     "MX_QH_FlowerCourtQingheArrivedLetterText".Translate(),
                     LetterDefOf.PositiveEvent,
-                    pawn);
-                SendSecondStageMessage(lotusPond);
-                return;
+                    qinghe);
             }
 
-            if (!MX_QHQuestUtility.LotusPavilionReady(lotusPond))
-            {
-                SendSecondStageMessage(lotusPond);
-                return;
-            }
-
-            CompleteFlowerCourt(lotusPond);
+            pavilionQuest ??= GenerateGuide(MX_QHDefOf.MX_QH_LotusPavilionQuestScript);
+            masteryQuest ??= GenerateGuide(MX_QHDefOf.MX_QH_MasteryGuideQuestScript);
+            Current.Game.GetComponent<GameComponent_QingheFlowerCourtQuest>().MarkCompleted();
+            quest.End(QuestEndOutcome.Success);
         }
 
-        private void SendSecondStageMessage(Building lotusPond)
+        private Quest GenerateGuide(QuestScriptDef questDef)
         {
-            if (secondStageMessageSent)
-            {
-                return;
-            }
-
-            secondStageMessageSent = true;
-            Find.LetterStack.ReceiveLetter(
-                "MX_QH_FlowerCourtSecondStageLetterLabel".Translate(),
-                "MX_QH_FlowerCourtSecondStageLetterText".Translate(),
-                LetterDefOf.NeutralEvent,
-                lotusPond);
-        }
-
-        private void CompleteFlowerCourt(Building lotusPond)
-        {
-            Find.LetterStack.ReceiveLetter(
-                "MX_QH_FlowerCourtCompletedLetterLabel".Translate(),
-                "MX_QH_FlowerCourtCompletedLetterText".Translate(),
-                LetterDefOf.PositiveEvent,
-                lotusPond);
-            Current.Game?.GetComponent<GameComponent_QingheFlowerCourtQuest>()?.MarkCompleted();
-            quest.End(QuestEndOutcome.Success, sendLetter: false, playSound: true);
+            Slate slate = new();
+            slate.Set("map", mapParent.Map);
+            slate.Set("qinghe", qinghe);
+            Quest child = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
+            child.parent = quest;
+            QuestUtility.SendLetterQuestAvailable(child);
+            return child;
         }
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref builtBuildingSignal, "builtBuildingSignal");
             Scribe_References.Look(ref mapParent, "mapParent");
             Scribe_Values.Look(ref qingheStart, "qingheStart", defaultValue: false);
-            Scribe_Values.Look(ref lotusPondBuilt, "lotusPondBuilt", defaultValue: false);
-            Scribe_Values.Look(ref qingheArrived, "qingheArrived", defaultValue: false);
-            Scribe_Values.Look(ref secondStageMessageSent, "secondStageMessageSent", defaultValue: false);
+            Scribe_References.Look(ref qinghe, "qinghe");
+            Scribe_References.Look(ref pavilionQuest, "pavilionQuest");
+            Scribe_References.Look(ref masteryQuest, "masteryQuest");
             Scribe_Values.Look(ref nextCheckTick, "nextCheckTick", -1);
         }
     }
@@ -391,7 +347,6 @@ namespace MiliraXian.Characters.QingHe
             Slate slate = new();
             slate.Set("points", parms.points);
             slate.Set("map", map);
-            slate.Set("qingheStart", false);
 
             Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
             if (quest == null)
@@ -470,7 +425,7 @@ namespace MiliraXian.Characters.QingHe
                 return false;
             }
 
-            if (MX_QHQuestUtility.PlayerHasQinghe() || MX_QHQuestUtility.QuestExists())
+            if (MX_QHQuestUtility.FindPlayerQinghe() != null || MX_QHQuestUtility.QuestExists())
             {
                 return false;
             }
@@ -542,34 +497,14 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            QuestScriptDef questDef = MX_QHDefOf.MX_QH_FlowerCourtQuestScript;
-            if (questDef == null)
-            {
-                Log.Error("[MiliraXian.Characters.QingHe] Missing Qinghe Flower Court QuestScriptDef.");
-                qingheStartQuestAccepted = true;
-                return;
-            }
-
             Slate slate = new();
             slate.Set("points", StorytellerUtility.DefaultThreatPointsNow(map));
             slate.Set("map", map);
-            slate.Set("qingheStart", true);
-
-            Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef, slate);
-            if (quest == null)
-            {
-                return;
-            }
-
-            quest.Accept(null);
+            Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(MX_QHDefOf.MX_QH_FlowerCourtStartQuestScript, slate);
             qingheStartQuestAccepted = true;
             questOffered = true;
             questMap = map;
-            Find.LetterStack.ReceiveLetter(
-                "MX_QH_FlowerCourtAutoAcceptedLetterLabel".Translate(),
-                "MX_QH_FlowerCourtAutoAcceptedLetterText".Translate(),
-                LetterDefOf.NeutralEvent,
-                map.Parent);
+            QuestUtility.SendLetterQuestAvailable(quest);
         }
 
         private static Map ResolveBestHomeMap(Map preferred)

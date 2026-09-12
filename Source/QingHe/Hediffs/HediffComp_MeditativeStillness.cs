@@ -70,9 +70,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     public class HediffComp_MeditativeStillness : HediffComp_PawnSpecialResource
     {
         private const int GainIntervalTicks = 300;
+        private const int NotificationIntervalTicks = 1800;
 
         private float pendingGain;
         private int gainIntervalTicks;
+        private float pendingNotificationGain;
+        private int notificationIntervalTicks;
 
         public HediffCompProperties_MeditativeStillness PropsStillness => (HediffCompProperties_MeditativeStillness)props;
 
@@ -83,6 +86,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompExposeData();
             Scribe_Values.Look(ref pendingGain, "pendingGain", 0f);
             Scribe_Values.Look(ref gainIntervalTicks, "gainIntervalTicks", 0);
+            Scribe_Values.Look(ref pendingNotificationGain, "pendingNotificationGain", 0f);
+            Scribe_Values.Look(ref notificationIntervalTicks, "notificationIntervalTicks", 0);
         }
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
@@ -97,6 +102,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             {
                 pendingGain = 0f;
                 gainIntervalTicks = 0;
+                pendingNotificationGain = 0f;
+                notificationIntervalTicks = 0;
                 return;
             }
 
@@ -105,6 +112,20 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             {
                 gainIntervalTicks = 0;
                 FlushPendingGain();
+            }
+
+            notificationIntervalTicks++;
+            if (notificationIntervalTicks >= NotificationIntervalTicks)
+            {
+                notificationIntervalTicks = 0;
+                if (pendingNotificationGain > 0f && Pawn.Spawned)
+                {
+                    float percent = pendingNotificationGain / MaxValue * 100f;
+                    Color textColor = Color.Lerp(parent.def.defaultLabelColor, Color.black, 0.3f);
+                    MoteMaker.ThrowText(Pawn.DrawPos, Pawn.Map, $"静思 +{percent:0.##}%", textColor, 1.1f);
+                }
+
+                pendingNotificationGain = 0f;
             }
         }
 
@@ -136,18 +157,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             float oldValue = CurrentValue;
             AddValue(amount);
             float applied = CurrentValue - oldValue;
-            if (applied > 0f && Pawn?.Spawned == true && Pawn.Map != null)
-            {
-                float percent = MaxValue <= 0f ? 0f : applied / MaxValue * 100f;
-                Color hediffColor = parent?.def?.defaultLabelColor ?? BarColor;
-                Color textColor = Color.Lerp(hediffColor, Color.black, 0.3f);
-                MoteMaker.ThrowText(
-                    Pawn.DrawPos,
-                    Pawn.Map,
-                    $"静思 +{percent:0.##}%",
-                    textColor,
-                    1.1f);
-            }
+            pendingNotificationGain += Mathf.Max(0f, applied);
 
             if (!wasReady && LongNightReady && Pawn != null)
             {
