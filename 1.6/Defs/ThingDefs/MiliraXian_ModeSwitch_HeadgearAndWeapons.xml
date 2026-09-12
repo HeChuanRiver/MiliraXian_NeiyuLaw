@@ -4,7 +4,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Neiyu_Form_Flower</defName>
         <label>霓羽·花形</label>
-        <description>霓羽常持于手中的花形兵装。看似柔和轻巧，实则是她投影于此界的三种兵装之一；花瓣间流转的辉光并不张扬，却始终带着温柔而稳定的力量。</description>
+        <description>霓羽常持于手中的花形兵装，以花瓣辉光施展赐福与毒庭。近战威力较低，可切换为剑或弓形态。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
         
         <graphicData>
@@ -52,7 +52,8 @@
                 <capacities>
                     <li>Blunt</li>
                 </capacities>
-                <power>6</power>
+                <power>10</power>
+                <armorPenetration>0.25</armorPenetration>
                 <cooldownTime>2.4</cooldownTime>
             </li>
         </tools>
@@ -90,7 +91,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Neiyu_Form_Weapon</defName>
         <label>霓羽·剑形</label>
-        <description>由花形转化而来的剑形兵装。锋芒凝练，气势凌厉，是霓羽在正面斩击与高速突进时最具压迫感的一种姿态。</description>
+        <description>由花形转化而来的剑形兵装，擅长高速斩击与穿透重甲。可切换为花或弓形态。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -135,7 +136,7 @@
                     <li>Stab</li>
                 </capacities>
                 <power>64</power>
-                <armorPenetration>0.28</armorPenetration>
+                <armorPenetration>1.20</armorPenetration>
                 <cooldownTime>1.8</cooldownTime>
             </li>
         </tools>
@@ -200,7 +201,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Neiyu_Form_Bow</defName>
         <label>霓羽·弓形</label>
-        <description>Neiyu's bow form. The main arrow splits into 16 homing shards. Can switch to flower or sword form.</description>
+        <description>霓羽的弓形兵装。主矢分裂为16支具有穿甲能力的追踪碎矢，可切换为花或剑形态。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>        <!--科技时代-->
@@ -295,6 +296,7 @@
         <projectile>
             <damageDef>Arrow</damageDef>
             <damageAmountBase>36</damageAmountBase>
+            <armorPenetrationBase>0.90</armorPenetrationBase>
             <speed>45</speed>
             <arcHeightFactor>0.10</arcHeightFactor>
         </projectile>
@@ -329,6 +331,7 @@
         <projectile>
             <damageDef>Arrow</damageDef>
             <damageAmountBase>12</damageAmountBase>
+            <armorPenetrationBase>0.45</armorPenetrationBase>
             <speed>54</speed>
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>
@@ -376,6 +379,7 @@
         <projectile>
             <damageDef>Arrow</damageDef>
             <damageAmountBase>30</damageAmountBase>
+            <armorPenetrationBase>0.75</armorPenetrationBase>
             <speed>56</speed>
             <arcHeightFactor>0.20</arcHeightFactor>
         </projectile>

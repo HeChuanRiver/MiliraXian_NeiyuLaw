@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MiliraXian_NeiyuInner.label>Neiyu: Inner Layer</MiliraXian_NeiyuInner.label>
-  <MiliraXian_NeiyuInner.description>A close-fitting inner layer worn under Neiyu's everyday attire. It is understated, but it completes the outfit's structure and colors while preserving enough lightness for movement.</MiliraXian_NeiyuInner.description>
+  <MiliraXian_NeiyuInner.description>Neiyu's supple innerwear provides a second protective layer over her torso, neck and upper limbs. Reduces incoming damage and melee cooldown, and improves work speed. Never breaks.</MiliraXian_NeiyuInner.description>
 
   <MX_Neiyu_Form_Flower.comps.0.commandLabel>Switch form</MX_Neiyu_Form_Flower.comps.0.commandLabel>
   <MX_Neiyu_Form_Flower.comps.0.commandDesc>Click to switch.</MX_Neiyu_Form_Flower.comps.0.commandDesc>

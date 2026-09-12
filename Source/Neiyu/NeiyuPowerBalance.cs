@@ -61,6 +61,8 @@ namespace MiliraXian.Characters.Neiyu
         private static readonly List<IDefTuning> DefTunings = new List<IDefTuning>();
         private static readonly FieldInfo ProjectileDamageAmountBaseField =
             AccessTools.Field(typeof(ProjectileProperties), "damageAmountBase");
+        private static readonly FieldInfo ProjectileArmorPenetrationBaseField =
+            AccessTools.Field(typeof(ProjectileProperties), "armorPenetrationBase");
         private static CharacterPowerLevel currentLevel = CharacterPowerLevel.Original;
         private static bool defsInitialized;
 
@@ -190,6 +192,7 @@ namespace MiliraXian.Characters.Neiyu
             ThingDef flower = ThingDefNamed("MX_Neiyu_Form_Flower");
             Tool flowerTool = FirstTool(flower);
             AddScaled(flowerTool, () => flowerTool.power, value => flowerTool.power = value, ConservativePowerTuning.Damage, 3f);
+            AddScaled(flowerTool, () => flowerTool.armorPenetration, value => flowerTool.armorPenetration = value, ConservativePowerTuning.Defense, 0.045f);
             AddScaled(flowerTool, () => flowerTool.cooldownTime, value => flowerTool.cooldownTime = value, 1f, 3f);
             AddStatBase(flower, StatDefOf.MeleeWeapon_CooldownMultiplier, 1f, 3.5f);
 
@@ -217,6 +220,9 @@ namespace MiliraXian.Characters.Neiyu
 
             ThingDef barrageArrow = ThingDefNamed("MX_Bullet_BarrageArrow");
             AddProjectileDamage(barrageArrow?.projectile, 6);
+            AddEquipmentDescription(flower);
+            AddEquipmentDescription(sword);
+            AddEquipmentDescription(bow);
         }
 
         private static void BuildAbilityTunings()
@@ -289,6 +295,8 @@ namespace MiliraXian.Characters.Neiyu
             AddEquippedOffset(outerwear, StatDefOf.CarryingCapacity, ConservativePowerTuning.Bonus, 0f);
             AddEquippedOffset(outerwear, StatDefOf.MeleeDodgeChance, ConservativePowerTuning.Bonus, 0f);
             AddEquippedOffset(outerwear, StatDefOf.MoveSpeed, ConservativePowerTuning.Bonus, 0f);
+            AddEquippedOffset(outerwear, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 0f);
+            AddEquipmentDescription(outerwear);
 
             ThingDef innerwear = ThingDefNamed("MiliraXian_NeiyuInner");
             AddStatBase(innerwear, StatDefOf.ArmorRating_Sharp, ConservativePowerTuning.Defense, 0f);
@@ -296,9 +304,19 @@ namespace MiliraXian.Characters.Neiyu
             AddStatBase(innerwear, StatDefOf.ArmorRating_Heat, ConservativePowerTuning.Defense, 0f);
             AddStatBase(innerwear, StatDefOf.Insulation_Cold, 1f, 2f);
             AddStatBase(innerwear, StatDefOf.Insulation_Heat, 1f, 2f);
+            AddEquippedOffset(innerwear, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 0f);
+            AddEquippedOffset(innerwear, StatDefOf.MeleeCooldownFactor, ConservativePowerTuning.Bonus, 0f);
+            AddEquippedOffset(innerwear, StatDefOf.WorkSpeedGlobal, ConservativePowerTuning.Bonus, 0f);
+            AddEquipmentDescription(innerwear);
 
             ThingDef earrings = ThingDefNamed("MX_Apparel_EarringsZhenzhu");
+            AddStatBase(earrings, StatDefOf.ArmorRating_Sharp, ConservativePowerTuning.Defense, 0f);
+            AddStatBase(earrings, StatDefOf.ArmorRating_Blunt, ConservativePowerTuning.Defense, 0f);
+            AddStatBase(earrings, StatDefOf.ArmorRating_Heat, ConservativePowerTuning.Defense, 0f);
             AddEquippedOffset(earrings, StatDefOf.ImmunityGainSpeed, ConservativePowerTuning.Bonus, 0f);
+            AddEquippedOffset(earrings, StatDefOf.AimingDelayFactor, ConservativePowerTuning.Bonus, 0f);
+            AddEquippedOffset(earrings, StatDefOf.RangedCooldownFactor, ConservativePowerTuning.Bonus, 0f);
+            AddEquipmentDescription(earrings);
 
             HediffDef blessing = HediffDefNamed("MX_Neiyu_FlowerBlessed");
             AddHediffFactor(blessing, StatDefOf.MoveSpeed, ConservativePowerTuning.Bonus, 1f);
@@ -357,6 +375,13 @@ namespace MiliraXian.Characters.Neiyu
             AddStatModifier(def?.statBases, stat, balanced, decorative);
         }
 
+        private static void AddEquipmentDescription(ThingDef def)
+        {
+            if (def == null) return;
+            Add(def, () => def.description, value => def.description = value,
+                def.description, "MX_Power_EquipmentInactive".Translate().ToString());
+        }
+
         private static void AddEquippedOffset(ThingDef def, StatDef stat, float balanced, float decorative)
         {
             AddStatModifier(def?.equippedStatOffsets, stat, balanced, decorative);
@@ -394,7 +419,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private static void AddProjectileDamage(ProjectileProperties projectile, int decorative)
         {
-            if (projectile == null || ProjectileDamageAmountBaseField == null)
+            if (projectile == null || ProjectileDamageAmountBaseField == null || ProjectileArmorPenetrationBaseField == null)
             {
                 return;
             }
@@ -405,6 +430,13 @@ namespace MiliraXian.Characters.Neiyu
                 value => ProjectileDamageAmountBaseField.SetValue(projectile, value),
                 ConservativePowerTuning.Damage,
                 decorative);
+            // Explicit penetration must follow the selected tier just like damage.
+            AddScaled(
+                projectile,
+                () => (float)ProjectileArmorPenetrationBaseField.GetValue(projectile),
+                value => ProjectileArmorPenetrationBaseField.SetValue(projectile, value),
+                ConservativePowerTuning.Defense,
+                decorative * 0.015f);
         }
 
         private static void AddScaled<TTarget, TValue>(TTarget target, Func<TValue> getter, Action<TValue> setter, float scale, TValue decorative, float neutral = 0f)
