@@ -497,6 +497,17 @@ namespace MiliraXian.Characters.Neiyu
                 yield break;
             }
 
+            if (NeiyuEquipmentUtility.IsNeiyu(__instance) && !__instance.Dead)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = Cultivation.CultivationText.Title,
+                    defaultDesc = Cultivation.CultivationText.Get("OpenDescription", "查看修行分支、所需材料与当前力量。"),
+                    icon = TexCommand.DesirePower,
+                    action = () => Find.WindowStack.Add(new Cultivation.Dialog_NeiyuCultivation(__instance))
+                };
+            }
+
             if (!Comp_ModeSwitchWeapon.TryGetSwitchContext(__instance, out Comp_ModeSwitchWeapon.SwitchContext context))
             {
                 yield break;

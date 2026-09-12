@@ -395,7 +395,7 @@ namespace MiliraXian.Characters.Neiyu
             task.aimCell = aimCell;
             task.fireDirection = GetFireDirection(caster, aimCell);
             task.projectileDef = props.projectileDef;
-            task.totalShots = Mathf.Max(1, props.shotCount);
+            task.totalShots = Cultivation.CultivationPower.BarrageCount(caster, props.shotCount);
             task.remainingShots = task.totalShots;
             task.firedShots = 0;
             task.spreadSeed = Rand.Int;

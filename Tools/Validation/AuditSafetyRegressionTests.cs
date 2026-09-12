@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Biography;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using Verse;
@@ -174,6 +175,7 @@ internal static class AuditSafetyRegressionTests
         typeof(MXNeiyuShieldUtility).GetField("shieldHediffDef", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, shieldDef);
         pawn.health.hediffSet = new HediffSet(pawn);
         pawn.health.hediffSet.hediffs.Add(hediff);
+        GiveFullNeiyuShieldCultivation(pawn);
         Set(shield, "stage", 3);
         Set(shield, "phase3StoredDamage", 300f);
         Set(shield, "phase3AbsorbUntilTick", 100);
@@ -536,6 +538,7 @@ internal static class AuditSafetyRegressionTests
             parent = new HediffWithComps { pawn = BarePawn() },
             props = new HediffCompProperties_MXNeiyuCountShield()
         };
+        GiveFullNeiyuShieldCultivation(shield.Pawn);
         Set(shield.Pawn.health, "healthState", PawnHealthState.Mobile);
         Set(shield, "stage", 2);
         Set(shield, "phase2Charges", 108);
@@ -560,6 +563,7 @@ internal static class AuditSafetyRegressionTests
         MethodInfo normalize = shield.GetType().GetMethod("NormalizeForPowerLevelChange", BindingFlags.NonPublic | BindingFlags.Instance);
         Set(shield, "phase2Charges", 1000);
         Set(shield, "weakUntilTick", 300000);
+        Set(shield, "observedPowerLevel", (CharacterPowerLevel)(-1));
         normalize.Invoke(shield, new object[] { 200 });
         Check(shield.Phase2Charges == 24 && shield.WeakUntilTick == 9200,
             "legacy weak charges and duration are clipped on first observation");
@@ -608,6 +612,20 @@ internal static class AuditSafetyRegressionTests
             }
         }
         finally { setLevel.Invoke(null, new object[] { CharacterPowerLevel.Original }); }
+    }
+
+    private static void GiveFullNeiyuShieldCultivation(Pawn pawn)
+    {
+        // Existing shield tests exercise the unlocked mechanic. Rank-zero migration
+        // and progressive ceilings have a separate production-DLL fixture.
+        typeof(DefOfHelper).GetField("bindingNow", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, true);
+        if (BiographyDefOf.MX_BiographyTracker == null)
+            BiographyDefOf.MX_BiographyTracker = new HediffDef { defName = "MX_BiographyTracker" };
+        pawn.kindDef = new PawnKindDef { defName = "MiliraXian_Neiyu" };
+        if (pawn.health.hediffSet == null) pawn.health.hediffSet = new HediffSet(pawn);
+        var tracker = new Hediff_BiographyTracker { pawn = pawn, def = BiographyDefOf.MX_BiographyTracker };
+        tracker.SetProgress("cultivation_halo", 3);
+        pawn.health.hediffSet.hediffs.Add(tracker);
     }
 
     private static void TestMingyuanDamageAndRecoveryBudget()

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using Verse;
 
@@ -6,70 +8,29 @@ namespace MiliraXian.Characters.Biography
 {
     public sealed class GameComponent_BiographyFramework : GameComponent
     {
-        private const int EvaluationIntervalTicks = 2500;
-
-        private int nextEvaluationTick;
-
         public GameComponent_BiographyFramework(Game game)
         {
         }
 
         public override void StartedNewGame()
         {
-            EvaluateAllActivePawns(sendNotifications: false);
-            ScheduleNextEvaluation();
+            BiographyFrameworkUtility.ClearCache();
         }
 
         public override void LoadedGame()
         {
-            EvaluateAllActivePawns(sendNotifications: false);
-            ScheduleNextEvaluation();
+            BiographyFrameworkUtility.ClearCache();
         }
 
-        public override void GameComponentTick()
-        {
-            if (!BiographyDatabase.HasAnyConfigurations || Find.TickManager == null)
-            {
-                return;
-            }
-
-            int currentTick = Find.TickManager.TicksGame;
-            if (currentTick < nextEvaluationTick)
-            {
-                return;
-            }
-
-            nextEvaluationTick = currentTick + EvaluationIntervalTicks;
-            EvaluateAllActivePawns(sendNotifications: true);
-        }
-
-        private static void EvaluateAllActivePawns(bool sendNotifications)
-        {
-            if (!BiographyDatabase.HasAnyConfigurations)
-            {
-                return;
-            }
-
-            List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive;
-            for (int i = 0; i < pawns.Count; i++)
-            {
-                Pawn pawn = pawns[i];
-                if (pawn != null && BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension))
-                {
-                    Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
-                    tracker?.EvaluateUnlocks(extension, sendNotifications);
-                }
-            }
-        }
-
-        private void ScheduleNextEvaluation()
-        {
-            nextEvaluationTick = (Find.TickManager?.TicksGame ?? 0) + EvaluationIntervalTicks;
-        }
+        // Compatibility shell. Cultivation evaluates conditions on demand; the former
+        // periodic scan of every map and caravan is no longer needed.
     }
 
     public static class BiographyFrameworkUtility
     {
+        private static ConditionalWeakTable<Pawn, Hediff_BiographyTracker> trackers = new();
+        internal static void ClearCache() => trackers = new();
+        internal static void Invalidate(Pawn pawn) { if (pawn != null) trackers.Remove(pawn); }
         public static Hediff_BiographyTracker GetTracker(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null || BiographyDefOf.MX_BiographyTracker == null)
@@ -77,13 +38,16 @@ namespace MiliraXian.Characters.Biography
                 return null;
             }
 
-            return pawn.health.hediffSet.GetFirstHediffOfDef(BiographyDefOf.MX_BiographyTracker)
-                as Hediff_BiographyTracker;
+            if (trackers.TryGetValue(pawn, out var cached)) return cached;
+            var tracker = pawn.health.hediffSet.GetFirstHediffOfDef(BiographyDefOf.MX_BiographyTracker) as Hediff_BiographyTracker;
+            if (tracker != null) trackers.Add(pawn, tracker);
+            return tracker;
         }
 
         public static Hediff_BiographyTracker GetOrCreateTracker(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || !BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension _))
+            if (pawn?.health?.hediffSet == null || (!NeiyuEquipmentUtility.IsNeiyu(pawn)
+                && !BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension _)))
             {
                 return null;
             }

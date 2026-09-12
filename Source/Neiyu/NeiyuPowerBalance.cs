@@ -5,6 +5,7 @@ using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Neiyu.Cultivation;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -191,6 +192,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             ThingDef flower = ThingDefNamed("MX_Neiyu_Form_Flower");
             Tool flowerTool = FirstTool(flower);
+            CultivationPower.RegisterTool(flowerTool, 3f, 0.045f);
             AddScaled(flowerTool, () => flowerTool.power, value => flowerTool.power = value, ConservativePowerTuning.Damage, 3f);
             AddScaled(flowerTool, () => flowerTool.armorPenetration, value => flowerTool.armorPenetration = value, ConservativePowerTuning.Defense, 0.045f);
             AddScaled(flowerTool, () => flowerTool.cooldownTime, value => flowerTool.cooldownTime = value, 1f, 3f);
@@ -198,6 +200,7 @@ namespace MiliraXian.Characters.Neiyu
 
             ThingDef sword = ThingDefNamed("MX_Neiyu_Form_Weapon");
             Tool swordTool = FirstTool(sword);
+            CultivationPower.RegisterTool(swordTool, 10f, 0.12f);
             AddScaled(swordTool, () => swordTool.power, value => swordTool.power = value, ConservativePowerTuning.Damage, 10f);
             AddScaled(swordTool, () => swordTool.armorPenetration, value => swordTool.armorPenetration = value, ConservativePowerTuning.Defense, 0.12f);
             AddScaled(swordTool, () => swordTool.cooldownTime, value => swordTool.cooldownTime = value, 1f, 2.4f);
@@ -373,6 +376,7 @@ namespace MiliraXian.Characters.Neiyu
         private static void AddStatBase(ThingDef def, StatDef stat, float balanced, float decorative)
         {
             AddStatModifier(def?.statBases, stat, balanced, decorative);
+            CultivationPower.RegisterStat(def, stat, decorative, offset: false);
         }
 
         private static void AddEquipmentDescription(ThingDef def)
@@ -385,6 +389,7 @@ namespace MiliraXian.Characters.Neiyu
         private static void AddEquippedOffset(ThingDef def, StatDef stat, float balanced, float decorative)
         {
             AddStatModifier(def?.equippedStatOffsets, stat, balanced, decorative);
+            CultivationPower.RegisterStat(def, stat, decorative, offset: true);
         }
 
         private static void AddHediffFactor(HediffDef def, StatDef stat, float balanced, float decorative)
@@ -419,6 +424,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private static void AddProjectileDamage(ProjectileProperties projectile, int decorative)
         {
+            CultivationPower.RegisterProjectile(projectile, decorative, decorative * 0.015f);
             if (projectile == null || ProjectileDamageAmountBaseField == null || ProjectileArmorPenetrationBaseField == null)
             {
                 return;

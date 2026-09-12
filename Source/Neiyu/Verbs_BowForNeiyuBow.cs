@@ -102,7 +102,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             forward = forward.normalized;
-            int count = Mathf.Max(1, ext?.splitCount ?? 6);
+            int count = Cultivation.CultivationPower.SplitCount(launcher as Pawn, ext?.splitCount ?? 6);
             Vector3 aimPoint = destination;
             if (intendedTarget.IsValid)
             {

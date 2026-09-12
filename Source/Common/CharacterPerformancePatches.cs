@@ -181,6 +181,7 @@ namespace MiliraXian.Characters
         private static void Postfix()
         {
             MXNeiyuShieldUtility.ClearCache();
+            Biography.BiographyFrameworkUtility.ClearCache();
             ZhaoliShieldLayerUtility.ClearCache();
             NeiyuSpecialPawnIntegration.ClearRuntimeState();
             NeiyuEarAnimationRuntime.Reset();

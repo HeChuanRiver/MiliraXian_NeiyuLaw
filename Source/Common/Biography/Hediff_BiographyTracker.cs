@@ -27,6 +27,12 @@ namespace MiliraXian.Characters.Biography
 
         public int Revision => revision;
 
+        public override void PostRemoved()
+        {
+            BiographyFrameworkUtility.Invalidate(pawn);
+            base.PostRemoved();
+        }
+
         public override void ExposeData()
         {
             base.ExposeData();

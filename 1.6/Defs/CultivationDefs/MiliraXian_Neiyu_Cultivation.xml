@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Wing1</defName>
+    <label>初羽</label><branch>Wing</branch><rank>1</rank>
+    <description>唤醒花、剑与弓的力量，提高武器伤害、穿透与近战出手速度。</description>
+    <story>羽毛掠过掌心时，霓羽仍记得第一次握住兵刃的重量。让力量停在刃上，比任它倾泻更难。</story>
+    <costs><Milira_Feather>12</Milira_Feather><Steel>60</Steel></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Wing2</defName>
+    <label>流光入刃</label><branch>Wing</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Wing1</prerequisite>
+    <description>进一步提高三种武器形态的威力。</description>
+    <story>她沿着刃脊拭去微光。收束后的锋芒，只在命中之时绽开。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>3</days></condition>
+    <costs><Milira_Feather>60</Milira_Feather><Plasteel>40</Plasteel></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Wing3</defName>
+    <label>羽律成锋</label><branch>Wing</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Wing2</prerequisite>
+    <description>完全释放三种武器形态的伤害、穿透与近战出手速度。</description>
+    <story>花、剑、弓在她手中依次浮现。形态不同，回应她的却始终是同一道法则。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>12</days></condition>
+    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Arrow1</defName>
+    <label>散羽</label><branch>Arrow</branch><rank>1</rank>
+    <description>增加普攻分裂箭与箭幕的弹丸数量。</description>
+    <story>一支箭离弦，数片羽光随之展开。霓羽开始分辨每一道细小的回声。</story>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>10</Jade></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Arrow2</defName>
+    <label>霁色成阵</label><branch>Arrow</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Arrow1</prerequisite>
+    <description>展开更多箭羽，扩大持续射击的规模。</description>
+    <story>雨停之后，细光横过天空。那些交错的轨迹渐渐有了秩序。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>3</days></condition>
+    <costs><Milira_Feather>60</Milira_Feather><Jade>30</Jade></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Arrow3</defName>
+    <label>百羽归弦</label><branch>Arrow</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Arrow2</prerequisite>
+    <description>完全展开普攻分裂箭与箭幕。</description>
+    <story>漫天羽光回到弦上，静得像从未离开。她终于能让每一片羽毛找到自己的去处。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>12</days></condition>
+    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Halo1</defName>
+    <label>微环</label><branch>Halo</branch><rank>1</rank>
+    <description>解锁首击防护与六层计数护盾。盾层耗尽后，需要等待恢复。</description>
+    <story>头顶的光环轻轻一颤。她把最先回应的那缕光，留在了身体之外。</story>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>10</Jade></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Halo2</defName>
+    <label>重环相护</label><branch>Halo</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Halo1</prerequisite>
+    <description>计数护盾增加至十八层。</description>
+    <story>薄薄的光层相继合拢。每次承受冲击，她都能听见它们在不同的地方鸣响。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>3</days></condition>
+    <costs><Milira_Feather>60</Milira_Feather><Plasteel>40</Plasteel></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Halo3</defName>
+    <label>霁光回响</label><branch>Halo</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Halo2</prerequisite>
+    <description>完全展开计数护盾，解锁三阶蓄伤与增益循环。循环结束后进入虚弱。</description>
+    <story>光环承住最后一次重击，随即向内收拢。霓羽抬起头，积蓄的微光沿羽翼流回刃尖。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>12</days></condition>
+    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Law1</defName>
+    <label>衣上微纹</label><branch>Law</branch><rank>1</rank>
+    <description>唤醒常服、内衬与耳饰中的法则，提高防护并恢复部分穿戴增益。</description>
+    <story>衣料上的纹路只有在光下才看得清。她顺着纹路，将散落的力量一寸寸接续。</story>
+    <costs><Milira_Feather>12</Milira_Feather><Cloth>60</Cloth></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Law2</defName>
+    <label>纹律共鸣</label><branch>Law</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Law1</prerequisite>
+    <description>进一步提高衣装防护、隔温与穿戴增益。</description>
+    <story>耳饰与衣摆同时泛起淡光。原本分散的纹路，开始随着她的呼吸起伏。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>3</days></condition>
+    <costs><Milira_Feather>60</Milira_Feather><Jade>30</Jade></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+    <defName>MX_Neiyu_Cultivation_Law3</defName>
+    <label>法衣归身</label><branch>Law</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Law2</prerequisite>
+    <description>完全释放常服、内衬与耳饰的防护、隔温和穿戴增益。</description>
+    <story>她收起羽翼，衣上的光也随之隐去。法则已经贴合身体，无须再向外宣示。</story>
+    <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>12</days></condition>
+    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
+  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+</Defs>
