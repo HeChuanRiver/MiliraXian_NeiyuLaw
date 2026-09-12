@@ -11,6 +11,9 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;
+        public static QuestScriptDef MX_QH_FlowerCourtStartQuestScript;
+        public static QuestScriptDef MX_QH_LotusPavilionQuestScript;
+        public static QuestScriptDef MX_QH_MasteryGuideQuestScript;
         public static ScenarioDef MXNL_QingheFlowerCourtStart;
 
         public static PawnKindDef MiliraXian_Qinghe;

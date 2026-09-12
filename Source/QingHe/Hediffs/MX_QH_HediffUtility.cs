@@ -1,6 +1,7 @@
 using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Things.Buildings;
 using UnityEngine;
 using Verse;
 
@@ -79,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float gain = stillness.PropsStillness.meditationGainPerDay / 60000f * ResolveLotusPondRoomStillnessFactor(lotusPond);
+            float gain = stillness.PropsStillness.meditationGainPerDay / 60000f * Building_LotusPond.StillnessFactorFor(lotusPond.GetRoom());
             stillness.AddStillness(gain);
         }
 
@@ -281,20 +282,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             return hediff;
-        }
-
-        private static float ResolveLotusPondRoomStillnessFactor(Building lotusPond)
-        {
-            Room room = lotusPond.GetRoom();
-            if (room == null)
-            {
-                return 1f;
-            }
-
-            float beauty = room.GetStat(RoomStatDefOf.Beauty);
-            float cleanliness = room.GetStat(RoomStatDefOf.Cleanliness);
-            return Mathf.Lerp(0.75f, 1.5f, Mathf.InverseLerp(-5f, 20f, beauty))
-                * Mathf.Lerp(0.75f, 1.25f, Mathf.InverseLerp(-2f, 1f, cleanliness));
         }
     }
 }

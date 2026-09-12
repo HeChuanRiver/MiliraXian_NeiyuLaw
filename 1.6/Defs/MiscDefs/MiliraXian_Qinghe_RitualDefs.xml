@@ -54,6 +54,16 @@
         <qualityOffset>0.2</qualityOffset>
         <expectedThingLabelTip>一座荷池</expectedThingLabelTip>
       </li>
+      <li Class="RitualOutcomeComp_RoomStat">
+        <statDef>Impressiveness</statDef>
+        <label>荷池印象</label>
+        <curve>
+          <points>
+            <li>(0, 0)</li>
+            <li>(100, 0.5)</li>
+          </points>
+        </curve>
+      </li>
     </comps>
     <outcomeChances>
       <li>
