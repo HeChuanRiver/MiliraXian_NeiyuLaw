@@ -25,7 +25,12 @@ namespace MiliraXian.Characters.Zhaoli
             p.ScaleStat(clothes, "CarryingCapacity", ConservativePowerTuning.Bonus, 0f, true);
             p.ScaleStat(clothes, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);
             p.ScaleStat(clothes, "MoveSpeed", ConservativePowerTuning.Bonus, 0f, true);
-            p.ScaleStat(Thing("MX_ZhaoliHood"), "MentalBreakThreshold", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(clothes, "IncomingDamageFactor", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(clothes, "MeleeDamageFactor", ConservativePowerTuning.Bonus, 0f, true);
+            var hood = Thing("MX_ZhaoliHood");
+            p.ScaleStat(hood, "MentalBreakThreshold", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(hood, "MeleeCooldownFactor", ConservativePowerTuning.Bonus, 0f, true);
+            p.ScaleStat(hood, "StaggerDurationFactor", ConservativePowerTuning.Bonus, 0f, true);
 
             p.Ability("MX_Zhaoli_Duanzhan", 12000, 5f);
             var slash = AbilityComp<CompProperties_AbilityDuanzhan>("MX_Zhaoli_Duanzhan");
@@ -86,8 +91,9 @@ namespace MiliraXian.Characters.Zhaoli
             p.Description(Hediff("MXZL_ZhaoliMinshenDamage"), "MX_Power_Zhaoli_Minshen");
             p.Description(Hediff("MXZL_ZhaoliMinghuo"), "MX_Power_Zhaoli_Minghuo");
             p.Description(Hediff("MXZL_ZhaoliShieldLayers"), "MX_Power_Zhaoli_Shield");
-            p.Description(clothes, "MX_Power_BalancedEquipment");
-            p.Description(Thing("MX_ZhaoliHood"), "MX_Power_BalancedEquipment");
+            foreach (ThingDef equipment in new[] { clothes, hood, Thing("MX_Zhaoli_DuanzhanBlade") })
+                p.Value(() => equipment.description, value => equipment.description = value,
+                    equipment.description, "MX_Power_EquipmentInactive".Translate().ToString());
             p.Apply();
         }
 

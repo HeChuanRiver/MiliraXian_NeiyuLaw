@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MiliraXian_NeiyuInner.label>霓羽·內襯</MiliraXian_NeiyuInner.label>
-  <MiliraXian_NeiyuInner.description>霓羽常服內部貼身穿著的一層內襯。它本身並不張揚，卻讓整套裝束在結構與色調上更加完整，也保留了足夠輕巧的活動性。</MiliraXian_NeiyuInner.description>
+  <MiliraXian_NeiyuInner.description>霓羽貼身穿著的柔韌內襯，為軀幹、頸部與四肢上段提供第二層防護。降低承傷，縮短近戰攻擊間隔，並提高工作速度。永不損壞。</MiliraXian_NeiyuInner.description>
 
   <MX_Neiyu_Form_Flower.comps.0.commandLabel>切換形態</MX_Neiyu_Form_Flower.comps.0.commandLabel>
   <MX_Neiyu_Form_Flower.comps.0.commandDesc>點擊切換</MX_Neiyu_Form_Flower.comps.0.commandDesc>

@@ -34,7 +34,7 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MiliraXian_NeiyuNormal</defName>
         <label>霓羽·常服</label>
-        <description>霓羽最常穿的一身衣装。她向来爱惜这套常服，也在漫长经历中不断为其添入稀有而精巧的材料；即使如今显现于此界的只是投影，它依旧兼具轻盈外观与不俗防护。</description>
+        <description>霓羽惯常穿着的轻盈衣装，护住身体与羽翼。提高防护、负重、移动速度与近战闪避，并降低承伤。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
     
         <graphicData>
@@ -43,9 +43,9 @@
         <statBases>
             <Mass>1.2</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>1.35</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.2</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.5</ArmorRating_Heat>
+            <ArmorRating_Sharp>1.70</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.45</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.80</ArmorRating_Heat>
             <Insulation_Cold>1200</Insulation_Cold>
             <Insulation_Heat>1200</Insulation_Heat>
         </statBases>
@@ -76,9 +76,10 @@
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
-            <CarryingCapacity>+65</CarryingCapacity>
+            <CarryingCapacity>+90</CarryingCapacity>
             <MeleeDodgeChance>20.0</MeleeDodgeChance>
-            <MoveSpeed>1.50</MoveSpeed>
+            <MoveSpeed>1.80</MoveSpeed>
+            <IncomingDamageFactor>-0.15</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -163,7 +164,7 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_ZhaoliNormal</defName>
         <label>昭离·常服</label>
-        <description>昭离惯常穿着的紫黑衣装。外摆压暗，内层带有细碎的紫白纹路，与离断刀柄和昭离的因果术式相互呼应。</description>
+        <description>昭离惯常穿着的紫黑衣装，护住身体与羽翼。提高防护、负重、移动速度、近战闪避与近战伤害，并降低承伤。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -172,9 +173,9 @@
         <statBases>
             <Mass>1.1</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>1.4</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.2</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.6</ArmorRating_Heat>
+            <ArmorRating_Sharp>1.80</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.60</ArmorRating_Blunt>
+            <ArmorRating_Heat>2.00</ArmorRating_Heat>
             <Insulation_Cold>900</Insulation_Cold>
             <Insulation_Heat>900</Insulation_Heat>
         </statBases>
@@ -205,9 +206,11 @@
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
-            <CarryingCapacity>+45</CarryingCapacity>
+            <CarryingCapacity>+75</CarryingCapacity>
             <MeleeDodgeChance>12.0</MeleeDodgeChance>
-            <MoveSpeed>0.80</MoveSpeed>
+            <MoveSpeed>1.20</MoveSpeed>
+            <IncomingDamageFactor>-0.20</IncomingDamageFactor>
+            <MeleeDamageFactor>0.15</MeleeDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -215,7 +218,7 @@
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_ZhaoliHood</defName>
         <label>昭离·兜帽</label>
-        <description>昭离外出时披戴的深色兜帽。兜帽边缘带有紫色纹饰，能够遮住昭离头顶的光环，使她在地面行动时不那么显眼。</description>
+        <description>昭离外出时披戴的深色兜帽，遮住光环并保护整个头部。缩短近战攻击间隔与受击踉跄时间，降低精神崩溃临界值。永不损坏。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
@@ -235,9 +238,9 @@
             <Beauty>1</Beauty>
             <EquipDelay>0.5</EquipDelay>
             <WorkToMake>12000</WorkToMake>
-            <ArmorRating_Sharp>0.40</ArmorRating_Sharp>
-            <ArmorRating_Blunt>0.40</ArmorRating_Blunt>
-            <ArmorRating_Heat>0.20</ArmorRating_Heat>
+            <ArmorRating_Sharp>1.60</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.40</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.80</ArmorRating_Heat>
         </statBases>
 
         <apparel>
@@ -272,6 +275,8 @@
         </comps>
         <equippedStatOffsets>
             <MentalBreakThreshold>-0.15</MentalBreakThreshold>
+            <MeleeCooldownFactor>-0.10</MeleeCooldownFactor>
+            <StaggerDurationFactor>-0.20</StaggerDurationFactor>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -279,7 +284,7 @@
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MiliraXian_NeiyuInner</defName>
         <label>霓羽·内衬</label>
-        <description>霓羽常服内部贴身穿着的一层内衬。它本身并不张扬，却让整套装束在结构与色调上更加完整，也保留了足够轻巧的活动性。</description>
+        <description>霓羽贴身穿着的柔韧内衬，为躯干、颈部与四肢上段提供第二层防护。降低承伤，缩短近战攻击间隔，并提高工作速度。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -288,9 +293,9 @@
         <statBases>
             <Mass>0.35</Mass>
             <WorkToMake>12000</WorkToMake>
-            <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
-            <ArmorRating_Blunt>0.2</ArmorRating_Blunt>
-            <ArmorRating_Heat>0.2</ArmorRating_Heat>
+            <ArmorRating_Sharp>0.80</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.65</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.00</ArmorRating_Heat>
             <Insulation_Cold>8</Insulation_Cold>
             <Insulation_Heat>8</Insulation_Heat>
         </statBases>
@@ -317,12 +322,17 @@
         <comps>
             <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
         </comps>
+        <equippedStatOffsets>
+            <IncomingDamageFactor>-0.10</IncomingDamageFactor>
+            <MeleeCooldownFactor>-0.10</MeleeCooldownFactor>
+            <WorkSpeedGlobal>0.15</WorkSpeedGlobal>
+        </equippedStatOffsets>
     </ThingDef>
 
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Apparel_EarringsZhenzhu</defName>
         <label>霓羽·珠饰</label>
-        <description>霓羽惯常佩戴的一对珠饰。样式轻巧素净，却与她的整体装束气质极为贴合，也是这道投影中最稳定的点缀之一。</description>
+        <description>霓羽佩戴的珍珠耳饰，以柔光护住头部上方。缩短瞄准时间和远程攻击间隔，并提高免疫增长速度。永不损坏。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
@@ -341,6 +351,9 @@
             <MaxHitPoints>80</MaxHitPoints>
             <Flammability>0</Flammability>
             <EquipDelay>0</EquipDelay>
+            <ArmorRating_Sharp>1.40</ArmorRating_Sharp>
+            <ArmorRating_Blunt>1.10</ArmorRating_Blunt>
+            <ArmorRating_Heat>1.50</ArmorRating_Heat>
         </statBases>
         
         <thingCategories>
@@ -366,6 +379,8 @@
         </comps>
         <equippedStatOffsets>
             <ImmunityGainSpeed>0.45</ImmunityGainSpeed>
+            <AimingDelayFactor>-0.20</AimingDelayFactor>
+            <RangedCooldownFactor>-0.15</RangedCooldownFactor>
         </equippedStatOffsets>
         
     </ThingDef>

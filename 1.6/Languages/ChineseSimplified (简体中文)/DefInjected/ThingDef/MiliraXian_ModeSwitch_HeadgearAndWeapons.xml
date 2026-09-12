@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Neiyu_Form_Flower.label>霓羽·花形</MX_Neiyu_Form_Flower.label>
-  <MX_Neiyu_Form_Flower.description>霓羽常持于手中的花形兵装。看似柔和轻巧，实则是她投影于此界的三种兵装之一；花瓣间流转的辉光并不张扬，却始终带着温柔而稳定的力量。</MX_Neiyu_Form_Flower.description>
+  <MX_Neiyu_Form_Flower.description>霓羽常持于手中的花形兵装，以花瓣辉光施展赐福与毒庭。近战威力较低，可切换为剑或弓形态。永不损坏。</MX_Neiyu_Form_Flower.description>
   <MX_Neiyu_Form_Flower.tools.0.label>拂花</MX_Neiyu_Form_Flower.tools.0.label>
   <MX_Neiyu_Form_Weapon.label>霓羽·剑形</MX_Neiyu_Form_Weapon.label>
-  <MX_Neiyu_Form_Weapon.description>由花形转化而来的剑形兵装。锋芒凝练，气势凌厉，是霓羽在正面斩击与高速突进时最具压迫感的一种姿态。</MX_Neiyu_Form_Weapon.description>
+  <MX_Neiyu_Form_Weapon.description>由花形转化而来的剑形兵装，擅长高速斩击与穿透重甲。可切换为花或弓形态。永不损坏。</MX_Neiyu_Form_Weapon.description>
   <MX_Neiyu_Form_Weapon.tools.0.label>霓刃</MX_Neiyu_Form_Weapon.tools.0.label>
   <MX_Neiyu_Form_Bow.label>霓羽·弓形</MX_Neiyu_Form_Bow.label>
-  <MX_Neiyu_Form_Bow.description>霓羽的弓形态。主矢分裂为16支追踪碎矢，可切换为花或剑形态。</MX_Neiyu_Form_Bow.description>
+  <MX_Neiyu_Form_Bow.description>霓羽的弓形兵装。主矢分裂为16支具有穿甲能力的追踪碎矢，可切换为花或剑形态。永不损坏。</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
   <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>

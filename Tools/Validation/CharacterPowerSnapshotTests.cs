@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Globalization;
+using System.Xml;
 
 // Executes the production snapshot engine, without starting Unity or loading a save.
 internal static class CharacterPowerSnapshotTests
@@ -74,7 +76,8 @@ internal static class CharacterPowerSnapshotTests
             Check(a.count == 73, "invalid enum fallback");
             TestConservativeTuning(assembly, profileType, levelType);
             TestNeiyuTunings(assembly, levelType);
-            Console.WriteLine("PASS: production snapshot engines; 100 complete tier cycles each, exact restoration, conservative scaling, intact mechanics, typed ranges, independent profiles, invalid-setting fallback.");
+            TestNeiyuProjectiles(root, assembly, levelType);
+            Console.WriteLine("PASS: production snapshot engines; 100 complete tier cycles each, exact restoration, conservative scaling, intact mechanics, typed ranges, independent profiles, invalid-setting fallback; all three Neiyu projectiles retain tier-correct damage and armor penetration.");
             return 0;
         }
         catch (Exception ex) { Console.Error.WriteLine(ex); return 1; }
@@ -153,5 +156,49 @@ internal static class CharacterPowerSnapshotTests
     private static void Check(bool condition, string message)
     {
         if (!condition) throw new Exception(message);
+    }
+
+    private static void TestNeiyuProjectiles(string root, Assembly assembly, Type levelType)
+    {
+        Type neiyu = assembly.GetType("MiliraXian.Characters.Neiyu.NeiyuPowerBalance", true);
+        MethodInfo register = neiyu.GetMethod("AddProjectileDamage", BindingFlags.NonPublic | BindingFlags.Static);
+        MethodInfo set = neiyu.GetMethod("SetLevel");
+        Assembly game = Assembly.LoadFrom(Path.GetFullPath(Path.Combine(root, "../../RimWorldWin64_Data/Managed/Assembly-CSharp.dll")));
+        Type projectileType = game.GetType("Verse.ProjectileProperties", true);
+        FieldInfo damage = projectileType.GetField("damageAmountBase", BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo penetration = projectileType.GetField("armorPenetrationBase", BindingFlags.NonPublic | BindingFlags.Instance);
+        object damageDef = Activator.CreateInstance(game.GetType("Verse.DamageDef", true));
+        FieldInfo category = damageDef.GetType().GetField("armorCategory");
+        category.SetValue(damageDef, Activator.CreateInstance(category.FieldType));
+        MethodInfo actualPenetration = projectileType.GetMethod("GetArmorPenetration");
+        var doc = new XmlDocument();
+        doc.Load(Path.Combine(root, "1.6/Defs/ThingDefs/MiliraXian_ModeSwitch_HeadgearAndWeapons.xml"));
+        string[] names = { "MX_Bullet_BigSplitArrow", "MX_Bullet_HomingShard", "MX_Bullet_BarrageArrow" };
+        int[] sealedDamage = { 12, 6, 6 };
+        for (int index = 0; index < names.Length; index++)
+        {
+            XmlNode xml = doc.SelectSingleNode("/Defs/ThingDef[defName='" + names[index] + "']/projectile");
+            int originalDamage = int.Parse(xml["damageAmountBase"].InnerText, CultureInfo.InvariantCulture);
+            float originalPenetration = float.Parse(xml["armorPenetrationBase"].InnerText, CultureInfo.InvariantCulture);
+            object projectile = Activator.CreateInstance(projectileType);
+            damage.SetValue(projectile, originalDamage);
+            penetration.SetValue(projectile, originalPenetration);
+            projectileType.GetField("damageDef").SetValue(projectile, damageDef);
+            register.Invoke(null, new object[] { projectile, sealedDamage[index] });
+            for (int cycle = 0; cycle < 100; cycle++)
+            {
+                foreach (int tier in new[] { 1, 2, 0 })
+                {
+                    set.Invoke(null, new[] { Enum.ToObject(levelType, tier) });
+                    int expectedDamage = tier == 0 ? originalDamage : tier == 1
+                        ? (int)Math.Round(originalDamage * .85f, MidpointRounding.AwayFromZero) : sealedDamage[index];
+                    float expectedPenetration = tier == 0 ? originalPenetration : tier == 1
+                        ? originalPenetration * .95f : sealedDamage[index] * .015f;
+                    Check((int)damage.GetValue(projectile) == expectedDamage, names[index] + " damage tier " + tier);
+                    Check(Near((float)actualPenetration.Invoke(projectile, new object[] { null, null }), expectedPenetration),
+                        names[index] + " live armor penetration tier " + tier);
+                }
+            }
+        }
     }
 }
