@@ -243,7 +243,7 @@
   <MiliraXian.Characters.SkillNodeDef>
     <defName>MX_QH_Trait_QixiRitual</defName>
     <label>七夕节庆</label>
-    <description>每年可在荷池举行一次乞巧仪式，参与者可以获得手工和艺术经验，并有机会获得灵感。</description>
+    <description>每年可在荷池举行一次七夕节，参与者可以获得手工和艺术经验，并有机会获得灵感。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <displayOrder>107</displayOrder>

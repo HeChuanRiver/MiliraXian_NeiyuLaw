@@ -195,10 +195,11 @@
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
   <MX_QH_RecoveryProgressLine>下个充能：{0} / {1}</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>充能速度：{0} /秒</MX_QH_RecoverySpeedLine>
-  <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧仪式。</MX_QH_QixiRequiresQinghe>
-  <MX_QH_QixiCooldown>乞巧仪式仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
+  <MX_QH_QixiRequiresQinghe>只有清荷可以主持七夕节。</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiRequiresFemaleOrGenderless>七夕节参与者必须是女性或无性别。</MX_QH_QixiRequiresFemaleOrGenderless>
+  <MX_QH_QixiCooldown>七夕节仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
   <MX_QH_QixiOutcomeInspirations>获得灵感的参与者：{0}。</MX_QH_QixiOutcomeInspirations>
-  <MX_QH_QixiInspirationReason>受乞巧仪式启发。</MX_QH_QixiInspirationReason>
+  <MX_QH_QixiInspirationReason>受七夕节启发。</MX_QH_QixiInspirationReason>
 
   <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>开发者测试用：手动为昭离增加10点因果。</MX_ZL_DebugAddKarmaDesc>
