@@ -86,23 +86,46 @@
     <!-- 清荷：常服 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_QingheNormal</defName>
-        <label>花仙子的襦裙</label>
-        <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计。</description>
-        <recipeMaker Inherit="False" IsNull="True" />
+        <label>花仙子襦裙</label>
+        <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计，不过不太适合用于战斗。</description>
+        <useHitPoints>true</useHitPoints>
+        <costList>
+            <Milira_Feather>200</Milira_Feather>
+            <Cloth>200</Cloth>
+            <Dye>100</Dye>
+        </costList>
+        <recipeMaker Inherit="False">
+            <skillRequirements>
+                <Crafting>16</Crafting>
+                <Artistic>16</Artistic>
+            </skillRequirements>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Tailor</effectWorking>
+            <soundWorking>Recipe_Tailor</soundWorking>
+            <unfinishedThingDef>UnfinishedApparel</unfinishedThingDef>
+            <recipeUsers>
+                <li>ElectricTailoringBench</li>
+                <li>HandTailoringBench</li>
+                <li>Milira_TailoringBench</li>
+            </recipeUsers>
+        </recipeMaker>
 
         <graphicData>
             <texPath>MiliraXianQinghe/Apparel/apparel_qinghe_normal_Female_south</texPath>
         </graphicData>
         <statBases>
+            <DeteriorationRate>1</DeteriorationRate>
             <Mass>1.2</Mass>
-            <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>1.0</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.15</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.0</ArmorRating_Heat>
+            <WorkToMake>300000</WorkToMake>
+            <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.05</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.15</ArmorRating_Heat>
             <Insulation_Cold>24</Insulation_Cold>
             <Insulation_Heat>12</Insulation_Heat>
         </statBases>
         <apparel>
+            <wearPerDay>0.4</wearPerDay>
             <useWornGraphicMask>true</useWornGraphicMask>
             <developmentalStageFilter>Adult</developmentalStageFilter>
             <bodyPartGroups>
@@ -126,11 +149,14 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.CompProperties_PawnKindEquipmentDurability">
+                <protectedPawnKinds>
+                    <li>MiliraXian_Qinghe</li>
+                </protectedPawnKinds>
+            </li>
         </comps>
         <equippedStatOffsets>
-            <CarryingCapacity>+25</CarryingCapacity>
-            <MeleeDodgeChance>12.0</MeleeDodgeChance>
+            <CarryingCapacity>+5</CarryingCapacity>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -362,11 +388,30 @@
     <!-- 清荷头饰 -->
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_QingheHeaddress</defName>
-        <label>荷花头花</label>
-        <description>清荷日常佩戴的花饰。样式是她最爱的荷花，典雅而不失清新，散发出一缕让人安心的清香。</description>
+        <label>荷花头饰</label>
+        <description>清荷日常佩戴的花饰。典雅而不失清新，散发出一缕让人安心的清香。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
-        <recipeMaker Inherit="False" IsNull="True" />
+        <costList>
+            <Cloth>20</Cloth>
+            <Dye>50</Dye>
+        </costList>
+        <recipeMaker Inherit="False">
+            <skillRequirements>
+                <Crafting>16</Crafting>
+                <Artistic>16</Artistic>
+            </skillRequirements>
+            <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+            <workSkill>Crafting</workSkill>
+            <effectWorking>Tailor</effectWorking>
+            <soundWorking>Recipe_Tailor</soundWorking>
+            <unfinishedThingDef>UnfinishedApparel</unfinishedThingDef>
+            <recipeUsers>
+                <li>ElectricTailoringBench</li>
+                <li>HandTailoringBench</li>
+                <li>Milira_TailoringBench</li>
+            </recipeUsers>
+        </recipeMaker>
 
         <graphicData>
             <texPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female_south</texPath>
@@ -377,10 +422,10 @@
 
         <statBases>
             <Mass>0.05</Mass>
-            <MarketValue>120</MarketValue>
             <MaxHitPoints>80</MaxHitPoints>
             <Flammability>0</Flammability>
             <EquipDelay>0</EquipDelay>
+            <WorkToMake>120000</WorkToMake>
         </statBases>
 
         <thingCategories>
@@ -414,10 +459,14 @@
         </apparel>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.CompProperties_PawnKindEquipmentDurability">
+                <protectedPawnKinds>
+                    <li>MiliraXian_Qinghe</li>
+                </protectedPawnKinds>
+            </li>
         </comps>
         <equippedStatOffsets>
-            <ImmunityGainSpeed>0.8</ImmunityGainSpeed>
+            <ImmunityGainSpeed>0.1</ImmunityGainSpeed>
         </equippedStatOffsets>
     </ThingDef>
 </Defs>

@@ -6,7 +6,8 @@ namespace MiliraXian.Characters
 {
     public class HediffCompProperties_AbnormalCorroded : HediffCompProperties
     {
-        public float armorMultiplier = 0.7f;
+        public float physicalArmorMultiplier = 1f;
+        public float heatArmorMultiplier = 1f;
         public DamageDef damageDef;
         public int damageIntervalTicks = 240;
         public float damageAmount = 2f;
@@ -29,7 +30,12 @@ namespace MiliraXian.Characters
 
         private HediffCompProperties_AbnormalCorroded PropsCorroded => (HediffCompProperties_AbnormalCorroded)props;
 
-        public float ArmorMultiplier => PropsCorroded.armorMultiplier;
+        public float GetArmorMultiplier(StatDef stat)
+        {
+            return stat == StatDefOf.ArmorRating_Heat
+                ? PropsCorroded.heatArmorMultiplier
+                : PropsCorroded.physicalArmorMultiplier;
+        }
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -87,6 +93,7 @@ namespace MiliraXian.Characters
             }
 
             DamageInfo dinfo = new(PropsCorroded.damageDef, PropsCorroded.damageAmount, PropsCorroded.armorPenetration);
+            dinfo.SetIgnoreArmor(true);
             dinfo.SetAllowDamagePropagation(false);
             Pawn.TakeDamage(dinfo);
         }

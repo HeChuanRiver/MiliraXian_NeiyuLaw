@@ -57,6 +57,17 @@ namespace MiliraXian.Characters.QingHe.Rituals
         {
         }
 
+        public override bool PawnCanFillRole(Pawn pawn, RitualRole role, out string reason, TargetInfo ritualTarget)
+        {
+            if (pawn.gender == Gender.Male)
+            {
+                reason = "MX_QH_QixiRequiresFemaleOrGenderless".Translate();
+                return false;
+            }
+
+            return base.PawnCanFillRole(pawn, role, out reason, ritualTarget);
+        }
+
         public override string CanStartRitualNow(TargetInfo target, Precept_Ritual ritual, Pawn selectedPawn = null, Dictionary<string, Pawn> forcedForRole = null)
         {
             string reason = base.CanStartRitualNow(target, ritual, selectedPawn, forcedForRole);

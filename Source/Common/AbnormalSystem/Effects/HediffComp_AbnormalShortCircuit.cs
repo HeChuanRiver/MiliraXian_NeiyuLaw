@@ -14,6 +14,9 @@ namespace MiliraXian.Characters
         public int stunTicks = 180;
         public int interruptCooldownTicks = 30;
         public float energyLossPercent = 0.20f;
+        public DamageDef bonusDamageDef;
+        public float maxHealthDamageFactor;
+        public float bonusArmorPenetration;
         public FleckDef steamFleckDef;
         public IntRange steamIntervalTicks = new(45, 90);
         public FloatRange steamScaleRange = new(0.55f, 0.9f);
@@ -83,6 +86,19 @@ namespace MiliraXian.Characters
             }
 
             AbnormalUtility.ReduceMechEnergyNeed(Pawn, PropsShortCircuit.energyLossPercent);
+
+            if (!Pawn.Dead)
+            {
+                float maxHealth = 0f;
+                foreach (BodyPartRecord part in Pawn.RaceProps.body.AllParts)
+                {
+                    maxHealth += part.def.GetMaxHealth(Pawn);
+                }
+
+                Pawn.TakeDamage(new DamageInfo(PropsShortCircuit.bonusDamageDef,
+                    maxHealth * PropsShortCircuit.maxHealthDamageFactor,
+                    PropsShortCircuit.bonusArmorPenetration, -1f, instigator));
+            }
         }
 
         private void InterruptPawnAction()

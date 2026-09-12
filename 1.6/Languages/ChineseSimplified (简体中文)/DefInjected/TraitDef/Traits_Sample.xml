@@ -2,8 +2,8 @@
 <LanguageData>
   <MiliraXianNeiyu_Love.degreeDatas.0.label>霓羽仙</MiliraXianNeiyu_Love.degreeDatas.0.label>
   <MiliraXianNeiyu_Love.degreeDatas.0.description>她爱着世人，她愿世间飘落霓裳花。</MiliraXianNeiyu_Love.degreeDatas.0.description>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.label>&lt;color=#99CCFF&gt;春雨&lt;/color&gt;</MX_QH_Trait_LongBreath.degreeDatas.0.label>
-  <MX_QH_Trait_LongBreath.degreeDatas.0.description>"梨花带雨，润物无声。"</MX_QH_Trait_LongBreath.degreeDatas.0.description>
+  <MX_QH_Trait_SpringFall.degreeDatas.0.label>&lt;color=#99CCFF&gt;春雨&lt;/color&gt;</MX_QH_Trait_SpringFall.degreeDatas.0.label>
+  <MX_QH_Trait_SpringFall.degreeDatas.0.description>"梨花带雨，润物无声。"</MX_QH_Trait_SpringFall.degreeDatas.0.description>
   <MX_QH_Trait_WaterFairy.degreeDatas.0.label>&lt;color=#FFCDE1&gt;霓羽仙&lt;/color&gt;</MX_QH_Trait_WaterFairy.degreeDatas.0.label>
-  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>"出淤泥而不染，濯清涟而不妖。"</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
+  <MX_QH_Trait_WaterFairy.degreeDatas.0.description>"出淤泥而不染，濯清涟而不妖。"\n\n免疫在水中或雨中的心情惩罚。</MX_QH_Trait_WaterFairy.degreeDatas.0.description>
 </LanguageData>

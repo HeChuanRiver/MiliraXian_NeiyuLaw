@@ -5,21 +5,20 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_QingheGraceSync : HediffCompProperties
+    public class HediffCompProperties_QingheAuraMasterySync : HediffCompProperties
     {
-        public HediffCompProperties_QingheGraceSync()
+        public HediffCompProperties_QingheAuraMasterySync()
         {
-            compClass = typeof(HediffComp_QingheGraceSync);
+            compClass = typeof(HediffComp_QingheAuraMasterySync);
         }
     }
 
     /// <summary>
-    /// Watches the divine grace severity and re-syncs grace-level skill nodes whenever it changes.
-    /// Also stores crafting progress toward the next grace level.
+    /// Tracks aura mastery level and crafting experience, and synchronizes skill nodes and effects.
     /// </summary>
-    public class HediffComp_QingheGraceSync : HediffComp
+    public class HediffComp_QingheAuraMasterySync : HediffComp
     {
-        public const int MaxGraceLevel = 24;
+        public const int MaxAuraMasteryLevel = 24;
 
         // Each row covers six destination levels: early, established, advanced, endgame.
         private static readonly float[] ProgressRequirements =
@@ -34,7 +33,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int level;
         private float lastSyncedSeverity = float.NaN;
 
-        public int CurrentLevel => Mathf.Clamp(level, 0, MaxGraceLevel);
+        public int CurrentLevel => Mathf.Clamp(level, 0, MaxAuraMasteryLevel);
 
         public int EffectiveLevel
         {
@@ -45,7 +44,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        public bool IsMaxLevel => CurrentLevel >= MaxGraceLevel;
+        public bool IsMaxLevel => CurrentLevel >= MaxAuraMasteryLevel;
 
         public float Progress => progress;
 
@@ -65,14 +64,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        public static float GetRequiredProgress(int graceLevel)
+        public static float GetRequiredProgress(int auraMasteryLevel)
         {
-            if (graceLevel >= MaxGraceLevel)
+            if (auraMasteryLevel >= MaxAuraMasteryLevel)
             {
                 return 0f;
             }
 
-            int level = Mathf.Clamp(graceLevel, 0, MaxGraceLevel - 1);
+            int level = Mathf.Clamp(auraMasteryLevel, 0, MaxAuraMasteryLevel - 1);
             return ProgressRequirements[level];
         }
 
@@ -94,7 +93,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 }
 
                 progress -= required;
-                level = Mathf.Min(MaxGraceLevel, level + 1);
+                level = Mathf.Min(MaxAuraMasteryLevel, level + 1);
             }
 
             if (IsMaxLevel)
@@ -115,8 +114,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             if (CurrentLevel != oldLevel)
             {
                 Find.LetterStack.ReceiveLetter(
-                    "MX_QH_DivineGraceGainedLetterLabel".Translate(),
-                    "MX_QH_DivineGraceGainedMessage".Translate(CurrentLevel),
+                    "MX_QH_AuraMasteryGainedLetterLabel".Translate(),
+                    "MX_QH_AuraMasteryGainedMessage".Translate(CurrentLevel),
                     LetterDefOf.PositiveEvent,
                     Pawn);
                 TrySync(force: true);
@@ -160,7 +159,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompExposeData()
         {
             base.CompExposeData();
-            Scribe_Values.Look(ref progress, "mx_qh_graceProgress", 0f);
+            Scribe_Values.Look(ref progress, "mx_qh_auraMasteryProgress", 0f);
             Scribe_Values.Look(ref level, "mx_qh_auraMasteryLevel", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {

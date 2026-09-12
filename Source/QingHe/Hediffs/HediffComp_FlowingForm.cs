@@ -7,7 +7,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_DivineBlessing : HediffCompProperties
+    public class HediffCompProperties_FlowingForm : HediffCompProperties
     {
         public HediffDef invisibilityHediffDef;
         public HediffDef damageImmunityHediffDef;
@@ -21,9 +21,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public int cooldownWarningCooldownTicks = 600;
         public int maxCharges = 1;
 
-        public HediffCompProperties_DivineBlessing()
+        public HediffCompProperties_FlowingForm()
         {
-            compClass = typeof(HediffComp_DivineBlessing);
+            compClass = typeof(HediffComp_FlowingForm);
         }
     }
 
@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// - Restores missing parts and all non-permanent injuries.
     /// - Grants temporary Psychic Invisibility when available.
     /// </summary>
-    public class HediffComp_DivineBlessing : HediffComp
+    public class HediffComp_FlowingForm : HediffComp
     {
         private const int ChargeConfigurationRefreshTicks = 60;
 
@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int cachedRechargeTicksTotal;
         private int nextChargeConfigurationRefreshTick;
 
-        public HediffCompProperties_DivineBlessing Props => (HediffCompProperties_DivineBlessing)props;
+        public HediffCompProperties_FlowingForm Props => (HediffCompProperties_FlowingForm)props;
 
         private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
@@ -89,9 +89,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void CompExposeData()
         {
             base.CompExposeData();
-            Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_divineBlessing_cooldownTicksLeft", 0);
-            Scribe_Values.Look(ref cooldownWarningEndTick, "mx_qh_divineBlessing_warningEndTick", -1);
-            Scribe_Values.Look(ref currentCharges, "mx_qh_divineBlessing_currentCharges", 1);
+            Scribe_Values.Look(ref cooldownTicksLeft, "mx_qh_flowingForm_cooldownTicksLeft", 0);
+            Scribe_Values.Look(ref cooldownWarningEndTick, "mx_qh_flowingForm_warningEndTick", -1);
+            Scribe_Values.Look(ref currentCharges, "mx_qh_flowingForm_currentCharges", 1);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -145,7 +145,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Pawn.Faction == Faction.OfPlayer)
             {
-                Messages.Message("MX_QH_LongBreathLowResourceWarning".Translate(), Pawn, MessageTypeDefOf.CautionInput);
+                Messages.Message("MX_QH_FlowingFormLowResourceWarning".Translate(), Pawn, MessageTypeDefOf.CautionInput);
             }
 
             int maxTicks = Props.cooldownWarningCooldownTicks > 0 ? Props.cooldownWarningCooldownTicks : 600;
@@ -170,7 +170,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             if (Pawn.Faction == Faction.OfPlayer)
             {
-                Messages.Message("MX_QH_LongBreathTriggered".Translate(), Pawn, MessageTypeDefOf.PositiveEvent);
+                Messages.Message("MX_QH_FlowingFormTriggered".Translate(), Pawn, MessageTypeDefOf.PositiveEvent);
             }
         }
 
@@ -322,9 +322,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             int previousMaxCharges = cachedMaxCharges;
             int previousRechargeTicksTotal = cachedRechargeTicksTotal;
             int newMaxCharges = ResolveMaxCharges();
-            float speed = Pawn == null || MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor == null
+            float speed = Pawn == null || MX_QHDefOf.MX_QH_FlowingFormRechargeSpeedFactor == null
                 ? 1f
-                : Pawn.GetStatValue(MX_QHDefOf.MX_QH_DivineBlessingRechargeSpeedFactor);
+                : Pawn.GetStatValue(MX_QHDefOf.MX_QH_FlowingFormRechargeSpeedFactor);
             int newRechargeTicksTotal = speed <= 0f
                 ? 0
                 : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
@@ -446,7 +446,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void ApplyDamageImmunity()
         {
-            HediffDef immunityDef = Props.damageImmunityHediffDef ?? MX_QHDefOf.MX_QH_DivineBlessingImmunity;
+            HediffDef immunityDef = Props.damageImmunityHediffDef ?? MX_QHDefOf.MX_QH_FlowingFormImmunity;
             if (immunityDef == null)
             {
                 return;

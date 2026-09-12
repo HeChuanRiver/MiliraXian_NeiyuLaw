@@ -48,7 +48,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
@@ -89,7 +89,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
-            AddInvulnerability(caster);
             caster.rotationTracker?.FaceCell(target.Cell);
             Job stanceJob = JobMaker.MakeJob(MX_QHDefOf.MX_QH_IllusoryReflection);
             stanceJob.ability = parent;
@@ -102,7 +101,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 tag: JobTag.Misc);
         }
 
-        private void AddInvulnerability(Pawn caster)
+        internal void AddInvulnerability(Pawn caster)
         {
             HediffDef hediffDef = Props.invulnerabilityHediff ?? MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable;
             if (caster?.health?.hediffSet == null || hediffDef == null)

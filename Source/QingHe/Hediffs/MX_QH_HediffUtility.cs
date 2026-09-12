@@ -63,11 +63,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return EnsureHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
         }
 
-        public static void SyncDivineProtectionForPowerLevel(Pawn pawn)
+        public static void SyncAuraShieldForPowerLevel(Pawn pawn)
         {
-            HediffComp_DivineProtection protection = GetHediffComp<HediffComp_DivineProtection>(
+            HediffComp_AuraShield protection = GetHediffComp<HediffComp_AuraShield>(
                 pawn,
-                MX_QHDefOf.MX_QH_DivineProtection);
+                MX_QHDefOf.MX_QH_AuraShield);
             protection?.SyncForPowerLevel();
         }
 
@@ -119,32 +119,32 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void EnsureCoreHediffs(Pawn pawn)
         {
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineBlessing);
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_DivineProtection);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_FlowingForm);
+            EnsureHediff(pawn, MX_QHDefOf.MX_QH_AuraShield);
             EnsureHediff(pawn, MX_QHDefOf.MX_QH_Trickle);
             EnsureFlowerResonance(pawn);
             EnsureFlowerDecree(pawn);
             EnsureCombatState(pawn);
             EnsureSwordPressure(pawn);
             EnsureMeditativeStillness(pawn);
-            EnsureDivineGraceComp(pawn);
+            EnsureAuraMasteryComp(pawn);
 
-            GetHediffComp<HediffComp_DivineProtection>(pawn, MX_QHDefOf.MX_QH_DivineProtection)?.EnsureShieldBound();
+            GetHediffComp<HediffComp_AuraShield>(pawn, MX_QHDefOf.MX_QH_AuraShield)?.EnsureShieldBound();
         }
 
-        public static int GetDivineGraceLevel(Pawn pawn)
+        public static int GetAuraMasteryLevel(Pawn pawn)
         {
-            return GetDivineGraceComp(pawn)?.EffectiveLevel ?? 0;
+            return GetAuraMasteryComp(pawn)?.EffectiveLevel ?? 0;
         }
 
-        public static void AddDivineGraceLevel(Pawn pawn)
+        public static void AddAuraMasteryLevel(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null)
             {
                 return;
             }
 
-            HediffComp_QingheGraceSync comp = EnsureDivineGraceComp(pawn);
+            HediffComp_QingheAuraMasterySync comp = EnsureAuraMasteryComp(pawn);
             if (comp == null || comp.IsMaxLevel)
             {
                 return;
@@ -154,66 +154,66 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             MX_QHSkillUtility.SyncChoices(pawn);
         }
 
-        public static HediffComp_QingheGraceSync GetDivineGraceComp(Pawn pawn)
+        public static HediffComp_QingheAuraMasterySync GetAuraMasteryComp(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return GetHediffComp<HediffComp_QingheAuraMasterySync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
-        public static HediffComp_QingheGraceSync EnsureDivineGraceComp(Pawn pawn)
+        public static HediffComp_QingheAuraMasterySync EnsureAuraMasteryComp(Pawn pawn)
         {
-            return EnsureHediffComp<HediffComp_QingheGraceSync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return EnsureHediffComp<HediffComp_QingheAuraMasterySync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
-        public static float GetDivineGraceProgress(Pawn pawn)
+        public static float GetAuraMasteryProgress(Pawn pawn)
         {
-            return GetDivineGraceComp(pawn)?.Progress ?? 0f;
+            return GetAuraMasteryComp(pawn)?.Progress ?? 0f;
         }
 
-        public static float GetDivineGraceProgressRequired(Pawn pawn)
+        public static float GetAuraMasteryProgressRequired(Pawn pawn)
         {
-            return GetDivineGraceComp(pawn)?.RequiredProgressForCurrentLevel ?? 0f;
+            return GetAuraMasteryComp(pawn)?.RequiredProgressForCurrentLevel ?? 0f;
         }
 
-        public static float GetDivineGraceProgressPercent(Pawn pawn)
+        public static float GetAuraMasteryProgressPercent(Pawn pawn)
         {
-            return GetDivineGraceComp(pawn)?.ProgressPercent ?? 0f;
+            return GetAuraMasteryComp(pawn)?.ProgressPercent ?? 0f;
         }
 
-        public static void AddDivineGraceProgress(Pawn pawn, float amount)
+        public static void AddAuraMasteryProgress(Pawn pawn, float amount)
         {
             if (!MX_QHCharacterUtility.IsQinghe(pawn) || amount <= 0f)
             {
                 return;
             }
 
-            EnsureDivineGraceComp(pawn)?.AddProgress(amount);
+            EnsureAuraMasteryComp(pawn)?.AddProgress(amount);
         }
 
-        public static void AddDivineGraceProgressFromCraft(Pawn pawn, RecipeDef recipe, Thing product)
+        public static void AddAuraMasteryProgressFromCraft(Pawn pawn, RecipeDef recipe, Thing product)
         {
             if (!MX_QHCharacterUtility.IsQinghe(pawn)
-                || !IsGraceCraftRecipe(recipe)
+                || !IsAuraMasteryCraftRecipe(recipe)
                 || product == null
                 || product.def?.category != ThingCategory.Item)
             {
                 return;
             }
 
-            float amount = CalculateDivineGraceProgressFromCraft(recipe, product);
+            float amount = CalculateAuraMasteryProgressFromCraft(recipe, product);
             if (amount > 0f)
             {
-                AddDivineGraceProgress(pawn, amount);
+                AddAuraMasteryProgress(pawn, amount);
             }
         }
 
-        private static bool IsGraceCraftRecipe(RecipeDef recipe)
+        private static bool IsAuraMasteryCraftRecipe(RecipeDef recipe)
         {
             return recipe != null
                 && recipe.workSkillLearnFactor > 0f
                 && (recipe.workSkill == SkillDefOf.Crafting || recipe.workSkill == SkillDefOf.Artistic);
         }
 
-        private static float CalculateDivineGraceProgressFromCraft(RecipeDef recipe, Thing product)
+        private static float CalculateAuraMasteryProgressFromCraft(RecipeDef recipe, Thing product)
         {
             // Crafted sculptures and instruments arrive wrapped in a MinifiedThing.
             Thing innerProduct = product.GetInnerIfMinified();

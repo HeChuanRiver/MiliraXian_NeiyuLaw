@@ -4,8 +4,8 @@
     <PawnKindDef ParentName="Milira_PawnBase">
         <defName>MiliraXian_Qinghe</defName>
         <!-- pawn kind label pawn kind的名字 -->
-        <!-- Lotus Rosalia -->
-        <label>花中仙子</label>
+        <!-- Lotaris Ryselia -->
+        <label>仙域米莉拉</label>
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
@@ -62,6 +62,11 @@
             <max>99999</max>
         </weaponMoney>
 
+        <inventoryOptions>
+            <thingDef>MX_QH_Weapon_Sword</thingDef>
+            <countRange>1</countRange>
+        </inventoryOptions>
+
         <!-- 生成时装备的耐久度区间，1-1则为100% -->
         <gearHealthRange Inherit="False">
             <min>1</min>
@@ -109,11 +114,11 @@
         <skills>
             <li>
                 <skill>Shooting</skill>
-                <range>3~3</range>
+                <range>5~5</range>
             </li>
             <li>
                 <skill>Melee</skill>
-                <range>2~2</range>
+                <range>11~11</range>
             </li>
             <li>
                 <skill>Construction</skill>
@@ -145,15 +150,15 @@
             </li>
             <li>
                 <skill>Medicine</skill>
-                <range>8~8</range>
+                <range>18~18</range>
             </li>
             <li>
                 <skill>Social</skill>
-                <range>8~8</range>
+                <range>1~1</range>
             </li>
             <li>
                 <skill>Intellectual</skill>
-                <range>17~17</range>
+                <range>14~14</range>
             </li>
         </skills>
 
@@ -245,7 +250,7 @@
                  禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
                 <disableRandomTraits>true</disableRandomTraits>
                 <extraForcedTraits>
-                    <li><def>MX_QH_Trait_LongBreath</def></li>
+                    <li><def>MX_QH_Trait_SpringFall</def></li>
                     <li><def>MX_QH_Trait_WaterFairy</def></li>
                     <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
                     <li>
@@ -258,12 +263,12 @@
                  生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
                 <extraForcedHediffs>
                     <li>
-                        <def>MX_QH_DivineBlessing</def>
+                        <def>MX_QH_FlowingForm</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
                     <li>
-                        <def>MX_QH_DivineProtection</def>
+                        <def>MX_QH_AuraShield</def>
                         <severity>1</severity>
                         <overwriteIfExists>true</overwriteIfExists>
                     </li>
@@ -364,7 +369,7 @@
              填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
             <li Class="AriandelLibrary.AL_TraitLock_Extension">
                 <requiredTraits>
-                    <li>MX_QH_Trait_LongBreath</li>
+                    <li>MX_QH_Trait_SpringFall</li>
                     <li>MX_QH_Trait_WaterFairy</li>
                 </requiredTraits>
             </li>

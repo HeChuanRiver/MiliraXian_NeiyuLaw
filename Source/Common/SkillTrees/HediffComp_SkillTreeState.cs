@@ -76,22 +76,24 @@ namespace MiliraXian.Characters
             return nodeLevels.TryGetValue(node, out level) && level > 0 ? 1 : 0;
         }
 
-        public int SyncNodesByGraceLevel(int graceLevel)
+        public int SyncNodesByAuraMasteryLevel(int auraMasteryLevel)
         {
             NormalizeCollections();
             int learnedCount = 0;
+            List<SkillNodeDef> unlockedNodes = new();
             foreach (SkillNodeDef node in RelevantNodes())
             {
-                if (node.requiredGraceLevel > graceLevel && GetNodeLevel(node) > 0)
+                if (node.requiredAuraMasteryLevel > auraMasteryLevel && GetNodeLevel(node) > 0)
                 {
                     nodeLevels.Remove(node);
                     learnedCount++;
                     continue;
                 }
 
-                if (node.requiredGraceLevel <= graceLevel && GetNodeLevel(node) <= 0)
+                if (node.requiredAuraMasteryLevel <= auraMasteryLevel && GetNodeLevel(node) <= 0)
                 {
                     nodeLevels[node] = 1;
+                    unlockedNodes.Add(node);
                     learnedCount++;
                 }
             }
@@ -99,6 +101,11 @@ namespace MiliraXian.Characters
             if (learnedCount > 0)
             {
                 NotifyStateChanged();
+            }
+
+            foreach (SkillNodeDef node in unlockedNodes)
+            {
+                node.Notify_Unlocked(Pawn);
             }
 
             return learnedCount;
@@ -113,11 +120,13 @@ namespace MiliraXian.Characters
             }
 
             int learnedCount = 0;
+            List<SkillNodeDef> unlockedNodes = new();
             foreach (SkillNodeDef node in nodes)
             {
                 if (node != null && IsRelevantNode(node) && GetNodeLevel(node) <= 0)
                 {
                     nodeLevels[node] = 1;
+                    unlockedNodes.Add(node);
                     learnedCount++;
                 }
             }
@@ -125,6 +134,11 @@ namespace MiliraXian.Characters
             if (learnedCount > 0)
             {
                 NotifyStateChanged();
+            }
+
+            foreach (SkillNodeDef node in unlockedNodes)
+            {
+                node.Notify_Unlocked(Pawn);
             }
 
             return learnedCount;

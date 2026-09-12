@@ -23,6 +23,9 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(Thing), nameof(Thing.TakeDamage)),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Thing_TakeDamage_Prefix)));
 
+            patcher.Patch(AccessTools.Method(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget"),
+                prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget_Prefix)));
+
             patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
 
@@ -183,7 +186,7 @@ namespace MiliraXian.Characters.QingHe
 
         private struct DamageHediffState
         {
-            public HediffComp_DivineBlessing DivineBlessing;
+            public HediffComp_FlowingForm FlowingForm;
             public bool Invulnerable;
         }
 
@@ -239,12 +242,12 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessing && state.DivineBlessing == null)
+                if (hediffDef == MX_QHDefOf.MX_QH_FlowingForm && state.FlowingForm == null)
                 {
-                    state.DivineBlessing = hediff.TryGetComp<HediffComp_DivineBlessing>();
+                    state.FlowingForm = hediff.TryGetComp<HediffComp_FlowingForm>();
                 }
 
-                if (hediffDef == MX_QHDefOf.MX_QH_DivineBlessingImmunity
+                if (hediffDef == MX_QHDefOf.MX_QH_FlowingFormImmunity
                     || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable
                     || hediffDef == MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable)
                 {
@@ -266,22 +269,22 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            HediffComp_DivineBlessing divineBlessingComp = __state.DivineBlessing;
-            if (divineBlessingComp == null)
+            HediffComp_FlowingForm flowingFormComp = __state.FlowingForm;
+            if (flowingFormComp == null)
             {
                 return;
             }
 
             // Lotus shield is processed by pawn ThingComp.PostPreApplyDamage.
             // Divine blessing only checks when damage still reaches the body.
-            divineBlessingComp.NotifyDamageNotAbsorbed(ref dinfo);
+            flowingFormComp.NotifyDamageNotAbsorbed(ref dinfo);
 
-            if (!divineBlessingComp.CanTrigger(ref dinfo))
+            if (!flowingFormComp.CanTrigger(ref dinfo))
             {
                 return;
             }
 
-            divineBlessingComp.Trigger(ref dinfo, ref absorbed);
+            flowingFormComp.Trigger(ref dinfo, ref absorbed);
         }
 
         public static void Patch_InspirationWorker_CommonalityFor_Postfix(InspirationWorker __instance, Pawn pawn, ref float __result)
@@ -326,7 +329,7 @@ namespace MiliraXian.Characters.QingHe
             ThingWithComps weapon = pawn?.equipment?.Primary;
             JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             if (reflection == null
-                || weapon?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
+                || !QingheSwordCombatUtility.IsSwordMode(pawn))
             {
                 return true;
             }
@@ -373,6 +376,22 @@ namespace MiliraXian.Characters.QingHe
                 }
             }
             return false;
+        }
+
+        public static void Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget_Prefix(
+            Verb_MeleeAttackDamage __instance, LocalTargetInfo target)
+        {
+            Pawn caster = __instance.CasterPawn;
+            if (!QingheSwordCombatUtility.IsSwordMode(caster)
+                || __instance.EquipmentSource?.def.IsMeleeWeapon != true
+                || __instance.verbProps.meleeDamageDef.Worker is DamageWorker_QingheSlash
+                || !QingheSwordCombatUtility.IsSwordPressureTarget(caster, target.Thing))
+            {
+                return;
+            }
+
+            // Runs after hit and dodge rolls, once per target rather than per extra damage packet.
+            MX_QH_HediffUtility.EnsureSwordPressure(caster).AddProgress(25f);
         }
 
         public static void Patch_Thing_TakeDamage_Prefix(Thing __instance, DamageInfo dinfo)
@@ -536,7 +555,7 @@ namespace MiliraXian.Characters.QingHe
 
         public static void Patch_GenRecipe_PostProcessProduct_Postfix(Thing __result, RecipeDef recipeDef, Pawn worker)
         {
-            MX_QH_HediffUtility.AddDivineGraceProgressFromCraft(worker, recipeDef, __result);
+            MX_QH_HediffUtility.AddAuraMasteryProgressFromCraft(worker, recipeDef, __result);
         }
         private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
         {
@@ -687,10 +706,10 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            if (MX_QHDefOf.MX_QH_Trait_LongBreath != null
-                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_LongBreath))
+            if (MX_QHDefOf.MX_QH_Trait_SpringFall != null
+                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_SpringFall))
             {
-                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_LongBreath));
+                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_SpringFall));
             }
 
             if (MX_QHDefOf.MX_QH_Trait_WaterFairy != null

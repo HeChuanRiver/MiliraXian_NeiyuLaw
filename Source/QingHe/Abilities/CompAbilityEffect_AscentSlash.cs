@@ -20,24 +20,25 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public int takeoffDelayTicks = 8;
         public float ascentDecelerationPower = 2.2f;
         public float descentAccelerationPower = 2.4f;
-        public float secondStageTrackingRange = 8f;
-        public float secondStageLimitedFollowDistance = 2.5f;
+        public float secondStageTrackingRange = 4f;
         public float secondStageMaxForwardOffset = 12f;
         public float secondStageMaxAltitudeLayers = 48f;
-        public float secondImpactRadius = 2f;
+        public float secondImpactRadius = 4f;
         public float damageAmount = 32f;
         public float armorPenetration = 0.35f;
         public float buildingDamageMultiplier = 2f;
         public float empoweredDamagePerPressurePoint = 0.25f;
         public int empoweredSlashCount = 7;
         public int empoweredSlashIntervalTicks = 6;
-        public float empoweredSlashRadius = 1f;
+        public float empoweredSlashRadius = 3f;
         public FleckDef empoweredSlashFleck;
         public float empoweredSlashVisualScale = 3.2f;
         public float empoweredSlashVisualAngleJitter = 12f;
         public int normalSlashCount = 3;
         public float postHitRecoveryPoints = 1f;
-        public int postHitRecoveryTicks = 300;
+        public int postHitRecoveryTicks = 600;
+        public float normalPostHitRecoveryPoints = 0.5f;
+        public int normalPostHitRecoveryTicks = 300;
         public int impactDelayTicks = 30;
 
         public string invalidLandingMessage = "MX_QH_AscentSlashInvalidLanding";
@@ -79,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public new CompProperties_AbilityAscentSlash Props => (CompProperties_AbilityAscentSlash)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasQingheExclusiveWeapon(parent?.pawn);
+        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
 
         private float AbilityRange => Mathf.Max(0f, parent?.def?.verbProperties?.range ?? 0f);
 

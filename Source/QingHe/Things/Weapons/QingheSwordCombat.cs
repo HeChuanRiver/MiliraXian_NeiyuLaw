@@ -35,21 +35,30 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     {
         public static bool IsSwordMode(Pawn pawn)
         {
-            return pawn?.equipment?.Primary?.def == MX_QHDefOf.MX_QH_Weapon_Sword;
+            return MX_QHCharacterUtility.IsQinghe(pawn)
+                && pawn.equipment?.Primary?.def.IsMeleeWeapon == true;
         }
 
         public static bool IsBellMode(Pawn pawn)
         {
-            return pawn?.equipment?.Primary?.def == MX_QHDefOf.MX_QH_Weapon_FlowerBell;
+            return MX_QHCharacterUtility.IsQinghe(pawn)
+                && pawn.equipment?.Primary?.def.IsRangedWeapon == true;
         }
 
-        public static bool HasQingheExclusiveWeapon(Pawn pawn)
+        public static bool HasWeaponStance(Pawn pawn)
         {
             return IsSwordMode(pawn) || IsBellMode(pawn);
         }
 
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
         {
+            ThingDef weaponDef = pawn?.equipment?.Primary?.def;
+            if (weaponDef != MX_QHDefOf.MX_QH_Weapon_Sword
+                && weaponDef != MX_QHDefOf.MX_QH_Weapon_FlowerBell)
+            {
+                return FlowerBellResonance.None;
+            }
+
             return MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
         }
 
@@ -96,13 +105,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             else if (resonance == FlowerBellResonance.Winter)
             {
-                CompDivineProtectionShield shield = caster.GetComp<CompDivineProtectionShield>();
+                CompAuraShield shield = caster.GetComp<CompAuraShield>();
                 if (shield != null)
                 {
-                    float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
+                    float specialFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
                     // Linearly map spell factors 1..5 to recovery factors 1..2.5.
                     float recoveryFactor = 1f + (specialFactor - 1f) * 0.375f;
-                    shield.RestoreEnergy(shield.CurrentRegenPerSecond * 0.5f * recoveryFactor);
+                    shield.RestoreEnergy((4f + shield.CurrentRegenPerSecond * 0.2f) * recoveryFactor);
                 }
             }
         }
@@ -144,7 +153,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
             DamageDef damageDef = empowered ? MX_QHDefOf.MX_QH_SlashSkill : MX_QHDefOf.MX_QH_Slash;
             bool hit = IsSwordPressureTarget(caster, target);
-            target.TakeDamage(new DamageInfo(damageDef ?? DamageDefOf.Cut, damage, armorPenetration, -1f, caster, null, MX_QHDefOf.MX_QH_Weapon_Sword));
+            target.TakeDamage(new DamageInfo(damageDef ?? DamageDefOf.Cut, damage, armorPenetration, -1f, caster, null, caster.equipment.Primary?.def));
             return hit;
         }
 

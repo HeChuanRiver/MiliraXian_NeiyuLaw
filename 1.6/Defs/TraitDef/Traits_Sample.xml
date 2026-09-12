@@ -31,12 +31,18 @@
     </modExtensions>
   </TraitDef>
   <TraitDef>
-    <defName>MX_QH_Trait_LongBreath</defName>
+    <defName>MX_QH_Trait_SpringFall</defName>
     <commonality>0.000001</commonality>
     <degreeDatas>
       <li>
-        <label>&lt;color=#99CCFF&gt;涓流长息&lt;/color&gt;</label>
-        <description>"梨花带雨，润物无声。"\n\n清荷的伤口会随时间自行愈合，即使是永久性损伤与失去的身体部位，也能在细水长流中慢慢复原。</description>
+        <label>&lt;color=#99CCFF&gt;春雨&lt;/color&gt;</label>
+        <description>"梨花带雨，润物无声。"</description>
+        <statFactors>
+          <FoodPoisonChance>0</FoodPoisonChance>
+          <MedicalSurgerySuccessChance>1.5</MedicalSurgerySuccessChance>
+          <MedicalTendQuality>1.5</MedicalTendQuality>
+          <PlantWorkSpeed>1.25</PlantWorkSpeed>
+        </statFactors>
       </li>
     </degreeDatas>
   </TraitDef>
@@ -46,10 +52,16 @@
     <degreeDatas>
       <li>
         <label>&lt;color=#FFCDE1&gt;霓羽仙&lt;/color&gt;</label>
-        <description>"出淤泥而不染，濯清涟而不妖。"\n\n霓羽仙是米莉拉修行者的至高境界，清荷亦已臻此境。当清荷受到致命或足以摧毁身体部位的伤害时，花神的垂怜将抵消此次伤害，让她的身体在花光中复原，并短暂遁入心灵隐形的庇护。（消耗一层充能，随时间恢复）</description>
+        <description>"出淤泥而不染，濯清涟而不妖。"\n\n免疫在水中或雨中的心情惩罚。</description>
         <statFactors>
           <IncomingDamageFactor>0.99</IncomingDamageFactor>
+          <WorkSpeedGlobal>1.25</WorkSpeedGlobal>
         </statFactors>
+        <statOffsets>
+          <ToxicResistance>1</ToxicResistance>
+          <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+          <ImmunityGainSpeed>0.5</ImmunityGainSpeed>
+        </statOffsets>
       </li>
     </degreeDatas>
     <modExtensions>

@@ -28,6 +28,8 @@ namespace MiliraXian.Characters.QingHe.Things
         public float breakEffectScale = 3.6f;
         public float breakFlashScale = 8f;
         public ThingDef enhancedRetaliationProjectileDef;
+        public float fearAccumulationPerSecond = 15f;
+        public float overloadAccumulationPerSecond = 15f;
 
         public CompProperties_LunarMirrorShield()
         {
@@ -86,6 +88,28 @@ namespace MiliraXian.Characters.QingHe.Things
             if (ticksLeft <= 0 || energy <= 0f)
             {
                 parent.Destroy(DestroyMode.Vanish);
+                return;
+            }
+
+            if (Active && ageTicks % 60 == 0 && MX_QHSkillUtility.HasSeasonalResonance(caster))
+            {
+                ApplyAbnormals();
+            }
+        }
+
+        private void ApplyAbnormals()
+        {
+            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            foreach (Pawn pawn in parent.Map.mapPawns.AllPawnsSpawned)
+            {
+                if (pawn.Dead || !GenHostility.HostileTo(caster, pawn)
+                    || pawn.Position.DistanceToSquared(parent.Position) > Props.radius * Props.radius)
+                {
+                    continue;
+                }
+
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalFear, Props.fearAccumulationPerSecond * effectFactor);
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalOverload, Props.overloadAccumulationPerSecond * effectFactor);
             }
         }
 
@@ -147,7 +171,7 @@ namespace MiliraXian.Characters.QingHe.Things
             caster = newCaster;
             casterFaction = newCaster?.Faction;
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
-            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
+            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpellEffectFactor(caster);
             ageTicks = 0;
         }
 

@@ -9,7 +9,8 @@
         <defName>MX_QH_SwordSlash</defName>
         <requiredCapacity>MX_QH_SwordCut</requiredCapacity>
         <verb>
-            <verbClass>Verb_MeleeAttackDamage</verbClass>
+            <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_QingheSwordSweep</verbClass>
+            <range>2.2</range>
             <meleeDamageDef>MX_QH_Slash</meleeDamageDef>
         </verb>
         <logEntryDef>MeleeAttack</logEntryDef>

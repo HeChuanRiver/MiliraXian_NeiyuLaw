@@ -101,13 +101,13 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (state == null)
             {
-                return "MX_QH_FlowerCourtTitle".Translate() + "\n\n" + "MX_QH_FlowerCourtMissing".Translate();
+                return "MX_QH_SkillTreeTitle".Translate() + "\n\n" + "MX_QH_SkillTreeMissing".Translate();
             }
 
-            return "MX_QH_FlowerCourtTitle".Translate() + "\n\n"
-                   + "MX_QH_FlowerCourtGraceLine".Translate(MX_QH_HediffUtility.GetDivineGraceLevel(pawn), 24) + "\n"
-                   + "MX_QH_FlowerCourtLearnedNodesLine".Translate(state.LearnedNodeCount) + "\n"
-                   + "MX_QH_FlowerCourtStillnessLine".Translate((stillness?.CurrentValue ?? 0f).ToString("0"), (stillness?.MaxValue ?? 100f).ToString("0"));
+            return "MX_QH_SkillTreeTitle".Translate() + "\n\n"
+                   + "MX_QH_SkillTreeAuraMasteryLine".Translate(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), 24) + "\n"
+                   + "MX_QH_SkillTreeCurrentAuraMasteryLevelLine".Translate(MX_QH_HediffUtility.GetAuraMasteryComp(pawn).CurrentLevel) + "\n"
+                   + "MX_QH_SkillTreeStillnessLine".Translate((stillness?.CurrentValue ?? 0f).ToString("0"), (stillness?.MaxValue ?? 100f).ToString("0"));
         }
 
         private int GetStableTipId()

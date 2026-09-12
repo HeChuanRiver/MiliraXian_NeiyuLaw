@@ -136,12 +136,12 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 
             if (!MX_QHCharacterUtility.IsQinghe(interactor))
             {
-                yield return new FloatMenuOption("MX_QH_OpenFlowerCourtRequiresQinghe".Translate(), null);
+                yield return new FloatMenuOption("MX_QH_OpenSkillTreeRequiresQinghe".Translate(), null);
                 yield break;
             }
 
             yield return new FloatMenuOption(
-                "MX_QH_OpenFlowerCourt".Translate(),
+                "MX_QH_OpenSkillTree".Translate(),
                 delegate
                 {
                     if (!interactor.CanReserveAndReach(clickedThing, PathEndMode.InteractionCell, Danger.Deadly))
@@ -154,7 +154,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                     MX_QH_HediffUtility.EnsureFlowerDecree(interactor);
                     if (state == null)
                     {
-                        Messages.Message("MX_QH_FlowerCourtMissing".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);
+                        Messages.Message("MX_QH_SkillTreeMissing".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);
                         return;
                     }
 

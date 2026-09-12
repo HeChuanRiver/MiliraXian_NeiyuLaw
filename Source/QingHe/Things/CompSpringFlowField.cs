@@ -17,10 +17,10 @@ namespace MiliraXian.Characters.QingHe.Things
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
         public int ambientVisualFlecksPerBurst = 2;
-        public List<HediffDef_Abnormal> enhancedBleedAbnormals = new();
-        public float enhancedBleedAccumulationAmount = 8f;
-        public List<HediffDef_Abnormal> enhancedToxinAbnormals = new();
-        public float enhancedToxinAccumulationAmount = 8f;
+        public float bleedAccumulationPerSecond = 20f;
+        public float toxinAccumulationPerSecond = 15f;
+        public float corrosionAccumulationPerSecond = 15f;
+        public float electricLeakAccumulationPerSecond = 20f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;
 
@@ -87,6 +87,11 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             ticksToNextEffect--;
+            if (ageTicks % 60 == 0 && MX_QHSkillUtility.HasSeasonalResonance(caster))
+            {
+                ApplyAbnormals();
+            }
+
             if (ticksToNextAmbientVisual <= 0)
             {
                 ticksToNextAmbientVisual = Props.ambientVisualIntervalTicks + Rand.RangeInclusive(-12, 18);
@@ -141,7 +146,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
             float radius = Mathf.Max(0f, CurrentRadius);
             float radiusSquared = radius * radius;
-            float effectFactor = ResolveSpecialEffectFactor();
+            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
             IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
             for (int i = 0; i < pawns.Count; i++)
             {
@@ -161,16 +166,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 if (pawn.Faction == caster.Faction)
                 {
                     ApplySpringFlow(pawn, effectFactor);
-                    continue;
                 }
-
-                if (!GenHostility.HostileTo(caster, pawn))
-                {
-                    continue;
-                }
-
-                ApplyEnhancedAccumulation(pawn, Props.enhancedBleedAbnormals, Props.enhancedBleedAccumulationAmount * effectFactor);
-                ApplyEnhancedAccumulation(pawn, Props.enhancedToxinAbnormals, Props.enhancedToxinAccumulationAmount * effectFactor);
             }
         }
 
@@ -189,24 +185,29 @@ namespace MiliraXian.Characters.QingHe.Things
             pawn.health.AddHediff(hediff);
         }
 
-        private float ResolveSpecialEffectFactor()
+        private void ApplyAbnormals()
         {
-            return MX_QHSkillUtility.GetSpecialAbilityEffectFactor(caster);
-        }
-
-        private void ApplyEnhancedAccumulation(Pawn pawn, List<HediffDef_Abnormal> abnormals, float amount)
-        {
-            if (pawn == null || abnormals == null || amount <= 0f)
+            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            // Short circuits can kill and despawn nearby pawns during this pulse.
+            foreach (Pawn pawn in new List<Pawn>(parent.Map.mapPawns.AllPawnsSpawned))
             {
-                return;
-            }
-
-            for (int i = 0; i < abnormals.Count; i++)
-            {
-                HediffDef_Abnormal abnormal = abnormals[i];
-                if (abnormal != null)
+                if (pawn.Dead || !GenHostility.HostileTo(caster, pawn)
+                    || pawn.Position.DistanceToSquared(parent.Position) > CurrentRadius * CurrentRadius)
                 {
-                    AbnormalSystem.ApplyAccumulation(caster, pawn, abnormal, amount);
+                    continue;
+                }
+
+                bool bleeding = pawn.health.hediffSet.HasHediff(MX_AbnormalDefOf.MX_AbnormalBleeding);
+                bool corroded = pawn.health.hediffSet.HasHediff(MX_AbnormalDefOf.MX_AbnormalCorroded);
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalBleed, Props.bleedAccumulationPerSecond * effectFactor);
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalCorrosion, Props.corrosionAccumulationPerSecond * effectFactor);
+                if (bleeding)
+                {
+                    AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalToxin, Props.toxinAccumulationPerSecond * effectFactor);
+                }
+                if (corroded)
+                {
+                    AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalElectricLeak, Props.electricLeakAccumulationPerSecond * effectFactor);
                 }
             }
         }

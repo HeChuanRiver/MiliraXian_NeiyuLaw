@@ -6,7 +6,7 @@ using MiliraXian.Characters.QingHe.Vfx;
 
 namespace MiliraXian.Characters.QingHe.Things
 {
-    public class CompProperties_DivineProtectionShield : CompProperties
+    public class CompProperties_AuraShield : CompProperties
     {
         public float maxEnergy = 100f;
 
@@ -19,19 +19,20 @@ namespace MiliraXian.Characters.QingHe.Things
         public int breakDisabledTicks = 600;
         public bool breakOnEmp = true;
         public float shieldDamageCap;
+        public float staggerDurationFactor = 1f;
 
-        public DivineProtectionShieldVisualProperties visual = new();
+        public AuraShieldVisualProperties visual = new();
 
-        public CompProperties_DivineProtectionShield()
+        public CompProperties_AuraShield()
         {
-            compClass = typeof(CompDivineProtectionShield);
+            compClass = typeof(CompAuraShield);
         }
     }
 
     /// <summary>
     /// Recoverable Lotus Shield for QingHe.
     /// </summary>
-    public class CompDivineProtectionShield : ThingComp
+    public class CompAuraShield : ThingComp
     {
         private const int RegenFlushIntervalTicks = 10;
 
@@ -42,12 +43,11 @@ namespace MiliraXian.Characters.QingHe.Things
         private int regenUntilTick = -1;
         private float cachedMaxEnergy = -1f;
         private float cachedRegenPerSecond;
-        private bool runtimeStateInitialized;
-        private DivineProtectionShieldRenderer renderer;
+        private AuraShieldRenderer renderer;
 
-        public CompProperties_DivineProtectionShield Props => (CompProperties_DivineProtectionShield)props;
+        public CompProperties_AuraShield Props => (CompProperties_AuraShield)props;
 
-        private DivineProtectionShieldRenderer Renderer => renderer ??= new DivineProtectionShieldRenderer(this);
+        private AuraShieldRenderer Renderer => renderer ??= new AuraShieldRenderer(this);
 
         private Pawn PawnOwner => parent as Pawn;
 
@@ -76,8 +76,8 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float factor = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapFactor, 0f);
-                float offset = GetStatValue(MX_QHDefOf.MX_QH_LotusShieldDamageCapOffset, 20f);
+                float factor = GetStatValue(MX_QHDefOf.MX_QH_AuraShieldDamageCapFactor, 0f);
+                float offset = GetStatValue(MX_QHDefOf.MX_QH_AuraShieldDamageCapOffset, 20f);
                 float afterOffset = Props.shieldDamageCap + offset;
                 if (factor <= 0f || afterOffset <= 0f)
                 {
@@ -93,7 +93,7 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return ApplyDelayFactorOffset(
                     Props.hitRegenDelayTicks,
-                    MX_QHDefOf.MX_QH_LotusShieldHitRegenDelayFactor);
+                    MX_QHDefOf.MX_QH_AuraShieldHitRegenDelayFactor);
             }
         }
 
@@ -103,17 +103,17 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return Mathf.Max(
                     0,
-                    Mathf.RoundToInt(Props.breakDisabledTicks + GetStatValue(MX_QHDefOf.MX_QH_LotusShieldBreakDelayOffset, 0f)));
+                    Mathf.RoundToInt(Props.breakDisabledTicks + GetStatValue(MX_QHDefOf.MX_QH_AuraShieldBreakDelayOffset, 0f)));
             }
         }
 
-        public bool InBreak => RuntimeInitialized() && CurrentTick < resetUntilTick;
+        public bool InBreak => CurrentTick < resetUntilTick;
 
-        public int BreakTicksLeft => RuntimeInitialized() ? Mathf.Max(0, resetUntilTick - CurrentTick) : 0;
+        public int BreakTicksLeft => Mathf.Max(0, resetUntilTick - CurrentTick);
 
-        public bool InRegenDelay => RuntimeInitialized() && CurrentTick < regenUntilTick;
+        public bool InRegenDelay => CurrentTick < regenUntilTick;
 
-        public int RegenDelayTicksLeft => RuntimeInitialized() ? Mathf.Max(0, regenUntilTick - CurrentTick) : 0;
+        public int RegenDelayTicksLeft => Mathf.Max(0, regenUntilTick - CurrentTick);
 
         public float CurrentRegenPerSecond
         {
@@ -151,26 +151,30 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostPostMake()
         {
             base.PostPostMake();
-            InitializeRuntimeState();
             energy = cachedMaxEnergy;
         }
 
-        public override void PostExposeData()
+        public void BindToPawn(Pawn pawn)
+        {
+            parent = pawn;
+            lastRegenUpdateTick = CurrentTick;
+            RefreshCachedStats();
+            renderer?.NotifyHidden();
+        }
+
+        // Only the owning HediffComp calls this, under the Hediff's save node.
+        // Pawn's normal ThingComp serialization must not write another copy.
+        public void ExposeShieldData()
         {
             if (Scribe.mode == LoadSaveMode.Saving)
             {
                 FlushAccumulatedRegen(CurrentTick, force: true);
             }
 
-            base.PostExposeData();
-            Scribe_Values.Look(ref energy, "mx_qh_lotus_energy", 100f);
-            Scribe_Values.Look(ref resetUntilTick, "mx_qh_lotus_resetUntilTick", -1);
-            Scribe_Values.Look(ref regenUntilTick, "mx_qh_lotus_regenUntilTick", -1);
-            Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_lotus_fullEnergyAccumulatedTicks", 0);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                InitializeRuntimeState();
-            }
+            Scribe_Values.Look(ref energy, "mx_qh_auraShield_energy", 100f);
+            Scribe_Values.Look(ref resetUntilTick, "mx_qh_auraShield_resetUntilTick", -1);
+            Scribe_Values.Look(ref regenUntilTick, "mx_qh_auraShield_regenUntilTick", -1);
+            Scribe_Values.Look(ref fullEnergyAccumulatedTicks, "mx_qh_auraShield_fullEnergyAccumulatedTicks", 0);
         }
 
         public override void CompTick()
@@ -179,18 +183,11 @@ namespace MiliraXian.Characters.QingHe.Things
 
             if (QinghePowerBalance.Sealed)
             {
-                PawnOwner?.AllComps?.Remove(this);
-                return;
-            }
-
-            if (PawnOwner == null)
-            {
-                energy = 0f;
+                lastRegenUpdateTick = CurrentTick;
                 return;
             }
 
             int currentTick = CurrentTick;
-            RuntimeInitialized();
 
             if (currentTick < resetUntilTick)
             {
@@ -211,8 +208,9 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void FlushAccumulatedRegen(int currentTick, bool force)
         {
-            if (!RuntimeInitialized() || PawnOwner == null)
+            if (QinghePowerBalance.Sealed)
             {
+                lastRegenUpdateTick = currentTick;
                 return;
             }
 
@@ -270,21 +268,21 @@ namespace MiliraXian.Characters.QingHe.Things
             absorbed = false;
 
             Pawn owner = PawnOwner;
-            if (owner == null || owner.Dead)
+            if (QinghePowerBalance.Sealed || owner.Dead)
             {
                 return;
             }
 
             FlushAccumulatedRegen(CurrentTick, force: true);
-            if (dinfo.Amount <= 0f || InBreak || dinfo.Def.ignoreShields || energy <= 0f)
+            if (dinfo.Amount <= 0f || InBreak || energy <= 0f)
             {
                 return;
             }
             float incomingDamageFactor = Mathf.Max(0f, GetStatValue(StatDefOf.IncomingDamageFactor, 1f));
             // Scale only the shield cost; unabsorbed damage keeps its normal body damage processing.
             float shieldDamage = Mathf.Min(dinfo.Amount * incomingDamageFactor, ShieldDamageCap);
-            float hardening = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_LotusShieldHardening, 0f));
-            float hardeningFactor = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_LotusShieldHardeningFactor, 0f));
+            float hardening = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHardening, 0f));
+            float hardeningFactor = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHardeningFactor, 0f));
             shieldDamage -= hardening * hardeningFactor;
             if (shieldDamage <= 0f)
             {
@@ -304,7 +302,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             int currentTick = CurrentTick;
-            regenUntilTick = currentTick + ResolveRegenDelayTicks();
+            regenUntilTick = currentTick + CurrentRegenDelayTicks;
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyAbsorbed(owner, CurrentTick);
             dinfo.SetAmount(0f);
@@ -320,7 +318,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             base.PostDraw();
             Pawn owner = PawnOwner;
-            if (owner == null
+            if (QinghePowerBalance.Sealed
                 || !owner.Spawned
                 || owner.Dead
                 || InBreak
@@ -338,10 +336,24 @@ namespace MiliraXian.Characters.QingHe.Things
             return true;
         }
 
+        public override float GetStatFactor(StatDef stat)
+        {
+            if (stat == StatDefOf.StaggerDurationFactor
+                && !QinghePowerBalance.Sealed
+                && !PawnOwner.Dead
+                && !InBreak
+                && Energy > 0f)
+            {
+                return Props.staggerDurationFactor;
+            }
+
+            return base.GetStatFactor(stat);
+        }
+
         public void RestoreEnergy(float amount)
         {
             FlushAccumulatedRegen(CurrentTick, force: true);
-            if (amount <= 0f || InBreak)
+            if (QinghePowerBalance.Sealed || amount <= 0f || InBreak)
             {
                 return;
             }
@@ -359,19 +371,9 @@ namespace MiliraXian.Characters.QingHe.Things
             float energyRatio = Energy / MaxEnergy;
             energy = 0f;
             regenUntilTick = -1;
-            resetUntilTick = CurrentTick + ResolveBreakDelayTicks();
+            resetUntilTick = CurrentTick + CurrentBreakDelayTicks;
             lastRegenUpdateTick = CurrentTick;
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
-        }
-
-        private int ResolveRegenDelayTicks()
-        {
-            return CurrentRegenDelayTicks;
-        }
-
-        private int ResolveBreakDelayTicks()
-        {
-            return CurrentBreakDelayTicks;
         }
 
         private int ApplyDelayFactorOffset(float baseValue, StatDef factorStat)
@@ -390,49 +392,32 @@ namespace MiliraXian.Characters.QingHe.Things
             return owner.GetStatValue(statDef, true, 1);
         }
 
-        private bool RuntimeInitialized()
-        {
-            if (!runtimeStateInitialized)
-            {
-                InitializeRuntimeState();
-            }
-
-            return runtimeStateInitialized;
-        }
-
-        private void InitializeRuntimeState()
-        {
-            lastRegenUpdateTick = CurrentTick;
-            RefreshCachedStats();
-            runtimeStateInitialized = true;
-        }
-
         private void RefreshCachedStats()
         {
             cachedMaxEnergy = ResolveMaxEnergy();
             cachedRegenPerSecond = Mathf.Max(
                 0f,
-                Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldRegenPerSecondFactor, 1f));
+                Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_AuraShieldRegenPerSecondFactor, 1f));
         }
 
         private float ResolveMaxEnergy()
         {
             return Mathf.Max(
                 1f,
-                Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_LotusShieldMaxEnergyFactor, 1f));
+                Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_AuraShieldMaxEnergyFactor, 1f));
         }
 
         public string BuildShieldTooltip()
         {
             string status = InBreak
-                ? "MX_QH_LotusShieldStatusDown".Translate(Mathf.CeilToInt(BreakTicksLeft / 60f)).ToString()
-                : "MX_QH_LotusShieldStatusActive".Translate().ToString();
+                ? "MX_QH_AuraShieldStatusDown".Translate(Mathf.CeilToInt(BreakTicksLeft / 60f)).ToString()
+                : "MX_QH_AuraShieldStatusActive".Translate().ToString();
 
-            return "MX_QH_LotusShieldTooltipTitle".Translate().ToString() + "\n\n"
+            return "MX_QH_AuraShieldTooltipTitle".Translate().ToString() + "\n\n"
                    + status + "\n"
-                   + "MX_QH_LotusShieldEnergyLine".Translate(Energy.ToString("F0"), MaxEnergy.ToString("F0")).ToString() + "\n"
-                   + "MX_QH_LotusShieldRegenLine".Translate(CurrentRegenPerSecond.ToString("F2")).ToString()
-                   + (InRegenDelay ? "\n" + "MX_QH_LotusShieldRegenDelayLine".Translate(Mathf.CeilToInt(RegenDelayTicksLeft / 60f)).ToString() : "");
+                   + "MX_QH_AuraShieldEnergyLine".Translate(Energy.ToString("F0"), MaxEnergy.ToString("F0")).ToString() + "\n"
+                   + "MX_QH_AuraShieldRegenLine".Translate(CurrentRegenPerSecond.ToString("F2")).ToString()
+                   + (InRegenDelay ? "\n" + "MX_QH_AuraShieldRegenDelayLine".Translate(Mathf.CeilToInt(RegenDelayTicksLeft / 60f)).ToString() : "");
         }
 
     }

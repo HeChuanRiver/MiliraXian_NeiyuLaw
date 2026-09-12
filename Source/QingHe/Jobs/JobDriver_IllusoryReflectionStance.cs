@@ -47,6 +47,13 @@ namespace MiliraXian.Characters.QingHe.Jobs
             pawn.rotationTracker?.FaceCell(stanceDirectionCell);
             stanceFacingInt = pawn.Rotation.AsInt;
             pawn.Rotation = StanceFacing;
+
+            // This job bypasses normal casting so it can defend immediately under attack.
+            Ability ability = job.ability;
+            if (ability != null && ability.HasCooldown && ability.CooldownTicksRemaining <= 0)
+            {
+                ability.StartCooldown(ability.def.cooldownTicksRange.RandomInRange);
+            }
         }
 
         public bool TryHandleDamage(ref DamageInfo dinfo, ref bool absorbed)
@@ -146,8 +153,11 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 : pawn.Position + StanceFacing.FacingCell;
             pawn.Rotation = StanceFacing;
             CompProperties_AbilityIllusoryReflection props = ResolveProps();
+            job.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.AddInvulnerability(pawn);
             props?.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
-            float specialFactor = MX_QHSkillUtility.GetSpecialAbilityEffectFactor(pawn);
+            float specialFactor = MX_QHSkillUtility.GetSpellEffectFactor(pawn);
+            // Snapshot before any target hit can grant pressure or other on-hit buffs.
+            float meleeFactor = pawn.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             PlayEmpoweredCounterSlash(directionCell, props);
             int hitCount = QingheSwordCombatUtility.ApplyCone(
                 pawn,
@@ -155,7 +165,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 directionCell,
                 props?.coneRadius ?? 5.5f,
                 props?.coneAngleDegrees ?? 90f,
-                (props?.empoweredDamage ?? 48f) * specialFactor,
+                (props?.empoweredDamage ?? 48f) * specialFactor * meleeFactor,
                 props?.armorPenetration ?? 0.45f,
                 empowered: true);
             if (hitCount > 0)

@@ -6,15 +6,15 @@
   <AbilityDef>
     <defName>MX_QH_SpringFlow</defName>
     <label>春泉涌流</label>
-    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果，泉水中的敌人还会持续积累异常效果。效果持续15秒。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
+    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累20点流血；若已处于流血状态，则改为积累15点毒素。机械敌人先积累15点腐蚀；若已处于腐蚀状态，则改为积累20点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>201</displayOrder>
     <cooldownTicksRange>480</cooldownTicksRange>
     <targetRequired>true</targetRequired>
     <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
-    <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
-    <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
       <targetable>true</targetable>
@@ -46,7 +46,7 @@
   <AbilityDef>
     <defName>MX_QH_LunarMirror</defName>
     <label>霜月镜</label>
-    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。</description>
+    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。\n\n习得“四时和鸣”后，每秒为护盾内的非机械敌人积累15点恐惧，为机械敌人积累15点过载；冰霜子弹命中时仅积累寒冷，达到上限后触发冻结。积累量受法术效果系数与对应异常附加效率影响。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>204</displayOrder>
@@ -180,32 +180,33 @@
         <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
         <dashDurationMinTicks>8</dashDurationMinTicks>
         <dashCollisionRadius>1.35</dashCollisionRadius>
-        <dashImpactRadius>1.8</dashImpactRadius>
-        <dashDamageAmount>10</dashDamageAmount>
-        <takeoffDelayTicks>18</takeoffDelayTicks>
+        <dashImpactRadius>1.5</dashImpactRadius>
+        <dashDamageAmount>5</dashDamageAmount>
+        <takeoffDelayTicks>10</takeoffDelayTicks>
         <ascentTicks>52</ascentTicks>
         <hoverTicks>22</hoverTicks>
         <descentTicks>14</descentTicks>
         <ascentDecelerationPower>2.2</ascentDecelerationPower>
         <descentAccelerationPower>2.4</descentAccelerationPower>
         <secondStageTrackingRange>4</secondStageTrackingRange>
-        <secondStageLimitedFollowDistance>1.5</secondStageLimitedFollowDistance>
         <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
         <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
-        <secondImpactRadius>2</secondImpactRadius>
-        <damageAmount>32</damageAmount>
-        <armorPenetration>0.35</armorPenetration>
-        <buildingDamageMultiplier>2</buildingDamageMultiplier>
+        <secondImpactRadius>4</secondImpactRadius>
+        <damageAmount>28</damageAmount>
+        <armorPenetration>1.35</armorPenetration>
+        <buildingDamageMultiplier>1.5</buildingDamageMultiplier>
         <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
         <empoweredSlashCount>7</empoweredSlashCount>
         <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>
-        <empoweredSlashRadius>1</empoweredSlashRadius>
+        <empoweredSlashRadius>3</empoweredSlashRadius>
         <empoweredSlashFleck>MX_QH_Fleck_MirrorSlashNormal</empoweredSlashFleck>
         <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
         <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
         <normalSlashCount>3</normalSlashCount>
-        <postHitRecoveryPoints>2</postHitRecoveryPoints>
+        <postHitRecoveryPoints>1</postHitRecoveryPoints>
         <postHitRecoveryTicks>600</postHitRecoveryTicks>
+        <normalPostHitRecoveryPoints>0.5</normalPostHitRecoveryPoints>
+        <normalPostHitRecoveryTicks>300</normalPostHitRecoveryTicks>
         <impactDelayTicks>30</impactDelayTicks>
         <dropSound>MX_QH_AscentSlash_Drop</dropSound>
         <slashSound>MX_QH_AscentSlash_Slash</slashSound>

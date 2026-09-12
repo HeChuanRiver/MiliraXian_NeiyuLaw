@@ -34,7 +34,9 @@ namespace MiliraXian.Characters
                 return true;
             }
 
-            if (thingWithComps.GetComp<CompUnbreakableEquipment>() == null)
+            // Check the damaged equipment itself; apparel damage-absorption callbacks also protect its wearer.
+            if (thingWithComps.GetComp<CompUnbreakableEquipment>() == null
+                && thingWithComps.GetComp<CompPawnKindEquipmentDurability>()?.PreventsDurabilityLoss != true)
             {
                 return true;
             }

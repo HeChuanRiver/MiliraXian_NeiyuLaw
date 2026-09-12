@@ -2,7 +2,7 @@
 <Defs>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldMaxEnergyFactor</defName>
+        <defName>MX_QH_AuraShieldMaxEnergyFactor</defName>
         <label>灵气容量乘数</label>
         <description>灵气加护最大容量的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
@@ -10,13 +10,13 @@
         <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldRegenPerSecondFactor</defName>
+        <defName>MX_QH_AuraShieldRegenPerSecondFactor</defName>
         <label>灵气回复乘数</label>
         <description>灵气每秒回复量的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
@@ -24,13 +24,13 @@
         <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldHitRegenDelayFactor</defName>
+        <defName>MX_QH_AuraShieldHitRegenDelayFactor</defName>
         <label>灵气回复延迟乘数</label>
         <description>受击后灵气回复延迟的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
@@ -38,13 +38,13 @@
         <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldBreakDelayOffset</defName>
+        <defName>MX_QH_AuraShieldBreakDelayOffset</defName>
         <label>灵气加护重启延迟偏移</label>
         <description>灵气耗尽后重新开始恢复的延迟加值修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_TicksToSeconds</workerClass>
@@ -52,66 +52,66 @@
         <defaultBaseValue>0</defaultBaseValue>
         <toStringStyle>FloatMaxOne</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldDamageCapFactor</defName>
+        <defName>MX_QH_AuraShieldDamageCapFactor</defName>
         <label>灵气最大单次消耗乘数</label>
-        <description>灵气单次消耗上限的倍率修正。0%时不限制单次消耗；刚柔并济提供100%，默认启用20点上限。</description>
+        <description>灵气单次消耗上限的倍率修正。此数值越大，单次消耗上限越高。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
         <minValue>0</minValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldDamageCapOffset</defName>
+        <defName>MX_QH_AuraShieldDamageCapOffset</defName>
         <label>灵气最大单次消耗偏移</label>
-        <description>灵气单次消耗上限的加值修正，基础值为20。此属性先于倍率应用；消耗上限乘数为0%时不启用封顶。</description>
+        <description>灵气单次消耗上限的加值修正，基础值为20。此属性先于倍率应用；消耗上限乘数为0%时该特性不生效。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>20</defaultBaseValue>
         <toStringStyle>FloatOne</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldHardening</defName>
+        <defName>MX_QH_AuraShieldHardening</defName>
         <label>灵气硬化</label>
-        <description>灵气盾每次消耗的基础抵扣值，乘灵气硬化乘数后生效。在承伤倍率与单次消耗上限结算后扣除；剩余消耗小于或等于0时，完全抵挡此次伤害，不消耗灵气，也不触发回复延迟。护盾破裂、无能量或伤害忽略护盾时不生效。</description>
+        <description>灵气硬化提供的额外护甲值，护盾受到的伤害会先减去护甲值，若原始伤害值小于护甲值，则伤害完全无效。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
         <minValue>0</minValue>
         <toStringStyle>FloatOne</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_LotusShieldHardeningFactor</defName>
+        <defName>MX_QH_AuraShieldHardeningFactor</defName>
         <label>灵气硬化乘数</label>
-        <description>灵气硬化抵扣值的倍率修正。0%时硬化不生效；刚柔并济提供100%，使灵气硬化按完整数值抵扣护盾消耗。</description>
+        <description>灵气硬化护甲值的倍率修正，该数值为0时护甲不会生效。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>0</defaultBaseValue>
         <minValue>0</minValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineProtection</li>
+            <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
@@ -145,7 +145,7 @@
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_DivineBlessingRechargeSpeedFactor</defName>
+        <defName>MX_QH_FlowingFormRechargeSpeedFactor</defName>
         <label>流水之形充能速度乘数</label>
         <description>流水之形充能速度的倍率修正。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
@@ -153,13 +153,13 @@
         <defaultBaseValue>1</defaultBaseValue>
         <toStringStyle>PercentZero</toStringStyle>
         <showIfHediffsPresent>
-            <li>MX_QH_DivineBlessing</li>
+            <li>MX_QH_FlowingForm</li>
         </showIfHediffsPresent>
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_SpecialAbilityEffectFactor</defName>
+        <defName>MX_QH_SpellEffectFactor</defName>
         <label>法术效果系数</label>
         <description>特殊法术效果的倍率修正。影响清荷的技能伤害、通过技能和共鸣附加异常状态的效率和技能增益产生的效果量。</description>
         <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>

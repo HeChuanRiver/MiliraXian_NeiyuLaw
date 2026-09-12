@@ -65,9 +65,9 @@ internal static class QingheExperienceRegressionTests
 
         float cumulative = 0f;
         float previous = 0f;
-        for (int level = 0; level < HediffComp_QingheGraceSync.MaxGraceLevel; level++)
+        for (int level = 0; level < HediffComp_QingheAuraMasterySync.MaxAuraMasteryLevel; level++)
         {
-            float required = HediffComp_QingheGraceSync.GetRequiredProgress(level);
+            float required = HediffComp_QingheAuraMasterySync.GetRequiredProgress(level);
             if (required <= previous) throw new InvalidOperationException("requirements must increase at level " + level);
             previous = required;
             cumulative += required;
@@ -79,9 +79,9 @@ internal static class QingheExperienceRegressionTests
                 case 24: Near(240000f, cumulative, "endgame budget"); break;
             }
         }
-        Near(60f, HediffComp_QingheGraceSync.GetRequiredProgress(-1), "negative level clamps to start");
-        Near(0f, HediffComp_QingheGraceSync.GetRequiredProgress(24), "maximum level has no requirement");
-        Near(0f, HediffComp_QingheGraceSync.GetRequiredProgress(25), "above maximum has no requirement");
+        Near(60f, HediffComp_QingheAuraMasterySync.GetRequiredProgress(-1), "negative level clamps to start");
+        Near(0f, HediffComp_QingheAuraMasterySync.GetRequiredProgress(24), "maximum level has no requirement");
+        Near(0f, HediffComp_QingheAuraMasterySync.GetRequiredProgress(25), "above maximum has no requirement");
     }
 
     private static RecipeDef Recipe(Thing product, float work)
@@ -102,7 +102,7 @@ internal static class QingheExperienceRegressionTests
     private static float Experience(Thing product, RecipeDef recipe)
     {
         MethodInfo calculate = typeof(MX_QH_HediffUtility).GetMethod(
-            "CalculateDivineGraceProgressFromCraft", BindingFlags.Static | BindingFlags.NonPublic);
+            "CalculateAuraMasteryProgressFromCraft", BindingFlags.Static | BindingFlags.NonPublic);
         return (float)calculate.Invoke(null, new object[] { recipe, product });
     }
 

@@ -6,7 +6,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 {
-    public class Widget_DivineProtectionShieldBar : Widget_Base
+    public class Widget_AuraShieldBar : Widget_Base
     {
         private const int TipSalt = 910203;
         private const float BarLeftPadding = 10f;
@@ -24,7 +24,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private static readonly Color ShieldBreakDarkColor = new(0.22f, 0.05f, 0.06f, 1f);
         private static readonly Color ShieldBreakBrightColor = new(1f, 0.95f, 0.95f, 1f);
 
-        public Widget_DivineProtectionShieldBar(Pawn pawn, Rect localRect, TextAnchor alignment)
+        public Widget_AuraShieldBar(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
         {
             this.pawn = pawn;
@@ -32,7 +32,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            CompDivineProtectionShield shield = pawn?.GetComp<CompDivineProtectionShield>();
+            CompAuraShield shield = pawn?.GetComp<CompAuraShield>();
             Rect outerRect = GetResourceBarRect(rect, BarHeight);
             DrawBar(rect, outerRect, shield);
 
@@ -43,7 +43,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
         }
 
-        private static void DrawBar(Rect widgetRect, Rect outerRect, CompDivineProtectionShield shield)
+        private static void DrawBar(Rect widgetRect, Rect outerRect, CompAuraShield shield)
         {
             Widgets.DrawBoxSolid(outerRect, OuterBorderColor);
 

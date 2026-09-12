@@ -26,26 +26,26 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static DamageDef MX_QH_Slash;
         public static DamageDef MX_QH_SlashSkill;
 
-        public static StatDef MX_QH_LotusShieldMaxEnergyFactor;
-        public static StatDef MX_QH_LotusShieldRegenPerSecondFactor;
-        public static StatDef MX_QH_LotusShieldHitRegenDelayFactor;
-        public static StatDef MX_QH_LotusShieldBreakDelayOffset;
-        public static StatDef MX_QH_LotusShieldDamageCapFactor;
-        public static StatDef MX_QH_LotusShieldDamageCapOffset;
-        public static StatDef MX_QH_LotusShieldHardening;
-        public static StatDef MX_QH_LotusShieldHardeningFactor;
+        public static StatDef MX_QH_AuraShieldMaxEnergyFactor;
+        public static StatDef MX_QH_AuraShieldRegenPerSecondFactor;
+        public static StatDef MX_QH_AuraShieldHitRegenDelayFactor;
+        public static StatDef MX_QH_AuraShieldBreakDelayOffset;
+        public static StatDef MX_QH_AuraShieldDamageCapFactor;
+        public static StatDef MX_QH_AuraShieldDamageCapOffset;
+        public static StatDef MX_QH_AuraShieldHardening;
+        public static StatDef MX_QH_AuraShieldHardeningFactor;
         public static StatDef MX_QH_FlowerDecreeMaxOffset;
         public static StatDef MX_QH_FlowerDecreeRegenFactor;
-        public static StatDef MX_QH_DivineBlessingRechargeSpeedFactor;
-        public static StatDef MX_QH_SpecialAbilityEffectFactor;
+        public static StatDef MX_QH_FlowingFormRechargeSpeedFactor;
+        public static StatDef MX_QH_SpellEffectFactor;
 
         public static HediffDef MX_QH_SpringFlow;
         public static HediffDef MX_QH_AscentSlashInvulnerable;
         public static HediffDef MX_QH_IllusoryReflectionInvulnerable;
-        public static HediffDef MX_QH_DivineBlessing;
-        public static HediffDef MX_QH_DivineBlessingImmunity;
+        public static HediffDef MX_QH_FlowingForm;
+        public static HediffDef MX_QH_FlowingFormImmunity;
         public static HediffDef MX_QH_AuraMastery;
-        public static HediffDef MX_QH_DivineProtection;
+        public static HediffDef MX_QH_AuraShield;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_SwordPressure;
@@ -64,7 +64,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static ThoughtDef MX_QH_NoLotusPond;
         public static ThoughtDef MX_QH_LotusPavilionBeautyLow;
 
-        public static TraitDef MX_QH_Trait_LongBreath;
+        public static TraitDef MX_QH_Trait_SpringFall;
         public static TraitDef MX_QH_Trait_WaterFairy;
 
         public static InspirationDef Frenzy_Work;
