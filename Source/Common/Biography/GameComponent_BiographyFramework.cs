@@ -8,6 +8,10 @@ namespace MiliraXian.Characters.Biography
 {
     public sealed class GameComponent_BiographyFramework : GameComponent
     {
+        private const int EvaluationIntervalTicks = 2500;
+
+        private int nextEvaluationTick;
+
         public GameComponent_BiographyFramework(Game game)
         {
         }
@@ -15,15 +19,57 @@ namespace MiliraXian.Characters.Biography
         public override void StartedNewGame()
         {
             BiographyFrameworkUtility.ClearCache();
+            EvaluateAllActivePawns(sendNotifications: false);
+            ScheduleNextEvaluation();
         }
 
         public override void LoadedGame()
         {
             BiographyFrameworkUtility.ClearCache();
+            EvaluateAllActivePawns(sendNotifications: false);
+            ScheduleNextEvaluation();
         }
 
-        // Compatibility shell. Cultivation evaluates conditions on demand; the former
-        // periodic scan of every map and caravan is no longer needed.
+        public override void GameComponentTick()
+        {
+            if (!BiographyDatabase.HasAnyConfigurations || Find.TickManager == null)
+            {
+                return;
+            }
+
+            int currentTick = Find.TickManager.TicksGame;
+            if (currentTick < nextEvaluationTick)
+            {
+                return;
+            }
+
+            nextEvaluationTick = currentTick + EvaluationIntervalTicks;
+            EvaluateAllActivePawns(sendNotifications: true);
+        }
+
+        private static void EvaluateAllActivePawns(bool sendNotifications)
+        {
+            if (!BiographyDatabase.HasAnyConfigurations)
+            {
+                return;
+            }
+
+            List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive;
+            for (int i = 0; i < pawns.Count; i++)
+            {
+                Pawn pawn = pawns[i];
+                if (pawn != null && BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension))
+                {
+                    Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
+                    tracker?.EvaluateUnlocks(extension, sendNotifications);
+                }
+            }
+        }
+
+        private void ScheduleNextEvaluation()
+        {
+            nextEvaluationTick = (Find.TickManager?.TicksGame ?? 0) + EvaluationIntervalTicks;
+        }
     }
 
     public static class BiographyFrameworkUtility
