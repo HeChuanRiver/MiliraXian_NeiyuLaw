@@ -17,7 +17,6 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         private static readonly Color Gold = new(.85f, .75f, .52f);
         private static readonly Color Ink = new(.91f, .94f, .92f);
         private static readonly Color Muted = new(.59f, .69f, .72f);
-        private static readonly Vector2[] Circle = MakeCircle();
         private readonly Dictionary<(string, int, GameFont), float> textHeights = new();
         private Vector2 listScroll, detailScroll;
         private bool narrowDetails;
@@ -51,13 +50,16 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
                 float tabsY = header.yMax + Gap;
                 float tabWidth = (inner.width - Gap * 3f) / 4f;
-                float tabHeight = 40f;
-                for (int i = 0; i < 4; i++) tabHeight = Mathf.Max(tabHeight, Height(CultivationText.Branch((CultivationBranch)i), tabWidth - 14f) + 16f);
+                bool stackedTabs = tabWidth < 150f;
+                float tabHeight = 48f;
+                for (int i = 0; i < 4; i++)
+                    tabHeight = Mathf.Max(tabHeight, Height(CultivationText.Branch((CultivationBranch)i), tabWidth - (stackedTabs ? 14f : 52f))
+                        + (stackedTabs ? 38f : 0f) + 16f);
                 for (int i = 0; i < 4; i++)
                 {
                     var branch = (CultivationBranch)i;
                     Rect tab = new(inner.x + i * (tabWidth + Gap), tabsY, tabWidth, tabHeight);
-                    if (Button(tab, CultivationText.Branch(branch), CultivationText.Branch(branch) + " · " + model.Ranks[i] + " / 3", model.Branch == branch, true))
+                    if (Button(tab, CultivationText.Branch(branch), CultivationText.Branch(branch) + " · " + model.Ranks[i] + " / 3", model.Branch == branch, true, CultivationArt.ForBranch(branch)))
                     {
                         model.SelectBranch(branch);
                         listScroll = detailScroll = Vector2.zero;
@@ -95,7 +97,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
         private void DrawHeader(Rect rect, CultivationViewModel model)
         {
-            if (rect.width > 480f) DrawEmblem(new Rect(rect.x, rect.y, 86f, rect.height), .9f);
+            if (rect.width > 480f) DrawIcon(new Rect(rect.x, rect.y, 86f, rect.height), CultivationArt.Emblem);
             float offset = rect.width > 480f ? 104f : 0f;
             float width = rect.width - offset - 44f;
             float y = rect.y;
@@ -203,7 +205,14 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         {
             float y = 0f;
             var node = model.Selected;
-            Flow(ref y, width, node.LabelCap, Ink, draw, GameFont.Medium, 12f);
+            float titleWidth = Mathf.Max(1f, width - 60f);
+            float titleHeight = Mathf.Max(48f, Height(node.LabelCap, titleWidth, GameFont.Medium));
+            if (draw)
+            {
+                DrawIcon(new Rect(0f, (titleHeight - 48f) / 2f, 48f, 48f), CultivationArt.ForBranch(node.branch));
+                Label(new Rect(60f, 0f, titleWidth, titleHeight), node.LabelCap, Ink, GameFont.Medium);
+            }
+            y += titleHeight + 12f;
             Flow(ref y, width, node.description, Muted, draw, gap: 22f);
             Flow(ref y, width, CultivationText.Get("Effects", "力量变化 · 当前 → 领悟后"), Accent, draw, gap: 10f);
             Flow(ref y, width, model.EffectText, Ink, draw, gap: 22f);
@@ -247,49 +256,34 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             GUI.color = Color.white;
         }
 
-        private static bool Button(Rect rect, string text, string tip, bool selected, bool active)
+        private static bool Button(Rect rect, string text, string tip, bool selected, bool active, Texture2D icon = null)
         {
             Widgets.DrawBoxSolid(rect, selected ? new Color(.15f, .27f, .31f) : new Color(.09f, .14f, .18f));
             if (selected) Widgets.DrawBoxSolid(new Rect(rect.x, rect.yMax - 2f, rect.width, 2f), active ? Accent : Muted);
             if (active && Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
             Text.Anchor = TextAnchor.MiddleCenter;
-            Label(rect.ContractedBy(7f, 4f), text, active ? Ink : Muted);
+            Rect label = rect.ContractedBy(7f, icon != null ? 8f : 4f);
+            if (icon != null)
+            {
+                bool stacked = rect.width < 150f;
+                DrawIcon(new Rect(stacked ? label.center.x - 16f : label.x,
+                    stacked ? label.y : label.center.y - 16f, 32f, 32f), icon);
+                if (stacked) label.yMin += 38f;
+                else label.xMin += 38f;
+            }
+            Label(label, text, active ? Ink : Muted);
             Text.Anchor = TextAnchor.UpperLeft;
             if (!tip.NullOrEmpty()) TooltipHandler.TipRegion(rect, tip);
             return active && Widgets.ButtonInvisible(rect);
         }
 
-        private static Vector2[] MakeCircle()
-        {
-            var points = new Vector2[49];
-            for (int i = 0; i < points.Length; i++)
-            {
-                float angle = i * Mathf.PI * 2 / 48f;
-                points[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            }
-            return points;
-        }
-
-        private static void DrawEmblem(Rect rect, float alpha)
+        private static void DrawIcon(Rect rect, Texture2D icon)
         {
             if (Event.current.type != EventType.Repaint) return;
-            Vector2 center = rect.center;
-            float radius = Mathf.Min(rect.width, rect.height) * .27f;
-            var color = new Color(Accent.r, Accent.g, Accent.b, alpha);
-            for (int i = 1; i < Circle.Length; i++)
-                Widgets.DrawLine(center + Circle[i - 1] * radius, center + Circle[i] * radius, color, 1f);
-            for (int side = -1; side <= 1; side += 2)
-                for (int feather = 0; feather < 5; feather++)
-                {
-                    Vector2 start = center + new Vector2(side * (9f + feather * 3f), 16f - feather * 4f);
-                    Vector2 end = center + new Vector2(side * (31f + feather * 2f), -15f + feather * 5f);
-                    Widgets.DrawLine(start, end, color, 1.5f);
-                }
-            Widgets.DrawLine(center + new Vector2(0, -radius - 8f), center + new Vector2(0, radius + 10f), Gold, 1f);
-            Widgets.DrawLine(center + new Vector2(-6, 0), center + new Vector2(0, -8), Gold, 1.5f);
-            Widgets.DrawLine(center + new Vector2(0, -8), center + new Vector2(6, 0), Gold, 1.5f);
-            Widgets.DrawLine(center + new Vector2(6, 0), center + new Vector2(0, 8), Gold, 1.5f);
-            Widgets.DrawLine(center + new Vector2(0, 8), center + new Vector2(-6, 0), Gold, 1.5f);
+            Color previous = GUI.color;
+            GUI.color = Color.white;
+            GUI.DrawTexture(rect, icon, ScaleMode.ScaleToFit, true);
+            GUI.color = previous;
         }
     }
 }

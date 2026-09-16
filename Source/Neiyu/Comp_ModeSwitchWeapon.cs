@@ -503,7 +503,7 @@ namespace MiliraXian.Characters.Neiyu
                 {
                     defaultLabel = Cultivation.CultivationText.Title,
                     defaultDesc = Cultivation.CultivationText.Get("OpenDescription", "查看修行分支、所需材料与当前力量。"),
-                    icon = TexCommand.DesirePower,
+                    icon = Cultivation.CultivationArt.Emblem,
                     action = () => Find.WindowStack.Add(new Cultivation.Dialog_NeiyuCultivation(__instance))
                 };
             }
