@@ -11,19 +11,20 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
     internal sealed class CultivationView
     {
         private const float Gap = 12f;
-        private static readonly Color Background = new(.045f, .074f, .102f);
-        private static readonly Color Panel = new(.071f, .111f, .145f);
-        private static readonly Color Accent = new(.64f, .88f, .92f);
-        private static readonly Color Gold = new(.85f, .75f, .52f);
-        private static readonly Color Ink = new(.91f, .94f, .92f);
-        private static readonly Color Muted = new(.59f, .69f, .72f);
+        private static readonly Color Accent = new(.72f, .87f, .84f);
+        private static readonly Color Gold = new(.92f, .82f, .60f);
+        private static readonly Color Ink = new(.95f, .94f, .88f);
+        private static readonly Color Muted = new(.78f, .83f, .80f);
+        private static readonly Color Warning = new(.94f, .71f, .61f);
         private readonly Dictionary<(string, int, GameFont), float> textHeights = new();
         private Vector2 listScroll, detailScroll;
         private bool narrowDetails;
+        private bool compact;
         private string selectedId;
 
         internal static bool SingleColumn(float width) => width < 720f;
         internal static float ListWidth(float width) => Mathf.Clamp(width * .34f, 225f, 360f);
+        internal static bool StackEffectValues(float width) => width < 340f;
 
         public bool Draw(Rect rect, CultivationViewModel model)
         {
@@ -37,29 +38,31 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.UpperLeft;
                 Text.WordWrap = true;
-                Widgets.DrawBoxSolid(rect, Background);
-                Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width, 2f), Accent);
+                compact = rect.height < 520f;
+                if (Event.current.type == EventType.Repaint)
+                    GUI.DrawTexture(rect, CultivationArt.Backdrop, ScaleMode.ScaleAndCrop);
                 Rect inner = rect.ContractedBy(rect.width < 500 ? 14f : 24f);
-                float headerTextWidth = inner.width - (inner.width > 480f ? 104f : 0f) - 44f;
-                float headerHeight = 23f + Height(CultivationText.Title, headerTextWidth, GameFont.Medium) + 4f
+                float headerTextWidth = inner.width - (!compact && inner.width > 480f ? 104f : 0f) - 44f;
+                float headerHeight = (compact ? 0f : 23f) + Height(CultivationText.Title, headerTextWidth, GameFont.Medium) + 4f
                     + Height(model.Pawn.LabelShortCap + "   ·   " + model.Progress, headerTextWidth, GameFont.Tiny);
                 Rect header = new(inner.x, inner.y, inner.width, headerHeight);
+                CultivationArt.DrawFrame(header.ExpandedBy(8f), CultivationArt.Panel, new Color(1f, 1f, 1f, .88f), 18f);
                 DrawHeader(header, model);
                 Rect close = new(header.xMax - 32f, header.y, 32f, 32f);
                 if (Button(close, "×", CultivationText.Get("Close", "关闭 · Esc"), false, true)) return true;
 
                 float tabsY = header.yMax + Gap;
                 float tabWidth = (inner.width - Gap * 3f) / 4f;
-                bool stackedTabs = tabWidth < 150f;
+                bool stackedTabs = tabWidth < 150f && !compact;
                 float tabHeight = 48f;
                 for (int i = 0; i < 4; i++)
-                    tabHeight = Mathf.Max(tabHeight, Height(CultivationText.Branch((CultivationBranch)i), tabWidth - (stackedTabs ? 14f : 52f))
+                    tabHeight = Mathf.Max(tabHeight, Height(CultivationText.Branch((CultivationBranch)i), tabWidth - (stackedTabs ? 20f : compact ? 50f : 58f))
                         + (stackedTabs ? 38f : 0f) + 16f);
                 for (int i = 0; i < 4; i++)
                 {
                     var branch = (CultivationBranch)i;
                     Rect tab = new(inner.x + i * (tabWidth + Gap), tabsY, tabWidth, tabHeight);
-                    if (Button(tab, CultivationText.Branch(branch), CultivationText.Branch(branch) + " · " + model.Ranks[i] + " / 3", model.Branch == branch, true, CultivationArt.ForBranch(branch)))
+                    if (Button(tab, CultivationText.Branch(branch), CultivationText.Branch(branch) + " · " + model.Ranks[i] + " / 3", model.Branch == branch, true, CultivationArt.ForBranch(branch), compact))
                     {
                         model.SelectBranch(branch);
                         listScroll = detailScroll = Vector2.zero;
@@ -97,12 +100,15 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
         private void DrawHeader(Rect rect, CultivationViewModel model)
         {
-            if (rect.width > 480f) DrawIcon(new Rect(rect.x, rect.y, 86f, rect.height), CultivationArt.Emblem);
-            float offset = rect.width > 480f ? 104f : 0f;
+            if (!compact && rect.width > 480f) DrawIcon(new Rect(rect.x, rect.y, 86f, rect.height), CultivationArt.Emblem);
+            float offset = !compact && rect.width > 480f ? 104f : 0f;
             float width = rect.width - offset - 44f;
             float y = rect.y;
-            Label(new Rect(rect.x + offset, y, width, 22f), "MILIRA  /  NEIYU", Gold, GameFont.Tiny);
-            y += 23f;
+            if (!compact)
+            {
+                Label(new Rect(rect.x + offset, y, width, 22f), CultivationText.Get("Header", "米莉拉 · 羽律"), Gold, GameFont.Tiny);
+                y += 23f;
+            }
             float titleHeight = Height(CultivationText.Title, width, GameFont.Medium);
             Label(new Rect(rect.x + offset, y, width, titleHeight), CultivationText.Title, Ink, GameFont.Medium);
             y += titleHeight + 4f;
@@ -114,7 +120,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
         private void DrawNodes(Rect rect, CultivationViewModel model, bool narrow)
         {
-            Widgets.DrawBoxSolid(rect, Panel);
+            CultivationArt.DrawFrame(rect, CultivationArt.Panel, Color.white);
             Rect viewport = rect.ContractedBy(14f);
             float width = Mathf.Max(1f, viewport.width - 18f);
             float contentHeight = 0f;
@@ -136,16 +142,16 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                     bool selected = model.Selected == node;
                     bool learned = model.Ranks[(int)node.branch] >= node.rank;
                     bool next = model.Ranks[(int)node.branch] + 1 == node.rank;
-                    Widgets.DrawBoxSolid(row, selected ? new Color(.13f, .23f, .28f) : new Color(.06f, .09f, .12f));
-                    Widgets.DrawBoxSolid(new Rect(row.x, row.y, 2f, row.height), selected ? Accent : new Color(.21f, .29f, .32f));
-                    if (Mouse.IsOver(row)) Widgets.DrawHighlight(row);
+                    CultivationArt.DrawFrame(row, selected ? CultivationArt.ButtonActive : CultivationArt.Button,
+                        Mouse.IsOver(row) && !selected ? new Color(1.10f, 1.10f, 1.10f) : Color.white);
                     Rect text = row.ContractedBy(14f);
                     string status = learned ? CultivationText.Get("Learned", "已领悟") : next ? CultivationText.Get("Next", "待领悟") : CultivationText.Get("Locked", "未解锁");
                     string badge = "0" + node.rank + "   /   " + status;
-                    Label(new Rect(text.x, text.y, text.width, 20f), badge, learned ? Gold : Muted, GameFont.Tiny);
+                    float badgeHeight = Height(badge, text.width, GameFont.Tiny);
+                    Label(new Rect(text.x, text.y, text.width, badgeHeight), badge, learned || next ? Gold : Muted, GameFont.Tiny);
                     float titleHeight = Height(node.LabelCap, text.width);
-                    Label(new Rect(text.x, text.y + 25f, text.width, titleHeight), node.LabelCap, selected ? Accent : Ink);
-                    float descY = text.y + 25f + titleHeight + 6f;
+                    Label(new Rect(text.x, text.y + badgeHeight + 6f, text.width, titleHeight), node.LabelCap, selected ? Gold : Ink);
+                    float descY = text.y + badgeHeight + 6f + titleHeight + 8f;
                     Label(new Rect(text.x, descY, text.width, Height(node.description, text.width)), node.description, Muted);
                     TooltipHandler.TipRegion(row, node.description + "\n" + (node.prerequisite == null ? "" : CultivationText.Get("Previous", "前置") + " · " + node.prerequisite.LabelCap));
                     if (Widgets.ButtonInvisible(row))
@@ -160,12 +166,18 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             finally { Widgets.EndScrollView(); }
         }
 
-        private float NodeHeight(NeiyuCultivationNodeDef node, float width) =>
-            28f + 25f + Height(node.LabelCap, width - 28f) + 6f + Height(node.description, width - 28f);
+        private float NodeHeight(NeiyuCultivationNodeDef node, float width)
+        {
+            // Reserve enough height for the longest translated state label, not a fixed line.
+            float badge = Mathf.Max(Height("0" + node.rank + "   /   " + CultivationText.Get("Learned", "已领悟"), width - 28f, GameFont.Tiny),
+                Mathf.Max(Height("0" + node.rank + "   /   " + CultivationText.Get("Next", "待领悟"), width - 28f, GameFont.Tiny),
+                    Height("0" + node.rank + "   /   " + CultivationText.Get("Locked", "未解锁"), width - 28f, GameFont.Tiny)));
+            return 28f + badge + 6f + Height(node.LabelCap, width - 28f) + 8f + Height(node.description, width - 28f);
+        }
 
         private void DrawDetails(Rect rect, CultivationViewModel model, bool narrow)
         {
-            Widgets.DrawBoxSolid(rect, new Color(.062f, .095f, .124f));
+            CultivationArt.DrawFrame(rect, CultivationArt.Panel, Color.white);
             Rect inner = rect.ContractedBy(18f);
             var node = model.Selected;
             if (node == null)
@@ -175,22 +187,41 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             }
             if (narrow)
             {
-                Rect back = new(inner.x, inner.y, inner.width, 32f);
-                if (Button(back, CultivationText.Get("Back", "‹ 返回修行分支"), null, false, true)) narrowDetails = false;
-                inner.yMin += 32f + Gap;
+                string backLabel = CultivationText.Get("Back", "‹ 返回修行分支");
+                Rect back = new(inner.x, inner.y, inner.width, Mathf.Max(32f, Height(backLabel, inner.width - 20f) + 16f));
+                if (Button(back, backLabel, null, false, true)) narrowDetails = false;
+                inner.yMin += back.height + Gap;
             }
             string button = model.Ranks[(int)node.branch] >= node.rank ? CultivationText.Get("Learned", "已领悟") :
                 !model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Learn", "消耗材料 · 领悟");
             float buttonHeight = Mathf.Max(42f, Height(button, inner.width - 24f) + 16f);
-            string feedback = model.Result ?? model.DisabledReason ?? CultivationText.Get("Ready", "材料齐备，可以领悟。");
-            // Keep the action and its reason visible. Very long reasons have a tooltip;
-            // the complete condition and resource list remain in the scrollable detail.
-            float feedbackHeight = Mathf.Min(54f, Height(feedback, inner.width));
+            string feedback = model.Result ?? model.DisabledReason ?? (!model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Ready", "材料齐备，可以领悟。"));
+            bool active = model.Ready && model.DisabledReason == null;
+            Color feedbackColor = model.Result != null || active ? Gold : Warning;
+            // Short windows keep every control reachable in one scroll instead of
+            // letting a fixed footer cover the entire reading area.
+            if (inner.height < 260f || Height(feedback, inner.width) > 54f || buttonHeight > inner.height * .3f)
+            {
+                float scrollWidth = Mathf.Max(1f, inner.width - 18f);
+                float readingHeight = DetailsFlow(scrollWidth, model, false);
+                float messageHeight = Height(feedback, scrollWidth);
+                float actionHeight = Mathf.Max(44f, Height(button, scrollWidth - 20f) + 16f);
+                Widgets.BeginScrollView(inner, ref detailScroll, new Rect(0, 0, scrollWidth, readingHeight + messageHeight + actionHeight + 24f));
+                try
+                {
+                    DetailsFlow(scrollWidth, model, true);
+                    Label(new Rect(0, readingHeight + 4f, scrollWidth, messageHeight), feedback, feedbackColor);
+                    if (Button(new Rect(0, readingHeight + messageHeight + 16f, scrollWidth, actionHeight), button, model.DisabledReason, true, active)) model.Learn();
+                }
+                finally { Widgets.EndScrollView(); }
+                return;
+            }
+            // Anchor concise feedback and the action when there is enough reading space.
+            float feedbackHeight = Height(feedback, inner.width);
             Rect action = new(inner.x, inner.yMax - buttonHeight, inner.width, buttonHeight);
             Rect reason = new(inner.x, action.y - feedbackHeight - 8f, inner.width, feedbackHeight);
-            Label(reason, feedback, model.Result != null ? Gold : Muted);
+            Label(reason, feedback, feedbackColor);
             TooltipHandler.TipRegion(reason, feedback);
-            bool active = model.Ready && model.DisabledReason == null;
             if (Button(action, button, model.DisabledReason, true, active)) model.Learn();
 
             Rect viewport = new(inner.x, inner.y, inner.width, Mathf.Max(1f, reason.y - inner.y - Gap));
@@ -214,17 +245,87 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             }
             y += titleHeight + 12f;
             Flow(ref y, width, node.description, Muted, draw, gap: 22f);
-            Flow(ref y, width, CultivationText.Get("Effects", "力量变化 · 当前 → 领悟后"), Accent, draw, gap: 10f);
-            Flow(ref y, width, model.EffectText, Ink, draw, gap: 22f);
-            Flow(ref y, width, CultivationText.Get("Requirements", "修行所需"), Accent, draw, gap: 10f);
+            Section(ref y, width, CultivationText.Get("EffectsTitle", "力量变化"), draw);
+            DrawEffects(ref y, width, model.Effects, draw);
+            Section(ref y, width, CultivationText.Get("Requirements", "修行所需"), draw);
             if (node.prerequisite != null)
                 Flow(ref y, width, CultivationText.Get("Previous", "前置") + " · " + node.prerequisite.LabelCap, Ink, draw, gap: 8f);
             Flow(ref y, width, model.ConditionText, Muted, draw, gap: 12f);
-            foreach (var cost in model.Costs) Flow(ref y, width, cost.Text, cost.Available >= cost.Cost.count ? Gold : Ink, draw, gap: 8f);
+            foreach (var cost in model.Costs) Cost(ref y, width, cost, draw);
             Flow(ref y, width, CultivationText.Get("MaterialScope", "使用本地图储存区中未禁用、可安全到达且可预留的材料。领悟时立即消耗。"), Muted, draw, GameFont.Tiny, 24f);
-            Flow(ref y, width, CultivationText.Get("Memory", "羽间拾忆"), Gold, draw, gap: 10f);
-            Flow(ref y, width, node.story, Muted, draw, gap: 12f);
+            Section(ref y, width, CultivationText.Get("Memory", "羽间拾忆"), draw);
+            float storyHeight = Height(node.story, width - 24f);
+            if (draw)
+            {
+                Widgets.DrawBoxSolid(new Rect(0f, y, width, storyHeight + 24f), new Color(.025f, .04f, .04f, .35f));
+                Label(new Rect(12f, y + 12f, width - 24f, storyHeight), node.story, Muted);
+            }
+            y += storyHeight + 36f;
             return y;
+        }
+
+        private void Section(ref float y, float width, string title, bool draw)
+        {
+            y += 12f;
+            if (draw) Widgets.DrawBoxSolid(new Rect(0f, y, width, 1f), new Color(Gold.r, Gold.g, Gold.b, .25f));
+            y += 10f;
+            Flow(ref y, width, title, Gold, draw, gap: 12f);
+        }
+
+        private void DrawEffects(ref float y, float width, List<CultivationEffectRow> rows, bool draw)
+        {
+            bool stacked = StackEffectValues(width);
+            float nameWidth = stacked ? 0f : width * .5f;
+            float valueWidth = (width - nameWidth - 32f) * .5f;
+            float beforeX = nameWidth + 8f, afterX = beforeX + valueWidth + 24f;
+            string beforeTitle = CultivationText.Get("Current", "当前");
+            string afterTitle = CultivationText.Get("After", "领悟后");
+            float headerHeight = Mathf.Max(Height(beforeTitle, valueWidth, GameFont.Tiny), Height(afterTitle, valueWidth, GameFont.Tiny));
+            if (draw)
+            {
+                Label(new Rect(beforeX, y, valueWidth, headerHeight), beforeTitle, Muted, GameFont.Tiny);
+                Label(new Rect(afterX, y, valueWidth, headerHeight), afterTitle, Gold, GameFont.Tiny);
+            }
+            y += headerHeight + 6f;
+            foreach (var row in rows)
+            {
+                if (!row.HasValues)
+                {
+                    y += row.Heading ? 10f : 4f;
+                    Flow(ref y, width, row.Label, row.Heading ? Accent : Muted, draw, gap: 8f);
+                    continue;
+                }
+                float labelHeight = Height(row.Label, stacked ? width - 16f : nameWidth - 8f);
+                float valuesHeight = Mathf.Max(Height(row.Before, valueWidth), Height(row.After, valueWidth));
+                float rowHeight = (stacked ? labelHeight + 6f + valuesHeight : Mathf.Max(labelHeight, valuesHeight)) + 16f;
+                if (draw)
+                {
+                    Widgets.DrawBoxSolid(new Rect(0f, y, width, rowHeight), new Color(.02f, .035f, .04f, .28f));
+                    Label(new Rect(8f, y + 8f, stacked ? width - 16f : nameWidth - 8f, labelHeight), row.Label, Ink);
+                    float valuesY = y + 8f + (stacked ? labelHeight + 6f : 0f);
+                    Label(new Rect(beforeX, valuesY, valueWidth, valuesHeight), row.Before, Muted);
+                    Label(new Rect(beforeX + valueWidth, valuesY, 24f, valuesHeight), "→", Muted);
+                    Label(new Rect(afterX, valuesY, valueWidth, valuesHeight), row.After, row.Before == row.After ? Ink : Gold);
+                }
+                y += rowHeight + 3f;
+            }
+            y += 8f;
+        }
+
+        private void Cost(ref float y, float width, CultivationViewModel.CostRow cost, bool draw)
+        {
+            float numberWidth = Mathf.Min(115f, width * .43f);
+            float labelWidth = Mathf.Max(1f, width - numberWidth - 40f);
+            float height = Mathf.Max(28f, Mathf.Max(Height(cost.Cost.thingDef.LabelCap, labelWidth), Height(cost.Quantity, numberWidth))) + 12f;
+            if (draw)
+            {
+                Widgets.ThingIcon(new Rect(0f, y + 6f, 28f, 28f), cost.Cost.thingDef);
+                Label(new Rect(36f, y + 6f, labelWidth, height - 12f), cost.Cost.thingDef.LabelCap, Ink);
+                Color color = !cost.Complete ? Muted : cost.Available >= cost.Cost.count ? Gold : Warning;
+                Label(new Rect(width - numberWidth, y + 6f, numberWidth, height - 12f), cost.Quantity, color);
+                TooltipHandler.TipRegion(new Rect(0f, y, width, height), cost.Text);
+            }
+            y += height;
         }
 
         private void Flow(ref float y, float width, string text, Color color, bool draw, GameFont font = GameFont.Small, float gap = 6f)
@@ -256,22 +357,23 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             GUI.color = Color.white;
         }
 
-        private static bool Button(Rect rect, string text, string tip, bool selected, bool active, Texture2D icon = null)
+        private static bool Button(Rect rect, string text, string tip, bool selected, bool active, Texture2D icon = null, bool compact = false)
         {
-            Widgets.DrawBoxSolid(rect, selected ? new Color(.15f, .27f, .31f) : new Color(.09f, .14f, .18f));
-            if (selected) Widgets.DrawBoxSolid(new Rect(rect.x, rect.yMax - 2f, rect.width, 2f), active ? Accent : Muted);
-            if (active && Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
+            bool hovered = active && Mouse.IsOver(rect);
+            Color tint = !active ? new Color(.65f, .69f, .68f) : hovered && !selected ? new Color(1.12f, 1.12f, 1.12f) : Color.white;
+            CultivationArt.DrawFrame(rect, selected && active ? CultivationArt.ButtonActive : CultivationArt.Button, tint);
             Text.Anchor = TextAnchor.MiddleCenter;
-            Rect label = rect.ContractedBy(7f, icon != null ? 8f : 4f);
+            Rect label = rect.ContractedBy(rect.width <= 40f ? 4f : 10f, rect.height <= 36f ? 4f : 8f);
             if (icon != null)
             {
-                bool stacked = rect.width < 150f;
-                DrawIcon(new Rect(stacked ? label.center.x - 16f : label.x,
-                    stacked ? label.y : label.center.y - 16f, 32f, 32f), icon);
-                if (stacked) label.yMin += 38f;
-                else label.xMin += 38f;
+                bool stacked = rect.width < 150f && !compact;
+                float iconSize = compact ? 24f : 32f;
+                DrawIcon(new Rect(stacked ? label.center.x - iconSize / 2f : label.x,
+                    stacked ? label.y : label.center.y - iconSize / 2f, iconSize, iconSize), icon);
+                if (stacked) label.yMin += iconSize + 6f;
+                else label.xMin += iconSize + 6f;
             }
-            Label(label, text, active ? Ink : Muted);
+            Label(label, text, active ? selected ? Gold : Ink : Muted);
             Text.Anchor = TextAnchor.UpperLeft;
             if (!tip.NullOrEmpty()) TooltipHandler.TipRegion(rect, tip);
             return active && Widgets.ButtonInvisible(rect);

@@ -97,6 +97,7 @@ internal static class NeiyuCultivationRegressionTests
         TestShield(a, tracker);
         TestCounts();
         TestLayout(assembly);
+        TestEffectRows(assembly);
 
         // Reconstruct the serialized dictionary, as Scribe_Collections does on load.
         var saved = new Dictionary<string, float>((Dictionary<string, float>)typeof(Hediff_BiographyTracker)
@@ -200,6 +201,31 @@ internal static class NeiyuCultivationRegressionTests
                 Check(left >= 225 && width - left - 12 >= 350, "two-column reading width");
             }
         }
+    }
+
+    private static void TestEffectRows(Assembly assembly)
+    {
+        var language = Bare<LoadedLanguage>();
+        language.keyedReplacements = new Dictionary<string, LoadedLanguage.KeyedReplacement>();
+        Set(language, "dataIsLoaded", true);
+        LanguageDatabase.activeLanguage = language;
+        Type presentation = assembly.GetType("MiliraXian.Characters.Neiyu.Cultivation.CultivationEffectText", true);
+        var node = new NeiyuCultivationNodeDef { branch = CultivationBranch.Arrow, rank = 1 };
+        var rows = (System.Collections.IList)Call(presentation, "Build", node, 0);
+        Check(rows.Count == 2, "arrow comparison has exactly two separate effect rows");
+        string Value(object row, string field) => (string)row.GetType().GetField(field).GetValue(row);
+        Check(Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "4", "split comparison preserves effective rank values");
+        Check(Value(rows[1], "Before") == "4" && Value(rows[1], "After") == "24", "barrage comparison preserves effective rank values");
+        const string translated = "Long translated label 12 → 34 with spaces";
+        language.keyedReplacements["MX_Cultivation_SplitCount"] = new LoadedLanguage.KeyedReplacement { value = translated };
+        rows = (System.Collections.IList)Call(presentation, "Build", node, 0);
+        Check(Value(rows[0], "Label") == translated && Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "4", "translated punctuation is not parsed as numeric columns");
+        rows = (System.Collections.IList)Call(presentation, "Build", node, 3);
+        Check(Value(rows[0], "Before") == "16" && Value(rows[0], "After") == "16", "viewing an earlier node never implies losing learned power");
+        Check(((System.Collections.IList)Call(presentation, "Build", null, 0)).Count == 0, "missing node has an empty presentation");
+        Type view = assembly.GetType("MiliraXian.Characters.Neiyu.Cultivation.CultivationView", true);
+        Check((bool)Call(view, "StackEffectValues", 240f), "narrow comparisons keep full labels above values");
+        Check(!(bool)Call(view, "StackEffectValues", 480f), "wide comparisons use aligned columns");
     }
 
     private static void Normalize(HediffComp_MXNeiyuCountShield shield) =>
