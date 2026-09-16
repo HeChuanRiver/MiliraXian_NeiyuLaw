@@ -39,14 +39,16 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 Text.Anchor = TextAnchor.UpperLeft;
                 Text.WordWrap = true;
                 compact = rect.height < 520f;
-                if (Event.current.type == EventType.Repaint)
-                    GUI.DrawTexture(rect, CultivationArt.Backdrop, ScaleMode.ScaleAndCrop);
-                Rect inner = rect.ContractedBy(rect.width < 500 ? 14f : 24f);
+                // Keep the generated alpha silhouette clear of the content. The same
+                // inset scales both the nine-slice corners and the safe reading area.
+                float rim = Mathf.Min(40f, Mathf.Min(rect.width, rect.height) * .065f);
+                CultivationArt.DrawFrame(rect, CultivationArt.SoftBackdrop, Color.white, rim * 2.4f);
+                Rect inner = rect.ContractedBy(rim);
                 float headerTextWidth = inner.width - (!compact && inner.width > 480f ? 104f : 0f) - 44f;
                 float headerHeight = (compact ? 0f : 23f) + Height(CultivationText.Title, headerTextWidth, GameFont.Medium) + 4f
                     + Height(model.Pawn.LabelShortCap + "   ·   " + model.Progress, headerTextWidth, GameFont.Tiny);
                 Rect header = new(inner.x, inner.y, inner.width, headerHeight);
-                CultivationArt.DrawFrame(header.ExpandedBy(8f), CultivationArt.Panel, new Color(1f, 1f, 1f, .88f), 18f);
+                CultivationArt.DrawFrame(header.ExpandedBy(rim * .2f), CultivationArt.Panel, new Color(1f, 1f, 1f, .88f), 18f);
                 DrawHeader(header, model);
                 Rect close = new(header.xMax - 32f, header.y, 32f, 32f);
                 if (Button(close, "×", CultivationText.Get("Close", "关闭 · Esc"), false, true)) return true;

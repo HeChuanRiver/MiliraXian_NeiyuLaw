@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
     {
         private const string Folder = "MiliraXianNeiyu/UI/Cultivation/";
         public static readonly Texture2D Emblem = ContentFinder<Texture2D>.Get(Folder + "Emblem");
-        public static readonly Texture2D Backdrop = ContentFinder<Texture2D>.Get(Folder + "Backdrop");
+        public static readonly Texture2D SoftBackdrop = ContentFinder<Texture2D>.Get(Folder + "SoftBackdrop");
         public static readonly Texture2D Panel = ContentFinder<Texture2D>.Get(Folder + "Panel");
         public static readonly Texture2D Button = ContentFinder<Texture2D>.Get(Folder + "Button");
         public static readonly Texture2D ButtonActive = ContentFinder<Texture2D>.Get(Folder + "ButtonActive");
