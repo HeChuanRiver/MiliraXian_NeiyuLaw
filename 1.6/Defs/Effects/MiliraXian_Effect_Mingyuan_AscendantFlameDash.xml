@@ -3,7 +3,7 @@
 
   <ThingDef ParentName="PawnFlyerBase">
     <defName>MX_Mingyuan_AscendantFlameDashFlyer</defName>
-    <label>Mingyuan ascendant flame dash flyer</label>
+    <label>明渊·升焰疾行载体</label>
     <pawnFlyer>
       <flightDurationMin>0.10</flightDurationMin>
       <flightSpeed>160</flightSpeed>
@@ -20,7 +20,7 @@
 
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_AscendantFlameScorchController</defName>
-    <label>Mingyuan ascendant flame scorch controller</label>
+    <label>明渊·升焰灼痕</label>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanAscendantFlameScorch</thingClass>
     <selectable>false</selectable>
     <tickerType>Normal</tickerType>

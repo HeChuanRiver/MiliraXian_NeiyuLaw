@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_ResonanceSpring.label>Seasonal Harmony: Spring</MX_QH_ResonanceSpring.label>
+  <MX_QH_ResonanceSummer.label>Seasonal Harmony: Summer</MX_QH_ResonanceSummer.label>
+  <MX_QH_ResonanceAutumn.label>Seasonal Harmony: Autumn</MX_QH_ResonanceAutumn.label>
+  <MX_QH_ResonanceWinter.label>Seasonal Harmony: Winter</MX_QH_ResonanceWinter.label>
+  <MX_QH_IllusoryReflectionInvulnerable.label>Illusory Reflection immunity</MX_QH_IllusoryReflectionInvulnerable.label>
+  <MX_QH_IllusoryReflectionInvulnerable.description>While performing Illusory Reflection, Qinghe evades harm with an illusory body and is temporarily immune to all damage.</MX_QH_IllusoryReflectionInvulnerable.description>
+</LanguageData>

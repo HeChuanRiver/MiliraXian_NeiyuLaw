@@ -3,7 +3,7 @@
 
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_BowVisual</defName>
-    <label>Mingyuan bow visual controller</label>
+    <label>明渊·长虹特效</label>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanBowVisual</thingClass>
     <drawerType>RealtimeOnly</drawerType>
     <selectable>false</selectable>
@@ -15,7 +15,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_BowFocusTarget</defName>
-    <label>Mingyuan bow focus target</label>
+    <label>明渊·长虹聚焦标记</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>

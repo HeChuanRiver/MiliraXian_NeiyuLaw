@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AuraShieldMaxEnergyFactor.label>靈氣容量乘數</MX_QH_AuraShieldMaxEnergyFactor.label>
+  <MX_QH_AuraShieldMaxEnergyFactor.description>靈氣加護最大容量的倍率修正。</MX_QH_AuraShieldMaxEnergyFactor.description>
+  <MX_QH_AuraShieldRegenPerSecondFactor.label>靈氣回復乘數</MX_QH_AuraShieldRegenPerSecondFactor.label>
+  <MX_QH_AuraShieldRegenPerSecondFactor.description>靈氣每秒回復量的倍率修正。</MX_QH_AuraShieldRegenPerSecondFactor.description>
+  <MX_QH_AuraShieldHitRegenDelayFactor.label>靈氣回復延遲乘數</MX_QH_AuraShieldHitRegenDelayFactor.label>
+  <MX_QH_AuraShieldHitRegenDelayFactor.description>受擊後靈氣回復延遲的倍率修正。</MX_QH_AuraShieldHitRegenDelayFactor.description>
+  <MX_QH_AuraShieldBreakDelayOffset.label>靈氣加護重啟延遲偏移</MX_QH_AuraShieldBreakDelayOffset.label>
+  <MX_QH_AuraShieldBreakDelayOffset.description>靈氣耗盡後重新開始恢復的延遲加值修正。</MX_QH_AuraShieldBreakDelayOffset.description>
+  <MX_QH_AuraShieldDamageCapFactor.label>靈氣最大單次消耗乘數</MX_QH_AuraShieldDamageCapFactor.label>
+  <MX_QH_AuraShieldDamageCapFactor.description>靈氣單次消耗上限的倍率修正。此數值越大，單次消耗上限越高。</MX_QH_AuraShieldDamageCapFactor.description>
+  <MX_QH_AuraShieldDamageCapOffset.label>靈氣最大單次消耗偏移</MX_QH_AuraShieldDamageCapOffset.label>
+  <MX_QH_AuraShieldDamageCapOffset.description>靈氣單次消耗上限的加值修正，基礎值為20。此屬性先于倍率應用；消耗上限乘數為0%時該特性不生效。</MX_QH_AuraShieldDamageCapOffset.description>
+  <MX_QH_AuraShieldHardening.label>靈氣硬化</MX_QH_AuraShieldHardening.label>
+  <MX_QH_AuraShieldHardening.description>靈氣硬化提供的額外護甲值，護盾受到的傷害會先減去護甲值，若原始傷害值小于護甲值，則傷害完全無效。</MX_QH_AuraShieldHardening.description>
+  <MX_QH_AuraShieldHardeningFactor.label>靈氣硬化乘數</MX_QH_AuraShieldHardeningFactor.label>
+  <MX_QH_AuraShieldHardeningFactor.description>靈氣硬化護甲值的倍率修正，該數值為0時護甲不會生效。</MX_QH_AuraShieldHardeningFactor.description>
+  <MX_QH_FlowerDecreeMaxOffset.label>花令上限偏移</MX_QH_FlowerDecreeMaxOffset.label>
+  <MX_QH_FlowerDecreeMaxOffset.description>花令上限的加值修正。</MX_QH_FlowerDecreeMaxOffset.description>
+  <MX_QH_FlowerDecreeRegenFactor.label>花令回復速度乘數</MX_QH_FlowerDecreeRegenFactor.label>
+  <MX_QH_FlowerDecreeRegenFactor.description>花令回復速度的倍率修正。</MX_QH_FlowerDecreeRegenFactor.description>
+  <MX_QH_FlowingFormRechargeSpeedFactor.label>流水之形充能速度乘數</MX_QH_FlowingFormRechargeSpeedFactor.label>
+  <MX_QH_FlowingFormRechargeSpeedFactor.description>流水之形充能速度的倍率修正。</MX_QH_FlowingFormRechargeSpeedFactor.description>
+  <MX_QH_SpellEffectFactor.label>法術效果系數</MX_QH_SpellEffectFactor.label>
+  <MX_QH_SpellEffectFactor.description>特殊法術效果的倍率修正。影響清荷的技能傷害、通過技能和共鳴附加異常狀態的效率和技能增益產生的效果量。</MX_QH_SpellEffectFactor.description>
+</LanguageData>

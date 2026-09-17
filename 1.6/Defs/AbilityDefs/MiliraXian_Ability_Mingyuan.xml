@@ -3,14 +3,14 @@
 
     <AbilityCategoryDef>
         <defName>MX_MingyuanSkill</defName>
-        <label>Mingyuan</label>
+        <label>明渊</label>
         <displayOrder>3100</displayOrder>
     </AbilityCategoryDef>
 
     <AbilityDef>
         <defName>MX_Mingyuan_AscendantFlameDash</defName>
-        <label>&lt;color=#FFB25C&gt;Ascendant Flame&lt;/color&gt;</label>
-        <description>Becomes flame and dashes up to 35 cells along a 3-cell-wide path without requiring line of sight. Enemies take 10 base burn damage, gain 30 Life Burn, are pushed back and stunned for 1 second. Scorch lasts 5 seconds and adds 6 Life Burn each second. Cooldown: 8 seconds.</description>
+        <label>&lt;color=#FFB25C&gt;升焰疾行&lt;/color&gt;</label>
+        <description>化为火焰，沿3格宽路径冲刺至多35格，无需视线。沿途敌人受到10点基础燃烧伤害、30层生命燃烧、击退和1秒眩晕。灼痕持续5秒，每秒附加6层生命燃烧。冷却8秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>100</displayOrder>
@@ -55,8 +55,8 @@
 
     <AbilityDef>
         <defName>MX_Mingyuan_InstantCombustion</defName>
-        <label>&lt;color=#FFD37A&gt;Instant Combustion&lt;/color&gt;</label>
-        <description>Deals 1 base burn damage separately to each enemy brain and eye within 12 cells, and stuns for 3 seconds. Doubles existing Life Burn and ignites unburning targets. Charge: 3 seconds. Cooldown: 120 seconds.</description>
+        <label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</label>
+        <description>对半径12格内敌人的大脑和眼睛分别造成1点基础燃烧伤害，并眩晕3秒。已有生命燃烧翻倍，没有层数的目标会被点燃。蓄力3秒，冷却120秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>110</displayOrder>
@@ -92,8 +92,8 @@
 
     <AbilityDef>
         <defName>MX_Mingyuan_BurningPillar</defName>
-        <label>&lt;color=#FF7A45&gt;Burning Pillar&lt;/color&gt;</label>
-        <description>Charges for 3 seconds to place a burning core within 40 cells. The core expands to a 10-cell radius over 3 seconds, then can be moved. Lasts 30 seconds. Each second, enemies take a combined 15 base burn and cut damage and gain Life Burn. Hostile and factionless buildings take 6% of their maximum health as base damage per second. Cooldown: 240 seconds.</description>
+        <label>&lt;color=#FF7A45&gt;燃烧之柱&lt;/color&gt;</label>
+        <description>蓄力3秒，在40格内放置燃烧核心。核心3秒内扩大至半径10格，随后可控制移动，持续30秒。每秒对敌人造成合计15点基础燃烧与切割伤害，并附加生命燃烧。对敌方及无阵营建筑，每秒造成其最大生命值6%的基础伤害。冷却240秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>120</displayOrder>
@@ -126,8 +126,8 @@
 
     <AbilityDef>
         <defName>MX_Mingyuan_TimeBurn</defName>
-        <label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</label>
-        <description>Charges for 3 seconds, then burns away the target's biological age over 20 seconds to execute it. Mechanoids dissolve into steel and plasteel; buildings return raw materials. Cooldown: 300 seconds.</description>
+        <label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</label>
+        <description>蓄力3秒，在20秒内燃尽目标的生物年龄并将其处决。机械体分解为钢铁和塑钢，建筑分解为原料。冷却300秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_TimeBurn</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>130</displayOrder>
@@ -168,8 +168,8 @@
 
     <AbilityDef>
         <defName>MX_Mingyuan_AshesOfSelf</defName>
-        <label>&lt;color=#FF5C3A&gt;Ashes of Self&lt;/color&gt;</label>
-        <description>Adds 20% blood loss and grants 100 Self Burn. Creates a moving 2.4-cell-radius field for 10 seconds. Every 0.5 seconds it burns enemies and adds Life Burn, heals the caster's wounds and scars, and builds Self Burn. Cooldown: 30 seconds.</description>
+        <label>&lt;color=#FF5C3A&gt;焚我余烬&lt;/color&gt;</label>
+        <description>增加20%失血并获得100层自燃。在自身周围形成半径2.4格、持续10秒的火场，每0.5秒灼烧敌人并附加生命燃烧，同时治疗自身伤口和旧伤、积累自燃。冷却30秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>140</displayOrder>

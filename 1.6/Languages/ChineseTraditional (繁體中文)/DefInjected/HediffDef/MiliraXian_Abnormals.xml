@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalBleed.label>流血積累</MX_AbnormalBleed.label>
+  <MX_AbnormalBleed.description>花信鈴的春之共鳴擾動了目標的血液。積累達到上限時會觸發流血效果。</MX_AbnormalBleed.description>
+  <MX_AbnormalElectricLeak.label>電漏積累</MX_AbnormalElectricLeak.label>
+  <MX_AbnormalElectricLeak.description>花信鈴的春之共鳴擾亂了機械結構。積累達到上限時會觸發短路效果。</MX_AbnormalElectricLeak.description>
+  <MX_AbnormalBleeding.label>流血</MX_AbnormalBleeding.label>
+  <MX_AbnormalBleeding.description>目標受到花信鈴春之共鳴的影響，正在持續流血。</MX_AbnormalBleeding.description>
+  <MX_AbnormalShortCircuit.label>短路</MX_AbnormalShortCircuit.label>
+  <MX_AbnormalShortCircuit.description>機械體受到花信鈴春之共鳴的影響，控制與供能系統發生短路。</MX_AbnormalShortCircuit.description>
+  <MX_AbnormalToxin.label>毒素積累</MX_AbnormalToxin.label>
+  <MX_AbnormalToxin.description>花信鈴的夏之共鳴在目標體內留下毒素。積累達到上限時會觸發劇毒效果。</MX_AbnormalToxin.description>
+  <MX_AbnormalCorrosion.label>腐蝕積累</MX_AbnormalCorrosion.label>
+  <MX_AbnormalCorrosion.description>花信鈴的夏之共鳴正在侵蝕機械結構。積累達到上限時會觸發腐蝕效果。</MX_AbnormalCorrosion.description>
+  <MX_AbnormalVenom.label>劇毒</MX_AbnormalVenom.label>
+  <MX_AbnormalVenom.description>目標受到花信鈴夏之共鳴的影響，毒素正在持續侵蝕其身體。</MX_AbnormalVenom.description>
+  <MX_AbnormalCorroded.label>腐蝕</MX_AbnormalCorroded.label>
+  <MX_AbnormalCorroded.description>機械體受到花信鈴夏之共鳴的影響，結構與裝甲正在持續腐蝕。</MX_AbnormalCorroded.description>
+  <MX_AbnormalFear.label>恐懼積累</MX_AbnormalFear.label>
+  <MX_AbnormalFear.description>花信鈴的秋之共鳴正在擾亂目標心神。積累達到上限時會觸發恐懼效果。</MX_AbnormalFear.description>
+  <MX_AbnormalOverload.label>過載積累</MX_AbnormalOverload.label>
+  <MX_AbnormalOverload.description>花信鈴的秋之共鳴正在壓迫機械控制核心。積累達到上限時會觸發過載效果。</MX_AbnormalOverload.description>
+  <MX_AbnormalFeared.label>恐懼</MX_AbnormalFeared.label>
+  <MX_AbnormalFeared.description>目標受到花信鈴秋之共鳴的影響，陷入了無法自控的恐懼。</MX_AbnormalFeared.description>
+  <MX_AbnormalOverloaded.label>過載</MX_AbnormalOverloaded.label>
+  <MX_AbnormalOverloaded.description>機械體受到花信鈴秋之共鳴的影響，控制核心陷入了過載狀態。</MX_AbnormalOverloaded.description>
+  <MX_AbnormalCold.label>寒冷積累</MX_AbnormalCold.label>
+  <MX_AbnormalCold.description>花信鈴的冬之共鳴正在侵入目標。積累達到上限時會觸發凍結效果。</MX_AbnormalCold.description>
+  <MX_AbnormalFrozen.label>凍結</MX_AbnormalFrozen.label>
+  <MX_AbnormalFrozen.description>目標受到花信鈴冬之共鳴的影響，被短暫凍結而無法行動。</MX_AbnormalFrozen.description>
+  <MX_AbnormalBleed.triggerText>流血</MX_AbnormalBleed.triggerText>
+  <MX_AbnormalElectricLeak.triggerText>短路</MX_AbnormalElectricLeak.triggerText>
+  <MX_AbnormalToxin.triggerText>中毒</MX_AbnormalToxin.triggerText>
+  <MX_AbnormalCorrosion.triggerText>腐蝕</MX_AbnormalCorrosion.triggerText>
+  <MX_AbnormalFear.triggerText>恐懼</MX_AbnormalFear.triggerText>
+  <MX_AbnormalOverload.triggerText>過載</MX_AbnormalOverload.triggerText>
+  <MX_AbnormalCold.triggerText>凍結</MX_AbnormalCold.triggerText>
+</LanguageData>

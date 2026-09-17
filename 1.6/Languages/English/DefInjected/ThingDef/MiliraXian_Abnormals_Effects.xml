@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Mote_AbnormalColdBar.label>abnormal effect</MX_Mote_AbnormalColdBar.label>
+  <MX_Mote_AbnormalBleedBar.label>abnormal effect</MX_Mote_AbnormalBleedBar.label>
+  <MX_Mote_AbnormalElectricLeakBar.label>abnormal effect</MX_Mote_AbnormalElectricLeakBar.label>
+  <MX_Mote_AbnormalToxinBar.label>abnormal effect</MX_Mote_AbnormalToxinBar.label>
+  <MX_Mote_AbnormalCorrosionBar.label>abnormal effect</MX_Mote_AbnormalCorrosionBar.label>
+  <MX_Mote_AbnormalFearBar.label>abnormal effect</MX_Mote_AbnormalFearBar.label>
+  <MX_Mote_AbnormalOverloadBar.label>abnormal effect</MX_Mote_AbnormalOverloadBar.label>
+  <MX_Mote_AbnormalFreeze_A.label>abnormal effect</MX_Mote_AbnormalFreeze_A.label>
+  <MX_Mote_AbnormalDeathSentenceBar.label>abnormal effect</MX_Mote_AbnormalDeathSentenceBar.label>
+  <MX_Mote_AbnormalFearedIcon.label>abnormal effect</MX_Mote_AbnormalFearedIcon.label>
+  <MX_Mote_AbnormalOverloadedIcon.label>abnormal effect</MX_Mote_AbnormalOverloadedIcon.label>
+  <MX_Mote_AbnormalFreeze_B.label>abnormal effect</MX_Mote_AbnormalFreeze_B.label>
+</LanguageData>

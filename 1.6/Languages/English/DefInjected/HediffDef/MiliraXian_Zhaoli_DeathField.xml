@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalDeathSentence.label>Death Sentence</MX_AbnormalDeathSentence.label>
+  <MX_AbnormalDeathSentence.description>Zhaoli's field erodes the target's vitality. While Death Sentence builds up, the target is slowed and periodically cut. At the buildup limit, the character who last applied Death Sentence executes the target.&#10;Neiyu, Qinghe, Zhaoli and Mingyuan are immune to Death Sentence and cannot be slowed, cut or executed by it.</MX_AbnormalDeathSentence.description>
+  <MX_AbnormalDeathSentenceResult.label>Death Sentence resolution</MX_AbnormalDeathSentenceResult.label>
+  <MX_AbnormalDeathSentenceResult.description>Hidden state used to resolve Death Sentence.</MX_AbnormalDeathSentenceResult.description>
+  <MX_AbnormalDeathSentence.triggerText>Death Sentence</MX_AbnormalDeathSentence.triggerText>
+</LanguageData>

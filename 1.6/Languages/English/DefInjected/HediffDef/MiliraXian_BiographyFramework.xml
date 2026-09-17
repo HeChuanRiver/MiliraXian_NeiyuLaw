@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_BiographyTracker.label>biography state</MX_BiographyTracker.label>
+  <MX_BiographyTracker.description>Hidden per-pawn state used by the special-character biography framework.</MX_BiographyTracker.description>
+</LanguageData>

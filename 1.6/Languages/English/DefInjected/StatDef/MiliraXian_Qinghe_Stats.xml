@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_AuraShieldMaxEnergyFactor.label>aura capacity multiplier</MX_QH_AuraShieldMaxEnergyFactor.label>
+  <MX_QH_AuraShieldMaxEnergyFactor.description>Multiplier applied to Aura Ward's maximum capacity.</MX_QH_AuraShieldMaxEnergyFactor.description>
+  <MX_QH_AuraShieldRegenPerSecondFactor.label>aura regeneration multiplier</MX_QH_AuraShieldRegenPerSecondFactor.label>
+  <MX_QH_AuraShieldRegenPerSecondFactor.description>Multiplier applied to aura regeneration per second.</MX_QH_AuraShieldRegenPerSecondFactor.description>
+  <MX_QH_AuraShieldHitRegenDelayFactor.label>aura regeneration delay multiplier</MX_QH_AuraShieldHitRegenDelayFactor.label>
+  <MX_QH_AuraShieldHitRegenDelayFactor.description>Multiplier applied to aura regeneration delay after taking a hit.</MX_QH_AuraShieldHitRegenDelayFactor.description>
+  <MX_QH_AuraShieldBreakDelayOffset.label>aura ward restart delay offset</MX_QH_AuraShieldBreakDelayOffset.label>
+  <MX_QH_AuraShieldBreakDelayOffset.description>Additive adjustment to the delay before regeneration resumes after aura is depleted.</MX_QH_AuraShieldBreakDelayOffset.description>
+  <MX_QH_AuraShieldDamageCapFactor.label>aura per-hit cost cap multiplier</MX_QH_AuraShieldDamageCapFactor.label>
+  <MX_QH_AuraShieldDamageCapFactor.description>Multiplier applied to the aura cost cap per hit. Higher values raise the cap.</MX_QH_AuraShieldDamageCapFactor.description>
+  <MX_QH_AuraShieldDamageCapOffset.label>aura per-hit cost cap offset</MX_QH_AuraShieldDamageCapOffset.label>
+  <MX_QH_AuraShieldDamageCapOffset.description>Additive adjustment to the aura cost cap per hit, whose base value is 20. Applied before the multiplier; has no effect when the cost cap multiplier is 0%.</MX_QH_AuraShieldDamageCapOffset.description>
+  <MX_QH_AuraShieldHardening.label>Aura Hardening</MX_QH_AuraShieldHardening.label>
+  <MX_QH_AuraShieldHardening.description>Additional armor provided by Aura Hardening. Armor is subtracted from damage dealt to the shield; damage below the armor value is completely negated.</MX_QH_AuraShieldHardening.description>
+  <MX_QH_AuraShieldHardeningFactor.label>aura hardening multiplier</MX_QH_AuraShieldHardeningFactor.label>
+  <MX_QH_AuraShieldHardeningFactor.description>Multiplier applied to Aura Hardening's armor value. At 0, the armor has no effect.</MX_QH_AuraShieldHardeningFactor.description>
+  <MX_QH_FlowerDecreeMaxOffset.label>flower decree maximum offset</MX_QH_FlowerDecreeMaxOffset.label>
+  <MX_QH_FlowerDecreeMaxOffset.description>Additive adjustment to maximum Flower Decree.</MX_QH_FlowerDecreeMaxOffset.description>
+  <MX_QH_FlowerDecreeRegenFactor.label>flower decree regeneration multiplier</MX_QH_FlowerDecreeRegenFactor.label>
+  <MX_QH_FlowerDecreeRegenFactor.description>Multiplier applied to Flower Decree regeneration speed.</MX_QH_FlowerDecreeRegenFactor.description>
+  <MX_QH_FlowingFormRechargeSpeedFactor.label>flowing form recharge speed multiplier</MX_QH_FlowingFormRechargeSpeedFactor.label>
+  <MX_QH_FlowingFormRechargeSpeedFactor.description>Multiplier applied to Flowing Form's recharge speed.</MX_QH_FlowingFormRechargeSpeedFactor.description>
+  <MX_QH_SpellEffectFactor.label>spell effect factor</MX_QH_SpellEffectFactor.label>
+  <MX_QH_SpellEffectFactor.description>Multiplier applied to special spell effects. Affects Qinghe's ability damage, abnormal buildup applied by abilities and resonance, and the strength of ability buffs.</MX_QH_SpellEffectFactor.description>
+</LanguageData>

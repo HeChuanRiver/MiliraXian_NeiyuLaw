@@ -6,7 +6,7 @@
     <degreeDatas>
       <li>
         <label>霓羽仙</label>
-        <description>"她爱着世人，她愿世间飘落霓裳花。"</description>
+        <description>她爱着世人，她愿世间飘落霓裳花。</description>
         <statOffsets></statOffsets>
         <statFactors>
           <IncomingDamageFactor>0.99</IncomingDamageFactor>

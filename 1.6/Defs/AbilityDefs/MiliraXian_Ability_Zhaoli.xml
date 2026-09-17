@@ -9,8 +9,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_DeathField</defName>
         <label>&lt;color=#E85A7A&gt;告死流场&lt;/color&gt;</label>
-        <description>Creates a radius-9 Death Sentence field for 9 seconds. Non-immune units other than the caster are slowed by 20%, receive cuts and gain 1 accumulation each second. At 9 points they are executed; a successful execution grants 1 Karma and 5 Deathward counters. Accumulation rapidly decays outside the field. Cooldown: 40 seconds.
-Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts and execution.</description>
+        <description>建立半径9格、持续9秒的告死流场。范围内除自身外的非免疫单位减速20%，每秒受割伤并积累1点告死。积累达到9点时处决；成功处决后获得1因果和5层讳亡计数。离场后积累快速衰减。冷却40秒。&#10;霓羽、清荷、昭离和明渊免疫告死的积累、减速、割伤及处决。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_DeathField</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -52,7 +51,7 @@ Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts an
     <AbilityDef>
         <defName>MX_Zhaoli_Guiyi</defName>
         <label>&lt;color=#C77DFF&gt;诡医&lt;/color&gt;</label>
-        <description>Costs 3 Karma to restore missing parts, wounds and treatable harmful conditions, and creates a 30-day Karma Link. At most 6 targets can be linked. Cannot target the caster or enemies. Cooldown: 15 seconds.</description>
+        <description>消耗3点因果，修复目标缺失部位、伤口和可治疗的负面状态，并建立30天的因果链接，最多保留6人。不能对自身或敌人使用。冷却15秒。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Guiyi</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -94,7 +93,7 @@ Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts an
     <AbilityDef>
         <defName>MX_Zhaoli_Dingshu</defName>
         <label>&lt;color=#C9A2FF&gt;定数&lt;/color&gt;</label>
-        <description>Costs 8 Karma and channels for about 34.7 seconds to resurrect and repair a corpse, creating a Karma Link and a 3-day Destiny Mark. A target that dies again while marked cannot be resurrected again. Unavailable during raids.</description>
+        <description>消耗8点因果，引导约34.7秒复活并修复尸体，建立因果链接及3天的定数标记。标记期间再次死亡不能再次复活。袭击状态不可使用。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Dingshu</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -142,7 +141,7 @@ Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts an
     <AbilityDef>
         <defName>MX_Zhaoli_Minghuo</defName>
         <label>&lt;color=#FF6A6A&gt;冥火&lt;/color&gt;</label>
-        <description>Costs 3 Karma to enchant the current primary weapon for 60 seconds. Damage, armor penetration, hit chance and attack speed increase by 25%, melee reach increases by 1 cell, and melee hits add fire damage. Cooldown: 150 seconds.</description>
+        <description>消耗3点因果，为当前主武器附魔60秒。伤害、穿甲、命中与攻速提高25%，近战范围增加1格，近战命中附加火焰伤害。冷却150秒。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minghuo</iconPath>
 
         <category>MX_ZhaoliSkill</category>
@@ -184,7 +183,7 @@ Neiyu, Qinghe, Zhaoli and Mingyuan are immune to its accumulation, slow, cuts an
     <AbilityDef>
         <defName>MX_Zhaoli_Minshen</defName>
         <label>&lt;color=#C77DFF&gt;泯神&lt;/color&gt;</label>
-        <description>Costs 3 Karma and affects enemies in a 13×13 area. Flesh targets take 1 armor-ignoring damage to the torso each second for 5 seconds, and have a 10% chance to become dazed for 7 seconds; otherwise their movement falls by 45% for 7 seconds. Non-flesh targets receive EMP. Cooldown: 15 seconds.</description>
+        <description>消耗3点因果，影响13×13格内敌人。血肉目标的躯干每秒受到1点无视护甲伤害，持续5秒；另有10%概率迷乱7秒，否则7秒内移速降低45%。非血肉目标受到EMP效果。冷却15秒。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Minshen</iconPath>
 
         <category>MX_ZhaoliSkill</category>

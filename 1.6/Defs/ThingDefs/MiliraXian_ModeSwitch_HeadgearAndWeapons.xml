@@ -67,7 +67,7 @@
 
                 <formLabels>
                     <li>花</li>
-                    <li>武器</li>
+                    <li>剑</li>
                     <li>弓</li>
                 </formLabels>
 
@@ -150,7 +150,7 @@
 
                 <formLabels>
                     <li>花</li>
-                    <li>武器</li>
+                    <li>剑</li>
                     <li>弓</li>
                 </formLabels>
 
@@ -161,7 +161,7 @@
                 </formIconPaths>
 
                 <commandLabel>切换形态</commandLabel>
-                <commandDesc>点击循环切换：花 → 武器 → 弓 → 花。</commandDesc>
+                <commandDesc>点击循环切换：花 → 剑 → 弓 → 花。</commandDesc>
 
                 <destroyOldWeapon>true</destroyOldWeapon>
                 <requirePrimary>true</requirePrimary>
@@ -258,7 +258,7 @@
 
                 <formLabels>
                     <li>花</li>
-                    <li>武器</li>
+                    <li>剑</li>
                     <li>弓</li>
                 </formLabels>
 
@@ -269,7 +269,7 @@
                 </formIconPaths>
 
                 <commandLabel>切换形态</commandLabel>
-                <commandDesc>点击循环切换：花 → 武器 → 弓 → 花。</commandDesc>
+                <commandDesc>点击循环切换：花 → 剑 → 弓 → 花。</commandDesc>
 
                 <destroyOldWeapon>true</destroyOldWeapon>
                 <requirePrimary>true</requirePrimary>

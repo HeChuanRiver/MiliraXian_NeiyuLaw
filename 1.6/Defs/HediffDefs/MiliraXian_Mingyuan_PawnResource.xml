@@ -3,8 +3,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_LifeBurn</defName>
-        <label>&lt;color=#FF7A45&gt;Life Burn&lt;/color&gt;</label>
-        <description>Every 2 seconds, Life Burn deals damage, drains needs, advances age and wears equipment. It bursts at the target's threshold and can spread to nearby enemies on death. Focus and Absorb consume existing layers to deal damage.</description>
+        <label>&lt;color=#FF7A45&gt;生命燃烧&lt;/color&gt;</label>
+        <description>生命燃烧每2秒造成伤害、消耗需求、增长年龄并损耗装备，叠至目标阈值时爆发。死亡时可传播至附近敌人。聚焦和吸收可以消耗已有层数造成伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
         <isBad>true</isBad>
@@ -69,8 +69,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_SelfBurn</defName>
-        <label>&lt;color=#FFB25C&gt;Self Burn&lt;/color&gt;</label>
-        <description>Self Burn bonuses apply once per complete 10 layers, up to 300 layers. Each 10 layers grants +4% melee and skill damage, +0.8% ranged damage, +2% movement, and +4% attack and work speed. Above 300 layers, Overburn doubles direct damage and Life Burn output and drains the flame reserve. Every 10 seconds, all excess layers are consumed in a radius-5 explosion centered on Mingyuan, dealing 1 damage per layer. Nearby allies and buildings can be hit; Mingyuan is excluded.</description>
+        <label>&lt;color=#FFB25C&gt;自我燃烧&lt;/color&gt;</label>
+        <description>自燃增益每满 10 层结算一次，最多计算 300 层。每 10 层增加 4% 近战与技能伤害、0.8% 远程伤害、2% 移动速度，以及 4% 攻击与工作速度。&#10;超过 300 层进入过燃，直接伤害与生命燃烧输出翻倍，并消耗护焰储备。每隔 10 秒消耗全部超出层数，在自身半径 5 格内爆炸，每层造成 1 点伤害。爆炸可伤及友军和建筑，不伤及明渊自身。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
         <isBad>false</isBad>
@@ -80,6 +80,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
+        <label></label>
                 <statFactors>
                     <MoveSpeed>1</MoveSpeed>
                     <WorkSpeedGlobal>1</WorkSpeedGlobal>
@@ -423,8 +424,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
-        <label>&lt;color=#FFD37A&gt;Burning Body&lt;/color&gt;</label>
-        <description>Improves consciousness. Immune to heat and explosion damage; these hits replenish 2 repair reserve at most once per second. Heals up to 15 points of ordinary injuries every 60 seconds. Taking actual damage grants 5 Self Burn and 0.2 seconds of invulnerability and burns hostile attackers in return.</description>
+        <label>&lt;color=#FFD37A&gt;燃烧之躯&lt;/color&gt;</label>
+        <description>提高意识。免疫热能和爆炸伤害，这类命中每秒最多补充一次2点修复储备。每60秒最多治疗15点普通伤口。实际受伤后获得5层自燃与0.2秒无敌，并反灼敌对攻击者。</description>
         <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -475,8 +476,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
-        <label>&lt;color=#FFE0A3&gt;Protective Flame Shield&lt;/color&gt;</label>
-        <description>Checks injuries every 10 seconds. Spends 1 reserve to restore one missing part or heal wounds and scars on one part. Stable Self Burn and heat hits replenish reserve; Overburn drains it. The reserve itself does not absorb damage.</description>
+        <label>&lt;color=#FFE0A3&gt;护身火盾&lt;/color&gt;</label>
+        <description>每10秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的伤口与旧伤。稳定自燃与热能命中可补充储备，过燃会消耗储备。储备本身不吸收伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>
@@ -506,8 +507,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_RebirthFlame</defName>
-        <label>&lt;color=#FF5C3A&gt;Rebirth Flame&lt;/color&gt;</label>
-        <description>When Mingyuan falls, the flame buried in her body detonates, leaves a rebirth flame, and restores her after 30 seconds.</description>
+        <label>&lt;color=#FF5C3A&gt;重生之焰&lt;/color&gt;</label>
+        <description>明渊倒下时，埋在体内的火会爆开并留下重生火标记，30 秒后完成重塑。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.36, 0.24)</defaultLabelColor>
         <isBad>false</isBad>
@@ -523,8 +524,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_EternalBurning</defName>
-        <label>&lt;color=#FF2E1F&gt;Eternal Burning&lt;/color&gt;</label>
-        <description>Mingyuan is enclosed in the fire that rebuilds her. While this flame lasts, outside blows cannot decide her death.</description>
+        <label>&lt;color=#FF2E1F&gt;永恒燃烧&lt;/color&gt;</label>
+        <description>明渊被重塑自身的火包裹。火焰尚在时，外来的打击不能决定她的死亡。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.18, 0.12)</defaultLabelColor>
         <isBad>false</isBad>
@@ -534,8 +535,8 @@
 
     <HediffDef>
         <defName>MX_Mingyuan_TimeBurnFrozen</defName>
-        <label>&lt;color=#C95CFF&gt;Time Burn&lt;/color&gt;</label>
-        <description>The target's lifetime is being burned away. When the remaining biological age reaches zero, the flame claims the body.</description>
+        <label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</label>
+        <description>目标的寿命正在被燃尽。当剩余生物年龄归零时，这束火会收走身体。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.79, 0.36, 1.00)</defaultLabelColor>
         <isBad>true</isBad>

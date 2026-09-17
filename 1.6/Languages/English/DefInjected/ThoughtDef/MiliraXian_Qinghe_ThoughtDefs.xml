@@ -3,13 +3,13 @@
   <MX_QH_LuoshenContractMaintained.stages.0.label>Luoshen contract: together</MX_QH_LuoshenContractMaintained.stages.0.label>
   <MX_QH_LuoshenContractMaintained.stages.0.description>I formed a contract with {PAWN_nameDef} under Luoshen's witness. Being with {PAWN_nameDef} makes me feel at peace.</MX_QH_LuoshenContractMaintained.stages.0.description>
   <MX_QH_LuoshenContractMaintained.stages.1.label>Luoshui rite</MX_QH_LuoshenContractMaintained.stages.1.label>
-  <MX_QH_LuoshenContractMaintained.stages.1.description>Luoshen's words still echo in my heart. My destined one has yet to arrive.</MX_QH_LuoshenContractMaintained.stages.1.description>
+  <MX_QH_LuoshenContractMaintained.stages.1.description>—"As faint clouds veil the moon, as drifting wind returns the snow."</MX_QH_LuoshenContractMaintained.stages.1.description>
   <MX_QH_LuoshenContractBroken.stages.0.label>Luoshen contract broken ({0})</MX_QH_LuoshenContractBroken.stages.0.label>
   <MX_QH_LuoshenContractBroken.stages.0.description>The contract I maintained with {OTHERPAWN_nameDef} has broken. The voices that once resonated now echo hollowly.</MX_QH_LuoshenContractBroken.stages.0.description>
   <MX_QH_QingheInstrumentPerformance.stages.0.label>heard Qinghe perform</MX_QH_QingheInstrumentPerformance.stages.0.label>
   <MX_QH_QingheInstrumentPerformance.stages.0.description>Qinghe's music moved softly through the room, easing the mind.</MX_QH_QingheInstrumentPerformance.stages.0.description>
   <MX_QH_NoLotusPond.stages.0.label>no lotus pond</MX_QH_NoLotusPond.stages.0.label>
-  <MX_QH_NoLotusPond.stages.0.description>There is no lotus pond nearby where Qinghe can settle her heart. The water intent has nowhere to rest.</MX_QH_NoLotusPond.stages.0.description>
+  <MX_QH_NoLotusPond.stages.0.description>I need a suitable place for cultivation.</MX_QH_NoLotusPond.stages.0.description>
   <MX_QH_LotusPavilionBeautyLow.stages.0.label>Lotus Rain Pavilion lacks grace</MX_QH_LotusPavilionBeautyLow.stages.0.label>
-  <MX_QH_LotusPavilionBeautyLow.stages.0.description>The room around the lotus pond is not yet graceful enough for Qinghe to truly quiet her heart.</MX_QH_LotusPavilionBeautyLow.stages.0.description>
+  <MX_QH_LotusPavilionBeautyLow.stages.0.description>The surroundings of my cultivation site are dreadful, and it makes me sad.</MX_QH_LotusPavilionBeautyLow.stages.0.description>
 </LanguageData>

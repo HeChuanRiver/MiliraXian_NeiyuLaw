@@ -7,6 +7,7 @@
 
     <ManeuverDef>
         <defName>MX_QH_SwordSlash</defName>
+        <label>散华斩击</label>
         <requiredCapacity>MX_QH_SwordCut</requiredCapacity>
         <verb>
             <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_QingheSwordSweep</verbClass>

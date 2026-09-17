@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerCourtQuestScript.questNameRules.rulesStrings.0>questName-&gt;A Call from the Hundred Flowers</MX_QH_FlowerCourtQuestScript.questNameRules.rulesStrings.0>
-  <MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;You have received a mysterious design, seemingly for an elegant pavilion. Accepting this quest unlocks a special building: the lotus pond. This begins the side quest to obtain Qinghe from Milira Character Expansion.</MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;Accepting unlocks the lotus pond. Once it is built, Qinghe joins the colony and the Lotus Rain Pavilion and Mastery Guide quests begin.</MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_FlowerCourtStartQuestScript.questNameRules.rulesStrings.0>questName-&gt;Flower Court's First Bloom</MX_QH_FlowerCourtStartQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_FlowerCourtStartQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;You have acquired the lotus pond design and can now build one. Completing it starts the Lotus Rain Pavilion and Mastery Guide quests.</MX_QH_FlowerCourtStartQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_LotusPavilionQuestScript.questNameRules.rulesStrings.0>questName-&gt;Tending the Lotus Rain Pavilion</MX_QH_LotusPavilionQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_LotusPavilionQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;Raise the impressiveness of the room containing the lotus pond to 40.</MX_QH_LotusPavilionQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_MasteryGuideQuestScript.questNameRules.rulesStrings.0>questName-&gt;Mastery Guide</MX_QH_MasteryGuideQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_MasteryGuideQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;Have Qinghe reach mastery level 1.</MX_QH_MasteryGuideQuestScript.questDescriptionRules.rulesStrings.0>
 </LanguageData>

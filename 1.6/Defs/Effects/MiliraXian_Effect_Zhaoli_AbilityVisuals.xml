@@ -3,7 +3,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiLinkLine</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -36,7 +36,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiLinkPulse</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -61,7 +61,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiLinkStripe</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -86,7 +86,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiHealGlow</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -110,7 +110,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiHealFrameA</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -134,7 +134,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiHealFrameB</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -158,7 +158,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_GuiyiHealFrameC</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -182,7 +182,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DingshuLinkLine</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -215,7 +215,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DingshuLinkPulse</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -240,7 +240,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DingshuLinkStripe</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -265,7 +265,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DingshuReviveGlow</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -298,7 +298,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DeathFieldArea</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -324,7 +324,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DeathFieldMark</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -350,7 +350,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DeathFieldParticleA</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -374,7 +374,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DeathFieldParticleB</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -398,7 +398,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_DeathFieldParticleC</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -422,7 +422,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_SoulAbsorbPulse</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteDualAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -447,7 +447,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_MinshenWarnArea</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -472,7 +472,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_MinghuoAuraFrameA</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -496,7 +496,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_MinghuoAuraFrameB</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -520,7 +520,7 @@
 
   <ThingDef>
     <defName>MXZL_Mote_MinghuoAuraFrameC</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>

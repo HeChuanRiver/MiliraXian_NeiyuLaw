@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LanguageData>
-  <MX_Neiyu_FlowerBlessed.label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</MX_Neiyu_FlowerBlessed.label>
-  <MX_Neiyu_FlowerBlessed.description>祈生祝福持续60秒，提高移动速度、免疫增长速度并降低受到的伤害。</MX_Neiyu_FlowerBlessed.description>
-  <MX_Neiyu_FlowerBlessed.stages.0.label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</MX_Neiyu_FlowerBlessed.stages.0.label>
-  <MX_Neiyu_SwordVulnerability.label>&lt;color=#C7A2F8&gt;剑坠易伤&lt;/color&gt;</MX_Neiyu_SwordVulnerability.label>
-  <MX_Neiyu_SwordVulnerability.description>受到天坠影响，承受更多伤害，持续25秒。</MX_Neiyu_SwordVulnerability.description>
-  <MX_Neiyu_SwordVulnerability.stages.0.label>&lt;color=#C7A2F8&gt;易伤&lt;/color&gt;</MX_Neiyu_SwordVulnerability.stages.0.label>
-</LanguageData>

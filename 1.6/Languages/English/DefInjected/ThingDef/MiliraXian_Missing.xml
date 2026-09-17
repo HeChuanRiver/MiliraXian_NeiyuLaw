@@ -3,12 +3,12 @@
   <MiliraXian_NeiyuInner.label>Neiyu: Inner Layer</MiliraXian_NeiyuInner.label>
   <MiliraXian_NeiyuInner.description>Neiyu's supple innerwear provides a second protective layer over her torso, neck and upper limbs. Reduces incoming damage and melee cooldown, and improves work speed. Never breaks.</MiliraXian_NeiyuInner.description>
 
-  <MX_Neiyu_Form_Flower.comps.0.commandLabel>Switch form</MX_Neiyu_Form_Flower.comps.0.commandLabel>
-  <MX_Neiyu_Form_Flower.comps.0.commandDesc>Click to switch.</MX_Neiyu_Form_Flower.comps.0.commandDesc>
-  <MX_Neiyu_Form_Weapon.comps.0.commandLabel>Switch form</MX_Neiyu_Form_Weapon.comps.0.commandLabel>
-  <MX_Neiyu_Form_Weapon.comps.0.commandDesc>Cycle forms: flower → sword → bow → flower.</MX_Neiyu_Form_Weapon.comps.0.commandDesc>
-  <MX_Neiyu_Form_Bow.comps.0.commandLabel>Switch form</MX_Neiyu_Form_Bow.comps.0.commandLabel>
-  <MX_Neiyu_Form_Bow.comps.0.commandDesc>Cycle forms: flower → sword → bow → flower.</MX_Neiyu_Form_Bow.comps.0.commandDesc>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandLabel>Switch form</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandLabel>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandDesc>Click to switch.</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandDesc>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandLabel>Switch form</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandLabel>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>Cycle forms: flower → sword → bow → flower.</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandLabel>Switch form</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandLabel>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>Cycle forms: flower → sword → bow → flower.</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>
 
 
   <MXZL_Mote_GuiyiLinkLine.label>Mote</MXZL_Mote_GuiyiLinkLine.label>

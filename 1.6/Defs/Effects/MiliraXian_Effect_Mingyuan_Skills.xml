@@ -2,7 +2,7 @@
 <Defs>
   <DamageDef ParentName="Flame">
     <defName>MX_Mingyuan_StructuralBurn</defName>
-    <label>structural scorching</label>
+    <label>结构灼烧</label>
     <workerClass>DamageWorker_AddInjury</workerClass>
     <scaleDamageToBuildingsBasedOnFlammability>false</scaleDamageToBuildingsBasedOnFlammability>
     <buildingDamageFactor>1</buildingDamageFactor>
@@ -11,7 +11,7 @@
   </DamageDef>
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_SkillVisual</defName>
-    <label>Mingyuan flame visual</label>
+    <label>明渊火焰特效</label>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanSkillVisual</thingClass>
     <drawerType>RealtimeOnly</drawerType>
     <tickerType>Normal</tickerType>

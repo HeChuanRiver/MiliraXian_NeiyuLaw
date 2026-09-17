@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliKarma</defName>
         <label>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</label>
-        <description>Gains Karma through Death Sentence. Healing and resurrection create up to 6 Karma Links lasting 30 days; living links can substitute for death. Recruited death growth caps at 10 deaths. Without a substitute, returns after 10 days.</description>
+        <description>通过告死积累因果。治疗和复活可建立因果链接，最多6人，持续30天，活链接可作为死亡替身。招募后死亡成长在10次封顶；没有可用替身时，10天后归来。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.74, 0.10, 0.18)</defaultLabelColor>
         <isBad>false</isBad>

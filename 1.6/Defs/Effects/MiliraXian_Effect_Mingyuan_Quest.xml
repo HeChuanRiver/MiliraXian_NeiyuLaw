@@ -3,7 +3,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestLandingSigil</defName>
-    <label>white flame landing sigil</label>
+    <label>白焰降临印记</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -31,7 +31,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestWhiteAsh</defName>
-    <label>white flame ash</label>
+    <label>白焰灰烬</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -57,7 +57,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestWavePortal</defName>
-    <label>machine incursion aperture</label>
+    <label>机械入侵裂口</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -85,7 +85,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestReformation</defName>
-    <label>white flame reconstruction</label>
+    <label>白焰重塑</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -113,7 +113,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestPulseRing</defName>
-    <label>white flame pulse</label>
+    <label>白焰脉冲</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -141,7 +141,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_QuestCollapse</defName>
-    <label>white flame collapse</label>
+    <label>白焰崩解</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>

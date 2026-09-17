@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_Cultivation_Wing1.label>First Feather</MX_Neiyu_Cultivation_Wing1.label>
+  <MX_Neiyu_Cultivation_Wing1.description>Awaken the power of flower, sword and bow, improving weapon damage, armor penetration and melee attack speed.</MX_Neiyu_Cultivation_Wing1.description>
+  <MX_Neiyu_Cultivation_Wing2.label>Light Within the Blade</MX_Neiyu_Cultivation_Wing2.label>
+  <MX_Neiyu_Cultivation_Wing2.description>Further improve the power of all three weapon forms.</MX_Neiyu_Cultivation_Wing2.description>
+  <MX_Neiyu_Cultivation_Wing3.label>Feather Law's Edge</MX_Neiyu_Cultivation_Wing3.label>
+  <MX_Neiyu_Cultivation_Wing3.description>Fully unleash the damage, armor penetration and melee attack speed of all three weapon forms.</MX_Neiyu_Cultivation_Wing3.description>
+  <MX_Neiyu_Cultivation_Arrow1.label>Scattered Feathers</MX_Neiyu_Cultivation_Arrow1.label>
+  <MX_Neiyu_Cultivation_Arrow1.description>Increase the number of projectiles in ordinary split-arrow attacks and Arrow Barrage.</MX_Neiyu_Cultivation_Arrow1.description>
+  <MX_Neiyu_Cultivation_Arrow2.label>Skywoven Formation</MX_Neiyu_Cultivation_Arrow2.label>
+  <MX_Neiyu_Cultivation_Arrow2.description>Unfurl more feather arrows to expand sustained fire.</MX_Neiyu_Cultivation_Arrow2.description>
+  <MX_Neiyu_Cultivation_Arrow3.label>A Hundred Feathers Return</MX_Neiyu_Cultivation_Arrow3.label>
+  <MX_Neiyu_Cultivation_Arrow3.description>Fully unleash ordinary split-arrow attacks and Arrow Barrage.</MX_Neiyu_Cultivation_Arrow3.description>
+  <MX_Neiyu_Cultivation_Halo1.label>Faint Halo</MX_Neiyu_Cultivation_Halo1.label>
+  <MX_Neiyu_Cultivation_Halo1.description>Unlock protection against the first hit and a six-charge shield. After the charges run out, the shield needs time to recover.</MX_Neiyu_Cultivation_Halo1.description>
+  <MX_Neiyu_Cultivation_Halo2.label>Sheltering Halos</MX_Neiyu_Cultivation_Halo2.label>
+  <MX_Neiyu_Cultivation_Halo2.description>Increase the shield to eighteen charges.</MX_Neiyu_Cultivation_Halo2.description>
+  <MX_Neiyu_Cultivation_Halo3.label>Clear Sky's Echo</MX_Neiyu_Cultivation_Halo3.label>
+  <MX_Neiyu_Cultivation_Halo3.description>Fully unleash the charge shield and unlock the Stage III damage-absorption and buff cycle. Weakness follows the cycle.</MX_Neiyu_Cultivation_Halo3.description>
+  <MX_Neiyu_Cultivation_Law1.label>Faint Patterns</MX_Neiyu_Cultivation_Law1.label>
+  <MX_Neiyu_Cultivation_Law1.description>Awaken the laws within the everyday attire, inner layer and earrings, improving protection and restoring some equipment bonuses.</MX_Neiyu_Cultivation_Law1.description>
+  <MX_Neiyu_Cultivation_Law2.label>Resonant Patterns</MX_Neiyu_Cultivation_Law2.label>
+  <MX_Neiyu_Cultivation_Law2.description>Further improve the attire's protection, insulation and equipment bonuses.</MX_Neiyu_Cultivation_Law2.description>
+  <MX_Neiyu_Cultivation_Law3.label>Raiment Restored</MX_Neiyu_Cultivation_Law3.label>
+  <MX_Neiyu_Cultivation_Law3.description>Fully unleash the protection, insulation and equipment bonuses of the everyday attire, inner layer and earrings.</MX_Neiyu_Cultivation_Law3.description>
+  <MX_Neiyu_Cultivation_Wing1.story>As a feather brushes her palm, Neiyu remembers the weight of the first weapon she held. Keeping power upon the blade is harder than letting it pour forth.</MX_Neiyu_Cultivation_Wing1.story>
+  <MX_Neiyu_Cultivation_Wing2.story>She wipes the faint light along the blade's spine. Its restrained brilliance blooms only at the moment of impact.</MX_Neiyu_Cultivation_Wing2.story>
+  <MX_Neiyu_Cultivation_Wing3.story>Flower, sword and bow appear in her hands in turn. Their forms differ, but the same law always answers her.</MX_Neiyu_Cultivation_Wing3.story>
+  <MX_Neiyu_Cultivation_Arrow1.story>An arrow leaves the string, unfurling feathers of light. Neiyu begins to distinguish each faint echo.</MX_Neiyu_Cultivation_Arrow1.story>
+  <MX_Neiyu_Cultivation_Arrow2.story>After the rain, threads of light cross the sky. Their interwoven paths slowly fall into order.</MX_Neiyu_Cultivation_Arrow2.story>
+  <MX_Neiyu_Cultivation_Arrow3.story>The sky's feather-light returns to the string, as still as if it had never left. At last, she can guide every feather to its own destination.</MX_Neiyu_Cultivation_Arrow3.story>
+  <MX_Neiyu_Cultivation_Halo1.story>The halo above her head trembles softly. She keeps the first answering strand of light outside her body.</MX_Neiyu_Cultivation_Halo1.story>
+  <MX_Neiyu_Cultivation_Halo2.story>Thin layers of light close one after another. With every impact, she hears them ring in different places.</MX_Neiyu_Cultivation_Halo2.story>
+  <MX_Neiyu_Cultivation_Halo3.story>The halo bears one last heavy blow, then folds inward. Neiyu raises her head as the gathered light flows along her wings and back to the blade's tip.</MX_Neiyu_Cultivation_Halo3.story>
+  <MX_Neiyu_Cultivation_Law1.story>The fabric's patterns reveal themselves only in the light. Following them, she reconnects the scattered power inch by inch.</MX_Neiyu_Cultivation_Law1.story>
+  <MX_Neiyu_Cultivation_Law2.story>Her earrings and hem glow softly together. Once separate, the patterns begin to rise and fall with her breath.</MX_Neiyu_Cultivation_Law2.story>
+  <MX_Neiyu_Cultivation_Law3.story>She folds her wings, and the light upon her clothes fades with them. The law now rests against her body, with no need to proclaim itself.</MX_Neiyu_Cultivation_Law3.story>
+</LanguageData>

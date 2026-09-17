@@ -3,7 +3,7 @@
 
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_Neiyu_SwordSkyfallAscendFlyer</defName>
-        <label>&#38675;&#32701;&#183;&#22825;&#22368;&#21319;&#31354;&#20307;</label>
+        <label>霓羽·天坠升空载体</label>
         <pawnFlyer>
             <flightDurationMin>0.22</flightDurationMin>
             <flightSpeed>120</flightSpeed>
@@ -21,7 +21,7 @@
 
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_Neiyu_SwordSkyfallFlyer</defName>
-        <label>&#38675;&#32701;&#183;&#22825;&#22368;&#33853;&#31354;&#20307;</label>
+        <label>霓羽·天坠下落载体</label>
         <pawnFlyer>
             <flightDurationMin>0.36</flightDurationMin>
             <flightSpeed>140</flightSpeed>
@@ -38,7 +38,7 @@
 
     <ThingDef ParentName="PawnFlyerBase">
         <defName>MX_Neiyu_SwordDashFlyer</defName>
-        <label>&#38675;&#32701;&#183;&#31361;&#36827;&#39134;&#34892;&#20307;</label>
+        <label>霓羽·突进载体</label>
         <pawnFlyer>
             <flightDurationMin>0.08</flightDurationMin>
             <flightSpeed>100</flightSpeed>

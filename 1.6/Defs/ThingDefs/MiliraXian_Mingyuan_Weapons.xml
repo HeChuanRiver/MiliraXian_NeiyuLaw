@@ -3,8 +3,8 @@
 
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Mingyuan_CinderSword</defName>
-        <label>Cinder Ash</label>
-        <description>Mingyuan's cinder blade, filled with searing scarlet flame. It has 44 base cut damage, 150% armor penetration and a 0.5 melee cooldown multiplier. Mingyuan's flame applies Life Burn on hit.</description>
+        <label>尘烬</label>
+        <description>明渊的余烬长剑，剑身流淌着灼热的赤焰。基础割伤44点，破甲150%，近战冷却系数0.5；明渊的火焰会在命中时施加生命燃烧。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -54,7 +54,7 @@
 
         <tools>
             <li>
-                <label>Cinder Ash</label>
+                <label>尘烬</label>
                 <capacities>
                     <li>Cut</li>
                     <li>Stab</li>
@@ -72,9 +72,8 @@
 
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
-        <label>Long Rainbow</label>
-        <description>Focus: 50-cell range, line of sight required, 2.5-second charge. Consumes all Life Burn on the target, dealing 40 armor-ignoring damage plus 0.6 per layer, capped at 220 damage per shot.
-Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds. Enemies take 1 burn damage and gain 50 Life Burn plus 4% of their burst threshold, capped at 120 layers. Overburn further increases the layers applied.</description>
+        <label>长虹</label>
+        <description>聚焦：射程50格，需要视线，蓄力2.5秒。消耗目标全部生命燃烧，造成40点无视护甲伤害，每层额外造成0.6点，单次伤害上限220点。&#10;散射：向前方10格、108°扇形区域散射，每1.5秒最多发射一次。对敌人造成1点燃烧伤害，并附加50层生命燃烧，额外层数为其引爆阈值的4%，最多附加120层。过燃时附加层数进一步提高。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -181,7 +180,7 @@ Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds.
 
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_Mingyuan_RainbowArrow</defName>
-        <label>Long Rainbow Arrow</label>
+        <label>长虹箭</label>
         <thingClass>MiliraXian.Characters.Mingyuan.Projectile_MingyuanRainbowArrow</thingClass>
         <graphicData>
             <texPath>MiliraXianMingyuan/Projectile/RainbowArrow</texPath>

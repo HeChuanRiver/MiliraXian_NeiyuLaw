@@ -18,6 +18,7 @@ $files = @(
 foreach ($file in $files) {
     $reference = $null
     foreach ($language in $languages) {
+        if ($file.StartsWith('DefInjected/') -and $language -eq 'ChineseSimplified (简体中文)') { continue }
         [xml]$xml = Get-Content -LiteralPath (Join-Path $ModPath "1.6/Languages/$language/$file") -Raw -Encoding UTF8
         $entries = @{}
         foreach ($node in $xml.LanguageData.ChildNodes | Where-Object NodeType -EQ 'Element') {
@@ -72,4 +73,4 @@ foreach ($entry in $textures.GetEnumerator()) {
 if ($weapons.SelectSingleNode("/Defs/ThingDef[defName='MX_Mingyuan_CinderSword']/equippedAngleOffset").InnerText -ne '90') { throw 'Upright sword orientation mismatch' }
 if ($weapons.SelectSingleNode("/Defs/ThingDef[defName='MX_Bullet_Mingyuan_RainbowArrow']/graphicData/drawSize").InnerText -ne '(1.8,1.8)') { throw 'Arrow aspect ratio mismatch' }
 
-Write-Output 'PASS: three-language keys/placeholders, gameplay wording, line breaks, live-value templates, eight textures, sword orientation and arrow aspect ratio.'
+Write-Output 'PASS: three-language Keyed and two-language DefInjected keys/placeholders, gameplay wording, line breaks, live-value templates, eight textures, sword orientation and arrow aspect ratio.'

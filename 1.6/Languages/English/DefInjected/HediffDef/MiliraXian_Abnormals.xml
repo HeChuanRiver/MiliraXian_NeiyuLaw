@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalBleed.label>bleeding buildup</MX_AbnormalBleed.label>
+  <MX_AbnormalBleed.description>The Flower-Tiding Bell's spring resonance disturbs the target's blood. Reaching the buildup limit triggers bleeding.</MX_AbnormalBleed.description>
+  <MX_AbnormalElectricLeak.label>electrical leakage buildup</MX_AbnormalElectricLeak.label>
+  <MX_AbnormalElectricLeak.description>The Flower-Tiding Bell's spring resonance disrupts mechanical structures. Reaching the buildup limit triggers a short circuit.</MX_AbnormalElectricLeak.description>
+  <MX_AbnormalBleeding.label>bleeding</MX_AbnormalBleeding.label>
+  <MX_AbnormalBleeding.description>The target is bleeding continuously under the Flower-Tiding Bell's spring resonance.</MX_AbnormalBleeding.description>
+  <MX_AbnormalShortCircuit.label>short circuit</MX_AbnormalShortCircuit.label>
+  <MX_AbnormalShortCircuit.description>The Flower-Tiding Bell's spring resonance has short-circuited the mechanoid's control and power systems.</MX_AbnormalShortCircuit.description>
+  <MX_AbnormalToxin.label>toxin buildup</MX_AbnormalToxin.label>
+  <MX_AbnormalToxin.description>The Flower-Tiding Bell's summer resonance deposits toxins inside the target. Reaching the buildup limit triggers venom.</MX_AbnormalToxin.description>
+  <MX_AbnormalCorrosion.label>corrosion buildup</MX_AbnormalCorrosion.label>
+  <MX_AbnormalCorrosion.description>The Flower-Tiding Bell's summer resonance eats away at mechanical structures. Reaching the buildup limit triggers corrosion.</MX_AbnormalCorrosion.description>
+  <MX_AbnormalVenom.label>venom</MX_AbnormalVenom.label>
+  <MX_AbnormalVenom.description>The target's body is being steadily consumed by toxins from the Flower-Tiding Bell's summer resonance.</MX_AbnormalVenom.description>
+  <MX_AbnormalCorroded.label>corrosion</MX_AbnormalCorroded.label>
+  <MX_AbnormalCorroded.description>The mechanoid's structure and armor are steadily corroding under the Flower-Tiding Bell's summer resonance.</MX_AbnormalCorroded.description>
+  <MX_AbnormalFear.label>fear buildup</MX_AbnormalFear.label>
+  <MX_AbnormalFear.description>The Flower-Tiding Bell's autumn resonance disturbs the target's mind. Reaching the buildup limit triggers fear.</MX_AbnormalFear.description>
+  <MX_AbnormalOverload.label>overload buildup</MX_AbnormalOverload.label>
+  <MX_AbnormalOverload.description>The Flower-Tiding Bell's autumn resonance strains the mechanical control core. Reaching the buildup limit triggers overload.</MX_AbnormalOverload.description>
+  <MX_AbnormalFeared.label>fear</MX_AbnormalFeared.label>
+  <MX_AbnormalFeared.description>The target has fallen into uncontrollable fear under the Flower-Tiding Bell's autumn resonance.</MX_AbnormalFeared.description>
+  <MX_AbnormalOverloaded.label>overload</MX_AbnormalOverloaded.label>
+  <MX_AbnormalOverloaded.description>The mechanoid's control core is overloaded by the Flower-Tiding Bell's autumn resonance.</MX_AbnormalOverloaded.description>
+  <MX_AbnormalCold.label>cold buildup</MX_AbnormalCold.label>
+  <MX_AbnormalCold.description>The Flower-Tiding Bell's winter resonance seeps into the target. Reaching the buildup limit triggers freezing.</MX_AbnormalCold.description>
+  <MX_AbnormalFrozen.label>frozen</MX_AbnormalFrozen.label>
+  <MX_AbnormalFrozen.description>The target is briefly frozen and unable to act under the Flower-Tiding Bell's winter resonance.</MX_AbnormalFrozen.description>
+  <MX_AbnormalBleed.triggerText>bleeding</MX_AbnormalBleed.triggerText>
+  <MX_AbnormalElectricLeak.triggerText>short circuit</MX_AbnormalElectricLeak.triggerText>
+  <MX_AbnormalToxin.triggerText>poisoned</MX_AbnormalToxin.triggerText>
+  <MX_AbnormalCorrosion.triggerText>corrosion</MX_AbnormalCorrosion.triggerText>
+  <MX_AbnormalFear.triggerText>fear</MX_AbnormalFear.triggerText>
+  <MX_AbnormalOverload.triggerText>overload</MX_AbnormalOverload.triggerText>
+  <MX_AbnormalCold.triggerText>frozen</MX_AbnormalCold.triggerText>
+</LanguageData>

@@ -2,19 +2,19 @@
 <LanguageData>
   <SpringFlowField.label>spring flow field</SpringFlowField.label>
   <MX_QH_LotusPond.label>lotus pond</MX_QH_LotusPond.label>
-  <MX_QH_LotusPond.description>The core of Qinghe's Flower Court, used to tune Four-Season Resonance. Qinghe herself can establish the current resonance with the Four-Season Flower Gods here.</MX_QH_LotusPond.description>
+  <MX_QH_LotusPond.description>Qinghe's cultivation site, where she meditates. Prepare a quiet, beautiful environment for her.</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
   <MX_QH_Weapon_FlowerBell.label>Flower-Tiding Bell</MX_QH_Weapon_FlowerBell.label>
-  <MX_QH_Weapon_FlowerBell.description>An instrument that has accompanied Qinghe since childhood. Its sound can pierce the mind, and infusing it with flower language grants it special power.</MX_QH_Weapon_FlowerBell.description>
+  <MX_QH_Weapon_FlowerBell.description>An instrument that has accompanied Qinghe since childhood. Its sound can pierce the mind, and infusing it with flower language grants special power.&#10;&#10;Only Qinghe can use it. Its special homing effect ignores shooting accuracy and cover.</MX_QH_Weapon_FlowerBell.description>
   <MX_QH_Weapon_Sword.label>Sanhua</MX_QH_Weapon_Sword.label>
-  <MX_QH_Weapon_Sword.description>Qinghe's personal sword. So elegant that it resembles a delicate work of art more than a weapon.</MX_QH_Weapon_Sword.description>
-  <MX_QH_Weapon_Sword.tools.0.label>Qinghe's blade</MX_QH_Weapon_Sword.tools.0.label>
+  <MX_QH_Weapon_Sword.description>Qinghe's personal sword. So elegant that it resembles a delicate work of art more than a weapon.&#10;&#10;Only Qinghe can use it.</MX_QH_Weapon_Sword.description>
+  <MX_QH_Weapon_Sword.tools.0.label>slash</MX_QH_Weapon_Sword.tools.0.label>
   <MX_Bullet_Qinghe_FlowerBell_Spring.label>bell note: spring</MX_Bullet_Qinghe_FlowerBell_Spring.label>
   <MX_Bullet_Qinghe_FlowerBell_Summer.label>bell note: summer</MX_Bullet_Qinghe_FlowerBell_Summer.label>
   <MX_Bullet_Qinghe_FlowerBell_Autumn.label>bell note: autumn</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
   <MX_Bullet_Qinghe_FlowerBell_Winter.label>bell note: winter</MX_Bullet_Qinghe_FlowerBell_Winter.label>
-  <MX_Bullet_QH_LunarMirrorRetaliation.label>wintersweet retaliation shot</MX_Bullet_QH_LunarMirrorRetaliation.label>
-  <MX_QH_LunarMirror.label>wintersweet shield</MX_QH_LunarMirror.label>
+  <MX_Bullet_QH_LunarMirrorRetaliation.label>frost chill</MX_Bullet_QH_LunarMirrorRetaliation.label>
+  <MX_QH_LunarMirror.label>Lunar Mirror shield</MX_QH_LunarMirror.label>
   <MX_QH_Mote_FlowerDivinationBurst.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBurst.label>
   <MX_QH_Mote_FlowerDivinationBokeh.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBokeh.label>
   <MX_QH_Mote_FlowerDivinationFootRing.label>Qinghe effect</MX_QH_Mote_FlowerDivinationFootRing.label>

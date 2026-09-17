@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalDeathSentence.label>告死</MX_AbnormalDeathSentence.label>
+  <MX_AbnormalDeathSentence.description>昭離以流場侵蝕目標的生機。積累期間目標行動受阻，并會周期性受到割傷；積累達到上限時，最後一次施加告死的角色將完成處決。&#10;霓羽、清荷、昭離和明淵免疫告死，不會因告死受到減速、割傷或處決。</MX_AbnormalDeathSentence.description>
+  <MX_AbnormalDeathSentenceResult.label>告死結算</MX_AbnormalDeathSentenceResult.label>
+  <MX_AbnormalDeathSentenceResult.description>告死的隱藏結算狀態。</MX_AbnormalDeathSentenceResult.description>
+  <MX_AbnormalDeathSentence.triggerText>告死</MX_AbnormalDeathSentence.triggerText>
+</LanguageData>

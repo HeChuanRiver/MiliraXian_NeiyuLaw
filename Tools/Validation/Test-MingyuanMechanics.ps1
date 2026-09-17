@@ -50,7 +50,7 @@ Get-ChildItem -LiteralPath (Join-Path $ModRoot '1.6') -Filter '*.xml' -Recurse |
         }
     }
 }
-foreach ($language in 'English','ChineseSimplified (简体中文)','ChineseTraditional (繁體中文)') {
+foreach ($language in 'English','ChineseTraditional (繁體中文)') {
     [xml]$translation = Get-Content -LiteralPath (Join-Path $ModRoot "1.6/Languages/$language/DefInjected/AbilityDef/MiliraXian_Mingyuan_Absorb.xml") -Raw -Encoding UTF8
     Check ($null -ne $translation.LanguageData.'MX_Mingyuan_Absorb.label' -and $null -ne $translation.LanguageData.'MX_Mingyuan_Absorb.description') "Missing Absorb translation: $language"
 }

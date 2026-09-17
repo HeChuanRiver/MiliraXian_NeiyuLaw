@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalVenomDamage.label>floral venom corrosion</MX_AbnormalVenomDamage.label>
+  <MX_AbnormalVenomDamage.description>Corrosive venom damage caused by the Flower-Tiding Bell's summer resonance.</MX_AbnormalVenomDamage.description>
+  <MX_AbnormalVenomDamage.deathMessage>{0} died from the Flower-Tiding Bell's deadly venom.</MX_AbnormalVenomDamage.deathMessage>
+  <MX_AbnormalShortCircuitDamage.label>short-circuit discharge</MX_AbnormalShortCircuitDamage.label>
+  <MX_AbnormalShortCircuitDamage.description>Damage caused by internal electrical discharge when a mechanoid short-circuits.</MX_AbnormalShortCircuitDamage.description>
+  <MX_AbnormalShortCircuitDamage.deathMessage>{0} died from a short-circuit discharge.</MX_AbnormalShortCircuitDamage.deathMessage>
+</LanguageData>

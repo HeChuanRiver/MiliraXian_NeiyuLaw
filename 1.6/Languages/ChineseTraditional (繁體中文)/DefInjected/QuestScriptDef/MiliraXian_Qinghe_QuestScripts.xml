@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerCourtQuestScript.questNameRules.rulesStrings.0>questName-&gt;來自百花的呼喚</MX_QH_FlowerCourtQuestScript.questNameRules.rulesStrings.0>
-  <MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;你得到了一份神秘的設計圖，看起來像一間雅致的亭居。——接取後可建造特殊建築：荷池（此為開啟獲取米莉拉角色拓展：清荷的支線任務）</MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;接取後解鎖荷池。建成荷池後，清荷加入殖民地，并開啟整理荷雨亭和升級引導任務。</MX_QH_FlowerCourtQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_FlowerCourtStartQuestScript.questNameRules.rulesStrings.0>questName-&gt;花庭初綻</MX_QH_FlowerCourtStartQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_FlowerCourtStartQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;已獲得荷池設計圖，可以建造荷池。建成後開啟整理荷雨亭和升級引導任務。</MX_QH_FlowerCourtStartQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_LotusPavilionQuestScript.questNameRules.rulesStrings.0>questName-&gt;整理荷雨亭</MX_QH_LotusPavilionQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_LotusPavilionQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;將荷池所在房間的印象值提高到40。</MX_QH_LotusPavilionQuestScript.questDescriptionRules.rulesStrings.0>
+  <MX_QH_MasteryGuideQuestScript.questNameRules.rulesStrings.0>questName-&gt;升級引導</MX_QH_MasteryGuideQuestScript.questNameRules.rulesStrings.0>
+  <MX_QH_MasteryGuideQuestScript.questDescriptionRules.rulesStrings.0>questDescription-&gt;讓清荷的精通等級達到1級。</MX_QH_MasteryGuideQuestScript.questDescriptionRules.rulesStrings.0>
 </LanguageData>

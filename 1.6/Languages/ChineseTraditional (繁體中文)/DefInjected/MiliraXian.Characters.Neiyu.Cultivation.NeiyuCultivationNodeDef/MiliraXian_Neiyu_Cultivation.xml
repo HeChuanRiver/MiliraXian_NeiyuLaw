@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_Cultivation_Wing1.label>初羽</MX_Neiyu_Cultivation_Wing1.label>
+  <MX_Neiyu_Cultivation_Wing1.description>喚醒花、劍與弓的力量，提高武器傷害、穿透與近戰出手速度。</MX_Neiyu_Cultivation_Wing1.description>
+  <MX_Neiyu_Cultivation_Wing2.label>流光入刃</MX_Neiyu_Cultivation_Wing2.label>
+  <MX_Neiyu_Cultivation_Wing2.description>進一步提高三種武器形態的威力。</MX_Neiyu_Cultivation_Wing2.description>
+  <MX_Neiyu_Cultivation_Wing3.label>羽律成鋒</MX_Neiyu_Cultivation_Wing3.label>
+  <MX_Neiyu_Cultivation_Wing3.description>完全釋放三種武器形態的傷害、穿透與近戰出手速度。</MX_Neiyu_Cultivation_Wing3.description>
+  <MX_Neiyu_Cultivation_Arrow1.label>散羽</MX_Neiyu_Cultivation_Arrow1.label>
+  <MX_Neiyu_Cultivation_Arrow1.description>增加普攻分裂箭與箭幕的彈丸數量。</MX_Neiyu_Cultivation_Arrow1.description>
+  <MX_Neiyu_Cultivation_Arrow2.label>霽色成陣</MX_Neiyu_Cultivation_Arrow2.label>
+  <MX_Neiyu_Cultivation_Arrow2.description>展開更多箭羽，擴大持續射擊的規模。</MX_Neiyu_Cultivation_Arrow2.description>
+  <MX_Neiyu_Cultivation_Arrow3.label>百羽歸弦</MX_Neiyu_Cultivation_Arrow3.label>
+  <MX_Neiyu_Cultivation_Arrow3.description>完全展開普攻分裂箭與箭幕。</MX_Neiyu_Cultivation_Arrow3.description>
+  <MX_Neiyu_Cultivation_Halo1.label>微環</MX_Neiyu_Cultivation_Halo1.label>
+  <MX_Neiyu_Cultivation_Halo1.description>解鎖首擊防護與六層計數護盾。盾層耗盡後，需要等待恢復。</MX_Neiyu_Cultivation_Halo1.description>
+  <MX_Neiyu_Cultivation_Halo2.label>重環相護</MX_Neiyu_Cultivation_Halo2.label>
+  <MX_Neiyu_Cultivation_Halo2.description>計數護盾增加至十八層。</MX_Neiyu_Cultivation_Halo2.description>
+  <MX_Neiyu_Cultivation_Halo3.label>霽光回響</MX_Neiyu_Cultivation_Halo3.label>
+  <MX_Neiyu_Cultivation_Halo3.description>完全展開計數護盾，解鎖三階蓄傷與增益循環。循環結束後進入虛弱。</MX_Neiyu_Cultivation_Halo3.description>
+  <MX_Neiyu_Cultivation_Law1.label>衣上微紋</MX_Neiyu_Cultivation_Law1.label>
+  <MX_Neiyu_Cultivation_Law1.description>喚醒常服、內襯與耳飾中的法則，提高防護并恢復部分穿戴增益。</MX_Neiyu_Cultivation_Law1.description>
+  <MX_Neiyu_Cultivation_Law2.label>紋律共鳴</MX_Neiyu_Cultivation_Law2.label>
+  <MX_Neiyu_Cultivation_Law2.description>進一步提高衣裝防護、隔溫與穿戴增益。</MX_Neiyu_Cultivation_Law2.description>
+  <MX_Neiyu_Cultivation_Law3.label>法衣歸身</MX_Neiyu_Cultivation_Law3.label>
+  <MX_Neiyu_Cultivation_Law3.description>完全釋放常服、內襯與耳飾的防護、隔溫和穿戴增益。</MX_Neiyu_Cultivation_Law3.description>
+  <MX_Neiyu_Cultivation_Wing1.story>羽毛掠過掌心時，霓羽仍記得第一次握住兵刃的重量。讓力量停在刃上，比任它傾瀉更難。</MX_Neiyu_Cultivation_Wing1.story>
+  <MX_Neiyu_Cultivation_Wing2.story>她沿著刃脊拭去微光。收束後的鋒芒，只在命中之時綻開。</MX_Neiyu_Cultivation_Wing2.story>
+  <MX_Neiyu_Cultivation_Wing3.story>花、劍、弓在她手中依次浮現。形態不同，回應她的卻始終是同一道法則。</MX_Neiyu_Cultivation_Wing3.story>
+  <MX_Neiyu_Cultivation_Arrow1.story>一支箭離弦，數片羽光隨之展開。霓羽開始分辨每一道細小的回聲。</MX_Neiyu_Cultivation_Arrow1.story>
+  <MX_Neiyu_Cultivation_Arrow2.story>雨停之後，細光橫過天空。那些交錯的軌跡漸漸有了秩序。</MX_Neiyu_Cultivation_Arrow2.story>
+  <MX_Neiyu_Cultivation_Arrow3.story>漫天羽光回到弦上，靜得像從未離開。她終于能讓每一片羽毛找到自己的去處。</MX_Neiyu_Cultivation_Arrow3.story>
+  <MX_Neiyu_Cultivation_Halo1.story>頭頂的光環輕輕一顫。她把最先回應的那縷光，留在了身體之外。</MX_Neiyu_Cultivation_Halo1.story>
+  <MX_Neiyu_Cultivation_Halo2.story>薄薄的光層相繼合攏。每次承受沖擊，她都能聽見它們在不同的地方鳴響。</MX_Neiyu_Cultivation_Halo2.story>
+  <MX_Neiyu_Cultivation_Halo3.story>光環承住最後一次重擊，隨即向內收攏。霓羽抬起頭，積蓄的微光沿羽翼流回刃尖。</MX_Neiyu_Cultivation_Halo3.story>
+  <MX_Neiyu_Cultivation_Law1.story>衣料上的紋路只有在光下才看得清。她順著紋路，將散落的力量一寸寸接續。</MX_Neiyu_Cultivation_Law1.story>
+  <MX_Neiyu_Cultivation_Law2.story>耳飾與衣擺同時泛起淡光。原本分散的紋路，開始隨著她的呼吸起伏。</MX_Neiyu_Cultivation_Law2.story>
+  <MX_Neiyu_Cultivation_Law3.story>她收起羽翼，衣上的光也隨之隱去。法則已經貼合身體，無須再向外宣示。</MX_Neiyu_Cultivation_Law3.story>
+</LanguageData>

@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliRebirth</defName>
         <label>&lt;color=#D9574E&gt;归亡者&lt;/color&gt;</label>
-        <description>Gains Karma through Death Sentence. Healing and resurrection create up to 6 Karma Links lasting 30 days; living links can substitute for death. Recruited death growth caps at 10 deaths. Without a substitute, returns after 10 days.</description>
+        <description>通过告死积累因果。治疗和复活可建立因果链接，最多6人，持续30天，活链接可作为死亡替身。招募后死亡成长在10次封顶；没有可用替身时，10天后归来。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.96, 0.36, 0.32)</defaultLabelColor>
         <scenarioCanAdd>false</scenarioCanAdd>
@@ -19,7 +19,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliDingshuMark</defName>
         <label>&lt;color=#C9A2FF&gt;定数标记&lt;/color&gt;</label>
-        <description>Destiny Mark lasts 3 days. Dying again while marked prevents another resurrection.</description>
+        <description>定数标记持续3天，期间再次死亡将无法再次复活。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.25, 0.08, 0.12)</defaultLabelColor>
         <isBad>false</isBad>

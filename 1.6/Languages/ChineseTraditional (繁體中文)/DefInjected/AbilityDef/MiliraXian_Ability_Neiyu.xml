@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Neiyu_WarpFeather.label>&lt;color=#79CBFF&gt;折躍引羽&lt;/color&gt;</MX_Neiyu_WarpFeather.label>
-  <MX_Neiyu_WarpFeather.description>短暫施法后生成12–24根米莉拉羽毛。冷卻300秒。</MX_Neiyu_WarpFeather.description>
+  <MX_Neiyu_WarpFeather.description>短暫施法後生成12–24根米莉拉羽毛。冷卻300秒。</MX_Neiyu_WarpFeather.description>
   <MX_Neiyu_ThunderMarkedStorm.label>&lt;color=#8BD5FF&gt;雷鎖印域&lt;/color&gt;</MX_Neiyu_ThunderMarkedStorm.label>
-  <MX_Neiyu_ThunderMarkedStorm.description>標記半徑3格內的敵人。延遲后每個目標受到3次雷擊，每次造成35點基礎傷害，并附加15點EMP效果。冷卻80秒。</MX_Neiyu_ThunderMarkedStorm.description>
+  <MX_Neiyu_ThunderMarkedStorm.description>標記半徑3格內的敵人。延遲後每個目標受到3次雷擊，每次造成35點基礎傷害，并附加15點EMP效果。冷卻80秒。</MX_Neiyu_ThunderMarkedStorm.description>
   <MX_Neiyu_Bow_ArrowBarrage.label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</MX_Neiyu_Bow_ArrowBarrage.label>
   <MX_Neiyu_Bow_ArrowBarrage.description>需要弓形態。蓄力5秒，沿選定方向發射32支箭，每支基礎傷害30點，射程55格。冷卻120秒。</MX_Neiyu_Bow_ArrowBarrage.description>
   <MX_Neiyu_Flower_BlessingField.label>&lt;color=#F39AD9&gt;花陣·祈生&lt;/color&gt;</MX_Neiyu_Flower_BlessingField.label>
-  <MX_Neiyu_Flower_BlessingField.description>需要花形態。治愈半徑6格內非敵對血肉目標的傷口與舊傷，并提高心情。隨后60秒內移動速度提高20%，承傷降低10%，免疫增長速度提高70%。冷卻90秒。</MX_Neiyu_Flower_BlessingField.description>
+  <MX_Neiyu_Flower_BlessingField.description>需要花形態。治愈半徑6格內非敵對血肉目標的傷口與舊傷，并提高心情。隨後60秒內移動速度提高20%，承傷降低10%，免疫增長速度提高70%。冷卻90秒。</MX_Neiyu_Flower_BlessingField.description>
   <MX_Neiyu_Flower_ToxinGarden.label>&lt;color=#D786E8&gt;花陣·瘴庭&lt;/color&gt;</MX_Neiyu_Flower_ToxinGarden.label>
   <MX_Neiyu_Flower_ToxinGarden.description>需要花形態。使半徑7格內敵人食物中毒，并有10%概率使其狂暴。冷卻120秒。</MX_Neiyu_Flower_ToxinGarden.description>
   <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;劍勢·天墜&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
-  <MX_Neiyu_Sword_Skyfall.description>需要劍形態。躍起并預警落點，對半徑3格內敵人造成120點無視護甲傷害，隨后25秒內使其承傷提高25%。冷卻150秒。</MX_Neiyu_Sword_Skyfall.description>
+  <MX_Neiyu_Sword_Skyfall.description>需要劍形態。躍起并預警落點，對半徑3格內敵人造成120點無視護甲傷害，隨後25秒內使其承傷提高25%。冷卻150秒。</MX_Neiyu_Sword_Skyfall.description>
   <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;劍勢·斷首&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>需要劍形態。短暫後撤後衝向目標，斬去頭部。目標沒有頭部時，造成75點無視護甲斬擊傷害。冷卻75秒。</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_Sword_ExecuteHead.description>需要劍形態。短暫後撤後沖向目標，斬去頭部。目標沒有頭部時，造成75點無視護甲斬擊傷害。冷卻75秒。</MX_Neiyu_Sword_ExecuteHead.description>
 </LanguageData>

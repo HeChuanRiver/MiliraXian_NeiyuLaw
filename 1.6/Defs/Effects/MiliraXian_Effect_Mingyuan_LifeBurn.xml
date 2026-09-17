@@ -3,7 +3,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_LifeBurnBurst</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -32,7 +32,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_LifeBurnDeathFade</defName>
-    <label>Mingyuan life burn death mark</label>
+    <label>明渊·燃命死亡标记</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -75,7 +75,7 @@
 
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_RebirthMarker</defName>
-    <label>Mingyuan rebirth flame</label>
+    <label>明渊·重生之焰</label>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanRebirthMarker</thingClass>
     <selectable>true</selectable>
     <tickerType>Never</tickerType>

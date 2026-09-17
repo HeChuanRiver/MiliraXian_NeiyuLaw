@@ -3,7 +3,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_InstantCombustionFlash</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteThrown</thingClass>
     <category>Mote</category>
     <graphicData>
@@ -32,7 +32,7 @@
 
   <ThingDef>
     <defName>MX_Mingyuan_Mote_InstantCombustionMark</defName>
-    <label>Mote</label>
+    <label>特效</label>
     <thingClass>MoteAttached</thingClass>
     <category>Mote</category>
     <graphicData>

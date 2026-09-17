@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalVenomDamage.label>花毒腐蝕</MX_AbnormalVenomDamage.label>
+  <MX_AbnormalVenomDamage.description>花信鈴夏之共鳴造成的毒素腐蝕傷害。</MX_AbnormalVenomDamage.description>
+  <MX_AbnormalVenomDamage.deathMessage>{0}死于花信鈴的劇毒。</MX_AbnormalVenomDamage.deathMessage>
+  <MX_AbnormalShortCircuitDamage.label>短路放電</MX_AbnormalShortCircuitDamage.label>
+  <MX_AbnormalShortCircuitDamage.description>機械體短路時，內部放電造成的損傷。</MX_AbnormalShortCircuitDamage.description>
+  <MX_AbnormalShortCircuitDamage.deathMessage>{0}死于短路放電。</MX_AbnormalShortCircuitDamage.deathMessage>
+</LanguageData>

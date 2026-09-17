@@ -4,9 +4,7 @@
     <HediffDef>
         <defName>MXNL_NeiyuShield</defName>
         <label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</label>
-        <description>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
-Stage II has 108 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 60 seconds without losing charges. Depleting the shield triggers Stage III.
-Stage III grants invulnerability and absorbs damage for 3 hours, then grants buffs based on the amount absorbed for 12 hours. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 24 charges and cannot block when empty or trigger Stage III.</description>
+        <description>第一阶段抵消一次攻击，随后进入第二阶段；致命攻击会直接触发第三阶段。&#10;第二阶段拥有108层护盾，每36点伤害消耗1层，向上取整，每次至少消耗1层。60秒未消耗盾层时回到第一阶段。盾层耗尽后进入第三阶段。&#10;第三阶段无敌并吸收伤害3小时，再根据吸收量获得12小时增益，高额吸收的增益最多叠加5层。结束后虚弱150秒，期间护盾仅有24层，耗尽后无法抵挡伤害，也无法触发第三阶段。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.44, 0.80, 1.00)</defaultLabelColor>
         <isBad>false</isBad>

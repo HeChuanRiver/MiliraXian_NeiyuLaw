@@ -4,11 +4,9 @@
     <ScenarioDef ParentName="ScenarioBase">
         <defName>MXNL_QingheFlowerCourtStart</defName>
         <label>花庭初绽</label>
-        <description><![CDATA[日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，你离开熟悉的庭院，独自来到这片与世隔绝的地面，想要追寻她的足迹。
-
-这一次，只有你自己、随身的少量行装，以及一片尚未开辟的土地。]]></description>
+        <description>日复一日的闭关修行终究不能回答所有疑问。听闻自己的老师霓羽来到边缘世界的消息后，你离开熟悉的庭院，独自来到这片与世隔绝的地面，想要追寻她的足迹。&#10;&#10;这一次，只有你自己、随身的少量行装，以及一片尚未开辟的土地。</description>
         <scenario>
-            <summary><![CDATA[花丛中的仙子来到边缘世界，尝试让百花的恩泽在这片陌生的土地上生根。]]></summary>
+            <summary>花丛中的仙子来到边缘世界，尝试让百花的恩泽在这片陌生的土地上生根。</summary>
             <playerFaction Inherit="false">
                 <def>PlayerFaction</def>
                 <factionDef>Milira_PlayerFaction</factionDef>
@@ -16,13 +14,7 @@
             <parts>
                 <li Class="ScenPart_GameStartDialog">
                     <def>GameStartDialog</def>
-                    <text><![CDATA[日复一日的闭关修行终究不能回答所有疑问。
-
-你追随自己的老师霓羽离开了自己熟悉的庭院，独自来到这片边缘世界的地面，想要追寻她的足迹。
-
-你拥有的只是随身携带的少量行装，以及一片尚未开辟的土地。
-
-先活下来，然后想办法建造一座新的庭园，重新唤醒自己的力量。]]></text>
+                    <text>日复一日的闭关修行终究不能回答所有疑问。&#10;&#10;你追随自己的老师霓羽离开了自己熟悉的庭院，独自来到这片边缘世界的地面，想要追寻她的足迹。&#10;&#10;你拥有的只是随身携带的少量行装，以及一片尚未开辟的土地。&#10;&#10;先活下来，然后想办法建造一座新的庭园，重新唤醒自己的力量。</text>
                     <closeSound>GameStartSting</closeSound>
                 </li>
 

@@ -18,7 +18,7 @@
     <HediffDef>
         <defName>MX_Neiyu_FlowerBlessed</defName>
         <label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</label>
-        <description>Blessing lasts 60 seconds, improving movement and immunity gain while reducing incoming damage.</description>
+        <description>祈生祝福持续60秒，提高移动速度、免疫增长速度并降低受到的伤害。</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.96, 0.60, 0.92)</defaultLabelColor>
         <isBad>false</isBad>
@@ -47,7 +47,7 @@
     <HediffDef>
         <defName>MX_Neiyu_SwordVulnerability</defName>
         <label>&lt;color=#C7A2F8&gt;剑坠易伤&lt;/color&gt;</label>
-        <description>Skyfall increases damage taken for 25 seconds.</description>
+        <description>受到天坠影响，承受更多伤害，持续25秒。</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.86, 0.52, 0.88)</defaultLabelColor>
         <isBad>true</isBad>

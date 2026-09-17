@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalBleedLimitFactor.label>流血積累上限乘數</MX_AbnormalBleedLimitFactor.label>
+  <MX_AbnormalBleedLimitFactor.description>觸發流血效果所需異常積累量的乘數。數值為0時，流血異常無效。</MX_AbnormalBleedLimitFactor.description>
+  <MX_AbnormalBleedEfficiencyFactor.label>流血附加效率乘數</MX_AbnormalBleedEfficiencyFactor.label>
+  <MX_AbnormalBleedEfficiencyFactor.description>該角色施加流血異常積累量時使用的效率乘數。</MX_AbnormalBleedEfficiencyFactor.description>
+  <MX_AbnormalElectricLeakLimitFactor.label>漏電積累上限乘數</MX_AbnormalElectricLeakLimitFactor.label>
+  <MX_AbnormalElectricLeakLimitFactor.description>觸發短路效果所需異常積累量的乘數。數值為0時，漏電異常無效。</MX_AbnormalElectricLeakLimitFactor.description>
+  <MX_AbnormalElectricLeakEfficiencyFactor.label>漏電附加效率乘數</MX_AbnormalElectricLeakEfficiencyFactor.label>
+  <MX_AbnormalElectricLeakEfficiencyFactor.description>該角色施加漏電異常積累量時使用的效率乘數。</MX_AbnormalElectricLeakEfficiencyFactor.description>
+  <MX_AbnormalToxinLimitFactor.label>毒素積累上限乘數</MX_AbnormalToxinLimitFactor.label>
+  <MX_AbnormalToxinLimitFactor.description>觸發劇毒效果所需異常積累量的乘數。數值為0時，毒素異常無效。</MX_AbnormalToxinLimitFactor.description>
+  <MX_AbnormalToxinEfficiencyFactor.label>毒素附加效率乘數</MX_AbnormalToxinEfficiencyFactor.label>
+  <MX_AbnormalToxinEfficiencyFactor.description>該角色施加毒素異常積累量時使用的效率乘數。</MX_AbnormalToxinEfficiencyFactor.description>
+  <MX_AbnormalCorrosionLimitFactor.label>腐蝕積累上限乘數</MX_AbnormalCorrosionLimitFactor.label>
+  <MX_AbnormalCorrosionLimitFactor.description>觸發腐蝕效果所需異常積累量的乘數。數值為0時，腐蝕異常無效。</MX_AbnormalCorrosionLimitFactor.description>
+  <MX_AbnormalCorrosionEfficiencyFactor.label>腐蝕附加效率乘數</MX_AbnormalCorrosionEfficiencyFactor.label>
+  <MX_AbnormalCorrosionEfficiencyFactor.description>該角色施加腐蝕異常積累量時使用的效率乘數。</MX_AbnormalCorrosionEfficiencyFactor.description>
+  <MX_AbnormalFearLimitFactor.label>恐懼積累上限乘數</MX_AbnormalFearLimitFactor.label>
+  <MX_AbnormalFearLimitFactor.description>觸發恐懼效果所需異常積累量的乘數。數值為0時，恐懼異常無效。</MX_AbnormalFearLimitFactor.description>
+  <MX_AbnormalFearEfficiencyFactor.label>恐懼附加效率乘數</MX_AbnormalFearEfficiencyFactor.label>
+  <MX_AbnormalFearEfficiencyFactor.description>該角色施加恐懼異常積累量時使用的效率乘數。</MX_AbnormalFearEfficiencyFactor.description>
+  <MX_AbnormalOverloadLimitFactor.label>過載積累上限乘數</MX_AbnormalOverloadLimitFactor.label>
+  <MX_AbnormalOverloadLimitFactor.description>觸發過載效果所需異常積累量的乘數。數值為0時，過載異常無效。</MX_AbnormalOverloadLimitFactor.description>
+  <MX_AbnormalOverloadEfficiencyFactor.label>過載附加效率乘數</MX_AbnormalOverloadEfficiencyFactor.label>
+  <MX_AbnormalOverloadEfficiencyFactor.description>該角色施加過載異常積累量時使用的效率乘數。</MX_AbnormalOverloadEfficiencyFactor.description>
+  <MX_AbnormalColdLimitFactor.label>寒冷積累上限乘數</MX_AbnormalColdLimitFactor.label>
+  <MX_AbnormalColdLimitFactor.description>觸發凍結效果所需異常積累量的乘數。數值為0時，寒冷異常無效。</MX_AbnormalColdLimitFactor.description>
+  <MX_AbnormalColdEfficiencyFactor.label>寒冷附加效率乘數</MX_AbnormalColdEfficiencyFactor.label>
+  <MX_AbnormalColdEfficiencyFactor.description>該角色施加寒冷異常積累量時使用的效率乘數。</MX_AbnormalColdEfficiencyFactor.description>
+  <MX_AbnormalDeathSentenceLimitFactor.label>告死積累上限乘數</MX_AbnormalDeathSentenceLimitFactor.label>
+  <MX_AbnormalDeathSentenceLimitFactor.description>觸發告死效果所需異常積累量的乘數。數值為0時，告死異常無效。&#10;霓羽、清荷、昭離和明淵免疫告死，不會因告死受到減速、割傷或處決。</MX_AbnormalDeathSentenceLimitFactor.description>
+  <MX_AbnormalDeathSentenceEfficiencyFactor.label>告死附加效率乘數</MX_AbnormalDeathSentenceEfficiencyFactor.label>
+  <MX_AbnormalDeathSentenceEfficiencyFactor.description>該角色施加告死異常積累量時使用的效率乘數。</MX_AbnormalDeathSentenceEfficiencyFactor.description>
+</LanguageData>

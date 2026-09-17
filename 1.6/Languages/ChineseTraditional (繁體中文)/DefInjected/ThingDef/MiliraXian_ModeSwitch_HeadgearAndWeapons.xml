@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_Neiyu_Form_Flower.label>霓羽·花形</MX_Neiyu_Form_Flower.label>
-  <MX_Neiyu_Form_Flower.description>霓羽常持於手中的花形兵裝，以花瓣輝光施展賜福與毒庭。近戰威力較低，可切換為劍或弓形態。永不損壞。</MX_Neiyu_Form_Flower.description>
+  <MX_Neiyu_Form_Flower.description>霓羽常持于手中的花形兵裝，以花瓣輝光施展賜福與毒庭。近戰威力較低，可切換為劍或弓形態。永不損壞。</MX_Neiyu_Form_Flower.description>
   <MX_Neiyu_Form_Flower.tools.0.label>拂花</MX_Neiyu_Form_Flower.tools.0.label>
   <MX_Neiyu_Form_Weapon.label>霓羽·劍形</MX_Neiyu_Form_Weapon.label>
   <MX_Neiyu_Form_Weapon.description>由花形轉化而來的劍形兵裝，擅長高速斬擊與穿透重甲。可切換為花或弓形態。永不損壞。</MX_Neiyu_Form_Weapon.description>
@@ -11,4 +11,13 @@
   <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
   <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.0>花</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.1>劍</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.2>弓</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.2>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.0>花</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.1>劍</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.2>弓</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.2>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.0>花</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.1>劍</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.2>弓</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.2>
 </LanguageData>

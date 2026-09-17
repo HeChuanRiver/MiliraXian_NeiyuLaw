@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_QH_Node_AuraEnhancement1.label>Aura Enhancement I</MX_QH_Node_AuraEnhancement1.label>
+  <MX_QH_Node_AuraEnhancement1.description>—Passive effect: Aura shield capacity +25%.</MX_QH_Node_AuraEnhancement1.description>
+  <MX_QH_Node_AuraEnhancement2.label>Aura Enhancement II</MX_QH_Node_AuraEnhancement2.label>
+  <MX_QH_Node_AuraEnhancement2.description>—Passive effect: Aura shield capacity +25%.</MX_QH_Node_AuraEnhancement2.description>
+  <MX_QH_Node_AuraCirculation.label>Aura Circulation</MX_QH_Node_AuraCirculation.label>
+  <MX_QH_Node_AuraCirculation.description>—Passive effect: Aura shield regeneration delay after a hit becomes 0 seconds.</MX_QH_Node_AuraCirculation.description>
+  <MX_QH_Node_FlowerFairy.label>Flower Fairy</MX_QH_Node_FlowerFairy.label>
+  <MX_QH_Node_FlowerFairy.description>I am one with the flowers in bloom. I move with the wind and dwell by the water.&#10;&#10;—Starts with Aura Ward, Stillness, Trickle, Flowing Form and the Qixi Festival traits.</MX_QH_Node_FlowerFairy.description>
+  <MX_QH_Node_FlyingFlowerDecree.label>Flying Flower Decree</MX_QH_Node_FlyingFlowerDecree.label>
+  <MX_QH_Node_FlyingFlowerDecree.description>—Learn Flying Flower Decree: Spring Flow.</MX_QH_Node_FlyingFlowerDecree.description>
+  <MX_QH_Node_SwordDance.label>Sword Dance</MX_QH_Node_SwordDance.label>
+  <MX_QH_Node_SwordDance.description>—Learn the sword art: Illusory Reflection.</MX_QH_Node_SwordDance.description>
+  <MX_QH_Node_SwordDance.unlockLetter.title>Sword Dance Stance</MX_QH_Node_SwordDance.unlockLetter.title>
+  <MX_QH_Node_SeasonalResonance.label>Seasonal Harmony</MX_QH_Node_SeasonalResonance.label>
+  <MX_QH_Node_SeasonalResonance.description>Attune the rhythm of your aura to grant different harmony effects to yourself and your weapons.</MX_QH_Node_SeasonalResonance.description>
+  <MX_QH_Node_LingeringSnow.label>Lingering Snow</MX_QH_Node_LingeringSnow.label>
+  <MX_QH_Node_LingeringSnow.description>—Learn the ability: Lunar Mirror.</MX_QH_Node_LingeringSnow.description>
+  <MX_QH_Node_AscentSlash.label>Falling Blossoms</MX_QH_Node_AscentSlash.label>
+  <MX_QH_Node_AscentSlash.description>A sword art Qinghe learned through exchanges with her teacher Neiyu, turning bell tones into sword qi. It combines the astonishing speed of Sword Art: Skyfall with Qinghe's distinctive cutting techniques.&#10;&#10;—Learn the sword art: Falling Blossoms.</MX_QH_Node_AscentSlash.description>
+  <MX_QH_Node_FlowerDecree1.label>Flower Decree Enhancement I</MX_QH_Node_FlowerDecree1.label>
+  <MX_QH_Node_FlowerDecree1.description>—Passive effect: Maximum Flower Decree +1.</MX_QH_Node_FlowerDecree1.description>
+  <MX_QH_Node_FlowerDecree2.label>Flower Decree Enhancement II</MX_QH_Node_FlowerDecree2.label>
+  <MX_QH_Node_FlowerDecree2.description>—Passive effect: Maximum Flower Decree +1.</MX_QH_Node_FlowerDecree2.description>
+  <MX_QH_Node_HardSoftBalance.label>Strength in Flexibility</MX_QH_Node_HardSoftBalance.label>
+  <MX_QH_Node_HardSoftBalance.description>—Passive effect: Aura per-hit cost cap multiplier and Aura Hardening multiplier each increase by 100%. Enables the default 20-point per-hit cost cap and applies the full Aura Hardening value to reduce the cost.</MX_QH_Node_HardSoftBalance.description>
+  <MX_QH_Trait_AuraShield.label>Aura Ward</MX_QH_Trait_AuraShield.label>
+  <MX_QH_Trait_AuraShield.description>—Passive effect: Enables the persistent shield.</MX_QH_Trait_AuraShield.description>
+  <MX_QH_Trait_FlowingForm.label>Flowing Form</MX_QH_Trait_FlowingForm.label>
+  <MX_QH_Trait_FlowingForm.description>—Passive effect: Enables protection against damage that could be lethal or destroy a body part.</MX_QH_Trait_FlowingForm.description>
+  <MX_QH_Node_SwordDance.unlockLetter.text>Qinghe has learned the sword art: Illusory Reflection.</MX_QH_Node_SwordDance.unlockLetter.text>
+</LanguageData>

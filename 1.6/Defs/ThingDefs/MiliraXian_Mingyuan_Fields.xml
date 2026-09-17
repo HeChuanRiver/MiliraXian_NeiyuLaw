@@ -3,7 +3,7 @@
 
     <ThingDef>
         <defName>MX_Mingyuan_BurningPillarField</defName>
-        <label>burning pillar core</label>
+        <label>燃烧之柱核心</label>
         <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanBurningPillarField</thingClass>
         <category>Building</category>
         <selectable>true</selectable>
@@ -69,7 +69,7 @@
 
     <ThingDef>
         <defName>MX_Mingyuan_AshesField</defName>
-        <label>ashes of self field</label>
+        <label>焚我余烬领域</label>
         <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanAshesField</thingClass>
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>

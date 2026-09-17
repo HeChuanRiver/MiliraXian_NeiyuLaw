@@ -3,33 +3,41 @@
   <MX_QH_FlowerDecree.label>花令</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>隱藏Hediff：資源計數器</MX_QH_FlowerDecree.description>
   <MX_QH_FlowerDecree.comps.0.resourceLabel>花令</MX_QH_FlowerDecree.comps.0.resourceLabel>
-  <MX_QH_FlowerDecree.comps.0.resourceDescription>清荷的充能型層數資源，用於釋放四時飛花令。</MX_QH_FlowerDecree.comps.0.resourceDescription>
+  <MX_QH_FlowerDecree.comps.0.resourceDescription>用于施放飛花令的充能資源。</MX_QH_FlowerDecree.comps.0.resourceDescription>
   <MX_QH_CombatState.label>四時共鳴</MX_QH_CombatState.label>
-  <MX_QH_CombatState.description>隱藏狀態：記錄清荷目前的四時共鳴。</MX_QH_CombatState.description>
+  <MX_QH_CombatState.description>隱藏狀態：記錄清荷當前的四時共鳴。</MX_QH_CombatState.description>
   <MX_QH_SwordPressure.label>劍壓</MX_QH_SwordPressure.label>
-  <MX_QH_SwordPressure.description>隱藏狀態：清荷近戰模式使用的戰鬥資源。</MX_QH_SwordPressure.description>
+  <MX_QH_SwordPressure.description>隱藏Hediff：資源計數器</MX_QH_SwordPressure.description>
   <MX_QH_SwordPressure.comps.0.resourceLabel>劍壓</MX_QH_SwordPressure.comps.0.resourceLabel>
-  <MX_QH_SwordPressure.comps.0.resourceDescription>揮劍命中敵人時積累。未完成的一段劍壓會在停止獲取後逐漸消退。</MX_QH_SwordPressure.comps.0.resourceDescription>
+  <MX_QH_SwordPressure.comps.0.resourceDescription>揮劍命中敵人時積累。未積累的一段劍壓會在停止獲取後逐漸流失。</MX_QH_SwordPressure.comps.0.resourceDescription>
   <MX_QH_MeditativeStillness.label>靜思</MX_QH_MeditativeStillness.label>
-  <MX_QH_MeditativeStillness.description>冥想或者讀書可以積累靜思，清荷進行需要品質的建造、製作或藝術創作時，會基於當前靜思獲得品質加成：靜思未滿時不消耗靜思、有機率使品質 +1；靜思蓄滿時會消耗全部靜思並使品質 +2。</MX_QH_MeditativeStillness.description>
+  <MX_QH_MeditativeStillness.description>清荷專心創作的能力顯化。進行冥想、閱讀或休息時可以積累，進行任意帶有品質要求的建造、手工或藝術創作時，會基于當前積累的靜思獲得品質加成（最多+1）。靜思累計滿後，下一次制作將必定獲得品質等級+2，并消耗所積累的全部靜思。</MX_QH_MeditativeStillness.description>
   <MX_QH_MeditativeStillness.comps.0.resourceLabel>靜思</MX_QH_MeditativeStillness.comps.0.resourceLabel>
-  <MX_QH_MeditativeStillness.comps.0.resourceDescription>清荷在荷池處冥想時積累的靜心沉澱。</MX_QH_MeditativeStillness.comps.0.resourceDescription>
+  <MX_QH_MeditativeStillness.comps.0.resourceDescription>隱藏資源，不直接顯示</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>和鳴</MX_QH_FlowerResonance.label>
-  <MX_QH_FlowerResonance.description>隱藏 Hediff：角色技能資料</MX_QH_FlowerResonance.description>
-  <MX_QH_AscentSlashInvulnerable.label>傷害免疫（絕影）</MX_QH_AscentSlashInvulnerable.label>
-  <MX_QH_AscentSlashInvulnerable.description>清荷施展劍勢·絕影期間躍入空中，暫時免疫所有傷害。</MX_QH_AscentSlashInvulnerable.description>
-  <MX_QH_DivineBlessing.label>花神之垂憐</MX_QH_DivineBlessing.label>
-  <MX_QH_DivineBlessing.description>受到致命傷害或可能摧毀身體部件的傷害時，抵消此次傷害、修復自身所有損傷，同時獲得短暫無敵和持續10秒的心靈隱形。此效果每120秒只可觸發一次。</MX_QH_DivineBlessing.description>
-  <MX_QH_DivineBlessingImmunity.label>神應</MX_QH_DivineBlessingImmunity.label>
-  <MX_QH_DivineBlessingImmunity.description>受到花神的垂憐，暫時免疫所有傷害。</MX_QH_DivineBlessingImmunity.description>
-  <MX_QH_DivineGrace.label>花神之恩典</MX_QH_DivineGrace.label>
-  <MX_QH_DivineGrace.description>清荷精通修行的顯化。隨著花神之恩典等級提高，清荷的基礎能力會逐步增強。</MX_QH_DivineGrace.description>
-  <MX_QH_DivineProtection.label>花神之眷顧</MX_QH_DivineProtection.label>
-  <MX_QH_DivineProtection.description>清荷受到十二花神的保護，能自然產生一面抵擋傷害的護盾。護盾單次承傷最多消耗20點。\n\n護盾被擊碎時會失效3秒。</MX_QH_DivineProtection.description>
+  <MX_QH_FlowerResonance.description>隱藏Hediff：清荷技能數據</MX_QH_FlowerResonance.description>
+  <MX_QH_AscentSlashInvulnerable.label>傷害免疫（落櫻）</MX_QH_AscentSlashInvulnerable.label>
+  <MX_QH_AscentSlashInvulnerable.description>躍入空中，暫時免疫所有傷害。</MX_QH_AscentSlashInvulnerable.description>
+
+
+
+
+
+
+
+
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
-  <MX_QH_Trickle.description>清荷會持續緩慢回復傷口，並逐步修復永久損傷與失去的身體部位。</MX_QH_Trickle.description>
+  <MX_QH_Trickle.description>清荷會持續緩慢回復傷口，并逐步修復永久損傷與失去的身體部位。</MX_QH_Trickle.description>
   <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
   <MX_QH_LuoshenContract.description>隱藏狀態：記錄清荷與配偶之間的洛神契綁定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，並免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，并免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlow.description>
+  <MX_QH_FlowingForm.label>流水之形</MX_QH_FlowingForm.label>
+  <MX_QH_FlowingForm.description>受到致命傷害或可能摧毀身體部件的傷害時，抵消此次傷害、修復自身所有損傷，同時獲得短暫無敵和持續10秒的心靈隱形。充能耗盡時無法使用。&#10;&#10;——形如流水，意似清風。</MX_QH_FlowingForm.description>
+  <MX_QH_FlowingFormImmunity.label>神應</MX_QH_FlowingFormImmunity.label>
+  <MX_QH_FlowingFormImmunity.description>受到花神的垂憐，暫時免疫所有傷害。</MX_QH_FlowingFormImmunity.description>
+  <MX_QH_AuraMastery.label>靈氣精通</MX_QH_AuraMastery.label>
+  <MX_QH_AuraMastery.description>清荷精通修行的顯化。隨著精通等級提高，清荷的基礎能力會逐步增強。&#10;&#10;完成任意帶有品質要求的制作、藝術創造時，可根據成品的價值和品質等級獲得精通經驗值。</MX_QH_AuraMastery.description>
+  <MX_QH_AuraShield.label>靈氣加護</MX_QH_AuraShield.label>
+  <MX_QH_AuraShield.description>清荷與自然之息共鳴，能調動靈氣形成一面無法穿透的護盾，抵擋所有來襲的傷害。護盾激活時，受到的抑止時間減少90%。護盾被擊碎時，需要20秒時間重新充能，期間她會失去防護能力。</MX_QH_AuraShield.description>
 </LanguageData>

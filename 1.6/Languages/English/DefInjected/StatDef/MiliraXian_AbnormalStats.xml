@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_AbnormalBleedLimitFactor.label>bleeding buildup limit multiplier</MX_AbnormalBleedLimitFactor.label>
+  <MX_AbnormalBleedLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger bleeding. At 0, bleeding has no effect.</MX_AbnormalBleedLimitFactor.description>
+  <MX_AbnormalBleedEfficiencyFactor.label>bleeding application efficiency multiplier</MX_AbnormalBleedEfficiencyFactor.label>
+  <MX_AbnormalBleedEfficiencyFactor.description>Efficiency multiplier used when this character applies bleeding buildup.</MX_AbnormalBleedEfficiencyFactor.description>
+  <MX_AbnormalElectricLeakLimitFactor.label>electrical leakage buildup limit multiplier</MX_AbnormalElectricLeakLimitFactor.label>
+  <MX_AbnormalElectricLeakLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger short circuit. At 0, electrical leakage has no effect.</MX_AbnormalElectricLeakLimitFactor.description>
+  <MX_AbnormalElectricLeakEfficiencyFactor.label>electrical leakage application efficiency multiplier</MX_AbnormalElectricLeakEfficiencyFactor.label>
+  <MX_AbnormalElectricLeakEfficiencyFactor.description>Efficiency multiplier used when this character applies electrical leakage buildup.</MX_AbnormalElectricLeakEfficiencyFactor.description>
+  <MX_AbnormalToxinLimitFactor.label>toxin buildup limit multiplier</MX_AbnormalToxinLimitFactor.label>
+  <MX_AbnormalToxinLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger venom. At 0, toxin has no effect.</MX_AbnormalToxinLimitFactor.description>
+  <MX_AbnormalToxinEfficiencyFactor.label>toxin application efficiency multiplier</MX_AbnormalToxinEfficiencyFactor.label>
+  <MX_AbnormalToxinEfficiencyFactor.description>Efficiency multiplier used when this character applies toxin buildup.</MX_AbnormalToxinEfficiencyFactor.description>
+  <MX_AbnormalCorrosionLimitFactor.label>corrosion buildup limit multiplier</MX_AbnormalCorrosionLimitFactor.label>
+  <MX_AbnormalCorrosionLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger corrosion. At 0, corrosion has no effect.</MX_AbnormalCorrosionLimitFactor.description>
+  <MX_AbnormalCorrosionEfficiencyFactor.label>corrosion application efficiency multiplier</MX_AbnormalCorrosionEfficiencyFactor.label>
+  <MX_AbnormalCorrosionEfficiencyFactor.description>Efficiency multiplier used when this character applies corrosion buildup.</MX_AbnormalCorrosionEfficiencyFactor.description>
+  <MX_AbnormalFearLimitFactor.label>fear buildup limit multiplier</MX_AbnormalFearLimitFactor.label>
+  <MX_AbnormalFearLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger fear. At 0, fear has no effect.</MX_AbnormalFearLimitFactor.description>
+  <MX_AbnormalFearEfficiencyFactor.label>fear application efficiency multiplier</MX_AbnormalFearEfficiencyFactor.label>
+  <MX_AbnormalFearEfficiencyFactor.description>Efficiency multiplier used when this character applies fear buildup.</MX_AbnormalFearEfficiencyFactor.description>
+  <MX_AbnormalOverloadLimitFactor.label>overload buildup limit multiplier</MX_AbnormalOverloadLimitFactor.label>
+  <MX_AbnormalOverloadLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger overload. At 0, overload has no effect.</MX_AbnormalOverloadLimitFactor.description>
+  <MX_AbnormalOverloadEfficiencyFactor.label>overload application efficiency multiplier</MX_AbnormalOverloadEfficiencyFactor.label>
+  <MX_AbnormalOverloadEfficiencyFactor.description>Efficiency multiplier used when this character applies overload buildup.</MX_AbnormalOverloadEfficiencyFactor.description>
+  <MX_AbnormalColdLimitFactor.label>cold buildup limit multiplier</MX_AbnormalColdLimitFactor.label>
+  <MX_AbnormalColdLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger freezing. At 0, cold has no effect.</MX_AbnormalColdLimitFactor.description>
+  <MX_AbnormalColdEfficiencyFactor.label>cold application efficiency multiplier</MX_AbnormalColdEfficiencyFactor.label>
+  <MX_AbnormalColdEfficiencyFactor.description>Efficiency multiplier used when this character applies cold buildup.</MX_AbnormalColdEfficiencyFactor.description>
+  <MX_AbnormalDeathSentenceLimitFactor.label>Death Sentence buildup limit multiplier</MX_AbnormalDeathSentenceLimitFactor.label>
+  <MX_AbnormalDeathSentenceLimitFactor.description>Multiplier applied to the abnormal buildup needed to trigger Death Sentence. At 0, Death Sentence has no effect.&#10;Neiyu, Qinghe, Zhaoli and Mingyuan are immune to Death Sentence and cannot be slowed, cut or executed by it.</MX_AbnormalDeathSentenceLimitFactor.description>
+  <MX_AbnormalDeathSentenceEfficiencyFactor.label>Death Sentence application efficiency multiplier</MX_AbnormalDeathSentenceEfficiencyFactor.label>
+  <MX_AbnormalDeathSentenceEfficiencyFactor.description>Efficiency multiplier used when this character applies Death Sentence buildup.</MX_AbnormalDeathSentenceEfficiencyFactor.description>
+</LanguageData>

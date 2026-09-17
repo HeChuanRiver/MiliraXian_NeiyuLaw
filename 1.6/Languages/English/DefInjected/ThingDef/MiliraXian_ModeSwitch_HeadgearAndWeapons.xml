@@ -11,4 +11,13 @@
   <MX_Bullet_BigSplitArrow.label>Neiyu: Rending Main Arrow</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>Neiyu: Pursuing Feather Shard</MX_Bullet_HomingShard.label>
   <MX_Bullet_BarrageArrow.label>Neiyu: Flowfeather Arrow</MX_Bullet_BarrageArrow.label>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.0>flower</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.1>sword</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.2>bow</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.formLabels.2>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.0>flower</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.1>sword</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.2>bow</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.formLabels.2>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.0>flower</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.0>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.1>sword</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.1>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.2>bow</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.formLabels.2>
 </LanguageData>

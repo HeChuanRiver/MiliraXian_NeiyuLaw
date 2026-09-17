@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_QH_SpringFlow.label>春泉湧流</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>消耗1點花令，在目標地點召喚出春泉，短時間內治療範圍內的友方單位並附加春泉洗禮效果，泉水中的敵人還會持續累積異常效果。效果持續15秒。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
+  <MX_QH_SpringFlow.description>消耗2點花令，在目標地點召喚出春泉，短時間內治療范圍內的友方單位并附加春泉洗禮效果，提升近戰攻擊造成的傷害、降低受到的傷害并凈化部分負面效果。效果持續15秒。&#10;&#10;習得“四時和鳴”後，每秒為泉水中的血肉敵人積累20點流血；若已處于流血狀態，則改為積累15點毒素。機械敵人先積累15點腐蝕；若已處于腐蝕狀態，則改為積累20點漏電。積累量受法術效果系數與對應異常附加效率影響。&#10;&#10;此效果可以驅散由告死流場施加的死亡宣告。</MX_QH_SpringFlow.description>
   <MX_QH_LunarMirror.label>霜月鏡</MX_QH_LunarMirror.label>
-  <MX_QH_LunarMirror.description>消耗2點花令，在目標地點召喚出冰雪般的護盾，短時間內攔截穿過範圍邊界的敵方投射物，每次攔截都會以冰霜子彈還擊攻擊者。護盾持續20秒，最多吸收300點傷害。</MX_QH_LunarMirror.description>
+  <MX_QH_LunarMirror.description>消耗2點花令，在目標地點召喚出冰雪般的護盾，短時間內攔截穿過范圍邊界的敵方投射物，每次攔截都會以冰霜子彈還擊攻擊者。護盾持續20秒，吸收一定量傷害後將會破碎。&#10;&#10;習得“四時和鳴”後，每秒為護盾內的非機械敵人積累15點恐懼，為機械敵人積累15點過載；冰霜子彈命中時僅積累寒冷，達到上限後觸發凍結。積累量受法術效果系數與對應異常附加效率影響。</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>鏡花水月</MX_QH_IllusoryReflection.label>
-  <MX_QH_IllusoryReflection.description>向所選方向舉刀進入持續5秒的防禦架勢。若期間受到攻擊，則化解此次攻擊，並立即消耗劍壓向目標方向發動強力反擊，劍壓不足也可發動，但斬擊的威力將大幅削弱。\n\n——鏡花水月，如夢似幻。</MX_QH_IllusoryReflection.description>
-  <MX_QH_AscentSlash.label>必殺劍：落櫻</MX_QH_AscentSlash.label>
-  <MX_QH_AscentSlash.description>向指定方向高速衝刺，對撞上的第一個目標造成少量踢擊傷害；若踢中敵對單位或建築，則借力躍入空中並乘勢消耗全部劍壓發動數次高威力斬擊。劍壓不足1層時也能發動，但斬擊次數和威力將大幅削弱。\n\n嗯……你說你好像在哪裡見過這招？可能吧。啊，我不是那個……什麼叫蝦頭？</MX_QH_AscentSlash.description>
+  <MX_QH_IllusoryReflection.description>向所選方向舉刀進入持續5秒的防御架勢。若期間受到攻擊，則化解此次攻擊，并立即向目標方向發動強力反擊，命中目標時額外積累劍壓。&#10;&#10;——鏡花水月，如夢似幻。</MX_QH_IllusoryReflection.description>
+  <MX_QH_AscentSlash.label>落櫻</MX_QH_AscentSlash.label>
+  <MX_QH_AscentSlash.description>向指定方向高速沖刺，對撞上的第一個目標造成少量踢擊傷害；若踢中敵對單位或建筑，則借力躍入空中并乘勢消耗全部劍壓發動多次高威力斬擊。劍壓不足1層時也能發動，但斬擊次數和威力將大幅削弱。&#10;&#10;嗯...你說你好像在哪裡見過這招？可能吧。啊，我不是那個...什麼叫蝦頭？</MX_QH_AscentSlash.description>
 </LanguageData>

@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MXZL_ZhaoliMinghuo</defName>
         <label>&lt;color=#FF6A6A&gt;冥火附武&lt;/color&gt;</label>
-        <description>The primary weapon is enchanted with Netherflame for 60 seconds.</description>
+        <description>主武器受到冥火附魔，持续60秒。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.86, 0.24, 0.30)</defaultLabelColor>
         <isBad>false</isBad>

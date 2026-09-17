@@ -3,8 +3,8 @@
 
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MX_Mingyuan_InfernoArmor</defName>
-        <label>Rosy Flamefeather Raiment</label>
-        <description>Mingyuan's raiment, woven from pale extradimensional flame and burning feathers, with gold and scarlet light flowing through its rosy plumes. Though seemingly delicate, it protects her body and wings, resists common damage, provides extreme insulation, carrying capacity, movement and dodge, reduces incoming damage by 25 percentage points, and never breaks.</description>
+        <label>霞焰羽裳</label>
+        <description>明渊以淡色异界火与燃羽织成的常服，羽摆间流淌着如霞光般的金赤辉彩。看似轻薄，却能覆护身体与羽翼，抵御常见伤害，提供极强的冷热隔绝，并提升承载、移速与闪避。装备时使普通承伤倍率降低25个百分点，且永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -59,8 +59,8 @@
 
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Mingyuan_BurningFeatherCrown</defName>
-        <label>Turbid Burning Feather Crown</label>
-        <description>A white-gold crown threaded with red burning feathers. It steadies Mingyuan's sight, quickens ranged attacks, improves dodge, and reduces ordinary incoming damage by 10 percentage points.</description>
+        <label>燃浊羽冠</label>
+        <description>以白金羽片与赤色燃羽织成的冠饰。它稳定明渊的视线，加快远程攻击，提升闪避，并使普通承伤倍率降低 10 个百分点。</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />

@@ -7,8 +7,8 @@
         <validWhileDespawned>true</validWhileDespawned>
         <stages>
             <li>
-                <label>Delighted</label>
-                <description>I love everything here so much!</description>
+                <label>愉悦</label>
+                <description>这里的一切我都好喜欢！</description>
                 <baseMoodEffect>10</baseMoodEffect>
             </li>
         </stages>
@@ -21,8 +21,8 @@
         <nullifiedIfNotColonist>true</nullifiedIfNotColonist>
         <stages>
             <li>
-                <label>At ease</label>
-                <description>For some reason, even the air nearby feels fresher~</description>
+                <label>倍感轻松</label>
+                <description>不知为何感觉附近的空气都变得清新~</description>
                 <baseMoodEffect>5</baseMoodEffect>
             </li>
         </stages>
@@ -35,8 +35,8 @@
         <validWhileDespawned>true</validWhileDespawned>
         <stages>
             <li>
-                <label>Light-headed</label>
-                <description>Do immortals need to eat too...</description>
+                <label>轻飘飘</label>
+                <description>仙人也要吃饭吗……</description>
                 <baseMoodEffect>-5</baseMoodEffect>
             </li>
         </stages>
@@ -49,8 +49,8 @@
         <validWhileDespawned>true</validWhileDespawned>
         <stages>
             <li>
-                <label>Cultivating...</label>
-                <description>It's normal for an immortal to cultivate. That's normal... right?</description>
+                <label>修仙ing</label>
+                <description>仙人修仙很正常，正常的吧……</description>
                 <baseMoodEffect>-5</baseMoodEffect>
             </li>
         </stages>
@@ -63,8 +63,8 @@
         <validWhileDespawned>true</validWhileDespawned>
         <stages>
             <li>
-                <label>Ennui</label>
-                <description>So bored! So bored! Maybe I should go find something fun to do...</description>
+                <label>倦怠</label>
+                <description>好无聊！好无聊！要不我找些乐子去哇……</description>
                 <baseMoodEffect>-15</baseMoodEffect>
             </li>
         </stages>
