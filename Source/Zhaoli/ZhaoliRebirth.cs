@@ -396,7 +396,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public void ExposeData()
         {
-            Scribe_References.Look(ref pawn, "pawn");
+            // Killed pawns are Destroyed, but remain deep-saved in WorldPawns until rebirth.
+            Scribe_References.Look(ref pawn, "pawn", saveDestroyedThings: true);
             Scribe_Values.Look(ref rebirthTick, "rebirthTick", 0);
         }
     }
@@ -465,7 +466,7 @@ namespace MiliraXian.Characters.Zhaoli
             for (int i = pendingRebirths.Count - 1; i >= 0; i--)
             {
                 ZhaoliPendingRebirth pendingRebirth = pendingRebirths[i];
-                if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Destroyed)
+                if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Discarded)
                 {
                     pendingRebirths.RemoveAt(i);
                     continue;
@@ -530,7 +531,8 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Collections.Look(ref pendingRebirths, "pendingRebirths", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Destroyed);
+                pendingRebirths ??= new();
+                pendingRebirths.RemoveAll(entry => entry == null || entry.pawn == null || entry.pawn.Discarded);
                 RecalculateNextRebirthTick();
             }
         }
