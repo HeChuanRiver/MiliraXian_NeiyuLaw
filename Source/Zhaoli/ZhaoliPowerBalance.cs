@@ -14,6 +14,14 @@ namespace MiliraXian.Characters.Zhaoli
         public static bool Sealed => Profile.Sealed;
         public static void SetLevel(CharacterPowerLevel level) => Profile.SetLevel(level);
 
+        private static string ShieldDescription(bool freeSmallHits)
+        {
+            const string key = "MX_ZL_CountShieldDescription";
+            const string source = "每通过告死吸纳一个单位，获得5层讳亡护盾。\n护盾抵挡伤害。{0}剩余层数不足时，耗尽护盾并抵挡本次伤害。持续伤害每次生效时单独计算。";
+            string rule = CountShieldUtility.RuleDescription(36f, freeSmallHits);
+            return key.CanTranslate() ? key.Translate(rule).ToString() : string.Format(source, rule);
+        }
+
         internal static void Initialize()
         {
             var p = Profile;
@@ -90,7 +98,10 @@ namespace MiliraXian.Characters.Zhaoli
             p.Description(Hediff("MXZL_ZhaoliMinshenSlow"), "MX_Power_Zhaoli_Minshen");
             p.Description(Hediff("MXZL_ZhaoliMinshenDamage"), "MX_Power_Zhaoli_Minshen");
             p.Description(Hediff("MXZL_ZhaoliMinghuo"), "MX_Power_Zhaoli_Minghuo");
-            p.Description(Hediff("MXZL_ZhaoliShieldLayers"), "MX_Power_Zhaoli_Shield");
+            var shield = Hediff("MXZL_ZhaoliShieldLayers");
+            shield.description = ShieldDescription(true);
+            p.Value(() => shield.description, value => shield.description = value,
+                ShieldDescription(false), "MX_Power_PassiveInactive".Translate().ToString());
             foreach (ThingDef equipment in new[] { clothes, hood, Thing("MX_Zhaoli_DuanzhanBlade") })
                 p.Value(() => equipment.description, value => equipment.description = value,
                     equipment.description, "MX_Power_EquipmentInactive".Translate().ToString());

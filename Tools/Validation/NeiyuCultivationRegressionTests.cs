@@ -98,6 +98,7 @@ internal static class NeiyuCultivationRegressionTests
         TestCounts();
         TestLayout(assembly);
         TestEffectRows(assembly);
+        TestShieldTiers(a, tracker, balance);
 
         // Reconstruct the serialized dictionary, as Scribe_Collections does on load.
         var saved = new Dictionary<string, float>((Dictionary<string, float>)typeof(Hediff_BiographyTracker)
@@ -161,6 +162,67 @@ internal static class NeiyuCultivationRegressionTests
         Normalize(shield);
         Check(shield.Phase2Charges == 2 && shield.Phase2MaxCharges == 108, "full rank recovers ceiling without free layers");
         Check((bool)Call(power, "StageThreeEnabled", pawn), "full rank enables existing stage-three path");
+    }
+
+    private static void TestShieldTiers(Pawn pawn, Hediff_BiographyTracker tracker, Type balance)
+    {
+        LanguageDatabase.activeLanguage.keyedReplacements["MX_NL_NeiyuPassiveSealedDesc"] =
+            new LoadedLanguage.KeyedReplacement { value = "Sealed" };
+        var props = new HediffCompProperties_MXNeiyuCountShield();
+        var def = new HediffDef { defName = "MXNL_NeiyuShield", description = "old description", comps = new List<HediffCompProperties> { props } };
+        DefDatabase<HediffDef>.Add(def);
+        Call(balance, "BuildPassiveTunings");
+        Set(Current.Game.tickManager, "ticksGameInt", 100);
+        float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 10000f };
+        foreach (CharacterPowerLevel level in new[] { CharacterPowerLevel.Original, CharacterPowerLevel.Balanced })
+        {
+            Call(balance, "SetLevel", level);
+            Call(balance, "ApplyDefTunings");
+            Check(props.phase2MaxChargesNormal == 108 && props.phase2MaxChargesWeak == 24
+                && props.phase2RecoverTicksNoChange == 3600 && props.stage3AbsorbTicks == 7500
+                && props.stage3BuffTicks == 30000 && props.weakDurationTicks == 9000,
+                "production shield tuning retains former Original values in " + level);
+            Check(def.description.Contains(level == CharacterPowerLevel.Original ? "不消耗盾层" : "至少消耗1层"),
+                "shield description follows active damage rule");
+            for (int rank = 1; rank <= 3; rank++)
+            {
+                SetRank(tracker, CultivationBranch.Halo, rank);
+                int capacity = rank == 1 ? 6 : rank == 2 ? 18 : 108;
+                foreach (float amount in amounts)
+                {
+                    var shield = new HediffComp_MXNeiyuCountShield { parent = new HediffWithComps { pawn = pawn }, props = props };
+                    Set(shield, "stage", 2); Set(shield, "phase2Charges", capacity); Normalize(shield);
+                    Set(shield, "phase2LastChargeChangeTick", 25);
+                    var hit = new DamageInfo(new DamageDef(), amount);
+                    bool absorbed = false;
+                    int cost = level == CharacterPowerLevel.Original && amount < 36 ? 0 : (int)Math.Ceiling(amount / 36);
+                    Check(shield.TryAbsorb(ref hit, ref absorbed) && absorbed
+                        && shield.Phase2Charges == Math.Max(0, capacity - cost),
+                        level + " rank " + rank + " actual absorption at " + amount);
+                    int lastChange = (int)shield.GetType().GetField("phase2LastChargeChangeTick", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(shield);
+                    Check(lastChange == (cost == 0 ? 25 : 100), "free hits do not postpone recovery");
+                    Check(shield.Stage == (rank == 3 && cost >= capacity ? 3 : 2), "only full cultivation enters stage three on exhaustion");
+                }
+            }
+            // Weak shields still need layers for free absorption, and cannot enter stage III.
+            var weak = new HediffComp_MXNeiyuCountShield { parent = new HediffWithComps { pawn = pawn }, props = props };
+            Set(weak, "stage", 2); Set(weak, "weakUntilTick", 1000); Set(weak, "weakWasActive", true);
+            Set(weak, "phase2Charges", 24); Normalize(weak);
+            Set(weak, "weakShieldExhaustedAnnounced", true);
+            var small = new DamageInfo(new DamageDef(), 1f);
+            bool blocked = false;
+            Check(weak.TryAbsorb(ref small, ref blocked) && blocked && weak.Phase2Charges == (level == CharacterPowerLevel.Original ? 24 : 23),
+                "weak shield uses selected cost rule");
+            Set(weak, "phase2Charges", 0); blocked = false;
+            Check(!weak.TryAbsorb(ref small, ref blocked) && !blocked, "empty weak shield cannot absorb small hits");
+
+            var partial = new HediffComp_MXNeiyuCountShield { parent = new HediffWithComps { pawn = pawn }, props = props };
+            Set(partial, "stage", 2); Set(partial, "phase2Charges", 11); Normalize(partial);
+            Call(balance, "SetLevel", level == CharacterPowerLevel.Original ? CharacterPowerLevel.Balanced : CharacterPowerLevel.Original);
+            Call(balance, "ApplyDefTunings"); Normalize(partial);
+            Check(partial.Phase2Charges == 11 && partial.Phase2MaxCharges == 108, "switching tiers neither clips nor refills earned layers");
+        }
+        Call(balance, "SetLevel", CharacterPowerLevel.Original); Call(balance, "ApplyDefTunings");
     }
 
     private static void TestCounts()

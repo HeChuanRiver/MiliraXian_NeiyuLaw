@@ -126,34 +126,8 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
-        public static void WeakenPassiveProfile(ref MXNeiyuStage3Profile profile)
-        {
-            if (currentLevel != CharacterPowerLevel.Balanced)
-            {
-                return;
-            }
-
-            const float strength = ConservativePowerTuning.Bonus;
-            profile.outgoingDamageFactor = Mathf.Lerp(1f, profile.outgoingDamageFactor, strength);
-            profile.aimingDelayFactor = Mathf.Lerp(1f, profile.aimingDelayFactor, strength);
-            profile.incomingDamageFactor = Mathf.Lerp(1f, profile.incomingDamageFactor, strength);
-            profile.moveSpeedFactor = Mathf.Lerp(1f, profile.moveSpeedFactor, strength);
-            profile.injuryHealingFactor = Mathf.Lerp(1f, profile.injuryHealingFactor, strength);
-            profile.meleeDodgeChanceFactor = Mathf.Lerp(1f, profile.meleeDodgeChanceFactor, strength);
-            profile.rangedDodgeBonusPct *= strength;
-            profile.meleeArmorPenetrationFactor = Mathf.Lerp(1f, profile.meleeArmorPenetrationFactor, strength);
-        }
-
         public static void GetWeakPenaltyFactors(out float moveSpeedFactor, out float restFallRateFactor, out float workSpeedGlobalFactor)
         {
-            if (currentLevel == CharacterPowerLevel.Balanced)
-            {
-                moveSpeedFactor = 0.85f;
-                restFallRateFactor = 1.15f;
-                workSpeedGlobalFactor = 0.80f;
-                return;
-            }
-
             moveSpeedFactor = 0.50f;
             restFallRateFactor = 1.50f;
             workSpeedGlobalFactor = 0.20f;
@@ -335,13 +309,15 @@ namespace MiliraXian.Characters.Neiyu
             AddThoughtMood(DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_RelaxedNearNeiyu"), 0f);
 
             HediffDef shieldDef = HediffDefNamed("MXNL_NeiyuShield");
+            if (shieldDef != null) shieldDef.description = ShieldDescription(true);
             Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
-                "MX_Power_Neiyu_Shield".Translate().ToString(), "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
+                ShieldDescription(false), "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
             HediffCompProperties_MXNeiyuCountShield shieldProps = HediffComp<HediffCompProperties_MXNeiyuCountShield>(shieldDef);
             AddScaled(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f, 1f);
-            Add(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 36, 0);
-            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, .9f, 0);
-            AddScaled(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, ConservativePowerTuning.Cooldown, 60000);
+            // Balanced retains the former Original shield; only sub-threshold hits cost layers.
+            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 1f, 0);
+            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, 1f, 0);
+            AddScaled(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, 1f, 60000);
             AddScaled(shieldProps, () => shieldProps.stage3AbsorbTicks, value => shieldProps.stage3AbsorbTicks = value, 1f, 1);
             AddScaled(shieldProps, () => shieldProps.stage3BuffTicks, value => shieldProps.stage3BuffTicks = value, 1f, 1);
             AddScaled(shieldProps, () => shieldProps.stage3DurationTicks, value => shieldProps.stage3DurationTicks = value, 1f, 2);
@@ -353,6 +329,14 @@ namespace MiliraXian.Characters.Neiyu
             AddScaled(shieldProps, () => shieldProps.bloodLossTierB, value => shieldProps.bloodLossTierB = value, 1f, 0f);
             AddScaled(shieldProps, () => shieldProps.bloodLossTierC, value => shieldProps.bloodLossTierC = value, 1f, 0f);
             AddScaled(shieldProps, () => shieldProps.bloodLossTierD, value => shieldProps.bloodLossTierD = value, 1f, 0f);
+        }
+
+        private static string ShieldDescription(bool freeSmallHits)
+        {
+            const string key = "MX_NL_CultivatedShieldDescription";
+            const string source = "光环修行依次解锁6、18、108层计数护盾，第三级解锁三阶循环。首击被抵消后展开计数护盾；解锁三阶后，致命攻击可直接触发三阶。\n{0}60秒未消耗盾层时恢复首击防护。常态下，剩余盾层抵挡整次伤害；耗尽后，未解锁三阶时等待恢复，已解锁时进入三阶。\n三阶先无敌并蓄伤3小时，再根据蓄伤量获得12小时增益，最多叠加5层。结束后虚弱150秒，护盾上限为24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
+            string rule = CountShieldUtility.RuleDescription(36f, freeSmallHits);
+            return key.CanTranslate() ? key.Translate(rule).ToString() : string.Format(source, rule);
         }
 
         private static void AddAbilityCooldown(AbilityDef def, int decorativeTicks)

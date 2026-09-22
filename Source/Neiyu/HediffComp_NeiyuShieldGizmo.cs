@@ -167,7 +167,11 @@ namespace MiliraXian.Characters.Neiyu
 
             var hintRect = new Rect(inner.x, inner.y + 46f, inner.width, HintHeight);
             var threshold = shield.Props.phase2Threshold;
-            var hintText = "MX_NL_ShieldStage2Hint".Translate(threshold.ToString("F0")) + (shield.InWeak ? "MX_NL_ShieldWeakSuffix".Translate().ToString() : "");
+            const string freeHintKey = "MX_NL_ShieldStage2FreeSmallHits";
+            string rule = NeiyuPowerBalance.IsOriginal
+                ? (freeHintKey.CanTranslate() ? freeHintKey.Translate(threshold.ToString("F0")).ToString() : $"低于{threshold:F0}伤害不扣层")
+                : "MX_NL_ShieldStage2Hint".Translate(threshold.ToString("F0")).ToString();
+            var hintText = rule + (shield.InWeak ? "MX_NL_ShieldWeakSuffix".Translate().ToString() : "");
             renderer.DrawStatusHint(hintRect, hintText, shield.InWeak ? props.weakColor : HintGrayColor);
         }
 

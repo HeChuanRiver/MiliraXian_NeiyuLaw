@@ -79,9 +79,9 @@ foreach ($language in 'ChineseSimplified (简体中文)','ChineseTraditional (�
 if ((Compare-Object $keySets[0] $keySets[1]) -or (Compare-Object $keySets[0] $keySets[2])) { throw 'Translation coverage mismatch' }
 
 # Tier two must reach the signature mechanics, not an alternate ordinary-damage branch.
+# Shield cost intentionally differs by tier; production absorption and cultivation tests cover it.
 $mechanicMethods = @(
     @('CompAbilityEffect_NeiyuSwordExecution', 'DecapitateTarget'),
-    @('HediffComp_MXNeiyuCountShield', 'CalculatePhase2Cost'),
     @('Hediff_ZhaoliDeathSentenceResult', 'Resolve'),
     @('CompAbilityEffect_ZhaoliGuiyi', 'Apply'),
     @('HediffComp_ZhaoliKarmaLinks', 'TryUseBalancedSubstitute'),

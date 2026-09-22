@@ -169,10 +169,12 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 if (def?.comps != null) foreach (var comp in def.comps) if (comp is HediffCompProperties_MXNeiyuCountShield p) props = p;
                 int ceiling = props?.phase2MaxChargesNormal ?? 108;
                 Line(text, CultivationText.Get("ShieldCapacity", "常态盾层上限"), CultivationPower.ShieldCapacity(currentRank, ceiling), CultivationPower.ShieldCapacity(targetRank, ceiling));
-                Note(text, CultivationText.Get("ShieldRule", "首击被完全阻挡，随后展开计数护盾。每 36 点正伤害消耗一层，向上取整。"));
+                Note(text, CultivationText.Get("ShieldOpening", "首击被完全阻挡，随后展开计数护盾。"));
+                Note(text, CountShieldUtility.RuleDescription(props?.phase2Threshold ?? 36f, NeiyuPowerBalance.IsOriginal));
                 Note(text, CultivationText.Get("Recovery", "盾层停止变化后的恢复时间") + "  " + ((props?.phase2RecoverTicksNoChange ?? 3600) / 60f).ToString("0.#") + " s");
                 if (targetRank >= 3)
                 {
+                    Note(text, CultivationText.Get("WeakShieldCapacity", "虚弱时盾层上限") + "  " + (props?.phase2MaxChargesWeak ?? 24));
                     Note(text, CultivationText.Get("StageThree", "解锁三阶蓄伤与增益循环。"));
                     Note(text, CultivationText.Get("AbsorbDuration", "蓄伤时间") + "  " + ((props?.stage3AbsorbTicks ?? 7500) / 60f).ToString("0.#") + " s");
                     Note(text, CultivationText.Get("BuffDuration", "增益时间") + "  " + ((props?.stage3BuffTicks ?? 30000) / 60f).ToString("0.#") + " s");

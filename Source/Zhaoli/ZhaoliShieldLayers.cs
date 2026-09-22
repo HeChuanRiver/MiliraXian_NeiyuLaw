@@ -207,7 +207,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            int cost = CountShieldUtility.CalculateCost(dinfo.Amount, PropsShield.damagePerLayer);
+            int cost = CountShieldUtility.CalculateCost(dinfo.Amount, PropsShield.damagePerLayer, ZhaoliPowerBalance.IsOriginal);
             // As with Neiyu's normal count shield, the final layers block the
             // entire hit even when its cost exceeds the remaining layers.
             shieldLayers = Mathf.Max(0, shieldLayers - cost);

@@ -64,7 +64,7 @@
   <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
     <defName>MX_Neiyu_Cultivation_Halo3</defName>
     <label>霁光回响</label><branch>Halo</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Halo2</prerequisite>
-    <description>完全展开计数护盾，解锁三阶蓄伤与增益循环。循环结束后进入虚弱。</description>
+    <description>计数护盾增加至一百零八层，解锁三阶蓄伤与增益循环。循环结束后进入虚弱，护盾上限降为二十四层。</description>
     <story>光环承住最后一次重击，随即向内收拢。霓羽抬起头，积蓄的微光沿羽翼流回刃尖。</story>
     <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>12</days></condition>
     <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>

@@ -467,7 +467,8 @@ internal static class AuditSafetyRegressionTests
                     pawn.health.hediffSet.hediffs.Add(hediff);
                     string context = level + (player ? " player" : " hostile");
                     float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
-                    int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
+                    int smallCost = level == CharacterPowerLevel.Original ? 0 : 1;
+                    int[] costs = { smallCost, smallCost, 1, 2, 2, 3, 10 };
                     for (int i = 0; i < amounts.Length; i++)
                     {
                         Set(shield, "shieldLayers", 500);
@@ -475,7 +476,7 @@ internal static class AuditSafetyRegressionTests
                         bool absorbed = false;
                         Patch_ZhaoliShieldLayers_PreApplyDamage.Postfix(pawn, ref hit, ref absorbed);
                         Check(absorbed && shield.ShieldLayers == 500 - costs[i],
-                            context + " blocks the hit and spends ceil(damage/36) at " + amounts[i]);
+                            context + " blocks the hit and spends the tier-specific cost at " + amounts[i]);
                         int remaining = shield.ShieldLayers;
                         shield.Notify_PawnPostApplyDamage(hit, amounts[i]);
                         Check(shield.ShieldLayers == remaining, context + " post-damage notification never spends a second time");
@@ -544,15 +545,15 @@ internal static class AuditSafetyRegressionTests
         Set(shield, "phase2Charges", 108);
         MethodInfo cost = shield.GetType().GetMethod("CalculatePhase2Cost", BindingFlags.NonPublic | BindingFlags.Instance);
         float[] amounts = { .01f, 35.99f, 36f, 36.01f, 72f, 72.01f, 360f };
-        int[] costs = { 1, 1, 1, 2, 2, 3, 10 };
+        int[] costs = { 0, 0, 1, 2, 2, 3, 10 };
         for (int i = 0; i < amounts.Length; i++)
             Check((int)cost.Invoke(shield, new object[] { amounts[i] }) == costs[i], "shield cost at " + amounts[i] + " damage");
 
         bool absorbed = false;
         var damage = new DamageInfo(new DamageDef(), .01f);
         bool handled = shield.TryAbsorb(ref damage, ref absorbed);
-        Check(handled && absorbed && shield.Phase2Charges == 107,
-            "an actual low-damage hit consumes a shield charge");
+        Check(handled && absorbed && shield.Phase2Charges == 108,
+            "an actual original-tier low-damage hit costs no shield charge");
         Set(shield, "weakUntilTick", 1000);
         Set(shield, "phase2Charges", 0);
         Set(shield, "weakShieldExhaustedAnnounced", true);
@@ -582,6 +583,7 @@ internal static class AuditSafetyRegressionTests
 
         Type balance = mod.GetType("MiliraXian.Characters.Neiyu.NeiyuPowerBalance", true);
         MethodInfo setLevel = balance.GetMethod("SetLevel");
+        var originalProfiles = new Dictionary<float, MXNeiyuStage3Profile>();
         try
         {
             foreach (CharacterPowerLevel level in new[] { CharacterPowerLevel.Original, CharacterPowerLevel.Balanced })
@@ -596,6 +598,8 @@ internal static class AuditSafetyRegressionTests
                     Set(shield, "phase3StoredDamage", stored);
                     MXNeiyuStage3Profile actual;
                     Check(shield.TryGetStage3Profile(out actual), "active buff profile in " + level);
+                    if (level == CharacterPowerLevel.Original) originalProfiles[stored] = actual;
+                    else Check(actual.Equals(originalProfiles[stored]), "Balanced preserves the former Original stage-three profile");
                     Check(actual.outgoingDamageFactor <= 2f && actual.incomingDamageFactor >= .5f
                         && actual.rangedDodgeBonusPct <= .3f, "absorption bonuses remain bounded in " + level);
                     if (!first)
@@ -609,6 +613,10 @@ internal static class AuditSafetyRegressionTests
                     previous = actual;
                 }
                 Check(shield.GetStage3TierLabel() == "D x5", "tier label respects the bonus cap");
+                object[] penalties = { 0f, 0f, 0f };
+                balance.GetMethod("GetWeakPenaltyFactors").Invoke(null, penalties);
+                Check((float)penalties[0] == .5f && (float)penalties[1] == 1.5f && (float)penalties[2] == .2f,
+                    "both tiers preserve the former Original weakness penalties");
             }
         }
         finally { setLevel.Invoke(null, new object[] { CharacterPowerLevel.Original }); }

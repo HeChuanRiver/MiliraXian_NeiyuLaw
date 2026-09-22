@@ -281,6 +281,15 @@ namespace MiliraXian.Characters.Neiyu
                 int before = phase2Charges;
                 int cost = CalculatePhase2Cost(dinfo.Amount);
 
+                // Free absorption requires existing layers and does not restart recovery.
+                if (before > 0 && cost == 0)
+                {
+                    absorbed = true;
+                    PlayAbsorbFx(dinfo);
+                    RecordPhase2Hit(dinfo.Amount, 0, before, before);
+                    return true;
+                }
+
                 // Earlier cultivation stages use the existing count shield and recovery
                 // timer, without the final stage's absorption/buff cycle.
                 if (!CultivationPower.StageThreeEnabled(Pawn))
@@ -389,7 +398,6 @@ namespace MiliraXian.Characters.Neiyu
 
             if (d <= Props.stage3TierA_MaxDamage)
             {
-                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -402,7 +410,6 @@ namespace MiliraXian.Characters.Neiyu
                 profile.meleeArmorPenetrationFactor = 1.10f;
                 profile.meleeDodgeChanceFactor = 1.10f;
                 profile.rangedDodgeBonusPct = 0.10f;
-                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -417,7 +424,6 @@ namespace MiliraXian.Characters.Neiyu
                 profile.meleeArmorPenetrationFactor = 1.10f;
                 profile.meleeDodgeChanceFactor = 1.10f;
                 profile.rangedDodgeBonusPct = 0.10f;
-                NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
                 return true;
             }
 
@@ -432,7 +438,6 @@ namespace MiliraXian.Characters.Neiyu
             profile.meleeDodgeChanceFactor = 1f + 0.10f * stacks;
             profile.rangedDodgeBonusPct = Mathf.Min(0.30f, 0.10f * stacks);
 
-            NeiyuPowerBalance.WeakenPassiveProfile(ref profile);
             return true;
         }
 
@@ -561,7 +566,7 @@ namespace MiliraXian.Characters.Neiyu
                 if (stage == 2)
                 {
                     sb.AppendLine("MX_NL_ShieldTipStage2Charges".Translate(phase2Charges, Phase2MaxCharges).ToString());
-                    sb.AppendLine("MX_NL_ShieldTipThreshold".Translate(Props.phase2Threshold.ToString("F1")).ToString());
+                    sb.AppendLine(CountShieldUtility.RuleDescription(Props.phase2Threshold, NeiyuPowerBalance.IsOriginal));
                     sb.AppendLine("MX_NL_ShieldTipRecentHits".Translate().ToString());
                     EnsureRecentLogs();
                     if (phase2RecentHitLogs.Count == 0)
@@ -791,7 +796,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private int CalculatePhase2Cost(float damageAmount)
         {
-            return CountShieldUtility.CalculateCost(damageAmount, Props.phase2Threshold);
+            return CountShieldUtility.CalculateCost(damageAmount, Props.phase2Threshold, NeiyuPowerBalance.IsOriginal);
         }
 
         private bool IsLethalOrDowning(DamageInfo dinfo)
