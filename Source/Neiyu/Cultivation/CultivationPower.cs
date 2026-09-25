@@ -109,7 +109,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public static bool ShieldEnabled(Pawn pawn) => !NeiyuPowerBalance.PassivesDisabled && CultivationService.Rank(pawn, CultivationBranch.Halo) > 0;
         public static bool StageThreeEnabled(Pawn pawn) => !NeiyuPowerBalance.PassivesDisabled && CultivationService.Rank(pawn, CultivationBranch.Halo) >= 3;
         public static int ShieldCapacity(Pawn pawn, int ceiling) => ShieldCapacity(CultivationService.Rank(pawn, CultivationBranch.Halo), ceiling);
-        public static int ShieldCapacity(int rank, int ceiling) => Math.Max(0, Math.Min(ceiling, rank <= 0 ? 0 : rank == 1 ? 6 : rank == 2 ? 18 : ceiling));
+        public static int ShieldCapacity(int rank, int ceiling) => Math.Max(0, Math.Min(ceiling, rank <= 0 ? 0 : rank == 1 ? 18 : rank == 2 ? 42 : ceiling));
     }
 
     public sealed class StatPart_NeiyuCultivation : StatPart

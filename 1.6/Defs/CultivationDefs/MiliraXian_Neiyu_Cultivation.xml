@@ -49,14 +49,14 @@
   <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
     <defName>MX_Neiyu_Cultivation_Halo1</defName>
     <label>微环</label><branch>Halo</branch><rank>1</rank>
-    <description>解锁首击防护与六层计数护盾。盾层耗尽后，需要等待恢复。</description>
+    <description>解锁首击防护与十八层计数护盾。盾层耗尽后，需要等待恢复。</description>
     <story>头顶的光环轻轻一颤。她把最先回应的那缕光，留在了身体之外。</story>
     <costs><Milira_Feather>12</Milira_Feather><Jade>10</Jade></costs>
   </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
   <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
     <defName>MX_Neiyu_Cultivation_Halo2</defName>
     <label>重环相护</label><branch>Halo</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Halo1</prerequisite>
-    <description>计数护盾增加至十八层。</description>
+    <description>计数护盾增加至四十二层。</description>
     <story>薄薄的光层相继合拢。每次承受冲击，她都能听见它们在不同的地方鸣响。</story>
     <condition Class="MiliraXian.Characters.Biography.BiographyCondition_ColonistDays"><days>3</days></condition>
     <costs><Milira_Feather>60</Milira_Feather><Plasteel>40</Plasteel></costs>

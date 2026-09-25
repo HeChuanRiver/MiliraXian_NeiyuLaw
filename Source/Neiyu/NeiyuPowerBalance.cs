@@ -334,7 +334,7 @@ namespace MiliraXian.Characters.Neiyu
         private static string ShieldDescription(bool freeSmallHits)
         {
             const string key = "MX_NL_CultivatedShieldDescription";
-            const string source = "光环修行依次解锁6、18、108层计数护盾，第三级解锁三阶循环。首击被抵消后展开计数护盾；解锁三阶后，致命攻击可直接触发三阶。\n{0}60秒未消耗盾层时恢复首击防护。常态下，剩余盾层抵挡整次伤害；耗尽后，未解锁三阶时等待恢复，已解锁时进入三阶。\n三阶先无敌并蓄伤3小时，再根据蓄伤量获得12小时增益，最多叠加5层。结束后虚弱150秒，护盾上限为24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
+            const string source = "光环修行依次解锁18、42、108层计数护盾，第三级解锁三阶循环。首击被抵消后展开计数护盾；解锁三阶后，致命攻击可直接触发三阶。\n{0}60秒未消耗盾层时恢复首击防护。常态下，剩余盾层抵挡整次伤害；耗尽后，未解锁三阶时等待恢复，已解锁时进入三阶。\n三阶先无敌并蓄伤3小时，再根据蓄伤量获得12小时增益，最多叠加5层。结束后虚弱150秒，护盾上限为24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
             string rule = CountShieldUtility.RuleDescription(36f, freeSmallHits);
             return key.CanTranslate() ? key.Translate(rule).ToString() : string.Format(source, rule);
         }

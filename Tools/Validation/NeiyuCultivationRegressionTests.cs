@@ -153,11 +153,11 @@ internal static class NeiyuCultivationRegressionTests
         SetRank(tracker, CultivationBranch.Halo, 1);
         Set(shield, "stage", 2); Set(shield, "phase2Charges", 108);
         Normalize(shield);
-        Check(shield.Stage == 2 && shield.Phase2Charges == 6 && shield.Phase2MaxCharges == 6, "old layers clamp to learned ceiling");
+        Check(shield.Stage == 2 && shield.Phase2Charges == 18 && shield.Phase2MaxCharges == 18, "old layers clamp to learned ceiling");
         Set(shield, "phase2Charges", 2);
         SetRank(tracker, CultivationBranch.Halo, 2);
         Normalize(shield);
-        Check(shield.Phase2Charges == 2 && shield.Phase2MaxCharges == 18, "rank advance does not refill damaged shield");
+        Check(shield.Phase2Charges == 2 && shield.Phase2MaxCharges == 42, "rank advance does not refill damaged shield");
         SetRank(tracker, CultivationBranch.Halo, 3);
         Normalize(shield);
         Check(shield.Phase2Charges == 2 && shield.Phase2MaxCharges == 108, "full rank recovers ceiling without free layers");
@@ -187,7 +187,7 @@ internal static class NeiyuCultivationRegressionTests
             for (int rank = 1; rank <= 3; rank++)
             {
                 SetRank(tracker, CultivationBranch.Halo, rank);
-                int capacity = rank == 1 ? 6 : rank == 2 ? 18 : 108;
+                int capacity = rank == 1 ? 18 : rank == 2 ? 42 : 108;
                 foreach (float amount in amounts)
                 {
                     var shield = new HediffComp_MXNeiyuCountShield { parent = new HediffWithComps { pawn = pawn }, props = props };
