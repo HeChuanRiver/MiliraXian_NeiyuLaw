@@ -10,7 +10,7 @@
     <tickerType>Normal</tickerType>
     <passability>Standable</passability>
     <isSaveable>true</isSaveable>
-    <drawOffscreen>false</drawOffscreen>
+    <drawOffscreen>true</drawOffscreen>
   </ThingDef>
 
   <ThingDef>

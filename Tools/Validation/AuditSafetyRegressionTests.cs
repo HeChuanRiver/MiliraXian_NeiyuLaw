@@ -71,6 +71,7 @@ internal static class AuditSafetyRegressionTests
             TestNeiyuShieldBalance();
             TestZhaoliCountShield();
             TestMingyuanDamageAndRecoveryBudget();
+            TestMingyuanBowVisualLifetime();
             TestRaidJobLogging();
         }
     }
@@ -663,6 +664,68 @@ internal static class AuditSafetyRegressionTests
         Check(reserve.TryRefillFromHeat() && reserve.Energy == 100f, "heat refill cannot exceed reserve capacity");
         Set(Current.Game.tickManager, "ticksGameInt", 380);
         Check(!reserve.TryRefillFromHeat(), "full reserve does not accept additional heat healing");
+    }
+
+    private sealed class BowVisualFixture : Thing_MingyuanBowVisual
+    {
+        public bool Vanished;
+        public void Step() { base.Tick(); }
+        public override void Destroy(DestroyMode mode = DestroyMode.Vanish) { Vanished = true; }
+    }
+
+    private static void TestMingyuanBowVisualLifetime()
+    {
+        Game previous = Current.Game;
+        try
+        {
+            Current.Game = (Game)FormatterServices.GetUninitializedObject(typeof(Game));
+            Current.Game.tickManager = (TickManager)FormatterServices.GetUninitializedObject(typeof(TickManager));
+            Type visualType = typeof(Thing_MingyuanBowVisual);
+            foreach (MingyuanBowVisualKind kind in new[] {
+                MingyuanBowVisualKind.FocusShot, MingyuanBowVisualKind.RadiationBlast, MingyuanBowVisualKind.RadiationHit })
+            {
+                var visual = new BowVisualFixture();
+                Set(visual, "kind", kind, visualType);
+                Set(visual, "startTick", 100, visualType);
+                Set(visual, "durationTicks", 24, visualType);
+                // An absent source models death/despawn or an unresolved source after load.
+                Set(Current.Game.tickManager, "ticksGameInt", 112);
+                visual.Step();
+                Check(!visual.Vanished, kind + " survives loss of its source after release");
+                visual.Step();
+                Check(!visual.Vanished, kind + " does not age when game ticks do not advance");
+                Set(Current.Game.tickManager, "ticksGameInt", 123);
+                visual.Step();
+                Check(!visual.Vanished, kind + " keeps its last valid tick");
+                Set(Current.Game.tickManager, "ticksGameInt", 124);
+                visual.Step();
+                Check(visual.Vanished, kind + " expires exactly at the saved lifetime boundary");
+            }
+            foreach (MingyuanBowVisualKind kind in new[] { MingyuanBowVisualKind.FocusCharge, MingyuanBowVisualKind.RadiationWarning })
+            {
+                var visual = new BowVisualFixture();
+                Set(visual, "kind", kind, visualType);
+                Set(visual, "startTick", 100, visualType);
+                Set(visual, "durationTicks", 150, visualType);
+                Set(Current.Game.tickManager, "ticksGameInt", 102);
+                visual.Step();
+                Check(visual.Vanished, kind + " cancels when its caster or warmup is unavailable");
+            }
+            var map = (Map)FormatterServices.GetUninitializedObject(typeof(Map));
+            Set(Current.Game, "maps", new List<Map> { map });
+            Pawn aliveCaster = BarePawn();
+            Set(aliveCaster, "mapIndexOrState", (sbyte)0, typeof(Thing));
+            var interrupted = new BowVisualFixture();
+            Set(interrupted, "mapIndexOrState", (sbyte)0, typeof(Thing));
+            Set(interrupted, "kind", MingyuanBowVisualKind.RadiationWarning, visualType);
+            Set(interrupted, "startTick", 100, visualType);
+            Set(interrupted, "durationTicks", 150, visualType);
+            Set(interrupted, "source", aliveCaster, visualType);
+            Set(interrupted, "sourceVerb", new Verb_MingyuanRainbowBow(), visualType);
+            interrupted.Step();
+            Check(interrupted.Vanished, "interrupted warmup cancels even with a living caster on the same map");
+        }
+        finally { Current.Game = previous; }
     }
 
     private static void Set(object obj, string field, object value, Type declaringType = null)
