@@ -20,7 +20,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             return float.IsNaN(value) || float.IsInfinity(value) ? 0 : Math.Max(0, Math.Min(3, (int)value));
         }
 
-        public static float Fraction(int rank) => rank <= 0 ? 0f : rank == 1 ? .25f : rank == 2 ? .60f : 1f;
+        // Match the shield's 18 / 42 / 108 progression; equipment interpolates from its usable base.
+        public static float Fraction(int rank) => rank <= 0 ? 0f : rank == 1 ? 18f / 108f : rank == 2 ? 42f / 108f : 1f;
         public static float Fraction(Pawn pawn, CultivationBranch branch) =>
             NeiyuPowerBalance.PassivesDisabled ? 0f : Fraction(Rank(pawn, branch));
 

@@ -102,10 +102,10 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
         internal static float ProjectilePenetrationCeiling(ProjectileProperties projectile) => ProjectilePenetration(projectile);
 
-        public static int SplitCount(Pawn pawn, int ceiling) => ArrowCount(CultivationService.Rank(pawn, CultivationBranch.Arrow), ceiling, 1, 4, 8);
-        public static int BarrageCount(Pawn pawn, int ceiling) => ArrowCount(CultivationService.Rank(pawn, CultivationBranch.Arrow), ceiling, 4, 24, 54);
-        public static int ArrowCount(int rank, int ceiling, int floor, int first, int second) =>
-            Math.Max(1, Math.Min(ceiling, rank <= 0 ? floor : rank == 1 ? first : rank == 2 ? second : ceiling));
+        public static int SplitCount(Pawn pawn, int ceiling) => ArrowCount(CultivationService.Rank(pawn, CultivationBranch.Arrow), ceiling, 1);
+        public static int BarrageCount(Pawn pawn, int ceiling) => ArrowCount(CultivationService.Rank(pawn, CultivationBranch.Arrow), ceiling, 4);
+        public static int ArrowCount(int rank, int ceiling, int floor) =>
+            Math.Max(1, Math.Min(ceiling, Math.Max(floor, Mathf.RoundToInt(ceiling * CultivationService.Fraction(rank)))));
         public static bool ShieldEnabled(Pawn pawn) => !NeiyuPowerBalance.PassivesDisabled && CultivationService.Rank(pawn, CultivationBranch.Halo) > 0;
         public static bool StageThreeEnabled(Pawn pawn) => !NeiyuPowerBalance.PassivesDisabled && CultivationService.Rank(pawn, CultivationBranch.Halo) >= 3;
         public static int ShieldCapacity(Pawn pawn, int ceiling) => ShieldCapacity(CultivationService.Rank(pawn, CultivationBranch.Halo), ceiling);

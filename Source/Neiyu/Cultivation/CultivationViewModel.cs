@@ -159,8 +159,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 var barrage = DefDatabase<AbilityDef>.GetNamedSilentFail("MX_Neiyu_Bow_ArrowBarrage");
                 int shots = 108;
                 if (barrage?.comps != null) foreach (var comp in barrage.comps) if (comp is CompProperties_AbilityNeiyuArrowBarrage p) shots = p.shotCount;
-                Line(text, CultivationText.Get("SplitCount", "普攻分裂箭数"), CultivationPower.ArrowCount(currentRank, splits, 1, 4, 8), CultivationPower.ArrowCount(targetRank, splits, 1, 4, 8));
-                Line(text, CultivationText.Get("BarrageCount", "箭幕总箭数"), CultivationPower.ArrowCount(currentRank, shots, 4, 24, 54), CultivationPower.ArrowCount(targetRank, shots, 4, 24, 54));
+                Line(text, CultivationText.Get("SplitCount", "普攻分裂箭数"), CultivationPower.ArrowCount(currentRank, splits, 1), CultivationPower.ArrowCount(targetRank, splits, 1));
+                Line(text, CultivationText.Get("BarrageCount", "箭幕总箭数"), CultivationPower.ArrowCount(currentRank, shots, 4), CultivationPower.ArrowCount(targetRank, shots, 4));
             }
             else if (node.branch == CultivationBranch.Halo)
             {

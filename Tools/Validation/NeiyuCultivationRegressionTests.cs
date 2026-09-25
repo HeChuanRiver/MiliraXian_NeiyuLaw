@@ -79,6 +79,12 @@ internal static class NeiyuCultivationRegressionTests
             {
                 SetRank(tracker, CultivationBranch.Wing, rank);
                 float damage = tool.power * (float)Call(power, "MeleeFactor", tool, a, false);
+                if (level == CharacterPowerLevel.Original)
+                {
+                    Near(new[] { 10f, 19f, 31f, 64f }[rank], damage, "sword growth follows shield milestone proportions");
+                    Near(new[] { .12f, .30f, .54f, 1.2f }[rank],
+                        tool.armorPenetration * (float)Call(power, "MeleeFactor", tool, a, true), "penetration follows the same growth curve");
+                }
                 Check(damage > previous, "damage grows monotonically in both power tiers");
                 previous = damage;
                 if (rank == 0) Near(10, damage, "minimal sword damage");
@@ -128,7 +134,7 @@ internal static class NeiyuCultivationRegressionTests
         for (int rank = 0; rank <= 3; rank++)
         {
             SetRank(tracker, CultivationBranch.Law, rank);
-            float fraction = rank == 0 ? 0 : rank == 1 ? .25f : rank == 2 ? .6f : 1;
+            float fraction = rank == 0 ? 0 : rank == 1 ? 18f / 108f : rank == 2 ? 42f / 108f : 1;
             float value = 1.7f;
             stat.parts[0].TransformValue(StatRequest.For(gear), ref value);
             Near(.15f + 1.55f * fraction, value, "actual native StatPart armor value");
@@ -227,12 +233,12 @@ internal static class NeiyuCultivationRegressionTests
 
     private static void TestCounts()
     {
-        int[] splits = { 1, 4, 8, 16 }, barrages = { 4, 24, 54, 108 };
+        int[] splits = { 1, 3, 6, 16 }, barrages = { 4, 18, 42, 108 };
         for (int rank = 0; rank <= 3; rank++)
         {
-            Near(splits[rank], (int)Call(power, "ArrowCount", rank, 16, 1, 4, 8), "split arrows at each rank");
-            Near(barrages[rank], (int)Call(power, "ArrowCount", rank, 108, 4, 24, 54), "barrage at each rank");
-            Near(1, (int)Call(power, "ArrowCount", rank, 1, 1, 4, 8), "low configured ceiling respected");
+            Near(splits[rank], (int)Call(power, "ArrowCount", rank, 16, 1), "split arrows at each rank");
+            Near(barrages[rank], (int)Call(power, "ArrowCount", rank, 108, 4), "barrage at each rank");
+            Near(1, (int)Call(power, "ArrowCount", rank, 1, 1), "low configured ceiling respected");
         }
     }
 
@@ -276,12 +282,12 @@ internal static class NeiyuCultivationRegressionTests
         var rows = (System.Collections.IList)Call(presentation, "Build", node, 0);
         Check(rows.Count == 2, "arrow comparison has exactly two separate effect rows");
         string Value(object row, string field) => (string)row.GetType().GetField(field).GetValue(row);
-        Check(Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "4", "split comparison preserves effective rank values");
-        Check(Value(rows[1], "Before") == "4" && Value(rows[1], "After") == "24", "barrage comparison preserves effective rank values");
+        Check(Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "3", "split comparison preserves effective rank values");
+        Check(Value(rows[1], "Before") == "4" && Value(rows[1], "After") == "18", "barrage comparison preserves effective rank values");
         const string translated = "Long translated label 12 → 34 with spaces";
         language.keyedReplacements["MX_Cultivation_SplitCount"] = new LoadedLanguage.KeyedReplacement { value = translated };
         rows = (System.Collections.IList)Call(presentation, "Build", node, 0);
-        Check(Value(rows[0], "Label") == translated && Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "4", "translated punctuation is not parsed as numeric columns");
+        Check(Value(rows[0], "Label") == translated && Value(rows[0], "Before") == "1" && Value(rows[0], "After") == "3", "translated punctuation is not parsed as numeric columns");
         rows = (System.Collections.IList)Call(presentation, "Build", node, 3);
         Check(Value(rows[0], "Before") == "16" && Value(rows[0], "After") == "16", "viewing an earlier node never implies losing learned power");
         Check(((System.Collections.IList)Call(presentation, "Build", null, 0)).Count == 0, "missing node has an empty presentation");
