@@ -191,20 +191,53 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool PlayerHasZhaoli()
         {
-            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+            Faction playerFaction = Find.World?.factionManager?.OfPlayer;
+            if (Current.Game == null || playerFaction == null) return false;
+            foreach (Pawn pawn in EnumerateScenarioPawns())
             {
-                if (pawn == null || pawn.Dead || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+                if (!ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.health?.hediffSet == null || pawn.Dead || pawn.Discarded)
                 {
                     continue;
                 }
 
-                if (pawn.Faction == Faction.OfPlayer && !IsHideoutState(pawn) && !IsRaidState(pawn))
+                if (pawn.Faction == playerFaction && !IsHideoutState(pawn) && !IsRaidState(pawn))
                 {
                     return true;
                 }
             }
 
             return false;
+        }
+
+        internal static IEnumerable<Pawn> EnumerateScenarioPawns()
+        {
+            Game game = Current.Game;
+            if (game == null) yield break;
+            // PawnsFinder's Alive/Dead aggregators inspect every temporary pawn's health
+            // before we can filter it. Other mods may still be constructing those pawns.
+            // Reuse the native registries and holder traversal without that early read.
+            List<Pawn> heldPawns = null;
+            if (game.Maps != null)
+            {
+                foreach (Map map in game.Maps)
+                {
+                    if (map?.mapPawns == null) continue;
+                    foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned) yield return pawn;
+                    if (map.listerThings == null) continue;
+                    heldPawns ??= new List<Pawn>();
+                    ThingOwnerUtility.GetAllThingsRecursively(map, ThingRequest.ForGroup(ThingRequestGroup.Pawn),
+                        heldPawns, allowUnreal: true, alsoGetSpawnedThings: false);
+                    foreach (Pawn pawn in heldPawns) yield return pawn;
+                }
+            }
+            World world = Find.World;
+            if (world?.worldPawns != null)
+                foreach (Pawn pawn in world.worldPawns.AllPawnsAliveOrDead) yield return pawn;
+            // Temporary is the unfiltered native list, including generation and site holders.
+            if (world == null || world.worldObjects != null)
+                foreach (Pawn pawn in PawnsFinder.Temporary) yield return pawn;
+            if (game.Gravship != null)
+                foreach (Pawn pawn in game.Gravship.Pawns) yield return pawn;
         }
 
         public static bool IsSpecialPawn(Pawn pawn)
@@ -1286,7 +1319,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void GameComponentTick()
         {
-            if (Current.ProgramState != ProgramState.Playing || Find.TickManager == null)
+            if (Current.ProgramState != ProgramState.Playing || Find.TickManager == null
+                || Find.World?.factionManager == null || Find.World.worldObjects == null)
             {
                 return;
             }
@@ -1726,9 +1760,9 @@ namespace MiliraXian.Characters.Zhaoli
         {
             qualifyingPawnDeathIds ??= new();
 
-            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+            foreach (Pawn pawn in ZhaoliScenarioUtility.EnumerateScenarioPawns())
             {
-                if (pawn == null || !pawn.Dead)
+                if (pawn?.health == null || !pawn.Dead)
                 {
                     continue;
                 }
@@ -2046,9 +2080,9 @@ namespace MiliraXian.Characters.Zhaoli
 
             int count = 0;
             int currentTick = Find.TickManager.TicksGame;
-            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead.ToList())
+            foreach (Pawn pawn in ZhaoliScenarioUtility.EnumerateScenarioPawns().ToList())
             {
-                if (pawn == null || pawn.Discarded || !pawn.Dead || pawn.Faction != Faction.OfPlayer || !ZhaoliKarmaUtility.IsZhaoli(pawn))
+                if (!ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.health == null || pawn.Discarded || !pawn.Dead || pawn.Faction != Faction.OfPlayer)
                 {
                     continue;
                 }
@@ -4015,6 +4049,7 @@ namespace MiliraXian.Characters.Zhaoli
         [HarmonyPriority(Priority.Last)]
         public static void Postfix(Pawn __instance)
         {
+            if (__instance?.health == null || !__instance.Dead || Current.Game?.components == null) return;
             GameComponent_ZhaoliScenario component = Current.Game?.GetComponent<GameComponent_ZhaoliScenario>();
             if (__instance == null || component == null)
             {

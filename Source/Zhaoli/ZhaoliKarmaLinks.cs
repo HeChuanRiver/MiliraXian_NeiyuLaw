@@ -671,7 +671,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void Prefix(Pawn __instance)
         {
-            if (__instance == null || __instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            if (!ZhaoliKarmaUtility.IsZhaoli(__instance) || __instance.health == null || __instance.Dead)
             {
                 return;
             }
@@ -691,7 +691,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void Postfix(Pawn __instance)
         {
-            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            if (!ZhaoliKarmaUtility.IsZhaoli(__instance)) return;
+            if (__instance.health == null || !__instance.Dead)
             {
                 pendingSubstitutePawns.Remove(__instance);
                 return;

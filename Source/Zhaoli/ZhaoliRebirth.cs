@@ -365,7 +365,7 @@ namespace MiliraXian.Characters.Zhaoli
         [HarmonyPriority(Priority.Last)]
         public static void Postfix(Pawn __instance)
         {
-            if (__instance == null || !__instance.Dead || !ZhaoliKarmaUtility.IsZhaoli(__instance))
+            if (!ZhaoliKarmaUtility.IsZhaoli(__instance) || __instance.health == null || !__instance.Dead)
             {
                 return;
             }

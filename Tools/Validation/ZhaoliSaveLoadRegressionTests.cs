@@ -7,6 +7,7 @@ using System.Xml;
 using HarmonyLib;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 // Uses the production component serializers and RimWorld's XML/reference/post-load
@@ -63,6 +64,11 @@ internal static class ZhaoliSaveLoadRegressionTests
         game.questManager = new QuestManager();
         Current.Game = game;
         Current.ProgramState = ProgramState.Playing;
+        Set(game, "maps", new List<Map>());
+        game.World = Bare<World>();
+        game.World.factionManager = new FactionManager();
+        game.World.worldObjects = new WorldObjectsHolder();
+        game.World.worldPawns = new WorldPawns();
         home = Bare<Map>();
         home.uniqueID = 17;
         SetTick(1000);
@@ -86,6 +92,7 @@ internal static class ZhaoliSaveLoadRegressionTests
         TestRebirth(game);
         TestLegacyRebirth(game);
         TestAnimalGuiyi(harmony);
+        TestScenarioPawnDiscovery(harmony, game, utility);
         Check(scribeErrors == 0, "no Scribe errors were suppressed during round trips");
         Current.Game = null;
         Console.WriteLine("PASS: " + checks + " Zhaoli save/load checks; Unity spawning is not exercised.");
@@ -249,6 +256,75 @@ internal static class ZhaoliSaveLoadRegressionTests
         pawn.health.hediffSet = new HediffSet(pawn);
         Set(pawn, "mapIndexOrState", (sbyte)-1);
         return pawn;
+    }
+
+    private static void TestScenarioPawnDiscovery(Harmony harmony, Game game, Type utility)
+    {
+        MethodInfo hasZhaoli = utility.GetMethod("PlayerHasZhaoli");
+        MethodInfo refresh = AccessTools.Method(typeof(GameComponent_ZhaoliScenario), "RefreshScenarioStateCache");
+        harmony.Unpatch(hasZhaoli, HarmonyPatchType.Prefix, harmony.Id);
+        harmony.Unpatch(refresh, HarmonyPatchType.Prefix, harmony.Id);
+        Func<bool> ownsZhaoli = () => (bool)hasZhaoli.Invoke(null, null);
+        Check(!ownsZhaoli(), "missing player faction safely reports no recruited Zhaoli");
+        var faction = Bare<Faction>(); faction.def = new FactionDef { isPlayer = true };
+        Set(game.World.factionManager, "ofPlayer", faction);
+        Pawn incompleteMech = Bare<Pawn>(); incompleteMech.kindDef = new PawnKindDef { defName = "TestIncompleteMech" };
+        Pawn incompleteZhaoli = Bare<Pawn>(); incompleteZhaoli.kindDef = new PawnKindDef { defName = ZhaoliKarmaUtility.ZhaoliPawnKindDefName };
+        Pawn zhaoli = LivePawn(704, Intelligence.Humanlike);
+        zhaoli.kindDef = incompleteZhaoli.kindDef;
+        Set(zhaoli, "factionInt", faction);
+        var temporary = (List<List<Pawn>>)AccessTools.Field(typeof(PawnGroupKindWorker), "pawnsBeingGeneratedNow").GetValue(null);
+        var generating = new List<Pawn> { null, incompleteMech, incompleteZhaoli };
+        temporary.Add(generating);
+        try
+        {
+            bool oldQueryThrew = false;
+            try { var ignored = PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead; }
+            catch (NullReferenceException) { oldQueryThrew = true; }
+            Check(oldQueryThrew, "reproduces the old global query's uninitialized-health exception");
+            Check(!ownsZhaoli(), "unrelated and incomplete temporary pawns do not break ownership lookup");
+            generating.Add(zhaoli);
+            Check(ownsZhaoli(), "a valid temporary Zhaoli is still discovered after malformed entries");
+            Set(zhaoli.health, "healthState", PawnHealthState.Dead);
+            Check(!ownsZhaoli(), "dead Zhaoli does not count as a recruited living pawn");
+            Set(zhaoli.health, "healthState", PawnHealthState.Mobile);
+            generating.RemoveAt(generating.Count - 1);
+            ((HashSet<Pawn>)Get(game.World.worldPawns, "pawnsAlive")).Add(zhaoli);
+            Check(ownsZhaoli(), "world and caravan-owned Zhaoli remains discoverable");
+            ((HashSet<Pawn>)Get(game.World.worldPawns, "pawnsAlive")).Clear();
+            var map = Bare<Map>(); map.mapPawns = Bare<MapPawns>();
+            Set(map.mapPawns, "pawnsSpawned", new List<Pawn> { incompleteMech, zhaoli });
+            game.Maps.Add(map);
+            Check(ownsZhaoli(), "spawned-map lookup filters identity before reading health");
+            game.Maps.Clear();
+            var component = new GameComponent_ZhaoliScenario(game);
+            Set(component, "scenarioCompleted", true);
+            for (int tick = 1000; tick <= 1500; tick += 250)
+            {
+                SetTick(tick);
+                component.GameComponentTick();
+                Check((int)Get(component, "nextScenarioStateCheckTick") > tick, "periodic scenario checks advance instead of repeating an exception");
+            }
+            AccessTools.Method(typeof(GameComponent_ZhaoliScenario), "BackfillTrackedPawnDeaths").Invoke(component, null);
+            Check((int)Get(component, "qualifyingPawnDeathCount") == 0, "death backfill also tolerates incomplete temporary pawns");
+            foreach (Pawn pawn in new[] { null, incompleteMech, incompleteZhaoli })
+            {
+                Patch_Pawn_Kill_ZhaoliSubstitute.Prefix(pawn);
+                Patch_Pawn_Kill_ZhaoliSubstitute.Postfix(pawn);
+                foreach (string patch in new[] { "Patch_Pawn_Kill_ZhaoliScenario", "Patch_Pawn_Kill_ZhaoliRebirthFallback" })
+                    utility.Assembly.GetType("MiliraXian.Characters.Zhaoli." + patch).GetMethod("Postfix").Invoke(null, new object[] { pawn });
+            }
+            Check(true, "Zhaoli death hooks safely ignore unrelated or incomplete pawns");
+            World world = game.World;
+            game.World = null;
+            Check(!ownsZhaoli(), "world initialization gap is handled without player-faction access");
+            component.GameComponentTick();
+            game.World = world;
+            Current.Game = null;
+            Check(!ownsZhaoli(), "main-menu or unloading state has no pawn lookup");
+            Current.Game = game;
+        }
+        finally { temporary.Remove(generating); }
     }
 
     private static bool NoMissingParts(ref List<Hediff_MissingPart> __result) { __result = new List<Hediff_MissingPart>(); return false; }
