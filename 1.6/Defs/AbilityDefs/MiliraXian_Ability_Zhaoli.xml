@@ -51,7 +51,7 @@
     <AbilityDef>
         <defName>MX_Zhaoli_Guiyi</defName>
         <label>&lt;color=#C77DFF&gt;诡医&lt;/color&gt;</label>
-        <description>消耗3点因果，修复目标缺失部位、伤口和可治疗的负面状态，并建立30天的因果链接，最多保留6人。不能对自身或敌人使用。冷却15秒。</description>
+        <description>消耗3点因果，修复目标缺失部位、伤口和可治疗的负面状态，并建立30天的因果链接，最多保留6人。不能对自身或敌人使用。冷却15秒。&#10;动物可以接受治疗，但不会建立因果链接。</description>
         <iconPath>MiliraXianZhaoli/UI/Zhaoli_Guiyi</iconPath>
 
         <category>MX_ZhaoliSkill</category>

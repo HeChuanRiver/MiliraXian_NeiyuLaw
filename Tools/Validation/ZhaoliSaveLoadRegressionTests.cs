@@ -49,6 +49,7 @@ internal static class ZhaoliSaveLoadRegressionTests
     private static int returnOffers;
     private static int scribeErrors;
     private static Map home;
+    private static bool testTargetHostile;
 
     public static void Run()
     {
@@ -84,6 +85,7 @@ internal static class ZhaoliSaveLoadRegressionTests
         TestMedicineReturn(game);
         TestRebirth(game);
         TestLegacyRebirth(game);
+        TestAnimalGuiyi(harmony);
         Check(scribeErrors == 0, "no Scribe errors were suppressed during round trips");
         Current.Game = null;
         Console.WriteLine("PASS: " + checks + " Zhaoli save/load checks; Unity spawning is not exercised.");
@@ -182,6 +184,79 @@ internal static class ZhaoliSaveLoadRegressionTests
         Set(pawn.health, "healthState", PawnHealthState.Dead);
         Set(pawn, "mapIndexOrState", (sbyte)-2);
         return pawn;
+    }
+
+    private static void TestAnimalGuiyi(Harmony harmony)
+    {
+        // Unity presentation and body-cache construction are outside this managed fixture.
+        Patch(harmony, AccessTools.Method(typeof(HediffSet), "GetMissingPartsCommonAncestors"), "NoMissingParts");
+        Patch(harmony, AccessTools.Method(typeof(Pawn_HealthTracker), "RemoveHediff"), "RemoveTestHediff");
+        Patch(harmony, AccessTools.Method(typeof(FleckMaker), "AttachedOverlay"), "SkipUnity");
+        Patch(harmony, AccessTools.PropertyGetter(typeof(RaceProperties), "IsAnomalyEntity"), "NoPlayerZhaoli");
+        Patch(harmony, AccessTools.Method(typeof(GenHostility), "HostileTo", new[] { typeof(Thing), typeof(Thing) }), "TestHostility");
+        AccessTools.Field(typeof(DefOfHelper), "bindingNow").SetValue(null, true);
+        var language = Bare<LoadedLanguage>();
+        language.keyedReplacements = new Dictionary<string, LoadedLanguage.KeyedReplacement>();
+        Set(language, "dataIsLoaded", true);
+        foreach (string key in new[] { "MX_ZL_LinkTargetInvalid", "MX_ZL_LinkLimitReached" })
+            language.keyedReplacements[key] = new LoadedLanguage.KeyedReplacement { value = key };
+        LanguageDatabase.activeLanguage = language;
+
+        Pawn caster = LivePawn(701, Intelligence.Humanlike), animal = LivePawn(702, Intelligence.Animal), human = LivePawn(703, Intelligence.Humanlike);
+        caster.kindDef = new PawnKindDef { defName = ZhaoliKarmaUtility.ZhaoliPawnKindDefName };
+        var karmaDef = new HediffDef { defName = ZhaoliKarmaUtility.KarmaHediffDefName };
+        DefDatabase<HediffDef>.Add(karmaDef);
+        var karma = new HediffWithComps { def = karmaDef, pawn = caster };
+        var links = new HediffComp_ZhaoliKarmaLinks { parent = karma, props = new HediffCompProperties_ZhaoliKarmaLinks { maxLinks = 0 } };
+        var resource = new MiliraXian.Characters.HediffComp_PawnSpecialResource {
+            parent = karma, props = new MiliraXian.Characters.HediffCompProperties_PawnSpecialResource { initialValue = 10f }
+        };
+        karma.comps = new List<HediffComp> { links, resource };
+        caster.health.hediffSet.hediffs.Add(karma);
+        var ability = Bare<Ability>(); ability.pawn = caster; ability.def = Bare<AbilityDef>();
+        var guiYi = new CompAbilityEffect_ZhaoliGuiyi { parent = ability, props = new CompProperties_AbilityZhaoliGuiyi { karmaCost = 3f } };
+        string reason;
+        bool created;
+        Check(!links.CanLinkTarget(animal, out reason) && !links.TryAddOrRefreshLink(animal, out created, out reason) && !created,
+            "animals cannot enter a causal link through either entry point");
+        Check(ZhaoliKarmaUtility.CanCarryKarmaLink(human), "human link eligibility is unchanged");
+        var injury = new Hediff_Injury { pawn = animal, def = new HediffDef { isBad = true } };
+        animal.health.hediffSet.hediffs.Add(injury);
+        testTargetHostile = true;
+        Check(!guiYi.Valid(new LocalTargetInfo(animal)), "hostile animals remain invalid treatment targets");
+        testTargetHostile = false;
+        Check(guiYi.Valid(new LocalTargetInfo(animal)), "injured animals remain valid with zero available link slots");
+        guiYi.Apply(new LocalTargetInfo(animal), LocalTargetInfo.Invalid);
+        Check(!animal.health.hediffSet.hediffs.Contains(injury) && resource.CurrentValue == 7f && links.ActiveLinkCount == 0,
+            "actual animal treatment removes injury, spends karma, and creates no link");
+        Check(!guiYi.Valid(new LocalTargetInfo(animal)), "healthy animals cannot waste treatment");
+
+        var legacy = new HediffComp_ZhaoliKarmaLinkTarget { parent = new HediffWithComps { pawn = animal } };
+        legacy.SetZhaoli(caster);
+        Set(links, "linkedPawns", new List<Pawn> { animal });
+        Check(legacy.CompShouldRemove && !ZhaoliKarmaUtility.HasLinkFrom(animal, caster), "old animal link markers expire and have no effect");
+        Check(links.ActiveLinkCount == 0 && links.GetRandomLiveLinkedPawn() == null && !links.TryDistributeOverflow(1),
+            "old animal links neither occupy slots nor supply sacrifice or overflow targets");
+    }
+
+    private static Pawn LivePawn(int id, Intelligence intelligence)
+    {
+        Pawn pawn = DeadPawn(id);
+        pawn.def.race = new RaceProperties { intelligence = intelligence };
+        Set(pawn.def.race, "fleshType", new FleshTypeDef { isOrganic = true });
+        Set(pawn.health, "pawn", pawn);
+        Set(pawn.health, "healthState", PawnHealthState.Mobile);
+        pawn.health.hediffSet = new HediffSet(pawn);
+        Set(pawn, "mapIndexOrState", (sbyte)-1);
+        return pawn;
+    }
+
+    private static bool NoMissingParts(ref List<Hediff_MissingPart> __result) { __result = new List<Hediff_MissingPart>(); return false; }
+    private static bool TestHostility(ref bool __result) { __result = testTargetHostile; return false; }
+    private static bool RemoveTestHediff(Pawn_HealthTracker __instance, Hediff hediff)
+    {
+        __instance.hediffSet.hediffs.Remove(hediff);
+        return false;
     }
 
     private static bool ResolveHome(ref Map __result) { __result = home; return false; }

@@ -23,6 +23,11 @@ namespace MiliraXian.Characters.Zhaoli
             return pawn?.kindDef?.defName == ZhaoliPawnKindDefName;
         }
 
+        public static bool CanCarryKarmaLink(Pawn pawn)
+        {
+            return pawn?.def?.race != null && !pawn.RaceProps.Animal;
+        }
+
         public static void ResetNoCooldownAbilityLocks(Pawn pawn)
         {
             if (pawn?.abilities == null)
@@ -150,6 +155,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static bool HasLinkFrom(Pawn targetPawn, Pawn zhaoli)
         {
+            if (!CanCarryKarmaLink(targetPawn)) return false;
             HediffComp_ZhaoliKarmaLinkTarget linkTargetComp = GetLinkTargetComp(targetPawn);
             return linkTargetComp != null && linkTargetComp.Zhaoli == zhaoli;
         }

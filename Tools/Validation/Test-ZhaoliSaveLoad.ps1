@@ -15,7 +15,7 @@ $output = Join-Path $ModRoot 'tmp/validation/zhaoli-save-load'
 New-Item -ItemType Directory -Force -Path $output | Out-Null
 $exe = Join-Path $output 'ZhaoliSaveLoadRegressionTests.exe'
 $compiler = Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319/csc.exe'
-$references = @($AssemblyPath, $harmony, (Join-Path $managed 'Assembly-CSharp.dll'), (Join-Path $managed 'UnityEngine.CoreModule.dll'))
+$references = @($AssemblyPath, $harmony, (Join-Path $managed 'Assembly-CSharp.dll'), (Join-Path $managed 'UnityEngine.CoreModule.dll'), (Join-Path $managed 'Unity.Mathematics.dll'))
 & $compiler /nologo /debug /target:exe "/out:$exe" @($references | ForEach-Object { "/reference:$_" }) (Join-Path $PSScriptRoot 'ZhaoliSaveLoadRegressionTests.cs')
 if ($LASTEXITCODE -ne 0) { throw 'Save/load test compilation failed.' }
 & $exe (Split-Path $AssemblyPath) $managed (Split-Path $paths.AriandelLibraryDll) (Split-Path $paths.AlienRaceDll) (Split-Path $harmony)

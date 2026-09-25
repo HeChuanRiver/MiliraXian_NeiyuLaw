@@ -79,25 +79,23 @@ namespace MiliraXian.Characters.Zhaoli
 
             Pawn caster = parent?.pawn;
             Pawn targetPawn = target.Pawn;
-            if (caster == null || targetPawn == null)
+            if (caster == null || targetPawn?.health?.hediffSet == null || targetPawn.Dead || targetPawn.Destroyed)
             {
                 return;
             }
 
-            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
-            if (linkComp == null)
+            HediffComp_ZhaoliKarmaLinks linkComp = null;
+            bool createdNewLink = false;
+            if (ZhaoliKarmaUtility.CanCarryKarmaLink(targetPawn))
             {
-                return;
-            }
-
-            if (!linkComp.TryAddOrRefreshLink(targetPawn, out bool createdNewLink, out string failureReason))
-            {
-                if (!failureReason.NullOrEmpty() && caster.Faction == Faction.OfPlayer)
+                linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
+                if (linkComp == null) return;
+                if (!linkComp.TryAddOrRefreshLink(targetPawn, out createdNewLink, out string failureReason))
                 {
-                    Messages.Message(failureReason, targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                    if (!failureReason.NullOrEmpty() && caster.Faction == Faction.OfPlayer)
+                        Messages.Message(failureReason, targetPawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
                 }
-
-                return;
             }
 
             if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
@@ -145,7 +143,7 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Pawn caster = parent?.pawn;
             Pawn targetPawn = target.Pawn;
-            if (caster == null || targetPawn == null || targetPawn.Dead)
+            if (caster == null || targetPawn?.health?.hediffSet == null || targetPawn.Dead || targetPawn.Destroyed)
             {
                 return false;
             }
@@ -189,6 +187,9 @@ namespace MiliraXian.Characters.Zhaoli
 
                 return false;
             }
+
+            // Animals receive the same treatment even when all link slots are occupied.
+            if (!ZhaoliKarmaUtility.CanCarryKarmaLink(targetPawn)) return base.Valid(target, throwMessages);
 
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
             if (linkComp == null)

@@ -89,7 +89,15 @@ namespace MiliraXian.Characters.Zhaoli
             p.ScaleField(mindDamage, "damagePerTick", ConservativePowerTuning.Damage, mindDamage.damagePerTick);
 
             foreach (string name in new[] { "Duanzhan", "DeathField", "Guiyi", "Dingshu", "Minghuo", "Minshen" })
-                p.Description(AbilityDef("MX_Zhaoli_" + name), "MX_Power_Zhaoli_" + name);
+            {
+                if (name != "Guiyi") p.Description(AbilityDef("MX_Zhaoli_" + name), "MX_Power_Zhaoli_" + name);
+            }
+            var guiYi = AbilityDef("MX_Zhaoli_Guiyi");
+            const string animalKey = "MX_ZL_GuiyiAnimalsHealOnly";
+            string animalNote = animalKey.CanTranslate() ? animalKey.Translate().ToString() : "动物可以接受治疗，但不会建立因果链接。";
+            if (!guiYi.description.EndsWith(animalNote)) guiYi.description += "\n" + animalNote;
+            p.Value(() => guiYi.description, value => guiYi.description = value,
+                "MX_Power_Zhaoli_Guiyi".Translate().ToString() + "\n" + animalNote, "MX_Power_SealedDescription".Translate().ToString());
             p.Description(Hediff("MXZL_ZhaoliRebirth"), "MX_Power_Zhaoli_Passives");
             p.Description(Hediff("MXZL_ZhaoliKarma"), "MX_Power_Zhaoli_Passives");
             p.Description(Hediff("MXZL_ZhaoliKarmaLink"), "MX_Power_Zhaoli_Passives");

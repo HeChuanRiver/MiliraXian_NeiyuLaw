@@ -92,7 +92,7 @@ namespace MiliraXian.Characters.Zhaoli
             failureReason = null;
             if (ZhaoliPowerBalance.Sealed) { failureReason = "MX_Power_AbilitiesSealed".Translate(); return false; }
             CleanupInvalidLinks();
-            if (target == null || target.Dead || target.Destroyed)
+            if (!ZhaoliKarmaUtility.CanCarryKarmaLink(target) || target.health?.hediffSet == null || target.Dead || target.Destroyed)
             {
                 failureReason = "MX_ZL_LinkTargetInvalid".Translate().ToString();
                 return false;
@@ -327,6 +327,9 @@ namespace MiliraXian.Characters.Zhaoli
         private Pawn zhaoli;
 
         public Pawn Zhaoli => zhaoli;
+
+        // Also expires old animal links that are no longer present in the caster's list.
+        public override bool CompShouldRemove => Pawn?.def?.race?.Animal == true;
 
         public override string CompLabelInBracketsExtra => zhaoli?.LabelShortCap;
 
