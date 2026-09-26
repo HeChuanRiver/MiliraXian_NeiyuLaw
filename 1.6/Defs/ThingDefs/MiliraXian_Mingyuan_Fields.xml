@@ -46,7 +46,7 @@
                 <pulseIntervalTicks>60</pulseIntervalTicks>
                 <moveIntervalTicks>60</moveIntervalTicks>
                 <initialHitPoints>300</initialHitPoints>
-                <maxHitPoints>800</maxHitPoints>
+                <maxHitPoints>2000</maxHitPoints>
                 <centerBurnDamage>12</centerBurnDamage>
                 <edgeBurnDamage>3</edgeBurnDamage>
                 <centerCutDamage>3</centerCutDamage>

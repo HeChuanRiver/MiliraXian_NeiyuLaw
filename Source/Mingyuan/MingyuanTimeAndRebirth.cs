@@ -84,10 +84,7 @@ namespace MiliraXian.Characters.Mingyuan
                     Map map = pawn.Map;
                     IntVec3 cell = pawn.Position;
                     pawn.DeSpawn();
-                    if (!pawn.IsWorldPawn())
-                    {
-                        Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
-                    }
+                    MingyuanRebirthUtility.KeepPendingPawnInWorld(pawn);
 
                     Thing marker = MingyuanRebirthUtility.SpawnRebirthMarker(map, cell);
                     rebirth.RegisterPendingRebirth(pawn, map, cell, record.endTick, marker);
@@ -139,7 +136,7 @@ namespace MiliraXian.Characters.Mingyuan
             MingyuanUtility.RestorePawnToBestCondition(pawn, false);
             pawn.jobs?.StopAll();
             pawn.DeSpawn();
-            if (!pawn.IsWorldPawn()) Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
+            KeepPendingPawnInWorld(pawn);
             DoRebirthExplosion(pawn, map, cell);
             return true;
         }
@@ -209,9 +206,29 @@ namespace MiliraXian.Characters.Mingyuan
                 corpse.Destroy(DestroyMode.Vanish);
             }
 
-            if (!pawn.Spawned && !pawn.IsWorldPawn())
+            KeepPendingPawnInWorld(pawn);
+        }
+
+        public static void KeepPendingPawnInWorld(Pawn pawn)
+        {
+            if (pawn == null || pawn.Spawned || pawn.IsWorldPawn())
             {
-                Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
+                return;
+            }
+
+            // Notify_PassedToWorld assigns living, free colonists to another faction.
+            // Rebirth only stores the same pawn temporarily; it is not a departure.
+            Faction faction = pawn.Faction;
+            PawnKindDef kind = pawn.kindDef;
+            Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
+            if (pawn.Faction != faction)
+            {
+                pawn.SetFaction(faction);
+            }
+            // SetFaction can replace a humanlike pawn's unique kind with a basic member.
+            if (pawn.kindDef != kind)
+            {
+                pawn.ChangeKind(kind);
             }
         }
 
