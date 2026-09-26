@@ -31,6 +31,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         private IntVec3 landingCell = IntVec3.Invalid;
         private IntVec3 directionCell = IntVec3.Invalid;
         private Thing trackedTarget;
+        private Vector3 airbornePos;
+        private int flightStartTick = -1;
         private int stageStartTick = -1;
         private int stageEndTick = -1;
         private int slashIndex;
@@ -45,6 +47,20 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private int NextSlashTick => stageStartTick
             + slashIndex * Mathf.Max(1, props.empoweredSlashIntervalTicks);
+
+        // Ascent, hover and descent share one timeline so the arc has no seams.
+        private int FlightTotalTicks => Mathf.Max(1, props.ascentTicks)
+            + Mathf.Max(1, props.hoverTicks)
+            + Mathf.Max(1, props.descentTicks);
+
+        private float FlightProgress => flightStartTick < 0
+            ? 0f
+            : Mathf.Clamp01((AscentSlashActionUtility.CurrentTick - flightStartTick) / (float)FlightTotalTicks);
+
+        private float ApexFraction => Mathf.Clamp(
+            (Mathf.Max(1, props.ascentTicks) + Mathf.Max(1, props.hoverTicks)) / (float)FlightTotalTicks,
+            0.01f,
+            0.99f);
 
         public ASSlash(CompProperties_AbilityAscentSlash props)
         {
@@ -64,6 +80,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             trackedTarget = dashResult.TrackedTarget;
             impactCell = IntVec3.Invalid;
             landingCell = IntVec3.Invalid;
+            airbornePos = takeoffCell.ToVector3Shifted();
             ResetSlashState();
 
             AscentSlashActionUtility.AddInvulnerability(caster);
@@ -91,7 +108,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
                     TickTakeoffDelay(caster, map, now);
                     break;
                 case SlashStage.Ascending:
-                    TickAscent(caster, now);
+                    TickAscent(caster, map, now);
                     break;
                 case SlashStage.Hover:
                     TickHover(caster, map, now);
@@ -126,6 +143,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
             Scribe_Values.Look(ref landingCell, "mx_qh_asSlash_landingCell", IntVec3.Invalid);
             Scribe_Values.Look(ref directionCell, "mx_qh_asSlash_directionCell", IntVec3.Invalid);
             Scribe_References.Look(ref trackedTarget, "mx_qh_asSlash_trackedTarget");
+            Scribe_Values.Look(ref airbornePos, "mx_qh_asSlash_airbornePos", Vector3.zero);
+            Scribe_Values.Look(ref flightStartTick, "mx_qh_asSlash_flightStartTick", -1);
             Scribe_Values.Look(ref stageStartTick, "mx_qh_asSlash_stageStartTick", -1);
             Scribe_Values.Look(ref stageEndTick, "mx_qh_asSlash_stageEndTick", -1);
             Scribe_Values.Look(ref slashIndex, "mx_qh_asSlash_index", 0);
@@ -147,6 +166,16 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 takeoffCell = caster.Position;
             }
 
+            if (airbornePos == Vector3.zero)
+            {
+                airbornePos = takeoffCell.ToVector3Shifted();
+            }
+
+            if (flightStartTick < 0 && stage is SlashStage.Ascending or SlashStage.Hover or SlashStage.Descending)
+            {
+                flightStartTick = AscentSlashActionUtility.CurrentTick;
+            }
+
             if (stage is SlashStage.ImpactDelay or SlashStage.ImpactSlashes)
             {
                 landingCell = impactCell = caster.Position;
@@ -160,27 +189,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return false;
             }
 
-            float progress = stageEndTick > stageStartTick
-                ? Mathf.Clamp01((AscentSlashActionUtility.CurrentTick - stageStartTick) / (float)(stageEndTick - stageStartTick))
-                : 1f;
-
-            if (stage == SlashStage.Descending)
-            {
-                float easedProgress = Mathf.Pow(progress, props.descentAccelerationPower);
-                float height = 1f - easedProgress;
-                drawPos = Vector3.Lerp(
-                        takeoffCell.ToVector3ShiftedWithAltitude(AltitudeLayer.Pawn),
-                        landingCell.ToVector3ShiftedWithAltitude(AltitudeLayer.Pawn),
-                        easedProgress)
-                    + Altitudes.AltIncVect * (props.secondStageMaxAltitudeLayers * height)
-                    + Vector3.forward * (props.secondStageMaxForwardOffset * height);
-                return true;
-            }
-
-            float altitude = stage == SlashStage.Hover
-                ? 1f
-                : 1f - Mathf.Pow(1f - progress, props.ascentDecelerationPower);
-            drawPos += Altitudes.AltIncVect * (props.secondStageMaxAltitudeLayers * altitude)
+            float altitude = FlightAltitude();
+            drawPos = AirborneDrawBase()
+                + Altitudes.AltIncVect * (props.secondStageMaxAltitudeLayers * altitude)
                 + Vector3.forward * (props.secondStageMaxForwardOffset * altitude);
             return true;
         }
@@ -194,11 +205,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             AscentSlashActionUtility.BreakRoofAt(map, takeoffCell, allowThickRoof: false);
             PlayTakeoffVisuals(map, caster.Position);
+            flightStartTick = AscentSlashActionUtility.CurrentTick;
             BeginStage(SlashStage.Ascending, props.ascentTicks);
         }
 
-        private void TickAscent(Pawn caster, int now)
+        private void TickAscent(Pawn caster, Map map, int now)
         {
+            AdvanceTracking(caster, map);
             if (now >= stageEndTick)
             {
                 BeginStage(SlashStage.Hover, props.hoverTicks);
@@ -207,27 +220,29 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         private void TickHover(Pawn caster, Map map, int now)
         {
+            AdvanceTracking(caster, map);
             if (now < stageEndTick)
             {
                 return;
             }
 
-            ResolveDestination(caster, map);
-            AscentSlashActionUtility.BreakRoofAt(map, landingCell, allowThickRoof: true);
+            IntVec3 descentCell = AirborneCell(map);
             BeginStage(SlashStage.Descending, props.descentTicks);
-            props.dropSound?.PlayOneShot(new TargetInfo(landingCell, map));
-            MX_QHGraphicsUtility.Fleck(map, landingCell, props.impactFleck, 1.1f);
+            props.dropSound?.PlayOneShot(new TargetInfo(descentCell, map));
+            MX_QHGraphicsUtility.Fleck(map, descentCell, props.impactFleck, 1.1f);
         }
 
         private void TickDescent(Pawn caster, Map map, int now)
         {
+            AdvanceTracking(caster, map);
             if (now < stageEndTick)
             {
                 return;
             }
 
             IntVec3 resolvedLanding = AscentSlashActionUtility.FindNearestLandingCell(
-                map, landingCell, caster, caster.Position, takeoffCell, props.secondStageTrackingRange);
+                map, AirborneCell(map), caster, caster.Position);
+            AscentSlashActionUtility.BreakRoofAt(map, resolvedLanding, allowThickRoof: true);
             if (resolvedLanding.IsValid && resolvedLanding.InBounds(map) && resolvedLanding != caster.Position)
             {
                 caster.Position = resolvedLanding;
@@ -236,7 +251,62 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             // All slash searches use the actual landing, even if the target moves away.
             landingCell = impactCell = caster.Position;
+            directionCell = AscentSlashActionUtility.ComputeDirectionCell(
+                landingCell, trackedTarget?.Spawned == true ? trackedTarget.Position : firstImpactCell);
             BeginStage(SlashStage.ImpactDelay, Mathf.Max(1, props.impactDelayTicks));
+        }
+
+        // Airborne pursuit is speed-limited, so a fleeing target can outrun the descent.
+        private void AdvanceTracking(Pawn caster, Map map)
+        {
+            if (!AscentSlashActionUtility.CanHit(caster, trackedTarget) || trackedTarget.MapHeld != map)
+            {
+                return;
+            }
+
+            float step = Mathf.Max(0f, props.trackingSpeedCellsPerSecond) / 60f * TrackingSpeedWeight();
+            airbornePos = Vector3.MoveTowards(airbornePos, trackedTarget.DrawPos.Yto0(), step);
+        }
+
+        // Pursuit eases in while rising and decays to zero before landing, so the
+        // descent stays nearly vertical instead of sliding sideways into the target.
+        private float TrackingSpeedWeight()
+        {
+            float progress = FlightProgress;
+            float rampIn = Mathf.Min(1f, progress / Mathf.Max(0.01f, props.trackingRampFraction));
+            float decayStart = Mathf.Clamp01(props.trackingDecayStartFraction);
+            float rampOut = progress <= decayStart
+                ? 1f
+                : 1f - Mathf.Clamp01((progress - decayStart) / Mathf.Max(0.01f, 1f - decayStart));
+            return rampIn * rampIn * (rampOut * rampOut);
+        }
+
+        private IntVec3 AirborneCell(Map map)
+        {
+            return AscentSlashActionUtility.ClampToMap(airbornePos.ToIntVec3(), map);
+        }
+
+        private Vector3 AirborneDrawBase()
+        {
+            Vector3 basePos = airbornePos;
+            basePos.y = AltitudeLayer.Pawn.AltitudeFor();
+            return basePos;
+        }
+
+        // Rise along a half parabola that flattens out at the apex, then drop back
+        // down along a near-straight line for a decisive dive.
+        private float FlightAltitude()
+        {
+            float progress = FlightProgress;
+            float apex = ApexFraction;
+            if (progress <= apex)
+            {
+                float rise = progress / apex;
+                return 1f - (1f - rise) * (1f - rise);
+            }
+
+            float fall = (progress - apex) / (1f - apex);
+            return 1f - Mathf.Pow(fall, props.descentStraightnessPower);
         }
 
         private void TickImpactDelay(Pawn caster, int now)
@@ -349,17 +419,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         }
 
-        private void ResolveDestination(Pawn caster, Map map)
-        {
-            IntVec3 start = takeoffCell.IsValid && takeoffCell.InBounds(map) ? takeoffCell : caster.Position;
-            bool hasTarget = AscentSlashActionUtility.CanHit(caster, trackedTarget) && trackedTarget.MapHeld == map;
-            IntVec3 desired = hasTarget ? trackedTarget.Position : start;
-            landingCell = AscentSlashActionUtility.FindNearestLandingCell(
-                map, desired, caster, start, start, props.secondStageTrackingRange);
-            directionCell = AscentSlashActionUtility.ComputeDirectionCell(
-                landingCell, hasTarget ? desired : firstImpactCell);
-        }
-
         private void PlaySlashFleck(Map map, IntVec3 slashCell)
         {
             if (props.empoweredSlashFleck == null)
@@ -391,6 +450,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             AscentSlashActionUtility.RemoveInvulnerability(caster);
             stage = SlashStage.None;
             trackedTarget = null;
+            flightStartTick = -1;
             stageStartTick = -1;
             stageEndTick = -1;
             ResetSlashState();

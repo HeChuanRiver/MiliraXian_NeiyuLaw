@@ -16,6 +16,8 @@ riderModule.iml
 .dotnet/
 .modpack/
 .tools/
+Tools
+Tests
 Documents
 /Docs/明渊完整设计与机制数值.md
 References.md

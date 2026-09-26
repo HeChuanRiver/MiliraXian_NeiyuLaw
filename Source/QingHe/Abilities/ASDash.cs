@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using MiliraXian.Characters;
-using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.Vfx;
 using RimWorld;
@@ -357,7 +356,15 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 damage *= props.buildingDamageMultiplier;
             }
 
-            QingheSwordCombatUtility.ApplySlash(caster, target, damage, props.armorPenetration, empowered: false);
+            // The dash kick is plain blunt impact: no sword pressure, no seasonal resonance.
+            target.TakeDamage(new DamageInfo(
+                DamageDefOf.Blunt,
+                damage,
+                props.armorPenetration,
+                -1f,
+                caster,
+                null,
+                caster.equipment?.Primary?.def));
         }
 
         private static void TryAddAfterimage(Pawn caster, Map map, Vector3 drawPos, int now)
