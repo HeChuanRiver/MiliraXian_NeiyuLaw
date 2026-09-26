@@ -8,7 +8,7 @@
 
 本模组基于 **Milira Race** 与 **Ariandel Library**，目前包含 **霓羽、清荷、昭离、明渊** 四位角色，以及专属招募任务、武器与服装、技能、资源机制和动画特效。它侧重角色体验与高辨识度的战斗设计，原始档位的强度明显高于原版。
 
-[Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594) · [下载 dev 分支](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/archive/refs/heads/dev.zip) · [问题反馈](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) · [提交记录](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/commits/dev/)
+[Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594) · [下载完整安装包（Releases）](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/releases) · [问题反馈](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) · [提交记录](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/commits/dev/)
 
 > 本文介绍 GitHub `dev` 分支，不代表创意工坊已发布全部相同内容。开发版仍在调整功能、数值和兼容性；用于长期存档前，请先备份并在副本中测试。
 
@@ -65,12 +65,12 @@
 
 ### 安装开发版
 
-1. 下载上方的 `dev` 分支 ZIP，或克隆本仓库的 `dev` 分支。
+1. 在上方 Releases 页面下载对应版本的 `MiliraXian_NeiyuLaw-版本号.zip` 完整安装包。开发版标记为预发布版（Pre-release）。不要下载页面自动生成的 `Source code`，也不要将分支 ZIP 直接当作安装包。
 2. 将模组文件夹放入 `RimWorld/Mods/`。文件夹内应直接包含 `About/`、`1.6/`、`Content/` 和 `LoadFolders.xml`，不要多套一层解压目录。
 3. 在游戏模组列表启用前置与「米莉拉角色拓展 v1.1dev」，处理缺失依赖和排序提示后重启游戏。
 4. 进入模组设置，按需选择角色强度；第一次测试建议使用新存档或现有存档副本。
 
-仓库已包含运行用 DLL 和资源包，**只游玩不需要安装 .NET SDK 或 Unity，也不需要自行编译**。不要只复制 DLL 而遗漏定义、贴图、语言文件与资源包。
+Release 安装包包含运行用 DLL、定义、贴图、语言文件与资源包，**只游玩不需要安装 .NET SDK 或 Unity，也不需要自行编译**。源码仓库不再跟踪 DLL／PDB；克隆仓库用于开发时，需要自行编译。更新安装包时先移走旧模组目录，再解压新版本，避免已经改名或移除的 DLL 留在目录中。
 
 ### 加载顺序
 
@@ -208,6 +208,32 @@ Harmony 2.4.2 使用 `packages.config` 与本地 `HintPath` 引用，**仅执行
 主项目输出到 `1.6/Assemblies/MiliraXian_NeiyuLaw.dll`；将 `Release` 改为 `Debug` 可构建调试版本。二者使用同一输出目录，不要在游戏运行时覆盖程序集。
 
 Melee Animation 兼容层是单独的 `MiliraXian_MACompat.csproj`，需要安装对应模组并正确设置 `ZAnimationModDll`；它不属于主项目的编译范围。
+
+### 手动制作与发布安装包
+
+准备好上述本地构建依赖（包括 Melee Animation）及 PowerShell 7，将此次源码和资源更新提交后，在仓库根目录执行：
+
+```powershell
+pwsh -File .\Tools\Release\New-ReleasePackage.ps1
+```
+
+默认打包 `HEAD`，版本名自动包含时间与提交号。也可以明确指定已有提交和版本名：
+
+```powershell
+pwsh -File .\Tools\Release\New-ReleasePackage.ps1 -Revision HEAD -Version dev-20260926-01
+```
+
+脚本从指定提交创建独立源码副本，读取本机依赖路径，分别重新编译主程序集与近战动画兼容层，再打包同一提交的游戏资源。未提交或未跟踪的文件不会进入安装包；不会使用工作目录的旧 DLL，也不会覆盖本地游戏正在使用的程序集。Harmony 优先使用本地对应版本的包，缺失时从 NuGet 下载。
+
+输出位于 Git 忽略的 `.release/`：完整 ZIP 及其 `.sha256` 校验文件。包内的 `build-info.json` 记录源码提交、构建时间和依赖校验值，不包含个人安装路径。缺少依赖、编译失败或 XML 解析失败时停止打包。脚本不自动上传、不创建标签，也不发布到创意工坊。
+
+手动发布步骤：
+
+1. 检查安装包的游戏加载及可选联动，并确认对应提交已推送到远程。
+2. 打开 GitHub Releases，创建新 Release，将标签指向安装包 `build-info.json` 中的准确提交。可先在本地用 `git tag 标签名 提交号` 创建标签，再用 `git push origin 标签名` 推送。
+3. 上传 `.release/` 中对应的 ZIP 和 `.sha256`，填写更新说明；开发版勾选 **Pre-release**，检查后发布。
+
+每次更新手动制作、上传一份安装包；本仓库不设置自动构建或定时发布。GitHub 的 `Source code` 附件只有源码与资源，不能代替完整安装包。外部前置仍由玩家单独安装，其 DLL 不随本模组分发。
 
 ### 资源与验证
 

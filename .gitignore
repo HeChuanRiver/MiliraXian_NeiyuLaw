@@ -4,7 +4,9 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 1.6/Assemblies/*
-!1.6/Assemblies/MiliraXian_NeiyuLaw.dll
+*.[dD][lL][lL]
+*.[pP][dD][bB]
+/.release/
 .agents/
 .cache/
 .vscode/
