@@ -5,11 +5,11 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ProjectGuid>{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}</ProjectGuid>
+    <ProjectGuid>{3A9F5C21-8E4D-4B76-9C13-6F2A0D84E5B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiliraXian.Characters.Neiyu</RootNamespace>
-    <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
+    <RootNamespace>MiliraXian.CharacterLib</RootNamespace>
+    <AssemblyName>MiliraXian_CharacterLib</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
 
@@ -35,13 +35,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Both assemblies ship in 1.6\Assemblies, so the library is not copied as a private dependency. -->
-    <ProjectReference Include="MiliraXian_CharacterLib.csproj">
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <Reference Include="AriandelLibrary">
       <HintPath>$(AriandelLibraryDll)</HintPath>
@@ -57,7 +50,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.dll</HintPath>
@@ -65,14 +57,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(RimWorldManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>$(RimWorldManagedDir)\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
@@ -86,23 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\Common\**\*.cs" />
-    <Compile Include="Source\Mingyuan\**\*.cs" />
-    <Compile Include="Source\Neiyu\**\*.cs" />
-    <Compile Include="Source\QingHe\**\*.cs" />
-    <Compile Include="Source\Zhaoli\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="1.6\**\*.*" Exclude="1.6\Assemblies\**\*.*" />
-    <Content Include="About\**\*.*" />
-    <Content Include="Content\**\*.*" />
-    <Content Include="LoadFolders.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="*.md" />
-    <Folder Include="1.6\Textures\" />
+    <Compile Include="Source\CharacterLib\**\*.cs" />
   </ItemGroup>
 </Project>
