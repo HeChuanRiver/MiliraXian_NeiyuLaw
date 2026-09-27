@@ -37,6 +37,16 @@
         <titleShort>无终旅人</titleShort>
         <description>“[PAWN_nameDef]”一直在一条没有尽头的道路上不停地旅行着，她在旅途中不断收获着各种各样的人生百态。常言道：旅途的终点在何方呢？在[PAWN_nameDef]的描述中，显然是只能不断前行的道路，因为她一直没能获取她想要得到的东西啊~</description>
         <slot>Adulthood</slot>
+        <skillGains>
+            <Construction>2</Construction>
+            <Plants>2</Plants>
+            <Social>2</Social>
+            <Intellectual>3</Intellectual>
+            <Crafting>3</Crafting>
+            <Artistic>3</Artistic>
+            <Shooting>5</Shooting>
+            <Melee>5</Melee>
+        </skillGains>
         <passions>
             <Crafting>2</Crafting>
             <Artistic>2</Artistic>

@@ -25,7 +25,19 @@ namespace MiliraXian.Characters.Neiyu
                 else
                     continue;
 
-                // These base levels already include Neiyu's backstory bonuses.
+                // Add backstory gains to the fixed base without vanilla age/random multipliers.
+                if (pawn.story != null)
+                {
+                    foreach (BackstoryDef backstory in pawn.story.AllBackstories)
+                    {
+                        if (backstory?.skillGains == null)
+                            continue;
+                        foreach (SkillGain gain in backstory.skillGains)
+                            if (gain.skill == skill.def)
+                                level += gain.amount;
+                    }
+                }
+
                 // Keep trait gains; genes and other aptitudes are added by SkillRecord.GetLevel.
                 if (pawn.story?.traits != null)
                 {
