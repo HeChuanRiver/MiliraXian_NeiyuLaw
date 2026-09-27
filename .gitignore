@@ -1,4 +1,4 @@
-﻿bin/
+bin/
 obj/
 /packages/
 riderModule.iml
@@ -16,12 +16,12 @@ riderModule.iml
 .dotnet/
 .modpack/
 .tools/
+Tools
+Tests
 Documents
-/Docs/明渊完整设计与机制数值.md
+Docs
 References.md
 Directory.Build.local.props
 AGENTS.md
-/Tools/Release/New-ReleasePackage.ps1
-/Tools/Unity/MingyuanWingAnimationAutomation.cs
-/Tools/Unity/NeiyuEarAutomation.cs
-/Tools/UnityVfx/CharacterVfxAutomation.cs
+CLAUDE.md
+QWEN.md

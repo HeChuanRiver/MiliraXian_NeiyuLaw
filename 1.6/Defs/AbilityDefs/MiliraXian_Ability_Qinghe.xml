@@ -186,9 +186,10 @@
         <ascentTicks>52</ascentTicks>
         <hoverTicks>22</hoverTicks>
         <descentTicks>14</descentTicks>
-        <ascentDecelerationPower>2.2</ascentDecelerationPower>
-        <descentAccelerationPower>2.4</descentAccelerationPower>
-        <secondStageTrackingRange>4</secondStageTrackingRange>
+        <trackingSpeedCellsPerSecond>6</trackingSpeedCellsPerSecond>
+        <trackingRampFraction>0.5</trackingRampFraction>
+        <trackingDecayStartFraction>0.7</trackingDecayStartFraction>
+        <descentStraightnessPower>1.15</descentStraightnessPower>
         <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
         <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
         <secondImpactRadius>4</secondImpactRadius>

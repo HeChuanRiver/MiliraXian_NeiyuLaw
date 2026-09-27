@@ -239,14 +239,9 @@ pwsh -File .\Tools\Release\New-ReleasePackage.ps1 -Revision HEAD -Version dev-20
 
 普通 C# 构建不会重新生成 Unity AssetBundle。相关编辑器脚本位于 `Tools/Unity/` 和 `Tools/UnityVfx/`，其中仍有本机构建路径；复用前需要调整路径并准备相应的 Unity 工程与输入资源。
 
-现有验证入口：
+本项目**不包含也不接受自动化测试**。请勿添加单元测试、回归检查、断言程序、PowerShell 验证脚本或任何临时测试脚本，也不要引入测试框架。验证方式限于编译对应工程并修正编译错误，其余行为由作者在游戏内实机确认。
 
-| 文件 | 检查范围 |
-| --- | --- |
-| [Test-CharacterPower.ps1](Tools/Validation/Test-CharacterPower.ps1) | 解析 XML，检查昭离／明渊档位配置的 Def 引用、反射字段、技能封禁入口与三语言设置键覆盖。 |
-| [CharacterPowerSnapshotTests.cs](Tools/Validation/CharacterPowerSnapshotTests.cs) | 对实际快照引擎执行 100 轮切档，检查数值与引用恢复、角色配置独立性、类型转换和非法值回退。 |
-
-这些是开发辅助检查，不是完整的游戏自动化测试。PowerShell 检查需要提供 `Mono.Cecil.dll` 路径，现有测试还含安装目录假设；换机器或将仓库放在游戏目录之外时，请先核对脚本中的依赖路径。编译和静态检查通过之后，仍需在游戏中测试加载、读档、战斗、切档和角色返回流程。
+编译通过之后，仍需在游戏中测试加载、读档、战斗、切档和角色返回流程。
 
 ## 贡献与致谢
 

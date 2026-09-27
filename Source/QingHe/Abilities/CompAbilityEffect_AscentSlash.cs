@@ -18,9 +18,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public int hoverTicks = 12;
         public int descentTicks = 12;
         public int takeoffDelayTicks = 8;
-        public float ascentDecelerationPower = 2.2f;
-        public float descentAccelerationPower = 2.4f;
-        public float secondStageTrackingRange = 4f;
+        public float trackingSpeedCellsPerSecond = 6f;
+        public float trackingRampFraction = 0.5f;
+        public float trackingDecayStartFraction = 0.7f;
+        public float descentStraightnessPower = 1.15f;
         public float secondStageMaxForwardOffset = 12f;
         public float secondStageMaxAltitudeLayers = 48f;
         public float secondImpactRadius = 4f;
