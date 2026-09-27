@@ -19,7 +19,9 @@ riderModule.iml
 Tools
 Tests
 Documents
-/Docs/明渊完整设计与机制数值.md
+Docs
 References.md
 Directory.Build.local.props
 AGENTS.md
+CLAUDE.md
+QWEN.md
