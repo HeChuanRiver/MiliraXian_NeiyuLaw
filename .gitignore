@@ -21,3 +21,7 @@ Documents
 References.md
 Directory.Build.local.props
 AGENTS.md
+/Tools/Release/New-ReleasePackage.ps1
+/Tools/Unity/MingyuanWingAnimationAutomation.cs
+/Tools/Unity/NeiyuEarAutomation.cs
+/Tools/UnityVfx/CharacterVfxAutomation.cs
