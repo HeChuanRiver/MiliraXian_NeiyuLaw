@@ -4,6 +4,7 @@
     <v1.6>
         <li>1.6</li>
         <li>Content</li>
+        <li IfModActive="Ariandel.AriandelLibrary">1.6/Mods/Ariandel.AriandelLibrary</li>
         <!-- 面部动画 -->
         <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
 

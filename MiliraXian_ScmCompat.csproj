@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>MiliraXian_ScmCompat</AssemblyName>
+    <OutputPath>1.6\Mods\Ariandel.AriandelLibrary\Assemblies</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="MiliraXian_CharacterLib.csproj" Private="false" />
+    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="AriandelLibrary" HintPath="$(AriandelLibraryDll)" Private="false" />
+    <Compile Include="Source\Compat\Scm\**\*.cs" />
+  </ItemGroup>
+</Project>

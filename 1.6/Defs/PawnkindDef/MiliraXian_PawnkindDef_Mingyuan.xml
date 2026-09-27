@@ -137,6 +137,9 @@
                 <npcTag>Mingyuan</npcTag>
             </li>
 
+            <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
+                <characterId>Mingyuan</characterId>
+            </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">
                 <uniqueID>Mingyuan</uniqueID>
                 <tabDef>MI_Milira_Tab</tabDef>

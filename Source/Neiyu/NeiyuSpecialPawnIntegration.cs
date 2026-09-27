@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using AriandelLibrary;
+using MiliraXian.CharacterLib;
 using HarmonyLib;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.QingHe;
@@ -12,9 +12,6 @@ namespace MiliraXian.Characters.Neiyu
     internal static class NeiyuSpecialPawnIntegration
     {
         public const int ValidationIntervalTicks = 600;
-
-        private const string AriandelPackageId = "Ariandel.AriandelLibrary";
-        private static readonly HashSet<int> WarnedDuplicatePawnIds = new();
 
         public static void TryRegister(Pawn pawn)
         {
@@ -38,36 +35,8 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            if (!ShouldRunIntegration())
-            {
-                return;
-            }
-
-            AriandelLibrary_GameComponent library = AriandelLibrary_GameComponent.Instance;
-            SpecialPawnManager manager = library?.SpecialPawns;
-            if (manager == null)
-            {
-                return;
-            }
-
-            string staticID = SpecialPawnRegistry.GetStaticID(pawn.kindDef);
-            if (string.IsNullOrEmpty(staticID))
-            {
-                return;
-            }
-
-            string realID = manager.GetRealID(staticID);
-            if (string.IsNullOrEmpty(realID))
-            {
-                manager.RegisterSpecialPawn(staticID, pawn);
-                return;
-            }
-
-            if (realID != pawn.ThingID && WarnedDuplicatePawnIds.Add(pawn.thingIDNumber))
-            {
-                Log.Warning("[MiliraXian.Characters.Neiyu] Special pawn staticID already mapped to another pawn. staticID="
-                            + staticID + ", existing=" + realID + ", current=" + pawn.ThingID);
-            }
+            CharacterServices.Registry?.Register(pawn,
+                NeiyuLawMod.Instance?.Settings?.EnableAriandelSpecialPawnIntegration ?? true);
         }
 
         public static void AuditAllPlayerSpecialPawns(System.Action<Pawn> observer = null)
@@ -123,23 +92,6 @@ namespace MiliraXian.Characters.Neiyu
 
         internal static void ClearRuntimeState()
         {
-            WarnedDuplicatePawnIds.Clear();
-        }
-
-        private static bool ShouldRunIntegration()
-        {
-            if (!ModsConfig.IsActive(AriandelPackageId))
-            {
-                return false;
-            }
-
-            if (NeiyuLawMod.Instance != null && NeiyuLawMod.Instance.Settings != null &&
-                !NeiyuLawMod.Instance.Settings.EnableAriandelSpecialPawnIntegration)
-            {
-                return false;
-            }
-
-            return AriandelLibrary_GameComponent.Instance?.SpecialPawns != null;
         }
     }
 

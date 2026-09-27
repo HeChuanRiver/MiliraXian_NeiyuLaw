@@ -1,4 +1,8 @@
 <Project>
+  <PropertyGroup>
+    <MxIntermediateRoot Condition="'$(MxIntermediateRoot)' == ''">$(MSBuildThisFileDirectory)obj/</MxIntermediateRoot>
+    <BaseIntermediateOutputPath>$(MxIntermediateRoot)$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+  </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)Directory.Build.local.props"
           Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.local.props')" />
 

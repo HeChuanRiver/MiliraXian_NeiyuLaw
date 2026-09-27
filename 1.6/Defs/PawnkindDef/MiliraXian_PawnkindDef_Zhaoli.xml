@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
     <!-- 霓羽 -->
@@ -193,6 +193,9 @@
 
             <!-- "SpecialPawnExtension" is used to adding this pawn into special character manager(SCM). 
             “SpecialPawnExtension”用于把这个角色加入特殊角色管理器。-->
+            <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
+                <characterId>Zhaoli</characterId>
+            </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">
                 <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
