@@ -22,7 +22,6 @@ namespace MiliraXian.Characters.Mingyuan
         {
             ArrowDamage = DefDatabase<DamageDef>.GetNamed("Arrow");
             var p = Profile;
-            p.LibraryPassives("MiliraXian_Mingyuan");
             p.Weapon("MX_Mingyuan_CinderSword", 16f, 2.5f);
             var sword = Thing("MX_Mingyuan_CinderSword");
             p.ScaleStat(sword, "MeleeDodgeChance", ConservativePowerTuning.Bonus, 0f, true);

@@ -214,8 +214,6 @@ namespace MiliraXian.Characters.Zhaoli
         {
             Game game = Current.Game;
             if (game == null) yield break;
-            if (CharacterLib.CharacterServices.Storage != null)
-                foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns) yield return pawn;
             // PawnsFinder's Alive/Dead aggregators inspect every temporary pawn's health
             // before we can filter it. Other mods may still be constructing those pawns.
             // Reuse the native registries and holder traversal without that early read.

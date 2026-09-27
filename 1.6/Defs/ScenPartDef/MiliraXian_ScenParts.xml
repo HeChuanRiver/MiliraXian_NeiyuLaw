@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- 按角色指定开局携带品。
+         原版的携带品完全由 StartingPawnUtility.GeneratePossessions 逐小人随机决定，剧本层面只有
+         ScenPart_NoPossessions 一个开关，且它对全部开局小人一刀切。本 ScenPart 把粒度收到具体角色：
+         列出的角色获得声明的物品，其余小人照原版处理。
+         replaceGenerated 为 true 时丢弃原版为该角色掷出的随机结果（背景故事 25%、特质 25%、
+         全局 possessionCount 物品 6% 三段），只保留本表声明的物品。
+
+         selectionWeight 为 0：本 ScenPart 只应由模组自带剧本显式声明，不参与随机剧本生成。 -->
+    <ScenPartDef>
+        <defName>MiliraXian_Possessions_Character</defName>
+        <label>角色开局携带品</label>
+        <scenPartClass>MiliraXian.CharacterLib.ScenPart_Possessions_CL_Character</scenPartClass>
+        <category>PlayerPawnFilter</category>
+        <selectionWeight>0</selectionWeight>
+        <summaryPriority>380</summaryPriority>
+    </ScenPartDef>
+
+</Defs>

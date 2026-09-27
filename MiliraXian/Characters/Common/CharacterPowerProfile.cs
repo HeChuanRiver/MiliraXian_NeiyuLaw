@@ -116,15 +116,6 @@ namespace MiliraXian.Characters.Common
                 key.Translate().ToString(), inactiveKey.Translate().ToString());
         }
 
-        public void LibraryPassives(string kindName)
-        {
-            PawnKindDef kind = DefDatabase<PawnKindDef>.GetNamed(kindName);
-            var rules = kind.GetModExtension<CharacterProtectionExtension>();
-            if (rules == null) return;
-            Value(() => rules.blockMentalBreak, value => rules.blockMentalBreak = value, rules.blockMentalBreak, false);
-            Value(() => rules.recoverOnDeath, value => rules.recoverOnDeath = value, rules.recoverOnDeath, false);
-        }
-
         public static ThingDef Thing(string name) => DefDatabase<ThingDef>.GetNamed(name);
         public static HediffDef Hediff(string name) => DefDatabase<HediffDef>.GetNamed(name);
         public static AbilityDef AbilityDef(string name) => DefDatabase<AbilityDef>.GetNamed(name);

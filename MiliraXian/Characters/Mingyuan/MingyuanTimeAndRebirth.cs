@@ -109,6 +109,24 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
+    // The protective flame takes over before death resolves: the pawn is healed, despawned and
+    // kept in the world, so this must prevent Kill rather than react to it.
+    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
+    internal static class Patch_Pawn_Kill_MingyuanRebirth
+    {
+        private static readonly HashSet<Pawn> intercepting = new();
+
+        [HarmonyPriority(Priority.High)]
+        private static bool Prefix(Pawn __instance)
+        {
+            if (intercepting.Contains(__instance)) return false;
+            intercepting.Add(__instance);
+            // Restoring health can raise a second fatal condition and re-enter Kill.
+            try { return !MingyuanRebirthUtility.TryInterceptFatalDamage(__instance); }
+            finally { intercepting.Remove(__instance); }
+        }
+    }
+
     public static class MingyuanRebirthUtility
     {
         public const int EternalBurningTicks = 1800;
@@ -348,7 +366,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick, marker));
-            CharacterServices.Scm?.SetUnavailable(pawn, true, "角色正在重生，暂时无法召回。");
+            CharacterSCM.SetUnavailable(pawn, true, "角色正在重生，暂时无法召回。");
             (marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(rebirthTick);
             nextProcessTick = Mathf.Min(nextProcessTick, rebirthTick);
         }
@@ -392,7 +410,7 @@ namespace MiliraXian.Characters.Mingyuan
                 MingyuanPendingRebirth pending = pendingRebirths[i];
                 if (pending?.pawn == null || pending.pawn.Discarded || (pending.pawn.Destroyed && !pending.pawn.Dead))
                 {
-                    CharacterServices.Scm?.SetUnavailable(pending?.pawn, false, null);
+                    CharacterSCM.SetUnavailable(pending?.pawn, false, null);
                     DestroyMarker(pending?.marker);
                     pendingRebirths.RemoveAt(i);
                     continue;
@@ -417,7 +435,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
                 if (MingyuanRebirthUtility.TryFinishRebirth(pending.pawn, pending.map, pending.cell))
                 {
-                    CharacterServices.Scm?.SetUnavailable(pending.pawn, false, null);
+                    CharacterSCM.SetUnavailable(pending.pawn, false, null);
                     DestroyMarker(pending.marker);
                     pendingRebirths.RemoveAt(i);
                 }
@@ -437,7 +455,8 @@ namespace MiliraXian.Characters.Mingyuan
             for (int i = 0; i < pendingRebirths.Count; i++)
             {
                 MingyuanPendingRebirth pending = pendingRebirths[i];
-                if (pending?.pawn != null) CharacterServices.Scm?.SetUnavailable(pending.pawn, true, "角色正在重生，暂时无法召回。");
+                // The lock lives in the manager, not in this save, so it must be reapplied.
+                if (pending?.pawn != null) CharacterSCM.SetUnavailable(pending.pawn, true, "角色正在重生，暂时无法召回。");
                 if (pending?.pawn == null || pending.map == null || !pending.cell.IsValid)
                 {
                     continue;

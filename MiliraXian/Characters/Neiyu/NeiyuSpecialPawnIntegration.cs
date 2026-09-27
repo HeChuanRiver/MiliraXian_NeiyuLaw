@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            ZhaoliScmActivity.Sync(pawn);
+            ZhaoliSCMActivity.Sync(pawn);
 
             if (!SpecialPawnCoreStateRepair.EnsureValidState(pawn, pawn.Spawned, logRepair: true) || pawn.Dead)
             {
@@ -38,20 +38,19 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            CharacterProtection.RestoreRequiredTraits(pawn);
             if (ZhaoliKarmaUtility.IsZhaoli(pawn) && (ZhaoliScenarioUtility.IsHideoutState(pawn) || ZhaoliScenarioUtility.IsRaidState(pawn)))
             {
                 return;
             }
 
-            CharacterServices.Registry?.Register(pawn,
-                NeiyuLawMod.Instance?.Settings?.EnableAriandelSpecialPawnIntegration ?? true);
+            if (NeiyuLawMod.Instance?.Settings?.EnableAriandelSpecialPawnIntegration ?? true)
+            {
+                CharacterSCM.TryRegister(pawn);
+            }
         }
 
         public static void AuditAllPlayerSpecialPawns(System.Action<Pawn> observer = null)
         {
-            if (CharacterServices.Storage != null)
-                foreach (Pawn pawn in CharacterServices.Storage.StoredPawns) AuditPawn(pawn, observer);
             List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction;
             for (int index = 0; index < pawns.Count; index++)
             {

@@ -26,7 +26,6 @@ namespace MiliraXian.Characters.Zhaoli
         internal static void Initialize()
         {
             var p = Profile;
-            p.LibraryPassives("MiliraXian_Zhaoli");
             p.Weapon("MX_Zhaoli_DuanzhanBlade", 16f, 2.5f);
             p.Armor("MX_ZhaoliNormal");
             p.Armor("MX_ZhaoliHood");

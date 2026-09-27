@@ -974,9 +974,6 @@ namespace MiliraXian.Characters.Neiyu
 
         public static bool NeiyuExistsAnywhere()
         {
-            if (CharacterLib.CharacterServices.Storage != null)
-                foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns)
-                    if (pawn.kindDef?.defName == NeiyuPawnKindDefName) return true;
             PawnKindDef neiyuKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(NeiyuPawnKindDefName);
             if (neiyuKind == null)
             {
@@ -1038,7 +1035,7 @@ namespace MiliraXian.Characters.Neiyu
                 colonistRelationChanceFactor: 20f,
                 forceAddFreeWarmLayerIfNeeded: false,
                 allowGay: true,
-                allowPregnant: true,
+                allowPregnant: false,
                 allowFood: true,
                 allowAddictions: true,
                 inhabitant: false,

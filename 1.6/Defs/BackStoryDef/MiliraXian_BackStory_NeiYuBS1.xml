@@ -51,6 +51,25 @@
             <Social>14</Social>
             <Intellectual>14</Intellectual>
         </skillGains>
+
+        <!-- 激情。原版由 Rand.Gaussian 随机分配，PawnKindDef 的 skills 只能定等级；
+             HAR 在 GenerateSkills 的 postfix 里读本字段覆盖，amount 即 Passion 枚举值
+             （0=无、1=小、2=大）。必须列全 12 项：未列出的技能仍保留原版随机结果。 -->
+        <passions>
+            <li><skill>Cooking</skill><amount>2</amount></li>
+            <li><skill>Shooting</skill><amount>2</amount></li>
+            <li><skill>Melee</skill><amount>2</amount></li>
+            <li><skill>Intellectual</skill><amount>1</amount></li>
+            <li><skill>Artistic</skill><amount>1</amount></li>
+            <li><skill>Construction</skill><amount>0</amount></li>
+            <li><skill>Mining</skill><amount>0</amount></li>
+            <li><skill>Plants</skill><amount>0</amount></li>
+            <li><skill>Animals</skill><amount>0</amount></li>
+            <li><skill>Crafting</skill><amount>0</amount></li>
+            <li><skill>Medicine</skill><amount>0</amount></li>
+            <li><skill>Social</skill><amount>0</amount></li>
+        </passions>
+
         <spawnCategories>
             <li>MiliraXian_BackStoryAdult_Neiyu_Tag</li>
         </spawnCategories>

@@ -17,11 +17,13 @@
         <isFighter>true</isFighter>
         <factionLeader>false</factionLeader>
 
+        <!-- 设为 0 以关闭随机装备补充，详见霓羽 PawnkindDef 的注释。 -->
         <apparelMoney>
-            <min>99999</min>
-            <max>99999</max>
+            <min>0</min>
+            <max>0</max>
         </apparelMoney>
 
+        <!-- 仅作用于随机补充，对 apparelRequired 无影响。 -->
         <apparelTags Inherit="False">
             <li>MX_MingyuanArmor</li>
             <li>MX_MingyuanCrown</li>
@@ -40,7 +42,6 @@
         <apparelAllowHeadgearChance>1.0</apparelAllowHeadgearChance>
 
         <weaponTags Inherit="False">
-            <li>MX_Mingyuan_CinderSword</li>
             <li>MX_Mingyuan_RainbowBow</li>
         </weaponTags>
 
@@ -48,6 +49,11 @@
             <min>99999</min>
             <max>99999</max>
         </weaponMoney>
+
+        <inventoryOptions>
+            <thingDef>MX_Mingyuan_CinderSword</thingDef>
+            <countRange>1</countRange>
+        </inventoryOptions>
 
         <gearHealthRange Inherit="False">
             <min>1</min>
@@ -83,7 +89,26 @@
             <PsychicSensitivity>-2</PsychicSensitivity>
         </disallowedTraitsWithDegree>
 
+        <forcedHair>Bald</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
+
+        <!-- 技能等级。FinalLevelOfSkill 的第 ⑤ 步会把算出的值夹进本区间，写成单点即完全确定。
+             必须列全 12 项，缺项仍走背景故事与年龄的随机路径。
+             注意：背景故事的 skillGains 在第 ⑤ 步之后被覆盖，仅作叙事装饰，不生效。 -->
+        <skills>
+            <li><skill>Shooting</skill><range>20~20</range></li>
+            <li><skill>Melee</skill><range>18~18</range></li>
+            <li><skill>Construction</skill><range>8~8</range></li>
+            <li><skill>Mining</skill><range>6~6</range></li>
+            <li><skill>Cooking</skill><range>6~6</range></li>
+            <li><skill>Plants</skill><range>6~6</range></li>
+            <li><skill>Animals</skill><range>6~6</range></li>
+            <li><skill>Crafting</skill><range>10~10</range></li>
+            <li><skill>Artistic</skill><range>8~8</range></li>
+            <li><skill>Medicine</skill><range>8~8</range></li>
+            <li><skill>Social</skill><range>6~6</range></li>
+            <li><skill>Intellectual</skill><range>14~14</range></li>
+        </skills>
 
         <abilities>
             <li>MX_Mingyuan_AscendantFlameDash</li>
@@ -99,38 +124,55 @@
         <minGenerationAge>180</minGenerationAge>
         <maxGenerationAge>180</maxGenerationAge>
         <chronologicalAgeRange>180~180</chronologicalAgeRange>
-        <forcedTraits>
-            <li>MX_Mingyuan_Trait</li>
-            <Beauty>2</Beauty>
-        </forcedTraits>
+
+        <!-- 特质由 CharacterIdentityExtension 的 traits 全量声明，不在此处重复维护。 -->
+
+        <!-- C# 字段默认值为 0.03，米莉拉继承链上无人覆盖，故必须显式归零，
+             否则每次生成约 3% 概率带孕。 -->
+        <humanPregnancyChance>0</humanPregnancyChance>
+        <!-- 默认 true，且老年伤病随年龄加重；本角色 180 岁，不关闭必然一身伤残。 -->
+        <allowOldAgeInjuries>false</allowOldAgeInjuries>
         <startingHediffs><li><def>MX_Mingyuan_BurningBody</def><severity>1</severity></li><li><def>MX_Mingyuan_RebirthFlame</def><severity>1</severity></li><li><def>MX_Mingyuan_ProtectiveFlameShield</def><severity>1</severity></li></startingHediffs>
 
         <modExtensions>
-            <li Class="MiliraXian.CharacterLib.CharacterAppearanceExtension">
+            <li Class="MiliraXian.CharacterLib.CharacterIdentityExtension">
                 <firstNameKey>MX_Name_Mingyuan_First</firstNameKey>
                 <lastNameKey>MX_Name_Mingyuan_Last</lastNameKey>
                 <nickNameKey>MX_Name_Mingyuan_Nick</nickNameKey>
                 <headType>MiliraMingyuanHead</headType>
+                <bodyType>Female</bodyType>
+                <childhoodBackstory>MiliraXian_BackStoryChild_Mingyuan_BS1</childhoodBackstory>
+                <adulthoodBackstory>MiliraXian_BackStoryAdult_Mingyuan_BS1</adulthoodBackstory>
+                <biologicalAgeYears>180</biologicalAgeYears>
+                <chronologicalAgeYears>180</chronologicalAgeYears>
+
+                <!-- 完整特质表。生成期原版会从七处追加特质，其中性取向一项无 XML 开关，
+                     故按本表全量重建：未列出的一律移除。 -->
+                <traits>
+                    <li><def>MX_Mingyuan_Trait</def></li>
+                    <li><def>Beauty</def><degree>2</degree></li>
+                </traits>
+
+                <!-- 生成期随机施加的污染项。怀孕与绝育源自 PawnKindDef 字段默认值，
+                     米莉拉继承链上无人覆盖；疤痕与失明来自意识形态。 -->
+                <forbiddenHediffs>
+                    <li>PregnantHuman</li>
+                    <li>Sterilized</li>
+                    <li>ImplantedIUD</li>
+                    <li>Scarification</li>
+                    <li>Blindness</li>
+                </forbiddenHediffs>
             </li>
 
+            <!-- 角色身份 ID。特殊角色管理器（SCM）的显示数据挂在条件目录的载体 kindDef 上
+                 （1.6/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml），二者靠此 ID 接合。 -->
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Mingyuan</characterId>
             </li>
-            <li Class="AriandelLibrary.SpecialPawnExtension" MayRequire="Ariandel.AriandelLibrary">
-                <uniqueID>Mingyuan</uniqueID>
-                <tabDef>MI_Milira_Tab</tabDef>
-                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
-                <labelKey>SpecialPawnMingyuan.label</labelKey>
-                <descKey>SpecialPawnMingyuan.desc</descKey>
-                <order>15</order>
-            </li>
 
+            <!-- 本角色怀孕时生下的是普通米莉拉，不会再生出一个明渊。 -->
             <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
-                <recoverOnDeath>true</recoverOnDeath>
                 <childKind>Milira_Colonist</childKind>
-                <requiredTraits>
-                    <li>MX_Mingyuan_Trait</li>
-                </requiredTraits>
             </li>
         </modExtensions>
 

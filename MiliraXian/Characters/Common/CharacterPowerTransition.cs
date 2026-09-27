@@ -42,9 +42,6 @@ namespace MiliraXian.Characters.Common
             if (n || z || m)
             {
                 var seen = new HashSet<Pawn>();
-                if (CharacterLib.CharacterServices.Storage != null)
-                    foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns)
-                        if (seen.Add(pawn)) Refresh(pawn, n, z, m, nChanged, zChanged, mChanged);
                 foreach (Map map in Find.Maps)
                     foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
                         if (seen.Add(pawn)) Refresh(pawn, n, z, m, nChanged, zChanged, mChanged);

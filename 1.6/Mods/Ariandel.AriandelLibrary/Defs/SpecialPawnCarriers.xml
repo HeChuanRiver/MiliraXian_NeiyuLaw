@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+    <!-- 特殊角色管理器（SCM）的显示载体。
+         SCM 的分页、图标、名称与描述来自 XML，但承载这些数据的 kindDef 不必是真实角色本身
+         （AriandelLibraryAdapter 为别家 Mod 的角色配空壳载体，即为此范式）。把声明移到载体上，
+         真实角色的 PawnkindDef 便无需引用 AL，对 AL 的生成 patch 完全透明；二者靠 uniqueID 接合。
+         uniqueID 与角色原有取值一致，老存档的绑定继续有效。
+
+         race 必须是 Milira：SCM 界面会读 entry.pawnKind.race.LabelCap 显示种族名，
+         且「生成并注册」按钮直接用 entry.pawnKind 生成 pawn，假种族会显示错误并产出畸形 pawn。
+         该按钮的开关是界面内的 DrawDeveloperToggle，不是 Prefs.DevMode，玩家自己就能打开，
+         因此每个载体都挂 CharacterCarrierExtension 把生成请求改写回它所代表的角色。
+
+         showInDebugSpawner 让载体不出现在开发者模式的 Spawn pawn 列表里（原版两个 spawn 菜单
+         都按此字段过滤，且无任何游戏逻辑读它）。这只是移走入口，不是防线：
+         SCM 的生成按钮与其他 Mod 扫 PawnKindDef 的行为仍要靠上面那个扩展兜住。 -->
+
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Carrier_Neiyu</defName>
+        <label>霓羽·安吉莉特</label>
+        <combatPower>0</combatPower>
+        <showInDebugSpawner>false</showInDebugSpawner>
+        <modExtensions>
+            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+                <representedKind>MiliraXian_Neiyu</representedKind>
+            </li>
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <uniqueID>Neiyu</uniqueID>
+                <tabDef>MI_Milira_Tab</tabDef>
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+                <labelKey>SpecialPawnNeiyu.label</labelKey>
+                <descKey>SpecialPawnNeiyu.desc</descKey>
+                <order>13</order>
+            </li>
+        </modExtensions>
+    </PawnKindDef>
+
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Carrier_Zhaoli</defName>
+        <label>昭离·西娅拉</label>
+        <combatPower>0</combatPower>
+        <showInDebugSpawner>false</showInDebugSpawner>
+        <modExtensions>
+            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+                <representedKind>MiliraXian_Zhaoli</representedKind>
+            </li>
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <uniqueID>Zhaoli</uniqueID>
+                <tabDef>MI_Milira_Tab</tabDef>
+                <iconPathRecruited>MiliraXianZhaoli/Icon/ZhaoliAG</iconPathRecruited>
+                <labelKey>SpecialPawnZhaoli.label</labelKey>
+                <descKey>SpecialPawnZhaoli.desc</descKey>
+                <order>14</order>
+            </li>
+        </modExtensions>
+    </PawnKindDef>
+
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Carrier_Mingyuan</defName>
+        <label>明渊</label>
+        <combatPower>0</combatPower>
+        <showInDebugSpawner>false</showInDebugSpawner>
+        <modExtensions>
+            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+                <representedKind>MiliraXian_Mingyuan</representedKind>
+            </li>
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <uniqueID>Mingyuan</uniqueID>
+                <tabDef>MI_Milira_Tab</tabDef>
+                <!-- TODO: 替换为明渊的头像。 -->
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+                <labelKey>SpecialPawnMingyuan.label</labelKey>
+                <descKey>SpecialPawnMingyuan.desc</descKey>
+                <order>15</order>
+            </li>
+        </modExtensions>
+    </PawnKindDef>
+
+    <PawnKindDef ParentName="Milira_PawnBase">
+        <defName>MiliraXian_Carrier_Qinghe</defName>
+        <label>仙域米莉拉</label>
+        <combatPower>0</combatPower>
+        <showInDebugSpawner>false</showInDebugSpawner>
+        <modExtensions>
+            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+                <representedKind>MiliraXian_Qinghe</representedKind>
+            </li>
+            <li Class="AriandelLibrary.SpecialPawnExtension">
+                <uniqueID>Qinghe</uniqueID>
+                <tabDef>MI_Milira_Tab</tabDef>
+                <!-- TODO: 替换为清荷的头像。 -->
+                <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
+                <labelKey>SpecialPawnQinghe.label</labelKey>
+                <descKey>SpecialPawnQinghe.desc</descKey>
+                <order>16</order>
+            </li>
+        </modExtensions>
+    </PawnKindDef>
+
+</Defs>

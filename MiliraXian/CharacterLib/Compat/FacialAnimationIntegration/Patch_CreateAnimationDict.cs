@@ -48,7 +48,6 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
         [HarmonyPostfix]
         public static void Postfix(Pawn pawn, int initialTick, ref Dictionary<string, List<FaceAnimation>> animationDict)
         {
-            CharacterFaceBinding.Apply(pawn);
             if (pawn == null || animationDict == null)
             {
                 return;
@@ -79,19 +78,6 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
             int initialTick,
             Dictionary<string, List<FaceAnimation>> animationDict)
         {
-            FaceAnimationDef replacement = null;
-            if (!overrideDef.with.NullOrEmpty())
-            {
-                replacement = DefDatabase<FaceAnimationDef>.GetNamedSilentFail(overrideDef.with);
-                if (replacement == null)
-                {
-                    Log.ErrorOnce(
-                        $"[MiliraXian] FaceAnimationOverrideDef {overrideDef.defName} references missing animation '{overrideDef.with}'.",
-                        overrideDef.defName.GetHashCode());
-                    return false;
-                }
-            }
-
             bool changed = false;
             foreach (string jobKey in ResolveJobKeys(overrideDef, animationDict))
             {
@@ -100,14 +86,14 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
                     continue;
                 }
 
-                if (!overrideDef.replace.NullOrEmpty())
+                if (overrideDef.replace != null)
                 {
-                    changed |= bucket.RemoveAll(x => x.animationDef?.defName == overrideDef.replace) > 0;
+                    changed |= bucket.RemoveAll(x => x.animationDef == overrideDef.replace) > 0;
                 }
 
-                if (replacement != null && !bucket.Exists(x => x.animationDef == replacement))
+                if (overrideDef.with != null && !bucket.Exists(x => x.animationDef == overrideDef.with))
                 {
-                    bucket.Add(new FaceAnimation(replacement, initialTick));
+                    bucket.Add(new FaceAnimation(overrideDef.with, initialTick));
                     changed = true;
                 }
             }

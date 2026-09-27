@@ -14,9 +14,10 @@
       </li>
     </degreeDatas>
     <modExtensions>
-      <li Class="MiliraXian.CharacterLib.CharacterTraitExtension">
-        <ignoreNegativeAptitude>Cooking</ignoreNegativeAptitude>
-        <lockedSkill>Cooking</lockedSkill>
+      <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
+        <ignoreNegativeAptitudes>
+          <li>Cooking</li>
+        </ignoreNegativeAptitudes>
       </li>
     </modExtensions>
   </TraitDef>
@@ -55,9 +56,11 @@
       </li>
     </degreeDatas>
     <modExtensions>
-      <li Class="MiliraXian.CharacterLib.CharacterTraitExtension">
-        <ignoreNegativeAptitude>Cooking</ignoreNegativeAptitude>
-        <lockedSkill>Artistic</lockedSkill>
+      <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
+        <ignoreNegativeAptitudes>
+          <li>Cooking</li>
+          <li>Artistic</li>
+        </ignoreNegativeAptitudes>
       </li>
     </modExtensions>
   </TraitDef>

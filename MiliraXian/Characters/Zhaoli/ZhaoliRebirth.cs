@@ -416,7 +416,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void LoadedGame()
         {
-            foreach (var pending in pendingRebirths) ZhaoliScmActivity.Sync(pending?.pawn);
+            // The lock lives in the manager, not in this save, so it must be reapplied.
+            foreach (var pending in pendingRebirths) ZhaoliSCMActivity.Sync(pending?.pawn);
         }
 
         public bool IsPending(Pawn pawn)
@@ -456,7 +457,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             pendingRebirths.Add(new ZhaoliPendingRebirth(pawn, rebirthTick));
-            ZhaoliScmActivity.Sync(pawn);
+            ZhaoliSCMActivity.Sync(pawn);
             nextRebirthTick = Mathf.Min(nextRebirthTick, rebirthTick);
         }
 
@@ -479,14 +480,14 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Discarded)
                 {
                     pendingRebirths.RemoveAt(i);
-                    ZhaoliScmActivity.Sync(pendingRebirth?.pawn);
+                    ZhaoliSCMActivity.Sync(pendingRebirth?.pawn);
                     continue;
                 }
 
                 if (!pendingRebirth.pawn.Dead)
                 {
                     pendingRebirths.RemoveAt(i);
-                    ZhaoliScmActivity.Sync(pendingRebirth.pawn);
+                    ZhaoliSCMActivity.Sync(pendingRebirth.pawn);
                     continue;
                 }
 
@@ -534,7 +535,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 pendingRebirths.RemoveAt(i);
-                ZhaoliScmActivity.Sync(pendingRebirth.pawn);
+                ZhaoliSCMActivity.Sync(pendingRebirth.pawn);
             }
 
             RecalculateNextRebirthTick();
