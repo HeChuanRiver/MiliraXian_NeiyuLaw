@@ -169,7 +169,7 @@
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Zhaoli</characterId>
             </li>
-            <li Class="AriandelLibrary.SpecialPawnExtension">
+            <li Class="AriandelLibrary.SpecialPawnExtension" MayRequire="Ariandel.AriandelLibrary">
                 <!-- StaticID for this pawn. Never let two pawn share the same StaticID, it must be unique for every special pawn! 
                 这是这个角色的StaticID，永远不要让两个角色的StaticID重复！ -->
                 <uniqueID>Zhaoli</uniqueID>
@@ -192,78 +192,12 @@
                 <order>14</order>
             </li>
 
-            <!-- The classes upon must be included!!! ↑↑↑ -->
-            <!-- 以上class必须全部填写，绝对不能漏任何一个 ↑↑↑ -->
-            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
-
-
-            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
-            <!-- These classes are tools for special characters. You can add them selectively based on your needs—and it’s completely fine if you don’t add any of them. ↓↓↓ -->
-            <!-- 以下的class是一些关于特殊角色的工具，你可以根据你的需求选择性的添加。这些class你就算一个都不添加也完全没问题。 ↓↓↓ -->
-
-            <!-- Disable all kinds of mental break, including mental break created by Mods.
-             禁用一切精神崩溃，包括Mod中新创作的精神崩溃。 -->
-            <li Class="AriandelLibrary.AL_RefuseMentalBreak_Extension">
-                <blockMentalBreak>true</blockMentalBreak>
-            </li>
-
-            <!-- Disable options of float menu. 禁用右键菜单中的选项 -->
-            <li Class="AriandelLibrary.AL_FloatMenuBlocker_Extension">
-                <!-- Disable rescue button when this pawn is NOT in player faction.  禁用非玩家派系（NPC状态）时的救援按钮。 -->
-                <blockRescue>true</blockRescue>
-                <!-- Disable capture button.  禁用俘虏按钮。 -->
-                <blockCapture>true</blockCapture>
-                <!-- Disable arrest button.  禁用拘捕按钮。 -->
-                <blockArrest>true</blockArrest>
-            </li>
-
-            <!-- Replace this pawn's pregnancy outcome to the PawnKindDef you write. If you are not using this class, your special character will duplicate itself when it get pregnant. 
-             替换这个角色的怀孕结果为填写的PawnKindDef，如果你不是使用这个class，使用原版怀孕的此角色将会生出复制人。这个功能摘抄自Azzy的Transpiler。-->
-            <li Class="AriandelLibrary.AL_AzzyPregnancy_Extension">
-                <replaceWithKind>Milira_Colonist</replaceWithKind>
-            </li>
-
-            <!-- Disable subcore scan for this pawn. 禁用次核扫描仪 -->
-            <li Class="AriandelLibrary.AL_SubcoreScannerBlocker_Extension" />
-
-            <!-- Disable some surgery from RimWorld Core. 禁用一部分来自环世界原版的手术 -->
-            <li Class="AriandelLibrary.AL_SurgeryBlocker_Extension">
-                <!-- Disable replace bodypart to worse part. 禁用将身体部件替换为更差的部件。 -->
-                <blockLowTech>true</blockLowTech>
-                <!-- Disable organ harvest. 禁用噶腰子。 -->
-                <blockHarvest>true</blockHarvest>
-            </li>
-
-            <!-- Freeze this pawn's biological age. 锁定这个角色的生理年龄，使生理年龄无增长。 -->
-            <li Class="AriandelLibrary.AL_AgeFreeze_Extension">
-                <freezeBiologicalAge>true</freezeBiologicalAge>
-            </li>
-
-            <!-- Make the trait defname you write here unique to this pawn. If any other pawn with wrong pawnkind gains these traits. These traits will be removed on the wrong pawn. You may write multiple traits here.
-             填写在下面的特质Defname将会独属于这个特殊角色，如果其他类型的pawn获得了这些专属特质，那么这些特质将会从错误的pawn身上删除。你可以写下多个专属特质。 -->
-            <!-- TODO: 这里记得放专属特质 -->
-            <li Class="AriandelLibrary.AL_TraitLock_Extension">
+            <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
+                <recoverOnDeath>false</recoverOnDeath>
+                <childKind>Milira_Colonist</childKind>
                 <requiredTraits>
                     <li>MiliraXianNeiyu_Love</li>
                 </requiredTraits>
-            </li>
-
-            <!-- Disable this special character from being used as a ritual victim.  禁用这个特殊角色作为心灵仪式受害者-->
-            <li Class="AriandelLibrary.Anomaly.AL_RitualRoleRestriction_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-
-            <!-- Disable obelisk duplication for this pawn. 禁止此角色被方尖碑复制。 -->
-            <li Class="AriandelLibrary.Anomaly.AL_ObeliskDuplicationBlocker_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-
-            <!-- Reflect flesh beast lance for this pawn. 反弹血肉突变枪。 -->
-            <li Class="AriandelLibrary.Anomaly.AL_FleshbeastReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-
-            <!-- Reflect psychic slaughter ability for this pawn. 反弹心灵宰杀。 -->
-            <li Class="AriandelLibrary.Anomaly.AL_PsychicSlaughterReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-
-            <!-- Replace this pawn's pregnancy outcome to the PawnKindDef you write. This is for RJW Menstruation. 
-             替换这个角色的怀孕结果为填写的PawnKindDef，这是为RJW月经扩展准备的工具。 -->
-            <li Class="AriandelLibrary.rjw.menstruation.AL_RJW_Menstruation_Pregnancy_Extension" MayRequire="rjw.menstruation">
-                <replaceWithKind>Milira_Colonist</replaceWithKind>
             </li>
 
         </modExtensions>

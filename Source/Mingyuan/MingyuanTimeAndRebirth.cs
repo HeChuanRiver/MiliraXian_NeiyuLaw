@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using AriandelLibrary;
+using MiliraXian.CharacterLib;
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
@@ -113,15 +113,11 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public const int EternalBurningTicks = 1800;
 
-        public static bool TryInterceptALRecovery(Pawn pawn)
+        public static bool TryInterceptFatalDamage(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed || pawn == null || pawn.Dead || pawn.Discarded
                 || pawn.Faction != Faction.OfPlayer || !pawn.Spawned || pawn.Map == null
                 || !MingyuanUtility.IsMingyuan(pawn) || !MingyuanUtility.HasHediff(pawn, MingyuanUtility.RebirthDef)) return false;
-            string id = SpecialPawnRegistry.GetStaticID(pawn.kindDef);
-            string realID = string.IsNullOrEmpty(id) ? null : AriandelLibrary_GameComponent.Instance?.SpecialPawns.GetRealID(id);
-            // Leave AL's duplicate/fake-pawn protection and off-map recovery intact.
-            if (string.IsNullOrEmpty(realID) || realID != pawn.ThingID) return false;
             GameComponent_MingyuanRebirth component = Current.Game?.GetComponent<GameComponent_MingyuanRebirth>();
             if (component == null) return false;
             if (component.IsPending(pawn)) return true;
@@ -352,6 +348,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             pendingRebirths.Add(new MingyuanPendingRebirth(pawn, map, cell, rebirthTick, marker));
+            CharacterServices.Scm?.SetUnavailable(pawn, true, "角色正在重生，暂时无法召回。");
             (marker as Thing_MingyuanRebirthMarker)?.SetReturnTick(rebirthTick);
             nextProcessTick = Mathf.Min(nextProcessTick, rebirthTick);
         }
@@ -395,6 +392,7 @@ namespace MiliraXian.Characters.Mingyuan
                 MingyuanPendingRebirth pending = pendingRebirths[i];
                 if (pending?.pawn == null || pending.pawn.Destroyed)
                 {
+                    CharacterServices.Scm?.SetUnavailable(pending?.pawn, false, null);
                     DestroyMarker(pending?.marker);
                     pendingRebirths.RemoveAt(i);
                     continue;
@@ -408,6 +406,7 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (MingyuanRebirthUtility.TryFinishRebirth(pending.pawn, pending.map, pending.cell))
                 {
+                    CharacterServices.Scm?.SetUnavailable(pending.pawn, false, null);
                     DestroyMarker(pending.marker);
                     pendingRebirths.RemoveAt(i);
                 }
@@ -427,6 +426,7 @@ namespace MiliraXian.Characters.Mingyuan
             for (int i = 0; i < pendingRebirths.Count; i++)
             {
                 MingyuanPendingRebirth pending = pendingRebirths[i];
+                if (pending?.pawn != null) CharacterServices.Scm?.SetUnavailable(pending.pawn, true, "角色正在重生，暂时无法召回。");
                 if (pending?.pawn == null || pending.map == null || !pending.cell.IsValid)
                 {
                     continue;
@@ -489,17 +489,4 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    // AL cancels Pawn.Kill before Notify_PawnDied ever runs. Intercept its verified
-    // recovery prefix only for the real, on-map player Mingyuan who can rebirth.
-    [HarmonyPatch(typeof(AriandelLibrary_Pawn_Kill_Patch), nameof(AriandelLibrary_Pawn_Kill_Patch.Prefix))]
-    internal static class Patch_ALKill_MingyuanRebirth
-    {
-        [HarmonyPrefix]
-        private static bool Prefix(Pawn __0, ref bool __result)
-        {
-            if (!MingyuanRebirthUtility.TryInterceptALRecovery(__0)) return true;
-            __result = false;
-            return false;
-        }
-    }
 }

@@ -14,6 +14,8 @@ namespace MiliraXian.Characters.Neiyu
     {
         static MiliraXianCharactersWingsBootstrap()
         {
+            CharacterLib.CharacterServices.InterceptDeath = MingyuanRebirthUtility.TryInterceptFatalDamage;
+            CharacterLib.CharacterServices.ScmEnabled = () => NeiyuLawMod.Instance?.Settings?.EnableAriandelSpecialPawnIntegration ?? true;
             var harmony = new Harmony("HeChuanRiver.MiliraXian.Characters.Neiyu");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }

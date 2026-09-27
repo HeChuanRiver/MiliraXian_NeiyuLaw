@@ -20,6 +20,12 @@ namespace MiliraXian.CharacterLib
     {
         private static void Prefix(ref PawnGenerationRequest request)
         {
+            var protection = request.KindDef?.GetModExtension<CharacterProtectionExtension>();
+            if (protection?.childKind != null && (request.AllowedDevelopmentalStages.Newborn() || request.FixedBiologicalAge == 0f))
+            {
+                request.PawnKindDefGetter = null;
+                request.KindDef = protection.childKind;
+            }
             var appearance = request.KindDef?.GetModExtension<CharacterAppearanceExtension>();
             if (appearance?.disableRandomTraits != true) return;
             request.MaximumAgeTraits = 0;

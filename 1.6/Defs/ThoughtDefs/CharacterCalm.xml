@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThoughtDef>
+    <defName>MX_CharacterCalm</defName>
+    <thoughtClass>Thought_Memory</thoughtClass>
+    <showBubble>false</showBubble>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>心境平和</label>
+        <description>精神崩溃被抵挡后，心境暂时安定下来。</description>
+        <baseMoodEffect>1500</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

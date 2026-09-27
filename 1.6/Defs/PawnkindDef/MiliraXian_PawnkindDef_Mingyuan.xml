@@ -113,7 +113,7 @@
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Mingyuan</characterId>
             </li>
-            <li Class="AriandelLibrary.SpecialPawnExtension">
+            <li Class="AriandelLibrary.SpecialPawnExtension" MayRequire="Ariandel.AriandelLibrary">
                 <uniqueID>Mingyuan</uniqueID>
                 <tabDef>MI_Milira_Tab</tabDef>
                 <iconPathRecruited>MiliraXianNeiyu/Icon/NeiyuAG</iconPathRecruited>
@@ -122,46 +122,12 @@
                 <order>15</order>
             </li>
 
-            <li Class="AriandelLibrary.AL_Kill_Manager_Extension" />
-
-            <li Class="AriandelLibrary.AL_RefuseMentalBreak_Extension">
-                <blockMentalBreak>true</blockMentalBreak>
-            </li>
-
-            <li Class="AriandelLibrary.AL_FloatMenuBlocker_Extension">
-                <blockRescue>true</blockRescue>
-                <blockCapture>true</blockCapture>
-                <blockArrest>true</blockArrest>
-            </li>
-
-            <li Class="AriandelLibrary.AL_AzzyPregnancy_Extension">
-                <replaceWithKind>Milira_Colonist</replaceWithKind>
-            </li>
-
-            <li Class="AriandelLibrary.AL_SubcoreScannerBlocker_Extension" />
-
-            <li Class="AriandelLibrary.AL_SurgeryBlocker_Extension">
-                <blockLowTech>true</blockLowTech>
-                <blockHarvest>true</blockHarvest>
-            </li>
-
-            <li Class="AriandelLibrary.AL_AgeFreeze_Extension">
-                <freezeBiologicalAge>true</freezeBiologicalAge>
-            </li>
-
-            <li Class="AriandelLibrary.AL_TraitLock_Extension">
+            <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
+                <recoverOnDeath>true</recoverOnDeath>
+                <childKind>Milira_Colonist</childKind>
                 <requiredTraits>
                     <li>MX_Mingyuan_Trait</li>
                 </requiredTraits>
-            </li>
-
-            <li Class="AriandelLibrary.Anomaly.AL_RitualRoleRestriction_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-            <li Class="AriandelLibrary.Anomaly.AL_ObeliskDuplicationBlocker_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-            <li Class="AriandelLibrary.Anomaly.AL_FleshbeastReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-            <li Class="AriandelLibrary.Anomaly.AL_PsychicSlaughterReflect_Extension" MayRequire="Ludeon.RimWorld.Anomaly" />
-
-            <li Class="AriandelLibrary.rjw.menstruation.AL_RJW_Menstruation_Pregnancy_Extension" MayRequire="rjw.menstruation">
-                <replaceWithKind>Milira_Colonist</replaceWithKind>
             </li>
         </modExtensions>
 

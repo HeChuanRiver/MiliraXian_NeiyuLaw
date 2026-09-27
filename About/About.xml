@@ -13,11 +13,6 @@
             <displayName>Milira Race</displayName>
             <steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3256974620</steamWorkshopUrl>
         </li>
-        <li>
-            <packageId>Ariandel.AriandelLibrary</packageId>
-            <displayName>Ariandel Library</displayName>
-            <steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3665997350</steamWorkshopUrl>
-        </li>
     </modDependencies>
     <loadAfter>
         <li>Ariandel.AriandelLibrary</li>

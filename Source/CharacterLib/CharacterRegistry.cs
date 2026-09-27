@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using RimWorld;
 using Verse;
 
@@ -14,13 +15,18 @@ namespace MiliraXian.CharacterLib
     {
         string GetRegisteredId(string characterId);
         bool Register(string characterId, Pawn pawn);
+        bool StoreRecovered(Pawn pawn, int cooldownTicks);
+        void SetUnavailable(Pawn pawn, bool unavailable, string reason);
     }
 
     public static class CharacterServices
     {
         public static ICharacterScm Scm { get; set; }
+        public static Func<Pawn, bool> InterceptDeath { get; set; }
+        public static Func<bool> ScmEnabled { get; set; }
         public static string IdFor(Pawn pawn) => pawn?.kindDef?.GetModExtension<CharacterRegistrationExtension>()?.characterId;
         public static GameComponent_CharacterRegistry Registry => Current.Game?.GetComponent<GameComponent_CharacterRegistry>();
+        public static GameComponent_CharacterStorage Storage => Current.Game?.GetComponent<GameComponent_CharacterStorage>();
     }
 
     public class GameComponent_CharacterRegistry : GameComponent

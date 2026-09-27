@@ -35,6 +35,12 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            CharacterProtection.RestoreRequiredTraits(pawn);
+            if (ZhaoliKarmaUtility.IsZhaoli(pawn) && (ZhaoliScenarioUtility.IsHideoutState(pawn) || ZhaoliScenarioUtility.IsRaidState(pawn)))
+            {
+                return;
+            }
+
             CharacterServices.Registry?.Register(pawn,
                 NeiyuLawMod.Instance?.Settings?.EnableAriandelSpecialPawnIntegration ?? true);
         }

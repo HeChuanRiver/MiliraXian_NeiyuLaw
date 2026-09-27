@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <!-- Keep existing calm memories readable when loading a save without AL. -->
+    <Operation Class="PatchOperationConditional">
+        <xpath>Defs/ThoughtDef[defName="AL_CalmAfterBreakBlock"]</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>Defs</xpath>
+            <value>
+                <ThoughtDef>
+                    <defName>AL_CalmAfterBreakBlock</defName>
+                    <thoughtClass>Thought_Memory</thoughtClass>
+                    <durationDays>1</durationDays>
+                    <stackLimit>1</stackLimit>
+                    <stages>
+                        <li>
+                            <label>心境平和</label>
+                            <description>杂念已消，心绪归于平静。</description>
+                            <baseMoodEffect>1500</baseMoodEffect>
+                        </li>
+                    </stages>
+                </ThoughtDef>
+            </value>
+        </nomatch>
+    </Operation>
+</Patch>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AriandelLibrary;
+using MiliraXian.CharacterLib;
 using HarmonyLib;
 using MiliraXian.Characters.Neiyu;
 using RimWorld;
@@ -119,24 +119,10 @@ namespace MiliraXian.Characters
         public void LibraryPassives(string kindName)
         {
             PawnKindDef kind = DefDatabase<PawnKindDef>.GetNamed(kindName);
-            var mental = kind.GetModExtension<AL_RefuseMentalBreak_Extension>();
-            // These library caches are populated once. Editing XML extensions alone does not update them.
-            bool runWild = AL_MentalBreak_Cache.RunWildImmuneKinds.Contains(kind);
-            bool mapped = AL_MentalBreak_Cache.KindExtensionMapping.TryGetValue(kind, out var originalMental);
-            Value(() => runWild, enabled => {
-                if (enabled) AL_MentalBreak_Cache.RunWildImmuneKinds.Add(kind);
-                else AL_MentalBreak_Cache.RunWildImmuneKinds.Remove(kind);
-            }, runWild, false);
-            Value(() => mapped, enabled => {
-                if (enabled) AL_MentalBreak_Cache.KindExtensionMapping[kind] = originalMental;
-                else AL_MentalBreak_Cache.KindExtensionMapping.Remove(kind);
-            }, mapped, false);
-            if (mental != null) KeepField(mental, "blockMentalBreak", false);
-            bool voidKill = AL_Kill_Manager_Cache.VoidKillKinds.Contains(kind);
-            Value(() => voidKill, enabled => {
-                if (enabled) AL_Kill_Manager_Cache.VoidKillKinds.Add(kind);
-                else AL_Kill_Manager_Cache.VoidKillKinds.Remove(kind);
-            }, voidKill, false);
+            var rules = kind.GetModExtension<CharacterProtectionExtension>();
+            if (rules == null) return;
+            Value(() => rules.blockMentalBreak, value => rules.blockMentalBreak = value, rules.blockMentalBreak, false);
+            Value(() => rules.recoverOnDeath, value => rules.recoverOnDeath = value, rules.recoverOnDeath, false);
         }
 
         public static ThingDef Thing(string name) => DefDatabase<ThingDef>.GetNamed(name);
