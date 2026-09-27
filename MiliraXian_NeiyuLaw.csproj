@@ -35,10 +35,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Lib.Harmony.2.4.2\lib\net48\0Harmony.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <Reference Include="AriandelLibrary">
       <HintPath>$(AriandelLibraryDll)</HintPath>
       <Private>False</Private>
@@ -99,7 +96,6 @@
 
   <ItemGroup>
     <None Include="*.md" />
-    <None Include="packages.config" />
     <Folder Include="1.6\Textures\" />
   </ItemGroup>
 </Project>

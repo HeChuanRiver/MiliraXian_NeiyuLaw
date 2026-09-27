@@ -41,24 +41,6 @@ $archive = Join-Path $work 'source.zip'
 if ($LASTEXITCODE -ne 0) { throw 'Cannot archive the selected commit.' }
 [IO.Compression.ZipFile]::ExtractToDirectory($archive, $source)
 
-# packages.config is not restored by dotnet restore. Reuse the installed Harmony
-# package, or fetch that exact package from NuGet when building a fresh checkout.
-[xml]$packages = Get-Content -LiteralPath (Join-Path $source 'packages.config') -Raw
-$harmony = @($packages.packages.package | Where-Object id -EQ 'Lib.Harmony')[0]
-$packageName = "$($harmony.id).$($harmony.version)"
-$harmonyDir = Join-Path $source "packages/$packageName"
-$cachedHarmony = Join-Path $root "packages/$packageName"
-New-Item -ItemType Directory -Path (Split-Path $harmonyDir) -Force | Out-Null
-if (Test-Path -LiteralPath (Join-Path $cachedHarmony 'lib/net48/0Harmony.dll')) {
-    Copy-Item -LiteralPath $cachedHarmony -Destination $harmonyDir -Recurse
-} else {
-    $id = $harmony.id.ToLowerInvariant()
-    $versionNumber = $harmony.version
-    $nupkg = Join-Path $work 'harmony.nupkg'
-    Invoke-WebRequest -Uri "https://api.nuget.org/v3-flatcontainer/$id/$versionNumber/$id.$versionNumber.nupkg" -OutFile $nupkg
-    [IO.Compression.ZipFile]::ExtractToDirectory($nupkg, $harmonyDir)
-}
-
 # Read the actual project references to fail early and record dependency hashes.
 $dependencies = @{}
 foreach ($project in @('MiliraXian_NeiyuLaw.csproj', 'MiliraXian_MACompat.csproj')) {

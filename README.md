@@ -180,7 +180,7 @@ Def 中的可翻译文本直接使用**简体中文**，并作为唯一原文，
 
 项目采用 **SDK 风格 C# 工程**，语言版本为 **C# 10**，目标框架为 **.NET Framework 4.8.1**。以下步骤以 Windows 为基准。
 
-准备好支持 C# 10 的 .NET SDK、.NET Framework 4.8.1 Developer Pack、[NuGet CLI](https://learn.microsoft.com/en-us/nuget/reference/cli-reference/cli-ref-restore)，以及本机 RimWorld 与前置模组程序集。已经使用 .NET SDK 9.0.306 验证过主项目构建。
+准备好支持 C# 10 的 .NET SDK、.NET Framework 4.8.1 Developer Pack，以及本机 RimWorld 与前置模组程序集。已经使用 .NET SDK 9.0.306 验证过主项目构建。
 
 在仓库根目录创建 `Directory.Build.local.props`，填写自己的安装位置。这个文件已被 Git 忽略，请勿提交个人路径：
 
@@ -198,12 +198,11 @@ Def 中的可翻译文本直接使用**简体中文**，并作为唯一原文，
 在仓库根目录运行：
 
 ```powershell
-nuget restore .\packages.config -PackagesDirectory .\packages
 dotnet restore .\MiliraXian_NeiyuLaw.csproj
 dotnet build .\MiliraXian_NeiyuLaw.csproj --configuration Release --no-restore
 ```
 
-Harmony 2.4.2 使用 `packages.config` 与本地 `HintPath` 引用，**仅执行 `dotnet restore` 不会替代第一步的 Harmony 包恢复**。其他游戏和前置程序集由本机安装提供，不由本仓库分发。
+Harmony 2.4.2 走 `PackageReference`，由 `dotnet restore` 自动拉取到全局包缓存，无需额外安装 nuget.exe。其他游戏和前置程序集由本机安装提供，不由本仓库分发。
 
 主项目输出到 `1.6/Assemblies/MiliraXian_NeiyuLaw.dll`；将 `Release` 改为 `Debug` 可构建调试版本。二者使用同一输出目录，不要在游戏运行时覆盖程序集。
 
@@ -223,7 +222,7 @@ pwsh -File .\Tools\Release\New-ReleasePackage.ps1
 pwsh -File .\Tools\Release\New-ReleasePackage.ps1 -Revision HEAD -Version dev-20260926-01
 ```
 
-脚本从指定提交创建独立源码副本，读取本机依赖路径，分别重新编译主程序集与近战动画兼容层，再打包同一提交的游戏资源。未提交或未跟踪的文件不会进入安装包；不会使用工作目录的旧 DLL，也不会覆盖本地游戏正在使用的程序集。Harmony 优先使用本地对应版本的包，缺失时从 NuGet 下载。
+脚本从指定提交创建独立源码副本，读取本机依赖路径，分别重新编译主程序集与近战动画兼容层，再打包同一提交的游戏资源。未提交或未跟踪的文件不会进入安装包；不会使用工作目录的旧 DLL，也不会覆盖本地游戏正在使用的程序集。Harmony 由 `dotnet build` 自带的还原流程取自全局包缓存，缺失时自动从 NuGet 下载。
 
 输出位于 Git 忽略的 `.release/`：完整 ZIP 及其 `.sha256` 校验文件。包内的 `build-info.json` 记录源码提交、构建时间和依赖校验值，不包含个人安装路径。缺少依赖、编译失败或 XML 解析失败时停止打包。脚本不自动上传、不创建标签，也不发布到创意工坊。
 
