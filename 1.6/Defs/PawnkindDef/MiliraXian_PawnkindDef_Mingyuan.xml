@@ -74,6 +74,9 @@
 
         <disallowedTraits>
             <li>BodyPurist</li>
+            <li>Gay</li>
+            <li>Bisexual</li>
+            <li>Asexual</li>
         </disallowedTraits>
 
         <disallowedTraitsWithDegree>
@@ -91,50 +94,20 @@
             <li>MX_Mingyuan_Absorb</li>
         </abilities>
 
+        <fixedChildBackstories Inherit="False"><li>MiliraXian_BackStoryChild_Mingyuan_BS1</li></fixedChildBackstories>
+        <fixedAdultBackstories Inherit="False"><li>MiliraXian_BackStoryAdult_Mingyuan_BS1</li></fixedAdultBackstories>
+        <minGenerationAge>180</minGenerationAge>
+        <maxGenerationAge>180</maxGenerationAge>
+        <chronologicalAgeRange>180~180</chronologicalAgeRange>
+        <forcedTraits><li><def>MX_Mingyuan_Trait</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <startingHediffs><li><def>MX_Mingyuan_BurningBody</def><severity>1</severity></li><li><def>MX_Mingyuan_RebirthFlame</def><severity>1</severity></li><li><def>MX_Mingyuan_ProtectiveFlameShield</def><severity>1</severity></li></startingHediffs>
+
         <modExtensions>
-            <li Class="AriandelLibrary.FixedIdentityExtension">
+            <li Class="MiliraXian.CharacterLib.CharacterAppearanceExtension">
                 <firstNameKey>MX_Name_Mingyuan_First</firstNameKey>
                 <lastNameKey>MX_Name_Mingyuan_Last</lastNameKey>
                 <nickNameKey>MX_Name_Mingyuan_Nick</nickNameKey>
-
-                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Mingyuan_BS1</childhoodBackstoryDef>
-                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Mingyuan_BS1</adulthoodBackstoryDef>
-
-                <forcedAgeYears>180</forcedAgeYears>
-                <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
-
-                <forcedHeadTypeDef>MiliraMingyuanHead</forcedHeadTypeDef>
-
-                <disableRandomTraits>true</disableRandomTraits>
-                <extraForcedTraits>
-                    <li><def>MX_Mingyuan_Trait</def></li>
-                    <li>
-                        <def>Beauty</def>
-                        <degree>2</degree>
-                    </li>
-                </extraForcedTraits>
-
-                <extraForcedHediffs>
-                    <li>
-                        <def>MX_Mingyuan_BurningBody</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_Mingyuan_RebirthFlame</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_Mingyuan_ProtectiveFlameShield</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                </extraForcedHediffs>
-            </li>
-
-            <li Class="AriandelLibrary.NPCKindTag">
-                <npcTag>Mingyuan</npcTag>
+                <headType>MiliraMingyuanHead</headType>
             </li>
 
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">

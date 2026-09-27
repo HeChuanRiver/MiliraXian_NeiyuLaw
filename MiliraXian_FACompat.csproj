@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="Assembly-CSharp">
       <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>

@@ -8,8 +8,8 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Neiyu</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Neiyu</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>
@@ -22,8 +22,8 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Zhaoli</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Zhaoli</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>
@@ -36,8 +36,8 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Qinghe</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Qinghe</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>
@@ -49,8 +49,8 @@
         <shader>Map/Transparent</shader>
         <probability>0</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Mingyuan</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Mingyuan</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.LidTypeDef>

@@ -11,8 +11,8 @@
         <maxColor>RGB(255,255,255)</maxColor>
         <probability>0.0001</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Neiyu</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Neiyu</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.EyeballTypeDef>
@@ -28,8 +28,8 @@
         <maxColor>RGB(255,255,255)</maxColor>
         <probability>0.0001</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Zhaoli</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Zhaoli</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.EyeballTypeDef>
@@ -45,8 +45,8 @@
         <maxColor>RGB(255,255,255)</maxColor>
         <probability>0.0001</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Qinghe</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Qinghe</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.EyeballTypeDef>
@@ -61,8 +61,8 @@
         <maxColor>RGB(255,255,255)</maxColor>
         <probability>0.0001</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Mingyuan</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Mingyuan</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.EyeballTypeDef>

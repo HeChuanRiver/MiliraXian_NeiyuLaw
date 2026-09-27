@@ -99,6 +99,9 @@
         <!-- use traitdef defname here! 禁止生成的trait，此处使用的是trait defname -->
         <disallowedTraits>
             <li>BodyPurist</li>
+            <li>Gay</li>
+            <li>Bisexual</li>
+            <li>Asexual</li>
         </disallowedTraits>
 
         <!-- use traitdef defname with degree here! 禁止生成的trait，此处使用的是trait defname，里面填写的degree对应一种trait，比如PsychicSensitivity：-2的意思是心灵失聪 -->
@@ -163,6 +166,14 @@
         </skills>
 
         <!-- modExtensions是用来使用的非官方类的地方 -->
+        <fixedChildBackstories Inherit="False"><li>MiliraXian_BackStoryChild_Qinghe_BS1</li></fixedChildBackstories>
+        <fixedAdultBackstories Inherit="False"><li>MiliraXian_BackStoryAdult_Qinghe_BS1</li></fixedAdultBackstories>
+        <minGenerationAge>160</minGenerationAge>
+        <maxGenerationAge>160</maxGenerationAge>
+        <chronologicalAgeRange>160~160</chronologicalAgeRange>
+        <forcedTraits><li><def>MX_QH_Trait_SpringFall</def></li><li><def>MX_QH_Trait_WaterFairy</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <startingHediffs><li><def>MX_QH_FlowingForm</def><severity>1</severity></li><li><def>MX_QH_AuraShield</def><severity>1</severity></li><li><def>MX_QH_FlowerResonance</def><severity>1</severity></li><li><def>MX_QH_FlowerDecree</def><severity>1</severity></li></startingHediffs>
+
         <modExtensions>
             <li Class="MiliraXian.Characters.Biography.BiographyExtension">
                 <stories>
@@ -222,73 +233,11 @@
             <!-- 以下class必须全部填写，绝对不能漏任何一个 ↓↓↓ -->
 
             <!-- "FixedIdentityExtension" is a tool for generating a fixed, non-random pawn. "FixedIdentityExtension"是用来生成一个固定的，绝对非随机的pawn的工具。 -->
-            <li Class="AriandelLibrary.FixedIdentityExtension">
-                <!-- Here you write “Key”. Then you need to go to the Language folder, find the Simplified Chinese folder, and open the Keyed folder. Use a translation XML file and enter the display name you want to show in the game for this “Key”. For example, the character name: <MI_Name_Ingefrid_First>Ingifríðr</MI_Name_Ingefrid_First>. 
-                 你在这里写下的是“Key”,然后你需要前去Language文件夹，找到简体中文文件夹，再打开Keyed文件夹，使用一个翻译xml文件，在里面写下这里的“Key”的实际想在游戏中展示的名称，例如这个角色的名：<MI_Name_Ingefrid_First>英芙莉德</MI_Name_Ingefrid_First>。 -->
-                <!-- firstname 姓名中的名，例如：《三体》中的叶文杰，文杰是firstname，叶是lastname。另一个例子：《沙丘》中的保罗厄崔迪，保罗是firstname，厄崔迪是lastname-->
+            <li Class="MiliraXian.CharacterLib.CharacterAppearanceExtension">
                 <firstNameKey>MX_Name_Qinghe_First</firstNameKey>
                 <lastNameKey>MX_Name_Qinghe_Last</lastNameKey>
-                <!-- Nickname is the name you want to display directly to the player in the game. For example, if your character is called "Tynan Sylvester" and you set the nickname to "Tynan", then after this pawn is generated in the game, the name shown under the pawn will be "Tynan".
-                 nickname是你希望在游戏中直接显示给玩家的名称。例如你的角色叫做“泰南·西尔维斯特”，而nickname你写下“泰南”，那么你在游戏中生成这个pawn后，显示在这个pawn下方的名字就是“泰南”。 -->
                 <nickNameKey>MX_Name_Qinghe_Nick</nickNameKey>
-
-                <!-- The backstory you want to generate, using defname here.
-                 你想要生成的背景故事，这里使用defname。 -->
-                <childhoodBackstoryDef>MiliraXian_BackStoryChild_Qinghe_BS1</childhoodBackstoryDef>
-                <adulthoodBackstoryDef>MiliraXian_BackStoryAdult_Qinghe_BS1</adulthoodBackstoryDef>
-
-                <!-- Biological age 生物年龄 -->
-                <forcedAgeYears>160</forcedAgeYears>
-                <!-- Chronological age 历法年龄 -->
-                <forcedChronologicalAgeYears>18</forcedChronologicalAgeYears>
-
-                <!-- You can use your own texture if you have your owen HeadTypeDef (Without mod Facial Animation).
-                 如果你自己创建了一个HeadTypeDef，那么便可以用来在没有面部动画mod的情况下为头部更换贴图。 -->
-                <forcedHeadTypeDef>MiliraQingheHead</forcedHeadTypeDef>
-
-                <!-- Disable random spawned trait, use the trait below only. You may write multiple traits here. 
-                 禁用随机生成特质，仅使用以下固定生成的特质，你可以写多个特质。 -->
-                <disableRandomTraits>true</disableRandomTraits>
-                <extraForcedTraits>
-                    <li><def>MX_QH_Trait_SpringFall</def></li>
-                    <li><def>MX_QH_Trait_WaterFairy</def></li>
-                    <!-- degree: 2 means "beautiful" degree为2代表：沉鱼落雁 -->
-                    <li>
-                        <def>Beauty</def>
-                        <degree>2</degree>  <!-- 1 = optimist；2 = sanguine；-1 = pessimist；-2 = depressive -->
-                    </li>
-                </extraForcedTraits>
-
-                <!-- Hediffs when spawned, including artificial body part. You may write multiple hediffs here. 
-                 生成时带有的hediff，包括仿生物植入物，你可以写多个hediff -->
-                <extraForcedHediffs>
-                    <li>
-                        <def>MX_QH_FlowingForm</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_QH_AuraShield</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_QH_FlowerResonance</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                    <li>
-                        <def>MX_QH_FlowerDecree</def>
-                        <severity>1</severity>
-                        <overwriteIfExists>true</overwriteIfExists>
-                    </li>
-                </extraForcedHediffs>
-            </li>
-
-            <!-- "npcTag" is used for generating fixed face part for mod "[NL] Facial Animation - Experimentals" 
-            “npcTag”是用来给“[NL] Facial Animation - Experimentals”（面部动画）这个mod生成固定面部特征用的。-->
-            <li Class="AriandelLibrary.NPCKindTag">
-                <npcTag>Qinghe</npcTag>
+                <headType>MiliraQingheHead</headType>
             </li>
 
             <!--            &lt;!&ndash; This class is for adding this pawn to randow recruitment in mod "Milira Faction: Milira Imperium" -->

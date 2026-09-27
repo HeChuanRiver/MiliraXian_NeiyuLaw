@@ -48,6 +48,7 @@ namespace MiliraXian.Characters.FacialAnimationCompat
         [HarmonyPostfix]
         public static void Postfix(Pawn pawn, int initialTick, ref Dictionary<string, List<FaceAnimation>> animationDict)
         {
+            CharacterFaceBinding.Apply(pawn);
             if (pawn == null || animationDict == null)
             {
                 return;

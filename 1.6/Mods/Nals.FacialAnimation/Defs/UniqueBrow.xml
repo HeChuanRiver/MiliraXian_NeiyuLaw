@@ -8,8 +8,8 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0.0001</probability>
         <modExtensions>
-            <li Class="AriandelLibrary.FA.ModExtension_NPCFA">
-                <forNPC>Qinghe</forNPC>
+            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Qinghe</pawnKind>
             </li>
         </modExtensions>
     </FacialAnimation.BrowTypeDef>
