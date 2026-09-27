@@ -96,18 +96,18 @@
              必须列全 12 项，缺项仍走背景故事与年龄的随机路径。
              注意：背景故事的 skillGains 在第 ⑤ 步之后被覆盖，仅作叙事装饰，不生效。 -->
         <skills>
-            <li><skill>Shooting</skill><range>20~20</range></li>
-            <li><skill>Melee</skill><range>18~18</range></li>
-            <li><skill>Construction</skill><range>8~8</range></li>
+            <li><skill>Shooting</skill><range>12~12</range></li>
+            <li><skill>Melee</skill><range>15~15</range></li>
+            <li><skill>Construction</skill><range>17~17</range></li>
             <li><skill>Mining</skill><range>6~6</range></li>
-            <li><skill>Cooking</skill><range>6~6</range></li>
-            <li><skill>Plants</skill><range>6~6</range></li>
-            <li><skill>Animals</skill><range>6~6</range></li>
-            <li><skill>Crafting</skill><range>10~10</range></li>
-            <li><skill>Artistic</skill><range>8~8</range></li>
-            <li><skill>Medicine</skill><range>8~8</range></li>
-            <li><skill>Social</skill><range>6~6</range></li>
-            <li><skill>Intellectual</skill><range>14~14</range></li>
+            <li><skill>Cooking</skill><range>0~0</range></li>
+            <li><skill>Plants</skill><range>10~10</range></li>
+            <li><skill>Animals</skill><range>0~0</range></li>
+            <li><skill>Crafting</skill><range>17~17</range></li>
+            <li><skill>Artistic</skill><range>5~5</range></li>
+            <li><skill>Medicine</skill><range>10~10</range></li>
+            <li><skill>Social</skill><range>20~20</range></li>
+            <li><skill>Intellectual</skill><range>7~7</range></li>
         </skills>
 
         <abilities>
