@@ -116,22 +116,23 @@
         <forcedHair>Bald</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
 
-        <!-- 技能等级。FinalLevelOfSkill 的第 ⑤ 步会把算出的值夹进本区间，写成单点即完全确定。
-             必须列全 12 项，缺项仍走背景故事与年龄的随机路径。
-             注意：背景故事的 skillGains 在第 ⑤ 步之后被覆盖，仅作叙事装饰，不生效。 -->
+        <!-- 技能等级。FinalLevelOfSkill 先按背景故事、特质、年龄与两次随机算出一个值，最后一步
+             再把它夹进本区间；写成单点区间时，算出多少都会被替换成这个值，因此结果完全确定。
+             必须列全 12 项：缺项没有区间可夹，仍是随机结果。
+             本处数值已包含背景故事 skillGains 的设计意图，故 skillGains 只作叙事装饰。 -->
         <skills>
-            <li><skill>Shooting</skill><range>20~20</range></li>
-            <li><skill>Melee</skill><range>20~20</range></li>
-            <li><skill>Construction</skill><range>8~8</range></li>
+            <li><skill>Shooting</skill><range>10~10</range></li>
+            <li><skill>Melee</skill><range>10~10</range></li>
+            <li><skill>Construction</skill><range>5~5</range></li>
             <li><skill>Mining</skill><range>6~6</range></li>
             <li><skill>Cooking</skill><range>20~20</range></li>
-            <li><skill>Plants</skill><range>10~10</range></li>
+            <li><skill>Plants</skill><range>5~5</range></li>
             <li><skill>Animals</skill><range>8~8</range></li>
-            <li><skill>Crafting</skill><range>12~12</range></li>
-            <li><skill>Artistic</skill><range>14~14</range></li>
-            <li><skill>Medicine</skill><range>12~12</range></li>
-            <li><skill>Social</skill><range>10~10</range></li>
-            <li><skill>Intellectual</skill><range>16~16</range></li>
+            <li><skill>Crafting</skill><range>6~6</range></li>
+            <li><skill>Artistic</skill><range>6~6</range></li>
+            <li><skill>Medicine</skill><range>3~3</range></li>
+            <li><skill>Social</skill><range>5~5</range></li>
+            <li><skill>Intellectual</skill><range>6~6</range></li>
         </skills>
 
         <!-- 给予这个角色的技能 -->
