@@ -131,7 +131,10 @@
         <minGenerationAge>180</minGenerationAge>
         <maxGenerationAge>180</maxGenerationAge>
         <chronologicalAgeRange>180~180</chronologicalAgeRange>
-        <forcedTraits><li><def>MiliraXianNeiyu_Love</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <forcedTraits>
+            <li>MiliraXianNeiyu_Love</li>
+            <Beauty>2</Beauty>
+        </forcedTraits>
         <startingHediffs><li><def>MXNL_NeiyuShield</def><severity>1</severity></li></startingHediffs>
 
         <modExtensions>

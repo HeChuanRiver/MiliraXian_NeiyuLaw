@@ -140,7 +140,10 @@
         <minGenerationAge>169</minGenerationAge>
         <maxGenerationAge>169</maxGenerationAge>
         <chronologicalAgeRange>169~169</chronologicalAgeRange>
-        <forcedTraits><li><def>MiliraXianNeiyu_Love</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <forcedTraits>
+            <li>MiliraXianNeiyu_Love</li>
+            <Beauty>2</Beauty>
+        </forcedTraits>
 
         <modExtensions>
             <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->

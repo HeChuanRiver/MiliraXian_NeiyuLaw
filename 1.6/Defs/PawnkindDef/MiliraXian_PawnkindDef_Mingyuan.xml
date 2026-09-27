@@ -99,7 +99,10 @@
         <minGenerationAge>180</minGenerationAge>
         <maxGenerationAge>180</maxGenerationAge>
         <chronologicalAgeRange>180~180</chronologicalAgeRange>
-        <forcedTraits><li><def>MX_Mingyuan_Trait</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <forcedTraits>
+            <li>MX_Mingyuan_Trait</li>
+            <Beauty>2</Beauty>
+        </forcedTraits>
         <startingHediffs><li><def>MX_Mingyuan_BurningBody</def><severity>1</severity></li><li><def>MX_Mingyuan_RebirthFlame</def><severity>1</severity></li><li><def>MX_Mingyuan_ProtectiveFlameShield</def><severity>1</severity></li></startingHediffs>
 
         <modExtensions>

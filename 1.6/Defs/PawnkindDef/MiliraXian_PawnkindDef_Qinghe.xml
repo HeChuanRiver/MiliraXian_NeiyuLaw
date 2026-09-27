@@ -171,7 +171,11 @@
         <minGenerationAge>160</minGenerationAge>
         <maxGenerationAge>160</maxGenerationAge>
         <chronologicalAgeRange>160~160</chronologicalAgeRange>
-        <forcedTraits><li><def>MX_QH_Trait_SpringFall</def></li><li><def>MX_QH_Trait_WaterFairy</def></li><li><def>Beauty</def><degree>2</degree></li></forcedTraits>
+        <forcedTraits>
+            <li>MX_QH_Trait_SpringFall</li>
+            <li>MX_QH_Trait_WaterFairy</li>
+            <Beauty>2</Beauty>
+        </forcedTraits>
         <startingHediffs><li><def>MX_QH_FlowingForm</def><severity>1</severity></li><li><def>MX_QH_AuraShield</def><severity>1</severity></li><li><def>MX_QH_FlowerResonance</def><severity>1</severity></li><li><def>MX_QH_FlowerDecree</def><severity>1</severity></li></startingHediffs>
 
         <modExtensions>
