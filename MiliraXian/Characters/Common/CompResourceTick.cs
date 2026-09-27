@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public class CompProperties_ResourceTick : CompProperties
     {

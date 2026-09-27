@@ -27,7 +27,7 @@
         </comps>
     </HediffDef>
 
-    <MiliraXian.Characters.HediffDef_Abnormal>
+    <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
         <defName>MX_AbnormalDeathSentence</defName>
         <label>告死</label>
         <description>昭离以流场侵蚀目标的生机。积累期间目标行动受阻，并会周期性受到割伤；积累达到上限时，最后一次施加告死的角色将完成处决。
@@ -60,11 +60,11 @@
             <li Class="MiliraXian.Characters.Zhaoli.HediffCompProperties_ZhaoliDeathSentence">
                 <cutSeverity>3</cutSeverity>
             </li>
-            <li Class="MiliraXian.Characters.HediffCompProperties_AttachedMote">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.HediffCompProperties_AttachedMote">
                 <moteDef>MXZL_Mote_DeathFieldMark</moteDef>
             </li>
         </comps>
-    </MiliraXian.Characters.HediffDef_Abnormal>
+    </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
 
     <HediffDef>
         <defName>MX_AbnormalDeathSentenceResult</defName>

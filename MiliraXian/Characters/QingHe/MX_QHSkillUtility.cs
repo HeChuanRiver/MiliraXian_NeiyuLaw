@@ -6,6 +6,7 @@ using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.SkillTrees;
 
 namespace MiliraXian.Characters.QingHe
 {

@@ -4,7 +4,7 @@ using FacialAnimation;
 using HarmonyLib;
 using Verse;
 
-namespace MiliraXian.Characters.FacialAnimationCompat
+namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
 {
     [StaticConstructorOnStartup]
     public static class FACompatBootstrap
@@ -21,7 +21,7 @@ namespace MiliraXian.Characters.FacialAnimationCompat
                 return;
             }
 
-            new Harmony("MiliraXian.Characters.FACompat").PatchAll();
+            new Harmony("MiliraXian.CharacterLib.FACompat").PatchAll();
         }
     }
 

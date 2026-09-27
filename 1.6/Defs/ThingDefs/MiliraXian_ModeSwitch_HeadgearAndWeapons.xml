@@ -84,7 +84,7 @@
                 <requirePrimary>true</requirePrimary>
                 <cooldownTicks>0</cooldownTicks>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
     
@@ -168,7 +168,7 @@
                 <cooldownTicks>0</cooldownTicks>
             </li>
 
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
@@ -275,7 +275,7 @@
                 <requirePrimary>true</requirePrimary>
                 <cooldownTicks>0</cooldownTicks>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
 
@@ -336,7 +336,7 @@
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+            <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileHomingCurve">
                 <homingStartDelayTicks>0</homingStartDelayTicks>
                 <minHomingTicksToImpact>6</minHomingTicksToImpact>
                 <homingLifetimeFactor>1.2</homingLifetimeFactor>

@@ -73,7 +73,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+90</CarryingCapacity>
@@ -149,7 +149,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_PawnKindEquipmentDurability">
+            <li Class="MiliraXian.Characters.Common.CompProperties_PawnKindEquipmentDurability">
                 <protectedPawnKinds>
                     <li>MiliraXian_Qinghe</li>
                 </protectedPawnKinds>
@@ -203,7 +203,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+75</CarryingCapacity>
@@ -271,7 +271,7 @@
         </apparel>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <MentalBreakThreshold>-0.15</MentalBreakThreshold>
@@ -320,7 +320,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <IncomingDamageFactor>-0.10</IncomingDamageFactor>
@@ -375,7 +375,7 @@
         </apparel>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <ImmunityGainSpeed>0.45</ImmunityGainSpeed>
@@ -459,7 +459,7 @@
         </apparel>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_PawnKindEquipmentDurability">
+            <li Class="MiliraXian.Characters.Common.CompProperties_PawnKindEquipmentDurability">
                 <protectedPawnKinds>
                     <li>MiliraXian_Qinghe</li>
                 </protectedPawnKinds>

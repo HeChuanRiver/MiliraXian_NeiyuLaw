@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <StatDef Name="MX_AbnormalFactorBase" Abstract="True">
-        <workerClass>MiliraXian.Characters.StatWorker_Mutable</workerClass>
+        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
         <defaultBaseValue>1</defaultBaseValue>
         <minValue>0</minValue>
@@ -17,10 +17,10 @@
         <label>流血积累上限乘数</label>
         <description>触发流血效果所需异常积累量的乘数。数值为0时，流血异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.FactorIfNotFlesh"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.FactorIfCannotBleed"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.NaturalSharpArmorFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfNotFlesh"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfCannotBleed"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.NaturalSharpArmorFactor">
                 <resistanceCurve>
                     <points>
                         <li>(0.00, 0.00)</li>
@@ -33,7 +33,7 @@
                     </points>
                 </resistanceCurve>
             </li>
-            <li Class="MiliraXian.Characters.BodySizeFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.BodySizeFactor">
                 <multiplierCurve>
                     <points>
                         <li>(0.20, 0.55)</li>
@@ -56,9 +56,9 @@
         <label>漏电积累上限乘数</label>
         <description>触发短路效果所需异常积累量的乘数。数值为0时，漏电异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfNotMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.FactorIfMilian"><factor>3.3333333</factor></li>
-            <li Class="MiliraXian.Characters.BodySizeFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfNotMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfMilian"><factor>3.3333333</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.BodySizeFactor">
                 <skipMilian>true</skipMilian>
                 <multiplierCurve>
                     <points>
@@ -82,9 +82,9 @@
         <label>毒素积累上限乘数</label>
         <description>触发剧毒效果所需异常积累量的乘数。数值为0时，毒素异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.ResistanceStatFactor"><stat>ToxicResistance</stat></li>
-            <li Class="MiliraXian.Characters.ResistanceStatFactor"><stat>ToxicEnvironmentResistance</stat></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.ResistanceStatFactor"><stat>ToxicResistance</stat></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.ResistanceStatFactor"><stat>ToxicEnvironmentResistance</stat></li>
         </parts>
     </StatDef>
 
@@ -99,8 +99,8 @@
         <label>腐蚀积累上限乘数</label>
         <description>触发腐蚀效果所需异常积累量的乘数。数值为0时，腐蚀异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfNotMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.BodySizeFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfNotMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.BodySizeFactor">
                 <multiplierCurve>
                     <points>
                         <li>(1.0, 1.0)</li>
@@ -109,7 +109,7 @@
                     </points>
                 </multiplierCurve>
             </li>
-            <li Class="MiliraXian.Characters.FactorIfHasApparel"><factor>1.25</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfHasApparel"><factor>1.25</factor></li>
         </parts>
     </StatDef>
 
@@ -124,8 +124,8 @@
         <label>恐惧积累上限乘数</label>
         <description>触发恐惧效果所需异常积累量的乘数。数值为0时，恐惧异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.PawnStatFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.PawnStatFactor">
                 <stat>PsychicSensitivity</stat>
                 <multiplierCurve>
                     <points>
@@ -150,8 +150,8 @@
         <label>过载积累上限乘数</label>
         <description>触发过载效果所需异常积累量的乘数。数值为0时，过载异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.FactorIfNotMechanoid"><factor>0</factor></li>
-            <li Class="MiliraXian.Characters.PawnStatFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfNotMechanoid"><factor>0</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.PawnStatFactor">
                 <stat>PsychicSensitivity</stat>
                 <multiplierCurve>
                     <points>
@@ -176,12 +176,12 @@
         <label>寒冷积累上限乘数</label>
         <description>触发冻结效果所需异常积累量的乘数。数值为0时，寒冷异常无效。</description>
         <parts>
-            <li Class="MiliraXian.Characters.ComfyTemperatureFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.ComfyTemperatureFactor">
                 <scaleStart>0</scaleStart>
                 <scaleZero>-100</scaleZero>
             </li>
-            <li Class="MiliraXian.Characters.FactorIfMechanoid"><factor>3.3333333</factor></li>
-            <li Class="MiliraXian.Characters.MechanoidBodySizeFactor">
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.FactorIfMechanoid"><factor>3.3333333</factor></li>
+            <li Class="MiliraXian.Characters.Common.AbnormalSystem.MechanoidBodySizeFactor">
                 <resistanceCurve>
                     <points>
                         <li>(1.0, 0.0)</li>

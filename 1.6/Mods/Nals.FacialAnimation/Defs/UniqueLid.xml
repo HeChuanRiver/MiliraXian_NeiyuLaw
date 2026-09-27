@@ -8,7 +8,7 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Neiyu</pawnKind>
             </li>
         </modExtensions>
@@ -22,7 +22,7 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Zhaoli</pawnKind>
             </li>
         </modExtensions>
@@ -36,7 +36,7 @@
         <enableUnisexTexPath>True</enableUnisexTexPath>
         <probability>0</probability>
         <modExtensions>
-            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Qinghe</pawnKind>
             </li>
         </modExtensions>
@@ -49,7 +49,7 @@
         <shader>Map/Transparent</shader>
         <probability>0</probability>
         <modExtensions>
-            <li Class="MiliraXian.Characters.FacialAnimationCompat.CharacterFaceExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Mingyuan</pawnKind>
             </li>
         </modExtensions>

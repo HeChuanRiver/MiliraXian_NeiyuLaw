@@ -6,6 +6,7 @@ using MiliraXian.Characters.QingHe;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Neiyu
 {

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using MiliraXian.Characters.Biography;
+using MiliraXian.Characters.Common.Biography;
 using Verse;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation

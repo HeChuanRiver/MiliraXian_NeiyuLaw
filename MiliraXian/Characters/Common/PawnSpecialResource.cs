@@ -5,7 +5,7 @@ using Verse;
 
 using RimWorld;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public class HediffCompProperties_PawnSpecialResource : HediffCompProperties
     {

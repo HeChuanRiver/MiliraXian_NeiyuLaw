@@ -4,8 +4,10 @@ using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.Biography;
+using MiliraXian.Characters.Mingyuan;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     [StaticConstructorOnStartup]
     internal static class MXShieldRenderUtility

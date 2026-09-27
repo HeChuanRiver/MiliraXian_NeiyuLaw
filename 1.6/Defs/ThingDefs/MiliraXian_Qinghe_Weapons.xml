@@ -81,8 +81,8 @@
                     <li>MX_QH_SwordResonanceDescriptionWinter</li>
                 </resonanceDescriptions>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
-            <li Class="MiliraXian.Characters.CompProperties_PawnKindRestrictedWeapon">
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_PawnKindRestrictedWeapon">
                 <allowedPawnKinds>
                     <li>MiliraXian_Qinghe</li>
                 </allowedPawnKinds>

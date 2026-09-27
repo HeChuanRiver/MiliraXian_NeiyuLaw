@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -150,8 +151,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayAttached(
-                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliGuiyi,
+            if (MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayAttached(
+                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliGuiyi,
                     target,
                     Mathf.Max(0.1f, scale),
                     18))

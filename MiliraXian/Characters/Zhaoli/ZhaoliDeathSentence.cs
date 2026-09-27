@@ -2,6 +2,7 @@ using MiliraXian.Characters;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
 namespace MiliraXian.Characters.Zhaoli
 {

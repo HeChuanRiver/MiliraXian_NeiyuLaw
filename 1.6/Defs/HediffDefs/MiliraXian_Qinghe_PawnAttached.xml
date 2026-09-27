@@ -175,7 +175,7 @@
     <defName>MX_QH_FlowerResonance</defName>
     <label>和鸣</label>
     <description>隐藏Hediff：清荷技能数据</description>
-    <hediffClass>MiliraXian.Characters.Hediff_SkillTreeState</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.SkillTrees.Hediff_SkillTreeState</hediffClass>
     <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -184,7 +184,7 @@
     <minSeverity>1.0</minSeverity>
     <maxSeverity>1.0</maxSeverity>
     <comps>
-      <li Class="MiliraXian.Characters.HediffCompProperties_SkillTreeState">
+      <li Class="MiliraXian.Characters.Common.SkillTrees.HediffCompProperties_SkillTreeState">
         <categories>
           <li>MX_QH_Category_Qinghe</li>
         </categories>
@@ -261,7 +261,7 @@
     <defName>MX_QH_AuraMastery</defName>
     <label>灵气精通</label>
     <description>清荷精通修行的显化。随着精通等级提高，清荷的基础能力会逐步增强。\n\n完成任意带有品质要求的制作、艺术创造时，可根据成品的价值和品质等级获得精通经验值。</description>
-    <hediffClass>MiliraXian.Characters.Hediff_SeverityScaledStats</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Hediff_SeverityScaledStats</hediffClass>
     <defaultLabelColor>(1.0, 0.78, 0.92)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -270,7 +270,7 @@
     <minSeverity>0</minSeverity>
     <maxSeverity>24</maxSeverity>
     <comps>
-      <li Class="MiliraXian.Characters.HediffCompProperties_SeverityLevelLabel">
+      <li Class="MiliraXian.Characters.Common.HediffCompProperties_SeverityLevelLabel">
         <useQingheEffectiveMax>true</useQingheEffectiveMax>
       </li>
     </comps>

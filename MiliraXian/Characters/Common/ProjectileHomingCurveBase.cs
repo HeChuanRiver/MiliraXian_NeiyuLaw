@@ -3,7 +3,7 @@ using UnityEngine;
 using Verse;
 using System.Collections.Generic;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public abstract class ProjectileHomingCurveBase : Bullet, IProjectileHomingCurveHost
     {

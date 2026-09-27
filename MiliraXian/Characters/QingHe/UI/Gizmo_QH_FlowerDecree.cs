@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.UI.WidgetControls;
-using MiliraXian.Characters.UI;
+using MiliraXian.Characters.Common.UI;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe.Things.Weapons;

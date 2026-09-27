@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using MiliraXian.Characters.Biography;
+using MiliraXian.Characters.Common.Biography;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Neiyu;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation
 {

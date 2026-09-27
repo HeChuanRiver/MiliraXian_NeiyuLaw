@@ -1,6 +1,8 @@
 using UnityEngine;
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {

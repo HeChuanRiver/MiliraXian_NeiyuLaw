@@ -90,8 +90,8 @@
           </li>
         </settings>
       </li>
-      <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
-      <li Class="MiliraXian.Characters.CompProperties_PawnKindRestrictedWeapon">
+      <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+      <li Class="MiliraXian.Characters.Common.CompProperties_PawnKindRestrictedWeapon">
         <allowedPawnKinds>
           <li>MiliraXian_Qinghe</li>
         </allowedPawnKinds>
@@ -127,7 +127,7 @@
       <arcHeightFactor>0.10</arcHeightFactor>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+      <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
         <trailMaxPoints>22</trailMaxPoints>
         <trailMinPointDistance>0.10</trailMinPointDistance>
@@ -138,7 +138,7 @@
         <trailAltitudeOffset>0.70</trailAltitudeOffset>
         <useProjectileGraphicColor>true</useProjectileGraphicColor>
       </li>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+      <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileHomingCurve">
         <homingStartDelayTicks>5</homingStartDelayTicks>
         <minHomingTicksToImpact>10</minHomingTicksToImpact>
         <homingTurnLerp>0.13</homingTurnLerp>

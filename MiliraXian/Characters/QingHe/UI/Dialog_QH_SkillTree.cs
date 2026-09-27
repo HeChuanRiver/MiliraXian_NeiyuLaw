@@ -9,6 +9,8 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.QingHe;
 using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI

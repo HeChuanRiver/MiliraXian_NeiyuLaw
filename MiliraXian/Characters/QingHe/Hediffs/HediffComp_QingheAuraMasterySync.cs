@@ -2,6 +2,7 @@ using RimWorld;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {

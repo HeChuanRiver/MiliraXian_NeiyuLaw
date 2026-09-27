@@ -4,7 +4,8 @@ using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using static MiliraXian.Characters.CharacterPowerProfile;
+using MiliraXian.Characters.Common;
+using static MiliraXian.Characters.Common.CharacterPowerProfile;
 
 namespace MiliraXian.Characters.Mingyuan
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace MiliraXian.Characters.FacialAnimationCompat
+namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
 {
     /// <summary>
     /// Redirects a race-wide Facial Animation entry to a character-specific one.

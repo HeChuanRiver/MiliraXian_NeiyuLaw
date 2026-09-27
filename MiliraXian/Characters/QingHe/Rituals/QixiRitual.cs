@@ -3,6 +3,7 @@ using System.Linq;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Rituals
 {

@@ -4,7 +4,7 @@ using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.Biography
+namespace MiliraXian.Characters.Common.Biography
 {
     public sealed class GameComponent_BiographyFramework : GameComponent
     {

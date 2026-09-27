@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public class CompProperties_ChannelResource : CompProperties_AbilityEffect
     {

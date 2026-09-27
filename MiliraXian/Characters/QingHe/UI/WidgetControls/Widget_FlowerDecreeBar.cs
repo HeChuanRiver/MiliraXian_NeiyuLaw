@@ -1,8 +1,10 @@
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
-using MiliraXian.Characters.UI;
+using MiliraXian.Characters.Common.UI;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.QingHe;
 using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls

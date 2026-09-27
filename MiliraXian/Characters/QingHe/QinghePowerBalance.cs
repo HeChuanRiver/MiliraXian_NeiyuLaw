@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.QingHe.Hediffs;
 using Verse;
-using static MiliraXian.Characters.CharacterPowerProfile;
+using MiliraXian.Characters.Common;
+using static MiliraXian.Characters.Common.CharacterPowerProfile;
 
 namespace MiliraXian.Characters.QingHe
 {

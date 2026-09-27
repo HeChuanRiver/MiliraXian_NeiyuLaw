@@ -1,7 +1,8 @@
 using Verse;
 using RimWorld;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
 {
     public class HediffCompProperties_AbnormalBleeding : HediffCompProperties
     {

@@ -9,6 +9,7 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Jobs
 {

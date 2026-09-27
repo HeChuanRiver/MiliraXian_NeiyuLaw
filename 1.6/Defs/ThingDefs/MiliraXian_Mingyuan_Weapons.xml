@@ -66,7 +66,7 @@
         </tools>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
 
@@ -174,7 +174,7 @@
                 <visualControllerDef>MX_Mingyuan_BowVisual</visualControllerDef>
             </li>
             <li Class="CompProperties_Styleable" />
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
 
@@ -197,7 +197,7 @@
             <arcHeightFactor>0</arcHeightFactor>
         </projectile>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+            <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileContinuousTrail">
                 <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
                 <trailMaxPoints>10</trailMaxPoints>
                 <trailMinPointDistance>0.18</trailMinPointDistance>
@@ -209,7 +209,7 @@
                 <useProjectileGraphicColor>true</useProjectileGraphicColor>
                 <useGlowShader>true</useGlowShader>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_ProjectileHomingCurve">
+            <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileHomingCurve">
                 <homingStartDelayTicks>2</homingStartDelayTicks>
                 <minHomingTicksToImpact>8</minHomingTicksToImpact>
                 <homingLifetimeFactor>1.15</homingLifetimeFactor>

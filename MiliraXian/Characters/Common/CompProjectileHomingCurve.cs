@@ -3,7 +3,7 @@ using Verse;
 using System.Collections.Generic;
 using RimWorld;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public interface IProjectileHomingCurveHost
     {

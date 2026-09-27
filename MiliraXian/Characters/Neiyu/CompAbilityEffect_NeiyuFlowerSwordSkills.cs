@@ -8,6 +8,7 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -420,8 +421,8 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             IntVec3 center = target.Cell;
-            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+            bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuFlowerCircle,
                 map,
                 center,
                 Mathf.Max(0.1f, Props.areaFleckScale),
@@ -577,8 +578,8 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             IntVec3 center = target.Cell;
-            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+            bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuFlowerCircle,
                 map,
                 center,
                 Mathf.Max(0.1f, Props.areaFleckScale),
@@ -825,8 +826,8 @@ namespace MiliraXian.Characters.Neiyu
                 caster.stances.stunner.StunFor(lockTicks, caster, addBattleLog: false, showMote: false);
             }
 
-            bool usingUnityTakeoff = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallTakeoff,
+            bool usingUnityTakeoff = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallTakeoff,
                 map,
                 originCell,
                 1f,
@@ -910,8 +911,8 @@ namespace MiliraXian.Characters.Neiyu
             {
                 BeginStage(SkyfallStage.Warning, Props.warningDelayTicks);
                 NeiyuSkyfallVisualTracker.BeginWarning(caster, stageStartTick, stageEndTick);
-                bool usingUnityWarning = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                    MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallWarning,
+                bool usingUnityWarning = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallWarning,
                     map,
                     landingCell,
                     Mathf.Max(0.1f, Props.impactRadius / 3f),
@@ -930,8 +931,8 @@ namespace MiliraXian.Characters.Neiyu
             int interval = Mathf.Max(1, Props.warningPulseIntervalTicks);
             if (now - lastPulseTick >= interval)
             {
-                if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
-                        MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallWarning))
+                if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
+                        MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallWarning))
                 {
                     float pulse = 0.95f + 0.55f * Mathf.Abs(Mathf.Sin((now - stageStartTick) * 0.35f));
                     NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.warningFleckDefName, Props.warningFleckScale * pulse);
@@ -947,8 +948,8 @@ namespace MiliraXian.Characters.Neiyu
             {
                 BeginStage(SkyfallStage.Descending, Props.descendVisualTicks);
                 NeiyuSkyfallVisualTracker.BeginDescending(caster, stageStartTick, stageEndTick);
-                MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                    MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallImpact,
+                MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallImpact,
                     map,
                     landingCell,
                     Mathf.Max(0.1f, Props.impactRadius / 3f),
@@ -970,8 +971,8 @@ namespace MiliraXian.Characters.Neiyu
             if (now - lastPulseTick >= interval)
             {
                 float progress = StageProgress(now);
-                if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
-                        MiliraXian.Characters.CharacterUnityVfxKind.NeiyuSkyfallImpact))
+                if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
+                        MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallImpact))
                 {
                     float scale = Mathf.Lerp(1.6f, 0.95f, progress);
                     NeiyuFlowerSwordSkillUtility.PlayFleckAt(map, landingCell, Props.landFleckDefName, scale);

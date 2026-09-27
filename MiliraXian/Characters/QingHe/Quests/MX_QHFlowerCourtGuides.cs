@@ -4,8 +4,9 @@ using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using Verse;
+using MiliraXian.Characters.QingHe;
 
-namespace MiliraXian.Characters.QingHe
+namespace MiliraXian.Characters.QingHe.Quests
 {
     public class QuestNode_Root_QingheFlowerCourtGuide : QuestNode
     {

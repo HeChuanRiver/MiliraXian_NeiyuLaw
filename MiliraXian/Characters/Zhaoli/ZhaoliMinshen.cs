@@ -3,6 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -63,8 +64,8 @@ namespace MiliraXian.Characters.Zhaoli
                     }
 
                     float areaScale = Mathf.Max(2.2f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.34f);
-                    bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                        MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen,
+                    bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                        MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen,
                         caster.Map,
                         target.Cell,
                         1f,
@@ -92,8 +93,8 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
-                                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen))
+                        if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
+                                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen))
                         {
                             SpawnMinshenAreaPulse(target.Cell, caster.Map);
                         }
@@ -115,8 +116,8 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        if (!MiliraXian.Characters.CharacterUnityVfxRuntime.IsAvailable(
-                                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshen))
+                        if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
+                                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen))
                         {
                             SpawnMinshenParticles(target.Cell, caster.Map, 7);
                         }
@@ -162,8 +163,8 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (caster.Spawned)
             {
-                bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayWorld(
-                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinshenImpact,
+                bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
+                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshenImpact,
                     caster.Map,
                     target.Cell,
                     1f,

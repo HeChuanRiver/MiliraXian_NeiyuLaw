@@ -3,7 +3,7 @@ using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.SkillTrees
 {
     public class HediffComp_SkillTreeState : HediffComp
     {

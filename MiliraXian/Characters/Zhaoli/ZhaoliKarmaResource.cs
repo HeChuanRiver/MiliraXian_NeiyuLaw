@@ -3,6 +3,7 @@ using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Zhaoli
 {

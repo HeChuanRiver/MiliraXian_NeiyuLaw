@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
-using MiliraXian.Characters.Vfx;
+using MiliraXian.Characters.Common.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Abilities
 {

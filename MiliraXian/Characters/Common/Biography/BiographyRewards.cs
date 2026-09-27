@@ -4,7 +4,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Biography
+namespace MiliraXian.Characters.Common.Biography
 {
     public sealed class BiographyReward_AddHediff : BiographyReward
     {

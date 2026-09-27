@@ -6,6 +6,7 @@ using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan
 {

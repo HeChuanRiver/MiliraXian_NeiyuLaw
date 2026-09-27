@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public interface IProjectileVisualPositionProvider
     {

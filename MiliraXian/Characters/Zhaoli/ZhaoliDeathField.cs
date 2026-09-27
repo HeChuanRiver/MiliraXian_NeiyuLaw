@@ -4,6 +4,8 @@ using MiliraXian.Characters;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -173,8 +175,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryMaintainWorld(
-                MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliDeathField,
+            bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryMaintainWorld(
+                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliDeathField,
                 Pawn,
                 map,
                 center,

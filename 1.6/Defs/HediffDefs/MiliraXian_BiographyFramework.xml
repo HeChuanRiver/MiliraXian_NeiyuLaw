@@ -4,7 +4,7 @@
     <defName>MX_BiographyTracker</defName>
     <label>传记状态</label>
     <description>特殊角色传记系统使用的角色隐藏状态。</description>
-    <hediffClass>MiliraXian.Characters.Biography.Hediff_BiographyTracker</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Biography.Hediff_BiographyTracker</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>

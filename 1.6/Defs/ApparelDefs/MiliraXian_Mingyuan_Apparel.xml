@@ -47,7 +47,7 @@
         </apparel>
         <tickerType>Normal</tickerType>
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+100</CarryingCapacity>
@@ -107,7 +107,7 @@
         </apparel>
 
         <comps>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
         <equippedStatOffsets>
             <MeleeDodgeChance>0.20</MeleeDodgeChance>

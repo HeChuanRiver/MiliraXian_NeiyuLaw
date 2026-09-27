@@ -2,6 +2,7 @@
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {

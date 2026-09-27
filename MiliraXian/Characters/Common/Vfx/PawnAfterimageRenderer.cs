@@ -3,7 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Vfx
+namespace MiliraXian.Characters.Common.Vfx
 {
     public class MapComponent_PawnAfterimages : MapComponent
     {

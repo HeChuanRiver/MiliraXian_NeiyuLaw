@@ -63,7 +63,7 @@
             <li Class="CompProperties_EquippableAbility">
                 <abilityDef>MX_Zhaoli_Duanzhan</abilityDef>
             </li>
-            <li Class="MiliraXian.Characters.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
 

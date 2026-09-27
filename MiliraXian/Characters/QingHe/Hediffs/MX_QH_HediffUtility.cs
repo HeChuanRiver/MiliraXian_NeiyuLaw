@@ -4,6 +4,9 @@ using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Things.Buildings;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {

@@ -3,7 +3,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalColdBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -20,7 +20,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -42,7 +42,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalBleedBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -59,7 +59,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -81,7 +81,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalElectricLeakBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -98,7 +98,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -120,7 +120,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalToxinBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -137,7 +137,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -159,7 +159,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalCorrosionBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -176,7 +176,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -198,7 +198,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalFearBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -215,7 +215,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -237,7 +237,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalOverloadBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -254,7 +254,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
@@ -300,7 +300,7 @@
   <ThingDef ParentName="MoteBase">
     <defName>MX_Mote_AbnormalDeathSentenceBar</defName>
     <label>异常特效</label>
-    <thingClass>MiliraXian.Characters.Mote_AbnormalBar</thingClass>
+    <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
       <texPath>Things/Mote/Transparent</texPath>
     </graphicData>
@@ -317,7 +317,7 @@
       <fadeOutUnmaintained>true</fadeOutUnmaintained>
     </mote>
     <modExtensions>
-      <li Class="MiliraXian.Characters.AbnormalBarProperties">
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.AbnormalBarProperties">
         <backgroundShaderType>MetaOverlay</backgroundShaderType>
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>

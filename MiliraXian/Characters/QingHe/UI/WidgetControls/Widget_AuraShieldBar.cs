@@ -1,5 +1,5 @@
 using MiliraXian.Characters.QingHe.Things;
-using MiliraXian.Characters.UI;
+using MiliraXian.Characters.Common.UI;
 using UnityEngine;
 using Verse;
 using Widgets = Verse.Widgets;

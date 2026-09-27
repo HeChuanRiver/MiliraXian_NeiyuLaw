@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MiliraXian.Characters.Vfx;
+using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Jobs;
 using UnityEngine;

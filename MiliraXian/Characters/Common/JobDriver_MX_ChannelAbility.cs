@@ -4,7 +4,7 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public abstract class JobDriver_MX_ChannelAbility : JobDriver_CastAbility
     {

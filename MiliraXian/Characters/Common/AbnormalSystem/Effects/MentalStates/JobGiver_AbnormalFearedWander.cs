@@ -1,8 +1,9 @@
 using RimWorld;
 using Verse;
 using Verse.AI;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates
 {
     public class JobGiver_AbnormalFearedWander : JobGiver_Wander
     {

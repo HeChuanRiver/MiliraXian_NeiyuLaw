@@ -1,7 +1,7 @@
 using System;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     // Tier two changes magnitude, not targeting, damage semantics or resource rules.
     // Evaluate against the post-patch baseline once, never against an already tuned value.

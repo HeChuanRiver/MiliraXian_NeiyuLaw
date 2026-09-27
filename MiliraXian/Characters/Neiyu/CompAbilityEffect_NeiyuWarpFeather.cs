@@ -2,6 +2,7 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -77,8 +78,8 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            bool usingUnityVfx = MiliraXian.Characters.CharacterUnityVfxRuntime.TryPlayAttached(
-                MiliraXian.Characters.CharacterUnityVfxKind.NeiyuFlowerCircle,
+            bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayAttached(
+                MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuFlowerCircle,
                 caster,
                 1f,
                 66);

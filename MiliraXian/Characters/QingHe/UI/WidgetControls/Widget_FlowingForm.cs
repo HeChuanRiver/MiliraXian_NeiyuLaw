@@ -1,6 +1,6 @@
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
-using MiliraXian.Characters.UI;
+using MiliraXian.Characters.Common.UI;
 using RimWorld;
 using UnityEngine;
 using Verse;

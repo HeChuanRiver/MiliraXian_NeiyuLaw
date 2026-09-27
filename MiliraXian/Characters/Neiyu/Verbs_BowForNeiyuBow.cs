@@ -2,6 +2,8 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Neiyu.Cultivation;
 
 namespace MiliraXian.Characters.Neiyu
 {
@@ -252,7 +254,7 @@ namespace MiliraXian.Characters.Neiyu
         protected override void Tick()
         {
             base.Tick();
-            if (MiliraXian.Characters.MXVisualBudget.ShouldEmit(this, 2))
+            if (MiliraXian.Characters.Common.MXVisualBudget.ShouldEmit(this, 2))
             {
                 FleckMaker.ThrowLightningGlow(ExactPosition, Map, 0.2f);
             }

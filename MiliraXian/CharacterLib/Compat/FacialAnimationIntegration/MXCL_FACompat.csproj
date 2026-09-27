@@ -5,7 +5,7 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <RootNamespace>MiliraXian.CharacterLib.Compat.FacialAnimation</RootNamespace>
+    <RootNamespace>MiliraXian.CharacterLib.Compat.FacialAnimationIntegration</RootNamespace>
     <AssemblyName>MXCL_FACompat</AssemblyName>
     <OutputPath>..\..\..\..\1.6\Mods\Nals.FacialAnimation\Assemblies</OutputPath>
   </PropertyGroup>

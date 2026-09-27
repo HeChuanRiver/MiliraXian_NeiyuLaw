@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Zhaoli;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     internal static class SpecialHaloAnimationRuntime
     {

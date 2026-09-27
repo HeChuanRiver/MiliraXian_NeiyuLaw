@@ -1,4 +1,4 @@
-using MiliraXian.Characters.UI;
+using MiliraXian.Characters.Common.UI;
 using MiliraXian.Characters.QingHe.UI;
 using UnityEngine;
 using Verse;

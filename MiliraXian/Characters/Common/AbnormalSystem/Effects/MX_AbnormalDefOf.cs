@@ -1,7 +1,8 @@
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
 {
     [DefOf]
     public static class MX_AbnormalDefOf

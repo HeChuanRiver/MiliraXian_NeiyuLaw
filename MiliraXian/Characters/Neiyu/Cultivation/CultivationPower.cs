@@ -5,6 +5,7 @@ using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Neiyu;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation
 {

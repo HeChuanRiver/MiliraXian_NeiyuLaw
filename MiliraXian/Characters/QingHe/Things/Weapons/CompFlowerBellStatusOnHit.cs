@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.AbnormalSystem;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Things.Weapons
 {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.UI
+namespace MiliraXian.Characters.Common.UI
 {
     public abstract class Widget_Base
     {

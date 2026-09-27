@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-using MiliraXian.Characters.Vfx;
+using MiliraXian.Characters.Common.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using MiliraXian.Characters.Common.AbnormalSystem;
+using MiliraXian.Characters.Common.AbnormalSystem.Effects;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Things
 {

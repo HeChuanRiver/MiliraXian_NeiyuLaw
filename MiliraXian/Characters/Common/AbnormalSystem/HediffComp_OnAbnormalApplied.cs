@@ -1,6 +1,6 @@
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.AbnormalSystem
 {
     public class HediffCompProperties_OnAbnormalApplied : HediffCompProperties
     {

@@ -2,6 +2,8 @@
 using MiliraXian.Characters;
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {

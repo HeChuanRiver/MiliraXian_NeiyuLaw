@@ -141,7 +141,7 @@
       <arcHeightFactor>0.05</arcHeightFactor>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.CompProperties_ProjectileContinuousTrail">
+      <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
         <trailMaxPoints>18</trailMaxPoints>
         <trailMinPointDistance>0.10</trailMinPointDistance>

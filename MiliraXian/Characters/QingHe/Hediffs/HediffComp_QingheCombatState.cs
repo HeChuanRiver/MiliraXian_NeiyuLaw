@@ -3,6 +3,7 @@ using MiliraXian.Characters.QingHe.Defs;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {

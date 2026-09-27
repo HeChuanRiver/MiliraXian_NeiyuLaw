@@ -3,7 +3,7 @@ using FacialAnimation;
 using HarmonyLib;
 using Verse;
 
-namespace MiliraXian.Characters.FacialAnimationCompat
+namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
 {
     public class CharacterFaceExtension : DefModExtension
     {

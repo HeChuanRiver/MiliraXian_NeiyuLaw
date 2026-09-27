@@ -8,7 +8,7 @@ using UnityEngine;
 using Verse;
 using Verse.AI;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     // One pass on a setting change/load, not a per-tick pawn/Def search.
     public sealed class GameComponent_CharacterPowerTransition : GameComponent

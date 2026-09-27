@@ -8,7 +8,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     // Snapshots are taken after XML patches/translations. Reflection is initialization-only;
     // combat reads the cached level, and changing back restores the actual loaded values.

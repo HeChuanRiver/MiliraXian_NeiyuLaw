@@ -2,7 +2,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Biography
+namespace MiliraXian.Characters.Common.Biography
 {
     public sealed class ITab_Biography : ITab
     {

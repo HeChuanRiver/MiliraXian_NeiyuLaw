@@ -1,7 +1,8 @@
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common.AbnormalSystem;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
 {
     public class HediffCompProperties_AbnormalOverloaded : HediffCompProperties
     {

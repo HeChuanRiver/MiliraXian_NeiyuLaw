@@ -7,7 +7,7 @@ using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.SkillTrees
 {
     public interface ISkillTreeStateListener
     {

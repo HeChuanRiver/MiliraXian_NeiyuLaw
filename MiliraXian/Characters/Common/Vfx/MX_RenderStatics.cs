@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Vfx
+namespace MiliraXian.Characters.Common.Vfx
 {
     [StaticConstructorOnStartup]
     public static class MX_RenderStatics

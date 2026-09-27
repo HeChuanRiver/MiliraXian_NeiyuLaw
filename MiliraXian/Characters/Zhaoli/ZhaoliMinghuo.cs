@@ -4,6 +4,7 @@ using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -206,8 +207,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (MiliraXian.Characters.CharacterUnityVfxRuntime.TryMaintainAttached(
-                    MiliraXian.Characters.CharacterUnityVfxKind.ZhaoliMinghuo,
+            if (MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryMaintainAttached(
+                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinghuo,
                     Pawn,
                     1f,
                     AuraFrameCount * AuraFrameIntervalTicks))

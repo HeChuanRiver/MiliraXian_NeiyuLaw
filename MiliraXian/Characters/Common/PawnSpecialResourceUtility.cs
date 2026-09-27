@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public static class PawnSpecialResourceUtility
     {

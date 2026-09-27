@@ -1,5 +1,6 @@
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common.AbnormalSystem.Effects;
 
 namespace MiliraXian.Characters.QingHe.Stats
 {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Neiyu;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     internal enum CharacterUnityVfxKind
     {
@@ -525,7 +526,7 @@ namespace MiliraXian.Characters
             }
 
             string address = AddressFor(kind);
-            ModContentPack content = MiliraXian.Characters.Neiyu.NeiyuLawMod.Instance?.Content;
+            ModContentPack content = NeiyuLawMod.Instance?.Content;
             List<AssetBundle> loadedBundles = content?.assetBundles?.loadedAssetBundles;
             if (loadedBundles != null)
             {

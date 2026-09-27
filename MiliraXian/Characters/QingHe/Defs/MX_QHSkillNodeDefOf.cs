@@ -1,6 +1,7 @@
 using RimWorld;
 using Verse;
 using MiliraXian.Characters;
+using MiliraXian.Characters.Common.SkillTrees;
 
 namespace MiliraXian.Characters.QingHe.Defs
 {

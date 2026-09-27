@@ -4,6 +4,8 @@ using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.QingHe;
+using MiliraXian.Characters.QingHe.Things;
 
 namespace MiliraXian.Characters.QingHe.Things.Weapons
 {

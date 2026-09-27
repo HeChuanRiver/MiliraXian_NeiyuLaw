@@ -64,7 +64,7 @@
         <li>questDescription->将荷池所在房间的印象值提高到40。</li>
       </rulesStrings>
     </questDescriptionRules>
-    <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourtGuide" />
+    <root Class="MiliraXian.Characters.QingHe.Quests.QuestNode_Root_QingheFlowerCourtGuide" />
   </QuestScriptDef>
 
   <QuestScriptDef>
@@ -85,7 +85,7 @@
         <li>questDescription->让清荷的精通等级达到1级。</li>
       </rulesStrings>
     </questDescriptionRules>
-    <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourtGuide">
+    <root Class="MiliraXian.Characters.QingHe.Quests.QuestNode_Root_QingheFlowerCourtGuide">
       <masteryGuide>true</masteryGuide>
     </root>
   </QuestScriptDef>

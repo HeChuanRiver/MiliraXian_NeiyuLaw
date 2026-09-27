@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using MiliraXian.Characters.Biography;
+using MiliraXian.Characters.Common.Biography;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using MiliraXian.Characters.Neiyu;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation
 {

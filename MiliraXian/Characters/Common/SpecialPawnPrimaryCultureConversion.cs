@@ -4,7 +4,7 @@ using MiliraXian.Characters.Zhaoli;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public class GameComponent_SpecialPawnPrimaryCultureConversion : GameComponent
     {

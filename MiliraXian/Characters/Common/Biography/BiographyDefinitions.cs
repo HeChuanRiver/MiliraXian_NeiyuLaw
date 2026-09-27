@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.Biography
+namespace MiliraXian.Characters.Common.Biography
 {
     [DefOf]
     public static class BiographyDefOf

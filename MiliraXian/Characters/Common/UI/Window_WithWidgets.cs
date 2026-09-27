@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.UI
+namespace MiliraXian.Characters.Common.UI
 {
     public abstract class Window_WithWidgets : Window
     {

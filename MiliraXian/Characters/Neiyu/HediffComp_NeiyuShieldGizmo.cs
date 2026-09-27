@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Neiyu.Cultivation;
 
 namespace MiliraXian.Characters.Neiyu
 {

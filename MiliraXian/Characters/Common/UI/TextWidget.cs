@@ -3,7 +3,7 @@ using UnityEngine;
 using Verse;
 using Widgets = Verse.Widgets;
 
-namespace MiliraXian.Characters.UI
+namespace MiliraXian.Characters.Common.UI
 {
     public class TextWidget : Widget_Base
     {

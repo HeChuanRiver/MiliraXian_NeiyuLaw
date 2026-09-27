@@ -3,6 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan
 {

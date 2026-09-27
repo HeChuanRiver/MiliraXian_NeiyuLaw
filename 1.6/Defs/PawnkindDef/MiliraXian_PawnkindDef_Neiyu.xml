@@ -196,13 +196,13 @@
             </li>
 
 
-            <li Class="MiliraXian.Characters.Biography.BiographyExtension">
+            <li Class="MiliraXian.Characters.Common.Biography.BiographyExtension">
                 <stories>
                     <li>
                         <storyName>StableStoryId</storyName>
                         <label>故事测试</label>
                         <storyText>gpt是个傻逼我是个傻逼大家都是煞笔，嘻嘻嘻嘻嘻</storyText>
-                        <unlockCondition Class="MiliraXian.Characters.Biography.BiographyCondition_RecordValue">
+                        <unlockCondition Class="MiliraXian.Characters.Common.Biography.BiographyCondition_RecordValue">
                             <record>DamageDealt</record>
                             <minimumValue>100</minimumValue>
                         </unlockCondition>

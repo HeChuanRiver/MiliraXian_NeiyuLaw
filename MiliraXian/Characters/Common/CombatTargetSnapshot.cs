@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     // Damage callbacks may despawn targets or start another area effect. Each
     // caller owns its snapshot until Return, including during nested callbacks.

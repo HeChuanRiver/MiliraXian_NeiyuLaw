@@ -1,7 +1,8 @@
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.QingHe;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     public class HediffCompProperties_SeverityLevelLabel : HediffCompProperties
     {

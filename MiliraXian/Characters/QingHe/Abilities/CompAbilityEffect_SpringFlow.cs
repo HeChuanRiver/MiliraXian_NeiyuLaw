@@ -5,6 +5,7 @@ using MiliraXian.Characters.QingHe.Things;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.QingHe.Abilities
 {

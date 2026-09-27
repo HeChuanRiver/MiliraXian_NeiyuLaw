@@ -2,7 +2,7 @@ using System;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.Stats
 {
     public class StatWorker_Mutable : StatWorker
     {

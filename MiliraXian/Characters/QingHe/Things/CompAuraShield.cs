@@ -3,6 +3,7 @@ using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Vfx;
+using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Things
 {

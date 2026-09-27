@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common
 {
     internal static class CountShieldUtility
     {

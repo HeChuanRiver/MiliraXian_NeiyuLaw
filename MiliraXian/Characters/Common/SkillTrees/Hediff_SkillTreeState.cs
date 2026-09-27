@@ -3,7 +3,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters
+namespace MiliraXian.Characters.Common.SkillTrees
 {
     public class Hediff_SkillTreeState : HediffWithComps, ISkillTreeStateListener
     {
