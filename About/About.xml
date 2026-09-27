@@ -16,6 +16,7 @@
     </modDependencies>
     <loadAfter>
         <li>Ariandel.AriandelLibrary</li>
+        <li>rjw.menstruation</li>
         <li>Ancot.MiliraRace</li>
         <li>Ancot.MiliraRaceGenePatch</li>
         <li>Ancot.MiliraRaceFacialAnimation</li>

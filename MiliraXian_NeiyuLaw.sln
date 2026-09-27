@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXian_FACompat", "Mili
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXian_ScmCompat", "MiliraXian_ScmCompat.csproj", "{EAD91006-9B4C-4367-92C2-671773566280}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiliraXian_MenstruationCompat", "MiliraXian_MenstruationCompat.csproj", "{C13C021D-B2D7-4629-98C3-71B2811E5B02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|x64.Build.0 = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Debug|x86.Build.0 = Debug|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|x64.ActiveCfg = Release|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|x64.Build.0 = Release|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|x86.ActiveCfg = Release|Any CPU
+		{C13C021D-B2D7-4629-98C3-71B2811E5B02}.Release|x86.Build.0 = Release|Any CPU
 		{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}.Debug|x64.ActiveCfg = Debug|Any CPU

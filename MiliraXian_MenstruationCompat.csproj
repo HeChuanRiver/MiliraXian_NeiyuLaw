@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>MiliraXian_MenstruationCompat</AssemblyName>
+    <OutputPath>1.6\Mods\rjw.menstruation\Assemblies</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
+    <ProjectReference Include="MiliraXian_CharacterLib.csproj" Private="false" />
+    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="RJW_Menstruation" HintPath="$(RjwMenstruationDll)" Private="false" />
+    <Compile Include="Source\Compat\Menstruation\**\*.cs" />
+  </ItemGroup>
+</Project>

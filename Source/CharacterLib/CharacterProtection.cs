@@ -34,9 +34,23 @@ namespace MiliraXian.CharacterLib
         public int lockedLevel = 20;
     }
 
+    [StaticConstructorOnStartup]
     public static class CharacterProtection
     {
-        public static CharacterProtectionExtension For(Pawn pawn) => pawn?.kindDef?.GetModExtension<CharacterProtectionExtension>();
+        private static readonly Dictionary<PawnKindDef, CharacterProtectionExtension> kinds = new();
+        private static readonly Dictionary<TraitDef, CharacterTraitExtension> traits = new();
+
+        static CharacterProtection()
+        {
+            foreach (PawnKindDef kind in DefDatabase<PawnKindDef>.AllDefsListForReading)
+                if (kind.GetModExtension<CharacterProtectionExtension>() is { } rule) kinds.Add(kind, rule);
+            foreach (TraitDef trait in DefDatabase<TraitDef>.AllDefsListForReading)
+                if (trait.GetModExtension<CharacterTraitExtension>() is { } rule) traits.Add(trait, rule);
+        }
+
+        // Values remain the actual Def extensions, so power-profile changes take effect immediately.
+        public static CharacterProtectionExtension For(Pawn pawn) => pawn?.kindDef != null && kinds.TryGetValue(pawn.kindDef, out var rule) ? rule : null;
+        internal static CharacterTraitExtension ForTrait(TraitDef trait) => trait != null && traits.TryGetValue(trait, out var rule) ? rule : null;
         public static void RestoreRequiredTraits(Pawn pawn)
         {
             var rules = For(pawn);
@@ -50,7 +64,7 @@ namespace MiliraXian.CharacterLib
             if (pawn?.story?.traits == null || pawn.skills == null) return;
             foreach (Trait trait in pawn.story.traits.allTraits)
             {
-                var rule = trait.def.GetModExtension<CharacterTraitExtension>();
+                var rule = ForTrait(trait.def);
                 if (rule?.lockedSkill == null) continue;
                 SkillRecord skill = pawn.skills.GetSkill(rule.lockedSkill);
                 if (skill.Level < rule.lockedLevel) skill.Level = rule.lockedLevel;
@@ -106,7 +120,7 @@ namespace MiliraXian.CharacterLib
             bool prevent = false;
             foreach (Trait trait in traits)
             {
-                var rule = trait.def.GetModExtension<CharacterTraitExtension>();
+                var rule = CharacterProtection.ForTrait(trait.def);
                 if (rule == null) continue;
                 prevent |= rule.noSkillDecay;
                 if (rule.lockedSkill == __instance.def)
@@ -130,7 +144,7 @@ namespace MiliraXian.CharacterLib
             if (pawn?.genes == null || pawn.story?.traits == null) return;
             bool ignore = false;
             foreach (Trait trait in pawn.story.traits.allTraits)
-                if (trait.def.GetModExtension<CharacterTraitExtension>()?.ignoreNegativeAptitude == __instance.def) { ignore = true; break; }
+                if (CharacterProtection.ForTrait(trait.def)?.ignoreNegativeAptitude == __instance.def) { ignore = true; break; }
             if (!ignore) return;
             foreach (Gene gene in pawn.genes.GenesListForReading)
             {
@@ -170,7 +184,7 @@ namespace MiliraXian.CharacterLib
             if (reflecting || !(target is Pawn pawn) || pawn.story?.traits == null) return true;
             bool reflect = false;
             foreach (Trait trait in pawn.story.traits.allTraits)
-                if (trait.def.GetModExtension<CharacterTraitExtension>()?.reflectPsychicShock == true) { reflect = true; break; }
+                if (CharacterProtection.ForTrait(trait.def)?.reflectPsychicShock == true) { reflect = true; break; }
             if (!reflect) return true;
             if (user != null && !user.Dead)
             {
