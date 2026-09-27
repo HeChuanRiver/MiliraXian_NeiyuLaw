@@ -4,15 +4,15 @@
     <LangVersion>10.0</LangVersion>
     <EnableDefaultItems>false</EnableDefaultItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AssemblyName>MiliraXian_ScmCompat</AssemblyName>
-    <OutputPath>1.6\Mods\Ariandel.AriandelLibrary\Assemblies</OutputPath>
+    <AssemblyName>MXCL_ALCompat</AssemblyName>
+    <OutputPath>..\..\..\..\1.6\Mods\Ariandel.AriandelLibrary\Assemblies</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
-    <Reference Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
-    <ProjectReference Include="MiliraXian_CharacterLib.csproj" Private="false" />
+    <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
     <Reference Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="AriandelLibrary" HintPath="$(AriandelLibraryDll)" Private="false" />
-    <Compile Include="Source\Compat\Scm\**\*.cs" />
+    <Compile Include="**\*.cs" />
   </ItemGroup>
 </Project>

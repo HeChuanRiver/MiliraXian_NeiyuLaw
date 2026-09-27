@@ -5,12 +5,12 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ProjectGuid>{CE777EB4-1F7C-45BD-AA5C-76AA6A902985}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiliraXian.Characters.Neiyu</RootNamespace>
+    <RootNamespace>MiliraXian.Characters</RootNamespace>
     <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\1.6\Assemblies</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -18,7 +18,6 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>1.6\Assemblies</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +27,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>1.6\Assemblies</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +34,7 @@
 
   <ItemGroup>
     <!-- Both assemblies ship in 1.6\Assemblies, so the library is not copied as a private dependency. -->
-    <ProjectReference Include="MiliraXian_CharacterLib.csproj">
+    <ProjectReference Include="..\CharacterLib\MiliraXian_CharacterLib.csproj">
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
@@ -83,22 +81,21 @@
 
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\Common\**\*.cs" />
-    <Compile Include="Source\Mingyuan\**\*.cs" />
-    <Compile Include="Source\Neiyu\**\*.cs" />
-    <Compile Include="Source\QingHe\**\*.cs" />
-    <Compile Include="Source\Zhaoli\**\*.cs" />
+    <Compile Include="Common\**\*.cs" />
+    <Compile Include="Mingyuan\**\*.cs" />
+    <Compile Include="Neiyu\**\*.cs" />
+    <Compile Include="QingHe\**\*.cs" />
+    <Compile Include="Zhaoli\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="1.6\**\*.*" Exclude="1.6\Assemblies\**\*.*" />
-    <Content Include="About\**\*.*" />
-    <Content Include="Content\**\*.*" />
-    <Content Include="LoadFolders.xml" />
+    <Content Include="..\..\1.6\**\*.*" Exclude="..\..\1.6\Assemblies\**\*.*" />
+    <Content Include="..\..\About\**\*.*" />
+    <Content Include="..\..\Content\**\*.*" />
+    <Content Include="..\..\LoadFolders.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="*.md" />
-    <Folder Include="1.6\Textures\" />
+    <None Include="..\..\*.md" />
   </ItemGroup>
 </Project>

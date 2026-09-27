@@ -4,7 +4,7 @@ using Verse;
 using HarmonyLib;
 using System.Collections.Generic;
 
-namespace MiliraXian.ScmCompat
+namespace MiliraXian.CharacterLib.Compat.Ariandel
 {
     [StaticConstructorOnStartup]
     internal static class ScmBootstrap

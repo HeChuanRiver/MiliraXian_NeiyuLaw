@@ -5,12 +5,12 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <ProjectGuid>{3A9F5C21-8E4D-4B76-9C13-6F2A0D84E5B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MiliraXian.CharacterLib</RootNamespace>
     <AssemblyName>MiliraXian_CharacterLib</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <OutputPath>..\..\1.6\Assemblies</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -18,7 +18,6 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>1.6\Assemblies</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -28,7 +27,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>1.6\Assemblies</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,6 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Source\CharacterLib\**\*.cs" />
+    <!-- Compat projects compile their own folders into separate conditional assemblies. -->
+    <Compile Include="**\*.cs" Exclude="Compat\**\*.cs" />
   </ItemGroup>
 </Project>
