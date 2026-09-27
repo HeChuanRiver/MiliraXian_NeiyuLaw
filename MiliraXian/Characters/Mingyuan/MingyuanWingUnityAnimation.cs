@@ -35,11 +35,40 @@ namespace MiliraXian.Characters.Mingyuan
     [StaticConstructorOnStartup]
     internal static class MingyuanWingUnityAnimationRuntime
     {
+        static MingyuanWingUnityAnimationRuntime()
+        {
+            // The library maps animations from XML; whether the Unity-driven one can run at all
+            // depends on bundle and driver state that only this class tracks.
+            CharacterLib.CharacterRaceParts.AnimationOverride = TryGetOverride;
+        }
+
+        private static AnimationDef TryGetOverride(Pawn pawn, AnimationDef raceAnimation) =>
+            TryGetFlyAnimation(pawn, pawn.Rotation, out AnimationDef animationDef) ? animationDef : null;
+
+        /// <summary>
+        /// The race animation a facing corresponds to. An abandoned driver falls back to it
+        /// directly: the wings then animate through the race's own frames, with the character's
+        /// textures substituted per frame, so no character-specific animation is needed.
+        /// </summary>
+        private static AnimationDef RaceAnimationFor(Rot4 facing)
+        {
+            string defName = facing.AsInt switch
+            {
+                0 => "Milira_FlyNorth",
+                1 => "Milira_FlyEast",
+                2 => "Milira_FlySouth",
+                _ => "Milira_FlyWest",
+            };
+            return DefDatabase<AnimationDef>.GetNamedSilentFail(defName);
+        }
+
         private const string MingyuanPawnKindDefName = "MiliraXian_Mingyuan";
         private const string BundleRelativePath = "1.6/AssetBundles/Windows/mingyuan_wing_anim";
         private const string DriverAssetName = "mingyuan_wing_driver";
         private const string FrameClockTransformName = "FrameClock";
-        private const string FrameTextureRoot = "MiliraXianMingyuan/PawnMingyuan/Wings/Milira_Fly";
+        // The race's own frame path. The character's copy is found by asking the part swaps
+        // declared on its PawnKindDef, so this file names no character texture directory.
+        private const string RaceFrameTextureRoot = "Milira/Pawn/Wings/Milira_Fly";
         private const string NorthAnimationDefName = "Milira_FlyNorth_Mingyuan_Unity";
         private const string EastAnimationDefName = "Milira_FlyEast_Mingyuan_Unity";
         private const string SouthAnimationDefName = "Milira_FlySouth_Mingyuan_Unity";
@@ -100,7 +129,7 @@ namespace MiliraXian.Characters.Mingyuan
                 || !pawn.Spawned
                 || pawn.Map != Find.CurrentMap
                 || !TryResolveAnimationDefs()
-                || !TryLoadFrameMaterials())
+                || !TryLoadFrameMaterials(pawn))
             {
                 return false;
             }
@@ -230,7 +259,7 @@ namespace MiliraXian.Characters.Mingyuan
             return animationDefsResolved;
         }
 
-        private static bool TryLoadFrameMaterials()
+        private static bool TryLoadFrameMaterials(Pawn pawn)
         {
             if (frameMaterialsLoaded)
             {
@@ -244,9 +273,9 @@ namespace MiliraXian.Characters.Mingyuan
 
             try
             {
-                LoadFrameSet(NorthFrameSetIndex, "North");
-                LoadFrameSet(EastFrameSetIndex, "East");
-                LoadFrameSet(SouthFrameSetIndex, "South");
+                LoadFrameSet(pawn, NorthFrameSetIndex, "North");
+                LoadFrameSet(pawn, EastFrameSetIndex, "East");
+                LoadFrameSet(pawn, SouthFrameSetIndex, "South");
                 frameMaterialsLoaded = true;
                 return true;
             }
@@ -261,12 +290,21 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        private static void LoadFrameSet(int frameSetIndex, string direction)
+        private static void LoadFrameSet(Pawn pawn, int frameSetIndex, string direction)
         {
             Material[] materials = FrameMaterials[frameSetIndex];
             for (int frameIndex = 0; frameIndex < FrameCount; frameIndex++)
             {
-                string texturePath = FrameTextureRoot + direction + "_" + (frameIndex + 1);
+                // Resolved through the character's declared part swaps rather than a second
+                // hardcoded root, so the destination is written in one place only.
+                string raceTexturePath = RaceFrameTextureRoot + direction + "_" + (frameIndex + 1);
+                string texturePath = CharacterLib.CharacterRaceParts.TexPathFor(pawn, raceTexturePath);
+                if (texturePath == null)
+                {
+                    throw new InvalidOperationException(
+                        "No part swap declares a replacement for " + raceTexturePath + ".");
+                }
+
                 Texture2D texture = ContentFinder<Texture2D>.Get(texturePath, reportFailure: false);
                 if (texture == null)
                 {
@@ -569,11 +607,8 @@ namespace MiliraXian.Characters.Mingyuan
                 {
                     Pawn pawn = state.Pawn;
                     PawnRenderer renderer = pawn?.Drawer?.renderer;
-                    if (renderer != null
-                        && MiliraXianCharactersWingRegistry.TryGetFlyAnimation(
-                            pawn,
-                            state.Facing,
-                            out AnimationDef legacyAnimation))
+                    AnimationDef legacyAnimation = RaceAnimationFor(state.Facing);
+                    if (renderer != null && legacyAnimation != null)
                     {
                         renderer.SetAnimation(legacyAnimation);
                     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using FacialAnimation;
@@ -6,6 +7,13 @@ using Verse;
 
 namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
 {
+    /// <summary>
+    /// Assigns this face part to a character instead of leaving it to Facial Animation's random
+    /// draw. Goes on any FaceTypeDef: eyeball, lid, brow, mouth, skin, head, and the rest.
+    /// Set probability to 0 alongside it so the part cannot also be drawn at random — as long as
+    /// the race keeps at least one part of that kind with a probability above 0, since a pool
+    /// summing to 0 falls back to its first entry.
+    /// </summary>
     public class CharacterFaceExtension : DefModExtension
     {
         public PawnKindDef pawnKind;
@@ -14,23 +22,28 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
     [StaticConstructorOnStartup]
     internal static class CharacterFaceBinding
     {
-        private static readonly Dictionary<PawnKindDef, EyeballTypeDef> Eyes = Index<EyeballTypeDef>();
-        private static readonly Dictionary<PawnKindDef, LidTypeDef> Lids = Index<LidTypeDef>();
-        private static readonly Dictionary<PawnKindDef, BrowTypeDef> Brows = Index<BrowTypeDef>();
+        /// <summary>
+        /// Every part a character claims, keyed by the FaceTypeDef subclass it belongs to.
+        /// Facial Animation declares one controller per subclass, so the subclass is what pairs
+        /// a declared part with the controller that can wear it.
+        /// </summary>
+        private static readonly Dictionary<PawnKindDef, Dictionary<Type, FaceTypeDef>> parts = new();
 
-        private static Dictionary<PawnKindDef, T> Index<T>() where T : FaceTypeDef, new()
+        static CharacterFaceBinding()
         {
-            var result = new Dictionary<PawnKindDef, T>();
-            foreach (T def in DefDatabase<T>.AllDefsListForReading)
-            {
-                PawnKindDef kind = def.GetModExtension<CharacterFaceExtension>()?.pawnKind;
-                if (kind != null) result[kind] = def;
-            }
-            return result;
+            foreach (Type type in typeof(FaceTypeDef).AllSubclassesNonAbstract())
+                foreach (Def def in GenDefDatabase.GetAllDefsInDatabaseForDef(type))
+                {
+                    if (def is not FaceTypeDef faceType) continue;
+                    PawnKindDef kind = faceType.GetModExtension<CharacterFaceExtension>()?.pawnKind;
+                    if (kind == null) continue;
+                    if (!parts.TryGetValue(kind, out var byType))
+                        parts[kind] = byType = new Dictionary<Type, FaceTypeDef>();
+                    byType[type] = faceType;
+                }
         }
 
-        public static bool HasFace(Pawn pawn) => pawn?.kindDef != null &&
-            (Eyes.ContainsKey(pawn.kindDef) || Lids.ContainsKey(pawn.kindDef) || Brows.ContainsKey(pawn.kindDef));
+        public static bool HasFace(Pawn pawn) => pawn?.kindDef != null && parts.ContainsKey(pawn.kindDef);
 
         /// <summary>
         /// Assigns the character's own parts, then hands control straight back to Facial
@@ -40,20 +53,36 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
         /// </summary>
         public static void Apply(Pawn pawn)
         {
-            if (!HasFace(pawn)) return;
-            Bind(pawn.TryGetComp<EyeballControllerComp>(), Eyes, pawn.kindDef);
-            Bind(pawn.TryGetComp<LidControllerComp>(), Lids, pawn.kindDef);
-            Bind(pawn.TryGetComp<BrowControllerComp>(), Brows, pawn.kindDef);
-        }
+            if (pawn?.kindDef == null || !parts.TryGetValue(pawn.kindDef, out var byType)) return;
 
-        private static void Bind<T, S>(ControllerBaseComp<T, S> controller, Dictionary<PawnKindDef, T> table, PawnKindDef kind)
-            where T : FaceTypeDef, new() where S : Def, IFaceShapeDef, new()
-        {
-            if (controller == null || !table.TryGetValue(kind, out T faceType) || controller.FaceType == faceType) return;
-            controller.FaceType = faceType;
-            controller.FaceColor = faceType.minColor;
-            if (controller is EyeballControllerComp eyes) eyes.FaceSecondColor = faceType.minColor;
-            controller.SetDirty();
+            foreach (ThingComp comp in pawn.AllComps)
+            {
+                if (comp is not IFacialAnimationController controller) continue;
+
+                // ControllerBaseComp's first type argument says which part this controller wears.
+                // The base chain is walked because a no-save controller sits one level below it.
+                Type controllerBase = null;
+                for (Type type = comp.GetType(); type != null; type = type.BaseType)
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ControllerBaseComp<,>))
+                    {
+                        controllerBase = type;
+                        break;
+                    }
+                if (controllerBase == null) continue;
+
+                if (!byType.TryGetValue(controllerBase.GetGenericArguments()[0], out FaceTypeDef faceType)) continue;
+                if (controller.FaceTypeDefName == faceType.defName) continue;
+
+                // Set through the interface: its setter resolves the def against the controller's
+                // own database, so one call serves every part type.
+                controller.FaceTypeDefName = faceType.defName;
+
+                // FaceColor sits on the generic base rather than the interface, so it is reached
+                // through that base; FaceSecondColor belongs to the eyeball alone.
+                controllerBase.GetProperty("FaceColor")?.SetValue(comp, faceType.minColor);
+                if (comp is EyeballControllerComp eyes) eyes.FaceSecondColor = faceType.minColor;
+                controller.SetDirty();
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
     <!-- 特殊角色管理器（SCM）的显示载体。
@@ -22,7 +22,7 @@
         <combatPower>0</combatPower>
         <showInDebugSpawner>false</showInDebugSpawner>
         <modExtensions>
-            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.AriandelLibraryIntegration.CharacterCarrierExtension">
                 <representedKind>MiliraXian_Neiyu</representedKind>
             </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">
@@ -42,7 +42,7 @@
         <combatPower>0</combatPower>
         <showInDebugSpawner>false</showInDebugSpawner>
         <modExtensions>
-            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.AriandelLibraryIntegration.CharacterCarrierExtension">
                 <representedKind>MiliraXian_Zhaoli</representedKind>
             </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">
@@ -62,7 +62,7 @@
         <combatPower>0</combatPower>
         <showInDebugSpawner>false</showInDebugSpawner>
         <modExtensions>
-            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.AriandelLibraryIntegration.CharacterCarrierExtension">
                 <representedKind>MiliraXian_Mingyuan</representedKind>
             </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">
@@ -83,7 +83,7 @@
         <combatPower>0</combatPower>
         <showInDebugSpawner>false</showInDebugSpawner>
         <modExtensions>
-            <li Class="MiliraXian.CharacterLib.CharacterCarrierExtension">
+            <li Class="MiliraXian.CharacterLib.Compat.AriandelLibraryIntegration.CharacterCarrierExtension">
                 <representedKind>MiliraXian_Qinghe</representedKind>
             </li>
             <li Class="AriandelLibrary.SpecialPawnExtension">

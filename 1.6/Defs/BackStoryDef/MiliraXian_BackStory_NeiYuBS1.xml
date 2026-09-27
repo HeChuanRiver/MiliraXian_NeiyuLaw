@@ -56,18 +56,18 @@
              HAR 在 GenerateSkills 的 postfix 里读本字段覆盖，amount 即 Passion 枚举值
              （0=无、1=小、2=大）。必须列全 12 项：未列出的技能仍保留原版随机结果。 -->
         <passions>
-            <li><skill>Cooking</skill><amount>2</amount></li>
-            <li><skill>Shooting</skill><amount>2</amount></li>
-            <li><skill>Melee</skill><amount>2</amount></li>
-            <li><skill>Intellectual</skill><amount>1</amount></li>
-            <li><skill>Artistic</skill><amount>1</amount></li>
-            <li><skill>Construction</skill><amount>0</amount></li>
-            <li><skill>Mining</skill><amount>0</amount></li>
-            <li><skill>Plants</skill><amount>0</amount></li>
-            <li><skill>Animals</skill><amount>0</amount></li>
-            <li><skill>Crafting</skill><amount>0</amount></li>
-            <li><skill>Medicine</skill><amount>0</amount></li>
-            <li><skill>Social</skill><amount>0</amount></li>
+            <Cooking>2</Cooking>
+            <Shooting>2</Shooting>
+            <Melee>2</Melee>
+            <Intellectual>1</Intellectual>
+            <Artistic>1</Artistic>
+            <Construction>0</Construction>
+            <Mining>0</Mining>
+            <Plants>0</Plants>
+            <Animals>0</Animals>
+            <Crafting>0</Crafting>
+            <Medicine>0</Medicine>
+            <Social>0</Social>
         </passions>
 
         <spawnCategories>

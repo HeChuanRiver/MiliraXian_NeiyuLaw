@@ -215,6 +215,21 @@
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Neiyu</characterId>
             </li>
+
+            <!-- 种族硬编码部件的替换。渲染树挂在种族 ThingDef 上（Race_Milira.xml 的 Milira_Milira），
+                 全米莉拉共用一棵，树里翅膀节点的贴图路径是常量，XML 层没有按角色改的入口。
+                 每条声明以 source 属性写源、元素内容写目标。prefix 让一条声明覆盖 front/behind
+                 两个子节点（后者没有 bodyPartLabel，只有 texPath）。
+                 第三条覆盖飞行：飞行时翅膀不走 GraphicFor，改由动画 keyframe 引用的
+                 GraphicStateDef 提供贴图，但那同样是贴图路径，所以一条前缀声明即可，
+                 不必为每个角色复制米莉拉的整套动画与 GraphicStateDef。 -->
+            <li Class="MiliraXian.CharacterLib.CharacterRacePartExtension">
+                <parts>
+                    <li source="Milira/Pawn/BodyAddon/LeftWingNew/" prefix="true">MiliraXianNeiyu/PawnNeiyu/LeftWingNew_Neiyu/</li>
+                    <li source="Milira/Pawn/BodyAddon/RightWingNew/" prefix="true">MiliraXianNeiyu/PawnNeiyu/RightWingNew_Neiyu/</li>
+                    <li source="Milira/Pawn/Wings/" prefix="true">MiliraXianNeiyu/PawnNeiyu/Wings_Neiyu/</li>
+                </parts>
+            </li>
             <!-- 本角色怀孕时生下的是普通米莉拉，不会再生出一个霓羽。 -->
             <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
                 <childKind>Milira_Colonist</childKind>

@@ -1,13 +1,13 @@
 using HarmonyLib;
 using Verse;
 
-namespace MiliraXian.CharacterLib
+namespace MiliraXian.CharacterLib.Compat.AriandelLibraryIntegration
 {
     /// <summary>
-    /// Marks a PawnKindDef that exists only to carry display data for an external manager's UI.
-    /// A carrier has no apparel, backstory, gender or head type of its own, so generating one
-    /// directly can only produce a malformed pawn. Since a carrier stands for a real character,
-    /// any generation request is redirected to that character instead.
+    /// Marks a PawnKindDef that exists only to carry display data for the Special Character
+    /// Manager's UI. A carrier has no apparel, backstory, gender or head type of its own, so
+    /// generating one directly can only produce a malformed pawn. Since a carrier stands for a
+    /// real character, any generation request is redirected to that character instead.
     /// </summary>
     public class CharacterCarrierExtension : DefModExtension
     {

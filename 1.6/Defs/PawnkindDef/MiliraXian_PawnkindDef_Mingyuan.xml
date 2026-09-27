@@ -170,6 +170,18 @@
                 <characterId>Mingyuan</characterId>
             </li>
 
+            <!-- 种族硬编码部件的替换，说明见霓羽的 PawnkindDef。
+                 本角色的飞行翅膀另有一套 Unity 驱动的逐帧版本，能否运行取决于 AssetBundle 与驱动
+                 对象的状态，只有主程序集知道，故不在此声明，由它在运行时经 AnimationOverride 顶替。
+                 顶替不成立时播米莉拉原版动画，翅膀贴图由下面第三条前缀声明逐帧替换。 -->
+            <li Class="MiliraXian.CharacterLib.CharacterRacePartExtension">
+                <parts>
+                    <li source="Milira/Pawn/BodyAddon/LeftWingNew/" prefix="true">MiliraXianMingyuan/PawnMingyuan/LeftWingNew_Mingyuan/</li>
+                    <li source="Milira/Pawn/BodyAddon/RightWingNew/" prefix="true">MiliraXianMingyuan/PawnMingyuan/RightWingNew_Mingyuan/</li>
+                    <li source="Milira/Pawn/Wings/" prefix="true">MiliraXianMingyuan/PawnMingyuan/Wings/</li>
+                </parts>
+            </li>
+
             <!-- 本角色怀孕时生下的是普通米莉拉，不会再生出一个明渊。 -->
             <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
                 <childKind>Milira_Colonist</childKind>

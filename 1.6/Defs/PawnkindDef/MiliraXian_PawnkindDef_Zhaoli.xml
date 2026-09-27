@@ -218,6 +218,15 @@
                 <characterId>Zhaoli</characterId>
             </li>
 
+            <!-- 种族硬编码部件的替换，说明见霓羽的 PawnkindDef。 -->
+            <li Class="MiliraXian.CharacterLib.CharacterRacePartExtension">
+                <parts>
+                    <li source="Milira/Pawn/BodyAddon/LeftWingNew/" prefix="true">MiliraXianZhaoli/Pawn/Wings/LeftWingNew/</li>
+                    <li source="Milira/Pawn/BodyAddon/RightWingNew/" prefix="true">MiliraXianZhaoli/Pawn/Wings/RightWingNew/</li>
+                    <li source="Milira/Pawn/Wings/" prefix="true">MiliraXianZhaoli/Pawn/Wings/Animation/</li>
+                </parts>
+            </li>
+
             <!-- 本角色怀孕时生下的是普通米莉拉，不会再生出一个昭离。 -->
             <li Class="MiliraXian.CharacterLib.CharacterProtectionExtension">
                 <childKind>Milira_Colonist</childKind>
