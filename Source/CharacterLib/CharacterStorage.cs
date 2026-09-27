@@ -15,6 +15,10 @@ namespace MiliraXian.CharacterLib
         private int nextReturnTick = int.MaxValue;
         public IThingHolder ParentHolder => null;
         public int Count => pawns.Count;
+        public IEnumerable<Pawn> StoredPawns
+        {
+            get { for (int i = 0; i < pawns.Count; i++) yield return pawns[i]; }
+        }
 
         public GameComponent_CharacterStorage(Game game) { pawns = new ThingOwner<Pawn>(this); }
         public ThingOwner GetDirectlyHeldThings() => pawns;

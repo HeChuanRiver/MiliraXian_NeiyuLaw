@@ -25,6 +25,8 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            ZhaoliScmActivity.Sync(pawn);
+
             if (!SpecialPawnCoreStateRepair.EnsureValidState(pawn, pawn.Spawned, logRepair: true) || pawn.Dead)
             {
                 return;
@@ -47,6 +49,8 @@ namespace MiliraXian.Characters.Neiyu
 
         public static void AuditAllPlayerSpecialPawns(System.Action<Pawn> observer = null)
         {
+            if (CharacterServices.Storage != null)
+                foreach (Pawn pawn in CharacterServices.Storage.StoredPawns) AuditPawn(pawn, observer);
             List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction;
             for (int index = 0; index < pawns.Count; index++)
             {

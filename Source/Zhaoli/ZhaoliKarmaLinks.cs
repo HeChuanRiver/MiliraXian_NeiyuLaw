@@ -380,6 +380,11 @@ namespace MiliraXian.Characters.Zhaoli
         {
         }
 
+        public override void LoadedGame()
+        {
+            foreach (var pending in pendingRebirths) ZhaoliScmActivity.Sync(pending?.pawn);
+        }
+
         public void RegisterPendingResurrection(Pawn pawn)
         {
             pendingResurrectionPawns ??= new();
@@ -451,12 +456,14 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirths[i]?.pawn == pawn)
                 {
                     pendingRebirths[i].rebirthTick = rebirthTick;
+                    pendingRebirths[i].retryAfterTick = 0;
                     nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, rebirthTick);
                     return;
                 }
             }
 
             pendingRebirths.Add(new ZhaoliPendingRebirth(pawn, rebirthTick));
+            ZhaoliScmActivity.Sync(pawn);
             nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, rebirthTick);
         }
 
@@ -529,18 +536,20 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Discarded)
                 {
                     pendingRebirths.RemoveAt(i);
+                    ZhaoliScmActivity.Sync(pendingRebirth?.pawn);
                     continue;
                 }
 
                 if (!pendingRebirth.pawn.Dead)
                 {
                     pendingRebirths.RemoveAt(i);
+                    ZhaoliScmActivity.Sync(pendingRebirth.pawn);
                     continue;
                 }
 
-                if (currentTick < pendingRebirth.rebirthTick)
+                if (currentTick < pendingRebirth.NextAttemptTick)
                 {
-                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, pendingRebirth.rebirthTick);
+                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, pendingRebirth.NextAttemptTick);
                     continue;
                 }
 
@@ -548,7 +557,8 @@ namespace MiliraXian.Characters.Zhaoli
 
                 if (!ZhaoliRebirthUtility.TryFindRebirthLocation(out Map map, out IntVec3 cell))
                 {
-                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, currentTick + 1);
+                    pendingRebirth.retryAfterTick = currentTick + 600;
+                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, pendingRebirth.NextAttemptTick);
                     continue;
                 }
 
@@ -569,7 +579,8 @@ namespace MiliraXian.Characters.Zhaoli
                     removeDiedThoughts = false
                 }))
                 {
-                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, currentTick + 1);
+                    pendingRebirth.retryAfterTick = currentTick + 600;
+                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, pendingRebirth.NextAttemptTick);
                     continue;
                 }
 
@@ -584,6 +595,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 Messages.Message("MX_ZL_RebirthReturned".Translate(), pendingRebirth.pawn, MessageTypeDefOf.PositiveEvent);
                 pendingRebirths.RemoveAt(i);
+                ZhaoliScmActivity.Sync(pendingRebirth.pawn);
             }
         }
 
@@ -616,7 +628,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliPendingRebirth entry = pendingRebirths[index];
                 if (entry != null)
                 {
-                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, entry.rebirthTick);
+                    nextRebirthCheckTick = System.Math.Min(nextRebirthCheckTick, entry.NextAttemptTick);
                 }
             }
         }

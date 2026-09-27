@@ -231,8 +231,8 @@ namespace MiliraXian.Characters.Mingyuan
         public static bool TryFinishRebirth(Pawn pawn, Map map, IntVec3 cell)
         {
             // Validate before resurrection/removing the world-pawn entry. A
-            // pending return may outlive its map or be taken over by AL recovery.
-            if (pawn == null || pawn.Destroyed || map == null
+            // Dead world pawns are Destroyed too, but can still be resurrected.
+            if (pawn == null || pawn.Discarded || (pawn.Destroyed && !pawn.Dead) || map == null
                 || Current.Game?.Maps.Contains(map) != true || !cell.IsValid || !cell.InBounds(map)
                 || (pawn.ParentHolder != null && pawn.ParentHolder is not Corpse))
             {
@@ -308,7 +308,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public void ExposeData()
         {
-            Scribe_References.Look(ref pawn, "pawn");
+            Scribe_References.Look(ref pawn, "pawn", saveDestroyedThings: true);
             Scribe_References.Look(ref map, "map");
             Scribe_Values.Look(ref cell, "cell");
             Scribe_Values.Look(ref rebirthTick, "rebirthTick", 0);
@@ -390,7 +390,7 @@ namespace MiliraXian.Characters.Mingyuan
             for (int i = pendingRebirths.Count - 1; i >= 0; i--)
             {
                 MingyuanPendingRebirth pending = pendingRebirths[i];
-                if (pending?.pawn == null || pending.pawn.Destroyed)
+                if (pending?.pawn == null || pending.pawn.Discarded || (pending.pawn.Destroyed && !pending.pawn.Dead))
                 {
                     CharacterServices.Scm?.SetUnavailable(pending?.pawn, false, null);
                     DestroyMarker(pending?.marker);
@@ -404,6 +404,17 @@ namespace MiliraXian.Characters.Mingyuan
                     continue;
                 }
 
+                // A removed encounter map must not strand the character forever.
+                if (pending.map == null || !Find.Maps.Contains(pending.map))
+                {
+                    Map home = Find.AnyPlayerHomeMap;
+                    if (home != null && CellFinder.TryFindRandomEdgeCellWith(c => c.Standable(home) && !c.Fogged(home),
+                        home, CellFinder.EdgeRoadChance_Neutral, out IntVec3 cell))
+                    {
+                        pending.map = home;
+                        pending.cell = cell;
+                    }
+                }
                 if (MingyuanRebirthUtility.TryFinishRebirth(pending.pawn, pending.map, pending.cell))
                 {
                     CharacterServices.Scm?.SetUnavailable(pending.pawn, false, null);

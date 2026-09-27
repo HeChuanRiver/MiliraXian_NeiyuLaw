@@ -974,6 +974,9 @@ namespace MiliraXian.Characters.Neiyu
 
         public static bool NeiyuExistsAnywhere()
         {
+            if (CharacterLib.CharacterServices.Storage != null)
+                foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns)
+                    if (pawn.kindDef?.defName == NeiyuPawnKindDefName) return true;
             PawnKindDef neiyuKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(NeiyuPawnKindDefName);
             if (neiyuKind == null)
             {

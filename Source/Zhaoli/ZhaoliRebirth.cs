@@ -383,6 +383,9 @@ namespace MiliraXian.Characters.Zhaoli
     {
         public Pawn pawn;
         public int rebirthTick;
+        // Runtime retry throttling leaves the saved ten-day deadline unchanged.
+        public int retryAfterTick;
+        public int NextAttemptTick => Mathf.Max(rebirthTick, retryAfterTick);
 
         public ZhaoliPendingRebirth()
         {
@@ -409,6 +412,11 @@ namespace MiliraXian.Characters.Zhaoli
 
         public GameComponent_ZhaoliRebirth(Game game)
         {
+        }
+
+        public override void LoadedGame()
+        {
+            foreach (var pending in pendingRebirths) ZhaoliScmActivity.Sync(pending?.pawn);
         }
 
         public bool IsPending(Pawn pawn)
@@ -441,12 +449,14 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirths[i]?.pawn == pawn)
                 {
                     pendingRebirths[i].rebirthTick = rebirthTick;
+                    pendingRebirths[i].retryAfterTick = 0;
                     RecalculateNextRebirthTick();
                     return;
                 }
             }
 
             pendingRebirths.Add(new ZhaoliPendingRebirth(pawn, rebirthTick));
+            ZhaoliScmActivity.Sync(pawn);
             nextRebirthTick = Mathf.Min(nextRebirthTick, rebirthTick);
         }
 
@@ -469,16 +479,18 @@ namespace MiliraXian.Characters.Zhaoli
                 if (pendingRebirth?.pawn == null || pendingRebirth.pawn.Discarded)
                 {
                     pendingRebirths.RemoveAt(i);
+                    ZhaoliScmActivity.Sync(pendingRebirth?.pawn);
                     continue;
                 }
 
                 if (!pendingRebirth.pawn.Dead)
                 {
                     pendingRebirths.RemoveAt(i);
+                    ZhaoliScmActivity.Sync(pendingRebirth.pawn);
                     continue;
                 }
 
-                if (currentTick < pendingRebirth.rebirthTick)
+                if (currentTick < pendingRebirth.NextAttemptTick)
                 {
                     continue;
                 }
@@ -487,6 +499,7 @@ namespace MiliraXian.Characters.Zhaoli
 
                 if (!ZhaoliRebirthUtility.TryFindRebirthLocation(out Map map, out IntVec3 cell))
                 {
+                    pendingRebirth.retryAfterTick = currentTick + 600;
                     continue;
                 }
 
@@ -507,6 +520,7 @@ namespace MiliraXian.Characters.Zhaoli
                     removeDiedThoughts = false
                 }))
                 {
+                    pendingRebirth.retryAfterTick = currentTick + 600;
                     continue;
                 }
 
@@ -520,6 +534,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
                 ZhaoliRebirthUtility.NotifyApparelResurrected(pendingRebirth.pawn);
                 pendingRebirths.RemoveAt(i);
+                ZhaoliScmActivity.Sync(pendingRebirth.pawn);
             }
 
             RecalculateNextRebirthTick();
@@ -545,7 +560,7 @@ namespace MiliraXian.Characters.Zhaoli
                 ZhaoliPendingRebirth entry = pendingRebirths[i];
                 if (entry != null)
                 {
-                    nextRebirthTick = Mathf.Min(nextRebirthTick, entry.rebirthTick);
+                    nextRebirthTick = Mathf.Min(nextRebirthTick, entry.NextAttemptTick);
                 }
             }
         }

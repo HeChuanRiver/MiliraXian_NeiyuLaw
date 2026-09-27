@@ -21,7 +21,7 @@ namespace MiliraXian.CharacterLib
         private static void Prefix(ref PawnGenerationRequest request)
         {
             var protection = request.KindDef?.GetModExtension<CharacterProtectionExtension>();
-            if (protection?.childKind != null && (request.AllowedDevelopmentalStages.Newborn() || request.FixedBiologicalAge == 0f))
+            if (protection?.childKind != null && (request.AllowedDevelopmentalStages == DevelopmentalStage.Newborn || request.FixedBiologicalAge == 0f))
             {
                 request.PawnKindDefGetter = null;
                 request.KindDef = protection.childKind;

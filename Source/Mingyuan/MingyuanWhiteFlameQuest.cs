@@ -40,6 +40,9 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool MingyuanExistsAnywhere(Pawn except = null)
         {
+            if (CharacterLib.CharacterServices.Storage != null)
+                foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns)
+                    if (pawn != except && pawn.kindDef?.defName == MingyuanPawnKindDefName) return true;
             foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
             {
                 if (pawn != null && pawn != except && pawn.kindDef?.defName == MingyuanPawnKindDefName)
@@ -53,6 +56,9 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool HasPlayerPawn(string pawnKindDefName)
         {
+            if (CharacterLib.CharacterServices.Storage != null)
+                foreach (Pawn pawn in CharacterLib.CharacterServices.Storage.StoredPawns)
+                    if (!pawn.Dead && pawn.Faction == Faction.OfPlayer && pawn.kindDef?.defName == pawnKindDefName) return true;
             List<Pawn> pawns = PawnsFinder.AllMapsCaravansAndTravellingTransporters_Alive_OfPlayerFaction;
             for (int index = 0; index < pawns.Count; index++)
             {
