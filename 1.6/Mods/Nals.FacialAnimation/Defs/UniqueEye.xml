@@ -9,7 +9,7 @@
         <raceName>Milira_Race</raceName>
         <minColor>RGB(255,255,255)</minColor>
         <maxColor>RGB(255,255,255)</maxColor>
-        <probability>0.0001</probability>
+        <probability>0</probability>
         <modExtensions>
             <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Neiyu</pawnKind>
@@ -26,7 +26,7 @@
         <raceName>Milira_Race</raceName>
         <minColor>RGB(255,255,255)</minColor>
         <maxColor>RGB(255,255,255)</maxColor>
-        <probability>0.0001</probability>
+        <probability>0</probability>
         <modExtensions>
             <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Zhaoli</pawnKind>
@@ -43,7 +43,7 @@
         <raceName>Milira_Race</raceName>
         <minColor>RGB(255,255,255)</minColor>
         <maxColor>RGB(255,255,255)</maxColor>
-        <probability>0.0001</probability>
+        <probability>0</probability>
         <modExtensions>
             <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Qinghe</pawnKind>
@@ -59,7 +59,7 @@
         <raceName>Milira_Race</raceName>
         <minColor>RGB(255,255,255)</minColor>
         <maxColor>RGB(255,255,255)</maxColor>
-        <probability>0.0001</probability>
+        <probability>0</probability>
         <modExtensions>
             <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Mingyuan</pawnKind>

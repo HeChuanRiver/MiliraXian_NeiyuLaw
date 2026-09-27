@@ -6,7 +6,7 @@
         <raceName>Milira_Race</raceName>
         <shader>Map/Transparent</shader>
         <enableUnisexTexPath>True</enableUnisexTexPath>
-        <probability>0.0001</probability>
+        <probability>0</probability>
         <modExtensions>
             <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
                 <pawnKind>MiliraXian_Qinghe</pawnKind>
