@@ -94,22 +94,22 @@ namespace MiliraXian.Characters.Common.Biography
             SetProgress(progressName, GetProgress(progressName) + amount);
         }
 
-        public bool EvaluateUnlocks(BiographyExtension extension, bool sendNotifications)
+        public bool EvaluateUnlocks(BiographyDef biography, bool sendNotifications)
         {
-            if (extension?.stories.NullOrEmpty() != false)
+            if (biography?.stories.NullOrEmpty() != false)
             {
                 return false;
             }
 
             EnsureLookups();
             bool anyUnlocked = false;
-            int storyCount = extension.stories.Count;
+            int storyCount = biography.stories.Count;
             for (int pass = 0; pass < storyCount; pass++)
             {
                 bool unlockedThisPass = false;
                 for (int i = 0; i < storyCount; i++)
                 {
-                    BiographyStory story = extension.stories[i];
+                    BiographyStory story = biography.stories[i];
                     if (story == null || story.storyName.NullOrEmpty() || IsStoryUnlocked(story.storyName)
                         || story.unlockCondition == null)
                     {

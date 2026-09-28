@@ -12,18 +12,34 @@ namespace MiliraXian.Characters.Common.Biography
         public static ThingDef Milira_Race;
     }
 
-    public sealed class BiographyExtension : DefModExtension
+    public sealed class BiographyDef : Def
     {
+        public PawnKindDef pawnKind;
         public List<BiographyStory> stories = new();
 
-        [Unsaved(false)]
-        private PawnKindDef parentPawnKind;
+        internal bool HasSupportedPawnKind => pawnKind?.race != null && (BiographyDefOf.Milira_Race != null
+            ? pawnKind.race == BiographyDefOf.Milira_Race
+            : pawnKind.race.defName == "Milira_Race");
 
-        public PawnKindDef ParentPawnKind => parentPawnKind;
-
-        public override void ResolveReferences(Def parentDef)
+        internal bool HasDuplicatePawnKind
         {
-            parentPawnKind = parentDef as PawnKindDef;
+            get
+            {
+                if (pawnKind == null)
+                {
+                    return false;
+                }
+
+                foreach (BiographyDef other in DefDatabase<BiographyDef>.AllDefsListForReading)
+                {
+                    if (other != null && other != this && other.pawnKind == pawnKind)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         }
 
         public BiographyStory GetStory(string storyName)
@@ -47,41 +63,32 @@ namespace MiliraXian.Characters.Common.Biography
 
         public override IEnumerable<string> ConfigErrors()
         {
-            string owner = parentPawnKind?.defName ?? "unknown PawnKindDef";
-            if (parentPawnKind == null)
+            foreach (string error in base.ConfigErrors())
             {
-                yield return "BiographyExtension must be attached to a PawnKindDef.";
+                yield return error;
+            }
+
+            string owner = defName ?? "unknown BiographyDef";
+            if (pawnKind == null)
+            {
+                yield return owner + ".pawnKind must reference a PawnKindDef.";
                 yield break;
             }
 
-            ThingDef supportedRace = BiographyDefOf.Milira_Race;
-            if (parentPawnKind.race == null || (supportedRace != null
-                    ? parentPawnKind.race != supportedRace
-                    : parentPawnKind.race.defName != "Milira_Race"))
+            if (!HasSupportedPawnKind)
             {
-                yield return owner + " has BiographyExtension, but its resolved race is not Milira_Race.";
+                yield return owner + ".pawnKind must have Milira_Race as its resolved race.";
             }
 
-            int extensionCount = 0;
-            if (parentPawnKind.modExtensions != null)
+            if (HasDuplicatePawnKind)
             {
-                for (int i = 0; i < parentPawnKind.modExtensions.Count; i++)
-                {
-                    if (parentPawnKind.modExtensions[i] is BiographyExtension)
-                    {
-                        extensionCount++;
-                    }
-                }
-            }
-
-            if (extensionCount != 1)
-            {
-                yield return owner + " must have exactly one BiographyExtension; found " + extensionCount + ".";
+                yield return owner + " shares pawnKind '" + pawnKind.defName
+                    + "' with another BiographyDef. This pawn kind's biography binding is disabled.";
             }
 
             if (stories.NullOrEmpty())
             {
-                yield return owner + " BiographyExtension has no stories.";
+                yield return owner + " BiographyDef has no stories.";
                 yield break;
             }
 
@@ -260,7 +267,7 @@ namespace MiliraXian.Characters.Common.Biography
 
         public abstract string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker);
 
-        public virtual IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public virtual IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             yield break;
         }
@@ -284,7 +291,7 @@ namespace MiliraXian.Characters.Common.Biography
 
         public abstract bool TryGrant(Pawn pawn, out string failureReason);
 
-        public virtual IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public virtual IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             yield break;
         }
@@ -314,57 +321,51 @@ namespace MiliraXian.Characters.Common.Biography
 
     public static class BiographyDatabase
     {
-        private static Dictionary<PawnKindDef, BiographyExtension> extensionsByPawnKind;
+        private static Dictionary<PawnKindDef, BiographyDef> biographiesByPawnKind;
 
         public static bool HasAnyConfigurations
         {
             get
             {
                 EnsureInitialized();
-                return extensionsByPawnKind.Count > 0;
+                return biographiesByPawnKind.Count > 0;
             }
         }
 
-        public static bool TryGet(PawnKindDef pawnKind, out BiographyExtension extension)
+        public static bool TryGet(PawnKindDef pawnKind, out BiographyDef biography)
         {
             EnsureInitialized();
             if (pawnKind != null)
             {
-                return extensionsByPawnKind.TryGetValue(pawnKind, out extension);
+                return biographiesByPawnKind.TryGetValue(pawnKind, out biography);
             }
 
-            extension = null;
+            biography = null;
             return false;
         }
 
         public static void Rebuild()
         {
-            Dictionary<PawnKindDef, BiographyExtension> rebuilt = new();
-            List<PawnKindDef> pawnKinds = DefDatabase<PawnKindDef>.AllDefsListForReading;
-            ThingDef supportedRace = BiographyDefOf.Milira_Race;
-            for (int i = 0; i < pawnKinds.Count; i++)
+            Dictionary<PawnKindDef, BiographyDef> rebuilt = new();
+            List<BiographyDef> biographies = DefDatabase<BiographyDef>.AllDefsListForReading;
+            for (int i = 0; i < biographies.Count; i++)
             {
-                PawnKindDef pawnKind = pawnKinds[i];
-                if (pawnKind == null || pawnKind.race == null || (supportedRace != null
-                        ? pawnKind.race != supportedRace
-                        : pawnKind.race.defName != "Milira_Race"))
+                BiographyDef biography = biographies[i];
+                if (biography == null || !biography.HasSupportedPawnKind || biography.HasDuplicatePawnKind
+                    || biography.stories.NullOrEmpty())
                 {
                     continue;
                 }
 
-                BiographyExtension extension = pawnKind.GetModExtension<BiographyExtension>();
-                if (extension != null && !extension.stories.NullOrEmpty())
-                {
-                    rebuilt[pawnKind] = extension;
-                }
+                rebuilt.Add(biography.pawnKind, biography);
             }
 
-            extensionsByPawnKind = rebuilt;
+            biographiesByPawnKind = rebuilt;
         }
 
         private static void EnsureInitialized()
         {
-            if (extensionsByPawnKind == null)
+            if (biographiesByPawnKind == null)
             {
                 Rebuild();
             }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.Common.Biography.BiographyDef>
+    <defName>MX_Biography_Neiyu</defName>
+    <pawnKind>MiliraXian_Neiyu</pawnKind>
+    <stories>
+        <li>
+            <storyName>StableStoryId</storyName>
+            <label>故事测试</label>
+            <storyText>gpt是个傻逼我是个傻逼大家都是煞笔，嘻嘻嘻嘻嘻</storyText>
+            <unlockCondition Class="MiliraXian.Characters.Common.Biography.BiographyCondition_RecordValue">
+                <record>DamageDealt</record>
+                <minimumValue>100</minimumValue>
+            </unlockCondition>
+            <rewards />
+        </li>
+    </stories>
+  </MiliraXian.Characters.Common.Biography.BiographyDef>
+</Defs>

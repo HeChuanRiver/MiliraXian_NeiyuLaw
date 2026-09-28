@@ -30,8 +30,8 @@ namespace MiliraXian.Characters.Common.Biography
             {
                 Pawn pawn = SelPawn;
                 return pawn != null
-                    && BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension)
-                    && !extension.stories.NullOrEmpty();
+                    && BiographyDatabase.TryGet(pawn.kindDef, out BiographyDef biography)
+                    && !biography.stories.NullOrEmpty();
             }
         }
 
@@ -54,8 +54,8 @@ namespace MiliraXian.Characters.Common.Biography
         protected override void FillTab()
         {
             Pawn pawn = SelPawn;
-            if (pawn == null || !BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension)
-                || extension.stories.NullOrEmpty())
+            if (pawn == null || !BiographyDatabase.TryGet(pawn.kindDef, out BiographyDef biography)
+                || biography.stories.NullOrEmpty())
             {
                 return;
             }
@@ -66,7 +66,7 @@ namespace MiliraXian.Characters.Common.Biography
             }
 
             Hediff_BiographyTracker tracker = PreparePawn(pawn, forceEvaluation: false);
-            BiographyStory selectedStory = EnsureSelectedStory(extension);
+            BiographyStory selectedStory = EnsureSelectedStory(biography);
 
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.Common.Biography
                 contentRect.width - LeftPanelWidth - PanelGap,
                 contentRect.height);
 
-            DrawStoryList(leftPanel, extension, tracker);
+            DrawStoryList(leftPanel, biography, tracker);
             DrawStoryDetails(rightPanel, pawn, selectedStory, tracker);
 
             Text.Font = GameFont.Small;
@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.Common.Biography
 
         private Hediff_BiographyTracker PreparePawn(Pawn pawn, bool forceEvaluation)
         {
-            if (pawn == null || !BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension))
+            if (pawn == null || !BiographyDatabase.TryGet(pawn.kindDef, out BiographyDef biography))
             {
                 return null;
             }
@@ -105,7 +105,7 @@ namespace MiliraXian.Characters.Common.Biography
             Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
             if (tracker != null && (forceEvaluation || currentTick - lastEvaluationTick >= OpenTabEvaluationInterval))
             {
-                tracker.EvaluateUnlocks(extension, sendNotifications: true);
+                tracker.EvaluateUnlocks(biography, sendNotifications: true);
                 lastEvaluationTick = currentTick;
             }
 
@@ -122,38 +122,38 @@ namespace MiliraXian.Characters.Common.Biography
             rightContentHeight = 0f;
         }
 
-        private BiographyStory EnsureSelectedStory(BiographyExtension extension)
+        private BiographyStory EnsureSelectedStory(BiographyDef biography)
         {
-            BiographyStory selected = extension.GetStory(selectedStoryName);
+            BiographyStory selected = biography.GetStory(selectedStoryName);
             if (selected != null)
             {
                 return selected;
             }
 
-            for (int i = 0; i < extension.stories.Count; i++)
+            for (int i = 0; i < biography.stories.Count; i++)
             {
-                if (extension.stories[i] != null)
+                if (biography.stories[i] != null)
                 {
-                    selectedStoryName = extension.stories[i].storyName;
+                    selectedStoryName = biography.stories[i].storyName;
                     rightScrollPosition = Vector2.zero;
-                    return extension.stories[i];
+                    return biography.stories[i];
                 }
             }
 
             return null;
         }
 
-        private void DrawStoryList(Rect panelRect, BiographyExtension extension, Hediff_BiographyTracker tracker)
+        private void DrawStoryList(Rect panelRect, BiographyDef biography, Hediff_BiographyTracker tracker)
         {
             Widgets.DrawMenuSection(panelRect);
             Rect outRect = panelRect.ContractedBy(6f);
-            float viewHeight = Mathf.Max(outRect.height, extension.stories.Count * StoryRowHeight);
+            float viewHeight = Mathf.Max(outRect.height, biography.stories.Count * StoryRowHeight);
             Rect viewRect = new(0f, 0f, outRect.width - 16f, viewHeight);
 
             Widgets.BeginScrollView(outRect, ref leftScrollPosition, viewRect);
-            for (int i = 0; i < extension.stories.Count; i++)
+            for (int i = 0; i < biography.stories.Count; i++)
             {
-                BiographyStory story = extension.stories[i];
+                BiographyStory story = biography.stories[i];
                 if (story == null)
                 {
                     continue;

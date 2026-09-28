@@ -58,10 +58,10 @@ namespace MiliraXian.Characters.Common.Biography
             for (int i = 0; i < pawns.Count; i++)
             {
                 Pawn pawn = pawns[i];
-                if (pawn != null && BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension extension))
+                if (pawn != null && BiographyDatabase.TryGet(pawn.kindDef, out BiographyDef biography))
                 {
                     Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
-                    tracker?.EvaluateUnlocks(extension, sendNotifications);
+                    tracker?.EvaluateUnlocks(biography, sendNotifications);
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace MiliraXian.Characters.Common.Biography
         public static Hediff_BiographyTracker GetOrCreateTracker(Pawn pawn)
         {
             if (pawn?.health?.hediffSet == null || (!NeiyuEquipmentUtility.IsNeiyu(pawn)
-                && !BiographyDatabase.TryGet(pawn.kindDef, out BiographyExtension _)))
+                && !BiographyDatabase.TryGet(pawn.kindDef, out BiographyDef _)))
             {
                 return null;
             }
@@ -126,13 +126,13 @@ namespace MiliraXian.Characters.Common.Biography
 
         public static Hediff_BiographyTracker EnsureAndEvaluate(Pawn pawn, bool sendNotifications)
         {
-            if (!BiographyDatabase.TryGet(pawn?.kindDef, out BiographyExtension extension))
+            if (!BiographyDatabase.TryGet(pawn?.kindDef, out BiographyDef biography))
             {
                 return null;
             }
 
             Hediff_BiographyTracker tracker = GetOrCreateTracker(pawn);
-            tracker?.EvaluateUnlocks(extension, sendNotifications);
+            tracker?.EvaluateUnlocks(biography, sendNotifications);
             return tracker;
         }
     }

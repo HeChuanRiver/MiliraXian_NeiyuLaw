@@ -78,7 +78,7 @@ namespace MiliraXian.Characters.Common.Biography
             return builder.ToString();
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (conditions.NullOrEmpty())
             {
@@ -96,7 +96,7 @@ namespace MiliraXian.Characters.Common.Biography
                     continue;
                 }
 
-                foreach (string error in condition.ConfigErrors(extension, story, childPath))
+                foreach (string error in condition.ConfigErrors(biography, story, childPath))
                 {
                     yield return error;
                 }
@@ -163,7 +163,7 @@ namespace MiliraXian.Characters.Common.Biography
             return builder.ToString();
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (conditions.NullOrEmpty())
             {
@@ -181,7 +181,7 @@ namespace MiliraXian.Characters.Common.Biography
                     continue;
                 }
 
-                foreach (string error in condition.ConfigErrors(extension, story, childPath))
+                foreach (string error in condition.ConfigErrors(biography, story, childPath))
                 {
                     yield return error;
                 }
@@ -234,7 +234,7 @@ namespace MiliraXian.Characters.Common.Biography
                 BiographyConditionText.Status(current >= days));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (days <= 0f)
             {
@@ -274,7 +274,7 @@ namespace MiliraXian.Characters.Common.Biography
                 BiographyConditionText.Status(current >= minimumValue));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (record == null)
             {
@@ -317,7 +317,7 @@ namespace MiliraXian.Characters.Common.Biography
                 BiographyConditionText.Status(complete));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (hediff == null)
             {
@@ -365,7 +365,7 @@ namespace MiliraXian.Characters.Common.Biography
                 : "MX_Biography_ConditionTrait".Translate(traitLabel, BiographyConditionText.Status(complete));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (trait == null)
             {
@@ -392,7 +392,7 @@ namespace MiliraXian.Characters.Common.Biography
             return "MX_Biography_ConditionAbility".Translate(abilityLabel, BiographyConditionText.Status(complete));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (ability == null)
             {
@@ -422,7 +422,7 @@ namespace MiliraXian.Characters.Common.Biography
                 BiographyConditionText.Status(current >= minimumLevel));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (skill == null)
             {
@@ -455,9 +455,9 @@ namespace MiliraXian.Characters.Common.Biography
         {
             bool complete = IsSatisfied(pawn, tracker);
             string storyLabel = storyName;
-            if (BiographyDatabase.TryGet(pawn?.kindDef, out BiographyExtension extension))
+            if (BiographyDatabase.TryGet(pawn?.kindDef, out BiographyDef biography))
             {
-                BiographyStory referencedStory = extension.GetStory(storyName);
+                BiographyStory referencedStory = biography.GetStory(storyName);
                 if (referencedStory != null && !referencedStory.label.NullOrEmpty())
                 {
                     storyLabel = referencedStory.label;
@@ -469,7 +469,7 @@ namespace MiliraXian.Characters.Common.Biography
                 BiographyConditionText.Status(complete));
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (!BiographyIdentifierUtility.IsValid(storyName))
             {
@@ -482,7 +482,7 @@ namespace MiliraXian.Characters.Common.Biography
                 yield return path + " cannot require its own storyName.";
             }
 
-            if (extension?.GetStory(storyName) == null)
+            if (biography?.GetStory(storyName) == null)
             {
                 yield return path + " references missing storyName '" + storyName + "'.";
             }

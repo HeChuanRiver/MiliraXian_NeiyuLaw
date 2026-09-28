@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Common.Biography
             return true;
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (hediff == null)
             {
@@ -106,7 +106,7 @@ namespace MiliraXian.Characters.Common.Biography
             return true;
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (ability == null)
             {
@@ -214,7 +214,7 @@ namespace MiliraXian.Characters.Common.Biography
             return true;
         }
 
-        public override IEnumerable<string> ConfigErrors(BiographyExtension extension, BiographyStory story, string path)
+        public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
         {
             if (thing == null)
             {
