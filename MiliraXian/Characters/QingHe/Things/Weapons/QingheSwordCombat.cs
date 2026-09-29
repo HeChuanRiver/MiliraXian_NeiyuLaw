@@ -12,7 +12,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     public class QingheSlashExtension : DefModExtension
     {
         public bool canGainSwordPressure = true;
-        public float swordPressureGain = 25f;
+        public float swordPressureGain = 0.25f;
         public float resonanceAccumulationMultiplier = 1f;
     }
 
@@ -75,12 +75,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             bool canGain = extension?.canGainSwordPressure ?? true;
             if (canGain)
             {
-                float gain = Mathf.Max(0f, extension?.swordPressureGain ?? 25f);
+                float gain = Mathf.Max(0f, extension?.swordPressureGain ?? 0.25f);
                 if (resonance == FlowerBellResonance.Summer)
                 {
                     gain *= 1.5f;
                 }
-                MX_QH_HediffUtility.GetSwordPressure(caster)?.AddProgress(gain);
+                MX_QH_HediffUtility.GetSwordPressure(caster)?.AddValue(gain);
             }
 
             // Hit rewards precede target defenses, including for empowered slashes.

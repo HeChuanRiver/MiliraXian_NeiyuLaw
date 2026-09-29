@@ -41,8 +41,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_AuraShieldDamageCapOffset;
         public static StatDef MX_QH_AuraShieldHardening;
         public static StatDef MX_QH_AuraShieldHardeningFactor;
-        public static StatDef MX_QH_FlowerDecreeMaxOffset;
-        public static StatDef MX_QH_FlowerDecreeRegenFactor;
         public static StatDef MX_QH_FlowingFormRechargeSpeedFactor;
         public static StatDef MX_QH_SpellEffectFactor;
 

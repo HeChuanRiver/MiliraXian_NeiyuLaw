@@ -1,3 +1,4 @@
+using System.Reflection;
 using HarmonyLib;
 using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Mingyuan;
@@ -76,6 +77,9 @@ namespace MiliraXian.Characters
         public NeiyuLawMod(ModContentPack content)
             : base(content)
         {
+            // Def-loading hooks (e.g. PawnSpecialResourceStats) must be registered before PlayDataLoader runs;
+            // StaticConstructorOnStartup fires too late, so PatchAll lives in the mod constructor.
+            new Harmony("HeChuanRiver.MiliraXian.Characters").PatchAll(Assembly.GetExecutingAssembly());
             Settings = GetSettings<NeiyuLawSettings>();
             Instance = this;
             NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);

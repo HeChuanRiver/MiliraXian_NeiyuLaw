@@ -27,7 +27,7 @@
     <modExtensions>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
         <canGainSwordPressure>true</canGainSwordPressure>
-        <swordPressureGain>25</swordPressureGain>
+        <swordPressureGain>0.25</swordPressureGain>
         <resonanceAccumulationMultiplier>1</resonanceAccumulationMultiplier>
       </li>
     </modExtensions>

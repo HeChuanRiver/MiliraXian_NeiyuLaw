@@ -117,34 +117,6 @@
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_FlowerDecreeMaxOffset</defName>
-        <label>花令上限偏移</label>
-        <description>花令上限的加值修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>0</defaultBaseValue>
-        <toStringStyle>FloatOne</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_FlowerDecree</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
-        <defName>MX_QH_FlowerDecreeRegenFactor</defName>
-        <label>花令回复速度乘数</label>
-        <description>花令回复速度的倍率修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>1</defaultBaseValue>
-        <toStringStyle>PercentZero</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_FlowerDecree</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
         <defName>MX_QH_FlowingFormRechargeSpeedFactor</defName>
         <label>流水之形充能速度乘数</label>
         <description>流水之形充能速度的倍率修正。</description>

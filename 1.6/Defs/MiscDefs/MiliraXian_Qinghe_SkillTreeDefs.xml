@@ -130,7 +130,7 @@
     <displayOrder>50</displayOrder>
     <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
+      <MX_QH_FlowerDecreeMaxValue>1</MX_QH_FlowerDecreeMaxValue>
     </statOffsets>
   </MiliraXian.Characters.Common.SkillTrees.SkillNodeDef>
   <MiliraXian.Characters.Common.SkillTrees.SkillNodeDef>
@@ -176,7 +176,7 @@
     <displayOrder>70</displayOrder>
     <requiredAuraMasteryLevel>18</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_FlowerDecreeMaxOffset>1</MX_QH_FlowerDecreeMaxOffset>
+      <MX_QH_FlowerDecreeMaxValue>1</MX_QH_FlowerDecreeMaxValue>
     </statOffsets>
   </MiliraXian.Characters.Common.SkillTrees.SkillNodeDef>
   <MiliraXian.Characters.Common.SkillTrees.SkillNodeDef>

@@ -48,11 +48,10 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private static void DrawBar(Rect barRect, HediffComp_FlowerDecree comp)
         {
-            float valuePerDecree = Mathf.Max(1f, comp?.ValuePerDecree ?? 100f);
-            int max = Mathf.Max(1, Mathf.RoundToInt((comp?.MaxValue ?? 300f) / valuePerDecree));
-            float currentValue = Mathf.Clamp(comp?.CurrentValue ?? 0f, 0f, comp?.MaxValue ?? 300f);
-            int fullSegments = Mathf.Clamp(Mathf.FloorToInt(currentValue / valuePerDecree), 0, max);
-            float partialPercent = Mathf.Clamp01((currentValue - fullSegments * valuePerDecree) / valuePerDecree);
+            int max = Mathf.Max(1, Mathf.RoundToInt(comp?.MaxValue ?? 3f));
+            float currentValue = Mathf.Clamp(comp?.CurrentValue ?? 0f, 0f, comp?.MaxValue ?? 3f);
+            int fullSegments = Mathf.Clamp(Mathf.FloorToInt(currentValue), 0, max);
+            float partialPercent = Mathf.Clamp01(currentValue - fullSegments);
             float segmentWidth = (barRect.width - SegmentGap * (max - 1)) / max;
             float highlight = comp?.HighlightPercent ?? 0f;
             int highlightedSegment = highlight > 0.0001f ? Mathf.Clamp(fullSegments - 1, -1, max - 1) : -1;
@@ -104,10 +103,10 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                 return "MX_QH_FlowerDecreeValueLine".Translate(0, 3);
             }
 
-            int current = Mathf.FloorToInt(comp.CurrentResourceValue);
-            int max = Mathf.FloorToInt(comp.MaxResourceValue);
-            int recoveryProgress = Mathf.FloorToInt(comp.RecoveryProgress);
-            int recoveryProgressMax = Mathf.FloorToInt(comp.RecoveryProgressMax);
+            int current = Mathf.FloorToInt(comp.CurrentValue);
+            int max = Mathf.FloorToInt(comp.MaxValue);
+            int recoveryProgress = Mathf.FloorToInt(Mathf.Repeat(comp.CurrentValue, 1f) * 100f);
+            const int recoveryProgressMax = 100;
             string tip = "MX_QH_FlowerDecreeValueLine".Translate(current, max).ToString()
                          + "\n" + "MX_QH_RecoveryProgressLine".Translate(recoveryProgress, recoveryProgressMax)
                          + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.CurrentRecoveryProgressPerSecond.ToString("F2"));

@@ -42,8 +42,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private static void DrawSegments(Rect barRect, HediffComp_SwordPressure pressure)
         {
-            int max = Mathf.Max(1, Mathf.RoundToInt(pressure?.MaxResourceValue ?? 3f));
-            float current = Mathf.Clamp(pressure?.CurrentResourceValue ?? 0f, 0f, max);
+            int max = Mathf.Max(1, Mathf.RoundToInt(pressure?.MaxValue ?? 3f));
+            float current = Mathf.Clamp(pressure?.CurrentValue ?? 0f, 0f, max);
             Color filledColor = FilledColorFor(current, max);
             float segmentWidth = (barRect.width - SegmentGap * (max - 1)) / max;
             for (int i = 0; i < max; i++)
@@ -91,8 +91,8 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         private static string BuildTip(HediffComp_SwordPressure pressure)
         {
-            float current = pressure?.CurrentResourceValue ?? 0f;
-            float max = pressure?.MaxResourceValue ?? 3f;
+            float current = pressure?.CurrentValue ?? 0f;
+            float max = pressure?.MaxValue ?? 3f;
             return "MX_QH_SwordPressureValueLine".Translate(current.ToString("F2"), max.ToString("F0")).ToString();
         }
     }

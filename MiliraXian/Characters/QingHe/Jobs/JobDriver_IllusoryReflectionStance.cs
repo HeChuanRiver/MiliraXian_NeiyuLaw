@@ -171,7 +171,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 empowered: true);
             if (hitCount > 0)
             {
-                MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddPoints(1f);
+                MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddValue(1f);
             }
         }
 

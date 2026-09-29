@@ -17,9 +17,8 @@
         <resourceLabel>花令</resourceLabel>
         <resourceDescription>用于施放飞花令的充能资源。</resourceDescription>
         <initialValue>0</initialValue>
-        <maxValue>300</maxValue>
+        <maxValue>3</maxValue>
         <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
-        <valuePerDecree>100</valuePerDecree>
         <highlightTicks>90</highlightTicks>
         <clampToMax>true</clampToMax>
         <showGizmo>false</showGizmo>
@@ -117,10 +116,9 @@
         <resourceLabel>剑压</resourceLabel>
         <resourceDescription>挥剑命中敌人时积累。未积累的一段剑压会在停止获取后逐渐流失。</resourceDescription>
         <initialValue>0</initialValue>
-        <maxValue>300</maxValue>
-        <valuePerPoint>100</valuePerPoint>
+        <maxValue>3</maxValue>
         <decayDelayTicks>300</decayDelayTicks>
-        <decayPerSecond>12</decayPerSecond>
+        <decayPerSecond>0.12</decayPerSecond>
         <clampToMax>true</clampToMax>
         <showGizmo>false</showGizmo>
         <hideOnHealthTab>true</hideOnHealthTab>
@@ -391,7 +389,7 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_FlowerDecreeRegenFactor</stat>
+            <stat>MX_QH_FlowerDecreeGainFactor</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>

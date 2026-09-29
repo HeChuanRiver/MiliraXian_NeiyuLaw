@@ -23,7 +23,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 }
 
                 // Read the resource directly so gains and consumption affect stats in the same tick.
-                return def.StageAtSeverity(QinghePowerBalance.ZeroLevelPassivesEnabled ? pressure.CurrentResourceValue : 0f);
+                return def.StageAtSeverity(QinghePowerBalance.ZeroLevelPassivesEnabled ? pressure.CurrentValue : 0f);
             }
         }
     }

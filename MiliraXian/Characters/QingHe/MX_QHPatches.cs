@@ -51,7 +51,7 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 // Runs after hit and dodge rolls, once per target rather than per extra damage packet.
-                MX_QH_HediffUtility.GetSwordPressure(caster)?.AddProgress(25f);
+                MX_QH_HediffUtility.GetSwordPressure(caster)?.AddValue(0.25f);
             }
         }
 

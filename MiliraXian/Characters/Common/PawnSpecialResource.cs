@@ -41,7 +41,14 @@ namespace MiliraXian.Characters.Common
             }
         }
 
-        public virtual float MaxValue => PropsResource.maxValue;
+        public virtual float MaxValue
+        {
+            get
+            {
+                StatDef stat = PawnSpecialResourceStats.MaxValueStatFor(parent?.def);
+                return stat != null && Pawn != null ? Pawn.GetStatValue(stat) : PropsResource.maxValue;
+            }
+        }
 
         public bool IsOverflowing => MaxValue > 0f && CurrentValue > MaxValue;
 
@@ -113,18 +120,27 @@ namespace MiliraXian.Characters.Common
             }
         }
 
-        public void AddValue(float value)
+        public virtual void AddValue(float value)
         {
             if (Mathf.Approximately(value, 0f))
             {
                 return;
             }
 
+            if (value > 0f)
+            {
+                StatDef gainStat = PawnSpecialResourceStats.GainFactorStatFor(parent?.def);
+                if (gainStat != null && Pawn != null)
+                {
+                    value *= Pawn.GetStatValue(gainStat);
+                }
+            }
+
             EnsureInitialized();
             currentValue = NormalizeValue(currentValue + value);
         }
 
-        public bool TryConsume(float value)
+        public virtual bool TryConsume(float value)
         {
             if (value < 0f)
             {
@@ -164,20 +180,6 @@ namespace MiliraXian.Characters.Common
         }
     }
 
-    public interface ISpecialResourceAddHandler
-    {
-        void AddResourceValue(float value);
-
-        bool TryConsumeResourceValue(float value);
-    }
-
-    public interface ISpecialResourceValueAdapter
-    {
-        float CurrentResourceValue { get; }
-
-        float MaxResourceValue { get; }
-    }
-    
     [StaticConstructorOnStartup]
     public class PawnSpecialResourceGizmo : Gizmo_Slider
     {
