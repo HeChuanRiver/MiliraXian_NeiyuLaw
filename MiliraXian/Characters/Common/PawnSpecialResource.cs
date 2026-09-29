@@ -11,7 +11,6 @@ namespace MiliraXian.Characters.Common
     {
         public string resourceLabel = "Resource";
         public string resourceDescription = string.Empty;
-        public float initialValue;
         public float maxValue = 100f;
         public bool clampToMax = true;
         public bool showGizmo = true;
@@ -28,18 +27,10 @@ namespace MiliraXian.Characters.Common
     public class HediffComp_PawnSpecialResource : HediffComp
     {
         private float currentValue;
-        private bool initialized;
 
         public HediffCompProperties_PawnSpecialResource PropsResource => (HediffCompProperties_PawnSpecialResource)props;
 
-        public virtual float CurrentValue
-        {
-            get
-            {
-                EnsureInitialized();
-                return currentValue;
-            }
-        }
+        public virtual float CurrentValue => currentValue;
 
         public virtual float MaxValue
         {
@@ -65,16 +56,6 @@ namespace MiliraXian.Characters.Common
         public override void CompExposeData()
         {
             Scribe_Values.Look(ref currentValue, "currentValue", 0f);
-            Scribe_Values.Look(ref initialized, "initialized", false);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                EnsureInitialized();
-            }
-        }
-
-        public override void Notify_Spawned()
-        {
-            EnsureInitialized();
         }
 
         public override bool CompDisallowVisible()
@@ -84,7 +65,6 @@ namespace MiliraXian.Characters.Common
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            EnsureInitialized();
             if (!PropsResource.showGizmo || Pawn == null || Pawn.Dead)
             {
                 yield break;
@@ -107,13 +87,11 @@ namespace MiliraXian.Characters.Common
 
         public void SetValue(float value)
         {
-            EnsureInitialized();
             currentValue = NormalizeValue(value);
         }
 
         protected void ClampCurrentValueTo(float maxValue)
         {
-            EnsureInitialized();
             if (PropsResource.clampToMax && maxValue > 0f && currentValue > maxValue)
             {
                 currentValue = maxValue;
@@ -136,7 +114,6 @@ namespace MiliraXian.Characters.Common
                 }
             }
 
-            EnsureInitialized();
             currentValue = NormalizeValue(currentValue + value);
         }
 
@@ -147,7 +124,6 @@ namespace MiliraXian.Characters.Common
                 return false;
             }
 
-            EnsureInitialized();
             if (currentValue + 1E-05f < value)
             {
                 return false;
@@ -155,17 +131,6 @@ namespace MiliraXian.Characters.Common
 
             currentValue = NormalizeValue(currentValue - value);
             return true;
-        }
-
-        private void EnsureInitialized()
-        {
-            if (initialized)
-            {
-                return;
-            }
-
-            currentValue = NormalizeValue(PropsResource.initialValue);
-            initialized = true;
         }
 
         private float NormalizeValue(float value)

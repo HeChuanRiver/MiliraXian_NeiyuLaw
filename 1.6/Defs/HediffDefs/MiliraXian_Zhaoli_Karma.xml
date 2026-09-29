@@ -16,7 +16,6 @@
             <li Class="MiliraXian.Characters.Common.HediffCompProperties_PawnSpecialResource">
                 <resourceLabel>&lt;color=#E85A7A&gt;因果&lt;/color&gt;</resourceLabel>
                 <resourceDescription>&lt;color=#E85A7A&gt;昭离&lt;/color&gt;专属资源。每次成功&lt;color=#C77DFF&gt;告死&lt;/color&gt;都会增加因果，后续主动技能会消耗因果。该资源超过&lt;color=#E85A7A&gt;100点&lt;/color&gt;时，会优先尝试把溢出的因果分摊给已链接者。</resourceDescription>
-                <initialValue>0</initialValue>
                 <maxValue>100</maxValue>
                 <clampToMax>false</clampToMax>
                 <showGizmo>true</showGizmo>
