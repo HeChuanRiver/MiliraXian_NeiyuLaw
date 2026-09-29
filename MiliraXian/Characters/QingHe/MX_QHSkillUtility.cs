@@ -14,7 +14,7 @@ namespace MiliraXian.Characters.QingHe
     {
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+            HediffComp_SkillTreeState state = MX_QH_HediffUtility.GetFlowerResonance(pawn);
             SyncChoices(pawn, state);
         }
 

@@ -1,6 +1,5 @@
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.Defs;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe;
@@ -18,7 +17,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     public class HediffComp_QingheCombatState : HediffComp
     {
         private const int TuneCooldownTicks = 60000;
-        private static readonly ConditionalWeakTable<Pawn, HediffComp_QingheCombatState> managers = new();
 
         private Hediff_SeasonalResonance currentResonance;
         private int pendingTuneResonance = -1;
@@ -27,33 +25,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public int TuneCooldownRemainingTicks => Mathf.Max(0, tuneCooldownUntilTick - Find.TickManager.TicksGame);
 
         public Hediff_SeasonalResonance CurrentResonance => currentResonance;
-
-        public static HediffComp_QingheCombatState GetFor(Pawn pawn)
-        {
-            return pawn != null && managers.TryGetValue(pawn, out var manager) ? manager : null;
-        }
-
-        private void Register()
-        {
-            managers.Remove(Pawn);
-            managers.Add(Pawn, this);
-        }
-
-        public override void CompPostPostAdd(DamageInfo? dinfo)
-        {
-            base.CompPostPostAdd(dinfo);
-            Register();
-        }
-
-        public override void CompPostPostRemoved()
-        {
-            base.CompPostPostRemoved();
-            RemoveCurrentResonance();
-            if (GetFor(Pawn) == this)
-            {
-                managers.Remove(Pawn);
-            }
-        }
 
         public void NotifyResonanceRemoved(Hediff_SeasonalResonance removed)
         {
@@ -73,6 +44,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
+        public override void CompPostPostRemoved()
+        {
+            base.CompPostPostRemoved();
+            RemoveCurrentResonance();
+        }
+
         public override bool CompDisallowVisible()
         {
             return true;
@@ -84,10 +61,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             Scribe_References.Look(ref currentResonance, "currentResonance");
             Scribe_Values.Look(ref pendingTuneResonance, "mx_qh_pendingTuneResonance", -1);
             Scribe_Values.Look(ref tuneCooldownUntilTick, "mx_qh_tuneCooldownUntilTick", -1);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                Register();
-            }
         }
 
         public override void CompPostTick(ref float severityAdjustment)

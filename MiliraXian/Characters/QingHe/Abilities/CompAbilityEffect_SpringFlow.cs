@@ -27,8 +27,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     {
         public new CompProperties_AbilitySpringFlow Props => (CompProperties_AbilitySpringFlow)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
-
         public override bool GizmoDisabled(out string reason)
         {
             if (Props.resourceCostDef != null

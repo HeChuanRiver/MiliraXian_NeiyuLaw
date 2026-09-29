@@ -35,23 +35,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public static class QingheSwordCombatUtility
     {
-        public static bool IsSwordMode(Pawn pawn)
-        {
-            return MX_QHCharacterUtility.IsQinghe(pawn)
-                && pawn.equipment?.Primary?.def.IsMeleeWeapon == true;
-        }
-
-        public static bool IsBellMode(Pawn pawn)
-        {
-            return MX_QHCharacterUtility.IsQinghe(pawn)
-                && pawn.equipment?.Primary?.def.IsRangedWeapon == true;
-        }
-
-        public static bool HasWeaponStance(Pawn pawn)
-        {
-            return IsSwordMode(pawn) || IsBellMode(pawn);
-        }
-
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
         {
             ThingDef weaponDef = pawn?.equipment?.Primary?.def;
@@ -97,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 {
                     gain *= 1.5f;
                 }
-                MX_QH_HediffUtility.EnsureSwordPressure(caster)?.AddProgress(gain);
+                MX_QH_HediffUtility.GetSwordPressure(caster)?.AddProgress(gain);
             }
 
             // Hit rewards precede target defenses, including for empowered slashes.
@@ -280,28 +263,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
             Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlow);
             hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
-        }
-    }
-
-    public class StatPart_QingheSwordModeDodge : StatPart
-    {
-        public float rawOffset = 30f;
-
-        public override void TransformValue(StatRequest req, ref float val)
-        {
-            if (req.HasThing && req.Thing is Pawn pawn && QingheSwordCombatUtility.IsSwordMode(pawn))
-            {
-                val += rawOffset;
-            }
-        }
-
-        public override string ExplanationPart(StatRequest req)
-        {
-            if (req.HasThing && req.Thing is Pawn pawn && QingheSwordCombatUtility.IsSwordMode(pawn))
-            {
-                return "MX_QH_SwordModeDodgeExplanation".Translate().ToString();
-            }
-            return null;
         }
     }
 }

@@ -81,8 +81,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public new CompProperties_AbilityAscentSlash Props => (CompProperties_AbilityAscentSlash)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
-
         private float AbilityRange => Mathf.Max(0f, parent?.def?.verbProperties?.range ?? 0f);
 
         private bool ActionInProgress => dashAction?.Active == true || slashAction?.Active == true;

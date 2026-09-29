@@ -84,7 +84,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (cachedState == null || cachedState.Pawn != pawn)
             {
-                cachedState = MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
+                cachedState = MX_QH_HediffUtility.GetFlowerResonance(pawn);
             }
 
             return cachedState;
@@ -94,7 +94,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (cachedStillness == null || cachedStillness.Pawn != pawn)
             {
-                cachedStillness = MX_QH_HediffUtility.EnsureMeditativeStillness(pawn);
+                cachedStillness = MX_QH_HediffUtility.GetMeditativeStillness(pawn);
             }
 
             return cachedStillness;

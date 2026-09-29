@@ -10,15 +10,5 @@ namespace MiliraXian.Characters.QingHe
         {
             return pawn?.kindDef == MX_QHDefOf.MiliraXian_Qinghe;
         }
-
-        public static string TranslateIfKey(string text)
-        {
-            if (text.NullOrEmpty())
-            {
-                return text;
-            }
-
-            return Translator.CanTranslate(text) ? text.Translate().ToString() : text;
-        }
     }
 }

@@ -83,8 +83,7 @@ namespace MiliraXian.Characters.QingHe.UI
         public Dialog_QH_SkillTree(Pawn pawn, HediffComp_SkillTreeState state)
         {
             this.pawn = pawn;
-            this.state = state ?? MX_QH_HediffUtility.EnsureFlowerResonance(pawn);
-            MX_QH_HediffUtility.EnsureAuraMasteryComp(pawn);
+            this.state = state ?? MX_QH_HediffUtility.GetFlowerResonance(pawn);
             forcePause = true;
             absorbInputAroundWindow = true;
             closeOnClickedOutside = true;
@@ -304,7 +303,7 @@ namespace MiliraXian.Characters.QingHe.UI
             {
                 return;
             }
-            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.EnsureCombatState(pawn);
+            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.GetCombatState(pawn);
             if (combatState == null || combatState.TuneCooldownRemainingTicks > 0)
             {
                 return;
@@ -317,7 +316,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawSkillTreePage(Rect rect)
         {
-            HediffComp_QingheAuraMasterySync auraMastery = MX_QH_HediffUtility.EnsureAuraMasteryComp(pawn);
+            HediffComp_QingheAuraMasterySync auraMastery = MX_QH_HediffUtility.GetAuraMasteryComp(pawn);
             Rect topBar = new(rect.x, rect.y, rect.width, TopBarHeight);
             float specialAreaHeight = GetSpecialAreaHeight(rect.width);
             Rect specialArea = new(rect.x, rect.yMax - specialAreaHeight - SkillTreeBottomPadding, rect.width, specialAreaHeight);

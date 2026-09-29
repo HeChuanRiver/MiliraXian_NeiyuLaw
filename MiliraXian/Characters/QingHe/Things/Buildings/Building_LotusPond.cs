@@ -189,8 +189,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         return;
                     }
 
-                    HediffComp_SkillTreeState state = MX_QH_HediffUtility.EnsureFlowerResonance(interactor);
-                    MX_QH_HediffUtility.EnsureFlowerDecree(interactor);
+                    HediffComp_SkillTreeState state = MX_QH_HediffUtility.GetFlowerResonance(interactor);
                     if (state == null)
                     {
                         Messages.Message("MX_QH_SkillTreeMissing".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);

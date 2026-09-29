@@ -39,6 +39,18 @@
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheCombatState" />
     </comps>
   </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_CombatStance</defName>
+    <label>战斗姿态</label>
+    <description>隐藏状态：记录清荷当前的战斗姿态，并施加姿态对应的属性修正。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.CombatStance.Hediff_CombatStance</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.CombatStance.HediffCompProperties_CombatStance" />
+    </comps>
+  </HediffDef>
   <HediffDef Name="MX_QH_SeasonalResonanceBase" Abstract="True">
     <description>散华与花信铃正与四时相和，获得当前季节对应的效果。</description>
     <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_SeasonalResonance</hediffClass>

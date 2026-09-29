@@ -1,3 +1,4 @@
+using MiliraXian.Characters.QingHe.CombatStance;
 using RimWorld;
 using Verse;
 
@@ -6,6 +7,9 @@ namespace MiliraXian.Characters.QingHe.Defs
     [DefOf]
     public static class MX_QHDefOf
     {
+        public static CombatStanceDef MX_QH_Stance_Sword;
+        public static CombatStanceDef MX_QH_Stance_Bell;
+
         public static JobDef MX_QH_IllusoryReflection;
         public static JobDef MX_QH_TuneResonance;
 
@@ -53,6 +57,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_SwordPressure;
         public static HediffDef MX_QH_CombatState;
+        public static HediffDef MX_QH_CombatStance;
         public static HediffDef MX_QH_ResonanceSpring;
         public static HediffDef MX_QH_ResonanceSummer;
         public static HediffDef MX_QH_ResonanceAutumn;

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
+    <defName>MX_QH_Stance_Sword</defName>
+    <label>剑舞</label>
+    <weaponClass>Melee</weaponClass>
+    <stanceEffect>
+      <statOffsets>
+        <MeleeDodgeChance>30</MeleeDodgeChance>
+      </statOffsets>
+    </stanceEffect>
+  </MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
+  <MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
+    <defName>MX_QH_Stance_Bell</defName>
+    <label>华彩</label>
+    <weaponClass>Ranged</weaponClass>
+  </MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
+</Defs>

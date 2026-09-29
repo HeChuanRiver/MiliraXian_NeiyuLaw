@@ -17,6 +17,8 @@ namespace MiliraXian.Characters.QingHe
     public static class MX_QHPatches
     {
         private static readonly Harmony patcher = new("MiliraXian.Characters.QingHe");
+        private static readonly AccessTools.FieldRef<Pawn_EquipmentTracker, Pawn> equipmentTrackerPawn =
+            AccessTools.FieldRefAccess<Pawn_EquipmentTracker, Pawn>("pawn");
 
         static MX_QHPatches()
         {
@@ -60,6 +62,11 @@ namespace MiliraXian.Characters.QingHe
 
             patcher.Patch(AccessTools.Method(typeof(JobDriver_Meditate), "MeditationTick"),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_Meditate_MeditationTick_Postfix)));
+
+            patcher.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.Notify_EquipmentAdded)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_EquipmentChanged_Postfix)));
+            patcher.Patch(AccessTools.Method(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.Notify_EquipmentRemoved)),
+                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_EquipmentChanged_Postfix)));
 
             patcher.Patch(AccessTools.Method(typeof(Book), nameof(Book.OnBookReadTick), new[] { typeof(Pawn), typeof(int), typeof(float) }),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Book_OnBookReadTick_Postfix)));
@@ -256,9 +263,18 @@ namespace MiliraXian.Characters.QingHe
             __result = AppendQingheLotusPondMeditationSpots(__result, pawn, allowFallbackSpots);
         }
 
+        public static void Patch_EquipmentChanged_Postfix(Pawn_EquipmentTracker __instance)
+        {
+            Pawn pawn = equipmentTrackerPawn(__instance);
+            if (MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                MX_QH_HediffUtility.GetCombatStance(pawn)?.RefreshStance();
+            }
+        }
+
         public static void Patch_VerbProperties_AdjustedArmorPenetration_Postfix(Verb ownerVerb, Pawn attacker, ref float __result)
         {
-            if (!QingheSwordCombatUtility.IsSwordMode(attacker)
+            if (MX_QH_HediffUtility.GetCombatStance(attacker)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                 || QingheSwordCombatUtility.ResonanceFor(attacker) != FlowerBellResonance.Autumn
                 || ownerVerb?.EquipmentSource?.def != MX_QHDefOf.MX_QH_Weapon_Sword)
             {
@@ -273,7 +289,7 @@ namespace MiliraXian.Characters.QingHe
             ThingWithComps weapon = pawn?.equipment?.Primary;
             JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
             if (reflection == null
-                || !QingheSwordCombatUtility.IsSwordMode(pawn))
+                || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword)
             {
                 return true;
             }
@@ -326,7 +342,7 @@ namespace MiliraXian.Characters.QingHe
             Verb_MeleeAttackDamage __instance, LocalTargetInfo target)
         {
             Pawn caster = __instance.CasterPawn;
-            if (!QingheSwordCombatUtility.IsSwordMode(caster)
+            if (MX_QH_HediffUtility.GetCombatStance(caster)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                 || __instance.EquipmentSource?.def.IsMeleeWeapon != true
                 || __instance.verbProps.meleeDamageDef.Worker is DamageWorker_QingheSlash
                 || !QingheSwordCombatUtility.IsSwordPressureTarget(caster, target.Thing))
@@ -335,7 +351,7 @@ namespace MiliraXian.Characters.QingHe
             }
 
             // Runs after hit and dodge rolls, once per target rather than per extra damage packet.
-            MX_QH_HediffUtility.EnsureSwordPressure(caster).AddProgress(25f);
+            MX_QH_HediffUtility.GetSwordPressure(caster)?.AddProgress(25f);
         }
 
         public static void Patch_Thing_TakeDamage_Prefix(Thing __instance, DamageInfo dinfo)

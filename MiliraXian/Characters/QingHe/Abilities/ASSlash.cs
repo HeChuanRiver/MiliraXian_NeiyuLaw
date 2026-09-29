@@ -333,7 +333,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             MX_QHGraphicsUtility.Fleck(map, center, props.impactFleck, Mathf.Max(0.8f, props.secondImpactRadius * 0.18f));
             props.castSound?.PlayOneShot(new TargetInfo(center, map));
 
-            HediffComp_SwordPressure pressure = MX_QH_HediffUtility.EnsureSwordPressure(caster);
+            HediffComp_SwordPressure pressure = MX_QH_HediffUtility.GetSwordPressure(caster);
             // Keep the pre-consumption stat for the entire slash sequence.
             float meleeFactor = caster.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             float consumedPressure = pressure != null && pressure.CompletedPoints >= 1 ? pressure.ConsumeAll() : 0f;
@@ -410,7 +410,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             {
                 if (slashHitCount > 0)
                 {
-                    MX_QH_HediffUtility.EnsureSwordPressure(caster)?.StartRecovery(
+                    MX_QH_HediffUtility.GetSwordPressure(caster)?.StartRecovery(
                         slashEmpowered ? props.postHitRecoveryPoints : props.normalPostHitRecoveryPoints,
                         slashEmpowered ? props.postHitRecoveryTicks : props.normalPostHitRecoveryTicks);
                 }

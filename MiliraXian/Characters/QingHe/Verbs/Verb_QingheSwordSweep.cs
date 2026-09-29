@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using Verse;
@@ -40,7 +42,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 return false;
             }
 
-            if (!QingheSwordCombatUtility.IsSwordMode(pawn))
+            if (MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword)
             {
                 return base.TryCastShot();
             }

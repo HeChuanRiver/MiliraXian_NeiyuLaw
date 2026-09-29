@@ -371,7 +371,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             int maxCharges = Mathf.Max(1, Props.maxCharges);
             if (cachedFlowerResonance == null || cachedFlowerResonance.Pawn != Pawn)
             {
-                cachedFlowerResonance = MX_QH_HediffUtility.EnsureFlowerResonance(Pawn);
+                cachedFlowerResonance = MX_QH_HediffUtility.GetFlowerResonance(Pawn);
             }
 
             HediffComp_SkillTreeState state = cachedFlowerResonance;

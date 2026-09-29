@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MiliraXian.Characters.QingHe.CombatStance;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.UI.WidgetControls;
 using MiliraXian.Characters.Common.UI;
 using UnityEngine;
@@ -30,12 +32,13 @@ namespace MiliraXian.Characters.QingHe.UI
             outWidgets.Add(new Widget_FlowingForm(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
             outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(160f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
             bool resourcesUnlocked = MX_QH_HediffUtility.GetAuraMasteryLevel(pawn) >= 1;
-            if (resourcesUnlocked && QingheSwordCombatUtility.IsSwordMode(pawn))
+            CombatStanceDef stance = MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance;
+            if (resourcesUnlocked && stance == MX_QHDefOf.MX_QH_Stance_Sword)
             {
                 outWidgets.Add(new TextWidget("MX_QH_SwordPressureLabel".Translate(), new Rect(8f, 2f, 40f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
                 outWidgets.Add(new Widget_SwordPressureBar(pawn, new Rect(0f, 12f, 120f, 24f), TextAnchor.MiddleLeft));
             }
-            else if (resourcesUnlocked && QingheSwordCombatUtility.IsBellMode(pawn))
+            else if (resourcesUnlocked && stance == MX_QHDefOf.MX_QH_Stance_Bell)
             {
                 outWidgets.Add(new TextWidget("MX_QH_FlowerDecreeLabel".Translate(), new Rect(8f, 2f, 32f, 24f), TextAnchor.MiddleLeft, GameFont.Tiny));
                 outWidgets.Add(new Widget_FlowerDecreeBar(pawn, new Rect(0f, 12f, 120f, 24f), TextAnchor.MiddleLeft));

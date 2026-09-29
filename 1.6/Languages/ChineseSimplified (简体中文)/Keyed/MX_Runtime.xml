@@ -126,11 +126,9 @@
   <MX_QH_SkillTreeNodeLearned>已习得</MX_QH_SkillTreeNodeLearned>
   <MX_QH_SkillTreeNodeLocked>习得等级：Lv.{0}</MX_QH_SkillTreeNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_RequiresSwordMode>需要装备近战武器，进入剑姿态。</MX_QH_RequiresSwordMode>
-  <MX_QH_RequiresBellMode>需要装备远程武器，进入铃姿态。</MX_QH_RequiresBellMode>
+  <MX_QH_RequiresStance>需要姿态：{0}。</MX_QH_RequiresStance>
   <MX_QH_SwordPressureLabel>剑压</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>剑压：{0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_SwordModeDodgeExplanation>剑舞姿态：近战闪避大幅提升</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashInProgress>正在施放此技能，无法再次施放。</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashInvalidLanding>无法在该位置施放。</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LotusPondAssignQingheOnly>荷池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>

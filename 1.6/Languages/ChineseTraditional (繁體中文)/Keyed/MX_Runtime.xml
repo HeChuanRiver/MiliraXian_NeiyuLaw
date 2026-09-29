@@ -138,15 +138,13 @@
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
   <MX_QH_SpringFlowMissingResource>花令不足，無法施放春泉湧流。</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>花令不足，無法施放霜月鏡。</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_RequiresSwordMode>需要裝備散華。</MX_QH_RequiresSwordMode>
-  <MX_QH_RequiresBellMode>需要裝備花信風鈴。</MX_QH_RequiresBellMode>
+  <MX_QH_RequiresStance>需要姿態：{0}。</MX_QH_RequiresStance>
   <MX_QH_WeaponFormFlowerBell>花信風鈴</MX_QH_WeaponFormFlowerBell>
   <MX_QH_WeaponFormSword>散華</MX_QH_WeaponFormSword>
   <MX_QH_ModeSwitchCommandLabel>切換武器</MX_QH_ModeSwitchCommandLabel>
   <MX_QH_ModeSwitchCommandDesc>在花信風鈴與散華之間切換武器。</MX_QH_ModeSwitchCommandDesc>
   <MX_QH_SwordPressureLabel>劍壓</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>劍壓：{0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_SwordModeDodgeExplanation>散華姿態：近戰閃避大幅提升</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashNotLearned>尚未習得絕影，無法使用劍勢·絕影。</MX_QH_AscentSlashNotLearned>
   <MX_QH_AscentSlashInProgress>劍勢·絕影仍在施展中。</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashLandingNoLineOfSight>劍勢·絕影的落點需要在清荷視線內。</MX_QH_AscentSlashLandingNoLineOfSight>

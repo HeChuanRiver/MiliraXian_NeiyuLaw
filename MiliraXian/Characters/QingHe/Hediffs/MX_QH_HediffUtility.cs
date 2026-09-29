@@ -1,5 +1,6 @@
 using RimWorld;
 using MiliraXian.Characters;
+using MiliraXian.Characters.QingHe.CombatStance;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
@@ -11,19 +12,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public static class MX_QH_HediffUtility
     {
-        public static HediffComp_SkillTreeState EnsureFlowerResonance(Pawn pawn)
-        {
-            return EnsureHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
-        }
-
         public static HediffComp_SkillTreeState GetFlowerResonance(Pawn pawn)
         {
             return GetHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
-        }
-
-        public static HediffComp_FlowerDecree EnsureFlowerDecree(Pawn pawn)
-        {
-            return PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
         }
 
         public static HediffComp_FlowerDecree GetFlowerDecree(Pawn pawn)
@@ -31,14 +22,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
         }
 
-        public static HediffComp_QingheCombatState EnsureCombatState(Pawn pawn)
-        {
-            return EnsureHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
-        }
-
         public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
         {
-            return HediffComp_QingheCombatState.GetFor(pawn);
+            return GetHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
         }
 
         public static Hediff_SeasonalResonance GetSeasonalResonance(Pawn pawn)
@@ -46,24 +32,19 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return GetCombatState(pawn)?.CurrentResonance;
         }
 
-        public static HediffComp_SwordPressure EnsureSwordPressure(Pawn pawn)
-        {
-            return PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
-        }
-
         public static HediffComp_SwordPressure GetSwordPressure(Pawn pawn)
         {
             return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_SwordPressure) as HediffComp_SwordPressure;
         }
 
-        public static HediffComp_MeditativeStillness EnsureMeditativeStillness(Pawn pawn)
+        public static HediffComp_MeditativeStillness GetMeditativeStillness(Pawn pawn)
         {
-            if (!MX_QHCharacterUtility.IsQinghe(pawn))
-            {
-                return null;
-            }
+            return GetHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
+        }
 
-            return EnsureHediffComp<HediffComp_MeditativeStillness>(pawn, MX_QHDefOf.MX_QH_MeditativeStillness);
+        public static HediffComp_CombatStance GetCombatStance(Pawn pawn)
+        {
+            return GetHediffComp<HediffComp_CombatStance>(pawn, MX_QHDefOf.MX_QH_CombatStance);
         }
 
         public static void SyncAuraShieldForPowerLevel(Pawn pawn)
@@ -76,7 +57,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddMeditativeStillnessFromMeditation(Pawn pawn, Building lotusPond)
         {
-            HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
+            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
             if (stillness == null)
             {
                 return;
@@ -94,7 +75,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddMeditativeStillnessFromReading(Pawn pawn, int delta, float roomBonusFactor)
         {
-            HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
+            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
             if (stillness == null || delta <= 0)
             {
                 return;
@@ -106,7 +87,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddMeditativeStillnessFromSleep(Pawn pawn, int delta)
         {
-            HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
+            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
             if (stillness == null || delta <= 0)
             {
                 return;
@@ -133,12 +114,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddAuraMasteryLevel(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null)
-            {
-                return;
-            }
-
-            HediffComp_QingheAuraMasterySync comp = EnsureAuraMasteryComp(pawn);
+            HediffComp_QingheAuraMasterySync comp = GetAuraMasteryComp(pawn);
             if (comp == null || comp.IsMaxLevel)
             {
                 return;
@@ -153,26 +129,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return GetHediffComp<HediffComp_QingheAuraMasterySync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
-        public static HediffComp_QingheAuraMasterySync EnsureAuraMasteryComp(Pawn pawn)
-        {
-            return EnsureHediffComp<HediffComp_QingheAuraMasterySync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
-        }
-
-        public static float GetAuraMasteryProgress(Pawn pawn)
-        {
-            return GetAuraMasteryComp(pawn)?.Progress ?? 0f;
-        }
-
-        public static float GetAuraMasteryProgressRequired(Pawn pawn)
-        {
-            return GetAuraMasteryComp(pawn)?.RequiredProgressForCurrentLevel ?? 0f;
-        }
-
-        public static float GetAuraMasteryProgressPercent(Pawn pawn)
-        {
-            return GetAuraMasteryComp(pawn)?.ProgressPercent ?? 0f;
-        }
-
         public static void AddAuraMasteryProgress(Pawn pawn, float amount)
         {
             if (!MX_QHCharacterUtility.IsQinghe(pawn) || amount <= 0f)
@@ -180,7 +136,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            EnsureAuraMasteryComp(pawn)?.AddProgress(amount);
+            GetAuraMasteryComp(pawn)?.AddProgress(amount);
         }
 
         public static void AddAuraMasteryProgressFromCraft(Pawn pawn, RecipeDef recipe, Thing product)
@@ -243,11 +199,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             return (workReward + cappedValue * 0.3f) * qualityFactor;
         }
-        private static T EnsureHediffComp<T>(Pawn pawn, HediffDef hediffDef) where T : HediffComp
-        {
-            Hediff hediff = EnsureHediff(pawn, hediffDef);
-            return (hediff as HediffWithComps)?.GetComp<T>();
-        }
 
         private static T GetHediffComp<T>(Pawn pawn, HediffDef hediffDef) where T : HediffComp
         {
@@ -258,23 +209,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
             return (hediff as HediffWithComps)?.GetComp<T>();
-        }
-
-        private static Hediff EnsureHediff(Pawn pawn, HediffDef hediffDef)
-        {
-            if (pawn?.health?.hediffSet == null || hediffDef == null)
-            {
-                return null;
-            }
-
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-            if (hediff == null)
-            {
-                hediff = HediffMaker.MakeHediff(hediffDef, pawn);
-                pawn.health.AddHediff(hediff);
-            }
-
-            return hediff;
         }
     }
 }

@@ -30,8 +30,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     {
         public new CompProperties_AbilityLunarMirror Props => (CompProperties_AbilityLunarMirror)props;
 
-        public override bool ShouldHideGizmo => !QingheSwordCombatUtility.HasWeaponStance(parent.pawn);
-
         public override bool GizmoDisabled(out string reason)
         {
             if (Props.resourceCostDef != null

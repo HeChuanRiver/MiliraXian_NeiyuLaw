@@ -113,7 +113,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
                          + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.CurrentRecoveryProgressPerSecond.ToString("F2"));
             if (!comp.ResourceDescription.NullOrEmpty())
             {
-                tip += "\n\n" + MX_QHCharacterUtility.TranslateIfKey(comp.ResourceDescription);
+                tip += "\n\n" + comp.ResourceDescription;
             }
 
             return tip;

@@ -138,15 +138,13 @@
   <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
-  <MX_QH_RequiresSwordMode>Sanhua must be equipped.</MX_QH_RequiresSwordMode>
-  <MX_QH_RequiresBellMode>The Flower-Tiding Bell must be equipped.</MX_QH_RequiresBellMode>
+  <MX_QH_RequiresStance>Requires stance: {0}.</MX_QH_RequiresStance>
   <MX_QH_WeaponFormFlowerBell>Flower-Tiding Bell</MX_QH_WeaponFormFlowerBell>
   <MX_QH_WeaponFormSword>Sanhua</MX_QH_WeaponFormSword>
   <MX_QH_ModeSwitchCommandLabel>Switch weapon</MX_QH_ModeSwitchCommandLabel>
   <MX_QH_ModeSwitchCommandDesc>Switch between the Flower-Tiding Bell and Sanhua.</MX_QH_ModeSwitchCommandDesc>
   <MX_QH_SwordPressureLabel>Sword Pressure</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>Sword Pressure: {0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_SwordModeDodgeExplanation>Sanhua stance: greatly increased melee dodge</MX_QH_SwordModeDodgeExplanation>
   <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
   <MX_QH_AscentSlashInProgress>Sword Form: Jueying is already in progress.</MX_QH_AscentSlashInProgress>
   <MX_QH_AscentSlashLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_AscentSlashLandingNoLineOfSight>
