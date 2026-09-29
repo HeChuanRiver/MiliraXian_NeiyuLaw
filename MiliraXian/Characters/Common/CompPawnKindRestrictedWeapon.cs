@@ -48,16 +48,14 @@ namespace MiliraXian.Characters.Common
         }
     }
 
-    [StaticConstructorOnStartup]
+    [HarmonyPatch]
     internal static class Patch_PawnKindRestrictedWeapon_CanEquip
     {
-        static Patch_PawnKindRestrictedWeapon_CanEquip()
+        // CanEquip's ref string cantReason cannot be expressed in attribute argument types.
+        private static System.Reflection.MethodBase TargetMethod()
         {
-            var harmony = new Harmony("MiliraXian.Characters.PawnKindRestrictedWeapon");
-            harmony.Patch(
-                AccessTools.Method(typeof(EquipmentUtility), nameof(EquipmentUtility.CanEquip),
-                    new[] { typeof(Thing), typeof(Pawn), typeof(string).MakeByRefType(), typeof(bool) }),
-                postfix: new HarmonyMethod(typeof(Patch_PawnKindRestrictedWeapon_CanEquip), nameof(Postfix)));
+            return AccessTools.Method(typeof(EquipmentUtility), nameof(EquipmentUtility.CanEquip),
+                new[] { typeof(Thing), typeof(Pawn), typeof(string).MakeByRefType(), typeof(bool) });
         }
 
         // Follow HAR's CanEquip postfix and preserve refusals from the game and other mods.
