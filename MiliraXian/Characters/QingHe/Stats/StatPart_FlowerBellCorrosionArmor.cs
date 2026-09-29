@@ -44,8 +44,7 @@ namespace MiliraXian.Characters.QingHe.Stats
 
         private static Pawn GetAffectedPawn(StatRequest req)
         {
-            Pawn pawn = req.Thing as Pawn;
-            if (pawn != null)
+            if (req.Thing is Pawn pawn)
             {
                 return pawn;
             }

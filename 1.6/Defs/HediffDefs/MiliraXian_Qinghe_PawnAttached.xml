@@ -135,9 +135,16 @@
         <resourceDescription>隐藏资源，不直接显示</resourceDescription>
         <initialValue>0</initialValue>
         <maxValue>100</maxValue>
-        <meditationGainPerDay>600</meditationGainPerDay>
-        <readingGainPerDay>480</readingGainPerDay>
-        <sleepGainPerDay>120</sleepGainPerDay>
+        <gainPeriodTicks>1800</gainPeriodTicks>
+        <meditationGainPerPeriod>18</meditationGainPerPeriod>
+        <readingGainPerPeriod>14.4</readingGainPerPeriod>
+        <sleepGainPerPeriod>3.6</sleepGainPerPeriod>
+        <lotusPondFactor>1.1</lotusPondFactor>
+        <environmentFactorBase>1</environmentFactorBase>
+        <environmentFactorPerBeauty>0.1</environmentFactorPerBeauty>
+        <environmentFactorPerCleanliness>0.25</environmentFactorPerCleanliness>
+        <environmentFactorMin>0.75</environmentFactorMin>
+        <environmentFactorMax>1.5</environmentFactorMax>
         <partialQualityBonusChancePerFull>0.5</partialQualityBonusChancePerFull>
         <fullQualityBonusLevels>2</fullQualityBonusLevels>
         <longNightLabel>MX_QH_LongNightStillnessLabel</longNightLabel>

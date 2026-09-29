@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.QingHe.Hediffs;
+using RimWorld;
 using Verse;
 using MiliraXian.Characters.Common;
 using static MiliraXian.Characters.Common.CharacterPowerProfile;
@@ -19,15 +19,26 @@ namespace MiliraXian.Characters.QingHe
         public static void SetLevel(CharacterPowerLevel level)
         {
             Profile.SetLevel(level);
-            IReadOnlyList<Pawn> pawns = Find.CurrentMap?.mapPawns?.AllPawnsSpawned;
-            if (pawns == null) return;
-            for (int i = 0; i < pawns.Count; i++)
+        }
+
+        public static void ApplyLevel(CharacterPowerLevel level)
+        {
+            SetLevel(level);
+            // Settings can be written from the main menu, where no pawns exist to sync.
+            if (Current.Game == null)
             {
-                if (MX_QHCharacterUtility.IsQinghe(pawns[i]))
+                return;
+            }
+
+            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+            {
+                if (pawn == null || pawn.Dead || !MX_QHCharacterUtility.IsQinghe(pawn))
                 {
-                    MX_QH_HediffUtility.GetAuraMasteryComp(pawns[i])?.SyncForPowerLevel();
-                    MX_QH_HediffUtility.SyncAuraShieldForPowerLevel(pawns[i]);
+                    continue;
                 }
+
+                MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.SyncForPowerLevel();
+                MX_QH_HediffUtility.SyncAuraShieldForPowerLevel(pawn);
             }
         }
 

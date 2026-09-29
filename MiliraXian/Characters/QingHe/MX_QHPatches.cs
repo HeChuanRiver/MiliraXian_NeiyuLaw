@@ -26,12 +26,6 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget"),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget_Prefix)));
 
-            patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix))
-                {
-                    priority = Priority.Last
-                });
-
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.PreApplyDamage)),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_PreApplyDamage_Prefix))
                 {
@@ -63,9 +57,6 @@ namespace MiliraXian.Characters.QingHe
 
             patcher.Patch(AccessTools.Method(typeof(MeditationUtility), nameof(MeditationUtility.AllMeditationSpotCandidates)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MeditationUtility_AllMeditationSpotCandidates_Postfix)));
-
-            patcher.Patch(AccessTools.Method(typeof(MeditationUtility), nameof(MeditationUtility.GetMeditationJob)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_MeditationUtility_GetMeditationJob_Postfix)));
 
             patcher.Patch(AccessTools.Method(typeof(JobDriver_Meditate), "MeditationTick"),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_JobDriver_Meditate_MeditationTick_Postfix)));
@@ -135,17 +126,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             CompAbilityEffect_AscentSlash.ApplyActiveActionDrawPos(___pawn, ref __result);
-        }
-
-        public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
-        {
-            if (!MX_QHCharacterUtility.IsQinghe(__instance))
-            {
-                return;
-            }
-
-            MX_QHSkillUtility.SyncChoices(__instance);
-            __instance.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         private struct DamageHediffState
@@ -439,35 +419,12 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                yield return building;
+                IntVec3 interactionCell = building.InteractionCell;
+                if (interactionCell.IsValid)
+                {
+                    yield return interactionCell;
+                }
             }
-        }
-
-        public static void Patch_MeditationUtility_GetMeditationJob_Postfix(Pawn pawn, ref Job __result)
-        {
-            if (__result == null || !MX_QHCharacterUtility.IsQinghe(pawn))
-            {
-                return;
-            }
-
-            Building lotusPond = __result.GetTarget(TargetIndex.A).Thing as Building;
-            if (lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond)
-            {
-                return;
-            }
-
-            IntVec3 cell = lotusPond.InteractionCell;
-            if (!cell.IsValid
-                || !cell.InBounds(lotusPond.Map)
-                || !cell.Standable(lotusPond.Map)
-                || cell.IsForbidden(pawn)
-                || !pawn.CanReserveAndReach(cell, PathEndMode.OnCell, pawn.NormalMaxDanger()))
-            {
-                __result = null;
-                return;
-            }
-
-            __result.SetTarget(TargetIndex.A, cell);
         }
 
         public static void Patch_JobDriver_Meditate_MeditationTick_Postfix(JobDriver_Meditate __instance)
@@ -478,13 +435,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            Building lotusPond = ResolveMeditatingLotusPond(pawn);
-            if (lotusPond == null)
-            {
-                return;
-            }
-
-            MX_QH_HediffUtility.AddMeditativeStillnessFromLotusPond(pawn, lotusPond);
+            MX_QH_HediffUtility.AddMeditativeStillnessFromMeditation(pawn, ResolveMeditatingLotusPond(pawn));
         }
 
         public static void Patch_Book_OnBookReadTick_Postfix(Pawn pawn, int delta, float roomBonusFactor)
@@ -560,44 +511,20 @@ namespace MiliraXian.Characters.QingHe
 
         private static Building ResolveMeditatingLotusPond(Pawn pawn)
         {
-            Job job = pawn?.CurJob;
-            if (job == null || pawn.Map == null || MX_QHDefOf.MX_QH_LotusPond == null)
+            if (pawn?.Map == null || MX_QHDefOf.MX_QH_LotusPond == null)
             {
                 return null;
             }
 
-            LocalTargetInfo target = job.GetTarget(TargetIndex.A);
-            Building assignedLotusPond = pawn.ownership?.AssignedMeditationSpot as Building;
-            if (IsMeditatingAtLotusPond(pawn, assignedLotusPond, target))
-            {
-                return assignedLotusPond;
-            }
-
             foreach (Building building in pawn.Map.listerBuildings.AllBuildingsColonistOfDef(MX_QHDefOf.MX_QH_LotusPond))
             {
-                if (IsMeditatingAtLotusPond(pawn, building, target))
+                if (building != null && building.InteractionCell == pawn.Position)
                 {
                     return building;
                 }
             }
 
             return null;
-        }
-
-        private static bool IsMeditatingAtLotusPond(Pawn pawn, Building lotusPond, LocalTargetInfo target)
-        {
-            if (pawn == null || lotusPond == null || lotusPond.def != MX_QHDefOf.MX_QH_LotusPond || lotusPond.Map != pawn.Map)
-            {
-                return false;
-            }
-
-            IntVec3 interactionCell = lotusPond.InteractionCell;
-            if (!interactionCell.IsValid)
-            {
-                return false;
-            }
-
-            return target.Cell == interactionCell && pawn.Position == interactionCell;
         }
 
         private const int QingheInstrumentPerformanceIntervalTicks = 600;

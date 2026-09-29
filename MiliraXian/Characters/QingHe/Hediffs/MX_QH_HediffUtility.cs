@@ -1,7 +1,6 @@
 using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
-using MiliraXian.Characters.QingHe.Things.Buildings;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Common;
@@ -75,15 +74,21 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             protection?.SyncForPowerLevel();
         }
 
-        public static void AddMeditativeStillnessFromLotusPond(Pawn pawn, Building lotusPond)
+        public static void AddMeditativeStillnessFromMeditation(Pawn pawn, Building lotusPond)
         {
             HediffComp_MeditativeStillness stillness = EnsureMeditativeStillness(pawn);
-            if (stillness == null || lotusPond == null)
+            if (stillness == null)
             {
                 return;
             }
 
-            float gain = stillness.PropsStillness.meditationGainPerDay / 60000f * Building_LotusPond.StillnessFactorFor(lotusPond.GetRoom());
+            HediffCompProperties_MeditativeStillness props = stillness.PropsStillness;
+            float gain = props.meditationGainPerPeriod / props.gainPeriodTicks * stillness.GetEnvironmentFactor();
+            if (lotusPond != null)
+            {
+                gain *= props.lotusPondFactor;
+            }
+
             stillness.AddStillness(gain);
         }
 
@@ -95,7 +100,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float gain = stillness.PropsStillness.readingGainPerDay / 60000f * delta * Mathf.Max(0.1f, roomBonusFactor);
+            float gain = stillness.PropsStillness.readingGainPerPeriod / stillness.PropsStillness.gainPeriodTicks * delta * Mathf.Max(0.1f, roomBonusFactor);
             stillness.AddStillness(gain);
         }
 
@@ -107,7 +112,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            float gain = stillness.PropsStillness.sleepGainPerDay / 60000f * delta;
+            float gain = stillness.PropsStillness.sleepGainPerPeriod / stillness.PropsStillness.gainPeriodTicks * delta;
             stillness.AddStillness(gain);
         }
 

@@ -92,7 +92,7 @@
             <PsychicSensitivity>-2</PsychicSensitivity>
         </disallowedTraitsWithDegree>
 
-        <forcedHair>Bald</forcedHair>
+        <forcedHair>Milira_Null</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
 
         <!-- 技能等级。FinalLevelOfSkill 的第 ⑤ 步会把算出的值夹进本区间，写成单点即完全确定。

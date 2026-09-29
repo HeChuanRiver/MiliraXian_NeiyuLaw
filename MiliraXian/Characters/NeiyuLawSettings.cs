@@ -130,7 +130,7 @@ namespace MiliraXian.Characters
             listing.Gap();
             DrawCharacterPowerOptions(listing, "MX_Power_Zhaoli", ref Settings.ZhaoliPowerLevel, ZhaoliPowerBalance.SetLevel);
             DrawCharacterPowerOptions(listing, "MX_Power_Mingyuan", ref Settings.MingyuanPowerLevel, MingyuanPowerBalance.SetLevel);
-            DrawCharacterPowerOptions(listing, "MX_Power_Qinghe", ref Settings.QinghePowerLevel, QinghePowerBalance.SetLevel);
+            DrawCharacterPowerOptions(listing, "MX_Power_Qinghe", ref Settings.QinghePowerLevel, QinghePowerBalance.ApplyLevel);
             listing.Label("MX_NL_SpecialPawnConsciousnessLockLabel".Translate().ToString());
             DrawConsciousnessLockOption(
                 listing,
@@ -198,7 +198,7 @@ namespace MiliraXian.Characters
             NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
             ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
             MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
-            QinghePowerBalance.SetLevel(Settings.QinghePowerLevel);
+            QinghePowerBalance.ApplyLevel(Settings.QinghePowerLevel);
             base.WriteSettings();
         }
     }

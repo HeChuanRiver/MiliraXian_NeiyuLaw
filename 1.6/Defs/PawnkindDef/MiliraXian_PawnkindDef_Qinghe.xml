@@ -108,8 +108,8 @@
             <PsychicSensitivity>-2</PsychicSensitivity>
         </disallowedTraitsWithDegree> -->
 
-        <!-- 这个角色的头发与发色 米莉拉种族锁定Bald，头发是专门的种族部件 -->
-        <forcedHair>Bald</forcedHair>
+        <!-- 这个角色的头发与发色 米莉拉头发是专门的种族部件，空发型使用种族自带的 Milira_Null -->
+        <forcedHair>Milira_Null</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
         <!-- 角色的偏好颜色 -->
         <favoriteColor>MX_QH_FlowerPink</favoriteColor>

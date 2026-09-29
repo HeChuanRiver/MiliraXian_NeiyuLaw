@@ -16,13 +16,6 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 {
     public class Building_LotusPond : Building
     {
-        public static float StillnessFactorFor(Room room)
-        {
-            return room == null
-                ? 1f
-                : Mathf.Lerp(0.75f, 1.5f, Mathf.InverseLerp(0f, 100f, room.GetStat(RoomStatDefOf.Impressiveness)));
-        }
-
         public override string GetInspectString()
         {
             string text = base.GetInspectString();
@@ -40,7 +33,9 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
             string beauty = room == null ? "—" : room.GetStat(RoomStatDefOf.Beauty).ToString("0.##");
             string cleanliness = room == null ? "—" : room.GetStat(RoomStatDefOf.Cleanliness).ToString("0.##");
             text += "MX_QH_LotusPondBeauty".Translate(beauty, cleanliness);
-            text += "\n" + "MX_QH_LotusPondStillnessBonus".Translate((StillnessFactorFor(room) - 1f).ToStringPercentSigned());
+            float lotusPondFactor = MX_QHDefOf.MX_QH_MeditativeStillness.comps
+                .OfType<HediffCompProperties_MeditativeStillness>().First().lotusPondFactor;
+            text += "\n" + "MX_QH_LotusPondStillnessBonus".Translate((lotusPondFactor - 1f).ToStringPercentSigned());
             if (ModsConfig.IdeologyActive)
             {
                 RitualOutcomeComp_RoomStat beautyComp = MX_QHDefOf.MX_QH_QixiRitualPattern.ritualOutcomeEffect.comps

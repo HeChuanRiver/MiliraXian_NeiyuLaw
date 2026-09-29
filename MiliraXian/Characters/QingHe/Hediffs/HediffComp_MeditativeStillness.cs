@@ -8,9 +8,16 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class HediffCompProperties_MeditativeStillness : HediffCompProperties_PawnSpecialResource
     {
-        public float meditationGainPerDay = 600f;
-        public float readingGainPerDay = 480f;
-        public float sleepGainPerDay = 120f;
+        public int gainPeriodTicks = 1800;
+        public float meditationGainPerPeriod = 18f;
+        public float readingGainPerPeriod = 14.4f;
+        public float sleepGainPerPeriod = 3.6f;
+        public float lotusPondFactor = 1.1f;
+        public float environmentFactorBase = 1f;
+        public float environmentFactorPerBeauty = 0.1f;
+        public float environmentFactorPerCleanliness = 0.25f;
+        public float environmentFactorMin = 0.75f;
+        public float environmentFactorMax = 1.5f;
         public float partialQualityBonusChancePerFull = 0.5f;
         public int fullQualityBonusLevels = 2;
         public string longNightLabel = "MX_QH_LongNightStillnessLabel";
@@ -78,6 +85,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int gainIntervalTicks;
         private float pendingNotificationGain;
         private int notificationIntervalTicks;
+        private float cachedEnvironmentFactor = 1f;
+        private int environmentFactorCachedTick = -1;
 
         public HediffCompProperties_MeditativeStillness PropsStillness => (HediffCompProperties_MeditativeStillness)props;
 
@@ -129,6 +138,39 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
                 pendingNotificationGain = 0f;
             }
+        }
+
+        // 冥想的环境倍率：美观用原版 BeautyUtility.AverageBeautyPerceptible（半径 8.9 ∩ 可见房间），
+        // 清洁度用所在房间的原版房间统计（RoomStatWorker_Cleanliness）。采样贵，缓存一个结算间隔（300t）。
+        public float GetEnvironmentFactor()
+        {
+            int ticksGame = Find.TickManager.TicksGame;
+            if (ticksGame - environmentFactorCachedTick < GainIntervalTicks)
+            {
+                return cachedEnvironmentFactor;
+            }
+
+            environmentFactorCachedTick = ticksGame;
+            cachedEnvironmentFactor = SampleEnvironmentFactor();
+            return cachedEnvironmentFactor;
+        }
+
+        private float SampleEnvironmentFactor()
+        {
+            HediffCompProperties_MeditativeStillness props = PropsStillness;
+            Pawn pawn = Pawn;
+            Map map = pawn?.Map;
+            if (map == null || !pawn.Position.IsValid || !pawn.Position.InBounds(map))
+            {
+                return props.environmentFactorBase;
+            }
+
+            float beauty = BeautyUtility.AverageBeautyPerceptible(pawn.Position, map);
+            float cleanliness = pawn.GetRoom().GetStat(RoomStatDefOf.Cleanliness);
+            return Mathf.Clamp(
+                props.environmentFactorBase + beauty * props.environmentFactorPerBeauty + cleanliness * props.environmentFactorPerCleanliness,
+                props.environmentFactorMin,
+                props.environmentFactorMax);
         }
 
         public void AddStillness(float amount)

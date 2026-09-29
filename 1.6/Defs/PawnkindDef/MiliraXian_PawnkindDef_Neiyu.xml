@@ -119,7 +119,7 @@
         </disallowedTraitsWithDegree>
 
         <!-- 这个角色的头发与发色 -->
-        <forcedHair>Bald</forcedHair>
+        <forcedHair>Milira_Null</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
 
         <!-- 技能等级。FinalLevelOfSkill 先按背景故事、特质、年龄与两次随机算出一个值，最后一步
