@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 特殊玩家派系与米莉拉阵营的关系，以好感情境表达：数值即天然好感偏移，
+       漂移带为天然值 ±50，落在带内永不漂移；开局显示好感由
+       GameComponent_CharacterFactionRelations 写成同名数值。 -->
+  <GoodwillSituationDef>
+    <defName>MiliraXian_MiliraAffinity</defName>
+    <label>仙缘</label>
+    <workerClass>MiliraXian.Characters.Common.GoodwillSituationWorker_CharacterFactionRelation</workerClass>
+    <naturalGoodwillOffset>50</naturalGoodwillOffset>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.CharacterFactionRelationExtension">
+        <playerFactions>
+          <li>MiliraXian_NeiyuPlayerFaction</li>
+          <li>MiliraXian_QinghePlayerFaction</li>
+        </playerFactions>
+        <targetFaction>Milira_Faction</targetFaction>
+      </li>
+    </modExtensions>
+  </GoodwillSituationDef>
+
+  <GoodwillSituationDef>
+    <defName>MiliraXian_ChurchEstrangement</defName>
+    <label>道不同</label>
+    <workerClass>MiliraXian.Characters.Common.GoodwillSituationWorker_CharacterFactionRelation</workerClass>
+    <naturalGoodwillOffset>-20</naturalGoodwillOffset>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.CharacterFactionRelationExtension">
+        <playerFactions>
+          <li>MiliraXian_NeiyuPlayerFaction</li>
+          <li>MiliraXian_QinghePlayerFaction</li>
+        </playerFactions>
+        <targetFaction>Milira_AngelismChurch</targetFaction>
+      </li>
+    </modExtensions>
+  </GoodwillSituationDef>
+</Defs>

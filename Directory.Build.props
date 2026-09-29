@@ -12,6 +12,7 @@
     <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">$(RimWorldInstallDir)\RimWorldWin64_Data\Managed</RimWorldManagedDir>
     <AriandelLibraryDll Condition="'$(AriandelLibraryDll)' == ''">$(RimWorldWorkshopDir)\3665997350\1.6\Assemblies\AriandelLibrary.dll</AriandelLibraryDll>
     <AlienRaceDll Condition="'$(AlienRaceDll)' == ''">$(RimWorldWorkshopDir)\839005762\1.6\Assemblies\AlienRace.dll</AlienRaceDll>
+    <MiliraDll Condition="'$(MiliraDll)' == ''">$(RimWorldWorkshopDir)\3256974620\1.6\Assemblies\Milira.dll</MiliraDll>
     <FacialAnimationDll Condition="'$(FacialAnimationDll)' == ''">$(RimWorldWorkshopDir)\1635901197\1.6\Assemblies\FacialAnimation.dll</FacialAnimationDll>
   </PropertyGroup>
 </Project>

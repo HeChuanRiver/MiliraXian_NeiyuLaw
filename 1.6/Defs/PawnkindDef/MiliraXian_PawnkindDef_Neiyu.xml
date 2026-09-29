@@ -9,7 +9,7 @@
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
-        <defaultFactionType>Ancients</defaultFactionType>
+        <defaultFactionType>MiliraXian_Faction</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -30,6 +30,12 @@
             <min>0</min>
             <max>0</max>
         </apparelMoney>
+
+        <!-- Milira_PawnBase 继承来的 invNutrition=3 会让原版 PawnInventoryGenerator.GiveRandomFood
+             在生成时往背包随机塞约 3 营养的食物（50% 简单／25% 精致／25% 包装食品）；开局与招募
+             请求的 allowFood 恒为 true，XML 侧没有别的闸门。角色行装由剧本与生成接管决定，
+             归零关掉随机食物。invNutrition 在原版仅 GiveRandomFood 一处消费，无副作用。 -->
+        <invNutrition>0</invNutrition>
 
         <!-- 随机装备池的白名单，仅作用于随机补充，对 apparelRequired 无影响。
              apparelMoney 为 0 时本段已无实际作用，保留作第二道防线。 -->

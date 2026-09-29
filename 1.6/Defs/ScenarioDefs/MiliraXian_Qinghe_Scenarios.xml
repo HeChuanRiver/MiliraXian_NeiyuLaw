@@ -9,7 +9,7 @@
             <summary>花丛中的仙子来到边缘世界，尝试让百花的恩泽在这片陌生的土地上生根。</summary>
             <playerFaction Inherit="false">
                 <def>PlayerFaction</def>
-                <factionDef>Milira_PlayerFaction</factionDef>
+                <factionDef>MiliraXian_QinghePlayerFaction</factionDef>
             </playerFaction>
             <parts>
                 <li Class="ScenPart_GameStartDialog">

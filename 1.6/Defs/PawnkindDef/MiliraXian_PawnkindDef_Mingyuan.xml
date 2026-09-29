@@ -6,7 +6,7 @@
         <defName>MiliraXian_Mingyuan</defName>
         <label>明渊</label>
         <fixedGender>Female</fixedGender>
-        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <defaultFactionType>MiliraXian_Faction</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -22,6 +22,9 @@
             <min>0</min>
             <max>0</max>
         </apparelMoney>
+
+        <!-- 关闭生成时随机携带食物，详见霓羽 PawnkindDef 的注释。 -->
+        <invNutrition>0</invNutrition>
 
         <!-- 仅作用于随机补充，对 apparelRequired 无影响。 -->
         <apparelTags Inherit="False">

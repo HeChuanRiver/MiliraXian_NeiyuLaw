@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 四个角色共用的隐藏派系。hidden 同时卡死两道据点生成闸门（FactionGenerator 的
+       世界生成补据点与派系创建初始据点都查 Faction.Hidden），并从派系页签、访客、
+       商队等随机派系选择中排除；displayInFactionSelection 关闭世界创建界面条目。
+       不写 pawnGroupMakers：TryGenerateNewLeader 对其为 null 的派系直接跳过，
+       不会生成首领 pawn。不设任何敌对标志，与所有派系开局中立。 
+       
+       简单来说，就是仙米版古代人 -->
+  <FactionDef ParentName="FactionBase">
+    <defName>MiliraXian_Faction</defName>
+    <!-- TODO：记得改名字 -->
+    <label>仙米测试派系</label>
+    <fixedName>仙米测试派系</fixedName>
+    <pawnSingular>仙米</pawnSingular>
+    <pawnsPlural>仙米</pawnsPlural>
+    <hidden>true</hidden>
+    <hiddenIdeo>true</hiddenIdeo>
+    <displayInFactionSelection>false</displayInFactionSelection>
+    <!-- 两个计数字段都要写：世界创建走配置列表路径（maxConfigurableAtWorldCreation
+         大于 0 才会被列进去），requiredCountAtGameStart 只覆盖无配置列表的备用路径。 -->
+    <maxConfigurableAtWorldCreation>1</maxConfigurableAtWorldCreation>
+    <requiredCountAtGameStart>1</requiredCountAtGameStart>
+    <configurationListOrderPriority>2000</configurationListOrderPriority>
+    <canGenerateQuestSites>false</canGenerateQuestSites>
+    <raidsForbidden>true</raidsForbidden>
+    <techLevel>Spacer</techLevel>
+    <!-- humanlikeFaction 为 true 时原版 ConfigErrors 要求必须有背景故事分类；
+         沿用 Ancients 的 Offworld，与角色此前挂在 Ancients 时的生成环境一致。 -->
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Offworld</li>
+        </categories>
+      </li>
+    </backstoryFilters>
+    <factionIconPath>World/WorldObjects/Expanding/Sites/DownedRefugee</factionIconPath>
+  </FactionDef>
+</Defs>

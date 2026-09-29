@@ -293,17 +293,6 @@ namespace MiliraXian.Characters.Zhaoli
             return GetRaidStateComp(pawn) != null;
         }
 
-        public static Faction ResolveAncientsFaction()
-        {
-            FactionManager factionManager = Find.FactionManager;
-            if (factionManager == null)
-            {
-                return null;
-            }
-
-            return factionManager.OfAncients ?? factionManager.FirstFactionOfDef(FactionDefOf.Ancients);
-        }
-
         public static Faction ResolveHostileAncientsFaction()
         {
             FactionManager factionManager = Find.FactionManager;
@@ -324,10 +313,10 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static Faction ResolveFriendlyFaction()
         {
-            Faction ancientsFaction = ResolveAncientsFaction();
-            if (ancientsFaction != null && !ancientsFaction.IsPlayer)
+            Faction characterFaction = CharacterFactionUtility.MiliraXianFaction;
+            if (characterFaction != null)
             {
-                return ancientsFaction;
+                return characterFaction;
             }
 
             List<Faction> factions = Find.FactionManager.AllFactionsListForReading;
@@ -356,7 +345,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return faction;
             }
 
-            if (Find.FactionManager.OfAncients != null && !Find.FactionManager.OfAncients.IsPlayer && !Find.FactionManager.OfAncients.HostileTo(Faction.OfPlayer))
+            if (Find.FactionManager.OfAncients != null && !Find.FactionManager.OfAncients.HostileTo(Faction.OfPlayer))
             {
                 return Find.FactionManager.OfAncients;
             }
@@ -380,7 +369,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static Pawn GenerateZhaoliPawn(Faction faction)
         {
-            faction = faction ?? ResolveAncientsFaction();
+            faction = faction ?? CharacterFactionUtility.MiliraXianFaction;
             PawnKindDef zhaoliKind = DefDatabase<PawnKindDef>.GetNamedSilentFail(ZhaoliPawnKindDefName);
             if (zhaoliKind == null)
             {

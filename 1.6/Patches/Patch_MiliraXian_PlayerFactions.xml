@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <!-- 米莉拉本体的 Milira_Faction 对 permanentEnemyToEveryoneExcept 名单外的派系一律 -100 死敌。
+         把两个剧本玩家派系加进豁免名单，让世界生成期就是中立；开局 +20/-20 由
+         GameComponent_PlayerFactionRelations 在此之上设置。 -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/FactionDef[defName='Milira_Faction']/permanentEnemyToEveryoneExcept</xpath>
+        <value>
+            <li>MiliraXian_NeiyuPlayerFaction</li>
+            <li>MiliraXian_QinghePlayerFaction</li>
+        </value>
+    </Operation>
+
+    <!-- 破碎帝国同样用 permanentEnemyToEveryoneExcept 白名单（原版含 PlayerColony/PlayerTribe，
+         米莉拉在自己的 Royalty.xml 里加了 Milira_PlayerFaction），我们的派系也要进去。 -->
+    <Operation Class="PatchOperationFindMod">
+        <mods>
+            <li>Royalty</li>
+        </mods>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/FactionDef[defName='Empire']/permanentEnemyToEveryoneExcept</xpath>
+            <value>
+                <li>MiliraXian_NeiyuPlayerFaction</li>
+                <li>MiliraXian_QinghePlayerFaction</li>
+            </value>
+        </match>
+    </Operation>
+</Patch>

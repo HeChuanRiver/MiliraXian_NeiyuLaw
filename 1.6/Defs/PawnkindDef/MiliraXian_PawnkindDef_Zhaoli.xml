@@ -9,7 +9,7 @@
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
-        <defaultFactionType>Ancients</defaultFactionType>
+        <defaultFactionType>MiliraXian_Faction</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -30,6 +30,9 @@
             <min>0</min>
             <max>0</max>
         </apparelMoney>
+
+        <!-- 关闭生成时随机携带食物，详见霓羽 PawnkindDef 的注释。 -->
+        <invNutrition>0</invNutrition>
 
         <!-- 仅作用于随机补充，对 apparelRequired 无影响。 -->
         <!-- TODO: 这里记得换昭离的衣服 -->

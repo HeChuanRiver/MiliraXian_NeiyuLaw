@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 霓羽单人开局剧本「界外羽痕」的玩家派系。结构对齐米莉拉的 Milira_PlayerFaction。 -->
+  <FactionDef ParentName="PlayerFactionBase">
+    <defName>MiliraXian_NeiyuPlayerFaction</defName>
+    <!-- TODO：记得改名字 -->
+    <label>霓羽测试玩家派系</label>
+    <description>霓羽测试玩家派系</description>
+    <isPlayer>true</isPlayer>
+    <basicMemberKind>Milira_Colonist</basicMemberKind>
+    <pawnSingular>居民</pawnSingular>
+    <pawnsPlural>居民们</pawnsPlural>
+    <categoryTag>Milira_PlayerFaction</categoryTag>
+    <colorSpectrum>
+      <li>(255,190,230)</li>
+    </colorSpectrum>
+    <techLevel>Ultra</techLevel>
+    <allowedCultures>
+      <li>MiliraCulture</li>
+    </allowedCultures>
+    <disallowedMemes>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Nudism</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Blindsight</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Transhumanist</li>
+    </disallowedMemes>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Milira_General</li>
+        </categories>
+        <commonality>1</commonality>
+      </li>
+    </backstoryFilters>
+    <factionIconPath>Milira/Faction/Faction_Icon</factionIconPath>
+    <playerInitialSettlementNameMaker>NamerInitialSettlementColony</playerInitialSettlementNameMaker>
+    <factionNameMaker>NamerFactionOutlander</factionNameMaker>
+    <settlementNameMaker>NamerSettlementOutlander</settlementNameMaker>
+    <startingResearchTags>
+      <li>MiliraRefugeeStart</li>
+    </startingResearchTags>
+    <startingTechprintsResearchTags>
+      <li>MiliraRefugeeStart</li>
+    </startingTechprintsResearchTags>
+    <apparelStuffFilter>
+      <stuffCategoriesToAllow>
+        <li>Metallic</li>
+        <li>Fabric</li>
+      </stuffCategoriesToAllow>
+      <disallowedThingDefs>
+        <li>Synthread</li>
+        <li>Hyperweave</li>
+        <li>Silver</li>
+        <li>Gold</li>
+        <li>Uranium</li>
+      </disallowedThingDefs>
+    </apparelStuffFilter>
+  </FactionDef>
+
+  <!-- 清荷单人开局剧本「花庭初绽」的玩家派系。 -->
+  <FactionDef ParentName="PlayerFactionBase">
+    <defName>MiliraXian_QinghePlayerFaction</defName>
+    <!-- TODO：记得改名字 -->
+    <label>清荷测试玩家派系</label>
+    <description>清荷测试玩家派系</description>
+    <isPlayer>true</isPlayer>
+    <basicMemberKind>Milira_Colonist</basicMemberKind>
+    <pawnSingular>居民</pawnSingular>
+    <pawnsPlural>居民们</pawnsPlural>
+    <categoryTag>Milira_PlayerFaction</categoryTag>
+    <colorSpectrum>
+      <li>(170,225,190)</li>
+    </colorSpectrum>
+    <techLevel>Ultra</techLevel>
+    <allowedCultures>
+      <li>MiliraCulture</li>
+    </allowedCultures>
+    <disallowedMemes>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Nudism</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Blindsight</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Transhumanist</li>
+    </disallowedMemes>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Milira_General</li>
+        </categories>
+        <commonality>1</commonality>
+      </li>
+    </backstoryFilters>
+    <factionIconPath>Milira/Faction/Faction_Icon</factionIconPath>
+    <playerInitialSettlementNameMaker>NamerInitialSettlementColony</playerInitialSettlementNameMaker>
+    <factionNameMaker>NamerFactionOutlander</factionNameMaker>
+    <settlementNameMaker>NamerSettlementOutlander</settlementNameMaker>
+    <startingResearchTags>
+      <li>MiliraRefugeeStart</li>
+    </startingResearchTags>
+    <startingTechprintsResearchTags>
+      <li>MiliraRefugeeStart</li>
+    </startingTechprintsResearchTags>
+    <apparelStuffFilter>
+      <stuffCategoriesToAllow>
+        <li>Metallic</li>
+        <li>Fabric</li>
+      </stuffCategoriesToAllow>
+      <disallowedThingDefs>
+        <li>Synthread</li>
+        <li>Hyperweave</li>
+        <li>Silver</li>
+        <li>Gold</li>
+        <li>Uranium</li>
+      </disallowedThingDefs>
+    </apparelStuffFilter>
+  </FactionDef>
+</Defs>

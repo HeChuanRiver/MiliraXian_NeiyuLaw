@@ -45,6 +45,10 @@
       <HintPath>$(AlienRaceDll)</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Milira">
+      <HintPath>$(MiliraDll)</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>

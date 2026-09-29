@@ -9,7 +9,7 @@
         <!-- 设置性别 -->
         <fixedGender>Female</fixedGender>
         <!-- faction you spawn her or her default belonging 生成她时的派系，或者说她的初始归属 -->
-        <defaultFactionType>Milira_Faction</defaultFactionType>
+        <defaultFactionType>MiliraXian_Faction</defaultFactionType>
         <xenotypeSet Inherit="False">
             <xenotypeChances>
                 <MiliraXenotype MayRequire="Ancot.MiliraRaceGenePatch">1.0</MiliraXenotype>
@@ -28,6 +28,9 @@
             <min>0</min>
             <max>0</max>
         </apparelMoney>
+
+        <!-- 关闭生成时随机携带食物，详见霓羽 PawnkindDef 的注释。 -->
+        <invNutrition>0</invNutrition>
 
         <!-- 仅作用于随机补充，对 apparelRequired 无影响。 -->
         <apparelTags>
@@ -52,10 +55,10 @@
 
         <!-- 武器的tag -->
         <weaponTags>
-          <li>MiliraXian_QingheInstrument</li>
+          <li>MX_QH_StartUpWeapon</li>
         </weaponTags>
 
-        <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围 -->
+        <!-- wealth range for random weapon 随机生成武器时，允许的武器财富值范围。必须调最大99999才能允许刷出任意想要的武器，范围用Tag限制 -->
         <weaponMoney>
             <min>99999</min>
             <max>99999</max>
@@ -75,42 +78,40 @@
         <minApparelQuality>Excellent</minApparelQuality>
         <maxApparelQuality>Excellent</maxApparelQuality>
 
-        <!-- backstory for this pawn, using tags here 为这个pawn选择背景故事，这里使用的是tag -->
+        <!-- backstory for this pawn, using tags here 为这个pawn选择背景故事，这里使用的是tag
         <backstoryFiltersOverride>
             <li>
-                <!-- 幼年背景故事 -->
                 <categoriesChildhood>
                     <li>MiliraXian_BackStoryChild_Qinghe_Tag</li>
                 </categoriesChildhood>
-
-                <!-- 成年背景故事 -->
                 <categoriesAdulthood>
                     <li>MiliraXian_BackStoryAdult_Qinghe_Tag</li>
                 </categoriesAdulthood>
             </li>
-        </backstoryFiltersOverride>
+        </backstoryFiltersOverride> 目前已被覆盖，应该暂时没用了-->
 
         <!-- work type required, in order to ban some backstory that may disable some kind of works 强制要求的工作类型，用于筛选并且禁止一些可能禁用指定的工作类型的背景故事 -->
         <requiredWorkTags>
             <li>Intellectual</li>
         </requiredWorkTags>
 
-        <!-- use traitdef defname here! 禁止生成的trait，此处使用的是trait defname -->
+        <!-- use traitdef defname here! 禁止生成的trait，此处使用的是trait defname 是否有用得打个问号
         <disallowedTraits>
             <li>BodyPurist</li>
             <li>Gay</li>
             <li>Bisexual</li>
             <li>Asexual</li>
-        </disallowedTraits>
+        </disallowedTraits> -->
 
-        <!-- use traitdef defname with degree here! 禁止生成的trait，此处使用的是trait defname，里面填写的degree对应一种trait，比如PsychicSensitivity：-2的意思是心灵失聪 -->
+        <!-- use traitdef defname with degree here! 禁止生成的trait，此处使用的是trait defname，里面填写的degree对应一种trait，比如PsychicSensitivity：-2的意思是心灵失聪
         <disallowedTraitsWithDegree>
             <PsychicSensitivity>-2</PsychicSensitivity>
-        </disallowedTraitsWithDegree>
+        </disallowedTraitsWithDegree> -->
 
-        <!-- 这个角色的头发与发色 -->
+        <!-- 这个角色的头发与发色 米莉拉种族锁定Bald，头发是专门的种族部件 -->
         <forcedHair>Bald</forcedHair>
         <forcedHairColor>(255,255,255)</forcedHairColor>
+        <!-- 角色的偏好颜色 -->
         <favoriteColor>MX_QH_FlowerPink</favoriteColor>
 
         <!-- 技能等级。FinalLevelOfSkill 的第 ⑤ 步会把算出的值夹进本区间，写成单点即完全确定。
@@ -166,47 +167,80 @@
                 <range>14~14</range>
             </li>
         </skills>
-
-        <!-- modExtensions是用来使用的非官方类的地方 -->
         <fixedChildBackstories Inherit="False"><li>MiliraXian_BackStoryChild_Qinghe_BS1</li></fixedChildBackstories>
         <fixedAdultBackstories Inherit="False"><li>MiliraXian_BackStoryAdult_Qinghe_BS1</li></fixedAdultBackstories>
+        <!-- 年龄设置。大概应该是没用的，在这里设置还会导致原版尝试生成失败
         <minGenerationAge>160</minGenerationAge>
         <maxGenerationAge>160</maxGenerationAge>
-        <chronologicalAgeRange>160~160</chronologicalAgeRange>
-
-        <!-- 特质由 CharacterIdentityExtension 的 traits 全量声明，不在此处重复维护。 -->
-
-        <!-- C# 字段默认值为 0.03，米莉拉继承链上无人覆盖，故必须显式归零，
+        <chronologicalAgeRange>160~160</chronologicalAgeRange>-->
+         <!-- C# 字段默认值为 0.03，米莉拉继承链上无人覆盖，故必须显式归零，
              否则每次生成约 3% 概率带孕。 -->
         <humanPregnancyChance>0</humanPregnancyChance>
-        <!-- 默认 true，且老年伤病随年龄加重；本角色 160 岁，不关闭必然一身伤残。 -->
         <allowOldAgeInjuries>false</allowOldAgeInjuries>
-        <startingHediffs><li><def>MX_QH_FlowingForm</def><severity>1</severity></li><li><def>MX_QH_AuraShield</def><severity>1</severity></li><li><def>MX_QH_FlowerResonance</def><severity>1</severity></li><li><def>MX_QH_FlowerDecree</def><severity>1</severity></li></startingHediffs>
-
+        <!--生成时自带的Hediff。-->
+        <startingHediffs>
+            <li>
+                <def>MX_QH_FlowingForm</def>
+                <severity>1</severity>
+            </li>
+            <li>
+                <def>MX_QH_AuraShield</def>
+                <severity>1</severity>
+            </li>
+            <li>
+                <def>MX_QH_FlowerResonance</def>
+                <severity>1</severity>
+            </li>
+            <li>
+                <def>MX_QH_FlowerDecree</def>
+                <severity>1</severity>
+            </li>
+            <!-- 未写 severity 的两项保持 MakeHediff 默认值，与 Def 声明一致 -->
+            <li>
+                <def>MX_QH_CombatState</def>
+            </li>
+            <li>
+                <def>MX_QH_SwordPressure</def>
+            </li>
+            <li>
+                <def>MX_QH_MeditativeStillness</def>
+                <severity>1</severity>
+            </li>
+            <li>
+                <def>MX_QH_Trickle</def>
+                <severity>1</severity>
+            </li>
+        </startingHediffs>
+        <!-- modExtensions是用来使用的非官方类的地方 -->
         <modExtensions>
-
-            <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->
-            <!-- The Following classes must be included!!! ↓↓↓ -->
-            <!-- 以下class必须全部填写，绝对不能漏任何一个 ↓↓↓ -->
-
-            <!-- "FixedIdentityExtension" is a tool for generating a fixed, non-random pawn. "FixedIdentityExtension"是用来生成一个固定的，绝对非随机的pawn的工具。 -->
             <li Class="MiliraXian.CharacterLib.CharacterIdentityExtension">
+                <!-- 角色名，分别是名字、姓氏和昵称。 昵称会在大部分情况下显示。 -->
                 <firstNameKey>MX_Name_Qinghe_First</firstNameKey>
                 <lastNameKey>MX_Name_Qinghe_Last</lastNameKey>
                 <nickNameKey>MX_Name_Qinghe_Nick</nickNameKey>
+                <!-- 角色的头型。-->
                 <headType>MiliraQingheHead</headType>
+                <!-- 体型，默认为Female，会影响贴图选择 -->
                 <bodyType>Female</bodyType>
+                <!-- 设置背景故事 -->
                 <childhoodBackstory>MiliraXian_BackStoryChild_Qinghe_BS1</childhoodBackstory>
                 <adulthoodBackstory>MiliraXian_BackStoryAdult_Qinghe_BS1</adulthoodBackstory>
+                <!-- 锁定生成时的年龄 -->
                 <biologicalAgeYears>160</biologicalAgeYears>
                 <chronologicalAgeYears>160</chronologicalAgeYears>
 
-                <!-- 完整特质表。生成期原版会从七处追加特质，其中性取向一项无 XML 开关，
-                     故按本表全量重建：未列出的一律移除。 -->
+                <!-- 完整特质表。除基因附加的特质外，只有这里列出的特质会被应用 -->
                 <traits>
-                    <li><def>MX_QH_Trait_SpringFall</def></li>
-                    <li><def>MX_QH_Trait_WaterFairy</def></li>
-                    <li><def>Beauty</def><degree>2</degree></li>
+                    <li>
+                        <def>MX_QH_Trait_SpringFall</def>
+                    </li>
+                    <li>
+                        <def>MX_QH_Trait_WaterFairy</def>
+                    </li>
+                    <li>
+                        <def>Beauty</def>
+                        <degree>2</degree>
+                    </li>
                 </traits>
 
                 <!-- 生成期随机施加的污染项。怀孕与绝育源自 PawnKindDef 字段默认值，
@@ -219,24 +253,13 @@
                     <li>Blindness</li>
                 </forbiddenHediffs>
             </li>
-
-            <!--            &lt;!&ndash; This class is for adding this pawn to randow recruitment in mod "Milira Faction: Milira Imperium" -->
-            <!--            这个class是用来把这个角色加入到“米莉拉派系扩展：米莉拉帝国”的随机招募中的。&ndash;&gt;-->
-            <!--            <li Class="MiliraImperium.UniqueRecruitExtension" MayRequire="Ariandel.MiliraImperium">-->
-            <!--                &lt;!&ndash; Only can be recruited once. 只可以被招募一次。 &ndash;&gt;-->
-            <!--                <uniqueOnce>true</uniqueOnce>-->
-            <!--                &lt;!&ndash; The higher weight means higher probability to be chose in randow recruitment. 越高的weight代表在随机招募中被抽中的概率越高。 &ndash;&gt;-->
-            <!--                <weight>0</weight>-->
-            <!--            </li>-->
-
             <!-- 角色身份 ID。特殊角色管理器（SCM）的显示数据挂在条件目录的载体 kindDef 上
                  （1.6/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml），二者靠此 ID 接合。 -->
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Qinghe</characterId>
             </li>
 
-            <!-- 种族硬编码部件的替换，说明见霓羽的 PawnkindDef。
-                 TODO：这里记得改翅膀贴图 (for 清荷 -->
+            <!-- 种族硬编码部件的替换，说明见霓羽的 PawnkindDef。 -->
             <li Class="MiliraXian.CharacterLib.CharacterRacePartExtension">
                 <parts>
                     <li source="Milira/Pawn/BodyAddon/LeftWingNew/" prefix="true">MiliraXianQinghe/Pawn/LeftWingNew_Qinghe/</li>
@@ -251,9 +274,5 @@
             </li>
 
         </modExtensions>
-
     </PawnKindDef>
-
-
-
 </Defs>

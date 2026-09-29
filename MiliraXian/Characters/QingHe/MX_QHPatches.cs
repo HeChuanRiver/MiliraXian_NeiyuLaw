@@ -26,12 +26,6 @@ namespace MiliraXian.Characters.QingHe
             patcher.Patch(AccessTools.Method(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget"),
                 prefix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget_Prefix)));
 
-            patcher.Patch(AccessTools.Method(typeof(StartingPawnUtility), nameof(StartingPawnUtility.NewGeneratedStartingPawn)),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix)));
-
-            patcher.Patch(AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
-                postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_PawnGenerator_GeneratePawn_Postfix)));
-
             patcher.Patch(AccessTools.Method(typeof(Pawn), nameof(Pawn.SpawnSetup)),
                 postfix: new HarmonyMethod(typeof(MX_QHPatches), nameof(Patch_Pawn_SpawnSetup_Postfix))
                 {
@@ -143,29 +137,6 @@ namespace MiliraXian.Characters.QingHe
             CompAbilityEffect_AscentSlash.ApplyActiveActionDrawPos(___pawn, ref __result);
         }
 
-        public static void Patch_StartingPawnUtility_NewGeneratedStartingPawn_Postfix(Pawn __result)
-        {
-            if (!MX_QHCharacterUtility.IsQinghe(__result))
-            {
-                return;
-            }
-
-            MX_QHCharacterUtility.MarkForLoadoutStabilization(__result);
-            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
-            __result.Drawer?.renderer?.SetAllGraphicsDirty();
-        }
-
-        public static void Patch_PawnGenerator_GeneratePawn_Postfix(ref Pawn __result)
-        {
-            if (!MX_QHCharacterUtility.IsQinghe(__result))
-            {
-                return;
-            }
-
-            MX_QHCharacterUtility.EnsureDefaultLoadout(__result);
-            __result.Drawer?.renderer?.SetAllGraphicsDirty();
-        }
-
         public static void Patch_Pawn_SpawnSetup_Postfix(Pawn __instance)
         {
             if (!MX_QHCharacterUtility.IsQinghe(__instance))
@@ -173,15 +144,8 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            EnsureQingheCoreTraits(__instance);
-            MX_QH_HediffUtility.EnsureCoreHediffs(__instance);
             MX_QHSkillUtility.SyncChoices(__instance);
             __instance.Drawer?.renderer?.SetAllGraphicsDirty();
-            if (MX_QHCharacterUtility.ShouldFinalizeLoadout(__instance))
-            {
-                MX_QHCharacterUtility.EnsureDefaultLoadout(__instance);
-                MX_QHCharacterUtility.ClearLoadoutStabilization(__instance);
-            }
         }
 
         private struct DamageHediffState
@@ -697,26 +661,6 @@ namespace MiliraXian.Characters.QingHe
             }
 
             HediffComp_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
-        }
-
-        private static void EnsureQingheCoreTraits(Pawn pawn)
-        {
-            if (pawn?.story?.traits == null)
-            {
-                return;
-            }
-
-            if (MX_QHDefOf.MX_QH_Trait_SpringFall != null
-                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_SpringFall))
-            {
-                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_SpringFall));
-            }
-
-            if (MX_QHDefOf.MX_QH_Trait_WaterFairy != null
-                && !pawn.story.traits.HasTrait(MX_QHDefOf.MX_QH_Trait_WaterFairy))
-            {
-                pawn.story.traits.GainTrait(new Trait(MX_QHDefOf.MX_QH_Trait_WaterFairy));
-            }
         }
 
     }

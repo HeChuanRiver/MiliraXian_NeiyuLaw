@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using RimWorld.Planet;
@@ -107,7 +108,7 @@ namespace MiliraXian.Characters.QingHe
 
             PawnGenerationRequest request = new(
                 qingheKind,
-                ResolveAncientsFaction(),
+                CharacterFactionUtility.MiliraXianFaction,
                 PawnGenerationContext.NonPlayer,
                 -1,
                 forceGenerateNewPawn: true,
@@ -126,10 +127,7 @@ namespace MiliraXian.Characters.QingHe
                 forceRedressWorldPawnIfFormerColonist: false,
                 worldPawnFactionDoesntMatter: false);
 
-            Pawn pawn = PawnGenerator.GeneratePawn(request);
-            MX_QHCharacterUtility.EnsureDefaultLoadout(pawn);
-            MX_QHCharacterUtility.MarkForLoadoutStabilization(pawn);
-            return pawn;
+            return PawnGenerator.GeneratePawn(request);
         }
 
         public static bool TrySpawnQinghe(Map map, out Pawn pawn)
@@ -153,17 +151,6 @@ namespace MiliraXian.Characters.QingHe
 
             GenSpawn.Spawn(pawn, cell, map);
             return true;
-        }
-
-        private static Faction ResolveAncientsFaction()
-        {
-            FactionManager factionManager = Find.FactionManager;
-            if (factionManager == null)
-            {
-                return null;
-            }
-
-            return factionManager.OfAncients ?? factionManager.FirstFactionOfDef(FactionDefOf.Ancients);
         }
     }
 

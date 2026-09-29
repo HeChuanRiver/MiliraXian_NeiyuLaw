@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LudeonTK;
+using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using RimWorld.Planet;
@@ -142,10 +143,9 @@ namespace MiliraXian.Characters.Mingyuan
                 return null;
             }
 
-            Faction faction = Find.FactionManager?.OfAncients;
             PawnGenerationRequest request = new PawnGenerationRequest(
                 kindDef,
-                faction,
+                CharacterFactionUtility.MiliraXianFaction,
                 PawnGenerationContext.NonPlayer,
                 -1,
                 forceGenerateNewPawn: true,

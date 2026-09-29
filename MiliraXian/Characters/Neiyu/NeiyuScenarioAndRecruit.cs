@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using HarmonyLib;
+using MiliraXian.Characters.Common;
 using RimWorld;
 using RimWorld.QuestGen;
 using RimWorld.Planet;
@@ -1020,11 +1021,9 @@ namespace MiliraXian.Characters.Neiyu
                 return null;
             }
 
-            Faction ancientsFaction = ResolveAncientsFaction();
-
             PawnGenerationRequest request = new(
                 neiyuKind,
-                ancientsFaction,
+                CharacterFactionUtility.MiliraXianFaction,
                 PawnGenerationContext.NonPlayer,
                 -1,
                 forceGenerateNewPawn: true,
@@ -1066,17 +1065,6 @@ namespace MiliraXian.Characters.Neiyu
             {
                 Find.WorldPawns.PassToWorld(pawn);
             }
-        }
-
-        private static Faction ResolveAncientsFaction()
-        {
-            FactionManager factionManager = Find.FactionManager;
-            if (factionManager == null)
-            {
-                return null;
-            }
-
-            return factionManager.OfAncients ?? factionManager.FirstFactionOfDef(FactionDefOf.Ancients);
         }
     }
 }

@@ -121,21 +121,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
         }
 
-        public static void EnsureCoreHediffs(Pawn pawn)
-        {
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_FlowingForm);
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_AuraShield);
-            EnsureHediff(pawn, MX_QHDefOf.MX_QH_Trickle);
-            EnsureFlowerResonance(pawn);
-            EnsureFlowerDecree(pawn);
-            EnsureCombatState(pawn);
-            EnsureSwordPressure(pawn);
-            EnsureMeditativeStillness(pawn);
-            EnsureAuraMasteryComp(pawn);
-
-            GetHediffComp<HediffComp_AuraShield>(pawn, MX_QHDefOf.MX_QH_AuraShield)?.EnsureShieldBound();
-        }
-
         public static int GetAuraMasteryLevel(Pawn pawn)
         {
             return GetAuraMasteryComp(pawn)?.EffectiveLevel ?? 0;
