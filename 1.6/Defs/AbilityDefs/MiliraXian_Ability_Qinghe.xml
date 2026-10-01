@@ -200,9 +200,8 @@
         <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
         <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
         <normalSlashCount>3</normalSlashCount>
-        <postHitRecoveryPoints>1</postHitRecoveryPoints>
+        <postHitRecoveryHediff>MX_QH_SwordPressureAfterglow</postHitRecoveryHediff>
         <postHitRecoveryTicks>600</postHitRecoveryTicks>
-        <normalPostHitRecoveryPoints>0.5</normalPostHitRecoveryPoints>
         <normalPostHitRecoveryTicks>300</normalPostHitRecoveryTicks>
         <impactDelayTicks>30</impactDelayTicks>
         <dropSound>MX_QH_AscentSlash_Drop</dropSound>

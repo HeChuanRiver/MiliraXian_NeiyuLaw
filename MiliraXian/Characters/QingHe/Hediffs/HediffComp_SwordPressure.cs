@@ -1,14 +1,14 @@
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Common;
-using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class HediffCompProperties_SwordPressure : HediffCompProperties_PawnSpecialResource
     {
-        public int decayDelayTicks = 300;
-        public float decayPerSecond = 0.12f;
+        public int decayDelayTicks = 360;
+        public int decayIntervalTicks = 120;
+        public float decayPerInterval = 0.1f;
 
         public HediffCompProperties_SwordPressure()
         {
@@ -19,17 +19,21 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     public class HediffComp_SwordPressure : HediffComp_PawnSpecialResource
     {
         private int ticksSinceGain;
-        private int recoveryTicksLeft;
-        private float recoveryPerTick;
+        private int ticksSinceDecay;
 
         public HediffCompProperties_SwordPressure PropsPressure => (HediffCompProperties_SwordPressure)props;
+
+        /// <summary>
+        /// Completed points are a sword-pressure concept: a filled point is already earned.
+        /// The resource itself knows nothing about segments.
+        /// </summary>
+        public int CompletedPoints => Mathf.FloorToInt(CurrentValue);
 
         public override void CompExposeData()
         {
             base.CompExposeData();
             Scribe_Values.Look(ref ticksSinceGain, "mx_qh_swordPressure_ticksSinceGain", 0);
-            Scribe_Values.Look(ref recoveryTicksLeft, "mx_qh_swordPressure_recoveryTicksLeft", 0);
-            Scribe_Values.Look(ref recoveryPerTick, "mx_qh_swordPressure_recoveryPerTick", 0f);
+            Scribe_Values.Look(ref ticksSinceDecay, "mx_qh_swordPressure_ticksSinceDecay", 0);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -37,56 +41,45 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             base.CompPostTick(ref severityAdjustment);
             ticksSinceGain++;
 
-            if (recoveryTicksLeft > 0)
-            {
-                recoveryTicksLeft--;
-                AddValue(recoveryPerTick);
-                return;
-            }
-
-            if (ticksSinceGain < Mathf.Max(0, PropsPressure.decayDelayTicks))
+            if (ticksSinceGain < PropsPressure.decayDelayTicks)
             {
                 return;
             }
 
-            float completedFloor = Mathf.Floor(CurrentValue);
-            float partial = CurrentValue - completedFloor;
-            if (partial <= 0.0001f)
+            ticksSinceDecay++;
+            if (ticksSinceDecay < PropsPressure.decayIntervalTicks)
             {
                 return;
             }
 
-            float decay = Mathf.Max(0f, PropsPressure.decayPerSecond) / 60f;
-            SetValue(Mathf.Max(completedFloor, CurrentValue - decay));
+            ticksSinceDecay = 0;
+
+            // Only the unfinished remainder drains; a completed point is never lost. That floor is
+            // why decay is an external consume rather than a negative recovery rate.
+            float remainder = CurrentValue - Mathf.Floor(CurrentValue);
+            if (remainder > 0.0001f)
+            {
+                TryConsume(Mathf.Min(PropsPressure.decayPerInterval, remainder));
+            }
         }
 
         public override void AddValue(float value)
         {
-            if (!QinghePowerBalance.ZeroLevelPassivesEnabled || value <= 0f)
+            if (value <= 0f)
             {
                 return;
             }
 
             base.AddValue(value);
             ticksSinceGain = 0;
+            ticksSinceDecay = 0;
         }
-
-        public int CompletedPoints => Mathf.FloorToInt(CurrentValue);
 
         public float ConsumeAll()
         {
             float consumed = CurrentValue;
             SetValue(0f);
-            recoveryTicksLeft = 0;
-            recoveryPerTick = 0f;
             return consumed;
-        }
-
-        public void StartRecovery(float totalPoints, int durationTicks)
-        {
-            int ticks = Mathf.Max(1, durationTicks);
-            recoveryTicksLeft = ticks;
-            recoveryPerTick = Mathf.Max(0f, totalPoints) / ticks;
         }
     }
 }

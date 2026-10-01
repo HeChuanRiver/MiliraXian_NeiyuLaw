@@ -186,6 +186,7 @@
   <MX_QH_LongNightStillnessLabel>Long-Night Stillness</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>Qinghe has accumulated full meditative stillness. The next quality-bearing construction, crafting, or artwork will consume all of it and raise quality by 2.</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>Qinghe's meditative stillness is full.</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_MeditativeStillnessGainMote>Stillness +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_LotusShieldTooltipTitle>Flower-God Ward</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>
@@ -203,7 +204,7 @@
   <MX_QH_RechargeProgressLine>Recharge progress: {0}</MX_QH_RechargeProgressLine>
   <MX_QH_RemainingTimeLine>Time remaining: {0}</MX_QH_RemainingTimeLine>
   <MX_QH_FlowerDecreeValueLine>Flower Decree: {0} / {1}</MX_QH_FlowerDecreeValueLine>
-  <MX_QH_RecoveryProgressLine>Recovery progress: {0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoveryProgressLine>Next charge: {0}%</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>Recovery speed: {0} /s</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>Only Qinghe can host the Qixi rite.</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>The Qixi rite is still on cooldown. Time remaining: {0}.</MX_QH_QixiCooldown>

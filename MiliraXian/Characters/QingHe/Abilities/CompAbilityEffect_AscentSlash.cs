@@ -36,9 +36,8 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public float empoweredSlashVisualScale = 3.2f;
         public float empoweredSlashVisualAngleJitter = 12f;
         public int normalSlashCount = 3;
-        public float postHitRecoveryPoints = 1f;
+        public HediffDef postHitRecoveryHediff;
         public int postHitRecoveryTicks = 600;
-        public float normalPostHitRecoveryPoints = 0.5f;
         public int normalPostHitRecoveryTicks = 300;
         public int impactDelayTicks = 30;
 

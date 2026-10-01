@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.CombatStance;
 using MiliraXian.Characters.QingHe.Defs;
@@ -17,9 +17,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return GetHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
-        public static HediffComp_FlowerDecree GetFlowerDecree(Pawn pawn)
+        public static HediffComp_PawnSpecialResource GetFlowerDecree(Pawn pawn)
         {
-            return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_FlowerDecree;
+            return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_PawnSpecialResource;
         }
 
         public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
@@ -55,46 +55,23 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             protection?.SyncForPowerLevel();
         }
 
-        public static void AddMeditativeStillnessFromMeditation(Pawn pawn, Building lotusPond)
+        private const int StillnessGatheringLapseTicks = 30;
+
+        /// <summary>
+        /// Stillness accrues continuously while an activity lasts, so the rate rides a short-lived
+        /// hediff whose severity is the rate per second: the activity refreshes it each tick and it
+        /// lapses on its own once the activity stops.
+        /// </summary>
+        public static void SetStillnessGathering(Pawn pawn, float ratePerSecond)
         {
-            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
-            if (stillness == null)
+            if (ratePerSecond <= 0f)
             {
                 return;
             }
 
-            HediffCompProperties_MeditativeStillness props = stillness.PropsStillness;
-            float gain = props.meditationGainPerPeriod / props.gainPeriodTicks * stillness.GetEnvironmentFactor();
-            if (lotusPond != null)
-            {
-                gain *= props.lotusPondFactor;
-            }
-
-            stillness.AddStillness(gain);
-        }
-
-        public static void AddMeditativeStillnessFromReading(Pawn pawn, int delta, float roomBonusFactor)
-        {
-            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
-            if (stillness == null || delta <= 0)
-            {
-                return;
-            }
-
-            float gain = stillness.PropsStillness.readingGainPerPeriod / stillness.PropsStillness.gainPeriodTicks * delta * Mathf.Max(0.1f, roomBonusFactor);
-            stillness.AddStillness(gain);
-        }
-
-        public static void AddMeditativeStillnessFromSleep(Pawn pawn, int delta)
-        {
-            HediffComp_MeditativeStillness stillness = GetMeditativeStillness(pawn);
-            if (stillness == null || delta <= 0)
-            {
-                return;
-            }
-
-            float gain = stillness.PropsStillness.sleepGainPerPeriod / stillness.PropsStillness.gainPeriodTicks * delta;
-            stillness.AddStillness(gain);
+            Hediff gathering = pawn.health.GetOrAddHediff(MX_QHDefOf.MX_QH_StillnessGathering);
+            gathering.Severity = ratePerSecond;
+            (gathering as HediffWithComps)?.GetComp<HediffComp_Disappears>()?.SetDuration(StillnessGatheringLapseTicks);
         }
 
         public static void ApplyMeditativeStillnessQualityBonus(Pawn pawn, ref QualityCategory quality)

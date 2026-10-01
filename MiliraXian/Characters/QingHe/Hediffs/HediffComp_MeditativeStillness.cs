@@ -8,10 +8,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public class HediffCompProperties_MeditativeStillness : HediffCompProperties_PawnSpecialResource
     {
-        public int gainPeriodTicks = 1800;
-        public float meditationGainPerPeriod = 18f;
-        public float readingGainPerPeriod = 14.4f;
-        public float sleepGainPerPeriod = 3.6f;
+        public float meditationGainPerSecond = 0.6f;
+        public float readingGainPerSecond = 0.48f;
+        public float sleepGainPerSecond = 0.12f;
         public float lotusPondFactor = 1.1f;
         public float environmentFactorBase = 1f;
         public float environmentFactorPerBeauty = 0.1f;
@@ -78,74 +77,53 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
     public class HediffComp_MeditativeStillness : HediffComp_PawnSpecialResource
     {
-        private const int GainIntervalTicks = 300;
-        private const int NotificationIntervalTicks = 1800;
+        private const int EnvironmentSampleIntervalTicks = 300;
+        private const int MoteIntervalTicks = 1800;
 
-        private float pendingGain;
-        private int gainIntervalTicks;
-        private float pendingNotificationGain;
-        private int notificationIntervalTicks;
         private float cachedEnvironmentFactor = 1f;
         private int environmentFactorCachedTick = -1;
+        private bool wasLongNightReady;
+        private float valueAtLastMote = -1f;
 
         public HediffCompProperties_MeditativeStillness PropsStillness => (HediffCompProperties_MeditativeStillness)props;
 
         public bool LongNightReady => MaxValue > 0f && CurrentValue >= MaxValue - 0.001f;
 
-        public override void CompExposeData()
-        {
-            base.CompExposeData();
-            Scribe_Values.Look(ref pendingGain, "pendingGain", 0f);
-            Scribe_Values.Look(ref gainIntervalTicks, "gainIntervalTicks", 0);
-            Scribe_Values.Look(ref pendingNotificationGain, "pendingNotificationGain", 0f);
-            Scribe_Values.Look(ref notificationIntervalTicks, "notificationIntervalTicks", 0);
-        }
-
-        public override void CompPostPostAdd(DamageInfo? dinfo)
-        {
-            base.CompPostPostAdd(dinfo);
-        }
-
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
+
+            bool ready = LongNightReady;
+            if (ready && !wasLongNightReady && Pawn != null)
             {
-                pendingGain = 0f;
-                gainIntervalTicks = 0;
-                pendingNotificationGain = 0f;
-                notificationIntervalTicks = 0;
-                return;
+                Messages.Message("MX_QH_MeditativeStillnessFullMessage".Translate(), Pawn, MessageTypeDefOf.PositiveEvent, historical: false);
             }
 
-            gainIntervalTicks++;
-            if (gainIntervalTicks >= GainIntervalTicks)
-            {
-                gainIntervalTicks = 0;
-                FlushPendingGain();
-            }
+            wasLongNightReady = ready;
 
-            notificationIntervalTicks++;
-            if (notificationIntervalTicks >= NotificationIntervalTicks)
+            if (valueAtLastMote < 0f)
             {
-                notificationIntervalTicks = 0;
-                if (pendingNotificationGain > 0f && Pawn.Spawned)
+                valueAtLastMote = CurrentValue;
+            }
+            else if (Pawn.IsHashIntervalTick(MoteIntervalTicks) && Pawn.Spawned)
+            {
+                float gained = CurrentValue - valueAtLastMote;
+                valueAtLastMote = CurrentValue;
+                if (gained > 0f && MaxValue > 0f)
                 {
-                    float percent = pendingNotificationGain / MaxValue * 100f;
                     Color textColor = Color.Lerp(parent.def.defaultLabelColor, Color.black, 0.3f);
-                    MoteMaker.ThrowText(Pawn.DrawPos, Pawn.Map, $"静思 +{percent:0.##}%", textColor, 1.1f);
+                    string percent = (gained / MaxValue * 100f).ToString("0.##");
+                    MoteMaker.ThrowText(Pawn.DrawPos, Pawn.Map, "MX_QH_MeditativeStillnessGainMote".Translate(percent), textColor, 1.1f);
                 }
-
-                pendingNotificationGain = 0f;
             }
         }
 
         // 冥想的环境倍率：美观用原版 BeautyUtility.AverageBeautyPerceptible（半径 8.9 ∩ 可见房间），
-        // 清洁度用所在房间的原版房间统计（RoomStatWorker_Cleanliness）。采样贵，缓存一个结算间隔（300t）。
+        // 清洁度用所在房间的原版房间统计（RoomStatWorker_Cleanliness）。采样贵，缓存一个采样间隔（300t）。
         public float GetEnvironmentFactor()
         {
             int ticksGame = Find.TickManager.TicksGame;
-            if (ticksGame - environmentFactorCachedTick < GainIntervalTicks)
+            if (ticksGame - environmentFactorCachedTick < EnvironmentSampleIntervalTicks)
             {
                 return cachedEnvironmentFactor;
             }
@@ -173,49 +151,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 props.environmentFactorMax);
         }
 
-        public void AddStillness(float amount)
-        {
-            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
-            {
-                return;
-            }
-
-            if (amount <= 0f)
-            {
-                return;
-            }
-
-            pendingGain += amount;
-        }
-
-        private void FlushPendingGain()
-        {
-            if (pendingGain <= 0f)
-            {
-                return;
-            }
-
-            float amount = pendingGain;
-            pendingGain = 0f;
-            bool wasReady = LongNightReady;
-            float oldValue = CurrentValue;
-            AddValue(amount);
-            float applied = CurrentValue - oldValue;
-            pendingNotificationGain += Mathf.Max(0f, applied);
-
-            if (!wasReady && LongNightReady && Pawn != null)
-            {
-                Messages.Message("MX_QH_MeditativeStillnessFullMessage".Translate(), Pawn, MessageTypeDefOf.PositiveEvent, historical: false);
-            }
-        }
-
         public int ConsumeForQualityBonus()
         {
-            if (!QinghePowerBalance.ZeroLevelPassivesEnabled)
-            {
-                return 0;
-            }
-
             if (CurrentValue <= 0.001f)
             {
                 return 0;

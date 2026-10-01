@@ -1,4 +1,5 @@
 using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
 using Verse;
@@ -39,6 +40,27 @@ namespace MiliraXian.Characters.QingHe
 
                 MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.SyncForPowerLevel();
                 MX_QH_HediffUtility.SyncAuraShieldForPowerLevel(pawn);
+                SyncSealHediff(pawn);
+            }
+        }
+
+        /// <summary>
+        /// Sealing suppresses passive recovery as a stat factor of zero rather than a code-side
+        /// gate, so it also cancels transient recovery offsets such as the sword-pressure afterglow.
+        /// </summary>
+        internal static void SyncSealHediff(Pawn pawn)
+        {
+            Hediff seal = pawn.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_PowerSealed);
+            if (Sealed)
+            {
+                if (seal == null)
+                {
+                    pawn.health.AddHediff(MX_QHDefOf.MX_QH_PowerSealed);
+                }
+            }
+            else if (seal != null)
+            {
+                pawn.health.RemoveHediff(seal);
             }
         }
 

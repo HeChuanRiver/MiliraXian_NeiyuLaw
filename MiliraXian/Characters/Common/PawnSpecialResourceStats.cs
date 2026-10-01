@@ -10,6 +10,7 @@ namespace MiliraXian.Characters.Common
     {
         private static readonly Dictionary<HediffDef, StatDef> maxValueStats = new();
         private static readonly Dictionary<HediffDef, StatDef> gainFactorStats = new();
+        private static readonly Dictionary<HediffDef, StatDef> recoveryStats = new();
 
         public static StatDef MaxValueStatFor(HediffDef resourceDef)
         {
@@ -19,6 +20,11 @@ namespace MiliraXian.Characters.Common
         public static StatDef GainFactorStatFor(HediffDef resourceDef)
         {
             return resourceDef != null && gainFactorStats.TryGetValue(resourceDef, out StatDef stat) ? stat : null;
+        }
+
+        public static StatDef RecoveryStatFor(HediffDef resourceDef)
+        {
+            return resourceDef != null && recoveryStats.TryGetValue(resourceDef, out StatDef stat) ? stat : null;
         }
 
         internal static void Generate(bool hotReload)
@@ -61,6 +67,21 @@ namespace MiliraXian.Characters.Common
                 };
                 DefGenerator.AddImpliedDef(gainFactorStat, hotReload);
                 gainFactorStats[resourceDef] = gainFactorStat;
+
+                StatDef recoveryStat = new StatDef
+                {
+                    defName = resourceDef.defName + "Recovery",
+                    label = resourceDef.label + "回复速度",
+                    description = "每秒自然变化的" + resourceDef.label + "量。正值回复，负值衰减。",
+                    workerClass = typeof(StatWorker_Mutable),
+                    category = category,
+                    defaultBaseValue = props.recoveryPerSecond,
+                    toStringStyle = ToStringStyle.FloatTwo,
+                    showIfHediffsPresent = new List<HediffDef> { resourceDef },
+                    neverDisabled = true
+                };
+                DefGenerator.AddImpliedDef(recoveryStat, hotReload);
+                recoveryStats[resourceDef] = recoveryStat;
             }
         }
 

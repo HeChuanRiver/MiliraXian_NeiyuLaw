@@ -1,4 +1,4 @@
-using MiliraXian.Characters.QingHe.Defs;
+﻿using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.Common.UI;
 using UnityEngine;
@@ -36,24 +36,24 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         protected override void DrawContents(Rect rect)
         {
             HediffComp_FlowerDecree comp = GetFlowerDecreeComp();
-            Rect barRect = GetResourceBarRect(rect, BarHeight);
-            DrawBar(barRect, comp);
+            float width = Mathf.Min(ResourceBarWidth, rect.width - BarLeftPadding - BarRightPadding);
+            Rect barRect = GetAlignedRect(rect, new Vector2(width, BarHeight), BarMargin);
+            DrawBar(barRect, comp, comp?.SegmentHighlightPercent ?? 0f);
 
-            TooltipHandler.TipRegion(barRect, () => BuildTip(comp), GetStableTipId());
+            TooltipHandler.TipRegion(barRect, () => BuildTip(comp), Gen.HashCombineInt(pawn?.thingIDNumber ?? 0, TipSalt));
             if (Mouse.IsOver(barRect))
             {
                 Widgets.DrawHighlight(barRect, 0.45f);
             }
         }
 
-        private static void DrawBar(Rect barRect, HediffComp_FlowerDecree comp)
+        private static void DrawBar(Rect barRect, HediffComp_FlowerDecree comp, float highlight)
         {
             int max = Mathf.Max(1, Mathf.RoundToInt(comp?.MaxValue ?? 3f));
             float currentValue = Mathf.Clamp(comp?.CurrentValue ?? 0f, 0f, comp?.MaxValue ?? 3f);
             int fullSegments = Mathf.Clamp(Mathf.FloorToInt(currentValue), 0, max);
             float partialPercent = Mathf.Clamp01(currentValue - fullSegments);
             float segmentWidth = (barRect.width - SegmentGap * (max - 1)) / max;
-            float highlight = comp?.HighlightPercent ?? 0f;
             int highlightedSegment = highlight > 0.0001f ? Mathf.Clamp(fullSegments - 1, -1, max - 1) : -1;
 
             for (int i = 0; i < max; i++)
@@ -79,13 +79,6 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
         }
 
-        private Rect GetResourceBarRect(Rect rect, float height)
-        {
-            float availableWidth = rect.width - BarLeftPadding - BarRightPadding;
-            float width = Mathf.Min(ResourceBarWidth, availableWidth);
-            return GetAlignedRect(rect, new Vector2(width, height), BarMargin);
-        }
-
         private HediffComp_FlowerDecree GetFlowerDecreeComp()
         {
             if (cachedComp == null || cachedComp.Pawn != pawn)
@@ -105,23 +98,18 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
             int current = Mathf.FloorToInt(comp.CurrentValue);
             int max = Mathf.FloorToInt(comp.MaxValue);
-            int recoveryProgress = Mathf.FloorToInt(Mathf.Repeat(comp.CurrentValue, 1f) * 100f);
-            const int recoveryProgressMax = 100;
+            // One decimal: the value advances ~0.83 points per settle, so whole percent would
+            // visibly skip a number every few steps.
+            string recoveryProgress = (Mathf.Repeat(comp.CurrentValue, 1f) * 100f).ToString("F1");
             string tip = "MX_QH_FlowerDecreeValueLine".Translate(current, max).ToString()
-                         + "\n" + "MX_QH_RecoveryProgressLine".Translate(recoveryProgress, recoveryProgressMax)
-                         + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.CurrentRecoveryProgressPerSecond.ToString("F2"));
+                         + "\n" + "MX_QH_RecoveryProgressLine".Translate(recoveryProgress)
+                         + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.RecoveryPerSecond.ToString("F2"));
             if (!comp.ResourceDescription.NullOrEmpty())
             {
                 tip += "\n\n" + comp.ResourceDescription;
             }
 
             return tip;
-        }
-
-        private int GetStableTipId()
-        {
-            int pawnId = pawn?.thingIDNumber ?? 0;
-            return Gen.HashCombineInt(pawnId, TipSalt);
         }
     }
 }

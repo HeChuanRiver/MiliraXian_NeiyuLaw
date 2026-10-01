@@ -273,7 +273,19 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                MX_QH_HediffUtility.AddMeditativeStillnessFromMeditation(pawn, ResolveMeditatingLotusPond(pawn));
+                HediffComp_MeditativeStillness stillness = MX_QH_HediffUtility.GetMeditativeStillness(pawn);
+                if (stillness == null)
+                {
+                    return;
+                }
+
+                float rate = stillness.PropsStillness.meditationGainPerSecond * stillness.GetEnvironmentFactor();
+                if (ResolveMeditatingLotusPond(pawn) != null)
+                {
+                    rate *= stillness.PropsStillness.lotusPondFactor;
+                }
+
+                MX_QH_HediffUtility.SetStillnessGathering(pawn, rate);
             }
         }
 
@@ -300,7 +312,13 @@ namespace MiliraXian.Characters.QingHe
         {
             public static void Postfix(Pawn pawn, int delta, float roomBonusFactor)
             {
-                MX_QH_HediffUtility.AddMeditativeStillnessFromReading(pawn, delta, roomBonusFactor);
+                HediffComp_MeditativeStillness stillness = MX_QH_HediffUtility.GetMeditativeStillness(pawn);
+                if (stillness != null)
+                {
+                    MX_QH_HediffUtility.SetStillnessGathering(
+                        pawn,
+                        stillness.PropsStillness.readingGainPerSecond * Mathf.Max(0.1f, roomBonusFactor));
+                }
             }
         }
 
@@ -314,7 +332,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                __result?.AddPreTickIntervalAction(delta => ApplyQingheSleepStillness(__instance, delta));
+                __result?.AddPreTickIntervalAction(_ => ApplyQingheSleepStillness(__instance));
             }
         }
 
@@ -579,7 +597,7 @@ namespace MiliraXian.Characters.QingHe
 
         private const float QingheInstrumentAudienceJoyGain = 0.03f;
 
-        private static void ApplyQingheSleepStillness(JobDriver_LayDown driver, int delta)
+        private static void ApplyQingheSleepStillness(JobDriver_LayDown driver)
         {
             Pawn pawn = driver?.pawn;
             if (driver == null || !driver.asleep || !MX_QHCharacterUtility.IsQinghe(pawn))
@@ -587,7 +605,23 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            MX_QH_HediffUtility.AddMeditativeStillnessFromSleep(pawn, delta);
+            HediffComp_MeditativeStillness stillness = MX_QH_HediffUtility.GetMeditativeStillness(pawn);
+            if (stillness == null)
+            {
+                return;
+            }
+
+            // Mirrors how vanilla gains rest (Toils_LayDown.ApplyBedRelatedEffects + Need_Rest):
+            // the bed's effectiveness scaled by the pawn's own rest rate.
+            Building_Bed bed = pawn.CurrentBed();
+            float bedEffectiveness = bed == null || !bed.def.statBases.StatListContains(StatDefOf.BedRestEffectiveness)
+                ? StatDefOf.BedRestEffectiveness.valueIfMissing
+                : bed.GetStatValue(StatDefOf.BedRestEffectiveness);
+            MX_QH_HediffUtility.SetStillnessGathering(
+                pawn,
+                stillness.PropsStillness.sleepGainPerSecond
+                    * bedEffectiveness
+                    * pawn.GetStatValue(StatDefOf.RestRateMultiplier));
         }
 
         private static void ApplyQingheInstrumentPerformance(JobDriver_PlayMusicalInstrument driver, int delta)

@@ -178,6 +178,7 @@
   <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>下一次进行涉及品质的建造、制作或艺术创作时，将消耗全部静思并使品质等级 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>【静思】已积累到上限。</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_MeditativeStillnessGainMote>静思 +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_AuraShieldTooltipTitle>灵气加护</MX_QH_AuraShieldTooltipTitle>
   <MX_QH_AuraShieldEnergyLine>灵气值：{0} / {1}</MX_QH_AuraShieldEnergyLine>
   <MX_QH_AuraShieldRegenLine>回复速率：{0} /秒</MX_QH_AuraShieldRegenLine>
@@ -195,7 +196,7 @@
   <MX_QH_RechargeProgressLine>恢复进度：{0}</MX_QH_RechargeProgressLine>
   <MX_QH_RemainingTimeLine>剩余时间：{0}</MX_QH_RemainingTimeLine>
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
-  <MX_QH_RecoveryProgressLine>下个充能：{0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoveryProgressLine>下个充能：{0}%</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>充能速度：{0} /秒</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>只有清荷可以主持七夕节。</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiRequiresFemaleOrGenderless>七夕节参与者必须是女性或无性别。</MX_QH_QixiRequiresFemaleOrGenderless>

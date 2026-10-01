@@ -195,6 +195,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             effect.Severity = Mathf.Min(CurrentLevel, QinghePowerBalance.MaxEffectiveLevel);
+            QinghePowerBalance.SyncSealHediff(Pawn);
         }
     }
 }

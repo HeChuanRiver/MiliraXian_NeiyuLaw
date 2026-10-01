@@ -186,6 +186,7 @@
   <MX_QH_LongNightStillnessLabel>長夜靜思</MX_QH_LongNightStillnessLabel>
   <MX_QH_LongNightStillnessDescription>清荷已積蓄圓滿的靜思。下一次進行需要品質的建造、製作或藝術創作時，將消耗全部靜思並使品質 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>清荷的靜思已經積蓄圓滿。</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_MeditativeStillnessGainMote>靜思 +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_LotusShieldTooltipTitle>花神護體</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>護盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>護盾回復：{0} /秒</MX_QH_LotusShieldRegenLine>
@@ -203,7 +204,7 @@
   <MX_QH_RechargeProgressLine>恢復進度：{0}</MX_QH_RechargeProgressLine>
   <MX_QH_RemainingTimeLine>剩餘時間：{0}</MX_QH_RemainingTimeLine>
   <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
-  <MX_QH_RecoveryProgressLine>恢復進度：{0} / {1}</MX_QH_RecoveryProgressLine>
+  <MX_QH_RecoveryProgressLine>下個充能：{0}%</MX_QH_RecoveryProgressLine>
   <MX_QH_RecoverySpeedLine>恢復速度：{0} /秒</MX_QH_RecoverySpeedLine>
   <MX_QH_QixiRequiresQinghe>只有清荷可以主持乞巧儀式。</MX_QH_QixiRequiresQinghe>
   <MX_QH_QixiCooldown>乞巧儀式仍在冷卻中，剩餘時間：{0}。</MX_QH_QixiCooldown>

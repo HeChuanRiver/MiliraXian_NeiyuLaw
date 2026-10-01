@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.Common
         public string resourceLabel = "Resource";
         public string resourceDescription = string.Empty;
         public float maxValue = 100f;
+        public float recoveryPerSecond;
         public bool clampToMax = true;
         public bool showGizmo = true;
         public bool hideOnHealthTab = true;
@@ -24,9 +25,22 @@ namespace MiliraXian.Characters.Common
         }
     }
     
+    /// <summary>
+    /// Carrier for a special resource. The value drives severity, so severity legitimately reaches
+    /// zero; vanilla would then remove the hediff and discard the comp's saved value with it.
+    /// A resource's existence is decided by whoever grants it, never by its current value.
+    /// </summary>
+    public class Hediff_PawnSpecialResource : HediffWithComps
+    {
+        public override bool ShouldRemove => false;
+    }
+
     public class HediffComp_PawnSpecialResource : HediffComp
     {
+        public const int SettleIntervalTicks = 10;
+
         private float currentValue;
+        private int lastSettleTick = -1;
 
         public HediffCompProperties_PawnSpecialResource PropsResource => (HediffCompProperties_PawnSpecialResource)props;
 
@@ -38,6 +52,16 @@ namespace MiliraXian.Characters.Common
             {
                 StatDef stat = PawnSpecialResourceStats.MaxValueStatFor(parent?.def);
                 return stat != null && Pawn != null ? Pawn.GetStatValue(stat) : PropsResource.maxValue;
+            }
+        }
+
+        /// <summary>Signed rate per second: positive recovers, negative decays, zero holds.</summary>
+        public float RecoveryPerSecond
+        {
+            get
+            {
+                StatDef stat = PawnSpecialResourceStats.RecoveryStatFor(parent?.def);
+                return stat != null && Pawn != null ? Pawn.GetStatValue(stat) : PropsResource.recoveryPerSecond;
             }
         }
 
@@ -56,6 +80,70 @@ namespace MiliraXian.Characters.Common
         public override void CompExposeData()
         {
             Scribe_Values.Look(ref currentValue, "currentValue", 0f);
+            Scribe_Values.Look(ref lastSettleTick, "lastSettleTick", -1);
+        }
+
+        /// <summary>
+        /// Pushes the value into severity so stage stat modifiers follow it, which also yields
+        /// vanilla's Notify_HediffChanged invalidation. Resources whose def keeps severity pinned
+        /// to a single stage are unaffected.
+        /// </summary>
+        private void SyncSeverity()
+        {
+            if (parent == null || parent.def.maxSeverity <= parent.def.minSeverity)
+            {
+                return;
+            }
+
+            float severity = Mathf.Clamp(currentValue, parent.def.minSeverity, parent.def.maxSeverity);
+            if (Mathf.Abs(parent.Severity - severity) > 0.0001f)
+            {
+                parent.Severity = severity;
+            }
+        }
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+            Settle(force: false);
+        }
+
+        /// <summary>
+        /// Applies elapsed continuous recovery. Real elapsed ticks are used rather than assuming
+        /// one interval, because map departure, re-adding the hediff and pausing all break that.
+        /// Consumption checks must force a settle so they observe the current value.
+        /// </summary>
+        protected void Settle(bool force)
+        {
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            if (lastSettleTick < 0)
+            {
+                lastSettleTick = currentTick;
+                return;
+            }
+
+            int elapsedTicks = Mathf.Max(0, currentTick - lastSettleTick);
+            if (elapsedTicks == 0 || (!force && elapsedTicks < SettleIntervalTicks))
+            {
+                return;
+            }
+
+            lastSettleTick = currentTick;
+            if (Pawn == null || Pawn.Dead)
+            {
+                return;
+            }
+
+            float rate = RecoveryPerSecond;
+            if (rate == 0f)
+            {
+                return;
+            }
+
+            float maxValue = MaxValue;
+            currentValue = Mathf.Max(0f, currentValue + rate * elapsedTicks / 60f);
+            ClampCurrentValueTo(maxValue);
+            SyncSeverity();
         }
 
         public override bool CompDisallowVisible()
@@ -87,7 +175,22 @@ namespace MiliraXian.Characters.Common
 
         public void SetValue(float value)
         {
-            currentValue = NormalizeValue(value);
+            currentValue = Mathf.Max(0f, value);
+            ClampCurrentValue();
+        }
+
+        /// <summary>
+        /// Write-then-check. Reads MaxValue only when a clamp could actually apply, so
+        /// clampToMax=false resources never pay for the stat lookup.
+        /// </summary>
+        protected void ClampCurrentValue()
+        {
+            if (PropsResource.clampToMax && currentValue > 0f)
+            {
+                ClampCurrentValueTo(MaxValue);
+            }
+
+            SyncSeverity();
         }
 
         protected void ClampCurrentValueTo(float maxValue)
@@ -114,7 +217,8 @@ namespace MiliraXian.Characters.Common
                 }
             }
 
-            currentValue = NormalizeValue(currentValue + value);
+            currentValue = Mathf.Max(0f, currentValue + value);
+            ClampCurrentValue();
         }
 
         public virtual bool TryConsume(float value)
@@ -124,24 +228,17 @@ namespace MiliraXian.Characters.Common
                 return false;
             }
 
+            // Consumption decides on the current value, so it cannot wait for the next settle point.
+            Settle(force: true);
+
             if (currentValue + 1E-05f < value)
             {
                 return false;
             }
 
-            currentValue = NormalizeValue(currentValue - value);
+            currentValue = Mathf.Max(0f, currentValue - value);
+            SyncSeverity();
             return true;
-        }
-
-        private float NormalizeValue(float value)
-        {
-            value = Mathf.Max(0f, value);
-            if (PropsResource.clampToMax && MaxValue > 0f)
-            {
-                value = Mathf.Min(value, MaxValue);
-            }
-
-            return value;
         }
     }
 

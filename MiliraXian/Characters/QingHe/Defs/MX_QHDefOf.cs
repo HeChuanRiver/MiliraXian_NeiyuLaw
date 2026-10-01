@@ -51,6 +51,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_FlowingFormImmunity;
         public static HediffDef MX_QH_AuraMastery;
         public static HediffDef MX_QH_AuraShield;
+        public static HediffDef MX_QH_PowerSealed;
+        public static HediffDef MX_QH_StillnessGathering;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_SwordPressure;

@@ -17,7 +17,7 @@
         <resourceLabel>花令</resourceLabel>
         <resourceDescription>用于施放飞花令的充能资源。</resourceDescription>
         <maxValue>3</maxValue>
-        <baseRecoveryTicksPerDecree>1200</baseRecoveryTicksPerDecree>
+        <recoveryPerSecond>0.05</recoveryPerSecond>
         <highlightTicks>90</highlightTicks>
         <clampToMax>true</clampToMax>
         <showGizmo>false</showGizmo>
@@ -87,6 +87,9 @@
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>0</initialSeverity>
+    <minSeverity>0</minSeverity>
+    <maxSeverity>3</maxSeverity>
     <stages>
       <li>
         <minSeverity>0</minSeverity>
@@ -115,8 +118,9 @@
         <resourceLabel>剑压</resourceLabel>
         <resourceDescription>挥剑命中敌人时积累。未积累的一段剑压会在停止获取后逐渐流失。</resourceDescription>
         <maxValue>3</maxValue>
-        <decayDelayTicks>300</decayDelayTicks>
-        <decayPerSecond>0.12</decayPerSecond>
+        <decayDelayTicks>360</decayDelayTicks>
+        <decayIntervalTicks>120</decayIntervalTicks>
+        <decayPerInterval>0.1</decayPerInterval>
         <clampToMax>true</clampToMax>
         <showGizmo>false</showGizmo>
         <hideOnHealthTab>true</hideOnHealthTab>
@@ -142,10 +146,9 @@
         <resourceLabel>静思</resourceLabel>
         <resourceDescription>隐藏资源，不直接显示</resourceDescription>
         <maxValue>100</maxValue>
-        <gainPeriodTicks>1800</gainPeriodTicks>
-        <meditationGainPerPeriod>18</meditationGainPerPeriod>
-        <readingGainPerPeriod>14.4</readingGainPerPeriod>
-        <sleepGainPerPeriod>3.6</sleepGainPerPeriod>
+        <meditationGainPerSecond>0.6</meditationGainPerSecond>
+        <readingGainPerSecond>0.48</readingGainPerSecond>
+        <sleepGainPerSecond>0.12</sleepGainPerSecond>
         <lotusPondFactor>1.1</lotusPondFactor>
         <environmentFactorBase>1</environmentFactorBase>
         <environmentFactorPerBeauty>0.1</environmentFactorPerBeauty>
@@ -272,10 +275,94 @@
     </comps>
   </HediffDef>
   <HediffDef>
+    <defName>MX_QH_SwordPressureAfterglow</defName>
+    <label>剑势余韵</label>
+    <description>落樱命中后的余韵，持续回复剑压。</description>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.30, 0.78, 0.92)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>1</minSeverity>
+    <maxSeverity>2</maxSeverity>
+    <stages>
+      <li>
+        <minSeverity>1</minSeverity>
+        <statOffsets>
+          <MX_QH_SwordPressureRecovery>0.1</MX_QH_SwordPressureRecovery>
+        </statOffsets>
+      </li>
+      <li>
+        <minSeverity>2</minSeverity>
+        <statOffsets>
+          <MX_QH_SwordPressureRecovery>0.2</MX_QH_SwordPressureRecovery>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>300</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_StillnessGathering</defName>
+    <label>静思凝神</label>
+    <description>隐藏Hediff：当前活动带来的静思积累速度。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHidden</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>0.01</initialSeverity>
+    <minSeverity>0.01</minSeverity>
+    <maxSeverity>2</maxSeverity>
+    <stages>
+      <li>
+        <minSeverity>0.01</minSeverity>
+        <statOffsetsBySeverity>
+          <li>
+            <stat>MX_QH_MeditativeStillnessRecovery</stat>
+            <valueBySeverity>
+              <points>
+                <li>(0,0)</li>
+                <li>(2,2)</li>
+              </points>
+            </valueBySeverity>
+          </li>
+        </statOffsetsBySeverity>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>30</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+  <HediffDef>
+    <defName>MX_QH_PowerSealed</defName>
+    <label>力量封印</label>
+    <description>清荷的力量被封印，所有资源停止自然回复。</description>
+    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHidden</hediffClass>
+    <defaultLabelColor>(0.55, 0.55, 0.60)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <statFactors>
+          <MX_QH_FlowerDecreeRecovery>0</MX_QH_FlowerDecreeRecovery>
+          <MX_QH_SwordPressureRecovery>0</MX_QH_SwordPressureRecovery>
+          <MX_QH_MeditativeStillnessRecovery>0</MX_QH_MeditativeStillnessRecovery>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+  <HediffDef>
     <defName>MX_QH_AuraMastery</defName>
     <label>灵气精通</label>
     <description>清荷精通修行的显化。随着精通等级提高，清荷的基础能力会逐步增强。\n\n完成任意带有品质要求的制作、艺术创造时，可根据成品的价值和品质等级获得精通经验值。</description>
-    <hediffClass>Verse.HediffWithComps</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Hediff_SeverityLevel</hediffClass>
     <defaultLabelColor>(1.0, 0.78, 0.92)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -386,10 +473,11 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_FlowerDecreeGainFactor</stat>
+            <stat>MX_QH_FlowerDecreeRecovery</stat>
             <valueBySeverity>
               <points>
-                <li>(0,1)</li>
+                <li>(0,0)</li>
+                <li>(1,1)</li>
                 <li>(24,1.5)</li>
               </points>
             </valueBySeverity>

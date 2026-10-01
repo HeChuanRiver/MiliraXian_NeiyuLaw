@@ -408,10 +408,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
             slashIndex++;
             if (slashIndex >= SlashTotalCount)
             {
-                if (slashHitCount > 0)
+                if (slashHitCount > 0 && props.postHitRecoveryHediff != null)
                 {
-                    MX_QH_HediffUtility.GetSwordPressure(caster)?.StartRecovery(
-                        slashEmpowered ? props.postHitRecoveryPoints : props.normalPostHitRecoveryPoints,
+                    // Severity drives the resource's recovery stat; repeat hits refresh the
+                    // duration instead of stacking leftover time.
+                    Hediff recovery = caster.health.GetOrAddHediff(props.postHitRecoveryHediff);
+                    recovery.Severity = slashEmpowered ? 2f : 1f;
+                    (recovery as HediffWithComps)?.GetComp<HediffComp_Disappears>()?.SetDuration(
                         slashEmpowered ? props.postHitRecoveryTicks : props.normalPostHitRecoveryTicks);
                 }
                 Complete(caster);
