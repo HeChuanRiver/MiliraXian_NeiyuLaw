@@ -1,23 +1,24 @@
 using RimWorld;
-using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_QingheAuraMasterySync : HediffCompProperties
+    public class HediffCompProperties_QingheAuraMastery : HediffCompProperties
     {
-        public HediffCompProperties_QingheAuraMasterySync()
+        public HediffCompProperties_QingheAuraMastery()
         {
-            compClass = typeof(HediffComp_QingheAuraMasterySync);
+            compClass = typeof(HediffComp_QingheAuraMastery);
         }
     }
 
     /// <summary>
-    /// Tracks aura mastery level and crafting experience, and synchronizes skill nodes and effects.
+    /// Carries aura mastery: the earned level and its crafting experience. The comp lives on the
+    /// level's own hediff, so <c>parent.Severity</c> is the gated level and <c>level</c> is the
+    /// stored one. The skill tree reads the gated level as an unlock condition; it never stores it.
     /// </summary>
-    public class HediffComp_QingheAuraMasterySync : HediffComp
+    public class HediffComp_QingheAuraMastery : HediffComp
     {
         public const int MaxAuraMasteryLevel = 24;
 
@@ -32,18 +33,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private float progress;
         private int level;
-        private float lastSyncedSeverity = float.NaN;
 
         public int CurrentLevel => Mathf.Clamp(level, 0, MaxAuraMasteryLevel);
 
-        public int EffectiveLevel
-        {
-            get
-            {
-                Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
-                return effect == null ? 0 : Mathf.Clamp(Mathf.RoundToInt(effect.Severity), 0, QinghePowerBalance.MaxEffectiveLevel);
-            }
-        }
+        public int EffectiveLevel => Mathf.Clamp(Mathf.RoundToInt(parent.Severity), 0, MaxAuraMasteryLevel);
 
         public bool IsMaxLevel => CurrentLevel >= MaxAuraMasteryLevel;
 
@@ -76,9 +69,20 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return ProgressRequirements[level];
         }
 
+        /// <summary>
+        /// The only writer of the gated level. Called on level-up, on settings change and on game
+        /// start, never per tick: the stored level changes only at those three points.
+        /// </summary>
+        public void SetEffectiveLevel()
+        {
+            parent.Severity = Mathf.Min(CurrentLevel, QinghePowerBalance.MaxEffectiveLevel);
+            MX_QHSkillUtility.SyncChoices(Pawn);
+            QinghePowerBalance.SyncSealHediff(Pawn);
+        }
+
         public void AddProgress(float amount)
         {
-            if (parent == null || amount <= 0f || IsMaxLevel)
+            if (amount <= 0f || IsMaxLevel)
             {
                 return;
             }
@@ -102,12 +106,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 progress = 0f;
             }
 
-            if (Pawn?.Spawned == true && Pawn.Map != null)
+            if (Pawn.Spawned && Pawn.Map != null)
             {
                 MoteMaker.ThrowText(
                     Pawn.DrawPos,
                     Pawn.Map,
-                    $"灵气精通 +{amount:0.##}经验",
+                    "MX_QH_AuraMasteryGainMote".Translate(amount.ToString("0.##")),
                     new Color(1f, 0.35f, 0.8f),
                     1.1f);
             }
@@ -119,42 +123,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                     "MX_QH_AuraMasteryGainedMessage".Translate(CurrentLevel),
                     LetterDefOf.PositiveEvent,
                     Pawn);
-                TrySync(force: true);
+                SetEffectiveLevel();
             }
         }
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            TrySync(force: true);
-        }
-
-        public void SyncForPowerLevel()
-        {
-            if (parent == null || !MX_QHCharacterUtility.IsQinghe(Pawn))
-            {
-                return;
-            }
-
-            EnsureEffectiveHediff();
-            MX_QHSkillUtility.SyncChoices(Pawn);
-        }
-
-        public override void CompPostPostRemoved()
-        {
-            Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
-            if (effect != null)
-            {
-                Pawn.health.RemoveHediff(effect);
-            }
-
-            base.CompPostPostRemoved();
-        }
-
-        public override void CompPostTick(ref float severityAdjustment)
-        {
-            base.CompPostTick(ref severityAdjustment);
-            TrySync();
+            SetEffectiveLevel();
         }
 
         public override void CompExposeData()
@@ -164,38 +140,8 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             Scribe_Values.Look(ref level, "mx_qh_auraMasteryLevel", 0);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                progress = Mathf.Max(0f, progress);
-                lastSyncedSeverity = float.NaN;
-                TrySync(force: true);
+                SetEffectiveLevel();
             }
-        }
-
-        private void TrySync(bool force = false)
-        {
-            if (parent == null || (!force && level == lastSyncedSeverity))
-            {
-                return;
-            }
-
-            lastSyncedSeverity = level;
-            if (MX_QHCharacterUtility.IsQinghe(Pawn))
-            {
-                EnsureEffectiveHediff();
-                MX_QHSkillUtility.SyncChoices(Pawn);
-            }
-        }
-
-        private void EnsureEffectiveHediff()
-        {
-            Hediff effect = Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_AuraMastery);
-            if (effect == null)
-            {
-                effect = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_AuraMastery, Pawn);
-                Pawn.health.AddHediff(effect);
-            }
-
-            effect.Severity = Mathf.Min(CurrentLevel, QinghePowerBalance.MaxEffectiveLevel);
-            QinghePowerBalance.SyncSealHediff(Pawn);
         }
     }
 }

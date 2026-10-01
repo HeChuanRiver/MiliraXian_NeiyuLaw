@@ -192,6 +192,9 @@
                 <severity>1</severity>
             </li>
             <li>
+                <def>MX_QH_AuraMastery</def>
+            </li>
+            <li>
                 <def>MX_QH_FlowerDecree</def>
                 <severity>1</severity>
             </li>

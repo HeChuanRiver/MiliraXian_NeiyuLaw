@@ -187,6 +187,7 @@
   <MX_QH_LongNightStillnessDescription>清荷已積蓄圓滿的靜思。下一次進行需要品質的建造、製作或藝術創作時，將消耗全部靜思並使品質 +2。</MX_QH_LongNightStillnessDescription>
   <MX_QH_MeditativeStillnessFullMessage>清荷的靜思已經積蓄圓滿。</MX_QH_MeditativeStillnessFullMessage>
   <MX_QH_MeditativeStillnessGainMote>靜思 +{0}%</MX_QH_MeditativeStillnessGainMote>
+  <MX_QH_AuraMasteryGainMote>靈氣精通 +{0}經驗</MX_QH_AuraMasteryGainMote>
   <MX_QH_LotusShieldTooltipTitle>花神護體</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>護盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>護盾回復：{0} /秒</MX_QH_LotusShieldRegenLine>

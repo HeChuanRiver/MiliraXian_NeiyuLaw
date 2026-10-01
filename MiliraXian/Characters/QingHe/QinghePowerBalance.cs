@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.QingHe
                     continue;
                 }
 
-                MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.SyncForPowerLevel();
+                MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.SetEffectiveLevel();
                 MX_QH_HediffUtility.SyncAuraShieldForPowerLevel(pawn);
                 SyncSealHediff(pawn);
             }

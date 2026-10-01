@@ -91,19 +91,18 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddAuraMasteryLevel(Pawn pawn)
         {
-            HediffComp_QingheAuraMasterySync comp = GetAuraMasteryComp(pawn);
+            HediffComp_QingheAuraMastery comp = GetAuraMasteryComp(pawn);
             if (comp == null || comp.IsMaxLevel)
             {
                 return;
             }
 
             comp.AddProgress(comp.RequiredProgressForCurrentLevel);
-            MX_QHSkillUtility.SyncChoices(pawn);
         }
 
-        public static HediffComp_QingheAuraMasterySync GetAuraMasteryComp(Pawn pawn)
+        public static HediffComp_QingheAuraMastery GetAuraMasteryComp(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheAuraMasterySync>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return GetHediffComp<HediffComp_QingheAuraMastery>(pawn, MX_QHDefOf.MX_QH_AuraMastery);
         }
 
         public static void AddAuraMasteryProgress(Pawn pawn, float amount)
