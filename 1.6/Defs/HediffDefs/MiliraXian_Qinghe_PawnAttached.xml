@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <HediffDef>
     <defName>MX_QH_FlowerDecree</defName>
@@ -192,7 +192,7 @@
     <defName>MX_QH_FlowerResonance</defName>
     <label>和鸣</label>
     <description>隐藏Hediff：清荷技能数据</description>
-    <hediffClass>MiliraXian.Characters.Common.SkillTrees.Hediff_SkillTreeState</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.PerkSystem.Hediff_SkillTreeState</hediffClass>
     <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -201,7 +201,7 @@
     <minSeverity>1.0</minSeverity>
     <maxSeverity>1.0</maxSeverity>
     <comps>
-      <li Class="MiliraXian.Characters.Common.SkillTrees.HediffCompProperties_SkillTreeState">
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AuraPerkTree">
         <categories>
           <li>MX_QH_Category_Qinghe</li>
         </categories>
@@ -373,7 +373,7 @@
       <li Class="MiliraXian.Characters.Common.HediffCompProperties_SeverityLevelLabel">
         <useQingheEffectiveMax>true</useQingheEffectiveMax>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheAuraMastery" />
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AuraMastery" />
     </comps>
     <stages>
       <li>

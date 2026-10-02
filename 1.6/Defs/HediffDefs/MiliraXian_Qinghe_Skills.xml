@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <HediffDef>
-        <defName>MX_QH_LuoshenContract</defName>
-        <label>洛神契</label>
-        <description>隐藏状态：记录清荷与配偶之间的洛神契绑定。</description>
-        <hediffClass>Verse.HediffWithTarget</hediffClass>
-        <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
-        <isBad>false</isBad>
-        <scenarioCanAdd>false</scenarioCanAdd>
-        <everCurableByItem>false</everCurableByItem>
-        <initialSeverity>1.0</initialSeverity>
-        <minSeverity>1.0</minSeverity>
-        <maxSeverity>1.0</maxSeverity>
-        <comps>
-            <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_LuoshenContract" />
-        </comps>
-    </HediffDef>
-
-    <HediffDef>
         <defName>MX_QH_SpringFlow</defName>
         <label>春泉洗礼</label>
         <description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近战与远程伤害提升、受到的伤害降低、疼痛感减轻，并免疫告死积累&lt;/color&gt;。</description>

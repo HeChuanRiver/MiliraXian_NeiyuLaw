@@ -9,7 +9,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
-using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.Common.PerkSystem;
 using MiliraXian.Characters.QingHe;
 using Widgets = Verse.Widgets;
 
@@ -316,7 +316,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawSkillTreePage(Rect rect)
         {
-            HediffComp_QingheAuraMastery auraMastery = MX_QH_HediffUtility.GetAuraMasteryComp(pawn);
+            HediffComp_AuraMastery auraMastery = MX_QH_HediffUtility.GetAuraMasteryComp(pawn);
             Rect topBar = new(rect.x, rect.y, rect.width, TopBarHeight);
             float specialAreaHeight = GetSpecialAreaHeight(rect.width);
             Rect specialArea = new(rect.x, rect.yMax - specialAreaHeight - SkillTreeBottomPadding, rect.width, specialAreaHeight);
@@ -339,7 +339,7 @@ namespace MiliraXian.Characters.QingHe.UI
             nodesByLevel.Clear();
             foreach (SkillNodeDef node in levelNodes)
             {
-                int level = Mathf.Clamp(node.requiredAuraMasteryLevel, 0, HediffComp_QingheAuraMastery.MaxAuraMasteryLevel);
+                int level = Mathf.Clamp(node.requiredAuraMasteryLevel, 0, HediffComp_AuraMastery.MaxAuraMasteryLevel);
                 if (!nodesByLevel.TryGetValue(level, out List<SkillNodeDef> list))
                 {
                     list = new List<SkillNodeDef>();
@@ -350,7 +350,7 @@ namespace MiliraXian.Characters.QingHe.UI
             }
         }
 
-        private void DrawAuraMasteryTopBar(Rect rect, HediffComp_QingheAuraMastery auraMastery)
+        private void DrawAuraMasteryTopBar(Rect rect, HediffComp_AuraMastery auraMastery)
         {
             int actualLevel = auraMastery?.CurrentLevel ?? MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
             int maxLevel = QinghePowerBalance.MaxEffectiveLevel;
@@ -386,18 +386,18 @@ namespace MiliraXian.Characters.QingHe.UI
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
-        private void DrawLevelArea(Rect rect, HediffComp_QingheAuraMastery auraMastery)
+        private void DrawLevelArea(Rect rect, HediffComp_AuraMastery auraMastery)
         {
             Rect outRect = rect;
             List<int> unlockLevels = nodesByLevel.Keys.OrderBy(level => level).ToList();
             float viewWidth = outRect.width - 16f;
-            float viewHeight = (HediffComp_QingheAuraMastery.MaxAuraMasteryLevel + 1) * LevelRowHeight;
+            float viewHeight = (HediffComp_AuraMastery.MaxAuraMasteryLevel + 1) * LevelRowHeight;
             Rect viewRect = new(0f, 0f, viewWidth, viewHeight);
             Widgets.BeginScrollView(outRect, ref levelScrollPosition, viewRect);
 
             int currentLevel = auraMastery?.CurrentLevel ?? MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
             int effectiveLevel = Mathf.Min(currentLevel, QinghePowerBalance.MaxEffectiveLevel);
-            float fillPercent = Mathf.Clamp01((currentLevel + (auraMastery?.ProgressPercent ?? 0f)) / HediffComp_QingheAuraMastery.MaxAuraMasteryLevel);
+            float fillPercent = Mathf.Clamp01((currentLevel + (auraMastery?.ProgressPercent ?? 0f)) / HediffComp_AuraMastery.MaxAuraMasteryLevel);
             for (int i = 0; i < unlockLevels.Count; i++)
             {
                 int level = unlockLevels[i];

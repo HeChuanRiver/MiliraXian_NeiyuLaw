@@ -180,6 +180,7 @@
   <MX_QH_MeditativeStillnessFullMessage>【静思】已积累到上限。</MX_QH_MeditativeStillnessFullMessage>
   <MX_QH_MeditativeStillnessGainMote>静思 +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_AuraMasteryGainMote>灵气精通 +{0}经验</MX_QH_AuraMasteryGainMote>
+  <MX_Perk_RequiresPerk>需要领悟：{0}</MX_Perk_RequiresPerk>
   <MX_QH_AuraShieldTooltipTitle>灵气加护</MX_QH_AuraShieldTooltipTitle>
   <MX_QH_AuraShieldEnergyLine>灵气值：{0} / {1}</MX_QH_AuraShieldEnergyLine>
   <MX_QH_AuraShieldRegenLine>回复速率：{0} /秒</MX_QH_AuraShieldRegenLine>

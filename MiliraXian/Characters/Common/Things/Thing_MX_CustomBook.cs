@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using RimWorld;
-using UnityEngine;
 using Verse;
-using Verse.Grammar;
 
-namespace MiliraXian.Characters.Common.SkillTrees
+namespace MiliraXian.Characters.Common.Things
 {
     public class Thing_MX_CustomBook : Book
     {

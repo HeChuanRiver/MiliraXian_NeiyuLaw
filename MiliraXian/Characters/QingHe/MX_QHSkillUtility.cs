@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -6,7 +6,7 @@ using MiliraXian.Characters.QingHe.UI;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.Common.PerkSystem;
 
 namespace MiliraXian.Characters.QingHe
 {
@@ -25,17 +25,18 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            int effectiveLevel = Mathf.Min(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), QinghePowerBalance.MaxEffectiveLevel);
-            state.SyncNodesByAuraMasteryLevel(effectiveLevel);
+            // Unlocking writes stored state, so it must see the earned level, not the gated one.
+            state.SyncNodesByAuraMasteryLevel(MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.CurrentLevel ?? 0);
             state.SyncGrantedDefs();
-            HediffComp_LuoshenContract.SyncForQinghe(pawn, state);
         }
 
         public static bool HasSeasonalResonance(Pawn pawn)
         {
             SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_SeasonalResonance;
+            // HasNode answers "is it unlocked", GetAuraMasteryLevel is already gated: one asks
+            // stored, the other asks whether it currently takes effect.
             return node != null
-                && Mathf.Min(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), QinghePowerBalance.MaxEffectiveLevel) >= node.requiredAuraMasteryLevel
+                && MX_QH_HediffUtility.GetAuraMasteryLevel(pawn) >= node.requiredAuraMasteryLevel
                 && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.HasNode(node) == true;
         }
 

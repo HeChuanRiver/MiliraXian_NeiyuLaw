@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Common.SkillTrees
+namespace MiliraXian.Characters.Common.PerkSystem
 {
     public class Hediff_SkillTreeState : HediffWithComps, ISkillTreeStateListener
     {
@@ -59,7 +59,7 @@ namespace MiliraXian.Characters.Common.SkillTrees
             {
                 foreach (SkillNodeDef node in state.LearnedNodes)
                 {
-                    if (state.GetNodeLevel(node) <= 0)
+                    if (state.EffectiveNodeLevel(node) <= 0)
                     {
                         continue;
                     }

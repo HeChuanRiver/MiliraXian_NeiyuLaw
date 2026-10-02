@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerDecree.label>Flower Decree</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>Hidden Hediff: resource counter.</MX_QH_FlowerDecree.description>
@@ -28,8 +28,6 @@
 
   <MX_QH_Trickle.label>Trickle</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>Qinghe slowly recovers from wounds over time, eventually restoring permanent injuries and missing body parts.</MX_QH_Trickle.description>
-  <MX_QH_LuoshenContract.label>Luoshen contract</MX_QH_LuoshenContract.label>
-  <MX_QH_LuoshenContract.description>Hidden state: records the Luoshen contract binding between Qinghe and her spouse.</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, reduced pain, and immunity to Death Sentence accumulation&lt;/color&gt;.</MX_QH_SpringFlow.description>
   <MX_QH_FlowingForm.label>Flowing Form</MX_QH_FlowingForm.label>

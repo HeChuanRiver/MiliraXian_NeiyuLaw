@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.QingHe.Thoughts
     {
         protected override ThoughtState CurrentStateInternal(Pawn p)
         {
-            int stage = HediffComp_LuoshenContract.MaintainedThoughtStageFor(p);
+            int stage = LuoshenContractUtility.MaintainedThoughtStageFor(p);
             return stage >= 0 ? ThoughtState.ActiveAtStage(stage) : ThoughtState.Inactive;
         }
     }

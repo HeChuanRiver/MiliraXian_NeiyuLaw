@@ -1,15 +1,15 @@
-using RimWorld;
+﻿using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_QingheAuraMastery : HediffCompProperties
+    public class HediffCompProperties_AuraMastery : HediffCompProperties
     {
-        public HediffCompProperties_QingheAuraMastery()
+        public HediffCompProperties_AuraMastery()
         {
-            compClass = typeof(HediffComp_QingheAuraMastery);
+            compClass = typeof(HediffComp_AuraMastery);
         }
     }
 
@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// level's own hediff, so <c>parent.Severity</c> is the gated level and <c>level</c> is the
     /// stored one. The skill tree reads the gated level as an unlock condition; it never stores it.
     /// </summary>
-    public class HediffComp_QingheAuraMastery : HediffComp
+    public class HediffComp_AuraMastery : HediffComp
     {
         public const int MaxAuraMasteryLevel = 24;
 

@@ -1,4 +1,4 @@
-using MiliraXian.Characters.QingHe.Hediffs;
+﻿using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.Common.UI;
@@ -6,7 +6,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Common;
-using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.Common.PerkSystem;
 using MiliraXian.Characters.QingHe.UI;
 using Widgets = Verse.Widgets;
 

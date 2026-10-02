@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerDecree.label>花令</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>隱藏Hediff：資源計數器</MX_QH_FlowerDecree.description>
@@ -28,8 +28,6 @@
 
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>清荷會持續緩慢回復傷口，并逐步修復永久損傷與失去的身體部位。</MX_QH_Trickle.description>
-  <MX_QH_LuoshenContract.label>洛神契</MX_QH_LuoshenContract.label>
-  <MX_QH_LuoshenContract.description>隱藏狀態：記錄清荷與配偶之間的洛神契綁定。</MX_QH_LuoshenContract.description>
   <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，并免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlow.description>
   <MX_QH_FlowingForm.label>流水之形</MX_QH_FlowingForm.label>

@@ -188,6 +188,7 @@
   <MX_QH_MeditativeStillnessFullMessage>Qinghe's meditative stillness is full.</MX_QH_MeditativeStillnessFullMessage>
   <MX_QH_MeditativeStillnessGainMote>Stillness +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_AuraMasteryGainMote>Aura Mastery +{0} XP</MX_QH_AuraMasteryGainMote>
+  <MX_Perk_RequiresPerk>Requires: {0}</MX_Perk_RequiresPerk>
   <MX_QH_LotusShieldTooltipTitle>Flower-God Ward</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>Shield energy: {0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>Shield regen: {0} /s</MX_QH_LotusShieldRegenLine>

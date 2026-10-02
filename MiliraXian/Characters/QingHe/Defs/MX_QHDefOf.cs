@@ -63,7 +63,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_ResonanceAutumn;
         public static HediffDef MX_QH_ResonanceWinter;
         public static HediffDef MX_QH_MeditativeStillness;
-        public static HediffDef MX_QH_LuoshenContract;
         public static HediffDef MX_QH_Trickle;
 
         public static ThoughtDef MX_QH_LuoshenContractBroken;

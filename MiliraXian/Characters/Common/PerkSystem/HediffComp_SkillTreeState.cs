@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Common.SkillTrees
+namespace MiliraXian.Characters.Common.PerkSystem
 {
     public class HediffComp_SkillTreeState : HediffComp
     {
@@ -73,7 +74,17 @@ namespace MiliraXian.Characters.Common.SkillTrees
             }
 
             int level;
-            return nodeLevels.TryGetValue(node, out level) && level > 0 ? 1 : 0;
+            return nodeLevels.TryGetValue(node, out level) ? Mathf.Max(0, level) : 0;
+        }
+
+        /// <summary>
+        /// The stored level after the character's seal applies. Stored state is never written by the
+        /// seal, so everything asking "does this take effect right now" comes through here.
+        /// Subclasses supply the seal; with none, stored is effective.
+        /// </summary>
+        public virtual int EffectiveNodeLevel(SkillNodeDef node)
+        {
+            return GetNodeLevel(node);
         }
 
         public int SyncNodesByAuraMasteryLevel(int auraMasteryLevel)
@@ -83,13 +94,6 @@ namespace MiliraXian.Characters.Common.SkillTrees
             List<SkillNodeDef> unlockedNodes = new();
             foreach (SkillNodeDef node in RelevantNodes())
             {
-                if (node.requiredAuraMasteryLevel > auraMasteryLevel && GetNodeLevel(node) > 0)
-                {
-                    nodeLevels.Remove(node);
-                    learnedCount++;
-                    continue;
-                }
-
                 if (node.requiredAuraMasteryLevel <= auraMasteryLevel && GetNodeLevel(node) <= 0)
                 {
                     nodeLevels[node] = 1;
@@ -223,45 +227,23 @@ namespace MiliraXian.Characters.Common.SkillTrees
                 return;
             }
 
-            HashSet<AbilityDef> allGranted = new();
-            HashSet<AbilityDef> activeGranted = new();
+            // Only ever grants. Removing would discard cooldowns, charges and comp state, so
+            // whether a granted ability currently works is AbilityGate's business at read time.
             for (int i = 0; i < relevantNodes.Count; i++)
             {
                 SkillNodeDef node = relevantNodes[i];
-                if (node?.grantedAbilities == null)
+                if (node?.grantedAbilities == null || GetNodeLevel(node) <= 0)
                 {
                     continue;
                 }
 
-                bool active = GetNodeLevel(node) > 0;
                 for (int j = 0; j < node.grantedAbilities.Count; j++)
                 {
                     AbilityDef ability = node.grantedAbilities[j];
-                    if (ability == null)
-                    {
-                        continue;
-                    }
-
-                    allGranted.Add(ability);
-                    if (active)
-                    {
-                        activeGranted.Add(ability);
-                    }
-                }
-            }
-
-            foreach (AbilityDef ability in allGranted)
-            {
-                if (activeGranted.Contains(ability))
-                {
-                    if (pawn.abilities.GetAbility(ability, includeTemporary: false) == null)
+                    if (ability != null && pawn.abilities.GetAbility(ability, includeTemporary: false) == null)
                     {
                         pawn.abilities.GainAbility(ability);
                     }
-                }
-                else
-                {
-                    pawn.abilities.RemoveAbility(ability);
                 }
             }
         }

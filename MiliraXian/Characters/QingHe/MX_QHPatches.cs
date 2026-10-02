@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -411,7 +411,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                HediffComp_LuoshenContract.NotifySpouseRelationAdded(___pawn, otherPawn);
+                LuoshenContractUtility.NotifySpouseRelationAdded(___pawn, otherPawn);
             }
         }
 
@@ -429,7 +429,7 @@ namespace MiliraXian.Characters.QingHe
                     return;
                 }
 
-                HediffComp_LuoshenContract.NotifySpouseRelationRemoved(___pawn, otherPawn);
+                LuoshenContractUtility.NotifySpouseRelationRemoved(___pawn, otherPawn);
             }
         }
 

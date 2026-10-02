@@ -5,7 +5,7 @@ using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Common;
-using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.Common.PerkSystem;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -91,7 +91,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public static void AddAuraMasteryLevel(Pawn pawn)
         {
-            HediffComp_QingheAuraMastery comp = GetAuraMasteryComp(pawn);
+            HediffComp_AuraMastery comp = GetAuraMasteryComp(pawn);
             if (comp == null || comp.IsMaxLevel)
             {
                 return;
@@ -100,9 +100,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             comp.AddProgress(comp.RequiredProgressForCurrentLevel);
         }
 
-        public static HediffComp_QingheAuraMastery GetAuraMasteryComp(Pawn pawn)
+        public static HediffComp_AuraMastery GetAuraMasteryComp(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheAuraMastery>(pawn, MX_QHDefOf.MX_QH_AuraMastery);
+            return GetHediffComp<HediffComp_AuraMastery>(pawn, MX_QHDefOf.MX_QH_AuraMastery);
         }
 
         public static void AddAuraMasteryProgress(Pawn pawn, float amount)

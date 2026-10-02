@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using MiliraXian.Characters.Common.SkillTrees;
+using MiliraXian.Characters.Common.PerkSystem;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
@@ -375,11 +375,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             HediffComp_SkillTreeState state = cachedFlowerResonance;
-            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge1))
+            if (state != null && state.EffectiveNodeLevel(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge1) > 0)
             {
                 maxCharges++;
             }
-            if (state != null && state.HasNode(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge2))
+            if (state != null && state.EffectiveNodeLevel(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge2) > 0)
             {
                 maxCharges++;
             }

@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace MiliraXian.Characters.Common.SkillTrees
+namespace MiliraXian.Characters.Common.PerkSystem
 {
     public class SkillNodeDef : Def
     {
