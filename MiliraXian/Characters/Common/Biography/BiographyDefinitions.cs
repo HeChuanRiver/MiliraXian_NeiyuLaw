@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using RimWorld;
 using Verse;
+using MiliraXian.Characters.Common.Conditions;
 
 namespace MiliraXian.Characters.Common.Biography
 {
@@ -124,7 +125,7 @@ namespace MiliraXian.Characters.Common.Biography
 
                 if (story.unlockCondition == null)
                 {
-                    yield return path + ".unlockCondition is required. Use BiographyCondition_Always for an initially unlocked story.";
+                    yield return path + ".unlockCondition is required. Use UnlockCondition_Always for an initially unlocked story.";
                 }
                 else
                 {
@@ -256,25 +257,9 @@ namespace MiliraXian.Characters.Common.Biography
         [MustTranslate]
         public string storyText;
 
-        public BiographyUnlockCondition unlockCondition;
+        public UnlockCondition unlockCondition;
         public List<BiographyReward> rewards = new();
         public bool notifyOnUnlock = true;
-    }
-
-    public abstract class BiographyUnlockCondition
-    {
-        public abstract bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker);
-
-        public abstract string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker);
-
-        public virtual IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
-        {
-            yield break;
-        }
-
-        public virtual void CollectReferencedStoryNames(List<string> storyNames)
-        {
-        }
     }
 
     public abstract class BiographyReward

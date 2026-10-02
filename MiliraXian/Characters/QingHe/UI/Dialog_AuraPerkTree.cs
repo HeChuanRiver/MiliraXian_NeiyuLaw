@@ -327,11 +327,16 @@ namespace MiliraXian.Characters.QingHe.UI
             DrawSpecialArea(specialArea);
         }
 
+        private static int RequiredMasteryLevel(CharacterPerkNodeDef node)
+        {
+            return node is MX_QH_AuraPerkNodeDef auraNode ? auraNode.requiredAuraMasteryLevel : 0;
+        }
+
         private void EnsureNodeCache()
         {
             List<CharacterPerkNodeDef> all = DefDatabase<CharacterPerkNodeDef>.AllDefsListForReading
                 .Where(node => state == null || state.IsRelevantNode(node))
-                .OrderBy(node => node.requiredAuraMasteryLevel)
+                .OrderBy(node => RequiredMasteryLevel(node))
                 .ThenBy(node => node.displayOrder)
                 .ToList();
             levelNodes = all.Where(node => !node.displayOnly).ToList();
@@ -339,7 +344,7 @@ namespace MiliraXian.Characters.QingHe.UI
             nodesByLevel.Clear();
             foreach (CharacterPerkNodeDef node in levelNodes)
             {
-                int level = Mathf.Clamp(node.requiredAuraMasteryLevel, 0, HediffComp_AuraMastery.MaxAuraMasteryLevel);
+                int level = Mathf.Clamp(RequiredMasteryLevel(node), 0, HediffComp_AuraMastery.MaxAuraMasteryLevel);
                 if (!nodesByLevel.TryGetValue(level, out List<CharacterPerkNodeDef> list))
                 {
                     list = new List<CharacterPerkNodeDef>();
@@ -459,8 +464,8 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawNodeCard(CharacterPerkNodeDef node, Rect rect, int actualLevel, int effectiveLevel, bool compact)
         {
-            bool learned = node.requiredAuraMasteryLevel <= effectiveLevel;
-            bool locked = !learned && node.requiredAuraMasteryLevel <= actualLevel;
+            bool learned = RequiredMasteryLevel(node) <= effectiveLevel;
+            bool locked = !learned && RequiredMasteryLevel(node) <= actualLevel;
             Rect iconRect = compact
                 ? new Rect(rect.x + (rect.width - NodeIconSize) * 0.5f, rect.y + 6f, NodeIconSize, NodeIconSize)
                 : new Rect(rect.x + 6f, rect.y + (rect.height - NodeIconSize) * 0.5f, NodeIconSize, NodeIconSize);
@@ -508,7 +513,7 @@ namespace MiliraXian.Characters.QingHe.UI
             string stateText = learned
                 ? "MX_QH_SkillTreeNodeLearned".Translate()
                 : locked
-                    ? "MX_QH_SkillTreeNodeLocked".Translate(node.requiredAuraMasteryLevel)
+                    ? "MX_QH_SkillTreeNodeLocked".Translate(RequiredMasteryLevel(node))
                     : "未习得";
             return tip + "\n\n" + stateText;
         }

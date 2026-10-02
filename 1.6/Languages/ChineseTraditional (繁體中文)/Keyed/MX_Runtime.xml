@@ -189,6 +189,9 @@
   <MX_QH_MeditativeStillnessGainMote>靜思 +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_AuraMasteryGainMote>靈氣精通 +{0}經驗</MX_QH_AuraMasteryGainMote>
   <MX_Perk_RequiresPerk>需要領悟：{0}</MX_Perk_RequiresPerk>
+  <MX_Perk_RequiresPrerequisite>需要前置：{0}（{1} 層）</MX_Perk_RequiresPrerequisite>
+  <MX_Perk_MaterialsMissing>可用材料不足。</MX_Perk_MaterialsMissing>
+  <MX_Perk_MaxLevel>已達到最高層級。</MX_Perk_MaxLevel>
   <MX_QH_LotusShieldTooltipTitle>花神護體</MX_QH_LotusShieldTooltipTitle>
   <MX_QH_LotusShieldEnergyLine>護盾值：{0} / {1}</MX_QH_LotusShieldEnergyLine>
   <MX_QH_LotusShieldRegenLine>護盾回復：{0} /秒</MX_QH_LotusShieldRegenLine>

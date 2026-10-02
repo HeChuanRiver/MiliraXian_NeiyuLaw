@@ -1,12 +1,13 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.Biography;
 
-namespace MiliraXian.Characters.Common.Biography
+namespace MiliraXian.Characters.Common.Conditions
 {
-    internal static class BiographyConditionText
+    internal static class UnlockConditionText
     {
         public static string Status(bool complete)
         {
@@ -19,7 +20,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_Always : BiographyUnlockCondition
+    public sealed class UnlockCondition_Always : UnlockCondition
     {
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -28,13 +29,13 @@ namespace MiliraXian.Characters.Common.Biography
 
         public override string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker)
         {
-            return "MX_Biography_ConditionAlways".Translate(BiographyConditionText.Status(true));
+            return "MX_Biography_ConditionAlways".Translate(UnlockConditionText.Status(true));
         }
     }
 
-    public sealed class BiographyCondition_All : BiographyUnlockCondition
+    public sealed class UnlockCondition_All : UnlockCondition
     {
-        public List<BiographyUnlockCondition> conditions = new();
+        public List<UnlockCondition> conditions = new();
 
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -62,12 +63,12 @@ namespace MiliraXian.Characters.Common.Biography
             {
                 for (int i = 0; i < conditions.Count; i++)
                 {
-                    BiographyUnlockCondition condition = conditions[i];
+                    UnlockCondition condition = conditions[i];
                     string progress = condition != null
                         ? condition.GetProgressText(pawn, tracker)
                         : "MX_Biography_ConditionMissing".Translate().ToString();
                     builder.Append("  - ");
-                    builder.Append(BiographyConditionText.Indent(progress));
+                    builder.Append(UnlockConditionText.Indent(progress));
                     if (i < conditions.Count - 1)
                     {
                         builder.AppendLine();
@@ -88,7 +89,7 @@ namespace MiliraXian.Characters.Common.Biography
 
             for (int i = 0; i < conditions.Count; i++)
             {
-                BiographyUnlockCondition condition = conditions[i];
+                UnlockCondition condition = conditions[i];
                 string childPath = path + ".conditions[" + i + "]";
                 if (condition == null)
                 {
@@ -117,9 +118,9 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_Any : BiographyUnlockCondition
+    public sealed class UnlockCondition_Any : UnlockCondition
     {
-        public List<BiographyUnlockCondition> conditions = new();
+        public List<UnlockCondition> conditions = new();
 
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -147,12 +148,12 @@ namespace MiliraXian.Characters.Common.Biography
             {
                 for (int i = 0; i < conditions.Count; i++)
                 {
-                    BiographyUnlockCondition condition = conditions[i];
+                    UnlockCondition condition = conditions[i];
                     string progress = condition != null
                         ? condition.GetProgressText(pawn, tracker)
                         : "MX_Biography_ConditionMissing".Translate().ToString();
                     builder.Append("  - ");
-                    builder.Append(BiographyConditionText.Indent(progress));
+                    builder.Append(UnlockConditionText.Indent(progress));
                     if (i < conditions.Count - 1)
                     {
                         builder.AppendLine();
@@ -173,7 +174,7 @@ namespace MiliraXian.Characters.Common.Biography
 
             for (int i = 0; i < conditions.Count; i++)
             {
-                BiographyUnlockCondition condition = conditions[i];
+                UnlockCondition condition = conditions[i];
                 string childPath = path + ".conditions[" + i + "]";
                 if (condition == null)
                 {
@@ -202,7 +203,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_PlayerFaction : BiographyUnlockCondition
+    public sealed class UnlockCondition_PlayerFaction : UnlockCondition
     {
         public override bool IsSatisfied(Pawn pawn, Hediff_BiographyTracker tracker)
         {
@@ -212,11 +213,11 @@ namespace MiliraXian.Characters.Common.Biography
         public override string GetProgressText(Pawn pawn, Hediff_BiographyTracker tracker)
         {
             bool complete = IsSatisfied(pawn, tracker);
-            return "MX_Biography_ConditionPlayerFaction".Translate(BiographyConditionText.Status(complete));
+            return "MX_Biography_ConditionPlayerFaction".Translate(UnlockConditionText.Status(complete));
         }
     }
 
-    public sealed class BiographyCondition_ColonistDays : BiographyUnlockCondition
+    public sealed class UnlockCondition_ColonistDays : UnlockCondition
     {
         public float days = 1f;
 
@@ -231,7 +232,7 @@ namespace MiliraXian.Characters.Common.Biography
             return "MX_Biography_ConditionColonistDays".Translate(
                 current.ToString("0.##"),
                 days.ToString("0.##"),
-                BiographyConditionText.Status(current >= days));
+                UnlockConditionText.Status(current >= days));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -253,7 +254,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_RecordValue : BiographyUnlockCondition
+    public sealed class UnlockCondition_RecordValue : UnlockCondition
     {
         public RecordDef record;
         public float minimumValue = 1f;
@@ -271,7 +272,7 @@ namespace MiliraXian.Characters.Common.Biography
                 recordLabel,
                 current.ToString("0.##"),
                 minimumValue.ToString("0.##"),
-                BiographyConditionText.Status(current >= minimumValue));
+                UnlockConditionText.Status(current >= minimumValue));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -293,7 +294,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_HasHediff : BiographyUnlockCondition
+    public sealed class UnlockCondition_HasHediff : UnlockCondition
     {
         public HediffDef hediff;
         public float minimumSeverity;
@@ -314,7 +315,7 @@ namespace MiliraXian.Characters.Common.Biography
                 hediffLabel,
                 currentSeverity.ToString("0.##"),
                 minimumSeverity.ToString("0.##"),
-                BiographyConditionText.Status(complete));
+                UnlockConditionText.Status(complete));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -338,7 +339,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_HasTrait : BiographyUnlockCondition
+    public sealed class UnlockCondition_HasTrait : UnlockCondition
     {
         public TraitDef trait;
         public bool requireDegree;
@@ -361,8 +362,8 @@ namespace MiliraXian.Characters.Common.Biography
             bool complete = IsSatisfied(pawn, tracker);
             string traitLabel = trait?.LabelCap.ToString() ?? "MX_Biography_UnknownDef".Translate();
             return requireDegree
-                ? "MX_Biography_ConditionTraitDegree".Translate(traitLabel, degree, BiographyConditionText.Status(complete))
-                : "MX_Biography_ConditionTrait".Translate(traitLabel, BiographyConditionText.Status(complete));
+                ? "MX_Biography_ConditionTraitDegree".Translate(traitLabel, degree, UnlockConditionText.Status(complete))
+                : "MX_Biography_ConditionTrait".Translate(traitLabel, UnlockConditionText.Status(complete));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -374,7 +375,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_HasAbility : BiographyUnlockCondition
+    public sealed class UnlockCondition_HasAbility : UnlockCondition
     {
         public AbilityDef ability;
         public bool includeTemporary;
@@ -389,7 +390,7 @@ namespace MiliraXian.Characters.Common.Biography
         {
             bool complete = IsSatisfied(pawn, tracker);
             string abilityLabel = ability?.LabelCap.ToString() ?? "MX_Biography_UnknownDef".Translate();
-            return "MX_Biography_ConditionAbility".Translate(abilityLabel, BiographyConditionText.Status(complete));
+            return "MX_Biography_ConditionAbility".Translate(abilityLabel, UnlockConditionText.Status(complete));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -401,7 +402,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_SkillLevel : BiographyUnlockCondition
+    public sealed class UnlockCondition_SkillLevel : UnlockCondition
     {
         public SkillDef skill;
         public int minimumLevel = 1;
@@ -419,7 +420,7 @@ namespace MiliraXian.Characters.Common.Biography
                 skillLabel,
                 current,
                 minimumLevel,
-                BiographyConditionText.Status(current >= minimumLevel));
+                UnlockConditionText.Status(current >= minimumLevel));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)
@@ -441,7 +442,7 @@ namespace MiliraXian.Characters.Common.Biography
         }
     }
 
-    public sealed class BiographyCondition_StoryUnlocked : BiographyUnlockCondition
+    public sealed class UnlockCondition_StoryUnlocked : UnlockCondition
     {
         [NoTranslate]
         public string storyName;
@@ -466,7 +467,7 @@ namespace MiliraXian.Characters.Common.Biography
 
             return "MX_Biography_ConditionStoryUnlocked".Translate(
                 storyLabel ?? "MX_Biography_UnknownStory".Translate(),
-                BiographyConditionText.Status(complete));
+                UnlockConditionText.Status(complete));
         }
 
         public override IEnumerable<string> ConfigErrors(BiographyDef biography, BiographyStory story, string path)

@@ -14,30 +14,14 @@ namespace MiliraXian.Characters.QingHe
     {
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_CharacterPerkTree state = MX_QH_HediffUtility.GetFlowerResonance(pawn);
-            SyncChoices(pawn, state);
-        }
-
-        public static void SyncChoices(Pawn pawn, HediffComp_CharacterPerkTree state)
-        {
-            if (pawn == null || state == null)
-            {
-                return;
-            }
-
-            // Unlocking writes stored state, so it must see the earned level, not the gated one.
-            state.SyncNodesByAuraMasteryLevel(MX_QH_HediffUtility.GetAuraMasteryComp(pawn)?.CurrentLevel ?? 0);
-            state.SyncGrantedDefs();
+            HediffComp_CharacterPerkTree tree = MX_QH_HediffUtility.GetFlowerResonance(pawn);
+            tree?.parent?.TryGetComp<HediffComp_PerkEventHandler>()?.TryAutoUnlock();
         }
 
         public static bool HasSeasonalResonance(Pawn pawn)
         {
-            CharacterPerkNodeDef node = MX_QHCharacterPerkNodeDefOf.MX_QH_Node_SeasonalResonance;
-            // HasNode answers "is it unlocked", GetAuraMasteryLevel is already gated: one asks
-            // stored, the other asks whether it currently takes effect.
-            return node != null
-                && MX_QH_HediffUtility.GetAuraMasteryLevel(pawn) >= node.requiredAuraMasteryLevel
-                && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.HasNode(node) == true;
+            CharacterPerkNodeDef node = MX_QH_PerkNodeDefOf.MX_QH_Node_SeasonalResonance;
+            return node != null && MX_QH_HediffUtility.GetFlowerResonance(pawn)?.EffectiveNodeLevel(node) > 0;
         }
 
         public static float GetSpellEffectFactor(Pawn pawn)

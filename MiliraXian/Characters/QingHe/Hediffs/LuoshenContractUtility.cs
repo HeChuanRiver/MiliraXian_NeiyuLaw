@@ -54,7 +54,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private static bool PerkInEffect(Pawn qinghe)
         {
             HediffComp_CharacterPerkTree tree = MX_QH_HediffUtility.GetFlowerResonance(qinghe);
-            return tree != null && tree.EffectiveNodeLevel(MX_QHCharacterPerkNodeDefOf.MX_QH_Node_Luoshenfu) > 0;
+            return tree != null && tree.EffectiveNodeLevel(MX_QH_PerkNodeDefOf.MX_QH_Node_Luoshenfu) > 0;
         }
 
         private static Pawn GetLivingSpouse(Pawn pawn)

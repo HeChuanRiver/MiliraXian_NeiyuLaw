@@ -181,6 +181,9 @@
   <MX_QH_MeditativeStillnessGainMote>静思 +{0}%</MX_QH_MeditativeStillnessGainMote>
   <MX_QH_AuraMasteryGainMote>灵气精通 +{0}经验</MX_QH_AuraMasteryGainMote>
   <MX_Perk_RequiresPerk>需要领悟：{0}</MX_Perk_RequiresPerk>
+  <MX_Perk_RequiresPrerequisite>需要前置：{0}（{1} 层）</MX_Perk_RequiresPrerequisite>
+  <MX_Perk_MaterialsMissing>可用材料不足。</MX_Perk_MaterialsMissing>
+  <MX_Perk_MaxLevel>已达到最高层级。</MX_Perk_MaxLevel>
   <MX_QH_AuraShieldTooltipTitle>灵气加护</MX_QH_AuraShieldTooltipTitle>
   <MX_QH_AuraShieldEnergyLine>灵气值：{0} / {1}</MX_QH_AuraShieldEnergyLine>
   <MX_QH_AuraShieldRegenLine>回复速率：{0} /秒</MX_QH_AuraShieldRegenLine>

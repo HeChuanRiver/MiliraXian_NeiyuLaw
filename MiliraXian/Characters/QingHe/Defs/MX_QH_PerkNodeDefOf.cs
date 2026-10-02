@@ -6,7 +6,7 @@ using MiliraXian.Characters.Common.PerkSystem;
 namespace MiliraXian.Characters.QingHe.Defs
 {
     [DefOf]
-    public static class MX_QHCharacterPerkNodeDefOf
+    public static class MX_QH_PerkNodeDefOf
     {
         public static CharacterPerkNodeDef MX_QH_Node_FlowerFairy;
         public static CharacterPerkNodeDef MX_QH_Node_FlyingFlowerDecree;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <MiliraXian.Characters.Common.Biography.BiographyDef>
     <defName>MX_Biography_Qinghe</defName>
@@ -8,7 +8,7 @@
             <storyName>MXQH_Test_Story01</storyName>
             <label>清荷测试故事01</label>
             <storyText>总之是测试</storyText>
-            <unlockCondition Class="MiliraXian.Characters.Common.Biography.BiographyCondition_RecordValue">
+            <unlockCondition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_RecordValue">
                 <record>DamageDealt</record>
                 <minimumValue>100</minimumValue>
             </unlockCondition>

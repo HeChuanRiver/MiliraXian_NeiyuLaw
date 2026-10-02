@@ -2,6 +2,7 @@
 using RimWorld;
 using UnityEngine;
 using Verse;
+using MiliraXian.Characters.Common.Conditions;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
@@ -9,15 +10,38 @@ namespace MiliraXian.Characters.Common.PerkSystem
     {
         public CharacterPerkCategoryDef category;
         public int displayOrder;
-        public int requiredAuraMasteryLevel;
         public string iconActive;
         public string iconInactive;
         public bool displayOnly;
+        public List<CharacterPerkNodeRef> prerequisites;
+        public List<UnlockCondition> requiresAll;
+        public List<UnlockCondition> requiresAny;
+        public List<ThingDefCountClass> costs;
+        public int maxLevel = 1;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
         public List<AbilityDef> grantedAbilities;
         public List<HediffDef> grantedHediffs;
         public CharacterPerkUnlockLetter unlockLetter;
+
+        /// <summary>
+        /// Whether this node unlocks itself when the event source changes (mastery level reaching a
+        /// threshold, a biography condition becoming true). Purchase-style nodes answer false and
+        /// wait for an explicit unlock request instead.
+        /// </summary>
+        public virtual bool ShouldAutoUnlock(Pawn pawn)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// The stored level after this node's seal applies. Sealing only narrows what takes effect;
+        /// it never rewrites the stored level.
+        /// </summary>
+        public virtual int EffectiveLevel(Pawn pawn, int storedLevel)
+        {
+            return storedLevel;
+        }
 
         public virtual void Notify_Unlocked(Pawn pawn)
         {
@@ -50,6 +74,13 @@ namespace MiliraXian.Characters.Common.PerkSystem
 
             return BaseContent.BadTex;
         }
+    }
+
+    /// <summary>A prerequisite pointing at a node at a minimum level; omitting minLevel means 1.</summary>
+    public class CharacterPerkNodeRef
+    {
+        public CharacterPerkNodeDef node;
+        public int minLevel = 1;
     }
 
     public class CharacterPerkUnlockLetter

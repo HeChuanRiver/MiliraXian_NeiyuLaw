@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using MiliraXian.Characters.Common.Biography;
+using MiliraXian.Characters.Common.Conditions;
 using Verse;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation
@@ -14,7 +14,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public int rank;
         public NeiyuCultivationNodeDef prerequisite;
         public List<ThingDefCountClass> costs = new();
-        public BiographyUnlockCondition condition;
+        public UnlockCondition condition;
         [MustTranslate] public string story;
 
         public override IEnumerable<string> ConfigErrors()

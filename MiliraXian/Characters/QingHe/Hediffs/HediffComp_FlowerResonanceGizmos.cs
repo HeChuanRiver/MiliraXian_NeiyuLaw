@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 
-    public class HediffComp_PerkTreeGizmos : HediffComp, IPerkEventListener
+    public class HediffComp_PerkTreeGizmos : HediffComp
     {
         public override bool CompDisallowVisible()
         {
@@ -24,16 +24,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            HediffComp_CharacterPerkTree state = parent?.GetComp<HediffComp_CharacterPerkTree>();
-            foreach (Gizmo gizmo in MX_QH_PerkUtility.GetGizmos(Pawn, state))
+            HediffComp_CharacterPerkTree tree = parent?.GetComp<HediffComp_CharacterPerkTree>();
+            foreach (Gizmo gizmo in MX_QH_PerkUtility.GetGizmos(Pawn, tree))
             {
                 yield return gizmo;
             }
-        }
-
-        public void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state)
-        {
-            MX_QH_PerkUtility.SyncChoices(pawn, state);
         }
     }
 }

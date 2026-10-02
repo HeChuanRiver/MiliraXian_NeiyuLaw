@@ -59,13 +59,14 @@ namespace MiliraXian.Characters.Common.PerkSystem
             {
                 foreach (CharacterPerkNodeDef node in state.LearnedNodes)
                 {
-                    if (state.EffectiveNodeLevel(node) <= 0)
+                    int level = state.EffectiveNodeLevel(node);
+                    if (level <= 0)
                     {
                         continue;
                     }
 
-                    AddOffsets(offsets, node.statOffsets, 1f);
-                    AddFactors(factors, node.statFactors, 1f);
+                    AddOffsets(offsets, node.statOffsets, level);
+                    AddFactors(factors, node.statFactors, level);
                 }
             }
 

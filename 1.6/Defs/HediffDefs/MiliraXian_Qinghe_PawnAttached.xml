@@ -201,11 +201,12 @@
     <minSeverity>1.0</minSeverity>
     <maxSeverity>1.0</maxSeverity>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AuraPerkTree">
+      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_CharacterPerkTree">
         <categories>
           <li>MX_QH_Category_Qinghe</li>
         </categories>
       </li>
+      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_PerkEventHandler" />
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_PerkTreeGizmos" />
     </comps>
   </HediffDef>

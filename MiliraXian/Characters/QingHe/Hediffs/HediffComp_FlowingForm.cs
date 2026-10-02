@@ -375,11 +375,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             }
 
             HediffComp_CharacterPerkTree state = cachedFlowerResonance;
-            if (state != null && state.EffectiveNodeLevel(MX_QHCharacterPerkNodeDefOf.MX_QH_Node_BlessingCharge1) > 0)
+            if (state != null && state.EffectiveNodeLevel(MX_QH_PerkNodeDefOf.MX_QH_Node_BlessingCharge1) > 0)
             {
                 maxCharges++;
             }
-            if (state != null && state.EffectiveNodeLevel(MX_QHCharacterPerkNodeDefOf.MX_QH_Node_BlessingCharge2) > 0)
+            if (state != null && state.EffectiveNodeLevel(MX_QH_PerkNodeDefOf.MX_QH_Node_BlessingCharge2) > 0)
             {
                 maxCharges++;
             }
