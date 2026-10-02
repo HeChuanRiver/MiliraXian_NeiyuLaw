@@ -10,15 +10,15 @@ using MiliraXian.Characters.Common.PerkSystem;
 
 namespace MiliraXian.Characters.QingHe
 {
-    public static class MX_QHSkillUtility
+    public static class MX_QH_PerkUtility
     {
         public static void SyncChoices(Pawn pawn)
         {
-            HediffComp_SkillTreeState state = MX_QH_HediffUtility.GetFlowerResonance(pawn);
+            HediffComp_CharacterPerkTree state = MX_QH_HediffUtility.GetFlowerResonance(pawn);
             SyncChoices(pawn, state);
         }
 
-        public static void SyncChoices(Pawn pawn, HediffComp_SkillTreeState state)
+        public static void SyncChoices(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
             if (pawn == null || state == null)
             {
@@ -32,7 +32,7 @@ namespace MiliraXian.Characters.QingHe
 
         public static bool HasSeasonalResonance(Pawn pawn)
         {
-            SkillNodeDef node = MX_QHSkillNodeDefOf.MX_QH_Node_SeasonalResonance;
+            CharacterPerkNodeDef node = MX_QHCharacterPerkNodeDefOf.MX_QH_Node_SeasonalResonance;
             // HasNode answers "is it unlocked", GetAuraMasteryLevel is already gated: one asks
             // stored, the other asks whether it currently takes effect.
             return node != null
@@ -50,7 +50,7 @@ namespace MiliraXian.Characters.QingHe
             return Mathf.Max(0f, pawn.GetStatValue(MX_QHDefOf.MX_QH_SpellEffectFactor));
         }
 
-        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_SkillTreeState state)
+        public static IEnumerable<Gizmo> GetGizmos(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
             if (pawn == null || pawn.Dead || state == null || Find.Selector.SingleSelectedThing != pawn)
             {

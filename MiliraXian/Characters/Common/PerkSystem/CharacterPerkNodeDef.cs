@@ -5,18 +5,18 @@ using Verse;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
-    public class SkillNodeDef : Def
+    public class CharacterPerkNodeDef : Def
     {
-        public SkillNodeCategoryDef category;
+        public CharacterPerkCategoryDef category;
         public int displayOrder;
         public int requiredAuraMasteryLevel;
         public string iconPath;
-        public bool traitNode;
+        public bool displayOnly;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
         public List<AbilityDef> grantedAbilities;
         public List<HediffDef> grantedHediffs;
-        public SkillNodeUnlockLetter unlockLetter;
+        public CharacterPerkUnlockLetter unlockLetter;
 
         public virtual void Notify_Unlocked(Pawn pawn)
         {
@@ -45,7 +45,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
         }
     }
 
-    public class SkillNodeUnlockLetter
+    public class CharacterPerkUnlockLetter
     {
         [MustTranslate]
         public string title;

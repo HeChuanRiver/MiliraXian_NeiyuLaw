@@ -7,15 +7,15 @@ using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_SkillTreeStateGizmos : HediffCompProperties
+    public class HediffCompProperties_PerkTreeGizmos : HediffCompProperties
     {
-        public HediffCompProperties_SkillTreeStateGizmos()
+        public HediffCompProperties_PerkTreeGizmos()
         {
-            compClass = typeof(HediffComp_SkillTreeStateGizmos);
+            compClass = typeof(HediffComp_PerkTreeGizmos);
         }
     }
 
-    public class HediffComp_SkillTreeStateGizmos : HediffComp, ISkillTreeStateListener
+    public class HediffComp_PerkTreeGizmos : HediffComp, IPerkEventListener
     {
         public override bool CompDisallowVisible()
         {
@@ -24,16 +24,16 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public override IEnumerable<Gizmo> CompGetGizmos()
         {
-            HediffComp_SkillTreeState state = parent?.GetComp<HediffComp_SkillTreeState>();
-            foreach (Gizmo gizmo in MX_QHSkillUtility.GetGizmos(Pawn, state))
+            HediffComp_CharacterPerkTree state = parent?.GetComp<HediffComp_CharacterPerkTree>();
+            foreach (Gizmo gizmo in MX_QH_PerkUtility.GetGizmos(Pawn, state))
             {
                 yield return gizmo;
             }
         }
 
-        public void Notify_SkillTreeStateChanged(Pawn pawn, HediffComp_SkillTreeState state)
+        public void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
-            MX_QHSkillUtility.SyncChoices(pawn, state);
+            MX_QH_PerkUtility.SyncChoices(pawn, state);
         }
     }
 }

@@ -9,7 +9,7 @@ using Verse.Grammar;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
-    public class SkillNodeCategoryDef : Def
+    public class CharacterPerkCategoryDef : Def
     {
         public int displayOrder;
     }

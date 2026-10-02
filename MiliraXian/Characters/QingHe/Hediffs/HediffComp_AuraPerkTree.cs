@@ -4,7 +4,7 @@ using MiliraXian.Characters.Common.PerkSystem;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_AuraPerkTree : HediffCompProperties_SkillTreeState
+    public class HediffCompProperties_AuraPerkTree : HediffCompProperties_CharacterPerkTree
     {
         public HediffCompProperties_AuraPerkTree()
         {
@@ -16,9 +16,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     /// Qinghe's perk tree. Nodes unlock by aura mastery level; the power-level setting seals how
     /// much of that takes effect without ever touching stored state.
     /// </summary>
-    public class HediffComp_AuraPerkTree : HediffComp_SkillTreeState
+    public class HediffComp_AuraPerkTree : HediffComp_CharacterPerkTree
     {
-        public override int EffectiveNodeLevel(SkillNodeDef node)
+        public override int EffectiveNodeLevel(CharacterPerkNodeDef node)
         {
             int stored = GetNodeLevel(node);
             if (stored <= 0 || node == null)

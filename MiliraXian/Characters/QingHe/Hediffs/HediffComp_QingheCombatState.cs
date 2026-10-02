@@ -1,4 +1,4 @@
-using MiliraXian.Characters.QingHe.Things.Weapons;
+﻿using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.Defs;
 using UnityEngine;
 using Verse;
@@ -71,7 +71,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         private void SyncResonanceHediff()
         {
-            if (!MX_QHSkillUtility.HasSeasonalResonance(Pawn))
+            if (!MX_QH_PerkUtility.HasSeasonalResonance(Pawn))
             {
                 pendingTuneResonance = -1;
                 RemoveCurrentResonance();
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void BeginTuning(FlowerBellResonance value)
         {
-            if (!MX_QHSkillUtility.HasSeasonalResonance(Pawn)
+            if (!MX_QH_PerkUtility.HasSeasonalResonance(Pawn)
                 || value < FlowerBellResonance.Spring || value > FlowerBellResonance.Winter)
             {
                 return;
@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public void CompleteTuning()
         {
-            if (!MX_QHSkillUtility.HasSeasonalResonance(Pawn))
+            if (!MX_QH_PerkUtility.HasSeasonalResonance(Pawn))
             {
                 pendingTuneResonance = -1;
                 return;

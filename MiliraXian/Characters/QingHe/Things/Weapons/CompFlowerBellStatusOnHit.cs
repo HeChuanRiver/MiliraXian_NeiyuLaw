@@ -47,7 +47,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
 
-            if (!MX_QHSkillUtility.HasSeasonalResonance(caster))
+            if (!MX_QH_PerkUtility.HasSeasonalResonance(caster))
             {
                 return;
             }
@@ -92,7 +92,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public static float ResolveSpellEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)
         {
             return props?.scaleWithQingheSpellEffect == true
-                ? MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpellEffectFactor(caster)
+                ? MiliraXian.Characters.QingHe.MX_QH_PerkUtility.GetSpellEffectFactor(caster)
                 : 1f;
         }
     }

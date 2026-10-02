@@ -189,14 +189,14 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         return;
                     }
 
-                    HediffComp_SkillTreeState state = MX_QH_HediffUtility.GetFlowerResonance(interactor);
+                    HediffComp_CharacterPerkTree state = MX_QH_HediffUtility.GetFlowerResonance(interactor);
                     if (state == null)
                     {
                         Messages.Message("MX_QH_SkillTreeMissing".Translate(), interactor, MessageTypeDefOf.RejectInput, historical: false);
                         return;
                     }
 
-                    Find.WindowStack.Add(new Dialog_QH_SkillTree(interactor, state));
+                    Find.WindowStack.Add(new Dialog_AuraPerkTree(interactor, state));
                 });
 
             if (ModsConfig.IdeologyActive)

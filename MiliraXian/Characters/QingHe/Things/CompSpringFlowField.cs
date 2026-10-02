@@ -1,4 +1,4 @@
-using Verse;
+﻿using Verse;
 
 using System.Collections.Generic;
 using MiliraXian.Characters;
@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             ticksToNextEffect--;
-            if (ageTicks % 60 == 0 && MX_QHSkillUtility.HasSeasonalResonance(caster))
+            if (ageTicks % 60 == 0 && MX_QH_PerkUtility.HasSeasonalResonance(caster))
             {
                 ApplyAbnormals();
             }
@@ -149,7 +149,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
             float radius = Mathf.Max(0f, CurrentRadius);
             float radiusSquared = radius * radius;
-            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            float effectFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             IReadOnlyList<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
             for (int i = 0; i < pawns.Count; i++)
             {
@@ -190,7 +190,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void ApplyAbnormals()
         {
-            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            float effectFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             // Short circuits can kill and despawn nearby pawns during this pulse.
             foreach (Pawn pawn in new List<Pawn>(parent.Map.mapPawns.AllPawnsSpawned))
             {

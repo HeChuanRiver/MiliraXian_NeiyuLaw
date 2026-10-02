@@ -5,7 +5,7 @@ using Verse;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
-    public class Hediff_SkillTreeState : HediffWithComps, ISkillTreeStateListener
+    public class Hediff_CharacterPerkTree : HediffWithComps, IPerkEventListener
     {
         private HediffStage cachedStage;
         private bool stageDirty = true;
@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
         }
 
-        public void Notify_SkillTreeStateChanged(Pawn pawn, HediffComp_SkillTreeState state)
+        public void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
             RebuildCachedStage();
         }
@@ -54,10 +54,10 @@ namespace MiliraXian.Characters.Common.PerkSystem
             AddOffsets(offsets, baseStage?.statOffsets, 1f);
             AddFactors(factors, baseStage?.statFactors, 1f);
 
-            HediffComp_SkillTreeState state = GetComp<HediffComp_SkillTreeState>();
+            HediffComp_CharacterPerkTree state = GetComp<HediffComp_CharacterPerkTree>();
             if (state != null)
             {
-                foreach (SkillNodeDef node in state.LearnedNodes)
+                foreach (CharacterPerkNodeDef node in state.LearnedNodes)
                 {
                     if (state.EffectiveNodeLevel(node) <= 0)
                     {

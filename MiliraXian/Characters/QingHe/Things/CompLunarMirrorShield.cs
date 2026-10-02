@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using RimWorld;
 using UnityEngine;
@@ -94,7 +94,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            if (Active && ageTicks % 60 == 0 && MX_QHSkillUtility.HasSeasonalResonance(caster))
+            if (Active && ageTicks % 60 == 0 && MX_QH_PerkUtility.HasSeasonalResonance(caster))
             {
                 ApplyAbnormals();
             }
@@ -102,7 +102,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private void ApplyAbnormals()
         {
-            float effectFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            float effectFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             foreach (Pawn pawn in parent.Map.mapPawns.AllPawnsSpawned)
             {
                 if (pawn.Dead || !GenHostility.HostileTo(caster, pawn)
@@ -174,7 +174,7 @@ namespace MiliraXian.Characters.QingHe.Things
             caster = newCaster;
             casterFaction = newCaster?.Faction;
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
-            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             ageTicks = 0;
         }
 

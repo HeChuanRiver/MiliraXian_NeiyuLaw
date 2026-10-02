@@ -192,7 +192,7 @@
     <defName>MX_QH_FlowerResonance</defName>
     <label>和鸣</label>
     <description>隐藏Hediff：清荷技能数据</description>
-    <hediffClass>MiliraXian.Characters.Common.PerkSystem.Hediff_SkillTreeState</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.PerkSystem.Hediff_CharacterPerkTree</hediffClass>
     <defaultLabelColor>(0.72, 0.90, 0.80)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -206,7 +206,7 @@
           <li>MX_QH_Category_Qinghe</li>
         </categories>
       </li>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_SkillTreeStateGizmos" />
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_PerkTreeGizmos" />
     </comps>
   </HediffDef>
   <HediffDef>

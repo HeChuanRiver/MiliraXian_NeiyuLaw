@@ -12,9 +12,9 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 {
     public static class MX_QH_HediffUtility
     {
-        public static HediffComp_SkillTreeState GetFlowerResonance(Pawn pawn)
+        public static HediffComp_CharacterPerkTree GetFlowerResonance(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_SkillTreeState>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
+            return GetHediffComp<HediffComp_CharacterPerkTree>(pawn, MX_QHDefOf.MX_QH_FlowerResonance);
         }
 
         public static HediffComp_PawnSpecialResource GetFlowerDecree(Pawn pawn)

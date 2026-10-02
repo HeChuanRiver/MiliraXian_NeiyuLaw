@@ -76,7 +76,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public void SetEffectiveLevel()
         {
             parent.Severity = Mathf.Min(CurrentLevel, QinghePowerBalance.MaxEffectiveLevel);
-            MX_QHSkillUtility.SyncChoices(Pawn);
+            MX_QH_PerkUtility.SyncChoices(Pawn);
             QinghePowerBalance.SyncSealHediff(Pawn);
         }
 

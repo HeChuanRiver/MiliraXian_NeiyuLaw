@@ -29,7 +29,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                     ExplosionRadius,
                     DamageDef,
                     launcher,
-                    Mathf.RoundToInt(DamageAmount * MX_QHSkillUtility.GetSpellEffectFactor(launcher as Pawn)),
+                    Mathf.RoundToInt(DamageAmount * MX_QH_PerkUtility.GetSpellEffectFactor(launcher as Pawn)),
                     ArmorPenetration,
                     null,
                     equipmentDef,

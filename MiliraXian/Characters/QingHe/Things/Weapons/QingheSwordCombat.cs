@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
@@ -93,7 +93,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 CompAuraShield shield = caster.GetComp<CompAuraShield>();
                 if (shield != null)
                 {
-                    float specialFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+                    float specialFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster);
                     // Linearly map spell factors 1..5 to recovery factors 1..2.5.
                     float recoveryFactor = 1f + (specialFactor - 1f) * 0.375f;
                     shield.RestoreEnergy((4f + shield.CurrentRegenPerSecond * 0.2f) * recoveryFactor);

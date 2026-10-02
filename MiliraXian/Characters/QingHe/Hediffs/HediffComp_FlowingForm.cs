@@ -44,7 +44,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         private int cooldownTicksLeft;
         private int cooldownWarningEndTick = -1;
         private int currentCharges = -1;
-        private HediffComp_SkillTreeState cachedFlowerResonance;
+        private HediffComp_CharacterPerkTree cachedFlowerResonance;
         private int cachedMaxCharges = 1;
         private int cachedRechargeTicksTotal;
         private int nextChargeConfigurationRefreshTick;
@@ -374,12 +374,12 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 cachedFlowerResonance = MX_QH_HediffUtility.GetFlowerResonance(Pawn);
             }
 
-            HediffComp_SkillTreeState state = cachedFlowerResonance;
-            if (state != null && state.EffectiveNodeLevel(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge1) > 0)
+            HediffComp_CharacterPerkTree state = cachedFlowerResonance;
+            if (state != null && state.EffectiveNodeLevel(MX_QHCharacterPerkNodeDefOf.MX_QH_Node_BlessingCharge1) > 0)
             {
                 maxCharges++;
             }
-            if (state != null && state.EffectiveNodeLevel(MX_QHSkillNodeDefOf.MX_QH_Node_BlessingCharge2) > 0)
+            if (state != null && state.EffectiveNodeLevel(MX_QHCharacterPerkNodeDefOf.MX_QH_Node_BlessingCharge2) > 0)
             {
                 maxCharges++;
             }

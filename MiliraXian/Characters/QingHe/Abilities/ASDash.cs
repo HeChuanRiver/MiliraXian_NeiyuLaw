@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.Common.Vfx;
@@ -314,7 +314,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             MX_QHGraphicsUtility.Fleck(map, center, props.impactFleck, 0.85f);
             props.castSound?.PlayOneShot(new TargetInfo(center, map));
 
-            float damageFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster)
+            float damageFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster)
                 * caster.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             List<Thing> victims = new();
             HashSet<Thing> unique = new();

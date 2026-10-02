@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Verse;
 using MiliraXian.Characters.Common.Abilities;
 
@@ -6,7 +6,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
 {
     public class AbilityRequirement_Perk : AbilityRequirement
     {
-        public SkillNodeDef perk;
+        public CharacterPerkNodeDef perk;
 
         public override bool Met(Pawn pawn)
         {
@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 return true;
             }
 
-            HediffComp_SkillTreeState tree = PerkTreeUtility.GetTreeFor(pawn, perk);
+            HediffComp_CharacterPerkTree tree = PerkTreeUtility.GetTreeFor(pawn, perk);
             return tree != null && tree.EffectiveNodeLevel(perk) > 0;
         }
 
@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
     public static class PerkTreeUtility
     {
         /// <summary>Finds the tree that owns this node's category, if the pawn has one.</summary>
-        public static HediffComp_SkillTreeState GetTreeFor(Pawn pawn, SkillNodeDef node)
+        public static HediffComp_CharacterPerkTree GetTreeFor(Pawn pawn, CharacterPerkNodeDef node)
         {
             List<Hediff> hediffs = pawn?.health?.hediffSet?.hediffs;
             if (hediffs == null)
@@ -39,7 +39,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             for (int i = 0; i < hediffs.Count; i++)
             {
                 if (hediffs[i] is HediffWithComps withComps
-                    && withComps.TryGetComp<HediffComp_SkillTreeState>() is HediffComp_SkillTreeState tree
+                    && withComps.TryGetComp<HediffComp_CharacterPerkTree>() is HediffComp_CharacterPerkTree tree
                     && tree.IsRelevantNode(node))
                 {
                     return tree;

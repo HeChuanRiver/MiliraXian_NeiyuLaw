@@ -15,7 +15,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI
 {
-    public class Dialog_QH_SkillTree : Window
+    public class Dialog_AuraPerkTree : Window
     {
         private enum SkillTreeTab
         {
@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.QingHe.UI
         private const float TopBarHeight = 58f;
         private const float SpecialNodeIconSize = 42f;
         private const float SpecialNodeGap = 8f;
-        private const float SkillTreeBottomPadding = 18f;
+        private const float PerkTreeBottomPadding = 18f;
         private const float LevelRailWidth = 96f;
         private const float LevelRowHeight = 64f;
         private const float LevelNodeWidth = 156f;
@@ -57,10 +57,10 @@ namespace MiliraXian.Characters.QingHe.UI
         private static Texture2D placeholderIcon;
 
         private readonly Pawn pawn;
-        private readonly HediffComp_SkillTreeState state;
-        private readonly Dictionary<int, List<SkillNodeDef>> nodesByLevel = new();
-        private List<SkillNodeDef> levelNodes = new();
-        private List<SkillNodeDef> specialNodes = new();
+        private readonly HediffComp_CharacterPerkTree state;
+        private readonly Dictionary<int, List<CharacterPerkNodeDef>> nodesByLevel = new();
+        private List<CharacterPerkNodeDef> levelNodes = new();
+        private List<CharacterPerkNodeDef> specialNodes = new();
         private SkillTreeTab currentTab = SkillTreeTab.SkillTree;
         private Vector2 levelScrollPosition;
         private Vector2 specialScrollPosition;
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.UI
             }
         }
 
-        public Dialog_QH_SkillTree(Pawn pawn, HediffComp_SkillTreeState state)
+        public Dialog_AuraPerkTree(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
             this.pawn = pawn;
             this.state = state ?? MX_QH_HediffUtility.GetFlowerResonance(pawn);
@@ -100,7 +100,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
             Rect contentRect = new(inRect.x, inRect.y, inRect.width - CloseButtonReserveWidth, inRect.height);
             Rect tabBar = new(contentRect.x, contentRect.y, contentRect.width, TabBarHeight);
-            bool resonanceUnlocked = MX_QHSkillUtility.HasSeasonalResonance(pawn);
+            bool resonanceUnlocked = MX_QH_PerkUtility.HasSeasonalResonance(pawn);
             if (!resonanceUnlocked)
             {
                 currentTab = SkillTreeTab.SkillTree;
@@ -119,7 +119,7 @@ namespace MiliraXian.Characters.QingHe.UI
             }
             else
             {
-                DrawSkillTreePage(pageRect);
+                DrawAuraPerkTreePage(pageRect);
             }
 
             ResetGui();
@@ -299,7 +299,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void StartTuning(FlowerBellResonance resonance)
         {
-            if (!MX_QHSkillUtility.HasSeasonalResonance(pawn))
+            if (!MX_QH_PerkUtility.HasSeasonalResonance(pawn))
             {
                 return;
             }
@@ -314,12 +314,12 @@ namespace MiliraXian.Characters.QingHe.UI
             Close();
         }
 
-        private void DrawSkillTreePage(Rect rect)
+        private void DrawAuraPerkTreePage(Rect rect)
         {
             HediffComp_AuraMastery auraMastery = MX_QH_HediffUtility.GetAuraMasteryComp(pawn);
             Rect topBar = new(rect.x, rect.y, rect.width, TopBarHeight);
             float specialAreaHeight = GetSpecialAreaHeight(rect.width);
-            Rect specialArea = new(rect.x, rect.yMax - specialAreaHeight - SkillTreeBottomPadding, rect.width, specialAreaHeight);
+            Rect specialArea = new(rect.x, rect.yMax - specialAreaHeight - PerkTreeBottomPadding, rect.width, specialAreaHeight);
             Rect mainArea = new(rect.x, topBar.yMax + 6f, rect.width, specialArea.y - topBar.yMax - 12f);
 
             DrawAuraMasteryTopBar(topBar, auraMastery);
@@ -329,20 +329,20 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void EnsureNodeCache()
         {
-            List<SkillNodeDef> all = DefDatabase<SkillNodeDef>.AllDefsListForReading
+            List<CharacterPerkNodeDef> all = DefDatabase<CharacterPerkNodeDef>.AllDefsListForReading
                 .Where(node => state == null || state.IsRelevantNode(node))
                 .OrderBy(node => node.requiredAuraMasteryLevel)
                 .ThenBy(node => node.displayOrder)
                 .ToList();
-            levelNodes = all.Where(node => !node.traitNode).ToList();
-            specialNodes = all.Where(node => node.traitNode).OrderBy(node => node.displayOrder).ToList();
+            levelNodes = all.Where(node => !node.displayOnly).ToList();
+            specialNodes = all.Where(node => node.displayOnly).OrderBy(node => node.displayOrder).ToList();
             nodesByLevel.Clear();
-            foreach (SkillNodeDef node in levelNodes)
+            foreach (CharacterPerkNodeDef node in levelNodes)
             {
                 int level = Mathf.Clamp(node.requiredAuraMasteryLevel, 0, HediffComp_AuraMastery.MaxAuraMasteryLevel);
-                if (!nodesByLevel.TryGetValue(level, out List<SkillNodeDef> list))
+                if (!nodesByLevel.TryGetValue(level, out List<CharacterPerkNodeDef> list))
                 {
-                    list = new List<SkillNodeDef>();
+                    list = new List<CharacterPerkNodeDef>();
                     nodesByLevel[level] = list;
                 }
 
@@ -409,7 +409,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 Widgets.Label(new Rect(8f, y + 6f, LevelRailWidth - 12f, 18f), "MX_QH_SkillTreeNodeLevel".Translate(level));
                 GUI.color = Color.white;
 
-                List<SkillNodeDef> rowNodes = nodesByLevel[level];
+                List<CharacterPerkNodeDef> rowNodes = nodesByLevel[level];
                 float nodeX = LevelRailWidth + 8f;
                 for (int nodeIndex = 0; nodeIndex < rowNodes.Count; nodeIndex++)
                 {
@@ -457,7 +457,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Widgets.EndScrollView();
         }
 
-        private void DrawNodeCard(SkillNodeDef node, Rect rect, int actualLevel, int effectiveLevel, bool compact)
+        private void DrawNodeCard(CharacterPerkNodeDef node, Rect rect, int actualLevel, int effectiveLevel, bool compact)
         {
             bool learned = node.requiredAuraMasteryLevel <= effectiveLevel;
             bool locked = !learned && node.requiredAuraMasteryLevel <= actualLevel;
@@ -501,7 +501,7 @@ namespace MiliraXian.Characters.QingHe.UI
             ResetGui();
         }
 
-        private static string BuildNodeTip(SkillNodeDef node, bool learned, bool locked)
+        private static string BuildNodeTip(CharacterPerkNodeDef node, bool learned, bool locked)
         {
             string tip = node.LabelCap.ToString() + "\n\n" + node.description;
             string stateText = learned

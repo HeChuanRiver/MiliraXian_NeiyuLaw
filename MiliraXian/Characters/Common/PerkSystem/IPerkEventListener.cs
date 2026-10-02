@@ -9,9 +9,9 @@ using Verse.Grammar;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
-    public interface ISkillTreeStateListener
+    public interface IPerkEventListener
     {
-        void Notify_SkillTreeStateChanged(Pawn pawn, HediffComp_SkillTreeState state);
+        void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state);
     }
 
 }

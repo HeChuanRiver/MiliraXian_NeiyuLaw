@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe.UI
 
         protected override void BuildWidgets(List<Widget_Base> outWidgets)
         {
-            outWidgets.Add(new Widget_SkillTree(pawn, new Rect(124f, 13f, 47f, 47f), TextAnchor.MiddleCenter));
+            outWidgets.Add(new Widget_AuraPerkTree(pawn, new Rect(124f, 13f, 47f, 47f), TextAnchor.MiddleCenter));
             outWidgets.Add(new Widget_FlowingForm(pawn, new Rect(80f, 34f, 32f, 8f), TextAnchor.MiddleRight));
             outWidgets.Add(new Widget_FlowerDecreeHelpButton(pawn, new Rect(160f, 0f, 15f, 15f), TextAnchor.MiddleCenter));
             bool resourcesUnlocked = MX_QH_HediffUtility.GetAuraMasteryLevel(pawn) >= 1;

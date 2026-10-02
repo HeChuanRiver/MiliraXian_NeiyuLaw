@@ -1,4 +1,4 @@
-using MiliraXian.Characters;
+﻿using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using MiliraXian.Characters.QingHe.Vfx;
@@ -337,7 +337,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             // Keep the pre-consumption stat for the entire slash sequence.
             float meleeFactor = caster.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
             float consumedPressure = pressure != null && pressure.CompletedPoints >= 1 ? pressure.ConsumeAll() : 0f;
-            float specialFactor = MX_QHSkillUtility.GetSpellEffectFactor(caster);
+            float specialFactor = MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             float damage = props.damageAmount * specialFactor * meleeFactor
                 * (1f + consumedPressure * Mathf.Max(0f, props.empoweredDamagePerPressurePoint));
             BeginSlashes(caster, map, center, damage, consumedPressure >= 1f);

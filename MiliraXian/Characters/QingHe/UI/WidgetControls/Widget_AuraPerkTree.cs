@@ -12,7 +12,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 {
-    public class Widget_SkillTree : DiamondWidget_Base
+    public class Widget_AuraPerkTree : DiamondWidget_Base
     {
         private const int TipSalt = 910209;
         private const float BorderThickness = 2f;
@@ -20,7 +20,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private const float CenterOverlayScale = 0.78f;
 
         private readonly Pawn pawn;
-        private HediffComp_SkillTreeState cachedState;
+        private HediffComp_CharacterPerkTree cachedState;
         private HediffComp_MeditativeStillness cachedStillness;
 
         private static readonly Color BorderColor = new(0.42f, 0.44f, 0.44f, 1f);
@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         private static readonly Color CenterBorderColor = new(0.50f, 0.52f, 0.52f, 1f);
         private static readonly Color StillnessFillColor = new(0.44f, 0.92f, 0.58f, 1f);
 
-        public Widget_SkillTree(Pawn pawn, Rect localRect, TextAnchor alignment)
+        public Widget_AuraPerkTree(Pawn pawn, Rect localRect, TextAnchor alignment)
             : base(localRect, alignment)
         {
             this.pawn = pawn;
@@ -36,7 +36,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
 
         protected override void DrawContents(Rect rect)
         {
-            HediffComp_SkillTreeState state = GetSkillTreeState();
+            HediffComp_CharacterPerkTree state = GetPerkTree();
             HediffComp_PawnSpecialResource stillness = GetStillnessComp();
             bool canClick = state != null;
             Rect diamondRect = GetAlignedRect(rect, new Vector2(Mathf.Min(rect.width, rect.height), Mathf.Min(rect.width, rect.height)), null).ContractedBy(OuterPadding);
@@ -65,7 +65,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             }
             if (canClick && mouseOverDiamond && Widgets.ButtonInvisible(diamondRect))
             {
-                Find.WindowStack.Add(new Dialog_QH_SkillTree(pawn, state));
+                Find.WindowStack.Add(new Dialog_AuraPerkTree(pawn, state));
             }
         }
 
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return Mathf.CeilToInt(fillPercent * 16f) / 16f;
         }
 
-        private HediffComp_SkillTreeState GetSkillTreeState()
+        private HediffComp_CharacterPerkTree GetPerkTree()
         {
             if (cachedState == null || cachedState.Pawn != pawn)
             {
@@ -100,7 +100,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             return cachedStillness;
         }
 
-        private string BuildTip(HediffComp_SkillTreeState state, HediffComp_PawnSpecialResource stillness)
+        private string BuildTip(HediffComp_CharacterPerkTree state, HediffComp_PawnSpecialResource stillness)
         {
             if (state == null)
             {

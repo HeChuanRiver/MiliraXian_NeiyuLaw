@@ -6,14 +6,14 @@ using Verse;
 
 namespace MiliraXian.Characters.Common.PerkSystem
 {
-    public class HediffComp_SkillTreeState : HediffComp
+    public class HediffComp_CharacterPerkTree : HediffComp
     {
         private bool initialized;
-        private Dictionary<SkillNodeDef, int> nodeLevels;
+        private Dictionary<CharacterPerkNodeDef, int> nodeLevels;
 
-        public HediffCompProperties_SkillTreeState Props => (HediffCompProperties_SkillTreeState)props;
+        public HediffCompProperties_CharacterPerkTree Props => (HediffCompProperties_CharacterPerkTree)props;
 
-        public IEnumerable<SkillNodeDef> LearnedNodes
+        public IEnumerable<CharacterPerkNodeDef> LearnedNodes
         {
             get
             {
@@ -49,8 +49,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
 
         public override void CompExposeData()
         {
-            Scribe_Values.Look(ref initialized, "mx_skillTree_initialized", false);
-            Scribe_Collections.Look(ref nodeLevels, "mx_skillTree_nodeLevels", LookMode.Def, LookMode.Value);
+            Scribe_Values.Look(ref initialized, "mx_perkTree_initialized", false);
+            Scribe_Collections.Look(ref nodeLevels, "mx_perkTree_nodeLevels", LookMode.Def, LookMode.Value);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -60,12 +60,12 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
         }
 
-        public bool HasNode(SkillNodeDef node)
+        public bool HasNode(CharacterPerkNodeDef node)
         {
             return GetNodeLevel(node) > 0;
         }
 
-        public int GetNodeLevel(SkillNodeDef node)
+        public int GetNodeLevel(CharacterPerkNodeDef node)
         {
             NormalizeCollections();
             if (node == null)
@@ -82,7 +82,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
         /// seal, so everything asking "does this take effect right now" comes through here.
         /// Subclasses supply the seal; with none, stored is effective.
         /// </summary>
-        public virtual int EffectiveNodeLevel(SkillNodeDef node)
+        public virtual int EffectiveNodeLevel(CharacterPerkNodeDef node)
         {
             return GetNodeLevel(node);
         }
@@ -91,8 +91,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
         {
             NormalizeCollections();
             int learnedCount = 0;
-            List<SkillNodeDef> unlockedNodes = new();
-            foreach (SkillNodeDef node in RelevantNodes())
+            List<CharacterPerkNodeDef> unlockedNodes = new();
+            foreach (CharacterPerkNodeDef node in RelevantNodes())
             {
                 if (node.requiredAuraMasteryLevel <= auraMasteryLevel && GetNodeLevel(node) <= 0)
                 {
@@ -107,7 +107,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 NotifyStateChanged();
             }
 
-            foreach (SkillNodeDef node in unlockedNodes)
+            foreach (CharacterPerkNodeDef node in unlockedNodes)
             {
                 node.Notify_Unlocked(Pawn);
             }
@@ -115,7 +115,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             return learnedCount;
         }
 
-        public int LearnNodes(IEnumerable<SkillNodeDef> nodes)
+        public int LearnNodes(IEnumerable<CharacterPerkNodeDef> nodes)
         {
             NormalizeCollections();
             if (nodes == null)
@@ -124,8 +124,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
 
             int learnedCount = 0;
-            List<SkillNodeDef> unlockedNodes = new();
-            foreach (SkillNodeDef node in nodes)
+            List<CharacterPerkNodeDef> unlockedNodes = new();
+            foreach (CharacterPerkNodeDef node in nodes)
             {
                 if (node != null && IsRelevantNode(node) && GetNodeLevel(node) <= 0)
                 {
@@ -140,7 +140,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 NotifyStateChanged();
             }
 
-            foreach (SkillNodeDef node in unlockedNodes)
+            foreach (CharacterPerkNodeDef node in unlockedNodes)
             {
                 node.Notify_Unlocked(Pawn);
             }
@@ -159,12 +159,12 @@ namespace MiliraXian.Characters.Common.PerkSystem
             initialized = true;
         }
 
-        private IEnumerable<SkillNodeDef> RelevantNodes()
+        private IEnumerable<CharacterPerkNodeDef> RelevantNodes()
         {
-            return DefDatabase<SkillNodeDef>.AllDefsListForReading.Where(IsRelevantNode);
+            return DefDatabase<CharacterPerkNodeDef>.AllDefsListForReading.Where(IsRelevantNode);
         }
 
-        public bool IsRelevantNode(SkillNodeDef node)
+        public bool IsRelevantNode(CharacterPerkNodeDef node)
         {
             if (node == null)
             {
@@ -174,12 +174,12 @@ namespace MiliraXian.Characters.Common.PerkSystem
             return IsRelevantCategory(node.category);
         }
 
-        public bool AllowsCategory(SkillNodeCategoryDef category)
+        public bool AllowsCategory(CharacterPerkCategoryDef category)
         {
             return IsRelevantCategory(category);
         }
 
-        private bool IsRelevantCategory(SkillNodeCategoryDef category)
+        private bool IsRelevantCategory(CharacterPerkCategoryDef category)
         {
             return Props.categories == null || Props.categories.Count == 0 || Props.categories.Contains(category);
         }
@@ -188,9 +188,9 @@ namespace MiliraXian.Characters.Common.PerkSystem
         {
             SyncGrantedDefs();
 
-            if (parent is ISkillTreeStateListener parentListener)
+            if (parent is IPerkEventListener parentListener)
             {
-                parentListener.Notify_SkillTreeStateChanged(Pawn, this);
+                parentListener.Notify_PerkTreeChanged(Pawn, this);
             }
 
             if (parent?.comps == null)
@@ -200,9 +200,9 @@ namespace MiliraXian.Characters.Common.PerkSystem
 
             foreach (HediffComp comp in parent.comps)
             {
-                if (comp is ISkillTreeStateListener listener)
+                if (comp is IPerkEventListener listener)
                 {
-                    listener.Notify_SkillTreeStateChanged(Pawn, this);
+                    listener.Notify_PerkTreeChanged(Pawn, this);
                 }
             }
         }
@@ -215,12 +215,12 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 return;
             }
 
-            List<SkillNodeDef> relevantNodes = RelevantNodes().ToList();
+            List<CharacterPerkNodeDef> relevantNodes = RelevantNodes().ToList();
             SyncGrantedAbilities(pawn, relevantNodes);
             SyncGrantedHediffs(pawn, relevantNodes);
         }
 
-        private void SyncGrantedAbilities(Pawn pawn, List<SkillNodeDef> relevantNodes)
+        private void SyncGrantedAbilities(Pawn pawn, List<CharacterPerkNodeDef> relevantNodes)
         {
             if (pawn.abilities == null)
             {
@@ -231,7 +231,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             // whether a granted ability currently works is AbilityGate's business at read time.
             for (int i = 0; i < relevantNodes.Count; i++)
             {
-                SkillNodeDef node = relevantNodes[i];
+                CharacterPerkNodeDef node = relevantNodes[i];
                 if (node?.grantedAbilities == null || GetNodeLevel(node) <= 0)
                 {
                     continue;
@@ -248,7 +248,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
         }
 
-        private void SyncGrantedHediffs(Pawn pawn, List<SkillNodeDef> relevantNodes)
+        private void SyncGrantedHediffs(Pawn pawn, List<CharacterPerkNodeDef> relevantNodes)
         {
             if (pawn.health?.hediffSet == null)
             {
@@ -258,7 +258,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             HashSet<HediffDef> activeGranted = new();
             for (int i = 0; i < relevantNodes.Count; i++)
             {
-                SkillNodeDef node = relevantNodes[i];
+                CharacterPerkNodeDef node = relevantNodes[i];
                 if (node?.grantedHediffs == null || GetNodeLevel(node) <= 0)
                 {
                     continue;
