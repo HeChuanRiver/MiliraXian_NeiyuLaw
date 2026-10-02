@@ -10,8 +10,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public CharacterPerkCategoryDef category;
         public int displayOrder;
         public int requiredAuraMasteryLevel;
-        public string iconInactive;
         public string iconActive;
+        public string iconInactive;
         public bool displayOnly;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
@@ -32,12 +32,13 @@ namespace MiliraXian.Characters.Common.PerkSystem
         }
 
         /// <summary>
-        /// The active icon falls back to the inactive one when unspecified: a node with no
-        /// dedicated unlocked art still has something to show.
+        /// iconActive is the primary art; iconInactive is an optional locked-state variant. When the
+        /// variant exists it replaces the default grey tint, so the art alone expresses the state.
         /// </summary>
-        public Texture2D ResolveIcon(bool active)
+        public Texture2D ResolveIcon(bool active, out bool skipLockedTint)
         {
-            string path = active && !iconActive.NullOrEmpty() ? iconActive : iconInactive;
+            skipLockedTint = !active && !iconInactive.NullOrEmpty();
+            string path = skipLockedTint ? iconInactive : iconActive;
             if (!path.NullOrEmpty())
             {
                 Texture2D tex = ContentFinder<Texture2D>.Get(path, false);

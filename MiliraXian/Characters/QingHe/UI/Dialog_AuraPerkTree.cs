@@ -475,8 +475,9 @@ namespace MiliraXian.Characters.QingHe.UI
                 Widgets.DrawHighlight(rect);
             }
 
-            GUI.color = Color.white;
-            GUI.DrawTexture(iconRect, node.ResolveIcon(learned), ScaleMode.ScaleToFit, true);
+            Texture2D icon = node.ResolveIcon(learned, out bool skipLockedTint);
+            GUI.color = !learned && !skipLockedTint ? LockedIconColor : Color.white;
+            GUI.DrawTexture(iconRect, icon, ScaleMode.ScaleToFit, true);
             GUI.color = Color.white;
 
             if (!compact)

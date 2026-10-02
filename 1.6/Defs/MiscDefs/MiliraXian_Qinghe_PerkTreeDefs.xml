@@ -11,7 +11,7 @@
     <label>灵气强化I</label>
     <description>——被动效果：灵气护盾容量 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>55</displayOrder>
     <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
@@ -23,7 +23,7 @@
     <label>灵气强化II</label>
     <description>——被动效果：灵气护盾容量 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>75</displayOrder>
     <requiredAuraMasteryLevel>13</requiredAuraMasteryLevel>
     <statOffsets>
@@ -35,7 +35,7 @@
     <label>灵气流转</label>
     <description>——被动效果：灵气护盾受击回复延迟变为0秒。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>85</displayOrder>
     <requiredAuraMasteryLevel>15</requiredAuraMasteryLevel>
     <statOffsets>
@@ -47,7 +47,7 @@
     <label>花中仙</label>
     <description>我与盛花之景本为一体。随风而动，随水而居。\n\n——初始习得灵气加护、静思、涓流、流水之形和七夕节庆特性。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>0</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
@@ -56,7 +56,7 @@
     <label>飞花令</label>
     <description>——习得飞花令：春泉涌流。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>10</displayOrder>
     <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -72,7 +72,7 @@
       <text>清荷已习得剑技：镜花水月。</text>
     </unlockLetter>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>15</displayOrder>
     <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -84,7 +84,7 @@
     <label>四时和鸣</label>
     <description>调谐自身灵气律动，为自身和武器附加不同的和鸣效果。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>20</displayOrder>
     <requiredAuraMasteryLevel>3</requiredAuraMasteryLevel>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
@@ -93,7 +93,7 @@
     <label>残雪</label>
     <description>——习得技能：霜月镜。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>25</displayOrder>
     <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -105,7 +105,7 @@
     <label>落樱</label>
     <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>30</displayOrder>
     <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -117,7 +117,7 @@
     <label>洛水之仪</label>
     <description>洛水之上，神女证誓。\n\n——习得被动特性：洛水之仪。清荷会与伴侣建立契约，大幅提升双方的心情，若关系被破坏，心情将大幅下降一段时间。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>40</displayOrder>
     <requiredAuraMasteryLevel>2</requiredAuraMasteryLevel>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
@@ -126,7 +126,7 @@
     <label>花令强化I</label>
     <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>50</displayOrder>
     <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
@@ -138,7 +138,7 @@
     <label>花神的怜惜I</label>
     <description>——被动效果：流水之形的充能次数 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>60</displayOrder>
     <requiredAuraMasteryLevel>12</requiredAuraMasteryLevel>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
@@ -147,7 +147,7 @@
     <label>刚柔并济</label>
     <description>——被动效果：灵气最大单次消耗乘数与灵气硬化乘数各增加100%。默认启用20点单次消耗上限，并使灵气硬化按完整数值抵扣消耗。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>65</displayOrder>
     <requiredAuraMasteryLevel>16</requiredAuraMasteryLevel>
     <statOffsets>
@@ -160,7 +160,7 @@
     <label>法术效果强化I</label>
     <description>——被动效果：法术效果系数 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>66</displayOrder>
     <requiredAuraMasteryLevel>16</requiredAuraMasteryLevel>
     <statOffsets>
@@ -172,7 +172,7 @@
     <label>花令强化II</label>
     <description>——被动效果：花令的积累上限 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>70</displayOrder>
     <requiredAuraMasteryLevel>18</requiredAuraMasteryLevel>
     <statOffsets>
@@ -184,7 +184,7 @@
     <label>法术效果强化II</label>
     <description>——被动效果：法术效果系数 +25%。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>78</displayOrder>
     <requiredAuraMasteryLevel>22</requiredAuraMasteryLevel>
     <statOffsets>
@@ -196,7 +196,7 @@
     <label>花神的怜惜II</label>
     <description>——被动效果：流水之形的充能次数 +1。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>80</displayOrder>
     <requiredAuraMasteryLevel>24</requiredAuraMasteryLevel>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
@@ -205,7 +205,7 @@
     <label>灵气加护</label>
     <description>——被动效果：启用常驻护盾能力。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>100</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <displayOnly>true</displayOnly>
@@ -215,7 +215,7 @@
     <label>流水之形</label>
     <description>——被动效果：启用受可能致命或损失部位的伤害时的免伤能力。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>101</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <displayOnly>true</displayOnly>
@@ -225,7 +225,7 @@
     <label>涓流</label>
     <description>——被动效果：启用伤口持续恢复能力。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>102</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <displayOnly>true</displayOnly>
@@ -235,7 +235,7 @@
     <label>静思</label>
     <description>——被动效果：启用积累静思和使用静思提高制作品质的能力。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>105</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <displayOnly>true</displayOnly>
@@ -245,7 +245,7 @@
     <label>七夕节庆</label>
     <description>每年可在荷池举行一次七夕节，参与者可以获得手工和艺术经验，并有机会获得灵感。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconInactive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconInactive>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>107</displayOrder>
     <requiredAuraMasteryLevel>0</requiredAuraMasteryLevel>
     <displayOnly>true</displayOnly>
