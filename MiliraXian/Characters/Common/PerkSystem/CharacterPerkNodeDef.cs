@@ -10,7 +10,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public CharacterPerkCategoryDef category;
         public int displayOrder;
         public int requiredAuraMasteryLevel;
-        public string iconPath;
+        public string iconInactive;
+        public string iconActive;
         public bool displayOnly;
         public List<StatModifier> statOffsets;
         public List<StatModifier> statFactors;
@@ -30,11 +31,16 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
         }
 
-        public Texture2D ResolveIcon()
+        /// <summary>
+        /// The active icon falls back to the inactive one when unspecified: a node with no
+        /// dedicated unlocked art still has something to show.
+        /// </summary>
+        public Texture2D ResolveIcon(bool active)
         {
-            if (!iconPath.NullOrEmpty())
+            string path = active && !iconActive.NullOrEmpty() ? iconActive : iconInactive;
+            if (!path.NullOrEmpty())
             {
-                Texture2D tex = ContentFinder<Texture2D>.Get(iconPath, false);
+                Texture2D tex = ContentFinder<Texture2D>.Get(path, false);
                 if (tex != null)
                 {
                     return tex;
