@@ -19,7 +19,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public override void PostRemoved()
         {
             base.PostRemoved();
-            MX_QH_HediffUtility.GetCombatState(pawn)?.NotifyResonanceRemoved(this);
+            MX_QH_HediffUtility.GetResonanceTracker(pawn)?.NotifyResonanceRemoved(this);
         }
     }
 }

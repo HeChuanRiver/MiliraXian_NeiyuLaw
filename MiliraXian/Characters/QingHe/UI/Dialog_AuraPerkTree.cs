@@ -152,10 +152,10 @@ namespace MiliraXian.Characters.QingHe.UI
 
         private void DrawResonancePage(Rect rect)
         {
-            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.GetCombatState(pawn);
+            HediffComp_ResonanceTracker tracker = MX_QH_HediffUtility.GetResonanceTracker(pawn);
             FlowerBellResonance current = MX_QH_HediffUtility.GetSeasonalResonance(pawn)?.Resonance ?? FlowerBellResonance.None;
             bool hasSelection = current != FlowerBellResonance.None;
-            int cooldownRemaining = combatState?.TuneCooldownRemainingTicks ?? 0;
+            int cooldownRemaining = tracker?.TuneCooldownRemainingTicks ?? 0;
 
             float cardSize = Mathf.Min(ResonanceCardWidth, Mathf.Max(136f, Mathf.Min(rect.width, rect.height) * 0.24f));
             Vector2 center = rect.center;
@@ -303,13 +303,13 @@ namespace MiliraXian.Characters.QingHe.UI
             {
                 return;
             }
-            HediffComp_QingheCombatState combatState = MX_QH_HediffUtility.GetCombatState(pawn);
-            if (combatState == null || combatState.TuneCooldownRemainingTicks > 0)
+            HediffComp_ResonanceTracker tracker = MX_QH_HediffUtility.GetResonanceTracker(pawn);
+            if (tracker == null || tracker.TuneCooldownRemainingTicks > 0)
             {
                 return;
             }
 
-            combatState.BeginTuning(resonance);
+            tracker.BeginTuning(resonance);
             pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(MX_QHDefOf.MX_QH_TuneResonance), JobTag.Misc);
             Close();
         }

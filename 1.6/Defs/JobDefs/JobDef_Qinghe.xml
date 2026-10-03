@@ -15,5 +15,7 @@
     <defName>MX_QH_TuneResonance</defName>
     <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneResonance</driverClass>
     <reportString>正在调谐四时共鸣。</reportString>
+    <playerInterruptible>false</playerInterruptible>
+    <casualInterruptible>false</casualInterruptible>
   </JobDef>
 </Defs>

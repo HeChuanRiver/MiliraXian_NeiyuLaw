@@ -22,14 +22,14 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             return PawnSpecialResourceUtility.GetSpecialResourceComp(pawn, MX_QHDefOf.MX_QH_FlowerDecree) as HediffComp_PawnSpecialResource;
         }
 
-        public static HediffComp_QingheCombatState GetCombatState(Pawn pawn)
+        public static HediffComp_ResonanceTracker GetResonanceTracker(Pawn pawn)
         {
-            return GetHediffComp<HediffComp_QingheCombatState>(pawn, MX_QHDefOf.MX_QH_CombatState);
+            return GetHediffComp<HediffComp_ResonanceTracker>(pawn, MX_QHDefOf.MX_QH_ResonanceTracker);
         }
 
         public static Hediff_SeasonalResonance GetSeasonalResonance(Pawn pawn)
         {
-            return GetCombatState(pawn)?.CurrentResonance;
+            return GetResonanceTracker(pawn)?.CurrentResonance;
         }
 
         public static HediffComp_SwordPressure GetSwordPressure(Pawn pawn)

@@ -4,8 +4,8 @@
   <MX_QH_FlowerDecree.description>隱藏Hediff：資源計數器</MX_QH_FlowerDecree.description>
   <MX_QH_FlowerDecree.comps.0.resourceLabel>花令</MX_QH_FlowerDecree.comps.0.resourceLabel>
   <MX_QH_FlowerDecree.comps.0.resourceDescription>用于施放飛花令的充能資源。</MX_QH_FlowerDecree.comps.0.resourceDescription>
-  <MX_QH_CombatState.label>四時共鳴</MX_QH_CombatState.label>
-  <MX_QH_CombatState.description>隱藏狀態：記錄清荷當前的四時共鳴。</MX_QH_CombatState.description>
+  <MX_QH_ResonanceTracker.label>四時共鳴</MX_QH_ResonanceTracker.label>
+  <MX_QH_ResonanceTracker.description>隱藏狀態：記錄清荷當前的四時共鳴。</MX_QH_ResonanceTracker.description>
   <MX_QH_SwordPressure.label>劍壓</MX_QH_SwordPressure.label>
   <MX_QH_SwordPressure.description>隱藏Hediff：資源計數器</MX_QH_SwordPressure.description>
   <MX_QH_SwordPressure.comps.0.resourceLabel>劍壓</MX_QH_SwordPressure.comps.0.resourceLabel>

@@ -4,8 +4,8 @@
   <MX_QH_FlowerDecree.description>Hidden Hediff: resource counter.</MX_QH_FlowerDecree.description>
   <MX_QH_FlowerDecree.comps.0.resourceLabel>Flower Decree</MX_QH_FlowerDecree.comps.0.resourceLabel>
   <MX_QH_FlowerDecree.comps.0.resourceDescription>Charge resource used to cast Flying Flower Decree abilities.</MX_QH_FlowerDecree.comps.0.resourceDescription>
-  <MX_QH_CombatState.label>Four-Season Resonance</MX_QH_CombatState.label>
-  <MX_QH_CombatState.description>Hidden state: records Qinghe's current Four-Season Resonance.</MX_QH_CombatState.description>
+  <MX_QH_ResonanceTracker.label>Four-Season Resonance</MX_QH_ResonanceTracker.label>
+  <MX_QH_ResonanceTracker.description>Hidden state: records Qinghe's current Four-Season Resonance.</MX_QH_ResonanceTracker.description>
   <MX_QH_SwordPressure.label>Sword Pressure</MX_QH_SwordPressure.label>
   <MX_QH_SwordPressure.description>Hidden Hediff: resource counter.</MX_QH_SwordPressure.description>
   <MX_QH_SwordPressure.comps.0.resourceLabel>Sword Pressure</MX_QH_SwordPressure.comps.0.resourceLabel>

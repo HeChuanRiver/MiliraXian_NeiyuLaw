@@ -16,15 +16,24 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
+            // Toil-level finish actions run on cleanup even when the job is interrupted;
+            // only the driver-level one sees the end condition.
+            AddFinishAction(delegate(JobCondition condition)
+            {
+                HediffComp_ResonanceTracker tracker = MX_QH_HediffUtility.GetResonanceTracker(pawn);
+                if (condition == JobCondition.Succeeded)
+                {
+                    tracker?.CompleteTuning();
+                }
+                else
+                {
+                    tracker?.CancelTuning();
+                }
+            });
             Toil tune = ToilMaker.MakeToil("TuneResonance");
             tune.defaultDuration = TuneDurationTicks;
             tune.defaultCompleteMode = ToilCompleteMode.Delay;
             tune.WithProgressBarToilDelay(TargetIndex.None);
-            tune.AddFinishAction(delegate
-            {
-                HediffComp_QingheCombatState state = MX_QH_HediffUtility.GetCombatState(pawn);
-                state?.CompleteTuning();
-            });
             yield return tune;
         }
     }

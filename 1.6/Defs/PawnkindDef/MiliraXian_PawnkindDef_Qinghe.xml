@@ -200,7 +200,7 @@
             </li>
             <!-- 未写 severity 的三项保持 MakeHediff 默认值，与 Def 声明一致 -->
             <li>
-                <def>MX_QH_CombatState</def>
+                <def>MX_QH_ResonanceTracker</def>
             </li>
             <li>
                 <def>MX_QH_CombatStance</def>

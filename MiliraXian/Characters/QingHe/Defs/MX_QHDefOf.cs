@@ -54,7 +54,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
         public static HediffDef MX_QH_SwordPressure;
-        public static HediffDef MX_QH_CombatState;
+        public static HediffDef MX_QH_ResonanceTracker;
         public static HediffDef MX_QH_CombatStance;
         public static HediffDef MX_QH_ResonanceSpring;
         public static HediffDef MX_QH_ResonanceSummer;

@@ -6,15 +6,15 @@ using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Hediffs
 {
-    public class HediffCompProperties_QingheCombatState : HediffCompProperties
+    public class HediffCompProperties_ResonanceTracker : HediffCompProperties
     {
-        public HediffCompProperties_QingheCombatState()
+        public HediffCompProperties_ResonanceTracker()
         {
-            compClass = typeof(HediffComp_QingheCombatState);
+            compClass = typeof(HediffComp_ResonanceTracker);
         }
     }
 
-    public class HediffComp_QingheCombatState : HediffComp
+    public class HediffComp_ResonanceTracker : HediffComp
     {
         private const int TuneCooldownTicks = 60000;
 
@@ -86,6 +86,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
             pendingTuneResonance = (int)value;
+        }
+
+        public void CancelTuning()
+        {
+            pendingTuneResonance = -1;
         }
 
         public void CompleteTuning()

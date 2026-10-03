@@ -26,7 +26,7 @@
     </comps>
   </HediffDef>
   <HediffDef>
-    <defName>MX_QH_CombatState</defName>
+    <defName>MX_QH_ResonanceTracker</defName>
     <label>四时共鸣</label>
     <description>隐藏状态：记录清荷当前的四时共鸣。</description>
     <hediffClass>Verse.HediffWithComps</hediffClass>
@@ -34,7 +34,7 @@
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_QingheCombatState" />
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_ResonanceTracker" />
     </comps>
   </HediffDef>
   <HediffDef>
