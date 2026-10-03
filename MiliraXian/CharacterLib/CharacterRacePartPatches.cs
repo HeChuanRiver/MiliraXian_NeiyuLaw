@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using HarmonyLib;
+using RimWorld;
 using Verse;
 
 namespace MiliraXian.CharacterLib
@@ -35,19 +36,23 @@ namespace MiliraXian.CharacterLib
     }
 
     /// <summary>
-    /// Substitutes a character's animation as the animation is applied, rather than where the
-    /// race decided on it. Vanilla leaves humanlike flight animations entirely to the race, so
-    /// each race mod picks them its own way and there is no shared decision point to patch; this
-    /// is the one place every animation must pass through.
+    /// Swaps a character's flight animation at the flight system's decision point. The flight
+    /// tracker records the def it requested and later compares the renderer's current animation
+    /// against it by reference to decide when to stop; substituting downstream at SetAnimation
+    /// would break that identity and leave the wings animating after landing. Vanilla offers no
+    /// flight animation for humanlikes — the race supplies it through this method — so a
+    /// non-null result is always the race's own def, ours to swap.
     /// </summary>
-    [HarmonyPatch(typeof(PawnRenderer), nameof(PawnRenderer.SetAnimation))]
-    internal static class Patch_PawnRenderer_SetAnimation
+    [HarmonyPatch(typeof(Pawn_FlightTracker), nameof(Pawn_FlightTracker.GetBestFlyAnimation))]
+    [HarmonyPriority(Priority.Last)]
+    internal static class Patch_PawnFlightTracker_GetBestFlyAnimation
     {
-        [HarmonyPrefix]
-        private static void Prefix(Pawn ___pawn, ref AnimationDef animation)
+        [HarmonyPostfix]
+        private static void Postfix(Pawn pawn, ref AnimationDef __result)
         {
-            AnimationDef replacement = CharacterRaceParts.AnimationFor(___pawn, animation);
-            if (replacement != null) animation = replacement;
+            if (__result == null) return;
+            AnimationDef replacement = CharacterRaceParts.FlyAnimationFor(pawn, __result);
+            if (replacement != null) __result = replacement;
         }
     }
 }

@@ -39,28 +39,11 @@ namespace MiliraXian.Characters.Mingyuan
         {
             // The library maps animations from XML; whether the Unity-driven one can run at all
             // depends on bundle and driver state that only this class tracks.
-            CharacterLib.CharacterRaceParts.AnimationOverride = TryGetOverride;
+            CharacterLib.CharacterRaceParts.FlyAnimationOverride = TryGetOverride;
         }
 
         private static AnimationDef TryGetOverride(Pawn pawn, AnimationDef raceAnimation) =>
             TryGetFlyAnimation(pawn, pawn.Rotation, out AnimationDef animationDef) ? animationDef : null;
-
-        /// <summary>
-        /// The race animation a facing corresponds to. An abandoned driver falls back to it
-        /// directly: the wings then animate through the race's own frames, with the character's
-        /// textures substituted per frame, so no character-specific animation is needed.
-        /// </summary>
-        private static AnimationDef RaceAnimationFor(Rot4 facing)
-        {
-            string defName = facing.AsInt switch
-            {
-                0 => "Milira_FlyNorth",
-                1 => "Milira_FlyEast",
-                2 => "Milira_FlySouth",
-                _ => "Milira_FlyWest",
-            };
-            return DefDatabase<AnimationDef>.GetNamedSilentFail(defName);
-        }
 
         private const string MingyuanPawnKindDefName = "MiliraXian_Mingyuan";
         private const string BundleRelativePath = "1.6/AssetBundles/Windows/mingyuan_wing_anim";
@@ -605,13 +588,12 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 try
                 {
-                    Pawn pawn = state.Pawn;
-                    PawnRenderer renderer = pawn?.Drawer?.renderer;
-                    AnimationDef legacyAnimation = RaceAnimationFor(state.Facing);
-                    if (renderer != null && legacyAnimation != null)
-                    {
-                        renderer.SetAnimation(legacyAnimation);
-                    }
+                    PawnRenderer renderer = state.Pawn?.Drawer?.renderer;
+                    // Clearing rather than setting the race animation: the flight tracker still
+                    // records the Unity def as playing, and would refuse to stop a directly-set
+                    // race def on landing. With null, its next tick re-sets the race animation
+                    // itself and refreshes its bookkeeping.
+                    renderer?.SetAnimation(null);
                 }
                 catch
                 {

@@ -85,7 +85,10 @@
             <drawSize>(2,2)</drawSize>
         </graphicData>
         <uiIconPath>MiliraXianMingyuan/Items/RainbowBow</uiIconPath>
-        <generateCommonality>0</generateCommonality>
+        <!-- 必须为正值：PawnWeaponGenerator.Reset 按 generateCommonality 归一化武器选取权重，
+             0 会把本武器权重乘成 0，原版生成永远选不中它。独占性由 weaponTags 闸门保证
+             （MX_Mingyuan_RainbowBow 仅明渊的 PawnKindDef 声明），不依赖此值归零。 -->
+        <generateCommonality>0.001</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>
 

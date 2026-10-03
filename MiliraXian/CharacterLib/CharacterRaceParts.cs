@@ -33,12 +33,12 @@ namespace MiliraXian.CharacterLib
     }
 
     /// <summary>
-    /// One animation swap on a race's part, written as
+    /// One flight animation swap on a race's part, written as
     /// <c>&lt;li source="Race_Anim"&gt;Character_Anim&lt;/li&gt;</c>. A part's animation is not
     /// reachable by swapping textures: while animating, a node takes its graphic from the
     /// animation's keyframes instead of from GraphicFor.
     /// </summary>
-    public class RacePartAnimationSwap
+    public class FlyAnimationSwap
     {
         public AnimationDef source;
         public AnimationDef target;
@@ -66,7 +66,7 @@ namespace MiliraXian.CharacterLib
     {
         public List<RacePartSwap> parts = new();
 
-        public List<RacePartAnimationSwap> animations = new();
+        public List<FlyAnimationSwap> flyAnimations = new();
 
         public override IEnumerable<string> ConfigErrors()
         {
@@ -76,7 +76,7 @@ namespace MiliraXian.CharacterLib
                 if (part.source.NullOrEmpty()) yield return "a part entry has no source attribute.";
                 if (part.target.NullOrEmpty()) yield return "a part entry has no target path.";
             }
-            foreach (RacePartAnimationSwap swap in animations)
+            foreach (FlyAnimationSwap swap in flyAnimations)
             {
                 if (swap.source == null) yield return "an animation entry has no source attribute.";
                 if (swap.target == null) yield return "an animation entry has no target animation.";
@@ -91,12 +91,12 @@ namespace MiliraXian.CharacterLib
         private static readonly Dictionary<(PawnKindDef, string), Graphic> graphics = new();
 
         /// <summary>
-        /// Lets a character override the declared replacement at runtime, in either direction:
-        /// a Unity-driven clip when one can run, a plainer animation when it cannot. Returning
-        /// null keeps what XML declares. This library cannot tell which applies, so the choice
-        /// is delegated while the mapping itself stays here.
+        /// Lets a character override the declared flight replacement at runtime, in either
+        /// direction: a Unity-driven clip when one can run, a plainer animation when it cannot.
+        /// Returning null keeps what XML declares. This library cannot tell which applies, so
+        /// the choice is delegated while the mapping itself stays here.
         /// </summary>
-        public static Func<Pawn, AnimationDef, AnimationDef> AnimationOverride;
+        public static Func<Pawn, AnimationDef, AnimationDef> FlyAnimationOverride;
 
         static CharacterRaceParts()
         {
@@ -219,28 +219,30 @@ namespace MiliraXian.CharacterLib
         }
 
         /// <summary>
-        /// The replacement declared in XML for <paramref name="raceAnimation"/>, ignoring
-        /// <see cref="AnimationOverride"/>.
+        /// The flight replacement declared in XML for <paramref name="raceAnimation"/>, ignoring
+        /// <see cref="FlyAnimationOverride"/>.
         /// </summary>
-        public static AnimationDef DeclaredAnimation(Pawn pawn, AnimationDef raceAnimation)
+        public static AnimationDef DeclaredFlyAnimation(Pawn pawn, AnimationDef raceAnimation)
         {
             if (pawn?.kindDef == null || raceAnimation == null
                 || !kinds.TryGetValue(pawn.kindDef, out var ext)) return null;
-            foreach (RacePartAnimationSwap swap in ext.animations)
+            foreach (FlyAnimationSwap swap in ext.flyAnimations)
                 if (swap.source == raceAnimation) return swap.target;
             return null;
         }
 
         /// <summary>
-        /// The animation to play in place of <paramref name="raceAnimation"/>, or null to keep
-        /// the race's own. An override applies even where XML declares no replacement: a part
-        /// whose frames are swapped by texture still plays the race's animation, and a character
-        /// may have a richer version of it to offer.
+        /// The flight animation to play in place of <paramref name="raceAnimation"/>, or null
+        /// to keep the race's own. Only flight is supported: vanilla consumers compare the
+        /// requested def against the renderer's current animation by reference (e.g.
+        /// Pawn_FlightTracker.playing), so a swap must happen at the decision point —
+        /// GetBestFlyAnimation — never downstream at SetAnimation, where it would break that
+        /// identity and leave the animation running forever.
         /// </summary>
-        public static AnimationDef AnimationFor(Pawn pawn, AnimationDef raceAnimation)
+        public static AnimationDef FlyAnimationFor(Pawn pawn, AnimationDef raceAnimation)
         {
             if (raceAnimation == null) return null;
-            return AnimationOverride?.Invoke(pawn, raceAnimation) ?? DeclaredAnimation(pawn, raceAnimation);
+            return FlyAnimationOverride?.Invoke(pawn, raceAnimation) ?? DeclaredFlyAnimation(pawn, raceAnimation);
         }
     }
 }
