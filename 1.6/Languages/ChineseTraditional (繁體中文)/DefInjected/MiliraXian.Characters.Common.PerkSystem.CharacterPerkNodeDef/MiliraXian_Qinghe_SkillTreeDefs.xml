@@ -58,7 +58,7 @@
   <MX_QH_Node_FlowerDecree2.label>花令強化II</MX_QH_Node_FlowerDecree2.label>
   <MX_QH_Node_FlowerDecree2.description>——被動效果：花令的積累上限 +1。</MX_QH_Node_FlowerDecree2.description>
   <MX_QH_Node_HardSoftBalance.label>剛柔并濟</MX_QH_Node_HardSoftBalance.label>
-  <MX_QH_Node_HardSoftBalance.description>——被動效果：靈氣最大單次消耗乘數與靈氣硬化乘數各增加100%。默認啟用20點單次消耗上限，并使靈氣硬化按完整數值抵扣消耗。</MX_QH_Node_HardSoftBalance.description>
+  <MX_QH_Node_HardSoftBalance.description>——被動效果：啟用靈氣單次消耗上限，每次受擊至多消耗20點靈氣。</MX_QH_Node_HardSoftBalance.description>
   <MX_QH_Trait_AuraShield.label>靈氣加護</MX_QH_Trait_AuraShield.label>
   <MX_QH_Trait_AuraShield.description>——被動效果：啟用常駐護盾能力。</MX_QH_Trait_AuraShield.description>
   <MX_QH_Trait_FlowingForm.label>流水之形</MX_QH_Trait_FlowingForm.label>

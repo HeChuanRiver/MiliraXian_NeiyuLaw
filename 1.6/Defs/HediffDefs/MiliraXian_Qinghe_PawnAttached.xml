@@ -254,7 +254,6 @@
         <minimumDamageForLethalCheck>8</minimumDamageForLethalCheck>
         <invisibilityDurationTicks>600</invisibilityDurationTicks>
         <damageImmunityDurationTicks>180</damageImmunityDurationTicks>
-        <retriggerCooldownTicks>60000</retriggerCooldownTicks>
         <cooldownWarningCooldownTicks>600</cooldownWarningCooldownTicks>
       </li>
     </comps>
@@ -455,7 +454,7 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_AuraShieldMaxEnergyFactor</stat>
+            <stat>MX_QH_AuraShieldMaxEnergy</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
@@ -465,7 +464,7 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_AuraShieldRegenPerSecondFactor</stat>
+            <stat>MX_QH_AuraShieldRegenPerSecond</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
@@ -484,7 +483,7 @@
             </valueBySeverity>
           </li>
           <li>
-            <stat>MX_QH_FlowingFormRechargeSpeedFactor</stat>
+            <stat>MX_QH_FlowingFormRechargeSpeed</stat>
             <valueBySeverity>
               <points>
                 <li>(0,1)</li>
@@ -517,10 +516,6 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_AuraShield">
         <shieldCompProperties>
-          <maxEnergy>500</maxEnergy>
-          <baseRegenPerSecond>7.5</baseRegenPerSecond>
-          <hitRegenDelayTicks>120</hitRegenDelayTicks>
-          <breakDisabledTicks>1200</breakDisabledTicks>
           <breakOnEmp>false</breakOnEmp>
           <staggerDurationFactor>0.1</staggerDurationFactor>
           <visual>

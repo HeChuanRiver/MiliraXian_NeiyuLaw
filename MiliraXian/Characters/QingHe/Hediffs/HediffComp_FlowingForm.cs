@@ -19,7 +19,6 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public int invisibilityDurationTicks = 600;
         public int damageImmunityDurationTicks = 180;
-        public int retriggerCooldownTicks = 3600;
         public int cooldownWarningCooldownTicks = 600;
         public int maxCharges = 1;
 
@@ -324,12 +323,13 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             int previousMaxCharges = cachedMaxCharges;
             int previousRechargeTicksTotal = cachedRechargeTicksTotal;
             int newMaxCharges = ResolveMaxCharges();
-            float speed = Pawn == null || MX_QHDefOf.MX_QH_FlowingFormRechargeSpeedFactor == null
-                ? 1f
-                : Pawn.GetStatValue(MX_QHDefOf.MX_QH_FlowingFormRechargeSpeedFactor);
+            StatDef speedStat = MX_QHDefOf.MX_QH_FlowingFormRechargeSpeed;
+            float speed = speedStat == null
+                ? 0f
+                : Pawn == null ? speedStat.defaultBaseValue : Pawn.GetStatValue(speedStat);
             int newRechargeTicksTotal = speed <= 0f
                 ? 0
-                : Mathf.Max(0, Mathf.RoundToInt(Props.retriggerCooldownTicks / speed));
+                : Mathf.Max(1, Mathf.RoundToInt(GenTicks.TicksPerRealSecond / speed));
 
             if (currentCharges >= 0
                 && currentCharges < previousMaxCharges

@@ -33,15 +33,13 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static DamageDef MX_QH_Slash;
         public static DamageDef MX_QH_SlashSkill;
 
-        public static StatDef MX_QH_AuraShieldMaxEnergyFactor;
-        public static StatDef MX_QH_AuraShieldRegenPerSecondFactor;
-        public static StatDef MX_QH_AuraShieldHitRegenDelayFactor;
-        public static StatDef MX_QH_AuraShieldBreakDelayOffset;
-        public static StatDef MX_QH_AuraShieldDamageCapFactor;
-        public static StatDef MX_QH_AuraShieldDamageCapOffset;
+        public static StatDef MX_QH_AuraShieldMaxEnergy;
+        public static StatDef MX_QH_AuraShieldRegenPerSecond;
+        public static StatDef MX_QH_AuraShieldHitRegenDelay;
+        public static StatDef MX_QH_AuraShieldBreakDelay;
+        public static StatDef MX_QH_AuraShieldDamageCap;
         public static StatDef MX_QH_AuraShieldHardening;
-        public static StatDef MX_QH_AuraShieldHardeningFactor;
-        public static StatDef MX_QH_FlowingFormRechargeSpeedFactor;
+        public static StatDef MX_QH_FlowingFormRechargeSpeed;
         public static StatDef MX_QH_SpellEffectFactor;
 
         public static HediffDef MX_QH_SpringFlow;

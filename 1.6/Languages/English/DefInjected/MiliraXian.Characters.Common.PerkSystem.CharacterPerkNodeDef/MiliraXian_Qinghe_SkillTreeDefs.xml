@@ -24,7 +24,7 @@
   <MX_QH_Node_FlowerDecree2.label>Flower Decree Enhancement II</MX_QH_Node_FlowerDecree2.label>
   <MX_QH_Node_FlowerDecree2.description>—Passive effect: Maximum Flower Decree +1.</MX_QH_Node_FlowerDecree2.description>
   <MX_QH_Node_HardSoftBalance.label>Strength in Flexibility</MX_QH_Node_HardSoftBalance.label>
-  <MX_QH_Node_HardSoftBalance.description>—Passive effect: Aura per-hit cost cap multiplier and Aura Hardening multiplier each increase by 100%. Enables the default 20-point per-hit cost cap and applies the full Aura Hardening value to reduce the cost.</MX_QH_Node_HardSoftBalance.description>
+  <MX_QH_Node_HardSoftBalance.description>—Passive effect: Enables the aura per-hit cost cap; each hit consumes at most 20 aura.</MX_QH_Node_HardSoftBalance.description>
   <MX_QH_Trait_AuraShield.label>Aura Ward</MX_QH_Trait_AuraShield.label>
   <MX_QH_Trait_AuraShield.description>—Passive effect: Enables the persistent shield.</MX_QH_Trait_AuraShield.description>
   <MX_QH_Trait_FlowingForm.label>Flowing Form</MX_QH_Trait_FlowingForm.label>

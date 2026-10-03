@@ -9,17 +9,7 @@ namespace MiliraXian.Characters.QingHe.Things
 {
     public class CompProperties_AuraShield : CompProperties
     {
-        public float maxEnergy = 100f;
-
-        // Shield regeneration per second.
-        public float baseRegenPerSecond = 0.8f;
-
-        public int hitRegenDelayTicks = 120;
-
-        // After breaking, shield is disabled for these ticks.
-        public int breakDisabledTicks = 600;
         public bool breakOnEmp = true;
-        public float shieldDamageCap;
         public float staggerDurationFactor = 1f;
 
         public AuraShieldVisualProperties visual = new();
@@ -77,14 +67,8 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                float factor = GetStatValue(MX_QHDefOf.MX_QH_AuraShieldDamageCapFactor, 0f);
-                float offset = GetStatValue(MX_QHDefOf.MX_QH_AuraShieldDamageCapOffset, 20f);
-                float afterOffset = Props.shieldDamageCap + offset;
-                if (factor <= 0f || afterOffset <= 0f)
-                {
-                    return float.PositiveInfinity;
-                }
-                return Mathf.Max(1f, afterOffset * factor);
+                float cap = GetStatValue(MX_QHDefOf.MX_QH_AuraShieldDamageCap);
+                return cap <= 0f ? float.PositiveInfinity : Mathf.Max(1f, cap);
             }
         }
 
@@ -92,9 +76,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                return ApplyDelayFactorOffset(
-                    Props.hitRegenDelayTicks,
-                    MX_QHDefOf.MX_QH_AuraShieldHitRegenDelayFactor);
+                return Mathf.Max(0, Mathf.RoundToInt(GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHitRegenDelay)));
             }
         }
 
@@ -102,9 +84,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             get
             {
-                return Mathf.Max(
-                    0,
-                    Mathf.RoundToInt(Props.breakDisabledTicks + GetStatValue(MX_QHDefOf.MX_QH_AuraShieldBreakDelayOffset, 0f)));
+                return Mathf.Max(0, Mathf.RoundToInt(GetStatValue(MX_QHDefOf.MX_QH_AuraShieldBreakDelay)));
             }
         }
 
@@ -279,12 +259,10 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
-            float incomingDamageFactor = Mathf.Max(0f, GetStatValue(StatDefOf.IncomingDamageFactor, 1f));
+            float incomingDamageFactor = Mathf.Max(0f, GetStatValue(StatDefOf.IncomingDamageFactor));
             // Scale only the shield cost; unabsorbed damage keeps its normal body damage processing.
             float shieldDamage = Mathf.Min(dinfo.Amount * incomingDamageFactor, ShieldDamageCap);
-            float hardening = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHardening, 0f));
-            float hardeningFactor = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHardeningFactor, 0f));
-            shieldDamage -= hardening * hardeningFactor;
+            shieldDamage -= Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldHardening));
             if (shieldDamage <= 0f)
             {
                 Renderer.NotifyAbsorbed(owner, CurrentTick);
@@ -377,17 +355,16 @@ namespace MiliraXian.Characters.QingHe.Things
             Renderer.NotifyBroken(PawnOwner, parent, energyRatio);
         }
 
-        private int ApplyDelayFactorOffset(float baseValue, StatDef factorStat)
-        {
-            return Mathf.Max(0, Mathf.RoundToInt(baseValue * GetStatValue(factorStat, 1f)));
-        }
-
-        private float GetStatValue(StatDef statDef, float fallback)
+        private float GetStatValue(StatDef statDef)
         {
             Pawn owner = PawnOwner;
-            if (owner == null || statDef == null)
+            if (statDef == null)
             {
-                return fallback;
+                return 0f;
+            }
+            if (owner == null)
+            {
+                return statDef.defaultBaseValue;
             }
 
             return owner.GetStatValue(statDef, true, 1);
@@ -396,16 +373,12 @@ namespace MiliraXian.Characters.QingHe.Things
         private void RefreshCachedStats()
         {
             cachedMaxEnergy = ResolveMaxEnergy();
-            cachedRegenPerSecond = Mathf.Max(
-                0f,
-                Props.baseRegenPerSecond * GetStatValue(MX_QHDefOf.MX_QH_AuraShieldRegenPerSecondFactor, 1f));
+            cachedRegenPerSecond = Mathf.Max(0f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldRegenPerSecond));
         }
 
         private float ResolveMaxEnergy()
         {
-            return Mathf.Max(
-                1f,
-                Props.maxEnergy * GetStatValue(MX_QHDefOf.MX_QH_AuraShieldMaxEnergyFactor, 1f));
+            return Mathf.Max(1f, GetStatValue(MX_QHDefOf.MX_QH_AuraShieldMaxEnergy));
         }
 
         public string BuildShieldTooltip()

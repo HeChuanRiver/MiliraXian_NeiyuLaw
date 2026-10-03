@@ -2,54 +2,13 @@
 <Defs>
 
     <StatDef>
-        <defName>MX_QH_AuraShieldMaxEnergyFactor</defName>
-        <label>灵气容量乘数</label>
-        <description>灵气加护最大容量的倍率修正。</description>
+        <defName>MX_QH_AuraShieldMaxEnergy</defName>
+        <label>灵气容量</label>
+        <description>灵气加护的最大容量。</description>
         <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
-        <defaultBaseValue>1</defaultBaseValue>
-        <toStringStyle>PercentZero</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_AuraShield</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
-        <defName>MX_QH_AuraShieldRegenPerSecondFactor</defName>
-        <label>灵气回复乘数</label>
-        <description>灵气每秒回复量的倍率修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>1</defaultBaseValue>
-        <toStringStyle>PercentZero</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_AuraShield</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
-        <defName>MX_QH_AuraShieldHitRegenDelayFactor</defName>
-        <label>灵气回复延迟乘数</label>
-        <description>受击后灵气回复延迟的倍率修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>1</defaultBaseValue>
-        <toStringStyle>PercentZero</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_AuraShield</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
-        <defName>MX_QH_AuraShieldBreakDelayOffset</defName>
-        <label>灵气加护重启延迟偏移</label>
-        <description>灵气耗尽后重新开始恢复的延迟加值修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_TicksToSeconds</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>0</defaultBaseValue>
+        <defaultBaseValue>100</defaultBaseValue>
+        <minValue>0</minValue>
         <toStringStyle>FloatMaxOne</toStringStyle>
         <showIfHediffsPresent>
             <li>MX_QH_AuraShield</li>
@@ -58,14 +17,14 @@
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_AuraShieldDamageCapFactor</defName>
-        <label>灵气最大单次消耗乘数</label>
-        <description>灵气单次消耗上限的倍率修正。此数值越大，单次消耗上限越高。</description>
+        <defName>MX_QH_AuraShieldRegenPerSecond</defName>
+        <label>灵气回复</label>
+        <description>灵气每秒回复量。</description>
         <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
-        <defaultBaseValue>0</defaultBaseValue>
+        <defaultBaseValue>7.5</defaultBaseValue>
         <minValue>0</minValue>
-        <toStringStyle>PercentZero</toStringStyle>
+        <toStringStyle>FloatMaxOne</toStringStyle>
         <showIfHediffsPresent>
             <li>MX_QH_AuraShield</li>
         </showIfHediffsPresent>
@@ -73,12 +32,43 @@
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_AuraShieldDamageCapOffset</defName>
-        <label>灵气最大单次消耗偏移</label>
-        <description>灵气单次消耗上限的加值修正，基础值为20。此属性先于倍率应用；消耗上限乘数为0%时该特性不生效。</description>
+        <defName>MX_QH_AuraShieldHitRegenDelay</defName>
+        <label>灵气回复延迟</label>
+        <description>受击后灵气回复的延迟。</description>
+        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_TicksToSeconds</workerClass>
+        <category>PawnCombat</category>
+        <defaultBaseValue>120</defaultBaseValue>
+        <minValue>0</minValue>
+        <toStringStyle>FloatMaxOne</toStringStyle>
+        <showIfHediffsPresent>
+            <li>MX_QH_AuraShield</li>
+        </showIfHediffsPresent>
+        <neverDisabled>true</neverDisabled>
+    </StatDef>
+
+    <StatDef>
+        <defName>MX_QH_AuraShieldBreakDelay</defName>
+        <label>灵气加护重启延迟</label>
+        <description>灵气耗尽后重新开始恢复的延迟。</description>
+        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_TicksToSeconds</workerClass>
+        <category>PawnCombat</category>
+        <defaultBaseValue>1200</defaultBaseValue>
+        <minValue>0</minValue>
+        <toStringStyle>FloatMaxOne</toStringStyle>
+        <showIfHediffsPresent>
+            <li>MX_QH_AuraShield</li>
+        </showIfHediffsPresent>
+        <neverDisabled>true</neverDisabled>
+    </StatDef>
+
+    <StatDef>
+        <defName>MX_QH_AuraShieldDamageCap</defName>
+        <label>灵气最大单次消耗</label>
+        <description>灵气单次消耗的上限。此数值为0时该特性不生效。</description>
         <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
-        <defaultBaseValue>20</defaultBaseValue>
+        <defaultBaseValue>0</defaultBaseValue>
+        <minValue>0</minValue>
         <toStringStyle>FloatOne</toStringStyle>
         <showIfHediffsPresent>
             <li>MX_QH_AuraShield</li>
@@ -102,28 +92,14 @@
     </StatDef>
 
     <StatDef>
-        <defName>MX_QH_AuraShieldHardeningFactor</defName>
-        <label>灵气硬化乘数</label>
-        <description>灵气硬化护甲值的倍率修正，该数值为0时护甲不会生效。</description>
+        <defName>MX_QH_FlowingFormRechargeSpeed</defName>
+        <label>流水之形充能速度</label>
+        <description>流水之形的充能速度，单位为次/秒。</description>
         <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
         <category>PawnCombat</category>
-        <defaultBaseValue>0</defaultBaseValue>
+        <defaultBaseValue>0.001</defaultBaseValue>
         <minValue>0</minValue>
-        <toStringStyle>PercentZero</toStringStyle>
-        <showIfHediffsPresent>
-            <li>MX_QH_AuraShield</li>
-        </showIfHediffsPresent>
-        <neverDisabled>true</neverDisabled>
-    </StatDef>
-
-    <StatDef>
-        <defName>MX_QH_FlowingFormRechargeSpeedFactor</defName>
-        <label>流水之形充能速度乘数</label>
-        <description>流水之形充能速度的倍率修正。</description>
-        <workerClass>MiliraXian.Characters.Common.Stats.StatWorker_Mutable</workerClass>
-        <category>PawnCombat</category>
-        <defaultBaseValue>1</defaultBaseValue>
-        <toStringStyle>PercentZero</toStringStyle>
+        <toStringStyle>FloatMaxThree</toStringStyle>
         <showIfHediffsPresent>
             <li>MX_QH_FlowingForm</li>
         </showIfHediffsPresent>

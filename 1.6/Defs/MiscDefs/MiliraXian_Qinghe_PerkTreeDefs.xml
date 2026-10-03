@@ -15,7 +15,7 @@
     <displayOrder>55</displayOrder>
     <requiredAuraMasteryLevel>6</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_AuraShieldMaxEnergyFactor>0.25</MX_QH_AuraShieldMaxEnergyFactor>
+      <MX_QH_AuraShieldMaxEnergy>25</MX_QH_AuraShieldMaxEnergy>
     </statOffsets>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
@@ -30,7 +30,7 @@
       <li><node>MX_QH_Node_AuraEnhancement1</node></li>
     </prerequisites>
     <statOffsets>
-      <MX_QH_AuraShieldMaxEnergyFactor>0.25</MX_QH_AuraShieldMaxEnergyFactor>
+      <MX_QH_AuraShieldMaxEnergy>25</MX_QH_AuraShieldMaxEnergy>
     </statOffsets>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
@@ -42,7 +42,7 @@
     <displayOrder>85</displayOrder>
     <requiredAuraMasteryLevel>15</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_AuraShieldHitRegenDelayFactor>-1.0</MX_QH_AuraShieldHitRegenDelayFactor>
+      <MX_QH_AuraShieldHitRegenDelay>-120</MX_QH_AuraShieldHitRegenDelay>
     </statOffsets>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
@@ -148,14 +148,13 @@
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
     <defName>MX_QH_Node_HardSoftBalance</defName>
     <label>刚柔并济</label>
-    <description>——被动效果：灵气最大单次消耗乘数与灵气硬化乘数各增加100%。默认启用20点单次消耗上限，并使灵气硬化按完整数值抵扣消耗。</description>
+    <description>——被动效果：启用灵气单次消耗上限，每次受击至多消耗20点灵气。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>65</displayOrder>
     <requiredAuraMasteryLevel>16</requiredAuraMasteryLevel>
     <statOffsets>
-      <MX_QH_AuraShieldDamageCapFactor>1</MX_QH_AuraShieldDamageCapFactor>
-      <MX_QH_AuraShieldHardeningFactor>1</MX_QH_AuraShieldHardeningFactor>
+      <MX_QH_AuraShieldDamageCap>20</MX_QH_AuraShieldDamageCap>
     </statOffsets>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
