@@ -15,6 +15,7 @@
     </degreeDatas>
     <modExtensions>
       <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
+        <preventAutonomousRomance>true</preventAutonomousRomance>
         <ignoreNegativeAptitudes>
           <li>Cooking</li>
         </ignoreNegativeAptitudes>

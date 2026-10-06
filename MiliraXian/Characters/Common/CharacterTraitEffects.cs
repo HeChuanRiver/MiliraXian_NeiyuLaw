@@ -14,6 +14,7 @@ namespace MiliraXian.Characters.Common
         public bool freezeBiologicalAge = true;
         public bool freezeChronologicalAge;
         public bool noSkillDecay = true;
+        public bool preventAutonomousRomance;
         /// <summary>Skills whose negative gene aptitude the bearer ignores.</summary>
         public List<SkillDef> ignoreNegativeAptitudes = new();
     }
@@ -32,6 +33,26 @@ namespace MiliraXian.Characters.Common
         // The value is the actual Def extension, so power-profile changes take effect immediately.
         internal static CharacterTraitExtension For(TraitDef trait) =>
             trait != null && traits.TryGetValue(trait, out var rule) ? rule : null;
+
+        internal static bool PreventsAutonomousRomance(Pawn pawn)
+        {
+            var carriedTraits = pawn?.story?.traits?.allTraits;
+            if (carriedTraits == null) return false;
+            foreach (Trait trait in carriedTraits)
+                if (For(trait.def)?.preventAutonomousRomance == true) return true;
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(InteractionWorker_RomanceAttempt), nameof(InteractionWorker_RomanceAttempt.RandomSelectionWeight))]
+    internal static class Patch_CharacterTraitAutonomousRomance
+    {
+        private static void Postfix(Pawn initiator, Pawn recipient, ref float __result)
+        {
+            if (__result > 0f && (CharacterTraitEffects.PreventsAutonomousRomance(initiator)
+                || CharacterTraitEffects.PreventsAutonomousRomance(recipient)))
+                __result = 0f;
+        }
     }
 
     [HarmonyPatch(typeof(Pawn_AgeTracker), nameof(Pawn_AgeTracker.AgeTickInterval))]
