@@ -55,12 +55,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             protection?.SyncForPowerLevel();
         }
 
-        private const int StillnessGatheringLapseTicks = 30;
-
         /// <summary>
-        /// Stillness accrues continuously while an activity lasts, so the rate rides a short-lived
-        /// hediff whose severity is the rate per second: the activity refreshes it each tick and it
-        /// lapses on its own once the activity stops.
+        /// Stillness accrues continuously while an activity lasts, so the rate rides a permanent
+        /// hediff whose severity is the rate per second: the activity refreshes it each tick and
+        /// the comp drops it back to idle once the activity stops.
         /// </summary>
         public static void SetStillnessGathering(Pawn pawn, float ratePerSecond)
         {
@@ -69,9 +67,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
                 return;
             }
 
-            Hediff gathering = pawn.health.GetOrAddHediff(MX_QHDefOf.MX_QH_StillnessGathering);
-            gathering.Severity = ratePerSecond;
-            (gathering as HediffWithComps)?.GetComp<HediffComp_Disappears>()?.SetDuration(StillnessGatheringLapseTicks);
+            GetHediffComp<HediffComp_StillnessGathering>(pawn, MX_QHDefOf.MX_QH_StillnessGathering)?.Refresh(ratePerSecond);
         }
 
         public static void ApplyMeditativeStillnessQualityBonus(Pawn pawn, ref QualityCategory quality)

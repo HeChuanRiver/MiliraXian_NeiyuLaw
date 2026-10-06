@@ -50,6 +50,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public HediffCompProperties_FlowingForm Props => (HediffCompProperties_FlowingForm)props;
 
+        public override bool CompDisallowVisible()
+        {
+            return !QinghePowerBalance.ZeroLevelPassivesEnabled;
+        }
+
         private int CurrentTick => Find.TickManager != null ? Find.TickManager.TicksGame : 0;
 
         public int MaxCharges => cachedMaxCharges;

@@ -4,7 +4,7 @@
     <defName>MX_QH_FlowerDecree</defName>
     <label>花令</label>
     <description>隐藏Hediff：资源计数器</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHiddenResource</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Hediff_PawnSpecialResource</hediffClass>
     <defaultLabelColor>(0.95, 0.74, 0.84)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -83,7 +83,7 @@
     <defName>MX_QH_SwordPressure</defName>
     <label>剑压</label>
     <description>隐藏Hediff：资源计数器</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHiddenResource</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Hediff_PawnSpecialResource</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
@@ -171,7 +171,7 @@
     <defName>MX_QH_Trickle</defName>
     <label>涓流</label>
     <description>清荷会持续缓慢回复伤口，并逐步修复永久损伤与失去的身体部位。</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheZeroLevelPassive</hediffClass>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(0.6, 0.8, 1.0)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -243,7 +243,7 @@
     <defName>MX_QH_FlowingForm</defName>
     <label>流水之形</label>
     <description>受到致命伤害或可能摧毁身体部件的伤害时，抵消此次伤害、修复自身所有损伤，同时获得短暂无敌和持续10秒的心灵隐形。充能耗尽时无法使用。\n\n——形如流水，意似清风。</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheZeroLevelPassive</hediffClass>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(0.6, 1.0, 0.8)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -309,16 +309,16 @@
     <defName>MX_QH_StillnessGathering</defName>
     <label>静思凝神</label>
     <description>隐藏Hediff：当前活动带来的静思积累速度。</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHidden</hediffClass>
+    <hediffClass>MiliraXian.Characters.Common.Hediff_SeverityLevel</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
-    <initialSeverity>0.01</initialSeverity>
-    <minSeverity>0.01</minSeverity>
+    <initialSeverity>0</initialSeverity>
+    <minSeverity>0</minSeverity>
     <maxSeverity>2</maxSeverity>
     <stages>
       <li>
-        <minSeverity>0.01</minSeverity>
+        <minSeverity>0</minSeverity>
         <statOffsetsBySeverity>
           <li>
             <stat>MX_QH_MeditativeStillnessRecovery</stat>
@@ -333,20 +333,21 @@
       </li>
     </stages>
     <comps>
-      <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>30</disappearsAfterTicks>
-      </li>
+      <li Class="MiliraXian.Characters.QingHe.Hediffs.HediffCompProperties_StillnessGathering" />
     </comps>
   </HediffDef>
   <HediffDef>
     <defName>MX_QH_PowerSealed</defName>
     <label>力量封印</label>
     <description>清荷的力量被封印，所有资源停止自然回复。</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheHidden</hediffClass>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(0.55, 0.55, 0.60)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="MiliraXian.Characters.Common.HediffCompProperties_Hidden" />
+    </comps>
     <stages>
       <li>
         <statFactors>
@@ -508,7 +509,7 @@
     <defName>MX_QH_AuraShield</defName>
     <label>灵气加护</label>
     <description>清荷与自然之息共鸣，能调动灵气形成一面无法穿透的护盾，抵挡所有来袭的伤害。护盾激活时，受到的抑止时间减少90%。护盾被击碎时，需要20秒时间重新充能，期间她会失去防护能力。</description>
-    <hediffClass>MiliraXian.Characters.QingHe.Hediffs.Hediff_QingheZeroLevelPassive</hediffClass>
+    <hediffClass>Verse.HediffWithComps</hediffClass>
     <defaultLabelColor>(1.0, 0.75, 1.0)</defaultLabelColor>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>

@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         }
     }
 
-    public class Hediff_MeditativeStillness : Hediff_QingheZeroLevelPassive
+    public class Hediff_MeditativeStillness : Hediff_PawnSpecialResource
     {
         private HediffComp_MeditativeStillness StillnessComp => GetComp<HediffComp_MeditativeStillness>();
 
@@ -88,6 +88,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
         public HediffCompProperties_MeditativeStillness PropsStillness => (HediffCompProperties_MeditativeStillness)props;
 
         public bool LongNightReady => MaxValue > 0f && CurrentValue >= MaxValue - 0.001f;
+
+        public override bool CompDisallowVisible()
+        {
+            return base.CompDisallowVisible() || !QinghePowerBalance.ZeroLevelPassivesEnabled;
+        }
 
         public override void CompPostTick(ref float severityAdjustment)
         {
@@ -166,6 +171,48 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             float chance = Mathf.Clamp01(PropsStillness.partialQualityBonusChancePerFull * ValuePercent);
             return chance > 0f && Rand.Value < chance ? 1 : 0;
+        }
+    }
+
+    public class HediffCompProperties_StillnessGathering : HediffCompProperties
+    {
+        public HediffCompProperties_StillnessGathering()
+        {
+            compClass = typeof(HediffComp_StillnessGathering);
+        }
+    }
+
+    /// <summary>
+    /// The hediff is permanent and its severity is the current accrual rate per second. Severity
+    /// stays inside one stage, so refreshing or idling it never raises vanilla's situational
+    /// thought invalidation, which adding or removing a hediff would do on every activity edge.
+    /// </summary>
+    public class HediffComp_StillnessGathering : HediffComp
+    {
+        private const int LapseTicks = 30;
+
+        private int lastRefreshTick = -LapseTicks - 1;
+
+        public override bool CompDisallowVisible()
+        {
+            return true;
+        }
+
+        public void Refresh(float ratePerSecond)
+        {
+            lastRefreshTick = Find.TickManager.TicksGame;
+            if (Mathf.Abs(parent.Severity - ratePerSecond) > 0.0001f)
+            {
+                parent.Severity = ratePerSecond;
+            }
+        }
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            if (parent.Severity > parent.def.minSeverity && Find.TickManager.TicksGame - lastRefreshTick > LapseTicks)
+            {
+                parent.Severity = parent.def.minSeverity;
+            }
         }
     }
 }

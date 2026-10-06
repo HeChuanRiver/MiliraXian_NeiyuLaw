@@ -24,6 +24,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
         public HediffCompProperties_AuraShield Props => (HediffCompProperties_AuraShield)props;
 
+        public override bool CompDisallowVisible()
+        {
+            return !QinghePowerBalance.ZeroLevelPassivesEnabled;
+        }
+
         public override string CompTipStringExtra
         {
             get

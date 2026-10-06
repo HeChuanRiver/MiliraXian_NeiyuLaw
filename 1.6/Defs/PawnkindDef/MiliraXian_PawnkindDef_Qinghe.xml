@@ -216,6 +216,9 @@
                 <def>MX_QH_Trickle</def>
                 <severity>1</severity>
             </li>
+            <li>
+                <def>MX_QH_StillnessGathering</def>
+            </li>
         </startingHediffs>
         <!-- modExtensions是用来使用的非官方类的地方 -->
         <modExtensions>

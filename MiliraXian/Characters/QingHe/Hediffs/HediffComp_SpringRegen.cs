@@ -43,6 +43,11 @@ namespace MiliraXian.Characters.QingHe.Hediffs
     {
         public HediffCompProperties_SpringRegen Props => (HediffCompProperties_SpringRegen)props;
 
+        public override bool CompDisallowVisible()
+        {
+            return !QinghePowerBalance.ZeroLevelPassivesEnabled;
+        }
+
         public override void CompPostTickInterval(ref float severityAdjustment, int delta)
         {
             base.CompPostTickInterval(ref severityAdjustment, delta);
