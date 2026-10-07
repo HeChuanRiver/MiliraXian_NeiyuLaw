@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 眼球贴图缺 Lovin_south，自动回退到 altShapeDef（normal）；只有 Lovin_highlight 是专属的 -->
+    <FacialAnimation.EyeballShapeDef>
+        <defName>Lovin</defName>
+        <label>Lovin</label>
+    </FacialAnimation.EyeballShapeDef>
+
+    <!-- targetJobs 留空覆盖掉默认的 ConstantJob，FA 自己便永不投放；
+         只由下方 FaceAnimationOverrideDef 塞进清荷的 Lovin 桶 -->
+    <FacialAnimation.FaceAnimationDef>
+        <defName>MiliraXian_QH_Lovin2</defName>
+        <raceName>Milira_Race</raceName>
+        <targetJobs />
+        <priority>10500</priority>
+        <roopIntervalMin>0</roopIntervalMin>
+        <roopIntervalMax>0</roopIntervalMax>
+        <applyWhenStandingOnly>true</applyWhenStandingOnly>
+        <animationFrames>
+            <li>
+                <duration>240</duration>
+                <browShapeDef>s-shaped</browShapeDef>
+                <mouthShapeDef>open</mouthShapeDef>
+                <headShapeDef>blush</headShapeDef>
+                <lidShapeDef>close</lidShapeDef>
+            </li>
+            <li>
+                <duration>240</duration>
+                <browShapeDef>s-shaped</browShapeDef>
+                <eyeballOffset>(0,0,-0.03)</eyeballOffset>
+                <headShapeDef>blush</headShapeDef>
+                <lidShapeDef>half</lidShapeDef>
+            </li>
+            <li>
+                <duration>240</duration>
+                <browShapeDef>s-shaped</browShapeDef>
+                <mouthShapeDef>Lovin</mouthShapeDef>
+                <headShapeDef>blush</headShapeDef>
+                <lidShapeDef>close</lidShapeDef>
+            </li>
+            <li>
+                <duration>240</duration>
+                <browShapeDef>flat</browShapeDef>
+                <eyeballOffset>(0,0,0.002)</eyeballOffset>
+                <mouthShapeDef>Lovin</mouthShapeDef>
+                <headShapeDef>blush</headShapeDef>
+                <lidShapeDef>half</lidShapeDef>
+                <eyeballShapeDef>Lovin</eyeballShapeDef>
+            </li>
+        </animationFrames>
+    </FacialAnimation.FaceAnimationDef>
+
+    <MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.FaceAnimationOverrideDef>
+        <defName>MiliraXian_QH_Override_Lovin2</defName>
+        <pawnKinds>
+            <li>MiliraXian_Qinghe</li>
+        </pawnKinds>
+        <targetJobs>
+            <li>Lovin</li>
+            <li>MLI_Jobs_MassLoveIn</li>
+            <li>MLI_Jobs_SingleLoveIn</li>
+        </targetJobs>
+        <replace>Milira_Race_Lovin2</replace>
+        <with>MiliraXian_QH_Lovin2</with>
+    </MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.FaceAnimationOverrideDef>
+</Defs>

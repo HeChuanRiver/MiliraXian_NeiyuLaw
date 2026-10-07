@@ -7,6 +7,8 @@
         <li IfModActive="Ariandel.AriandelLibrary">1.6/Mods/Ariandel.AriandelLibrary</li>
         <!-- 面部动画 -->
         <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
+        <!-- 动画级定制：既要 FA 本体的类型，也要米莉拉种族动画作为替换基准 -->
+        <li IfModActiveAll="Nals.FacialAnimation, Ancot.MiliraRaceFacialAnimation">1.6/Mods/Ancot.MiliraRaceFacialAnimation</li>
     </v1.6>
 
 </loadFolders>

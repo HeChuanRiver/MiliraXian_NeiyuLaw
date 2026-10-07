@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 清荷专属嘴型，贴图缺失的形状由 altShapeDef 回退到 normal -->
+    <FacialAnimation.MouthShapeDef>
+        <defName>Lovin</defName>
+    </FacialAnimation.MouthShapeDef>
+
+    <FacialAnimation.MouthTypeDef>
+        <defName>MiliraXian_Mouth_Qinghe</defName>
+        <texPath>MiliraXianQinghe/Pawn/FA_Components/Mouth</texPath>
+        <raceName>Milira_Race</raceName>
+        <shader>Map/Transparent</shader>
+        <enableUnisexTexPath>True</enableUnisexTexPath>
+        <probability>0</probability>
+        <modExtensions>
+            <li Class="MiliraXian.CharacterLib.Compat.FacialAnimationIntegration.CharacterFaceExtension">
+                <pawnKind>MiliraXian_Qinghe</pawnKind>
+            </li>
+        </modExtensions>
+    </FacialAnimation.MouthTypeDef>
+</Defs>
