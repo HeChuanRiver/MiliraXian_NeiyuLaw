@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <SoundDef>
+        <defName>MX_ArcaneCircle_Hum</defName>
+        <context>MapOnly</context>
+        <sustain>true</sustain>
+        <priorityMode>PrioritizeNearest</priorityMode>
+        <sustainFadeoutTime>0</sustainFadeoutTime>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneHum</clipPath></li></grains>
+                <volumeRange>28</volumeRange>
+                <distRange>8~40</distRange>
+                <sustainLoop>true</sustainLoop>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_ArcaneCircle_Etch</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneEtch</clipPath></li></grains>
+                <volumeRange>30</volumeRange><distRange>8~40</distRange>
+                <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_ArcaneCircle_Stage</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneStage</clipPath></li></grains>
+                <volumeRange>35</volumeRange><distRange>8~40</distRange>
+                <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_ArcaneCircle_Seal</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneSeal</clipPath></li></grains>
+                <volumeRange>38</volumeRange><distRange>8~40</distRange>
+                <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_ArcaneCircle_Converge</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneConverge</clipPath></li></grains>
+                <volumeRange>35</volumeRange><distRange>8~40</distRange>
+                <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+</Defs>

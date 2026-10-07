@@ -69,6 +69,10 @@
       <HintPath>$(RimWorldManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(RimWorldManagedDir)\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>

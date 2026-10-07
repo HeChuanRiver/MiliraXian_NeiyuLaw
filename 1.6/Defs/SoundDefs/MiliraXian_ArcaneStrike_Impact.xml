@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <SoundDef>
+        <defName>MX_ArcaneStrike_Impact</defName>
+        <context>WorldOnly</context>
+        <subSounds>
+            <li>
+                <onCamera>true</onCamera>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneImpact</clipPath></li></grains>
+                <volumeRange>75</volumeRange>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+</Defs>

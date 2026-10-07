@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <WorldObjectDef>
+        <defName>MX_ArcaneProjectile</defName>
+        <label>奥术彗星</label>
+        <description>沿星球上空飞行的高能奥术弹。</description>
+        <worldObjectClass>MiliraXian.Characters.Common.Things.WorldObject_ArcaneProjectile</worldObjectClass>
+        <texture>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</texture>
+        <useDynamicDrawer>true</useDynamicDrawer>
+        <expandingIcon>false</expandingIcon>
+        <selectable>true</selectable>
+        <neverMultiSelect>true</neverMultiSelect>
+        <canHaveMap>false</canHaveMap>
+        <validLaunchTarget>false</validLaunchTarget>
+        <canHaveFaction>false</canHaveFaction>
+        <saved>true</saved>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.Common.Things.ArcaneProjectileProperties">
+                <impactDef>MX_ArcaneImpact</impactDef>
+                <flightDurationSeconds>18</flightDurationSeconds>
+                <arcHeight>28</arcHeight>
+                <trailProgressLength>0.28</trailProgressLength>
+                <sizeInTiles>2.4</sizeInTiles>
+            </li>
+        </modExtensions>
+    </WorldObjectDef>
+</Defs>

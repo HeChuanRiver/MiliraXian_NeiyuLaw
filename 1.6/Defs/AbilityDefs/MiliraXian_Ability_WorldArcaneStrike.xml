@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <AbilityDef>
+        <defName>WorldArcaneStrike</defName>
+        <label>世界奥术打击</label>
+        <description>吟唱60秒，向世界地图上任意地块发射奥术彗星。
+
+落点周围半径5个世界格的圆形区域永久化为焦土，范围内的据点、地图和商队遭受毁灭打击，玩家与友方也会受影响。既有免死与复活机制仍可生效。
+
+被摧毁据点所属派系仅在已无任何据点时灭亡。</description>
+        <gizmoClass>MiliraXian.Characters.Common.Abilities.Command_WorldArcaneStrike</gizmoClass>
+        <jobDef>MX_WorldArcaneStrikeChant</jobDef>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.Common.Abilities.ArcaneStrikeLaunchProperties">
+                <projectileDef>MX_ArcaneProjectile</projectileDef>
+                <beamDurationSeconds>4</beamDurationSeconds>
+                <beamHeight>32</beamHeight>
+                <beamWidth>2.7</beamWidth>
+                <launchSound>MX_ArcaneStrike_Launch</launchSound>
+            </li>
+            <li Class="MiliraXian.Characters.Common.Vfx.ArcaneCircleVFXProperties">
+                <scale>1.15</scale>
+                <humSound>MX_ArcaneCircle_Hum</humSound>
+                <etchSound>MX_ArcaneCircle_Etch</etchSound>
+                <stageSound>MX_ArcaneCircle_Stage</stageSound>
+                <sealSound>MX_ArcaneCircle_Seal</sealSound>
+                <convergeSound>MX_ArcaneCircle_Converge</convergeSound>
+            </li>
+        </modExtensions>
+        <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+        <targetRequired>true</targetRequired>
+        <targetWorldCell>true</targetWorldCell>
+        <aiCanUse>false</aiCanUse>
+        <groupAbility>false</groupAbility>
+        <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted>
+        <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
+        <statBases>
+            <Ability_EffectRadius>5</Ability_EffectRadius>
+        </statBases>
+        <verbProperties>
+            <verbClass>Verb_CastAbility</verbClass>
+            <targetable>true</targetable>
+            <range>0</range>
+            <warmupTime>60</warmupTime>
+            <targetParams>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
+            </targetParams>
+        </verbProperties>
+    </AbilityDef>
+</Defs>

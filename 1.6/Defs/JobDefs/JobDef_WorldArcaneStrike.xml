@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <JobDef>
+        <defName>MX_WorldArcaneStrikeChant</defName>
+        <driverClass>MiliraXian.Characters.Common.Abilities.JobDriver_WorldArcaneStrike</driverClass>
+        <reportString>正在吟唱世界奥术打击。</reportString>
+        <abilityCasting>true</abilityCasting>
+        <playerInterruptible>true</playerInterruptible>
+        <casualInterruptible>false</casualInterruptible>
+        <suspendable>false</suspendable>
+        <sleepCanInterrupt>false</sleepCanInterrupt>
+        <neverFleeFromEnemies>true</neverFleeFromEnemies>
+        <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+        <alwaysShowReport>true</alwaysShowReport>
+    </JobDef>
+</Defs>

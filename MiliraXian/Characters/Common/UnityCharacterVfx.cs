@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Common.Vfx;
 
 namespace MiliraXian.Characters.Common
 {
@@ -19,7 +20,10 @@ namespace MiliraXian.Characters.Common
         NeiyuSkyfallWarning,
         NeiyuSkyfallImpact,
         NeiyuHalo,
-        ZhaoliHalo
+        ZhaoliHalo,
+        ArcaneCircle,
+        ArcaneLaunch,
+        ArcaneImpact
     }
 
     public sealed class GameComponent_CharacterUnityVfx : GameComponent
@@ -30,14 +34,19 @@ namespace MiliraXian.Characters.Common
 
         public override void StartedNewGame()
         {
+            ArcaneProjectileVfx.Reset();
+            ArcaneImpactVfx.Reset();
             SpecialHaloAnimationRuntime.Reset();
             CharacterUnityVfxRuntime.Reset();
         }
 
         public override void LoadedGame()
         {
+            ArcaneProjectileVfx.Reset();
+            ArcaneImpactVfx.Reset();
             SpecialHaloAnimationRuntime.Reset();
             CharacterUnityVfxRuntime.Reset();
+            ArcaneCircleVFXController.RebuildAfterLoad();
         }
 
         public override void GameComponentUpdate()
@@ -90,8 +99,8 @@ namespace MiliraXian.Characters.Common
         private static readonly Dictionary<int, Material> Materials = new Dictionary<int, Material>();
         private static readonly MaterialPropertyBlock PropertyBlock = new MaterialPropertyBlock();
 
-        private static AssetBundle fallbackBundle;
-        private static bool fallbackLoadAttempted;
+        private static readonly Dictionary<string, AssetBundle> FallbackBundles = new();
+        private static readonly HashSet<string> AttemptedFallbackBundles = new();
 
         public static bool IsAvailable(CharacterUnityVfxKind kind)
         {
@@ -436,6 +445,15 @@ namespace MiliraXian.Characters.Common
                 return;
             }
 
+            DrawAnimatedSprite(renderer, anchor, Vector3.zero, instance.Scale,
+                instance.Rotation, instance.FlipX, instance.AlphaMultiplier);
+        }
+
+        internal static void DrawAnimatedSprite(SpriteRenderer renderer, Vector3 anchor,
+            Vector3 authoredOrigin, float visualScale, float rotation, bool mirror, float alphaMultiplier,
+            Material overrideMaterial = null, float reveal = 1f, bool invertAnimatedRotation = false)
+        {
+
             Sprite sprite = renderer != null ? renderer.sprite : null;
             if (sprite == null || renderer.color.a <= 0.001f)
             {
@@ -449,23 +467,24 @@ namespace MiliraXian.Characters.Common
             }
 
             Transform transform = renderer.transform;
-            Vector3 animationPosition = transform.position;
+            Vector3 animationPosition = transform.position - authoredOrigin;
             Vector3 scale = transform.lossyScale;
             Vector2 spriteSize = sprite.bounds.size;
-            float width = Mathf.Abs(spriteSize.x * scale.x * instance.Scale);
-            float height = Mathf.Abs(spriteSize.y * scale.y * instance.Scale);
+            float width = Mathf.Abs(spriteSize.x * scale.x * visualScale);
+            float height = Mathf.Abs(spriteSize.y * scale.y * visualScale);
             if (width <= 0.001f || height <= 0.001f)
             {
                 return;
             }
 
             Vector3 drawPosition = anchor;
-            drawPosition.x += animationPosition.x * instance.Scale * (instance.FlipX ? -1f : 1f);
-            drawPosition.z += animationPosition.y * instance.Scale;
+            drawPosition.x += animationPosition.x * visualScale * (mirror ? -1f : 1f);
+            drawPosition.z += animationPosition.y * visualScale;
             drawPosition += Altitudes.AltIncVect * (0.01f + Mathf.Max(0, renderer.sortingOrder) * 0.004f);
             float animatedAngle = Mathf.DeltaAngle(0f, transform.eulerAngles.z);
-            float angle = instance.Rotation + (instance.FlipX ? -animatedAngle : animatedAngle);
-            bool flipX = instance.FlipX ^ renderer.flipX ^ (scale.x < 0f);
+            if (invertAnimatedRotation) animatedAngle = -animatedAngle;
+            float angle = rotation + (mirror ? -animatedAngle : animatedAngle);
+            bool flipX = mirror ^ renderer.flipX ^ (scale.x < 0f);
             bool flipY = renderer.flipY ^ (scale.y < 0f);
             Matrix4x4 matrix = Matrix4x4.TRS(
                 drawPosition,
@@ -473,7 +492,7 @@ namespace MiliraXian.Characters.Common
                 new Vector3(flipX ? -width : width, 1f, flipY ? -height : height));
 
             bool glow = renderer.name.IndexOf("Glow", StringComparison.OrdinalIgnoreCase) >= 0;
-            Material material = GetMaterial(texture, glow);
+            Material material = overrideMaterial ?? GetMaterial(texture, glow);
             if (material == null)
             {
                 return;
@@ -481,8 +500,12 @@ namespace MiliraXian.Characters.Common
 
             PropertyBlock.Clear();
             Color drawColor = renderer.color;
-            drawColor.a = Mathf.Clamp01(drawColor.a * instance.AlphaMultiplier);
+            drawColor.a = Mathf.Clamp01(drawColor.a * alphaMultiplier);
             PropertyBlock.SetColor(ShaderPropertyIDs.Color, drawColor);
+            if (overrideMaterial != null)
+            {
+                PropertyBlock.SetFloat("_Reveal", reveal);
+            }
             Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, PropertyBlock);
             PropertyBlock.Clear();
         }
@@ -498,7 +521,7 @@ namespace MiliraXian.Characters.Common
                 || renderer.name.StartsWith("HaloPulseGlow_", StringComparison.OrdinalIgnoreCase);
         }
 
-        private static Material GetMaterial(Texture2D texture, bool glow)
+        internal static Material GetMaterial(Texture2D texture, bool glow)
         {
             int key = unchecked(texture.GetInstanceID() * 2 + (glow ? 1 : 0));
             if (Materials.TryGetValue(key, out Material material))
@@ -512,7 +535,7 @@ namespace MiliraXian.Characters.Common
             return material;
         }
 
-        private static bool TryGetPrefab(CharacterUnityVfxKind kind, out GameObject prefab)
+        internal static bool TryGetPrefab(CharacterUnityVfxKind kind, out GameObject prefab)
         {
             if (Prefabs.TryGetValue(kind, out prefab))
             {
@@ -549,17 +572,25 @@ namespace MiliraXian.Characters.Common
                 }
             }
 
-            if (!fallbackLoadAttempted)
+            string bundleRelativePath = kind switch
             {
-                fallbackLoadAttempted = true;
+                CharacterUnityVfxKind.ArcaneCircle => "1.6/AssetBundles/Windows/miliraxian_arcane_circle",
+                CharacterUnityVfxKind.ArcaneLaunch => "1.6/AssetBundles/Windows/miliraxian_arcane_launch",
+                CharacterUnityVfxKind.ArcaneImpact => "1.6/AssetBundles/Windows/miliraxian_arcane_impact",
+                _ => BundleRelativePath
+            };
+            if (AttemptedFallbackBundles.Add(bundleRelativePath))
+            {
                 string modRoot = content?.RootDir;
                 string bundlePath = modRoot.NullOrEmpty()
                     ? null
-                    : Path.Combine(modRoot, BundleRelativePath.Replace('/', Path.DirectorySeparatorChar));
+                    : Path.Combine(modRoot, bundleRelativePath.Replace('/', Path.DirectorySeparatorChar));
+                AssetBundle fallbackBundle = null;
                 if (!bundlePath.NullOrEmpty() && File.Exists(bundlePath))
                 {
                     fallbackBundle = AssetBundle.LoadFromFile(bundlePath);
                 }
+                FallbackBundles[bundleRelativePath] = fallbackBundle;
 
                 if (fallbackBundle == null)
                 {
@@ -569,7 +600,8 @@ namespace MiliraXian.Characters.Common
                 }
             }
 
-            if (TryLoadFromBundle(fallbackBundle, address, out prefab))
+            FallbackBundles.TryGetValue(bundleRelativePath, out AssetBundle bundle);
+            if (TryLoadFromBundle(bundle, address, out prefab))
             {
                 Prefabs[kind] = prefab;
                 return true;
@@ -620,6 +652,12 @@ namespace MiliraXian.Characters.Common
                     return "neiyu_halo_vfx";
                 case CharacterUnityVfxKind.ZhaoliHalo:
                     return "zhaoli_halo_vfx";
+                case CharacterUnityVfxKind.ArcaneCircle:
+                    return "arcane_circle";
+                case CharacterUnityVfxKind.ArcaneLaunch:
+                    return "arcane_launch";
+                case CharacterUnityVfxKind.ArcaneImpact:
+                    return "arcane_impact";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
             }
