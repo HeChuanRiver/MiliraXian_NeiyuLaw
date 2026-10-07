@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <BiomeDef Name="MX_ArcaneScorchedBase" Abstract="True">
+        <workerClass>MiliraXian.Characters.Common.Abilities.BiomeWorker_ArcaneScorched</workerClass>
+        <generatesNaturally>false</generatesNaturally>
+        <canAutoChoose>false</canAutoChoose>
+        <canBuildBase>true</canBuildBase>
+        <settlementSelectionWeight>0</settlementSelectionWeight>
+        <campSelectionWeight>0</campSelectionWeight>
+        <animalDensity>0</animalDensity>
+        <plantDensity>0</plantDensity>
+        <wildAnimalsCanWanderInto>false</wildAnimalsCanWanderInto>
+        <hasVirtualPlants>false</hasVirtualPlants>
+        <forageability>0</forageability>
+        <movementDifficulty>2</movementDifficulty>
+        <allowRoads>true</allowRoads>
+        <allowRivers>false</allowRivers>
+        <allowFarmingCamps>false</allowFarmingCamps>
+        <geyserCountFactor>0</geyserCountFactor>
+        <maxFishPopulation>0</maxFishPopulation>
+        <texture>Common/WorldArcaneStrike/ScorchedWorld</texture>
+        <terrainsByFertility>
+            <li><terrain>MX_ArcaneAsh</terrain><min>-999</min><max>999</max></li>
+        </terrainsByFertility>
+        <baseWeatherCommonalities><Clear>1</Clear></baseWeatherCommonalities>
+        <coastalBeachTerrain>MX_ArcaneAsh</coastalBeachTerrain>
+        <lakeBeachTerrain>MX_ArcaneAsh</lakeBeachTerrain>
+        <riverbankTerrain>MX_ArcaneAsh</riverbankTerrain>
+        <mudTerrain>MX_ArcaneAsh</mudTerrain>
+        <gravelTerrain>MX_ArcaneAsh</gravelTerrain>
+    </BiomeDef>
+    <BiomeDef ParentName="MX_ArcaneScorchedBase">
+        <defName>MX_ArcaneScorched</defName>
+        <label>奥术焦土</label>
+        <description>遭受毁灭打击后的灰烬荒原。植被、河流与原有地貌已被焚毁，无法采集食物。</description>
+    </BiomeDef>
+    <BiomeDef ParentName="MX_ArcaneScorchedBase">
+        <defName>MX_ArcaneScorchedVacuum</defName>
+        <label>真空焦土</label>
+        <description>真空环境中遭受毁灭打击后的灰烬残骸。没有植被和可采集的食物。</description>
+        <inVacuum>true</inVacuum>
+        <constantOutdoorTemperature>-75</constantOutdoorTemperature>
+        <noAmbientWind>true</noAmbientWind>
+        <hasBedrock>false</hasBedrock>
+        <canExitMap>false</canExitMap>
+    </BiomeDef>
+</Defs>

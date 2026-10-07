@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <WorldObjectDef>
+        <defName>MX_ArcaneImpact</defName>
+        <label>奥术毁灭打击</label>
+        <worldObjectClass>MiliraXian.Characters.Common.Things.WorldObject_ArcaneImpact</worldObjectClass>
+        <texture>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</texture>
+        <useDynamicDrawer>true</useDynamicDrawer>
+        <expandingIcon>false</expandingIcon>
+        <selectable>false</selectable>
+        <canHaveMap>false</canHaveMap>
+        <validLaunchTarget>false</validLaunchTarget>
+        <canHaveFaction>false</canHaveFaction>
+        <saved>true</saved>
+        <modExtensions>
+            <li Class="MiliraXian.Characters.Common.Things.ArcaneImpactProperties">
+                <scorchedBiome>MX_ArcaneScorched</scorchedBiome>
+                <scorchedVacuumBiome>MX_ArcaneScorchedVacuum</scorchedVacuumBiome>
+                <durationSeconds>20</durationSeconds>
+                <cloudHeightInTiles>9</cloudHeightInTiles>
+                <impactSound>MX_ArcaneStrike_Impact</impactSound>
+            </li>
+        </modExtensions>
+    </WorldObjectDef>
+</Defs>

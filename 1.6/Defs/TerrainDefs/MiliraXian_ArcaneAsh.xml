@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <TerrainDef ParentName="NaturalTerrainBase">
+        <defName>MX_ArcaneAsh</defName>
+        <label>焦土</label>
+        <description>碎裂的焦黑土壤和灰烬，无法种植。</description>
+        <texturePath>Common/WorldArcaneStrike/ScorchedGround</texturePath>
+        <edgeType>FadeRough</edgeType>
+        <categoryType>Soil</categoryType>
+        <renderPrecedence>341</renderPrecedence>
+        <pathCost>4</pathCost>
+        <fertility>0</fertility>
+        <affordances><li>Light</li><li>Medium</li><li>Heavy</li></affordances>
+        <statBases><Beauty>-8</Beauty><BeautyOutdoors>-5</BeautyOutdoors><Cleanliness>-1</Cleanliness></statBases>
+        <takeFootprints>true</takeFootprints>
+    </TerrainDef>
+</Defs>

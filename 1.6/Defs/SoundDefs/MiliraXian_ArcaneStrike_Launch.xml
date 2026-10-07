@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <SoundDef>
+        <defName>MX_ArcaneStrike_Launch</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneLaunch</clipPath></li></grains>
+                <volumeRange>65</volumeRange>
+                <distRange>12~80</distRange>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+</Defs>
