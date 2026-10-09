@@ -16,7 +16,7 @@
     </modExtensions>
     <label>春泉涌流</label>
     <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累20点流血；若已处于流血状态，则改为积累15点毒素。机械敌人先积累15点腐蚀；若已处于腐蚀状态，则改为积累20点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>201</displayOrder>
     <cooldownTicksRange>480</cooldownTicksRange>
@@ -62,7 +62,7 @@
     </modExtensions>
     <label>霜月镜</label>
     <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。\n\n习得“四时和鸣”后，每秒为护盾内的非机械敌人积累15点恐惧，为机械敌人积累15点过载；冰霜子弹命中时仅积累寒冷，达到上限后触发冻结。积累量受法术效果系数与对应异常附加效率影响。</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <iconPath>MiliraXianQinghe/UI/Icons/lunarfrost_mirror</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>204</displayOrder>
     <cooldownTicksRange>600</cooldownTicksRange>
@@ -176,7 +176,7 @@
     </modExtensions>
     <label>落樱</label>
     <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动多次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
-    <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
+    <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>230</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>

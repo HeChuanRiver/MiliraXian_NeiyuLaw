@@ -59,7 +59,7 @@
     <label>飞花令</label>
     <description>——习得飞花令：春泉涌流。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <iconActive>MiliraXianQinghe/UI/Icons/spring_flow</iconActive>
     <displayOrder>10</displayOrder>
     <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -96,7 +96,7 @@
     <label>残雪</label>
     <description>——习得技能：霜月镜。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <iconActive>MiliraXianQinghe/UI/Icons/lunarfrost_mirror</iconActive>
     <displayOrder>25</displayOrder>
     <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
@@ -108,7 +108,7 @@
     <label>落樱</label>
     <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</description>
     <category>MX_QH_Category_Qinghe</category>
-    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <iconActive>MiliraXianQinghe/UI/Icons/ascend_slash</iconActive>
     <displayOrder>30</displayOrder>
     <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
