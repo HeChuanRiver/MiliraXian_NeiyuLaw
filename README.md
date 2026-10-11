@@ -8,7 +8,7 @@
 
 本模组基于 **Milira Race** 与 **Ariandel Library**，目前包含 **霓羽、清荷、昭离、明渊** 四位角色，以及专属招募任务、武器与服装、技能、资源机制和动画特效。它侧重角色体验与高辨识度的战斗设计，原始档位的强度明显高于原版。
 
-[Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594) · [下载完整安装包（Releases）](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/releases) · [问题反馈](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) · [提交记录](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/commits/dev/)
+[Steam 创意工坊](https://steamcommunity.com/sharedfiles/filedetails/?id=3684504594) · [下载完整安装包（Releases）](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/releases) · [问题反馈](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/issues) · [提交记录](https://github.com/HeChuanRiver/MiliraXian_NeiyuLaw/commits/dev/) · [CC BY-NC-SA 3.0](LICENSE)
 
 > 本文介绍 GitHub `dev` 分支，不代表创意工坊已发布全部相同内容。开发版仍在调整功能、数值和兼容性；用于长期存档前，请先备份并在副本中测试。
 
@@ -21,6 +21,7 @@
 - [反馈问题](#反馈问题)
 - [开发与构建](#开发与构建)
 - [贡献与致谢](#贡献与致谢)
+- [许可协议](#许可协议)
 
 ## 角色与玩法
 
@@ -262,4 +263,10 @@ pwsh -File .\Tools\Release\New-ReleasePackage.ps1 -Revision HEAD -Version dev-20
 
 提交改动时请以 `dev` 为目标分支，在说明中写清修改动机、影响角色、档位行为和验证方式。涉及玩家可见文本时，请同步检查三种语言；不要提交临时产物、游戏存档、个人安装路径或第三方游戏程序集。
 
-仓库目前未附统一的 `LICENSE` 文件。复用代码、美术或资源包前，请向维护者确认相应内容的授权范围；本 README 不额外授予第三方素材的使用许可。
+## 许可协议
+
+本模组采用 [知识共享署名—非商业性使用—相同方式共享 3.0 未本地化版本（CC BY-NC-SA 3.0）](https://creativecommons.org/licenses/by-nc-sa/3.0/)，完整条款见 [LICENSE](LICENSE)。
+
+允许在非商业用途下分享和改编；使用时须保留作者署名及协议链接、注明修改，分发改编作品须遵守协议的相同方式共享条款。
+
+除另有声明外，本协议适用于本项目作者和贡献者有权授权的代码、文本、美术与资源包。第三方素材、游戏及依赖模组仍遵循各自许可。

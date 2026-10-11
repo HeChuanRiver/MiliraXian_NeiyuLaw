@@ -5,7 +5,10 @@
     <supportedVersions>
         <li>1.6</li>
     </supportedVersions>
-    <description>添加了霓羽与昭离两位额外的特殊米莉拉角色~ 警告：本mod所添加角色的数值较高，希望各位可以自行抉择是否启用。</description>
+    <description>添加了霓羽与昭离两位额外的特殊米莉拉角色~ 警告：本mod所添加角色的数值较高，希望各位可以自行抉择是否启用。
+
+本模组原创代码与资源采用 CC BY-NC-SA 3.0（署名—非商业性使用—相同方式共享）；第三方内容遵循原有许可。
+https://creativecommons.org/licenses/by-nc-sa/3.0/</description>
     <packageId>HeChuanRiver.MiliraXian.NeiyuLawdev</packageId>
     <modDependencies>
         <li>
