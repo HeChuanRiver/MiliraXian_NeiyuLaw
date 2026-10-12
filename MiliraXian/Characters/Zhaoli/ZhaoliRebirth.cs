@@ -50,6 +50,9 @@ namespace MiliraXian.Characters.Zhaoli
 
         public static void RemoveRebirthHediff(Pawn pawn)
         {
+            // Challenge combat gates recruit growth through the raid state; keep
+            // the original progress container for this pawn's return.
+            if (ZhaoliScenarioUtility.GetRaidStateComp(pawn)?.IsPlayerChallenge == true) return;
             if (pawn?.health?.hediffSet == null)
             {
                 return;

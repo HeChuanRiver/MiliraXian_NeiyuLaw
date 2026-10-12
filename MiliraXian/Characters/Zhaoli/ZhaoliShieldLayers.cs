@@ -5,7 +5,6 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
-using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -111,7 +110,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class HediffCompProperties_ZhaoliShieldLayers : HediffCompProperties
     {
-        public float damagePerLayer = 36f;
         public bool showGizmo = true;
         public bool drawActiveShield = true;
         public bool drawOnlyInCombat = true;
@@ -137,6 +135,10 @@ namespace MiliraXian.Characters.Zhaoli
         public HediffCompProperties_ZhaoliShieldLayers PropsShield => (HediffCompProperties_ZhaoliShieldLayers)props;
 
         public int ShieldLayers => ZhaoliPowerBalance.Sealed ? 0 : shieldLayers;
+
+        internal int StoredLayers => shieldLayers;
+
+        internal void SetLayers(int layers) => shieldLayers = Mathf.Max(0, layers);
 
         public bool ShouldDrawActiveShield
         {
@@ -208,10 +210,9 @@ namespace MiliraXian.Characters.Zhaoli
                 return false;
             }
 
-            int cost = CountShieldUtility.CalculateCost(dinfo.Amount, PropsShield.damagePerLayer, ZhaoliPowerBalance.IsOriginal);
-            // As with Neiyu's normal count shield, the final layers block the
-            // entire hit even when its cost exceeds the remaining layers.
-            shieldLayers = Mathf.Max(0, shieldLayers - cost);
+            // Every positive damage event spends exactly one layer, regardless
+            // of its amount or type. The last layer still absorbs the whole hit.
+            shieldLayers--;
             absorbed = true;
             PlayShieldHitFx();
             return true;

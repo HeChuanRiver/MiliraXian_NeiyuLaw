@@ -208,6 +208,19 @@ namespace MiliraXian.Characters.Zhaoli
         private bool sweepFxPlayed;
         private bool finishFxPlayed;
 
+        internal bool SequenceActive => stage != DuanzhanSequenceStage.None;
+
+        internal bool CanHitCell(IntVec3 center, IntVec3 aimCell, IntVec3 victimCell)
+        {
+            return CanHitCell(center, ComputeForward(center, aimCell), victimCell);
+        }
+
+        private bool CanHitCell(IntVec3 center, Vector3 forward, IntVec3 victimCell)
+        {
+            return IsInsideSlashArea(center, victimCell, forward,
+                Props.impactRadius, Props.coneDotThreshold, Props.lineLengthCells, Props.lineWidthCells);
+        }
+
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
             Pawn caster = parent?.pawn;
@@ -507,7 +520,7 @@ namespace MiliraXian.Characters.Zhaoli
                     continue;
                 }
 
-                if (!IsInsideSlashArea(center, pawn.Position, forward, Props.impactRadius, Props.coneDotThreshold, Props.lineLengthCells, Props.lineWidthCells))
+                if (!CanHitCell(center, forward, pawn.Position))
                 {
                     continue;
                 }

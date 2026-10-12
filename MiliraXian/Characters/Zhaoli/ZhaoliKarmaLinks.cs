@@ -21,6 +21,7 @@ namespace MiliraXian.Characters.Zhaoli
     public class HediffComp_ZhaoliKarmaLinks : HediffComp
     {
         private List<Pawn> linkedPawns = new();
+        private List<Pawn> suspendedPlayerLinks;
         private int balanceRevision = -1;
 
         // Tier two uses the same link-sacrifice rules as the original character.
@@ -46,10 +47,35 @@ namespace MiliraXian.Characters.Zhaoli
         public override void CompExposeData()
         {
             Scribe_Collections.Look(ref linkedPawns, "linkedPawns", LookMode.Reference);
+            Scribe_Collections.Look(ref suspendedPlayerLinks, "suspendedPlayerLinks", LookMode.Reference);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 CleanupInvalidLinks();
             }
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmos()
+        {
+            if (ZhaoliKarmaUtility.IsZhaoli(Pawn) && Pawn.Faction == Faction.OfPlayer)
+                yield return ZhaoliPlayerChallengeUtility.CreateGizmo(Pawn);
+        }
+
+        internal void SuspendPlayerLinksForChallenge()
+        {
+            if (suspendedPlayerLinks != null) return;
+            CleanupInvalidLinks();
+            suspendedPlayerLinks = linkedPawns;
+            linkedPawns = new List<Pawn>();
+        }
+
+        internal void RestorePlayerLinksAfterChallenge()
+        {
+            if (suspendedPlayerLinks == null) return;
+            CleanupInvalidLinks();
+            while (linkedPawns.Count > 0) BreakLink(linkedPawns[linkedPawns.Count - 1]);
+            linkedPawns = suspendedPlayerLinks;
+            suspendedPlayerLinks = null;
+            CleanupInvalidLinks();
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -176,6 +202,7 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             linkedPawns.RemoveAll(pawn => pawn == null || pawn == target);
+            suspendedPlayerLinks?.RemoveAll(pawn => pawn == null || pawn == target);
         }
 
         public void BreakLink(Pawn target)
@@ -543,6 +570,7 @@ namespace MiliraXian.Characters.Zhaoli
 
                 if (!pendingRebirth.pawn.Dead)
                 {
+                    ZhaoliScenarioUtility.GetRaidStateComp(pendingRebirth.pawn)?.FinishPlayerChallengeReturn();
                     pendingRebirths.RemoveAt(i);
                     ZhaoliSCMActivity.Sync(pendingRebirth.pawn);
                     continue;
@@ -590,6 +618,7 @@ namespace MiliraXian.Characters.Zhaoli
                     Find.WorldPawns.RemovePawn(pendingRebirth.pawn);
                 }
 
+                ZhaoliScenarioUtility.GetRaidStateComp(pendingRebirth.pawn)?.FinishPlayerChallengeReturn();
                 GenSpawn.Spawn(pendingRebirth.pawn, cell, map);
                 ZhaoliRebirthUtility.FinalizeReturnedPawn(pendingRebirth.pawn);
                 ZhaoliScenarioUtility.EnsureDefaultLoadout(pendingRebirth.pawn);
