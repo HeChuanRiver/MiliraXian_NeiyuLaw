@@ -507,6 +507,22 @@ namespace MiliraXian.Characters.Neiyu
                     icon = Cultivation.CultivationArt.Emblem,
                     action = () => Find.WindowStack.Add(new Cultivation.Dialog_NeiyuCultivation(__instance))
                 };
+
+                if (Prefs.DevMode && DebugSettings.ShowDevGizmos)
+                {
+                    yield return new Command_Action
+                    {
+                        defaultLabel = CultivationText.Get("DevCompleteAllLabel", "DEV：修行全部修满"),
+                        defaultDesc = CultivationText.Get("DevCompleteAllDescription", "立即领悟全部修行，跳过材料与经历要求。进度保存到当前角色，力量封印仍然生效。"),
+                        icon = CultivationArt.Emblem,
+                        action = () =>
+                        {
+                            bool success = CultivationService.TryCompleteAllForDev(__instance, out string message);
+                            Messages.Message(message, __instance,
+                                success ? MessageTypeDefOf.PositiveEvent : MessageTypeDefOf.RejectInput, historical: false);
+                        }
+                    };
+                }
             }
 
             if (!Comp_ModeSwitchWeapon.TryGetSwitchContext(__instance, out Comp_ModeSwitchWeapon.SwitchContext context))

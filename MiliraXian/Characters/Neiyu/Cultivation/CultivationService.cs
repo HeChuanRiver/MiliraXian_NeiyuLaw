@@ -132,12 +132,63 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 message = CultivationText.Get("Retry", "材料状态已变化，请重新尝试。");
                 return false;
             }
-            tracker.SetProgress(RankKeys[(int)node.branch], node.rank);
+            ApplyNodeProgress(pawn, tracker, node);
             foreach (Thing piece in staged) piece.Destroy(DestroyMode.Vanish);
-            CultivationPower.InvalidateStats(pawn);
-            pawn.health.capacities.Notify_CapacityLevelsDirty();
+            NotifyProgressChanged(pawn);
             message = CultivationText.Get("Learned", "已领悟") + " · " + node.LabelCap;
             return true;
+        }
+
+        // Keep the developer entry independent of storage and branch counts. When cultivation
+        // moves to the shared perk tree, route this and normal learning through its unlock API,
+        // including grants and change notifications; do not add a separate forced-max state.
+        public static bool TryCompleteAllForDev(Pawn pawn, out string message)
+        {
+            if (!Prefs.DevMode)
+            {
+                message = CultivationText.Get("DevOnly", "仅开发者模式可用。");
+                return false;
+            }
+            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead
+                || pawn.Faction != Faction.OfPlayer)
+            {
+                message = CultivationText.Get("Unavailable", "角色当前无法修行。");
+                return false;
+            }
+            var nodes = new List<NeiyuCultivationNodeDef>(DefDatabase<NeiyuCultivationNodeDef>.AllDefsListForReading);
+            if (nodes.Count == 0)
+            {
+                message = CultivationText.Get("NoNodes", "未找到修行节点。");
+                return false;
+            }
+            Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
+            if (tracker == null)
+            {
+                message = CultivationText.Get("Unavailable", "角色当前无法修行。");
+                return false;
+            }
+            // Only purchase requirements are bypassed. Stored progress still obeys the seal
+            // when read, and existing cooldowns, shield charges and combat state are retained.
+            nodes.Sort((a, b) => a.rank.CompareTo(b.rank));
+            bool changed = false;
+            foreach (NeiyuCultivationNodeDef node in nodes)
+                changed |= ApplyNodeProgress(pawn, tracker, node);
+            if (changed) NotifyProgressChanged(pawn);
+            message = CultivationText.Get("AllLearned", "已领悟全部修行。");
+            return true;
+        }
+
+        private static bool ApplyNodeProgress(Pawn pawn, Hediff_BiographyTracker tracker, NeiyuCultivationNodeDef node)
+        {
+            if (Rank(pawn, node.branch) >= node.rank) return false;
+            tracker.SetProgress(RankKeys[(int)node.branch], node.rank);
+            return true;
+        }
+
+        private static void NotifyProgressChanged(Pawn pawn)
+        {
+            CultivationPower.InvalidateStats(pawn);
+            pawn.health.capacities.Notify_CapacityLevelsDirty();
         }
     }
 }
