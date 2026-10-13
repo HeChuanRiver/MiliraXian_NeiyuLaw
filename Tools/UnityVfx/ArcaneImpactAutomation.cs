@@ -17,11 +17,12 @@ public static class ArcaneImpactAutomation
     {
         Directory.CreateDirectory(Root + "/Art");
         Directory.CreateDirectory(Root + "/Prefabs");
-        File.Copy(Path.Combine(ModRoot, @"Tools\UnityVfx\ArcaneCloud.shader"), Root + "/ArcaneCloud.shader", true);
+        File.Copy(Path.Combine(ModRoot, @"Content\ShaderSources\WorldArcaneStrike\ArcaneCloud.shader"), Root + "/ArcaneCloud.shader", true);
         AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
         Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(Root + "/ArcaneCloud.shader");
         if (shader == null) throw new InvalidOperationException("ArcaneCloud shader was not imported.");
         GameObject prefab = new GameObject("ArcaneImpact");
+        string output = Path.Combine(Path.GetTempPath(), "MiliraXian_ArcaneImpact_" + Guid.NewGuid().ToString("N"));
         try
         {
             AddLayer(prefab, "Cloud", shader, false);
@@ -29,7 +30,6 @@ public static class ArcaneImpactAutomation
             string prefabPath = Root + "/Prefabs/ArcaneImpact.prefab";
             PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
             AssetDatabase.SaveAssets();
-            string output = Path.Combine(ModRoot, @".arcane-strike-chant-build\ImpactBundle");
             Directory.CreateDirectory(output);
             AssetBundleBuild build = new AssetBundleBuild
             {
@@ -43,10 +43,14 @@ public static class ArcaneImpactAutomation
             if (manifest == null) throw new InvalidOperationException("ArcaneImpact AssetBundle build failed.");
             BuildScorchedTextures();
             BuildSound();
-            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"1.6\AssetBundles\Windows", BundleName), true);
+            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"Content\AssetBundles\Windows", BundleName), true);
             Debug.Log("ArcaneImpact AssetBundle built: " + BundleName);
         }
-        finally { UnityEngine.Object.DestroyImmediate(prefab); }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(prefab);
+            if (Directory.Exists(output)) Directory.Delete(output, true);
+        }
     }
 
     private static void AddLayer(GameObject root, string name, Shader shader, bool dust)

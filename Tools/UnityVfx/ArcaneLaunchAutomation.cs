@@ -16,7 +16,7 @@ public static class ArcaneLaunchAutomation
     {
         Directory.CreateDirectory(Root + "/Art");
         Directory.CreateDirectory(Root + "/Prefabs");
-        File.Copy(Path.Combine(ModRoot, @"Tools\UnityVfx\ArcaneEnergy.shader"), Root + "/ArcaneEnergy.shader", true);
+        File.Copy(Path.Combine(ModRoot, @"Content\ShaderSources\WorldArcaneStrike\ArcaneEnergy.shader"), Root + "/ArcaneEnergy.shader", true);
         AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
         Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(Root + "/ArcaneEnergy.shader");
         if (shader == null) throw new InvalidOperationException("ArcaneEnergy shader was not imported.");
@@ -29,6 +29,7 @@ public static class ArcaneLaunchAutomation
             materials[i] = SaveMaterial(names[i], shader, sprites[i].texture);
         }
         GameObject prefab = new GameObject("ArcaneLaunch");
+        string output = Path.Combine(Path.GetTempPath(), "MiliraXian_ArcaneLaunch_" + Guid.NewGuid().ToString("N"));
         try
         {
             Transform beam = Child(prefab.transform, "Beam");
@@ -40,7 +41,6 @@ public static class ArcaneLaunchAutomation
             string prefabPath = Root + "/Prefabs/ArcaneLaunch.prefab";
             PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
             AssetDatabase.SaveAssets();
-            string output = Path.Combine(ModRoot, @".arcane-strike-chant-build\LaunchBundle");
             Directory.CreateDirectory(output);
             AssetBundleBuild build = new AssetBundleBuild
             {
@@ -53,12 +53,13 @@ public static class ArcaneLaunchAutomation
                 BuildTarget.StandaloneWindows64);
             if (manifest == null) throw new InvalidOperationException("ArcaneLaunch AssetBundle build failed.");
             BuildSound();
-            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"1.6\AssetBundles\Windows", BundleName), true);
+            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"Content\AssetBundles\Windows", BundleName), true);
             Debug.Log("ArcaneLaunch AssetBundle built: " + BundleName);
         }
         finally
         {
             UnityEngine.Object.DestroyImmediate(prefab);
+            if (Directory.Exists(output)) Directory.Delete(output, true);
         }
     }
 

@@ -161,25 +161,34 @@ Windows 的日志通常位于：
 About/                     模组信息、封面与工坊 ID
 1.6/
   Assemblies/              主程序集
-  AssetBundles/Windows/    动画与特效资源包
   Defs/                    角色、技能、装备、任务等定义
   Languages/               简体中文、繁体中文、英文
-  Mods/                    按需加载的兼容内容
+  Mods/                    按需加载的兼容程序集与角色注册定义
   Patches/                 XML 补丁
-Content/Textures/          游戏贴图
-Source/
-  Common/                  共用资源、异常状态、传记、技能树与工具
-  Neiyu/                   霓羽
-  QingHe/                  清荷
-  Zhaoli/                  昭离
-  Mingyuan/                明渊
-  Compat/                  外部模组兼容源码
+Content/
+  Textures/                按角色与 Common 分类的贴图、序列帧和界面图片
+  Sounds/                  世界奥术打击与清荷技能音效
+  AssetBundles/            按 Windows、Linux、Mac 分类的动画与特效资源包
+  Defs/AnimationDefs/      动画曲线、图层、序列帧引用与飞行动画定义
+  Defs/SoundDefs/          音效定义
+  Defs/ShaderDefs/         Shader 定义
+  Defs/Effects/            特效对象、Fleck 与 Effecter 定义
+  Mods/                    按模组条件加载的面部美术与动画定义
+  ShaderSources/           原 Unity Shader 制作源码
+  Artwork/                 宣传与封面制作图片
+MiliraXian/
+  CharacterLib/            角色生成、美术绑定与独立兼容工程
+  Characters/              Common 共用玩法与四角色实现
 Tools/
   Unity/                   耳羽与翅膀资源构建脚本
   UnityVfx/                角色特效资源构建脚本
   Validation/              档位配置与快照回归检查
 LoadFolders.xml            版本与条件加载入口
 ```
+
+正式游戏资源统一放在 `Content/`，1.6 与 1.7 共用；游戏规定位置的模组封面仍为 `About/Preview.png`。贴图和声音的 Def 路径相对于各自的 `Textures/`、`Sounds/` 根目录填写。新增资源沿用角色与用途分类，移动时同步加载规则、代码和导出工具，不在旧目录保留副本。
+
+内容相同但用于不同动画帧、方向或 FA 状态的必需文件名保留；备份副本、构建中间文件、日志和缓存不作为资源收录。Unity 原始制作工程继续保留，修改后使用导出工具更新 `Content/` 中的运行数据。
 
 ### 本地化约定
 

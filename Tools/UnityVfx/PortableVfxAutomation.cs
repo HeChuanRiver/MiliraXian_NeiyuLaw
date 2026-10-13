@@ -32,28 +32,36 @@ public static class PortableVfxAutomation
         TexturePaths.Clear();
         ExistingTextures.Clear();
         MaterialPaths.Clear();
-        if (buildResources) BakeParticles();
-        string textureRoot = Path.Combine(ModRoot, "Content/Textures");
-        foreach (string file in Directory.GetFiles(textureRoot, "*.png", SearchOption.AllDirectories).OrderBy(x => x, StringComparer.Ordinal))
-            ExistingTextures[Hash(file)] = file.Substring(textureRoot.Length + 1).Replace('\\', '/').Replace(".png", "");
+        try
+        {
+            if (buildResources) BakeParticles();
+            string textureRoot = Path.Combine(ModRoot, "Content/Textures");
+            foreach (string file in Directory.GetFiles(textureRoot, "*.png", SearchOption.AllDirectories).OrderBy(x => x, StringComparer.Ordinal))
+                ExistingTextures[Hash(file)] = file.Substring(textureRoot.Length + 1).Replace('\\', '/').Replace(".png", "");
 
-        XElement defs = new XElement("Defs");
-        string[] names = { "ZhaoliMinghuo", "ZhaoliGuiyi", "ZhaoliDeathField", "ZhaoliMinshen", "ZhaoliMinshenImpact",
-            "NeiyuFlowerCircle", "NeiyuSkyfallTakeoff", "NeiyuSkyfallWarning", "NeiyuSkyfallImpact", "NeiyuHalo", "ZhaoliHalo" };
-        string[] addresses = { "zhaoli_minghuo_vfx", "zhaoli_guiyi_vfx", "zhaoli_deathfield_vfx", "zhaoli_minshen_vfx",
-            "zhaoli_minshen_impact_vfx", "neiyu_flower_circle_vfx", "neiyu_skyfall_takeoff_vfx", "neiyu_skyfall_warning_vfx",
-            "neiyu_skyfall_impact_vfx", "neiyu_halo_vfx", "zhaoli_halo_vfx" };
-        for (int i = 0; i < names.Length; i++)
-            defs.Add(Export(addresses[i], "Assets/CharacterVfx/Prefabs/" + names[i] + ".prefab", "Assets/CharacterVfx/Animations/" + names[i] + ".anim"));
-        defs.Add(Export("arcane_circle", "Assets/ArcaneCircle/Prefabs/ArcaneCircle.prefab", "Assets/ArcaneCircle/Animations/ArcaneCircle.anim"));
-        defs.Add(Export("arcane_launch", "Assets/ArcaneLaunch/Prefabs/ArcaneLaunch.prefab", null));
-        defs.Add(Export("arcane_impact", "Assets/ArcaneImpact/Prefabs/ArcaneImpact.prefab", null));
-        foreach (string state in new[] { "Idle", "Twitch", "Alert" })
-            defs.Add(Export("neiyu_ear_" + state.ToLowerInvariant(), "Assets/NeiyuEar/Prefabs/NeiyuEarDriver_Runtime.prefab", "Assets/NeiyuEar/Animations/Ear_" + state + ".anim"));
-        string destination = Path.Combine(ModRoot, "1.6/Defs/MiscDefs/MiliraXian_CharacterVfx.xml");
-        new XDocument(new XDeclaration("1.0", "utf-8", null), defs).Save(destination);
-        if (buildResources) BuildMaterials();
-        Debug.Log("[MiliraXian] Exported authored VFX layers and animation curves to " + destination);
+            XElement defs = new XElement("Defs");
+            string[] names = { "ZhaoliMinghuo", "ZhaoliGuiyi", "ZhaoliDeathField", "ZhaoliMinshen", "ZhaoliMinshenImpact",
+                "NeiyuFlowerCircle", "NeiyuSkyfallTakeoff", "NeiyuSkyfallWarning", "NeiyuSkyfallImpact", "NeiyuHalo", "ZhaoliHalo" };
+            string[] addresses = { "zhaoli_minghuo_vfx", "zhaoli_guiyi_vfx", "zhaoli_deathfield_vfx", "zhaoli_minshen_vfx",
+                "zhaoli_minshen_impact_vfx", "neiyu_flower_circle_vfx", "neiyu_skyfall_takeoff_vfx", "neiyu_skyfall_warning_vfx",
+                "neiyu_skyfall_impact_vfx", "neiyu_halo_vfx", "zhaoli_halo_vfx" };
+            for (int i = 0; i < names.Length; i++)
+                defs.Add(Export(addresses[i], "Assets/CharacterVfx/Prefabs/" + names[i] + ".prefab", "Assets/CharacterVfx/Animations/" + names[i] + ".anim"));
+            defs.Add(Export("arcane_circle", "Assets/ArcaneCircle/Prefabs/ArcaneCircle.prefab", "Assets/ArcaneCircle/Animations/ArcaneCircle.anim"));
+            defs.Add(Export("arcane_launch", "Assets/ArcaneLaunch/Prefabs/ArcaneLaunch.prefab", null));
+            defs.Add(Export("arcane_impact", "Assets/ArcaneImpact/Prefabs/ArcaneImpact.prefab", null));
+            foreach (string state in new[] { "Idle", "Twitch", "Alert" })
+                defs.Add(Export("neiyu_ear_" + state.ToLowerInvariant(), "Assets/NeiyuEar/Prefabs/NeiyuEarDriver_Runtime.prefab", "Assets/NeiyuEar/Animations/Ear_" + state + ".anim"));
+            string destination = Path.Combine(ModRoot, "Content/Defs/AnimationDefs/MiliraXian_CharacterVfx.xml");
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
+            new XDocument(new XDeclaration("1.0", "utf-8", null), defs).Save(destination);
+            if (buildResources) BuildMaterials();
+            Debug.Log("[MiliraXian] Exported authored VFX layers and animation curves to " + destination);
+        }
+        finally
+        {
+            if (buildResources && File.Exists(ParticleAsset)) AssetDatabase.DeleteAsset(ParticleAsset);
+        }
     }
 
     private static XElement Export(string address, string prefabPath, string clipPath)
@@ -223,7 +231,7 @@ public static class PortableVfxAutomation
     private static void BuildMaterials()
     {
         const string bundleName = "miliraxian_vfx_materials";
-        string output = Path.Combine(ModRoot, ".compat17-fix/Materials");
+        string output = Path.Combine(Path.GetTempPath(), "MiliraXian_VfxMaterials_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(output);
         GraphicsDeviceType[] previous = PlayerSettings.GetGraphicsAPIs(BuildTarget.StandaloneWindows64);
         bool automatic = PlayerSettings.GetUseDefaultGraphicsAPIs(BuildTarget.StandaloneWindows64);
@@ -238,12 +246,21 @@ public static class PortableVfxAutomation
             AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(output, new[] { build },
                 BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.StrictMode, BuildTarget.StandaloneWindows64);
             if (manifest == null) throw new InvalidOperationException("Authored VFX material export failed.");
-            File.Copy(Path.Combine(output, bundleName), Path.Combine(ModRoot, "1.6/AssetBundles/Windows/" + bundleName), true);
+            string destination = Path.Combine(ModRoot, "Content/AssetBundles/Windows/" + bundleName);
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
+            File.Copy(Path.Combine(output, bundleName), destination, true);
         }
         finally
         {
-            PlayerSettings.SetGraphicsAPIs(BuildTarget.StandaloneWindows64, previous);
-            PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.StandaloneWindows64, automatic);
+            try
+            {
+                PlayerSettings.SetGraphicsAPIs(BuildTarget.StandaloneWindows64, previous);
+                PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.StandaloneWindows64, automatic);
+            }
+            finally
+            {
+                if (Directory.Exists(output)) Directory.Delete(output, true);
+            }
         }
     }
 

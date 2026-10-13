@@ -25,7 +25,7 @@ public static class ArcaneCircleAutomation
         Directory.CreateDirectory(Root + "/Art");
         Directory.CreateDirectory(Root + "/Animations");
         Directory.CreateDirectory(Root + "/Prefabs");
-        File.Copy(Path.Combine(ModRoot, @"Tools\UnityVfx\ArcaneCircle.shader"), Root + "/ArcaneCircle.shader", true);
+        File.Copy(Path.Combine(ModRoot, @"Content\ShaderSources\WorldArcaneStrike\ArcaneCircle.shader"), Root + "/ArcaneCircle.shader", true);
         AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
         Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(Root + "/ArcaneCircle.shader");
         if (shader == null)
@@ -38,6 +38,7 @@ public static class ArcaneCircleAutomation
         Material spark = SaveMaterial("Spark", shader, art["Spark"].texture);
         Material rune = SaveMaterial("RuneParticle", shader, art["RuneParticle"].texture);
         GameObject root = new GameObject("ArcaneCircle");
+        string output = Path.Combine(Path.GetTempPath(), "MiliraXian_ArcaneCircle_" + Guid.NewGuid().ToString("N"));
         try
         {
             AnimationClip clip = CreateClip();
@@ -111,7 +112,6 @@ public static class ArcaneCircleAutomation
             PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
             AssetDatabase.SaveAssets();
 
-            string output = Path.Combine(ModRoot, @".arcane-strike-chant-build\UnityBundle");
             Directory.CreateDirectory(output);
             AssetBundleBuild build = new AssetBundleBuild
             {
@@ -126,12 +126,13 @@ public static class ArcaneCircleAutomation
             {
                 throw new InvalidOperationException("ArcaneCircle AssetBundle build failed.");
             }
-            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"1.6\AssetBundles\Windows", BundleName), true);
+            File.Copy(Path.Combine(output, BundleName), Path.Combine(ModRoot, @"Content\AssetBundles\Windows", BundleName), true);
             Debug.Log("ArcaneCircle AssetBundle built: " + BundleName);
         }
         finally
         {
             UnityEngine.Object.DestroyImmediate(root);
+            if (Directory.Exists(output)) Directory.Delete(output, true);
         }
     }
 

@@ -526,7 +526,7 @@ namespace MiliraXian.Characters.Common
                         if (bundle != null && bundle.name == name) { authoredMaterials = bundle; break; }
                 if (authoredMaterials == null && content != null)
                 {
-                    string path = Path.Combine(content.RootDir, "1.6/AssetBundles/Windows/" + name);
+                    string path = Path.Combine(content.RootDir, "Content/AssetBundles/Windows/" + name);
                     if (File.Exists(path)) authoredMaterials = AssetBundle.LoadFromFile(path);
                 }
             }
