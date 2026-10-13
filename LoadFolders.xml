@@ -11,4 +11,12 @@
         <li IfModActiveAll="Nals.FacialAnimation, Ancot.MiliraRaceFacialAnimation">1.6/Mods/Ancot.MiliraRaceFacialAnimation</li>
     </v1.6>
 
+    <v1.7>
+        <li>1.6</li>
+        <li>Content</li>
+        <li IfModActive="Ariandel.AriandelLibrary">1.6/Mods/Ariandel.AriandelLibrary</li>
+        <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
+        <li IfModActiveAll="Nals.FacialAnimation, Ancot.MiliraRaceFacialAnimation">1.6/Mods/Ancot.MiliraRaceFacialAnimation</li>
+    </v1.7>
+
 </loadFolders>

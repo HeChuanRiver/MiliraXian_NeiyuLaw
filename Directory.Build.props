@@ -7,12 +7,19 @@
           Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.local.props')" />
 
   <PropertyGroup>
-    <RimWorldInstallDir Condition="'$(RimWorldInstallDir)' == ''">$(MSBuildThisFileDirectory)..\..\RimWorld</RimWorldInstallDir>
+    <RimWorldInstallDir Condition="'$(RimWorldInstallDir)' == ''">$(MSBuildThisFileDirectory)..\..</RimWorldInstallDir>
     <RimWorldWorkshopDir Condition="'$(RimWorldWorkshopDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\workshop\content\294100</RimWorldWorkshopDir>
     <RimWorldManagedDir Condition="'$(RimWorldManagedDir)' == ''">$(RimWorldInstallDir)\RimWorldWin64_Data\Managed</RimWorldManagedDir>
     <AriandelLibraryDll Condition="'$(AriandelLibraryDll)' == ''">$(RimWorldWorkshopDir)\3665997350\1.6\Assemblies\AriandelLibrary.dll</AriandelLibraryDll>
     <AlienRaceDll Condition="'$(AlienRaceDll)' == ''">$(RimWorldWorkshopDir)\839005762\1.6\Assemblies\AlienRace.dll</AlienRaceDll>
     <MiliraDll Condition="'$(MiliraDll)' == ''">$(RimWorldWorkshopDir)\3256974620\1.6\Assemblies\Milira.dll</MiliraDll>
     <FacialAnimationDll Condition="'$(FacialAnimationDll)' == ''">$(RimWorldWorkshopDir)\1635901197\1.6\Assemblies\FacialAnimation.dll</FacialAnimationDll>
+    <!-- Waylith preserves the 1.6 mod ABI, but no longer ships Unity reference DLLs.
+         Compile the shared net481 DLL against pinned reference-only assemblies. -->
+    <UseRimWorldReferencePackage Condition="'$(UseRimWorldReferencePackage)' == '' and !Exists('$(RimWorldManagedDir)\UnityEngine.CoreModule.dll')">true</UseRimWorldReferencePackage>
+    <RimWorldReferenceVersion Condition="'$(RimWorldReferenceVersion)' == ''">1.6.4871</RimWorldReferenceVersion>
   </PropertyGroup>
+  <ItemGroup Condition="'$(UseRimWorldReferencePackage)' == 'true'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="$(RimWorldReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
 </Project>

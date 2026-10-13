@@ -12,9 +12,9 @@
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
-    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
-    <Reference Include="UnityEngine" HintPath="$(RimWorldManagedDir)\UnityEngine.dll" Private="false" />
-    <Reference Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine" HintPath="$(RimWorldManagedDir)\UnityEngine.dll" Private="false" />
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="FacialAnimation" HintPath="$(FacialAnimationDll)" Private="false" />
     <Compile Include="**\*.cs" />
   </ItemGroup>

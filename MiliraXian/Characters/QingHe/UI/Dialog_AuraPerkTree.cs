@@ -15,6 +15,7 @@ using Widgets = Verse.Widgets;
 
 namespace MiliraXian.Characters.QingHe.UI
 {
+    [StaticConstructorOnStartup]
     public class Dialog_AuraPerkTree : Window
     {
         private enum SkillTreeTab
@@ -54,7 +55,7 @@ namespace MiliraXian.Characters.QingHe.UI
         private static readonly Color TabBackColor = new(0.09f, 0.10f, 0.11f, 1f);
         private static readonly Color TabSelectedColor = new(0.22f, 0.16f, 0.19f, 1f);
 
-        private static Texture2D placeholderIcon;
+        private static readonly Texture2D placeholderIcon = ContentFinder<Texture2D>.Get("MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm", false) ?? BaseContent.BadTex;
 
         private readonly Pawn pawn;
         private readonly HediffComp_CharacterPerkTree state;
@@ -71,11 +72,6 @@ namespace MiliraXian.Characters.QingHe.UI
         {
             get
             {
-                if (placeholderIcon == null)
-                {
-                    placeholderIcon = ContentFinder<Texture2D>.Get("MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm", false) ?? BaseContent.BadTex;
-                }
-
                 return placeholderIcon;
             }
         }

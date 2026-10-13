@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using HarmonyLib;
-using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -12,24 +11,10 @@ namespace MiliraXian.Characters.Mingyuan
 {
     public sealed class GameComponent_MingyuanWingUnityAnimation : GameComponent
     {
-        public GameComponent_MingyuanWingUnityAnimation(Game game)
-        {
-        }
-
-        public override void StartedNewGame()
-        {
-            MingyuanWingUnityAnimationRuntime.Reset();
-        }
-
-        public override void LoadedGame()
-        {
-            MingyuanWingUnityAnimationRuntime.Reset();
-        }
-
-        public override void GameComponentUpdate()
-        {
-            MingyuanWingUnityAnimationRuntime.Update();
-        }
+        public GameComponent_MingyuanWingUnityAnimation(Game game) { }
+        public override void StartedNewGame() => MingyuanWingUnityAnimationRuntime.Reset();
+        public override void LoadedGame() => MingyuanWingUnityAnimationRuntime.Reset();
+        public override void GameComponentUpdate() => MingyuanWingUnityAnimationRuntime.Update();
     }
 
     [StaticConstructorOnStartup]
@@ -37,8 +22,6 @@ namespace MiliraXian.Characters.Mingyuan
     {
         static MingyuanWingUnityAnimationRuntime()
         {
-            // The library maps animations from XML; whether the Unity-driven one can run at all
-            // depends on bundle and driver state that only this class tracks.
             CharacterLib.CharacterRaceParts.FlyAnimationOverride = TryGetOverride;
         }
 
@@ -46,174 +29,98 @@ namespace MiliraXian.Characters.Mingyuan
             TryGetFlyAnimation(pawn, pawn.Rotation, out AnimationDef animationDef) ? animationDef : null;
 
         private const string MingyuanPawnKindDefName = "MiliraXian_Mingyuan";
-        private const string BundleRelativePath = "1.6/AssetBundles/Windows/mingyuan_wing_anim";
-        private const string DriverAssetName = "mingyuan_wing_driver";
-        private const string FrameClockTransformName = "FrameClock";
-        // The race's own frame path. The character's copy is found by asking the part swaps
-        // declared on its PawnKindDef, so this file names no character texture directory.
         private const string RaceFrameTextureRoot = "Milira/Pawn/Wings/Milira_Fly";
         private const string NorthAnimationDefName = "Milira_FlyNorth_Mingyuan_Unity";
         private const string EastAnimationDefName = "Milira_FlyEast_Mingyuan_Unity";
         private const string SouthAnimationDefName = "Milira_FlySouth_Mingyuan_Unity";
         private const string WestAnimationDefName = "Milira_FlyWest_Mingyuan_Unity";
-        private const float LoopDurationSeconds = 0.60f;
-        private const float MaximumDeltaSeconds = 0.10f;
-        private const float FrontLayer = 60f;
-        private const float BehindLayer = -10f;
-        // The legacy Milira_WingBinding node uses the 1.5-cell humanlike body mesh and
-        // then applies GraphicState.drawSize 2.5, for a final 3.75-cell flight plane.
         private const float FrameDrawSize = 3.75f;
-        private const int AnimationDurationTicks = 36;
-        private const int FrameCount = 8;
-        private const int NorthFrameSetIndex = 0;
-        private const int EastFrameSetIndex = 1;
-        private const int SouthFrameSetIndex = 2;
-
-        private static readonly int NorthStateHash = Animator.StringToHash("Base Layer.North");
-        private static readonly int SouthStateHash = Animator.StringToHash("Base Layer.South");
-        private static readonly int EastStateHash = Animator.StringToHash("Base Layer.East");
-        private static readonly Dictionary<int, DriverState> Drivers = new Dictionary<int, DriverState>();
-        private static readonly List<int> RemovalBuffer = new List<int>();
+        private const int AnimationDurationTicks = 36, FrameCount = 8;
+        private const int NorthFrameSetIndex = 0, EastFrameSetIndex = 1, SouthFrameSetIndex = 2;
+        private static readonly int[] FrameTicks = { 0, 3, 9, 12, 15, 21, 25, 30 };
+        private static readonly Dictionary<int, DriverState> Drivers = new();
+        private static readonly List<int> RemovalBuffer = new();
         private static readonly Material[][] FrameMaterials =
         {
-            new Material[FrameCount],
-            new Material[FrameCount],
-            new Material[FrameCount]
+            new Material[FrameCount], new Material[FrameCount], new Material[FrameCount]
         };
-
-        private static AssetBundle fallbackBundle;
-        private static GameObject driverPrefab;
-        private static bool bundleLoadAttempted;
-        private static bool runtimeFailed;
-        private static bool frameMaterialsLoaded;
-        private static bool frameMaterialsFailed;
-        private static bool animationDefsResolved;
-        private static AnimationDef northAnimation;
-        private static AnimationDef eastAnimation;
-        private static AnimationDef southAnimation;
-        private static AnimationDef westAnimation;
+        private static bool runtimeFailed, frameMaterialsLoaded, frameMaterialsFailed, animationDefsResolved;
+        private static AnimationDef northAnimation, eastAnimation, southAnimation, westAnimation;
 
         private sealed class DriverState
         {
             public Pawn Pawn;
-            public GameObject Root;
-            public Animator Animator;
-            public Transform FrameClock;
             public Rot4 Facing;
             public float Phase;
-            public float LastRealtime;
+            public int LastTick;
         }
 
         internal static bool TryGetFlyAnimation(Pawn pawn, Rot4 facing, out AnimationDef animationDef)
         {
             animationDef = null;
-            if (runtimeFailed
-                || pawn?.kindDef?.defName != MingyuanPawnKindDefName
-                || !pawn.Spawned
-                || pawn.Map != Find.CurrentMap
-                || !TryResolveAnimationDefs()
-                || !TryLoadFrameMaterials(pawn))
+            if (runtimeFailed || pawn?.kindDef?.defName != MingyuanPawnKindDefName
+                || !pawn.Spawned || pawn.Map != Find.CurrentMap
+                || !TryResolveAnimationDefs() || !TryLoadFrameMaterials(pawn)) return false;
+            if (!Drivers.TryGetValue(pawn.thingIDNumber, out DriverState state))
             {
-                return false;
+                state = new DriverState
+                {
+                    Pawn = pawn, Phase = Mathf.Repeat(-Rand.RangeSeeded(0, AnimationDurationTicks, pawn.thingIDNumber), AnimationDurationTicks) / AnimationDurationTicks,
+                    LastTick = Find.TickManager.TicksGame
+                };
+                Drivers.Add(pawn.thingIDNumber, state);
             }
-
-            DriverState state = EnsureDriver(pawn);
-            if (state == null)
-            {
-                return false;
-            }
-
             state.Facing = facing;
-            switch (facing.AsInt)
-            {
-                case 0:
-                    animationDef = northAnimation;
-                    break;
-                case 1:
-                    animationDef = eastAnimation;
-                    break;
-                case 2:
-                    animationDef = southAnimation;
-                    break;
-                case 3:
-                    animationDef = westAnimation;
-                    break;
-                default:
-                    animationDef = eastAnimation;
-                    state.Facing = Rot4.East;
-                    break;
-            }
-
-            return animationDef != null;
+            animationDef = facing == Rot4.North ? northAnimation : facing == Rot4.South ? southAnimation
+                : facing == Rot4.West ? westAnimation : eastAnimation;
+            return true;
         }
 
         internal static void Update()
         {
-            if (Current.ProgramState != ProgramState.Playing)
+            if (Current.ProgramState != ProgramState.Playing || Find.TickManager == null)
             {
-                if (Drivers.Count > 0)
-                {
-                    ResetDrivers();
-                }
-
+                Drivers.Clear();
                 return;
             }
-
-            float now = Time.realtimeSinceStartup;
+            int now = Find.TickManager.TicksGame;
             RemovalBuffer.Clear();
-            bool failedThisFrame = false;
-
             foreach (KeyValuePair<int, DriverState> pair in Drivers)
             {
-                DriverState state = pair.Value;
-                Pawn pawn = state.Pawn;
-                if (!IsDriverValid(state)
-                    || pawn.Dead
-                    || !pawn.Spawned
-                    || pawn.Map != Find.CurrentMap
-                    || !IsUnityFlightActive(pawn))
+                DriverState state = pair.Value; Pawn pawn = state.Pawn;
+                AnimationDef animation = pawn?.Drawer?.renderer?.CurAnimation;
+                if (pawn == null || pawn.Destroyed || pawn.Dead || !pawn.Spawned || pawn.Map != Find.CurrentMap
+                    || !pawn.Flying && animation != northAnimation && animation != eastAnimation && animation != southAnimation && animation != westAnimation)
                 {
                     RemovalBuffer.Add(pair.Key);
                     continue;
                 }
-
-                try
-                {
-                    AdvancePhase(state, now);
-                    if (IsVisibleOnCurrentMap(pawn))
-                    {
-                        SampleAndDraw(state);
-                    }
-                }
+                float tickRate = Mathf.Max(1f, Find.TickManager.TickRateMultiplier);
+                float visualTicks = Mathf.Max(0, now - state.LastTick) * Mathf.Min(3f, tickRate) / tickRate;
+                state.Phase = Mathf.Repeat(state.Phase + visualTicks / AnimationDurationTicks, 1f);
+                state.LastTick = now;
+                if (Find.CameraDriver?.CurrentViewRect.ExpandedBy(1).Contains(pawn.Position) != true) continue;
+                try { SampleAndDraw(state); }
                 catch (Exception exception)
                 {
                     runtimeFailed = true;
-                    failedThisFrame = true;
-                    Log.ErrorOnce(
-                        "[MiliraXian Mingyuan] Unity wing animation failed during sampling; reverting to the legacy eight-frame animation.\n"
-                        + exception,
-                        178643201);
+                    Log.ErrorOnce("[MiliraXian Mingyuan] Wing frames could not be drawn; using the race animation.\n" + exception, 178643201);
+                    foreach (DriverState driver in Drivers.Values)
+                    {
+                        Pawn owner = driver.Pawn;
+                        // Let the flight tracker restore its declared animation and keep its landing bookkeeping.
+                        owner?.Drawer?.renderer?.SetAnimation(null);
+                    }
                     break;
                 }
             }
-
-            if (failedThisFrame)
-            {
-                SwitchDriversToLegacyFallback();
-                ResetDrivers();
-                return;
-            }
-
-            for (int index = 0; index < RemovalBuffer.Count; index++)
-            {
-                RemoveDriver(RemovalBuffer[index]);
-            }
+            if (runtimeFailed) Drivers.Clear();
+            else foreach (int id in RemovalBuffer) Drivers.Remove(id);
         }
 
         internal static void Reset()
         {
-            ResetDrivers();
-            runtimeFailed = false;
+            Drivers.Clear(); RemovalBuffer.Clear(); runtimeFailed = false;
         }
 
         private static bool TryResolveAnimationDefs()
@@ -306,249 +213,22 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        private static bool IsUnityFlightActive(Pawn pawn)
-        {
-            if (pawn.Flying)
-            {
-                return true;
-            }
-
-            AnimationDef animation = pawn.Drawer?.renderer?.CurAnimation;
-            return animation == northAnimation
-                || animation == eastAnimation
-                || animation == southAnimation
-                || animation == westAnimation;
-        }
-
-        private static DriverState EnsureDriver(Pawn pawn)
-        {
-            int id = pawn.thingIDNumber;
-            if (Drivers.TryGetValue(id, out DriverState existing))
-            {
-                if (IsDriverValid(existing))
-                {
-                    return existing;
-                }
-
-                RemoveDriver(id);
-            }
-
-            if (!TryLoadDriverPrefab())
-            {
-                return null;
-            }
-
-            GameObject root = null;
-            try
-            {
-                root = UnityEngine.Object.Instantiate(driverPrefab);
-                root.name = "MingyuanWingDriver_" + id;
-                root.hideFlags = HideFlags.HideAndDontSave;
-                UnityEngine.Object.DontDestroyOnLoad(root);
-
-                Animator animator = root.GetComponent<Animator>();
-                Transform frameClock = root.transform.Find(FrameClockTransformName);
-                if (animator == null
-                    || frameClock == null)
-                {
-                    throw new InvalidOperationException("The driver prefab is missing its Animator or FrameClock transform.");
-                }
-
-                animator.applyRootMotion = false;
-                animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-                animator.speed = 0f;
-                animator.Rebind();
-                animator.Update(0f);
-                if (!animator.HasState(0, NorthStateHash)
-                    || !animator.HasState(0, SouthStateHash)
-                    || !animator.HasState(0, EastStateHash))
-                {
-                    throw new InvalidOperationException("The driver Animator does not contain North, South and East states.");
-                }
-
-                int randomStartTick = Rand.RangeSeeded(0, AnimationDurationTicks, id);
-                DriverState state = new DriverState
-                {
-                    Pawn = pawn,
-                    Root = root,
-                    Animator = animator,
-                    FrameClock = frameClock,
-                    Facing = pawn.Rotation,
-                    Phase = GenMath.PositiveMod(-randomStartTick, AnimationDurationTicks) / (float)AnimationDurationTicks,
-                    LastRealtime = Time.realtimeSinceStartup
-                };
-                Drivers.Add(id, state);
-                return state;
-            }
-            catch (Exception exception)
-            {
-                if (root != null)
-                {
-                    UnityEngine.Object.Destroy(root);
-                }
-
-                runtimeFailed = true;
-                Log.ErrorOnce(
-                    "[MiliraXian Mingyuan] Unity wing driver initialization failed; using the legacy eight-frame animation.\n"
-                    + exception,
-                    178643204);
-                return null;
-            }
-        }
-
-        private static bool TryLoadDriverPrefab()
-        {
-            if (driverPrefab != null)
-            {
-                return true;
-            }
-
-            if (bundleLoadAttempted)
-            {
-                return false;
-            }
-
-            bundleLoadAttempted = true;
-            try
-            {
-                ModContentPack content = NeiyuLawMod.Instance?.Content;
-                List<AssetBundle> loadedBundles = content?.assetBundles?.loadedAssetBundles;
-                if (loadedBundles != null)
-                {
-                    for (int index = 0; index < loadedBundles.Count; index++)
-                    {
-                        AssetBundle bundle = loadedBundles[index];
-                        if (bundle == null)
-                        {
-                            continue;
-                        }
-
-                        driverPrefab = bundle.LoadAsset<GameObject>(DriverAssetName);
-                        if (driverPrefab != null)
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                string modRoot = content?.RootDir;
-                if (modRoot.NullOrEmpty())
-                {
-                    throw new InvalidOperationException("The mod root directory could not be resolved.");
-                }
-
-                string bundlePath = Path.Combine(modRoot, BundleRelativePath.Replace('/', Path.DirectorySeparatorChar));
-                if (!File.Exists(bundlePath))
-                {
-                    throw new FileNotFoundException("The Unity wing bundle is missing.", bundlePath);
-                }
-
-                fallbackBundle = AssetBundle.LoadFromFile(bundlePath);
-                if (fallbackBundle == null)
-                {
-                    throw new InvalidOperationException("Unity could not load the wing AssetBundle at " + bundlePath);
-                }
-
-                driverPrefab = fallbackBundle.LoadAsset<GameObject>(DriverAssetName);
-                if (driverPrefab == null)
-                {
-                    throw new InvalidOperationException(
-                        "The wing AssetBundle does not contain address '" + DriverAssetName + "'.");
-                }
-
-                return true;
-            }
-            catch (Exception exception)
-            {
-                Log.ErrorOnce(
-                    "[MiliraXian Mingyuan] Unity wing animation is unavailable; using the legacy eight-frame animation.\n"
-                    + exception,
-                    178643205);
-                return false;
-            }
-        }
-
-        private static bool IsDriverValid(DriverState state)
-        {
-            return state != null
-                && state.Pawn != null
-                && !state.Pawn.Destroyed
-                && state.Root != null
-                && state.Animator != null
-                && state.FrameClock != null;
-        }
-
-        private static void AdvancePhase(DriverState state, float now)
-        {
-            float delta = Mathf.Clamp(now - state.LastRealtime, 0f, MaximumDeltaSeconds);
-            state.LastRealtime = now;
-            TickManager tickManager = Find.TickManager;
-            float speed = tickManager == null ? 0f : Mathf.Min(3f, Mathf.Max(0f, tickManager.TickRateMultiplier));
-            if (speed > 0f && delta > 0f)
-            {
-                state.Phase = Mathf.Repeat(state.Phase + delta * speed / LoopDurationSeconds, 1f);
-            }
-        }
-
-        private static bool IsVisibleOnCurrentMap(Pawn pawn)
-        {
-            CameraDriver cameraDriver = Find.CameraDriver;
-            return cameraDriver != null
-                && cameraDriver.CurrentViewRect.ExpandedBy(1).Contains(pawn.Position);
-        }
 
         private static void SampleAndDraw(DriverState state)
         {
-            int stateHash;
-            int frameSetIndex;
-            float layer;
-            bool mirror;
-            switch (state.Facing.AsInt)
-            {
-                case 0:
-                    stateHash = NorthStateHash;
-                    frameSetIndex = NorthFrameSetIndex;
-                    layer = FrontLayer;
-                    mirror = false;
-                    break;
-                case 2:
-                    stateHash = SouthStateHash;
-                    frameSetIndex = SouthFrameSetIndex;
-                    layer = BehindLayer;
-                    mirror = false;
-                    break;
-                case 3:
-                    stateHash = EastStateHash;
-                    frameSetIndex = EastFrameSetIndex;
-                    layer = FrontLayer;
-                    mirror = true;
-                    break;
-                default:
-                    stateHash = EastStateHash;
-                    frameSetIndex = EastFrameSetIndex;
-                    layer = FrontLayer;
-                    mirror = false;
-                    break;
-            }
-
-            state.Animator.Play(stateHash, 0, state.Phase);
-            state.Animator.Update(0f);
-            float frameCursor = Mathf.Repeat(state.FrameClock.localPosition.x, FrameCount);
-            int currentFrameIndex = Mathf.Clamp(Mathf.FloorToInt(frameCursor), 0, FrameCount - 1);
-
-            Material[] materials = FrameMaterials[frameSetIndex];
-            Material currentMaterial = materials[currentFrameIndex];
+            int frameSet = state.Facing == Rot4.North ? NorthFrameSetIndex
+                : state.Facing == Rot4.South ? SouthFrameSetIndex : EastFrameSetIndex;
+            float tick = state.Phase * AnimationDurationTicks;
+            int frame = 0;
+            while (frame + 1 < FrameCount && tick >= FrameTicks[frame + 1]) frame++;
+            float layer = state.Facing == Rot4.South ? -10f : 60f;
             float bodyAngle = state.Facing == Rot4.East ? 8f : state.Facing == Rot4.West ? -8f : 0f;
-            Vector3 drawPosition = state.Pawn.DrawPos;
-            drawPosition.y += PawnRenderUtility.AltitudeForLayer(layer);
-            drawPosition.z += BodyBobAt(state.Phase);
-            Matrix4x4 matrix = Matrix4x4.TRS(
-                drawPosition,
-                Quaternion.AngleAxis(bodyAngle, Vector3.up),
-                new Vector3(FrameDrawSize, 1f, FrameDrawSize));
-            Mesh mesh = mirror ? MeshPool.plane10Flip : MeshPool.plane10;
-            Graphics.DrawMesh(mesh, matrix, currentMaterial, 0);
+            Vector3 position = state.Pawn.DrawPos;
+            position.y += PawnRenderUtility.AltitudeForLayer(layer);
+            position.z += BodyBobAt(state.Phase);
+            Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.AngleAxis(bodyAngle, Vector3.up), new Vector3(FrameDrawSize, 1f, FrameDrawSize));
+            Graphics.DrawMesh(state.Facing == Rot4.West ? MeshPool.plane10Flip : MeshPool.plane10,
+                matrix, FrameMaterials[frameSet][frame], 0);
         }
 
         private static float BodyBobAt(float phase)
@@ -567,54 +247,6 @@ namespace MiliraXian.Characters.Mingyuan
             return Mathf.Lerp(0.0125f, -0.0125f, (tick - 15f) / 21f);
         }
 
-        private static void RemoveDriver(int id)
-        {
-            if (!Drivers.TryGetValue(id, out DriverState state))
-            {
-                return;
-            }
-
-            if (state.Root != null)
-            {
-                UnityEngine.Object.Destroy(state.Root);
-            }
-
-            Drivers.Remove(id);
-        }
-
-        private static void SwitchDriversToLegacyFallback()
-        {
-            foreach (DriverState state in Drivers.Values)
-            {
-                try
-                {
-                    PawnRenderer renderer = state.Pawn?.Drawer?.renderer;
-                    // Clearing rather than setting the race animation: the flight tracker still
-                    // records the Unity def as playing, and would refuse to stop a directly-set
-                    // race def on landing. With null, its next tick re-sets the race animation
-                    // itself and refreshes its bookkeeping.
-                    renderer?.SetAnimation(null);
-                }
-                catch
-                {
-                    // The original error was already logged once. Cleanup must still complete.
-                }
-            }
-        }
-
-        private static void ResetDrivers()
-        {
-            foreach (DriverState state in Drivers.Values)
-            {
-                if (state.Root != null)
-                {
-                    UnityEngine.Object.Destroy(state.Root);
-                }
-            }
-
-            Drivers.Clear();
-            RemovalBuffer.Clear();
-        }
     }
 
     [HarmonyPatch(typeof(MemoryUtility), nameof(MemoryUtility.ClearAllMapsAndWorld))]

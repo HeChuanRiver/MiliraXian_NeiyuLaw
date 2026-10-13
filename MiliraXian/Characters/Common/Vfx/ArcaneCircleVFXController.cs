@@ -22,14 +22,13 @@ namespace MiliraXian.Characters.Common.Vfx
     {
         private sealed class CircleLayer
         {
-            public SpriteRenderer Renderer;
+            public CharacterVfxSprite Renderer;
             public Transform Reveal;
         }
 
         private sealed class ParticleLayer
         {
-            public ParticleSystem System;
-            public ParticleSystem.Particle[] Buffer;
+            public CharacterVfxParticleLayer Source;
             public Material Material;
             public bool Stretch;
             public float LengthScale;
@@ -39,7 +38,7 @@ namespace MiliraXian.Characters.Common.Vfx
         private static bool invalidPrefab;
         private JobDriver_WorldArcaneStrike owner;
         private Game sourceGame;
-        private Animator animator;
+        private CharacterVfxAnimation animation;
         private CircleLayer[] layers;
         private ParticleLayer[] particles;
         private MaterialPropertyBlock particleProperties;
@@ -56,7 +55,7 @@ namespace MiliraXian.Characters.Common.Vfx
         public static ArcaneCircleVFXController Create(JobDriver_WorldArcaneStrike job)
         {
             if (!OwnerAvailable(job) || invalidPrefab
-                || !CharacterUnityVfxRuntime.TryGetPrefab(CharacterUnityVfxKind.ArcaneCircle, out GameObject prefab))
+                || !CharacterUnityVfxRuntime.TryGetAnimation(CharacterUnityVfxKind.ArcaneCircle, out CharacterVfxDef definition))
             {
                 return null;
             }
@@ -64,12 +63,14 @@ namespace MiliraXian.Characters.Common.Vfx
             GameObject root = null;
             try
             {
-                root = UnityEngine.Object.Instantiate(prefab);
+                CharacterVfxAnimation native = definition.Instantiate();
+                root = native.Root;
                 root.name = "ArcaneCircle_" + job.Caster.thingIDNumber;
                 root.hideFlags = HideFlags.HideAndDontSave;
                 // Update still runs during menu/load transitions and disposes stale owners.
                 UnityEngine.Object.DontDestroyOnLoad(root);
                 ArcaneCircleVFXController controller = root.AddComponent<ArcaneCircleVFXController>();
+                controller.animation = native;
                 controller.Initialize(job);
                 return controller;
             }
@@ -108,21 +109,12 @@ namespace MiliraXian.Characters.Common.Vfx
             sourceGame = Current.Game;
             properties = job.Caster.CurJob.ability.def.GetModExtension<ArcaneCircleVFXProperties>();
             scale = Mathf.Max(0.01f, properties?.scale ?? 1.15f);
-            animator = GetComponent<Animator>();
-            if (animator == null || animator.runtimeAnimatorController == null || !animator.HasState(0, Animator.StringToHash("Play")))
-            {
-                throw new InvalidOperationException("ArcaneCircle requires an Animator with the Play state.");
-            }
-            animator.applyRootMotion = false;
-            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-            animator.updateMode = AnimatorUpdateMode.Normal;
-            animator.speed = 0f;
-            visualDuration = animator.runtimeAnimatorController.animationClips[0].length;
+            visualDuration = animation.Def.duration;
             lastAudioProgress = job.ChantProgress > 0f ? job.ChantProgress : -1f;
             // Restoring a cast must not replay its earlier construction cues.
             lastSoundSecond = job.ChantProgress > 0f ? Mathf.FloorToInt(job.ChantProgress * visualDuration) : -1;
 
-            SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            CharacterVfxSprite[] renderers = animation.Sprites;
             if (renderers.Length == 0)
             {
                 throw new InvalidOperationException("ArcaneCircle has no independent visual layers.");
@@ -130,35 +122,29 @@ namespace MiliraXian.Characters.Common.Vfx
             layers = new CircleLayer[renderers.Length];
             for (int i = 0; i < renderers.Length; i++)
             {
-                SpriteRenderer renderer = renderers[i];
-                renderer.enabled = false;
+                CharacterVfxSprite renderer = renderers[i];
                 layers[i] = new CircleLayer { Renderer = renderer, Reveal = renderer.transform.Find("Reveal") };
             }
 
-            ParticleSystem[] systems = GetComponentsInChildren<ParticleSystem>(true);
+            CharacterVfxParticleLayer[] systems = animation.Particles;
             particles = new ParticleLayer[systems.Length];
             particleProperties = new MaterialPropertyBlock();
             for (int i = 0; i < systems.Length; i++)
             {
-                ParticleSystem system = systems[i];
-                ParticleSystemRenderer renderer = system.GetComponent<ParticleSystemRenderer>();
-                Texture2D texture = renderer?.sharedMaterial?.mainTexture as Texture2D;
+                CharacterVfxParticleLayer system = systems[i];
+                CharacterVfxEmitter emitter = system.Emitter;
+                Texture2D texture = animation.Def.Texture(emitter?.texture);
                 if (texture == null)
                 {
-                    throw new InvalidOperationException("ArcaneCircle particle layer has no texture: " + system.name);
+                    throw new InvalidOperationException("ArcaneCircle particle layer has no texture: " + system.Transform.name);
                 }
-                renderer.enabled = false;
-                system.useAutoRandomSeed = false;
-                system.randomSeed = (uint)(1147 + i * 79);
-                system.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
                 particles[i] = new ParticleLayer
                 {
-                    System = system,
-                    Buffer = new ParticleSystem.Particle[Mathf.Clamp(system.main.maxParticles, 1, 128)],
+                    Source = system,
                     Material = CharacterUnityVfxRuntime.GetMaterial(texture, true),
-                    Stretch = renderer.renderMode == ParticleSystemRenderMode.Stretch,
-                    LengthScale = renderer.lengthScale,
-                    VelocityScale = renderer.velocityScale
+                    Stretch = emitter.stretch,
+                    LengthScale = emitter.lengthScale,
+                    VelocityScale = emitter.velocityScale
                 };
             }
             SampleProgress(job.ChantProgress);
@@ -202,24 +188,11 @@ namespace MiliraXian.Characters.Common.Vfx
             {
                 return;
             }
-            animator.Play("Play", 0, Mathf.Clamp01(progress));
-            animator.Update(0f);
+            animation.Sample(Mathf.Clamp01(progress));
             // The clip and particles share the 96%-97.25% sealing hold.
             float particleProgress = progress <= 0.96f ? progress
                 : progress < 0.9725f ? 0.96f : progress - 0.0125f;
             float particleTime = particleProgress * visualDuration;
-            bool restart = lastParticleTime < 0f || particleTime < lastParticleTime;
-            float delta = restart ? particleTime : particleTime - lastParticleTime;
-            if (delta > 0f || restart)
-            {
-                for (int i = 0; i < particles.Length; i++)
-                {
-                    ParticleSystem system = particles[i].System;
-                    // A saved orbit needs small simulation steps when fast-forwarded.
-                    system.Simulate(delta, false, restart, restart || delta > 0.1f);
-                    system.Pause(false);
-                }
-            }
             lastProgress = progress;
             lastParticleTime = particleTime;
         }
@@ -288,30 +261,31 @@ namespace MiliraXian.Characters.Common.Vfx
             for (int layerIndex = 0; layerIndex < particles.Length; layerIndex++)
             {
                 ParticleLayer layer = particles[layerIndex];
-                int count = layer.System.GetParticles(layer.Buffer);
-                float layerScale = layer.System.transform.lossyScale.x * scale;
+                CharacterVfxParticle[] frame = CharacterVfxParticles.Sample(layer.Source.Emitter.bakedIndex, lastParticleTime);
+                Transform emitterTransform = layer.Source.Transform;
+                float layerScale = emitterTransform.lossyScale.x * scale;
                 float glow = Mathf.Lerp(1f, 1.35f, Mathf.InverseLerp(0.85f, 0.96f, lastProgress));
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < frame.Length; i++)
                 {
-                    ParticleSystem.Particle particle = layer.Buffer[i];
-                    Color color = particle.GetCurrentColor(layer.System);
+                    CharacterVfxParticle particle = frame[i];
+                    Color color = particle.Color;
                     color.r *= glow;
                     color.g *= glow;
                     color.b *= glow;
-                    Vector3 local = layer.System.transform.TransformPoint(particle.position) - transform.position;
+                    Vector3 local = emitterTransform.TransformPoint(particle.Position) - transform.position;
                     Vector3 position = anchor + new Vector3(local.x * scale, local.z * 0.04f, local.y * scale);
-                    float size = particle.GetCurrentSize(layer.System) * Mathf.Abs(layerScale);
+                    float size = particle.Size * Mathf.Abs(layerScale);
                     if (size <= 0.001f || color.a <= 0.001f)
                     {
                         continue;
                     }
                     particleProperties.Clear();
                     particleProperties.SetColor(ShaderPropertyIDs.Color, color);
-                    float angle = -particle.rotation - layer.System.transform.eulerAngles.z;
+                    float angle = -particle.Rotation - emitterTransform.eulerAngles.z;
                     float length = size;
                     if (layer.Stretch)
                     {
-                        Vector3 velocity = layer.System.transform.TransformVector(particle.totalVelocity) * scale;
+                        Vector3 velocity = emitterTransform.TransformVector(particle.Velocity) * scale;
                         float speed = Mathf.Sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
                         if (speed > 0.001f) angle = Mathf.Atan2(velocity.x, velocity.y) * Mathf.Rad2Deg;
                         length = Mathf.Min(1.8f * Mathf.Abs(layerScale),
@@ -346,7 +320,7 @@ namespace MiliraXian.Characters.Common.Vfx
             owner = null;
             sourceGame = null;
             gameObject.SetActive(false);
-            UnityEngine.Object.Destroy(gameObject);
+            animation?.Dispose();
         }
 
         private void OnDestroy()
@@ -357,7 +331,7 @@ namespace MiliraXian.Characters.Common.Vfx
             sourceGame = null;
             layers = null;
             particles = null;
-            animator = null;
+            animation = null;
             particleProperties = null;
             properties = null;
         }

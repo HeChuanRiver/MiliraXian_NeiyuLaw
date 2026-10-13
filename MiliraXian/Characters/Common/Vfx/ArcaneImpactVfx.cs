@@ -53,9 +53,9 @@ namespace MiliraXian.Characters.Common.Vfx
             if (!ArcaneEnergyResources.Ready()) return false;
             if (attempted) return cloud != null && dust != null;
             attempted = true;
-            if (!CharacterUnityVfxRuntime.TryGetPrefab(CharacterUnityVfxKind.ArcaneImpact, out GameObject prefab)) return false;
-            cloud = prefab.transform.Find("Cloud")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
-            dust = prefab.transform.Find("Dust")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
+            if (!CharacterUnityVfxRuntime.TryGetAnimation(CharacterUnityVfxKind.ArcaneImpact, out CharacterVfxDef animation)) return false;
+            cloud = animation.MaterialAt("Cloud");
+            dust = animation.MaterialAt("Dust");
             if (cloud == null || dust == null)
                 Log.ErrorOnce("[WorldArcaneStrike] ArcaneImpact prefab has incomplete cloud materials.", 197631220);
             return cloud != null && dust != null;

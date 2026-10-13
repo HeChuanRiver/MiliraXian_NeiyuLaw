@@ -59,16 +59,14 @@ namespace MiliraXian.Characters.Common
     [StaticConstructorOnStartup]
     internal static class CharacterUnityVfxRuntime
     {
-        private const string BundleRelativePath = "1.6/AssetBundles/Windows/miliraxian_character_vfx";
-        private const string AnimatorStateName = "Play";
         private const int MaintainGraceTicks = 3;
 
         private sealed class VfxInstance
         {
             public CharacterUnityVfxKind Kind;
             public GameObject Root;
-            public Animator Animator;
-            public SpriteRenderer[] Renderers;
+            public CharacterVfxAnimation Animation;
+            public CharacterVfxSprite[] Renderers;
             public Map Map;
             public Pawn FollowPawn;
             public Vector3 Position;
@@ -87,11 +85,7 @@ namespace MiliraXian.Characters.Common
             public int LastPhaseTick;
         }
 
-        private static readonly Dictionary<CharacterUnityVfxKind, GameObject> Prefabs =
-            new Dictionary<CharacterUnityVfxKind, GameObject>();
-
-        private static readonly HashSet<CharacterUnityVfxKind> MissingPrefabs =
-            new HashSet<CharacterUnityVfxKind>();
+        private static readonly HashSet<CharacterUnityVfxKind> MissingPrefabs = new();
 
         private static readonly List<VfxInstance> OneShots = new List<VfxInstance>();
         private static readonly Dictionary<long, VfxInstance> Persistent = new Dictionary<long, VfxInstance>();
@@ -99,12 +93,17 @@ namespace MiliraXian.Characters.Common
         private static readonly Dictionary<int, Material> Materials = new Dictionary<int, Material>();
         private static readonly MaterialPropertyBlock PropertyBlock = new MaterialPropertyBlock();
 
-        private static readonly Dictionary<string, AssetBundle> FallbackBundles = new();
-        private static readonly HashSet<string> AttemptedFallbackBundles = new();
+        private static AssetBundle authoredMaterials;
+        private static bool materialsLoadAttempted;
+
+        static CharacterUnityVfxRuntime()
+        {
+            foreach (CharacterVfxDef def in DefDatabase<CharacterVfxDef>.AllDefsListForReading) def.Prepare();
+        }
 
         public static bool IsAvailable(CharacterUnityVfxKind kind)
         {
-            return TryGetPrefab(kind, out _);
+            return TryGetAnimation(kind, out _);
         }
 
         public static bool TryPlayAttached(
@@ -337,75 +336,42 @@ namespace MiliraXian.Characters.Common
             PersistentRemovalBuffer.Clear();
         }
 
-        private static VfxInstance CreateInstance(
-            CharacterUnityVfxKind kind,
-            Map map,
-            Vector3 position,
-            float scale,
-            float rotation,
-            int durationTicks,
-            bool loop)
+        private static VfxInstance CreateInstance(CharacterUnityVfxKind kind, Map map, Vector3 position,
+            float scale, float rotation, int durationTicks, bool loop)
         {
-            if (map == null || !TryGetPrefab(kind, out GameObject prefab))
+            if (map == null || !TryGetAnimation(kind, out CharacterVfxDef def)) return null;
+            CharacterVfxAnimation animation = null;
+            try
             {
-                return null;
+                animation = def.Instantiate();
+                if (animation == null || animation.Sprites.Length == 0)
+                {
+                    animation?.Dispose();
+                    MissingPrefabs.Add(kind);
+                    return null;
+                }
+                int now = CurrentTick;
+                return new VfxInstance
+                {
+                    Kind = kind, Root = animation.Root, Animation = animation, Renderers = animation.Sprites,
+                    Map = map, Position = position, Scale = Mathf.Max(0.01f, scale), Rotation = rotation,
+                    StartTick = now, DurationTicks = Mathf.Max(1, durationTicks), Loop = loop,
+                    LastMaintainTick = now, AlphaMultiplier = 1f, PlaybackRate = 1f, LastPhaseTick = now
+                };
             }
-
-            GameObject root = UnityEngine.Object.Instantiate(prefab);
-            root.name = "MXCharacterVfx_" + kind;
-            root.hideFlags = HideFlags.HideAndDontSave;
-            root.transform.position = Vector3.zero;
-            root.transform.rotation = Quaternion.identity;
-            root.transform.localScale = Vector3.one;
-            UnityEngine.Object.DontDestroyOnLoad(root);
-
-            Animator animator = root.GetComponent<Animator>();
-            SpriteRenderer[] renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
-            if (animator == null || animator.runtimeAnimatorController == null || renderers.Length == 0)
+            catch (Exception exception)
             {
-                Log.ErrorOnce(
-                    "[MiliraXian] Unity character VFX prefab is invalid: " + kind,
-                    197631100 + (int)kind);
-                UnityEngine.Object.Destroy(root);
+                animation?.Dispose();
                 MissingPrefabs.Add(kind);
+                Log.ErrorOnce("[MiliraXian] VFX could not be initialized: " + kind + "\n" + exception,
+                    197631100 + (int)kind);
                 return null;
             }
-
-            animator.applyRootMotion = false;
-            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-            animator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            animator.speed = 0f;
-            for (int index = 0; index < renderers.Length; index++)
-            {
-                renderers[index].enabled = false;
-            }
-
-            animator.Play(AnimatorStateName, 0, 0f);
-            animator.Update(0f);
-            int now = CurrentTick;
-            return new VfxInstance
-            {
-                Kind = kind,
-                Root = root,
-                Animator = animator,
-                Renderers = renderers,
-                Map = map,
-                Position = position,
-                Scale = Mathf.Max(0.01f, scale),
-                Rotation = rotation,
-                StartTick = now,
-                DurationTicks = Mathf.Max(1, durationTicks),
-                Loop = loop,
-                LastMaintainTick = now,
-                AlphaMultiplier = 1f,
-                PlaybackRate = 1f,
-                LastPhaseTick = now
-            };
         }
 
         private static void UpdateAndDraw(VfxInstance instance, int now)
         {
-            if (instance.Map != Find.CurrentMap || instance.Animator == null)
+            if (instance.Map != Find.CurrentMap || instance.Animation == null)
             {
                 return;
             }
@@ -423,8 +389,7 @@ namespace MiliraXian.Characters.Common
                 float elapsed = Mathf.Max(0, now - instance.StartTick);
                 normalized = Mathf.Clamp01(elapsed / Mathf.Max(1f, instance.DurationTicks));
             }
-            instance.Animator.Play(AnimatorStateName, 0, normalized);
-            instance.Animator.Update(0f);
+            instance.Animation.Sample(normalized);
 
             Vector3 anchor = instance.FollowPawn != null ? instance.FollowPawn.DrawPos : instance.Position;
             if (instance.Directional && instance.FollowPawn?.Drawer?.renderer != null)
@@ -438,7 +403,7 @@ namespace MiliraXian.Characters.Common
             }
         }
 
-        private static void DrawRenderer(VfxInstance instance, SpriteRenderer renderer, Vector3 anchor)
+        private static void DrawRenderer(VfxInstance instance, CharacterVfxSprite renderer, Vector3 anchor)
         {
             if (!RendererMatchesFacing(instance, renderer) || IsStaticHaloRenderer(instance, renderer))
             {
@@ -449,27 +414,19 @@ namespace MiliraXian.Characters.Common
                 instance.Rotation, instance.FlipX, instance.AlphaMultiplier);
         }
 
-        internal static void DrawAnimatedSprite(SpriteRenderer renderer, Vector3 anchor,
+        internal static void DrawAnimatedSprite(CharacterVfxSprite renderer, Vector3 anchor,
             Vector3 authoredOrigin, float visualScale, float rotation, bool mirror, float alphaMultiplier,
             Material overrideMaterial = null, float reveal = 1f, bool invertAnimatedRotation = false)
         {
 
-            Sprite sprite = renderer != null ? renderer.sprite : null;
-            if (sprite == null || renderer.color.a <= 0.001f)
-            {
-                return;
-            }
-
-            Texture2D texture = sprite.texture;
-            if (texture == null)
-            {
-                return;
-            }
+            if (renderer == null || !renderer.visible || !renderer.transform.gameObject.activeInHierarchy
+                || renderer.texture == null || renderer.color.a <= 0.001f || reveal <= 0.0001f) return;
+            Texture2D texture = renderer.texture;
 
             Transform transform = renderer.transform;
             Vector3 animationPosition = transform.position - authoredOrigin;
             Vector3 scale = transform.lossyScale;
-            Vector2 spriteSize = sprite.bounds.size;
+            Vector2 spriteSize = renderer.size;
             float width = Mathf.Abs(spriteSize.x * scale.x * visualScale);
             float height = Mathf.Abs(spriteSize.y * scale.y * visualScale);
             if (width <= 0.001f || height <= 0.001f)
@@ -491,7 +448,7 @@ namespace MiliraXian.Characters.Common
                 Quaternion.AngleAxis(angle, Vector3.up),
                 new Vector3(flipX ? -width : width, 1f, flipY ? -height : height));
 
-            bool glow = renderer.name.IndexOf("Glow", StringComparison.OrdinalIgnoreCase) >= 0;
+            bool glow = renderer.glow;
             Material material = overrideMaterial ?? GetMaterial(texture, glow);
             if (material == null)
             {
@@ -502,15 +459,12 @@ namespace MiliraXian.Characters.Common
             Color drawColor = renderer.color;
             drawColor.a = Mathf.Clamp01(drawColor.a * alphaMultiplier);
             PropertyBlock.SetColor(ShaderPropertyIDs.Color, drawColor);
-            if (overrideMaterial != null)
-            {
-                PropertyBlock.SetFloat("_Reveal", reveal);
-            }
+            if (overrideMaterial != null) PropertyBlock.SetFloat("_Reveal", reveal);
             Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, PropertyBlock);
             PropertyBlock.Clear();
         }
 
-        private static bool IsStaticHaloRenderer(VfxInstance instance, SpriteRenderer renderer)
+        private static bool IsStaticHaloRenderer(VfxInstance instance, CharacterVfxSprite renderer)
         {
             if (!instance.Directional || renderer == null)
             {
@@ -523,6 +477,7 @@ namespace MiliraXian.Characters.Common
 
         internal static Material GetMaterial(Texture2D texture, bool glow)
         {
+            if (texture == null) return null;
             int key = unchecked(texture.GetInstanceID() * 2 + (glow ? 1 : 0));
             if (Materials.TryGetValue(key, out Material material))
             {
@@ -535,95 +490,47 @@ namespace MiliraXian.Characters.Common
             return material;
         }
 
-        internal static bool TryGetPrefab(CharacterUnityVfxKind kind, out GameObject prefab)
+        internal static bool TryGetAnimation(CharacterUnityVfxKind kind, out CharacterVfxDef def)
         {
-            if (Prefabs.TryGetValue(kind, out prefab))
-            {
-                return prefab != null;
-            }
-
-            if (MissingPrefabs.Contains(kind))
-            {
-                prefab = null;
-                return false;
-            }
-
-            string address = AddressFor(kind);
-            ModContentPack content = NeiyuLawMod.Instance?.Content;
-            List<AssetBundle> loadedBundles = content?.assetBundles?.loadedAssetBundles;
-            if (loadedBundles != null)
-            {
-                for (int index = 0; index < loadedBundles.Count; index++)
-                {
-                    if (TryLoadFromBundle(loadedBundles[index], address, out prefab))
-                    {
-                        Prefabs[kind] = prefab;
-                        return true;
-                    }
-                }
-            }
-
-            foreach (AssetBundle loadedBundle in AssetBundle.GetAllLoadedAssetBundles())
-            {
-                if (TryLoadFromBundle(loadedBundle, address, out prefab))
-                {
-                    Prefabs[kind] = prefab;
-                    return true;
-                }
-            }
-
-            string bundleRelativePath = kind switch
-            {
-                CharacterUnityVfxKind.ArcaneCircle => "1.6/AssetBundles/Windows/miliraxian_arcane_circle",
-                CharacterUnityVfxKind.ArcaneLaunch => "1.6/AssetBundles/Windows/miliraxian_arcane_launch",
-                CharacterUnityVfxKind.ArcaneImpact => "1.6/AssetBundles/Windows/miliraxian_arcane_impact",
-                _ => BundleRelativePath
-            };
-            if (AttemptedFallbackBundles.Add(bundleRelativePath))
-            {
-                string modRoot = content?.RootDir;
-                string bundlePath = modRoot.NullOrEmpty()
-                    ? null
-                    : Path.Combine(modRoot, bundleRelativePath.Replace('/', Path.DirectorySeparatorChar));
-                AssetBundle fallbackBundle = null;
-                if (!bundlePath.NullOrEmpty() && File.Exists(bundlePath))
-                {
-                    fallbackBundle = AssetBundle.LoadFromFile(bundlePath);
-                }
-                FallbackBundles[bundleRelativePath] = fallbackBundle;
-
-                if (fallbackBundle == null)
-                {
-                    Log.ErrorOnce(
-                        "[MiliraXian] Character Unity VFX bundle could not be loaded: " + bundlePath,
-                        197631090);
-                }
-            }
-
-            FallbackBundles.TryGetValue(bundleRelativePath, out AssetBundle bundle);
-            if (TryLoadFromBundle(bundle, address, out prefab))
-            {
-                Prefabs[kind] = prefab;
-                return true;
-            }
-
+            def = null;
+            if (MissingPrefabs.Contains(kind)) return false;
+            def = DefDatabase<CharacterVfxDef>.GetNamedSilentFail("MX_Vfx_" + AddressFor(kind));
+            if (def != null && def.Prepare()) return true;
             MissingPrefabs.Add(kind);
-            Log.ErrorOnce(
-                "[MiliraXian] Character Unity VFX bundle is missing address '" + address + "'.",
-                197631100 + (int)kind);
+            Log.ErrorOnce("[MiliraXian] Authored VFX data is unavailable: " + kind, 197631100 + (int)kind);
+            def = null;
             return false;
         }
 
-        private static bool TryLoadFromBundle(AssetBundle bundle, string address, out GameObject prefab)
+        internal static Material LoadAuthoredMaterial(string address)
         {
-            prefab = null;
-            if (bundle == null)
+            Material material = LoadAuthoredAsset<Material>(address);
+            if (material == null || material.shader == null || !material.shader.isSupported)
             {
-                return false;
+                Log.ErrorOnce("[MiliraXian] Authored VFX material is unavailable: " + address, GenText.StableStringHash(address));
+                return null;
             }
+            return material;
+        }
 
-            prefab = bundle.LoadAsset<GameObject>(address);
-            return prefab != null;
+        internal static T LoadAuthoredAsset<T>(string address) where T : UnityEngine.Object
+        {
+            if (!materialsLoadAttempted)
+            {
+                materialsLoadAttempted = true;
+                const string name = "miliraxian_vfx_materials";
+                ModContentPack content = NeiyuLawMod.Instance?.Content;
+                List<AssetBundle> bundles = content?.assetBundles?.loadedAssetBundles;
+                if (bundles != null)
+                    foreach (AssetBundle bundle in bundles)
+                        if (bundle != null && bundle.name == name) { authoredMaterials = bundle; break; }
+                if (authoredMaterials == null && content != null)
+                {
+                    string path = Path.Combine(content.RootDir, "1.6/AssetBundles/Windows/" + name);
+                    if (File.Exists(path)) authoredMaterials = AssetBundle.LoadFromFile(path);
+                }
+            }
+            return authoredMaterials?.LoadAsset<T>(address);
         }
 
         private static string AddressFor(CharacterUnityVfxKind kind)
@@ -699,7 +606,7 @@ namespace MiliraXian.Characters.Common
             }
         }
 
-        private static bool RendererMatchesFacing(VfxInstance instance, SpriteRenderer renderer)
+        private static bool RendererMatchesFacing(VfxInstance instance, CharacterVfxSprite renderer)
         {
             if (!instance.Directional || renderer == null)
             {

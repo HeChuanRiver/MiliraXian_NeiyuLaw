@@ -49,7 +49,7 @@
       <HintPath>$(MiliraDll)</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="Assembly-CSharp">
       <HintPath>$(RimWorldManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -57,31 +57,31 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.CoreModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.AnimationModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.AnimationModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.ParticleSystemModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.ParticleSystemModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.AssetBundleModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.IMGUIModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
+    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.TextRenderingModule">
       <HintPath>$(RimWorldManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>

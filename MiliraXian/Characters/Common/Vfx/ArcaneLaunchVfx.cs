@@ -17,12 +17,12 @@ namespace MiliraXian.Characters.Common.Vfx
         {
             if (attempted) return Billboard != null;
             attempted = true;
-            if (!CharacterUnityVfxRuntime.TryGetPrefab(CharacterUnityVfxKind.ArcaneLaunch, out GameObject prefab)) return false;
-            BeamCore = prefab.transform.Find("Beam/BeamCore")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
-            BeamInner = prefab.transform.Find("Beam/BeamInnerGlow")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
-            BeamOuter = prefab.transform.Find("Beam/BeamOuterGlow")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
-            Spark = prefab.transform.Find("Particle/ParticleColumn")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
-            Shockwave = prefab.transform.Find("Ground/Shockwave")?.GetComponent<SpriteRenderer>()?.sharedMaterial;
+            if (!CharacterUnityVfxRuntime.TryGetAnimation(CharacterUnityVfxKind.ArcaneLaunch, out CharacterVfxDef animation)) return false;
+            BeamCore = animation.MaterialAt("Beam/BeamCore");
+            BeamInner = animation.MaterialAt("Beam/BeamInnerGlow");
+            BeamOuter = animation.MaterialAt("Beam/BeamOuterGlow");
+            Spark = animation.MaterialAt("Particle/ParticleColumn");
+            Shockwave = animation.MaterialAt("Ground/Shockwave");
             if (BeamCore == null || BeamInner == null || BeamOuter == null || Spark == null || Shockwave == null)
             {
                 Log.ErrorOnce("[WorldArcaneStrike] ArcaneLaunch prefab has incomplete visual layers.", 197631210);

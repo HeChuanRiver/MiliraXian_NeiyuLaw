@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <!-- 1.7 installations automatically use pinned reference-only assemblies when Unity DLLs are absent. -->
     <RimWorldInstallDir>D:\SteamLibrary\steamapps\common\RimWorld</RimWorldInstallDir>
     <RimWorldWorkshopDir>D:\SteamLibrary\steamapps\workshop\content\294100</RimWorldWorkshopDir>
   </PropertyGroup>

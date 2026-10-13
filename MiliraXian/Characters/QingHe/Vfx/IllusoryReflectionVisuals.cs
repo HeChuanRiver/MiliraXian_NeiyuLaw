@@ -7,6 +7,7 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
+    [StaticConstructorOnStartup]
     public class MapComponent_QingheMirrorSlashVisuals : MapComponent
     {
         private const int MaxVisuals = 16;
