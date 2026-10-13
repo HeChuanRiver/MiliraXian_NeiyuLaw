@@ -425,7 +425,7 @@ namespace MiliraXian.Characters.Common
 
             Transform transform = renderer.transform;
             Vector3 animationPosition = transform.position - authoredOrigin;
-            Vector3 scale = transform.lossyScale;
+            Vector3 scale = transform.localToWorldMatrix.lossyScale;
             Vector2 spriteSize = renderer.size;
             float width = Mathf.Abs(spriteSize.x * scale.x * visualScale);
             float height = Mathf.Abs(spriteSize.y * scale.y * visualScale);

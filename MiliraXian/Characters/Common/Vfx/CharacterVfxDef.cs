@@ -63,7 +63,18 @@ namespace MiliraXian.Characters.Common.Vfx
 
         internal Texture2D Texture(string path) => !path.NullOrEmpty() && textures.TryGetValue(path, out Texture2D texture) ? texture : null;
         internal Material Material(string address) => !address.NullOrEmpty() && materials.TryGetValue(address, out Material material) ? material : null;
-        internal CharacterVfxAnimation Instantiate() => Prepare() ? new CharacterVfxAnimation(this) : null;
+        internal CharacterVfxAnimation Instantiate()
+        {
+            if (!Prepare()) return null;
+            try { return new CharacterVfxAnimation(this); }
+            catch (Exception exception)
+            {
+                available = false;
+                Log.ErrorOnce("[MiliraXian] Authored VFX instance could not be created: " + defName + "\n" + exception,
+                    GenText.StableStringHash("MX_Vfx_Instantiate_" + defName));
+                return null;
+            }
+        }
 
         internal Material MaterialAt(string path)
         {
@@ -332,7 +343,11 @@ namespace MiliraXian.Characters.Common.Vfx
             for (int i = 0; i < Nodes.Length; i++)
             {
                 Nodes[i].localPosition = positions[i]; Nodes[i].localScale = scales[i];
-                Nodes[i].localRotation = quaternionAnimated[i] ? rotations[i].normalized : Quaternion.Euler(euler[i]);
+                // Waylith exposes Lerp, but has neither Quaternion.normalized nor a component indexer.
+                Quaternion rotation = rotations[i];
+                Nodes[i].localRotation = quaternionAnimated[i]
+                    ? (Quaternion.Dot(rotation, rotation) > 1e-12f ? Quaternion.Lerp(rotation, rotation, 0f) : Quaternion.identity)
+                    : Quaternion.Euler(euler[i]);
             }
             foreach (CharacterVfxSpriteFrame frame in source.spriteFrames)
                 if (frame.time <= time && spritesByPart[frame.part] != null)
@@ -354,7 +369,19 @@ namespace MiliraXian.Characters.Common.Vfx
             else if (property.StartsWith("m_LocalPosition.")) positions[track.part][axis] = value;
             else if (property.StartsWith("m_LocalScale.")) scales[track.part][axis] = value;
             else if (property.StartsWith("localEulerAngles")) euler[track.part][axis] = value;
-            else if (property.StartsWith("m_LocalRotation.")) { rotations[track.part][axis] = value; quaternionAnimated[track.part] = true; }
+            else if (property.StartsWith("m_LocalRotation."))
+            {
+                Quaternion rotation = rotations[track.part];
+                switch (axis)
+                {
+                    case 0: rotation.x = value; break;
+                    case 1: rotation.y = value; break;
+                    case 2: rotation.z = value; break;
+                    default: rotation.w = value; break;
+                }
+                rotations[track.part] = rotation;
+                quaternionAnimated[track.part] = true;
+            }
         }
 
         internal void Dispose() { if (Root != null) UnityEngine.Object.Destroy(Root); }

@@ -64,6 +64,7 @@ namespace MiliraXian.Characters.Common.Vfx
             try
             {
                 CharacterVfxAnimation native = definition.Instantiate();
+                if (native == null) return null;
                 root = native.Root;
                 root.name = "ArcaneCircle_" + job.Caster.thingIDNumber;
                 root.hideFlags = HideFlags.HideAndDontSave;
@@ -263,7 +264,7 @@ namespace MiliraXian.Characters.Common.Vfx
                 ParticleLayer layer = particles[layerIndex];
                 CharacterVfxParticle[] frame = CharacterVfxParticles.Sample(layer.Source.Emitter.bakedIndex, lastParticleTime);
                 Transform emitterTransform = layer.Source.Transform;
-                float layerScale = emitterTransform.lossyScale.x * scale;
+                float layerScale = emitterTransform.localToWorldMatrix.lossyScale.x * scale;
                 float glow = Mathf.Lerp(1f, 1.35f, Mathf.InverseLerp(0.85f, 0.96f, lastProgress));
                 for (int i = 0; i < frame.Length; i++)
                 {
