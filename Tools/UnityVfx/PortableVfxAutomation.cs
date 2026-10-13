@@ -52,7 +52,7 @@ public static class PortableVfxAutomation
             defs.Add(Export("arcane_impact", "Assets/ArcaneImpact/Prefabs/ArcaneImpact.prefab", null));
             foreach (string state in new[] { "Idle", "Twitch", "Alert" })
                 defs.Add(Export("neiyu_ear_" + state.ToLowerInvariant(), "Assets/NeiyuEar/Prefabs/NeiyuEarDriver_Runtime.prefab", "Assets/NeiyuEar/Animations/Ear_" + state + ".anim"));
-            string destination = Path.Combine(ModRoot, "Content/Defs/AnimationDefs/MiliraXian_CharacterVfx.xml");
+            string destination = Path.Combine(ModRoot, "1.6/Defs/MiscDefs/MiliraXian_CharacterVfx.xml");
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
             new XDocument(new XDeclaration("1.0", "utf-8", null), defs).Save(destination);
             if (buildResources) BuildMaterials();

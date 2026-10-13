@@ -161,19 +161,14 @@ Windows 的日志通常位于：
 About/                     模组信息、封面与工坊 ID
 1.6/
   Assemblies/              主程序集
-  Defs/                    角色、技能、装备、任务等定义
+  Defs/                    角色、技能、装备、任务及动画、特效、音效、Shader 等 XML 定义
   Languages/               简体中文、繁体中文、英文
-  Mods/                    按需加载的兼容程序集与角色注册定义
+  Mods/                    按需加载的兼容程序集、Def 与 XML 补丁
   Patches/                 XML 补丁
 Content/
   Textures/                按角色与 Common 分类的贴图、序列帧和界面图片
   Sounds/                  世界奥术打击与清荷技能音效
   AssetBundles/            按 Windows、Linux、Mac 分类的动画与特效资源包
-  Defs/AnimationDefs/      动画曲线、图层、序列帧引用与飞行动画定义
-  Defs/SoundDefs/          音效定义
-  Defs/ShaderDefs/         Shader 定义
-  Defs/Effects/            特效对象、Fleck 与 Effecter 定义
-  Mods/                    按模组条件加载的面部美术与动画定义
   ShaderSources/           原 Unity Shader 制作源码
   Artwork/                 宣传与封面制作图片
 MiliraXian/
@@ -186,7 +181,9 @@ Tools/
 LoadFolders.xml            版本与条件加载入口
 ```
 
-正式游戏资源统一放在 `Content/`，1.6 与 1.7 共用；游戏规定位置的模组封面仍为 `About/Preview.png`。贴图和声音的 Def 路径相对于各自的 `Textures/`、`Sounds/` 根目录填写。新增资源沿用角色与用途分类，移动时同步加载规则、代码和导出工具，不在旧目录保留副本。
+`Content/` 只收纳贴图、序列帧、动画与特效资源包、音效、Shader 制作源码等素材，1.6 与 1.7 共用。XML 定义（包括动画曲线、特效、音效和 Shader 定义）仍放在 `1.6/Defs/` 的原有分类中，联动 Def 和补丁分别放在 `1.6/Mods/<packageId>/Defs/`、`Patches/` 并保持条件加载，不能随素材迁入 `Content/`。游戏规定位置的模组封面仍为 `About/Preview.png`。
+
+贴图和声音的 Def 路径相对于 `Content/Textures/`、`Content/Sounds/` 根目录填写。新增素材沿用角色与用途分类，移动时同步加载规则、代码和导出工具，不在旧目录保留副本；导出工具生成的 XML 写入对应 Def 目录。
 
 内容相同但用于不同动画帧、方向或 FA 状态的必需文件名保留；备份副本、构建中间文件、日志和缓存不作为资源收录。Unity 原始制作工程继续保留，修改后使用导出工具更新 `Content/` 中的运行数据。
 
