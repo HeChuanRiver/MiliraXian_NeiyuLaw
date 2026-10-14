@@ -10,7 +10,7 @@
     <RootNamespace>MiliraXian.Characters</RootNamespace>
     <AssemblyName>MiliraXian_NeiyuLaw</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <OutputPath>..\..\1.6\Assemblies</OutputPath>
+    <OutputPath>..\..\1.7\Assemblies</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Both assemblies ship in 1.6\Assemblies, so the library is not copied as a private dependency. -->
+    <!-- Both assemblies ship in 1.7\Assemblies, so the library is not copied as a private dependency. -->
     <ProjectReference Include="..\CharacterLib\MiliraXian_CharacterLib.csproj">
       <Private>False</Private>
     </ProjectReference>
@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\1.6\**\*.*" Exclude="..\..\1.6\Assemblies\**\*.*" />
+    <Content Include="..\..\1.7\**\*.*" Exclude="..\..\1.7\Assemblies\**\*.*" />
     <Content Include="..\..\About\**\*.*" />
     <Content Include="..\..\Content\**\*.*" />
     <Content Include="..\..\LoadFolders.xml" />

@@ -7,7 +7,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>MiliraXian.CharacterLib.Compat.FacialAnimationIntegration</RootNamespace>
     <AssemblyName>MXCL_FACompat</AssemblyName>
-    <OutputPath>..\..\..\..\1.6\Mods\Nals.FacialAnimation\Assemblies</OutputPath>
+    <OutputPath>..\..\..\..\1.7\Mods\Nals.FacialAnimation\Assemblies</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />

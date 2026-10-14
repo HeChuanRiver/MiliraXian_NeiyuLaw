@@ -1,6 +1,6 @@
 # 米莉拉角色拓展
 
-**Milira Character Expansion · RimWorld 1.6 · v1.1 开发分支**
+**Milira Character Expansion · RimWorld 1.7 · v1.1 开发分支**
 
 ![米莉拉角色拓展封面](About/Preview.png)
 
@@ -49,7 +49,7 @@
 
 ### 运行环境
 
-- **RimWorld 1.6**。
+- **RimWorld 1.7**。
 - **Royalty、Biotech**：当前 Milira Race 的前置要求。
 - 本仓库的 Unity AssetBundle 目前仅提供 **Windows** 构建；Linux／macOS 的动画与特效完整性尚未验证。
 
@@ -67,7 +67,7 @@
 ### 安装开发版
 
 1. 在上方 Releases 页面下载对应版本的 `MiliraXian_NeiyuLaw-版本号.zip` 完整安装包。开发版标记为预发布版（Pre-release）。不要下载页面自动生成的 `Source code`，也不要将分支 ZIP 直接当作安装包。
-2. 将模组文件夹放入 `RimWorld/Mods/`。文件夹内应直接包含 `About/`、`1.6/`、`Content/` 和 `LoadFolders.xml`，不要多套一层解压目录。
+2. 将模组文件夹放入 `RimWorld/Mods/`。文件夹内应直接包含 `About/`、`1.7/`、`Content/` 和 `LoadFolders.xml`，不要多套一层解压目录。
 3. 在游戏模组列表启用前置与「米莉拉角色拓展 v1.1dev」，处理缺失依赖和排序提示后重启游戏。
 4. 进入模组设置，按需选择角色强度；第一次测试建议使用新存档或现有存档副本。
 
@@ -159,7 +159,7 @@ Windows 的日志通常位于：
 
 ```text
 About/                     模组信息、封面与工坊 ID
-1.6/
+1.7/
   Assemblies/              主程序集
   Defs/                    角色、技能、装备、任务及动画、特效、音效、Shader 等 XML 定义
   Languages/               简体中文、繁体中文、英文
@@ -181,7 +181,7 @@ Tools/
 LoadFolders.xml            版本与条件加载入口
 ```
 
-`Content/` 只收纳贴图、序列帧、动画与特效资源包、音效、Shader 制作源码等素材，1.6 与 1.7 共用。XML 定义（包括动画曲线、特效、音效和 Shader 定义）仍放在 `1.6/Defs/` 的原有分类中，联动 Def 和补丁分别放在 `1.6/Mods/<packageId>/Defs/`、`Patches/` 并保持条件加载，不能随素材迁入 `Content/`。游戏规定位置的模组封面仍为 `About/Preview.png`。
+`Content/` 只收纳贴图、序列帧、动画与特效资源包、音效、Shader 制作源码等素材。XML 定义（包括动画曲线、特效、音效和 Shader 定义）仍放在 `1.7/Defs/` 的原有分类中，联动 Def 和补丁分别放在 `1.7/Mods/<packageId>/Defs/`、`Patches/` 并保持条件加载，不能随素材迁入 `Content/`。游戏规定位置的模组封面仍为 `About/Preview.png`。
 
 贴图和声音的 Def 路径相对于 `Content/Textures/`、`Content/Sounds/` 根目录填写。新增素材沿用角色与用途分类，移动时同步加载规则、代码和导出工具，不在旧目录保留副本；导出工具生成的 XML 写入对应 Def 目录。
 
@@ -223,7 +223,7 @@ dotnet build .\MiliraXian_NeiyuLaw.csproj --configuration Release --no-restore
 
 Harmony 2.4.2 走 `PackageReference`，由 `dotnet restore` 自动拉取到全局包缓存，无需额外安装 nuget.exe。其他游戏和前置程序集由本机安装提供，不由本仓库分发。
 
-主项目输出到 `1.6/Assemblies/MiliraXian_NeiyuLaw.dll`；将 `Release` 改为 `Debug` 可构建调试版本。二者使用同一输出目录，不要在游戏运行时覆盖程序集。
+主项目输出到 `1.7/Assemblies/MiliraXian_NeiyuLaw.dll`；将 `Release` 改为 `Debug` 可构建调试版本。二者使用同一输出目录，不要在游戏运行时覆盖程序集。
 
 Melee Animation 兼容层是单独的 `MiliraXian_MACompat.csproj`，需要安装对应模组并正确设置 `ZAnimationModDll`；它不属于主项目的编译范围。
 

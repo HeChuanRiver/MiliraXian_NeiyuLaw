@@ -168,7 +168,7 @@
             </li>
 
             <!-- 角色身份 ID。特殊角色管理器（SCM）的显示数据挂在条件目录的载体 kindDef 上
-                 （1.6/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml），二者靠此 ID 接合。 -->
+                 （1.7/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml），二者靠此 ID 接合。 -->
             <li Class="MiliraXian.CharacterLib.CharacterRegistrationExtension">
                 <characterId>Mingyuan</characterId>
             </li>

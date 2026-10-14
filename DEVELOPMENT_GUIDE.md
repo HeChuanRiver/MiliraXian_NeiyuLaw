@@ -4,11 +4,11 @@
 
 ## 一、MiliraXian_CharacterLib（内置角色库）
 
-定位是**替代 AriandelLibrary 的自研内置角色库**，与主程序集同样输出到 `1.6/Assemblies/`，根命名空间 `MiliraXian.CharacterLib`。
+定位是**替代 AriandelLibrary 的自研内置角色库**，与主程序集同样输出到 `1.7/Assemblies/`，根命名空间 `MiliraXian.CharacterLib`。
 
-- **依赖方向单向**：主程序集通过 `ProjectReference`（`<Private>False</Private>`）依赖本库，本库**不引用主程序集**，不反向依赖角色代码。构建主工程会自动先编本库；两者同在 `1.6/Assemblies/`，因此不作私有依赖复制。
+- **依赖方向单向**：主程序集通过 `ProjectReference`（`<Private>False</Private>`）依赖本库，本库**不引用主程序集**，不反向依赖角色代码。构建主工程会自动先编本库；两者同在 `1.7/Assemblies/`，因此不作私有依赖复制。
 - **核心工程既不引用 AL 也不引用 AlienRace**。引用列表只有 Lib.Harmony、Assembly-CSharp、System、System.Core、System.Xml 与 UnityEngine 模块。AL 只被 `MXCL_ALCompat.csproj` 引用。若日后把飞行动画替换（`AnimationDef`，属 AlienRace）移入核心，需要**新增** AlienRace 引用。
-- 隔离靠**独立程序集**而非代码守卫：AL 类型全部只出现在 `Compat/AriandelLibraryIntegration/`，该工程输出到 `1.6/Mods/Ariandel.AriandelLibrary/Assemblies/`，由 `LoadFolders.xml` 的 `IfModActive` 条件加载，AL 缺席时整个 DLL 不加载。这比 `ModsConfig.IsActive` 守卫更彻底。
+- 隔离靠**独立程序集**而非代码守卫：AL 类型全部只出现在 `Compat/AriandelLibraryIntegration/`，该工程输出到 `1.7/Mods/Ariandel.AriandelLibrary/Assemblies/`，由 `LoadFolders.xml` 的 `IfModActive` 条件加载，AL 缺席时整个 DLL 不加载。这比 `ModsConfig.IsActive` 守卫更彻底。
 - 若将来确实需要在**同一程序集**内条件性触及第三方类型：`<Private>False</Private>` 只表示不复制 DLL，**不能**让程序集在运行时摆脱依赖。CLR 按方法粒度延迟解析，JIT 某方法时只要其签名或方法体出现该类型就会去加载对应程序集，缺席时在那一刻抛 `TypeLoadException` / `FileNotFoundException`。此时守卫与第三方类型**不能写在同一个方法里**。
 - 加载顺序：RimWorld 按文件名字母序加载 `Assemblies/`，`MiliraXian_CharacterLib` 排在 `MiliraXian_NeiyuLaw` 之前。两者都注册 Harmony patch 时需留意此顺序。
 
@@ -40,7 +40,7 @@ CL 是**只依赖 AlienRace 的特殊角色库**，职责限定为三件事：
 | `CharacterCarrierExtension` | MXCL_ALCompat | 标记 SCM 载体 kindDef（见下「SCM 对接：载体模式」） |
 | `CharacterFaceExtension` | MXCL_FACompat | 按 `PawnKindDef` 绑定 FA 五官 |
 
-四位角色的真实 PawnkindDef（`1.6/Defs/PawnkindDef/`）各挂前四个扩展，**无任何 AL 扩展**。
+四位角色的真实 PawnkindDef（`1.7/Defs/PawnkindDef/`）各挂前四个扩展，**无任何 AL 扩展**。
 
 ### 特殊角色的身份与限定式生成
 
@@ -50,7 +50,7 @@ CL 是**只依赖 AlienRace 的特殊角色库**，职责限定为三件事：
 2. **CL 的 `CharacterIdentityExtension`**——生成后改名/换 backstory/定年龄/剔特质（取代原 AL `FixedIdentityExtension`；沿用其技能增益差值补偿逻辑：替换 backstory 后用旧集合 −1、新集合 +1 累加 `skillGains` 再夹到 [0,20]，否则技能数值错乱）。
 3. **`MiliraXian/Characters/Neiyu/SpecialPawnCoreStateRepair.cs`**——主程序集自写的兜底修复，在 `Pawn.SpawnSetup` 前重建残缺 tracker 图，并硬编码修复视觉身份（霓羽补 `MiliraNeiyuHead`/Female/Bald/两个 backstory，明渊无条件纠正 `MiliraMingyuanHead`）。
 
-**SCM 对接：载体模式**。`SpecialPawnExtension`（AL 类型）只挂在条件目录 `1.6/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml` 的 4 个载体 kindDef 上（各配 `CharacterCarrierExtension`），AL 缺席时整个目录不加载；真实角色 PawnkindDef 不被 SCM 接管生成与死亡。
+**SCM 对接：载体模式**。`SpecialPawnExtension`（AL 类型）只挂在条件目录 `1.7/Mods/Ariandel.AriandelLibrary/Defs/SpecialPawnCarriers.xml` 的 4 个载体 kindDef 上（各配 `CharacterCarrierExtension`），AL 缺席时整个目录不加载；真实角色 PawnkindDef 不被 SCM 接管生成与死亡。
 
 限定式生成有两条路径：
 
@@ -68,7 +68,7 @@ CL 是**只依赖 AlienRace 的特殊角色库**，职责限定为三件事：
 | 翅膀／race part | PawnkindDef 挂 `CharacterRacePartExtension`，由 CharacterLib 的 `CharacterRaceParts` / `CharacterRacePartPatches`（postfix 原版 `PawnRenderNode.GraphicFor`）按 `Props.texPath` 前缀匹配替换 Graphic |
 | FA 五官 | `FacialAnimation.*TypeDef` + `probability` 0.0001 + `CharacterFaceExtension.pawnKind`，patch `DrawFaceGraphicsComp.CompRenderNodes`（internal，运行时经 `AccessTools.TypeByName` 解析）执行绑定；另 postfix `FacialAnimationModSettings.ShouldDrawRaceXenoType` 强制显示 |
 
-FA 的 XML 侧在 `1.6/Mods/Nals.FacialAnimation/Defs/` 的 Unique{Eye,Lid,Brow}.xml；动画级定制走同工程 `Patch_CreateAnimationDict.cs` + `FaceAnimationOverrideDef`（机制就绪，XML 目前零引用）。
+FA 的 XML 侧在 `1.7/Mods/Nals.FacialAnimation/Defs/` 的 Unique{Eye,Lid,Brow}.xml；动画级定制走同工程 `Patch_CreateAnimationDict.cs` + `FaceAnimationOverrideDef`（机制就绪，XML 目前零引用）。
 
 ### 米莉拉翅膀渲染（race part 替换的前提）
 
