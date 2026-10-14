@@ -7,12 +7,16 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>MiliraXian.CharacterLib.Compat.FacialAnimationIntegration</RootNamespace>
     <AssemblyName>MXCL_FACompat</AssemblyName>
-    <OutputPath>..\..\..\..\1.6\Mods\Nals.FacialAnimation\Assemblies</OutputPath>
+    <OutputPath>..\..\..\..\1.7\Mods\Nals.FacialAnimation\Assemblies</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
     <Reference Include="FacialAnimation" HintPath="$(FacialAnimationDll)" Private="false" />
+    <!-- FacialAnimation ships only 1.6 assemblies whose signatures name UnityEngine.CoreModule;
+         the facade below is compile-only, and the runtime remaps it to UnityStubs. -->
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4871" ExcludeAssets="all" NoWarn="NU1701" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(NuGetPackageRoot)krafs.rimworld.ref\1.6.4871\ref\net472\UnityEngine.CoreModule.dll" Private="false" />
     <Compile Include="**\*.cs" />
   </ItemGroup>
 </Project>
