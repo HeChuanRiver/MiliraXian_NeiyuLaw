@@ -9,12 +9,16 @@
     <AbilityDef>
         <defName>MX_Neiyu_WarpFeather</defName>
         <label>&lt;color=#79CBFF&gt;折跃引羽&lt;/color&gt;</label>
-        <description>短暂施法后生成12–24根米莉拉羽毛。冷却300秒。</description>
+        <description>凝聚周围的光羽，施法3秒后，在身旁生成12～24根米莉拉羽毛。
+冷却时间：300秒。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_WarpFeather</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>100</displayOrder>
         <cooldownTicksRange>18000</cooldownTicksRange>
+        <warmupSound>MX_Neiyu_WarpFeather_Wind</warmupSound>
+        <warmupPreEndSound>MX_Neiyu_WarpFeather_Chime</warmupPreEndSound>
+        <warmupPreEndSoundSeconds>0.9</warmupPreEndSoundSeconds>
 
         <targetRequired>false</targetRequired>
         <hostile>false</hostile>
@@ -23,10 +27,11 @@
         <disableGizmoWhileUndrafted>false</disableGizmoWhileUndrafted>
 
         <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
+            <verbClass>MiliraXian.Characters.Neiyu.Verb_CastAbilityNeiyuWarpFeather</verbClass>
             <targetable>false</targetable>
             <range>0</range>
-            <warmupTime>0.3</warmupTime>
+            <warmupTime>3</warmupTime>
+            <drawAimPie>false</drawAimPie>
             <targetParams>
                 <canTargetSelf>true</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -38,7 +43,8 @@
 
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuWarpFeather">
-                <finishFlashFleckDefName>PsycastSkipFlashExit</finishFlashFleckDefName>
+                <warmupMoteDef>MX_Mote_NeiyuWarpFeather</warmupMoteDef>
+                <placementSound>MX_Neiyu_WarpFeather_Rustle</placementSound>
                 <featherThingDef>Milira_Feather</featherThingDef>
                 <featherCountRange>12~24</featherCountRange>
             </li>

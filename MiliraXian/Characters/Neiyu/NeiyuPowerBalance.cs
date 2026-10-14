@@ -206,10 +206,10 @@ namespace MiliraXian.Characters.Neiyu
         private static void BuildAbilityTunings()
         {
             AbilityDef warp = AbilityDefNamed("MX_Neiyu_WarpFeather");
-            AddAbilityDescription(warp);
-            AddAbilityCooldown(warp, 60000);
-            CompProperties_AbilityNeiyuWarpFeather warpProps = AbilityComp<CompProperties_AbilityNeiyuWarpFeather>(warp);
-            AddScaled(warpProps, () => warpProps.featherCountRange, value => warpProps.featherCountRange = value, 1f, new IntRange(1, 2));
+            // Warp Feather keeps its configured yield, cooldown and description in both usable tiers.
+            if (warp != null)
+                Add(warp, () => warp.description, value => warp.description = value,
+                    warp.description, "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString());
 
             AbilityDef thunder = AbilityDefNamed("MX_Neiyu_ThunderMarkedStorm");
             AddAbilityDescription(thunder);

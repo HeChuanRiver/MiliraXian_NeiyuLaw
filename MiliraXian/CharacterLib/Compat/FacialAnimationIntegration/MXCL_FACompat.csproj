@@ -12,8 +12,6 @@
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
-    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldInstallDir)\Assembly-CSharp.dll" Private="false" />
-    <Reference Include="UnityStubs" HintPath="$(RimWorldInstallDir)\UnityStubs.dll" Private="false" />
     <Reference Include="FacialAnimation" HintPath="$(FacialAnimationDll)" Private="false" />
     <!-- FacialAnimation ships only 1.6 assemblies whose signatures name UnityEngine.CoreModule;
          the facade below is compile-only, and the runtime remaps it to UnityStubs. -->

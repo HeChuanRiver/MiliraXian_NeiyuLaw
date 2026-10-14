@@ -2,6 +2,7 @@
   <PropertyGroup>
     <MxIntermediateRoot Condition="'$(MxIntermediateRoot)' == ''">$(MSBuildThisFileDirectory)obj/</MxIntermediateRoot>
     <BaseIntermediateOutputPath>$(MxIntermediateRoot)$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildThisFileDirectory)Directory.Build.local.props"
           Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.local.props')" />
@@ -9,9 +10,16 @@
   <PropertyGroup>
     <RimWorldInstallDir Condition="'$(RimWorldInstallDir)' == ''">$(MSBuildThisFileDirectory)..\..</RimWorldInstallDir>
     <RimWorldWorkshopDir Condition="'$(RimWorldWorkshopDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\workshop\content\294100</RimWorldWorkshopDir>
-    <AriandelLibraryDll Condition="'$(AriandelLibraryDll)' == ''">$(RimWorldWorkshopDir)\3665997350\1.6\Assemblies\AriandelLibrary.dll</AriandelLibraryDll>
+    <AriandelLibraryDll Condition="'$(AriandelLibraryDll)' == ''">$(RimWorldWorkshopDir)\3665997350\1.7\Assemblies\AriandelLibrary.dll</AriandelLibraryDll>
     <AlienRaceDll Condition="'$(AlienRaceDll)' == ''">$(RimWorldWorkshopDir)\839005762\1.6\Assemblies\AlienRace.dll</AlienRaceDll>
     <MiliraDll Condition="'$(MiliraDll)' == ''">$(RimWorldWorkshopDir)\3256974620\1.6\Assemblies\Milira.dll</MiliraDll>
     <FacialAnimationDll Condition="'$(FacialAnimationDll)' == ''">$(RimWorldWorkshopDir)\1635901197\1.6\Assemblies\FacialAnimation.dll</FacialAnimationDll>
   </PropertyGroup>
+  <!-- RimWorld 1.7 ships its .NET 10 game and compatibility assemblies at the install root. -->
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldInstallDir)\Assembly-CSharp.dll" Private="false" />
+    <Reference Include="UnityStubs" HintPath="$(RimWorldInstallDir)\UnityStubs.dll" Private="false" />
+    <Reference Include="Waylith" HintPath="$(RimWorldInstallDir)\Waylith.dll" Private="false" />
+    <Reference Include="Waylith.UnityCompat" HintPath="$(RimWorldInstallDir)\Waylith.UnityCompat.dll" Private="false" />
+  </ItemGroup>
 </Project>

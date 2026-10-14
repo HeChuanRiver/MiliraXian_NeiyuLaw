@@ -10,8 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
-    <Reference Include="Assembly-CSharp" HintPath="$(RimWorldInstallDir)\Assembly-CSharp.dll" Private="false" />
-    <Reference Include="UnityStubs" HintPath="$(RimWorldInstallDir)\UnityStubs.dll" Private="false" />
     <Reference Include="AriandelLibrary" HintPath="$(AriandelLibraryDll)" Private="false" />
     <Compile Include="**\*.cs" />
   </ItemGroup>
