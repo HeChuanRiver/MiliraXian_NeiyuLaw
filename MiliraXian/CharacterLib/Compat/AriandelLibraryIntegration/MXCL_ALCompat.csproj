@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net481</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14.0</LangVersion>
     <EnableDefaultItems>false</EnableDefaultItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AssemblyName>MXCL_ALCompat</AssemblyName>
@@ -10,8 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <ProjectReference Include="..\..\MiliraXian_CharacterLib.csproj" Private="false" />
-    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="Assembly-CSharp" HintPath="$(RimWorldManagedDir)\Assembly-CSharp.dll" Private="false" />
-    <Reference Condition="'$(UseRimWorldReferencePackage)' != 'true'" Include="UnityEngine.CoreModule" HintPath="$(RimWorldManagedDir)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="AriandelLibrary" HintPath="$(AriandelLibraryDll)" Private="false" />
     <Compile Include="**\*.cs" />
   </ItemGroup>

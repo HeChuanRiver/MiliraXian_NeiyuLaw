@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef ParentName="MoteBase">
+        <defName>MX_Mote_NeiyuWarpFeather</defName>
+        <label>凝聚光羽</label>
+        <thingClass>MiliraXian.Characters.Neiyu.Mote_NeiyuWarpFeather</thingClass>
+        <altitudeLayer>MoteOverheadLow</altitudeLayer>
+        <tickerType>Normal</tickerType>
+        <isSaveable>false</isSaveable>
+        <graphicData>
+            <texPath>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texPath>
+            <shaderType>MoteGlow</shaderType>
+            <drawSize>(5,5)</drawSize>
+        </graphicData>
+        <mote>
+            <realTime>false</realTime>
+            <needsMaintenance>false</needsMaintenance>
+        </mote>
+    </ThingDef>
+</Defs>

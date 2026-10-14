@@ -28,6 +28,10 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
         /// a declared part with the controller that can wear it.
         /// </summary>
         private static readonly Dictionary<PawnKindDef, Dictionary<Type, FaceTypeDef>> parts = new();
+        // The installed FA DLL declares these colors through UnityEngine.CoreModule.
+        // Keep the boxed value inside FA's API boundary when compiling against Waylith.
+        private static readonly FieldInfo minimumColor = AccessTools.Field(typeof(FaceTypeDef), "minColor");
+        private static readonly PropertyInfo secondEyeColor = AccessTools.Property(typeof(EyeballControllerComp), "FaceSecondColor");
 
         static CharacterFaceBinding()
         {
@@ -79,8 +83,9 @@ namespace MiliraXian.CharacterLib.Compat.FacialAnimationIntegration
 
                 // FaceColor sits on the generic base rather than the interface, so it is reached
                 // through that base; FaceSecondColor belongs to the eyeball alone.
-                controllerBase.GetProperty("FaceColor")?.SetValue(comp, faceType.minColor);
-                if (comp is EyeballControllerComp eyes) eyes.FaceSecondColor = faceType.minColor;
+                object color = minimumColor.GetValue(faceType);
+                controllerBase.GetProperty("FaceColor")?.SetValue(comp, color);
+                if (comp is EyeballControllerComp eyes) secondEyeColor.SetValue(eyes, color);
                 controller.SetDirty();
             }
         }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <SoundDef>
+        <defName>MX_Neiyu_WarpFeather_Wind</defName>
+        <context>MapOnly</context>
+        <sustain>true</sustain>
+        <sustainFadeoutTime>0.12</sustainFadeoutTime>
+        <priorityMode>PrioritizeNearest</priorityMode>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/WarpFeather/FeatherWind</clipPath></li></grains>
+                <volumeRange>18</volumeRange>
+                <distRange>4~22</distRange>
+                <sustainLoop>true</sustainLoop>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_Neiyu_WarpFeather_Chime</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/WarpFeather/FeatherChime</clipPath></li></grains>
+                <volumeRange>22</volumeRange>
+                <distRange>4~22</distRange>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_Neiyu_WarpFeather_Rustle</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/WarpFeather/FeatherRustle</clipPath></li></grains>
+                <volumeRange>18</volumeRange>
+                <distRange>4~22</distRange>
+                <muteWhenPaused>true</muteWhenPaused>
+                <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+            </li>
+        </subSounds>
+    </SoundDef>
+</Defs>

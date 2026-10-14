@@ -1,16 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <loadFolders>
 
-    <v1.6>
-        <li>1.6</li>
-        <li>Content</li>
-        <li IfModActive="Ariandel.AriandelLibrary">1.6/Mods/Ariandel.AriandelLibrary</li>
-        <!-- 面部动画 -->
-        <li IfModActive="Nals.FacialAnimation">1.6/Mods/Nals.FacialAnimation</li>
-        <!-- 动画级定制：既要 FA 本体的类型，也要米莉拉种族动画作为替换基准 -->
-        <li IfModActiveAll="Nals.FacialAnimation, Ancot.MiliraRaceFacialAnimation">1.6/Mods/Ancot.MiliraRaceFacialAnimation</li>
-    </v1.6>
-
     <v1.7>
         <li>1.6</li>
         <li>Content</li>
