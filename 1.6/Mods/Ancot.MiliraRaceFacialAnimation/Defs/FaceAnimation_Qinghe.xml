@@ -30,6 +30,7 @@
                 <eyeballOffset>(0,0,-0.03)</eyeballOffset>
                 <headShapeDef>blush</headShapeDef>
                 <lidShapeDef>half</lidShapeDef>
+                <eyeballShapeDef>Lovin</eyeballShapeDef>
             </li>
             <li>
                 <duration>240</duration>
