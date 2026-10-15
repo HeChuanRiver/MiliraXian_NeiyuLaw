@@ -13,11 +13,11 @@ public static class ArcaneCircleAutomation
     private const string Root = "Assets/ArcaneCircle";
     private const float Length = 60f;
     private const string BundleName = "miliraxian_arcane_circle";
-    private static readonly Color Ice = new Color(0.12f, 0.62f, 1f, 1f);
-    private static readonly Color Gold = new Color(1f, 0.68f, 0.12f, 1f);
-    private static readonly Color Violet = new Color(0.63f, 0.22f, 1f, 1f);
-    private static readonly Color Teal = new Color(0.12f, 1f, 0.64f, 1f);
-    private static readonly Color Rose = new Color(1f, 0.20f, 0.47f, 1f);
+    private static readonly Color Ice = new Color(0.40f, 0.77f, 1f, 1f);
+    private static readonly Color Gold = new Color(0.96f, 0.76f, 0.39f, 1f);
+    private static readonly Color Violet = new Color(0.65f, 0.50f, 0.96f, 1f);
+    private static readonly Color Teal = new Color(0.38f, 0.91f, 0.76f, 1f);
+    private static readonly Color Rose = new Color(0.96f, 0.47f, 0.72f, 1f);
 
     [MenuItem("Tools/MiliraXian/Build ArcaneCircle Bundle")]
     public static void BuildFromCommandLine()

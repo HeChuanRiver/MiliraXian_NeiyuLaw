@@ -416,7 +416,8 @@ namespace MiliraXian.Characters.Common
 
         internal static void DrawAnimatedSprite(CharacterVfxSprite renderer, Vector3 anchor,
             Vector3 authoredOrigin, float visualScale, float rotation, bool mirror, float alphaMultiplier,
-            Material overrideMaterial = null, float reveal = 1f, bool invertAnimatedRotation = false)
+            Material overrideMaterial = null, float reveal = 1f, bool invertAnimatedRotation = false,
+            MaterialPropertyBlock properties = null)
         {
 
             if (renderer == null || !renderer.visible || !renderer.transform.gameObject.activeInHierarchy
@@ -455,13 +456,14 @@ namespace MiliraXian.Characters.Common
                 return;
             }
 
-            PropertyBlock.Clear();
+            MaterialPropertyBlock drawProperties = properties ?? PropertyBlock;
+            if (properties == null) drawProperties.Clear();
             Color drawColor = renderer.color;
             drawColor.a = Mathf.Clamp01(drawColor.a * alphaMultiplier);
-            PropertyBlock.SetColor(ShaderPropertyIDs.Color, drawColor);
-            if (overrideMaterial != null) PropertyBlock.SetFloat("_Reveal", reveal);
-            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, PropertyBlock);
-            PropertyBlock.Clear();
+            drawProperties.SetColor(ShaderPropertyIDs.Color, drawColor);
+            if (overrideMaterial != null) drawProperties.SetFloat("_Reveal", reveal);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, drawProperties);
+            if (properties == null) drawProperties.Clear();
         }
 
         private static bool IsStaticHaloRenderer(VfxInstance instance, CharacterVfxSprite renderer)

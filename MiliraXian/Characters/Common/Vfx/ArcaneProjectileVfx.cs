@@ -17,10 +17,15 @@ namespace MiliraXian.Characters.Common.Vfx
             AccessTools.FieldRefAccess<WorldCameraDriver, float>("desiredAltitude");
         private readonly Vector3[] vertices = new Vector3[(Segments + 1) * 2];
         private readonly Vector3[] coreVertices = new Vector3[(Segments + 1) * 2];
+        private readonly Vector3[] innerVertices = new Vector3[(Segments + 1) * 2];
         private Mesh tailMesh;
         private Mesh coreMesh;
+        private Mesh innerMesh;
+        private ArcaneParticleBatch sparks;
         private int lastTick = -1;
         private Vector3 lastCamera;
+        private Quaternion lastCameraRotation;
+        private ArcaneVfxQuality lastQuality;
         internal bool Disposed { get; private set; }
 
         internal ArcaneProjectileVfx()
@@ -76,43 +81,59 @@ namespace MiliraXian.Characters.Common.Vfx
 
         internal void Draw(WorldObject_ArcaneProjectile projectile)
         {
-            if (Disposed || !ArcaneEnergyResources.Ready()) return;
+            if (Disposed || Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active || !ArcaneEnergyResources.Ready()) return;
             Camera camera = Find.WorldCamera;
             Vector3 head = projectile.DrawPos;
             float p = projectile.FlightProgress;
             float size = projectile.DrawSize;
+            float seconds = projectile.FlightSeconds;
             if (tailMesh == null) CreateMeshes();
-            if (lastTick != Find.TickManager.TicksGame || lastCamera != camera.transform.position)
+            bool update = lastTick != Find.TickManager.TicksGame || lastCamera != camera.transform.position
+                || lastCameraRotation != camera.transform.rotation || lastQuality != ArcaneVfxStyle.Quality;
+            if (update)
             {
                 BuildTail(projectile, camera);
                 lastTick = Find.TickManager.TicksGame;
                 lastCamera = camera.transform.position;
+                lastCameraRotation = camera.transform.rotation;
+                lastQuality = ArcaneVfxStyle.Quality;
             }
             int layer = WorldCameraManager.WorldLayer;
             ArcaneEnergyResources.DrawMesh(tailMesh, Matrix4x4.identity, ArcaneEnergyResources.BeamOuter,
-                new Color(0.12f, 0.6f, 1.4f, 0.8f), layer, camera);
+                new Color(0.25f, 0.48f, 1.1f, 0.34f), layer, camera, seconds);
+            ArcaneEnergyResources.DrawMesh(innerMesh, Matrix4x4.identity, ArcaneEnergyResources.BeamInner,
+                new Color(0.35f, 0.83f, 1.15f, 0.62f), layer, camera, seconds);
             ArcaneEnergyResources.DrawMesh(coreMesh, Matrix4x4.identity, ArcaneEnergyResources.BeamCore,
-                new Color(0.6f, 1.3f, 1.7f, 0.9f), layer, camera);
+                new Color(0.72f, 1.0f, 1.2f, 0.79f), layer, camera, seconds);
             float pulse = 1f + 0.04f * Mathf.Sin(p * 160f);
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, head, size * 4.5f, size * 4.5f,
-                new Color(0.15f, 0.6f, 1.3f, 0.6f), camera, layer);
+                new Color(0.26f, 0.51f, 1.1f, 0.36f), camera, layer, seconds);
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, head, size * 2.2f, size * 2.2f,
-                new Color(0.4f, 1.1f, 1.8f, 0.9f), camera, layer);
+                new Color(0.43f, 0.88f, 1.2f, 0.68f), camera, layer, seconds);
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, head, size * pulse, size * pulse,
-                new Color(1.8f, 1.8f, 1.6f, 1f), camera, layer);
+                new Color(0.9f, 1.03f, 1.14f, 0.9f), camera, layer, seconds, 4f);
 
-            for (int i = 0; i < 18; i++)
+            sparks ??= new ArcaneParticleBatch(ArcaneEnergyResources.Spark);
+            if (update)
             {
-                float age = Mathf.Repeat(i * 0.618034f + p * 5f, 1f);
-                float sample = Mathf.Max(0, p - age * Mathf.Min(p, projectile.TrailLength));
-                float phase = i * 2.399963f + p * 36f;
-                Vector3 center = projectile.PositionAt(sample);
-                float spread = size * (0.5f + age * 1.2f);
-                center += (camera.transform.right * Mathf.Cos(phase) + camera.transform.up * Mathf.Sin(phase)) * spread;
-                float alpha = (1f - age) * Mathf.Clamp01(p * 12f);
-                ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, center, size * 0.25f, size * 0.6f,
-                    new Color(0.4f, 0.85f, 1.5f, alpha), camera, layer);
+                sparks.Begin();
+                for (int i = 0; i < 36; i++)
+                {
+                    if (!ArcaneVfxStyle.KeepParticle(i, 2, ArcaneVfxStyle.Density)) continue;
+                    float age = Mathf.Repeat(i * 0.618034f + p * 5f, 1f);
+                    float sample = Mathf.Max(0, p - age * Mathf.Min(p, projectile.TrailLength));
+                    float phase = i * 2.399963f + p * 36f;
+                    Vector3 center = projectile.PositionAt(sample);
+                    float spread = size * (0.5f + age * 1.2f);
+                    center += (camera.transform.right * Mathf.Cos(phase) + camera.transform.up * Mathf.Sin(phase)) * spread;
+                    float alpha = (1f - age) * Mathf.Clamp01(p * 12f);
+                    float diameter = size * (0.11f + Mathf.Repeat(i * 0.38f, 1f) * 0.17f);
+                    sparks.Add(center, camera.transform.right, camera.transform.up, diameter,
+                        diameter * (1.4f + age * 1.5f), new Color(0.48f, 0.83f, 1.14f, alpha * 0.7f));
+                }
+                sparks.Upload();
             }
+            sparks.Draw(seconds, layer, camera);
         }
 
         private void CreateMeshes()
@@ -135,14 +156,17 @@ namespace MiliraXian.Characters.Common.Vfx
             }
             tailMesh = new Mesh { name = "MX_ArcaneWorldTail", vertices = vertices, uv = uv, colors32 = colors, triangles = triangles };
             coreMesh = new Mesh { name = "MX_ArcaneWorldTailCore", vertices = coreVertices, uv = uv, colors32 = colors, triangles = triangles };
+            innerMesh = new Mesh { name = "MX_ArcaneWorldTailInner", vertices = innerVertices, uv = uv, colors32 = colors, triangles = triangles };
             tailMesh.MarkDynamic();
             coreMesh.MarkDynamic();
+            innerMesh.MarkDynamic();
         }
 
         private void BuildTail(WorldObject_ArcaneProjectile projectile, Camera camera)
         {
             float head = projectile.FlightProgress;
             float start = Mathf.Max(0f, head - projectile.TrailLength);
+            Vector3 previousSide = Vector3.zero;
             for (int i = 0; i <= Segments; i++)
             {
                 float t = i / (float)Segments;
@@ -153,16 +177,20 @@ namespace MiliraXian.Characters.Common.Vfx
                 Vector3 side = Vector3.Cross(tangent, position - camera.transform.position);
                 if (side.sqrMagnitude < 0.00000001f) side = camera.transform.right;
                 side.Normalize();
-                Vector3 offset = side * (projectile.DrawSize * 1.1f * Mathf.Lerp(0.06f, 1f, t));
-                vertices[i * 2] = position - offset;
-                vertices[i * 2 + 1] = position + offset;
-                coreVertices[i * 2] = position - offset * 0.3f;
-                coreVertices[i * 2 + 1] = position + offset * 0.3f;
+                if (i > 0 && Vector3.Dot(side, previousSide) < 0f) side = -side;
+                previousSide = side;
+                Vector3 offset = side * (projectile.DrawSize * 1.1f * Mathf.Lerp(0.06f, 1f, t)
+                    * Mathf.Clamp(ArcaneVfxStyle.Tuning.trailWidth, 0.5f, 1.5f));
+                vertices[i * 2] = position - offset * 1.65f;
+                vertices[i * 2 + 1] = position + offset * 1.65f;
+                innerVertices[i * 2] = position - offset * 0.8f;
+                innerVertices[i * 2 + 1] = position + offset * 0.8f;
+                coreVertices[i * 2] = position - offset * 0.20f;
+                coreVertices[i * 2 + 1] = position + offset * 0.20f;
             }
-            tailMesh.vertices = vertices;
-            coreMesh.vertices = coreVertices;
-            tailMesh.RecalculateBounds();
-            coreMesh.RecalculateBounds();
+            ArcaneVfxStyle.UploadMesh(tailMesh, vertices);
+            ArcaneVfxStyle.UploadMesh(coreMesh, coreVertices);
+            ArcaneVfxStyle.UploadMesh(innerMesh, innerVertices);
         }
 
         internal void Dispose()
@@ -171,8 +199,12 @@ namespace MiliraXian.Characters.Common.Vfx
             Disposed = true;
             if (tailMesh != null) Object.Destroy(tailMesh);
             if (coreMesh != null) Object.Destroy(coreMesh);
+            if (innerMesh != null) Object.Destroy(innerMesh);
+            sparks?.Dispose();
             tailMesh = null;
             coreMesh = null;
+            innerMesh = null;
+            sparks = null;
             Active.Remove(this);
         }
     }

@@ -90,6 +90,9 @@ namespace MiliraXian.Characters.Common.Abilities
                     projectile.Initialize(launch.Caster, launch.SourceTile, launch.TargetTile, launch.ImpactRadius);
                     Find.WorldObjects.Add(projectile);
                     ArcaneProjectileVfx.FrameFlight(projectile);
+                    Log.Message($"[WorldArcaneStrike] Projectile {projectile.ID} spawned: "
+                        + $"{launch.SourceTile} -> {launch.TargetTile}, tick={Find.TickManager.TicksGame}, "
+                        + $"dynamicDrawer={projectile.def.useDynamicDrawer}, drawWorldObjects={DebugViewSettings.drawWorldObjects}.");
                 }
                 catch (Exception exception)
                 {

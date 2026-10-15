@@ -32,7 +32,13 @@ namespace MiliraXian.Characters.Common.Vfx
                 foreach (CharacterVfxPart part in parts)
                 {
                     available &= LoadTexture(part.texture);
-                    if (!part.material.NullOrEmpty() && !materials.ContainsKey(part.material))
+                    if (part.shader != null && !part.texture.NullOrEmpty())
+                    {
+                        string key = part.shader.defName + "/" + part.texture;
+                        if (!materials.ContainsKey(key))
+                            materials.Add(key, MaterialPool.MatFrom(Texture(part.texture), part.shader.Shader, Color.white));
+                    }
+                    else if (!part.material.NullOrEmpty() && !materials.ContainsKey(part.material))
                     {
                         Material material = CharacterUnityVfxRuntime.LoadAuthoredMaterial(part.material);
                         materials.Add(part.material, material);
@@ -63,6 +69,8 @@ namespace MiliraXian.Characters.Common.Vfx
 
         internal Texture2D Texture(string path) => !path.NullOrEmpty() && textures.TryGetValue(path, out Texture2D texture) ? texture : null;
         internal Material Material(string address) => !address.NullOrEmpty() && materials.TryGetValue(address, out Material material) ? material : null;
+        internal Material Material(CharacterVfxPart part) => part.shader != null
+            ? Material(part.shader.defName + "/" + part.texture) : Material(part.material);
         internal CharacterVfxAnimation Instantiate()
         {
             if (!Prepare()) return null;
@@ -83,7 +91,7 @@ namespace MiliraXian.Characters.Common.Vfx
                 string candidate = parts[i].name;
                 int parent = parts[i].parentIndex;
                 while (parent > 0) { candidate = parts[parent].name + "/" + candidate; parent = parts[parent].parentIndex; }
-                if (candidate == path) return Material(parts[i].material) ?? CharacterUnityVfxRuntime.GetMaterial(Texture(parts[i].texture), parts[i].glow);
+                if (candidate == path) return Material(parts[i]) ?? CharacterUnityVfxRuntime.GetMaterial(Texture(parts[i].texture), parts[i].glow);
             }
             return null;
         }
@@ -171,6 +179,7 @@ namespace MiliraXian.Characters.Common.Vfx
     public sealed class CharacterVfxPart
     {
         public string name, texture, material;
+        public ShaderDef shader;
         public int parentIndex = -1, sortingOrder;
         public Vector3 position, rotation, scale = Vector3.one;
         public Vector2 size = Vector2.one;
@@ -292,6 +301,9 @@ namespace MiliraXian.Characters.Common.Vfx
                 {
                     CharacterVfxPart part = def.parts[i];
                     GameObject node = new GameObject(part.name); Nodes[i] = node.transform;
+                    // Waylith stores the Transform's name separately from its GameObject
+                    // and initially calls every transform "Transform". Find uses that name.
+                    Nodes[i].name = part.name;
                     if (part.parentIndex >= 0) Nodes[i].SetParent(Nodes[part.parentIndex], false);
                     else Nodes[i].SetParent(Root.transform, false);
                     Nodes[i].localPosition = part.position; Nodes[i].localEulerAngles = part.rotation; Nodes[i].localScale = part.scale;
@@ -302,7 +314,7 @@ namespace MiliraXian.Characters.Common.Vfx
                         {
                             transform = Nodes[i], name = part.name, texture = def.Texture(part.texture), size = part.size,
                             color = part.color, sortingOrder = part.sortingOrder, flipX = part.flipX, flipY = part.flipY,
-                            visible = part.visible, glow = part.glow, authoredMaterial = def.Material(part.material)
+                            visible = part.visible, glow = part.glow, authoredMaterial = def.Material(part)
                         };
                         spritesByPart[i] = sprite; sprites.Add(sprite);
                     }
