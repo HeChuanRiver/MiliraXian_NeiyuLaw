@@ -3,7 +3,7 @@
     <AbilityDef>
         <defName>WorldArcaneStrike</defName>
         <label>世界奥术打击</label>
-        <description>吟唱60秒，向世界地图上任意地块发射奥术彗星。
+        <description>吟唱72秒，向世界地图上任意地块发射奥术彗星。
 
 落点周围半径5个世界格的圆形区域永久化为焦土，范围内的据点、地图和商队遭受毁灭打击，玩家与友方也会受影响。既有免死与复活机制仍可生效。
 
@@ -41,7 +41,7 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
             <range>0</range>
-            <warmupTime>60</warmupTime>
+            <warmupTime>72</warmupTime>
             <targetParams>
                 <canTargetLocations>true</canTargetLocations>
                 <canTargetSelf>false</canTargetSelf>

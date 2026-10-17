@@ -8,6 +8,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _ArcaneClock; // @default = vec4(0.0, 0.0, 0.0, 1.0)
     vec4 _Stroke; // @default = vec4(1.35, 0.58, 5.5, 0.32)
     vec4 _Flow; // @default = vec4(0.28, 0.48, 0.0, 0.0)
+    vec4 _ChantFinish; // @default = vec4(0.0, 0.0, 0.0, 0.0)
     float _Reveal; // @default = 1.0
 } uMaterial;
 layout(set = 2, binding = 1) uniform sampler2D _MainTex;
@@ -37,11 +38,17 @@ void main()
     float grain = 0.96 + 0.04 * sin(angle * 163.0 + length(p) * 113.0 - t * 1.7);
     float breath = 0.97 + 0.03 * sin(t * 1.35 + seed * TAU);
     float tip = reveal >= 0.9999 ? 0.0 : exp(-pow((reveal - angle) * 120.0, 2.0));
+    float seal = uMaterial._ChantFinish.x;
+    float pull = uMaterial._ChantFinish.y;
+    // The completion breath is shared by every rune. During convergence a
+    // single highlight travels inward with the controller's tick-sampled phase.
+    float inward = exp(-pow((length(p) * 2.0 - (1.0 - pull)) * 12.0, 2.0))
+        * sin(pull * 3.14159265359);
     vec4 color = uMaterial._Color * vColor;
-    float glow = uMaterial._Stroke.w * uMaterial._ArcaneClock.w;
+    float glow = uMaterial._Stroke.w * uMaterial._ArcaneClock.w * (1.0 + seal * 0.65);
     float alpha = clamp((ink * 0.88 + rim * 0.26 + halo * glow * 0.35) * color.a * sweep, 0.0, 0.94);
-    vec3 hue = mix(color.rgb, vec3(0.91, 0.97, 1.0), core * 0.24);
-    float light = grain * breath * (0.85 + flow * uMaterial._Flow.x + tip * 0.32);
+    vec3 hue = mix(color.rgb, vec3(0.91, 0.97, 1.0), core * (0.24 + seal * 0.20 + inward * 0.16));
+    float light = grain * breath * (0.85 + flow * uMaterial._Flow.x + tip * 0.32 + seal * 0.24 + inward * 0.22);
     vec3 rgb = hue * (ink * light + rim * 0.30 + halo * glow * 0.23) * color.a * sweep;
     // A narrow cool contour protects fine runes against bright terrain.
     rgb += vec3(0.012, 0.020, 0.033) * rim * 0.2 * color.a * sweep;

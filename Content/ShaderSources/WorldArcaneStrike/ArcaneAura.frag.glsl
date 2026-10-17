@@ -7,6 +7,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Color; // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     vec4 _ArcaneClock; // @default = vec4(0.0, 0.0, 0.0, 1.0)
     vec4 _Flow; // @default = vec4(0.28, 0.48, 0.0, 0.0)
+    vec4 _ChantFinish; // @default = vec4(0.0, 0.0, 0.0, 0.0)
     float _Reveal; // @default = 1.0
 } uMaterial;
 void main()
@@ -18,7 +19,13 @@ void main()
     float edge = exp(-pow((r - 0.86) * 55.0, 2.0));
     float wake = exp(-pow((r - 0.79) * 14.0, 2.0));
     float mask = mix(base * (0.94 + 0.06 * sin(t * 1.3)), edge * 0.8 + wake * 0.24, pulse);
+    // The same pulse becomes a small soft afterglow once the circle is closed.
+    float afterglow = uMaterial._ChantFinish.w * (1.0 - uMaterial._ChantFinish.z);
+    mask = mix(mask, base, smoothstep(0.0, 1.0, afterglow));
+    mask *= 1.0 + uMaterial._ChantFinish.x * 0.35;
     vec4 color = uMaterial._Color * vColor;
+    color.rgb = mix(color.rgb, vec3(0.91, 0.97, 1.0),
+        uMaterial._ChantFinish.x * 0.20 + uMaterial._ChantFinish.y * 0.25);
     float alpha = clamp(mask * color.a * mix(0.8, uMaterial._Flow.y, pulse), 0.0, 0.32);
     if (alpha <= 0.001) discard;
     outColor = vec4(color.rgb * alpha, alpha * 0.55);

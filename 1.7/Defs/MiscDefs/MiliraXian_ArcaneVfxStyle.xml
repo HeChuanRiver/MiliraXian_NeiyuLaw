@@ -17,6 +17,13 @@
     <particleSizeMax>0.21</particleSizeMax>
     <dustLifetime>1.6</dustLifetime>
     <explosionParticleDensity>1</explosionParticleDensity>
+    <!-- Visual timing within the existing chant. Five stages grow by this ratio. -->
+    <chantStageLengthening>1.3</chantStageLengthening>
+    <chantBeatInterval>0.75</chantBeatInterval>
+    <chantBeatLengthening>2.4</chantBeatLengthening>
+    <chantSealFraction>0.05</chantSealFraction>
+    <chantConvergeFraction>0.08</chantConvergeFraction>
+    <chantAfterglowFraction>0.04</chantAfterglowFraction>
   </MiliraXian.Characters.Common.Vfx.ArcaneVfxStyleDef>
 
   <ShaderDef>

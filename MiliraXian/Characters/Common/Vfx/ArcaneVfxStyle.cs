@@ -25,10 +25,26 @@ namespace MiliraXian.Characters.Common.Vfx
         public float particleSizeMax = 0.21f;
         public float dustLifetime = 1.6f;
         public float explosionParticleDensity = 1f;
+        public float chantStageLengthening = 1.3f;
+        public float chantBeatInterval = 0.75f;
+        public float chantBeatLengthening = 2.4f;
+        public float chantSealFraction = 0.05f;
+        public float chantConvergeFraction = 0.08f;
+        public float chantAfterglowFraction = 0.04f;
+    }
+
+    // A sample of the existing job progress, never a second clock or saved cast state.
+    internal struct ArcaneChantFrame
+    {
+        internal float ClipProgress, Seconds, Construction, BeatPhase, PhaseProgress;
+        internal int Stage, Beat;
+        internal Vector4 Finish;
     }
 
     internal static class ArcaneVfxStyle
     {
+        // Boundaries in the authored circle clip; its geometry and tracks stay authoritative.
+        private static readonly float[] ChantClipStages = { 0f, 0.15f, 0.35f, 0.60f, 0.85f, 0.96f };
         internal static ArcaneVfxStyleDef Tuning => DefDatabase<ArcaneVfxStyleDef>.GetNamed("MX_ArcaneVfxStyle");
         internal static ArcaneVfxQuality Quality => NeiyuLawMod.Instance?.Settings?.ArcaneVisualQuality ?? ArcaneVfxQuality.Medium;
         internal static int ParticleBudget => Quality switch { ArcaneVfxQuality.Low => 144, ArcaneVfxQuality.High => 448, _ => 288 };
@@ -36,10 +52,68 @@ namespace MiliraXian.Characters.Common.Vfx
             * (Quality == ArcaneVfxQuality.Low ? 0.45f : Quality == ArcaneVfxQuality.High ? 1f : 0.7f);
         internal static float Glow => Quality == ArcaneVfxQuality.Low ? 0.65f : Quality == ArcaneVfxQuality.High ? 1f : 0.85f;
 
-        // This clock is the only extra visual time mapping. The owner still controls
-        // construction, sealing and convergence through the original animation clip.
-        internal static float ChantSeconds(float progress, float duration) =>
-            (progress <= 0.96f ? progress : progress < 0.9725f ? 0.96f : progress - 0.0125f) * duration;
+        internal static ArcaneChantFrame ChantFrame(float progress, float clipDuration, float chantDuration)
+        {
+            ArcaneVfxStyleDef tuning = Tuning;
+            progress = Mathf.Clamp01(progress);
+            float seal = Mathf.Clamp(tuning.chantSealFraction, 0.01f, 0.1f);
+            float converge = Mathf.Clamp(tuning.chantConvergeFraction, 0.02f, 0.15f);
+            float afterglow = Mathf.Clamp(tuning.chantAfterglowFraction, 0.01f, 0.1f);
+            float constructionEnd = 1f - seal - converge - afterglow;
+            ArcaneChantFrame frame = new() { Construction = Mathf.Clamp01(progress / constructionEnd) };
+            if (progress < constructionEnd)
+            {
+                float growth = Mathf.Clamp(tuning.chantStageLengthening, 1f, 2f);
+                float total = 0f, weight = 1f;
+                for (int i = 0; i < 5; i++, weight *= growth) total += weight;
+                float position = frame.Construction * total;
+                weight = 1f;
+                while (frame.Stage < 4 && position >= weight)
+                {
+                    position -= weight;
+                    weight *= growth;
+                    frame.Stage++;
+                }
+                frame.PhaseProgress = Mathf.Clamp01(position / weight);
+                frame.ClipProgress = Mathf.Lerp(ChantClipStages[frame.Stage], ChantClipStages[frame.Stage + 1], frame.PhaseProgress);
+            }
+            else if (progress < constructionEnd + seal)
+            {
+                frame.Stage = 5;
+                frame.PhaseProgress = (progress - constructionEnd) / seal;
+                frame.ClipProgress = 0.96f;
+                frame.Finish.x = Mathf.Sin(frame.PhaseProgress * Mathf.PI);
+            }
+            else if (progress < 1f - afterglow)
+            {
+                frame.Stage = 6;
+                frame.PhaseProgress = (progress - constructionEnd - seal) / converge;
+                float pull = Mathf.SmoothStep(0f, 1f, frame.PhaseProgress);
+                frame.ClipProgress = Mathf.Lerp(0.9725f, 0.998f, pull);
+                frame.Finish.y = pull;
+            }
+            else
+            {
+                frame.Stage = 7;
+                frame.PhaseProgress = Mathf.InverseLerp(1f - afterglow, 1f, progress);
+                frame.ClipProgress = Mathf.Lerp(0.998f, 1f, frame.PhaseProgress);
+                frame.Finish.y = 1f;
+                frame.Finish.z = 1f - frame.PhaseProgress;
+                frame.Finish.w = 1f;
+            }
+            frame.Seconds = (frame.ClipProgress <= 0.96f ? frame.ClipProgress
+                : frame.ClipProgress < 0.9725f ? 0.96f : frame.ClipProgress - 0.0125f) * clipDuration;
+            // Integrate a linearly increasing interval: later beats take longer,
+            // and sampling after pause/load/speed changes needs no accumulated timer.
+            float interval = Mathf.Clamp(tuning.chantBeatInterval, 0.3f, 2f);
+            float lengthening = Mathf.Clamp(tuning.chantBeatLengthening, 1f, 4f) - 1f;
+            float elapsed = frame.Construction * constructionEnd * chantDuration;
+            float beats = lengthening < 0.001f ? elapsed / interval
+                : constructionEnd * chantDuration / (interval * lengthening) * Mathf.Log(1f + lengthening * frame.Construction);
+            frame.Beat = Mathf.FloorToInt(beats);
+            frame.BeatPhase = beats - frame.Beat;
+            return frame;
+        }
 
         internal static void Properties(MaterialPropertyBlock block, float seconds, float seed = 0f, float profile = 0f)
         {
