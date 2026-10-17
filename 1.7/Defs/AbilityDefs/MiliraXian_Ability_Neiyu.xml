@@ -54,12 +54,14 @@
     <AbilityDef>
         <defName>MX_Neiyu_ThunderMarkedStorm</defName>
         <label>&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;</label>
-        <description>标记半径3格内的敌人。延迟后每个目标受到3次雷击，每次造成35点基础伤害，并附加15点EMP效果。冷却80秒。</description>
+        <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
+每个目标受到108除以目标数、向上取整次数的追踪雷击。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害、15点EMP，并点燃可燃目标。
+冷却60秒；范围内无有效目标时不进入冷却。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>120</displayOrder>
-        <cooldownTicksRange>4800</cooldownTicksRange>
+        <cooldownTicksRange>3600</cooldownTicksRange>
 
         <targetRequired>true</targetRequired>
         <hostile>true</hostile>
@@ -68,10 +70,12 @@
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
 
         <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
+            <verbClass>MiliraXian.Characters.Neiyu.Verb_CastAbilityNeiyuThunderSigil</verbClass>
             <targetable>true</targetable>
             <range>30</range>
             <warmupTime>1.2</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
+            <drawAimPie>false</drawAimPie>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -84,10 +88,11 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuThunderSigil">
                 <radius>3</radius>
-                <strikeCountRange>3~3</strikeCountRange>
+                <strikeBudget>108</strikeBudget>
+                <warmupMote>MX_Mote_NeiyuThunderWarmup</warmupMote>
                 <firstDelayTicksRange>120~180</firstDelayTicksRange>
                 <strikeIntervalTicksRange>45~75</strikeIntervalTicksRange>
-                <damageAmount>35</damageAmount>
+                <damageAmount>25</damageAmount>
                 <empDamageAmount>15</empDamageAmount>
                 <markerHediff>MX_Neiyu_ThunderMark</markerHediff>
             </li>
