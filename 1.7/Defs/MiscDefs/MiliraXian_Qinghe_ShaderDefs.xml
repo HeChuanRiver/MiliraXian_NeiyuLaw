@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ShaderDef>
+        <defName>MX_QH_AuraShieldPetal</defName>
+        <shaderProgram>
+            <vertexShaderFileName>MX_QH_AuraShield.vert.glsl</vertexShaderFileName>
+            <fragmentShaderFileName>MX_QH_AuraShield.frag.glsl</fragmentShaderFileName>
+            <blendMode>Additive</blendMode>
+            <depthWrite>false</depthWrite>
+            <cullMode>None</cullMode>
+            <renderQueue>3151</renderQueue>
+        </shaderProgram>
+    </ShaderDef>
+</Defs>

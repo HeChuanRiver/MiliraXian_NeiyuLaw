@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 本文件只维护状态机接线（每态的 clip 引用、过渡时长、播放速度、scale/dissolve 曲线）。
+         rig 与各态 clip 定义在同目录 MiliraXian_Qinghe_ShieldSkeletalData.xml，
+         由 .cache/lotus/blender_export_rig.py 从 Blender 生成，勿手工新建同名 Def。 -->
+    <MiliraXian.Characters.QingHe.Defs.ShieldAnimationDef>
+        <defName>MX_QH_AuraShieldAnim</defName>
+        <rig>MX_QH_AuraShieldRig</rig>
+        <!-- 显示级缩放的轴心（网格局部坐标，(0,0)=中心，x 向右 y 向上）。
+             网格 y 范围约 -0.25~0.22，-0.25 即护盾底边：缩放时底边不动、向上鼓起 -->
+        <scalePivot>(0, -0.25)</scalePivot>
+        <idle>
+            <transitionTicks>30</transitionTicks>
+            <clip>MX_QH_AuraShieldClip_Idle</clip>
+            <!-- 播放速度倍率：0.5 = 半速（119 tick 的 clip 播约 4 秒一轮） -->
+            <speed>0.25</speed>
+        </idle>
+        <hit>
+            <transitionTicks>3</transitionTicks>
+            <clip>MX_QH_AuraShieldClip_Hit</clip>
+            <!-- 受击态中再次受击时从第 10 tick 起播（第二个关键帧在第 15 tick），
+                 姿态仍从当前位置交叉淡化过去；从闲置进入受击照常从 0 开始 -->
+            <retriggerStartTick>10</retriggerStartTick>
+            <!-- 显示级整体缩放（网格+辉光），x 为归一化状态时间 0~1；受击态全长约 2 秒 -->
+            <scale>
+                <points>
+                    <li>(0, 1)</li>
+                    <li>(0.14, 1.28)</li>
+                    <li>(0.5, 1.28)</li>
+                    <li>(1, 1)</li>
+                </points>
+            </scale>
+        </hit>
+        <breakState>
+            <transitionTicks>4</transitionTicks>
+            <clip>MX_QH_AuraShieldClip_Break</clip>
+            <scale>
+                <points>
+                    <li>(0, 1)</li>
+                    <li>(0.08, 1.12)</li>
+                    <li>(0.55, 1.15)</li>
+                    <li>(1, 1.5)</li>
+                </points>
+            </scale>
+            <dissolve>
+                <points>
+                    <li>(0, 0)</li>
+                    <li>(0.55, 0)</li>
+                    <li>(1, 1)</li>
+                </points>
+            </dissolve>
+        </breakState>
+    </MiliraXian.Characters.QingHe.Defs.ShieldAnimationDef>
+</Defs>

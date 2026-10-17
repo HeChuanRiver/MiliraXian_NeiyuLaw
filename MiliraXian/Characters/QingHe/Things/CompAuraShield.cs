@@ -300,7 +300,7 @@ namespace MiliraXian.Characters.QingHe.Things
             if (QinghePowerBalance.Sealed
                 || !owner.Spawned
                 || owner.Dead
-                || InBreak
+                || (InBreak && !Renderer.BreakAnimActive)
                 || (Energy >= MaxEnergy - 0.0001f && fullEnergyAccumulatedTicks >= Renderer.FullEnergyFadeOutTicks))
             {
                 Renderer.NotifyHidden();

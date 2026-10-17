@@ -522,17 +522,19 @@
           <visual>
             <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
             <texPath>MiliraXianQinghe/Effect/lotus_shield</texPath>
-            <shaderType>MX_QH_AuraShieldDistortion</shaderType>
+            <petalShader>MX_QH_AuraShieldPetal</petalShader>
+            <petalAnimation>MX_QH_AuraShieldAnim</petalAnimation>
             <shaderParameters>
-              <_FlowMap>/MiliraXianQinghe/Effect/lotus_shield_flowmap</_FlowMap>
+              <_DissolveNoise>/MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</_DissolveNoise>
+              <_DissolveEdgeColor>(1,0.75,0.9,1)</_DissolveEdgeColor>
+              <_DissolveEdgeWidth>0.08</_DissolveEdgeWidth>
+              <_DissolveEdgeIntensity>2.0</_DissolveEdgeIntensity>
               <_BaseLayerAlpha>1.0</_BaseLayerAlpha>
               <_AdditiveGlowColor>(1,0.45,0.43,1)</_AdditiveGlowColor>
               <_AdditiveGlowAlpha>1.0</_AdditiveGlowAlpha>
               <_AdditiveGlowBreathAmplitude>0.9</_AdditiveGlowBreathAmplitude>
               <_AdditiveGlowBreathSpeed>0.21</_AdditiveGlowBreathSpeed>
               <_AdditiveGlowMinMask>0</_AdditiveGlowMinMask>
-              <_SwayStrength>0.015</_SwayStrength>
-              <_SwaySpeed>1.13</_SwaySpeed>
             </shaderParameters>
             <drawSize>(2.5,2.5)</drawSize>
             <alpha>0.8</alpha>

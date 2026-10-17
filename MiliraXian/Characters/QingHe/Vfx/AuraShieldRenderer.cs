@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common.Skeletal2D;
 using MiliraXian.Characters.Common.Vfx;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Things;
 using RimWorld;
 using UnityEngine;
@@ -27,6 +29,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public int fullEnergyFadeOutTicks = 90;
         public string texPath = "MiliraXianNeiyu/Effect/Neiyu_Shield/Shield";
         public ShaderTypeDef shaderType;
+        public ShaderDef petalShader;
+        public ShieldAnimationDef petalAnimation;
         public List<ShaderParameter> shaderParameters;
         public Vector2 drawSize = new(1.9f, 1.9f);
         public float alpha = 0.45f;
@@ -60,10 +64,14 @@ namespace MiliraXian.Characters.QingHe.Vfx
     public class AuraShieldRenderer
     {
         private static readonly int EffectTimeProperty = Shader.PropertyToID("_EffectTime");
+        private static readonly int DissolveProperty = Shader.PropertyToID("_Dissolve");
+        private static readonly int BoneTransformsProperty = Shader.PropertyToID("_BoneTransforms");
         private static readonly Dictionary<string, Material> GlowMaterialsByPath = new();
 
         private readonly CompAuraShield shield;
         private Material shieldMaterial;
+        private AuraShieldAnimator petalAnimator;
+        private Vector4[] boneData;
         private bool visibleLastFrame;
         private float startRealTime;
         private int lastAbsorbTick = -1;
@@ -74,6 +82,17 @@ namespace MiliraXian.Characters.QingHe.Vfx
         }
 
         private AuraShieldVisualProperties Visual => shield.Props.visual ?? AuraShieldVisualProperties.Default;
+
+        private bool UsePetalShield => Visual.petalShader != null && Visual.petalAnimation != null
+            && Visual.petalAnimation.rig != null
+            && Visual.petalAnimation.idle?.clip != null
+            && Visual.petalAnimation.hit?.clip != null
+            && Visual.petalAnimation.breakState?.clip != null;
+
+        // During break the comp stops drawing by default; with the petal pipeline the break
+        // animation keeps rendering until its dissolve finishes. Before the animator exists we
+        // must draw once so the state machine can observe the break.
+        public bool BreakAnimActive => UsePetalShield && (petalAnimator?.BreakActive ?? true);
 
         public void NotifyHidden()
         {
@@ -130,6 +149,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         public void NotifyBroken(Pawn owner, Thing parent, float energyRatio)
         {
+            petalAnimator?.ForceBreak((Find.TickManager?.TicksGame ?? 0) / 60f);
             if (owner == null || !owner.Spawned || owner.Map == null)
             {
                 return;
@@ -178,6 +198,28 @@ namespace MiliraXian.Characters.QingHe.Vfx
             Quaternion rotation = PawnBodyRenderRotation(owner);
             pos += RotateDrawOffset(Visual.drawOffset, rotation);
 
+            // 骨骼动画走游戏 tick：暂停冻结、随游戏速度缩放，与世界其他视觉一致。
+            // 显示级缩放只作用于护盾网格本体；辉光等附属特效保持原尺寸与原位置，
+            // 需要缩放时另写各自的动画。
+            float gameSeconds = (Find.TickManager?.TicksGame ?? 0) / 60f;
+            float displayScale = 1f;
+            Vector3 shieldPos = pos;
+            if (UsePetalShield)
+            {
+                petalAnimator ??= new AuraShieldAnimator(Visual.petalAnimation, gameSeconds);
+                petalAnimator.Update(shield, lastAbsorbTick, gameSeconds);
+                displayScale = Mathf.Max(0f, petalAnimator.Scale);
+                // 绕 scalePivot 缩放：把网格绘制中心向轴心方向移 (1-s)·pivot·drawSize，
+                // 轴心在屏幕上保持不动。网格局部 (x, y) 对应世界 (x, 0, z)。
+                Vector2 pivot = Visual.petalAnimation.scalePivot;
+                float k = 1f - displayScale;
+                shieldPos += rotation * new Vector3(
+                    pivot.x * Visual.drawSize.x * k,
+                    0f,
+                    pivot.y * Visual.drawSize.y * k);
+            }
+            Vector2 shieldDrawSize = Visual.drawSize * displayScale;
+
             DrawGlow(Visual.farGlow, pos, Visual.drawSize, drawAlpha, effectTime, 1f, rotation);
 
             float hitGlowFactor = 0f;
@@ -204,11 +246,31 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
             propertyBlock.SetFloat(EffectTimeProperty, effectTime);
 
+            Mesh shieldMesh = MeshPool.plane10;
+            if (UsePetalShield)
+            {
+                // GPU 蒙皮：网格静态共享只上传一次，每帧只传骨骼变换给顶点 shader。
+                Mesh skinnedMesh = Skeletal2DGpuSkin.GetMesh(Visual.petalAnimation.rig);
+                if (skinnedMesh != null)
+                {
+                    Skeletal2DBoneTransform[] bones = petalAnimator.EvaluateWorldTransforms(gameSeconds);
+                    int vectorCount = bones.Length * Skeletal2DGpuSkin.VectorsPerBone;
+                    if (boneData == null || boneData.Length != vectorCount)
+                    {
+                        boneData = new Vector4[vectorCount];
+                    }
+                    Skeletal2DGpuSkin.PackBones(bones, boneData);
+                    propertyBlock.SetVectorArray(BoneTransformsProperty, boneData);
+                    propertyBlock.SetFloat(DissolveProperty, petalAnimator.Dissolve);
+                    shieldMesh = skinnedMesh;
+                }
+            }
+
             Matrix4x4 matrix = Matrix4x4.TRS(
-                pos,
+                shieldPos,
                 rotation,
-                new Vector3(Visual.drawSize.x, 1f, Visual.drawSize.y));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, shieldMat, 0, null, 0, propertyBlock);
+                new Vector3(shieldDrawSize.x, 1f, shieldDrawSize.y));
+            Graphics.DrawMesh(shieldMesh, matrix, shieldMat, 0, null, 0, propertyBlock);
             propertyBlock.Clear();
         }
 
@@ -239,8 +301,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return null;
             }
 
-            ShaderTypeDef shaderType = Visual.shaderType ?? ShaderTypeDefOf.Transparent;
-            MaterialRequest request = new(texture, shaderType.Shader, Color.white)
+            Shader shader = UsePetalShield
+                ? Visual.petalShader.Shader
+                : (Visual.shaderType ?? ShaderTypeDefOf.Transparent).Shader;
+            MaterialRequest request = new(texture, shader, Color.white)
             {
                 shaderParameters = Visual.shaderParameters
             };

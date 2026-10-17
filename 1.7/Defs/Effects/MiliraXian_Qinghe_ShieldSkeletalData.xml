@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 本文件由 .cache/lotus/blender_export_rig.py 生成，请勿手工编辑 -->
+    <MiliraXian.Characters.Common.Skeletal2D.Skeletal2DRigDef>
+        <defName>MX_QH_AuraShieldRig</defName>
+        <meshAssetPath>1.7/Assets/QingHe/lotus_shield_mesh.json</meshAssetPath>
+        <bones>
+            <li>
+                <name>Petal3_root.R</name>
+                <restHead>(-0.12871, -0.17498)</restHead>
+                <restTail>(-0.1908, -0.13575)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n1.R</name>
+                <parent>Petal3_root.R</parent>
+                <restHead>(-0.1908, -0.13575)</restHead>
+                <restTail>(-0.23275, -0.09496)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n2.R</name>
+                <parent>Petal3_n1.R</parent>
+                <restHead>(-0.23275, -0.09496)</restHead>
+                <restTail>(-0.26333, -0.057)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n3.R</name>
+                <parent>Petal3_n2.R</parent>
+                <restHead>(-0.26333, -0.057)</restHead>
+                <restTail>(-0.29553, -0.02658)</restTail>
+            </li>
+            <li>
+                <name>Petal3_tip1.R</name>
+                <parent>Petal3_n3.R</parent>
+                <restHead>(-0.29553, -0.02658)</restHead>
+                <restTail>(-0.32527, -0.00794)</restTail>
+            </li>
+            <li>
+                <name>Petal3_tip2.R</name>
+                <parent>Petal3_tip1.R</parent>
+                <restHead>(-0.32527, -0.00794)</restHead>
+                <restTail>(-0.3457, 0.00266)</restTail>
+            </li>
+            <li>
+                <name>Petal2_root.R</name>
+                <restHead>(-0.08911, -0.15149)</restHead>
+                <restTail>(-0.14889, -0.0941)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n1.R</name>
+                <parent>Petal2_root.R</parent>
+                <restHead>(-0.14889, -0.0941)</restHead>
+                <restTail>(-0.19902, -0.02472)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n2.R</name>
+                <parent>Petal2_n1.R</parent>
+                <restHead>(-0.19902, -0.02472)</restHead>
+                <restTail>(-0.23298, 0.05909)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n3.R</name>
+                <parent>Petal2_n2.R</parent>
+                <restHead>(-0.23298, 0.05909)</restHead>
+                <restTail>(-0.26062, 0.11624)</restTail>
+            </li>
+            <li>
+                <name>Petal2_tip1.R</name>
+                <parent>Petal2_n3.R</parent>
+                <restHead>(-0.26062, 0.11624)</restHead>
+                <restTail>(-0.28148, 0.15178)</restTail>
+            </li>
+            <li>
+                <name>Petal2_tip2.R</name>
+                <parent>Petal2_tip1.R</parent>
+                <restHead>(-0.28148, 0.15178)</restHead>
+                <restTail>(-0.30023, 0.17764)</restTail>
+            </li>
+            <li>
+                <name>Petal1_root.R</name>
+                <restHead>(-0.05345, -0.12989)</restHead>
+                <restTail>(-0.09268, -0.03691)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n1.R</name>
+                <parent>Petal1_root.R</parent>
+                <restHead>(-0.09268, -0.03691)</restHead>
+                <restTail>(-0.11255, 0.03256)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n2.R</name>
+                <parent>Petal1_n1.R</parent>
+                <restHead>(-0.11255, 0.03256)</restHead>
+                <restTail>(-0.14532, 0.09673)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n3.R</name>
+                <parent>Petal1_n2.R</parent>
+                <restHead>(-0.14532, 0.09673)</restHead>
+                <restTail>(-0.16759, 0.1525)</restTail>
+            </li>
+            <li>
+                <name>Petal1_tip1.R</name>
+                <parent>Petal1_n3.R</parent>
+                <restHead>(-0.16759, 0.1525)</restHead>
+                <restTail>(-0.17155, 0.18574)</restTail>
+            </li>
+            <li>
+                <name>Petal1_tip2.R</name>
+                <parent>Petal1_tip1.R</parent>
+                <restHead>(-0.17155, 0.18574)</restHead>
+                <restTail>(-0.1666, 0.21283)</restTail>
+            </li>
+            <li>
+                <name>PetalC_root</name>
+                <restHead>(-0.00055, -0.11824)</restHead>
+                <restTail>(-0.00037, -0.02386)</restTail>
+            </li>
+            <li>
+                <name>PetalC_n1</name>
+                <parent>PetalC_root</parent>
+                <restHead>(-0.00037, -0.02386)</restHead>
+                <restTail>(0.00006, 0.04738)</restTail>
+            </li>
+            <li>
+                <name>PetalC_n2</name>
+                <parent>PetalC_n1</parent>
+                <restHead>(0.00006, 0.04738)</restHead>
+                <restTail>(-0.00003, 0.10896)</restTail>
+            </li>
+            <li>
+                <name>PetalC_n3</name>
+                <parent>PetalC_n2</parent>
+                <restHead>(-0.00003, 0.10896)</restHead>
+                <restTail>(-0.00007, 0.15897)</restTail>
+            </li>
+            <li>
+                <name>PetalC_tip1</name>
+                <parent>PetalC_n3</parent>
+                <restHead>(-0.00007, 0.15897)</restHead>
+                <restTail>(0.00003, 0.18398)</restTail>
+            </li>
+            <li>
+                <name>PetalC_tip2</name>
+                <parent>PetalC_tip1</parent>
+                <restHead>(0.00003, 0.18398)</restHead>
+                <restTail>(0.00001, 0.20898)</restTail>
+            </li>
+            <li>
+                <name>Petal1_root.L</name>
+                <restHead>(0.05345, -0.12989)</restHead>
+                <restTail>(0.09268, -0.03691)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n1.L</name>
+                <parent>Petal1_root.L</parent>
+                <restHead>(0.09268, -0.03691)</restHead>
+                <restTail>(0.11255, 0.03256)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n2.L</name>
+                <parent>Petal1_n1.L</parent>
+                <restHead>(0.11255, 0.03256)</restHead>
+                <restTail>(0.14532, 0.09673)</restTail>
+            </li>
+            <li>
+                <name>Petal1_n3.L</name>
+                <parent>Petal1_n2.L</parent>
+                <restHead>(0.14532, 0.09673)</restHead>
+                <restTail>(0.16759, 0.1525)</restTail>
+            </li>
+            <li>
+                <name>Petal1_tip1.L</name>
+                <parent>Petal1_n3.L</parent>
+                <restHead>(0.16759, 0.1525)</restHead>
+                <restTail>(0.17155, 0.18574)</restTail>
+            </li>
+            <li>
+                <name>Petal1_tip2.L</name>
+                <parent>Petal1_tip1.L</parent>
+                <restHead>(0.17155, 0.18574)</restHead>
+                <restTail>(0.1666, 0.21283)</restTail>
+            </li>
+            <li>
+                <name>Petal2_root.L</name>
+                <restHead>(0.08911, -0.15149)</restHead>
+                <restTail>(0.14889, -0.0941)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n1.L</name>
+                <parent>Petal2_root.L</parent>
+                <restHead>(0.14889, -0.0941)</restHead>
+                <restTail>(0.19902, -0.02472)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n2.L</name>
+                <parent>Petal2_n1.L</parent>
+                <restHead>(0.19902, -0.02472)</restHead>
+                <restTail>(0.23298, 0.05909)</restTail>
+            </li>
+            <li>
+                <name>Petal2_n3.L</name>
+                <parent>Petal2_n2.L</parent>
+                <restHead>(0.23298, 0.05909)</restHead>
+                <restTail>(0.26062, 0.11624)</restTail>
+            </li>
+            <li>
+                <name>Petal2_tip1.L</name>
+                <parent>Petal2_n3.L</parent>
+                <restHead>(0.26062, 0.11624)</restHead>
+                <restTail>(0.28148, 0.15178)</restTail>
+            </li>
+            <li>
+                <name>Petal2_tip2.L</name>
+                <parent>Petal2_tip1.L</parent>
+                <restHead>(0.28148, 0.15178)</restHead>
+                <restTail>(0.30023, 0.17764)</restTail>
+            </li>
+            <li>
+                <name>Petal3_root.L</name>
+                <restHead>(0.12871, -0.17498)</restHead>
+                <restTail>(0.1908, -0.13575)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n1.L</name>
+                <parent>Petal3_root.L</parent>
+                <restHead>(0.1908, -0.13575)</restHead>
+                <restTail>(0.23275, -0.09496)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n2.L</name>
+                <parent>Petal3_n1.L</parent>
+                <restHead>(0.23275, -0.09496)</restHead>
+                <restTail>(0.26333, -0.057)</restTail>
+            </li>
+            <li>
+                <name>Petal3_n3.L</name>
+                <parent>Petal3_n2.L</parent>
+                <restHead>(0.26333, -0.057)</restHead>
+                <restTail>(0.29553, -0.02658)</restTail>
+            </li>
+            <li>
+                <name>Petal3_tip1.L</name>
+                <parent>Petal3_n3.L</parent>
+                <restHead>(0.29553, -0.02658)</restHead>
+                <restTail>(0.32527, -0.00794)</restTail>
+            </li>
+            <li>
+                <name>Petal3_tip2.L</name>
+                <parent>Petal3_tip1.L</parent>
+                <restHead>(0.32527, -0.00794)</restHead>
+                <restTail>(0.3457, 0.00266)</restTail>
+            </li>
+        </bones>
+    </MiliraXian.Characters.Common.Skeletal2D.Skeletal2DRigDef>
+
+    <MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+        <defName>MX_QH_AuraShieldClip_Idle</defName>
+        <dataPath>1.7/Assets/QingHe/Clips/MX_QH_AuraShieldClip_Idle.json</dataPath>
+    </MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+
+    <MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+        <defName>MX_QH_AuraShieldClip_Hit</defName>
+        <dataPath>1.7/Assets/QingHe/Clips/MX_QH_AuraShieldClip_Hit.json</dataPath>
+    </MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+
+    <MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+        <defName>MX_QH_AuraShieldClip_Break</defName>
+        <dataPath>1.7/Assets/QingHe/Clips/MX_QH_AuraShieldClip_Break.json</dataPath>
+    </MiliraXian.Characters.Common.Skeletal2D.Skeletal2DClipDef>
+
+</Defs>
