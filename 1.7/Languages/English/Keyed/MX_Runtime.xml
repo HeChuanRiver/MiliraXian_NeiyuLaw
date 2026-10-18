@@ -25,6 +25,8 @@
   <MX_NL_EnableSpecialPawnIntegrationDesc>When enabled, special characters are registered with Ariandel's special pawn manager when they join the player faction or during save-load checks, preventing the unique character limiter from removing them because they were not registered.</MX_NL_EnableSpecialPawnIntegrationDesc>
   <MX_NL_EnableUpdateLogLettersLabel>Send update log letters</MX_NL_EnableUpdateLogLettersLabel>
   <MX_NL_EnableUpdateLogLettersDesc>When enabled, each save receives one letter for the latest update log the first time it runs a new version. When disabled, that version is recorded as checked and older logs will not be sent later.</MX_NL_EnableUpdateLogLettersDesc>
+  <MX_NL_EnableScreenBloomLabel>Screen bloom</MX_NL_EnableScreenBloomLabel>
+  <MX_NL_EnableScreenBloomDesc>When enabled, screen bloom effects such as character shield halos are shown. Disabling it saves a little performance at the cost of the halos.</MX_NL_EnableScreenBloomDesc>
   <MX_NL_ViewUpdateLogsButton>View all update logs</MX_NL_ViewUpdateLogsButton>
   <MX_NL_UpdateLogDialogTitle>Milira Character Expansion Update Logs</MX_NL_UpdateLogDialogTitle>
   <MX_NL_UpdateLogLetterLabel>Milira Character Expansion update log {0}</MX_NL_UpdateLogLetterLabel>

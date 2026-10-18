@@ -88,6 +88,13 @@ namespace MiliraXian.Characters.Common.Vfx
             Material material,
             MaterialPropertyBlock block)
         {
+            // The mod setting turns the whole feature off: with nothing submitted, no layer is
+            // allocated and FlushFrame never runs the capture and the composite either.
+            if (NeiyuLawMod.Instance?.Settings?.EnableScreenBloom == false)
+            {
+                return;
+            }
+
             // The gravship capture camera draws every layer the main camera does, so a halo
             // submitted while it renders would end up inside the gravship image.
             if (group == null || mesh == null || material == null
