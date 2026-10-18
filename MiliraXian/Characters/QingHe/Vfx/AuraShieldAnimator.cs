@@ -37,6 +37,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         public float Dissolve { get; private set; }
 
+        /// <summary>Normalized (0..1) progress of the break clip while breaking, else 0.</summary>
+        public float BreakProgress { get; private set; }
+
         /// <summary>Display-level uniform scale of the whole shield, crossfaded across state changes.</summary>
         public float Scale { get; private set; } = 1f;
 
@@ -45,9 +48,6 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private float scaleFrom = 1f;
         private float scaleBlendStartTime;
         private float scaleBlendSeconds = 0.0001f;
-        // Seconds of the current state's clip skipped by a retrigger start offset; the hit window
-        // is shortened by the same amount so it still ends when the clip does.
-        private float stateStartOffsetSeconds;
 
         /// <summary>
         /// Break is an event, not a pollable state: the comp's draw gate reads BreakAnimActive
@@ -68,18 +68,29 @@ namespace MiliraXian.Characters.QingHe.Vfx
         {
             bool newHit = lastAbsorbTick != lastSeenAbsorbTick;
             lastSeenAbsorbTick = lastAbsorbTick;
-            if (newHit && state == ShieldAnimState.Hit && !shield.InBreak)
+            // Entering Hit is driven only by a new absorb event, never re-derived from the absorb
+            // tick every frame: re-deriving let the hit window reopen right after a retriggered
+            // hit ended and replayed the first frames of the clip. The stale-event check keeps an
+            // animator created long after the last hit from starting one.
+            int currentTick = Find.TickManager?.TicksGame ?? 0;
+            bool freshHit = newHit && lastAbsorbTick >= 0
+                && (currentTick - lastAbsorbTick) / 60f < DurationSeconds(def.hit);
+            if (shield.InBreak)
             {
-                // Hit while already reacting to a hit: restart from retriggerStartTick, not frame 0.
-                PlayState(ShieldAnimState.Hit, nowSeconds, retrigger: true);
-            }
-            else
-            {
-                ShieldAnimState target = SelectState(shield, lastAbsorbTick);
-                if (target != state)
+                if (state != ShieldAnimState.Break)
                 {
-                    PlayState(target, nowSeconds, retrigger: false);
+                    PlayState(ShieldAnimState.Break, nowSeconds);
                 }
+            }
+            else if (freshHit)
+            {
+                // Hit while already reacting to a hit restarts from retriggerStartTick, not frame 0.
+                PlayState(ShieldAnimState.Hit, nowSeconds, retrigger: state == ShieldAnimState.Hit);
+            }
+            else if (state == ShieldAnimState.Break
+                || (state == ShieldAnimState.Hit && nowSeconds - stateStartTime >= DurationSeconds(def.hit)))
+            {
+                PlayState(ShieldAnimState.Idle, nowSeconds);
             }
 
             ShieldAnimStateParams stateDef = StateDef(state);
@@ -88,6 +99,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             float stateTime = stateDef.clip.Loop ? Mathf.Repeat(elapsed, duration) / duration : Mathf.Clamp01(elapsed / duration);
             BreakActive = state == ShieldAnimState.Break && !stateDef.clip.Loop && elapsed < duration;
             Dissolve = stateDef.dissolve?.Evaluate(stateTime) ?? 0f;
+            BreakProgress = state == ShieldAnimState.Break ? stateTime : 0f;
 
             float targetScale = stateDef.scale?.Evaluate(stateTime) ?? 1f;
             float blendT = Mathf.Clamp01((nowSeconds - scaleBlendStartTime) / scaleBlendSeconds);
@@ -106,30 +118,15 @@ namespace MiliraXian.Characters.QingHe.Vfx
             scaleBlendSeconds = Mathf.Max(0.0001f, targetDef.transitionTicks / 60f);
             player.Play(targetDef.clip, targetDef.transitionTicks, nowSeconds, targetDef.speed, startTick);
             state = target;
-            // Back-date the state start so scale/dissolve curves line up with the clip offset.
-            stateStartOffsetSeconds = startTick / 60f / speed;
-            stateStartTime = nowSeconds - stateStartOffsetSeconds;
+            // Back-date the state start so the scale/dissolve curves and the hit end line up with
+            // the clip offset.
+            stateStartTime = nowSeconds - startTick / 60f / speed;
         }
 
         /// <summary>Real playback length of a state's clip, with its speed multiplier applied.</summary>
         private static float DurationSeconds(ShieldAnimStateParams stateDef)
         {
             return Mathf.Max(1 / 60f, stateDef.clip.DurationTicks / 60f / Mathf.Max(0.0001f, stateDef.speed));
-        }
-
-        private ShieldAnimState SelectState(CompAuraShield shield, int lastAbsorbTick)
-        {
-            if (shield.InBreak)
-            {
-                return ShieldAnimState.Break;
-            }
-            int currentTick = Find.TickManager?.TicksGame ?? 0;
-            float hitOffset = state == ShieldAnimState.Hit ? stateStartOffsetSeconds : 0f;
-            if (lastAbsorbTick >= 0 && (currentTick - lastAbsorbTick) / 60f + hitOffset < DurationSeconds(def.hit))
-            {
-                return ShieldAnimState.Hit;
-            }
-            return ShieldAnimState.Idle;
         }
 
         private ShieldAnimStateParams StateDef(ShieldAnimState target)

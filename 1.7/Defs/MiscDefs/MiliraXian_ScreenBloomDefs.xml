@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <!-- 屏幕空间泛光：同组发光物共用一个层，一帧只渲染一次、整个视野一张离屏场景图。
+         Prefilter 一次把场景图缩小 4 倍并做软膝阈值；Composite 在合成时自己采样做模糊（dual Kawase 升采样核），
+         再以加法贴回整个视野。Prefilter 只用于离屏 Blit，故 Opaque；合成队列 3190 在原版阴影（3170~3180）之上、
+         发光覆盖层（3201）之下。 -->
+    <ShaderDef>
+        <defName>MX_ScreenBloomPrefilter</defName>
+        <shaderProgram>
+            <vertexShaderFileName>MX_ScreenBloomBlit.vert.glsl</vertexShaderFileName>
+            <fragmentShaderFileName>MX_ScreenBloomPrefilter.frag.glsl</fragmentShaderFileName>
+            <flipTextureST>false</flipTextureST>
+            <blendMode>Opaque</blendMode>
+            <depthTest>false</depthTest>
+            <depthWrite>false</depthWrite>
+            <cullMode>None</cullMode>
+            <renderQueue>2000</renderQueue>
+        </shaderProgram>
+    </ShaderDef>
+    <ShaderDef>
+        <defName>MX_ScreenBloomComposite</defName>
+        <shaderProgram>
+            <vertexShaderFileName>MX_ScreenBloomBlit.vert.glsl</vertexShaderFileName>
+            <fragmentShaderFileName>MX_ScreenBloomComposite.frag.glsl</fragmentShaderFileName>
+            <flipTextureST>false</flipTextureST>
+            <blendMode>Additive</blendMode>
+            <depthWrite>false</depthWrite>
+            <cullMode>None</cullMode>
+            <renderQueue>3190</renderQueue>
+        </shaderProgram>
+    </ShaderDef>
+
+    <!-- 泛光组：一个组 = 一个层 = 一套参数。发光物只引用组名，参数不同的发光物才需要不同的组。
+         sceneDivisor：场景图为屏幕的 1/N，模糊半径因此以屏幕像素计（镜头拉近时光晕相对物体变细）。
+         blurRadius：模糊核的缩放，1 时核的标准差约 1.15 个光晕图像素 = 4.6 × sceneDivisor 个屏幕像素（按核权重推算，未实测）。
+         缩小改成一次 4 倍、模糊挪进合成 shader 后，核的采样间距与旧版（1 级降采样 + 升采样）相同，
+         但少了旧版降采样那一步的平均，所以光晕大概率比旧版略窄；觉得窄就把 blurRadius 调大（如 1.3）。观感未实机验证。 -->
+    <MiliraXian.Characters.Common.Vfx.ScreenBloomGroupDef>
+        <defName>MX_ScreenBloom_Glow</defName>
+        <sceneDivisor>2</sceneDivisor>
+        <threshold>0.02</threshold>
+        <knee>0.02</knee>
+        <blurRadius>1</blurRadius>
+        <gain>1.37</gain>
+    </MiliraXian.Characters.Common.Vfx.ScreenBloomGroupDef>
+</Defs>

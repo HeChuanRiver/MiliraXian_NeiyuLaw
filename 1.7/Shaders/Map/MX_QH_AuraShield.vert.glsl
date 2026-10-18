@@ -21,6 +21,10 @@ layout(set = 2, binding = 3) readonly buffer _BoneTransforms
 } uBones;
 
 layout(location = 0) out vec2 vUv;
+// Rest-pose and skinned positions (mesh local x/z): the fragment shader compares their
+// screen-space footprints to measure how much the cloth is stretched or compressed.
+layout(location = 1) out vec2 vRest;
+layout(location = 2) out vec2 vPos;
 
 void main()
 {
@@ -49,4 +53,6 @@ void main()
 
     gl_Position = uVertex.ViewProj * (push.modelMatrix * vec4(p.x, inPosition.y, p.y, 1.0));
     vUv = inUv0.xy;
+    vRest = rest;
+    vPos = p;
 }

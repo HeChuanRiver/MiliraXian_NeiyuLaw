@@ -8,7 +8,9 @@
             <blendMode>Additive</blendMode>
             <depthWrite>false</depthWrite>
             <cullMode>None</cullMode>
-            <renderQueue>3151</renderQueue>
+            <!-- 护盾是伪发光体，须画在原版阴影之上：SunShadow 3170、SunShadowFade/FogOfWar 3175、
+                 Darkness 3180（队列大的后画），并低于 GlowOverlay/雨 3201。光晕用 3190，在盾体之下。 -->
+            <renderQueue>3191</renderQueue>
         </shaderProgram>
     </ShaderDef>
 </Defs>
