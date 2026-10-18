@@ -522,40 +522,46 @@
           <visual>
             <fullEnergyFadeOutTicks>90</fullEnergyFadeOutTicks>
             <texPath>MiliraXianQinghe/Effect/lotus_shield</texPath>
-            <shaderType>MX_QH_AuraShieldDistortion</shaderType>
+            <petalShader>MX_QH_AuraShieldPetal</petalShader>
+            <petalAnimation>MX_QH_AuraShieldAnim</petalAnimation>
             <shaderParameters>
-              <_FlowMap>/MiliraXianQinghe/Effect/lotus_shield_flowmap</_FlowMap>
+              <_DissolveNoise>/MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</_DissolveNoise>
+              <_DissolveEdgeColor>(1,0.75,0.9,1)</_DissolveEdgeColor>
+              <_DissolveEdgeWidth>0.08</_DissolveEdgeWidth>
+              <_DissolveEdgeIntensity>2.0</_DissolveEdgeIntensity>
               <_BaseLayerAlpha>1.0</_BaseLayerAlpha>
               <_AdditiveGlowColor>(1,0.45,0.43,1)</_AdditiveGlowColor>
               <_AdditiveGlowAlpha>1.0</_AdditiveGlowAlpha>
-              <_AdditiveGlowBreathAmplitude>0.9</_AdditiveGlowBreathAmplitude>
+              <_AdditiveGlowBreathAmplitude>0</_AdditiveGlowBreathAmplitude>
               <_AdditiveGlowBreathSpeed>0.21</_AdditiveGlowBreathSpeed>
               <_AdditiveGlowMinMask>0</_AdditiveGlowMinMask>
-              <_SwayStrength>0.015</_SwayStrength>
-              <_SwaySpeed>1.13</_SwaySpeed>
+              <!-- 流光溢彩：强度参数默认 0（关闭），下面是初始试色值，按实机观感调 -->
+              <_IridIntensity>0.55</_IridIntensity>
+              <_IridLumaMask>0.5</_IridLumaMask>
+              <_IridLateralFreq>4.0</_IridLateralFreq>
+              <_IridRadialFreq>3.0</_IridRadialFreq>
+              <_IridFlowSpeed>0.35</_IridFlowSpeed>
+              <_BandIntensity>0.5</_BandIntensity>
+              <_BandRadialFreq>2.5</_BandRadialFreq>
+              <_BandSpeed>0.35</_BandSpeed>
+              <_BandWidth>0.12</_BandWidth>
+              <_RimIntensity>0.6</_RimIntensity>
+              <_RimWidth>2.0</_RimWidth>
+              <!-- 形变着色：拉伸处变亮变薄、压缩处变暗变实（正值生效） -->
+              <_StrainGain>0.6</_StrainGain>
+              <_StrainThin>0.3</_StrainThin>
+              <!-- 破碎联动：破碎中段光效增强、相位被推进 -->
+              <_BreakGlow>1.5</_BreakGlow>
+              <_BreakPhaseKick>1.0</_BreakPhaseKick>
             </shaderParameters>
+            <!-- 发光：引用泛光组（参数在 MiliraXian_ScreenBloomDefs.xml），同组所有发光物共用一次泛光。 -->
+            <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
             <drawSize>(2.5,2.5)</drawSize>
             <alpha>0.8</alpha>
             <drawOffset>(0,0,-0.23)</drawOffset>
             <breakScale>(1.3,1.3)</breakScale>
             <absorbFleckDefName>MXNL_Fleck_NeiyuShield_Hurt_A</absorbFleckDefName>
             <absorbFleckScale>0.6</absorbFleckScale>
-            <farGlow>
-              <texPath>Things/Mote/FireGlow</texPath>
-              <color>(1,0.81,0.93,1)</color>
-              <alpha>1.0</alpha>
-              <sizeMultiplier>2.8</sizeMultiplier>
-              <breathAmplitude>0.6</breathAmplitude>
-              <breathSpeed>0.21</breathSpeed>
-            </farGlow>
-            <hitGlow>
-              <texPath>Things/Mote/PsychicDistortionRing</texPath>
-              <color>(1,0.72,0.92,1)</color>
-              <alpha>0.85</alpha>
-              <sizeMultiplier>0.9</sizeMultiplier>
-              <durationTicks>120</durationTicks>
-              <drawOffset>(0,0,0.2)</drawOffset>
-            </hitGlow>
           </visual>
         </shieldCompProperties>
       </li>

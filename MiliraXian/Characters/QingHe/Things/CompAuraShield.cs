@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -34,6 +35,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private int regenUntilTick = -1;
         private float cachedMaxEnergy = -1f;
         private float cachedRegenPerSecond;
+        private bool devKeepVisible;
         private AuraShieldRenderer renderer;
 
         public CompProperties_AuraShield Props => (CompProperties_AuraShield)props;
@@ -128,6 +130,39 @@ namespace MiliraXian.Characters.QingHe.Things
         /// Flash intensity for the shield bar, decaying from 1 to 0 over ~40 ticks after absorbing damage.
         /// </summary>
         public float AbsorbFlashPercent => Renderer.AbsorbFlashPercent(CurrentTick);
+
+        public bool DevKeepVisible => devKeepVisible;
+
+        // Dev gizmo toggle: forces the shield visible regardless of the full-energy fade;
+        // turning it off restarts the fade from full visibility so it fades out normally.
+        public void ToggleDevKeepVisible()
+        {
+            devKeepVisible = !devKeepVisible;
+            if (!devKeepVisible)
+            {
+                FlushAccumulatedRegen(CurrentTick, force: true);
+                fullEnergyAccumulatedTicks = 0;
+                lastRegenUpdateTick = CurrentTick;
+            }
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            {
+                yield return gizmo;
+            }
+            if (Prefs.DevMode)
+            {
+                yield return new Command_Toggle
+                {
+                    defaultLabel = "DEV 护盾常显",
+                    defaultDesc = "开启后护盾保持显示、不再因满能量渐消，便于调试护盾外观；关闭后从满显示状态正常渐消。",
+                    isActive = () => devKeepVisible,
+                    toggleAction = ToggleDevKeepVisible,
+                };
+            }
+        }
 
         public override void PostPostMake()
         {
@@ -300,8 +335,8 @@ namespace MiliraXian.Characters.QingHe.Things
             if (QinghePowerBalance.Sealed
                 || !owner.Spawned
                 || owner.Dead
-                || InBreak
-                || (Energy >= MaxEnergy - 0.0001f && fullEnergyAccumulatedTicks >= Renderer.FullEnergyFadeOutTicks))
+                || (InBreak && !Renderer.BreakAnimActive)
+                || (!devKeepVisible && Energy >= MaxEnergy - 0.0001f && fullEnergyAccumulatedTicks >= Renderer.FullEnergyFadeOutTicks))
             {
                 Renderer.NotifyHidden();
                 return;

@@ -25,6 +25,8 @@
   <MX_NL_EnableSpecialPawnIntegrationDesc>啟用後，特殊角色在加入玩家派系或讀檔巡檢時，會被註冊進 Ariandel 的特殊角色管理器，避免因未註冊而被唯一角色限制器清理。</MX_NL_EnableSpecialPawnIntegrationDesc>
   <MX_NL_EnableUpdateLogLettersLabel>推送更新日誌信件</MX_NL_EnableUpdateLogLettersLabel>
   <MX_NL_EnableUpdateLogLettersDesc>啟用後，當前存檔第一次執行新版本時，只會收到最新版本的更新日誌信件一次。關閉後，該版本會被記錄為已檢查，不會補發舊日誌。</MX_NL_EnableUpdateLogLettersDesc>
+  <MX_NL_EnableScreenBloomLabel>螢幕泛光</MX_NL_EnableScreenBloomLabel>
+  <MX_NL_EnableScreenBloomDesc>啟用後，角色的護盾光暈等螢幕泛光效果會正常顯示。關閉後可省下少許效能，代價是失去光暈。</MX_NL_EnableScreenBloomDesc>
   <MX_NL_ViewUpdateLogsButton>查看所有更新日誌</MX_NL_ViewUpdateLogsButton>
   <MX_NL_UpdateLogDialogTitle>米莉拉角色拓展 更新日誌</MX_NL_UpdateLogDialogTitle>
   <MX_NL_UpdateLogLetterLabel>米莉拉角色拓展更新日誌 {0}</MX_NL_UpdateLogLetterLabel>

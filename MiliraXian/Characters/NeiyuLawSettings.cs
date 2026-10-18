@@ -23,6 +23,7 @@ namespace MiliraXian.Characters
     {
         public bool EnableAriandelSpecialPawnIntegration = true;
         public bool EnableUpdateLogLetters = true;
+        public bool EnableScreenBloom = true;
         public ArcaneVfxQuality ArcaneVisualQuality = ArcaneVfxQuality.Medium;
         public SpecialPawnConsciousnessLockMode ConsciousnessLockMode = SpecialPawnConsciousnessLockMode.Lock100;
         public CharacterPowerLevel NeiyuPowerLevel = CharacterPowerLevel.Original;
@@ -36,6 +37,7 @@ namespace MiliraXian.Characters
             base.ExposeData();
             Scribe_Values.Look(ref EnableAriandelSpecialPawnIntegration, "EnableAriandelSpecialPawnIntegration", true);
             Scribe_Values.Look(ref EnableUpdateLogLetters, "EnableUpdateLogLetters", true);
+            Scribe_Values.Look(ref EnableScreenBloom, "EnableScreenBloom", true);
             Scribe_Values.Look(ref ArcaneVisualQuality, "ArcaneVisualQuality", ArcaneVfxQuality.Medium);
             if (ArcaneVisualQuality < ArcaneVfxQuality.Low || ArcaneVisualQuality > ArcaneVfxQuality.High)
                 ArcaneVisualQuality = ArcaneVfxQuality.Medium;
@@ -125,6 +127,11 @@ namespace MiliraXian.Characters
                 "MX_NL_EnableUpdateLogLettersLabel".Translate().ToString(),
                 ref Settings.EnableUpdateLogLetters,
                 "MX_NL_EnableUpdateLogLettersDesc".Translate().ToString());
+            listing.Gap();
+            listing.CheckboxLabeled(
+                "MX_NL_EnableScreenBloomLabel".Translate().ToString(),
+                ref Settings.EnableScreenBloom,
+                "MX_NL_EnableScreenBloomDesc".Translate().ToString());
             if (listing.ButtonText("MX_NL_ViewUpdateLogsButton".Translate().ToString()))
             {
                 Find.WindowStack.Add(new Dialog_MessageBox(
