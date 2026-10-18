@@ -43,6 +43,7 @@ namespace MiliraXian.Characters.Common.Things
         public Vector3 Origin => origin;
         public float DrawSize => drawSize;
         public float TrailLength => trailLength;
+        public float FlightSeconds => Mathf.Max(0, Find.TickManager.TicksGame - launchTick) / 60f;
         public float FlightProgress => Mathf.Clamp01((Find.TickManager.TicksGame - launchTick) / (float)Mathf.Max(1, durationTicks));
         public override Vector3 DrawPos => PositionAt(FlightProgress);
         public override bool ShowRelatedQuests => false;
@@ -132,12 +133,16 @@ namespace MiliraXian.Characters.Common.Things
             if (impacted || launchTick < 0 || durationTicks <= 0
                 || !TileAvailable(sourceTile, sourceLayerId) || !TileAvailable(targetTile, targetLayerId))
             {
+                Log.Warning($"[WorldArcaneStrike] Projectile {ID} removed before arrival: impacted={impacted}, "
+                    + $"launchTick={launchTick}, durationTicks={durationTicks}, "
+                    + $"sourceAvailable={TileAvailable(sourceTile, sourceLayerId)}, "
+                    + $"targetAvailable={TileAvailable(targetTile, targetLayerId)}.");
                 Destroy();
                 return;
             }
             if (FlightProgress < 1f) return;
             impacted = true;
-            Log.Message("Arcane projectile impact.");
+            Log.Message($"[WorldArcaneStrike] Projectile {ID} arrived at {targetTile}, tick={Find.TickManager.TicksGame}.");
             if (impactDef?.worldObjectClass == typeof(WorldObject_ArcaneImpact))
             {
                 WorldObject_ArcaneImpact impact = (WorldObject_ArcaneImpact)WorldObjectMaker.MakeWorldObject(impactDef);
@@ -155,6 +160,8 @@ namespace MiliraXian.Characters.Common.Things
             {
                 ArcaneImpactVfx.Preload(impactDef?.GetModExtension<ArcaneImpactProperties>());
                 visual = new ArcaneProjectileVfx();
+                Log.Message($"[WorldArcaneStrike] Projectile {ID} drawing started: "
+                    + $"progress={FlightProgress:F3}, position={DrawPos}, size={drawSize:F3}.");
             }
             visual.Draw(this);
         }

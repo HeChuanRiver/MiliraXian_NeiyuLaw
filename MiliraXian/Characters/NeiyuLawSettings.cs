@@ -1,6 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.QingHe;
@@ -23,6 +24,7 @@ namespace MiliraXian.Characters
         public bool EnableAriandelSpecialPawnIntegration = true;
         public bool EnableUpdateLogLetters = true;
         public bool EnableScreenBloom = true;
+        public ArcaneVfxQuality ArcaneVisualQuality = ArcaneVfxQuality.Medium;
         public SpecialPawnConsciousnessLockMode ConsciousnessLockMode = SpecialPawnConsciousnessLockMode.Lock100;
         public CharacterPowerLevel NeiyuPowerLevel = CharacterPowerLevel.Original;
         public CharacterPowerLevel ZhaoliPowerLevel = CharacterPowerLevel.Original;
@@ -36,6 +38,9 @@ namespace MiliraXian.Characters
             Scribe_Values.Look(ref EnableAriandelSpecialPawnIntegration, "EnableAriandelSpecialPawnIntegration", true);
             Scribe_Values.Look(ref EnableUpdateLogLetters, "EnableUpdateLogLetters", true);
             Scribe_Values.Look(ref EnableScreenBloom, "EnableScreenBloom", true);
+            Scribe_Values.Look(ref ArcaneVisualQuality, "ArcaneVisualQuality", ArcaneVfxQuality.Medium);
+            if (ArcaneVisualQuality < ArcaneVfxQuality.Low || ArcaneVisualQuality > ArcaneVfxQuality.High)
+                ArcaneVisualQuality = ArcaneVfxQuality.Medium;
             Scribe_Values.Look(ref NeiyuPowerLevel, "NeiyuPowerLevel", CharacterPowerLevel.Original);
             Scribe_Values.Look(ref ZhaoliPowerLevel, "ZhaoliPowerLevel", CharacterPowerLevel.Original);
             Scribe_Values.Look(ref MingyuanPowerLevel, "MingyuanPowerLevel", CharacterPowerLevel.Original);
@@ -79,6 +84,10 @@ namespace MiliraXian.Characters
         public NeiyuLawMod(ModContentPack content)
             : base(content)
         {
+            // ShaderDefRegistry discovers Shaders automatically. Keep this mod's source
+            // in its established authoring directory using Waylith's public search API.
+            Waylith.Rendering.ShaderSourceLoader.RegisterShaderSourceDirectory(
+                System.IO.Path.Combine(content.RootDir, "Content", "ShaderSources"));
             // Def-loading hooks (e.g. PawnSpecialResourceStats) must be registered before PlayDataLoader runs;
             // StaticConstructorOnStartup fires too late, so PatchAll lives in the mod constructor.
             new Harmony("HeChuanRiver.MiliraXian.Characters").PatchAll(Assembly.GetExecutingAssembly());
@@ -105,6 +114,14 @@ namespace MiliraXian.Characters
                 "MX_NL_EnableSpecialPawnIntegrationLabel".Translate().ToString(),
                 ref Settings.EnableAriandelSpecialPawnIntegration,
                 "MX_NL_EnableSpecialPawnIntegrationDesc".Translate().ToString());
+            listing.Gap();
+            listing.Label("世界奥术打击：特效质量");
+            if (listing.RadioButton("低", Settings.ArcaneVisualQuality == ArcaneVfxQuality.Low))
+                Settings.ArcaneVisualQuality = ArcaneVfxQuality.Low;
+            if (listing.RadioButton("中", Settings.ArcaneVisualQuality == ArcaneVfxQuality.Medium))
+                Settings.ArcaneVisualQuality = ArcaneVfxQuality.Medium;
+            if (listing.RadioButton("高", Settings.ArcaneVisualQuality == ArcaneVfxQuality.High))
+                Settings.ArcaneVisualQuality = ArcaneVfxQuality.High;
             listing.Gap();
             listing.CheckboxLabeled(
                 "MX_NL_EnableUpdateLogLettersLabel".Translate().ToString(),

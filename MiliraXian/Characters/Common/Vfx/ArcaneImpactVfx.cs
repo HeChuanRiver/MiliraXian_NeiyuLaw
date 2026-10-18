@@ -21,7 +21,12 @@ namespace MiliraXian.Characters.Common.Vfx
         private readonly Vector3[] vertices = new Vector3[(RingSegments + 1) * 6];
         private readonly Color[] colors = new Color[(RingSegments + 1) * 6];
         private Mesh rings;
+        private ArcaneParticleBatch embers;
         private int lastTick = -1;
+        private float lastCloudSeconds = -1f;
+        private Vector3 lastCloudCamera;
+        private Quaternion lastCloudRotation;
+        private ArcaneVfxQuality lastQuality;
         internal bool Disposed { get; private set; }
 
         private struct Puff
@@ -83,42 +88,77 @@ namespace MiliraXian.Characters.Common.Vfx
                 lastTick = Find.TickManager.TicksGame;
             }
             ArcaneEnergyResources.DrawMesh(rings, Matrix4x4.identity, ArcaneEnergyResources.BeamInner,
-                new Color(0.7f, 1.05f, 1.6f), drawLayer, camera);
+                new Color(0.54f, 0.89f, 1.16f, 0.82f), drawLayer, camera, seconds, 1f);
 
             float flash = Mathf.Exp(-seconds * 3.8f);
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, anchor, radius * 6f, radius * 6f,
-                new Color(1.5f, 1.65f, 1.8f, flash), camera, drawLayer);
+                new Color(0.48f, 0.81f, 1.13f, flash * 0.58f), camera, drawLayer, seconds);
+            ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, anchor, radius * 2.6f, radius * 2.6f,
+                new Color(0.93f, 1.02f, 1.15f, flash * 0.88f), camera, drawLayer, seconds, 4f);
             float fire = Mathf.Exp(-seconds * 0.37f) * fade;
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, anchor + normal * radius * 0.35f,
-                radius * 3.2f, radius * 3.2f, new Color(1.7f, 0.58f, 0.12f, fire), camera, drawLayer);
+                radius * 3.2f, radius * 3.2f, new Color(1.12f, 0.56f, 0.22f, fire * 0.62f), camera, drawLayer, seconds);
 
             // Stem, annular cloud crown and ground skirt. Far-to-near sorting gives the
             // premultiplied cloud billboards volume from any orbiting world camera angle.
-            BuildCloud(anchor, normal, first, second, radius, impact.CloudHeight, seconds, rise, fade, camera);
+            bool update = lastCloudSeconds != seconds || lastCloudCamera != camera.transform.position
+                || lastCloudRotation != camera.transform.rotation || lastQuality != ArcaneVfxStyle.Quality;
+            if (update) BuildCloud(anchor, normal, first, second, radius, impact.CloudHeight, seconds, rise, fade, camera);
             for (int i = 0; i < CloudCount; i++)
             {
-                Puff puff = puffs[order[i]];
+                int index = order[i];
+                // All three cloud regions remain represented at every quality level.
+                if (ArcaneVfxStyle.Quality == ArcaneVfxQuality.Low && index % 3 == 2
+                    || ArcaneVfxStyle.Quality == ArcaneVfxQuality.Medium && index % 6 == 5) continue;
+                Puff puff = puffs[index];
                 if (puff.Color.a <= 0.001f) continue;
                 ArcaneEnergyResources.DrawBillboard(puff.Dust ? dust : cloud, puff.Position,
-                    puff.Width, puff.Height, puff.Color, camera, drawLayer);
+                    puff.Width, puff.Height, puff.Color, camera, drawLayer, seconds, seed: index * 0.618034f);
             }
             // Hot core remains visible through the rolling cloud for the first few seconds.
             Vector3 crown = anchor + normal * impact.CloudHeight * rise;
             ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, crown,
-                radius * 1.8f, radius * 1.8f, new Color(0.3f, 0.8f, 1.8f, fire * 0.55f), camera, drawLayer);
-            for (int i = 0; i < 64; i++)
+                radius * 1.8f, radius * 1.8f, new Color(0.38f, 0.75f, 1.15f, fire * 0.42f), camera, drawLayer, seconds);
+            embers ??= new ArcaneParticleBatch(ArcaneEnergyResources.Spark);
+            if (update)
             {
-                float seed = Mathf.Repeat(i * 0.618034f, 1f);
-                float age = Mathf.Repeat(seconds * 0.23f + seed, 1f);
-                float angle = i * 2.399963f + seconds * 0.25f;
-                Vector3 tangent = first * Mathf.Cos(angle) + second * Mathf.Sin(angle);
-                Vector3 position = anchor + tangent * radius * (0.2f + age * 1.5f)
-                    + normal * impact.CloudHeight * (Mathf.Sin(age * Mathf.PI) * 0.55f + rise * 0.1f);
-                float size = layer.AverageTileSize * (0.08f + seed * 0.1f);
-                float alpha = Mathf.Sin(age * Mathf.PI) * rise * fade;
-                Color color = i % 3 == 0 ? new Color(0.25f, 0.75f, 1.8f, alpha) : new Color(1.8f, 0.55f, 0.07f, alpha);
-                ArcaneEnergyResources.DrawBillboard(ArcaneEnergyResources.Spark, position, size, size * 2.8f, color, camera, drawLayer);
+                embers.Begin();
+                for (int i = 0; i < 88; i++)
+                {
+                    if (!ArcaneVfxStyle.KeepParticle(i, 3, ArcaneVfxStyle.Density * ArcaneVfxStyle.Tuning.explosionParticleDensity)) continue;
+                    float seed = Mathf.Repeat(i * 0.618034f, 1f);
+                    float age = Mathf.Repeat(seconds * 0.23f + seed, 1f);
+                    float angle = i * 2.399963f + seconds * 0.25f;
+                    Vector3 tangent = first * Mathf.Cos(angle) + second * Mathf.Sin(angle);
+                    Vector3 position = anchor + tangent * radius * (0.2f + age * 1.5f)
+                        + normal * impact.CloudHeight * (Mathf.Sin(age * Mathf.PI) * 0.55f + rise * 0.1f);
+                    float size = layer.AverageTileSize * (0.08f + seed * 0.1f);
+                    float alpha = Mathf.Sin(age * Mathf.PI) * rise * fade * Mathf.Lerp(1f, 0.22f, progress) * 0.74f;
+                    Color color = i % 3 == 0 ? new Color(0.35f, 0.78f, 1.2f, alpha) : new Color(1.15f, 0.60f, 0.22f, alpha);
+                    Vector3 velocity = tangent * radius * 0.35f + normal * (Mathf.Cos(age * Mathf.PI) * impact.CloudHeight * 0.45f);
+                    Vector3 direction = Vector3.ProjectOnPlane(velocity, camera.transform.forward).normalized;
+                    if (direction.sqrMagnitude < 0.01f) direction = camera.transform.up;
+                    Vector3 side = Vector3.Cross(direction, camera.transform.forward).normalized;
+                    embers.Add(position, side, direction, size, size * (1.6f + seed * 1.8f), color);
+                }
+                // A short radial burst emphasizes impact without a persistent white disc.
+                for (int i = 0; i < 16 && seconds < 0.9f; i++)
+                {
+                    if (!ArcaneVfxStyle.KeepParticle(i, 8, ArcaneVfxStyle.Density)) continue;
+                    float angle = i * 2.399963f;
+                    Vector3 tangent = first * Mathf.Cos(angle) + second * Mathf.Sin(angle);
+                    Vector3 position = anchor + tangent * radius * seconds * 2f + normal * radius * 0.2f;
+                    Vector3 direction = Vector3.ProjectOnPlane(tangent, camera.transform.forward).normalized;
+                    embers.Add(position, Vector3.Cross(direction, camera.transform.forward), direction,
+                        radius * 0.016f, radius * 0.24f, new Color(0.56f, 0.88f, 1.12f, (1f - seconds / 0.9f) * 0.6f));
+                }
+                embers.Upload();
+                lastCloudSeconds = seconds;
+                lastCloudCamera = camera.transform.position;
+                lastCloudRotation = camera.transform.rotation;
+                lastQuality = ArcaneVfxStyle.Quality;
             }
+            embers.Draw(seconds, drawLayer, camera);
         }
 
         private void BuildCloud(Vector3 anchor, Vector3 normal, Vector3 first, Vector3 second,
@@ -156,9 +196,9 @@ namespace MiliraXian.Characters.Common.Vfx
                 puff.Height = width * (puff.Dust ? 0.65f : 0.9f + seed * 0.2f);
                 float heat = Mathf.Exp(-seconds * 0.42f);
                 Color ash = new Color(0.23f + seed * 0.14f, 0.24f + seed * 0.13f, 0.29f + seed * 0.13f);
-                Color hot = i < 24 ? new Color(1.7f, 0.6f, 0.14f) : new Color(1.35f, 0.92f, 0.57f);
+                Color hot = i < 24 ? new Color(1.15f, 0.60f, 0.24f) : new Color(1.05f, 0.83f, 0.60f);
                 puff.Color = Color.Lerp(ash, hot, heat);
-                puff.Color.a = rise * fade * (puff.Dust ? 0.5f : 0.85f);
+                puff.Color.a = rise * fade * (puff.Dust ? 0.42f : 0.72f);
                 puff.Distance = (puff.Position - camera.transform.position).sqrMagnitude;
                 puffs[i] = puff;
                 order[i] = i;
@@ -191,7 +231,7 @@ namespace MiliraXian.Characters.Common.Vfx
                     triangles[index] = v; triangles[index + 1] = v + 2; triangles[index + 2] = v + 1;
                     triangles[index + 3] = v + 1; triangles[index + 4] = v + 2; triangles[index + 5] = v + 3;
                 }
-            rings = new Mesh { name = "MX_ArcaneImpact_SphericalWaves", vertices = vertices, uv = uv, triangles = triangles };
+            rings = new Mesh { name = "MX_ArcaneImpact_SphericalWaves", vertices = vertices, uv = uv, colors = colors, triangles = triangles };
             rings.MarkDynamic();
         }
 
@@ -216,9 +256,7 @@ namespace MiliraXian.Characters.Common.Vfx
                     colors[v] = colors[v + 1] = new Color(1, 1, 1, alpha);
                 }
             }
-            rings.vertices = vertices;
-            rings.colors = colors;
-            rings.RecalculateBounds();
+            ArcaneVfxStyle.UploadMesh(rings, vertices, colors);
         }
 
         internal void Dispose()
@@ -226,7 +264,9 @@ namespace MiliraXian.Characters.Common.Vfx
             if (Disposed) return;
             Disposed = true;
             if (rings != null) Object.Destroy(rings);
+            embers?.Dispose();
             rings = null;
+            embers = null;
             Active.Remove(this);
         }
     }

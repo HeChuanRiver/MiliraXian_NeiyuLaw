@@ -74,11 +74,7 @@ namespace MiliraXian.Characters.Neiyu
         public static bool PassivesDisabled => currentLevel == CharacterPowerLevel.Decorative;
         public static bool IsOriginal => currentLevel == CharacterPowerLevel.Original;
         public static bool IsBalanced => currentLevel == CharacterPowerLevel.Balanced;
-        public static int ThunderStrikeCap => AbilitiesDisabled ? 0 : int.MaxValue;
-        public static int ThunderDamageCap => IsOriginal ? int.MaxValue : IsBalanced ? balancedThunderDamage : 0;
-        public static int ThunderEmpDamageCap => IsOriginal ? int.MaxValue : IsBalanced ? balancedThunderEmpDamage : 0;
         public static int BarrageShotCap => AbilitiesDisabled ? 0 : int.MaxValue;
-        private static int balancedThunderDamage, balancedThunderEmpDamage;
 
         public static float HungerFloorPercent
         {
@@ -211,16 +207,8 @@ namespace MiliraXian.Characters.Neiyu
                 Add(warp, () => warp.description, value => warp.description = value,
                     warp.description, "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString());
 
-            AbilityDef thunder = AbilityDefNamed("MX_Neiyu_ThunderMarkedStorm");
-            AddAbilityDescription(thunder);
-            AddAbilityCooldown(thunder, 18000);
-            CompProperties_AbilityNeiyuThunderSigil thunderProps = AbilityComp<CompProperties_AbilityNeiyuThunderSigil>(thunder);
-            balancedThunderDamage = thunderProps == null ? 0 : (int)ConservativePowerTuning.Number(thunderProps.damageAmount, ConservativePowerTuning.Damage);
-            balancedThunderEmpDamage = thunderProps == null ? 0 : (int)ConservativePowerTuning.Number(thunderProps.empDamageAmount, ConservativePowerTuning.Damage);
-            AddScaled(thunderProps, () => thunderProps.radius, value => thunderProps.radius = value, 1f, 2f);
-            AddScaled(thunderProps, () => thunderProps.strikeCountRange, value => thunderProps.strikeCountRange = value, 1f, new IntRange(1, 1));
-            AddScaled(thunderProps, () => thunderProps.damageAmount, value => thunderProps.damageAmount = value, ConservativePowerTuning.Damage, 10);
-            AddScaled(thunderProps, () => thunderProps.empDamageAmount, value => thunderProps.empDamageAmount = value, ConservativePowerTuning.Damage, 0);
+            // Thunder Sigil uses its authored rules in both usable power levels.
+            // The shared decorative gate still prevents casts and cancels pending work.
 
             AbilityDef barrage = AbilityDefNamed("MX_Neiyu_Bow_ArrowBarrage");
             AddAbilityDescription(barrage);

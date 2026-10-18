@@ -52,7 +52,7 @@ public static class PortableVfxAutomation
             defs.Add(Export("arcane_impact", "Assets/ArcaneImpact/Prefabs/ArcaneImpact.prefab", null));
             foreach (string state in new[] { "Idle", "Twitch", "Alert" })
                 defs.Add(Export("neiyu_ear_" + state.ToLowerInvariant(), "Assets/NeiyuEar/Prefabs/NeiyuEarDriver_Runtime.prefab", "Assets/NeiyuEar/Animations/Ear_" + state + ".anim"));
-            string destination = Path.Combine(ModRoot, "1.6/Defs/MiscDefs/MiliraXian_CharacterVfx.xml");
+            string destination = Path.Combine(ModRoot, "1.7/Defs/MiscDefs/MiliraXian_CharacterVfx.xml");
             Directory.CreateDirectory(Path.GetDirectoryName(destination));
             new XDocument(new XDeclaration("1.0", "utf-8", null), defs).Save(destination);
             if (buildResources) BuildMaterials();
@@ -82,20 +82,17 @@ public static class PortableVfxAutomation
             if (sprite != null && sprite.sprite != null)
             {
                 Vector3 size = sprite.sprite.bounds.size;
-                part.Add(new XElement("texture", TexturePath(sprite.sprite.texture, address)),
+                string texturePath = TexturePath(sprite.sprite.texture, address);
+                string shader = NativeArcaneShader(address, sprite.sprite.texture.name);
+                if (shader == "MX_ArcaneStroke") texturePath = texturePath.Replace("/arcane_circle/", "/arcane_circle/StrokeFields/");
+                part.Add(new XElement("texture", texturePath),
                     new XElement("size", "(" + F(size.x) + "," + F(size.y) + ")"), C("color", sprite.color),
                     new XElement("sortingOrder", sprite.sortingOrder), new XElement("flipX", sprite.flipX),
                     new XElement("flipY", sprite.flipY), new XElement("visible", sprite.enabled),
                     new XElement("glow", node.name.IndexOf("Glow", StringComparison.OrdinalIgnoreCase) >= 0));
                 if (address.StartsWith("arcane_", StringComparison.Ordinal))
                 {
-                    string materialPath = AssetDatabase.GetAssetPath(sprite.sharedMaterial);
-                    if (!MaterialPaths.TryGetValue(materialPath, out string materialAddress))
-                    {
-                        materialAddress = address + "_" + sprite.sharedMaterial.name.ToLowerInvariant();
-                        MaterialPaths.Add(materialPath, materialAddress);
-                    }
-                    part.Add(new XElement("material", materialAddress));
+                    part.Add(new XElement("shader", shader));
                 }
             }
             ParticleSystem ps = node.GetComponent<ParticleSystem>();
@@ -136,6 +133,12 @@ public static class PortableVfxAutomation
             if (transition != null) result.Add(new XElement("blendInDuration", F(transition.duration)));
         }
         return result;
+    }
+
+    private static string NativeArcaneShader(string address, string texture)
+    {
+        if (address == "arcane_circle") return texture == "Halo" || texture == "Pulse" ? "MX_ArcaneAura" : "MX_ArcaneStroke";
+        return address == "arcane_impact" ? "MX_ArcaneCloud" : "MX_ArcaneEnergy";
     }
 
     private static XElement Curve(string name, AnimationCurve curve)

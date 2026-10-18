@@ -33,6 +33,7 @@ namespace MiliraXian.Characters.Common.Abilities
         public PlanetTile TargetTile => job?.globalTarget.Tile ?? PlanetTile.Invalid;
         public Map SourceMap => sourceMap;
         public bool IsChanting => state == WorldArcaneStrikeState.Chanting && !ended;
+        public float ChantDurationSeconds => Mathf.Max(1, chantDurationTicks) / 60f;
         public float ChantProgress => state == WorldArcaneStrikeState.Chanting
             ? Mathf.Clamp01(1f - ticksLeftThisToil / (float)Mathf.Max(1, chantDurationTicks))
             : 0f;
