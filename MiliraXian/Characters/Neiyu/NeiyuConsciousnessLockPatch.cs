@@ -18,6 +18,8 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             Pawn pawn = diffSet?.pawn;
+            // The trait's timed recovery is actual unconsciousness, not a combat debuff.
+            if (NeiyuSoulRecoveryUtility.IsRecovering(pawn)) return;
             float minimumConsciousness = MinimumConsciousnessFromSettings();
             if (pawn != null && NeiyuEquipmentUtility.IsNeiyu(pawn))
             {

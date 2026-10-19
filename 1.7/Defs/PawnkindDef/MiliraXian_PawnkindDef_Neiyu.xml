@@ -194,6 +194,9 @@
                      故按本表全量重建：未列出的一律移除。 -->
                 <traits>
                     <li><def>MiliraXianNeiyu_Love</def></li>
+                    <li><def>MX_Neiyu_SoulRemnant</def></li>
+                    <li><def>MX_Neiyu_IdleSleeper</def></li>
+                    <li><def>MX_Neiyu_Nishang</def></li>
                     <li><def>Beauty</def><degree>2</degree></li>
                 </traits>
 

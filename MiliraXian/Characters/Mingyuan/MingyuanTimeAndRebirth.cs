@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using MiliraXian.CharacterLib;
-using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -106,24 +105,6 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 locks ??= new();
             }
-        }
-    }
-
-    // The protective flame takes over before death resolves: the pawn is healed, despawned and
-    // kept in the world, so this must prevent Kill rather than react to it.
-    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
-    internal static class Patch_Pawn_Kill_MingyuanRebirth
-    {
-        private static readonly HashSet<Pawn> intercepting = new();
-
-        [HarmonyPriority(Priority.High)]
-        private static bool Prefix(Pawn __instance)
-        {
-            if (intercepting.Contains(__instance)) return false;
-            intercepting.Add(__instance);
-            // Restoring health can raise a second fatal condition and re-enter Kill.
-            try { return !MingyuanRebirthUtility.TryInterceptFatalDamage(__instance); }
-            finally { intercepting.Remove(__instance); }
         }
     }
 

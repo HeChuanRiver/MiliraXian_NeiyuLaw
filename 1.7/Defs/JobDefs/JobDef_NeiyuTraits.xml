@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <JobDef>
+    <defName>MX_Neiyu_ExtraNutrition</defName>
+    <driverClass>RimWorld.JobDriver_Ingest</driverClass>
+    <reportString>正在额外进食TargetA。</reportString>
+    <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+  </JobDef>
+  <JobDef>
+    <defName>MX_Neiyu_IdleSleep</defName>
+    <driverClass>RimWorld.JobDriver_LayDown</driverClass>
+    <reportString>正在睡觉。</reportString>
+    <isIdle>true</isIdle>
+    <suspendable>false</suspendable>
+  </JobDef>
+  <JobDef>
+    <defName>MX_Neiyu_RecoverSoul</defName>
+    <driverClass>MiliraXian.Characters.Neiyu.JobDriver_NeiyuSoulRecovery</driverClass>
+    <reportString>正在休眠，等待肉体重塑。</reportString>
+    <casualInterruptible>false</casualInterruptible>
+    <playerInterruptible>false</playerInterruptible>
+    <suspendable>false</suspendable>
+  </JobDef>
+  <ThinkTreeDef>
+    <defName>MX_Neiyu_ExtraNutritionBehavior</defName>
+    <insertTag>Humanlike_PreMain</insertTag>
+    <thinkRoot Class="MiliraXian.Characters.Neiyu.JobGiver_NeiyuExtraNutrition" />
+  </ThinkTreeDef>
+  <ThinkTreeDef>
+    <defName>MX_Neiyu_IdleSleepBehavior</defName>
+    <insertTag>Humanlike_PostMain</insertTag>
+    <thinkRoot Class="MiliraXian.Characters.Neiyu.JobGiver_NeiyuIdleSleep" />
+  </ThinkTreeDef>
+</Defs>

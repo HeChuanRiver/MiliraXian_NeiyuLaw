@@ -135,9 +135,29 @@ namespace MiliraXian.Characters.Neiyu
 
     public class GameComponent_NeiyuSpecialPawnIntegration : GameComponent
     {
+        private bool neiyuTraitsMigrated;
+
         public GameComponent_NeiyuSpecialPawnIntegration(Game game)
         {
         }
 
+        public override void StartedNewGame() => neiyuTraitsMigrated = true;
+
+        public override void LoadedGame()
+        {
+            if (neiyuTraitsMigrated) return;
+            // A one-time upgrade for pre-trait saves, including caravans/world pawns.
+            // Generation uses CharacterIdentityExtension; this is not another ongoing repair loop.
+            foreach (Pawn pawn in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+            {
+                if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.story?.traits == null) continue;
+                foreach (TraitDef trait in new[] { NeiyuTraitDefOf.MX_Neiyu_SoulRemnant, NeiyuTraitDefOf.MX_Neiyu_IdleSleeper, NeiyuTraitDefOf.MX_Neiyu_Nishang })
+                    if (!pawn.story.traits.allTraits.Exists(existing => existing.def == trait))
+                        pawn.story.traits.GainTrait(new Trait(trait), suppressConflicts: true);
+            }
+            neiyuTraitsMigrated = true;
+        }
+
+        public override void ExposeData() => Scribe_Values.Look(ref neiyuTraitsMigrated, "neiyuTraitsMigrated", false);
     }
 }

@@ -452,66 +452,13 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static void ClearControlStates(Pawn pawn)
         {
-            if (pawn == null)
-            {
-                return;
-            }
-
-            pawn.stances?.stunner?.StopStun();
-            pawn.mindState?.mentalStateHandler?.Reset();
-            Thing fire = pawn.GetAttachment(ThingDefOf.Fire);
-            if (fire != null && !fire.Destroyed)
-            {
-                fire.Destroy(DestroyMode.Vanish);
-            }
+            MiliraXian.Characters.Common.CharacterHealthUtility.ClearControlStates(pawn);
         }
 
         public static void RestorePawnToBestCondition(Pawn pawn, bool keepLifeBurn)
         {
             if (MingyuanPowerBalance.Sealed) return;
-            if (pawn?.health?.hediffSet == null || pawn.Dead)
-            {
-                return;
-            }
-
-            List<Hediff_MissingPart> missingParts = new();
-            foreach (Hediff_MissingPart missingPart in pawn.health.hediffSet.GetMissingPartsCommonAncestors())
-            {
-                if (missingPart.Part != null)
-                {
-                    missingParts.Add(missingPart);
-                }
-            }
-
-            for (int i = 0; i < missingParts.Count; i++)
-            {
-                pawn.health.RestorePart(missingParts[i].Part);
-            }
-
-            List<Hediff> toRemove = new();
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            HediffDef lifeBurn = LifeBurnDef;
-            for (int i = 0; i < hediffs.Count; i++)
-            {
-                Hediff hediff = hediffs[i];
-                if (hediff == null || (keepLifeBurn && hediff.def == lifeBurn))
-                {
-                    continue;
-                }
-
-                if (hediff is Hediff_Injury
-                    || hediff is Hediff_MissingPart
-                    || hediff.def.isBad
-                    || hediff.def.defName == "BloodLoss")
-                {
-                    toRemove.Add(hediff);
-                }
-            }
-
-            for (int i = 0; i < toRemove.Count; i++)
-            {
-                pawn.health.RemoveHediff(toRemove[i]);
-            }
+            MiliraXian.Characters.Common.CharacterHealthUtility.RestoreForRebirth(pawn, keepLifeBurn ? LifeBurnDef : null);
         }
 
         public static IntVec3 FindStandableCellNear(IntVec3 center, Map map, int radius)
