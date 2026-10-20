@@ -188,7 +188,7 @@ namespace MiliraXian.Characters.Mingyuan
         private void ApplyExtraLifeBurn(Pawn pawn, Pawn instigator)
         {
             MingyuanRainbowArrowExtension ext = Ext;
-            float layers = (ext?.lifeBurnLayers ?? 300f) * (MingyuanPowerBalance.IsBalanced ? .9f : 1f);
+            float layers = ext?.lifeBurnLayers ?? 300f;
             if (pawn == null || pawn.Dead || layers <= 0f)
             {
                 return;

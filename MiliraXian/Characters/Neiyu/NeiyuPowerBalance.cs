@@ -10,118 +10,39 @@ using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Neiyu
 {
-    public enum CharacterPowerLevel
-    {
-        Original,
-        Balanced,
-        Decorative
-    }
-
-    /// <summary>
-    /// Applies Neiyu's selected power level once when defs finish loading and again only
-    /// when the setting changes. Combat hot paths read the cached enum instead of settings.
-    /// </summary>
+    // The shared profile owns both the loaded baseline and the decorative overrides.
     internal static class NeiyuPowerBalance
     {
-        private interface IDefTuning
-        {
-            void Apply(CharacterPowerLevel level);
-        }
-
-        private sealed class DefTuning<T> : IDefTuning
-        {
-            private readonly Action<T> setter;
-            private readonly T original;
-            private readonly T balanced;
-            private readonly T decorative;
-
-            public DefTuning(Func<T> getter, Action<T> setter, T balanced, T decorative)
-            {
-                this.setter = setter;
-                original = getter();
-                this.balanced = balanced;
-                this.decorative = decorative;
-            }
-
-            public void Apply(CharacterPowerLevel level)
-            {
-                switch (level)
-                {
-                    case CharacterPowerLevel.Balanced:
-                        setter(balanced);
-                        break;
-                    case CharacterPowerLevel.Decorative:
-                        setter(decorative);
-                        break;
-                    default:
-                        setter(original);
-                        break;
-                }
-            }
-        }
-
-        private static readonly List<IDefTuning> DefTunings = new List<IDefTuning>();
+        internal static readonly CharacterPowerProfile Profile = new();
         private static readonly FieldInfo ProjectileDamageAmountBaseField =
             AccessTools.Field(typeof(ProjectileProperties), "damageAmountBase");
         private static readonly FieldInfo ProjectileArmorPenetrationBaseField =
             AccessTools.Field(typeof(ProjectileProperties), "armorPenetrationBase");
-        private static CharacterPowerLevel currentLevel = CharacterPowerLevel.Original;
         private static bool defsInitialized;
 
-        public static CharacterPowerLevel CurrentLevel => currentLevel;
-        public static int Revision { get; private set; }
-        public static bool AbilitiesDisabled => currentLevel == CharacterPowerLevel.Decorative;
-        public static bool PassivesDisabled => currentLevel == CharacterPowerLevel.Decorative;
-        public static bool IsOriginal => currentLevel == CharacterPowerLevel.Original;
-        public static bool IsBalanced => currentLevel == CharacterPowerLevel.Balanced;
+        public static int Revision => Profile.Revision;
+        public static bool AbilitiesDisabled => Profile.Sealed;
+        public static bool PassivesDisabled => Profile.Sealed;
         public static int BarrageShotCap => AbilitiesDisabled ? 0 : int.MaxValue;
+        public static float HungerFloorPercent => PassivesDisabled ? 0f : 0.20f;
+        public static string AbilitiesDisabledReason => "MX_NeiyuDecorativeAbilitiesSealed".CanTranslate()
+            ? "MX_NeiyuDecorativeAbilitiesSealed".Translate().ToString()
+            : "观赏模式下无法使用主动技能。";
 
-        public static float HungerFloorPercent
-        {
-            get
-            {
-                switch (currentLevel)
-                {
-                    case CharacterPowerLevel.Balanced:
-                        return 0.20f;
-                    case CharacterPowerLevel.Decorative:
-                        return 0f;
-                    default:
-                        return 0.20f;
-                }
-            }
-        }
-
-        public static string AbilitiesDisabledReason => "MX_NL_NeiyuAbilitiesSealed".Translate().ToString();
-
-        public static void SetLevel(CharacterPowerLevel level)
-        {
-            CharacterPowerLevel next = IsValid(level) ? level : CharacterPowerLevel.Original;
-            if (currentLevel != next) Revision++;
-            currentLevel = next;
-            if (defsInitialized)
-            {
-                ApplyDefTunings();
-            }
-        }
+        public static void SetDecorative(bool decorative) => Profile.SetDecorative(decorative);
 
         internal static void EnsureDefsInitialized()
         {
-            InitializeDefs();
+            if (defsInitialized) return;
+            BuildWeaponTunings();
+            BuildAbilityTunings();
+            BuildPassiveTunings();
+            defsInitialized = true;
+            Profile.Apply();
         }
 
-        public static float LimitConsciousnessMinimum(float configuredMinimum)
-        {
-            switch (currentLevel)
-            {
-                case CharacterPowerLevel.Balanced:
-                    return configuredMinimum;
-                case CharacterPowerLevel.Decorative:
-                    return 0f;
-                default:
-                    return configuredMinimum;
-            }
-        }
+        public static float LimitConsciousnessMinimum(float configuredMinimum) =>
+            PassivesDisabled ? 0f : configuredMinimum;
 
         public static void GetWeakPenaltyFactors(out float moveSpeedFactor, out float restFallRateFactor, out float workSpeedGlobalFactor)
         {
@@ -130,64 +51,35 @@ namespace MiliraXian.Characters.Neiyu
             workSpeedGlobalFactor = 0.20f;
         }
 
-        private static bool IsValid(CharacterPowerLevel level)
-        {
-            return level == CharacterPowerLevel.Original
-                   || level == CharacterPowerLevel.Balanced
-                   || level == CharacterPowerLevel.Decorative;
-        }
-
-        private static void InitializeDefs()
-        {
-            if (defsInitialized)
-            {
-                return;
-            }
-
-            BuildWeaponTunings();
-            BuildAbilityTunings();
-            BuildPassiveTunings();
-            defsInitialized = true;
-            ApplyDefTunings();
-        }
-
-        private static void ApplyDefTunings()
-        {
-            for (int index = 0; index < DefTunings.Count; index++)
-            {
-                DefTunings[index].Apply(currentLevel);
-            }
-        }
-
         private static void BuildWeaponTunings()
         {
             ThingDef flower = ThingDefNamed("MX_Neiyu_Form_Flower");
             Tool flowerTool = FirstTool(flower);
             CultivationPower.RegisterTool(flowerTool, 3f, 0.045f);
-            AddScaled(flowerTool, () => flowerTool.power, value => flowerTool.power = value, ConservativePowerTuning.Damage, 3f);
-            AddScaled(flowerTool, () => flowerTool.armorPenetration, value => flowerTool.armorPenetration = value, ConservativePowerTuning.Defense, 0.045f);
-            AddScaled(flowerTool, () => flowerTool.cooldownTime, value => flowerTool.cooldownTime = value, 1f, 3f);
-            AddStatBase(flower, StatDefOf.MeleeWeapon_CooldownMultiplier, 1f, 3.5f);
+            Add(flowerTool, () => flowerTool.power, value => flowerTool.power = value, 3f);
+            Add(flowerTool, () => flowerTool.armorPenetration, value => flowerTool.armorPenetration = value, 0.045f);
+            Add(flowerTool, () => flowerTool.cooldownTime, value => flowerTool.cooldownTime = value, 3f);
+            AddStatBase(flower, StatDefOf.MeleeWeapon_CooldownMultiplier, 3.5f);
 
             ThingDef sword = ThingDefNamed("MX_Neiyu_Form_Weapon");
             Tool swordTool = FirstTool(sword);
             CultivationPower.RegisterTool(swordTool, 10f, 0.12f);
-            AddScaled(swordTool, () => swordTool.power, value => swordTool.power = value, ConservativePowerTuning.Damage, 10f);
-            AddScaled(swordTool, () => swordTool.armorPenetration, value => swordTool.armorPenetration = value, ConservativePowerTuning.Defense, 0.12f);
-            AddScaled(swordTool, () => swordTool.cooldownTime, value => swordTool.cooldownTime = value, 1f, 2.4f);
-            AddStatBase(sword, StatDefOf.MeleeWeapon_CooldownMultiplier, 1f, 1.15f);
+            Add(swordTool, () => swordTool.power, value => swordTool.power = value, 10f);
+            Add(swordTool, () => swordTool.armorPenetration, value => swordTool.armorPenetration = value, 0.12f);
+            Add(swordTool, () => swordTool.cooldownTime, value => swordTool.cooldownTime = value, 2.4f);
+            AddStatBase(sword, StatDefOf.MeleeWeapon_CooldownMultiplier, 1.15f);
 
             ThingDef bow = ThingDefNamed("MX_Neiyu_Form_Bow");
             VerbProperties bowVerb = FirstVerb(bow);
-            AddScaled(bowVerb, () => bowVerb.warmupTime, value => bowVerb.warmupTime = value, ConservativePowerTuning.Cooldown, 2.8f);
-            AddScaled(bowVerb, () => bowVerb.range, value => bowVerb.range = value, 1f, 24f);
+            Add(bowVerb, () => bowVerb.warmupTime, value => bowVerb.warmupTime = value, 2.8f);
+            Add(bowVerb, () => bowVerb.range, value => bowVerb.range = value, 24f);
 
             ThingDef mainArrow = ThingDefNamed("MX_Bullet_BigSplitArrow");
             AddProjectileDamage(mainArrow?.projectile, 12);
             SplitArrowExtension split = mainArrow?.GetModExtension<SplitArrowExtension>();
-            AddScaled(split, () => split.splitCount, value => split.splitCount = value, 1f, 1);
-            AddScaled(split, () => split.splitRetargetChance, value => split.splitRetargetChance = value, 1f, 0f);
-            AddScaled(split, () => split.splitRetargetRadius, value => split.splitRetargetRadius = value, 1f, 1f);
+            Add(split, () => split.splitCount, value => split.splitCount = value, 1);
+            Add(split, () => split.splitRetargetChance, value => split.splitRetargetChance = value, 0f);
+            Add(split, () => split.splitRetargetRadius, value => split.splitRetargetRadius = value, 1f);
 
             ThingDef shard = ThingDefNamed("MX_Bullet_HomingShard");
             AddProjectileDamage(shard?.projectile, 6);
@@ -202,95 +94,95 @@ namespace MiliraXian.Characters.Neiyu
         private static void BuildAbilityTunings()
         {
             AbilityDef warp = AbilityDefNamed("MX_Neiyu_WarpFeather");
-            // Warp Feather keeps its configured yield, cooldown and description in both usable tiers.
+            // Warp Feather keeps its authored yield and cooldown; the shared gate seals its casts.
             if (warp != null)
                 Add(warp, () => warp.description, value => warp.description = value,
-                    warp.description, "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString());
+                    "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString());
 
-            // Thunder Sigil uses its authored rules in both usable power levels.
+            // Thunder Sigil keeps its authored rules.
             // The shared decorative gate still prevents casts and cancels pending work.
 
             AbilityDef barrage = AbilityDefNamed("MX_Neiyu_Bow_ArrowBarrage");
             AddAbilityDescription(barrage);
             AddAbilityCooldown(barrage, 24000);
             CompProperties_AbilityNeiyuArrowBarrage barrageProps = AbilityComp<CompProperties_AbilityNeiyuArrowBarrage>(barrage);
-            AddScaled(barrageProps, () => barrageProps.shotCount, value => barrageProps.shotCount = value, 1f, 4);
-            AddScaled(barrageProps, () => barrageProps.shotIntervalTicks, value => barrageProps.shotIntervalTicks = value, 1f, 10);
-            AddScaled(barrageProps, () => barrageProps.maxDistance, value => barrageProps.maxDistance = value, 1f, 30f);
-            AddScaled(barrageProps, () => barrageProps.lateralSpread, value => barrageProps.lateralSpread = value, 1f, 2f);
+            Add(barrageProps, () => barrageProps.shotCount, value => barrageProps.shotCount = value, 4);
+            Add(barrageProps, () => barrageProps.shotIntervalTicks, value => barrageProps.shotIntervalTicks = value, 10);
+            Add(barrageProps, () => barrageProps.maxDistance, value => barrageProps.maxDistance = value, 30f);
+            Add(barrageProps, () => barrageProps.lateralSpread, value => barrageProps.lateralSpread = value, 2f);
 
             AbilityDef blessing = AbilityDefNamed("MX_Neiyu_Flower_BlessingField");
             AddAbilityDescription(blessing);
             AddAbilityCooldown(blessing, 18000);
             CompProperties_AbilityNeiyuFlowerBless blessingProps = AbilityComp<CompProperties_AbilityNeiyuFlowerBless>(blessing);
-            AddScaled(blessingProps, () => blessingProps.radius, value => blessingProps.radius = value, 1f, 2f);
-            AddScaled(blessingProps, () => blessingProps.buffDurationTicks, value => blessingProps.buffDurationTicks = value, 1f, 600);
+            Add(blessingProps, () => blessingProps.radius, value => blessingProps.radius = value, 2f);
+            Add(blessingProps, () => blessingProps.buffDurationTicks, value => blessingProps.buffDurationTicks = value, 600);
 
             AbilityDef toxin = AbilityDefNamed("MX_Neiyu_Flower_ToxinGarden");
             AddAbilityDescription(toxin);
             AddAbilityCooldown(toxin, 24000);
             CompProperties_AbilityNeiyuFlowerToxinField toxinProps = AbilityComp<CompProperties_AbilityNeiyuFlowerToxinField>(toxin);
-            AddScaled(toxinProps, () => toxinProps.radius, value => toxinProps.radius = value, 1f, 2f);
-            AddScaled(toxinProps, () => toxinProps.severeFoodPoisoningSeverity, value => toxinProps.severeFoodPoisoningSeverity = value, ConservativePowerTuning.Bonus, 0.05f);
-            AddScaled(toxinProps, () => toxinProps.berserkChance, value => toxinProps.berserkChance = value, ConservativePowerTuning.Bonus, 0f);
+            Add(toxinProps, () => toxinProps.radius, value => toxinProps.radius = value, 2f);
+            Add(toxinProps, () => toxinProps.severeFoodPoisoningSeverity, value => toxinProps.severeFoodPoisoningSeverity = value, 0.05f);
+            Add(toxinProps, () => toxinProps.berserkChance, value => toxinProps.berserkChance = value, 0f);
 
             AbilityDef skyfall = AbilityDefNamed("MX_Neiyu_Sword_Skyfall");
             AddAbilityDescription(skyfall);
             AddAbilityCooldown(skyfall, 24000);
             CompProperties_AbilityNeiyuSwordSkyfall skyfallProps = AbilityComp<CompProperties_AbilityNeiyuSwordSkyfall>(skyfall);
-            AddScaled(skyfallProps, () => skyfallProps.impactRadius, value => skyfallProps.impactRadius = value, 1f, 1.5f);
-            AddScaled(skyfallProps, () => skyfallProps.impactDamage, value => skyfallProps.impactDamage = value, ConservativePowerTuning.Damage, 18);
-            AddScaled(skyfallProps, () => skyfallProps.impactArmorPen, value => skyfallProps.impactArmorPen = value, ConservativePowerTuning.Defense, 0.10f);
-            AddScaled(skyfallProps, () => skyfallProps.vulnerabilityDurationTicks, value => skyfallProps.vulnerabilityDurationTicks = value, 1f, 300);
+            Add(skyfallProps, () => skyfallProps.impactRadius, value => skyfallProps.impactRadius = value, 1.5f);
+            Add(skyfallProps, () => skyfallProps.impactDamage, value => skyfallProps.impactDamage = value, 18);
+            Add(skyfallProps, () => skyfallProps.impactArmorPen, value => skyfallProps.impactArmorPen = value, 0.10f);
+            Add(skyfallProps, () => skyfallProps.vulnerabilityDurationTicks, value => skyfallProps.vulnerabilityDurationTicks = value, 300);
 
             AbilityDef execution = AbilityDefNamed("MX_Neiyu_Sword_ExecuteHead");
             AddAbilityDescription(execution);
             AddAbilityCooldown(execution, 24000);
             CompProperties_AbilityNeiyuSwordExecution executionProps = AbilityComp<CompProperties_AbilityNeiyuSwordExecution>(execution);
-            AddScaled(executionProps, () => executionProps.dashDamage, value => executionProps.dashDamage = value, ConservativePowerTuning.Damage, 18);
+            Add(executionProps, () => executionProps.dashDamage, value => executionProps.dashDamage = value, 18);
         }
 
         private static void BuildPassiveTunings()
         {
             ThingDef outerwear = ThingDefNamed("MiliraXian_NeiyuNormal");
-            AddStatBase(outerwear, StatDefOf.ArmorRating_Sharp, ConservativePowerTuning.Defense, 0.15f);
-            AddStatBase(outerwear, StatDefOf.ArmorRating_Blunt, ConservativePowerTuning.Defense, 0.08f);
-            AddStatBase(outerwear, StatDefOf.ArmorRating_Heat, ConservativePowerTuning.Defense, 0.10f);
-            AddStatBase(outerwear, StatDefOf.Insulation_Cold, 1f, 8f);
-            AddStatBase(outerwear, StatDefOf.Insulation_Heat, 1f, 5f);
-            AddEquippedOffset(outerwear, StatDefOf.CarryingCapacity, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(outerwear, StatDefOf.MeleeDodgeChance, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(outerwear, StatDefOf.MoveSpeed, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(outerwear, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 0f);
+            AddStatBase(outerwear, StatDefOf.ArmorRating_Sharp, 0.15f);
+            AddStatBase(outerwear, StatDefOf.ArmorRating_Blunt, 0.08f);
+            AddStatBase(outerwear, StatDefOf.ArmorRating_Heat, 0.10f);
+            AddStatBase(outerwear, StatDefOf.Insulation_Cold, 8f);
+            AddStatBase(outerwear, StatDefOf.Insulation_Heat, 5f);
+            AddEquippedOffset(outerwear, StatDefOf.CarryingCapacity, 0f);
+            AddEquippedOffset(outerwear, StatDefOf.MeleeDodgeChance, 0f);
+            AddEquippedOffset(outerwear, StatDefOf.MoveSpeed, 0f);
+            AddEquippedOffset(outerwear, StatDefOf.IncomingDamageFactor, 0f);
             AddEquipmentDescription(outerwear);
 
             ThingDef innerwear = ThingDefNamed("MiliraXian_NeiyuInner");
-            AddStatBase(innerwear, StatDefOf.ArmorRating_Sharp, ConservativePowerTuning.Defense, 0f);
-            AddStatBase(innerwear, StatDefOf.ArmorRating_Blunt, ConservativePowerTuning.Defense, 0f);
-            AddStatBase(innerwear, StatDefOf.ArmorRating_Heat, ConservativePowerTuning.Defense, 0f);
-            AddStatBase(innerwear, StatDefOf.Insulation_Cold, 1f, 2f);
-            AddStatBase(innerwear, StatDefOf.Insulation_Heat, 1f, 2f);
-            AddEquippedOffset(innerwear, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(innerwear, StatDefOf.MeleeCooldownFactor, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(innerwear, StatDefOf.WorkSpeedGlobal, ConservativePowerTuning.Bonus, 0f);
+            AddStatBase(innerwear, StatDefOf.ArmorRating_Sharp, 0f);
+            AddStatBase(innerwear, StatDefOf.ArmorRating_Blunt, 0f);
+            AddStatBase(innerwear, StatDefOf.ArmorRating_Heat, 0f);
+            AddStatBase(innerwear, StatDefOf.Insulation_Cold, 2f);
+            AddStatBase(innerwear, StatDefOf.Insulation_Heat, 2f);
+            AddEquippedOffset(innerwear, StatDefOf.IncomingDamageFactor, 0f);
+            AddEquippedOffset(innerwear, StatDefOf.MeleeCooldownFactor, 0f);
+            AddEquippedOffset(innerwear, StatDefOf.WorkSpeedGlobal, 0f);
             AddEquipmentDescription(innerwear);
 
             ThingDef earrings = ThingDefNamed("MX_Apparel_EarringsZhenzhu");
-            AddStatBase(earrings, StatDefOf.ArmorRating_Sharp, ConservativePowerTuning.Defense, 0f);
-            AddStatBase(earrings, StatDefOf.ArmorRating_Blunt, ConservativePowerTuning.Defense, 0f);
-            AddStatBase(earrings, StatDefOf.ArmorRating_Heat, ConservativePowerTuning.Defense, 0f);
-            AddEquippedOffset(earrings, StatDefOf.ImmunityGainSpeed, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(earrings, StatDefOf.AimingDelayFactor, ConservativePowerTuning.Bonus, 0f);
-            AddEquippedOffset(earrings, StatDefOf.RangedCooldownFactor, ConservativePowerTuning.Bonus, 0f);
+            AddStatBase(earrings, StatDefOf.ArmorRating_Sharp, 0f);
+            AddStatBase(earrings, StatDefOf.ArmorRating_Blunt, 0f);
+            AddStatBase(earrings, StatDefOf.ArmorRating_Heat, 0f);
+            AddEquippedOffset(earrings, StatDefOf.ImmunityGainSpeed, 0f);
+            AddEquippedOffset(earrings, StatDefOf.AimingDelayFactor, 0f);
+            AddEquippedOffset(earrings, StatDefOf.RangedCooldownFactor, 0f);
             AddEquipmentDescription(earrings);
 
             HediffDef blessing = HediffDefNamed("MX_Neiyu_FlowerBlessed");
-            AddHediffFactor(blessing, StatDefOf.MoveSpeed, ConservativePowerTuning.Bonus, 1f);
-            AddHediffFactor(blessing, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 1f);
-            AddHediffFactor(blessing, StatDefOf.ImmunityGainSpeed, ConservativePowerTuning.Bonus, 1f);
+            AddHediffFactor(blessing, StatDefOf.MoveSpeed, 1f);
+            AddHediffFactor(blessing, StatDefOf.IncomingDamageFactor, 1f);
+            AddHediffFactor(blessing, StatDefOf.ImmunityGainSpeed, 1f);
 
             HediffDef vulnerability = HediffDefNamed("MX_Neiyu_SwordVulnerability");
-            AddHediffFactor(vulnerability, StatDefOf.IncomingDamageFactor, ConservativePowerTuning.Bonus, 1f);
+            AddHediffFactor(vulnerability, StatDefOf.IncomingDamageFactor, 1f);
 
             ThoughtDef blessingThought = DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_FlowerBlessedThought");
             AddThoughtMood(blessingThought, 0f);
@@ -298,98 +190,84 @@ namespace MiliraXian.Characters.Neiyu
             AddThoughtMood(DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_RelaxedNearNeiyu"), 0f);
 
             HediffDef shieldDef = HediffDefNamed("MXNL_NeiyuShield");
-            if (shieldDef != null) shieldDef.description = ShieldDescription(true);
+            if (shieldDef != null) shieldDef.description = ShieldDescription();
             Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
-                ShieldDescription(false), "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
+                "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
             HediffCompProperties_MXNeiyuCountShield shieldProps = HediffComp<HediffCompProperties_MXNeiyuCountShield>(shieldDef);
-            AddScaled(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f, 1f);
-            // Balanced retains the former Original shield; only sub-threshold hits cost layers.
-            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 1f, 0);
-            AddScaled(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, 1f, 0);
-            AddScaled(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, 1f, 60000);
-            AddScaled(shieldProps, () => shieldProps.stage3AbsorbTicks, value => shieldProps.stage3AbsorbTicks = value, 1f, 1);
-            AddScaled(shieldProps, () => shieldProps.stage3BuffTicks, value => shieldProps.stage3BuffTicks = value, 1f, 1);
-            AddScaled(shieldProps, () => shieldProps.stage3DurationTicks, value => shieldProps.stage3DurationTicks = value, 1f, 2);
-            AddScaled(shieldProps, () => shieldProps.weakDurationTicks, value => shieldProps.weakDurationTicks = value, 1f, 60000);
-            AddScaled(shieldProps, () => shieldProps.stage3TierA_MaxDamage, value => shieldProps.stage3TierA_MaxDamage = value, 1f, 100f);
-            AddScaled(shieldProps, () => shieldProps.stage3TierB_MaxDamage, value => shieldProps.stage3TierB_MaxDamage = value, 1f, 500f);
-            AddScaled(shieldProps, () => shieldProps.stage3TierC_MaxDamage, value => shieldProps.stage3TierC_MaxDamage = value, 1f, 1000f);
-            AddScaled(shieldProps, () => shieldProps.stage3TierD_ExtraStepDamage, value => shieldProps.stage3TierD_ExtraStepDamage = value, 1f, 500f);
-            AddScaled(shieldProps, () => shieldProps.bloodLossTierB, value => shieldProps.bloodLossTierB = value, 1f, 0f);
-            AddScaled(shieldProps, () => shieldProps.bloodLossTierC, value => shieldProps.bloodLossTierC = value, 1f, 0f);
-            AddScaled(shieldProps, () => shieldProps.bloodLossTierD, value => shieldProps.bloodLossTierD = value, 1f, 0f);
+            Add(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f);
+            Add(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 0);
+            Add(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, 0);
+            Add(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, 60000);
+            Add(shieldProps, () => shieldProps.stage3AbsorbTicks, value => shieldProps.stage3AbsorbTicks = value, 1);
+            Add(shieldProps, () => shieldProps.stage3BuffTicks, value => shieldProps.stage3BuffTicks = value, 1);
+            Add(shieldProps, () => shieldProps.stage3DurationTicks, value => shieldProps.stage3DurationTicks = value, 2);
+            Add(shieldProps, () => shieldProps.weakDurationTicks, value => shieldProps.weakDurationTicks = value, 60000);
+            Add(shieldProps, () => shieldProps.stage3TierA_MaxDamage, value => shieldProps.stage3TierA_MaxDamage = value, 100f);
+            Add(shieldProps, () => shieldProps.stage3TierB_MaxDamage, value => shieldProps.stage3TierB_MaxDamage = value, 500f);
+            Add(shieldProps, () => shieldProps.stage3TierC_MaxDamage, value => shieldProps.stage3TierC_MaxDamage = value, 1000f);
+            Add(shieldProps, () => shieldProps.stage3TierD_ExtraStepDamage, value => shieldProps.stage3TierD_ExtraStepDamage = value, 500f);
+            Add(shieldProps, () => shieldProps.bloodLossTierB, value => shieldProps.bloodLossTierB = value, 0f);
+            Add(shieldProps, () => shieldProps.bloodLossTierC, value => shieldProps.bloodLossTierC = value, 0f);
+            Add(shieldProps, () => shieldProps.bloodLossTierD, value => shieldProps.bloodLossTierD = value, 0f);
         }
 
-        private static string ShieldDescription(bool freeSmallHits)
+        private static string ShieldDescription()
         {
             const string key = "MX_NL_CultivatedShieldDescription";
             const string source = "光环修行依次解锁18、42、108层计数护盾，第三级解锁三阶循环。首击被抵消后展开计数护盾；解锁三阶后，致命攻击可直接触发三阶。\n{0}60秒未消耗盾层时恢复首击防护。常态下，剩余盾层抵挡整次伤害；耗尽后，未解锁三阶时等待恢复，已解锁时进入三阶。\n三阶先无敌并蓄伤3小时，再根据蓄伤量获得12小时增益，最多叠加5层。结束后虚弱150秒，护盾上限为24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
-            string rule = CountShieldUtility.RuleDescription(36f, freeSmallHits);
+            string rule = CountShieldUtility.RuleDescription(36f, true);
             return key.CanTranslate() ? key.Translate(rule).ToString() : string.Format(source, rule);
         }
 
         private static void AddAbilityCooldown(AbilityDef def, int decorativeTicks)
         {
-            AddScaled(def, () => def.cooldownTicksRange, value => def.cooldownTicksRange = value,
-                ConservativePowerTuning.Cooldown, new IntRange(decorativeTicks, decorativeTicks));
+            Add(def, () => def.cooldownTicksRange, value => def.cooldownTicksRange = value,
+                new IntRange(decorativeTicks, decorativeTicks));
         }
 
         private static void AddAbilityDescription(AbilityDef def)
         {
-            if (def == null)
-            {
-                return;
-            }
-
-            string balanced = ("MX_Power_" + def.defName).Translate().ToString();
-            string decorative = "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString();
-            Add(def, () => def.description, value => def.description = value, balanced, decorative);
+            Add(def, () => def.description, value => def.description = value,
+                "MX_NL_NeiyuAbilityDecorativeNotice".Translate().ToString());
         }
 
-        private static void AddStatBase(ThingDef def, StatDef stat, float balanced, float decorative)
+        private static void AddStatBase(ThingDef def, StatDef stat, float decorative)
         {
-            AddStatModifier(def?.statBases, stat, balanced, decorative);
+            AddStatModifier(def?.statBases, stat, decorative);
             CultivationPower.RegisterStat(def, stat, decorative, offset: false);
         }
 
         private static void AddEquipmentDescription(ThingDef def)
         {
-            if (def == null) return;
-            Add(def, () => def.description, value => def.description = value,
-                def.description, "MX_Power_EquipmentInactive".Translate().ToString());
+            if (def != null) Profile.Description(def);
         }
 
-        private static void AddEquippedOffset(ThingDef def, StatDef stat, float balanced, float decorative)
+        private static void AddEquippedOffset(ThingDef def, StatDef stat, float decorative)
         {
-            AddStatModifier(def?.equippedStatOffsets, stat, balanced, decorative);
+            AddStatModifier(def?.equippedStatOffsets, stat, decorative);
             CultivationPower.RegisterStat(def, stat, decorative, offset: true);
         }
 
-        private static void AddHediffFactor(HediffDef def, StatDef stat, float balanced, float decorative)
+        private static void AddHediffFactor(HediffDef def, StatDef stat, float decorative)
         {
             HediffStage stage = def?.stages != null && def.stages.Count > 0 ? def.stages[0] : null;
-            AddStatModifier(stage?.statFactors, stat, balanced, decorative, 1f);
+            AddStatModifier(stage?.statFactors, stat, decorative);
         }
 
         private static void AddThoughtMood(ThoughtDef def, float decorative)
         {
             ThoughtStage stage = def?.stages != null && def.stages.Count > 0 ? def.stages[0] : null;
-            AddScaled(stage, () => stage.baseMoodEffect, value => stage.baseMoodEffect = value, ConservativePowerTuning.Bonus, decorative);
+            Add(stage, () => stage.baseMoodEffect, value => stage.baseMoodEffect = value, decorative);
         }
 
-        private static void AddStatModifier(List<StatModifier> modifiers, StatDef stat, float balanced, float decorative, float neutral = 0f)
+        private static void AddStatModifier(List<StatModifier> modifiers, StatDef stat, float decorative)
         {
-            if (modifiers == null || stat == null)
+            if (modifiers == null || stat == null) return;
+            foreach (StatModifier modifier in modifiers)
             {
-                return;
-            }
-
-            for (int index = 0; index < modifiers.Count; index++)
-            {
-                StatModifier modifier = modifiers[index];
-                if (modifier?.stat == stat)
+                if (modifier.stat == stat)
                 {
-                    AddScaled(modifier, () => modifier.value, value => modifier.value = value, balanced, decorative, neutral);
+                    Add(modifier, () => modifier.value, value => modifier.value = value, decorative);
                     return;
                 }
             }
@@ -399,39 +277,17 @@ namespace MiliraXian.Characters.Neiyu
         {
             CultivationPower.RegisterProjectile(projectile, decorative, decorative * 0.015f);
             if (projectile == null || ProjectileDamageAmountBaseField == null || ProjectileArmorPenetrationBaseField == null)
-            {
                 return;
-            }
-
-            AddScaled(
-                projectile,
-                () => (int)ProjectileDamageAmountBaseField.GetValue(projectile),
-                value => ProjectileDamageAmountBaseField.SetValue(projectile, value),
-                ConservativePowerTuning.Damage,
-                decorative);
-            // Explicit penetration must follow the selected tier just like damage.
-            AddScaled(
-                projectile,
-                () => (float)ProjectileArmorPenetrationBaseField.GetValue(projectile),
-                value => ProjectileArmorPenetrationBaseField.SetValue(projectile, value),
-                ConservativePowerTuning.Defense,
-                decorative * 0.015f);
+            Add(projectile, () => (int)ProjectileDamageAmountBaseField.GetValue(projectile),
+                value => ProjectileDamageAmountBaseField.SetValue(projectile, value), decorative);
+            Add(projectile, () => (float)ProjectileArmorPenetrationBaseField.GetValue(projectile),
+                value => ProjectileArmorPenetrationBaseField.SetValue(projectile, value), decorative * 0.015f);
         }
 
-        private static void AddScaled<TTarget, TValue>(TTarget target, Func<TValue> getter, Action<TValue> setter, float scale, TValue decorative, float neutral = 0f)
+        private static void Add<TTarget, TValue>(TTarget target, Func<TValue> getter, Action<TValue> setter, TValue decorative)
             where TTarget : class
         {
-            if (target != null)
-                Add(target, getter, setter, (TValue)ConservativePowerTuning.Number(getter(), scale, neutral), decorative);
-        }
-
-        private static void Add<TTarget, TValue>(TTarget target, Func<TValue> getter, Action<TValue> setter, TValue balanced, TValue decorative)
-            where TTarget : class
-        {
-            if (target != null)
-            {
-                DefTunings.Add(new DefTuning<TValue>(getter, setter, balanced, decorative));
-            }
+            if (target != null) Profile.Value(getter, setter, decorative);
         }
 
         private static ThingDef ThingDefNamed(string defName)

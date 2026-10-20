@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using MiliraXian.CharacterLib;
 using HarmonyLib;
-using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -11,45 +9,54 @@ using Verse;
 namespace MiliraXian.Characters.Common
 {
     // Snapshots are taken after XML patches/translations. Reflection is initialization-only;
-    // combat reads the cached level, and changing back restores the actual loaded values.
+    // combat reads the cached seal, and changing back restores the actual loaded values.
     internal sealed class CharacterPowerProfile
     {
-        private readonly List<Action<CharacterPowerLevel>> tunings = new List<Action<CharacterPowerLevel>>();
-        public CharacterPowerLevel Level { get; private set; }
+        private readonly List<Action<bool>> tunings = new();
         public int Revision { get; private set; }
-        public bool Original => Level == CharacterPowerLevel.Original;
-        public bool Balanced => Level == CharacterPowerLevel.Balanced;
-        public bool Sealed => Level == CharacterPowerLevel.Decorative;
+        public bool Sealed { get; private set; }
 
-        public void SetLevel(CharacterPowerLevel level)
+        public void SetDecorative(bool decorative)
         {
-            if (level < CharacterPowerLevel.Original || level > CharacterPowerLevel.Decorative)
-                level = CharacterPowerLevel.Original;
-            if (Level == level) return;
-            Level = level;
+            if (Sealed == decorative) return;
+            Sealed = decorative;
             Revision++;
             Apply();
         }
 
         public void Apply()
         {
-            for (int i = 0; i < tunings.Count; i++) tunings[i](Level);
+            for (int i = 0; i < tunings.Count; i++) tunings[i](Sealed);
         }
 
-        public void Value<T>(Func<T> getter, Action<T> setter, T balanced, T decorative)
+        // Old enum names are read as strings so removing Balanced never reaches Enum.Parse.
+        // Only the new boolean is written; its presence takes precedence over legacy data.
+        public static bool LookDecorative(ref bool decorative, string label, string legacyLabel)
+        {
+            bool readLegacy = Scribe.mode == LoadSaveMode.LoadingVars
+                && Scribe.loader.curXmlParent[label] == null;
+            Scribe_Values.Look(ref decorative, label, false, forceSave: true);
+            if (!readLegacy) return false;
+
+            string legacy = null;
+            Scribe_Values.Look(ref legacy, legacyLabel);
+            decorative = legacy == "Decorative" || legacy == "2";
+            return legacy == "Balanced" || legacy == "1";
+        }
+
+        public void Value<T>(Func<T> getter, Action<T> setter, T decorative)
         {
             T original = getter();
-            tunings.Add(level => setter(level == CharacterPowerLevel.Original ? original
-                : level == CharacterPowerLevel.Balanced ? balanced : decorative));
+            tunings.Add(sealedPower => setter(sealedPower ? decorative : original));
         }
 
-        public void Field(object target, string name, object balanced, object decorative)
+        public void Field(object target, string name, object decorative)
         {
             if (target == null) throw new InvalidOperationException("Missing balance target for " + name);
             FieldInfo field = AccessTools.Field(target.GetType(), name);
             if (field == null) throw new MissingFieldException(target.GetType().FullName, name);
-            object b = ConvertValue(balanced, field.FieldType), d = ConvertValue(decorative, field.FieldType);
-            Value(() => field.GetValue(target), value => field.SetValue(target, value), b, d);
+            object value = ConvertValue(decorative, field.FieldType);
+            Value(() => field.GetValue(target), next => field.SetValue(target, next), value);
         }
 
         private static object ConvertValue(object value, Type type)
@@ -57,63 +64,46 @@ namespace MiliraXian.Characters.Common
             return value == null || type.IsInstanceOfType(value) ? value : Convert.ChangeType(value, type);
         }
 
-        public void ScaleField(object target, string name, float scale, object decorative, float neutral = 0f)
-        {
-            if (target == null) throw new InvalidOperationException("Missing balance target for " + name);
-            FieldInfo field = AccessTools.Field(target.GetType(), name);
-            if (field == null) throw new MissingFieldException(target.GetType().FullName, name);
-            Field(target, name, ConservativePowerTuning.Number(field.GetValue(target), scale, neutral), decorative);
-        }
-
-        public void KeepField(object target, string name, object decorative)
-        {
-            if (target == null) throw new InvalidOperationException("Missing balance target for " + name);
-            FieldInfo field = AccessTools.Field(target.GetType(), name);
-            if (field == null) throw new MissingFieldException(target.GetType().FullName, name);
-            Field(target, name, field.GetValue(target), decorative);
-        }
-
-        public void ScaleStat(ThingDef def, string name, float scale, float decorative, bool equipped = false)
+        public void Stat(ThingDef def, string name, float decorative, bool equipped = false)
         {
             List<StatModifier> list = equipped ? def.equippedStatOffsets : def.statBases;
             StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(name);
             if (stat == null) return; // DLC-dependent stats.
             StatModifier modifier = list?.Find(item => item.stat == stat);
-            if (modifier != null) ScaleField(modifier, "value", scale, decorative);
+            if (modifier != null) Field(modifier, "value", decorative);
         }
 
         public void Weapon(string name, float decorativeDamage, float decorativeInterval)
         {
             ThingDef def = Thing(name);
-            ScaleField(def.tools[0], "power", ConservativePowerTuning.Damage, decorativeDamage);
-            ScaleField(def.tools[0], "armorPenetration", ConservativePowerTuning.Defense, .1f);
-            KeepField(def.tools[0], "cooldownTime", decorativeInterval);
-            ScaleStat(def, "MeleeWeapon_CooldownMultiplier", 1f, 1f);
+            Field(def.tools[0], "power", decorativeDamage);
+            Field(def.tools[0], "armorPenetration", .1f);
+            Field(def.tools[0], "cooldownTime", decorativeInterval);
+            Stat(def, "MeleeWeapon_CooldownMultiplier", 1f);
         }
 
         public void Armor(string name)
         {
             ThingDef def = Thing(name);
-            ScaleStat(def, "ArmorRating_Sharp", ConservativePowerTuning.Defense, .18f);
-            ScaleStat(def, "ArmorRating_Blunt", ConservativePowerTuning.Defense, .08f);
-            ScaleStat(def, "ArmorRating_Heat", ConservativePowerTuning.Defense, .1f);
-            ScaleStat(def, "Insulation_Cold", 1f, 8f);
-            ScaleStat(def, "Insulation_Heat", 1f, 5f);
+            Stat(def, "ArmorRating_Sharp", .18f);
+            Stat(def, "ArmorRating_Blunt", .08f);
+            Stat(def, "ArmorRating_Heat", .1f);
+            Stat(def, "Insulation_Cold", 8f);
+            Stat(def, "Insulation_Heat", 5f);
         }
 
         public void Ability(string name, int cooldown, float range)
         {
             AbilityDef def = AbilityDef(name);
-            ScaleField(def, "cooldownTicksRange", ConservativePowerTuning.Cooldown, new IntRange(cooldown, cooldown));
-            KeepField(def.verbProperties, "range", range);
+            Field(def, "cooldownTicksRange", new IntRange(cooldown, cooldown));
+            Field(def.verbProperties, "range", range);
         }
 
-        public void Description(Def def, string key)
+        public void Description(Def def)
         {
             string inactiveKey = def is AbilityDef ? "MX_Power_SealedDescription"
                 : def is ThingDef ? "MX_Power_EquipmentInactive" : "MX_Power_PassiveInactive";
-            Value(() => def.description, value => def.description = value,
-                key.Translate().ToString(), inactiveKey.Translate().ToString());
+            Value(() => def.description, value => def.description = value, inactiveKey.Translate().ToString());
         }
 
         public static ThingDef Thing(string name) => DefDatabase<ThingDef>.GetNamed(name);

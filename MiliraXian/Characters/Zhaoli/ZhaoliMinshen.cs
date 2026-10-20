@@ -353,7 +353,6 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 handler.CurState.forceRecoverAfterTicks = Props.mentalStateDurationTicks;
                 handler.CurState.sourceFaction = caster.Faction;
-                if (!ZhaoliPowerBalance.IsOriginal) handler.CurState.causedByPawn = caster;
             }
 
             if (pawn.Spawned)

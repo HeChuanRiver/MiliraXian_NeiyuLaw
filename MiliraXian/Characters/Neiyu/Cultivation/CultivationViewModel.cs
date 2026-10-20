@@ -172,7 +172,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 int ceiling = props?.phase2MaxChargesNormal ?? 108;
                 Line(text, CultivationText.Get("ShieldCapacity", "常态盾层上限"), CultivationPower.ShieldCapacity(currentRank, ceiling), CultivationPower.ShieldCapacity(targetRank, ceiling));
                 Note(text, CultivationText.Get("ShieldOpening", "首击被完全阻挡，随后展开计数护盾。"));
-                Note(text, CountShieldUtility.RuleDescription(props?.phase2Threshold ?? 36f, NeiyuPowerBalance.IsOriginal));
+                Note(text, CountShieldUtility.RuleDescription(props?.phase2Threshold ?? 36f, true));
                 Note(text, CultivationText.Get("Recovery", "盾层停止变化后的恢复时间") + "  " + ((props?.phase2RecoverTicksNoChange ?? 3600) / 60f).ToString("0.#") + " s");
                 if (targetRank >= 3)
                 {

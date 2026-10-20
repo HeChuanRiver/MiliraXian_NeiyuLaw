@@ -328,7 +328,6 @@ namespace MiliraXian.Characters.Mingyuan
         public static float GetSelfBurnSkillDamageFactor(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return 1f;
-            if (MingyuanPowerBalance.IsBalanced) return 1f + GetSelfBurnEffectiveLayers(pawn) * (.004f * ConservativePowerTuning.Bonus);
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
             return selfBurn > 0f ? 1f + selfBurn * 0.004f : 1f;
         }

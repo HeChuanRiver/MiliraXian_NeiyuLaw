@@ -331,7 +331,6 @@ namespace MiliraXian.Characters.Mingyuan
         private FleckDef visualFleckDef;
         private float visualFleckScale = 1f;
         private int visualFleckLimit = 32;
-        private int balanceRevision = -1;
 
         public CompProperties_MingyuanAscendantFlameScorch PropsScorch => (CompProperties_MingyuanAscendantFlameScorch)props;
 
@@ -418,11 +417,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             int currentTick = Find.TickManager.TicksGame;
-            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
-            {
-                balanceRevision = MingyuanPowerBalance.Profile.Revision;
-                if (!MingyuanPowerBalance.IsOriginal) expireTick = Mathf.Min(expireTick, currentTick + PropsScorch.durationTicks);
-            }
             if (MingyuanPowerBalance.Sealed || currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead || !HasPathCells)
             {
                 parent.Destroy(DestroyMode.Vanish);

@@ -37,7 +37,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             if (pawn.Downed || pawn.InMentalState || pawn.Drafted)
                 return CultivationText.Get("AtRest", "需要清醒、未征召，且不处于精神崩溃状态。");
             if (NeiyuPowerBalance.PassivesDisabled)
-                return CultivationText.Get("Sealed", "当前强度设置封印了力量，修行进度仍会保留。");
+                return CultivationText.Get("DecorativeSealed", "观赏模式封印了力量，修行进度仍会保留。");
             return null;
         }
 

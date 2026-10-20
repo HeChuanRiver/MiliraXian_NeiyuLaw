@@ -127,7 +127,7 @@ namespace MiliraXian.Characters.Mingyuan
         {
             this.pawn = pawn;
             this.caster = caster;
-            // Retain reducedCast only to finish old saves safely; new tier-two casts use age erasure.
+            // Retain reducedCast only to finish legacy saved effects; new casts use age erasure.
             reducedCast = false;
             startTick = tick;
             durationTicks = Mathf.Max(1, props.durationTicks);

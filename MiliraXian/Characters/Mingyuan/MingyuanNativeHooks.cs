@@ -138,8 +138,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return 1f;
             }
 
-            float original = Mathf.Max(0.05f, 1f - lifeBurn * 0.0001f);
-            return MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Scale(original, ConservativePowerTuning.Bonus, 1f) : original;
+            return Mathf.Max(0.05f, 1f - lifeBurn * 0.0001f);
         }
     }
 

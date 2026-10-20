@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.Neiyu
         private bool weakShieldExhaustedAnnounced;
         private int lastAbsorbTick = -1;
         private int lastPenetrateTick = -1;
-        private CharacterPowerLevel observedPowerLevel = (CharacterPowerLevel)(-1);
+        private int observedPowerRevision = -1;
         private int observedCultivationRank = -1;
 
         private int weakUntilTick = -1;
@@ -567,7 +567,7 @@ namespace MiliraXian.Characters.Neiyu
                 if (stage == 2)
                 {
                     sb.AppendLine("MX_NL_ShieldTipStage2Charges".Translate(phase2Charges, Phase2MaxCharges).ToString());
-                    sb.AppendLine(CountShieldUtility.RuleDescription(Props.phase2Threshold, NeiyuPowerBalance.IsOriginal));
+                    sb.AppendLine(CountShieldUtility.RuleDescription(Props.phase2Threshold, true));
                     sb.AppendLine("MX_NL_ShieldTipRecentHits".Translate().ToString());
                     EnsureRecentLogs();
                     if (phase2RecentHitLogs.Count == 0)
@@ -726,14 +726,14 @@ namespace MiliraXian.Characters.Neiyu
 
         private void NormalizeForPowerLevelChange(int now)
         {
-            CharacterPowerLevel currentPowerLevel = NeiyuPowerBalance.CurrentLevel;
+            int powerRevision = NeiyuPowerBalance.Revision;
             int cultivationRank = CultivationService.Rank(Pawn, CultivationBranch.Halo);
-            if (observedPowerLevel == currentPowerLevel && observedCultivationRank == cultivationRank)
+            if (observedPowerRevision == powerRevision && observedCultivationRank == cultivationRank)
             {
                 return;
             }
 
-            observedPowerLevel = currentPowerLevel;
+            observedPowerRevision = powerRevision;
             observedCultivationRank = cultivationRank;
             // Old saves can carry stage III or a full pre-cultivation shield. Normalizing
             // must not trigger blood loss, refill charges or grant an unearned buff.
@@ -743,7 +743,7 @@ namespace MiliraXian.Characters.Neiyu
                 weakWasActive = false;
                 if (stage == 3 || cultivationRank == 0) EnterStage1(now);
             }
-            if (currentPowerLevel == CharacterPowerLevel.Decorative)
+            if (NeiyuPowerBalance.PassivesDisabled)
             {
                 return;
             }
@@ -797,7 +797,7 @@ namespace MiliraXian.Characters.Neiyu
 
         private int CalculatePhase2Cost(float damageAmount)
         {
-            return CountShieldUtility.CalculateCost(damageAmount, Props.phase2Threshold, NeiyuPowerBalance.IsOriginal);
+            return CountShieldUtility.CalculateCost(damageAmount, Props.phase2Threshold, true);
         }
 
         private bool IsLethalOrDowning(DamageInfo dinfo)

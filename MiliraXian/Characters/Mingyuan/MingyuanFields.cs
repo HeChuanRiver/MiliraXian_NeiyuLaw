@@ -95,7 +95,6 @@ namespace MiliraXian.Characters.Mingyuan
         private IntVec3 drawToCell = IntVec3.Invalid;
         private int drawMoveStartTick;
         private int grantedCoreHitPoints;
-        private int balanceRevision = -1;
 
         public CompProperties_MingyuanBurningPillarTornado PropsTornado => (CompProperties_MingyuanBurningPillarTornado)props;
 
@@ -191,15 +190,6 @@ namespace MiliraXian.Characters.Mingyuan
 
             EnsureInitialized();
             int currentTick = Find.TickManager.TicksGame;
-            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
-            {
-                balanceRevision = MingyuanPowerBalance.Profile.Revision;
-                if (!MingyuanPowerBalance.IsOriginal)
-                {
-                    expireTick = Mathf.Min(expireTick, currentTick + PropsTornado.durationTicks);
-                    parent.HitPoints = Mathf.Min(parent.HitPoints, PropsTornado.maxHitPoints);
-                }
-            }
             if (MingyuanPowerBalance.Sealed || currentTick >= expireTick || caster == null || caster.Destroyed || caster.Dead)
             {
                 parent.Destroy(DestroyMode.Vanish);
@@ -615,7 +605,6 @@ namespace MiliraXian.Characters.Mingyuan
         private int expireTick;
         private int ticksToPulse;
         private float selfBurnGainedThisPulse;
-        private int balanceRevision = -1;
 
         public CompProperties_MingyuanBurningField PropsField => (CompProperties_MingyuanBurningField)props;
 
@@ -668,11 +657,6 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (balanceRevision != MingyuanPowerBalance.Profile.Revision)
-            {
-                balanceRevision = MingyuanPowerBalance.Profile.Revision;
-                if (!MingyuanPowerBalance.IsOriginal) expireTick = Mathf.Min(expireTick, Find.TickManager.TicksGame + PropsField.durationTicks);
-            }
             if (MingyuanPowerBalance.Sealed || Find.TickManager.TicksGame >= expireTick || caster == null || caster.Destroyed || caster.Dead)
             {
                 parent.Destroy(DestroyMode.Vanish);
