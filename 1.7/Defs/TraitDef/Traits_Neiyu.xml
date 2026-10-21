@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <TraitDef>
+    <defName>MX_Neiyu_SoulRemnant</defName>
+    <commonality>0</commonality>
+    <degreeDatas>
+      <li>
+        <label>残魂</label>
+        <description>正常进食后，多余营养用于完善肉体。累计存储30、60、120、300点营养时，逐步提高携带能力、进食速度、愈合系数、移动速度、疼痛休克阈值、休息效率和毒素抗性。&#10;开启额外进食后，每天自动存储至2点营养；手动喂食时，每日总存储量最多5点，于当地零点刷新。&#10;遭遇死亡时回到绑定的床，无绑定床时寻找最近的可用床；没有可用床则原地恢复。强制睡眠12小时后恢复正常，累计营养清空。</description>
+      </li>
+    </degreeDatas>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
+        <freezeBiologicalAge>false</freezeBiologicalAge>
+        <noSkillDecay>false</noSkillDecay>
+        <grantedHediff>MX_Neiyu_SoulRemnantState</grantedHediff>
+      </li>
+    </modExtensions>
+  </TraitDef>
+  <TraitDef>
+    <defName>MX_Neiyu_IdleSleeper</defName>
+    <commonality>0</commonality>
+    <degreeDatas>
+      <li>
+        <label>慵懒</label>
+        <description>无事可做时会回床上睡觉，即使精力充沛也会继续睡。发现可做的事情后便会起床。</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+  <TraitDef>
+    <defName>MX_Neiyu_Nishang</defName>
+    <commonality>0</commonality>
+    <degreeDatas>
+      <li>
+        <label>霓裳</label>
+        <description>治疗质量固定为200%，对异象生物造成的伤害×150%。</description>
+      </li>
+    </degreeDatas>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
+        <freezeBiologicalAge>false</freezeBiologicalAge>
+        <noSkillDecay>false</noSkillDecay>
+        <fixedTendQuality>2</fixedTendQuality>
+        <entityDamageFactor>1.5</entityDamageFactor>
+      </li>
+    </modExtensions>
+  </TraitDef>
+</Defs>

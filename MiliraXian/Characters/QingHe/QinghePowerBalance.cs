@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
@@ -12,19 +11,18 @@ namespace MiliraXian.Characters.QingHe
     {
         internal static readonly CharacterPowerProfile Profile = new CharacterPowerProfile();
 
-        public static bool IsOriginal => Profile.Original;
-        public static bool IsBalanced => Profile.Balanced;
         public static bool Sealed => Profile.Sealed;
         public static bool ZeroLevelPassivesEnabled => !Sealed;
-        public static int MaxEffectiveLevel => IsOriginal ? 24 : IsBalanced ? 12 : 0;
-        public static void SetLevel(CharacterPowerLevel level)
+        public static int MaxEffectiveLevel => Sealed ? 0 : HediffComp_AuraMastery.MaxAuraMasteryLevel;
+        public static void SetDecorative(bool decorative)
         {
-            Profile.SetLevel(level);
+            Profile.SetDecorative(decorative);
         }
 
-        public static void ApplyLevel(CharacterPowerLevel level)
+        public static void ApplyDecorative(bool decorative)
         {
-            SetLevel(level);
+            if (Sealed == decorative) return;
+            SetDecorative(decorative);
             // Settings can be written from the main menu, where no pawns exist to sync.
             if (Current.Game == null)
             {

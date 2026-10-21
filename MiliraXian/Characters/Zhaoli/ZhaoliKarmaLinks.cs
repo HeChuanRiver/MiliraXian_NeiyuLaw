@@ -24,8 +24,7 @@ namespace MiliraXian.Characters.Zhaoli
         private List<Pawn> suspendedPlayerLinks;
         private int balanceRevision = -1;
 
-        // Tier two uses the same link-sacrifice rules as the original character.
-        public bool TryUseBalancedSubstitute() => !ZhaoliPowerBalance.Sealed;
+        public bool CanUseSubstitute() => !ZhaoliPowerBalance.Sealed;
 
         public HediffCompProperties_ZhaoliKarmaLinks PropsLinks => (HediffCompProperties_ZhaoliKarmaLinks)props;
 
@@ -678,7 +677,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (!linkComp.TryUseBalancedSubstitute()) return;
+            if (!linkComp.CanUseSubstitute()) return;
             linkComp.BreakLink(sacrificePawn);
             sacrificePawn.Kill(null);
 
@@ -726,7 +725,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (!linkComp.TryUseBalancedSubstitute()) return;
+            if (!linkComp.CanUseSubstitute()) return;
 
             pendingSubstitutePawns[__instance] = sacrificePawn;
         }

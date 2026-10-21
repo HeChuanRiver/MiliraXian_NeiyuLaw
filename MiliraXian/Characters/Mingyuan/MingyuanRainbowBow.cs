@@ -306,7 +306,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (modeAtCastStart == MingyuanBowMode.Focus && WarmupStance != null)
             {
-                WarmupStance.ticksLeft = MingyuanPowerBalance.IsOriginal ? 300 : Mathf.RoundToInt(WarmupTime * 60f);
+                WarmupStance.ticksLeft = !MingyuanPowerBalance.Sealed ? 300 : Mathf.RoundToInt(WarmupTime * 60f);
             }
 
             Vector3 direction = castDirection;

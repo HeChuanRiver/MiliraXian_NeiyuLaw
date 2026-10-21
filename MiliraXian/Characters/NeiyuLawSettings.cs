@@ -26,10 +26,10 @@ namespace MiliraXian.Characters
         public bool EnableScreenBloom = true;
         public ArcaneVfxQuality ArcaneVisualQuality = ArcaneVfxQuality.Medium;
         public SpecialPawnConsciousnessLockMode ConsciousnessLockMode = SpecialPawnConsciousnessLockMode.Lock100;
-        public CharacterPowerLevel NeiyuPowerLevel = CharacterPowerLevel.Original;
-        public CharacterPowerLevel ZhaoliPowerLevel = CharacterPowerLevel.Original;
-        public CharacterPowerLevel MingyuanPowerLevel = CharacterPowerLevel.Original;
-        public CharacterPowerLevel QinghePowerLevel = CharacterPowerLevel.Original;
+        public bool NeiyuDecorativeMode;
+        public bool ZhaoliDecorativeMode;
+        public bool MingyuanDecorativeMode;
+        public bool QingheDecorativeMode;
         private bool legacyLockSpecialPawnConsciousness = true;
 
         public override void ExposeData()
@@ -41,16 +41,10 @@ namespace MiliraXian.Characters
             Scribe_Values.Look(ref ArcaneVisualQuality, "ArcaneVisualQuality", ArcaneVfxQuality.Medium);
             if (ArcaneVisualQuality < ArcaneVfxQuality.Low || ArcaneVisualQuality > ArcaneVfxQuality.High)
                 ArcaneVisualQuality = ArcaneVfxQuality.Medium;
-            Scribe_Values.Look(ref NeiyuPowerLevel, "NeiyuPowerLevel", CharacterPowerLevel.Original);
-            Scribe_Values.Look(ref ZhaoliPowerLevel, "ZhaoliPowerLevel", CharacterPowerLevel.Original);
-            Scribe_Values.Look(ref MingyuanPowerLevel, "MingyuanPowerLevel", CharacterPowerLevel.Original);
-            Scribe_Values.Look(ref QinghePowerLevel, "QinghePowerLevel", CharacterPowerLevel.Original);
-            if (ZhaoliPowerLevel < CharacterPowerLevel.Original || ZhaoliPowerLevel > CharacterPowerLevel.Decorative)
-                ZhaoliPowerLevel = CharacterPowerLevel.Original;
-            if (MingyuanPowerLevel < CharacterPowerLevel.Original || MingyuanPowerLevel > CharacterPowerLevel.Decorative)
-                MingyuanPowerLevel = CharacterPowerLevel.Original;
-            if (QinghePowerLevel < CharacterPowerLevel.Original || QinghePowerLevel > CharacterPowerLevel.Decorative)
-                QinghePowerLevel = CharacterPowerLevel.Original;
+            CharacterPowerProfile.LookDecorative(ref NeiyuDecorativeMode, "NeiyuDecorativeMode", "NeiyuPowerLevel");
+            CharacterPowerProfile.LookDecorative(ref ZhaoliDecorativeMode, "ZhaoliDecorativeMode", "ZhaoliPowerLevel");
+            CharacterPowerProfile.LookDecorative(ref MingyuanDecorativeMode, "MingyuanDecorativeMode", "MingyuanPowerLevel");
+            CharacterPowerProfile.LookDecorative(ref QingheDecorativeMode, "QingheDecorativeMode", "QinghePowerLevel");
 
             bool hasNewConsciousnessLockMode = Scribe.mode != LoadSaveMode.LoadingVars
                 || Scribe.loader.curXmlParent["SpecialPawnConsciousnessLockMode"] != null;
@@ -62,13 +56,6 @@ namespace MiliraXian.Characters
                 ConsciousnessLockMode = legacyLockSpecialPawnConsciousness
                     ? SpecialPawnConsciousnessLockMode.Lock100
                     : SpecialPawnConsciousnessLockMode.None;
-            }
-
-            if (NeiyuPowerLevel != CharacterPowerLevel.Original
-                && NeiyuPowerLevel != CharacterPowerLevel.Balanced
-                && NeiyuPowerLevel != CharacterPowerLevel.Decorative)
-            {
-                NeiyuPowerLevel = CharacterPowerLevel.Original;
             }
         }
     }
@@ -93,10 +80,10 @@ namespace MiliraXian.Characters
             new Harmony("HeChuanRiver.MiliraXian.Characters").PatchAll(Assembly.GetExecutingAssembly());
             Settings = GetSettings<NeiyuLawSettings>();
             Instance = this;
-            NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
-            ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
-            MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
-            QinghePowerBalance.SetLevel(Settings.QinghePowerLevel);
+            NeiyuPowerBalance.SetDecorative(Settings.NeiyuDecorativeMode);
+            ZhaoliPowerBalance.SetDecorative(Settings.ZhaoliDecorativeMode);
+            MingyuanPowerBalance.SetDecorative(Settings.MingyuanDecorativeMode);
+            QinghePowerBalance.SetDecorative(Settings.QingheDecorativeMode);
         }
 
         public override string SettingsCategory()
@@ -139,26 +126,15 @@ namespace MiliraXian.Characters
                     title: "MX_NL_UpdateLogDialogTitle".Translate().ToString()));
             }
             listing.Gap();
-            listing.Label("MX_NL_NeiyuPowerLevelLabel".Translate().ToString());
-            DrawNeiyuPowerLevelOption(
-                listing,
-                CharacterPowerLevel.Original,
-                "MX_NL_NeiyuPowerLevelOriginalLabel",
-                "MX_NL_NeiyuPowerLevelOriginalDesc");
-            DrawNeiyuPowerLevelOption(
-                listing,
-                CharacterPowerLevel.Balanced,
-                "MX_NL_NeiyuPowerLevelBalancedLabel",
-                "MX_NL_NeiyuPowerLevelBalancedDesc");
-            DrawNeiyuPowerLevelOption(
-                listing,
-                CharacterPowerLevel.Decorative,
-                "MX_NL_NeiyuPowerLevelDecorativeLabel",
-                "MX_NL_NeiyuPowerLevelDecorativeDesc");
+            DrawDecorativeOption(listing, "MX_NeiyuDecorativeMode", "霓羽：观赏模式",
+                "MX_NL_NeiyuPowerLevelDecorativeDesc", ref Settings.NeiyuDecorativeMode, NeiyuPowerBalance.SetDecorative);
+            DrawDecorativeOption(listing, "MX_ZhaoliDecorativeMode", "昭离：观赏模式",
+                "MX_Power_Zhaoli_Decorative", ref Settings.ZhaoliDecorativeMode, ZhaoliPowerBalance.SetDecorative);
+            DrawDecorativeOption(listing, "MX_MingyuanDecorativeMode", "明渊：观赏模式",
+                "MX_Power_Mingyuan_Decorative", ref Settings.MingyuanDecorativeMode, MingyuanPowerBalance.SetDecorative);
+            DrawDecorativeOption(listing, "MX_QingheDecorativeMode", "清荷：观赏模式",
+                "MX_Power_Qinghe_Decorative", ref Settings.QingheDecorativeMode, QinghePowerBalance.ApplyDecorative);
             listing.Gap();
-            DrawCharacterPowerOptions(listing, "MX_Power_Zhaoli", ref Settings.ZhaoliPowerLevel, ZhaoliPowerBalance.SetLevel);
-            DrawCharacterPowerOptions(listing, "MX_Power_Mingyuan", ref Settings.MingyuanPowerLevel, MingyuanPowerBalance.SetLevel);
-            DrawCharacterPowerOptions(listing, "MX_Power_Qinghe", ref Settings.QinghePowerLevel, QinghePowerBalance.ApplyLevel);
             listing.Label("MX_NL_SpecialPawnConsciousnessLockLabel".Translate().ToString());
             DrawConsciousnessLockOption(
                 listing,
@@ -180,20 +156,14 @@ namespace MiliraXian.Characters
             Widgets.EndScrollView();
         }
 
-        private static void DrawCharacterPowerOptions(Listing_Standard listing, string key, ref CharacterPowerLevel selected, System.Action<CharacterPowerLevel> apply)
+        private static void DrawDecorativeOption(Listing_Standard listing, string labelKey, string sourceLabel,
+            string tooltipKey, ref bool selected, System.Action<bool> apply)
         {
-            listing.Label(key.Translate());
-            for (int i = 0; i < 3; i++)
-            {
-                var level = (CharacterPowerLevel)i;
-                if (listing.RadioButton(("MX_NL_NeiyuPowerLevel" + level + "Label").Translate(), selected == level,
-                    24f, (key + "_" + level).Translate()))
-                {
-                    selected = level;
-                    apply(level);
-                }
-            }
-            listing.Gap();
+            bool previous = selected;
+            listing.CheckboxLabeled(labelKey.CanTranslate() ? labelKey.Translate().ToString() : sourceLabel,
+                ref selected, tooltipKey.CanTranslate() ? tooltipKey.Translate().ToString()
+                    : "保留外观和剧情，封印主动技能与战斗被动。修习等级和已解锁节点仍会保留。");
+            if (selected != previous) apply(selected);
         }
 
         private void DrawConsciousnessLockOption(Listing_Standard listing, SpecialPawnConsciousnessLockMode mode, string labelKey, string tooltipKey)
@@ -208,25 +178,12 @@ namespace MiliraXian.Characters
             }
         }
 
-        private void DrawNeiyuPowerLevelOption(Listing_Standard listing, CharacterPowerLevel level, string labelKey, string tooltipKey)
-        {
-            if (listing.RadioButton(
-                labelKey.Translate().ToString(),
-                Settings.NeiyuPowerLevel == level,
-                24f,
-                tooltipKey.Translate().ToString()))
-            {
-                Settings.NeiyuPowerLevel = level;
-                NeiyuPowerBalance.SetLevel(level);
-            }
-        }
-
         public override void WriteSettings()
         {
-            NeiyuPowerBalance.SetLevel(Settings.NeiyuPowerLevel);
-            ZhaoliPowerBalance.SetLevel(Settings.ZhaoliPowerLevel);
-            MingyuanPowerBalance.SetLevel(Settings.MingyuanPowerLevel);
-            QinghePowerBalance.ApplyLevel(Settings.QinghePowerLevel);
+            NeiyuPowerBalance.SetDecorative(Settings.NeiyuDecorativeMode);
+            ZhaoliPowerBalance.SetDecorative(Settings.ZhaoliDecorativeMode);
+            MingyuanPowerBalance.SetDecorative(Settings.MingyuanDecorativeMode);
+            QinghePowerBalance.ApplyDecorative(Settings.QingheDecorativeMode);
             base.WriteSettings();
         }
     }

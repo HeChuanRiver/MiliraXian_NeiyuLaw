@@ -6,16 +6,20 @@
     <degreeDatas>
       <li>
         <label>霓羽仙</label>
-        <description>她爱着世人，她愿世间飘落霓裳花。</description>
+        <description>生理年龄不再增长，历法年龄照常增长；技能经验不会自然衰退。&#10;疾病会自动获得200%质量的治疗，免疫速率提高500%。&#10;受到伤害×90%，移动速度×110%，远征携带重量增加5000kg。&#10;不会自主向别人表白，也不会被自主表白；仍可由玩家发起表白。</description>
         <statOffsets></statOffsets>
         <statFactors>
-          <IncomingDamageFactor>0.99</IncomingDamageFactor>
+          <IncomingDamageFactor>0.90</IncomingDamageFactor>
+          <MoveSpeed>1.10</MoveSpeed>
+          <ImmunityGainSpeed>6</ImmunityGainSpeed>
         </statFactors>
       </li>
     </degreeDatas>
     <modExtensions>
       <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
         <preventAutonomousRomance>true</preventAutonomousRomance>
+        <caravanCapacityOffset>5000</caravanCapacityOffset>
+        <diseaseTendQuality>2</diseaseTendQuality>
         <ignoreNegativeAptitudes>
           <li>Cooking</li>
         </ignoreNegativeAptitudes>

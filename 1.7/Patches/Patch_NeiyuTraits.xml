@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <!-- Recovery must precede Humanlike's ordinary Downed/KeepLyingDown branches. -->
+  <Operation Class="PatchOperationInsert">
+    <xpath>/Defs/ThinkTreeDef[defName='Humanlike']/thinkRoot/subNodes/li[1]</xpath>
+    <order>Prepend</order>
+    <value>
+      <li Class="MiliraXian.Characters.Neiyu.JobGiver_NeiyuSoulRecovery" />
+    </value>
+  </Operation>
+</Patch>

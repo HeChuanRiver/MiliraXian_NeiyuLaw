@@ -69,7 +69,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public float ExecuteProgress => Mathf.Clamp01(CurrentLayers / ExecuteThreshold);
 
-        public float BurstDamage => MingyuanPowerBalance.Sealed ? 0f : Mathf.Max(Pawn?.health?.LethalDamageThreshold ?? 1f, ExecuteThreshold * Mathf.Max(0.01f, PropsLifeBurn.burstDamageMultiplier) * (MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Damage : 1f));
+        public float BurstDamage => MingyuanPowerBalance.Sealed ? 0f : Mathf.Max(Pawn?.health?.LethalDamageThreshold ?? 1f, ExecuteThreshold * Mathf.Max(0.01f, PropsLifeBurn.burstDamageMultiplier));
 
         public override string CompLabelInBracketsExtra => Mathf.RoundToInt(CurrentLayers) + "/" + Mathf.RoundToInt(ExecuteThreshold);
 
@@ -84,7 +84,7 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (MingyuanPowerBalance.Sealed) return null;
                 float layers = CurrentLayers;
-                float per100Percent = Mathf.Min(95f, layers / 100f) * (MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Bonus : 1f);
+                float per100Percent = Mathf.Min(95f, layers / 100f);
                 float increasedPercent = per100Percent;
                 float periodicDamage = PeriodicDamageFor(layers);
                 float selfStack = layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction);
@@ -731,7 +731,7 @@ namespace MiliraXian.Characters.Mingyuan
                 float overburnLayers = Mathf.Max(0f, layers - PropsSelfBurn.overburnThreshold);
                 bool overburning = overburnLayers > 0f;
                 float per100 = effectiveLayers / 100f * MingyuanUtility.SelfBurnBonusScale;
-                float bonusScale = MingyuanUtility.SelfBurnBonusScale * (MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Bonus : 1f);
+                float bonusScale = MingyuanUtility.SelfBurnBonusScale;
                 float damage = effectiveLayers * bonusScale;
                 float move = effectiveLayers * 0.5f * bonusScale;
                 float attackSpeed = effectiveLayers * bonusScale;
@@ -1026,10 +1026,9 @@ namespace MiliraXian.Characters.Mingyuan
             MingyuanUtility.AddSelfBurn(Pawn, PropsBody.selfBurnOnHit);
 
             Pawn attacker = dinfo.Instigator as Pawn;
-            if (attacker != null && attacker != Pawn && attacker.HostileTo(Pawn) && !attacker.Dead
-                && (MingyuanPowerBalance.IsOriginal || !MingyuanUtility.SuppressOnHitLifeBurn))
+            if (attacker != null && attacker != Pawn && attacker.HostileTo(Pawn) && !attacker.Dead)
             {
-                float reflected = Mathf.Max(1f, dinfo.Amount) * (MingyuanPowerBalance.IsBalanced ? ConservativePowerTuning.Damage : 1f);
+                float reflected = Mathf.Max(1f, dinfo.Amount);
                 MingyuanUtility.ApplyTrueDamage(attacker, dinfo.Def ?? DamageDefOf.Burn, reflected, Pawn);
                 MingyuanUtility.AddLifeBurn(attacker, Pawn, PropsBody.reflectLifeBurnLayers);
             }
