@@ -554,8 +554,13 @@
               <_BreakGlow>1.5</_BreakGlow>
               <_BreakPhaseKick>1.0</_BreakPhaseKick>
             </shaderParameters>
-            <!-- 发光：引用泛光组（参数在 MiliraXian_ScreenBloomDefs.xml），同组所有发光物共用一次泛光。 -->
-            <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+            <!-- 发光：bloom.group 引用泛光组（模糊/阈值/增益等共享参数在 MiliraXian_ScreenBloomDefs.xml），
+                 同组所有发光物共用一次泛光。tint 与 intensity 只影响光晕，不影响盾体本身。 -->
+            <bloom>
+              <group>MX_ScreenBloom_Glow</group>
+              <tint>(1,1,1,1)</tint>
+              <intensity>1</intensity>
+            </bloom>
             <drawSize>(2.5,2.5)</drawSize>
             <alpha>0.8</alpha>
             <drawOffset>(0,0,-0.23)</drawOffset>

@@ -20,6 +20,11 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _RimColor;           // @color @default = vec4(1.0, 0.85, 0.95, 1.0)
     // Radiation center of the petals in UV space (xy); flow and hue start here.
     vec4 _EffectOrigin;       // @default = vec4(0.5, 0.647, 0.0, 0.0)
+    // Halo-only colour: ScreenBloom sets these for its offscreen submission and restores them
+    // before the body is drawn, so the shield itself is unaffected. Keep vec4 members above the
+    // scalars: the engine derives uniform offsets the std140 way, while GLSL blocks default to
+    // the shared layout, and every other shader here follows that order.
+    vec4 _BloomTint;          // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     float _BaseLayerAlpha;    // @default = 1.0
     float _AdditiveGlowAlpha; // @default = 1.0
     float _AdditiveGlowBreathAmplitude; // @default = 0.9
@@ -47,6 +52,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     float _DissolveNoiseScale;    // @default = 1.0
     float _EffectTime;        // @default = 0.0
     float _GameSeconds;       // global, set by TickManager
+    float _BloomIntensity;    // @default = 1.0
 } u;
 
 layout(set = 2, binding = 1) uniform sampler2D _MainTex;
@@ -148,5 +154,5 @@ void main()
         col += u._DissolveEdgeColor.rgb * (edge * u._DissolveEdgeIntensity * tex.a);
     }
 
-    outColor = vec4(col * u._Color.rgb, alpha);
+    outColor = vec4(col * u._Color.rgb * u._BloomTint.rgb * u._BloomIntensity, alpha);
 }

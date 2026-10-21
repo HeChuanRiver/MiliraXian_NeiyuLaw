@@ -66,6 +66,8 @@ namespace MiliraXian.Characters.Common.Vfx
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int GainId = Shader.PropertyToID("_Gain");
         private static readonly int RadiusId = Shader.PropertyToID("_Radius");
+        private static readonly int BloomTintId = Shader.PropertyToID("_BloomTint");
+        private static readonly int BloomIntensityId = Shader.PropertyToID("_BloomIntensity");
 
         private static Camera spareCamera;
         private static Material reduceMaterial;
@@ -81,8 +83,14 @@ namespace MiliraXian.Characters.Common.Vfx
         /// right next to the object's normal draw, while <paramref name="block"/> still holds its
         /// colour/alpha and any per-draw data; the block is copied by the call.
         /// </summary>
+        /// <remarks>
+        /// <paramref name="bloom"/>'s tint and intensity are written into the block just for this
+        /// submission and restored afterwards, so the object's own draw is unaffected. That is safe
+        /// because the draw call copies the block: whatever it holds when the call is made is what
+        /// the halo is rendered with.
+        /// </remarks>
         public static void Submit(
-            ScreenBloomGroupDef group,
+            ScreenBloomProperties bloom,
             Mesh mesh,
             Matrix4x4 matrix,
             Material material,
@@ -97,13 +105,18 @@ namespace MiliraXian.Characters.Common.Vfx
 
             // The gravship capture camera draws every layer the main camera does, so a halo
             // submitted while it renders would end up inside the gravship image.
+            ScreenBloomGroupDef group = bloom?.group;
             if (group == null || mesh == null || material == null
                 || GravshipCapturer.IsGravshipRenderInProgress || !EnsureLayers() || group.layer < 0)
             {
                 return;
             }
 
+            block.SetColor(BloomTintId, bloom.tint);
+            block.SetFloat(BloomIntensityId, bloom.intensity);
             Graphics.DrawMesh(mesh, matrix, material, group.layer, null, 0, block);
+            block.SetColor(BloomTintId, Color.white);
+            block.SetFloat(BloomIntensityId, 1f);
 
             int frame = Time.frameCount;
             if (pendingFrame != frame)

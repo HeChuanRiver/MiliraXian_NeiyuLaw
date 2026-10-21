@@ -28,8 +28,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public List<string> hurtFleckDefNames = new();
         public float absorbFleckScale = 1.2f;
         public string absorbEffecterDefName = null;
-        // Bloom group the shield glows into; absent means no halo.
-        public ScreenBloomGroupDef bloomGroup;
+        // Bloom settings the shield glows with; absent means no halo. Tint and intensity only
+        // affect the halo, never the shield body.
+        public ScreenBloomProperties bloom;
     }
 
     [StaticConstructorOnStartup]
@@ -233,9 +234,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
             // The glow is a second submission of the same mesh to the bloom group's layer, with the
             // same property block (bones, colour and fade included). The bloom pass renders every
             // submission of the frame at once, so a shield costs nothing beyond this call.
-            if (Visual.bloomGroup != null && drawAlpha > 0.001f)
+            if (Visual.bloom != null && drawAlpha > 0.001f)
             {
-                ScreenBloom.Submit(Visual.bloomGroup, shieldMesh, matrix, shieldMat, propertyBlock);
+                ScreenBloom.Submit(Visual.bloom, shieldMesh, matrix, shieldMat, propertyBlock);
             }
             Graphics.DrawMesh(shieldMesh, matrix, shieldMat, 0, null, 0, propertyBlock);
             propertyBlock.Clear();
