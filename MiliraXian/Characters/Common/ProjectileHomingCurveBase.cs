@@ -90,6 +90,19 @@ namespace MiliraXian.Characters.Common
 
         public bool AllowHomingUpdate => !landed;
 
+        // A parry changes only the current flight segment. Keep the existing
+        // homing comp's seed, delay and retarget budget, plus subclass payloads.
+        internal void NotifyDeflected(Vector3 position, Vector3 returnDestination, int flightTicks)
+        {
+            hasSegmentImpactPosition = false;
+            closestIntendedDistanceSqr = float.MaxValue;
+            manualGroundPosition = position.Yto0();
+            manualMoveDirection = (returnDestination - position).Yto0().normalized;
+            manualTicksLeft = Mathf.Max(1, flightTicks);
+            visualMoveDirection = manualMoveDirection;
+            hasVisualMoveDirection = true;
+        }
+
         public LocalTargetInfo HomingIntendedTarget => intendedTarget;
 
         public Vector3 HomingExactPosition => ExactPosition;

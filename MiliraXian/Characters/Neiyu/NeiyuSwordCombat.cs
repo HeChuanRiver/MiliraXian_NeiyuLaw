@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
-using MiliraXian.Characters.QingHe.Verbs;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -16,6 +14,8 @@ public sealed class NeiyuSwordCombatDef : Def
     public HediffDef posture;
     public JobDef executionJob, brokenJob;
     public float successChance = .6f, perfectChance = .15f;
+    public bool reflectProjectiles = true;
+    public float projectileReturnSpreadDegrees = 4f;
     public float normalPosture = 25f, perfectPosture = 45f;
     public float basePosture = 100f, minimumPostureFraction = .45f;
     public int recoveryDelayTicks = 120;
@@ -36,6 +36,8 @@ public sealed class NeiyuSwordCombatDef : Def
             yield return "剑、架势 Hediff 与处决 Job 引用必须完整。";
         if (!(perfectChance >= 0f && perfectChance <= successChance && successChance <= 1f))
             yield return "弹刀概率必须满足 0 ≤ 完美概率 ≤ 总概率 ≤ 1。";
+        if (!(projectileReturnSpreadDegrees >= 0f && projectileReturnSpreadDegrees <= 30f))
+            yield return "弹丸弹回方向的偏转角必须在 0–30 度之间。";
         if (!(basePosture >= 1f && minimumPostureFraction > 0f && minimumPostureFraction <= 1f
             && recoveryPerSecond >= 0f && minimumRecoveryFraction >= 0f && minimumRecoveryFraction <= 1f
             && normalPosture > 0f && perfectPosture > 0f && vulnerabilityMultiplier >= 1f))
@@ -71,14 +73,13 @@ internal static class NeiyuSwordCombat
     internal static bool HostilePair(Pawn defender, Pawn attacker) => attacker is { Spawned: true, Dead: false, Destroyed: false }
         && defender != attacker && defender.Map == attacker.Map && GenHostility.HostileTo(attacker, defender);
 
-    internal static bool TryDeflect(Verb_MeleeAttackDamage verb, Pawn defender)
+    internal static bool TryDeflect(Verb_MeleeAttack verb, Pawn defender)
     {
         Pawn attacker = verb.CasterPawn;
-        // EquipmentSource excludes fists, bites and implanted attacks. A rifle used
-        // as a club is still a melee weapon attack; IsMeleeAttack identifies the verb.
+        // The melee verb is the attack boundary. Mechanoid blades, natural tools,
+        // fists and implanted weapons need not have an EquipmentSource.
         if (!CanAct(defender) || !HostilePair(defender, attacker)
-            || verb.EquipmentSource?.def.IsWeapon != true || !verb.verbProps.IsMeleeAttack
-            || verb.verbProps.meleeDamageDef?.harmsHealth != true
+            || !verb.verbProps.IsMeleeAttack
             || !DebugSettings.enableDamage) return false;
         int outcome = NeiyuSwordCombatRules.Deflection(Rand.Value, Config.successChance, Config.perfectChance);
         if (outcome == 0) return false;
@@ -112,44 +113,15 @@ internal static class NeiyuSwordCombat
         && HostilePair(executor, target)
         && executor.Position.DistanceToSquared(target.Position) <= Config.executionRange * Config.executionRange
         && GenSight.LineOfSight(executor.Position, target.Position, executor.Map);
-}
 
-// The native loop is after hit/dodge and before every main/extra/surprise packet.
-// The repository's sweep overrides that loop, so it shares this same patch. No
-// fallback based on attacker+tick: distinct attacks in one tick remain distinct.
-[HarmonyPatch]
-internal static class Patch_NeiyuSwordDeflection
-{
-    private static IEnumerable<MethodBase> TargetMethods()
+    // Execution is a committed finishing event, never an ordinary melee hit or
+    // damage packet. Neither hit/dodge rolls nor damage-avoidance shields run here.
+    internal static void Execute(Pawn executor, Pawn victim)
     {
-        yield return AccessTools.DeclaredMethod(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget");
-        yield return AccessTools.DeclaredMethod(typeof(Verb_QingheSwordSweep), "ApplyMeleeDamageToTarget");
-    }
-
-    [HarmonyPriority(Priority.First)]
-    internal readonly record struct AttackFrame(Verb_MeleeAttackDamage Verb, Thing Target, bool Owns);
-
-    private static bool Prefix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target,
-        ref DamageWorker.DamageResult __result, out AttackFrame __state)
-    {
-        __state = default;
-        // An overriding loop may delegate to base. The outer invocation owns the roll.
-        if (activeVerb == __instance && activeTarget == target.Thing) return true;
-        if (target.Pawn == null || !NeiyuSwordCombat.SwordEquipped(target.Pawn)) return true;
-        __state = new AttackFrame(activeVerb, activeTarget, true);
-        activeVerb = __instance;
-        activeTarget = target.Thing;
-        if (!NeiyuSwordCombat.TryDeflect(__instance, target.Pawn)) return true;
-        __result = new DamageWorker.DamageResult { deflected = true };
-        return false;
-    }
-
-    // Game combat runs on the main thread; the finalizer also clears on exceptions.
-    [System.ThreadStatic] private static Verb_MeleeAttackDamage activeVerb;
-    [System.ThreadStatic] private static Thing activeTarget;
-    private static void Finalizer(AttackFrame __state)
-    {
-        if (__state.Owns) { activeVerb = __state.Verb; activeTarget = __state.Target; }
+        if (!CanAct(executor) || !ExecutionTarget(victim) || executor.Map != victim.Map) return;
+        DamageInfo execution = new(DamageDefOf.ExecutionCut, 1f, 0f, -1f,
+            executor, null, executor.equipment.Primary.def);
+        victim.Kill(execution);
     }
 }
 

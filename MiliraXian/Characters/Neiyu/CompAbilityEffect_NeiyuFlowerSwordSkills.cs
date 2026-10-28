@@ -1322,9 +1322,9 @@ namespace MiliraXian.Characters.Neiyu
 
             if (!headRemoved && !victim.Dead && Props.dashDamage > 0)
             {
-                DamageInfo finisher = new(DamageDefOf.Cut, Props.dashDamage, 999f, -1f, caster);
-                finisher.SetIgnoreArmor(true);
-                victim.TakeDamage(finisher);
+                // Headless bodies use the same unavoidable execution event as
+                // posture breaks, rather than a dodgeable ordinary damage packet.
+                NeiyuSwordCombat.Execute(caster, victim);
             }
         }
 

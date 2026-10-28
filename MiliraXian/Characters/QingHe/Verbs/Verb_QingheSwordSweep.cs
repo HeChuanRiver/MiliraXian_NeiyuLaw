@@ -4,6 +4,7 @@ using HarmonyLib;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things.Weapons;
+using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using Verse;
 using Verse.Sound;
@@ -20,10 +21,6 @@ namespace MiliraXian.Characters.QingHe.Verbs
             (Func<Verb_MeleeAttack, LocalTargetInfo, float>)Delegate.CreateDelegate(
                 typeof(Func<Verb_MeleeAttack, LocalTargetInfo, float>),
                 AccessTools.Method(typeof(Verb_MeleeAttack), "GetNonMissChance"));
-        private static readonly Func<Verb_MeleeAttack, LocalTargetInfo, float> DodgeChance =
-            (Func<Verb_MeleeAttack, LocalTargetInfo, float>)Delegate.CreateDelegate(
-                typeof(Func<Verb_MeleeAttack, LocalTargetInfo, float>),
-                AccessTools.Method(typeof(Verb_MeleeAttack), "GetDodgeChance"));
         private static readonly Func<Verb_MeleeAttack, Thing, SoundDef> DodgeSound =
             (Func<Verb_MeleeAttack, Thing, SoundDef>)Delegate.CreateDelegate(
                 typeof(Func<Verb_MeleeAttack, Thing, SoundDef>),
@@ -109,6 +106,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         private bool TryHitSweepTarget(Thing target, Map map)
         {
+            using NeiyuMeleeDefense.Scope defense = NeiyuMeleeDefense.Begin(this, target);
             Pawn victim = target as Pawn;
             if (victim != null)
             {
@@ -122,7 +120,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 CreateCombatLog(m => m.combatLogRulesMiss, alwaysShow: false);
                 return false;
             }
-            if (Rand.Chance(DodgeChance(this, target)))
+            if (NeiyuMeleeDefense.RollDodge(this, target))
             {
                 DodgeSound(this, target)?.PlayOneShot(new TargetInfo(target.Position, map));
                 MoteMaker.ThrowText(target.DrawPos, map, "TextMote_Dodge".Translate(), 1.9f);

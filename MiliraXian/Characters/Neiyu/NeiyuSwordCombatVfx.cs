@@ -15,10 +15,20 @@ internal static class NeiyuSwordCombatVfx
     internal static readonly Color Gold = new(1f, .65f, .15f), Hot = new(1f, .96f, .76f);
     internal static readonly Color Red = new(1f, .19f, .12f), Ice = new(.65f, .87f, 1f);
     private static readonly FleckDef Spark = DefDatabase<FleckDef>.GetNamed("MX_NeiyuSwordSpark");
+    private static readonly FleckDef ParryFire = DefDatabase<FleckDef>.GetNamed("MX_NeiyuSwordParryFire");
+    private static readonly FleckDef ParryDust = DefDatabase<FleckDef>.GetNamed("MX_NeiyuSwordParryDust");
     private static readonly FleckDef Slash = DefDatabase<FleckDef>.GetNamed("MXNL_Fleck_BladeLight_Neiyu_A");
     internal static bool Enabled => NeiyuLawMod.Instance?.Settings?.EnableNeiyuSwordVfx != false;
     internal static float Intensity => Mathf.Clamp(NeiyuSwordCombat.Config.visualIntensity
         * (NeiyuLawMod.Instance?.Settings?.NeiyuSwordVfxIntensity ?? 1f), 0f, 2f);
+
+    static NeiyuSwordCombatVfx()
+    {
+        // Load the impact textures during startup, rather than on the first parry.
+        foreach (FleckDef def in new[] { Spark, ParryFire, ParryDust })
+            foreach (GraphicData graphic in def.randomGraphics)
+                _ = graphic.Graphic;
+    }
 
     internal static void AdjustExecutionWeapon(Thing equipment, ref Vector3 drawLoc, ref float aimAngle)
     {
@@ -41,28 +51,71 @@ internal static class NeiyuSwordCombatVfx
         try
         {
             sound?.PlayOneShot(new TargetInfo(position.ToIntVec3(), pawn.Map));
+        }
+        catch (Exception exception)
+        {
+            Log.ErrorOnce($"[霓羽弹刀] 事件音效不可用：{exception}", 197632103);
+        }
+        try
+        {
             if (!Enabled || Intensity <= 0f || pawn.IsHiddenFromPlayer()
                 || Find.CameraDriver?.CurrentViewRect.ExpandedBy(3).Contains(position.ToIntVec3()) == false) return;
-            pawn.Map.GetComponent<MapComponent_NeiyuSwordVfx>().Add(pawn, position, direction, kind);
-            if (kind is 0 or 1 or 2 or 4)
+            if (kind is not (0 or 1))
+                pawn.Map.GetComponent<MapComponent_NeiyuSwordVfx>().Add(pawn, position, direction, kind);
+            // Native flecks own the whole parry burst; no parallel procedural parry flash.
+            Rand.PushState(unchecked(pawn.thingIDNumber * 397 ^ NeiyuSwordCombat.Now));
+            try
             {
-                int count = Mathf.RoundToInt(NeiyuSwordCombat.Config.sparksPerDeflection * Intensity * (kind == 0 ? 1f : 1.6f));
-                float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                for (int i = 0; i < Mathf.Min(40, count); i++)
+                if (kind is 0 or 1) EmitParry(pawn, position, direction, kind == 1);
+                if (kind is 0 or 1 or 2 or 4)
                 {
-                    float seed = Hash(pawn.thingIDNumber + NeiyuSwordCombat.Now * 43 + i * 97);
-                    FleckCreationData data = FleckMaker.GetDataStatic(position, pawn.Map, Spark, .13f + seed * .11f);
-                    data.velocityAngle = angle + (seed - .5f) * 160f;
-                    data.velocitySpeed = 3f + seed * 6f;
-                    data.rotation = data.velocityAngle;
-                    data.instanceColor = kind is 2 or 4 ? Color.Lerp(Red, Gold, seed) : Color.Lerp(Gold, Hot, seed);
-                    pawn.Map.flecks.CreateFleck(data);
+                    int count = Mathf.RoundToInt(NeiyuSwordCombat.Config.sparksPerDeflection * Intensity * (kind == 0 ? 1f : 1.6f));
+                    float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                    for (int i = 0; i < Mathf.Min(40, count); i++)
+                    {
+                        float seed = Hash(pawn.thingIDNumber + NeiyuSwordCombat.Now * 43 + i * 97);
+                        FleckCreationData data = FleckMaker.GetDataStatic(position, pawn.Map, Spark, .28f + seed * .16f);
+                        data.velocityAngle = angle + (seed - .5f) * 160f;
+                        data.velocitySpeed = 2.5f + seed * 4f;
+                        data.rotation = data.velocityAngle;
+                        data.instanceColor = kind is 2 or 4 ? Color.Lerp(Red, Gold, seed) : Color.Lerp(Gold, Hot, seed);
+                        pawn.Map.flecks.CreateFleck(data);
+                    }
                 }
             }
+            finally { Rand.PopState(); }
         }
         catch (Exception exception)
         {
             Log.ErrorOnce($"[霓羽弹刀] 事件特效不可用：{exception}", 197632101);
+        }
+    }
+
+    private static void EmitParry(Pawn pawn, Vector3 position, Vector3 direction, bool perfect)
+    {
+        float intensity = Intensity;
+        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        FleckCreationData fire = FleckMaker.GetDataStatic(position, pawn.Map, ParryFire,
+            (perfect ? 2.1f : 1.65f) * Mathf.Lerp(.85f, 1.1f, intensity * .5f));
+        fire.rotation = angle - 45f;
+        fire.solidTimeOverride = perfect ? .055f : .025f;
+        fire.instanceColor = new Color(1f, 1f, 1f, Mathf.Min(1f, intensity));
+        pawn.Map.flecks.CreateFleck(fire);
+
+        int count = Mathf.Clamp(Mathf.RoundToInt((perfect ? 12f : 8f) * intensity), 1, 20);
+        for (int i = 0; i < count; i++)
+        {
+            int seed = pawn.thingIDNumber + NeiyuSwordCombat.Now * 43 + i * 97;
+            float spread = Hash(seed), size = Hash(seed + 31), drift = Hash(seed + 73);
+            Vector3 at = position + new Vector3((spread - .5f) * .3f, 0f, (drift - .5f) * .12f);
+            FleckCreationData dust = FleckMaker.GetDataStatic(at, pawn.Map, ParryDust, .24f + size * .2f);
+            dust.rotation = spread * 360f;
+            dust.rotationRate = (drift - .5f) * 100f;
+            dust.velocityAngle = angle + (spread - .5f) * 210f;
+            dust.velocitySpeed = .18f + drift * .45f;
+            dust.airTimeLeft = .85f;
+            dust.instanceColor = new Color(1f, 1f, 1f, .75f * Mathf.Min(1f, intensity));
+            pawn.Map.flecks.CreateFleck(dust);
         }
     }
 
@@ -87,6 +140,13 @@ internal static class NeiyuSwordCombatVfx
 
     internal static void Break(Pawn target) => Emit(target, target.DrawPos, 2,
         NeiyuSwordCombat.Config.breakSound, Vector3.forward);
+
+    internal static void Reflect(Pawn defender, Vector3 contact, Vector3 returnDirection, bool perfect) => Safely(() =>
+    {
+        Emit(defender, contact, perfect ? 1 : 0,
+            perfect ? NeiyuSwordCombat.Config.perfectSound : NeiyuSwordCombat.Config.normalSound, returnDirection);
+        NeiyuWeaponVisualHooks.Notify(defender, "SwordDeflect_Projectile", contact.ToIntVec3(), 1.2f, returnDirection.AngleFlat());
+    });
 
     internal static void Execution(Pawn executor, IntVec3 target, NeiyuExecutionPhase phase) => Safely(() =>
     {
@@ -149,7 +209,7 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 
     internal void Add(Pawn pawn, Vector3 position, Vector3 direction, int kind)
     {
-        int duration = kind switch { 0 => 9, 1 => 12, 2 => 22, 3 => 22, 4 => 18, 5 => 25, 7 => 35, _ => 15 };
+        int duration = kind switch { 2 => 22, 3 => 22, 4 => 18, 5 => 25, 7 => 35, _ => 15 };
         AddAt(pawn, position, direction, kind, NeiyuSwordCombat.Now, duration);
     }
 
@@ -246,15 +306,14 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
             }
             return;
         }
-        bool strong = f.Kind is 1 or 2 or 4;
         if (f.Kind != 6)
         {
-            float glow = Mathf.Max(0f, 1f - p * (strong ? 4f : 5f));
-            batch.Add(at, right, up, strong ? .72f : .42f, strong ? .72f : .42f, Alpha(hot, glow));
+            float glow = Mathf.Max(0f, 1f - p * 4f);
+            batch.Add(at, right, up, .72f, .72f, Alpha(hot, glow));
         }
-        if (f.Kind is 1 or 4 or 6)
+        if (f.Kind is 4 or 6)
         {
-            float reach = f.Kind == 4 ? 1.25f : f.Kind == 6 ? .95f : .65f;
+            float reach = f.Kind == 4 ? 1.25f : .95f;
             Vector3 slash = (right + up * .65f).normalized * reach;
             Line(at - slash, at + slash, .055f * (1f - p) + .015f, Alpha(f.Kind == 4 ? red : hot, fade));
             if (f.Kind != 6)
@@ -263,13 +322,12 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
                 Line(at - slash, at + slash, .04f, Alpha(gold, fade));
             }
         }
-        // Normal deflection has a short arc; perfect has a thin expanding ring.
-        if (f.Kind is 0 or 1 or 2 or 4)
+        if (f.Kind is 2 or 4)
         {
-            int segments = strong ? 16 : 8;
-            float sweep = strong ? Mathf.PI * 2f : Mathf.PI * .85f;
+            const int segments = 16;
+            const float sweep = Mathf.PI * 2f;
             float start = Mathf.Atan2(Vector3.Dot(f.Direction, up), Vector3.Dot(f.Direction, right)) - sweep * .5f;
-            float radius = f.Kind == 2 ? Mathf.Lerp(.8f, .12f, p) : Mathf.Lerp(.15f, strong ? 1.05f : .62f, p);
+            float radius = f.Kind == 2 ? Mathf.Lerp(.8f, .12f, p) : Mathf.Lerp(.15f, 1.05f, p);
             for (int i = 0; i < segments; i++)
             {
                 float a = start + sweep * i / segments, b = start + sweep * (i + .88f) / segments;

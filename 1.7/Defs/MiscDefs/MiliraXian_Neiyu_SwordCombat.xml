@@ -6,9 +6,11 @@
     <posture>MX_NeiyuSwordPosture</posture>
     <executionJob>MX_NeiyuPostureExecution</executionJob>
     <brokenJob>MX_NeiyuPostureBroken</brokenJob>
-    <!-- 完美概率是每次有效近战命中的绝对概率，不是成功后的第二次抽签。 -->
+    <!-- 近战先判弹刀，失败后判闪避。完美概率为绝对概率，不作第二次抽签。 -->
     <successChance>0.60</successChance>
     <perfectChance>0.15</perfectChance>
+    <reflectProjectiles>true</reflectProjectiles>
+    <projectileReturnSpreadDegrees>4</projectileReturnSpreadDegrees>
     <normalPosture>25</normalPosture>
     <perfectPosture>45</perfectPosture>
     <basePosture>100</basePosture>

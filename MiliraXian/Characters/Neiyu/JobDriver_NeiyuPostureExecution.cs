@@ -110,12 +110,7 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver
             pawn.Drawer.Notify_MeleeAttackOn(victim);
             try
             {
-                if (NeiyuSwordCombat.ExecutionTarget(victim))
-                {
-                    DamageInfo execution = new(DamageDefOf.ExecutionCut, 1f, 0f, -1f,
-                        pawn, null, pawn.equipment.Primary.def);
-                    victim.Kill(execution);
-                }
+                NeiyuSwordCombat.Execute(pawn, victim);
             }
             catch (Exception exception)
             {

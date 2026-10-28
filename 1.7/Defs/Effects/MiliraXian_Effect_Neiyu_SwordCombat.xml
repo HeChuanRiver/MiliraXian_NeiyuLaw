@@ -1,11 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>MX_NeiyuSwordParryFire</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <realTime>false</realTime>
+    <fadeInTime>0</fadeInTime>
+    <solidTime>0.025</solidTime>
+    <fadeOutTime>0.15</fadeOutTime>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>MiliraXianNeiyu/Effect/SwordFight/ParryFire</texPath>
+        <shaderType>MoteGlow</shaderType>
+        <renderInstanced>true</renderInstanced>
+        <drawSize>(1,1)</drawSize>
+      </li>
+    </randomGraphics>
+  </FleckDef>
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>MX_NeiyuSwordParryDust</defName>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <realTime>false</realTime>
+    <fadeInTime>0.015</fadeInTime>
+    <solidTime>0.15</solidTime>
+    <fadeOutTime>0.65</fadeOutTime>
+    <growthRate>-0.16</growthRate>
+    <acceleration>(0,0,-0.9)</acceleration>
+    <archHeight>0.2~0.38</archHeight>
+    <archDuration>0.58~0.76</archDuration>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>MiliraXianNeiyu/Effect/SwordFight/ParryDust</texPath>
+        <shaderType>Mote</shaderType>
+        <renderInstanced>true</renderInstanced>
+        <drawSize>(1,1)</drawSize>
+      </li>
+    </randomGraphics>
+  </FleckDef>
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
     <defName>MX_NeiyuSwordSpark</defName>
     <altitudeLayer>MoteOverheadLow</altitudeLayer>
     <realTime>false</realTime>
     <growthRate>-0.85</growthRate>
-    <fadeInTime>0.005</fadeInTime>
+    <fadeInTime>0</fadeInTime>
     <solidTime>0.025</solidTime>
     <fadeOutTime>0.13</fadeOutTime>
     <randomGraphics>
@@ -14,7 +52,7 @@
         <texPath>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texPath>
         <shaderType>MoteGlow</shaderType>
         <renderInstanced>true</renderInstanced>
-        <drawSize>(0.18,1)</drawSize>
+        <drawSize>(0.28,1)</drawSize>
       </li>
     </randomGraphics>
   </FleckDef>
