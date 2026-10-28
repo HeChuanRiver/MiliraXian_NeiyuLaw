@@ -24,6 +24,8 @@ namespace MiliraXian.Characters
         public bool EnableAriandelSpecialPawnIntegration = true;
         public bool EnableUpdateLogLetters = true;
         public bool EnableScreenBloom = true;
+        public bool EnableNeiyuSwordVfx = true;
+        public float NeiyuSwordVfxIntensity = 1f;
         public ArcaneVfxQuality ArcaneVisualQuality = ArcaneVfxQuality.Medium;
         public SpecialPawnConsciousnessLockMode ConsciousnessLockMode = SpecialPawnConsciousnessLockMode.Lock100;
         public bool NeiyuDecorativeMode;
@@ -38,6 +40,9 @@ namespace MiliraXian.Characters
             Scribe_Values.Look(ref EnableAriandelSpecialPawnIntegration, "EnableAriandelSpecialPawnIntegration", true);
             Scribe_Values.Look(ref EnableUpdateLogLetters, "EnableUpdateLogLetters", true);
             Scribe_Values.Look(ref EnableScreenBloom, "EnableScreenBloom", true);
+            Scribe_Values.Look(ref EnableNeiyuSwordVfx, "EnableNeiyuSwordVfx", true);
+            Scribe_Values.Look(ref NeiyuSwordVfxIntensity, "NeiyuSwordVfxIntensity", 1f);
+            NeiyuSwordVfxIntensity = Mathf.Clamp(NeiyuSwordCombatRules.Finite(NeiyuSwordVfxIntensity, 1f), .2f, 1.5f);
             Scribe_Values.Look(ref ArcaneVisualQuality, "ArcaneVisualQuality", ArcaneVfxQuality.Medium);
             if (ArcaneVisualQuality < ArcaneVfxQuality.Low || ArcaneVisualQuality > ArcaneVfxQuality.High)
                 ArcaneVisualQuality = ArcaneVfxQuality.Medium;
@@ -109,6 +114,10 @@ namespace MiliraXian.Characters
                 Settings.ArcaneVisualQuality = ArcaneVfxQuality.Medium;
             if (listing.RadioButton("高", Settings.ArcaneVisualQuality == ArcaneVfxQuality.High))
                 Settings.ArcaneVisualQuality = ArcaneVfxQuality.High;
+            listing.Gap();
+            listing.CheckboxLabeled("霓羽：弹刀与处决特效", ref Settings.EnableNeiyuSwordVfx);
+            listing.Label($"弹刀特效强度：{Settings.NeiyuSwordVfxIntensity:P0}");
+            Settings.NeiyuSwordVfxIntensity = listing.Slider(Settings.NeiyuSwordVfxIntensity, .2f, 1.5f);
             listing.Gap();
             listing.CheckboxLabeled(
                 "MX_NL_EnableUpdateLogLettersLabel".Translate().ToString(),

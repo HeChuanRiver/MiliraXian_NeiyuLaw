@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.Neiyu.NeiyuSwordCombatDef>
+    <defName>MX_NeiyuSwordCombat</defName>
+    <sword>MX_Neiyu_Form_Weapon</sword>
+    <posture>MX_NeiyuSwordPosture</posture>
+    <executionJob>MX_NeiyuPostureExecution</executionJob>
+    <brokenJob>MX_NeiyuPostureBroken</brokenJob>
+    <!-- 完美概率是每次有效近战命中的绝对概率，不是成功后的第二次抽签。 -->
+    <successChance>0.60</successChance>
+    <perfectChance>0.15</perfectChance>
+    <normalPosture>25</normalPosture>
+    <perfectPosture>45</perfectPosture>
+    <basePosture>100</basePosture>
+    <minimumPostureFraction>0.45</minimumPostureFraction>
+    <recoveryDelayTicks>120</recoveryDelayTicks>
+    <recoveryPerSecond>4</recoveryPerSecond>
+    <minimumRecoveryFraction>0.1</minimumRecoveryFraction>
+    <perfectStunTicks>45</perfectStunTicks>
+    <vulnerabilityTicks>360</vulnerabilityTicks>
+    <vulnerabilityMultiplier>2</vulnerabilityMultiplier>
+    <breakWindowTicks>180</breakWindowTicks>
+    <barFadeTicks>90</barFadeTicks>
+    <executionTicks>84</executionTicks>
+    <dashFraction>0.18</dashFraction>
+    <strikeFraction>0.40</strikeFraction>
+    <recoverFraction>0.61</recoverFraction>
+    <executionRange>2</executionRange>
+    <visualIntensity>1</visualIntensity>
+    <maxVisuals>96</maxVisuals>
+    <sparksPerDeflection>12</sparksPerDeflection>
+    <normalSound>MX_NeiyuSwordDeflect</normalSound>
+    <perfectSound>MX_NeiyuSwordPerfect</perfectSound>
+    <breakSound>MX_NeiyuSwordBreak</breakSound>
+    <prepareSound>MX_NeiyuSwordPrepare</prepareSound>
+    <strikeSound>MX_NeiyuSwordStrike</strikeSound>
+    <endSound>MX_NeiyuSwordEnd</endSound>
+  </MiliraXian.Characters.Neiyu.NeiyuSwordCombatDef>
+</Defs>

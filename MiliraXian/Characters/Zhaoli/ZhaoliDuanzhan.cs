@@ -619,7 +619,6 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAiming))]
     [StaticConstructorOnStartup]
     internal static class Patch_ZhaoliDuanzhan_DrawEquipmentAiming
     {
@@ -663,8 +662,7 @@ namespace MiliraXian.Characters.Zhaoli
         private static Vector2 slashGlowBaseDrawSize = Vector2.one;
         private static bool triedLoadMaterials;
 
-        [HarmonyPrefix]
-        private static bool Prefix(Thing eq, Vector3 drawLoc, float aimAngle)
+        internal static bool DrawWeapon(Thing eq, Vector3 drawLoc, float aimAngle)
         {
             if (eq == null || !DuanzhanVisualTracker.TryGetWeaponVisual(eq, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages))
             {

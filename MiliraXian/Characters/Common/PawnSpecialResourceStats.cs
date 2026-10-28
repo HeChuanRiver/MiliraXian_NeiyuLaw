@@ -33,7 +33,7 @@ namespace MiliraXian.Characters.Common
             foreach (HediffDef resourceDef in DefDatabase<HediffDef>.AllDefsListForReading)
             {
                 HediffCompProperties_PawnSpecialResource props = ResourcePropsOf(resourceDef);
-                if (props == null)
+                if (props == null || !props.generateStats)
                 {
                     continue;
                 }

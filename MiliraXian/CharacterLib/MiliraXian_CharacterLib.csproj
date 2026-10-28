@@ -33,7 +33,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>

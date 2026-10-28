@@ -16,6 +16,7 @@ namespace MiliraXian.Characters.Common
         public bool clampToMax = true;
         public bool showGizmo = true;
         public bool hideOnHealthTab = true;
+        public bool generateStats = true;
         public Color barColor = new(0.72f, 0.18f, 0.24f, 1f);
         public Color barHighlightColor = new(0.9f, 0.35f, 0.42f, 1f);
 
@@ -56,7 +57,7 @@ namespace MiliraXian.Characters.Common
         }
 
         /// <summary>Signed rate per second: positive recovers, negative decays, zero holds.</summary>
-        public float RecoveryPerSecond
+        public virtual float RecoveryPerSecond
         {
             get
             {
@@ -66,6 +67,10 @@ namespace MiliraXian.Characters.Common
         }
 
         public bool IsOverflowing => MaxValue > 0f && CurrentValue > MaxValue;
+
+        // Resources with a grace period can delay continuous settlement without
+        // owning another copy of the value or another recovery implementation.
+        protected virtual int RecoveryStartTick => 0;
 
         public float ValuePercent => MaxValue <= 0f ? 0f : Mathf.Clamp01(CurrentValue / MaxValue);
 
@@ -128,6 +133,7 @@ namespace MiliraXian.Characters.Common
                 return;
             }
 
+            int recoveryTicks = Mathf.Max(0, currentTick - Mathf.Max(lastSettleTick, RecoveryStartTick));
             lastSettleTick = currentTick;
             if (Pawn == null || Pawn.Dead)
             {
@@ -141,7 +147,7 @@ namespace MiliraXian.Characters.Common
             }
 
             float maxValue = MaxValue;
-            currentValue = Mathf.Max(0f, currentValue + rate * elapsedTicks / 60f);
+            currentValue = Mathf.Max(0f, currentValue + rate * recoveryTicks / 60f);
             ClampCurrentValueTo(maxValue);
             SyncSeverity();
         }

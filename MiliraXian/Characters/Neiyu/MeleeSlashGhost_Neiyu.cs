@@ -152,7 +152,7 @@ namespace MiliraXian.Characters.Neiyu
             return Mathf.Atan2(0f - vec.z, vec.x) * 57.29578f;
         }
 
-        private static void SpawnDirectionalFleck(Map map, Vector3 pos, FleckDef fleckDef, float scale, float rotation)
+        internal static void SpawnDirectionalFleck(Map map, Vector3 pos, FleckDef fleckDef, float scale, float rotation)
         {
             if (map == null || fleckDef == null)
             {

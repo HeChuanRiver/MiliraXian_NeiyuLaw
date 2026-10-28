@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <SoundDef Name="MX_NeiyuSwordCollisionBase" Abstract="True">
+    <context>MapOnly</context>
+    <maxSimultaneous>6</maxSimultaneous>
+    <subSounds>
+      <li>
+        <!-- 同一 subSound 的 grains 随机选一个；不同时叠播三份素材。 -->
+        <grains>
+          <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight1</clipPath></li>
+          <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight2</clipPath></li>
+          <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight3</clipPath></li>
+        </grains>
+        <volumeRange>28~32</volumeRange>
+        <pitchRange>0.94~1.04</pitchRange>
+        <distRange>3~28</distRange>
+        <muteWhenPaused>true</muteWhenPaused>
+        <tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+      </li>
+    </subSounds>
+  </SoundDef>
+  <SoundDef ParentName="MX_NeiyuSwordCollisionBase">
+    <defName>MX_NeiyuSwordDeflect</defName>
+  </SoundDef>
+  <SoundDef ParentName="MX_NeiyuSwordCollisionBase">
+    <defName>MX_NeiyuSwordPerfect</defName>
+    <subSounds Inherit="False"><li>
+      <grains>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight1</clipPath></li>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight2</clipPath></li>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight3</clipPath></li>
+      </grains>
+      <volumeRange>38~42</volumeRange><pitchRange>1.16~1.28</pitchRange><distRange>3~28</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef ParentName="MX_NeiyuSwordCollisionBase">
+    <defName>MX_NeiyuSwordBreak</defName>
+    <subSounds Inherit="False"><li>
+      <grains>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight1</clipPath></li>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight2</clipPath></li>
+        <li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight3</clipPath></li>
+      </grains>
+      <volumeRange>29~33</volumeRange><pitchRange>0.65~0.77</pitchRange><distRange>3~28</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>MX_NeiyuSwordPrepare</defName>
+    <context>MapOnly</context>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/WarpFeather/FeatherRustle</clipPath></li></grains>
+      <volumeRange>15~18</volumeRange><pitchRange>1.05~1.15</pitchRange><distRange>3~22</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>MX_NeiyuSwordStrike</defName>
+    <context>MapOnly</context>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_slash</clipPath></li></grains>
+      <volumeRange>34~38</volumeRange><pitchRange>0.85~0.95</pitchRange><distRange>3~30</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>MX_NeiyuSwordEnd</defName>
+    <context>MapOnly</context>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/WarpFeather/FeatherChime</clipPath></li></grains>
+      <volumeRange>10~13</volumeRange><pitchRange>0.8~0.95</pitchRange><distRange>3~20</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+</Defs>

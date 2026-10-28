@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>MX_NeiyuSwordSpark</defName>
+    <altitudeLayer>MoteOverheadLow</altitudeLayer>
+    <realTime>false</realTime>
+    <growthRate>-0.85</growthRate>
+    <fadeInTime>0.005</fadeInTime>
+    <solidTime>0.025</solidTime>
+    <fadeOutTime>0.13</fadeOutTime>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texPath>
+        <shaderType>MoteGlow</shaderType>
+        <renderInstanced>true</renderInstanced>
+        <drawSize>(0.18,1)</drawSize>
+      </li>
+    </randomGraphics>
+  </FleckDef>
+</Defs>
