@@ -51,6 +51,7 @@ public sealed class Mote_NeiyuThunderWarmup : Mote
 
 // Shared Def materials + two bounded native mesh batches per map. Transients are
 // reconstructed from saved task deadlines, and never serialize damage or cast state.
+[StaticConstructorOnStartup]
 internal sealed class NeiyuThunderVfx : IDisposable
 {
     private readonly struct Flash(Vector3 position, int tick, int seed, int kind, bool final)

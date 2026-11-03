@@ -28,6 +28,7 @@
         <defName>MX_Mingyuan_FireCastHum</defName>
         <context>MapOnly</context>
         <sustain>true</sustain>
+        <priorityMode>PrioritizeNearest</priorityMode>
         <sustainFadeoutTime>0.18</sustainFadeoutTime>
         <subSounds>
             <li>
