@@ -129,7 +129,7 @@ public class CompMingyuanBurningPillarTornado : ThingComp
         Props.impactSound?.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
     }
 
-    public override void CompTick()
+    internal void TickBeforePathRequests()
     {
         if (!parent.Spawned) return;
         int now = Find.TickManager.TicksGame;
@@ -464,6 +464,39 @@ public class CompMingyuanBurningPillarTornado : ThingComp
         Props.snapSound?.PlayOneShot(new TargetInfo(caster.Position, caster.Map));
         MingyuanFireVfx.PlayBurst(caster.Map, caster.DrawPos, 0.85f, 22);
         destinationCell = destination;
+    }
+}
+
+// PathFinderTick joins the previous batch, finalizes it, then snapshots the next requests.
+// Pillar displacement and damage can both change pawns that the workers read directly.
+[HarmonyPatch(typeof(PathFinder), "FinalizeRecyclePathJobData")]
+internal static class Patch_MingyuanPillarPathingBoundary
+{
+    private static void Postfix(Map ___map)
+    {
+        ThingDef def = MX_MingyuanDefOf.MX_Mingyuan_BurningPillarField;
+        if (def == null) return;
+        List<Thing> active = ___map.listerThings.ThingsOfDef(def);
+        if (active.Count == 0) return;
+
+        List<Thing> pillars = CombatTargetSnapshot.Rent(active);
+        try
+        {
+            foreach (Thing thing in pillars)
+            {
+                if (!thing.Spawned || thing.Map != ___map) continue;
+                try
+                {
+                    ((Thing_MingyuanBurningPillarField)thing).Tornado.TickBeforePathRequests();
+                }
+                catch (Exception exception)
+                {
+                    // A fault in one core must not abort the map's pathfinder tick.
+                    Log.ErrorOnce($"Exception ticking {thing}: {exception}", thing.thingIDNumber ^ 0x22627165);
+                }
+            }
+        }
+        finally { CombatTargetSnapshot.Return(pillars); }
     }
 }
 
