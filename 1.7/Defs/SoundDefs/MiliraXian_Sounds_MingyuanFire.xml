@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <SoundDef>
+        <defName>MX_Mingyuan_PhoenixDive</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianMingyuan/FireSkills/PhoenixDive</clipPath></li></grains>
+                <volumeRange>48</volumeRange>
+                <distRange>8~48</distRange>
+                <muteWhenPaused>true</muteWhenPaused>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_Mingyuan_PillarSnap</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianMingyuan/FireSkills/PillarSnap</clipPath></li></grains>
+                <volumeRange>56</volumeRange>
+                <distRange>7~36</distRange>
+                <muteWhenPaused>true</muteWhenPaused>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_Mingyuan_FireCastHum</defName>
+        <context>MapOnly</context>
+        <sustain>true</sustain>
+        <sustainFadeoutTime>0.18</sustainFadeoutTime>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>WorldArcaneStrike/ArcaneHum</clipPath></li></grains>
+                <volumeRange>26</volumeRange>
+                <distRange>7~32</distRange>
+                <sustainLoop>true</sustainLoop>
+                <muteWhenPaused>true</muteWhenPaused>
+                <paramMappings>
+                    <li>
+                        <inParam Class="SoundParamSource_External"><inParamName>FireCharge</inParamName><defaultValue>0</defaultValue></inParam>
+                        <outParam Class="SoundParamTarget_Volume" />
+                        <paramUpdateMode>Constant</paramUpdateMode>
+                    </li>
+                </paramMappings>
+            </li>
+        </subSounds>
+    </SoundDef>
+    <SoundDef>
+        <defName>MX_Mingyuan_PillarWindFire</defName>
+        <context>MapOnly</context>
+        <sustain>true</sustain>
+        <sustainFadeoutTime>0.20</sustainFadeoutTime>
+        <priorityMode>PrioritizeNearest</priorityMode>
+        <maxSimultaneous>3</maxSimultaneous>
+        <subSounds>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>Misc/Fire/BurningLoop</clipPath></li></grains>
+                <volumeRange>33</volumeRange>
+                <distRange>8~46</distRange>
+                <sustainLoop>true</sustainLoop>
+                <muteWhenPaused>true</muteWhenPaused>
+                <paramMappings>
+                    <li>
+                        <inParam Class="SoundParamSource_External"><inParamName>PillarStrength</inParamName><defaultValue>0</defaultValue></inParam>
+                        <outParam Class="SoundParamTarget_Volume" />
+                        <paramUpdateMode>Constant</paramUpdateMode>
+                    </li>
+                </paramMappings>
+            </li>
+            <li>
+                <grains><li Class="AudioGrain_Clip"><clipPath>Ambience/Wind/Amb_Wind_Altitude1_Loop</clipPath></li></grains>
+                <volumeRange>22</volumeRange>
+                <distRange>9~48</distRange>
+                <sustainLoop>true</sustainLoop>
+                <muteWhenPaused>true</muteWhenPaused>
+                <paramMappings>
+                    <li>
+                        <inParam Class="SoundParamSource_External"><inParamName>PillarStrength</inParamName><defaultValue>0</defaultValue></inParam>
+                        <outParam Class="SoundParamTarget_Volume" />
+                        <paramUpdateMode>Constant</paramUpdateMode>
+                    </li>
+                </paramMappings>
+            </li>
+        </subSounds>
+    </SoundDef>
+</Defs>

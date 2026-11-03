@@ -349,6 +349,12 @@ namespace MiliraXian.Characters.Mingyuan
             base.Notify_PawnDied(dinfo, culprit);
             try
             {
+                if (MingyuanUtility.IsPillarDeath(Pawn, dinfo) && !burstVisualSpawnedForDeath)
+                {
+                    burstVisualSpawnedForDeath = true;
+                    SetInstigator(dinfo.Value.Instigator as Pawn);
+                    SpawnBurstMote(Pawn.MapHeld, Pawn.PositionHeld);
+                }
                 TransferLifeBurnOnDeath();
             }
             finally
@@ -454,7 +460,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        private void SpawnBurstMote(Map map, IntVec3 cell)
+        internal static void SpawnBurstMote(Map map, IntVec3 cell)
         {
             ThingDef burstDef = MX_MingyuanDefOf.MX_Mingyuan_Mote_LifeBurnBurst ?? DefDatabase<ThingDef>.GetNamedSilentFail("MX_Mingyuan_Mote_LifeBurnBurst");
             if (map != null && burstDef != null && cell.IsValid)

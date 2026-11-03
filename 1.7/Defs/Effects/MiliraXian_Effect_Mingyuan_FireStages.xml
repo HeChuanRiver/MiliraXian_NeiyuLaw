@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ThingDef ParentName="EtherealThingBase">
+        <defName>MX_Mingyuan_FireCastVisual</defName>
+        <label>明渊·火焰术式</label>
+        <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanFireCastVisual</thingClass>
+        <tickerType>Normal</tickerType>
+        <drawerType>RealtimeOnly</drawerType>
+        <drawOffscreen>true</drawOffscreen>
+        <selectable>false</selectable>
+        <isSaveable>true</isSaveable>
+    </ThingDef>
+
+    <ThingDef ParentName="BaseProjectileNeolithic">
+        <defName>MX_Mingyuan_PillarCrystal</defName>
+        <label>明渊·燃烧火晶</label>
+        <thingClass>MiliraXian.Characters.Mingyuan.Projectile_MingyuanPillarCrystal</thingClass>
+        <graphicData>
+            <texPath>MiliraXianMingyuan/Effect/BurningPillarCore</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+        </graphicData>
+        <projectile>
+            <damageDef>Burn</damageDef>
+            <damageAmountBase>0</damageAmountBase>
+            <speed>25</speed>
+        </projectile>
+    </ThingDef>
+</Defs>

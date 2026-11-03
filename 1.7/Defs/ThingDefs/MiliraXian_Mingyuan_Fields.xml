@@ -14,13 +14,10 @@
         <fillPercent>0</fillPercent>
         <rotatable>false</rotatable>
         <graphicData>
-            <graphicClass>MiliraXian.Characters.Mingyuan.Graphic_MingyuanBurningPillarTornado</graphicClass>
-            <shaderType>MoteGlow</shaderType>
-            <color>(1.00,0.78,0.36,0.42)</color>
-            <texPath>MiliraXianMingyuan/Effect/BurningPillarTornado</texPath>
-            <drawSize>(30,30)</drawSize>
+            <graphicClass>Graphic_Single</graphicClass>
+            <texPath>MiliraXianMingyuan/Effect/BurningPillarCore</texPath>
         </graphicData>
-        <drawOffscreen>false</drawOffscreen>
+        <drawOffscreen>true</drawOffscreen>
         <useHitPoints>true</useHitPoints>
         <statBases>
             <MaxHitPoints>2000</MaxHitPoints>
@@ -39,30 +36,27 @@
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningPillarTornado">
                 <startRadius>1</startRadius>
                 <maxRadius>10</maxRadius>
-                <durationTicks>1800</durationTicks>
-                <radiusGrowTicks>180</radiusGrowTicks>
-                <controlUnlockTicks>180</controlUnlockTicks>
-                <coreGrowTicks>180</coreGrowTicks>
-                <pulseIntervalTicks>60</pulseIntervalTicks>
-                <moveIntervalTicks>60</moveIntervalTicks>
+                <durationTicks>2400</durationTicks>
+                <radiusGrowTicks>600</radiusGrowTicks>
+                <controlUnlockTicks>600</controlUnlockTicks>
+                <buildingMaxHealthDamagePerSecond>0.30</buildingMaxHealthDamagePerSecond>
+                <smallPawnBodySizeThreshold>1.2</smallPawnBodySizeThreshold>
+                <pawnLifeDamageFractionPerSecond>0.15</pawnLifeDamageFractionPerSecond>
+                <killBonusDurationTicks>300</killBonusDurationTicks>
+                <obeyMovementBlockers>true</obeyMovementBlockers>
+                <!-- 移动、牵引、生命燃烧与装备损耗采用暂定参数。 -->
+                <tornadoMoveSpeedCellsPerSecond>4</tornadoMoveSpeedCellsPerSecond>
+                <tornadoPullSpeedCellsPerSecond>2.5</tornadoPullSpeedCellsPerSecond>
+                <lifeBurnFractionPerSecond>0.05</lifeBurnFractionPerSecond>
+                <furEquipmentDurabilityLossFractionPerSecond>0.20</furEquipmentDurabilityLossFractionPerSecond>
+                <controlGestureTicks>22</controlGestureTicks>
                 <initialHitPoints>300</initialHitPoints>
-                <maxHitPoints>2000</maxHitPoints>
-                <centerBurnDamage>12</centerBurnDamage>
-                <edgeBurnDamage>3</edgeBurnDamage>
-                <centerCutDamage>3</centerCutDamage>
-                <edgeCutDamage>12</edgeCutDamage>
-                <lifeBurnLayersPerBurnDamage>1</lifeBurnLayersPerBurnDamage>
-                <buildingDamageFraction>0.06</buildingDamageFraction>
                 <targetPriorityFactor>0.65</targetPriorityFactor>
-                <visualRotationDegreesPerTick>2.25</visualRotationDegreesPerTick>
-                <visualFadeTicks>120</visualFadeTicks>
-                <coreGraphicData>
-                    <graphicClass>Graphic_Single</graphicClass>
-                    <shaderType>MoteGlow</shaderType>
-                    <texPath>MiliraXianMingyuan/Effect/BurningPillarCore</texPath>
-                    <color>(1.00,0.82,0.42,0.76)</color>
-                    <drawSize>(1.65,1.65)</drawSize>
-                </coreGraphicData>
+                <visualFadeTicks>36</visualFadeTicks>
+                <particleLimit>28</particleLimit>
+                <impactSound>MX_Neiyu_WarpFeather_Chime</impactSound>
+                <snapSound>MX_Mingyuan_PillarSnap</snapSound>
+                <loopSound>MX_Mingyuan_PillarWindFire</loopSound>
             </li>
         </comps>
     </ThingDef>

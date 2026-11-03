@@ -7,10 +7,12 @@
         <displayOrder>3100</displayOrder>
     </AbilityCategoryDef>
 
+    <!-- 三项冷却暂沿用旧版配置。 -->
     <AbilityDef>
         <defName>MX_Mingyuan_AscendantFlameDash</defName>
         <label>&lt;color=#FFB25C&gt;升焰疾行&lt;/color&gt;</label>
-        <description>化为火焰，沿3格宽路径冲刺至多35格，无需视线。沿途敌人受到10点基础燃烧伤害、30层生命燃烧、击退和1秒眩晕。灼痕持续5秒，每秒附加6层生命燃烧。冷却8秒。</description>
+        <description>原地升空，随后沿3格宽的路径俯冲，最远35格，可越过障碍。命中敌人时分别造成30点基础燃烧和钝击伤害，眩晕1秒，并使已有生命燃烧翻倍，最多叠至其引爆阈值的15%。
+沿途地面燃烧15秒。敌人每秒受到10点基础燃烧伤害，附加引爆阈值15%的生命燃烧，并有30%概率着火。冷却8秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>100</displayOrder>
@@ -26,7 +28,6 @@
             <range>35</range>
             <requireLineOfSight>false</requireLineOfSight>
             <warmupTime>0</warmupTime>
-            <soundCast>FireSpew_Resolve</soundCast>
             <soundLanding>Longjump_Land</soundLanding>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
@@ -38,17 +39,21 @@
         </verbProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanAscendantFlameDash">
-                <maxDistance>35</maxDistance>
                 <pathWidth>3</pathWidth>
-                <pathDamage>10</pathDamage>
-                <lifeBurnLayers>30</lifeBurnLayers>
-                <selfLifeBurnLayers>30</selfLifeBurnLayers>
-                <stunTicks>60</stunTicks>
+                <directBurnDamage>30</directBurnDamage>
+                <directBluntDamage>30</directBluntDamage>
+                <directStunTicks>60</directStunTicks>
+                <directLifeBurnDoubleCapFraction>0.15</directLifeBurnDoubleCapFraction>
                 <flyerDef>MX_Mingyuan_AscendantFlameDashFlyer</flyerDef>
-                <scorchControllerDef>MX_Mingyuan_AscendantFlameScorchController</scorchControllerDef>
-                <scorchFleckDef>MX_Mingyuan_Fleck_AscendantFlameScorch</scorchFleckDef>
-                <scorchFleckScale>1</scorchFleckScale>
-                <maxScorchFlecks>32</maxScorchFlecks>
+                <gatherTicks>9</gatherTicks>
+                <ascentTicks>27</ascentTicks>
+                <hiddenTicks>7</hiddenTicks>
+                <nearDiveTicks>15</nearDiveTicks>
+                <farDiveTicks>42</farDiveTicks>
+                <landingVisualTicks>18</landingVisualTicks>
+                <featherLimit>20</featherLimit>
+                <ascentSound>FireSpew_Warmup</ascentSound>
+                <diveSound>MX_Mingyuan_PhoenixDive</diveSound>
             </li>
         </comps>
     </AbilityDef>
@@ -56,7 +61,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_InstantCombustion</defName>
         <label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</label>
-        <description>对半径12格内敌人的大脑和眼睛分别造成1点基础燃烧伤害，并眩晕3秒。已有生命燃烧翻倍，没有层数的目标会被点燃。蓄力3秒，冷却120秒。</description>
+        <description>跃起后绘制法阵3秒，使半径12格内敌人已有的生命燃烧翻倍，最多叠至其引爆阈值的50%。
+有眼睛的敌人眩晕3秒。施放完成时，正朝明渊行走的敌人会失去现存眼睛。冷却120秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>110</displayOrder>
@@ -66,8 +72,9 @@
         <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+        <jobDef>MX_Mingyuan_CastInstantCombustion</jobDef>
         <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
+            <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanFireCast</verbClass>
             <targetable>false</targetable>
             <range>30</range>
             <warmupTime>3</warmupTime>
@@ -78,14 +85,19 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanInstantCombustion">
                 <radius>12</radius>
-                <partDamage>1</partDamage>
-                <stunTicks>180</stunTicks>
-                <flashMoteDef>MX_Mingyuan_Mote_InstantCombustionFlash</flashMoteDef>
-                <targetMoteDef>MX_Mingyuan_Mote_InstantCombustionMark</targetMoteDef>
-                <flashMoteScale>1.35</flashMoteScale>
-                <targetMoteScale>1</targetMoteScale>
+                <jumpTicks>12</jumpTicks>
+                <lifeBurnDoubleCapFraction>0.50</lifeBurnDoubleCapFraction>
+                <eyeRequiredStunTicks>180</eyeRequiredStunTicks>
+                <destroyEyesWhenMovingTowardCaster>true</destroyEyesWhenMovingTowardCaster>
+                <movementConeDegrees>90</movementConeDegrees>
+                <visualFadeTicks>30</visualFadeTicks>
                 <maxTargetMotes>16</maxTargetMotes>
-                <minimumLifeBurnLayers>1</minimumLifeBurnLayers>
+                <targetMoteDef>MX_Mingyuan_Mote_InstantCombustionMark</targetMoteDef>
+                <warmupLoop>MX_Mingyuan_FireCastHum</warmupLoop>
+                <etchSound>MX_ArcaneCircle_Etch</etchSound>
+                <sealSound>MX_ArcaneCircle_Seal</sealSound>
+                <resolveSound>MX_ArcaneStrike_Impact</resolveSound>
+                <hitSound>FireSpew_Resolve</hitSound>
             </li>
         </comps>
     </AbilityDef>
@@ -93,7 +105,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_BurningPillar</defName>
         <label>&lt;color=#FF7A45&gt;燃烧之柱&lt;/color&gt;</label>
-        <description>蓄力3秒，在40格内放置燃烧核心。核心3秒内扩大至半径10格，随后可控制移动，持续30秒。每秒对敌人造成合计15点基础燃烧与切割伤害，并附加生命燃烧。对敌方及无阵营建筑，每秒造成其最大生命值6%的基础伤害。冷却240秒。</description>
+        <description>持长虹瞄准3秒，向40格内视线和弹道畅通的地点射出火晶。火晶落地后形成持续40秒的旋风，前10秒扩张至半径10格，成形后可指挥它沿直线移动。
+每秒对敌人造成相当于其致命伤害阈值15%的基础燃烧伤害，并附加其引爆阈值5%的生命燃烧。体型小于1.2的敌人会被卷入。旋风损耗皮革装备，对非玩家建筑每秒造成其最大生命值30%的伤害，烧毁的木制建筑不留残料。旋风直接击杀会引爆生命燃烧，并延长5秒。冷却240秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>120</displayOrder>
@@ -104,22 +117,25 @@
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
         <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
         <verbProperties>
-            <verbClass>Verb_CastAbility</verbClass>
+            <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanFireCast</verbClass>
             <targetable>true</targetable>
             <range>40</range>
             <warmupTime>3</warmupTime>
-            <soundCast>FireSpew_Resolve</soundCast>
+            <requireLineOfSight>true</requireLineOfSight>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
                 <canTargetLocations>true</canTargetLocations>
-                <canTargetBuildings>true</canTargetBuildings>
+                <canTargetBuildings>false</canTargetBuildings>
                 <canTargetItems>false</canTargetItems>
             </targetParams>
         </verbProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanBurningPillar">
-                <fieldDef>MX_Mingyuan_BurningPillarField</fieldDef>
+                <projectileDef>MX_Mingyuan_PillarCrystal</projectileDef>
+                <bowDef>MX_Mingyuan_RainbowBow</bowDef>
+                <warmupLoop>MX_Mingyuan_FireCastHum</warmupLoop>
+                <launchSound>Bow_Large</launchSound>
             </li>
         </comps>
     </AbilityDef>
