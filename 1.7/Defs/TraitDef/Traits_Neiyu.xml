@@ -13,6 +13,7 @@
       <li Class="MiliraXian.Characters.Common.CharacterTraitExtension">
         <freezeBiologicalAge>false</freezeBiologicalAge>
         <noSkillDecay>false</noSkillDecay>
+        <requiredPawnKind>MiliraXian_Neiyu</requiredPawnKind>
         <grantedHediff>MX_Neiyu_SoulRemnantState</grantedHediff>
       </li>
     </modExtensions>
