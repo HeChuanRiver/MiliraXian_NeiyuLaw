@@ -12,6 +12,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     float _BloomIntensity; // @default = 1.0
 } u;
 
+layout(set = 2, binding = 1) uniform sampler2D _MainTex;
+
 const float TAU = 6.2831853;
 const vec3 Ember = vec3(0.47, 0.10, 0.045);
 const vec3 Red = vec3(0.86, 0.16, 0.065);
@@ -95,31 +97,10 @@ void main()
     }
     else if (shape == 2)
     {
-        float x = abs(p.x);
-        vec2 q = vec2(x, p.y + 0.035 * sin(t * 19.0 + x * 5.0) * x);
-        float wings = 0.0;
-        float glow = 0.0;
-        for (int i = 0; i < 7; i++)
-        {
-            float i01 = float(i) / 6.0;
-            vec2 root = vec2(0.065 + i01 * 0.21, 0.20 + i01 * 0.12);
-            vec2 tip = vec2(0.93 - i01 * 0.48, 0.52 - i01 * 0.68);
-            float d = segment(q, root, tip);
-            wings = max(wings, band(d, 0.035 + 0.023 * (1.0 - i01)));
-            glow = max(glow, band(d, 0.11 + 0.027 * i01));
-        }
-        float crown = band(segment(p, vec2(0.0, 0.19), vec2(0.0, 0.53)), 0.14);
-        crown += 0.65 * band(segment(q, vec2(0.11, 0.49), vec2(0.0, 0.76)), 0.040);
-        float tail = 0.0;
-        for (int i = 0; i < 4; i++)
-        {
-            float trail = float(i) / 3.0;
-            tail = max(tail, band(segment(q, vec2(0.017 + trail * 0.061, 0.17),
-                vec2(0.04 + 0.29 * trail, mix(-0.96, -0.40, trail))), 0.026 + 0.023 * (1.0 - trail)));
-        }
-        float flicker = 0.71 + 0.22 * sin(t * 18.0 + r * 4.0) * sin(p.y * 7.0 - t * 10.0);
-        color = mix(Red, Core, clamp(wings * 0.56 + crown * 0.78 + tail * 0.58, 0.0, 1.0));
-        alpha = clamp(glow * 0.33 + wings * 0.62 + crown * 0.63 + tail * f * 0.69, 0.0, 1.0) * flicker;
+        // The quad's forward edge is v=1, while Waylith's PNG texture starts at the top row.
+        vec4 phoenix = texture(_MainTex, vec2(vUv.x, 1.0 - vUv.y));
+        color = phoenix.rgb;
+        alpha = phoenix.a * (0.88 + 0.08 * sin(t * 18.0));
     }
     else if (shape == 3)
     {

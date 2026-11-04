@@ -13,6 +13,7 @@
             <depthWrite>false</depthWrite>
             <cullMode>None</cullMode>
             <renderQueue>3198</renderQueue>
+            <textureWrapOverrides><li><key>_MainTex</key><value>Clamp</value></li></textureWrapOverrides>
         </shaderProgram>
     </ShaderDef>
 </Defs>

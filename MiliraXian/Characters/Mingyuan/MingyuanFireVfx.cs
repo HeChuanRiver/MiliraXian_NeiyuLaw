@@ -12,7 +12,9 @@ internal static class MingyuanFireVfx
 {
     private enum Shape { Scorch, Sigil, Phoenix, Vortex, Funnel, Crystal, Burst, Wake, Particles }
     private const int MaxParticles = 32;
-    private static readonly Material Material;
+    private static readonly Material FireMaterial;
+    private static readonly Material PhoenixTakeoff;
+    private static readonly Material PhoenixDive;
     private static readonly MaterialPropertyBlock Properties = new();
     private static readonly int ParamsId = Shader.PropertyToID("_FireParams");
     private static readonly int ShapeId = Shader.PropertyToID("_FireShape");
@@ -29,7 +31,9 @@ internal static class MingyuanFireVfx
     static MingyuanFireVfx()
     {
         Shader shader = DefDatabase<ShaderDef>.GetNamed("MX_Mingyuan_FireStages").Shader;
-        Material = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
+        FireMaterial = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
+        PhoenixTakeoff = LoadPhoenixMaterial(shader, "PhoenixTakeoff");
+        PhoenixDive = LoadPhoenixMaterial(shader, "PhoenixDive");
         Bloom = new ScreenBloomProperties
         {
             group = DefDatabase<ScreenBloomGroupDef>.GetNamed("MX_ScreenBloom_Glow"),
@@ -43,20 +47,27 @@ internal static class MingyuanFireVfx
     private static float GroundAltitude => AltitudeLayer.MoteLow.AltitudeFor();
     private static float AirAltitude => AltitudeLayer.MoteOverheadLow.AltitudeFor();
 
-    private static void Draw(Shape shape, Mesh mesh, Matrix4x4 matrix, float time, float progress,
-        float alpha, Vector4 options = default, bool bloom = false)
+    private static Material LoadPhoenixMaterial(Shader shader, string name)
     {
-        if (alpha <= 0.001f || Material == null) return;
+        Texture2D texture = ContentFinder<Texture2D>.Get("MiliraXianMingyuan/Effect/AscendantFlameDash/" + name);
+        return texture == null ? null : MaterialPool.MatFrom(new MaterialRequest(texture, shader, Color.white));
+    }
+
+    private static void Draw(Shape shape, Mesh mesh, Matrix4x4 matrix, float time, float progress,
+        float alpha, Vector4 options = default, bool bloom = false, Material material = null)
+    {
+        material ??= FireMaterial;
+        if (alpha <= 0.001f || material == null) return;
         Properties.SetVector(ParamsId, new Vector4((int)shape, time, progress, alpha));
         Properties.SetVector(ShapeId, options);
-        if (bloom) ScreenBloom.Submit(Bloom, mesh, matrix, Material, Properties);
-        Graphics.DrawMesh(mesh, matrix, Material, 0, null, 0, Properties);
+        if (bloom) ScreenBloom.Submit(Bloom, mesh, matrix, material, Properties);
+        Graphics.DrawMesh(mesh, matrix, material, 0, null, 0, Properties);
     }
 
     private static void Quad(Shape shape, Vector3 center, Quaternion rotation, float width, float height,
-        float time, float progress, float alpha, Vector4 options = default, bool bloom = false) =>
+        float time, float progress, float alpha, Vector4 options = default, bool bloom = false, Material material = null) =>
         Draw(shape, MeshPool.plane10, Matrix4x4.TRS(center, rotation, new Vector3(width, 1f, height)),
-            time, progress, alpha, options, bloom);
+            time, progress, alpha, options, bloom, material);
 
     private static bool Visible(Vector3 center, float margin) =>
         Find.CameraDriver.CurrentViewRect.ExpandedBy(Mathf.CeilToInt(margin)).Contains(center.ToIntVec3());
@@ -82,8 +93,9 @@ internal static class MingyuanFireVfx
         {
             float lift = Mathf.Clamp01((pawn.z - ground.z) / 5f);
             Quad(Shape.Vortex, ground.WithY(GroundAltitude), Quaternion.identity, 3.6f, 3.6f, time, 0f, (1f - lift) * 0.8f);
-            Quad(Shape.Phoenix, pawn.WithY(AirAltitude), facing.AsQuat, 4.4f, 3.8f, time, 0f,
-                Mathf.Clamp01(time * 7f) * (1f - 0.65f * lift), bloom: true);
+            if (PhoenixTakeoff != null)
+                Quad(Shape.Phoenix, pawn.WithY(AirAltitude), facing.AsQuat, 4.4f, 3.8f, time, 0f,
+                    Mathf.Clamp01(time * 7f) * (1f - 0.65f * lift), bloom: true, material: PhoenixTakeoff);
             Sparks(ground + Vector3.forward * (pawn.z - ground.z) * 0.45f, rotation, 2.6f, time, 0f, 0.9f, feathers);
             return;
         }
@@ -91,8 +103,9 @@ internal static class MingyuanFireVfx
         float fade = 1f - Mathf.SmoothStep(0f, 0.35f, Mathf.InverseLerp(0.85f, 1f, progress));
         Quad(Shape.Wake, (pawn - forward * 2.45f).WithY(AirAltitude - 0.01f), rotation,
             4.3f, 7.3f, time, 0f, fade * 0.88f, bloom: true);
-        Quad(Shape.Phoenix, (pawn + forward * 0.23f).WithY(AirAltitude + 0.01f), rotation,
-            6.8f, 7f, time, 1f, fade, bloom: true);
+        if (PhoenixDive != null)
+            Quad(Shape.Phoenix, (pawn + forward * 0.23f).WithY(AirAltitude + 0.01f), rotation,
+                6.8f, 7f, time, 0f, fade, bloom: true, material: PhoenixDive);
         Sparks(pawn, rotation, 3.6f, time, 1f, fade, feathers);
     }
 
