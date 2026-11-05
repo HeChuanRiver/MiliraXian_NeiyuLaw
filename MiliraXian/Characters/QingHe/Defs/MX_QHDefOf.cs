@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static JobDef MX_QH_IllusoryReflection;
         public static JobDef MX_QH_TuneResonance;
+        public static JobDef MX_QH_SakuraDance;
 
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 3D 刀身：同原版 Cutout（透明度测试、写深度），但不做背面剔除，刀转到背面时不会消失。
+       网格 UV 的 v 朝贴图上方；和原版一样保留 flipTextureST 的默认值（翻转），贴图才不会上下颠倒。 -->
+  <ShaderDef>
+    <defName>MX_BladeBody</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_BladeBody.frag.glsl</fragmentShaderFileName>
+      <transparent>true</transparent>
+      <depthWrite>true</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>2900</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

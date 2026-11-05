@@ -12,6 +12,19 @@
     <checkOverrideOnDamage>Never</checkOverrideOnDamage>
   </JobDef>
   <JobDef>
+    <defName>MX_QH_SakuraDance</defName>
+    <driverClass>MiliraXian.Characters.QingHe.Abilities.SakuraDance.JobDriver_SakuraDance</driverClass>
+    <reportString>正在施展樱舞。</reportString>
+    <!-- 空中施放时保持飞行，由技能在落地时刻自己结束飞行 -->
+    <ifFlyingKeepFlying>true</ifFlyingKeepFlying>
+    <playerInterruptible>false</playerInterruptible>
+    <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+  </JobDef>
+  <JobDef>
     <defName>MX_QH_TuneResonance</defName>
     <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneResonance</driverClass>
     <reportString>正在调谐四时共鸣。</reportString>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 樱舞刀光：顶点已在地图坐标，顶点色带沿刀光的淡出；亮丝加法、灰带普通混合。
+       队列都排在扭曲带（3151）之后：扭曲带把抓屏前的背景画回屏幕，排在刀光后面会把刀光盖掉。
+       深度测试打开、不写深度：刀环顶点按前后给了不同高度，身后那半段会被角色身体挡住。 -->
+  <ShaderDef>
+    <defName>MX_QH_SakuraTrailAdd</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SakuraTrail.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3153</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+  <ShaderDef>
+    <defName>MX_QH_SakuraTrailAlpha</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SakuraTrail.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <!-- 预乘透明：片元输出 颜色×alpha，亮度大于 1 的灰带不会在写入 8 位颜色缓冲前被截成 1 -->
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>One</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3152</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 花瓣：图集按帧取 UV，不平铺。 -->
+  <ShaderDef>
+    <defName>MX_QH_SakuraPetal</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SakuraTrail.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>One</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3154</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 扭曲带：沿用原版的 DistortionBackground 抓屏点（队列必须同为 3151，否则引擎会警告并保留原队列）。 -->
+  <ShaderDef>
+    <defName>MX_QH_SakuraDistort</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SakuraDistort.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3151</renderQueue>
+      <sceneGrab>
+        <name>DistortionBackground</name>
+        <queue>3151</queue>
+      </sceneGrab>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Repeat</value>
+        </li>
+        <li>
+          <key>_NormalTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

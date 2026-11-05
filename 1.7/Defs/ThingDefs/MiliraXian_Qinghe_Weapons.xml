@@ -114,6 +114,17 @@
                     <drawSize>(1.5,4.5)</drawSize>
                 </graphicData>
             </li>
+            <!-- 3D 刀身标定（樱舞等动作用）：UV 的 v 向上，按手持贴图 626×1334 量取 -->
+            <li Class="MiliraXian.Characters.Common.Vfx.BladeBody.BladeGraphicExtension">
+                <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
+                <pommelUV>(0.504, 0.034)</pommelUV>
+                <tipUV>(0.446, 0.954)</tipUV>
+                <gripUV>(0.494, 0.138)</gripUV>
+                <edgeSide>1</edgeSide>
+                <length>1.1</length>
+                <uvMin>(0.38, 0.02)</uvMin>
+                <uvMax>(0.58, 0.97)</uvMax>
+            </li>
         </modExtensions>
     </ThingDef>
 </Defs>
