@@ -196,7 +196,7 @@ internal static class NeiyuSwordCombatVfx
     }
 }
 
-// Visual events only. Saved gameplay lives in the resource comp and native Job.
+// Visual events only. Saved gameplay lives in the shared posture comp and native Job.
 // Two snapshots can overlap; this bounded batch uses the existing Waylith mesh path.
 public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 {
@@ -342,38 +342,5 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
     {
         flashes.Clear(); batch?.Dispose(); batch = null;
         base.MapRemoved();
-    }
-}
-
-[HarmonyPatch(typeof(Pawn), nameof(Pawn.DrawGUIOverlay))]
-internal static class Patch_NeiyuPostureBar
-{
-    private static void Postfix(Pawn __instance)
-    {
-        if (Event.current.type != EventType.Repaint || !__instance.Spawned || __instance.Dead
-            || __instance.IsHiddenFromPlayer() || __instance.Position.Fogged(__instance.Map)
-            || Find.ScreenshotModeHandler.Active) return;
-        HediffComp_NeiyuPosture state = NeiyuSwordCombat.Posture(__instance);
-        if (state == null || state.BarAlpha <= 0f) return;
-        float ratio = state.ValuePercent, alpha = state.BarAlpha;
-        float width = Mathf.Clamp(Find.CameraDriver.CellSizePixels / Prefs.UIScale * .92f, 16f, 48f);
-        Vector2 pos = GenMapUI.LabelDrawPosFor(__instance, .55f);
-        Rect rect = new(pos.x - width * .5f, pos.y - 15f, width, 4f);
-        Color color = ratio >= .8f ? NeiyuSwordCombatVfx.Red
-            : ratio >= .5f ? new Color(1f, .38f, .1f) : new Color(.65f, .29f, .08f);
-        if (ratio >= .8f) alpha *= .8f + .2f * Mathf.Sin(NeiyuSwordCombat.Now * .3f);
-        color.a = alpha;
-        Widgets.DrawBoxSolid(rect.ExpandedBy(1f), new Color(.06f, .025f, .025f, alpha * .85f));
-        if (state.Broken) color = new Color(1f, .88f, .56f, alpha);
-        Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width * (state.Broken ? 1f : ratio), rect.height), color);
-        if (ratio >= .9f)
-            Widgets.DrawBoxSolid(new Rect(rect.xMax - 1f, rect.y - 1f, 2f, 6f), new Color(1f, .85f, .4f, alpha));
-        if (!Find.Selector.IsSelected(__instance)) return;
-        GameFont font = Text.Font;
-        TextAnchor anchor = Text.Anchor;
-        Color previous = GUI.color;
-        Text.Font = GameFont.Tiny; Text.Anchor = TextAnchor.LowerCenter; GUI.color = Color.white;
-        Widgets.Label(new Rect(pos.x - 60f, rect.y - 20f, 120f, 19f), state.Broken ? "架势崩溃" : $"架势 {state.CurrentValue:0}/{state.MaxValue:0}");
-        GUI.color = previous; Text.Font = font; Text.Anchor = anchor;
     }
 }

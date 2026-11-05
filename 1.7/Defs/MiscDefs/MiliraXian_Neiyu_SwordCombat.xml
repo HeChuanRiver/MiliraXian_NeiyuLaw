@@ -3,9 +3,8 @@
   <MiliraXian.Characters.Neiyu.NeiyuSwordCombatDef>
     <defName>MX_NeiyuSwordCombat</defName>
     <sword>MX_Neiyu_Form_Weapon</sword>
-    <posture>MX_NeiyuSwordPosture</posture>
     <executionJob>MX_NeiyuPostureExecution</executionJob>
-    <brokenJob>MX_NeiyuPostureBroken</brokenJob>
+    <!-- 架势上限、恢复、破绽和崩溃窗口改由通用的 MX_CombatPosture（MiliraXian_CombatPosture.xml）配置 -->
     <!-- 近战先判弹刀，失败后判闪避。完美概率为绝对概率，不作第二次抽签。 -->
     <successChance>0.60</successChance>
     <perfectChance>0.15</perfectChance>
@@ -13,16 +12,7 @@
     <projectileReturnSpreadDegrees>4</projectileReturnSpreadDegrees>
     <normalPosture>25</normalPosture>
     <perfectPosture>45</perfectPosture>
-    <basePosture>100</basePosture>
-    <minimumPostureFraction>0.45</minimumPostureFraction>
-    <recoveryDelayTicks>120</recoveryDelayTicks>
-    <recoveryPerSecond>4</recoveryPerSecond>
-    <minimumRecoveryFraction>0.1</minimumRecoveryFraction>
     <perfectStunTicks>45</perfectStunTicks>
-    <vulnerabilityTicks>360</vulnerabilityTicks>
-    <vulnerabilityMultiplier>2</vulnerabilityMultiplier>
-    <breakWindowTicks>180</breakWindowTicks>
-    <barFadeTicks>90</barFadeTicks>
     <executionTicks>84</executionTicks>
     <dashFraction>0.18</dashFraction>
     <strikeFraction>0.40</strikeFraction>
@@ -38,4 +28,15 @@
     <strikeSound>MX_NeiyuSwordStrike</strikeSound>
     <endSound>MX_NeiyuSwordEnd</endSound>
   </MiliraXian.Characters.Neiyu.NeiyuSwordCombatDef>
+
+  <JobDef>
+    <defName>MX_NeiyuPostureExecution</defName>
+    <driverClass>MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureExecution</driverClass>
+    <reportString>正在斩断TargetA的架势。</reportString>
+    <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+    <casualInterruptible>false</casualInterruptible>
+    <playerInterruptible>true</playerInterruptible>
+    <suspendable>false</suspendable>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+  </JobDef>
 </Defs>

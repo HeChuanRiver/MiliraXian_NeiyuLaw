@@ -4,7 +4,7 @@ using HarmonyLib;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Things.Weapons;
-using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Common.Combat;
 using RimWorld;
 using Verse;
 using Verse.Sound;
@@ -106,7 +106,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         private bool TryHitSweepTarget(Thing target, Map map)
         {
-            using NeiyuMeleeDefense.Scope defense = NeiyuMeleeDefense.Begin(this, target);
+            using CombatBlock.Scope defense = CombatBlock.Begin(this, target);
             Pawn victim = target as Pawn;
             if (victim != null)
             {
@@ -120,7 +120,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 CreateCombatLog(m => m.combatLogRulesMiss, alwaysShow: false);
                 return false;
             }
-            if (NeiyuMeleeDefense.RollDodge(this, target))
+            if (CombatBlock.RollDodge(this, target))
             {
                 DodgeSound(this, target)?.PlayOneShot(new TargetInfo(target.Position, map));
                 MoteMaker.ThrowText(target.DrawPos, map, "TextMote_Dodge".Translate(), 1.9f);

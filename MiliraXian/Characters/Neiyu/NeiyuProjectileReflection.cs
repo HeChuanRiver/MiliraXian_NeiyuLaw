@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 using HarmonyLib;
 using MiliraXian.Characters.Common;
 using RimWorld;
@@ -9,6 +6,7 @@ using Verse;
 
 namespace MiliraXian.Characters.Neiyu;
 
+// Called by NeiyuSwordBlocker from the shared projectile interception (Common/Combat).
 // Projectile has no public in-flight redirect API. Resolve only the native
 // trajectory fields once; do not clone, relaunch or replace the projectile.
 internal static class NeiyuProjectileReflection
@@ -76,43 +74,4 @@ internal static class NeiyuProjectileReflection
         projectile.Position = start.ToIntVec3();
         if (projectile is ProjectileHomingCurveBase homing) homing.NotifyDeflected(start, destination, ticks);
     }
-}
-
-// Bullet destroys itself in base.Impact BEFORE applying damage. Each declared
-// override must therefore be intercepted before its own body, including special
-// arrows/explosives. The invocation scope avoids rerolling through base calls.
-[HarmonyPatch]
-internal static class Patch_NeiyuProjectileReflection
-{
-    [ThreadStatic] private static Projectile activeProjectile;
-    internal readonly struct Scope(Projectile previous, bool owns)
-    {
-        internal void Restore() { if (owns) activeProjectile = previous; }
-    }
-
-    private static IEnumerable<MethodBase> TargetMethods()
-    {
-        Type[] parameters = [typeof(Thing), typeof(bool)];
-        yield return AccessTools.DeclaredMethod(typeof(Projectile), "Impact", parameters);
-        foreach (Type type in GenTypes.AllSubclasses(typeof(Projectile)))
-        {
-            if (type.ContainsGenericParameters) continue;
-            MethodInfo method = AccessTools.DeclaredMethod(type, "Impact", parameters);
-            if (method is { IsAbstract: false } && method.GetBaseDefinition().DeclaringType == typeof(Projectile))
-                yield return method;
-        }
-    }
-
-    [HarmonyPriority(Priority.First)]
-    private static bool Prefix(Projectile __instance, Thing __0, bool __1, out Scope __state)
-    {
-        __state = default;
-        if (activeProjectile == __instance || __1 || __0 is not Pawn defender
-            || !NeiyuEquipmentUtility.IsNeiyu(defender)) return true;
-        __state = new Scope(activeProjectile, true);
-        activeProjectile = __instance;
-        return !NeiyuProjectileReflection.TryReflect(__instance, defender);
-    }
-
-    private static void Finalizer(Scope __state) => __state.Restore();
 }

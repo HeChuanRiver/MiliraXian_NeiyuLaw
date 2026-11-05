@@ -19,7 +19,17 @@ namespace MiliraXian.Characters.Common
             { "MiliraXian.Characters.Biography.GameComponent_BiographyFramework", typeof(GameComponent_BiographyFramework) },
             { "MiliraXian.Characters.Biography.Hediff_BiographyTracker", typeof(Hediff_BiographyTracker) },
             { "MiliraXian.Characters.Neiyu.GameComponent_NeiyuLawUpdateLog", typeof(GameComponent_NeiyuLawUpdateLog) },
-            { "MiliraXian.Characters.Vfx.MapComponent_PawnAfterimages", typeof(MapComponent_PawnAfterimages) }
+            { "MiliraXian.Characters.Vfx.MapComponent_PawnAfterimages", typeof(MapComponent_PawnAfterimages) },
+            // Neiyu's posture moved to the shared combat posture (Common/Combat).
+            { "MiliraXian.Characters.Neiyu.Hediff_NeiyuPosture", typeof(Combat.Hediff_CombatPosture) },
+            { "MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureBroken", typeof(Combat.JobDriver_CombatPostureBroken) }
+        };
+
+        // Defs renamed in place; the saved data keeps its meaning under the new name.
+        internal static readonly Dictionary<(Type, string), string> RenamedDefs = new()
+        {
+            { (typeof(HediffDef), "MX_NeiyuSwordPosture"), "MX_CombatPosture" },
+            { (typeof(JobDef), "MX_NeiyuPostureBroken"), "MX_CombatPostureBroken" }
         };
 
         internal static readonly Dictionary<string, string> FlightAnimations = CreateFlightAliases();
@@ -54,8 +64,13 @@ namespace MiliraXian.Characters.Common
         [HarmonyPostfix]
         private static void Postfix(Type defType, string defName, bool forDefInjections, ref string __result)
         {
-            if (defType != typeof(AnimationDef) || forDefInjections || Scribe.mode == LoadSaveMode.Inactive
-                || defName == null || __result != defName) return;
+            if (forDefInjections || Scribe.mode == LoadSaveMode.Inactive || defName == null || __result != defName) return;
+            if (defType != null && LegacySaveReferences.RenamedDefs.TryGetValue((defType, defName), out string renamed))
+            {
+                __result = renamed;
+                return;
+            }
+            if (defType != typeof(AnimationDef)) return;
             if (LegacySaveReferences.FlightAnimations.TryGetValue(defName, out string current)
                 && DefDatabase<AnimationDef>.GetNamedSilentFail(defName) == null
                 && DefDatabase<AnimationDef>.GetNamedSilentFail(current) != null)

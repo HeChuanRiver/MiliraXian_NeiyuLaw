@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 通用架势：格挡者挡下近战时给攻击者积累，满后崩溃（假倒地），由格挡者处决。每次格挡加多少由各角色自己的配置决定。 -->
+  <MiliraXian.Characters.Common.Combat.CombatPostureDef>
+    <defName>MX_CombatPosture</defName>
+    <posture>MX_CombatPosture</posture>
+    <brokenJob>MX_CombatPostureBroken</brokenJob>
+    <basePosture>100</basePosture>
+    <minimumPostureFraction>0.45</minimumPostureFraction>
+    <recoveryDelayTicks>120</recoveryDelayTicks>
+    <recoveryPerSecond>4</recoveryPerSecond>
+    <minimumRecoveryFraction>0.1</minimumRecoveryFraction>
+    <vulnerabilityTicks>360</vulnerabilityTicks>
+    <vulnerabilityMultiplier>2</vulnerabilityMultiplier>
+    <breakWindowTicks>180</breakWindowTicks>
+    <barFadeTicks>90</barFadeTicks>
+  </MiliraXian.Characters.Common.Combat.CombatPostureDef>
+
+  <HediffDef>
+    <defName>MX_CombatPosture</defName>
+    <label>兵刃架势</label>
+    <description>被兵刃格挡时积累的架势压力。健康越差，承受上限越低，恢复越慢。架势崩溃后暂时无法行动，格挡者可趁隙处决。
+部分格挡会留下短暂破绽，使下一次有效直接攻击伤害翻倍，生效一次后消失。</description>
+    <hediffClass>MiliraXian.Characters.Common.Combat.Hediff_CombatPosture</hediffClass>
+    <isBad>true</isBad>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>1</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <comps>
+      <li Class="MiliraXian.Characters.Common.Combat.HediffCompProperties_CombatPosture">
+        <resourceLabel>架势</resourceLabel>
+        <resourceDescription>架势积累至上限时崩溃；停止积累一段时间后逐渐恢复。</resourceDescription>
+        <hideOnHealthTab>false</hideOnHealthTab>
+        <showGizmo>false</showGizmo>
+        <clampToMax>false</clampToMax>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <JobDef>
+    <defName>MX_CombatPostureBroken</defName>
+    <driverClass>MiliraXian.Characters.Common.Combat.JobDriver_CombatPostureBroken</driverClass>
+    <reportString>正在重整架势。</reportString>
+    <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+    <casualInterruptible>false</casualInterruptible>
+    <playerInterruptible>false</playerInterruptible>
+    <suspendable>false</suspendable>
+  </JobDef>
+</Defs>
