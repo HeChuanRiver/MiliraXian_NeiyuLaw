@@ -20,6 +20,8 @@ namespace MiliraXian.Characters.Mingyuan
         public static HediffDef MX_Mingyuan_TimeBurnFrozen;
 
         public static ThingDef MX_Mingyuan_BurningPillarField;
+        public static ThingDef MX_Mingyuan_FireCastVisual;
+        public static JobDef MX_Mingyuan_ControlBurningPillar;
         public static ThingDef MX_Mingyuan_AshesField;
         public static ThingDef MX_Mingyuan_AscendantFlameDashFlyer;
         public static ThingDef MX_Mingyuan_AscendantFlameScorchController;

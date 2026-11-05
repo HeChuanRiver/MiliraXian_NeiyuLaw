@@ -4,6 +4,7 @@
   <ThingDef ParentName="PawnFlyerBase">
     <defName>MX_Mingyuan_AscendantFlameDashFlyer</defName>
     <label>明渊·升焰疾行载体</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.PawnFlyer_MingyuanAscendantFlameDash</thingClass>
     <pawnFlyer>
       <flightDurationMin>0.10</flightDurationMin>
       <flightSpeed>160</flightSpeed>
@@ -21,16 +22,19 @@
   <ThingDef ParentName="EtherealThingBase">
     <defName>MX_Mingyuan_AscendantFlameScorchController</defName>
     <label>明渊·升焰灼痕</label>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>true</drawOffscreen>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanAscendantFlameScorch</thingClass>
     <selectable>false</selectable>
     <tickerType>Normal</tickerType>
     <passability>Standable</passability>
     <comps>
       <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanAscendantFlameScorch">
-        <durationTicks>300</durationTicks>
+        <durationTicks>900</durationTicks>
         <pulseIntervalTicks>60</pulseIntervalTicks>
-        <lifeBurnLayers>6</lifeBurnLayers>
-        <scaleWithOverburn>true</scaleWithOverburn>
+        <burnDamagePerSecond>10</burnDamagePerSecond>
+        <igniteChancePerSecond>0.30</igniteChancePerSecond>
+        <lifeBurnFractionPerSecond>0.15</lifeBurnFractionPerSecond>
       </li>
     </comps>
   </ThingDef>

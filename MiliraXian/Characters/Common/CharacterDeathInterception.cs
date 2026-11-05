@@ -13,6 +13,9 @@ namespace MiliraXian.Characters.Common
     {
         private static readonly HashSet<Pawn> intercepting = new();
 
+        private static void Postfix(Pawn __instance, DamageInfo? dinfo) =>
+            MingyuanUtility.NotifyPillarDeath(__instance, dinfo);
+
         [HarmonyPriority(Priority.High)]
         private static bool Prefix(Pawn __instance)
         {

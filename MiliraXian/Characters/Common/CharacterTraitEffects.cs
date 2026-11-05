@@ -7,8 +7,7 @@ using Verse;
 namespace MiliraXian.Characters.Common
 {
     /// <summary>
-    /// Ongoing effects a character trait confers on its bearer. CharacterLib decides which
-    /// traits a pawn carries; what those traits do is gameplay and belongs here.
+    /// Eligibility and ongoing effects for character traits.
     /// </summary>
     public class CharacterTraitExtension : DefModExtension
     {
@@ -20,6 +19,7 @@ namespace MiliraXian.Characters.Common
         public float diseaseTendQuality = -1f;
         public float fixedTendQuality = -1f;
         public float entityDamageFactor = 1f;
+        public PawnKindDef requiredPawnKind;
         public HediffDef grantedHediff;
         /// <summary>Skills whose negative gene aptitude the bearer ignores.</summary>
         public List<SkillDef> ignoreNegativeAptitudes = new();
@@ -39,6 +39,9 @@ namespace MiliraXian.Characters.Common
         // The value is the actual Def extension, so power-profile changes take effect immediately.
         internal static CharacterTraitExtension For(TraitDef trait) =>
             trait != null && traits.TryGetValue(trait, out var rule) ? rule : null;
+
+        internal static bool CanGain(Pawn pawn, TraitDef trait) =>
+            For(trait)?.requiredPawnKind is not { } kind || pawn?.kindDef == kind;
 
         internal static bool Grants(Pawn pawn, HediffDef hediff)
         {
@@ -74,9 +77,28 @@ namespace MiliraXian.Characters.Common
         }
     }
 
+    [HarmonyPatch(typeof(TraitSet), nameof(TraitSet.GainTrait))]
+    internal static class Patch_CharacterTraitGain
+    {
+        private static bool Prefix(Pawn ___pawn, Trait trait) => CharacterTraitEffects.CanGain(___pawn, trait.def);
+    }
+
+    // A forced scenario trait removes an existing trait before calling GainTrait.
+    [HarmonyPatch(typeof(ScenPart_ForcedTrait), "ModifyPawnPostGenerate")]
+    internal static class Patch_CharacterTraitScenario
+    {
+        private static bool Prefix(Pawn pawn, TraitDef ___trait) => CharacterTraitEffects.CanGain(pawn, ___trait);
+    }
+
     [HarmonyPatch(typeof(TraitSet), "RecacheTraits")]
     internal static class Patch_CharacterTraitState
     {
+        private static void Prefix(TraitSet __instance, Pawn ___pawn)
+        {
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+                __instance.allTraits.RemoveAll(trait => !CharacterTraitEffects.CanGain(___pawn, trait.def));
+        }
+
         private static void Postfix(Pawn ___pawn) => CharacterTraitEffects.SyncGrantedHediffs(___pawn);
     }
 

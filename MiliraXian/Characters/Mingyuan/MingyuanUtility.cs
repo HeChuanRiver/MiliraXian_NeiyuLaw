@@ -100,6 +100,20 @@ namespace MiliraXian.Characters.Mingyuan
             comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
         }
 
+        public static void AddLifeBurnFraction(Pawn target, Pawn instigator, float fraction, bool scaleWithOverburn = false)
+        {
+            AddLifeBurn(target, instigator, GetLifeBurnExecuteThreshold(target) * fraction,
+                scaleWithOverburn: scaleWithOverburn);
+        }
+
+        public static void DoubleLifeBurn(Pawn target, Pawn instigator, float capFraction)
+        {
+            float current = GetLifeBurnLayers(target);
+            if (current <= 0f) return;
+            float cap = GetLifeBurnExecuteThreshold(target) * capFraction;
+            AddLifeBurn(target, instigator, Mathf.Min(current, cap - current));
+        }
+
         public static bool TryTriggerLifeBurnBurst(Pawn target, Pawn instigator)
         {
             if (target?.health?.hediffSet == null
@@ -355,6 +369,49 @@ namespace MiliraXian.Characters.Mingyuan
                    && caster != null
                    && pawn != caster
                    && pawn.HostileTo(caster);
+        }
+
+        [System.ThreadStatic] private static Pawn pillarVictim;
+        [System.ThreadStatic] private static Pawn pillarCaster;
+        [System.ThreadStatic] private static bool pillarDeathConfirmed;
+
+        internal static bool IsPillarDeath(Pawn victim, DamageInfo? damage) =>
+            victim == pillarVictim && damage is { } info
+            && info.Instigator == pillarCaster && info.Def == DamageDefOf.Burn;
+
+        internal static void NotifyPillarDeath(Pawn victim, DamageInfo? damage)
+        {
+            if (victim.Dead && IsPillarDeath(victim, damage)) pillarDeathConfirmed = true;
+        }
+
+        internal static bool ApplyPillarDamage(Pawn victim, Pawn caster, float amount)
+        {
+            if (victim.Dead || victim.Destroyed || amount <= 0f) return false;
+            Pawn previousVictim = pillarVictim;
+            Pawn previousCaster = pillarCaster;
+            bool previousDeathConfirmed = pillarDeathConfirmed;
+            bool killed;
+            Map map = victim.MapHeld;
+            IntVec3 cell = victim.PositionHeld;
+            bool hasLifeBurn = victim.health.hediffSet.GetFirstHediffOfDef(LifeBurnDef) is HediffWithComps hediff
+                && hediff.GetComp<HediffComp_MingyuanLifeBurn>() != null;
+            try
+            {
+                pillarVictim = victim;
+                pillarCaster = caster;
+                pillarDeathConfirmed = false;
+                ApplyTrueDamage(victim, DamageDefOf.Burn, amount, caster, scaleWithSelfBurn: true);
+                killed = pillarDeathConfirmed;
+            }
+            finally
+            {
+                pillarVictim = previousVictim;
+                pillarCaster = previousCaster;
+                pillarDeathConfirmed = previousDeathConfirmed;
+            }
+            if (!killed) return false;
+            if (!hasLifeBurn) HediffComp_MingyuanLifeBurn.SpawnBurstMote(map, cell);
+            return true;
         }
 
         public static DamageWorker.DamageResult ApplyTrueDamage(Thing target, DamageDef damageDef, float amount, Pawn instigator = null, BodyPartRecord hitPart = null, bool scaleWithSelfBurn = false)

@@ -53,7 +53,7 @@
     <drawOffscreen>false</drawOffscreen>
     <mote>
       <fadeInTime>0.06</fadeInTime>
-      <solidTime>0.50</solidTime>
+      <solidTime>0.16</solidTime>
       <fadeOutTime>0.34</fadeOutTime>
     </mote>
   </ThingDef>

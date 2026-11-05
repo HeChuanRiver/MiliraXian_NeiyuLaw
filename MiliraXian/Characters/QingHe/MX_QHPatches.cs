@@ -460,20 +460,6 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        [HarmonyPatch(typeof(Pawn_DrawTracker), "DrawPos", MethodType.Getter)]
-        public static class Patch_PawnDrawTracker_DrawPos
-        {
-            public static void Postfix(Pawn ___pawn, ref Vector3 __result)
-            {
-                if (___pawn == null || ___pawn.Destroyed || !___pawn.Spawned)
-                {
-                    return;
-                }
-
-                CompAbilityEffect_AscentSlash.ApplyActiveActionDrawPos(___pawn, ref __result);
-            }
-        }
-
         public struct DamageHediffState
         {
             public HediffComp_FlowingForm FlowingForm;

@@ -61,39 +61,8 @@ namespace MiliraXian.Characters.Mingyuan
             p.Field(Thing("MX_Bullet_Mingyuan_RainbowArrow").projectile, "armorPenetrationBase", .1f);
 
             p.Ability("MX_Mingyuan_AscendantFlameDash", 2500, 24f);
-            var dash = AbilityComp<CompProperties_AbilityMingyuanAscendantFlameDash>("MX_Mingyuan_AscendantFlameDash");
-            p.Field(dash, "maxDistance", 24f);
-            p.Field(dash, "pathDamage", 0f);
-            p.Field(dash, "lifeBurnLayers", 0f);
-            p.Field(dash, "selfLifeBurnLayers", 0f);
-            p.Field(dash, "stunTicks", 0);
-            var scorch = ThingComp<CompProperties_MingyuanAscendantFlameScorch>("MX_Mingyuan_AscendantFlameScorchController");
-            p.Field(scorch, "durationTicks", 0);
-            p.Field(scorch, "pulseIntervalTicks", 120);
-            p.Field(scorch, "lifeBurnLayers", 0f);
-
             p.Ability("MX_Mingyuan_InstantCombustion", 30000, 8f);
-            var flash = AbilityComp<CompProperties_AbilityMingyuanInstantCombustion>("MX_Mingyuan_InstantCombustion");
-            p.Field(flash, "radius", 0f);
-            p.Field(flash, "partDamage", 0f);
-            p.Field(flash, "stunTicks", 0);
-            p.Field(flash, "minimumLifeBurnLayers", 0f);
-
             p.Ability("MX_Mingyuan_BurningPillar", 45000, 25f);
-            var pillar = ThingComp<CompProperties_MingyuanBurningPillarTornado>("MX_Mingyuan_BurningPillarField");
-            p.Field(pillar, "maxRadius", 0f);
-            p.Field(pillar, "durationTicks", 0);
-            p.Field(pillar, "radiusGrowTicks", 180);
-            p.Field(pillar, "controlUnlockTicks", 180);
-            p.Field(pillar, "coreGrowTicks", 300);
-            p.Field(pillar, "initialHitPoints", 1);
-            p.Field(pillar, "maxHitPoints", 1);
-            p.Field(pillar, "pulseIntervalTicks", 120);
-            p.Field(pillar, "centerBurnDamage", 0f);
-            p.Field(pillar, "edgeBurnDamage", 0f);
-            p.Field(pillar, "centerCutDamage", 0f);
-            p.Field(pillar, "edgeCutDamage", 0f);
-            p.Field(pillar, "buildingDamageFraction", 0f);
 
             p.Ability("MX_Mingyuan_TimeBurn", 45000, 25f);
             p.Field(AbilityDef("MX_Mingyuan_TimeBurn").verbProperties, "warmupTime", 3f);

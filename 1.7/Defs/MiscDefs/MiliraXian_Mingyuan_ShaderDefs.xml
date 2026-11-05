@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <ShaderDef>
+        <defName>MX_Mingyuan_FireStages</defName>
+        <shaderProgram>
+            <vertexShaderFileName>MX_Mingyuan_FireStages.vert.glsl</vertexShaderFileName>
+            <fragmentShaderFileName>MX_Mingyuan_FireStages.frag.glsl</fragmentShaderFileName>
+            <flipTextureST>false</flipTextureST>
+            <blendMode>Custom</blendMode>
+            <blendSrcFactor>One</blendSrcFactor>
+            <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+            <transparent>true</transparent>
+            <depthWrite>false</depthWrite>
+            <cullMode>None</cullMode>
+            <renderQueue>3198</renderQueue>
+            <textureWrapOverrides><li><key>_MainTex</key><value>Clamp</value></li></textureWrapOverrides>
+        </shaderProgram>
+    </ShaderDef>
+</Defs>

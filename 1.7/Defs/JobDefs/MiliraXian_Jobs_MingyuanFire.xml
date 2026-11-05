@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <JobDef ParentName="CastAbilityOnThing">
+        <defName>MX_Mingyuan_CastInstantCombustion</defName>
+        <driverClass>MiliraXian.Characters.Mingyuan.JobDriver_MingyuanCombustion</driverClass>
+        <tryStartFlying>false</tryStartFlying>
+    </JobDef>
+    <JobDef>
+        <defName>MX_Mingyuan_ControlBurningPillar</defName>
+        <driverClass>MiliraXian.Characters.Mingyuan.JobDriver_MingyuanControlPillar</driverClass>
+        <reportString>掐诀引导燃烧之柱。</reportString>
+        <neverShowWeapon>true</neverShowWeapon>
+        <casualInterruptible>false</casualInterruptible>
+    </JobDef>
+</Defs>
