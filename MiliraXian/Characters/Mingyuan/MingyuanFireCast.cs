@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -212,10 +213,34 @@ public class CompAbilityEffect_MingyuanBurningPillar : CompAbilityEffect_Mingyua
     internal static bool CanLand(IntVec3 cell, Map map) =>
         CanOccupy(cell, map) && cell.GetFirstBuilding(map) == null;
 
-    internal static bool CanOccupy(IntVec3 cell, Map map) =>
-        map != null && cell.InBounds(map) && cell.Standable(map)
-        && cell.GetEdifice(map) is not Building_Door { Open: false }
-        && cell.GetFirstBuilding(map) is not Thing_MingyuanBurningPillarField;
+    internal static bool CanOccupy(IntVec3 cell, Map map)
+    {
+        if (map == null || !cell.InBounds(map) || !cell.Walkable(map)
+            || cell.GetEdifice(map) is Building_Door { Open: false }
+            || cell.GetFirstBuilding(map) is Thing_MingyuanBurningPillarField)
+            return false;
+
+        // Stone chunks allow passage but fail the vanilla Standable check.
+        foreach (Thing thing in cell.GetThingList(map))
+            if (thing.def.passability != Traversability.Standable && !IsLooseStoneChunk(thing.def))
+                return false;
+
+        return true;
+    }
+
+    internal static bool IsLooseStoneChunk(ThingDef def) =>
+        def.category == ThingCategory.Item && def.IsWithinCategory(ThingCategoryDefOf.StoneChunks);
+}
+
+[HarmonyPatch(typeof(Projectile), "CanHit")]
+internal static class Patch_MingyuanPillarCrystal_CanHit
+{
+    private static void Postfix(Projectile __instance, Thing thing, ref bool __result)
+    {
+        if (__result && __instance is Projectile_MingyuanPillarCrystal
+            && CompAbilityEffect_MingyuanBurningPillar.IsLooseStoneChunk(thing.def))
+            __result = false;
+    }
 }
 
 public class Projectile_MingyuanPillarCrystal : Projectile
