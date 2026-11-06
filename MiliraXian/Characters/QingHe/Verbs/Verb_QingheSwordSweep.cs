@@ -197,8 +197,9 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         /// <summary>
         /// During this verb's own warmup a target that has walked out of touch still counts as in
-        /// reach while one step brings Qinghe back to it: the long windup would otherwise drop the
-        /// attack against anything that moves. Starting an attack still needs touch, as in vanilla.
+        /// reach while Qinghe can land next to it within <see cref="QingheSwordGuardDef.chaseRange"/>:
+        /// the long windup would otherwise drop the attack against anything that moves. Starting an
+        /// attack still needs touch, as in vanilla.
         /// </summary>
         public override bool CanHitTargetFrom(IntVec3 root, LocalTargetInfo targ)
         {
@@ -212,8 +213,10 @@ namespace MiliraXian.Characters.QingHe.Verbs
         }
 
         /// <summary>
-        /// A cell next to <paramref name="root"/> Qinghe can step into and touch the target from: standable,
-        /// no door, no other pawn, no wall corner cut on a diagonal. The one nearest the target wins.
+        /// A cell next to the target, within <see cref="QingheSwordGuardDef.chaseRange"/> of
+        /// <paramref name="root"/>, Qinghe can land on and touch the target from: standable, no door, no
+        /// other pawn, in her sight with nothing in between (no wall corner cut on a one-cell diagonal).
+        /// The nearest to her wins (the shortest move), then the nearest to the target.
         /// </summary>
         private bool TryFindStepCell(IntVec3 root, Thing target, out IntVec3 cell)
         {
@@ -224,16 +227,21 @@ namespace MiliraXian.Characters.QingHe.Verbs
             {
                 return false;
             }
+            float range = Mathf.Max(1.5f, QingheSwordGuard.Config.chaseRange);
+            if (root.DistanceToSquared(target.Position) > (range + 1.5f) * (range + 1.5f))
+            {
+                return false;
+            }
             Vector3 aimAt = target.DrawPos;
             float best = float.MaxValue;
-            for (int i = 0; i < 8; i++)
+            foreach (IntVec3 c in GenAdj.CellsAdjacent8Way(target))
             {
-                IntVec3 c = root + GenAdj.AdjacentCells[i];
-                if (!c.InBounds(map) || !c.Standable(map) || c.GetDoor(map) != null)
+                float move = root.DistanceToSquared(c);
+                if (c == root || move > range * range || !c.InBounds(map) || !c.Standable(map) || c.GetDoor(map) != null)
                 {
                     continue;
                 }
-                if (c.x != root.x && c.z != root.z
+                if (c.x != root.x && c.z != root.z && Mathf.Abs(c.x - root.x) <= 1 && Mathf.Abs(c.z - root.z) <= 1
                     && (!new IntVec3(c.x, 0, root.z).Walkable(map) || !new IntVec3(root.x, 0, c.z).Walkable(map)))
                 {
                     continue;
@@ -243,11 +251,12 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 {
                     continue;
                 }
-                if (!ReachabilityImmediate.CanReachImmediate(c, target, map, PathEndMode.Touch, pawn))
+                if (!ReachabilityImmediate.CanReachImmediate(c, target, map, PathEndMode.Touch, pawn)
+                    || !GenSight.LineOfSight(root, c, map))
                 {
                     continue;
                 }
-                float d = (c.ToVector3Shifted() - aimAt).sqrMagnitude;
+                float d = move * 4f + (c.ToVector3Shifted() - aimAt).sqrMagnitude;
                 if (d < best)
                 {
                     best = d;
@@ -413,8 +422,8 @@ namespace MiliraXian.Characters.QingHe.Verbs
             Vector3 center = pawn.DrawPos - BladeMotionPlayer.BodyOffset(pawn);
             center.y = 0f;
 
-            // The target walked off during the windup: one step back into touch. The drawn body
-            // slides after (vanilla tweening), so the sweep is centred on the new cell, not DrawPos.
+            // The target walked off during the windup: the draw carries her next to it (up to chaseRange).
+            // The drawn body slides after (vanilla tweening), so the sweep is centred on the new cell, not DrawPos.
             if (!pawn.CanReachImmediate(primary, PathEndMode.Touch) && TryFindStepCell(pawn.Position, primary, out IntVec3 step))
             {
                 pawn.Position = step;

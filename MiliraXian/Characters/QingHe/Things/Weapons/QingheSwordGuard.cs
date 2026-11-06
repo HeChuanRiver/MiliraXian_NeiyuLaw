@@ -38,6 +38,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public int parryTicks = 24;
         /// <summary>Melee cooldown after the counter's cut, before the next windup (guard and parry only).</summary>
         public int counterRecoveryTicks = 60;
+        /// <summary>
+        /// Cross-slash windup chase, cells: a target that walks out of touch during the windup is still
+        /// pursued while Qinghe can land next to it within this distance (in sight); the draw moves her there.
+        /// </summary>
+        public float chaseRange = 4f;
         /// <summary>Plain block of a projectile: posture to Qinghe.</summary>
         public float projectileBlockSelfPosture = 8f;
         /// <summary>A melee hit she did not turn aside, when the attack carries no posture of its own.</summary>

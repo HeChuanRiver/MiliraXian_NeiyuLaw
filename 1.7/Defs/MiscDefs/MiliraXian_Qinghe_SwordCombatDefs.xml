@@ -57,6 +57,11 @@
         <parryTicks>24</parryTicks>
         <!-- 反击斩完、回正之后再等 1 秒才能重新起手；期间只能普通防御和弹开，不能化解 -->
         <counterRecoveryTicks>60</counterRecoveryTicks>
+        <!--
+          十字斩举刀追击（格）：举刀 1.45 秒里目标走开时，只要清荷能在这个距离内落到它身旁（有视线、可站、能直线过去），
+          举刀就不取消，拔刀那一刻落到它身旁出刀（真实移动，身体沿途画过去）。起手仍要贴身。
+        -->
+        <chaseRange>4</chaseRange>
         <projectileBlockSelfPosture>8</projectileBlockSelfPosture>
         <!--
           清荷受到近战攻击时自己的架势。攻击带架势伤害（十字斩、化解反击）时按它算：普通格挡给 blockCarriedPostureShare（一半），
