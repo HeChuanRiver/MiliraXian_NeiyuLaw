@@ -1688,16 +1688,10 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool HasActiveWaveEnemies()
         {
-            for (int index = 0; index < wavePawns.Count; index++)
+            foreach (Pawn pawn in wavePawns)
             {
-                Pawn pawn = wavePawns[index];
-                if (pawn != null
-                    && !pawn.Dead
-                    && !pawn.Destroyed
-                    && pawn.Spawned
-                    && pawn.MapHeld == targetMap
-                    && pawn.Faction != null
-                    && pawn.Faction.HostileTo(Faction.OfPlayer))
+                if (pawn is { Dead: false, Spawned: true } && pawn.Map == targetMap
+                    && GenHostility.IsActiveThreatToPlayer(pawn, canBeFogged: true))
                 {
                     return true;
                 }
