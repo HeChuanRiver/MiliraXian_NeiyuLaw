@@ -139,7 +139,9 @@ namespace MiliraXian.Characters.Mingyuan
         public static bool TryScheduleRebirth(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return false;
-            if (pawn == null || pawn.Discarded || !pawn.Dead || !MingyuanUtility.IsMingyuan(pawn))
+            if (pawn == null || pawn.Discarded || !pawn.Dead
+                || (pawn.kindDef?.defName != MingyuanUtility.PawnKindDefName
+                    && !MingyuanUtility.HasHediff(pawn, MingyuanUtility.BurningBodyDef)))
             {
                 return false;
             }
@@ -167,10 +169,12 @@ namespace MiliraXian.Characters.Mingyuan
         private static void DoRebirthExplosion(Pawn pawn, Map map, IntVec3 cell)
         {
             if (MingyuanPowerBalance.Sealed) return;
-            MingyuanSkillVfx.Play(map, cell.ToVector3Shifted(), MingyuanSkillVisualKind.Rebirth, 8f);
-            GenExplosion.DoExplosion(cell, map, 8f, DamageDefOf.Bomb, pawn, 999, 999f);
+            const float radius = 4f;
+            MingyuanSkillVfx.Play(map, cell.ToVector3Shifted(), MingyuanSkillVisualKind.Rebirth, radius);
+            GenExplosion.DoExplosion(cell, map, radius, DamageDefOf.Bomb, pawn, 666, 999f,
+                ignoredThings: new List<Thing> { pawn });
 
-            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, 8f, true))
+            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(cell, map, radius, true))
             {
                 Pawn target = thing as Pawn;
                 if (target != null && target != pawn && !target.Dead && target.HostileTo(pawn))

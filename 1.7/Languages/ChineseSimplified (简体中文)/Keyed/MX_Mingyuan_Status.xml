@@ -19,13 +19,13 @@
   <MX_Mingyuan_SelfBurn_TipOverburnEffect>过燃：
 - 主动直接伤害 +{0}
 - 主动生命燃烧叠层 +{1}
-- 护盾储备不能由自燃补充</MX_Mingyuan_SelfBurn_TipOverburnEffect>
+- 免疫近战伤害，暂停自燃转化护焰</MX_Mingyuan_SelfBurn_TipOverburnEffect>
   <MX_Mingyuan_SelfBurn_TipRhythm>变化：
 - 征召：每 {0} tick +{1}，自然上限 {2}
-- 非征召：每 {3} tick -{4}，明渊保留 1 层
+- 非征召且未过燃：每 {3} tick -{4}，白焰征兆期间最低 1 层
 - 下次变化：{6} tick</MX_Mingyuan_SelfBurn_TipRhythm>
   <MX_Mingyuan_Shield_TipStatus>修复储备：{0}/{1}</MX_Mingyuan_Shield_TipStatus>
-  <MX_Mingyuan_Shield_TipRepair>每{1}秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的全部伤口与旧伤。下次检查：{0}秒后。</MX_Mingyuan_Shield_TipRepair>
+  <MX_Mingyuan_Shield_TipRepair>每 {1} 秒最多修复 3 个部位，优先恢复缺失部位。每处消耗 1 点储备。下次检查：{0} 秒后。</MX_Mingyuan_Shield_TipRepair>
   <MX_Mingyuan_Shield_TipRefill>自燃补盾检查：{0} 秒后。比例：{1} 自我燃烧 = 1 储备；每次最多消耗 {2}。补充冷却：{3} 秒。当前允许：{4}</MX_Mingyuan_Shield_TipRefill>
   <MX_Mingyuan_Shield_TipOverburnDrain>过燃流失：{0}。过燃时每 5 秒失去 {1} 储备。下次流失：{2} 秒后。</MX_Mingyuan_Shield_TipOverburnDrain>
   <MX_Mingyuan_BurningPillar_Inspect>半径：{0}&#10;核心稳定：{1}/{2}&#10;剩余：{3}秒&#10;控制：{4}&#10;建筑基础伤害：每次脉冲为最大生命值的{5}%</MX_Mingyuan_BurningPillar_Inspect>
@@ -38,16 +38,8 @@
   <MX_Mingyuan_BurningPillar_StopDesc>让燃烧核心停在当前位置。</MX_Mingyuan_BurningPillar_StopDesc>
   <MX_Mingyuan_BurningPillar_InvalidDestination>燃烧之柱目的地无效。</MX_Mingyuan_BurningPillar_InvalidDestination>
   <MX_Mingyuan_BurningPillar_NoValidCell>燃烧之柱没有可用放置格。</MX_Mingyuan_BurningPillar_NoValidCell>
-  <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊无法安全消耗 50% 血液点燃焚我余烬。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
+  <MX_Mingyuan_AshesOfSelf_InsufficientCost>明渊当前无法安全承受额外 15% 失血。</MX_Mingyuan_AshesOfSelf_InsufficientCost>
   <MX_Mingyuan_AshesField_Inspect>余烬领域：半径 {0}，灼伤 {1}，生命燃烧 +{2}，剩余 {3} 秒</MX_Mingyuan_AshesField_Inspect>
-  <MX_Mingyuan_Bow_ModeFocus>聚焦形态</MX_Mingyuan_Bow_ModeFocus>
-  <MX_Mingyuan_Bow_ModeRadiation>辐射形态</MX_Mingyuan_Bow_ModeRadiation>
-  <MX_Mingyuan_Bow_ModeCommand>长虹：{0}</MX_Mingyuan_Bow_ModeCommand>
-  <MX_Mingyuan_Bow_ModeDesc>当前：{0}。点击切换至{1}。
-聚焦：50格视线内选敌，蓄力{2}秒，消耗已有生命燃烧提高箭伤。
-散射：扫过{3}格、{4}°扇区，每{5}秒最多一次，附加生命燃烧。</MX_Mingyuan_Bow_ModeDesc>
-  <MX_Mingyuan_Bow_ModeBusy>长虹正在蓄力或结算，暂时不能切换形态。</MX_Mingyuan_Bow_ModeBusy>
-  <MX_Mingyuan_Bow_ModeInspect>当前形态：{0}</MX_Mingyuan_Bow_ModeInspect>
   <MX_Mingyuan_Bow_InvalidFocusTarget>聚焦形态只能选择视线内、可被生命燃烧影响的敌对单位。</MX_Mingyuan_Bow_InvalidFocusTarget>
   <MX_Mingyuan_SelfBurn_TipRelease>增益每满 10 层结算。过燃时每 10 秒消耗超出 300 的全部层数，在自身半径 5 格内爆炸，每层造成 1 点伤害。可伤及友军，不伤及明渊自身。距离下次释放：{0} 秒。</MX_Mingyuan_SelfBurn_TipRelease>
   <MX_Mingyuan_Rebirth_Countdown>距离重生：{0} 秒。</MX_Mingyuan_Rebirth_Countdown>

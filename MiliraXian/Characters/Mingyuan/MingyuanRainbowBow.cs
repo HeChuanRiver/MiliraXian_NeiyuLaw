@@ -2,593 +2,153 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.AI;
 using Verse.Sound;
 
 namespace MiliraXian.Characters.Mingyuan
 {
-    public enum MingyuanBowMode : byte
-    {
-        Focus,
-        Radiation
-    }
-
     public class CompProperties_MingyuanRainbowBow : CompProperties
     {
-        public string modeIconPath = "MiliraXianMingyuan/Items/RainbowBow";
-
-        public float focusWarmupSeconds = 2.5f;
-        public float focusRange = 50f;
         public float focusBaseDamage = 40f;
         public float focusDamagePerLayer = 0.6f;
         public float focusMaxDamage = 220f;
+        public float burstThresholdFraction = 0.60f;
+        public float focusLayerFraction = 0.29f;
         public SoundDef focusChargeSound;
         public SoundDef focusFireSound;
-        // Kept for Def/extension compatibility. Bow presentation now belongs to the
-        // saved mesh controller instead of independent flecks and maintained motes.
-        public FleckDef focusBeamFleck;
-        public ThingDef focusMuzzleFlashMote;
-        public float focusMuzzleFlashScale = 0.24f;
-        public ThingDef focusTargetMote;
-        public float focusTargetMoteScale = 0.92f;
-
-        public float radiationWarmupSeconds = 0.35f;
-        public float radiationRange = 10f;
-        public float radiationArcDegrees = 108f;
-        public int radiationMinIntervalTicks = 90;
-        public float radiationDamage = 1f;
-        public float radiationLayerFraction = 0.04f;
-        public float radiationBaseLayers = 50f;
-        public float radiationMaxLayers = 120f;
-        public SoundDef radiationWarmupSound;
-        public SoundDef radiationFireSound;
-        public ThingDef radiationHitMote;
-        public float radiationHitMoteScale = 0.42f;
-        public int radiationHitVisualLimit = 8;
-        public int radiationBlastTicks = 30;
-
         public ThingDef visualControllerDef;
 
-        public CompProperties_MingyuanRainbowBow()
-        {
-            compClass = typeof(CompEquippable_MingyuanRainbowBow);
-        }
+        public CompProperties_MingyuanRainbowBow() => compClass = typeof(CompEquippable_MingyuanRainbowBow);
 
-        public float FocusDamageFor(float layers)
-            => Mathf.Clamp(focusBaseDamage + Mathf.Max(0f, layers) * focusDamagePerLayer, 0f, focusMaxDamage);
-
-        public int RadiationLayersFor(float threshold)
-            => Mathf.Max(1, Mathf.CeilToInt(Mathf.Min(radiationMaxLayers,
-                radiationBaseLayers + Mathf.Max(0f, threshold) * radiationLayerFraction)));
+        public float FocusDamageFor(float layers) =>
+            Mathf.Clamp(focusBaseDamage + Mathf.Max(0f, layers) * focusDamagePerLayer, 0f, focusMaxDamage);
     }
 
     public class CompEquippable_MingyuanRainbowBow : CompEquippable
     {
-        private MingyuanBowMode mode;
-        private int lastRadiationShotTick = -999999;
-        private Texture2D cachedModeIcon;
-
         public CompProperties_MingyuanRainbowBow PropsBow => (CompProperties_MingyuanRainbowBow)props;
-
-        public MingyuanBowMode Mode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : mode;
-
-        public override void PostExposeData()
-        {
-            base.PostExposeData();
-            Scribe_Values.Look(ref mode, "mx_mingyuanBowMode", MingyuanBowMode.Focus);
-            Scribe_Values.Look(ref lastRadiationShotTick, "mx_mingyuanBowLastRadiationTick", -999999);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit
-                && mode != MingyuanBowMode.Focus
-                && mode != MingyuanBowMode.Radiation)
-            {
-                mode = MingyuanBowMode.Focus;
-            }
-        }
-
-        public override IEnumerable<Gizmo> CompGetEquippedGizmosExtra()
-        {
-            foreach (Gizmo gizmo in base.CompGetEquippedGizmosExtra())
-            {
-                yield return gizmo;
-            }
-
-            if (MingyuanPowerBalance.Sealed) yield break;
-            Pawn holder = Holder;
-            if (holder == null || holder.Faction != Faction.OfPlayer)
-            {
-                yield break;
-            }
-
-            MingyuanBowMode nextMode = mode == MingyuanBowMode.Focus
-                ? MingyuanBowMode.Radiation
-                : MingyuanBowMode.Focus;
-            bool busy = PrimaryVerb?.WarmingUp == true || PrimaryVerb?.Bursting == true;
-
-            Command_Action command = new()
-            {
-                defaultLabel = "MX_Mingyuan_Bow_ModeCommand".Translate(ModeLabel(mode)).ToString(),
-                defaultDesc = "MX_Mingyuan_Bow_ModeDesc".Translate(
-                    ModeLabel(mode), ModeLabel(nextMode), PropsBow.focusWarmupSeconds.ToString("0.##"),
-                    PropsBow.radiationRange.ToString("0.##"), PropsBow.radiationArcDegrees.ToString("0.##"),
-                    (PropsBow.radiationMinIntervalTicks / 60f).ToString("0.##")).ToString(),
-                icon = ModeIcon ?? TexCommand.Attack,
-                Disabled = busy,
-                disabledReason = busy ? "MX_Mingyuan_Bow_ModeBusy".Translate().ToString() : null,
-                action = delegate
-                {
-                    if (PrimaryVerb?.WarmingUp == true || PrimaryVerb?.Bursting == true)
-                    {
-                        return;
-                    }
-
-                    mode = nextMode;
-                }
-            };
-            yield return command;
-        }
-
-        public override string CompInspectStringExtra()
-        {
-            return "MX_Mingyuan_Bow_ModeInspect".Translate(ModeLabel(mode)).ToString();
-        }
-
-        public bool CanBeginRadiationShot()
-        {
-            int currentTick = Find.TickManager?.TicksGame ?? 0;
-            return currentTick - lastRadiationShotTick >= Mathf.Max(1, PropsBow.radiationMinIntervalTicks);
-        }
-
-        public bool TryBeginRadiationShot()
-        {
-            if (!CanBeginRadiationShot())
-            {
-                return false;
-            }
-
-            lastRadiationShotTick = Find.TickManager?.TicksGame ?? 0;
-            return true;
-        }
-
-        private Texture2D ModeIcon
-        {
-            get
-            {
-                if (cachedModeIcon == null && !PropsBow.modeIconPath.NullOrEmpty())
-                {
-                    cachedModeIcon = ContentFinder<Texture2D>.Get(PropsBow.modeIconPath, false);
-                }
-
-                return cachedModeIcon;
-            }
-        }
-
-        private static string ModeLabel(MingyuanBowMode value)
-        {
-            return (value == MingyuanBowMode.Focus
-                    ? "MX_Mingyuan_Bow_ModeFocus"
-                    : "MX_Mingyuan_Bow_ModeRadiation")
-                .Translate()
-                .ToString();
-        }
     }
 
     public class Verb_MingyuanRainbowBow : Verb
     {
-        private MingyuanBowMode modeAtCastStart;
-        private bool castModeLocked;
+        // Read the previous in-flight mode so a saved scatter order cannot fire as focus.
+        private enum LegacyCastMode : byte { Focus, Radiation }
+        private LegacyCastMode legacyCastMode;
         private bool automaticFocusTarget;
-        private Vector3 castDirection;
-        private readonly List<Pawn> radiationTargets = new(32);
-
-        private CompEquippable_MingyuanRainbowBow BowComp =>
-            EquipmentCompSource as CompEquippable_MingyuanRainbowBow;
-
-        private CompProperties_MingyuanRainbowBow PropsBow => BowComp?.PropsBow;
-
-        private MingyuanBowMode ActiveMode => MingyuanPowerBalance.Sealed ? MingyuanBowMode.Focus : castModeLocked && (WarmingUp || Bursting)
-            ? modeAtCastStart
-            : BowComp?.Mode ?? MingyuanBowMode.Focus;
-
-        public override float WarmupTime => ActiveMode == MingyuanBowMode.Focus
-            ? Mathf.Max(0f, PropsBow?.focusWarmupSeconds ?? 2.5f)
-            : Mathf.Max(0f, PropsBow?.radiationWarmupSeconds ?? 0.35f);
-
-        public override float EffectiveRange
-        {
-            get
-            {
-                if (ActiveMode == MingyuanBowMode.Radiation)
-                {
-                    return Mathf.Max(1f, PropsBow?.radiationRange ?? 10f);
-                }
-
-                return Mathf.Max(1f, PropsBow?.focusRange ?? 50f);
-            }
-        }
+        private CompProperties_MingyuanRainbowBow PropsBow =>
+            (EquipmentCompSource as CompEquippable_MingyuanRainbowBow)?.PropsBow;
 
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref modeAtCastStart, "mx_mingyuanBowCastMode", MingyuanBowMode.Focus);
-            Scribe_Values.Look(ref castModeLocked, "mx_mingyuanBowCastModeLocked", false);
-            Scribe_Values.Look(ref automaticFocusTarget, "mx_mingyuanBowAutomaticFocusTarget", false);
-            Scribe_Values.Look(ref castDirection, "mx_mingyuanBowCastDirection", Vector3.zero);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit && !WarmingUp && !Bursting)
+            Scribe_Values.Look(ref automaticFocusTarget, "mx_mingyuanBowAutomaticFocusTarget");
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+                Scribe_Values.Look(ref legacyCastMode, "mx_mingyuanBowCastMode", LegacyCastMode.Focus);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && legacyCastMode == LegacyCastMode.Radiation)
             {
-                castModeLocked = false;
-                automaticFocusTarget = false;
-                castDirection = Vector3.zero;
+                if (WarmupStance != null) CasterPawn.stances.CancelBusyStanceHard();
+                Reset();
             }
         }
 
-        public override bool Available()
+        public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false,
+            bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
         {
-            if (!base.Available())
-            {
-                return false;
-            }
-
-            return ActiveMode != MingyuanBowMode.Radiation || BowComp?.CanBeginRadiationShot() != false;
-        }
-
-        public override void OrderForceTarget(LocalTargetInfo target)
-        {
-            if (ActiveMode != MingyuanBowMode.Radiation)
-            {
-                base.OrderForceTarget(target);
-                return;
-            }
-
-            Pawn pawn = CasterPawn;
-            if (pawn?.jobs == null)
-            {
-                return;
-            }
-
-            float minimumRange = verbProps.EffectiveMinRange(target, pawn);
-            if (pawn.Position.DistanceToSquared(target.Cell) < minimumRange * minimumRange
-                && pawn.Position.AdjacentTo8WayOrInside(target.Cell))
-            {
-                Messages.Message("MessageCantShootInMelee".Translate(), pawn, MessageTypeDefOf.RejectInput, false);
-                return;
-            }
-
-            Job job = JobMaker.MakeJob(JobDefOf.AttackStatic, target);
-            job.verbToUse = this;
-            job.endIfCantShootInMelee = true;
-            job.maxNumStaticAttacks = 1;
-            pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-        }
-
-        public override bool TryStartCastOn(
-            LocalTargetInfo castTarg,
-            LocalTargetInfo destTarg,
-            bool surpriseAttack = false,
-            bool canHitNonTargetPawns = true,
-            bool preventFriendlyFire = false,
-            bool nonInterruptingSelfCast = false)
-        {
-            modeAtCastStart = BowComp?.Mode ?? MingyuanBowMode.Focus;
-            castModeLocked = true;
-            automaticFocusTarget = modeAtCastStart == MingyuanBowMode.Focus
-                                   && CasterPawn?.jobs?.curJob?.playerForced != true;
-
+            automaticFocusTarget = CasterPawn?.jobs?.curJob?.playerForced != true;
             if (automaticFocusTarget)
             {
-                Pawn bestTarget = TryFindBestFocusTarget();
-                if (bestTarget == null)
-                {
-                    castModeLocked = false;
-                    automaticFocusTarget = false;
-                    castDirection = Vector3.zero;
-                    return false;
-                }
-
-                castTarg = bestTarget;
+                Pawn best = TryFindBestFocusTarget();
+                if (best == null) return false;
+                castTarg = best;
             }
 
-            castDirection = DirectionTo(castTarg.Cell);
-
-            bool started = base.TryStartCastOn(
-                castTarg,
-                destTarg,
-                surpriseAttack,
-                canHitNonTargetPawns,
-                preventFriendlyFire,
-                nonInterruptingSelfCast);
-            if (!started)
-            {
-                castModeLocked = false;
-                automaticFocusTarget = false;
-                castDirection = Vector3.zero;
+            if (!base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
                 return false;
-            }
 
-            if (modeAtCastStart == MingyuanBowMode.Focus && WarmupStance != null)
+            if (WarmupStance != null)
             {
-                WarmupStance.ticksLeft = !MingyuanPowerBalance.Sealed ? 300 : Mathf.RoundToInt(WarmupTime * 60f);
-            }
-
-            Vector3 direction = castDirection;
-            int visualTicks = Mathf.Max(1, WarmupTicksLeft);
-            if (modeAtCastStart == MingyuanBowMode.Focus)
-            {
-                SpawnVisual(MingyuanBowVisualKind.FocusCharge, direction, visualTicks, this, castTarg.Pawn);
+                SpawnVisual(MingyuanBowVisualKind.FocusCharge, DirectionTo(castTarg.Cell), WarmupTicksLeft, this, castTarg.Pawn);
                 PlaySound(PropsBow?.focusChargeSound);
             }
-            else
-            {
-                SpawnVisual(MingyuanBowVisualKind.RadiationWarning, direction, visualTicks, this, null);
-                PlaySound(PropsBow?.radiationWarmupSound);
-            }
-
             return true;
         }
 
         public override bool CanHitTargetFrom(IntVec3 root, LocalTargetInfo target)
         {
             Map map = caster?.Map;
-            if (map == null || !target.IsValid || !target.Cell.IsValid || !target.Cell.InBounds(map))
-            {
-                return false;
-            }
-
-            if (target.HasThing && target.Thing.Map != map)
-            {
-                return false;
-            }
-
-            if (!base.CanHitTargetFrom(root, target))
-            {
-                return false;
-            }
-
-            if (ActiveMode == MingyuanBowMode.Radiation)
-            {
-                return target.Cell != root;
-            }
-
-            Pawn targetPawn = target.Pawn;
-            return IsValidFocusTarget(targetPawn)
-                   && GenSight.LineOfSightToThing(root, targetPawn, map, skipFirstCell: true);
+            Pawn pawn = target.Pawn;
+            return map != null && IsValidFocusTarget(pawn) && pawn.Map == map
+                && base.CanHitTargetFrom(root, target)
+                && GenSight.LineOfSightToThing(root, pawn, map, skipFirstCell: true);
         }
 
         public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
         {
-            if (!base.ValidateTarget(target, showMessages))
-            {
-                return false;
-            }
-
-            if (ActiveMode == MingyuanBowMode.Focus && !IsValidFocusTarget(target.Pawn))
-            {
-                if (showMessages)
-                {
-                    Messages.Message("MX_Mingyuan_Bow_InvalidFocusTarget".Translate(), MessageTypeDefOf.RejectInput, false);
-                }
-
-                return false;
-            }
-
-            return CanHitTargetFrom(caster.Position, target);
+            if (!base.ValidateTarget(target, showMessages)) return false;
+            if (IsValidFocusTarget(target.Pawn)) return CanHitTargetFrom(caster.Position, target);
+            if (showMessages)
+                Messages.Message("MX_Mingyuan_Bow_InvalidFocusTarget".Translate(), MessageTypeDefOf.RejectInput, false);
+            return false;
         }
 
         public override void DrawHighlight(LocalTargetInfo target)
         {
-            if (caster == null || !caster.Spawned || !target.IsValid)
-            {
-                return;
-            }
-
+            if (caster?.Spawned != true || !target.IsValid) return;
             GenDraw.DrawTargetHighlight(target);
-            Vector3 direction = DirectionTo(target.Cell);
-            if (ActiveMode == MingyuanBowMode.Radiation)
-            {
-                MingyuanBowVisualDrawer.DrawSectorWarning(
-                    caster.DrawPos,
-                    direction,
-                    EffectiveRange,
-                    PropsBow?.radiationArcDegrees ?? 108f,
-                    0.9f);
-            }
-            else
-            {
-                MingyuanBowVisualDrawer.DrawFocusAim(caster.DrawPos, target.CenterVector3, direction);
-            }
+            MingyuanBowVisualDrawer.DrawFocusAim(caster.DrawPos, target.CenterVector3, DirectionTo(target.Cell));
         }
 
         public override void Reset()
         {
             base.Reset();
-            castModeLocked = false;
             automaticFocusTarget = false;
-            castDirection = Vector3.zero;
         }
 
         protected override bool TryCastShot()
         {
-            bool result = (MingyuanPowerBalance.Sealed || modeAtCastStart == MingyuanBowMode.Focus)
-                ? TryCastFocusShot()
-                : TryCastRadiationShot();
-            if (result)
-            {
-                lastShotTick = Find.TickManager?.TicksGame ?? lastShotTick;
-            }
-            castModeLocked = false;
-            castDirection = Vector3.zero;
-            return result;
-        }
-
-        private bool TryCastFocusShot()
-        {
+            if (PropsBow is not { } bow || CasterPawn?.Spawned != true) return false;
             Pawn target = currentTarget.Pawn;
             if (!CanResolveFocusTarget(target))
             {
-                if (!automaticFocusTarget)
-                {
-                    return false;
-                }
-
+                if (!automaticFocusTarget) return false;
                 target = TryFindBestFocusTarget();
-                if (target == null)
-                {
-                    return false;
-                }
-
+                if (target == null) return false;
                 currentTarget = target;
             }
 
             Vector3 targetPosition = target.DrawPos;
             Vector3 direction = DirectionTo(target.Position);
-            if (!MingyuanPowerBalance.Sealed)
-            {
-                float layers = MingyuanUtility.ConsumeLifeBurn(target);
-                MingyuanUtility.ApplyTrueDamage(target, MingyuanPowerBalance.ArrowDamage,
-                    PropsBow.FocusDamageFor(layers), CasterPawn);
-            }
-
+            Pawn shooter = CasterPawn;
             if (MingyuanPowerBalance.Sealed)
             {
-                // Only tier three substitutes an ordinary low-power shot for the burst.
-                ShotReport report = ShotReport.HitReportFor(CasterPawn, this, target);
+                ShotReport report = ShotReport.HitReportFor(shooter, this, target);
                 if (Rand.Chance(report.AimOnTargetChance_IgnoringPosture * report.PassCoverChance))
+                    MingyuanUtility.ApplyDamageWithoutLifeBurn(target, new DamageInfo(MingyuanPowerBalance.ArrowDamage,
+                        bow.focusBaseDamage, 0.1f, -1f, shooter, weapon: EquipmentSource?.def));
+            }
+            else
+            {
+                float layers = MingyuanUtility.GetLifeBurnLayers(target);
+                float threshold = MingyuanUtility.GetLifeBurnExecuteThreshold(target);
+                if (layers >= threshold * bow.burstThresholdFraction)
                 {
-                    float amount = 17f;
-                    bool suppression = MingyuanUtility.SuppressOnHitLifeBurn;
-                    try
+                    MingyuanUtility.TryTriggerLifeBurnBurst(target, shooter);
+                }
+                else
+                {
+                    float factor = EquipmentSource?.GetStatValue(StatDefOf.RangedWeapon_DamageMultiplier) ?? 1f;
+                    MingyuanUtility.ApplyTrueDamage(target, MingyuanPowerBalance.ArrowDamage, bow.FocusDamageFor(layers) * factor, shooter);
+                    if (!target.Dead && !target.Destroyed)
                     {
-                        MingyuanUtility.SuppressOnHitLifeBurn = true;
-                        target.TakeDamage(new DamageInfo(MingyuanPowerBalance.ArrowDamage, amount, .1f,
-                            -1f, CasterPawn, null, EquipmentSource?.def));
+                        MingyuanUtility.ConsumeLifeBurn(target, layers);
+                        MingyuanUtility.AddLifeBurn(target, shooter, threshold * bow.focusLayerFraction, scaleWithOverburn: true);
                     }
-                    finally { MingyuanUtility.SuppressOnHitLifeBurn = suppression; }
                 }
             }
 
-            // Visual flight only: focus damage has already resolved above.
             SpawnVisual(MingyuanBowVisualKind.FocusShot, direction, 24, null, null, targetPosition);
-            PlaySound(PropsBow?.focusFireSound);
+            PlaySound(bow.focusFireSound);
+            lastShotTick = Find.TickManager.TicksGame;
             return true;
-        }
-
-        private bool TryCastRadiationShot()
-        {
-            if (BowComp == null || !BowComp.TryBeginRadiationShot() || CasterPawn?.Map == null)
-            {
-                return false;
-            }
-
-            Vector3 direction = castDirection;
-            if (direction.sqrMagnitude < 0.001f)
-            {
-                return false;
-            }
-
-            Map map = CasterPawn.Map;
-            Vector3 logicalOrigin = CasterPawn.Position.ToVector3Shifted();
-            float range = Mathf.Max(1f, PropsBow.radiationRange);
-            float rangeSquared = range * range;
-            float halfAngle = Mathf.Clamp(PropsBow.radiationArcDegrees * 0.5f, 1f, 179f);
-            float minimumDot = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
-            int hitVisuals = 0;
-            IntVec3 center = CasterPawn.Position;
-            int radialCellCount = GenRadial.NumCellsInRadius(range);
-            radiationTargets.Clear();
-
-            for (int cellIndex = 0; cellIndex < radialCellCount; cellIndex++)
-            {
-                IntVec3 cell = center + GenRadial.RadialPattern[cellIndex];
-                if (!cell.InBounds(map))
-                {
-                    continue;
-                }
-
-                List<Thing> things = cell.GetThingList(map);
-                for (int thingIndex = 0; thingIndex < things.Count; thingIndex++)
-                {
-                    Pawn target = things[thingIndex] as Pawn;
-                    if (target == null || target.Position != cell || !IsHostileEnemy(target))
-                    {
-                        continue;
-                    }
-
-                    Vector3 offset = target.Position.ToVector3Shifted() - logicalOrigin;
-                    offset.y = 0f;
-                    float distanceSquared = offset.sqrMagnitude;
-                    if (distanceSquared <= 0.001f || distanceSquared > rangeSquared)
-                    {
-                        continue;
-                    }
-
-                    float dot = Vector3.Dot(direction, offset) / Mathf.Sqrt(distanceSquared);
-                    if (dot + 0.0001f >= minimumDot)
-                    {
-                        radiationTargets.Add(target);
-                    }
-                }
-            }
-
-            try
-            {
-                for (int i = 0; i < radiationTargets.Count; i++)
-                {
-                    Pawn target = radiationTargets[i];
-                    Vector3 hitPosition = target.DrawPos;
-                    ApplyRadiationHit(target);
-                    if (hitVisuals < Mathf.Max(0, PropsBow.radiationHitVisualLimit))
-                    {
-                        SpawnVisual(MingyuanBowVisualKind.RadiationHit, direction, 18, null, null, hitPosition);
-                        hitVisuals++;
-                    }
-                }
-            }
-            finally
-            {
-                radiationTargets.Clear();
-            }
-
-            SpawnVisual(
-                MingyuanBowVisualKind.RadiationBlast,
-                direction,
-                Mathf.Max(1, PropsBow.radiationBlastTicks),
-                null,
-                null);
-            PlaySound(PropsBow.radiationFireSound);
-            return true;
-        }
-
-        private void ApplyRadiationHit(Pawn target)
-        {
-            if (MingyuanPowerBalance.Sealed) return;
-            float threshold = MingyuanUtility.GetLifeBurnExecuteThreshold(target);
-            int layers = PropsBow.RadiationLayersFor(threshold);
-            MingyuanUtility.AddLifeBurn(target, CasterPawn, layers);
-
-            float damage = Mathf.Max(0f, PropsBow.radiationDamage);
-            if (damage <= 0f || target.Dead)
-            {
-                return;
-            }
-
-            DamageInfo damageInfo = new(
-                DamageDefOf.Burn,
-                damage,
-                0f,
-                -1f,
-                CasterPawn,
-                null,
-                EquipmentSource?.def,
-                intendedTarget: target);
-            bool previousSuppression = MingyuanUtility.SuppressOnHitLifeBurn;
-            try
-            {
-                MingyuanUtility.SuppressOnHitLifeBurn = true;
-                target.TakeDamage(damageInfo);
-            }
-            finally
-            {
-                MingyuanUtility.SuppressOnHitLifeBurn = previousSuppression;
-            }
         }
 
         private Pawn TryFindBestFocusTarget()
@@ -652,13 +212,12 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool IsHostileEnemy(Pawn target)
         {
-            Pawn hostilePawn;
             return target != null
                    && target.Spawned
                    && !target.Destroyed
                    && !target.Dead
                    && !target.IsPsychologicallyInvisible()
-                   && MingyuanUtility.IsHostilePawn(target, CasterPawn, out hostilePawn);
+                   && MingyuanUtility.IsHostilePawn(target, CasterPawn, out _);
         }
 
         private Vector3 DirectionTo(IntVec3 targetCell)
@@ -674,55 +233,31 @@ namespace MiliraXian.Characters.Mingyuan
             return direction.normalized;
         }
 
-        private void SpawnVisual(
-            MingyuanBowVisualKind kind,
-            Vector3 direction,
-            int durationTicks,
-            Verb sourceVerb,
-            Pawn focusTarget,
-            Vector3? shotEnd = null)
+        private void SpawnVisual(MingyuanBowVisualKind kind, Vector3 direction, int duration, Verb sourceVerb,
+            Pawn focusTarget, Vector3? shotEnd = null)
         {
             ThingDef visualDef = PropsBow?.visualControllerDef;
             Pawn source = CasterPawn;
-            if (visualDef == null || source?.Map == null || !source.Spawned)
-            {
-                return;
-            }
+            if (visualDef == null || source?.Spawned != true) return;
 
-            Thing_MingyuanBowVisual visual = ThingMaker.MakeThing(visualDef) as Thing_MingyuanBowVisual;
-            if (visual == null)
-            {
-                return;
-            }
-
-            GenSpawn.Spawn(visual, source.Position, source.Map, WipeMode.Vanish);
-            visual.Init(
-                source,
-                sourceVerb,
-                kind,
-                direction,
-                durationTicks,
-                PropsBow.radiationRange,
-                PropsBow.radiationArcDegrees,
-                focusTarget,
-                PropsBow.focusTargetMote,
-                PropsBow.focusTargetMoteScale);
-            if (shotEnd.HasValue)
-                visual.SetShotPath(MingyuanBowVisualDrawer.EmitterPosition(source.DrawPos, direction), shotEnd.Value);
+            var visual = (Thing_MingyuanBowVisual)ThingMaker.MakeThing(visualDef);
+            visual.Init(source, sourceVerb, kind, direction, duration, focusTarget);
+            if (shotEnd is { } end)
+                visual.SetShotPath(MingyuanBowVisualDrawer.EmitterPosition(source.DrawPos, direction), end);
+            GenSpawn.Spawn(visual, source.Position, source.Map);
         }
 
         private void PlaySound(SoundDef soundDef)
         {
-            if (soundDef != null && CasterPawn?.Map != null)
-            {
-                soundDef.PlayOneShot(new TargetInfo(CasterPawn.Position, CasterPawn.Map));
-            }
+            if (soundDef != null && CasterPawn?.Map is { } map)
+                soundDef.PlayOneShot(new TargetInfo(CasterPawn.Position, map));
         }
     }
 
     public enum MingyuanBowVisualKind : byte
     {
         FocusCharge,
+        // Serialized names and ordinals for retiring visuals from old saves.
         RadiationWarning,
         RadiationBlast,
         FocusShot,
@@ -734,16 +269,17 @@ namespace MiliraXian.Characters.Mingyuan
         private Pawn source;
         private Verb sourceVerb;
         private Pawn focusTarget;
-        private ThingDef focusTargetMoteDef;
-        private float focusTargetMoteScale = 0.92f;
         private MingyuanBowVisualKind kind;
         private Vector3 direction;
         private int startTick;
         private int durationTicks;
-        private float range;
-        private float arcDegrees;
         private Vector3 shotStart;
         private Vector3 shotEnd;
+
+        private bool WarmupValid => source is { Spawned: true, Dead: false } && source.Map == Map
+            && focusTarget is { Spawned: true, Dead: false } && focusTarget.Map == Map
+            && sourceVerb?.WarmingUp == true;
+        private int Age => Find.TickManager.TicksGame - startTick;
 
         public void SetShotPath(Vector3 start, Vector3 end)
         {
@@ -757,125 +293,47 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_References.Look(ref source, "source");
             Scribe_References.Look(ref sourceVerb, "sourceVerb");
             Scribe_References.Look(ref focusTarget, "focusTarget");
-            Scribe_Defs.Look(ref focusTargetMoteDef, "focusTargetMoteDef");
-            Scribe_Values.Look(ref focusTargetMoteScale, "focusTargetMoteScale", 0.92f);
             Scribe_Values.Look(ref kind, "kind", MingyuanBowVisualKind.FocusCharge);
-            Scribe_Values.Look(ref direction, "direction", Vector3.zero);
+            Scribe_Values.Look(ref direction, "direction");
             Scribe_Values.Look(ref startTick, "startTick");
             Scribe_Values.Look(ref durationTicks, "durationTicks", 1);
-            Scribe_Values.Look(ref range, "range", 1f);
-            Scribe_Values.Look(ref arcDegrees, "arcDegrees", 108f);
-            Scribe_Values.Look(ref shotStart, "shotStart", Vector3.zero);
-            Scribe_Values.Look(ref shotEnd, "shotEnd", Vector3.zero);
+            Scribe_Values.Look(ref shotStart, "shotStart");
+            Scribe_Values.Look(ref shotEnd, "shotEnd");
         }
 
-        public void Init(
-            Pawn newSource,
-            Verb newSourceVerb,
-            MingyuanBowVisualKind newKind,
-            Vector3 newDirection,
-            int newDurationTicks,
-            float newRange,
-            float newArcDegrees,
-            Pawn newFocusTarget,
-            ThingDef newFocusTargetMoteDef,
-            float newFocusTargetMoteScale)
+        internal void Init(Pawn newSource, Verb verb, MingyuanBowVisualKind visualKind, Vector3 aim, int duration, Pawn target)
         {
             source = newSource;
-            sourceVerb = newSourceVerb;
-            focusTarget = newFocusTarget;
-            focusTargetMoteDef = newFocusTargetMoteDef;
-            focusTargetMoteScale = Mathf.Max(0.1f, newFocusTargetMoteScale);
-            kind = newKind;
-            direction = newDirection.normalized;
-            startTick = Find.TickManager?.TicksGame ?? 0;
-            durationTicks = Mathf.Max(1, newDurationTicks);
-            range = Mathf.Max(1f, newRange);
-            arcDegrees = Mathf.Clamp(newArcDegrees, 2f, 358f);
+            sourceVerb = verb;
+            focusTarget = target;
+            kind = visualKind;
+            direction = aim;
+            startTick = Find.TickManager.TicksGame;
+            durationTicks = Mathf.Max(1, duration);
         }
 
         protected override void Tick()
         {
             base.Tick();
-            if (Destroyed)
-            {
-                return;
-            }
-
-            int age = (Find.TickManager?.TicksGame ?? 0) - startTick;
-            bool isWarmup = IsWarmup(kind);
-            bool sourceInvalid = isWarmup && (source == null
-                                 || source.Destroyed
-                                 || source.Dead
-                                 || !source.Spawned
-                                 || source.Map != Map);
-            bool focusTargetInvalid = kind == MingyuanBowVisualKind.FocusCharge
-                                      && (focusTarget == null
-                                          || focusTarget.Destroyed
-                                          || focusTarget.Dead
-                                          || !focusTarget.Spawned
-                                          || focusTarget.Map != Map);
-            bool warmupEnded = isWarmup && age > 1
-                               && (sourceVerb == null || !sourceVerb.WarmingUp);
-            if (sourceInvalid || focusTargetInvalid || warmupEnded || age >= durationTicks)
-            {
+            if (Age >= durationTicks || (kind == MingyuanBowVisualKind.FocusCharge && Age > 1 && !WarmupValid)
+                || kind is not (MingyuanBowVisualKind.FocusCharge or MingyuanBowVisualKind.FocusShot))
                 Destroy(DestroyMode.Vanish);
-                return;
-            }
-        }
-
-        internal static bool IsWarmup(MingyuanBowVisualKind value)
-        {
-            return value == MingyuanBowVisualKind.FocusCharge || value == MingyuanBowVisualKind.RadiationWarning;
         }
 
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
-            if (direction.sqrMagnitude < 0.001f
-                || (IsWarmup(kind) && (source == null || source.Destroyed || source.Dead
-                    || !source.Spawned || source.Map != Map || sourceVerb == null || !sourceVerb.WarmingUp))
-                || (kind == MingyuanBowVisualKind.FocusCharge && (focusTarget == null || focusTarget.Destroyed
-                    || focusTarget.Dead || !focusTarget.Spawned || focusTarget.Map != Map)))
+            float progress = Mathf.Clamp01(Age / (float)Mathf.Max(1, durationTicks));
+            if (kind == MingyuanBowVisualKind.FocusShot)
             {
+                MingyuanBowVisualDrawer.DrawFocusArrow(shotStart, shotEnd, progress);
                 return;
             }
+            if (kind != MingyuanBowVisualKind.FocusCharge || !WarmupValid) return;
 
-            int age = Mathf.Max(0, (Find.TickManager?.TicksGame ?? 0) - startTick);
-            float progress = Mathf.Clamp01(age / (float)Mathf.Max(1, durationTicks));
-            switch (kind)
-            {
-                case MingyuanBowVisualKind.FocusCharge:
-                    Vector3 focusDirection = focusTarget != null
-                        ? (focusTarget.DrawPos - source.DrawPos).Yto0()
-                        : direction;
-                    if (focusDirection.sqrMagnitude < 0.001f)
-                    {
-                        focusDirection = direction;
-                    }
-                    focusDirection.Normalize();
-                    MingyuanBowVisualDrawer.DrawFocusCharge(source.DrawPos, focusDirection, progress);
-                    if (focusTarget != null)
-                    {
-                        MingyuanBowVisualDrawer.DrawFocusAim(
-                            source.DrawPos, focusTarget.DrawPos, focusDirection, progress, age / 60f);
-                    }
-                    break;
-                case MingyuanBowVisualKind.RadiationWarning:
-                    MingyuanBowVisualDrawer.DrawScatterCharge(source.DrawPos, direction, arcDegrees, progress);
-                    break;
-                case MingyuanBowVisualKind.RadiationBlast:
-                    // Released arrows stay anchored to the saved controller position,
-                    // rather than sliding across the map when the archer moves.
-                    MingyuanBowVisualDrawer.DrawSectorBlast(drawLoc, direction, range, arcDegrees, progress);
-                    break;
-                case MingyuanBowVisualKind.FocusShot:
-                    MingyuanBowVisualDrawer.DrawFocusArrow(shotStart, shotEnd, progress);
-                    break;
-                case MingyuanBowVisualKind.RadiationHit:
-                    MingyuanBowVisualDrawer.DrawImpact(shotEnd, direction, progress, 0.65f);
-                    break;
-            }
+            Vector3 aim = (focusTarget.DrawPos - source.DrawPos).Yto0().normalized;
+            if (aim.sqrMagnitude < 0.001f) aim = direction;
+            MingyuanBowVisualDrawer.DrawFocusCharge(source.DrawPos, aim, progress);
+            MingyuanBowVisualDrawer.DrawFocusAim(source.DrawPos, focusTarget.DrawPos, aim, progress, Age / 60f);
         }
     }
-
 }

@@ -4,7 +4,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Mingyuan_CinderSword</defName>
         <label>尘烬</label>
-        <description>明渊的余烬长剑，剑身流淌着灼热的赤焰。基础割伤44点，破甲150%，近战冷却系数0.5；明渊的火焰会在命中时施加生命燃烧。</description>
+        <description>明渊的余烬长剑，剑身流淌着灼热的赤焰。基础割伤44点，破甲150%，近战冷却系数0.5；明渊的火焰会在命中时施加生命燃烧。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -40,7 +40,6 @@
         <statBases>
             <Mass>1.5</Mass>
             <MarketValue>12000</MarketValue>
-            <MaxHitPoints>40000</MaxHitPoints>
             <MeleeWeapon_CooldownMultiplier>0.50</MeleeWeapon_CooldownMultiplier>
             <AccuracyTouch>1.00</AccuracyTouch>
             <AccuracyShort>1.00</AccuracyShort>
@@ -73,7 +72,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Mingyuan_RainbowBow</defName>
         <label>长虹</label>
-        <description>聚焦：射程50格，需要视线，蓄力2.5秒。消耗目标全部生命燃烧，造成40点无视护甲伤害，每层额外造成0.6点，单次伤害上限220点。&#10;散射：向前方10格、108°扇形区域散射，每1.5秒最多发射一次。对敌人造成1点燃烧伤害，并附加50层生命燃烧，额外层数为其引爆阈值的4%，最多附加120层。过燃时附加层数进一步提高。</description>
+        <description>长虹聚焦蓄力 1 秒，射程 50 格，需要视线。目标生命燃烧达到阈值 60% 时直接引爆。否则造成 40 点无视护甲的基础伤害，每层再增加 0.6 点，基础伤害最多 220 点。随后消耗命中前的层数，附加相当于目标阈值 29% 的生命燃烧。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>
@@ -111,7 +110,6 @@
         <statBases>
             <Mass>1.3</Mass>
             <MarketValue>12000</MarketValue>
-            <MaxHitPoints>40000</MaxHitPoints>
             <AccuracyTouch>1.00</AccuracyTouch>
             <AccuracyShort>1.00</AccuracyShort>
             <AccuracyMedium>1.00</AccuracyMedium>
@@ -127,13 +125,13 @@
                 <violent>true</violent>
                 <ai_IsWeapon>true</ai_IsWeapon>
                 <targetable>true</targetable>
-                <warmupTime>2.5</warmupTime>
+                <warmupTime>1</warmupTime>
                 <range>50</range>
                 <burstShotCount>1</burstShotCount>
                 <ticksBetweenBurstShots>1</ticksBetweenBurstShots>
-                <requireLineOfSight>false</requireLineOfSight>
+                <requireLineOfSight>true</requireLineOfSight>
                 <targetParams>
-                    <canTargetLocations>true</canTargetLocations>
+                    <canTargetLocations>false</canTargetLocations>
                     <canTargetPawns>true</canTargetPawns>
                     <canTargetBuildings>false</canTargetBuildings>
                     <canTargetItems>false</canTargetItems>
@@ -144,36 +142,13 @@
         <comps Inherit="False">
             <li Class="CompProperties_Forbiddable" />
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanRainbowBow">
-                <modeIconPath>MiliraXianMingyuan/Items/RainbowBow</modeIconPath>
-
-                <focusWarmupSeconds>2.5</focusWarmupSeconds>
-                <focusRange>50</focusRange>
                 <focusBaseDamage>40</focusBaseDamage>
                 <focusDamagePerLayer>0.6</focusDamagePerLayer>
                 <focusMaxDamage>220</focusMaxDamage>
+                <burstThresholdFraction>0.60</burstThresholdFraction>
+                <focusLayerFraction>0.29</focusLayerFraction>
                 <focusChargeSound>Psycast_Skip_Entry</focusChargeSound>
                 <focusFireSound>ChargeLance_Fire</focusFireSound>
-                <focusBeamFleck>MX_Mingyuan_Fleck_LifeBurnTransferLine</focusBeamFleck>
-                <focusMuzzleFlashMote>MX_Mingyuan_Mote_InstantCombustionFlash</focusMuzzleFlashMote>
-                <focusMuzzleFlashScale>0.24</focusMuzzleFlashScale>
-                <focusTargetMote>MX_Mingyuan_Mote_BowFocusTarget</focusTargetMote>
-                <focusTargetMoteScale>0.92</focusTargetMoteScale>
-
-                <radiationWarmupSeconds>0.35</radiationWarmupSeconds>
-                <radiationRange>10</radiationRange>
-                <radiationArcDegrees>108</radiationArcDegrees>
-                <radiationMinIntervalTicks>90</radiationMinIntervalTicks>
-                <radiationDamage>1</radiationDamage>
-                <radiationLayerFraction>0.04</radiationLayerFraction>
-                <radiationBaseLayers>50</radiationBaseLayers>
-                <radiationMaxLayers>120</radiationMaxLayers>
-                <radiationWarmupSound>FireSpew_Warmup</radiationWarmupSound>
-                <radiationFireSound>FireSpew_Resolve</radiationFireSound>
-                <radiationHitMote>MX_Mingyuan_Mote_InstantCombustionMark</radiationHitMote>
-                <radiationHitMoteScale>0.42</radiationHitMoteScale>
-                <radiationHitVisualLimit>8</radiationHitVisualLimit>
-                <radiationBlastTicks>30</radiationBlastTicks>
-
                 <visualControllerDef>MX_Mingyuan_BowVisual</visualControllerDef>
             </li>
             <li Class="CompProperties_Styleable" />

@@ -68,26 +68,17 @@
         <tickerType>Normal</tickerType>
         <drawerType>RealtimeOnly</drawerType>
         <altitudeLayer>MoteLow</altitudeLayer>
-        <graphicData>
-            <graphicClass>Graphic_Single</graphicClass>
-            <shaderType>MoteGlow</shaderType>
-            <color>(1.00,0.74,0.34,0.52)</color>
-            <texPath>MiliraXianMingyuan/Effect/AshesFieldRange</texPath>
-            <drawSize>(5,5)</drawSize>
-        </graphicData>
-        <drawOffscreen>false</drawOffscreen>
+        <drawOffscreen>true</drawOffscreen>
         <useHitPoints>false</useHitPoints>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanBurningField">
-                <radius>2.4</radius>
-                <durationTicks>600</durationTicks>
+                <radius>4</radius>
+                <durationTicks>1800</durationTicks>
+                <!-- 伤害和结算间隔暂沿用旧配置。 -->
                 <pulseIntervalTicks>30</pulseIntervalTicks>
                 <damageAmount>1</damageAmount>
-                <lifeBurnLayers>20</lifeBurnLayers>
-                <scalesWithSelfBurn>true</scalesWithSelfBurn>
-                <selfBurnLifeBurnPer100>20</selfBurnLifeBurnPer100>
-                <selfHealAmount>1</selfHealAmount>
-                <maxSelfBurnGainPerPulse>20</maxSelfBurnGainPerPulse>
+                <lifeBurnLayers>150</lifeBurnLayers>
+                <bloodLossRecovery>0.03</bloodLossRecovery>
                 <previewRingColor>(1.00,0.75,0.34,0.64)</previewRingColor>
             </li>
         </comps>

@@ -418,9 +418,21 @@ namespace MiliraXian.Characters.Mingyuan
 
     public class Thing_MingyuanQuestRebirthFlame : Building
     {
+        private int savedMaxHitPoints;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref savedMaxHitPoints, "savedMaxHitPoints", 1200);
+        }
+
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
+            int max = MaxHitPoints;
+            if (savedMaxHitPoints > 0 && savedMaxHitPoints != max)
+                HitPoints = Mathf.Clamp(HitPoints + max - savedMaxHitPoints, 1, max);
+            savedMaxHitPoints = max;
             if (!respawningAfterLoad)
             {
                 Current.Game?.GetComponent<GameComponent_MingyuanWhiteFlameQuest>()
@@ -621,7 +633,8 @@ namespace MiliraXian.Characters.Mingyuan
         private const string FallbackMechKindDefName = "Mech_Lancer";
         private const string EliteMechKindDefName = "Mech_CentipedeBlaster";
 
-        private static readonly float[] WavePointFactors = { 0.7f, 1f, 1.3f };
+        private static readonly float[] WavePointFactors = { 2f, 2.5f, 5f };
+        private const int MaxWaveSpawnAttempts = 10;
 
         private MingyuanWhiteFlameStage stage;
         private int nextProcessTick;
@@ -633,6 +646,7 @@ namespace MiliraXian.Characters.Mingyuan
         private int nextWaveTick;
         private int wavesSpawned;
         private int wavesWarned;
+        private int waveSpawnFailures;
         private int markerLandedTick;
         private int reformationStartedTick;
         private int reformationEndTick;
@@ -647,6 +661,9 @@ namespace MiliraXian.Characters.Mingyuan
         private bool resolvingQuest;
 
         public Thing Marker => marker;
+
+        internal bool IsOmenFor(Pawn pawn) =>
+            stage == MingyuanWhiteFlameStage.Omen && targetMap != null && pawn.MapHeld == targetMap;
 
         public GameComponent_MingyuanWhiteFlameQuest(Game game)
         {
@@ -704,6 +721,8 @@ namespace MiliraXian.Characters.Mingyuan
                 wavePawns = new List<Pawn>();
             }
 
+            if (activeQuest != null && activeQuest.State is QuestState.Ongoing or QuestState.NotYetAccepted)
+                activeQuest.description = MingyuanWhiteFlameUtility.BuildQuestDescription();
             wavePawns.RemoveAll(pawn => pawn == null);
             RestoreWaveAssaults();
             if (stage == MingyuanWhiteFlameStage.Waiting || stage == MingyuanWhiteFlameStage.Omen
@@ -748,6 +767,7 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref nextWaveTick, "mingyuanWhiteFlameNextWaveTick", 0);
             Scribe_Values.Look(ref wavesSpawned, "mingyuanWhiteFlameWavesSpawned", 0);
             Scribe_Values.Look(ref wavesWarned, "mingyuanWhiteFlameWavesWarned", 0);
+            Scribe_Values.Look(ref waveSpawnFailures, "mingyuanWhiteFlameWaveSpawnFailures");
             Scribe_Values.Look(ref markerLandedTick, "mingyuanWhiteFlameMarkerLandedTick", 0);
             Scribe_Values.Look(ref reformationStartedTick, "mingyuanWhiteFlameReformationStartedTick", 0);
             Scribe_Values.Look(ref reformationEndTick, "mingyuanWhiteFlameReformationEndTick", 0);
@@ -861,6 +881,7 @@ namespace MiliraXian.Characters.Mingyuan
             markerLandedTick = 0;
             nextWaveTick = int.MaxValue;
             wavesSpawned = 0;
+            waveSpawnFailures = 0;
             wavesWarned = 0;
             reformationStartedTick = 0;
             reformationEndTick = 0;
@@ -1344,7 +1365,13 @@ namespace MiliraXian.Characters.Mingyuan
                     if (SpawnWave(wavesSpawned))
                     {
                         wavesSpawned++;
+                        waveSpawnFailures = 0;
                         nextWaveTick = defenseStartedTick + FirstWaveDelayTicks + wavesSpawned * WaveSpacingTicks;
+                    }
+                    else if (++waveSpawnFailures >= MaxWaveSpawnAttempts)
+                    {
+                        FailDefense("MX_Mingyuan_WaveArrivalFailed".Translate());
+                        return;
                     }
                     else
                     {
@@ -1577,7 +1604,7 @@ namespace MiliraXian.Characters.Mingyuan
                 }
             }
 
-            if (pawns.Count == 0 || !ArriveAtMapEdge(pawns, mechanoids))
+            if (pawns.Count == 0 || !ArriveAtMapEdge(pawns, mechanoids, points))
             {
                 for (int index = 0; index < pawns.Count; index++)
                 {
@@ -1629,13 +1656,13 @@ namespace MiliraXian.Characters.Mingyuan
             return true;
         }
 
-        private bool ArriveAtMapEdge(List<Pawn> pawns, Faction faction)
+        private bool ArriveAtMapEdge(List<Pawn> pawns, Faction faction, float points)
         {
             IncidentParms parms = new IncidentParms
             {
                 target = targetMap,
                 faction = faction,
-                points = StorytellerUtility.DefaultThreatPointsNow(targetMap),
+                points = points,
                 raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn,
                 raidStrategy = RaidStrategyDefOf.ImmediateAttack,
                 sendLetter = false
@@ -1963,6 +1990,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             wavesSpawned = 0;
+            waveSpawnFailures = 0;
             wavesWarned = 0;
             markerLandedTick = 0;
             defenseStartedTick = 0;

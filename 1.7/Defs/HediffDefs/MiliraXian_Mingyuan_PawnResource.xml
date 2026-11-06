@@ -4,7 +4,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_LifeBurn</defName>
         <label>&lt;color=#FF7A45&gt;生命燃烧&lt;/color&gt;</label>
-        <description>生命燃烧每2秒造成伤害、消耗需求、增长年龄并损耗装备，叠至目标阈值时爆发。死亡时可传播至附近敌人。聚焦和吸收可以消耗已有层数造成伤害。</description>
+        <description>每 2 秒受到 10 点灼烧伤害，每 100 层再增加 2.5 点。每次结算自增 5%，连续 10 秒未受到外部叠层后，每次结算衰减 10%。达到目标爆条阈值时爆发，宿主死亡后可向附近敌人传播。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.38, 0.20)</defaultLabelColor>
         <isBad>true</isBad>
@@ -16,14 +16,14 @@
                 <minSeverity>0</minSeverity>
                 <label></label>
                 <statFactorsBySeverity>
-                    <li><stat>MoveSpeed</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
-                    <li><stat>MeleeHitChance</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
-                    <li><stat>ShootingAccuracyPawn</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
-                    <li><stat>WorkSpeedGlobal</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
-                    <li><stat>MeleeDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,0.05)</li><li>(999999,0.05)</li></points></valueBySeverity></li>
-                    <li><stat>IncomingDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
-                    <li><stat>MeleeCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
-                    <li><stat>RangedCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(9500,1.95)</li><li>(999999,1.95)</li></points></valueBySeverity></li>
+                    <li><stat>MoveSpeed</stat><valueBySeverity><points><li>(0,1)</li><li>(1200,0.4)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeHitChance</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,0.4)</li></points></valueBySeverity></li>
+                    <li><stat>ShootingAccuracyPawn</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,0.4)</li></points></valueBySeverity></li>
+                    <li><stat>WorkSpeedGlobal</stat><valueBySeverity><points><li>(0,1)</li><li>(1200,0.4)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,0.4)</li></points></valueBySeverity></li>
+                    <li><stat>IncomingDamageFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,1.6)</li></points></valueBySeverity></li>
+                    <li><stat>MeleeCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,1.6)</li></points></valueBySeverity></li>
+                    <li><stat>RangedCooldownFactor</stat><valueBySeverity><points><li>(0,1)</li><li>(2400,1.6)</li></points></valueBySeverity></li>
                 </statFactorsBySeverity>
             </li>
         </stages>
@@ -44,16 +44,12 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanLifeBurn">
                 <tickInterval>120</tickInterval>
-                <baseDamage>0.5</baseDamage>
-                <damagePer100Layers>0.25</damagePer100Layers>
-                <needDrainPer100Layers>0.01</needDrainPer100Layers>
-                <ageTicksPerLayer>60</ageTicksPerLayer>
+                <baseDamage>10</baseDamage>
+                <damagePer100Layers>2.5</damagePer100Layers>
                 <transferRadius>30</transferRadius>
                 <deathTransferProgressFraction>0.10</deathTransferProgressFraction>
-                <executeHealthScaleMultiplier>10</executeHealthScaleMultiplier>
-                <burstDamageMultiplier>1</burstDamageMultiplier>
                 <burnSelfStackFraction>0.05</burnSelfStackFraction>
-                <decayDelayTicks>1800</decayDelayTicks>
+                <decayDelayTicks>600</decayDelayTicks>
                 <decayFraction>0.1</decayFraction>
                 <removeBelowLayers>0.5</removeBelowLayers>
                 <transferVisualLimit>3</transferVisualLimit>
@@ -70,7 +66,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_SelfBurn</defName>
         <label>&lt;color=#FFB25C&gt;自我燃烧&lt;/color&gt;</label>
-        <description>自燃增益每满 10 层结算一次，最多计算 300 层。每 10 层增加 4% 近战与技能伤害、0.8% 远程伤害、2% 移动速度，以及 4% 攻击与工作速度。&#10;超过 300 层进入过燃，直接伤害与生命燃烧输出翻倍，并消耗护焰储备。每隔 10 秒消耗全部超出层数，在自身半径 5 格内爆炸，每层造成 1 点伤害。爆炸可伤及友军和建筑，不伤及明渊自身。</description>
+        <description>自燃增益每满 10 层结算一次，最多计算 300 层。每 10 层增加 4% 近战与技能伤害、0.8% 远程伤害、2% 移动速度，以及 4% 攻击与工作速度。&#10;超过 300 层进入过燃，直接伤害与生命燃烧输出翻倍，免疫近战伤害，并消耗护焰储备。每隔 10 秒消耗全部超出层数，在自身半径 5 格内爆炸，每层造成 1 点伤害。爆炸可伤及友军和建筑，不伤及明渊自身。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.70, 0.36)</defaultLabelColor>
         <isBad>false</isBad>
@@ -390,7 +386,7 @@
                 </statFactors>
             </li>
             <li>
-                <minSeverity>300.0001</minSeverity>
+                <minSeverity>300.00003</minSeverity>
                 <statFactors>
                     <MoveSpeed>1.6</MoveSpeed>
                     <WorkSpeedGlobal>2.2</WorkSpeedGlobal>
@@ -425,7 +421,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;燃烧之躯&lt;/color&gt;</label>
-        <description>提高意识。免疫热能和爆炸伤害，这类命中每秒最多补充一次2点修复储备。每60秒最多治疗15点普通伤口。实际受伤后获得5层自燃与0.2秒无敌，并反灼敌对攻击者。</description>
+        <description>提高意识。普通伤害不会导致倒地，血液或全身部位总耐久剩余 5% 时触发死亡判定。免疫火焰，爆炸伤害乘以 30%。每 60 秒最多治疗 15 点普通伤口。实际受伤后获得 5 层自燃与 0.2 秒无敌，并反灼敌对攻击者。</description>
         <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -477,7 +473,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_ProtectiveFlameShield</defName>
         <label>&lt;color=#FFE0A3&gt;护身火盾&lt;/color&gt;</label>
-        <description>每10秒检查一次伤势，消耗1点储备恢复一个缺失部位，或治愈一个部位的伤口与旧伤。稳定自燃与热能命中可补充储备，过燃会消耗储备。储备本身不吸收伤害。</description>
+        <description>最多储存 100 点护焰。每 2 秒最多修复 3 个部位，优先恢复缺失部位，每处消耗 1 点。火焰命中每 2.5 秒最多补充 1 点，爆炸命中每 10 秒最多补充 3 点。非过燃时每 5 秒检查自燃转化，每消耗 3 层补充 1 点，单次最多补充 30 点，成功后冷却 10 秒。过燃每 5 秒消耗 1 点。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.88, 0.64)</defaultLabelColor>
         <isBad>false</isBad>
@@ -489,11 +485,13 @@
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanProtectiveFlameShield">
                 <maxEnergy>100</maxEnergy>
-                <repairIntervalTicks>600</repairIntervalTicks>
-                <heatRefillEnergy>2</heatRefillEnergy>
-                <heatRefillCooldownTicks>60</heatRefillCooldownTicks>
+                <repairIntervalTicks>120</repairIntervalTicks>
+                <heatRefillEnergy>1</heatRefillEnergy>
+                <heatRefillCooldownTicks>150</heatRefillCooldownTicks>
+                <explosionRefillEnergy>3</explosionRefillEnergy>
+                <explosionRefillCooldownTicks>600</explosionRefillCooldownTicks>
                 <selfBurnRefillIntervalTicks>300</selfBurnRefillIntervalTicks>
-                <selfBurnRefillCooldownTicks>1800</selfBurnRefillCooldownTicks>
+                <selfBurnRefillCooldownTicks>600</selfBurnRefillCooldownTicks>
                 <selfBurnPerEnergy>3</selfBurnPerEnergy>
                 <selfBurnRefillMaxFractionOfCap>0.3</selfBurnRefillMaxFractionOfCap>
                 <overburnDrainIntervalTicks>300</overburnDrainIntervalTicks>
@@ -508,7 +506,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_RebirthFlame</defName>
         <label>&lt;color=#FF5C3A&gt;重生之焰&lt;/color&gt;</label>
-        <description>明渊倒下时，埋在体内的火会爆开并留下重生火标记，30 秒后完成重塑。</description>
+        <description>明渊触发死亡判定时，在半径 4 格内引发 666 点伤害的爆炸，使存活的敌人眩晕 10 秒。明渊离场 30 秒后原地重塑。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(1.00, 0.36, 0.24)</defaultLabelColor>
         <isBad>false</isBad>
@@ -536,7 +534,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_TimeBurnFrozen</defName>
         <label>&lt;color=#C95CFF&gt;时间燃烧&lt;/color&gt;</label>
-        <description>目标的寿命正在被燃尽。当剩余生物年龄归零时，这束火会收走身体。</description>
+        <description>目标的生物年龄正在增长，达到种族理论寿命时老死。单次最多增加 500 年。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.79, 0.36, 1.00)</defaultLabelColor>
         <isBad>true</isBad>

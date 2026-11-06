@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
@@ -34,13 +35,17 @@ internal static class Patch_CharacterBladeBodyRendering
         {
             return true;
         }
-        ThingWithComps weapon = pawn.equipment?.Primary;
-        BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
-        if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !BladePoseProviders.TryGet(pawn, out BladePose pose))
+        if (pawn.stances?.curStance is not Stance_Warmup { verb: Verb_MingyuanTimeBurn }
+            || MingyuanPowerBalance.Sealed)
         {
-            return true;
+            ThingWithComps weapon = pawn.equipment?.Primary;
+            BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
+            if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !BladePoseProviders.TryGet(pawn, out BladePose pose))
+            {
+                return true;
+            }
+            BladeRenderer.Draw(ext, pose, pawn.DrawPos);
         }
-        BladeRenderer.Draw(ext, pose, pawn.DrawPos);
         if (pawn.apparel != null)
         {
             foreach (Apparel apparel in pawn.apparel.WornApparel)

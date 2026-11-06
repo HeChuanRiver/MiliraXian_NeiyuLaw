@@ -13,6 +13,13 @@ namespace MiliraXian.Characters.Common
 
     public class CompUnbreakableEquipment : ThingComp
     {
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && parent.def.useHitPoints
+                && parent.HitPoints > parent.MaxHitPoints)
+                parent.HitPoints = parent.MaxHitPoints;
+        }
     }
 
     [HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]

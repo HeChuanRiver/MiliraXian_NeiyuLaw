@@ -10,15 +10,17 @@ namespace MiliraXian.Characters.Mingyuan;
 [StaticConstructorOnStartup]
 internal static class MingyuanFireVfx
 {
-    private enum Shape { Scorch, Sigil, Phoenix, Vortex, Funnel, Crystal, Burst, Wake, Particles }
+    private enum Shape { Scorch, Sigil, Phoenix, Vortex, Funnel, Crystal, Burst, Wake, Particles, AshesField, TimeHourglass, TimeSword, TimeWave }
     private const int MaxParticles = 32;
     private static readonly Material FireMaterial;
     private static readonly Material PhoenixTakeoff;
     private static readonly Material PhoenixDive;
+    private static readonly Material CinderSword;
     private static readonly MaterialPropertyBlock Properties = new();
     private static readonly int ParamsId = Shader.PropertyToID("_FireParams");
     private static readonly int ShapeId = Shader.PropertyToID("_FireShape");
     private static readonly ScreenBloomProperties Bloom;
+    private static readonly ScreenBloomProperties TimeBloom;
     private static readonly Mesh Funnel;
     private static readonly Mesh Particles;
     private static readonly List<Vector3> ScorchVertices = new(640);
@@ -34,11 +36,20 @@ internal static class MingyuanFireVfx
         FireMaterial = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
         PhoenixTakeoff = LoadPhoenixMaterial(shader, "PhoenixTakeoff");
         PhoenixDive = LoadPhoenixMaterial(shader, "PhoenixDive");
+        string swordPath = MX_MingyuanDefOf.MX_Mingyuan_CinderSword?.graphicData?.texPath;
+        if (swordPath != null && ContentFinder<Texture2D>.Get(swordPath) is { } sword)
+            CinderSword = MaterialPool.MatFrom(new MaterialRequest(sword, shader, Color.white));
         Bloom = new ScreenBloomProperties
         {
             group = DefDatabase<ScreenBloomGroupDef>.GetNamed("MX_ScreenBloom_Glow"),
             tint = new Color(1f, 0.78f, 0.55f),
             intensity = 0.34f
+        };
+        TimeBloom = new ScreenBloomProperties
+        {
+            group = Bloom.group,
+            tint = new Color(0.73f, 0.39f, 1f),
+            intensity = 0.36f
         };
         Funnel = BuildFunnel();
         Particles = BuildParticles();
@@ -60,7 +71,7 @@ internal static class MingyuanFireVfx
         if (alpha <= 0.001f || material == null) return;
         Properties.SetVector(ParamsId, new Vector4((int)shape, time, progress, alpha));
         Properties.SetVector(ShapeId, options);
-        if (bloom) ScreenBloom.Submit(Bloom, mesh, matrix, material, Properties);
+        if (bloom) ScreenBloom.Submit(shape >= Shape.TimeHourglass ? TimeBloom : Bloom, mesh, matrix, material, Properties);
         Graphics.DrawMesh(mesh, matrix, material, 0, null, 0, Properties);
     }
 
@@ -202,6 +213,70 @@ internal static class MingyuanFireVfx
         Quad(Shape.Crystal, center.WithY(AirAltitude), rotation, 0.86f, 1.56f, time, progress, 1f, bloom: true);
     }
 
+    internal static void DrawTimeBurnCast(Pawn caster, CompProperties_AbilityMingyuanTimeBurn props,
+        Vector3 aim, float progress, float fade, bool showSword)
+    {
+        Vector3 pawn = caster.DrawPos;
+        if (!Visible(pawn, 2f)) return;
+        Rot4 facing = caster.Rotation;
+        float time = VisualClock.Ticks / 60f;
+        float elapsed = progress * (props.openingTicks + props.enchantTicks + props.chargeTicks + props.swingTicks);
+        float eyes = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / Mathf.Max(1, props.openingTicks))) * fade;
+        if (facing != Rot4.North && caster.story != null)
+        {
+            Vector3 head = pawn + caster.Drawer.renderer.BaseHeadOffsetAt(facing);
+            float headWidth = HumanlikeMeshPoolUtility.HumanlikeHeadWidthForPawn(caster);
+            float pupilX = (facing == Rot4.South ? 0.047f : 0.043f) * headWidth;
+            float side = facing == Rot4.West ? -1f : 1f;
+            Vector3 eye = (head + new Vector3(side * pupilX, 0f, -0.05f * headWidth)).WithY(AirAltitude + 0.05f);
+            float width = 0.038f * headWidth;
+            float height = 0.054f * headWidth;
+            Quad(Shape.TimeHourglass, eye, Quaternion.identity, width, height, time, 0f, eyes, bloom: true);
+            if (facing == Rot4.South)
+                Quad(Shape.TimeHourglass, eye - Vector3.right * (2f * pupilX), Quaternion.identity,
+                    width, height, time + 0.23f, 0f, eyes, bloom: true);
+        }
+
+        if (!showSword || CinderSword == null) return;
+        Vector3 direction = (aim - pawn).Yto0().normalized;
+        if (direction.sqrMagnitude < 0.001f) direction = facing.FacingCell.ToVector3();
+        float enchant = Mathf.Clamp01((elapsed - props.openingTicks) / Mathf.Max(1, props.enchantTicks));
+        float chargeElapsed = elapsed - props.openingTicks - props.enchantTicks;
+        float charge = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(chargeElapsed / Mathf.Max(1, props.chargeTicks)));
+        float swing = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((chargeElapsed - props.chargeTicks) / Mathf.Max(1, props.swingTicks)));
+        float angle = direction.AngleFlat() + Mathf.Lerp(Mathf.Lerp(-35f, -125f, charge), 68f, swing);
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
+        Vector3 sideward = new(direction.z, 0f, -direction.x);
+        Vector3 grip = pawn + direction * Mathf.Lerp(0.28f - 0.52f * charge, 0.48f, swing)
+            + sideward * Mathf.Lerp(-0.33f, 0.27f, swing);
+        const float size = 1.8f;
+        Vector3 bladeCenter = grip + rotation * Vector3.forward * (size * 0.36f);
+        Quad(Shape.TimeSword, bladeCenter.WithY(AirAltitude + 0.032f), rotation, size, size,
+            time, enchant, eyes, new Vector4(charge, 0f, 0f, 0f), bloom: enchant > 0f, material: CinderSword);
+    }
+
+    internal static void DrawTimeBurnWave(Vector3 center, Vector3 direction, float progress)
+    {
+        if (!Visible(center, 2f)) return;
+        const float halfDepth = 0.68f;
+        const float offset = 0.45f;
+        float fade = Mathf.Lerp(1f, 0.48f, progress);
+        Quaternion rotation = Quaternion.AngleAxis(direction.AngleFlat(), Vector3.up);
+        Quad(Shape.TimeWave, (center - direction * offset).WithY(AirAltitude), rotation,
+            2f * Projectile_MingyuanTimeBurnWave.HalfWidth, 2f * halfDepth, VisualClock.Ticks / 60f, progress, fade,
+            new Vector4(Projectile_MingyuanTimeBurnWave.ArcDepth, halfDepth, offset, 0f), bloom: true);
+    }
+
+    internal static void DrawAshesField(Vector3 center, float radius, int remainingTicks)
+    {
+        if (!Visible(center, radius + 1f)) return;
+        float time = VisualClock.Ticks / 60f;
+        float fade = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(remainingTicks / 90f));
+        Quad(Shape.AshesField, center.WithY(GroundAltitude), Quaternion.identity, radius * 2f, radius * 2f,
+            time, 0f, fade);
+        Sparks(center, Quaternion.identity, radius * 0.65f, time, 5f, fade * 0.65f, 16);
+    }
+
     internal static void DrawTornado(Vector3 center, float radius, float growth, int age, float fade, int particleLimit)
     {
         if (!Visible(center, radius * 2f + 2f) || fade <= 0f) return;
@@ -339,7 +414,7 @@ public class Thing_MingyuanFireCastVisual : Thing
         stanceStart = stance.startedTick;
         origin = pawn.Position.ToVector3Shifted();
         aimCell = target;
-        duration = 20;
+        duration = stance.verb is Verb_MingyuanTimeBurn ? 14 : 20;
         radius = (stance.verb as Verb_MingyuanFireCast)?.Combustion?.Props.radius ?? 0f;
         sigil = radius > 0f;
     }
@@ -354,9 +429,9 @@ public class Thing_MingyuanFireCastVisual : Thing
         sigil = isSigil;
     }
 
-    private Verb_MingyuanFireCast Verb => caster?.abilities?.GetAbility(ability)?.verb as Verb_MingyuanFireCast;
+    private Verb_CastAbility Verb => caster?.abilities?.GetAbility(ability)?.verb as Verb_CastAbility;
 
-    private bool IsWarming(Verb_MingyuanFireCast verb) => !MingyuanPowerBalance.Sealed
+    private bool IsWarming(Verb_CastAbility verb) => !MingyuanPowerBalance.Sealed
         && caster is { Spawned: true, Dead: false } && caster.Map == Map
         && verb?.WarmupStance is { } stance && stance.startedTick == stanceStart;
 
@@ -369,22 +444,31 @@ public class Thing_MingyuanFireCastVisual : Thing
             return;
         }
 
-        Verb_MingyuanFireCast verb = Verb;
+        Verb_CastAbility verb = Verb;
         if (!IsWarming(verb))
         {
             // A completed cast has its own release visual. An interrupted circle fades at the last drawn angle.
             castLoop?.End();
             castLoop = null;
-            if (progress >= 0.99f) Destroy();
+            if (verb is not Verb_MingyuanTimeBurn && progress >= 0.99f) Destroy();
             else endTick = now + duration;
             return;
         }
 
         origin = caster.Position.ToVector3Shifted();
         if (Position != caster.Position) Position = caster.Position;
-        int elapsed = verb.CastTicks - verb.WarmupTicksLeft;
-        progress = Mathf.Clamp01((elapsed - verb.JumpTicks) / (float)(verb.CastTicks - verb.JumpTicks));
-        SoundDef hum = verb.Combustion?.Props.warmupLoop ?? verb.Pillar?.Props.warmupLoop;
+        if (verb is Verb_MingyuanTimeBurn timeBurn)
+        {
+            LocalTargetInfo target = verb.WarmupStance.focusTarg;
+            if (target.IsValid && target.Cell.InBounds(Map)) aimCell = target.Cell;
+            progress = Mathf.Clamp01(1f - verb.WarmupTicksLeft / (float)Mathf.Max(1, timeBurn.CastTicks));
+            return;
+        }
+        if (verb is not Verb_MingyuanFireCast fire) return;
+
+        int elapsed = fire.CastTicks - fire.WarmupTicksLeft;
+        progress = Mathf.Clamp01((elapsed - fire.JumpTicks) / (float)(fire.CastTicks - fire.JumpTicks));
+        SoundDef hum = fire.Combustion?.Props.warmupLoop ?? fire.Pillar?.Props.warmupLoop;
         if (hum != null && Map == Find.CurrentMap)
         {
             if (castLoop == null || castLoop.Ended)
@@ -395,7 +479,7 @@ public class Thing_MingyuanFireCastVisual : Thing
                 castLoop.Maintain();
             }
         }
-        if (!etchPlayed && elapsed >= verb.JumpTicks && verb.Combustion is { } combustion)
+        if (!etchPlayed && elapsed >= fire.JumpTicks && fire.Combustion is { } combustion)
         {
             etchPlayed = true;
             combustion.Props.etchSound?.PlayOneShot(new TargetInfo(Position, Map));
@@ -406,9 +490,18 @@ public class Thing_MingyuanFireCastVisual : Thing
     {
         float remaining = endTick > 0 ? Mathf.Clamp01((endTick - Find.TickManager.TicksGame) / (float)duration) : 1f;
         if (burst) MingyuanFireVfx.DrawBurst(origin, radius, 1f - remaining, sigil);
+        else if (Verb is Verb_MingyuanTimeBurn { Props: { } props } timeBurn)
+        {
+            if (MingyuanPowerBalance.Sealed || caster is not { Spawned: true, Dead: false } || caster.Map != Map) return;
+            bool warming = IsWarming(timeBurn);
+            float phase = warming
+                ? Mathf.Clamp01((VisualClock.Ticks - stanceStart) / Mathf.Max(1, timeBurn.CastTicks))
+                : progress;
+            MingyuanFireVfx.DrawTimeBurnCast(caster, props, aimCell.ToVector3Shifted(), phase, remaining, warming);
+        }
         else if (sigil && endTick > 0)
             MingyuanFireVfx.DrawSigil(origin, radius, progress, remaining, Find.TickManager.TicksGame / 60f);
-        else MingyuanFireVfx.DrawWarmup(Verb, origin, aimCell.ToVector3Shifted(), progress, remaining);
+        else MingyuanFireVfx.DrawWarmup(Verb as Verb_MingyuanFireCast, origin, aimCell.ToVector3Shifted(), progress, remaining);
     }
 
     public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)

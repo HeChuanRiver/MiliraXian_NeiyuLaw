@@ -19,6 +19,7 @@ namespace MiliraXian.Characters.Common
         [HarmonyPriority(Priority.High)]
         private static bool Prefix(Pawn __instance)
         {
+            if (MingyuanSurvival.AppliesTo(__instance) && !MingyuanSurvival.CanDie(__instance)) return false;
             if (!intercepting.Add(__instance)) return false;
             try
             {

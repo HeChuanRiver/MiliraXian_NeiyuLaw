@@ -106,63 +106,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        public static void DrawScatterCharge(Vector3 origin, Vector3 direction, float arcDegrees, float progress)
-        {
-            direction = direction.Yto0().normalized;
-            Vector3 emitter = EmitterPosition(origin, direction);
-            float charge = Ease(progress);
-            Sprite(Crown, emitter, Rotate(direction, -progress * 35f), 1.25f, 1.25f, 0.25f + charge * 0.45f);
-            Vector3 previous = emitter;
-            for (int i = 0; i < 7; i++)
-            {
-                float spread = i / 6f * 2f - 1f;
-                Vector3 ray = Rotate(direction, spread * arcDegrees * 0.42f);
-                Vector3 point = emitter + ray * (0.58f - charge * 0.2f);
-                if (i > 0) Stroke(previous, point, 0.06f, 0.35f + charge * 0.3f);
-                Sprite(Arrow, point, ray, 0.75f + charge * 0.2f, 1f + charge * 0.25f, 0.25f + charge * 0.65f);
-                previous = point;
-            }
-        }
-
-        public static void DrawSectorBlast(Vector3 origin, Vector3 direction, float radius, float arcDegrees, float progress)
-        {
-            origin = Raised(origin);
-            direction = direction.Yto0().normalized;
-            if (direction.sqrMagnitude < 0.001f || radius <= 0f || progress >= 1f) return;
-            Vector3 emitter = EmitterPosition(origin, direction);
-            // One fan volley mirrors the single area hit. Its curved trajectories and
-            // staggered embers are cosmetic, never additional projectiles or hit scans.
-            const int count = 13;
-            for (int i = 0; i < count; i++)
-            {
-                float spread = i / (float)(count - 1) * 2f - 1f;
-                float local = Mathf.Clamp01((progress - Mathf.Abs(spread) * 0.035f) / 0.75f);
-                float travel = Ease(Mathf.Clamp01(local * 1.6f));
-                float fade = 1f - Ease(Mathf.InverseLerp(0.52f, 1f, local));
-                float angle = spread * arcDegrees * 0.5f;
-                float reach = radius * (i % 2 == 0 ? 0.98f : 0.84f);
-                Vector3 end = origin + Rotate(direction, angle) * reach;
-                Vector3 control = emitter + Rotate(direction, angle * 0.35f) * (reach * 0.45f);
-                Vector3 head = FanPoint(emitter, control, end, travel);
-                Vector3 tangent = ((control - emitter) * (1f - travel) + (end - control) * travel).normalized;
-                float trailLength = Mathf.Min((head - emitter).magnitude, 1.5f + travel * 0.8f);
-                DrawWake(head, tangent, trailLength, 1.05f, fade * 0.85f);
-                Sprite(Arrow, head, tangent, 1.1f, 1.5f, fade);
-                if (local > 0.3f)
-                {
-                    Vector3 ember = FanPoint(emitter, control, end, Mathf.Clamp01(travel - 0.18f));
-                    ember += Rotate(tangent, (i % 2 == 0 ? 1 : -1) * 90f) * (local - 0.3f) * 0.4f;
-                    Sprite(Wake, ember, tangent, 0.4f, 0.65f, fade * 0.55f);
-                }
-            }
-            // A short expanding pressure front describes the cone, then clears the map.
-            float front = Mathf.Clamp01(progress * 2.5f);
-            if (front < 1f)
-                Arc(origin, direction, radius * front, arcDegrees, 20, 0.08f, (1f - front) * 0.6f);
-            float release = Mathf.Clamp01(progress * 4f);
-            Sprite(Crown, emitter, direction, 1f + release, 1f + release, (1f - release) * 0.9f);
-        }
-
         public static void DrawSectorWarning(Vector3 origin, Vector3 direction, float radius, float arcDegrees, float alpha)
         {
             origin = Raised(origin);
@@ -170,12 +113,6 @@ namespace MiliraXian.Characters.Mingyuan
             Stroke(origin, origin + Rotate(direction, -arcDegrees * 0.5f) * radius, 0.075f, alpha);
             Stroke(origin, origin + Rotate(direction, arcDegrees * 0.5f) * radius, 0.075f, alpha);
             Arc(origin, direction, radius, arcDegrees, 24, 0.075f, alpha);
-        }
-
-        private static Vector3 FanPoint(Vector3 start, Vector3 control, Vector3 end, float t)
-        {
-            float u = 1f - t;
-            return start * (u * u) + control * (2f * u * t) + end * (t * t);
         }
 
         private static void DrawWake(Vector3 head, Vector3 direction, float length, float width, float alpha)

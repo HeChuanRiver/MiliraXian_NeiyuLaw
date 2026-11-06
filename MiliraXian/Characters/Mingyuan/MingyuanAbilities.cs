@@ -1,68 +1,14 @@
-using System.Collections.Generic;
 using RimWorld;
-using UnityEngine;
 using Verse;
 using Verse.Sound;
-using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan
 {
-    public class CompProperties_AbilityMingyuanTimeBurn : CompProperties_AbilityEffect
-    {
-        public int durationTicks = MingyuanUtility.TicksPerHour;
-        public int tickIntervalTicks = 60;
-        public ThingDef startMoteDef;
-        public ThingDef collapseMoteDef;
-        public SoundDef effectSoundDef;
-        public float startMoteScale = 2.2f;
-        public float collapseMoteScale = 2.4f;
-        public int mechSteelCount = 75;
-        public int mechPlasteelCount = 25;
-
-        public CompProperties_AbilityMingyuanTimeBurn()
-        {
-            compClass = typeof(CompAbilityEffect_MingyuanTimeBurn);
-        }
-    }
-
-    public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowerLimited
-    {
-        public new CompProperties_AbilityMingyuanTimeBurn Props => (CompProperties_AbilityMingyuanTimeBurn)props;
-
-        public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
-        {
-            if (MingyuanPowerBalance.Sealed) return;
-            base.Apply(target, dest);
-            Pawn caster = parent.pawn;
-            if (caster == null)
-            {
-                return;
-            }
-
-            Pawn targetPawn = target.Pawn;
-            if (targetPawn != null && !targetPawn.Dead)
-            {
-                MingyuanTimeBurnUtility.PlayEffectSound(Props.effectSoundDef, targetPawn.PositionHeld, targetPawn.MapHeld);
-                MingyuanTimeBurnUtility.TryMakeStaticMote(targetPawn.PositionHeld, targetPawn.MapHeld, Props.startMoteDef, Props.startMoteScale);
-                MingyuanTimeBurnUtility.Register(targetPawn, caster, Props);
-                return;
-            }
-
-            Thing targetThing = target.Thing;
-            if (targetThing != null && targetThing.def.category == ThingCategory.Building)
-            {
-                MingyuanTimeBurnUtility.DissolveBuilding(targetThing, caster, Props);
-            }
-        }
-    }
-
     public class CompProperties_AbilityMingyuanAshesOfSelf : CompProperties_AbilityEffect
     {
         public ThingDef fieldDef;
-        public float selfBurnLayers = 100f;
-        public float bloodLossCost = 0.5f;
-        public int fieldDurationTicks = 900;
-        public float fieldPreviewRadius = 2.4f;
+        public float selfBurnLayers = 150f;
+        public float bloodLossCost = 0.15f;
         public ThingDef castMoteDef;
         public float castMoteScale = 1f;
         public SoundDef effectSoundDef;
@@ -77,6 +23,17 @@ namespace MiliraXian.Characters.Mingyuan
     {
         public new CompProperties_AbilityMingyuanAshesOfSelf Props => (CompProperties_AbilityMingyuanAshesOfSelf)props;
 
+        public override bool GizmoDisabled(out string reason)
+        {
+            if (base.GizmoDisabled(out reason)) return true;
+            if (CanPay(parent.pawn)) return false;
+            reason = "MX_Mingyuan_AshesOfSelf_InsufficientCost".Translate();
+            return true;
+        }
+
+        public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest) =>
+            base.CanApplyOn(target, dest) && CanPay(parent.pawn);
+
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             Pawn caster = parent?.pawn;
@@ -85,48 +42,29 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            GenDraw.DrawRadiusRing(caster.Position, Mathf.Max(0.1f, Props.fieldPreviewRadius), new Color(1f, 0.74f, 0.34f, 0.72f));
+            if (Props.fieldDef?.GetCompProperties<CompProperties_MingyuanBurningField>() is { } field)
+                GenDraw.DrawRadiusRing(caster.Position, field.radius, field.previewRingColor);
         }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
-            if (MingyuanPowerBalance.Sealed) return;
-            base.Apply(target, dest);
             Pawn caster = parent.pawn;
-            if (caster == null || caster.Map == null || !caster.Spawned)
-            {
-                return;
-            }
+            if (MingyuanPowerBalance.Sealed || caster?.Spawned != true || caster.Dead
+                || Props.fieldDef == null || !CanPay(caster)) return;
 
-            if (!ConsumeCost(caster))
-            {
-                Messages.Message("MX_Mingyuan_AshesOfSelf_InsufficientCost".Translate(), caster, MessageTypeDefOf.RejectInput, false);
-                return;
-            }
+            base.Apply(target, dest);
+            ThingWithComps field = (ThingWithComps)ThingMaker.MakeThing(Props.fieldDef);
+            field.GetComp<CompMingyuanBurningField>().Init(caster);
+            GenSpawn.Spawn(field, caster.Position, caster.Map);
 
+            HealthUtility.AdjustSeverity(caster, HediffDefOf.BloodLoss, Props.bloodLossCost);
             MingyuanUtility.AddSelfBurn(caster, Props.selfBurnLayers);
             PlayCastVisuals(caster);
-
-            if (Props.fieldDef == null)
-            {
-                return;
-            }
-
-            Thing field = ThingMaker.MakeThing(Props.fieldDef);
-            GenSpawn.Spawn(field, caster.Position, caster.Map);
-            field.TryGetComp<CompMingyuanBurningField>()?.Init(caster, Props.fieldDurationTicks);
         }
 
-        private bool ConsumeCost(Pawn caster)
-        {
-            if (caster.RaceProps?.IsFlesh != true || caster.WouldDieFromAdditionalBloodLoss(Props.bloodLossCost))
-            {
-                return false;
-            }
-
-            HealthUtility.AdjustSeverity(caster, HediffDefOf.BloodLoss, Mathf.Max(0f, Props.bloodLossCost));
-            return true;
-        }
+        private bool CanPay(Pawn caster) =>
+            caster?.health != null && !caster.Dead && caster.RaceProps.IsFlesh
+            && MingyuanSurvival.BloodLoss(caster) + Props.bloodLossCost < MingyuanSurvival.DeathBloodLoss;
 
         private void PlayCastVisuals(Pawn caster)
         {
