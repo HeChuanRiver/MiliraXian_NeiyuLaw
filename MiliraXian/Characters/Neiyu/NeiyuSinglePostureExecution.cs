@@ -10,16 +10,18 @@ namespace MiliraXian.Characters.Neiyu;
 
 public sealed class NeiyuSingleExecutionProps
 {
-    public float enemyRadius = 8f, slashWidth = 6f;
+    public float enemyRadius = 8f, slashWidth = 9.5f, throwDistance = 6f, spiritSwordScale = 1.45f;
+    public int lockTicks = 150;
     public int readyTicks = 20, enchantTicks = 30, flashTicks = 3, swingTicks = 8, hitStopTicks = 5;
     public int approachTicks = 12, spinLeadTicks = 8, spinTicksPerTurn = 20;
     public int flightTicks = 24, glyphDelayTicks = 7, swordCount = 5, swordStaggerTicks = 2, finishTicks = 14;
-    public int waveTicks = 15, glyphHoldTicks = 6, glyphFadeTicks = 11, pierceTicks = 11, afterimageTicks = 14;
+    public int waveTicks = 21, glyphHoldTicks = 6, glyphFadeTicks = 11, pierceTicks = 11, afterimageTicks = 14;
     public SoundDef pierceSound;
     public BladeKeyframes drawBlade, aimBlade;
 
     internal bool Valid => float.IsFinite(enemyRadius) && enemyRadius > 0f
-        && slashWidth is >= 5f and <= 7f
+        && slashWidth is >= 5f and <= 14f && throwDistance is >= 2f and <= 8f
+        && spiritSwordScale is >= .5f and <= 2.5f && lockTicks >= 0
         && readyTicks > 0 && enchantTicks > 0 && flashTicks > 0 && swingTicks >= 4 && hitStopTicks >= 0
         && approachTicks > 0 && spinLeadTicks > 0 && spinTicksPerTurn >= 8
         && flightTicks is > 1 and <= 30 && glyphDelayTicks > 0 && glyphDelayTicks < flightTicks
@@ -30,7 +32,6 @@ public sealed class NeiyuSingleExecutionProps
 
 public sealed partial class JobDriver_NeiyuPostureExecution
 {
-    private const int LockTicks = 600;
     private enum SingleStage { Lock, Draw, FirstCut, Approach, Grab, Flight, Volley, Recovery }
 
     private SingleStage singleStage;
@@ -73,7 +74,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private void BeginSingle()
     {
         HediffComp_CombatPosture posture = CombatPosture.Get(Victim);
-        sceneStart = (posture?.BrokenAt is >= 0 ? posture.BrokenAt : startedAt) + LockTicks;
+        sceneStart = (posture?.BrokenAt is >= 0 ? posture.BrokenAt : startedAt) + Single.lockTicks;
         spinTurns = Rand.RangeInclusive(1, 3);
         posture?.HoldThrough(pawn, sceneStart + EndAt + 1);
         actorCell = origin;
@@ -298,18 +299,20 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         touchdown = FirstImpactAt;
         float bestScore = float.NegativeInfinity;
         Vector3 tangent = Forward(throwYaw);
+        float range = Single.throwDistance;
+        int searchRadius = Mathf.CeilToInt(range);
         // Snap to real cells only after checking the complete segment, including closed doors and corners.
-        for (int z = -4; z <= 4; z++)
-        for (int x = -4; x <= 4; x++)
+        for (int z = -searchRadius; z <= searchRadius; z++)
+        for (int x = -searchRadius; x <= searchRadius; x++)
         {
             IntVec3 cell = targetCell + new IntVec3(x, 0, z);
             if (cell == targetCell || !CanOccupy(target, cell)) continue;
             Vector3 destination = cell.ToVector3Shifted().Yto0();
             Vector3 delta = destination - throwOrigin;
             float distance = delta.magnitude;
-            if (distance > 4.05f) continue;
+            if (distance > range) continue;
             float alignment = Vector3.Dot(delta / distance, tangent);
-            float score = alignment * 3f + Mathf.Min(distance, 3.5f);
+            float score = alignment * range + Mathf.Min(distance, range - .5f);
             if (alignment < 0f || score <= bestScore || !CanTravel(target, throwOrigin, destination)) continue;
             landingCell = cell;
             bestScore = score;

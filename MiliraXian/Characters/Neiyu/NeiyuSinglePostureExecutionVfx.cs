@@ -109,18 +109,29 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     {
         slashWave ??= BuildSlashWave(ext);
         float p = ProgressBetween(tick, FirstCutAt, FirstCutAt + Single.waveTicks);
-        Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.08f, 1.65f, p);
-        at.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+        Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.18f, 2.2f, p);
+        at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
         Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(initialYaw + 11f, Vector3.up),
-            new Vector3(Mathf.Lerp(.92f, 1f, p), 1f, Mathf.Lerp(.7f, 1.2f, p)));
-        DrawMesh(slashWave, matrix, NeiyuExecutionMaterials.Wave, Color.white, (1f - p) * (1f - p));
+            new Vector3(Mathf.Lerp(.97f, 1.07f, p), 1f, Mathf.Lerp(.92f, 1.13f, p)));
+        float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.28f, 1f, p));
+        DrawMesh(slashWave, matrix, NeiyuExecutionMaterials.Wave, Color.white, fade);
     }
 
     private Mesh BuildSlashWave(BladeGraphicExtension ext)
     {
-        const int segments = 28, rows = 5;
-        float[] depths = [.035f, 0f, -.10f, -.37f, -.67f];
-        float[] opacity = [0f, 1f, .68f, .38f, 0f];
+        const int segments = 28;
+        // A cold-white edge and a saturated face keep the slash readable on light floors.
+        (float depth, Color color)[] profile =
+        [
+            (.16f, new Color(.22f, .65f, 1f, 0f)),
+            (.07f, new Color(.30f, .73f, 1f, .88f)),
+            (0f, Color.white),
+            (-.12f, new Color(.79f, .95f, 1f, .98f)),
+            (-.42f, new Color(.32f, .76f, 1f, .92f)),
+            (-.85f, new Color(1f, .55f, .83f, .70f)),
+            (-1.36f, new Color(1f, .64f, .84f, 0f))
+        ];
+        int rows = profile.Length;
         Vector3[] edge = new Vector3[segments + 1];
         float min = float.PositiveInfinity, max = float.NegativeInfinity;
         for (int i = 0; i <= segments; i++)
@@ -141,15 +152,15 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         {
             float u = i / (float)segments;
             float taper = Mathf.Sqrt(Mathf.Max(0f, Mathf.Sin(u * Mathf.PI)));
-            float span = Mathf.Lerp(u, Mathf.InverseLerp(min, max, edge[i].x), .75f);
+            float span = Mathf.Lerp(u, Mathf.InverseLerp(min, max, edge[i].x), .42f);
             for (int row = 0; row < rows; row++)
             {
                 int v = i * rows + row;
+                (float depth, Color color) = profile[row];
                 vertices[v] = new Vector3((span - .5f) * Single.slashWidth, 0f,
-                    edge[i].z * .62f + depths[row] * taper);
+                    edge[i].z * .9f + depth * taper);
                 uv[v] = new Vector2(u, row / (float)(rows - 1));
-                Color tint = row == 1 ? Color.white : Color.Lerp(ExecutionIce, ExecutionPink, .15f + .7f * u);
-                colors[v] = tint.WithAlpha(opacity[row] * taper);
+                colors[v] = color.WithAlpha(color.a * taper);
                 if (i == segments || row == rows - 1) continue;
                 int t = (i * (rows - 1) + row) * 6;
                 triangles[t] = v; triangles[t + 1] = v + rows; triangles[t + 2] = v + 1;
@@ -166,6 +177,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Vector3 aim = Vector3.Lerp(previousTargetDraw, aimPoint, FrameLerp);
         Vector3 forward = Forward(throwYaw);
         Vector3 side = Vector3.Cross(Vector3.up, forward);
+        float swordScale = Single.spiritSwordScale;
+        float tipOffset = .70f * swordScale;
+        float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
         float glyphAge = tick - VolleyAt;
         if (glyphAge >= 0f && glyphAge < Single.glyphHoldTicks + Single.glyphFadeTicks)
         {
@@ -178,19 +192,24 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             int offset = i * Single.swordStaggerTicks;
             int launch = VolleyAt + offset, impact = FirstImpactAt + offset;
             float slot = i == 0 ? 0f : ((i + 1) / 2) * (i % 2 == 1 ? -1f : 1f);
-            Vector3 seat = body.Yto0() + side * (.52f * slot) - forward * (.72f + .16f * Mathf.Abs(slot))
+            Vector3 seat = body.Yto0() + side * (slotSpacing * slot) - forward * (.72f + .16f * Mathf.Abs(slot))
                 + Vector3.forward * (.42f + .11f * Mathf.Abs(slot));
             if (tick < impact)
             {
                 float p = ProgressBetween(tick, launch, impact);
                 float appear = ProgressBetween(tick, ReleaseAt, VolleyAt);
-                Vector3 direction = (aim - seat).Yto0().normalized;
-                Vector3 tip = Vector3.Lerp(seat + direction * .70f, aim, p * p);
-                Vector3 center = tip - direction * .70f;
-                float yaw = direction.sqrMagnitude > .001f ? direction.AngleFlat() : throwYaw;
-                Sprite(NeiyuExecutionMaterials.Sword, center, yaw, .85f, 1.5f, Color.white, appear);
+                Vector3 toAim = (aim - seat).Yto0();
+                float distance = toAim.magnitude;
+                Vector3 direction = distance > .001f ? toAim / distance : forward;
+                // Keep the enlarged tip on the same contact point, including short throws into walls.
+                Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
+                Vector3 tip = Vector3.Lerp(startTip, aim, p * p);
+                Vector3 center = tip - direction * tipOffset;
+                float yaw = direction.AngleFlat();
+                Sprite(NeiyuExecutionMaterials.Sword, center, yaw, .85f * swordScale, 1.5f * swordScale, Color.white, appear);
                 if (p > 0f)
-                    Sprite(NeiyuExecutionMaterials.Glow, center - direction * .53f, yaw, .18f, 1.55f,
+                    Sprite(NeiyuExecutionMaterials.Glow, center - direction * (.53f * swordScale),
+                        yaw, .18f * swordScale, 1.55f * swordScale,
                         Color.Lerp(ExecutionIce, ExecutionPink, Mathf.Abs(slot) / 4f), .73f);
             }
             else if (impacts > i)
