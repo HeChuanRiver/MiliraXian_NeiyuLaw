@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -150,9 +151,7 @@ namespace MiliraXian.Characters.Common.Vfx
                 }
                 if (mask != 0)
                 {
-                    Waylith.Rendering.LayerPassRouter.RegisterLayerMask(
-                        mask,
-                        Waylith.Rendering.RenderPassRegistry.Register("CaptureOnly"));
+                    RouteToCaptureOnly(mask);
                 }
             }
             catch (Exception ex)
@@ -162,5 +161,14 @@ namespace MiliraXian.Characters.Common.Vfx
             }
             return !disabled;
         }
+
+        /// <remarks>
+        /// Kept out of <see cref="EnsureLayers"/> so that a changed Waylith member fails when this
+        /// is called, inside the try there, instead of when EnsureLayers itself is compiled, which
+        /// would throw into the glowing object's draw code.
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void RouteToCaptureOnly(int mask) =>
+            Waylith.Rendering.LayerPassRouter.RegisterLayerMask(mask, Waylith.Rendering.RenderPassRegistry.Register("CaptureOnly"));
     }
 }

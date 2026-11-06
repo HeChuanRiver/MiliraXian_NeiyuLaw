@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Brutal.VulkanApi;
 using RimWorld.Planet;
@@ -184,7 +185,7 @@ namespace MiliraXian.Characters.Common.Vfx
             public byte PassId { get; } = RenderPassRegistry.Register("MX_ScreenBloomScene");
             public PassAttachment Attachment => null;
             public bool PreBackbuffer => true;
-            public void Record(in FrameContext ctx, object featurePayload) => owner.RecordScene(in ctx, featurePayload as BloomFrame);
+            public void Record(in FrameContext ctx, object featurePayload) => owner.GuardedRecordScene(in ctx, featurePayload as BloomFrame);
             public void OnRenderTargetRebuilt(IRenderTarget target) { }
             public void Dispose() { }
         }
@@ -196,7 +197,7 @@ namespace MiliraXian.Characters.Common.Vfx
             public byte PassId { get; } = RenderPassRegistry.Register("MX_ScreenBloomComposite");
             public PassAttachment Attachment => null;
             public bool PreBackbuffer => false;
-            public void Record(in FrameContext ctx, object featurePayload) => owner.RecordComposite(in ctx, featurePayload as BloomFrame);
+            public void Record(in FrameContext ctx, object featurePayload) => owner.GuardedRecordComposite(in ctx, featurePayload as BloomFrame);
             public void OnRenderTargetRebuilt(IRenderTarget target) { }
             public void Dispose() { }
         }
@@ -220,9 +221,94 @@ namespace MiliraXian.Characters.Common.Vfx
             passes = new IRenderPass[] { new ScenePass(this), new CompositeStage(this) };
         }
 
-        // ---------------------------------------------------------------- main thread
+        // ---------------------------------------------------------------- engine entry points
+        //
+        // The engine calls these every frame. Each only forwards to a NoInlining worker inside a
+        // try, so if a game update changes a Waylith member the worker uses, the JIT failure
+        // (MissingMethodException, TypeLoadException, ...) is raised at the call inside the try:
+        // the bloom reports once and turns itself off instead of taking down the frame loop.
+        // Keep these bodies free of engine calls for the same reason.
 
         public object CaptureFrame(in FrameTiming timing)
+        {
+            if (failed)
+            {
+                isActive = false;
+                return null;
+            }
+            try
+            {
+                return CaptureFrameCore(in timing);
+            }
+            catch (Exception ex)
+            {
+                isActive = false;
+                Fail("capturing the frame", ex);
+                return null;
+            }
+        }
+
+        private void GuardedRecordScene(in FrameContext ctx, BloomFrame frame)
+        {
+            if (frame == null || failed)
+            {
+                return;
+            }
+            try
+            {
+                RecordScene(in ctx, frame);
+            }
+            catch (Exception ex)
+            {
+                Fail("recording the scene pass", ex);
+            }
+        }
+
+        private void GuardedRecordComposite(in FrameContext ctx, BloomFrame frame)
+        {
+            if (frame == null || failed)
+            {
+                return;
+            }
+            try
+            {
+                RecordComposite(in ctx, frame);
+            }
+            catch (Exception ex)
+            {
+                Fail("recording the composite pass", ex);
+            }
+        }
+
+        public void OnRenderTargetRebuilt(IRenderTarget renderTarget)
+        {
+            try
+            {
+                OnRenderTargetRebuiltCore(renderTarget);
+            }
+            catch (Exception ex)
+            {
+                Fail("handling a render target rebuild", ex);
+            }
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                DisposeCore();
+            }
+            catch (Exception ex)
+            {
+                // Shutdown: nothing to turn off any more, just leave a trace.
+                Log.Warning("[MiliraXian] Screen bloom failed to release its GPU resources: " + ex);
+            }
+        }
+
+        // ---------------------------------------------------------------- main thread
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private object CaptureFrameCore(in FrameTiming timing)
         {
             isActive = false;
             if (failed || !ScreenBloom.ConsumeSubmissions(out int layerMask))
@@ -321,77 +407,97 @@ namespace MiliraXian.Characters.Common.Vfx
 
         // ---------------------------------------------------------------- render thread
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private void RecordScene(in FrameContext ctx, BloomFrame frame)
         {
-            if (frame == null || failed)
-            {
-                return;
-            }
-            try
-            {
-                renderer ??= new MeshBatchRenderer(ctx.GraphicsDevice, ctx.RenderContext);
-                EnsureSceneRenderPass(in ctx);
-                renderer.BeginFrame(in ctx, frame.frameNumber);
+            renderer ??= new MeshBatchRenderer(ctx.GraphicsDevice, ctx.RenderContext);
+            EnsureSceneRenderPass(in ctx);
+            renderer.BeginFrame(in ctx, frame.frameNumber);
 
-                int slot = ctx.SubmissionFrameIndex;
-                for (int g = 0; g < frame.groups.Count; g++)
+            int slot = ctx.SubmissionFrameIndex;
+            for (int g = 0; g < frame.groups.Count; g++)
+            {
+                GroupFrame groupFrame = frame.groups[g];
+                GroupTargets t = EnsureTargets(in ctx, groupFrame);
+                SlotImages images = t.slots[slot % t.slots.Length];
+
+                RecordSceneImage(in ctx, t.sceneAttachment, groupFrame.items, frame.view);
+                images.scene.Color.SetMipLayout(0, VkImageLayout.ShaderReadOnlyOptimal);
+                RecordSampleBarrier(ctx.CommandBuffer, images.scene);
+
+                // Down: scene -> down[0] (threshold) -> down[1] -> ... -> down[n-1].
+                RunPass(in ctx, t.prefilter, images.down[0], images.scene, null, in groupFrame.prefilter);
+                for (int i = 1; i < t.levels; i++)
                 {
-                    GroupFrame groupFrame = frame.groups[g];
-                    GroupTargets t = EnsureTargets(in ctx, groupFrame);
-                    SlotImages images = t.slots[slot % t.slots.Length];
-
-                    RecordSceneImage(in ctx, t.sceneAttachment, groupFrame.items, frame.view);
-                    images.scene.Color.SetMipLayout(0, VkImageLayout.ShaderReadOnlyOptimal);
-
-                    // Down: scene -> down[0] (threshold) -> down[1] -> ... -> down[n-1].
-                    RunPass(in ctx, t.prefilter, images.down[0], images.scene, null, in groupFrame.prefilter);
-                    for (int i = 1; i < t.levels; i++)
-                    {
-                        RunPass(in ctx, t.downsample[i - 1], images.down[i], images.down[i - 1], null, default(PrefilterParams), writeUniforms: false);
-                    }
-
-                    // Up: up[i] = mix(down[i], tent(up[i+1]), scatter), starting from the coarsest
-                    // level, which is its own accumulation.
-                    for (int i = t.levels - 2; i >= 0; i--)
-                    {
-                        Waylith.Rendering.RenderTexture coarse = i + 1 == t.levels - 1 ? images.down[i + 1] : images.up[i + 1];
-                        RunPass(in ctx, t.upsample[i], images.up[i], coarse, images.down[i], in groupFrame.upsample);
-                    }
+                    RunPass(in ctx, t.downsample[i - 1], images.down[i], images.down[i - 1], null, default(PrefilterParams), writeUniforms: false);
                 }
-            }
-            catch (Exception ex)
-            {
-                Fail("recording the scene pass", ex);
+
+                // Up: up[i] = mix(down[i], tent(up[i+1]), scatter), starting from the coarsest
+                // level, which is its own accumulation.
+                for (int i = t.levels - 2; i >= 0; i--)
+                {
+                    Waylith.Rendering.RenderTexture coarse = i + 1 == t.levels - 1 ? images.down[i + 1] : images.up[i + 1];
+                    RunPass(in ctx, t.upsample[i], images.up[i], coarse, images.down[i], in groupFrame.upsample);
+                }
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private void RecordComposite(in FrameContext ctx, BloomFrame frame)
         {
-            if (frame == null || failed)
+            int slot = ctx.SubmissionFrameIndex;
+            for (int g = 0; g < frame.groups.Count; g++)
+            {
+                GroupFrame groupFrame = frame.groups[g];
+                if (!targets.TryGetValue(groupFrame.group, out GroupTargets t) || t.slots.Length == 0)
+                {
+                    continue;
+                }
+                SlotImages images = t.slots[slot % t.slots.Length];
+                Waylith.Rendering.RenderTexture halo = t.levels > 1 ? images.up[0] : images.down[0];
+                t.composite.SetInput(0, halo.Color, halo.Sampler);
+                t.composite.SetUniforms(in groupFrame.composite);
+                t.composite.RecordInline(in ctx, ctx.RenderPass, ctx.SampleCount);
+            }
+        }
+
+        /// <summary>
+        /// Makes the scene image's colour writes visible to the prefilter's sampling.
+        /// </summary>
+        /// <remarks>
+        /// The scene render pass already ends with an external dependency to fragment-shader reads
+        /// (<see cref="PostFxPassHelpers.CreateColorRenderPass"/>), which suffices elsewhere; the game
+        /// adds this explicit barrier on macOS only (SceneColorTargets.RecordSampleBarrier, also in
+        /// PostEffectPass), presumably because MoltenVK does not honour the subpass dependency. The
+        /// same is done here for the same image transition.
+        /// </remarks>
+        private static void RecordSampleBarrier(CommandBuffer cmd, Waylith.Rendering.RenderTexture target)
+        {
+            if (!Brutal.Platform.IsMacOS)
             {
                 return;
             }
-            try
+            VkImageMemoryBarrier barrier = new VkImageMemoryBarrier
             {
-                int slot = ctx.SubmissionFrameIndex;
-                for (int g = 0; g < frame.groups.Count; g++)
+                SrcAccessMask = VkAccessFlags.ColorAttachmentWriteBit,
+                DstAccessMask = VkAccessFlags.ShaderReadBit,
+                OldLayout = VkImageLayout.ShaderReadOnlyOptimal,
+                NewLayout = VkImageLayout.ShaderReadOnlyOptimal,
+                SrcQueueFamilyIndex = -1,
+                DstQueueFamilyIndex = -1,
+                Image = target.Color.Image,
+                SubresourceRange = new VkImageSubresourceRange
                 {
-                    GroupFrame groupFrame = frame.groups[g];
-                    if (!targets.TryGetValue(groupFrame.group, out GroupTargets t) || t.slots.Length == 0)
-                    {
-                        continue;
-                    }
-                    SlotImages images = t.slots[slot % t.slots.Length];
-                    Waylith.Rendering.RenderTexture halo = t.levels > 1 ? images.up[0] : images.down[0];
-                    t.composite.SetInput(0, halo.Color, halo.Sampler);
-                    t.composite.SetUniforms(in groupFrame.composite);
-                    t.composite.RecordInline(in ctx, ctx.RenderPass, ctx.SampleCount);
-                }
-            }
-            catch (Exception ex)
-            {
-                Fail("recording the composite pass", ex);
-            }
+                    AspectMask = VkImageAspectFlags.ColorBit,
+                    BaseMipLevel = 0,
+                    LevelCount = 1,
+                    BaseArrayLayer = 0,
+                    LayerCount = 1,
+                },
+            };
+            cmd.PipelineBarrier(VkPipelineStageFlags.ColorAttachmentOutputBit, VkPipelineStageFlags.FragmentShaderBit,
+                VkDependencyFlags.None, default(ReadOnlySpan<VkMemoryBarrier>), default(ReadOnlySpan<VkBufferMemoryBarrier>),
+                new ReadOnlySpan<VkImageMemoryBarrier>(ref barrier));
         }
 
         private unsafe void RecordSceneImage(in FrameContext main, PassAttachment attachment, List<FinalDrawItem> items, CameraView view)
@@ -576,7 +682,8 @@ namespace MiliraXian.Characters.Common.Vfx
         /// The frame renderer notifies features, not their passes, and calls this while the render
         /// thread is idle, so the GPU resources can be touched here.
         /// </remarks>
-        public void OnRenderTargetRebuilt(IRenderTarget renderTarget)
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void OnRenderTargetRebuiltCore(IRenderTarget renderTarget)
         {
             if (renderTarget is IRenderContext renderContext)
             {
@@ -601,7 +708,8 @@ namespace MiliraXian.Characters.Common.Vfx
             Log.Error($"[MiliraXian] Screen bloom failed while {stage} and is disabled: {ex}");
         }
 
-        public void Dispose()
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void DisposeCore()
         {
             foreach (GroupTargets t in targets.Values)
             {
@@ -629,29 +737,37 @@ namespace MiliraXian.Characters.Common.Vfx
     {
         static ScreenBloomFeatureRegistration()
         {
+            // Same reasoning as the feature's entry points: the engine calls live in a NoInlining
+            // method so a changed Waylith member fails inside this try.
             try
             {
-                FrameRenderer frameRenderer = EngineApplication.Instance?.FrameRenderer;
-                if (frameRenderer == null || EngineApplication.Instance.Options.Headless)
-                {
-                    return;
-                }
-
-                int index = frameRenderer.GetFeatureCount();
-                for (int i = 0; i < frameRenderer.GetFeatureCount(); i++)
-                {
-                    if (frameRenderer.GetFeatureAt(i).GetType().Name == "PostFxFeature")
-                    {
-                        index = i + 1;
-                        break;
-                    }
-                }
-                frameRenderer.InsertFeature(index, new ScreenBloomFeature());
+                Register();
             }
             catch (Exception ex)
             {
                 Log.Error("[MiliraXian] Screen bloom could not register its render feature: " + ex);
             }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void Register()
+        {
+            FrameRenderer frameRenderer = EngineApplication.Instance?.FrameRenderer;
+            if (frameRenderer == null || EngineApplication.Instance.Options.Headless)
+            {
+                return;
+            }
+
+            int index = frameRenderer.GetFeatureCount();
+            for (int i = 0; i < frameRenderer.GetFeatureCount(); i++)
+            {
+                if (frameRenderer.GetFeatureAt(i).GetType().Name == "PostFxFeature")
+                {
+                    index = i + 1;
+                    break;
+                }
+            }
+            frameRenderer.InsertFeature(index, new ScreenBloomFeature());
         }
     }
 }
