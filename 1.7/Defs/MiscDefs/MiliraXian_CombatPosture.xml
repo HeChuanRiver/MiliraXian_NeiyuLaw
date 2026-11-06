@@ -42,6 +42,8 @@
     <defName>MX_CombatPostureBroken</defName>
     <driverClass>MiliraXian.Characters.Common.Combat.JobDriver_CombatPostureBroken</driverClass>
     <reportString>正在重整架势。</reportString>
+    <!-- 受伤不重新选 Job：原版受伤时会重算 Job，崩溃的敌人一挨打就站起来，破绽随之解除，等不到处决 -->
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
     <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
     <casualInterruptible>false</casualInterruptible>
     <playerInterruptible>false</playerInterruptible>

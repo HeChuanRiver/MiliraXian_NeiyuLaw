@@ -15,6 +15,7 @@ using Verse.AI;
 using Verse.AI.Group;
 using Verse.Sound;
 using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.Combat;
 
 namespace MiliraXian.Characters.Zhaoli
 {
@@ -4072,6 +4073,21 @@ namespace MiliraXian.Characters.Zhaoli
                 if (ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.TrySchedulePlayerChallengeReturn() != true)
                     component.NotifyRaidZhaoliDefeated(__instance);
             }
+        }
+    }
+
+    /// <summary>
+    /// Executions skip every shield and invulnerability; the phase transition must still not be
+    /// skipped by one. While Zhaoli is transition-invulnerable, every execution is negated (no charge
+    /// spent, no limit), as the damage patch below absorbs every hit.
+    /// </summary>
+    [StaticConstructorOnStartup]
+    internal static class ZhaoliTransitionExecutionGuard
+    {
+        static ZhaoliTransitionExecutionGuard()
+        {
+            ExecutionGuard.Register((victim, _) =>
+                ZhaoliScenarioUtility.GetRaidStateComp(victim)?.IsTransitionInvulnerable() == true);
         }
     }
 

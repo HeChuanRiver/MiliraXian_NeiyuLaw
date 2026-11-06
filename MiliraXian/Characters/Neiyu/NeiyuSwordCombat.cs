@@ -139,6 +139,8 @@ internal static class NeiyuSwordCombat
         if (!CanAct(executor) || !ExecutionTarget(victim) || executor.Map != victim.Map) return;
         DamageInfo execution = new(DamageDefOf.ExecutionCut, 1f, 0f, -1f,
             executor, null, executor.equipment.Primary.def);
+        // The one exception: a life-like charge (Qinghe's Flowing Form) takes the execution instead.
+        if (ExecutionGuard.TryNegate(victim, execution)) return;
         victim.Kill(execution);
     }
 }

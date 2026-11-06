@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MiliraXian.Characters.QingHe.Abilities;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -457,6 +457,17 @@ namespace MiliraXian.Characters.QingHe
             public static void Postfix(Pawn __instance)
             {
                 CompAbilityEffect_AscentSlash.NotifyPawnUnavailable(__instance);
+            }
+        }
+
+        /// <summary>Flowing Form is the one guard an execution respects (one charge = one life).</summary>
+        [StaticConstructorOnStartup]
+        internal static class FlowingFormExecutionGuard
+        {
+            static FlowingFormExecutionGuard()
+            {
+                Common.Combat.ExecutionGuard.Register((victim, dinfo) =>
+                    ScanDamageHediffs(victim.health?.hediffSet?.hediffs).FlowingForm?.TryNegateExecution(dinfo) == true);
             }
         }
 

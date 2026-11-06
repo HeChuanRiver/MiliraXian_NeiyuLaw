@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
@@ -156,6 +156,22 @@ namespace MiliraXian.Characters.QingHe.Hediffs
 
             int maxTicks = Props.cooldownWarningCooldownTicks > 0 ? Props.cooldownWarningCooldownTicks : 600;
             cooldownWarningEndTick = CurrentTick + maxTicks;
+        }
+
+        /// <summary>
+        /// An execution always counts as lethal: with a charge left, Flowing Form negates it as it
+        /// would a lethal hit (one charge spent, wounds restored, invisibility and immunity).
+        /// </summary>
+        public bool TryNegateExecution(DamageInfo dinfo)
+        {
+            if (!QinghePowerBalance.ZeroLevelPassivesEnabled || Pawn == null || Pawn.Dead
+                || Pawn.health == null || CurrentCharges <= 0)
+            {
+                return false;
+            }
+            bool absorbed = false;
+            Trigger(ref dinfo, ref absorbed);
+            return absorbed;
         }
 
         public void Trigger(ref DamageInfo dinfo, ref bool absorbed)

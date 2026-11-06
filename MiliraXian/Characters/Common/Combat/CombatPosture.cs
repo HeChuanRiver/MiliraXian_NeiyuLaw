@@ -157,6 +157,9 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         holdStarted = false;
         Pawn.pather?.StopDead();
         Pawn.stances?.CancelBusyStanceHard();
+        // The hold starts on the next tick, not inside the hit that broke it (that may be the
+        // victim's own swing); until then no new job or cast can start (Patch_CombatPostureLock).
+        nextUpdateTick = Now + 1;
         owner?.NotifyPostureBroken(source, Pawn);
     }
 
@@ -177,9 +180,21 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         if (previous > 0f && CurrentValue <= 0f) fadeUntilTick = Now + C.barFadeTicks;
         if (!broken) return;
         CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
-        if (Now >= brokenUntilTick || owner == null || !owner.CanExecute(source, Pawn))
+        if (Now >= brokenUntilTick)
         {
             ReleaseBreak();
+            return;
+        }
+        if (owner == null || !owner.Executes)
+        {
+            // Broken by someone who does not execute: hold still for the window, then recover.
+            HoldWithoutExecution();
+            return;
+        }
+        if (!owner.CanExecute(source, Pawn))
+        {
+            if (owner.WaitForExecutor && executioner == null) HoldWithoutExecution();
+            else ReleaseBreak();
             return;
         }
         if (executioner != null)
@@ -189,27 +204,44 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
                 ReleaseBreak();
             return;
         }
-        if (holdStarted && !Pawn.Downed && Pawn.CurJobDef != C.brokenJob)
-        {
-            ReleaseBreak();
-            return;
-        }
-        if (!holdStarted)
-        {
-            holdStarted = true;
-            if (!Pawn.Downed)
-                Pawn.jobs.StartJob(JobMaker.MakeJob(C.brokenJob), JobCondition.InterruptForced);
-        }
+        EnsureHold();
         // Multiple broken enemies wait in their own bounded break window while
         // their source finishes an existing execution. No map search or queue scan.
         if (source.jobs?.curDriver is IPostureExecutionDriver) return;
-        if (source.stances?.curStance is Stance_Warmup) { ReleaseBreak(); return; }
+        // An executor that waits decides itself (in CanExecute) which of its own stances it may leave.
+        if (source.stances?.curStance is Stance_Warmup && !owner.WaitForExecutor) { ReleaseBreak(); return; }
         Job job = owner.MakeExecutionJob(source, Pawn);
         if (job == null) { ReleaseBreak(); return; }
         executioner = source;
-        source.jobs.StartJob(job, JobCondition.InterruptForced, resumeCurJobAfterwards: true);
+        // An executor that waited may start late: the break lasts through its execution.
+        if (owner.WaitForExecutor) brokenUntilTick = Mathf.Max(brokenUntilTick, Now + owner.MinimumBreakWindowTicks);
+        // Not resumed afterwards: a suspended job goes to the front of the job queue, and an AI
+        // pawn whose think tree issues a fresh attack job never takes it back, so each execution
+        // left one more stale job queued. After the execution the AI or the draft picks anew.
+        source.jobs.StartJob(job, JobCondition.InterruptForced, resumeCurJobAfterwards: false);
         if (source.CurJob != job) ReleaseBreak();
     }
+
+    private void HoldWithoutExecution() => EnsureHold();
+
+    /// <summary>
+    /// The victim holds still in the broken job for the whole window. Other jobs and casts cannot
+    /// start meanwhile (Patch_CombatPostureLock); if the hold job still ends (a forced end, a load),
+    /// it starts again instead of the break being dropped.
+    /// </summary>
+    private void EnsureHold()
+    {
+        holdStarted = true;
+        if (Pawn.Downed || Pawn.CurJobDef == C.brokenJob || Pawn.jobs == null) return;
+        Pawn.jobs.StartJob(JobMaker.MakeJob(C.brokenJob), JobCondition.InterruptForced);
+    }
+
+    /// <summary>The victim is held: no job but the hold job and no cast may start.</summary>
+    internal bool HoldsPawn => broken && Pawn.Spawned && !Pawn.Dead && !Pawn.Downed && Now < brokenUntilTick;
+
+    // Posture from something other than a block on the attacker (for example a
+    // defender's own guard taking the hit). No opening.
+    public void AddPressure(Pawn source, float amount) => ReceiveBlock(source, amount, opening: false);
 
     // HediffWithComps dispatches interval comps separately in 1.7. Sharing the
     // same deadline also makes legacy comp callbacks safe if both are dispatched.
@@ -298,6 +330,31 @@ internal static class Patch_CombatPostureOpening
         __state?.CompleteOpening(__result?.totalDamageDealt > 0f);
 
     private static void Finalizer(HediffComp_CombatPosture __state) => __state?.ReleaseOpening();
+}
+
+// While the posture is broken nothing the victim does can end the hold: AI, abilities (Milira's
+// burst flight is a CastJump job), mental states and orders all start jobs or casts, so both
+// are refused until the window ends or the execution releases it.
+[HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.StartJob))]
+internal static class Patch_CombatPostureLock
+{
+    private static bool Prefix(Job newJob, Pawn ___pawn)
+    {
+        if (newJob == null || newJob.def == CombatPosture.Config.brokenJob) return true;
+        return CombatPosture.Get(___pawn)?.HoldsPawn != true;
+    }
+}
+
+[HarmonyPatch(typeof(Verb), nameof(Verb.TryStartCastOn),
+    new[] { typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(bool), typeof(bool), typeof(bool), typeof(bool) })]
+internal static class Patch_CombatPostureLockCast
+{
+    private static bool Prefix(Verb __instance, ref bool __result)
+    {
+        if (CombatPosture.Get(__instance.CasterPawn)?.HoldsPawn != true) return true;
+        __result = false;
+        return false;
+    }
 }
 
 [HarmonyPatch(typeof(Pawn), nameof(Pawn.DrawGUIOverlay))]

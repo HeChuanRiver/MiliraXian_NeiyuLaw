@@ -14,22 +14,51 @@ namespace MiliraXian.Characters.Common.Combat;
 public static class CombatBlock
 {
     internal static readonly MethodInfo NativeDodge = AccessTools.DeclaredMethod(typeof(Verb_MeleeAttack), "GetDodgeChance");
+    internal static readonly MethodInfo NativeHit = AccessTools.DeclaredMethod(typeof(Verb_MeleeAttack), "GetNonMissChance");
     // Bind at first combat use, after startup patch registration has finished.
-    private static class NativeDodgeCall
+    private static class NativeCall
     {
-        internal static readonly Func<Verb_MeleeAttack, LocalTargetInfo, float> Chance =
+        internal static readonly Func<Verb_MeleeAttack, LocalTargetInfo, float> Dodge =
             NativeDodge.CreateDelegate<Func<Verb_MeleeAttack, LocalTargetInfo, float>>();
+        internal static readonly Func<Verb_MeleeAttack, LocalTargetInfo, float> Hit =
+            NativeHit.CreateDelegate<Func<Verb_MeleeAttack, LocalTargetInfo, float>>();
     }
     [ThreadStatic] private static Verb_MeleeAttack activeVerb;
     [ThreadStatic] private static Thing activeTarget;
-    [ThreadStatic] private static byte decision; // 0 undecided, 1 failed/ineligible, 2 blocked
+    // 0 undecided, 1 before-hit blockers failed, 2 blocked, 3 every blocker failed
+    [ThreadStatic] private static byte decision;
+    [ThreadStatic] private static bool hitNotified;
+    // Posture the attack now resolving carries (a technique strike); 0 = none, the defender's defaults apply.
+    [ThreadStatic] private static float attackPosture;
 
-    public readonly struct Scope(Verb_MeleeAttack previousVerb, Thing previousTarget, byte previousDecision, bool owns) : IDisposable
+    /// <summary>
+    /// Posture of the melee attack now resolving; 0 when it carries none. A blocker reads it to
+    /// scale what a block costs its defender; an unblocked hit's posture is applied by the attacker.
+    /// </summary>
+    public static float AttackPosture => attackPosture;
+
+    public readonly struct PostureScope(float previous) : IDisposable
     {
+        public void Dispose() => attackPosture = previous;
+    }
+
+    /// <summary>Marks the attack resolved inside the scope as carrying <paramref name="posture"/>.</summary>
+    public static PostureScope WithAttackPosture(float posture)
+    {
+        PostureScope scope = new(attackPosture);
+        attackPosture = Math.Max(0f, posture);
+        return scope;
+    }
+
+    public readonly struct Scope(Verb_MeleeAttack previousVerb, Thing previousTarget, byte previousDecision, bool previousNotified, bool owns) : IDisposable
+    {
+        /// <summary>This call opened the decision scope (the outermost one for its verb and target).</summary>
+        public bool Owns => owns;
+
         public void Dispose()
         {
             if (!owns) return;
-            activeVerb = previousVerb; activeTarget = previousTarget; decision = previousDecision;
+            activeVerb = previousVerb; activeTarget = previousTarget; decision = previousDecision; hitNotified = previousNotified;
         }
     }
 
@@ -37,18 +66,35 @@ public static class CombatBlock
     {
         if (!CombatBlockers.Covers(target.Pawn)
             || activeVerb == verb && activeTarget == target.Thing) return default;
-        Scope scope = new(activeVerb, activeTarget, decision, true);
-        activeVerb = verb; activeTarget = target.Thing; decision = 0;
+        Scope scope = new(activeVerb, activeTarget, decision, hitNotified, true);
+        activeVerb = verb; activeTarget = target.Thing; decision = 0; hitNotified = false;
         return scope;
     }
+
+    private static bool InScope(Verb_MeleeAttack verb, LocalTargetInfo target) =>
+        activeVerb == verb && activeTarget == target.Thing;
 
     public static bool Blocked(Verb_MeleeAttack verb, LocalTargetInfo target)
     {
         if (!CombatBlockers.Covers(target.Pawn)) return false;
-        if (activeVerb != verb || activeTarget != target.Thing)
+        if (!InScope(verb, target))
             return CombatBlockers.TryBlockMelee(verb, target.Pawn);
-        if (decision == 0) decision = CombatBlockers.TryBlockMelee(verb, target.Pawn) ? (byte)2 : (byte)1;
+        if (decision == 0) decision = CombatBlockers.TryBlockMelee(verb, target.Pawn, MeleeBlockStage.BeforeHit) ? (byte)2 : (byte)1;
+        if (decision == 1) decision = CombatBlockers.TryBlockMelee(verb, target.Pawn, MeleeBlockStage.AfterHit) ? (byte)2 : (byte)3;
         return decision == 2;
+    }
+
+    // Replaces the native hit roll. Blockers that decide before the hit see
+    // every swing; a block counts as a hit so the swing reaches the block path
+    // (no dodge, deflected damage result) instead of being logged as a miss.
+    public static bool RollHit(Verb_MeleeAttack verb, LocalTargetInfo target)
+    {
+        if (CombatBlockers.Covers(target.Pawn) && InScope(verb, target))
+        {
+            if (decision == 0) decision = CombatBlockers.TryBlockMelee(verb, target.Pawn, MeleeBlockStage.BeforeHit) ? (byte)2 : (byte)1;
+            if (decision == 2) return true;
+        }
+        return Rand.Chance(NativeCall.Hit(verb, target));
     }
 
     public static bool RollDodge(Verb_MeleeAttack verb, LocalTargetInfo target)
@@ -56,7 +102,26 @@ public static class CombatBlock
         // A successful block never rolls dodge. A failed block reaches the exact
         // native chance, including other mods' patches on GetDodgeChance.
         if (Blocked(verb, target)) return false;
-        return Rand.Chance(NativeDodgeCall.Chance(verb, target));
+        return Rand.Chance(NativeCall.Dodge(verb, target));
+    }
+
+    // Damage is about to be applied and no blocker stopped it.
+    internal static void NotifyUnblockedHit(Verb_MeleeAttack verb, LocalTargetInfo target)
+    {
+        if (target.Pawn == null || !InScope(verb, target) || hitNotified) return;
+        hitNotified = true;
+        resultNotified = false;
+        CombatBlockers.NotifyMeleeHit(verb, target.Pawn);
+    }
+
+    [ThreadStatic] private static bool resultNotified;
+
+    // The unblocked hit's damage has been applied (once per invocation and target, outermost call).
+    internal static void NotifyUnblockedResult(Verb_MeleeAttack verb, LocalTargetInfo target, DamageWorker.DamageResult result)
+    {
+        if (target.Pawn == null || !InScope(verb, target) || !hitNotified || resultNotified) return;
+        resultNotified = true;
+        CombatBlockers.NotifyMeleeHitResult(verb, target.Pawn, result);
     }
 }
 
@@ -72,19 +137,22 @@ internal static class Patch_CombatBlockOrder
     {
         List<CodeInstruction> code = new(instructions);
         MethodInfo chance = AccessTools.Method(typeof(Rand), nameof(Rand.Chance), [typeof(float)]);
-        MethodInfo resolve = AccessTools.Method(typeof(CombatBlock), nameof(CombatBlock.RollDodge));
-        int replacements = 0;
+        MethodInfo resolveDodge = AccessTools.Method(typeof(CombatBlock), nameof(CombatBlock.RollDodge));
+        MethodInfo resolveHit = AccessTools.Method(typeof(CombatBlock), nameof(CombatBlock.RollHit));
+        int dodges = 0, hits = 0;
         for (int i = 0; i < code.Count - 1; i++)
         {
-            if (!code[i].Calls(CombatBlock.NativeDodge) || !code[i + 1].Calls(chance)) continue;
+            MethodInfo resolve;
+            if (code[i].Calls(CombatBlock.NativeDodge) && code[i + 1].Calls(chance)) { resolve = resolveDodge; dodges++; }
+            else if (code[i].Calls(CombatBlock.NativeHit) && code[i + 1].Calls(chance)) { resolve = resolveHit; hits++; }
+            else continue;
             // The stack already contains (verb, LocalTargetInfo). Keep labels and
             // exception blocks in place; only replace the two calls, not the shot.
             code[i].opcode = OpCodes.Call; code[i].operand = resolve;
             code[i + 1].opcode = OpCodes.Nop; code[i + 1].operand = null;
-            replacements++;
         }
-        if (replacements != 1)
-            throw new InvalidOperationException($"通用格挡：预期一个闪避入口，实际匹配 {replacements} 个。请核对当前游戏与其他转译补丁。");
+        if (dodges != 1 || hits != 1)
+            throw new InvalidOperationException($"通用格挡：预期命中和闪避入口各一个，实际匹配命中 {hits} 个、闪避 {dodges} 个。请核对当前游戏与其他转译补丁。");
         return code;
     }
 }
@@ -111,9 +179,20 @@ internal static class Patch_CombatBlockMeleeDamage
         ref DamageWorker.DamageResult __result, out CombatBlock.Scope __state)
     {
         __state = CombatBlock.Begin(__instance, __0);
-        if (!CombatBlock.Blocked(__instance, __0)) return true;
+        if (!CombatBlock.Blocked(__instance, __0))
+        {
+            CombatBlock.NotifyUnblockedHit(__instance, __0);
+            return true;
+        }
         __result = new DamageWorker.DamageResult { deflected = true };
         return false;
+    }
+
+    // After the damage of an unblocked hit (the outermost scope owner reports it once).
+    private static void Postfix(Verb_MeleeAttack __instance, LocalTargetInfo __0, DamageWorker.DamageResult __result,
+        CombatBlock.Scope __state)
+    {
+        if (__state.Owns) CombatBlock.NotifyUnblockedResult(__instance, __0, __result);
     }
 
     private static void Finalizer(CombatBlock.Scope __state) => __state.Dispose();
