@@ -374,6 +374,19 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
+    public class StatPart_MingyuanRebirthFlameMarketValue : StatPart
+    {
+        public override void TransformValue(StatRequest req, ref float val)
+        {
+            if (req.Thing is Thing_MingyuanQuestRebirthFlame)
+            {
+                val = 0f;
+            }
+        }
+
+        public override string ExplanationPart(StatRequest req) => null;
+    }
+
     public class Thing_MingyuanQuestRebirthFlame : Building
     {
         private int savedMaxHitPoints;
