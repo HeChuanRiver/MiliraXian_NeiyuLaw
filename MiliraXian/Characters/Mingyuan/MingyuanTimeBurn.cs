@@ -30,15 +30,30 @@ public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowe
 {
     internal new CompProperties_AbilityMingyuanTimeBurn Props => (CompProperties_AbilityMingyuanTimeBurn)props;
 
-    public override bool Valid(LocalTargetInfo target, bool throwMessages = false) =>
-        base.Valid(target, throwMessages) && MingyuanTimeBurnUtility.IsTarget(target.Pawn, parent.pawn, parent.pawn.Map);
+    public override void PostExposeData()
+    {
+        base.PostExposeData();
+        // VerbTracker can replace the saved vanilla verb after Ability.Initialize has already bound it.
+        if (Scribe.mode == LoadSaveMode.PostLoadInit && parent.verb is Verb_MingyuanTimeBurn verb)
+            verb.Ability = parent;
+    }
+
+    public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
+    {
+        if (!base.Valid(target, throwMessages)) return false;
+        Pawn caster = parent.pawn;
+        if (MingyuanTimeBurnUtility.IsTarget(target.Pawn, caster, caster.Map)) return true;
+        if (throwMessages && target.HasThing)
+            Messages.Message("时间燃烧只能以可衰老的敌对生物为目标，机械体免疫。", target.Thing, MessageTypeDefOf.RejectInput, false);
+        return false;
+    }
 
     public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest) =>
         base.CanApplyOn(target, dest) && Valid(target);
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
     {
-        if (!Valid(target) || Props.projectileDef == null || parent.verb is not Verb_MingyuanTimeBurn verb) return;
+        if (!Valid(target) || Props.projectileDef == null) return;
         Pawn caster = parent.pawn;
         Map map = caster.Map;
         Vector3 origin = caster.Position.ToVector3Shifted();
@@ -47,7 +62,7 @@ public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowe
 
         base.Apply(target, dest);
         var wave = (Projectile_MingyuanTimeBurnWave)GenSpawn.Spawn(Props.projectileDef, caster.Position, map);
-        wave.LaunchWave(caster, target, direction, verb.EffectiveRange);
+        wave.LaunchWave(caster, target, direction, parent.verb.EffectiveRange);
         Props.effectSoundDef?.PlayOneShot(new TargetInfo(caster.Position, map));
     }
 }
@@ -85,8 +100,8 @@ internal static class MingyuanTimeBurnUtility
         map != null && pawn?.Map == map && pawn.Spawned && pawn != caster && CanAge(pawn) && pawn.HostileTo(caster);
 
     internal static CompProperties_AbilityMingyuanTimeBurn PropsFor(Pawn caster) =>
-        caster?.abilities?.GetAbility(MX_MingyuanDefOf.MX_Mingyuan_TimeBurn)?.verb is Verb_MingyuanTimeBurn verb
-            ? verb.Props : null;
+        caster?.abilities?.GetAbility(MX_MingyuanDefOf.MX_Mingyuan_TimeBurn)
+            ?.CompOfType<CompAbilityEffect_MingyuanTimeBurn>()?.Props;
 }
 
 public class Projectile_MingyuanTimeBurnWave : Projectile

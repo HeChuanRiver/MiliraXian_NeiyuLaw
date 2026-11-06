@@ -20,6 +20,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool destroyOldWeapon = true;
         public bool requirePrimary = true;
+        public bool reuseInventoryForm;
         public bool blockWhilePawnBusy;
         public int cooldownTicks = 0;
 
@@ -379,21 +380,43 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            ThingDef stuff = targetDef.MadeFromStuff ? sourceThing.Stuff : null;
-            ThingWithComps newThing = ThingMaker.MakeThing(targetDef, stuff) as ThingWithComps;
-            if (newThing == null)
-            {
-                Messages.Message("MX_ModeSwitch_TargetFormInvalidThing".Translate(targetDef.defName), pawn, MessageTypeDefOf.RejectInput, false);
+            ThingOwner heldInventory = pawn.inventory?.innerContainer;
+            if (context.Location == HeldLocation.EquipmentPrimary
+                ? pawn.equipment?.Primary != sourceThing
+                : heldInventory?.Contains(sourceThing) != true)
                 return;
+
+            ThingWithComps newThing = null;
+            if (Props.reuseInventoryForm && context.Location == HeldLocation.EquipmentPrimary && heldInventory != null)
+            {
+                for (int i = 0; i < heldInventory.Count; i++)
+                {
+                    if (heldInventory[i] is ThingWithComps alternate && alternate.def == targetDef && heldInventory.Remove(alternate))
+                    {
+                        newThing = alternate;
+                        break;
+                    }
+                }
             }
 
-            newThing.HitPoints = Math.Min(sourceThing.HitPoints, newThing.MaxHitPoints);
-
-            CompQuality qOld = sourceThing.TryGetComp<CompQuality>();
-            CompQuality qNew = newThing.TryGetComp<CompQuality>();
-            if (qOld != null && qNew != null)
+            if (newThing == null)
             {
-                qNew.SetQuality(qOld.Quality, ArtGenerationContext.Colony);
+                ThingDef stuff = targetDef.MadeFromStuff ? sourceThing.Stuff : null;
+                newThing = ThingMaker.MakeThing(targetDef, stuff) as ThingWithComps;
+                if (newThing == null)
+                {
+                    Messages.Message("MX_ModeSwitch_TargetFormInvalidThing".Translate(targetDef.defName), pawn, MessageTypeDefOf.RejectInput, false);
+                    return;
+                }
+
+                newThing.HitPoints = Math.Min(sourceThing.HitPoints, newThing.MaxHitPoints);
+
+                CompQuality qOld = sourceThing.TryGetComp<CompQuality>();
+                CompQuality qNew = newThing.TryGetComp<CompQuality>();
+                if (qOld != null && qNew != null)
+                {
+                    qNew.SetQuality(qOld.Quality, ArtGenerationContext.Colony);
+                }
             }
 
             if (context.Location == HeldLocation.EquipmentPrimary)

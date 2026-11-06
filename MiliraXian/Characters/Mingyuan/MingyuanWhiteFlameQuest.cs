@@ -37,7 +37,6 @@ namespace MiliraXian.Characters.Mingyuan
         public const string ZhaoliPawnKindDefName = "MiliraXian_Zhaoli";
 
         private const string RainbowBowDefName = "MX_Mingyuan_RainbowBow";
-        private const string CinderSwordDefName = "MX_Mingyuan_CinderSword";
 
         public static bool MingyuanExistsAnywhere(Pawn except = null)
         {
@@ -220,7 +219,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            EnsureFixedWeapons(pawn);
+            EnsureFixedWeapon(pawn);
             if (pawn.abilities != null && pawn.kindDef?.abilities != null)
             {
                 for (int index = 0; index < pawn.kindDef.abilities.Count; index++)
@@ -248,53 +247,25 @@ namespace MiliraXian.Characters.Mingyuan
             return Find.AnyPlayerHomeMap;
         }
 
-        private static void EnsureFixedWeapons(Pawn pawn)
+        private static void EnsureFixedWeapon(Pawn pawn)
         {
-            if (pawn?.equipment == null)
-            {
-                return;
-            }
+            if (pawn?.equipment == null) return;
 
             ThingDef bowDef = DefDatabase<ThingDef>.GetNamedSilentFail(RainbowBowDefName);
-            ThingDef swordDef = DefDatabase<ThingDef>.GetNamedSilentFail(CinderSwordDefName);
-            if (bowDef == null || swordDef == null)
+            if (bowDef == null)
             {
                 Log.Error("[MiliraXian.Characters.Mingyuan] Missing fixed Mingyuan weapon def.");
                 return;
             }
 
             ThingWithComps primary = pawn.equipment.Primary;
-            if (primary == null || primary.def != bowDef)
-            {
-                if (primary != null)
-                {
-                    if (primary.def == swordDef && pawn.inventory?.innerContainer != null)
-                    {
-                        pawn.equipment.TryTransferEquipmentToContainer(primary, pawn.inventory.innerContainer);
-                    }
-                    else
-                    {
-                        pawn.equipment.DestroyEquipment(primary);
-                    }
-                }
-
-                ThingWithComps bow = MakeExcellentGear(bowDef, pawn);
-                if (bow != null)
-                {
-                    pawn.equipment.AddEquipment(bow);
-                }
-            }
-
-            if (pawn.inventory?.innerContainer == null || ContainsDef(pawn.inventory.innerContainer, swordDef))
-            {
+            if (primary != null && (primary.def == bowDef || primary.def == MX_MingyuanDefOf.MX_Mingyuan_CinderSword))
                 return;
-            }
 
-            ThingWithComps sword = MakeExcellentGear(swordDef, pawn);
-            if (sword != null && !pawn.inventory.innerContainer.TryAdd(sword, canMergeWithExistingStacks: false))
-            {
-                sword.Destroy(DestroyMode.Vanish);
-            }
+            ThingWithComps bow = MakeExcellentGear(bowDef, pawn);
+            if (bow == null) return;
+            if (primary != null) pawn.equipment.DestroyEquipment(primary);
+            pawn.equipment.AddEquipment(bow);
         }
 
         private static ThingWithComps MakeExcellentGear(ThingDef thingDef, Pawn pawn)
@@ -309,19 +280,6 @@ namespace MiliraXian.Characters.Mingyuan
             gear.TryGetComp<CompQuality>()?.SetQuality(QualityCategory.Excellent, ArtGenerationContext.Outsider);
             gear.HitPoints = gear.MaxHitPoints;
             return gear;
-        }
-
-        private static bool ContainsDef(ThingOwner owner, ThingDef thingDef)
-        {
-            for (int index = 0; index < owner.Count; index++)
-            {
-                if (owner[index]?.def == thingDef)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 

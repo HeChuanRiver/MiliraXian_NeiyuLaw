@@ -53,11 +53,6 @@
             <max>99999</max>
         </weaponMoney>
 
-        <inventoryOptions>
-            <thingDef>MX_Mingyuan_CinderSword</thingDef>
-            <countRange>1</countRange>
-        </inventoryOptions>
-
         <gearHealthRange Inherit="False">
             <min>1</min>
             <max>1</max>

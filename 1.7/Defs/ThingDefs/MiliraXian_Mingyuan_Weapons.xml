@@ -65,6 +65,19 @@
         </tools>
 
         <comps>
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_Mingyuan_RainbowBow</li>
+                    <li>MX_Mingyuan_CinderSword</li>
+                </formWeaponDefs>
+                <formIconPaths>
+                    <li>MiliraXianMingyuan/Items/RainbowBow</li>
+                    <li>MiliraXianMingyuan/Items/CinderSword</li>
+                </formIconPaths>
+                <commandLabel>切换武器</commandLabel>
+                <commandDesc>在长虹与尘烬之间切换。</commandDesc>
+                <reuseInventoryForm>true</reuseInventoryForm>
+            </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
@@ -152,6 +165,19 @@
                 <visualControllerDef>MX_Mingyuan_BowVisual</visualControllerDef>
             </li>
             <li Class="CompProperties_Styleable" />
+            <li Class="MiliraXian.Characters.Neiyu.CompProperties_ModeSwitchWeapon">
+                <formWeaponDefs>
+                    <li>MX_Mingyuan_RainbowBow</li>
+                    <li>MX_Mingyuan_CinderSword</li>
+                </formWeaponDefs>
+                <formIconPaths>
+                    <li>MiliraXianMingyuan/Items/RainbowBow</li>
+                    <li>MiliraXianMingyuan/Items/CinderSword</li>
+                </formIconPaths>
+                <commandLabel>切换武器</commandLabel>
+                <commandDesc>在长虹与尘烬之间切换。</commandDesc>
+                <reuseInventoryForm>true</reuseInventoryForm>
+            </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
         </comps>
     </ThingDef>
