@@ -1,37 +1,43 @@
 #version 450
 
-layout(location = 1) in vec2 vUv;
+// Base level of the bloom pyramid, at the scene image's own resolution so the final halo is as
+// sharp as the scene image. Waylith PostEffectPass (fullscreen triangle, set 0): binding 0 is the
+// bloom group's scene image, binding 1 the per-group threshold.
+layout(location = 0) in vec2 vUv;
 
 layout(location = 0) out vec4 outColor;
 
-layout(set = 2, binding = 0) uniform MaterialUniforms
-{
-    vec4 _MainTex_ST; // @default = vec4(0.0, 0.0, 1.0, 1.0)
-    float _Threshold; // @default = 0.02
-    float _Knee;      // @default = 0.02
-} u;
+layout(set = 0, binding = 0) uniform sampler2D _MainTex;
 
-layout(set = 2, binding = 1) uniform sampler2D _MainTex;
+layout(set = 0, binding = 1) uniform Params
+{
+    float threshold;
+    float knee;
+} p;
+
+float luma(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
 
 void main()
 {
-    // Reduces the scene image 4x in one pass. The target pixel centre is the centre of a 4x4 block of
-    // source texels; four bilinear taps one texel off-centre each average a 2x2 block, so together
-    // they cover the whole 4x4 block with equal weights. The soft-knee threshold then drops the
-    // faintest values.
-    vec2 uv = vUv * u._MainTex_ST.zw + u._MainTex_ST.xy;
-    uv.y = 1.0 - uv.y;
-    vec2 t = 1.0 / vec2(textureSize(_MainTex, 0));
-    vec3 c = texture(_MainTex, uv + vec2(-t.x, -t.y)).rgb
-           + texture(_MainTex, uv + vec2( t.x, -t.y)).rgb
-           + texture(_MainTex, uv + vec2(-t.x,  t.y)).rgb
-           + texture(_MainTex, uv + vec2( t.x,  t.y)).rgb;
-    c *= 0.25;
+    // Four bilinear taps half a texel off-centre together form a 3x3 tent around the pixel. Each
+    // tap is weighted by 1 / (1 + luma) (Karis average), so one very bright texel cannot dominate
+    // the pyramid; without it a small glow flickers as it moves across texel boundaries.
+    vec2 t = 0.5 / vec2(textureSize(_MainTex, 0));
+    vec3 a = textureLod(_MainTex, vUv + vec2(-t.x, -t.y), 0.0).rgb;
+    vec3 b = textureLod(_MainTex, vUv + vec2( t.x, -t.y), 0.0).rgb;
+    vec3 c = textureLod(_MainTex, vUv + vec2(-t.x,  t.y), 0.0).rgb;
+    vec3 d = textureLod(_MainTex, vUv + vec2( t.x,  t.y), 0.0).rgb;
+    float wa = 1.0 / (1.0 + luma(a));
+    float wb = 1.0 / (1.0 + luma(b));
+    float wc = 1.0 / (1.0 + luma(c));
+    float wd = 1.0 / (1.0 + luma(d));
+    vec3 col = (a * wa + b * wb + c * wc + d * wd) / (wa + wb + wc + wd);
 
-    float knee = max(u._Knee, 1e-3);
-    float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
-    float soft = clamp(l - u._Threshold + knee, 0.0, 2.0 * knee);
+    // Soft-knee threshold drops the faintest values.
+    float knee = max(p.knee, 1e-3);
+    float l = luma(col);
+    float soft = clamp(l - p.threshold + knee, 0.0, 2.0 * knee);
     soft = soft * soft / (4.0 * knee + 1e-4);
-    float contrib = max(soft, l - u._Threshold) / max(l, 1e-4);
-    outColor = vec4(c * contrib, 1.0);
+    float contrib = max(soft, l - p.threshold) / max(l, 1e-4);
+    outColor = vec4(col * contrib, 1.0);
 }
