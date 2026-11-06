@@ -20,7 +20,7 @@ internal static class Patch_PostureThinkTree
 {
     private static bool Prefix(Pawn ___pawn, ref ThinkTreeDef thinkTree, ref ThinkResult __result)
     {
-        if (!CombatPosture.ControlsActions(___pawn)) return true;
+        if (!CombatPosture.BlocksAutonomousJobs(___pawn)) return true;
         thinkTree = null;
         __result = ThinkResult.NoJob;
         return false;
@@ -32,7 +32,7 @@ internal static class Patch_PostureConstantThinkTree
 {
     private static bool Prefix(Pawn ___pawn, ref ThinkResult __result)
     {
-        if (!CombatPosture.ControlsActions(___pawn)) return true;
+        if (!CombatPosture.BlocksAutonomousJobs(___pawn)) return true;
         __result = ThinkResult.NoJob;
         return false;
     }

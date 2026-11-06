@@ -174,6 +174,13 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         : NeiyuExecutionPhase.ExecutionStart;
     public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 
+    public override string GetReport()
+    {
+        if (IsSingle && SceneTick < 0)
+            return $"正在锁定{Victim?.LabelShortCap}，剩余 {(-SceneTick).TicksToSeconds():0.0} 秒。";
+        return base.GetReport();
+    }
+
     public override void Notify_Starting()
     {
         base.Notify_Starting();
@@ -222,6 +229,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         AddFinishAction(Finish);
         Toil execution = ToilMaker.MakeToil("NeiyuPostureExecution");
         execution.defaultCompleteMode = ToilCompleteMode.Never;
+        // The single timeline owns its deadline and validates the pawn itself.
+        // A lingering combat stance must allow the first Toil to start.
+        execution.atomicWithPrevious = IsSingle;
         execution.handlingFacing = IsSingle;
         execution.tickAction = TickExecution;
         yield return execution;

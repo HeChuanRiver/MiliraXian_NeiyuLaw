@@ -64,6 +64,9 @@ public static class CombatPosture
 
     internal static bool ControlsActions(Pawn pawn) => pawn is { Spawned: true, Dead: false }
         && pawn.health is { isBeingKilled: false } && Get(pawn)?.Broken == true;
+
+    internal static bool BlocksAutonomousJobs(Pawn pawn) => ControlsActions(pawn)
+        || pawn?.jobs?.curDriver is IPostureExecutionDriver { DrivesExecutorPosition: true };
 }
 
 public sealed class Hediff_CombatPosture : HediffWithComps
