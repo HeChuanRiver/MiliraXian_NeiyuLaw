@@ -421,7 +421,7 @@
     <HediffDef>
         <defName>MX_Mingyuan_BurningBody</defName>
         <label>&lt;color=#FFD37A&gt;燃烧之躯&lt;/color&gt;</label>
-        <description>提高意识。普通伤害不会导致倒地，血液或全身部位总耐久剩余 5% 时触发死亡判定。免疫火焰，爆炸伤害乘以 30%。每 60 秒最多治疗 15 点普通伤口。实际受伤后获得 5 层自燃与 0.2 秒无敌，并反灼敌对攻击者。</description>
+        <description>提高意识。普通伤害不会导致倒地，血液或全身部位总耐久剩余 5% 时触发死亡判定。免疫火焰，爆炸伤害乘以 30%。每 60 秒最多治疗 15 点普通伤口。实际受伤后获得 5 层自燃与约 0.08 秒无敌，并反灼敌对攻击者。</description>
         <hediffClass>MiliraXian.Characters.Mingyuan.Hediff_MingyuanBurningBody</hediffClass>
         <defaultLabelColor>(1.00, 0.82, 0.48)</defaultLabelColor>
         <isBad>false</isBad>
@@ -459,7 +459,7 @@
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanBurningBody">
                 <restoreIntervalTicks>3600</restoreIntervalTicks>
                 <restoreHealAmount>15</restoreHealAmount>
-                <invulnerableTicks>12</invulnerableTicks>
+                <invulnerableTicks>5</invulnerableTicks>
                 <reflectLifeBurnLayers>20</reflectLifeBurnLayers>
                 <selfBurnOnHit>5</selfBurnOnHit>
                 <meleeLifeBurnLayers>10</meleeLifeBurnLayers>
