@@ -54,7 +54,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 BladeRenderer.GetGripAndTip(ext, pose, body, out Vector3 grip, out Vector3 tip);
                 DrawEnchantment(grip, tip, tick, pose.reveal);
             }
-            if (tick >= SwingAt && tick < ApproachAt)
+            if (tick >= SwingAt && tick < KnockbackAt)
                 DrawBladeTrail(ext, tick, body);
             if (tick >= FirstCutAt && tick < FirstCutAt + Single.waveTicks)
                 DrawSlashWave(ext, tick);
@@ -99,7 +99,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             BladePose past = BladeAt(sample, body, aimPoint);
             BladeRenderer.GetGripAndTip(ext, past, body, out Vector3 grip, out Vector3 tip);
             Vector3 line = (tip - grip).Yto0();
-            float fade = (1f - i / 7f) * (1f - ProgressBetween(tick, FirstCutAt + Single.hitStopTicks, ApproachAt));
+            float fade = (1f - i / 7f) * (1f - ProgressBetween(tick, FirstCutAt + hitStopTicks, KnockbackAt));
             Sprite(NeiyuExecutionMaterials.Glow, Vector3.Lerp(grip, tip, .63f), line.AngleFlat(),
                 .11f + .038f * i, line.magnitude, Color.Lerp(ExecutionIce, ExecutionPink, i / 6f), .58f * fade);
         }
@@ -109,7 +109,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     {
         slashWave ??= BuildSlashWave(ext);
         float p = ProgressBetween(tick, FirstCutAt, FirstCutAt + Single.waveTicks);
-        Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.18f, 2.2f, p);
+        Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.18f, 4f, p);
         at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
         Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(initialYaw + 11f, Vector3.up),
             new Vector3(Mathf.Lerp(.97f, 1.07f, p), 1f, Mathf.Lerp(.92f, 1.13f, p)));
@@ -123,13 +123,13 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         // A cold-white edge and a saturated face keep the slash readable on light floors.
         (float depth, Color color)[] profile =
         [
-            (.16f, new Color(.22f, .65f, 1f, 0f)),
-            (.07f, new Color(.30f, .73f, 1f, .88f)),
+            (.25f, new Color(.22f, .65f, 1f, 0f)),
+            (.10f, new Color(.30f, .73f, 1f, .88f)),
             (0f, Color.white),
-            (-.12f, new Color(.79f, .95f, 1f, .98f)),
-            (-.42f, new Color(.32f, .76f, 1f, .92f)),
-            (-.85f, new Color(1f, .55f, .83f, .70f)),
-            (-1.36f, new Color(1f, .64f, .84f, 0f))
+            (-.20f, new Color(.79f, .95f, 1f, .98f)),
+            (-.78f, new Color(.32f, .76f, 1f, .92f)),
+            (-1.65f, new Color(1f, .55f, .83f, .70f)),
+            (-2.8f, new Color(1f, .64f, .84f, 0f))
         ];
         int rows = profile.Length;
         Vector3[] edge = new Vector3[segments + 1];
@@ -158,7 +158,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 int v = i * rows + row;
                 (float depth, Color color) = profile[row];
                 vertices[v] = new Vector3((span - .5f) * Single.slashWidth, 0f,
-                    edge[i].z * .9f + depth * taper);
+                    edge[i].z * 1.45f + depth * taper);
                 uv[v] = new Vector2(u, row / (float)(rows - 1));
                 colors[v] = color.WithAlpha(color.a * taper);
                 if (i == segments || row == rows - 1) continue;
@@ -189,7 +189,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
         for (int i = 0; i < Single.swordCount; i++)
         {
-            int offset = i * Single.swordStaggerTicks;
+            int offset = i * swordStaggerTicks;
             int launch = VolleyAt + offset, impact = FirstImpactAt + offset;
             float slot = i == 0 ? 0f : ((i + 1) / 2) * (i % 2 == 1 ? -1f : 1f);
             Vector3 seat = body.Yto0() + side * (slotSpacing * slot) - forward * (.72f + .16f * Mathf.Abs(slot))

@@ -29,28 +29,30 @@
     <endSound>MX_NeiyuSwordEnd</endSound>
     <single>
       <enemyRadius>8</enemyRadius>
-      <slashWidth>9.5</slashWidth>
-      <throwDistance>6</throwDistance>
+      <slashWidth>14</slashWidth>
+      <knockbackDistance>3.5</knockbackDistance>
+      <throwDistance>12</throwDistance>
       <spiritSwordScale>1.45</spiritSwordScale>
       <lockTicks>150</lockTicks>
       <readyTicks>20</readyTicks>
       <enchantTicks>30</enchantTicks>
       <flashTicks>3</flashTicks>
       <swingTicks>8</swingTicks>
-      <hitStopTicks>5</hitStopTicks>
-      <approachTicks>12</approachTicks>
-      <spinLeadTicks>8</spinLeadTicks>
-      <spinTicksPerTurn>20</spinTicksPerTurn>
-      <flightTicks>24</flightTicks>
-      <glyphDelayTicks>7</glyphDelayTicks>
+      <hitStopTicks>9</hitStopTicks>
+      <knockbackTicks>24</knockbackTicks>
+      <approachTicks>24</approachTicks>
+      <spinLeadTicks>12</spinLeadTicks>
+      <spinTicksPerTurn>30</spinTicksPerTurn>
+      <flightTicks>30</flightTicks>
+      <glyphDelayTicks>12</glyphDelayTicks>
       <swordCount>5</swordCount>
-      <swordStaggerTicks>2</swordStaggerTicks>
-      <finishTicks>14</finishTicks>
-      <waveTicks>21</waveTicks>
-      <glyphHoldTicks>6</glyphHoldTicks>
-      <glyphFadeTicks>11</glyphFadeTicks>
-      <pierceTicks>11</pierceTicks>
-      <afterimageTicks>14</afterimageTicks>
+      <swordStaggerTicks>4</swordStaggerTicks>
+      <finishTicks>24</finishTicks>
+      <waveTicks>38</waveTicks>
+      <glyphHoldTicks>9</glyphHoldTicks>
+      <glyphFadeTicks>15</glyphFadeTicks>
+      <pierceTicks>17</pierceTicks>
+      <afterimageTicks>20</afterimageTicks>
       <pierceSound>MX_NeiyuSwordPerfect</pierceSound>
       <drawBlade>
         <keys>
