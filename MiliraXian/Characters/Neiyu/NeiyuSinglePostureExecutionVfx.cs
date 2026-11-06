@@ -34,6 +34,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private void FinishSingle()
     {
+        executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.UntrackVolley(this);
         executionMap?.GetComponent<MapComponent_PawnAfterimages>()?.RemoveOwnedBy(this);
         if (slashWave != null)
         {
@@ -58,12 +59,23 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 DrawBladeTrail(ext, tick, body);
             if (tick >= FirstCutAt && tick < FirstCutAt + Single.waveTicks)
                 DrawSlashWave(ext, tick);
-            if (tick >= ReleaseAt)
-                DrawVolley(tick, body);
         }
         catch (Exception exception)
         {
             Log.ErrorOnce($"[霓羽弹刀] 单体处决绘制失败：{exception}", 197632105);
+        }
+    }
+
+    internal void DrawSingleVolley()
+    {
+        if (pawn?.jobs?.curDriver != this || pawn.IsHiddenFromPlayer()
+            || NeiyuSwordCombatVfx.Intensity <= 0f) return;
+        float tick = SceneFrame;
+        if (tick < ReleaseAt) return;
+        try { DrawVolley(tick, pawn.DrawPos); }
+        catch (Exception exception)
+        {
+            Log.ErrorOnce($"[霓羽弹刀] 飞剑绘制失败：{exception}", 197632106);
         }
     }
 
@@ -179,6 +191,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Vector3 side = Vector3.Cross(Vector3.up, forward);
         float swordScale = Single.spiritSwordScale;
         float tipOffset = .70f * swordScale;
+        float swordWidth = .85f * swordScale, swordLength = 1.5f * swordScale;
         float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
         float glyphAge = tick - VolleyAt;
         if (glyphAge >= 0f && glyphAge < Single.glyphHoldTicks + Single.glyphFadeTicks)
@@ -187,26 +200,28 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             float fade = 1f - Mathf.Clamp01((glyphAge - Single.glyphHoldTicks) / Single.glyphFadeTicks);
             Sprite(NeiyuExecutionMaterials.Glyph, at, 0f, 1.28f, 1.28f, Color.white, fade);
         }
-        for (int i = 0; i < Single.swordCount; i++)
+        for (int i = 0; i < swordCount; i++)
         {
-            int offset = i * swordStaggerTicks;
-            int launch = VolleyAt + offset, impact = FirstImpactAt + offset;
+            int launch = SwordLaunchAt(i), impact = SwordImpactAt(i);
+            bool terminal = i == swordCount - 1;
             float slot = i == 0 ? 0f : ((i + 1) / 2) * (i % 2 == 1 ? -1f : 1f);
             Vector3 seat = body.Yto0() + side * (slotSpacing * slot) - forward * (.72f + .16f * Mathf.Abs(slot))
                 + Vector3.forward * (.42f + .11f * Mathf.Abs(slot));
+            Vector3 contact = terminal ? aim : aim + side * (.13f * slot)
+                + Vector3.forward * (.13f - .065f * Mathf.Abs(slot));
+            Vector3 toContact = (contact - seat).Yto0();
+            float distance = toContact.magnitude;
+            Vector3 direction = distance > .001f ? toContact / distance : forward;
+            float yaw = direction.AngleFlat();
             if (tick < impact)
             {
                 float p = ProgressBetween(tick, launch, impact);
-                float appear = ProgressBetween(tick, ReleaseAt, VolleyAt);
-                Vector3 toAim = (aim - seat).Yto0();
-                float distance = toAim.magnitude;
-                Vector3 direction = distance > .001f ? toAim / distance : forward;
+                float appear = ProgressBetween(tick, ReleaseAt, AimAt);
                 // Keep the enlarged tip on the same contact point, including short throws into walls.
                 Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
-                Vector3 tip = Vector3.Lerp(startTip, aim, p * p);
+                Vector3 tip = Vector3.Lerp(startTip, contact, p * (.72f + .28f * p));
                 Vector3 center = tip - direction * tipOffset;
-                float yaw = direction.AngleFlat();
-                Sprite(NeiyuExecutionMaterials.Sword, center, yaw, .85f * swordScale, 1.5f * swordScale, Color.white, appear);
+                Sprite(NeiyuExecutionMaterials.Sword, center, yaw, swordWidth, swordLength, Color.white, appear);
                 if (p > 0f)
                     Sprite(NeiyuExecutionMaterials.Glow, center - direction * (.53f * swordScale),
                         yaw, .18f * swordScale, 1.55f * swordScale,
@@ -215,19 +230,27 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             else if (impacts > i)
             {
                 float age = tick - impact;
-                DrawPierce(aimPoint, forward, side, i, age);
+                if (!terminal)
+                {
+                    float settle = Mathf.Clamp01(age / 6f);
+                    float pinYaw = yaw + slot * 8f * settle;
+                    Vector3 center = contact - Forward(pinYaw) * (tipOffset * Mathf.Lerp(1f, .68f, settle));
+                    float fade = 1f - ProgressBetween(tick, FinalImpactAt, FinalImpactAt + Single.pierceTicks);
+                    Sprite(NeiyuExecutionMaterials.Sword, center, pinYaw, swordWidth, swordLength, Color.white, .92f * fade);
+                }
+                DrawPierce(contact, forward, side, i, terminal, age);
             }
         }
     }
 
-    private void DrawPierce(Vector3 at, Vector3 forward, Vector3 side, int blade, float age)
+    private void DrawPierce(Vector3 at, Vector3 forward, Vector3 side, int blade, bool terminal, float age)
     {
         if (age >= Single.pierceTicks) return;
         float p = age / Single.pierceTicks;
         float fade = (1f - p) * (1f - p);
-        float size = blade == 0 ? 1.65f : .75f;
-        Sprite(NeiyuExecutionMaterials.Cut, at, blade == 0 ? -10f : 16f * (blade - 2), size * 1.3f, size,
-            Color.Lerp(Color.white, ExecutionIce, blade * .11f), fade);
+        float size = terminal ? 1.65f : .75f;
+        Sprite(NeiyuExecutionMaterials.Cut, at, terminal ? -10f : 16f * (blade - 2), size * 1.3f, size,
+            terminal ? Color.white : Color.Lerp(Color.white, ExecutionIce, .44f), fade);
         int count = Mathf.Clamp(Mathf.RoundToInt(7f * NeiyuSwordCombatVfx.Intensity), 1, 10);
         for (int i = 0; i < count; i++)
         {

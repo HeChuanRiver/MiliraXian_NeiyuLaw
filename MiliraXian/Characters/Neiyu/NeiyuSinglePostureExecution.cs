@@ -10,22 +10,22 @@ namespace MiliraXian.Characters.Neiyu;
 
 public sealed class NeiyuSingleExecutionProps
 {
-    public float enemyRadius = 8f, slashWidth = 14f, knockbackDistance = 3.5f, throwDistance = 12f, spiritSwordScale = 1.45f;
+    public float enemyRadius = 8f, slashWidth = 14f, knockbackDistance = 3.5f, throwDistance = 25f, spiritSwordScale = 1.45f;
     public int lockTicks = 150;
     public int readyTicks = 20, enchantTicks = 30, flashTicks = 3, swingTicks = 8, hitStopTicks = 9;
     public int knockbackTicks = 24, approachTicks = 24, spinLeadTicks = 12, spinTicksPerTurn = 30;
-    public int flightTicks = 30, glyphDelayTicks = 12, swordCount = 5, swordStaggerTicks = 4, finishTicks = 24;
+    public int flightTicks = 30, glyphDelayTicks = 8, swordCount = 5, swordStaggerTicks = 20, swordFlightTicks = 36, finishTicks = 24;
     public int waveTicks = 38, glyphHoldTicks = 9, glyphFadeTicks = 15, pierceTicks = 17, afterimageTicks = 20;
     public SoundDef pierceSound;
     public BladeKeyframes drawBlade, aimBlade;
 
     internal bool Valid => float.IsFinite(enemyRadius) && enemyRadius > 0f
-        && slashWidth is >= 5f and <= 18f && knockbackDistance is >= 1f and <= 6f && throwDistance is >= 2f and <= 16f
+        && slashWidth is >= 5f and <= 18f && knockbackDistance is >= 1f and <= 6f && throwDistance is >= 2f and <= 25f
         && spiritSwordScale is >= .5f and <= 2.5f && lockTicks >= 0
         && readyTicks > 0 && enchantTicks > 0 && flashTicks > 0 && swingTicks >= 4 && hitStopTicks >= 0
         && knockbackTicks > 0 && approachTicks > 0 && spinLeadTicks > 0 && spinTicksPerTurn >= 8
-        && flightTicks is > 1 and <= 30 && glyphDelayTicks > 0 && glyphDelayTicks < flightTicks
-        && swordCount is > 0 and <= 9 && swordStaggerTicks > 0 && finishTicks > 0
+        && flightTicks is > 1 and <= 30 && glyphDelayTicks > 0
+        && swordCount is > 0 and <= 9 && swordStaggerTicks > 0 && swordFlightTicks > 0 && finishTicks > 0
         && waveTicks > 0 && glyphHoldTicks >= 0 && glyphFadeTicks > 0 && pierceTicks > 0 && afterimageTicks > 0
         && drawBlade?.keys.Count >= 2 && aimBlade?.keys.Count >= 2;
 }
@@ -37,7 +37,8 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private SingleStage singleStage;
     private int sceneStart, spinTurns, impacts, touchdown;
     private int hitStopTicks, knockbackTicks, approachTicks, spinLeadTicks, spinTicksPerTurn;
-    private int flightTicks, glyphDelayTicks, swordStaggerTicks, finishTicks;
+    private int flightTicks, glyphDelayTicks, swordCount, swordStaggerTicks, swordFlightTicks, finishTicks;
+    private int volleyStart = -1;
     private IntVec3 actorCell, targetCell, approachCell, landingCell;
     private IntVec3 grabStartCell = IntVec3.Invalid;
     private Vector3 actorDraw, targetDraw, previousActorDraw, previousTargetDraw;
@@ -56,9 +57,16 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private int GrabAt => ApproachAt + approachTicks;
     private int SpinAt => GrabAt + spinLeadTicks;
     private int ReleaseAt => SpinAt + spinTurns * spinTicksPerTurn;
-    private int VolleyAt => ReleaseAt + glyphDelayTicks;
-    private int FirstImpactAt => ReleaseAt + flightTicks;
-    private int EndAt => FirstImpactAt + (Single.swordCount - 1) * swordStaggerTicks + finishTicks;
+    private int AimAt => ReleaseAt + glyphDelayTicks;
+    private bool VolleyAfterLanding => swordFlightTicks > 0;
+    private int VolleyAt => VolleyAfterLanding
+        ? (volleyStart >= 0 ? volleyStart : AimAt + flightTicks)
+        : AimAt;
+    private int SwordLaunchAt(int index) => VolleyAt + index * swordStaggerTicks;
+    private int SwordImpactAt(int index) => SwordLaunchAt(index)
+        + (VolleyAfterLanding ? swordFlightTicks : flightTicks - glyphDelayTicks);
+    private int FinalImpactAt => SwordImpactAt(swordCount - 1);
+    private int EndAt => FinalImpactAt + finishTicks;
     private IntVec3 GrabCell => grabStartCell.IsValid ? grabStartCell : hitCell;
 
     private Branch ChooseBranch(Pawn target)
@@ -89,7 +97,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         spinTicksPerTurn = Single.spinTicksPerTurn;
         flightTicks = Single.flightTicks;
         glyphDelayTicks = Single.glyphDelayTicks;
+        swordCount = Single.swordCount;
         swordStaggerTicks = Single.swordStaggerTicks;
+        swordFlightTicks = Single.swordFlightTicks;
         finishTicks = Single.finishTicks;
         throwDistance = Single.throwDistance;
         posture?.HoldThrough(pawn, sceneStart + EndAt + 1);
@@ -115,7 +125,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref spinTicksPerTurn, "singleExecutionSpinTicksPerTurn", 20);
         Scribe_Values.Look(ref flightTicks, "singleExecutionFlightTicks", 24);
         Scribe_Values.Look(ref glyphDelayTicks, "singleExecutionGlyphDelayTicks", 7);
+        Scribe_Values.Look(ref swordCount, "singleExecutionSwordCount", 5);
         Scribe_Values.Look(ref swordStaggerTicks, "singleExecutionSwordStaggerTicks", 2);
+        Scribe_Values.Look(ref swordFlightTicks, "singleExecutionSwordFlightTicks");
+        Scribe_Values.Look(ref volleyStart, "singleExecutionVolleyStart", -1);
         Scribe_Values.Look(ref finishTicks, "singleExecutionFinishTicks", 14);
         Scribe_Values.Look(ref throwDistance, "singleExecutionThrowDistance", 6f);
         Scribe_Values.Look(ref spinTurns, "singleExecutionTurns");
@@ -136,6 +149,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref initialYaw, "singleExecutionInitialYaw");
         Scribe_Values.Look(ref throwYaw, "singleExecutionThrowYaw");
         Scribe_Values.Look(ref curvedApproach, "singleExecutionCurvedApproach");
+        if (Scribe.mode == LoadSaveMode.PostLoadInit
+            && (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery))
+            executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
     }
 
     private void TickSingle()
@@ -219,11 +235,17 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 BeginThrow(target);
             }
         }
-        if (singleStage is SingleStage.Flight or SingleStage.Volley)
+        if (singleStage == SingleStage.Flight || (!VolleyAfterLanding && singleStage == SingleStage.Volley))
         {
-            if (tick >= VolleyAt) singleStage = SingleStage.Volley;
             MoveTargetAlongMotion(target, tick, ReleaseAt, .23f, .55f);
             aimPoint = targetDraw;
+            if (VolleyAfterLanding && tick >= touchdown)
+            {
+                volleyStart = touchdown + glyphDelayTicks;
+                singleStage = SingleStage.Volley;
+            }
+            else if (!VolleyAfterLanding && tick >= VolleyAt)
+                singleStage = SingleStage.Volley;
         }
         else if (singleStage == SingleStage.FirstCut)
         {
@@ -236,10 +258,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
 
         pawn.Rotation = Rot4.FromAngleFlat(BodyYaw(tick, actorDraw, aimPoint));
-        while (impacts < Single.swordCount && tick >= FirstImpactAt + impacts * swordStaggerTicks)
+        while (impacts < swordCount && tick >= SwordImpactAt(impacts))
         {
             impacts++;
-            if (impacts == 1)
+            if (impacts == swordCount && !strikeCommitted)
             {
                 // Set the terminal frame before invoking callbacks which can save the game.
                 singleStage = SingleStage.Recovery;
@@ -281,7 +303,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Vector3 direction = aim - actor;
         float aimYaw = direction.sqrMagnitude > .001f ? direction.AngleFlat() : throwYaw;
         return Mathf.LerpAngle(releaseYaw, aimYaw, Mathf.SmoothStep(0f, 1f,
-            ProgressBetween(tick, ReleaseAt, VolleyAt)));
+            ProgressBetween(tick, ReleaseAt, AimAt)));
     }
 
     private Vector3 ApproachAtProgress(float progress, IntVec3 destination, bool curved)
@@ -343,7 +365,25 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private void BeginThrow(Pawn target)
     {
         throwYaw = SpinYaw(ReleaseAt) + 90f;
-        BeginTargetMotion(target, Forward(throwYaw), throwDistance, FirstImpactAt, 0f);
+        Vector3 tangent = Forward(throwYaw);
+        if (VolleyAfterLanding)
+        {
+            motionOrigin = targetGround;
+            touchdown = ReleaseAt + flightTicks;
+            Vector3 end = motionOrigin + tangent * throwDistance;
+            // Quantize the endpoint without putting its cell centre beyond the range.
+            landingCell = end.ToIntVec3();
+            if ((landingCell.ToVector3Shifted().Yto0() - motionOrigin).sqrMagnitude > throwDistance * throwDistance)
+                landingCell = (end - tangent * .72f).ToIntVec3();
+        }
+        else
+            PlanSavedThrow(target, tangent);
+        executionMap.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
+    }
+
+    private void PlanSavedThrow(Pawn target, Vector3 tangent)
+    {
+        BeginTargetMotion(target, tangent, throwDistance, ReleaseAt + flightTicks, 0f);
         if (landingCell == actorCell)
         {
             // A short release is still possible if the tangent points into a wall.
@@ -393,9 +433,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         if (tick > touchdown && targetGround == end) return;
         float p = ProgressBetween(tick, startTick, touchdown);
         Vector3 next = Vector3.Lerp(motionOrigin, end, 1f - (1f - p) * (1f - p));
-        if (!CanTravel(target, targetGround, next, targetCell == actorCell ? pawn : null))
+        if (!TryTravel(target, targetGround, next, out IntVec3 lastClear, targetCell == actorCell ? pawn : null))
         {
-            landingCell = targetCell;
+            landingCell = lastClear;
             touchdown = tick;
             next = landingCell.ToVector3Shifted().Yto0();
             p = 1f;
@@ -423,19 +463,25 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         return true;
     }
 
-    private bool CanTravel(Pawn subject, Vector3 from, Vector3 to, Pawn sharingWith = null)
+    private bool CanTravel(Pawn subject, Vector3 from, Vector3 to, Pawn sharingWith = null) =>
+        TryTravel(subject, from, to, out _, sharingWith);
+
+    private bool TryTravel(Pawn subject, Vector3 from, Vector3 to, out IntVec3 lastClear, Pawn sharingWith = null)
     {
-        IntVec3 last = from.ToIntVec3();
+        lastClear = from.ToIntVec3();
         int samples = Mathf.Max(1, Mathf.CeilToInt((to - from).magnitude * 5f));
         for (int i = 1; i <= samples; i++)
         {
-            IntVec3 cell = Vector3.Lerp(from, to, i / (float)samples).ToIntVec3();
-            if (cell == last) continue;
+            Vector3 point = Vector3.Lerp(from, to, i / (float)samples);
+            // ToIntVec3 truncates negative fractions into the zero cell.
+            if (point.x < 0f || point.z < 0f) return false;
+            IntVec3 cell = point.ToIntVec3();
+            if (cell == lastClear) continue;
             if (!CanOccupy(subject, cell, sharingWith)) return false;
-            if (last.x != cell.x && last.z != cell.z
-                && (!CanOccupy(subject, new IntVec3(last.x, 0, cell.z), sharingWith)
-                    || !CanOccupy(subject, new IntVec3(cell.x, 0, last.z), sharingWith))) return false;
-            last = cell;
+            if (lastClear.x != cell.x && lastClear.z != cell.z
+                && (!CanOccupy(subject, new IntVec3(lastClear.x, 0, cell.z), sharingWith)
+                    || !CanOccupy(subject, new IntVec3(cell.x, 0, lastClear.z), sharingWith))) return false;
+            lastClear = cell;
         }
         return true;
     }
@@ -495,7 +541,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 yaw = BodyYaw(tick, actor, aim) + 18f;
                 if (tick >= ReleaseAt)
                 {
-                    float drawAim = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, ReleaseAt, VolleyAt));
+                    float drawAim = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, ReleaseAt, AimAt));
                     yaw -= 18f * drawAim;
                     time = Mathf.Lerp(.45f, 1f, drawAim);
                 }

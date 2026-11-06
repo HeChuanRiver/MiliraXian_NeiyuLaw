@@ -31,7 +31,7 @@
       <enemyRadius>8</enemyRadius>
       <slashWidth>14</slashWidth>
       <knockbackDistance>3.5</knockbackDistance>
-      <throwDistance>12</throwDistance>
+      <throwDistance>25</throwDistance>
       <spiritSwordScale>1.45</spiritSwordScale>
       <lockTicks>150</lockTicks>
       <readyTicks>20</readyTicks>
@@ -44,9 +44,10 @@
       <spinLeadTicks>12</spinLeadTicks>
       <spinTicksPerTurn>30</spinTicksPerTurn>
       <flightTicks>30</flightTicks>
-      <glyphDelayTicks>12</glyphDelayTicks>
+      <glyphDelayTicks>8</glyphDelayTicks>
       <swordCount>5</swordCount>
-      <swordStaggerTicks>4</swordStaggerTicks>
+      <swordStaggerTicks>20</swordStaggerTicks>
+      <swordFlightTicks>36</swordFlightTicks>
       <finishTicks>24</finishTicks>
       <waveTicks>38</waveTicks>
       <glyphHoldTicks>9</glyphHoldTicks>
