@@ -22,6 +22,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
 
         private static readonly Dictionary<BladeGraphicExtension, Mesh> Meshes = new();
         private static readonly Dictionary<string, Material> Materials = new();
+        private static readonly int BladeReveal = Shader.PropertyToID("_BladeReveal");
 
         /// <param name="bodyCenter">Drawn body centre on the map; its altitude is the body's base altitude.</param>
         public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
@@ -64,7 +65,41 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             m.SetColumn(1, new Vector4(0f, 1e-3f, 0f, 0f));
             m.SetColumn(2, new Vector4(cv.x, cv.y, cv.z, 0f));
             m.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
-            Graphics.DrawMesh(MeshFor(ext), m, mat, 0);
+            if (pose.reveal <= 0f)
+            {
+                Graphics.DrawMesh(MeshFor(ext), m, mat, 0);
+                return;
+            }
+            float bladeLength = Vector2.Dot(tip - grip, a);
+            if (bladeLength <= 1e-3f)
+            {
+                Graphics.DrawMesh(MeshFor(ext), m, mat, 0);
+                return;
+            }
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            block.SetVector(BladeReveal, new Vector4(a.x * w / bladeLength, a.y * h / bladeLength,
+                -Vector2.Dot(grip, a) / bladeLength, Mathf.Clamp01(pose.reveal)));
+            Graphics.DrawMesh(MeshFor(ext), m, mat, 0, null, 0, block);
+            block.Clear();
+        }
+
+        public static void GetGripAndTip(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter,
+            out Vector3 grip, out Vector3 tip)
+        {
+            Texture texture = MaterialFor(ext.texPath)?.mainTexture;
+            Vector2 size = texture == null ? Vector2.one : new Vector2(texture.width, texture.height);
+            Vector2 axis = Vector2.Scale(ext.tipUV - ext.pommelUV, size);
+            Vector2 delta = Vector2.Scale(ext.tipUV - ext.gripUV, size);
+            Vector3 direction = pose.dir.normalized;
+            Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, direction) * direction).normalized
+                * Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
+            Vector2 side = new(axis.y, -axis.x);
+            float scale = ext.length / Mathf.Max(.0001f, axis.sqrMagnitude);
+            Vector3 tipOffset = direction * (Vector2.Dot(delta, axis) * scale)
+                + edge * (Vector2.Dot(delta, side) * scale);
+            Vector3 center = bodyCenter + Vector3.up * MidAltitude;
+            grip = center + ToMapLinear(pose.grip, pose.heightToScreen);
+            tip = center + ToMapLinear(pose.grip + tipOffset, pose.heightToScreen);
         }
 
         /// <summary>World offset (x east, y height, z north) to map offset (x, altitude, z).</summary>

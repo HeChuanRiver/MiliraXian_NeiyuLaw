@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Combat;
+using MiliraXian.Characters.Common.Vfx.BladeBody;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -24,6 +25,7 @@ public sealed class NeiyuSwordCombatDef : Def
     public float executionRange = 2f, visualIntensity = 1f;
     public int maxVisuals = 96, sparksPerDeflection = 12;
     public SoundDef normalSound, perfectSound, breakSound, prepareSound, strikeSound, endSound;
+    public NeiyuSingleExecutionProps single = new();
 
     public override IEnumerable<string> ConfigErrors()
     {
@@ -41,6 +43,8 @@ public sealed class NeiyuSwordCombatDef : Def
             && executionRange >= 1.42f && perfectStunTicks >= 0
             && maxVisuals > 0 && sparksPerDeflection >= 0 && visualIntensity >= 0f))
             yield return "处决时间、阶段、距离或特效参数无效。";
+        if (single == null || !single.Valid)
+            yield return "单体处决的时间、距离或光剑参数无效。";
     }
 }
 
@@ -86,6 +90,7 @@ internal static class NeiyuSwordCombat
     internal static bool CanAct(Pawn pawn) => pawn is { Spawned: true, Dead: false, Destroyed: false, Downed: false }
         && !NeiyuPowerBalance.PassivesDisabled && !pawn.InMentalState && !pawn.Deathresting
         && !pawn.InContainerEnclosed && pawn.Awake() && pawn.health?.capacities.CanBeAwake == true
+        && !CombatPosture.ControlsActions(pawn)
         && pawn.GetPosture() == PawnPosture.Standing && !pawn.IsBurning()
         && pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation)
         && !pawn.WorkTagIsDisabled(WorkTags.Violent) && pawn.stances?.stunner?.Stunned != true
@@ -128,7 +133,10 @@ internal static class NeiyuSwordCombat
     }
 
     internal static bool ExecutionPair(Pawn executor, Pawn target) => CanAct(executor) && ExecutionTarget(target)
-        && HostilePair(executor, target)
+        && HostilePair(executor, target) && InExecutionReach(executor, target);
+
+    internal static bool InExecutionReach(Pawn executor, Pawn target) =>
+        executor.Map == target.Map
         && executor.Position.DistanceToSquared(target.Position) <= Config.executionRange * Config.executionRange
         && GenSight.LineOfSight(executor.Position, target.Position, executor.Map);
 
@@ -145,15 +153,19 @@ internal static class NeiyuSwordCombat
 
 public enum NeiyuExecutionPhase { Normal, PostureBroken, ExecutionStart, ExecutionStrike, ExecutionEnd }
 
-public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecutionDriver
+public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecutionDriver, IBladePoseSource
 {
+    private enum Branch { Compatibility, Single, Invalid }
+    private Branch branch;
     private int startedAt = -1, duration, dashTick, strikeTick, recoverTick;
     private bool prepared, dashed, strikeCommitted, endedVisual;
     private bool visualsRebound;
     private Map executionMap;
+    private ThingWithComps executionWeapon;
     private IntVec3 origin = IntVec3.Invalid, hitCell = IntVec3.Invalid;
 
     public Pawn Victim => job?.targetA.Pawn;
+    internal bool IsSingle => branch == Branch.Single;
     public int Elapsed => Mathf.Max(0, NeiyuSwordCombat.Now - startedAt);
     public float Progress => Mathf.Clamp01(Elapsed / (float)Mathf.Max(1, duration));
     public float FacingAngle => (hitCell.ToVector3Shifted() - pawn.DrawPos).AngleFlat();
@@ -174,6 +186,14 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecuti
         executionMap = pawn.Map;
         origin = pawn.Position;
         hitCell = Victim?.Position ?? origin;
+        executionWeapon = pawn.equipment?.Primary;
+        if (!NeiyuSwordCombat.ExecutionPair(pawn, Victim))
+        {
+            branch = Branch.Invalid;
+            return;
+        }
+        branch = ChooseBranch(Victim);
+        if (IsSingle) BeginSingle();
     }
 
     public override void ExposeData()
@@ -191,6 +211,9 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecuti
         Scribe_Values.Look(ref origin, "swordExecutionOrigin", IntVec3.Invalid);
         Scribe_Values.Look(ref hitCell, "swordExecutionHitCell", IntVec3.Invalid);
         Scribe_References.Look(ref executionMap, "swordExecutionMap");
+        Scribe_References.Look(ref executionWeapon, "swordExecutionWeapon");
+        Scribe_Values.Look(ref branch, "swordExecutionBranch");
+        ExposeSingle();
         base.ExposeData();
     }
 
@@ -199,23 +222,38 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecuti
         AddFinishAction(Finish);
         Toil execution = ToilMaker.MakeToil("NeiyuPostureExecution");
         execution.defaultCompleteMode = ToilCompleteMode.Never;
+        execution.handlingFacing = IsSingle;
         execution.tickAction = TickExecution;
         yield return execution;
     }
 
-    private bool Valid()
+    private bool ValidExecutor() => startedAt >= 0 && executionMap != null && pawn.Map == executionMap
+        && (executionWeapon == null ? !IsSingle : pawn.equipment?.Primary == executionWeapon)
+        && NeiyuSwordCombat.CanAct(pawn);
+
+    private void TickExecution()
     {
-        if (startedAt < 0 || duration < 12 || !origin.IsValid || executionMap == null
-            || !NeiyuSwordCombat.CanAct(pawn) || pawn.Map != executionMap || pawn.Position != origin) return false;
+        if (branch == Branch.Invalid || !ValidExecutor())
+        {
+            EndJobWith(JobCondition.Incompletable);
+            return;
+        }
+        if (IsSingle) TickSingle();
+        else TickCompatibility();
+    }
+
+    private bool ValidCompatibility()
+    {
+        if (duration < 12 || !origin.IsValid || pawn.Position != origin) return false;
         if (strikeCommitted) return true;
         return NeiyuSwordCombat.ExecutionPair(pawn, Victim)
             && (Victim.Downed || Victim.CurJobDef == CombatPosture.Config.brokenJob)
             && NeiyuSwordCombat.Posture(Victim)?.Owns(pawn) == true;
     }
 
-    private void TickExecution()
+    private void TickCompatibility()
     {
-        if (!Valid()) { EndJobWith(JobCondition.Incompletable); return; }
+        if (!ValidCompatibility()) { EndJobWith(JobCondition.Incompletable); return; }
         pawn.pather.StopDead();
         if (!visualsRebound)
         {
@@ -237,24 +275,7 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecuti
         }
         if (!strikeCommitted && Elapsed >= strikeTick)
         {
-            Pawn victim = Victim;
-            HediffComp_CombatPosture posture = NeiyuSwordCombat.Posture(victim);
-            // Saved BEFORE invoking a native/mod death callback, including callbacks
-            // that save, resurrect, teleport, throw or decline the death.
-            strikeCommitted = true;
-            NeiyuSwordCombatVfx.Execution(pawn, hitCell, NeiyuExecutionPhase.ExecutionStrike);
-            pawn.Drawer.Notify_MeleeAttackOn(victim);
-            try
-            {
-                NeiyuSwordCombat.Execute(pawn, victim);
-            }
-            catch (System.Exception exception)
-            {
-                Log.ErrorOnce($"[霓羽弹刀] 处决死亡回调中断，已释放目标状态：{exception}", 197632100);
-                EndJobWith(JobCondition.Errored);
-                return;
-            }
-            finally { posture?.ReleaseBreak(); }
+            if (!CommitStrike(Victim)) return;
         }
         if (!endedVisual && Elapsed >= recoverTick)
         {
@@ -264,10 +285,44 @@ public sealed class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecuti
         if (Elapsed >= duration) EndJobWith(JobCondition.Succeeded);
     }
 
+    private bool CommitStrike(Pawn victim)
+    {
+        // Write the event before death callbacks, including callbacks that save,
+        // resurrect, move the victim, or replace this job.
+        strikeCommitted = true;
+        int jobId = job.loadID;
+        try
+        {
+            if (IsSingle)
+                NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound ?? NeiyuSwordCombat.Config.endSound);
+            else
+            {
+                NeiyuSwordCombatVfx.Execution(pawn, hitCell, NeiyuExecutionPhase.ExecutionStrike);
+                pawn.Drawer.Notify_MeleeAttackOn(victim);
+            }
+            if (pawn.jobs.curDriver != this || job.loadID != jobId) return false;
+            NeiyuSwordCombat.Execute(pawn, victim);
+        }
+        catch (System.Exception exception)
+        {
+            Log.ErrorOnce($"[霓羽弹刀] 处决死亡回调中断，已释放目标状态：{exception}", 197632100);
+            if (pawn.jobs.curDriver == this) EndJobWith(JobCondition.Errored);
+            return false;
+        }
+        finally { ReleaseVictim(victim); }
+        return pawn.jobs.curDriver == this && job.loadID == jobId;
+    }
+
+    private void ReleaseVictim(Pawn victim)
+    {
+        HediffComp_CombatPosture posture = NeiyuSwordCombat.Posture(victim);
+        if (posture?.Executioner == pawn) posture.ReleaseBreak();
+    }
+
     private void Finish(JobCondition condition)
     {
-        HediffComp_CombatPosture posture = NeiyuSwordCombat.Posture(Victim);
-        if (posture?.Executioner == pawn) posture.ReleaseBreak();
+        ReleaseVictim(Victim);
+        if (IsSingle) FinishSingle();
         // StartJob's native resumeCurJobAfterwards owns restoration. Never clear
         // the player's queue or revive a saved reference to a pooled old Job.
     }

@@ -45,6 +45,7 @@
     <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
     <casualInterruptible>false</casualInterruptible>
     <playerInterruptible>false</playerInterruptible>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
     <suspendable>false</suspendable>
   </JobDef>
 </Defs>

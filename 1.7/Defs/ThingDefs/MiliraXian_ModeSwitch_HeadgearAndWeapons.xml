@@ -197,6 +197,15 @@
                     <drawSize>(1.5,4.5)</drawSize>
                 </graphicData>
             </li>
+            <li Class="MiliraXian.Characters.Common.Vfx.BladeBody.BladeGraphicExtension">
+                <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
+                <pommelUV>(0.500,0.033)</pommelUV>
+                <gripUV>(0.490,0.122)</gripUV>
+                <tipUV>(0.453,0.936)</tipUV>
+                <uvMin>(0.40,0.03)</uvMin>
+                <uvMax>(0.55,0.94)</uvMax>
+                <length>2.28</length>
+            </li>
         </modExtensions>
     </ThingDef>
     

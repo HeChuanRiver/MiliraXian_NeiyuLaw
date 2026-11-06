@@ -34,7 +34,7 @@ internal static class NeiyuSwordCombatVfx
     {
         if (equipment?.def != NeiyuSwordCombat.Config.sword) return;
         Pawn pawn = MXNeiyuShieldUtility.TryGetEquipmentOwnerPawn(equipment);
-        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution driver) return;
+        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution { IsSingle: false } driver) return;
         float p = driver.Progress;
         NeiyuSwordCombatDef c = NeiyuSwordCombat.Config;
         float angle = p < c.dashFraction ? Mathf.Lerp(-25f, -75f, p / c.dashFraction)
@@ -126,6 +126,17 @@ internal static class NeiyuSwordCombatVfx
         {
             Log.ErrorOnce($"[霓羽弹刀] 视觉回调已中断，战斗结算继续：{exception}", 197632102);
         }
+    }
+
+    internal static void SingleSound(Pawn pawn, Vector3 at, SoundDef sound) =>
+        Safely(() => sound?.PlayOneShot(new TargetInfo(at.ToIntVec3(), pawn.Map)));
+
+    internal static void SingleAfterimage(Pawn pawn, Vector3 at, Rot4 facing, int startTick, int duration,
+        JobDriver_NeiyuPostureExecution owner)
+    {
+        if (!Enabled || Intensity <= 0f) return;
+        Safely(() => pawn.Map.GetComponent<MapComponent_PawnAfterimages>().AddAfterimage(
+            pawn, at, facing, duration, .42f * Mathf.Min(1f, Intensity), Ice, owner, startTick));
     }
 
     internal static void Deflect(Pawn defender, Pawn attacker, bool perfect) => Safely(() =>

@@ -16,6 +16,8 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public Vector3 edge;
         /// <summary>Screen offset to the north per metre of height (the same as the trails).</summary>
         public float heightToScreen;
+        /// <summary>Lit fraction of the blade measured from grip to tip.</summary>
+        public float reveal;
     }
 
     /// <summary>A job driver that animates the held blade itself while it runs.</summary>

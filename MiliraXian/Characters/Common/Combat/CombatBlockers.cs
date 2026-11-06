@@ -37,6 +37,7 @@ public abstract class CombatBlocker
 public interface IPostureExecutionDriver
 {
     Pawn Victim { get; }
+    bool DrivesExecutorPosition => false;
 }
 
 public static class CombatBlockers

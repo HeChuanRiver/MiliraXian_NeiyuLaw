@@ -32,6 +32,10 @@ namespace MiliraXian.Characters.Common.Vfx
         }
 
         public void AddAfterimage(Pawn pawn, Vector3 drawPos, Rot4 facing, int durationTicks, float startAlpha, Color tint)
+            => AddAfterimage(pawn, drawPos, facing, durationTicks, startAlpha, tint, null);
+
+        internal void AddAfterimage(Pawn pawn, Vector3 drawPos, Rot4 facing, int durationTicks, float startAlpha, Color tint,
+            object owner, int? startTick = null)
         {
             if (map == null || pawn == null || pawn.Destroyed || pawn.IsHiddenFromPlayer() || pawn.MapHeld != map)
             {
@@ -60,12 +64,23 @@ namespace MiliraXian.Characters.Common.Vfx
             {
                 pawn = pawn,
                 drawPos = drawPos,
-                startTick = Find.TickManager != null ? Find.TickManager.TicksGame : 0,
+                startTick = startTick ?? Find.TickManager?.TicksGame ?? 0,
                 durationTicks = Mathf.Max(1, durationTicks),
                 startAlpha = Mathf.Clamp01(startAlpha),
                 tint = tint,
+                owner = owner,
                 texture = texture
             });
+        }
+
+        internal void RemoveOwnedBy(object owner)
+        {
+            for (int i = afterimages.Count - 1; i >= 0; i--)
+            {
+                if (afterimages[i].owner != owner) continue;
+                ReleaseAfterimage(afterimages[i]);
+                afterimages.RemoveAt(i);
+            }
         }
 
         public override void MapRemoved()
@@ -201,6 +216,7 @@ namespace MiliraXian.Characters.Common.Vfx
             public int durationTicks;
             public float startAlpha;
             public Color tint;
+            public object owner;
             public RenderTexture texture;
         }
     }

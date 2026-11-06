@@ -61,6 +61,9 @@ public static class CombatPosture
 
     public static HediffComp_CombatPosture Ensure(Pawn pawn) =>
         Get(pawn) ?? PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, Config.posture) as HediffComp_CombatPosture;
+
+    internal static bool ControlsActions(Pawn pawn) => pawn is { Spawned: true, Dead: false }
+        && pawn.health is { isBeingKilled: false } && Get(pawn)?.Broken == true;
 }
 
 public sealed class Hediff_CombatPosture : HediffWithComps
@@ -85,6 +88,8 @@ public sealed class HediffCompProperties_CombatPosture : HediffCompProperties_Pa
 public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
 {
     private int lastIncreaseTick = -1, fadeUntilTick, brokenUntilTick, openingUntilTick;
+    private int brokenAt = -1;
+    private IntVec3 breakCell = IntVec3.Invalid;
     private int nextUpdateTick, openingGeneration, reservedGeneration;
     private bool broken, openingReserved, holdStarted;
     private Pawn source, executioner;
@@ -99,6 +104,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     public bool Broken => broken;
     public bool Locked => executioner != null;
     public Pawn Executioner => executioner;
+    public int BrokenAt => brokenAt;
     public int LastIncreaseTick => lastIncreaseTick;
     public bool HasOpening => openingUntilTick > Now && !CombatBlockers.OpeningsSuppressed;
     public float BarAlpha => CurrentValue > 0f || broken ? 1f
@@ -115,6 +121,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         Scribe_Values.Look(ref lastIncreaseTick, "lastPostureIncrease", -1);
         Scribe_Values.Look(ref fadeUntilTick, "postureFadeUntil");
         Scribe_Values.Look(ref brokenUntilTick, "postureBrokenUntil");
+        Scribe_Values.Look(ref brokenAt, "postureBrokenAt", -1);
+        Scribe_Values.Look(ref breakCell, "postureBreakCell", IntVec3.Invalid);
         Scribe_Values.Look(ref openingUntilTick, "swordOpeningUntil");
         Scribe_Values.Look(ref openingGeneration, "swordOpeningGeneration");
         Scribe_Values.Look(ref broken, "postureBroken");
@@ -153,6 +161,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         if (broken || CurrentValue < MaxValue || CurrentValue <= 0f || !Pawn.Spawned) return;
         CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
         broken = true;
+        brokenAt = Now;
+        breakCell = Pawn.Position;
         brokenUntilTick = Now + Mathf.Max(C.breakWindowTicks, owner?.MinimumBreakWindowTicks ?? 0);
         holdStarted = false;
         Pawn.pather?.StopDead();
@@ -176,8 +186,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         base.CompPostTick(ref severityAdjustment);
         if (previous > 0f && CurrentValue <= 0f) fadeUntilTick = Now + C.barFadeTicks;
         if (!broken) return;
-        CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
-        if (Now >= brokenUntilTick || owner == null || !owner.CanExecute(source, Pawn))
+        if (Now >= brokenUntilTick)
         {
             ReleaseBreak();
             return;
@@ -187,6 +196,13 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
             // A saved lock is valid only while the matching saved Job owns it.
             if (executioner.jobs?.curDriver is not IPostureExecutionDriver driver || driver.Victim != Pawn)
                 ReleaseBreak();
+            return;
+        }
+        CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
+        if ((breakCell.IsValid && Pawn.Position != breakCell)
+            || owner == null || !owner.CanExecute(source, Pawn))
+        {
+            ReleaseBreak();
             return;
         }
         if (holdStarted && !Pawn.Downed && Pawn.CurJobDef != C.brokenJob)
@@ -218,6 +234,11 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
 
     public bool Owns(Pawn executor) => broken && executioner == executor && Now < brokenUntilTick;
 
+    internal void HoldThrough(Pawn executor, int untilTick)
+    {
+        if (Owns(executor)) brokenUntilTick = Mathf.Max(brokenUntilTick, untilTick);
+    }
+
     public void ReleaseBreak()
     {
         broken = false;
@@ -225,6 +246,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         source = null;
         holdStarted = false;
         brokenUntilTick = 0;
+        brokenAt = -1;
+        breakCell = IntVec3.Invalid;
         SetValue(0f);
         fadeUntilTick = Now + C.barFadeTicks;
         // The hold job terminates itself; never stop an unrelated replacement job

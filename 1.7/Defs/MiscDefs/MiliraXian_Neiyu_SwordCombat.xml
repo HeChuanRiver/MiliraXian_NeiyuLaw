@@ -27,6 +27,47 @@
     <prepareSound>MX_NeiyuSwordPrepare</prepareSound>
     <strikeSound>MX_NeiyuSwordStrike</strikeSound>
     <endSound>MX_NeiyuSwordEnd</endSound>
+    <single>
+      <enemyRadius>8</enemyRadius>
+      <slashWidth>6</slashWidth>
+      <readyTicks>20</readyTicks>
+      <enchantTicks>30</enchantTicks>
+      <flashTicks>3</flashTicks>
+      <swingTicks>8</swingTicks>
+      <hitStopTicks>5</hitStopTicks>
+      <approachTicks>12</approachTicks>
+      <spinLeadTicks>8</spinLeadTicks>
+      <spinTicksPerTurn>20</spinTicksPerTurn>
+      <flightTicks>24</flightTicks>
+      <glyphDelayTicks>7</glyphDelayTicks>
+      <swordCount>5</swordCount>
+      <swordStaggerTicks>2</swordStaggerTicks>
+      <finishTicks>14</finishTicks>
+      <waveTicks>15</waveTicks>
+      <glyphHoldTicks>6</glyphHoldTicks>
+      <glyphFadeTicks>11</glyphFadeTicks>
+      <pierceTicks>11</pierceTicks>
+      <afterimageTicks>14</afterimageTicks>
+      <pierceSound>MX_NeiyuSwordPerfect</pierceSound>
+      <drawBlade>
+        <keys>
+          <li><time>0</time><yaw>25</yaw><pitch>24</pitch><roll>10</roll><reach>0.72</reach><offset>(0.06,0,0)</offset></li>
+          <li><time>0.20</time><yaw>-82</yaw><pitch>6</pitch><roll>12</roll><reach>0.33</reach><offset>(0.34,-0.09,-0.10)</offset></li>
+          <li><time>0.31</time><yaw>-78</yaw><pitch>8</pitch><roll>12</roll><reach>0.45</reach><offset>(0.29,-0.07,-0.06)</offset></li>
+          <li><time>0.50</time><yaw>-52</yaw><pitch>12</pitch><roll>17</roll><reach>0.72</reach><offset>(0.19,-0.03,0.01)</offset></li>
+          <li><time>0.70</time><yaw>0</yaw><pitch>13</pitch><roll>23</roll><reach>1.06</reach><offset>(0.03,0.02,0.03)</offset></li>
+          <li><time>0.87</time><yaw>57</yaw><pitch>18</pitch><roll>24</roll><reach>1.04</reach></li>
+          <li><time>1</time><yaw>82</yaw><pitch>14</pitch><roll>18</roll><reach>0.84</reach></li>
+        </keys>
+      </drawBlade>
+      <aimBlade>
+        <keys>
+          <li><time>0</time><yaw>82</yaw><pitch>14</pitch><roll>18</roll><reach>0.84</reach></li>
+          <li><time>0.45</time><yaw>5</yaw><pitch>22</pitch><roll>22</roll><reach>0.47</reach><offset>(-0.15,0,-0.06)</offset></li>
+          <li><time>1</time><yaw>0</yaw><pitch>0</pitch><roll>12</roll><reach>1.03</reach><offset>(-0.12,0,0.04)</offset></li>
+        </keys>
+      </aimBlade>
+    </single>
   </MiliraXian.Characters.Neiyu.NeiyuSwordCombatDef>
 
   <JobDef>
