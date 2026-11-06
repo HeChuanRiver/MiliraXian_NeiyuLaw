@@ -79,6 +79,7 @@
                 <reuseInventoryForm>true</reuseInventoryForm>
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
         </comps>
     </ThingDef>
 
@@ -179,6 +180,7 @@
                 <reuseInventoryForm>true</reuseInventoryForm>
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
         </comps>
     </ThingDef>
 

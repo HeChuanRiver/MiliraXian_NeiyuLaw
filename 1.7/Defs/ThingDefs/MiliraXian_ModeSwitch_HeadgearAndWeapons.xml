@@ -85,6 +85,7 @@
                 <cooldownTicks>0</cooldownTicks>
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
         </comps>
     </ThingDef>
     
@@ -169,6 +170,7 @@
             </li>
 
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
         </comps>
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
@@ -276,6 +278,7 @@
                 <cooldownTicks>0</cooldownTicks>
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
         </comps>
     </ThingDef>
 

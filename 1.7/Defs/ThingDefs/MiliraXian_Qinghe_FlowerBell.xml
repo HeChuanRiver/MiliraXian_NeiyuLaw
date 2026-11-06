@@ -94,6 +94,7 @@
         </settings>
       </li>
       <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+      <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
       <li Class="MiliraXian.Characters.Common.CompProperties_PawnKindRestrictedWeapon">
         <allowedPawnKinds>
           <li>MiliraXian_Qinghe</li>
