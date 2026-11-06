@@ -11,22 +11,34 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
     /// and the mirrored back face all come out of the matrix. Parts of the blade north of the body
     /// are drawn below the body's altitude and parts to the south above it; with the depth-writing
     /// cutout shader the blade is cut per pixel where it passes through the body.
+    /// The part of the blade inside a scabbard is left out, and the scabbard is drawn with the
+    /// blade's own texture (grip to tip), tinted.
     /// </summary>
     [StaticConstructorOnStartup]
     public static class BladeRenderer
     {
-        /// <summary>Altitude per metre of north-south depth (layers are about 0.037 apart).</summary>
-        private const float AltitudePerMetre = 0.02f;
-        /// <summary>Altitude of the body centre plane above the body's base altitude (between body and head).</summary>
-        private const float MidAltitude = 0.016f;
+        /// <summary>
+        /// Altitude per metre of north-south depth. Pawn layers (altitude above the pawn's base,
+        /// PawnRenderUtility.AltitudeForLayer): body 0, body apparel about 0.007-0.009, head 0.018,
+        /// hair 0.023. With 0.05 a point 0.2 m north of the body centre is level with the body and
+        /// one 0.2 m south with the head, so things worn at the hip (0.15-0.2 m out) go behind or in
+        /// front of the body like the sprite's own parts; the old 0.02 needed 0.8 m.
+        /// </summary>
+        private const float AltitudePerMetre = 0.05f;
+        /// <summary>Altitude of the body centre plane above the body's base altitude (just over the body apparel).</summary>
+        private const float MidAltitude = 0.0095f;
+        /// <summary>Steps of the sheathed share that get their own cut mesh.</summary>
+        private const int SheatheSteps = 64;
+        private const int ScabbardMeshKey = -1;
 
-        private static readonly Dictionary<BladeGraphicExtension, Mesh> Meshes = new();
-        private static readonly Dictionary<string, Material> Materials = new();
+        private static readonly Dictionary<(BladeGraphicExtension, int), Mesh> Meshes = new();
+        private static readonly Dictionary<(string, Color), Material> Materials = new();
 
         /// <param name="bodyCenter">Drawn body centre on the map; its altitude is the body's base altitude.</param>
         public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
         {
-            Material mat = MaterialFor(ext.texPath);
+            Color scabbardColor = pose.scabbardColor;
+            Material mat = MaterialFor(ext.texPath, Color.white);
             Texture tex = mat?.mainTexture;
             if (tex == null)
             {
@@ -46,71 +58,117 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             Vector2 a = axisPx / lenPx;
             Vector2 n = new(a.y, -a.x); // toward larger u when the blade points up the texture
             float mpp = ext.length / lenPx;
+            float edgeSign = Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
 
-            Vector3 dir = pose.dir.normalized;
-            Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, dir) * dir).normalized * Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
-            // World offset of a texture pixel P: grip + dir * ((P - G) . a) * mpp + edge * ((P - G) . n) * mpp.
+            int q = Mathf.Clamp(Mathf.RoundToInt(pose.sheathed * SheatheSteps), 0, SheatheSteps);
+            float cutV = ext.gripUV.y + (ext.tipUV.y - ext.gripUV.y) * (1f - q / (float)SheatheSteps);
+            if (cutV > ext.uvMin.y + 1e-3f)
+            {
+                Vector3 dir = pose.dir.normalized;
+                Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, dir) * dir).normalized * edgeSign;
+                Mesh mesh = MeshFor(ext, q, ext.uvMin.y, q == 0 ? ext.uvMax.y : Mathf.Min(cutV, ext.uvMax.y));
+                DrawQuad(mesh, mat, w, h, a, n, grip, mpp, pose.grip, dir, edge, pose, bodyCenter);
+            }
+
+            if (pose.hasScabbard && pose.scabbardLength > 1e-3f)
+            {
+                // Grip-to-tip of the texture laid from the mouth to the end of the scabbard.
+                float gripToTipPx = Vector2.Dot(tip - grip, a);
+                if (gripToTipPx > 1e-3f)
+                {
+                    Material smat = MaterialFor(ext.texPath, scabbardColor.a <= 0f ? new Color(0.24f, 0.16f, 0.14f, 1f) : scabbardColor);
+                    Vector3 sdir = pose.scabbardDir.normalized;
+                    Vector3 sedge = pose.scabbardEdge - Vector3.Dot(pose.scabbardEdge, sdir) * sdir;
+                    if (sedge.sqrMagnitude < 1e-6f)
+                    {
+                        sedge = Vector3.Cross(sdir, Vector3.up);
+                        if (sedge.sqrMagnitude < 1e-6f)
+                        {
+                            sedge = Vector3.right;
+                        }
+                    }
+                    sedge = sedge.normalized * edgeSign;
+                    float smpp = pose.scabbardLength / gripToTipPx;
+                    Mesh smesh = MeshFor(ext, ScabbardMeshKey, ext.gripUV.y, ext.uvMax.y);
+                    DrawQuad(smesh, smat, w, h, a, n, grip, smpp, pose.scabbardMouth, sdir, sedge, pose, bodyCenter);
+                }
+            }
+        }
+
+        /// <summary>Lays texture pixel <paramref name="gripPx"/> on <paramref name="at"/>, the blade axis along <paramref name="dir"/>.</summary>
+        private static void DrawQuad(Mesh mesh, Material mat, float w, float h, Vector2 a, Vector2 n, Vector2 gripPx, float mpp,
+            Vector3 at, Vector3 dir, Vector3 edge, in BladePose pose, Vector3 bodyCenter)
+        {
+            // World offset of a texture pixel P: at + dir * ((P - G) . a) * mpp + edge * ((P - G) . n) * mpp.
             Vector3 du = dir * (a.x * w * mpp) + edge * (n.x * w * mpp);
             Vector3 dv = dir * (a.y * h * mpp) + edge * (n.y * h * mpp);
-            Vector3 o = pose.grip - dir * (Vector2.Dot(grip, a) * mpp) - edge * (Vector2.Dot(grip, n) * mpp);
+            Vector3 o = at - dir * (Vector2.Dot(gripPx, a) * mpp) - edge * (Vector2.Dot(gripPx, n) * mpp);
 
             float k = pose.heightToScreen;
-            Vector3 cu = ToMapLinear(du, k);
-            Vector3 cv = ToMapLinear(dv, k);
-            Vector3 origin = bodyCenter + new Vector3(0f, MidAltitude, 0f) + ToMapLinear(o, k);
+            float d = pose.DepthScale;
+            Vector3 cu = ToMapLinear(du, k, d);
+            Vector3 cv = ToMapLinear(dv, k, d);
+            Vector3 origin = bodyCenter + new Vector3(0f, MidAltitude, pose.heightOrigin * k) + ToMapLinear(o, k, d);
 
             Matrix4x4 m = Matrix4x4.identity;
             m.SetColumn(0, new Vector4(cu.x, cu.y, cu.z, 0f));
             m.SetColumn(1, new Vector4(0f, 1e-3f, 0f, 0f));
             m.SetColumn(2, new Vector4(cv.x, cv.y, cv.z, 0f));
             m.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
-            Graphics.DrawMesh(MeshFor(ext), m, mat, 0);
+            Graphics.DrawMesh(mesh, m, mat, 0);
         }
 
         /// <summary>World offset (x east, y height, z north) to map offset (x, altitude, z).</summary>
-        private static Vector3 ToMapLinear(Vector3 v, float heightToScreen)
+        private static Vector3 ToMapLinear(Vector3 v, float heightToScreen, float depthToScreen)
         {
-            return new Vector3(v.x, -v.z * AltitudePerMetre, v.z + v.y * heightToScreen);
+            return new Vector3(v.x, -v.z * AltitudePerMetre, v.z * depthToScreen + v.y * heightToScreen);
         }
 
-        /// <summary>A quad over the calibrated texture area, vertices at (u, 0, v).</summary>
-        private static Mesh MeshFor(BladeGraphicExtension ext)
+        /// <summary>Map position of a body-relative world offset (x east, y height, z north), as the blade is drawn.</summary>
+        public static Vector3 BodyOffsetToMap(Vector3 bodyCenter, Vector3 offset, in BladePose pose)
         {
-            if (Meshes.TryGetValue(ext, out Mesh mesh) && mesh != null)
+            return new Vector3(bodyCenter.x + offset.x, bodyCenter.y,
+                bodyCenter.z + offset.z * pose.DepthScale + (offset.y + pose.heightOrigin) * pose.heightToScreen);
+        }
+
+        /// <summary>A quad over the calibrated texture area between two v values, vertices at (u, 0, v).</summary>
+        private static Mesh MeshFor(BladeGraphicExtension ext, int key, float loY, float hiY)
+        {
+            if (Meshes.TryGetValue((ext, key), out Mesh mesh) && mesh != null)
             {
                 return mesh;
             }
-            Vector2 lo = ext.uvMin;
-            Vector2 hi = ext.uvMax;
+            float lx = ext.uvMin.x;
+            float hx = ext.uvMax.x;
             mesh = new Mesh { name = "MX_BladeBody" };
             mesh.SetVertices(new List<Vector3>
             {
-                new(lo.x, 0f, lo.y),
-                new(lo.x, 0f, hi.y),
-                new(hi.x, 0f, hi.y),
-                new(hi.x, 0f, lo.y),
+                new(lx, 0f, loY),
+                new(lx, 0f, hiY),
+                new(hx, 0f, hiY),
+                new(hx, 0f, loY),
             });
             mesh.SetUVs(0, new List<Vector2>
             {
-                new(lo.x, lo.y),
-                new(lo.x, hi.y),
-                new(hi.x, hi.y),
-                new(hi.x, lo.y),
+                new(lx, loY),
+                new(lx, hiY),
+                new(hx, hiY),
+                new(hx, loY),
             });
             mesh.SetColors(new List<Color> { Color.white, Color.white, Color.white, Color.white });
             mesh.SetTriangles(new List<int> { 0, 1, 2, 0, 2, 3 }, 0);
             mesh.RecalculateBounds();
-            Meshes[ext] = mesh;
+            Meshes[(ext, key)] = mesh;
             return mesh;
         }
 
-        private static Material MaterialFor(string texPath)
+        private static Material MaterialFor(string texPath, Color color)
         {
             if (texPath.NullOrEmpty())
             {
                 return null;
             }
-            if (Materials.TryGetValue(texPath, out Material cached))
+            if (Materials.TryGetValue((texPath, color), out Material cached))
             {
                 return cached;
             }
@@ -119,13 +177,13 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             Material mat = null;
             if (shader != null && tex != null)
             {
-                mat = MaterialPool.MatFrom(tex, shader, Color.white);
+                mat = MaterialPool.MatFrom(tex, shader, color);
             }
             else
             {
                 Log.ErrorOnce($"[MiliraXian] Blade body: missing shader 'MX_BladeBody' or texture '{texPath}'.", GenText.StableStringHash("MX_BladeBody|" + texPath));
             }
-            Materials[texPath] = mat;
+            Materials[(texPath, color)] = mat;
             return mat;
         }
     }

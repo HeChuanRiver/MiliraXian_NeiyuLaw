@@ -6,4 +6,14 @@
   <MX_QH_Slash.deathMessage>{0} died beneath Sanhua's blade.</MX_QH_Slash.deathMessage>
   <MX_QH_SlashSkill.label>Sanhua sword form</MX_QH_SlashSkill.label>
   <MX_QH_SlashSkill.deathMessage>{0} was struck down by Qinghe's elegant sword techniques.</MX_QH_SlashSkill.deathMessage>
+  <MX_QH_CrossSlash.label>iaido cross slash</MX_QH_CrossSlash.label>
+  <MX_QH_CrossSlash.deathMessage>{0} fell to Qinghe's iaido cross slash.</MX_QH_CrossSlash.deathMessage>
+  <MX_QH_CounterSlash.label>iaido counter</MX_QH_CounterSlash.label>
+  <MX_QH_CounterSlash.deathMessage>{0}'s attack was turned aside, and Qinghe's counter cut them down.</MX_QH_CounterSlash.deathMessage>
+  <MX_QH_SakuraDanceSlash.label>sakura dance</MX_QH_SakuraDanceSlash.label>
+  <MX_QH_SakuraDanceSlash.deathMessage>{0} fell amid the blade light of Qinghe's sakura dance.</MX_QH_SakuraDanceSlash.deathMessage>
+  <MX_QH_SakuraThunderSlash.label>sakura dance: lightning reversal</MX_QH_SakuraThunderSlash.label>
+  <MX_QH_SakuraThunderSlash.deathMessage>{0} was struck down by the lightning Qinghe's blade returned.</MX_QH_SakuraThunderSlash.deathMessage>
+  <MX_QH_ExecutionSlash.label>zanshin</MX_QH_ExecutionSlash.label>
+  <MX_QH_ExecutionSlash.deathMessage>{0} fell as Qinghe's blade clicked home.</MX_QH_ExecutionSlash.deathMessage>
 </LanguageData>

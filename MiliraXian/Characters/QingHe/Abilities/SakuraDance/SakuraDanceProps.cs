@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -139,6 +140,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// <summary>Radius and damage factors of this cut when it carries the thunder.</summary>
         public float thunderRadiusFactor = 1f;
         public float thunderDamageFactor = 1f;
+        /// <summary>Posture each hit of this cut adds to the enemy, and the extra when it carries the thunder.</summary>
+        public float posture;
+        public float thunderPosture;
         /// <summary>Lightning shot out of the charged blade while this cut spins (FXR 440684/440683 tracers).</summary>
         public SakuraDischargeProps thunderDischarge;
         /// <summary>Rising whirlwind spawned with this cut (the take-off of the third cut).</summary>
@@ -217,9 +221,13 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     /// The body motion of one variant (ground or airborne cast). Curves are interpolated with a
     /// monotone cubic, so keys mark the poses and the motion eases between them without overshoot.
     /// </summary>
-    public class SakuraDanceMotion
+    public class SakuraDanceMotion : BladeMotionClip
     {
-        public float durationSeconds = 2.3f;
+        public SakuraDanceMotion()
+        {
+            durationSeconds = 2.3f;
+        }
+
         /// <summary>
         /// The dance starts this far into the curves (motion seconds); everything before it is the
         /// aim pose, already shown by the warmup. All times here stay in motion seconds.
@@ -227,14 +235,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public float skipSeconds;
         /// <summary>Spawn time of each cut, seconds. Missing entries fall back to the cut's own time.</summary>
         public List<float> cutTimes = new();
-        /// <summary>Body height in metres; negative values are a crouch.</summary>
-        public SimpleCurve height;
-        /// <summary>Body turn in degrees (clockwise from above when facing east).</summary>
-        public SimpleCurve spin;
+        // Body height (height), body turn (turn) and the held blade relative to the turned body
+        // (blade) are the shared clip tracks.
         /// <summary>Airborne cast only: when vanilla flight is ended. Negative = the pawn stays flying.</summary>
         public float landTime = -1f;
-        /// <summary>Held blade, relative to the spun body. Missing = the vanilla flat weapon is drawn.</summary>
-        public BladeKeyframes blade;
         /// <summary>Rain only: when the blade catches the thunder (motion seconds). Negative = never. See <see cref="thunderCatchTimes"/>.</summary>
         public float thunderCatchTime = -1f;
         /// <summary>
@@ -261,23 +265,32 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     /// <see cref="durationSeconds"/> and stretched over the actual warmup. It should end in the
     /// pose the dance starts from.
     /// </summary>
-    public class SakuraWarmupMotion
+    public class SakuraWarmupMotion : BladeMotionClip
     {
-        public float durationSeconds = 0.4f;
-        /// <summary>Body turn, degrees, same convention as the dance spin (it should end at the dance's first value).</summary>
-        public SimpleCurve spin;
-        public BladeKeyframes blade;
+        // turn should end at the dance's first value.
+        public SakuraWarmupMotion()
+        {
+            durationSeconds = 0.4f;
+        }
     }
 
     public class CompProperties_AbilitySakuraDance : CompProperties_AbilityEffect
     {
         public SweepDamageDef sweepDamage;
+        /// <summary>Named damage of the cuts and of the charged cuts (shown in wounds and the combat log); null = the sweep def's.</summary>
+        public DamageDef cutDamageDef;
+        public DamageDef thunderCutDamageDef;
         public SakuraWarmupMotion warmup;
         public SakuraDanceMotion groundMotion;
         /// <summary>Used when the pawn is flying at cast time; falls back to the ground motion.</summary>
         public SakuraDanceMotion airMotion;
         /// <summary>Screen offset to the north per metre of height.</summary>
         public float heightToScreen = 0.5f;
+        /// <summary>Screen scale of north-south offsets of the held blade from the body (not the rings); see BladeMotionSetExtension.</summary>
+        public float depthToScreen = 1f;
+        /// <summary>Height of the motion origin above the drawn body centre, metres (blade, rings, petals, lightning).</summary>
+        public float heightOrigin;
+        public BladeProjection Projection => new(heightToScreen, depthToScreen, heightOrigin);
         /// <summary>Height of the ring origin above the pawn's drawn body centre, metres.</summary>
         public float ringHeightOffset = 0.6f;
         public List<SakuraCutProps> cuts = new();

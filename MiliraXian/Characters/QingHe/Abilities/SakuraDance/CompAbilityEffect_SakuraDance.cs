@@ -51,6 +51,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             job.ability = parent;
             job.SetTarget(TargetIndex.A, target.Cell);
             job.playerForced = true;
+            if (SakuraThunderReturn.Casting)
+            {
+                job.count = SakuraThunderReturn.JobMarker;
+            }
             caster.jobs.StartJob(job, JobCondition.InterruptForced, cancelBusyStances: false, tag: JobTag.Misc);
         }
     }

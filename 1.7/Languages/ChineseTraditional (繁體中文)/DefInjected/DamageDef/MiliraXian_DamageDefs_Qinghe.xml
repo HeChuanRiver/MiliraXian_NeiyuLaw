@@ -6,4 +6,14 @@
   <MX_QH_Slash.deathMessage>{0}死于散華的刀刃之下。</MX_QH_Slash.deathMessage>
   <MX_QH_SlashSkill.label>散華劍技</MX_QH_SlashSkill.label>
   <MX_QH_SlashSkill.deathMessage>{0}被清荷華麗的劍技擊倒了。</MX_QH_SlashSkill.deathMessage>
+  <MX_QH_CrossSlash.label>拔刀十字斬</MX_QH_CrossSlash.label>
+  <MX_QH_CrossSlash.deathMessage>{0}倒在了清荷的拔刀十字斬之下。</MX_QH_CrossSlash.deathMessage>
+  <MX_QH_CounterSlash.label>拔刀斬·化解</MX_QH_CounterSlash.label>
+  <MX_QH_CounterSlash.deathMessage>{0}的攻勢被化解，隨即倒在清荷的反擊之下。</MX_QH_CounterSlash.deathMessage>
+  <MX_QH_SakuraDanceSlash.label>櫻舞</MX_QH_SakuraDanceSlash.label>
+  <MX_QH_SakuraDanceSlash.deathMessage>{0}倒在了清荷櫻舞的刀光之中。</MX_QH_SakuraDanceSlash.deathMessage>
+  <MX_QH_SakuraThunderSlash.label>櫻舞·雷返</MX_QH_SakuraThunderSlash.label>
+  <MX_QH_SakuraThunderSlash.deathMessage>{0}被清荷刀上奉還的落雷擊倒了。</MX_QH_SakuraThunderSlash.deathMessage>
+  <MX_QH_ExecutionSlash.label>殘心</MX_QH_ExecutionSlash.label>
+  <MX_QH_ExecutionSlash.deathMessage>{0}在清荷收刀的一聲輕響中倒下了。</MX_QH_ExecutionSlash.deathMessage>
 </LanguageData>

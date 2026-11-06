@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
@@ -20,9 +21,9 @@ internal static class Patch_CharacterWeaponRendering
     }
 }
 
-// Rigid 3D blade: while the current job driver (IBladePoseSource) or a registered provider (for
-// example an ability warmup) poses the blade and the weapon is calibrated (BladeGraphicExtension),
-// the blade is drawn here instead of the vanilla flat weapon. Worn apparel extras are still drawn.
+// Rigid 3D blade: while the pawn plays a motion with a blade track (BladeMotionPlayer) and the
+// weapon is calibrated (BladeGraphicExtension), the blade is drawn here instead of the vanilla flat
+// weapon. Worn apparel extras are still drawn.
 [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras))]
 internal static class Patch_CharacterBladeBodyRendering
 {
@@ -36,7 +37,7 @@ internal static class Patch_CharacterBladeBodyRendering
         }
         ThingWithComps weapon = pawn.equipment?.Primary;
         BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
-        if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !BladePoseProviders.TryGet(pawn, out BladePose pose))
+        if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !BladeMotionPlayer.TryGetBladePose(pawn, out BladePose pose))
         {
             return true;
         }

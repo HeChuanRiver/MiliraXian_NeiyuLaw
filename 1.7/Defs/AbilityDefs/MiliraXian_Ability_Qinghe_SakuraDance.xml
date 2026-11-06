@@ -66,16 +66,19 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.SakuraDance.CompProperties_AbilitySakuraDance">
         <sweepDamage>MX_QH_SakuraDanceSweep</sweepDamage>
+        <!-- 伤口和战斗日志里的招式名：普通三刀为樱舞，接雷之后的刀为雷返 -->
+        <cutDamageDef>MX_QH_SakuraDanceSlash</cutDamageDef>
+        <thunderCutDamageDef>MX_QH_SakuraThunderSlash</thunderCutDamageDef>
         <!-- 动作曲线用单调三次插值：关键帧是姿势，之间缓入缓出、不过冲。
              高度单位米（负数是下蹲），转身单位度（朝东时顺时针）。
              转身曲线取自《只狼》根骨骼朝向（按出刀时刻对齐时间），不是每刀转一圈：第一刀约转 210°，
              第一、二刀之间约 130°，第二刀约 130°，第二、三刀之间约 270°（空中借旋转蓄势），第三刀只转约 45°。
              朝向基准：原作根骨骼的局部 Z 是侧向，换算时另减 90°；这样第三刀和前摇起点都正对目标。 -->
         <!-- 瞄准前摇（原版施法预热，动作取《只狼》316700：旋身下蹲、把刀横架到脑后）。原片 0.4 秒，按实际预热时长拉伸；
-             结束姿势就是樱舞动作的第一帧，转身曲线终点与樱舞 spin 的起点一致。 -->
+             结束姿势就是樱舞动作的第一帧，转身曲线终点与樱舞 turn 的起点一致。 -->
         <warmup>
           <durationSeconds>0.4</durationSeconds>
-          <spin><points><li>(0, -352.9)</li><li>(0.05, -303.2)</li><li>(0.1, -253.4)</li><li>(0.15, -203.0)</li><li>(0.2, -154.4)</li><li>(0.25, -111.6)</li><li>(0.3, -77.7)</li><li>(0.35, -59.1)</li><li>(0.4, -52.4)</li><li>(0.4, -52.4)</li></points></spin>
+          <turn><points><li>(0, -352.9)</li><li>(0.05, -303.2)</li><li>(0.1, -253.4)</li><li>(0.15, -203.0)</li><li>(0.2, -154.4)</li><li>(0.25, -111.6)</li><li>(0.3, -77.7)</li><li>(0.35, -59.1)</li><li>(0.4, -52.4)</li><li>(0.4, -52.4)</li></points></turn>
           <blade>
             <shoulder>(0.12, 0.25, 0)</shoulder>
             <armLength>0.55</armLength>
@@ -135,7 +138,7 @@
               <li>(2.7, 0)</li>
             </points>
           </height>
-          <spin>
+          <turn>
             <points>
               <li>(0, -52.4)</li>
               <li>(0.263, -52.4)</li>
@@ -174,7 +177,7 @@
               <li>(2.001, 754.0)</li>
               <li>(2.053, 754.6)</li>
             </points>
-          </spin>
+          </turn>
           <!-- 刀：相对转身后的身体。手在手臂末端：握点 = 肩 + 手臂方向 × armLength × reach，
                手臂朝刀的方向，只跟一半俯仰（其余由手腕承担）。shoulder 单位米（右, 上, 前，相对身体绘制中心）。
                yaw 0 = 正前、正值向右；pitch 正值向上；roll 是刃口绕刀身的扭转；reach 是手臂伸展比例；
@@ -275,7 +278,7 @@
               <li>(2.6, 1.2)</li>
             </points>
           </height>
-          <spin>
+          <turn>
             <points>
               <li>(0, -52.4)</li>
               <li>(0.203, -52.4)</li>
@@ -314,7 +317,7 @@
               <li>(1.941, 754.0)</li>
               <li>(1.993, 754.6)</li>
             </points>
-          </spin>
+          </turn>
           <!-- 刀：同样取自骨骼（空中版动画 316200），按空中版的出刀时刻对齐 -->
           <blade>
             <shoulder>(0.12, 0.25, 0)</shoulder>
@@ -377,9 +380,15 @@
             </keys>
           </blade>
         </airMotion>
-        <heightToScreen>0.5</heightToScreen>
-        <!-- 刀环中心比身体绘制中心高多少米；0 = 正好在身体上 -->
-        <ringHeightOffset>0.1</ringHeightOffset>
+        <!--
+          投影和散华的十字斩一致：高度压到 0.35，动作原点（骨骼的骨盆）放到小人中心下 0.2 米的腰部，
+          握着的刀南北方向缩到 0.55（刀环不缩，刀环在地上的范围就是出伤范围）。
+          刀环中心比原点（腰部）高 ringHeightOffset 米。
+        -->
+        <heightToScreen>0.35</heightToScreen>
+        <heightOrigin>-0.2</heightOrigin>
+        <depthToScreen>0.55</depthToScreen>
+        <ringHeightOffset>0.3</ringHeightOffset>
         <petalKeepFraction>0.3</petalKeepFraction>
         <petalSpeedScale>0.25</petalSpeedScale>
         <petalSpreadDegrees>12</petalSpreadDegrees>
@@ -445,6 +454,9 @@
             <radius>2.5</radius>
             <damage>40</damage>
             <armorPenetration>0.5</armorPenetration>
+            <!-- 每次命中给敌人的架势；带雷时再加 -->
+            <posture>5</posture>
+            <thunderPosture>5</thunderPosture>
             <petalStartAngle>157.5</petalStartAngle>
             <petalRadius>2.75</petalRadius>
             <layers>
@@ -636,6 +648,9 @@
             <radius>2.7</radius>
             <damage>40</damage>
             <armorPenetration>0.5</armorPenetration>
+            <!-- 每次命中给敌人的架势；带雷时再加 -->
+            <posture>10</posture>
+            <thunderPosture>10</thunderPosture>
             <petalStartAngle>67.5</petalStartAngle>
             <petalRadius>2.95</petalRadius>
             <layers>
@@ -809,6 +824,9 @@
             <radius>4</radius>
             <damage>60</damage>
             <armorPenetration>0.5</armorPenetration>
+            <!-- 每次命中给敌人的架势；带雷（雷电奉还）时再加 -->
+            <posture>20</posture>
+            <thunderPosture>60</thunderPosture>
             <petalStartAngle>90</petalStartAngle>
             <petalRadius>3.5</petalRadius>
             <!-- 照抄预览 v28 的 CUT3_LAYERS / DIST3 / UV3 / DCOL3 / INNER3，贴图用自制 Sakura* 系列 -->

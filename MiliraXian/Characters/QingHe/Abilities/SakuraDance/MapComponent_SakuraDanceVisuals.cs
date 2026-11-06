@@ -138,6 +138,13 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             });
         }
 
+        /// <summary>Adds a visual of another kind (for example a blade trail); it is drawn and dropped like the others.</summary>
+        internal void AddSource(StripSource v)
+        {
+            v.lifeSeconds = Mathf.Max(v.lifeSeconds, v.StripLife());
+            Add(v);
+        }
+
         private void Add(StripSource v)
         {
             while (strips.Count >= MaxStrips)
@@ -172,7 +179,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 StripSource v = strips[i];
                 float t = v.Seconds(ticks);
-                if (t > v.lifeSeconds)
+                if (t > v.lifeSeconds || !v.Alive(ticks))
                 {
                     v.Dispose();
                     strips.RemoveAt(i);
@@ -184,6 +191,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 }
                 try
                 {
+                    v.BeforeDraw();
                     DrawStrips(v, t, distortScale, minWidth);
                     v.DrawExtra(t, dt);
                 }
@@ -266,14 +274,14 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 block.Clear();
                 if (layer.distortion)
                 {
-                    Texture2D normal = ContentFinder<Texture2D>.Get(layer.normalTexPath ?? v.props.distortionNormalTexPath, reportFailure: false);
+                    Texture2D normal = ContentFinder<Texture2D>.Get(layer.normalTexPath ?? v.DistortionNormalTexPath, reportFailure: false);
                     if (normal != null)
                     {
                         block.SetTexture(NormalTexId, normal);
                     }
                     float intensity = SakuraTrailLayer.Eval(layer.distortionIntensityCurve, layer.distortionIntensity, t);
-                    block.SetFloat(IntensityId, intensity * v.props.distortionMetresPerUnit);
-                    block.SetFloat(ShadeId, v.props.shadeOpacity);
+                    block.SetFloat(IntensityId, intensity * v.DistortionMetresPerUnit);
+                    block.SetFloat(ShadeId, v.ShadeOpacity);
                     block.SetVector(DistortScaleId, distortScale);
                 }
                 else
@@ -282,7 +290,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     block.SetFloat(AlphaScaleId, AlphaScale);
                     block.SetFloat(AdditiveId, layer.additive ? 1f : 0f);
                     block.SetFloat(AlphaMaxId, layer.clampAlpha ? 1f : 1e6f);
-                    ScreenBloomProperties bloom = li >= v.baseLayerCount ? v.props.thunderBloom ?? v.props.bloom : v.props.bloom;
+                    ScreenBloomProperties bloom = v.BloomFor(li);
                     if (layer.bloom && bloom != null)
                     {
                         ScreenBloom.Submit(bloom, mesh, Matrix4x4.identity, mat, block);
@@ -317,8 +325,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             float scroll = layer.ScrollU(t);
             float si = layer.segmentInterval > 0f ? layer.segmentInterval : 1f / 60f;
             float shadeRgb = layer.distortion ? 1f - Mathf.Clamp01(layer.shadeDarkness) : 1f;
-            Color tint = layer.distortion ? Color.white : layer.color;
-            float heightToScreen = v.props.heightToScreen;
+            Color tint = layer.distortion ? Color.white : v.TintFor(layerIndex, layer);
+            float heightToScreen = v.HeightToScreen;
             // Animated layers show one frame (a horizontal band of the texture) at a time.
             int frames = Mathf.Max(1, layer.frames);
             float vLo = 0f;
@@ -475,7 +483,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         internal static Vector3 ToMap(StripSource v, Vector3 world, float heightToScreen)
         {
             float alt = v.pawnAltitude + Mathf.Clamp((v.groundZ - world.z) * AltitudePerMetre, -AltitudeSpread, AltitudeSpread);
-            return SakuraDanceGeometry.ToMap(world, heightToScreen, alt);
+            // North-south offsets from the body are scaled about the body (groundZ), as the blade is.
+            float d = v.DepthToScreen;
+            Vector3 w = d == 1f ? world : new Vector3(world.x, world.y, v.groundZ + (world.z - v.groundZ) * d);
+            w.y += v.HeightOrigin;
+            return SakuraDanceGeometry.ToMap(w, heightToScreen, alt);
         }
 
         internal static Mesh NewMesh()
@@ -527,8 +539,28 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             public int baseLayerCount;
             public Mesh[] meshes;
 
+            // Rendering settings; Sakura Dance sources read them from the ability props.
+            public virtual float HeightToScreen => props.heightToScreen;
+            // The rings keep their true north-south size: the damage reach is that circle on the ground.
+            public virtual float DepthToScreen => 1f;
+            public virtual float HeightOrigin => props.heightOrigin;
+            public virtual string DistortionNormalTexPath => props.distortionNormalTexPath;
+            public virtual float DistortionMetresPerUnit => props.distortionMetresPerUnit;
+            public virtual float ShadeOpacity => props.shadeOpacity;
+            public virtual ScreenBloomProperties BloomFor(int layerIndex) =>
+                layerIndex >= baseLayerCount ? props.thunderBloom ?? props.bloom : props.bloom;
+            public virtual Color TintFor(int layerIndex, SakuraTrailLayer layer) => layer.color;
+
+            /// <summary>Checked every frame before drawing; false drops the source.</summary>
+            public virtual bool Alive(float ticks) => true;
+
             /// <summary>World point of the trail emitted at <paramref name="te"/> and the unit width direction there.</summary>
             public abstract void Sample(int layerIndex, float te, float radialOffset, out Vector3 centre, out Vector3 side);
+
+            /// <summary>Called every frame before the strips are drawn (for sources that follow a moving pawn).</summary>
+            public virtual void BeforeDraw()
+            {
+            }
 
             public virtual void DrawExtra(float t, float dt)
             {

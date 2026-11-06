@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -52,6 +52,11 @@ namespace MiliraXian.Characters.Neiyu
 
             MXMeleeSlashGhostExtension ext = weapon.def.GetModExtension<MXMeleeSlashGhostExtension>();
             if (ext == null)
+            {
+                return;
+            }
+            // Attacks that play a blade motion draw their own trail along the blade.
+            if (__instance is MiliraXian.Characters.Common.Vfx.BladeMotion.IBladeMotionVerb { MotionActive: true })
             {
                 return;
             }

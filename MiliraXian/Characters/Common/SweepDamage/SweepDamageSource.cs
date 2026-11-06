@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -29,6 +29,8 @@ namespace MiliraXian.Characters.Common.SweepDamage
         public SweepDamageDef def;
         public Pawn caster;
         public ThingDef weaponDef;
+        /// <summary>Damage type of this sweep's hits, overriding the def's (one sweep rule, several named cuts).</summary>
+        public DamageDef damageDef;
         /// <summary>Sweep centre on the ground (y ignored).</summary>
         public Vector3 center;
         public float radius;
@@ -37,6 +39,30 @@ namespace MiliraXian.Characters.Common.SweepDamage
         public int startTick;
         /// <summary>Heading at tick offsets 0..Count-1. The sweep ends after the last entry.</summary>
         public List<float> headings = new();
+
+        /// <summary>
+        /// Optional melee verb the hits belong to. Workers that resolve hits through the verb read
+        /// <see cref="damage"/> as a factor of the verb's own damage instead of an amount.
+        /// </summary>
+        public Verb verb;
+        /// <summary>Share of on-hit resource gains, for verb-based workers.</summary>
+        public float resourceFactor = 1f;
+        /// <summary>Hit on the last tick if the sweep never reached it but it is still within reach (the attacked target).</summary>
+        public Thing guaranteedTarget;
+        /// <summary>For verb-based workers: this target skips the miss and dodge rolls (blocks still apply).</summary>
+        public Thing sureHitTarget;
+        /// <summary>Posture each unblocked hit adds to a struck pawn (owned by <see cref="caster"/>, who may execute it).</summary>
+        public float posture;
+        /// <summary>
+        /// The attacked thing: the sweep can hit it even when the target filter would not (a wall of
+        /// one's own, a neutral animal). Unlike <see cref="guaranteedTarget"/> it is only hit when the blade passes it.
+        /// </summary>
+        public Thing primaryTarget;
+        /// <summary>
+        /// When set (≥ 0), the sweep belongs to the caster's busy stance of <see cref="verb"/> started on
+        /// this tick; it stops when that stance ends early or the caster is stunned.
+        /// </summary>
+        public int boundStanceTick = -1;
 
         private int lastProcessedOffset = -1;
         private List<Thing> hit = new();
@@ -63,9 +89,26 @@ namespace MiliraXian.Characters.Common.SweepDamage
             return Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg;
         }
 
+        private bool StanceBroken(int now)
+        {
+            // The bound stance is created on boundStanceTick, possibly after this source.
+            if (boundStanceTick < 0 || verb == null || now <= boundStanceTick)
+            {
+                return false;
+            }
+            return caster?.stances == null || caster.stances.stunner.Stunned
+                || caster.stances.curStance is not Stance_Busy busy || busy.verb != verb || busy.startedTick != boundStanceTick;
+        }
+
         public void Tick(Map map, int now)
         {
+            if (lastProcessedOffset < headings.Count - 1 && StanceBroken(now))
+            {
+                // Interrupted: the strikes not yet swung deal nothing; contacts already made still land.
+                lastProcessedOffset = headings.Count - 1;
+            }
             int offset = Mathf.Min(now - startTick, headings.Count - 1);
+            bool reachesEnd = offset == headings.Count - 1 && lastProcessedOffset < offset;
             if (offset > lastProcessedOffset && offset >= 1 && caster != null && caster.Spawned && caster.MapHeld == map)
             {
                 // Catch up every tick interval not yet tested (normally one).
@@ -74,6 +117,10 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 for (int i = from; i < offset; i++)
                 {
                     TestInterval(map, headings[i], headings[i + 1], now);
+                }
+                if (reachesEnd)
+                {
+                    TryGuaranteedHit(map, now);
                 }
             }
             if (offset > lastProcessedOffset)
@@ -95,7 +142,11 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 {
                     continue;
                 }
-                def.Worker.ApplyHit(this, t);
+                // A character reaction may take the whole contact instead (Qinghe catching a returned thunder).
+                if (!SweepHitInterceptors.TryIntercept(this, t))
+                {
+                    def.Worker.ApplyHit(this, t);
+                }
             }
         }
 
@@ -114,7 +165,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 for (int i = 0; i < things.Count; i++)
                 {
                     Thing t = things[i];
-                    if (TmpSeen.Add(t) && !hit.Contains(t) && def.Worker.CanTarget(this, t))
+                    if (TmpSeen.Add(t) && !hit.Contains(t) && (t == guaranteedTarget || t == primaryTarget || def.Worker.CanTarget(this, t)))
                     {
                         TmpCandidates.Add(t);
                     }
@@ -165,6 +216,23 @@ namespace MiliraXian.Characters.Common.SweepDamage
             }
         }
 
+        private void TryGuaranteedHit(Map map, int now)
+        {
+            Thing t = guaranteedTarget;
+            if (t == null || hit.Contains(t) || t.Destroyed || !t.Spawned || t.MapHeld != map || t is Pawn { Dead: true })
+            {
+                return;
+            }
+            Vector3 rel = (t is Pawn ? t.DrawPos : GenThing.TrueCenter(t)) - center;
+            rel.y = 0f;
+            if (rel.magnitude > radius + BodyRadius(t))
+            {
+                return;
+            }
+            hit.Add(t);
+            pending.Add(new PendingHit { target = t, dueTick = now + Mathf.Max(0, def.damageDelayTicks) });
+        }
+
         private static float BodyRadius(Thing t)
         {
             if (t is Pawn p)
@@ -180,6 +248,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
             Scribe_Defs.Look(ref def, "def");
             Scribe_References.Look(ref caster, "caster");
             Scribe_Defs.Look(ref weaponDef, "weaponDef");
+            Scribe_Defs.Look(ref damageDef, "damageDef");
             Scribe_Values.Look(ref center, "center");
             Scribe_Values.Look(ref radius, "radius");
             Scribe_Values.Look(ref damage, "damage");
@@ -187,6 +256,13 @@ namespace MiliraXian.Characters.Common.SweepDamage
             Scribe_Values.Look(ref startTick, "startTick");
             Scribe_Values.Look(ref lastProcessedOffset, "lastProcessedOffset", -1);
             Scribe_Collections.Look(ref headings, "headings", LookMode.Value);
+            Scribe_References.Look(ref verb, "verb");
+            Scribe_Values.Look(ref resourceFactor, "resourceFactor", 1f);
+            Scribe_References.Look(ref guaranteedTarget, "guaranteedTarget");
+            Scribe_References.Look(ref sureHitTarget, "sureHitTarget");
+            Scribe_Values.Look(ref posture, "posture");
+            Scribe_References.Look(ref primaryTarget, "primaryTarget");
+            Scribe_Values.Look(ref boundStanceTick, "boundStanceTick", -1);
             Scribe_Collections.Look(ref hit, "hit", LookMode.Reference);
             Scribe_Collections.Look(ref pending, "pending", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)

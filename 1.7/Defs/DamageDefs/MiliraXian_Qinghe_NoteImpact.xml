@@ -32,6 +32,84 @@
       </li>
     </modExtensions>
   </DamageDef>
+  <!--
+    清荷剑舞的招式伤害：label 是招式名，会作为"武器 招式"显示在伤口来源里，并按 TechniqueDamageExtension 的规则写入战斗日志
+    （日志沿用原版斩击的句式，招式名填在工具位置）。剑压、四时共鸣与原来对应的伤害类型一致。
+  -->
+  <DamageDef Name="MX_QH_TechniqueSlashBase" ParentName="MX_QH_SlashBase" Abstract="True">
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Combat.TechniqueDamageExtension">
+        <logRulesHit>Maneuver_Slash_MeleeHit</logRulesHit>
+        <logRulesDeflect>Maneuver_Slash_MeleeDeflect</logRulesDeflect>
+        <logRulesMiss>Maneuver_Slash_MeleeMiss</logRulesMiss>
+        <logRulesDodge>Maneuver_Slash_MeleeDodge</logRulesDodge>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <!-- 普攻：拔刀十字斩（同散华斩击，每斩按片段的 resourceFactor 给剑压） -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_CrossSlash</defName>
+    <label>拔刀十字斩</label>
+    <deathMessage>{0}倒在了清荷的拔刀十字斩之下。</deathMessage>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>true</canGainSwordPressure>
+        <swordPressureGain>0.25</swordPressureGain>
+        <resonanceAccumulationMultiplier>1</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <!-- 收刀途中化解后的反击 -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_CounterSlash</defName>
+    <label>拔刀斩化解</label>
+    <deathMessage>{0}的攻势被化解，随即倒在清荷的反击之下。</deathMessage>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>true</canGainSwordPressure>
+        <swordPressureGain>0.25</swordPressureGain>
+        <resonanceAccumulationMultiplier>1</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <!-- 樱舞（同散华剑技：建筑伤害 ×2，不按命中积累剑压） -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_SakuraDanceSlash</defName>
+    <label>樱舞</label>
+    <deathMessage>{0}倒在了清荷樱舞的刀光之中。</deathMessage>
+    <buildingDamageFactor>2</buildingDamageFactor>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <!-- 樱舞接雷之后的刀（雷返，含第三刀雷电奉还） -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_SakuraThunderSlash</defName>
+    <label>樱舞·雷返</label>
+    <deathMessage>{0}被清荷击出的落雷击倒了。</deathMessage>
+    <buildingDamageFactor>2</buildingDamageFactor>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <!-- 剑舞处决（过身斩，收刀那一刻对核心部位的一击）。剑压由处决固定给 1 档，这里不再按命中积累 -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_ExecutionSlash</defName>
+    <label>残心</label>
+    <deathMessage>{0}在清荷收刀的一声轻响中被洞穿了弱点。</deathMessage>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_SlashSkill</defName>
     <label>散华剑技</label>

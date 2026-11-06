@@ -16,46 +16,21 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public Vector3 edge;
         /// <summary>Screen offset to the north per metre of height (the same as the trails).</summary>
         public float heightToScreen;
-    }
+        /// <summary>Screen scale of north-south offsets from the body (0 = unset, treated as 1).</summary>
+        public float depthToScreen;
+        /// <summary>Height of the motion's origin above the drawn body centre, metres (negative = lower).</summary>
+        public float heightOrigin;
 
-    /// <summary>A job driver that animates the held blade itself while it runs.</summary>
-    public interface IBladePoseSource
-    {
-        bool TryGetBladePose(out BladePose pose);
-    }
-
-    /// <summary>Blade pose of a pawn from something other than its job driver (for example an ability warmup).</summary>
-    public delegate bool PawnBladePoseProvider(Pawn pawn, out BladePose pose);
-
-    /// <summary>Extra blade pose sources, asked in order when the job driver does not pose the blade.</summary>
-    public static class BladePoseProviders
-    {
-        private static readonly List<PawnBladePoseProvider> Providers = new();
-
-        public static void Register(PawnBladePoseProvider provider)
-        {
-            if (provider != null && !Providers.Contains(provider))
-            {
-                Providers.Add(provider);
-            }
-        }
-
-        public static bool TryGet(Pawn pawn, out BladePose pose)
-        {
-            if (pawn?.jobs?.curDriver is IBladePoseSource source && source.TryGetBladePose(out pose))
-            {
-                return true;
-            }
-            for (int i = 0; i < Providers.Count; i++)
-            {
-                if (Providers[i](pawn, out pose))
-                {
-                    return true;
-                }
-            }
-            pose = default;
-            return false;
-        }
+        public float DepthScale => depthToScreen > 0f ? depthToScreen : 1f;
+        /// <summary>Share of the blade (grip to tip) inside the scabbard; that part is not drawn. 0 = fully out.</summary>
+        public float sheathed;
+        /// <summary>A scabbard is drawn from <see cref="scabbardMouth"/> along <see cref="scabbardDir"/>.</summary>
+        public bool hasScabbard;
+        public Color scabbardColor;
+        public Vector3 scabbardMouth;
+        public Vector3 scabbardDir;
+        public Vector3 scabbardEdge;
+        public float scabbardLength;
     }
 
     /// <summary>

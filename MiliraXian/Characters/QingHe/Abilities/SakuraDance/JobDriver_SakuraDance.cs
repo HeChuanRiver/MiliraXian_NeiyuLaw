@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using HarmonyLib;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -14,11 +14,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     /// <summary>
     /// Runs the Sakura Dance timeline in place. A ground cast and an airborne cast use different
     /// motions: in the air the first two cuts are made while dropping to the ground and the third
-    /// one jumps. Each cut, at its time, spawns a sweep damage source and a visual ring. The drawn
-    /// body is lifted by the motion's height curve and turned by its spin curve; Position, shadow
-    /// and selection stay on the ground.
+    /// one jumps. Each cut, at its time, spawns a sweep damage source and a visual ring. The motion
+    /// (blade, body turn and lift) is a shared clip played by <see cref="BladeMotionPlayer"/>;
+    /// Position, shadow and selection stay on the ground.
     /// </summary>
-    public class JobDriver_SakuraDance : JobDriver, IBladePoseSource
+    public class JobDriver_SakuraDance : JobDriver, IMotionPlaybackSource
     {
         private int danceStartTick = -1;
         private Vector3 aim = Vector3.right;
@@ -38,6 +38,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         private int updraftMask;
         /// <summary>Motion time of this cast's thunder catch, picked at the start; negative = none.</summary>
         private float thunderCatchAt = -1f;
+        /// <summary>Cast to return a caught enemy thunder (<see cref="SakuraThunderReturn"/>): no sky bolt.</summary>
+        private bool returnedThunder;
 
         public override bool PlayerInterruptable => false;
 
@@ -79,8 +81,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 flight.ForceLand();
             }
             Props?.castSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+            // A thunder caught off an enemy's Lightning Reversal is carried from the first cut, whatever the sky.
+            returnedThunder = job.count == SakuraThunderReturn.JobMarker;
             thunderEligible = Props?.thunderSweepDamage != null
-                && SakuraThunderUtility.CanCatch(pawn, Props, Gen.HashCombineInt(danceStartTick, pawn.thingIDNumber ^ 0x5A17));
+                && (returnedThunder
+                    || SakuraThunderUtility.CanCatch(pawn, Props, Gen.HashCombineInt(danceStartTick, pawn.thingIDNumber ^ 0x5A17)));
             // The bolt comes at a random one of the motion's catch times (before the first or the third
             // cut). Picked from the cast tick and the pawn, not the shared Rand stream, so a pushed
             // or reseeded Rand state around the cast cannot pin it to the same entry every time.
@@ -88,6 +93,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             if (m == null)
             {
                 thunderCatchAt = -1f;
+            }
+            else if (returnedThunder && !m.thunderCatchTimes.NullOrEmpty())
+            {
+                // Before the first cut: all three cuts carry it.
+                thunderCatchAt = m.thunderCatchTimes[0];
             }
             else if (!m.thunderCatchTimes.NullOrEmpty())
             {
@@ -224,6 +234,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     def = sweepDef,
                     caster = pawn,
                     weaponDef = pawn.equipment?.Primary?.def,
+                    damageDef = charged ? props.thunderCutDamageDef ?? props.cutDamageDef : props.cutDamageDef,
+                    posture = cut.posture + (charged ? cut.thunderPosture : 0f),
                     center = new Vector3(frame.center.x, 0f, frame.center.z),
                     radius = radius,
                     damage = cut.damage * factor * (charged ? cut.thunderDamageFactor : 1f),
@@ -249,6 +261,12 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         {
             thunderCharged = true;
             thunderCatchTick = Find.TickManager.TicksGame;
+            if (returnedThunder)
+            {
+                // The thunder came off an enemy's blade, not the sky: no bolt, flash or thunderclap.
+                pawn.Map.GetComponent<MapComponent_SakuraDanceVisuals>()?.EnsureCharged(pawn);
+                return;
+            }
             Map map = pawn.Map;
             // The sky flash lasts exactly as long as the bolt.
             int flashTicks = Mathf.Max(4, Mathf.RoundToInt(props.thunderBoltSeconds * 60f));
@@ -273,33 +291,42 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         }
 
         /// <summary>
-        /// Body lift, through the vanilla job offset: it is part of <c>DrawPos</c>, so everything
-        /// drawn at the pawn (shield, halo, weapon, overlays) follows the body. Only the shadow is
-        /// put back on the ground, by <see cref="Patch_PawnRenderer_SakuraDanceShadow"/>.
+        /// The dance as a motion playback (the Job side of the bridge): the variant's clip on the
+        /// dance clock (with the thunder hit-stop), along the aim. The shared player draws the
+        /// blade in the turned body frame, turns the sprite and lifts the body (the clip's height is
+        /// absolute, so vanilla flight's own lift is taken off).
         /// </summary>
-        public override Vector3 ForcedBodyOffset
+        public bool TryGetPlayback(out MotionPlayback playback)
         {
-            get
-            {
-                CompProperties_AbilitySakuraDance props = Props;
-                SakuraDanceMotion motion = Motion;
-                if (props == null || motion == null || danceStartTick < 0)
-                {
-                    return Vector3.zero;
-                }
-                // Vanilla flight adds its own lift to DrawPos; the motion is written in absolute
-                // height, so only the difference is added (inside LiftAt).
-                return new Vector3(0f, 0f, LiftAt(MotionSeconds(VisualClock.Ticks)));
-            }
+            return TryGetPlaybackAt(MotionSeconds(VisualClock.Ticks), out playback);
         }
 
-        /// <summary>
-        /// Held blade: the keys are in the body frame, which is the aim frame (mirrored for a
-        /// west-facing cast, like the rings) turned by the continuous spin curve.
-        /// </summary>
+        private bool TryGetPlaybackAt(float seconds, out MotionPlayback playback)
+        {
+            playback = default;
+            CompProperties_AbilitySakuraDance props = Props;
+            SakuraDanceMotion motion = Motion;
+            if (props == null || motion == null || danceStartTick < 0)
+            {
+                return false;
+            }
+            playback = new MotionPlayback
+            {
+                clip = motion,
+                seconds = seconds,
+                aim = aim,
+                projection = props.Projection,
+                source = motion,
+                sourceId = danceStartTick,
+                heightIncludesFlight = true,
+            };
+            return true;
+        }
+
+        /// <summary>Held blade now (the same pose the player draws).</summary>
         public bool TryGetBladePose(out BladePose pose)
         {
-            return TryGetBladePoseAt(MotionSeconds(VisualClock.Ticks), out pose);
+            return TryGetBladeAt(MotionSeconds(VisualClock.Ticks), out pose, out _);
         }
 
         /// <summary>
@@ -308,12 +335,15 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// </summary>
         internal bool TryGetBladeAt(float seconds, out BladePose pose, out Vector3 body)
         {
+            pose = default;
             body = pawn.DrawPos;
-            if (!TryGetBladePoseAt(seconds, out pose))
+            if (!TryGetPlaybackAt(seconds, out MotionPlayback at) || at.clip.blade == null
+                || !TryGetPlayback(out MotionPlayback now))
             {
                 return false;
             }
-            body.z += LiftAt(seconds) - ForcedBodyOffset.z;
+            pose = BladeMotionUtility.Pose(at.clip, at.seconds, at.aim, at.projection, null);
+            body.z += BladeMotionPlayer.BodyLiftAt(pawn, at, seconds) - BladeMotionPlayer.BodyLift(pawn, now);
             return true;
         }
 
@@ -394,66 +424,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
 
         internal int DanceStartTick => danceStartTick;
         internal int ThunderCatchTick => thunderCatchTick;
+
+        /// <summary>The thunder was caught off an enemy's blade: no sky bolt is drawn.</summary>
+        internal bool ReturnedThunder => returnedThunder;
         internal SakuraDanceMotion CurrentMotion => Motion;
-
-        /// <summary>Screen lift of the drawn body at <paramref name="seconds"/>, without the vanilla flight lift.</summary>
-        private float LiftAt(float seconds)
-        {
-            CompProperties_AbilitySakuraDance props = Props;
-            SakuraDanceMotion motion = Motion;
-            if (props == null || motion == null)
-            {
-                return 0f;
-            }
-            float lift = MonotoneCurve.Evaluate(motion.height, seconds) * props.heightToScreen;
-            if (pawn.flight != null && pawn.flight.Flying)
-            {
-                lift -= VanillaFlightLift * pawn.flight.PositionOffsetFactor;
-            }
-            return lift;
-        }
-
-        private bool TryGetBladePoseAt(float seconds, out BladePose pose)
-        {
-            pose = default;
-            CompProperties_AbilitySakuraDance props = Props;
-            SakuraDanceMotion motion = Motion;
-            if (props == null || motion?.blade == null || danceStartTick < 0)
-            {
-                return false;
-            }
-            SakuraRingFrame.BodyBasis(aim, out Vector3 right, out Vector3 up, out Vector3 forward);
-            float spin = MonotoneCurve.Evaluate(motion.spin, seconds) * Mathf.Deg2Rad;
-            Vector3 f = forward * Mathf.Cos(spin) + right * Mathf.Sin(spin);
-            Vector3 r = right * Mathf.Cos(spin) - forward * Mathf.Sin(spin);
-            motion.blade.Evaluate(seconds, out Vector3 grip, out Vector3 dir, out Vector3 edge);
-            pose.grip = SakuraRingFrame.BodyToWorld(grip, r, up, f);
-            pose.dir = SakuraRingFrame.BodyToWorld(dir, r, up, f);
-            pose.edge = SakuraRingFrame.BodyToWorld(edge, r, up, f);
-            pose.heightToScreen = props.heightToScreen;
-            return true;
-        }
-
-        /// <summary>Body turn for the renderer.</summary>
-        internal void ModifyDraw(ref Rot4? rotOverride)
-        {
-            SakuraDanceMotion motion = Motion;
-            if (Props == null || motion == null || danceStartTick < 0)
-            {
-                return;
-            }
-            float seconds = MotionSeconds(VisualClock.Ticks);
-            if (motion.spin != null)
-            {
-                float spin = MonotoneCurve.Evaluate(motion.spin, seconds);
-                // AngleFlat: 0 = north, clockwise. The mirrored west-facing cast spins the other way.
-                float facing = aim.AngleFlat() + (aim.x < 0f ? -spin : spin);
-                rotOverride = Rot4.FromAngleFlat(facing);
-            }
-        }
-
-        /// <summary>Screen lift of a flying pawn in vanilla (Pawn_DrawTracker: 0.6 cells north at full flight).</summary>
-        internal const float VanillaFlightLift = 0.6f;
 
         public override void ExposeData()
         {
@@ -471,47 +445,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             Scribe_Values.Look(ref thunderCatchTick, "mx_qh_sakura_thunderCatchTick", -1);
             Scribe_Values.Look(ref updraftMask, "mx_qh_sakura_updraft");
             Scribe_Values.Look(ref thunderCatchAt, "mx_qh_sakura_thunderCatchAt", -1f);
-        }
-    }
-
-    /// <summary>Turns the body of a dancing pawn.</summary>
-    [HarmonyPatch(typeof(PawnRenderer), "ParallelGetPreRenderResults")]
-    internal static class Patch_PawnRenderer_SakuraDanceBody
-    {
-        private static void Prefix(Pawn ___pawn, ref Rot4? rotOverride)
-        {
-            if (___pawn?.jobs?.curDriver is JobDriver_SakuraDance driver)
-            {
-                driver.ModifyDraw(ref rotOverride);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Keeps the shadow of a dancing pawn on the ground: the jump lift is in <c>DrawPos</c>, which
-    /// both shadow paths start from. The flying branch is redrawn here because it reads
-    /// <c>pawn.DrawPos</c> itself instead of its argument.
-    /// </summary>
-    [HarmonyPatch(typeof(PawnRenderer), "DrawShadowInternal")]
-    internal static class Patch_PawnRenderer_SakuraDanceShadow
-    {
-        private static bool Prefix(PawnRenderer __instance, Pawn ___pawn, ref Vector3 drawLoc)
-        {
-            if (___pawn?.jobs?.curDriver is not JobDriver_SakuraDance driver)
-            {
-                return true;
-            }
-            Vector3 lift = driver.ForcedBodyOffset;
-            if (___pawn.Flying)
-            {
-                Vector3 pos = ___pawn.DrawPos - lift;
-                pos.y = AltitudeLayer.Filth.AltitudeFor();
-                pos -= new Vector3(0f, 0f, ___pawn.flight.PositionOffsetFactor);
-                Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(pos, Quaternion.identity, Vector3.one * 0.75f), __instance.FlightShadowMaterial, 0);
-                return false;
-            }
-            drawLoc -= lift;
-            return true;
+            Scribe_Values.Look(ref returnedThunder, "mx_qh_sakura_returnedThunder");
         }
     }
 }

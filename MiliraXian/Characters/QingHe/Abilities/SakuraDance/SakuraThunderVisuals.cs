@@ -78,11 +78,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             float sinceCatch = (ticks - driver.ThunderCatchTick) / 60f;
             Vector3? glowAt = null;
             float glowK = 0f;
-            if (driver.ThunderCatchTick >= 0 && sinceCatch >= 0f && sinceCatch < props.thunderBoltSeconds
+            if (!driver.ReturnedThunder && driver.ThunderCatchTick >= 0 && sinceCatch >= 0f && sinceCatch < props.thunderBoltSeconds
                 && driver.TryGetBladeAt(driver.MotionSeconds(driver.ThunderCatchTick), out BladePose catchPose, out Vector3 catchBody))
             {
                 catchBody.y += AboveBody;
-                Vector3 tip = SakuraThunderUtility.BodyOffsetToMap(catchBody, catchPose.grip + catchPose.dir.normalized * length, catchPose.heightToScreen);
+                Vector3 tip = MiliraXian.Characters.Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(catchBody, catchPose.grip + catchPose.dir.normalized * length, catchPose);
                 float k = 1f - sinceCatch / Mathf.Max(0.01f, props.thunderBoltSeconds);
                 // Lightning flickers: full for the first frames, then dims and flashes back.
                 int frame = Mathf.FloorToInt(sinceCatch * 30f);
@@ -190,8 +190,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                         float flicker = frame == 0 ? 1f : frame % 2 == 0 ? 0.8f : 0.5f;
                         Bolts.Add(new Bolt
                         {
-                            from = SakuraThunderUtility.BodyOffsetToMap(body, p0, pose.heightToScreen),
-                            to = SakuraThunderUtility.BodyOffsetToMap(body, p0 + outDir * len, pose.heightToScreen),
+                            from = MiliraXian.Characters.Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(body, p0, pose),
+                            to = MiliraXian.Characters.Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(body, p0 + outDir * len, pose),
                             width = d.width * Mathf.Lerp(0.5f, 1f, strength),
                             alpha = (1f - x * x) * flicker * Mathf.Lerp(0.5f, 1f, strength),
                             seed = s,
@@ -344,7 +344,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     float rot = Rand.Range(0f, 360f);
                     int frame = Rand.Range(0, SparkColumns * SparkColumns);
                     Rand.PopState();
-                    Vector3 at = SakuraThunderUtility.BodyOffsetToMap(body, pose.grip + dir * (length * along), pose.heightToScreen);
+                    Vector3 at = MiliraXian.Characters.Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(body, pose.grip + dir * (length * along), pose);
                     float u0 = frame % SparkColumns * cell;
                     float v1 = 1f - frame / SparkColumns * cell;
                     MapComponent_SakuraDanceVisuals.AddQuad(at, size * (0.7f + 0.3f * fade), rot,
