@@ -18,29 +18,58 @@ namespace MiliraXian.Characters.Common
             return owner == pawn || (allowUnbound && owner == null);
         }
 
-        internal static bool ShouldCancelGroundDrop(Thing thing)
+        internal static bool ShouldCancelGroundDrop(Thing thing, bool trace)
         {
             if (thing is not ThingWithComps weapon || GetProtection(weapon) is not { } protection)
+            {
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Drop.pass", thing,
+                        $"reason=ineligible-weapon equipmentType={thing.def.equipmentType} stack={thing.stackCount}/{thing.def.stackLimit}");
                 return false;
+            }
 
             // Keep weapons in inventory when DropAndForbidEverything drops equipment and then inventory.
             if (weapon.ParentHolder is Pawn_InventoryTracker inventory)
-                return IsStoredWeapon(weapon, inventory.pawn);
+            {
+                bool stored = IsStoredWeapon(weapon, inventory.pawn);
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Drop.inventory", weapon,
+                        $"protectedInInventory={stored} contains={inventory.innerContainer?.Contains(weapon)} "
+                        + $"discarded={inventory.pawn.Discarded}", inventory.pawn);
+                return stored;
+            }
 
             if (weapon.ParentHolder is not Pawn_EquipmentTracker equipment)
+            {
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Drop.pass", weapon, "reason=source-is-not-pawn-equipment-or-inventory",
+                        includeStack: true);
                 return false;
+            }
 
-            return TryRedirectWeaponDrop(equipment, weapon, out bool protectedDrop)
+            bool stowed = TryRedirectWeaponDrop(equipment, weapon, out bool protectedDrop);
+            bool cancel = stowed
                 || (protectedDrop && (weapon.ParentHolder != equipment || protection.Transferring || weapon.def.destroyOnDrop));
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.Drop.equipment", weapon,
+                    $"eligible={protectedDrop} stowed={stowed} cancel={cancel} destroyOnDrop={weapon.def.destroyOnDrop}",
+                    equipment.pawn);
+            return cancel;
         }
 
         internal static bool TryRedirectWeaponDrop(Pawn_EquipmentTracker equipment, ThingWithComps weapon, out bool protectedDrop)
         {
             Pawn pawn = equipment.pawn;
             CompWeaponDropProtection protection = GetProtection(weapon);
-            protectedDrop = protection != null && weapon.ParentHolder == equipment && equipment.Contains(weapon)
-                && protection.BoundOwner == pawn && !pawn.Discarded
+            bool held = protection != null && weapon.ParentHolder == equipment && equipment.Contains(weapon);
+            bool boundToHolder = held && protection.BoundOwner == pawn;
+            protectedDrop = boundToHolder && !pawn.Discarded
                 && weapon.TryGetComp<CompPawnKindRestrictedWeapon>()?.CanEquip(pawn) != false;
+            if (WeaponDropDiagnostics.ShouldTrace(weapon, pawn))
+                WeaponDropDiagnostics.Write("Protection.Redirect.check", weapon,
+                    $"eligible={protectedDrop} supported={protection != null} inEquipment={held} "
+                    + $"boundToHolder={boundToHolder} discarded={pawn.Discarded} "
+                    + $"inventory={WeaponDropDiagnostics.HolderId(pawn.inventory)}", pawn);
             if (!protectedDrop || protection.Transferring)
                 return false;
 
@@ -101,7 +130,16 @@ namespace MiliraXian.Characters.Common
         internal static void EquipOrReject(Pawn pawn, ThingWithComps weapon, bool allowUnbound = false)
         {
             string reason = EquipDisabledReason(pawn, weapon, allowUnbound);
-            if (reason == null && TryEquip(pawn, weapon, allowUnbound))
+            bool trace = WeaponDropDiagnostics.ShouldTrace(weapon, pawn);
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.Reequip.begin", weapon,
+                    $"current={WeaponDropDiagnostics.ThingId(pawn?.equipment?.Primary)} allowUnbound={allowUnbound} "
+                    + $"blocked={reason ?? "no"}", pawn);
+            bool equipped = reason == null && TryEquip(pawn, weapon, allowUnbound);
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.Reequip.end", weapon,
+                    $"equipped={equipped} current={WeaponDropDiagnostics.ThingId(pawn?.equipment?.Primary)}", pawn);
+            if (equipped)
                 return;
 
             Messages.Message(reason ?? Text("SwapFailed", "未能完成换装。"), pawn,
@@ -135,7 +173,12 @@ namespace MiliraXian.Characters.Common
                 try
                 {
                     if (equipment.Primary == null && previous != null && inventory.Contains(previous))
+                    {
+                        if (WeaponDropDiagnostics.ShouldTrace(previous, pawn))
+                            WeaponDropDiagnostics.Write("Protection.Reequip.restorePrevious", previous,
+                                $"failedTarget={WeaponDropDiagnostics.ThingId(weapon)}", pawn);
                         TryEquipFromInventory(equipment, inventory, previous);
+                    }
                 }
                 finally
                 {
@@ -148,10 +191,15 @@ namespace MiliraXian.Characters.Common
 
         private static bool TryEquipFromInventory(Pawn_EquipmentTracker equipment, ThingOwner inventory, ThingWithComps weapon)
         {
+            bool trace = WeaponDropDiagnostics.ShouldTrace(weapon, equipment.pawn);
             try
             {
                 if (equipment.Primary == null && inventory.Remove(weapon) && IsLoose(weapon))
+                {
+                    if (trace)
+                        WeaponDropDiagnostics.Write("Protection.EquipFromInventory.add", weapon, "", equipment.pawn);
                     equipment.AddEquipment(weapon);
+                }
             }
             catch (Exception exception)
             {
@@ -159,18 +207,28 @@ namespace MiliraXian.Characters.Common
             }
 
             RestoreIfLoose(weapon, inventory, equipment.pawn);
-            return equipment.Primary == weapon;
+            bool equipped = equipment.Primary == weapon;
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.EquipFromInventory.end", weapon, $"equipped={equipped}", equipment.pawn);
+            return equipped;
         }
 
         private static bool TryStow(Pawn_EquipmentTracker equipment, ThingWithComps weapon, ThingOwner inventory)
         {
-            if (!CanStow(inventory, weapon))
+            bool trace = WeaponDropDiagnostics.ShouldTrace(weapon, equipment.pawn);
+            int capacity = StowCapacity(inventory, weapon);
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.Stow.check", weapon,
+                    $"hasInventory={inventory != null} acceptable={capacity} required={weapon.stackCount}", equipment.pawn);
+            if (inventory == null || capacity < weapon.stackCount)
                 return false;
 
             ThingOwner source = equipment.GetDirectlyHeldThings();
             try
             {
-                source.TryTransferToContainer(weapon, inventory, canMergeWithExistingStacks: false);
+                bool transferred = source.TryTransferToContainer(weapon, inventory, canMergeWithExistingStacks: false);
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Stow.transfer", weapon, $"apiResult={transferred}", equipment.pawn);
             }
             catch (Exception exception)
             {
@@ -178,11 +236,17 @@ namespace MiliraXian.Characters.Common
             }
 
             RestoreIfLoose(weapon, equipment.Primary == null ? source : inventory, equipment.pawn);
-            return inventory.Contains(weapon);
+            bool stowed = inventory.Contains(weapon);
+            if (trace)
+                WeaponDropDiagnostics.Write("Protection.Stow.end", weapon, $"inInventory={stowed}", equipment.pawn);
+            return stowed;
         }
 
         private static bool CanStow(ThingOwner inventory, Thing weapon) =>
-            inventory != null && inventory.GetCountCanAccept(weapon, canMergeWithExistingStacks: false) >= weapon.stackCount;
+            inventory != null && StowCapacity(inventory, weapon) >= weapon.stackCount;
+
+        private static int StowCapacity(ThingOwner inventory, Thing weapon) =>
+            inventory?.GetCountCanAccept(weapon, canMergeWithExistingStacks: false) ?? 0;
 
         private static bool IsLoose(Thing thing) => !thing.Destroyed && !thing.Spawned && thing.ParentHolder == null;
 
@@ -191,30 +255,41 @@ namespace MiliraXian.Characters.Common
             if (!IsLoose(weapon))
                 return;
 
-            TryRestoreToContainer(weapon, container);
+            bool trace = WeaponDropDiagnostics.ShouldTrace(weapon, pawn);
+            TryRestoreToContainer(weapon, container, pawn, trace);
             ThingOwner inventory = pawn.inventory?.innerContainer;
             if (IsLoose(weapon) && inventory != container)
-                TryRestoreToContainer(weapon, inventory);
+                TryRestoreToContainer(weapon, inventory, pawn, trace);
 
             if (IsLoose(weapon))
             {
                 // A container callback can veto both the original operation and its rollback.
                 bool placed = pawn.MapHeld is { } map && pawn.PositionHeld.InBounds(map)
                     && GenPlace.TryPlaceThing(weapon, pawn.PositionHeld, map, ThingPlaceMode.Near);
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Restore.ground", weapon, $"placed={placed}", pawn);
                 Log.Error($"[MiliraXian] Could not restore {weapon} to {pawn}'s container; "
                     + (placed ? "the original instance was placed nearby." : "no safe map placement was available."));
             }
         }
 
-        private static void TryRestoreToContainer(Thing weapon, ThingOwner container)
+        private static void TryRestoreToContainer(Thing weapon, ThingOwner container, Pawn pawn, bool trace)
         {
             if (container == null || (container.Owner is Pawn_EquipmentTracker equipment
                 && weapon.def.equipmentType == EquipmentType.Primary && equipment.Primary != null))
+            {
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Restore.skip", weapon,
+                        $"destination={WeaponDropDiagnostics.HolderId(container?.Owner)}", pawn);
                 return;
+            }
 
             try
             {
-                container.TryAdd(weapon, canMergeWithExistingStacks: false);
+                bool restored = container.TryAdd(weapon, canMergeWithExistingStacks: false);
+                if (trace)
+                    WeaponDropDiagnostics.Write("Protection.Restore.container", weapon,
+                        $"destination={WeaponDropDiagnostics.HolderId(container.Owner)} result={restored}", pawn);
             }
             catch (Exception exception)
             {
