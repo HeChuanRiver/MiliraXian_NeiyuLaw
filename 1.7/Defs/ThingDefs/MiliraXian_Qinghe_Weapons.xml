@@ -3,7 +3,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_QH_Weapon_Sword</defName>
         <label>散华</label>
-        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。</description>
+        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。\n\n此武器带有特殊战技(替换普通攻击)\n\n十字拔刀斩：\n借收刀之势向前方发动高速二连斩，能同时攻击范围内的所有敌人。攻守兼备的绝技，若在收刀完毕前受到攻击，则可立即拔刀弹开并反击。\n\n拔刀斩化解：\n收刀过程中受到攻击立即拔刀弹开并对攻击者造成硬直，随后发动一次反斩。\n\n必杀剑·残心：\n敌人因架势不稳而失衡时自动使用，闪现到敌人身后对弱点造成大量伤害。\n</description>
         <recipeMaker Inherit="False">
             <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
             <workSkill>Crafting</workSkill>
@@ -51,7 +51,11 @@
             <WorkToMake>120000</WorkToMake>
             <MarketValue>3000</MarketValue>
             <Mass>1.8</Mass>
-            <MeleeWeapon_CooldownMultiplier>0.75</MeleeWeapon_CooldownMultiplier>
+            <!--
+              剑舞架势的十字斩：举刀（收刀入鞘、蓄势）1.45 秒走原版施法预热，之后 1.72 秒的出刀和回正走冷却。
+              冷却 1.0 × 1.72 = 1.72 秒，正好按原速播放；攻速加成缩短冷却时动作按比例加速。整套周期 3.17 秒。
+            -->
+            <MeleeWeapon_CooldownMultiplier>1.72</MeleeWeapon_CooldownMultiplier>
         </statBases>
 
         <tools>
@@ -124,6 +128,444 @@
                 <length>1.1</length>
                 <uvMin>(0.38, 0.02)</uvMin>
                 <uvMax>(0.58, 0.97)</uvMax>
+            </li>
+            <li Class="MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionSetExtension">
+                <!-- 由 .cache/slash_proto/cross_slash_preview.py（参数 xml）生成，和离线预览完全一致；改动作请改脚本再生成 -->
+                <!-- 投影：高度压到 0.35；原点（骨骼的骨盆）放在贴图实测的骨盆（小人中心下 0.22 格 = 0.63 米 × 0.35）；南北方向缩到 0.55 -->
+                <heightToScreen>0.35</heightToScreen>
+                <heightOrigin>-0.63</heightOrigin>
+                <depthToScreen>0.55</depthToScreen>
+                <blendSeconds>0.08</blendSeconds>
+                <!-- 刀鞘：持刀时挂在左腰（身体坐标：右、上、前，米） -->
+                <scabbard>true</scabbard>
+                <scabbardRestMouth>(-0.240, 0.020, 0.100)</scabbardRestMouth>
+                <scabbardRestEnd>(-0.318, -0.718, -0.133)</scabbardRestEnd>
+                <!-- 征召静止待机：双手持刀前举，刀身在右侧、往左前略倾（不那么标准的中段架势），2 秒一次轻微呼吸 -->
+                <idle>
+                    <loop>true</loop>
+                    <durationSeconds>2</durationSeconds>
+                    <blade>
+                        <keys>
+                            <li><time>0</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                            <li><time>1</time><yaw>-11.0</yaw><pitch>66.5</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.140, 0.380)</offset></li>
+                            <li><time>2</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                        </keys>
+                    </blade>
+                </idle>
+                <!-- 防御（手写初值）：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
+                <guard>
+                    <durationSeconds>0.12</durationSeconds>
+                    <blade>
+                        <keys>
+                            <li><time>0</time><yaw>-80.0</yaw><pitch>20.0</pitch><roll>0</roll><reach>0</reach><offset>(0.140, 0.240, 0.330)</offset></li>
+                            <li><time>0.12</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
+                        </keys>
+                    </blade>
+                </guard>
+                <!-- 防御受击：刀被压回半寸、身体后仰一下，0.15 秒回到防御姿势 -->
+                <guardHit>
+                    <durationSeconds>0.15</durationSeconds>
+                    <blade>
+                        <keys>
+                            <li><time>0</time><yaw>-96.0</yaw><pitch>22.0</pitch><roll>-6.0</roll><reach>0</reach><offset>(0.150, 0.270, 0.240)</offset></li>
+                            <li><time>0.15</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
+                        </keys>
+                    </blade>
+                    <bodyForward><points><li>(0, -0.07)</li><li>(0.15, 0)</li></points></bodyForward>
+                    <tilt><points><li>(0, -4)</li><li>(0.15, 0)</li></points></tilt>
+                </guardHit>
+                <!--
+                  化解（手写初值）：收刀途中以刀横架弹开来招，刀被震向外上方，借势后撤蓄力，
+                  转身接到十字斩第二刀的起手（攻击片段 counterFrom 1.64 秒的姿势：刀、转身、高度、前冲都对齐）。
+                  按 parryTicks 拉伸播放。
+                -->
+                <parry>
+                    <durationSeconds>0.4</durationSeconds>
+                    <turnCarriesBlade>false</turnCarriesBlade>
+                    <blade>
+                        <keys>
+                            <li><time>0</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
+                            <li><time>0.1</time><yaw>-66.0</yaw><pitch>34.0</pitch><roll>-12.0</roll><reach>0</reach><offset>(0.220, 0.330, 0.280)</offset></li>
+                            <li><time>0.26</time><yaw>40.0</yaw><pitch>46.0</pitch><roll>-40.0</roll><reach>0</reach><offset>(0.450, 0.420, 0.380)</offset></li>
+                            <li><time>0.4</time><yaw>114.8</yaw><pitch>49.0</pitch><roll>-68.3</roll><reach>0</reach><offset>(0.607, 0.450, 0.438)</offset></li>
+                        </keys>
+                    </blade>
+                    <turn><points><li>(0, 0)</li><li>(0.1, 0)</li><li>(0.4, 90)</li></points></turn>
+                    <height><points><li>(0, 0)</li><li>(0.1, -0.04)</li><li>(0.4, -0.108)</li></points></height>
+                    <bodyForward><points><li>(0, -0.05)</li><li>(0.1, -0.10)</li><li>(0.26, 0.05)</li><li>(0.4, 0.273)</li></points></bodyForward>
+                    <tilt><points><li>(0, -3)</li><li>(0.1, -6)</li><li>(0.4, 0)</li></points></tilt>
+                </parry>
+                <attacks>
+                    <!--
+                      苇名十字斩（8 字斩），骨骼取自只狼 a104_316210（收刀）和 a104_316000（出刀），握点按刀长比例放大 1.24 倍。
+                      0–0.15 秒离开待机；收刀入鞘（0.783 秒完全入鞘，鞘口闪光）；入鞘蓄势；
+                      1.45 秒拔刀：斜撩 → 往右下摆 → 向左横斩；停刀、慢速回挥；最后 0.3 秒回到待机。
+                      举刀（原版施法预热）到 1.45 秒；之后的 1.72 秒走冷却，冷却比动作短时按比例加速。
+                      每斩 2.3 倍伤害（整套周期从 0.75 秒拉长到 3.17 秒，秒伤不变的初值），剑压每斩 0.5。
+                    -->
+                    <li>
+                        <durationSeconds>3.1700</durationSeconds>
+                        <windupSeconds>1.45</windupSeconds>
+                        <!-- 伤口和战斗日志里的招式名：两斩为拔刀十字斩，收刀途中化解后的反击为拔刀斩·化解 -->
+                        <damageDef>MX_QH_CrossSlash</damageDef>
+                        <counterDamageDef>MX_QH_CounterSlash</counterDamageDef>
+                        <strikes>
+                            <li><start>1.45</start><end>1.633</end><damageFactor>2.3</damageFactor><resourceFactor>0.5</resourceFactor></li>
+                            <li><start>1.6665</start><end>1.8</end><damageFactor>2.3</damageFactor><resourceFactor>0.5</resourceFactor></li>
+                        </strikes>
+                        <!--
+                          判定按刀尖相对清荷站位的方位扫过（刀握在身体左侧，按刀身方向算会偏到一边）。
+                          第二斩（右往左横斩）从 1.6665 秒算起：刀尖从右前约 60° 扫过正前方到左后约 115°；
+                          原来从 1.7 秒算起时刀尖已到正前偏左，只有左侧一窄条
+                        -->
+                        <!-- 刀光跟刀身走：从拔刀到横斩结束；拔刀那一下刀尖还在鞘里，刀光外缘按出鞘后的半径画 -->
+                        <trailStart>1.45</trailStart>
+                        <trailEnd>1.8</trailEnd>
+                        <drawPushStart>1.45</drawPushStart>
+                        <drawPushEnd>1.5</drawPushEnd>
+                        <flashTime>0.7830</flashTime>
+                        <!-- 收刀和蓄势中弹开时的反击追斩：从第一斩结束后往右下摆的那一下接入，只打第二刀（右往左横斩） -->
+                        <counterFrom>1.64</counterFrom>
+                        <!-- 小人转向（度，相对瞄准方向，负为左）：收刀面向左，斜撩转到右，横斩转回左，收势回正。刀和刀鞘不跟着转 -->
+                        <turnCarriesBlade>false</turnCarriesBlade>
+                        <turn><points><li>(0, 0)</li><li>(0.15, 0)</li><li>(0.35, -90)</li><li>(1.45, -90)</li><li>(1.55, 90)</li><li>(1.7, 90)</li><li>(1.76, 0)</li></points></turn>
+                        <!-- 身体：前冲（米，沿瞄准方向）按方案手写：蓄力后坐、拔刀前冲、第二斩保持、收势回位；高度和倾角取骨骼骨盆和 Spine1（高度 ×0.5，倾角 ×0.25、上限 12°），开头和收势与待机插帧。倾角按瞄准方向记录：东西向出刀画前倾，南北向出刀画左右倾 -->
+                        <bodyForward><points><li>(0.0000, 0.000)</li><li>(0.7800, 0.000)</li><li>(1.4000, -0.060)</li><li>(1.5000, 0.250)</li><li>(1.8000, 0.300)</li><li>(2.6000, 0.120)</li><li>(3.1700, 0.000)</li></points></bodyForward>
+                        <height><points><li>(0.0000, -0.000)</li><li>(0.0334, -0.007)</li><li>(0.0667, -0.025)</li><li>(0.1001, -0.044)</li><li>(0.1335, -0.057)</li><li>(0.1668, -0.069)</li><li>(0.2002, -0.084)</li><li>(0.2336, -0.093)</li><li>(0.2669, -0.099)</li><li>(0.3003, -0.104)</li><li>(0.3337, -0.107)</li><li>(0.3671, -0.111)</li><li>(0.4004, -0.114)</li><li>(0.4338, -0.116)</li><li>(0.4672, -0.116)</li><li>(0.5005, -0.116)</li><li>(0.5339, -0.115)</li><li>(0.5673, -0.114)</li><li>(0.6006, -0.113)</li><li>(0.6340, -0.114)</li><li>(0.6674, -0.116)</li><li>(0.7007, -0.114)</li><li>(0.7341, -0.108)</li><li>(0.7675, -0.100)</li><li>(0.8008, -0.088)</li><li>(0.8342, -0.072)</li><li>(0.8676, -0.055)</li><li>(0.9009, -0.041)</li><li>(0.9343, -0.034)</li><li>(0.9677, -0.030)</li><li>(1.0011, -0.030)</li><li>(1.0344, -0.029)</li><li>(1.0678, -0.029)</li><li>(1.1012, -0.050)</li><li>(1.1345, -0.089)</li><li>(1.1679, -0.128)</li><li>(1.2013, -0.161)</li><li>(1.2346, -0.178)</li><li>(1.2680, -0.176)</li><li>(1.3014, -0.165)</li><li>(1.3347, -0.143)</li><li>(1.3681, -0.112)</li><li>(1.4015, -0.081)</li><li>(1.4348, -0.053)</li><li>(1.4682, -0.048)</li><li>(1.5016, -0.060)</li><li>(1.5349, -0.086)</li><li>(1.5683, -0.093)</li><li>(1.6017, -0.098)</li><li>(1.6351, -0.108)</li><li>(1.6684, -0.120)</li><li>(1.7018, -0.098)</li><li>(1.7352, -0.089)</li><li>(1.7685, -0.077)</li><li>(1.8019, -0.069)</li><li>(1.8353, -0.071)</li><li>(1.8686, -0.077)</li><li>(1.9020, -0.082)</li><li>(1.9354, -0.086)</li><li>(1.9687, -0.089)</li><li>(2.0021, -0.091)</li><li>(2.0355, -0.093)</li><li>(2.0688, -0.095)</li><li>(2.1022, -0.097)</li><li>(2.1356, -0.099)</li><li>(2.1689, -0.099)</li><li>(2.2023, -0.100)</li><li>(2.2357, -0.100)</li><li>(2.2691, -0.098)</li><li>(2.3024, -0.096)</li><li>(2.3358, -0.094)</li><li>(2.3692, -0.091)</li><li>(2.4025, -0.089)</li><li>(2.4359, -0.086)</li><li>(2.4693, -0.083)</li><li>(2.5026, -0.081)</li><li>(2.5360, -0.079)</li><li>(2.5694, -0.077)</li><li>(2.6027, -0.077)</li><li>(2.6361, -0.076)</li><li>(2.6695, -0.076)</li><li>(2.7028, -0.075)</li><li>(2.7362, -0.073)</li><li>(2.7696, -0.069)</li><li>(2.8029, -0.060)</li><li>(2.8363, -0.048)</li><li>(2.8697, -0.034)</li><li>(2.9031, -0.032)</li><li>(2.9364, -0.029)</li><li>(2.9698, -0.025)</li><li>(3.0032, -0.020)</li><li>(3.0365, -0.014)</li><li>(3.0699, -0.009)</li><li>(3.1033, -0.004)</li><li>(3.1366, -0.001)</li><li>(3.1700, -0.000)</li></points></height>
+                        <tilt><points><li>(0.0000, 0.0)</li><li>(0.0334, 0.4)</li><li>(0.0667, 1.2)</li><li>(0.1001, 2.1)</li><li>(0.1335, 2.7)</li><li>(0.1668, 3.0)</li><li>(0.2002, 3.2)</li><li>(0.2336, 3.2)</li><li>(0.2669, 3.2)</li><li>(0.3003, 3.1)</li><li>(0.3337, 3.0)</li><li>(0.3671, 2.9)</li><li>(0.4004, 2.9)</li><li>(0.4338, 2.9)</li><li>(0.4672, 3.1)</li><li>(0.5005, 3.3)</li><li>(0.5339, 3.5)</li><li>(0.5673, 3.9)</li><li>(0.6006, 4.3)</li><li>(0.6340, 4.8)</li><li>(0.6674, 5.5)</li><li>(0.7007, 6.2)</li><li>(0.7341, 6.7)</li><li>(0.7675, 7.2)</li><li>(0.8008, 7.7)</li><li>(0.8342, 8.0)</li><li>(0.8676, 8.0)</li><li>(0.9009, 7.8)</li><li>(0.9343, 7.6)</li><li>(0.9677, 7.3)</li><li>(1.0011, 7.0)</li><li>(1.0344, 6.7)</li><li>(1.0678, 6.4)</li><li>(1.1012, 7.3)</li><li>(1.1345, 9.6)</li><li>(1.1679, 12.0)</li><li>(1.2013, 12.0)</li><li>(1.2346, 12.0)</li><li>(1.2680, 12.0)</li><li>(1.3014, 12.0)</li><li>(1.3347, 12.0)</li><li>(1.3681, 12.0)</li><li>(1.4015, 12.0)</li><li>(1.4348, 11.9)</li><li>(1.4682, 11.1)</li><li>(1.5016, 10.9)</li><li>(1.5349, 11.1)</li><li>(1.5683, 11.5)</li><li>(1.6017, 11.9)</li><li>(1.6351, 12.0)</li><li>(1.6684, 9.1)</li><li>(1.7018, 3.4)</li><li>(1.7352, 3.6)</li><li>(1.7685, 3.9)</li><li>(1.8019, 4.1)</li><li>(1.8353, 4.4)</li><li>(1.8686, 4.7)</li><li>(1.9020, 4.9)</li><li>(1.9354, 5.1)</li><li>(1.9687, 5.1)</li><li>(2.0021, 5.1)</li><li>(2.0355, 5.0)</li><li>(2.0688, 4.9)</li><li>(2.1022, 4.8)</li><li>(2.1356, 4.7)</li><li>(2.1689, 4.6)</li><li>(2.2023, 4.5)</li><li>(2.2357, 4.5)</li><li>(2.2691, 4.4)</li><li>(2.3024, 4.3)</li><li>(2.3358, 4.2)</li><li>(2.3692, 4.1)</li><li>(2.4025, 4.0)</li><li>(2.4359, 3.9)</li><li>(2.4693, 3.8)</li><li>(2.5026, 3.8)</li><li>(2.5360, 3.9)</li><li>(2.5694, 4.0)</li><li>(2.6027, 4.3)</li><li>(2.6361, 4.6)</li><li>(2.6695, 5.0)</li><li>(2.7028, 5.5)</li><li>(2.7362, 5.9)</li><li>(2.7696, 6.3)</li><li>(2.8029, 6.6)</li><li>(2.8363, 6.8)</li><li>(2.8697, 6.9)</li><li>(2.9031, 6.7)</li><li>(2.9364, 6.0)</li><li>(2.9698, 5.1)</li><li>(3.0032, 4.0)</li><li>(3.0365, 2.9)</li><li>(3.0699, 1.8)</li><li>(3.1033, 0.9)</li><li>(3.1366, 0.2)</li><li>(3.1700, 0.0)</li></points></tilt>
+                        <tiltSide><points><li>(0.0000, -0.0)</li><li>(0.0334, -0.1)</li><li>(0.0667, -0.4)</li><li>(0.1001, -0.8)</li><li>(0.1335, -1.0)</li><li>(0.1668, -1.6)</li><li>(0.2002, -2.2)</li><li>(0.2336, -2.6)</li><li>(0.2669, -2.7)</li><li>(0.3003, -2.7)</li><li>(0.3337, -2.7)</li><li>(0.3671, -2.8)</li><li>(0.4004, -3.1)</li><li>(0.4338, -3.5)</li><li>(0.4672, -4.0)</li><li>(0.5005, -4.5)</li><li>(0.5339, -5.0)</li><li>(0.5673, -5.6)</li><li>(0.6006, -6.1)</li><li>(0.6340, -6.8)</li><li>(0.6674, -7.5)</li><li>(0.7007, -8.1)</li><li>(0.7341, -8.7)</li><li>(0.7675, -9.2)</li><li>(0.8008, -9.6)</li><li>(0.8342, -9.6)</li><li>(0.8676, -9.4)</li><li>(0.9009, -9.1)</li><li>(0.9343, -8.5)</li><li>(0.9677, -7.8)</li><li>(1.0011, -7.0)</li><li>(1.0344, -6.3)</li><li>(1.0678, -5.5)</li><li>(1.1012, -5.6)</li><li>(1.1345, -6.4)</li><li>(1.1679, -6.8)</li><li>(1.2013, -6.7)</li><li>(1.2346, -5.8)</li><li>(1.2680, -4.5)</li><li>(1.3014, -3.3)</li><li>(1.3347, -0.6)</li><li>(1.3681, 2.7)</li><li>(1.4015, 5.2)</li><li>(1.4348, 6.7)</li><li>(1.4682, 6.1)</li><li>(1.5016, 4.0)</li><li>(1.5349, -0.4)</li><li>(1.5683, -1.8)</li><li>(1.6017, -2.9)</li><li>(1.6351, -5.3)</li><li>(1.6684, -5.3)</li><li>(1.7018, -6.0)</li><li>(1.7352, -5.5)</li><li>(1.7685, -4.2)</li><li>(1.8019, -3.0)</li><li>(1.8353, -2.9)</li><li>(1.8686, -3.0)</li><li>(1.9020, -3.3)</li><li>(1.9354, -3.6)</li><li>(1.9687, -3.9)</li><li>(2.0021, -4.2)</li><li>(2.0355, -4.5)</li><li>(2.0688, -4.8)</li><li>(2.1022, -5.0)</li><li>(2.1356, -5.0)</li><li>(2.1689, -5.1)</li><li>(2.2023, -5.1)</li><li>(2.2357, -5.0)</li><li>(2.2691, -5.0)</li><li>(2.3024, -5.0)</li><li>(2.3358, -5.0)</li><li>(2.3692, -5.1)</li><li>(2.4025, -5.2)</li><li>(2.4359, -5.3)</li><li>(2.4693, -5.4)</li><li>(2.5026, -5.4)</li><li>(2.5360, -5.5)</li><li>(2.5694, -5.5)</li><li>(2.6027, -5.5)</li><li>(2.6361, -5.3)</li><li>(2.6695, -5.2)</li><li>(2.7028, -5.0)</li><li>(2.7362, -4.6)</li><li>(2.7696, -4.2)</li><li>(2.8029, -3.7)</li><li>(2.8363, -3.2)</li><li>(2.8697, -2.7)</li><li>(2.9031, -2.6)</li><li>(2.9364, -2.3)</li><li>(2.9698, -2.0)</li><li>(3.0032, -1.5)</li><li>(3.0365, -1.1)</li><li>(3.0699, -0.7)</li><li>(3.1033, -0.3)</li><li>(3.1366, -0.1)</li><li>(3.1700, -0.0)</li></points></tiltSide>
+                        <sheathed><points><li>(0.0000, 0.000)</li><li>(0.5663, 0.000)</li><li>(0.5830, 0.020)</li><li>(0.5997, 0.051)</li><li>(0.6163, 0.086)</li><li>(0.6330, 0.146)</li><li>(0.6497, 0.212)</li><li>(0.6663, 0.287)</li><li>(0.6830, 0.362)</li><li>(0.6997, 0.413)</li><li>(0.7163, 0.460)</li><li>(0.7330, 0.551)</li><li>(0.7497, 0.638)</li><li>(0.7663, 0.699)</li><li>(0.7830, 0.749)</li><li>(0.7997, 0.759)</li><li>(0.8163, 0.766)</li><li>(0.8330, 0.768)</li><li>(0.8497, 0.766)</li><li>(0.8663, 0.760)</li><li>(0.8830, 0.753)</li><li>(0.8997, 0.745)</li><li>(0.9163, 0.736)</li><li>(0.9330, 0.727)</li><li>(0.9497, 0.718)</li><li>(0.9663, 0.707)</li><li>(0.9830, 0.696)</li><li>(0.9997, 0.685)</li><li>(1.0163, 0.673)</li><li>(1.0330, 0.663)</li><li>(1.0497, 0.653)</li><li>(1.0663, 0.641)</li><li>(1.0830, 0.635)</li><li>(1.0997, 0.632)</li><li>(1.1163, 0.640)</li><li>(1.1330, 0.647)</li><li>(1.1497, 0.659)</li><li>(1.1663, 0.671)</li><li>(1.1830, 0.685)</li><li>(1.1997, 0.695)</li><li>(1.2163, 0.705)</li><li>(1.2330, 0.712)</li><li>(1.2497, 0.718)</li><li>(1.2663, 0.717)</li><li>(1.2830, 0.715)</li><li>(1.2997, 0.704)</li><li>(1.3163, 0.685)</li><li>(1.3330, 0.611)</li><li>(1.3497, 0.466)</li><li>(1.3663, 0.387)</li><li>(1.3830, 0.363)</li><li>(1.3997, 0.329)</li><li>(1.4163, 0.294)</li><li>(1.4330, 0.244)</li><li>(1.4497, 0.169)</li><li>(1.4583, 0.000)</li></points></sheathed>
+                        <!-- 刀鞘（鞘口、鞘尾，身体坐标）：左手骨骼，开头和收势与挂腰姿势插帧；刀在鞘里时贴到刀身线上 -->
+                        <scabbardKeys>
+                            <li><time>0.0000</time><mouth>(-0.240, 0.020, 0.100)</mouth><end>(-0.318, -0.718, -0.133)</end></li>
+                            <li><time>0.0334</time><mouth>(-0.244, 0.027, 0.086)</mouth><end>(-0.324, -0.645, -0.211)</end></li>
+                            <li><time>0.0667</time><mouth>(-0.253, 0.045, 0.054)</mouth><end>(-0.338, -0.477, -0.391)</end></li>
+                            <li><time>0.1001</time><mouth>(-0.263, 0.064, 0.018)</mouth><end>(-0.353, -0.289, -0.591)</end></li>
+                            <li><time>0.1335</time><mouth>(-0.269, 0.077, -0.006)</mouth><end>(-0.364, -0.159, -0.730)</end></li>
+                            <li><time>0.1668</time><mouth>(-0.234, 0.117, -0.037)</mouth><end>(-0.214, -0.165, -0.762)</end></li>
+                            <li><time>0.2002</time><mouth>(-0.188, 0.174, -0.074)</mouth><end>(0.000, -0.185, -0.739)</end></li>
+                            <li><time>0.2336</time><mouth>(-0.169, 0.200, -0.109)</mouth><end>(0.100, -0.194, -0.724)</end></li>
+                            <li><time>0.2669</time><mouth>(-0.157, 0.212, -0.145)</mouth><end>(0.147, -0.209, -0.725)</end></li>
+                            <li><time>0.3003</time><mouth>(-0.143, 0.216, -0.185)</mouth><end>(0.168, -0.226, -0.744)</end></li>
+                            <li><time>0.3337</time><mouth>(-0.127, 0.215, -0.224)</mouth><end>(0.186, -0.240, -0.773)</end></li>
+                            <li><time>0.3671</time><mouth>(-0.104, 0.213, -0.259)</mouth><end>(0.216, -0.256, -0.791)</end></li>
+                            <li><time>0.4004</time><mouth>(-0.082, 0.203, -0.285)</mouth><end>(0.257, -0.282, -0.791)</end></li>
+                            <li><time>0.4338</time><mouth>(-0.068, 0.181, -0.305)</mouth><end>(0.293, -0.315, -0.784)</end></li>
+                            <li><time>0.4672</time><mouth>(-0.060, 0.154, -0.321)</mouth><end>(0.328, -0.341, -0.779)</end></li>
+                            <li><time>0.5005</time><mouth>(-0.053, 0.131, -0.331)</mouth><end>(0.366, -0.354, -0.774)</end></li>
+                            <li><time>0.5339</time><mouth>(-0.045, 0.109, -0.339)</mouth><end>(0.406, -0.360, -0.765)</end></li>
+                            <li><time>0.5673</time><mouth>(-0.037, 0.091, -0.344)</mouth><end>(0.445, -0.360, -0.756)</end></li>
+                            <li><time>0.6006</time><mouth>(-0.029, 0.075, -0.351)</mouth><end>(0.466, -0.383, -0.762)</end></li>
+                            <li><time>0.6340</time><mouth>(-0.028, 0.091, -0.371)</mouth><end>(0.505, -0.388, -0.836)</end></li>
+                            <li><time>0.6674</time><mouth>(-0.018, 0.123, -0.384)</mouth><end>(0.601, -0.378, -0.839)</end></li>
+                            <li><time>0.7007</time><mouth>(0.000, 0.112, -0.377)</mouth><end>(0.653, -0.426, -0.754)</end></li>
+                            <li><time>0.7341</time><mouth>(-0.010, 0.123, -0.347)</mouth><end>(0.666, -0.427, -0.661)</end></li>
+                            <li><time>0.7675</time><mouth>(-0.061, 0.161, -0.305)</mouth><end>(0.646, -0.373, -0.575)</end></li>
+                            <li><time>0.8008</time><mouth>(-0.087, 0.181, -0.286)</mouth><end>(0.645, -0.329, -0.538)</end></li>
+                            <li><time>0.8342</time><mouth>(-0.094, 0.185, -0.276)</mouth><end>(0.655, -0.296, -0.534)</end></li>
+                            <li><time>0.8676</time><mouth>(-0.100, 0.183, -0.266)</mouth><end>(0.667, -0.259, -0.543)</end></li>
+                            <li><time>0.9009</time><mouth>(-0.105, 0.180, -0.260)</mouth><end>(0.673, -0.224, -0.561)</end></li>
+                            <li><time>0.9343</time><mouth>(-0.111, 0.179, -0.255)</mouth><end>(0.673, -0.188, -0.584)</end></li>
+                            <li><time>0.9677</time><mouth>(-0.118, 0.178, -0.251)</mouth><end>(0.670, -0.153, -0.611)</end></li>
+                            <li><time>1.0011</time><mouth>(-0.123, 0.176, -0.249)</mouth><end>(0.663, -0.120, -0.643)</end></li>
+                            <li><time>1.0344</time><mouth>(-0.129, 0.173, -0.249)</mouth><end>(0.651, -0.087, -0.678)</end></li>
+                            <li><time>1.0678</time><mouth>(-0.136, 0.164, -0.248)</mouth><end>(0.631, -0.062, -0.715)</end></li>
+                            <li><time>1.1012</time><mouth>(-0.128, 0.201, -0.258)</mouth><end>(0.646, 0.055, -0.747)</end></li>
+                            <li><time>1.1345</time><mouth>(-0.125, 0.270, -0.270)</mouth><end>(0.656, 0.242, -0.769)</end></li>
+                            <li><time>1.1679</time><mouth>(-0.133, 0.303, -0.276)</mouth><end>(0.639, 0.365, -0.785)</end></li>
+                            <li><time>1.2013</time><mouth>(-0.146, 0.308, -0.284)</mouth><end>(0.603, 0.446, -0.813)</end></li>
+                            <li><time>1.2346</time><mouth>(-0.152, 0.283, -0.296)</mouth><end>(0.558, 0.485, -0.856)</end></li>
+                            <li><time>1.2680</time><mouth>(-0.142, 0.237, -0.313)</mouth><end>(0.521, 0.494, -0.907)</end></li>
+                            <li><time>1.3014</time><mouth>(-0.109, 0.174, -0.332)</mouth><end>(0.497, 0.440, -0.982)</end></li>
+                            <li><time>1.3347</time><mouth>(-0.121, 0.104, -0.231)</mouth><end>(0.233, -0.012, -1.080)</end></li>
+                            <li><time>1.3681</time><mouth>(-0.137, 0.040, -0.102)</mouth><end>(0.054, -0.318, -0.935)</end></li>
+                            <li><time>1.4015</time><mouth>(-0.058, 0.146, -0.049)</mouth><end>(0.185, 0.030, -0.936)</end></li>
+                            <li><time>1.4348</time><mouth>(-0.014, 0.157, 0.009)</mouth><end>(0.124, 0.202, -0.906)</end></li>
+                            <li><time>1.4682</time><mouth>(-0.131, 0.219, 0.018)</mouth><end>(-0.415, 0.279, -0.704)</end></li>
+                            <li><time>1.5016</time><mouth>(-0.160, 0.221, 0.037)</mouth><end>(-0.393, 0.148, -0.703)</end></li>
+                            <li><time>1.5349</time><mouth>(-0.197, 0.213, 0.073)</mouth><end>(-0.188, 0.002, -0.676)</end></li>
+                            <li><time>1.5683</time><mouth>(-0.201, 0.213, 0.051)</mouth><end>(-0.093, -0.032, -0.680)</end></li>
+                            <li><time>1.6017</time><mouth>(-0.193, 0.222, 0.007)</mouth><end>(0.004, -0.046, -0.697)</end></li>
+                            <li><time>1.6351</time><mouth>(-0.162, 0.234, -0.063)</mouth><end>(0.204, -0.075, -0.676)</end></li>
+                            <li><time>1.6684</time><mouth>(-0.112, 0.224, -0.146)</mouth><end>(0.435, -0.131, -0.572)</end></li>
+                            <li><time>1.7018</time><mouth>(-0.145, 0.189, -0.157)</mouth><end>(0.468, -0.030, -0.584)</end></li>
+                            <li><time>1.7352</time><mouth>(-0.098, 0.167, -0.206)</mouth><end>(0.564, -0.119, -0.499)</end></li>
+                            <li><time>1.7685</time><mouth>(-0.080, 0.173, -0.206)</mouth><end>(0.599, -0.099, -0.470)</end></li>
+                            <li><time>1.8019</time><mouth>(-0.064, 0.183, -0.201)</mouth><end>(0.632, -0.074, -0.436)</end></li>
+                            <li><time>1.8353</time><mouth>(-0.048, 0.195, -0.192)</mouth><end>(0.662, -0.048, -0.396)</end></li>
+                            <li><time>1.8686</time><mouth>(-0.033, 0.208, -0.180)</mouth><end>(0.692, -0.023, -0.345)</end></li>
+                            <li><time>1.9020</time><mouth>(-0.019, 0.219, -0.166)</mouth><end>(0.717, -0.001, -0.293)</end></li>
+                            <li><time>1.9354</time><mouth>(-0.012, 0.224, -0.158)</mouth><end>(0.729, 0.011, -0.260)</end></li>
+                            <li><time>1.9687</time><mouth>(-0.010, 0.225, -0.156)</mouth><end>(0.734, 0.015, -0.249)</end></li>
+                            <li><time>2.0021</time><mouth>(-0.011, 0.225, -0.155)</mouth><end>(0.734, 0.017, -0.248)</end></li>
+                            <li><time>2.0355</time><mouth>(-0.013, 0.222, -0.156)</mouth><end>(0.731, 0.019, -0.255)</end></li>
+                            <li><time>2.0688</time><mouth>(-0.018, 0.219, -0.158)</mouth><end>(0.725, 0.017, -0.268)</end></li>
+                            <li><time>2.1022</time><mouth>(-0.023, 0.216, -0.161)</mouth><end>(0.719, 0.016, -0.284)</end></li>
+                            <li><time>2.1356</time><mouth>(-0.029, 0.212, -0.163)</mouth><end>(0.712, 0.015, -0.300)</end></li>
+                            <li><time>2.1689</time><mouth>(-0.033, 0.209, -0.165)</mouth><end>(0.705, 0.013, -0.313)</end></li>
+                            <li><time>2.2023</time><mouth>(-0.037, 0.207, -0.166)</mouth><end>(0.701, 0.013, -0.322)</end></li>
+                            <li><time>2.2357</time><mouth>(-0.040, 0.205, -0.167)</mouth><end>(0.696, 0.012, -0.331)</end></li>
+                            <li><time>2.2691</time><mouth>(-0.045, 0.202, -0.168)</mouth><end>(0.690, 0.012, -0.340)</end></li>
+                            <li><time>2.3024</time><mouth>(-0.051, 0.199, -0.168)</mouth><end>(0.682, 0.013, -0.352)</end></li>
+                            <li><time>2.3358</time><mouth>(-0.058, 0.195, -0.169)</mouth><end>(0.672, 0.015, -0.368)</end></li>
+                            <li><time>2.3692</time><mouth>(-0.065, 0.191, -0.169)</mouth><end>(0.663, 0.017, -0.382)</end></li>
+                            <li><time>2.4025</time><mouth>(-0.073, 0.187, -0.170)</mouth><end>(0.652, 0.021, -0.398)</end></li>
+                            <li><time>2.4359</time><mouth>(-0.081, 0.183, -0.170)</mouth><end>(0.641, 0.024, -0.415)</end></li>
+                            <li><time>2.4693</time><mouth>(-0.090, 0.180, -0.169)</mouth><end>(0.623, 0.024, -0.439)</end></li>
+                            <li><time>2.5026</time><mouth>(-0.100, 0.177, -0.168)</mouth><end>(0.601, 0.025, -0.471)</end></li>
+                            <li><time>2.5360</time><mouth>(-0.113, 0.174, -0.164)</mouth><end>(0.565, 0.018, -0.513)</end></li>
+                            <li><time>2.5694</time><mouth>(-0.129, 0.174, -0.158)</mouth><end>(0.509, -0.001, -0.569)</end></li>
+                            <li><time>2.6027</time><mouth>(-0.145, 0.178, -0.147)</mouth><end>(0.435, -0.030, -0.623)</end></li>
+                            <li><time>2.6361</time><mouth>(-0.160, 0.184, -0.133)</mouth><end>(0.347, -0.065, -0.669)</end></li>
+                            <li><time>2.6695</time><mouth>(-0.175, 0.191, -0.119)</mouth><end>(0.252, -0.097, -0.702)</end></li>
+                            <li><time>2.7028</time><mouth>(-0.188, 0.196, -0.103)</mouth><end>(0.156, -0.127, -0.722)</end></li>
+                            <li><time>2.7362</time><mouth>(-0.201, 0.197, -0.088)</mouth><end>(0.065, -0.150, -0.732)</end></li>
+                            <li><time>2.7696</time><mouth>(-0.214, 0.191, -0.073)</mouth><end>(-0.017, -0.164, -0.738)</end></li>
+                            <li><time>2.8029</time><mouth>(-0.230, 0.176, -0.059)</mouth><end>(-0.090, -0.163, -0.746)</end></li>
+                            <li><time>2.8363</time><mouth>(-0.246, 0.153, -0.051)</mouth><end>(-0.151, -0.139, -0.766)</end></li>
+                            <li><time>2.8697</time><mouth>(-0.262, 0.125, -0.050)</mouth><end>(-0.201, -0.092, -0.795)</end></li>
+                            <li><time>2.9031</time><mouth>(-0.261, 0.121, -0.045)</mouth><end>(-0.205, -0.113, -0.773)</end></li>
+                            <li><time>2.9364</time><mouth>(-0.259, 0.112, -0.031)</mouth><end>(-0.216, -0.170, -0.712)</end></li>
+                            <li><time>2.9698</time><mouth>(-0.256, 0.098, -0.011)</mouth><end>(-0.231, -0.254, -0.624)</end></li>
+                            <li><time>3.0032</time><mouth>(-0.253, 0.081, 0.012)</mouth><end>(-0.250, -0.352, -0.520)</end></li>
+                            <li><time>3.0365</time><mouth>(-0.249, 0.064, 0.037)</mouth><end>(-0.269, -0.457, -0.410)</end></li>
+                            <li><time>3.0699</time><mouth>(-0.246, 0.047, 0.061)</mouth><end>(-0.288, -0.556, -0.305)</end></li>
+                            <li><time>3.1033</time><mouth>(-0.243, 0.033, 0.081)</mouth><end>(-0.303, -0.639, -0.217)</end></li>
+                            <li><time>3.1366</time><mouth>(-0.241, 0.024, 0.095)</mouth><end>(-0.314, -0.697, -0.156)</end></li>
+                            <li><time>3.1700</time><mouth>(-0.240, 0.020, 0.100)</mouth><end>(-0.318, -0.718, -0.133)</end></li>
+                        </scabbardKeys>
+                        <blade>
+                            <keys>
+                                <li><time>0</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                                <li><time>0.15</time><yaw>-101.2</yaw><pitch>6.9</pitch><roll>0.2</roll><reach>0</reach><offset>(0.005, -0.069, 0.803)</offset></li>
+                                <li><time>0.1833</time><yaw>-152.5</yaw><pitch>-4.8</pitch><roll>18.0</roll><reach>0</reach><offset>(-0.410, 0.032, 0.756)</offset></li>
+                                <li><time>0.2166</time><yaw>-174.3</yaw><pitch>-2.9</pitch><roll>27.6</roll><reach>0</reach><offset>(-0.538, 0.080, 0.685)</offset></li>
+                                <li><time>0.25</time><yaw>-181.5</yaw><pitch>1.8</pitch><roll>38.1</roll><reach>0</reach><offset>(-0.566, 0.127, 0.685)</offset></li>
+                                <li><time>0.2833</time><yaw>-186.3</yaw><pitch>-2.6</pitch><roll>47.7</roll><reach>0</reach><offset>(-0.571, 0.214, 0.687)</offset></li>
+                                <li><time>0.3166</time><yaw>-188.1</yaw><pitch>-8.2</pitch><roll>57.2</roll><reach>0</reach><offset>(-0.547, 0.315, 0.694)</offset></li>
+                                <li><time>0.3499</time><yaw>-189.0</yaw><pitch>-14.5</pitch><roll>65.8</roll><reach>0</reach><offset>(-0.515, 0.409, 0.686)</offset></li>
+                                <li><time>0.3832</time><yaw>-191.2</yaw><pitch>-20.6</pitch><roll>73.0</roll><reach>0</reach><offset>(-0.505, 0.482, 0.648)</offset></li>
+                                <li><time>0.4166</time><yaw>-194.7</yaw><pitch>-25.2</pitch><roll>77.3</roll><reach>0</reach><offset>(-0.526, 0.514, 0.582)</offset></li>
+                                <li><time>0.4499</time><yaw>-199.0</yaw><pitch>-27.7</pitch><roll>78.7</roll><reach>0</reach><offset>(-0.560, 0.511, 0.505)</offset></li>
+                                <li><time>0.4832</time><yaw>-204.0</yaw><pitch>-28.1</pitch><roll>78.1</roll><reach>0</reach><offset>(-0.603, 0.473, 0.445)</offset></li>
+                                <li><time>0.5165</time><yaw>-209.2</yaw><pitch>-28.1</pitch><roll>76.2</roll><reach>0</reach><offset>(-0.653, 0.423, 0.393)</offset></li>
+                                <li><time>0.5499</time><yaw>-214.5</yaw><pitch>-27.6</pitch><roll>74.0</roll><reach>0</reach><offset>(-0.698, 0.362, 0.333)</offset></li>
+                                <li><time>0.5832</time><yaw>-219.3</yaw><pitch>-28.2</pitch><roll>73.5</roll><reach>0</reach><offset>(-0.718, 0.318, 0.254)</offset></li>
+                                <li><time>0.6165</time><yaw>-223.9</yaw><pitch>-30.9</pitch><roll>76.3</roll><reach>0</reach><offset>(-0.696, 0.309, 0.149)</offset></li>
+                                <li><time>0.6498</time><yaw>-230.3</yaw><pitch>-32.1</pitch><roll>84.4</roll><reach>0</reach><offset>(-0.647, 0.277, 0.020)</offset></li>
+                                <li><time>0.6831</time><yaw>-237.0</yaw><pitch>-33.7</pitch><roll>91.4</roll><reach>0</reach><offset>(-0.567, 0.221, -0.098)</offset></li>
+                                <li><time>0.7165</time><yaw>-242.4</yaw><pitch>-36.6</pitch><roll>94.4</roll><reach>0</reach><offset>(-0.483, 0.167, -0.176)</offset></li>
+                                <li><time>0.7498</time><yaw>-247.2</yaw><pitch>-36.1</pitch><roll>96.2</roll><reach>0</reach><offset>(-0.421, 0.100, -0.213)</offset></li>
+                                <li><time>0.7831</time><yaw>-250.2</yaw><pitch>-34.2</pitch><roll>95.8</roll><reach>0</reach><offset>(-0.394, 0.065, -0.223)</offset></li>
+                                <li><time>0.8164</time><yaw>-251.2</yaw><pitch>-32.6</pitch><roll>93.2</roll><reach>0</reach><offset>(-0.391, 0.057, -0.219)</offset></li>
+                                <li><time>0.8498</time><yaw>-250.6</yaw><pitch>-29.9</pitch><roll>90.2</roll><reach>0</reach><offset>(-0.405, 0.048, -0.205)</offset></li>
+                                <li><time>0.8831</time><yaw>-249.6</yaw><pitch>-27.2</pitch><roll>86.7</roll><reach>0</reach><offset>(-0.422, 0.042, -0.188)</offset></li>
+                                <li><time>0.9164</time><yaw>-248.1</yaw><pitch>-24.7</pitch><roll>82.8</roll><reach>0</reach><offset>(-0.445, 0.037, -0.170)</offset></li>
+                                <li><time>0.9497</time><yaw>-246.5</yaw><pitch>-22.2</pitch><roll>78.7</roll><reach>0</reach><offset>(-0.468, 0.033, -0.151)</offset></li>
+                                <li><time>0.983</time><yaw>-244.5</yaw><pitch>-19.8</pitch><roll>74.1</roll><reach>0</reach><offset>(-0.492, 0.027, -0.130)</offset></li>
+                                <li><time>1.0164</time><yaw>-242.4</yaw><pitch>-17.5</pitch><roll>69.7</roll><reach>0</reach><offset>(-0.515, 0.021, -0.108)</offset></li>
+                                <li><time>1.0497</time><yaw>-240.2</yaw><pitch>-15.2</pitch><roll>65.0</roll><reach>0</reach><offset>(-0.536, 0.009, -0.086)</offset></li>
+                                <li><time>1.083</time><yaw>-237.8</yaw><pitch>-12.9</pitch><roll>60.6</roll><reach>0</reach><offset>(-0.553, -0.005, -0.063)</offset></li>
+                                <li><time>1.1164</time><yaw>-237.6</yaw><pitch>-5.3</pitch><roll>53.0</roll><reach>0</reach><offset>(-0.540, 0.022, -0.077)</offset></li>
+                                <li><time>1.1497</time><yaw>-237.1</yaw><pitch>0.9</pitch><roll>43.7</roll><reach>0</reach><offset>(-0.528, 0.034, -0.091)</offset></li>
+                                <li><time>1.1831</time><yaw>-236.0</yaw><pitch>6.1</pitch><roll>32.3</roll><reach>0</reach><offset>(-0.513, 0.027, -0.108)</offset></li>
+                                <li><time>1.2165</time><yaw>-233.4</yaw><pitch>10.4</pitch><roll>18.1</roll><reach>0</reach><offset>(-0.498, -0.003, -0.119)</offset></li>
+                                <li><time>1.2498</time><yaw>-230.2</yaw><pitch>14.2</pitch><roll>1.3</roll><reach>0</reach><offset>(-0.475, -0.054, -0.132)</offset></li>
+                                <li><time>1.2832</time><yaw>-226.0</yaw><pitch>16.9</pitch><roll>-18.2</roll><reach>0</reach><offset>(-0.444, -0.119, -0.137)</offset></li>
+                                <li><time>1.3165</time><yaw>-219.0</yaw><pitch>16.1</pitch><roll>-42.4</roll><reach>0</reach><offset>(-0.401, -0.178, -0.109)</offset></li>
+                                <li><time>1.3499</time><yaw>-192.4</yaw><pitch>-24.6</pitch><roll>-62.3</roll><reach>0</reach><offset>(-0.389, -0.015, 0.360)</offset></li>
+                                <li><time>1.3833</time><yaw>-193.8</yaw><pitch>-19.4</pitch><roll>-56.1</roll><reach>0</reach><offset>(-0.374, 0.038, 0.493)</offset></li>
+                                <li><time>1.4166</time><yaw>-196.1</yaw><pitch>1.3</pitch><roll>-30.6</roll><reach>0</reach><offset>(-0.318, -0.087, 0.656)</offset></li>
+                                <li><time>1.45</time><yaw>-174.2</yaw><pitch>3.2</pitch><roll>-21.3</roll><reach>0</reach><offset>(-0.157, -0.146, 0.815)</offset></li>
+                                <li><time>1.5</time><yaw>-18.8</yaw><pitch>-5.7</pitch><roll>33.9</roll><reach>0</reach><offset>(0.256, 0.342, 1.007)</offset></li>
+                                <li><time>1.5333</time><yaw>15.4</yaw><pitch>23.0</pitch><roll>54.9</roll><reach>0</reach><offset>(0.457, 0.822, 0.539)</offset></li>
+                                <li><time>1.5666</time><yaw>46.5</yaw><pitch>41.3</pitch><roll>30.0</roll><reach>0</reach><offset>(0.463, 0.799, 0.400)</offset></li>
+                                <li><time>1.5999</time><yaw>80.9</yaw><pitch>44.6</pitch><roll>-10.1</roll><reach>0</reach><offset>(0.498, 0.696, 0.396)</offset></li>
+                                <li><time>1.6332</time><yaw>114.8</yaw><pitch>49.0</pitch><roll>-68.3</roll><reach>0</reach><offset>(0.607, 0.450, 0.438)</offset></li>
+                                <li><time>1.6665</time><yaw>117.8</yaw><pitch>37.1</pitch><roll>-208.8</roll><reach>0</reach><offset>(0.191, 0.458, 0.989)</offset></li>
+                                <li><time>1.6998</time><yaw>11.8</yaw><pitch>8.7</pitch><roll>-140.3</roll><reach>0</reach><offset>(-0.527, 0.080, 0.939)</offset></li>
+                                <li><time>1.7331</time><yaw>-27.8</yaw><pitch>-4.1</pitch><roll>-178.3</roll><reach>0</reach><offset>(-1.084, -0.047, -0.020)</offset></li>
+                                <li><time>1.7664</time><yaw>-77.4</yaw><pitch>-7.6</pitch><roll>-187.8</roll><reach>0</reach><offset>(-0.899, -0.052, -0.318)</offset></li>
+                                <li><time>1.7997</time><yaw>-113.5</yaw><pitch>-6.3</pitch><roll>-184.6</roll><reach>0</reach><offset>(-0.746, -0.038, -0.412)</offset></li>
+                                <li><time>1.833</time><yaw>-118.5</yaw><pitch>-4.9</pitch><roll>-188.7</roll><reach>0</reach><offset>(-0.752, -0.010, -0.396)</offset></li>
+                                <li><time>1.8665</time><yaw>-121.3</yaw><pitch>-2.7</pitch><roll>-193.3</roll><reach>0</reach><offset>(-0.718, 0.017, -0.412)</offset></li>
+                                <li><time>1.8999</time><yaw>-122.7</yaw><pitch>-0.8</pitch><roll>-195.9</roll><reach>0</reach><offset>(-0.682, 0.035, -0.426)</offset></li>
+                                <li><time>1.9334</time><yaw>-123.0</yaw><pitch>1.0</pitch><roll>-194.4</roll><reach>0</reach><offset>(-0.655, 0.037, -0.428)</offset></li>
+                                <li><time>1.9668</time><yaw>-122.7</yaw><pitch>2.8</pitch><roll>-191.3</roll><reach>0</reach><offset>(-0.633, 0.027, -0.427)</offset></li>
+                                <li><time>2.0003</time><yaw>-122.4</yaw><pitch>4.5</pitch><roll>-188.3</roll><reach>0</reach><offset>(-0.616, 0.017, -0.422)</offset></li>
+                                <li><time>2.0337</time><yaw>-122.0</yaw><pitch>5.2</pitch><roll>-185.6</roll><reach>0</reach><offset>(-0.608, 0.002, -0.417)</offset></li>
+                                <li><time>2.0672</time><yaw>-121.5</yaw><pitch>5.4</pitch><roll>-183.7</roll><reach>0</reach><offset>(-0.610, -0.010, -0.414)</offset></li>
+                                <li><time>2.1006</time><yaw>-121.1</yaw><pitch>5.1</pitch><roll>-181.7</roll><reach>0</reach><offset>(-0.617, -0.024, -0.413)</offset></li>
+                                <li><time>2.1341</time><yaw>-120.5</yaw><pitch>4.6</pitch><roll>-180.0</roll><reach>0</reach><offset>(-0.627, -0.037, -0.413)</offset></li>
+                                <li><time>2.1675</time><yaw>-119.6</yaw><pitch>4.1</pitch><roll>-178.4</roll><reach>0</reach><offset>(-0.638, -0.049, -0.410)</offset></li>
+                                <li><time>2.201</time><yaw>-118.5</yaw><pitch>3.8</pitch><roll>-177.1</roll><reach>0</reach><offset>(-0.648, -0.060, -0.405)</offset></li>
+                                <li><time>2.2344</time><yaw>-117.1</yaw><pitch>3.7</pitch><roll>-175.7</roll><reach>0</reach><offset>(-0.656, -0.065, -0.394)</offset></li>
+                                <li><time>2.2679</time><yaw>-115.4</yaw><pitch>3.1</pitch><roll>-174.4</roll><reach>0</reach><offset>(-0.662, -0.070, -0.377)</offset></li>
+                                <li><time>2.3013</time><yaw>-113.1</yaw><pitch>2.6</pitch><roll>-174.1</roll><reach>0</reach><offset>(-0.670, -0.070, -0.357)</offset></li>
+                                <li><time>2.3348</time><yaw>-109.2</yaw><pitch>1.5</pitch><roll>-175.6</roll><reach>0</reach><offset>(-0.685, -0.076, -0.332)</offset></li>
+                                <li><time>2.3682</time><yaw>-104.6</yaw><pitch>0.3</pitch><roll>-178.4</roll><reach>0</reach><offset>(-0.704, -0.081, -0.308)</offset></li>
+                                <li><time>2.4017</time><yaw>-99.6</yaw><pitch>-1.3</pitch><roll>-181.4</roll><reach>0</reach><offset>(-0.724, -0.086, -0.285)</offset></li>
+                                <li><time>2.4351</time><yaw>-94.4</yaw><pitch>-2.9</pitch><roll>-184.6</roll><reach>0</reach><offset>(-0.743, -0.090, -0.261)</offset></li>
+                                <li><time>2.4686</time><yaw>-88.2</yaw><pitch>-4.8</pitch><roll>-187.6</roll><reach>0</reach><offset>(-0.763, -0.096, -0.225)</offset></li>
+                                <li><time>2.502</time><yaw>-81.1</yaw><pitch>-6.5</pitch><roll>-190.6</roll><reach>0</reach><offset>(-0.779, -0.102, -0.178)</offset></li>
+                                <li><time>2.5355</time><yaw>-72.5</yaw><pitch>-8.1</pitch><roll>-193.3</roll><reach>0</reach><offset>(-0.791, -0.108, -0.112)</offset></li>
+                                <li><time>2.5689</time><yaw>-62.4</yaw><pitch>-9.4</pitch><roll>-195.6</roll><reach>0</reach><offset>(-0.791, -0.114, -0.027)</offset></li>
+                                <li><time>2.6024</time><yaw>-51.6</yaw><pitch>-10.4</pitch><roll>-197.6</roll><reach>0</reach><offset>(-0.776, -0.117, 0.066)</offset></li>
+                                <li><time>2.6358</time><yaw>-39.7</yaw><pitch>-11.1</pitch><roll>-199.8</roll><reach>0</reach><offset>(-0.741, -0.115, 0.163)</offset></li>
+                                <li><time>2.6693</time><yaw>-25.6</yaw><pitch>-12.5</pitch><roll>-203.0</roll><reach>0</reach><offset>(-0.681, -0.108, 0.264)</offset></li>
+                                <li><time>2.7027</time><yaw>-10.2</yaw><pitch>-14.2</pitch><roll>-206.1</roll><reach>0</reach><offset>(-0.596, -0.098, 0.358)</offset></li>
+                                <li><time>2.7362</time><yaw>3.2</yaw><pitch>-13.9</pitch><roll>-205.2</roll><reach>0</reach><offset>(-0.506, -0.094, 0.431)</offset></li>
+                                <li><time>2.7696</time><yaw>11.5</yaw><pitch>-10.2</pitch><roll>-197.0</roll><reach>0</reach><offset>(-0.429, -0.105, 0.493)</offset></li>
+                                <li><time>2.8031</time><yaw>16.9</yaw><pitch>-4.7</pitch><roll>-182.8</roll><reach>0</reach><offset>(-0.352, -0.134, 0.548)</offset></li>
+                                <li><time>2.8365</time><yaw>20.6</yaw><pitch>0.2</pitch><roll>-165.5</roll><reach>0</reach><offset>(-0.264, -0.176, 0.591)</offset></li>
+                                <li><time>2.87</time><yaw>22.0</yaw><pitch>1.5</pitch><roll>-145.8</roll><reach>0</reach><offset>(-0.163, -0.227, 0.616)</offset></li>
+                                <li><time>3.17</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                            </keys>
+                        </blade>
+                    </li>
+                </attacks>
+            </li>
+            <!--
+              十字斩刀光（跟刀身走）和收刀闪光，层次照只狼 FFX 440071（刀光）和 440070（收刀闪光，去掉径向模糊）。
+              刀光带沿刀身方向展开，radialOffset 从刀身 bandCentre（握点起算的比例）处量，正 = 往刀尖。
+              灰白为主；亮丝按花铃共鸣换色（春、夏、秋、冬），没有共鸣为白色。
+            -->
+            <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheBladeTrailExtension">
+                <bladeLength>0.976</bladeLength>
+                <bandCentre>0.65</bandCentre>
+                <!-- 和上面的动作投影一致（heightOrigin、depthToScreen 从动作取） -->
+                <heightToScreen>0.35</heightToScreen>
+                <distortionNormalTexPath>MiliraXianQinghe/Effect/SakuraDance/SakuraNormal</distortionNormalTexPath>
+                <distortionMetresPerUnit>0.04</distortionMetresPerUnit>
+                <shadeOpacity>0</shadeOpacity>
+                <bloom>
+                    <group>MX_ScreenBloom_Glow</group>
+                    <tint>(1, 1, 1, 1)</tint>
+                    <intensity>0.8</intensity>
+                </bloom>
+                <resonanceThreadColors>
+                    <li>(1, 0.72, 0.84, 1)</li>
+                    <li>(0.7, 1, 0.78, 1)</li>
+                    <li>(1, 0.8, 0.5, 1)</li>
+                    <li>(0.72, 0.88, 1, 1)</li>
+                </resonanceThreadColors>
+                <layers>
+                    <!-- 扭曲带：440071 宽 0.6，扭曲 5 → 0.4，段寿命 2 秒（这里按刀长缩到 0.55） -->
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
+                        <distortion>true</distortion>
+                        <liveFade>true</liveFade>
+                        <radialOffset>-0.05</radialOffset>
+                        <width>0.55</width>
+                        <segmentDuration>1.5</segmentDuration>
+                        <startFade>40</startFade>
+                        <endFade>40</endFade>
+                        <alphaCurve><points><li>(0, 1)</li><li>(0.375, 0.844)</li><li>(0.75, 0.5)</li><li>(1.125, 0.156)</li><li>(1.5, 0)</li></points></alphaCurve>
+                        <shadeDarkness>1</shadeDarkness>
+                        <textureFraction>0.01</textureFraction>
+                        <attachedUV>true</attachedUV>
+                        <flipV>true</flipV>
+                        <speedUCurve><points><li>(0, 8)</li><li>(0.367, 4.05)</li><li>(0.733, 0.1)</li></points></speedUCurve>
+                        <distortionIntensityCurve><points><li>(0, 5)</li><li>(1.5, 0.4)</li></points></distortionIntensityCurve>
+                    </li>
+                    <!-- 灰带：0.835 灰，亮度 2 → 1，段寿命 1.33 秒，两端淡出 10/90 -->
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
+                        <liveFade>true</liveFade>
+                        <clampAlpha>true</clampAlpha>
+                        <radialOffset>0.05</radialOffset>
+                        <width>0.3</width>
+                        <segmentDuration>1.333</segmentDuration>
+                        <startFade>10</startFade>
+                        <endFade>90</endFade>
+                        <alphaCurve><points><li>(0, 1)</li><li>(0.25, 0.5625)</li><li>(0.5, 0.25)</li><li>(0.75, 0.0625)</li><li>(1, 0)</li></points></alphaCurve>
+                        <brightnessCurve><points><li>(0, 1.67)</li><li>(1.333, 0.835)</li></points></brightnessCurve>
+                        <textureFraction>0.01</textureFraction>
+                    </li>
+                    <!-- 4 条亮丝（加色，随共鸣换色）：宽 0.4 在 0.133 秒内收到 0.01，亮度 4，段寿命 2 / 1.67 / 1.33 / 1 秒 -->
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
+                        <additive>true</additive>
+                        <bloom>true</bloom>
+                        <liveFade>true</liveFade>
+                        <clampAlpha>true</clampAlpha>
+                        <radialOffset>0.24</radialOffset>
+                        <widthCurve><points><li>(0, 0.4)</li><li>(0.067, 0.2)</li><li>(0.133, 0.01)</li></points></widthCurve>
+                        <segmentDuration>2</segmentDuration>
+                        <startFadeCurve><points><li>(0, 0)</li><li>(0.75, 50)</li><li>(1.5, 100)</li></points></startFadeCurve>
+                        <endFadeCurve><points><li>(0, 100)</li><li>(0.75, 50)</li><li>(1.5, 0)</li></points></endFadeCurve>
+                        <alphaCurve><points><li>(0, 3)</li><li>(0.2, 1.3)</li><li>(0.5, 1)</li><li>(1, 0.25)</li><li>(1.5, 0)</li></points></alphaCurve>
+                        <brightnessCurve><points><li>(0, 4)</li><li>(0.5, 4)</li><li>(1.5, 1)</li></points></brightnessCurve>
+                        <textureFraction>0.1</textureFraction>
+                        <speedU>0.02</speedU>
+                    </li>
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
+                        <additive>true</additive>
+                        <bloom>true</bloom>
+                        <liveFade>true</liveFade>
+                        <clampAlpha>true</clampAlpha>
+                        <radialOffset>0.24</radialOffset>
+                        <widthCurve><points><li>(0, 0.4)</li><li>(0.067, 0.2)</li><li>(0.133, 0.01)</li></points></widthCurve>
+                        <segmentDuration>1.667</segmentDuration>
+                        <startFadeCurve><points><li>(0, 0)</li><li>(0.625, 50)</li><li>(1.25, 100)</li></points></startFadeCurve>
+                        <endFadeCurve><points><li>(0, 100)</li><li>(0.625, 50)</li><li>(1.25, 0)</li></points></endFadeCurve>
+                        <alphaCurve><points><li>(0, 3)</li><li>(0.2, 1.26)</li><li>(0.5, 0.9)</li><li>(1, 0.1)</li><li>(1.25, 0)</li></points></alphaCurve>
+                        <brightnessCurve><points><li>(0, 4)</li><li>(0.5, 4)</li><li>(1.25, 1)</li></points></brightnessCurve>
+                        <textureFraction>0.1</textureFraction>
+                        <speedU>0.02</speedU>
+                    </li>
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
+                        <additive>true</additive>
+                        <bloom>true</bloom>
+                        <liveFade>true</liveFade>
+                        <clampAlpha>true</clampAlpha>
+                        <radialOffset>0.24</radialOffset>
+                        <widthCurve><points><li>(0, 0.4)</li><li>(0.067, 0.2)</li><li>(0.133, 0.01)</li></points></widthCurve>
+                        <segmentDuration>1.333</segmentDuration>
+                        <startFadeCurve><points><li>(0, 0)</li><li>(0.5, 50)</li><li>(1, 100)</li></points></startFadeCurve>
+                        <endFadeCurve><points><li>(0, 100)</li><li>(0.5, 50)</li><li>(1, 0)</li></points></endFadeCurve>
+                        <alphaCurve><points><li>(0, 3)</li><li>(0.2, 1.2)</li><li>(0.5, 0.75)</li><li>(0.875, 0.047)</li><li>(1, 0)</li></points></alphaCurve>
+                        <brightnessCurve><points><li>(0, 4)</li><li>(0.5, 4)</li><li>(1, 1)</li></points></brightnessCurve>
+                        <textureFraction>0.1</textureFraction>
+                        <speedU>0.02</speedU>
+                    </li>
+                    <li>
+                        <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
+                        <additive>true</additive>
+                        <bloom>true</bloom>
+                        <liveFade>true</liveFade>
+                        <clampAlpha>true</clampAlpha>
+                        <radialOffset>0.24</radialOffset>
+                        <widthCurve><points><li>(0, 0.4)</li><li>(0.067, 0.2)</li><li>(0.133, 0.01)</li></points></widthCurve>
+                        <segmentDuration>1</segmentDuration>
+                        <startFadeCurve><points><li>(0, 0)</li><li>(0.375, 50)</li><li>(0.75, 100)</li></points></startFadeCurve>
+                        <endFadeCurve><points><li>(0, 100)</li><li>(0.375, 50)</li><li>(0.75, 0)</li></points></endFadeCurve>
+                        <alphaCurve><points><li>(0, 3)</li><li>(0.2, 1.1)</li><li>(0.5, 0.5)</li><li>(0.75, 0)</li></points></alphaCurve>
+                        <brightnessCurve><points><li>(0, 4)</li><li>(0.5, 4)</li><li>(0.75, 1)</li></points></brightnessCurve>
+                        <textureFraction>0.1</textureFraction>
+                        <speedU>0.02</speedU>
+                    </li>
+                </layers>
+                <!-- 收刀闪光：刀完全入鞘时在鞘口一闪（星芒 1–2 帧、横向光条 0.2 秒、光晕 0.2 秒），去掉原作的径向模糊 -->
+                <sheatheFlash>
+                    <texPath>MiliraXianQinghe/Effect/SakuraDance/Glow</texPath>
+                    <color>(0.88, 0.93, 0.96, 1)</color>
+                    <needleLength>0.9</needleLength>
+                    <needleWidth>0.04</needleWidth>
+                    <needleSeconds>0.067</needleSeconds>
+                    <needleBrightness>4</needleBrightness>
+                    <needleAngle>55</needleAngle>
+                    <barLength>1.4</barLength>
+                    <barWidth>0.08</barWidth>
+                    <barSeconds>0.2</barSeconds>
+                    <barBrightness>2.5</barBrightness>
+                    <haloSize>0.9</haloSize>
+                    <haloEndSize>0.5</haloEndSize>
+                    <haloSeconds>0.2</haloSeconds>
+                    <haloBrightness>1.5</haloBrightness>
+                </sheatheFlash>
             </li>
         </modExtensions>
     </ThingDef>

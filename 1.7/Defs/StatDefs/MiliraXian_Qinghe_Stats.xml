@@ -120,4 +120,17 @@
         <neverDisabled>true</neverDisabled>
     </StatDef>
 
+    <StatDef>
+        <defName>MX_QH_ParryChance</defName>
+        <label>化解几率</label>
+        <description>防御时将攻击弹开的几率。弹开时自身不受架势伤害，并给近战敌人较多架势伤害；未弹开时为普通格挡，双方各受少量架势伤害。由战斗姿态提供。</description>
+        <category>PawnCombat</category>
+        <defaultBaseValue>0</defaultBaseValue>
+        <minValue>0</minValue>
+        <maxValue>1</maxValue>
+        <toStringStyle>PercentZero</toStringStyle>
+        <hideAtValue>0</hideAtValue>
+        <neverDisabled>true</neverDisabled>
+    </StatDef>
+
 </Defs>

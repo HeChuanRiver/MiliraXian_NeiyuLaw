@@ -69,10 +69,10 @@
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
     <defName>MX_QH_Node_SwordDance</defName>
     <label>剑舞</label>
-    <description>——习得剑技：镜花水月。</description>
+    <description>——领悟使用刀剑近身格斗的新战斗姿态，并习得剑技：镜花水月。</description>
     <unlockLetter>
       <title>剑舞姿态</title>
-      <text>清荷已习得剑技：镜花水月。</text>
+      <text>已习得全新的战斗姿态。从背包中取出武器【散华】并装备即可切换到专精近战攻击的剑舞姿态。\n\n剑舞姿态特性：\n - 清荷获得防御、弹开和化解敌人普通攻击的能力。\n - 弹开和化解敌人的近战攻击将给予架势伤害，利用弹开或化解使敌人失衡，将使敌人进入长时间眩晕并可以进行一次高伤害处决攻击。\n - 灵气加护的恢复速率降低、禁用刚毅和硬化效果。\n\n可使用全新剑技：\n - 镜花水月</text>
     </unlockLetter>
     <category>MX_QH_Category_Qinghe</category>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>

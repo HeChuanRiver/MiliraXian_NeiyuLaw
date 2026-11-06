@@ -14,6 +14,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static JobDef MX_QH_TuneResonance;
         public static JobDef MX_QH_SakuraDance;
 
+        public static MiliraXian.Characters.Common.SweepDamage.SweepDamageDef MX_QH_SwordSweep;
+
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;
         public static QuestScriptDef MX_QH_FlowerCourtStartQuestScript;
@@ -42,6 +44,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_AuraShieldHardening;
         public static StatDef MX_QH_FlowingFormRechargeSpeed;
         public static StatDef MX_QH_SpellEffectFactor;
+        public static StatDef MX_QH_ParryChance;
 
         public static HediffDef MX_QH_SpringFlow;
         public static HediffDef MX_QH_AscentSlashInvulnerable;

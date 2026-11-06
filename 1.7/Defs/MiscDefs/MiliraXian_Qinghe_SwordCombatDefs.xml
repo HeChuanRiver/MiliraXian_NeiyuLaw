@@ -5,6 +5,265 @@
         <label>散华斩击</label>
     </ToolCapacityDef>
 
+    <!-- 剑舞架势普攻的扫掠出伤：每次接触交回散华斩击自己判定命中、闪避、格挡和战斗日志 -->
+    <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+        <defName>MX_QH_SwordSweep</defName>
+        <targetFaction>Hostile</targetFaction>
+        <hitPawns>true</hitPawns>
+        <hitBuildings>true</hitBuildings>
+        <requireLineOfSight>true</requireLineOfSight>
+        <damageDelayTicks>0</damageDelayTicks>
+        <workerClass>MiliraXian.Characters.Common.SweepDamage.SweepDamageWorker_Verb</workerClass>
+    </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+
+    <!--
+      剑舞架势的防御（初值，实机再调）。防御在敌人命中判定之前：
+      空闲或最后一斩之后：停下举刀防御，按「化解几率」弹开，否则普通格挡；
+      防御中再受击：必定弹开，防御延长（逐次递减）；
+      收刀和蓄势（举刀）中受近战攻击：必定弹开并立即反击追斩；
+      拔刀到最后一斩结束：不防御，被近战打中时自身额外受架势伤害。
+    -->
+    <MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
+        <defName>MX_QH_SwordGuard</defName>
+        <guardTicks>30</guardTicks>
+        <extendTicks>
+            <li>12</li>
+            <li>8</li>
+            <li>5</li>
+            <li>3</li>
+        </extendTicks>
+        <!-- 格挡、弹开给攻击者的架势 -->
+        <blockAttackerPosture>5</blockAttackerPosture>
+        <parryAttackerPosture>20</parryAttackerPosture>
+        <!-- 化解（收刀途中弹开）给攻击者的架势 -->
+        <counterAttackerPosture>30</counterAttackerPosture>
+        <!-- 普攻十字斩每斩、化解反击每次命中给敌人的架势（被对方格挡时不给） -->
+        <attackPosture>5</attackPosture>
+        <counterCutPosture>10</counterCutPosture>
+        <!--
+          弹开近战后攻击者硬直（原版眩晕，期间它的冷却暂停），清荷先手出招。
+          2 秒：反击（约 1.53 秒）+ 下一次起手（1.45 秒）+ 两斩（约 0.35 秒）共约 3.33 秒，
+          冷却 1.5–2.6 秒的常见敌人在此之后才出下一招，落在清荷收势可防御的时段
+        -->
+        <parryStaggerTicks>120</parryStaggerTicks>
+        <!--
+          收刀途中化解（弹开并反击）时攻击者的硬直，3.5 秒。
+          化解后清荷：反击出刀 0.4、反击结束 1.93、冷却后起手 2.93、闪光 3.71、两斩结束 4.73 秒；
+          被化解的敌人下一招在 3.5 + 自身冷却（1.5–2.6 秒）= 5.0–6.1 秒，都落在收势可防御的时段。
+          面对多个敌人时只对被化解的那一个有效。
+        -->
+        <counterStaggerTicks>210</counterStaggerTicks>
+        <!-- 化解动作（弹开到反击出刀之间）0.4 秒；期间再受攻击只弹开，不再反击 -->
+        <parryTicks>24</parryTicks>
+        <!-- 反击斩完、回正之后再等 1 秒才能重新起手；期间只能普通防御和弹开，不能化解 -->
+        <counterRecoveryTicks>60</counterRecoveryTicks>
+        <projectileBlockSelfPosture>8</projectileBlockSelfPosture>
+        <!--
+          清荷受到近战攻击时自己的架势。攻击带架势伤害（十字斩、化解反击）时按它算：普通格挡给 blockCarriedPostureShare（一半），
+          弹开、化解为 0，没挡住为全额；不带时普通格挡 blockSelfPosture、弹开化解 0、没挡住 struckSelfPosture。
+          伤害被护盾等吸收、没有造成伤口时，只给 25%。
+        -->
+        <blockSelfPosture>5</blockSelfPosture>
+        <blockCarriedPostureShare>0.5</blockCarriedPostureShare>
+        <struckSelfPosture>10</struckSelfPosture>
+
+        <!--
+          特效（照只狼 201001 格挡、252001/253001 弹刀、261001 尘环的结构重做，贴图用樱舞的 Glow）。
+          位置在清荷刀身上（contactShare：从握把起算的刀长比例），火花朝攻击者方向喷出、减速后下坠。
+          单位：地图格、秒；加法部分的 alpha 可以大于 1（更亮）。
+        -->
+        <contactShare>0.7</contactShare>
+        <vfxTexPath>MiliraXianQinghe/Effect/SakuraDance/Glow</vfxTexPath>
+        <bloom>
+            <group>MX_ScreenBloom_Glow</group>
+            <tint>(1, 0.85, 0.7, 1)</tint>
+            <intensity>1</intensity>
+        </bloom>
+        <!-- 普通格挡：小火花、小闪光、灰色尘环 -->
+        <blockVfx>
+            <flashSize>0.6</flashSize>
+            <flashSeconds>0.12</flashSeconds>
+            <flashAlpha>1.6</flashAlpha>
+            <flashColor>(1, 0.72, 0.45, 1)</flashColor>
+            <sparks>12</sparks>
+            <sparkSpeed>1.5~3.5</sparkSpeed>
+            <sparkLife>0.12~0.28</sparkLife>
+            <sparkSpread>120</sparkSpread>
+            <sparkWidth>0.022</sparkWidth>
+            <sparkAlpha>2.5</sparkAlpha>
+            <dustStart>0.15</dustStart>
+            <dustEnd>0.75</dustEnd>
+            <dustWidth>0.22</dustWidth>
+            <dustSeconds>0.5</dustSeconds>
+            <dustAlpha>0.3</dustAlpha>
+            <sound>MX_QH_SwordBlock</sound>
+        </blockVfx>
+        <!-- 弹开：橙色闪光 + 星芒、30 多道火花、白色扩散冲击环 -->
+        <parryVfx>
+            <flashSize>1.2</flashSize>
+            <flashSeconds>0.2</flashSeconds>
+            <flashAlpha>2.5</flashAlpha>
+            <flashColor>(1, 0.6, 0.3, 1)</flashColor>
+            <needleLength>1.0</needleLength>
+            <needleWidth>0.035</needleWidth>
+            <needleSeconds>0.07</needleSeconds>
+            <needleAlpha>3</needleAlpha>
+            <sparks>34</sparks>
+            <sparkSpeed>2.5~5.5</sparkSpeed>
+            <sparkLife>0.15~0.4</sparkLife>
+            <sparkSpread>135</sparkSpread>
+            <sparkAlpha>3</sparkAlpha>
+            <ringStart>0.1</ringStart>
+            <ringEnd>0.9</ringEnd>
+            <ringWidth>0.08</ringWidth>
+            <ringSeconds>0.22</ringSeconds>
+            <ringAlpha>1.6</ringAlpha>
+            <sound>MX_QH_SwordParry</sound>
+        </parryVfx>
+        <!-- 化解：弹开再放大一档，闪光和冲击环更大，加一层尘环 -->
+        <counterVfx>
+            <flashSize>1.7</flashSize>
+            <flashSeconds>0.26</flashSeconds>
+            <flashAlpha>3.2</flashAlpha>
+            <flashColor>(1, 0.82, 0.55, 1)</flashColor>
+            <needleLength>1.6</needleLength>
+            <needleWidth>0.045</needleWidth>
+            <needleSeconds>0.09</needleSeconds>
+            <needleAlpha>4</needleAlpha>
+            <needleAngle>22</needleAngle>
+            <sparks>40</sparks>
+            <sparkSpeed>3~6.5</sparkSpeed>
+            <sparkLife>0.18~0.45</sparkLife>
+            <sparkSpread>150</sparkSpread>
+            <sparkAlpha>3.5</sparkAlpha>
+            <ringStart>0.1</ringStart>
+            <ringEnd>1.4</ringEnd>
+            <ringWidth>0.1</ringWidth>
+            <ringSeconds>0.3</ringSeconds>
+            <ringAlpha>2.2</ringAlpha>
+            <dustStart>0.2</dustStart>
+            <dustEnd>1.1</dustEnd>
+            <dustWidth>0.3</dustWidth>
+            <dustSeconds>0.6</dustSeconds>
+            <dustAlpha>0.35</dustAlpha>
+            <sound>MX_QH_SwordCounter</sound>
+        </counterVfx>
+        <!-- 敌人架势崩溃：金红色的环向内收紧，加一圈火花 -->
+        <breakVfx>
+            <flashSize>1.0</flashSize>
+            <flashSeconds>0.2</flashSeconds>
+            <flashAlpha>2</flashAlpha>
+            <flashColor>(1, 0.35, 0.2, 1)</flashColor>
+            <sparks>18</sparks>
+            <sparkSpeed>1.5~3</sparkSpeed>
+            <sparkLife>0.2~0.4</sparkLife>
+            <sparkSpread>360</sparkSpread>
+            <sparkCool>(1, 0.2, 0.1, 1)</sparkCool>
+            <ringStart>1.1</ringStart>
+            <ringEnd>0.25</ringEnd>
+            <ringWidth>0.07</ringWidth>
+            <ringSeconds>0.35</ringSeconds>
+            <ringAlpha>2</ringAlpha>
+            <ringColor>(1, 0.55, 0.25, 1)</ringColor>
+            <sound>MX_QH_SwordPostureBreak</sound>
+        </breakVfx>
+        <!-- 处决命中（收刀"咔"的一声）：白红闪光、红火花、大冲击环 -->
+        <executionVfx>
+            <flashSize>1.8</flashSize>
+            <flashSeconds>0.3</flashSeconds>
+            <flashAlpha>3</flashAlpha>
+            <flashColor>(1, 0.5, 0.45, 1)</flashColor>
+            <needleLength>1.8</needleLength>
+            <needleWidth>0.05</needleWidth>
+            <needleSeconds>0.1</needleSeconds>
+            <needleAlpha>4</needleAlpha>
+            <needleAngle>10</needleAngle>
+            <sparks>28</sparks>
+            <sparkSpeed>2~5</sparkSpeed>
+            <sparkLife>0.2~0.5</sparkLife>
+            <sparkSpread>360</sparkSpread>
+            <sparkHot>(1, 0.85, 0.8, 1)</sparkHot>
+            <sparkCool>(0.9, 0.12, 0.1, 1)</sparkCool>
+            <ringStart>0.2</ringStart>
+            <ringEnd>1.8</ringEnd>
+            <ringWidth>0.12</ringWidth>
+            <ringSeconds>0.4</ringSeconds>
+            <ringAlpha>2</ringAlpha>
+            <ringColor>(1, 0.75, 0.7, 1)</ringColor>
+            <dustStart>0.3</dustStart>
+            <dustEnd>1.4</dustEnd>
+            <dustWidth>0.35</dustWidth>
+            <dustSeconds>0.8</dustSeconds>
+            <dustAlpha>0.35</dustAlpha>
+            <sound>MX_QH_SwordExecutionHit</sound>
+        </executionVfx>
+
+        <!--
+          处决（居合·过身斩）：清荷打满敌人架势后，敌人原地破绽（等她出刀、反击结束），她到能出手的时机就处决。
+          动作用十字斩片段分段重放（执行秒 start–end 播片段秒 clipFrom→clipTo，clipTo 小于 clipFrom 时倒放）：
+          0–0.6 面向敌人收刀入鞘（片段 0.15→0.783，鞘口闪光）；0.6–0.85 蓄势（0.783→1.45，压缩）；
+          0.85–1.05 拔刀冲刺（dash）：第一斩斜撩（1.45→1.633），穿过敌人落到它身后一格，留残影，敌人身上一道斩痕；
+          1.05–1.5 背对敌人停刀、慢速回挥（1.8→2.4）；
+          1.5–2.1 转身面向敌人收刀（aimBack，0.15→0.783）；刀完全入鞘（2.1 秒，鞘口闪光）时敌人中刀；
+          2.1–2.4 残心；2.4–2.7 刀出鞘回到待机（倒放 0.783→0.15）。
+          冲刺是真实移动：格子在拔刀那一刻换到敌人身后，身体沿途画过去。冲刺也是吸附：敌人在 executionRange 内（视线可达）就能处决，
+          不必贴身（樱舞等范围技能常打崩远处的敌人）。身后没有空格时：已贴身就原地拔刀；不贴身就落到敌人旁边任一空格；
+          旁边一个空格都没有则放弃处决、解除破绽。
+          伤害：对核心部位（人类为躯干）一击 600 点、穿甲 2，按原版伤害结算。固定给 1 档剑压（不受夏共鸣加成）。期间受到的攻击全部弹开。
+        -->
+        <executionJob>MX_QH_SwordExecution</executionJob>
+        <executionAttack>0</executionAttack>
+        <executionSeconds>2.7</executionSeconds>
+        <executionCutSeconds>0.85</executionCutSeconds>
+        <executionHitSeconds>2.1</executionHitSeconds>
+        <executionMotion>
+            <li><start>0</start><end>0.6</end><clipFrom>0.15</clipFrom><clipTo>0.783</clipTo><blend>0.12</blend></li>
+            <li><start>0.6</start><end>0.85</end><clipFrom>0.783</clipFrom><clipTo>1.45</clipTo><blend>0.02</blend></li>
+            <li><start>0.85</start><end>1.05</end><clipFrom>1.45</clipFrom><clipTo>1.633</clipTo><blend>0.02</blend><dash>true</dash></li>
+            <li><start>1.05</start><end>1.5</end><clipFrom>1.8</clipFrom><clipTo>2.4</clipTo><blend>0.06</blend></li>
+            <li><start>1.5</start><end>2.1</end><clipFrom>0.15</clipFrom><clipTo>0.783</clipTo><blend>0.15</blend><aimBack>true</aimBack></li>
+            <li><start>2.1</start><end>2.4</end><clipFrom>0.783</clipFrom><clipTo>0.783</clipTo><blend>0.02</blend><aimBack>true</aimBack></li>
+            <li><start>2.4</start><end>2.7</end><clipFrom>0.783</clipFrom><clipTo>0.15</clipTo><blend>0.02</blend><aimBack>true</aimBack></li>
+        </executionMotion>
+        <executionAfterimages>4</executionAfterimages>
+        <!-- 冲刺穿过时敌人身上的斩痕：沿冲刺方向一道亮线 + 火花 -->
+        <executionDashVfx>
+            <slashLength>2.2</slashLength>
+            <slashWidth>0.09</slashWidth>
+            <slashSeconds>0.35</slashSeconds>
+            <slashAlpha>3.5</slashAlpha>
+            <slashAngle>-12</slashAngle>
+            <flashSize>0.9</flashSize>
+            <flashSeconds>0.12</flashSeconds>
+            <flashAlpha>2</flashAlpha>
+            <flashColor>(1, 0.85, 0.75, 1)</flashColor>
+            <sparks>14</sparks>
+            <sparkSpeed>2~4.5</sparkSpeed>
+            <sparkLife>0.12~0.3</sparkLife>
+            <sparkSpread>60</sparkSpread>
+            <sparkAlpha>2.5</sparkAlpha>
+        </executionDashVfx>
+        <!-- 处决距离（格）：大约是樱舞的范围，超出则敌人只原地破绽、恢复，不处决 -->
+        <executionRange>12</executionRange>
+        <executionDamageDef>MX_QH_ExecutionSlash</executionDamageDef>
+        <executionDamage>600</executionDamage>
+        <executionSwordPressure>1</executionSwordPressure>
+        <executionArmorPenetration>2</executionArmorPenetration>
+        <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>
+    </MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
+
+    <JobDef>
+        <defName>MX_QH_SwordExecution</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Things.Weapons.JobDriver_QingheSwordExecution</driverClass>
+        <reportString>正在以居合处决TargetA。</reportString>
+        <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+        <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
+        <casualInterruptible>false</casualInterruptible>
+        <playerInterruptible>true</playerInterruptible>
+        <suspendable>false</suspendable>
+        <alwaysShowWeapon>true</alwaysShowWeapon>
+    </JobDef>
+
     <ManeuverDef>
         <defName>MX_QH_SwordSlash</defName>
         <label>散华斩击</label>
@@ -13,6 +272,8 @@
             <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_QingheSwordSweep</verbClass>
             <range>2.2</range>
             <meleeDamageDef>MX_QH_Slash</meleeDamageDef>
+            <!-- 剑舞架势的举刀走原版施法预热，不画瞄准饼 -->
+            <drawAimPie>false</drawAimPie>
         </verb>
         <logEntryDef>MeleeAttack</logEntryDef>
         <combatLogRulesHit>Maneuver_Slash_MeleeHit</combatLogRulesHit>

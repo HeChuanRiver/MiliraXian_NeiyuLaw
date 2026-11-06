@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using RimWorld;
@@ -35,6 +35,10 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
     public static class QingheSwordCombatUtility
     {
+        /// <summary>Share of the sword pressure gain for the hit now resolving (one strike of a multi-strike motion gives less).</summary>
+        [System.ThreadStatic] public static float swordPressureScaleOverride;
+        public static float SwordPressureScale => swordPressureScaleOverride > 0f ? swordPressureScaleOverride : 1f;
+
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
         {
             ThingDef weaponDef = pawn?.equipment?.Primary?.def;
@@ -75,7 +79,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             bool canGain = extension?.canGainSwordPressure ?? true;
             if (canGain)
             {
-                float gain = Mathf.Max(0f, extension?.swordPressureGain ?? 0.25f);
+                float gain = Mathf.Max(0f, extension?.swordPressureGain ?? 0.25f) * SwordPressureScale;
                 if (resonance == FlowerBellResonance.Summer)
                 {
                     gain *= 1.5f;
