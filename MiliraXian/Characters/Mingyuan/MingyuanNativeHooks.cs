@@ -7,6 +7,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.Combat;
 
 namespace MiliraXian.Characters.Mingyuan
 {
@@ -130,16 +131,8 @@ namespace MiliraXian.Characters.Mingyuan
 
     internal static class MingyuanStatUtility
     {
-        public static float LifeBurnPenaltyFactor(float lifeBurn)
-        {
-            if (MingyuanPowerBalance.Sealed) return 1f;
-            if (lifeBurn <= 0f)
-            {
-                return 1f;
-            }
-
-            return Mathf.Max(0.05f, 1f - lifeBurn * 0.0001f);
-        }
+        public static float LifeBurnCombatChange(float layers) =>
+            MingyuanPowerBalance.Sealed ? 0f : Mathf.Clamp(layers / 200f * 0.05f, 0f, 0.60f);
     }
 
     public class CompProperties_MingyuanDamageResponder : CompProperties
@@ -176,19 +169,103 @@ namespace MiliraXian.Characters.Mingyuan
 
             if (MingyuanPowerBalance.Sealed) return;
 
-            if (body.Invulnerable)
+            if (dinfo.Amount <= 0f) return;
+            bool heat = dinfo.Def.armorCategory?.armorRatingStat == StatDefOf.ArmorRating_Heat
+                || typeof(DamageWorker_Flame).IsAssignableFrom(dinfo.Def.workerClass);
+            bool explosion = dinfo.Def.isExplosive;
+            if (heat || explosion)
             {
-                absorbed = true;
-                return;
+                // Thermal hits take priority over blast damage when a Def marks both.
+                (pawn.health.hediffSet.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)
+                    ?.GetComp<HediffComp_MingyuanProtectiveFlameShield>()?.RefillFromAttack(explosion: !heat);
             }
 
-            if (MingyuanUtility.IsHeatOrExplosionDamage(dinfo.Def))
+            bool melee = !explosion && !dinfo.Def.isRanged && dinfo.Instigator is Pawn
+                && (dinfo.Tool != null || dinfo.WeaponBodyPartGroup != null || dinfo.WeaponLinkedHediff != null
+                    || dinfo.Weapon?.IsMeleeWeapon == true);
+            absorbed = heat || body.Invulnerable || (melee && MingyuanUtility.IsOverburning(pawn));
+            if (!absorbed && explosion) dinfo.SetAmount(dinfo.Amount * 0.30f);
+        }
+    }
+
+    [StaticConstructorOnStartup]
+    internal sealed class MingyuanOverburnBlocker : CombatBlocker
+    {
+        static MingyuanOverburnBlocker() => CombatBlockers.Register(new MingyuanOverburnBlocker());
+
+        public override bool Covers(Pawn pawn) => MingyuanUtility.IsMingyuan(pawn)
+            && !MingyuanDeveloperDamageContext.Active && MingyuanUtility.IsOverburning(pawn);
+
+        public override bool TryBlockMelee(Verb_MeleeAttack verb, Pawn defender) => true;
+    }
+
+    internal static class MingyuanSurvival
+    {
+        public const float DeathBloodLoss = 0.95f;
+
+        internal static bool AppliesTo(Pawn pawn) =>
+            !MingyuanPowerBalance.Sealed && !MingyuanDeveloperDamageContext.Active
+            && MingyuanUtility.IsMingyuan(pawn) && pawn.health?.hediffSet != null;
+
+        internal static bool CanDie(Pawn pawn)
+        {
+            if (BloodLoss(pawn) >= DeathBloodLoss) return true;
+            HediffSet set = pawn.health.hediffSet;
+            List<BodyPartRecord> parts = pawn.RaceProps.body.AllParts;
+            float maximum = 0f;
+            foreach (BodyPartRecord part in parts) maximum += part.def.GetMaxHealth(pawn);
+            if (maximum <= 0f) return false;
+
+            float remaining = maximum * 0.05f;
+            foreach (BodyPartRecord part in parts)
             {
-                absorbed = true;
-                if (dinfo.Amount > 0f)
-                    (pawn.health.hediffSet.GetFirstHediffOfDef(MingyuanUtility.ShieldDef) as HediffWithComps)
-                        ?.GetComp<HediffComp_MingyuanProtectiveFlameShield>()?.TryRefillFromHeat();
+                remaining -= set.GetPartHealth(part);
+                if (remaining < 0f) return false;
             }
+            return true;
+        }
+
+        internal static float BloodLoss(Pawn pawn) =>
+            pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.BloodLoss)?.Severity ?? 0f;
+    }
+
+    [HarmonyPatch(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.ShouldBeDead))]
+    internal static class Patch_MingyuanShouldBeDead
+    {
+        private static bool Prefix(Pawn ___pawn, ref bool __result)
+        {
+            if (___pawn.Dead || !MingyuanSurvival.AppliesTo(___pawn)) return true;
+            __result = MingyuanSurvival.CanDie(___pawn);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.ShouldBeDowned))]
+    internal static class Patch_MingyuanShouldBeDowned
+    {
+        private static bool Prefix(Pawn ___pawn, ref bool __result)
+        {
+            if (!MingyuanSurvival.AppliesTo(___pawn)) return true;
+            __result = false;
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Hediff), nameof(Hediff.Severity), MethodType.Setter)]
+    internal static class Patch_MingyuanBloodLossThreshold
+    {
+        private static void Prefix(Hediff __instance, float __0, out bool __state) =>
+            __state = __instance.def is { } def && def == HediffDefOf.BloodLoss
+                && __instance.Severity < MingyuanSurvival.DeathBloodLoss
+                && __0 >= MingyuanSurvival.DeathBloodLoss && __0 < def.lethalSeverity;
+
+        private static void Postfix(Hediff __instance, bool __state)
+        {
+            if (!__state || __instance.Severity < MingyuanSurvival.DeathBloodLoss) return;
+            Pawn pawn = __instance.pawn;
+            if (pawn != null && !pawn.Dead && MingyuanSurvival.AppliesTo(pawn)
+                && pawn.health.hediffSet.hediffs.Contains(__instance))
+                pawn.health.Notify_HediffChanged(__instance);
         }
     }
 
@@ -249,7 +326,7 @@ namespace MiliraXian.Characters.Mingyuan
                 return 1f;
             }
 
-            float factor = MingyuanStatUtility.LifeBurnPenaltyFactor(MingyuanUtility.GetLifeBurnLayers(owner));
+            float factor = 1f - MingyuanStatUtility.LifeBurnCombatChange(MingyuanUtility.GetLifeBurnLayers(owner));
             factor *= MingyuanUtility.GetSelfBurnRangedWeaponDamageFactor(owner);
             factor *= MingyuanUtility.GetOverburnDamageFactor(owner);
             return factor;

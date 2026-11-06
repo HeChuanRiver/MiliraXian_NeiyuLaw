@@ -26,7 +26,7 @@
     <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
     <filthLeaving IsNull="True" />
     <statBases>
-      <MaxHitPoints>1200</MaxHitPoints>
+      <MaxHitPoints>2500</MaxHitPoints>
       <WorkToBuild>1</WorkToBuild>
       <Flammability>0</Flammability>
       <MarketValue>0</MarketValue>

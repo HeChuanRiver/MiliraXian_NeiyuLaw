@@ -4130,120 +4130,6 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    [HarmonyPatch(typeof(Pawn), nameof(Pawn.DropAndForbidEverything))]
-    internal static class Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon
-    {
-        public sealed class ZhaoliWeaponDropState
-        {
-            public ThingWithComps weapon;
-            public bool stashInInventory;
-        }
-
-        public static void Prefix(Pawn __instance, out ZhaoliWeaponDropState __state)
-        {
-            __state = null;
-            if (!ZhaoliKarmaUtility.IsZhaoli(__instance))
-            {
-                return;
-            }
-
-            bool isBeingKilled = __instance.health?.isBeingKilled == true;
-            bool isDownedDrop = !isBeingKilled && __instance.Downed;
-            if (!isBeingKilled && !isDownedDrop)
-            {
-                return;
-            }
-
-            ThingWithComps primary = __instance.equipment?.Primary;
-            if (primary != null && primary.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
-            {
-                __instance.equipment.Remove(primary);
-                __state = new ZhaoliWeaponDropState
-                {
-                    weapon = primary,
-                    stashInInventory = isDownedDrop
-                };
-                return;
-            }
-
-            if (isBeingKilled && TryRemoveStoredZhaoliWeaponFromInventory(__instance, out ThingWithComps storedWeapon))
-            {
-                __state = new ZhaoliWeaponDropState
-                {
-                    weapon = storedWeapon,
-                    stashInInventory = false
-                };
-            }
-        }
-
-        public static void Postfix(Pawn __instance, ZhaoliWeaponDropState __state)
-        {
-            if (__state?.weapon == null || __state.weapon.Destroyed || __instance == null || __instance.Destroyed)
-            {
-                return;
-            }
-
-            if (__state.stashInInventory && __instance.inventory?.innerContainer != null && !__instance.Dead)
-            {
-                __instance.mindState.droppedWeapon = null;
-                if (__instance.inventory.innerContainer.TryAdd(__state.weapon, canMergeWithExistingStacks: false))
-                {
-                    return;
-                }
-            }
-
-            if (__instance.equipment == null || __instance.equipment.Primary != null)
-            {
-                return;
-            }
-
-            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(__state.weapon);
-            __instance.equipment.AddEquipment(__state.weapon);
-        }
-
-        internal static void TryReequipStoredZhaoliWeapon(Pawn pawn)
-        {
-            if (pawn == null || pawn.Destroyed || pawn.Dead || pawn.Downed || !ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.equipment == null || pawn.equipment.Primary != null)
-            {
-                return;
-            }
-
-            if (!TryRemoveStoredZhaoliWeaponFromInventory(pawn, out ThingWithComps weapon))
-            {
-                return;
-            }
-
-            ZhaoliBladeVerbLoadFixUtility.EnsureCleanVerbTracker(weapon);
-            pawn.equipment.AddEquipment(weapon);
-        }
-
-        private static bool TryRemoveStoredZhaoliWeaponFromInventory(Pawn pawn, out ThingWithComps weapon)
-        {
-            weapon = null;
-            if (pawn?.inventory?.innerContainer == null)
-            {
-                return false;
-            }
-
-            foreach (Thing thing in pawn.inventory.innerContainer)
-            {
-                if (thing is ThingWithComps thingWithComps && thingWithComps.def == MXZL_ZhaoliDefOf.MX_Zhaoli_DuanzhanBlade)
-                {
-                    weapon = thingWithComps;
-                    break;
-                }
-            }
-
-            if (weapon == null)
-            {
-                return false;
-            }
-
-            pawn.inventory.innerContainer.Remove(weapon);
-            return true;
-        }
-    }
-
     [HarmonyPatch(typeof(Thing), nameof(Thing.TakeDamage))]
     internal static class Patch_Thing_TakeDamage_ZhaoliScenario
     {
@@ -4271,15 +4157,6 @@ namespace MiliraXian.Characters.Zhaoli
             ZhaoliRaidDebugUtility.Log(___pawn, "NoDowned", "prevented MakeDowned and forced death instead");
             ___pawn.Kill(dinfo, hediff);
             return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(Pawn_HealthTracker), "MakeUndowned")]
-    internal static class Patch_Pawn_HealthTracker_MakeUndowned_ZhaoliWeapon
-    {
-        public static void Postfix(Pawn ___pawn)
-        {
-            Patch_Pawn_DropAndForbidEverything_ZhaoliWeapon.TryReequipStoredZhaoliWeapon(___pawn);
         }
     }
 

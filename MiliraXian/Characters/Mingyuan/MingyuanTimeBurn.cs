@@ -1,427 +1,420 @@
 using System;
 using System.Collections.Generic;
+using MiliraXian.Characters.Common;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace MiliraXian.Characters.Mingyuan
+namespace MiliraXian.Characters.Mingyuan;
+
+public class CompProperties_AbilityMingyuanTimeBurn : CompProperties_AbilityEffect
 {
-    public static class MingyuanTimeBurnUtility
+    public int openingTicks = 10;
+    public int enchantTicks = 32;
+    public int chargeTicks = 21;
+    public int swingTicks = 12;
+    public int durationTicks = 1200;
+    public int tickIntervalTicks = 6;
+    public ThingDef projectileDef;
+    public ThingDef startMoteDef;
+    public ThingDef collapseMoteDef;
+    public SoundDef effectSoundDef;
+    public float startMoteScale = 2.2f;
+    public float collapseMoteScale = 2.4f;
+
+    public CompProperties_AbilityMingyuanTimeBurn() => compClass = typeof(CompAbilityEffect_MingyuanTimeBurn);
+}
+
+public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowerLimited
+{
+    internal new CompProperties_AbilityMingyuanTimeBurn Props => (CompProperties_AbilityMingyuanTimeBurn)props;
+
+    public override void PostExposeData()
     {
-        public static void Register(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
-        {
-            if (MingyuanPowerBalance.Sealed) return;
-            if (pawn == null || pawn.Destroyed || pawn.Dead || props == null)
-            {
-                return;
-            }
-
-            MingyuanUtility.EnsureHediff(pawn, MingyuanUtility.TimeBurnFrozenDef);
-            Current.Game?.GetComponent<GameComponent_MingyuanTimeBurn>()?.Register(pawn, caster, props);
-        }
-
-        public static void DissolveBuilding(Thing thing, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
-        {
-            if (MingyuanPowerBalance.Sealed) return;
-            if (thing == null || thing.Destroyed || thing.def?.category != ThingCategory.Building)
-            {
-                return;
-            }
-
-            Map map = thing.MapHeld;
-            IntVec3 position = thing.PositionHeld;
-            if (map == null)
-            {
-                return;
-            }
-
-            PlayEffectSound(props?.effectSoundDef, position, map);
-            TryMakeStaticMote(position, map, props?.collapseMoteDef, props?.collapseMoteScale ?? 1f);
-
-            List<ThingDefCountClass> costs = (thing as Frame)?.TotalMaterialCost() ?? thing.CostListAdjusted();
-            DropCostList(costs, position, map);
-            thing.Destroy(DestroyMode.Vanish);
-        }
-
-        public static void TryMakeStaticMote(IntVec3 cell, Map map, ThingDef moteDef, float scale)
-        {
-            if (map == null || moteDef == null || !cell.IsValid || !cell.InBounds(map))
-            {
-                return;
-            }
-
-            Mote mote = MoteMaker.MakeStaticMote(cell.ToVector3Shifted(), map, moteDef, Mathf.Max(0.1f, scale), false, Rand.Range(0f, 360f));
-            if (mote != null)
-            {
-                mote.exactPosition = cell.ToVector3Shifted();
-            }
-        }
-
-        public static void PlayEffectSound(SoundDef soundDef, IntVec3 cell, Map map)
-        {
-            if (soundDef != null && map != null && cell.IsValid)
-            {
-                soundDef.PlayOneShot(new TargetInfo(cell, map));
-            }
-        }
-
-        public static void DropThing(ThingDef thingDef, int count, IntVec3 cell, Map map)
-        {
-            if (thingDef == null || count <= 0 || map == null || !cell.IsValid)
-            {
-                return;
-            }
-
-            Thing thing = ThingMaker.MakeThing(thingDef);
-            thing.stackCount = count;
-            if (!GenPlace.TryPlaceThing(thing, cell, map, ThingPlaceMode.Near))
-            {
-                thing.Destroy(DestroyMode.Vanish);
-            }
-        }
-
-        private static void DropCostList(List<ThingDefCountClass> costs, IntVec3 cell, Map map)
-        {
-            if (costs == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < costs.Count; i++)
-            {
-                ThingDefCountClass cost = costs[i];
-                DropThing(cost?.thingDef, cost?.count ?? 0, cell, map);
-            }
-        }
+        base.PostExposeData();
+        // VerbTracker can replace the saved vanilla verb after Ability.Initialize has already bound it.
+        if (Scribe.mode == LoadSaveMode.PostLoadInit && parent.verb is Verb_MingyuanTimeBurn verb)
+            verb.Ability = parent;
     }
 
-    public class MingyuanTimeBurnRecord : IExposable
+    public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
     {
-        public Pawn pawn;
-        public Pawn caster;
-        public int startTick;
-        public int endTick;
-        public int nextAgeTick;
-        public int durationTicks;
-        public int tickIntervalTicks;
-        public long startAgeTicks;
-        public bool reducedCast;
-        public HediffDef markerHediff;
-        public ThingDef collapseMoteDef;
-        public SoundDef effectSoundDef;
-        public float collapseMoteScale = 1f;
-        public int mechSteelCount = 75;
-        public int mechPlasteelCount = 25;
-
-        public MingyuanTimeBurnRecord()
-        {
-        }
-
-        public MingyuanTimeBurnRecord(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props, int tick)
-        {
-            Reset(pawn, caster, props, tick);
-        }
-
-        public void Reset(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props, int tick)
-        {
-            this.pawn = pawn;
-            this.caster = caster;
-            // Retain reducedCast only to finish legacy saved effects; new casts use age erasure.
-            reducedCast = false;
-            startTick = tick;
-            durationTicks = Mathf.Max(1, props.durationTicks);
-            endTick = tick + durationTicks;
-            tickIntervalTicks = Mathf.Max(1, props.tickIntervalTicks);
-            nextAgeTick = tick;
-            startAgeTicks = Math.Max(0L, pawn?.ageTracker?.AgeBiologicalTicks ?? 0L);
-            markerHediff = MingyuanUtility.TimeBurnFrozenDef;
-            collapseMoteDef = props.collapseMoteDef;
-            effectSoundDef = props.effectSoundDef;
-            collapseMoteScale = Mathf.Max(0.1f, props.collapseMoteScale);
-            mechSteelCount = Mathf.Max(0, props.mechSteelCount);
-            mechPlasteelCount = Mathf.Max(0, props.mechPlasteelCount);
-        }
-
-        public void ExposeData()
-        {
-            Scribe_References.Look(ref pawn, "pawn");
-            Scribe_References.Look(ref caster, "caster");
-            Scribe_Values.Look(ref startTick, "startTick", 0);
-            Scribe_Values.Look(ref endTick, "endTick", 0);
-            Scribe_Values.Look(ref nextAgeTick, "nextAgeTick", 0);
-            Scribe_Values.Look(ref durationTicks, "durationTicks", 2500);
-            Scribe_Values.Look(ref tickIntervalTicks, "tickIntervalTicks", 60);
-            Scribe_Values.Look(ref startAgeTicks, "startAgeTicks", 0L);
-            Scribe_Values.Look(ref reducedCast, "power_reducedCast", false);
-            Scribe_Defs.Look(ref markerHediff, "markerHediff");
-            Scribe_Defs.Look(ref collapseMoteDef, "collapseMoteDef");
-            Scribe_Defs.Look(ref effectSoundDef, "effectSoundDef");
-            Scribe_Values.Look(ref collapseMoteScale, "collapseMoteScale", 1f);
-            Scribe_Values.Look(ref mechSteelCount, "mechSteelCount", 75);
-            Scribe_Values.Look(ref mechPlasteelCount, "mechPlasteelCount", 25);
-        }
+        if (!base.Valid(target, throwMessages)) return false;
+        Pawn caster = parent.pawn;
+        if (MingyuanTimeBurnUtility.IsTarget(target.Pawn, caster, caster.Map)) return true;
+        if (throwMessages && target.HasThing)
+            Messages.Message("时间燃烧只能以可衰老的敌对生物为目标，机械体免疫。", target.Thing, MessageTypeDefOf.RejectInput, false);
+        return false;
     }
 
-    public class GameComponent_MingyuanTimeBurn : GameComponent
+    public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest) =>
+        base.CanApplyOn(target, dest) && Valid(target);
+
+    public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
     {
-        private List<MingyuanTimeBurnRecord> records = new();
-        private int nextProcessTick;
+        if (!Valid(target) || Props.projectileDef == null) return;
+        Pawn caster = parent.pawn;
+        Map map = caster.Map;
+        Vector3 origin = caster.Position.ToVector3Shifted();
+        Vector3 direction = (target.CenterVector3 - origin).Yto0().normalized;
+        if (direction.sqrMagnitude < 0.001f) return;
 
-        public GameComponent_MingyuanTimeBurn(Game game)
+        base.Apply(target, dest);
+        var wave = (Projectile_MingyuanTimeBurnWave)GenSpawn.Spawn(Props.projectileDef, caster.Position, map);
+        wave.LaunchWave(caster, target, direction, parent.verb.EffectiveRange);
+        Props.effectSoundDef?.PlayOneShot(new TargetInfo(caster.Position, map));
+    }
+}
+
+public class Verb_MingyuanTimeBurn : Verb_CastAbility
+{
+    internal CompProperties_AbilityMingyuanTimeBurn Props => Ability?.CompOfType<CompAbilityEffect_MingyuanTimeBurn>()?.Props;
+    internal int CastTicks => Props is { } p ? p.openingTicks + p.enchantTicks + p.chargeTicks + p.swingTicks : 1;
+    public override float WarmupTime => Mathf.Max(1, CastTicks) / 60f;
+
+    public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false,
+        bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
+    {
+        if (!ValidateTarget(castTarg, false)
+            || !base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
+            return false;
+
+        if (WarmupStance is { } stance)
         {
+            stance.ticksLeft = CastTicks;
+            MingyuanFireVfx.PlayWarmup(CasterPawn, Ability.def, stance, castTarg.Cell);
+        }
+        return true;
+    }
+
+    protected override bool TryCastShot() => ValidateTarget(currentTarget, false) && base.TryCastShot();
+}
+
+internal static class MingyuanTimeBurnUtility
+{
+    internal static bool CanAge(Pawn pawn) => pawn is { Dead: false, Destroyed: false, ageTracker: not null }
+        && pawn.RaceProps.IsFlesh && !pawn.RaceProps.IsMechanoid;
+
+    internal static bool IsTarget(Pawn pawn, Pawn caster, Map map) =>
+        map != null && pawn?.Map == map && pawn.Spawned && pawn != caster && CanAge(pawn) && pawn.HostileTo(caster);
+
+    internal static CompProperties_AbilityMingyuanTimeBurn PropsFor(Pawn caster) =>
+        caster?.abilities?.GetAbility(MX_MingyuanDefOf.MX_Mingyuan_TimeBurn)
+            ?.CompOfType<CompAbilityEffect_MingyuanTimeBurn>()?.Props;
+}
+
+public class Projectile_MingyuanTimeBurnWave : Projectile
+{
+    internal const float HalfWidth = 1.05f;
+    internal const float ArcDepth = 0.52f;
+    private const float HitTolerance = 0.28f;
+    private List<int> attemptedIds = new(3);
+    private int hits;
+    private float damageFactor = 1f;
+    private Vector3 previous;
+    private Vector3 Direction => (destination - origin).Yto0().normalized;
+    public override int UpdateRateTicks => 1;
+    public override int DamageAmount => Mathf.RoundToInt(base.DamageAmount * damageFactor);
+
+    internal void LaunchWave(Pawn caster, LocalTargetInfo target, Vector3 direction, float range)
+    {
+        Vector3 start = caster.Position.ToVector3Shifted();
+        Vector3 end = start + direction * range;
+        Launch(caster, start, end.ToIntVec3(), target, ProjectileHitFlags.NonTargetWorld, preventFriendlyFire: true);
+        destination = end;
+        lifetime = ticksToImpact = Mathf.Max(1, Mathf.CeilToInt(StartingTicksToImpact));
+        damageFactor = MingyuanUtility.GetSelfBurnSkillDamageFactor(caster) * MingyuanUtility.GetOverburnDamageFactor(caster);
+    }
+
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Collections.Look(ref attemptedIds, "attemptedIds", LookMode.Value);
+        Scribe_Values.Look(ref hits, "successfulHits");
+        Scribe_Values.Look(ref damageFactor, "damageFactor", 1f);
+        if (Scribe.mode == LoadSaveMode.PostLoadInit) attemptedIds ??= new(3);
+    }
+
+    protected override void TickInterval(int delta)
+    {
+        if (MingyuanPowerBalance.Sealed || Launcher is not Pawn { Dead: false } caster || caster.Map != Map)
+        {
+            Destroy();
+            return;
         }
 
-        public bool Cancel(Pawn pawn)
+        previous = ExactPosition;
+        Vector3 next = Vector3.MoveTowards(previous, destination.WithY(previous.y), def.projectile.SpeedTilesPerTick * delta);
+        if (!OpenPath(previous.ToIntVec3(), next.ToIntVec3(), Map))
         {
-            if (pawn == null) return false;
-            bool removed = false;
-            for (int i = records.Count - 1; i >= 0; i--)
-            {
-                MingyuanTimeBurnRecord record = records[i];
-                if (record?.pawn != pawn) continue;
-                if (!record.reducedCast && pawn.ageTracker != null)
-                    pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
-                RemoveMarker(pawn, record.markerHediff);
-                records.RemoveAt(i);
-                removed = true;
-            }
-            RemoveMarker(pawn, MingyuanUtility.TimeBurnFrozenDef);
-            nextProcessTick = 0;
-            return removed;
+            Destroy();
+            return;
         }
 
-        public void Register(Pawn pawn, Pawn caster, CompProperties_AbilityMingyuanTimeBurn props)
+        // Vanilla handles world collision and projectile interceptors before the swept arc.
+        base.TickInterval(delta);
+        if (!Destroyed) Sweep(previous, ExactPosition, caster);
+    }
+
+    protected override void ImpactSomething()
+    {
+        if (Launcher is Pawn caster) Sweep(previous, ExactPosition, caster);
+        if (!Destroyed) base.Impact(null);
+    }
+
+    private static bool OpenPath(IntVec3 from, IntVec3 to, Map map) => to.InBounds(map)
+        && to.CanBeSeenOverFast(map) && GenSight.LineOfSight(from, to, map, skipFirstCell: true);
+
+    private readonly record struct Contact(Pawn Pawn, float Along, bool Intended);
+
+    private void Sweep(Vector3 from, Vector3 to, Pawn caster)
+    {
+        Map map = Map;
+        Vector3 direction = Direction;
+        Vector3 side = new(direction.z, 0f, -direction.x);
+        float length = (to - from).MagnitudeHorizontal();
+        if (length <= 0f) return;
+        List<Contact> contacts = CombatTargetSnapshot.Rent(Array.Empty<Contact>());
+        try
         {
-            if (pawn == null || props == null)
+            foreach (Thing thing in GenRadial.RadialDistinctThingsAround(to.ToIntVec3(), map, 3f, true))
             {
-                return;
+                if (thing is not Pawn pawn || !MingyuanTimeBurnUtility.IsTarget(pawn, caster, map)
+                    || attemptedIds.Contains(pawn.thingIDNumber)) continue;
+
+                Vector3 offset = pawn.Position.ToVector3Shifted() - from;
+                float lateral = Mathf.Abs(Vector3.Dot(offset, side));
+                if (lateral > HalfWidth) continue;
+                float relativeWidth = lateral / HalfWidth;
+                float along = Vector3.Dot(offset, direction) + ArcDepth * relativeWidth * relativeWidth;
+                if (along < -HitTolerance || along > length + HitTolerance
+                    || !OpenPath((from + direction * Mathf.Clamp(along, 0f, length)).ToIntVec3(), pawn.Position, map))
+                    continue;
+                contacts.Add(new Contact(pawn, Mathf.Clamp(along, 0f, length), pawn == intendedTarget.Pawn));
             }
 
-            int tick = Find.TickManager.TicksGame;
-            for (int i = 0; i < records.Count; i++)
+            contacts.Sort(static (a, b) =>
             {
-                MingyuanTimeBurnRecord record = records[i];
-                if (record?.pawn == pawn)
+                int order = a.Along.CompareTo(b.Along);
+                if (order != 0) return order;
+                if (a.Intended != b.Intended) return a.Intended ? -1 : 1;
+                return a.Pawn.thingIDNumber.CompareTo(b.Pawn.thingIDNumber);
+            });
+
+            foreach (Contact contact in contacts)
+            {
+                Pawn pawn = contact.Pawn;
+                if (!MingyuanTimeBurnUtility.IsTarget(pawn, caster, map)) continue;
+                attemptedIds.Add(pawn.thingIDNumber);
+                DamageInfo hit = new(DamageDef, DamageAmount, ArmorPenetration, direction.AngleFlat(),
+                    caster, intendedTarget: intendedTarget.Thing);
+                DamageWorker.DamageResult result = MingyuanUtility.ApplyDamageWithoutLifeBurn(pawn, hit);
+                if (result != null && !result.deflected)
                 {
-                    record.Reset(pawn, caster, props, tick);
-                    nextProcessTick = tick;
+                    hits++;
+                    if (MingyuanTimeBurnUtility.CanAge(pawn))
+                        Current.Game.GetComponent<GameComponent_MingyuanTimeBurn>().Register(pawn, caster);
+                }
+                if (Destroyed) return;
+                if (contact.Intended || hits >= 3)
+                {
+                    Destroy();
                     return;
                 }
             }
-
-            records.Add(new MingyuanTimeBurnRecord(pawn, caster, props, tick));
-            nextProcessTick = tick;
         }
-
-        public override void GameComponentTick()
+        finally
         {
-            base.GameComponentTick();
-            if (Current.ProgramState != ProgramState.Playing || records.Count == 0)
-            {
-                return;
-            }
-
-            int tick = Find.TickManager.TicksGame;
-            if (nextProcessTick > tick)
-            {
-                return;
-            }
-
-            int nextDueTick = int.MaxValue;
-            for (int i = records.Count - 1; i >= 0; i--)
-            {
-                MingyuanTimeBurnRecord record = records[i];
-                if (record?.pawn == null || record.pawn.Destroyed || record.pawn.Discarded || record.pawn.Dead)
-                {
-                    records.RemoveAt(i);
-                    continue;
-                }
-
-                // Cleansing/rebirth may remove the marker outside this component.
-                // Never leave an invisible erasure queued against that pawn.
-                if (record.markerHediff != null && !MingyuanUtility.HasHediff(record.pawn, record.markerHediff))
-                {
-                    if (!record.reducedCast && record.pawn.ageTracker != null)
-                        record.pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
-                    records.RemoveAt(i);
-                    continue;
-                }
-
-                if (MingyuanPowerBalance.Sealed)
-                {
-                    // Cancel an original-mode erasure safely; do not leave a frozen infant behind.
-                    if (!record.reducedCast && record.pawn.ageTracker != null)
-                        record.pawn.ageTracker.AgeBiologicalTicks = record.startAgeTicks;
-                    RemoveMarker(record.pawn, record.markerHediff);
-                    record.pawn.stances?.stunner?.StopStun();
-                    records.RemoveAt(i);
-                    continue;
-                }
-
-                if (record.reducedCast)
-                {
-                    // A cast never becomes a lethal original-mode erasure when toggling upward.
-                    if (tick >= record.endTick)
-                    {
-                        RemoveMarker(record.pawn, record.markerHediff);
-                        MingyuanUtility.ApplyTrueDamage(record.pawn, DamageDefOf.Burn, 12f, record.caster);
-                        records.RemoveAt(i);
-                    }
-                    else
-                    {
-                        if (tick >= record.nextAgeTick)
-                        {
-                            MingyuanUtility.ApplyTrueDamage(record.pawn, DamageDefOf.Burn, 4f, record.caster);
-                            record.nextAgeTick = tick + 60;
-                        }
-                        nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
-                    }
-                    continue;
-                }
-
-                if (record.pawn.ageTracker == null)
-                {
-                    FinalizePawn(record);
-                    records.RemoveAt(i);
-                    continue;
-                }
-
-                if (tick < record.nextAgeTick && tick < record.endTick)
-                {
-                    nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
-                    continue;
-                }
-
-                long newAge = CalculateAge(record, tick);
-                if (record.pawn.Spawned)
-                    MingyuanSkillVfx.Play(record.pawn.Map, record.pawn.DrawPos, MingyuanSkillVisualKind.TimeErosion,
-                        Mathf.Lerp(1.2f, 0.35f, Mathf.Clamp01((tick - record.startTick) / (float)Mathf.Max(1, record.durationTicks))));
-                if (record.pawn.ageTracker.AgeBiologicalTicks > newAge)
-                {
-                    record.pawn.ageTracker.AgeBiologicalTicks = newAge;
-                }
-
-                if (tick >= record.endTick || record.pawn.ageTracker.AgeBiologicalTicks <= 0L)
-                {
-                    record.pawn.ageTracker.AgeBiologicalTicks = 0L;
-                    FinalizePawn(record);
-                    records.RemoveAt(i);
-                    continue;
-                }
-
-                record.nextAgeTick = Mathf.Min(tick + Mathf.Max(1, record.tickIntervalTicks), record.endTick);
-                nextDueTick = Mathf.Min(nextDueTick, NextDueTick(record));
-            }
-
-            nextProcessTick = records.Count > 0 && nextDueTick != int.MaxValue ? Mathf.Max(tick + 1, nextDueTick) : 0;
+            CombatTargetSnapshot.Return(contacts);
         }
+    }
 
-        public override void ExposeData()
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) =>
+        MingyuanFireVfx.DrawTimeBurnWave(drawLoc, Direction, DistanceCoveredFraction);
+}
+
+public class MingyuanTimeBurnRecord : IExposable
+{
+    internal const long AgeBudget = 500L * GenDate.TicksPerYear;
+    public Pawn pawn;
+    public Pawn caster;
+    public int startTick;
+    public int endTick;
+    public int nextAgeTick;
+    public int durationTicks;
+    public int tickIntervalTicks;
+    public long startAgeTicks;
+    public HediffDef markerHediff;
+    public ThingDef collapseMoteDef;
+    public SoundDef effectSoundDef;
+    public float collapseMoteScale = 1f;
+    public bool reducedCast;
+    public long ageBudget;
+    public long ageAdded;
+
+    public void ExposeData()
+    {
+        Scribe_References.Look(ref pawn, "pawn");
+        Scribe_References.Look(ref caster, "caster");
+        Scribe_Values.Look(ref startTick, "startTick");
+        Scribe_Values.Look(ref endTick, "endTick");
+        Scribe_Values.Look(ref nextAgeTick, "nextAgeTick");
+        Scribe_Values.Look(ref durationTicks, "durationTicks", 2500);
+        Scribe_Values.Look(ref tickIntervalTicks, "tickIntervalTicks", 60);
+        Scribe_Values.Look(ref startAgeTicks, "startAgeTicks");
+        Scribe_Defs.Look(ref markerHediff, "markerHediff");
+        Scribe_Defs.Look(ref collapseMoteDef, "collapseMoteDef");
+        Scribe_Defs.Look(ref effectSoundDef, "effectSoundDef");
+        Scribe_Values.Look(ref collapseMoteScale, "collapseMoteScale", 1f);
+        Scribe_Values.Look(ref reducedCast, "power_reducedCast");
+        Scribe_Values.Look(ref ageBudget, "ageBudget");
+        Scribe_Values.Look(ref ageAdded, "ageAdded");
+    }
+
+    internal void RestoreLegacyErasure()
+    {
+        if (reducedCast || nextAgeTick <= startTick || pawn?.ageTracker == null || pawn.Dead) return;
+        int interval = Math.Max(1, tickIntervalTicks);
+        int elapsed = nextAgeTick < endTick ? Math.Max(0, nextAgeTick - startTick - interval)
+            : Math.Max(0, (endTick - startTick - 1) / interval * interval);
+        long ageAfterErasure = (long)Math.Floor(startAgeTicks
+            * (Math.Max(0, endTick - startTick - elapsed) / (double)Math.Max(1, durationTicks)));
+        pawn.ageTracker.AgeBiologicalTicks += Math.Max(0L, startAgeTicks - ageAfterErasure);
+    }
+}
+
+public class GameComponent_MingyuanTimeBurn : GameComponent
+{
+    private List<MingyuanTimeBurnRecord> records = new();
+    private int nextProcessTick;
+
+    public GameComponent_MingyuanTimeBurn(Game game) { }
+
+    public bool Cancel(Pawn pawn)
+    {
+        if (pawn == null) return false;
+        bool removed = false;
+        for (int i = records.Count - 1; i >= 0; i--)
         {
-            base.ExposeData();
-            Scribe_Collections.Look(ref records, "mingyuanTimeBurnRecords", LookMode.Deep);
-            Scribe_Values.Look(ref nextProcessTick, "nextProcessTick", 0);
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                records ??= new();
-            }
+            MingyuanTimeBurnRecord record = records[i];
+            if (record.pawn != pawn) continue;
+            records.RemoveAt(i);
+            if (pawn.ageTracker != null && MingyuanUtility.HasHediff(pawn, record.markerHediff))
+                pawn.ageTracker.AgeBiologicalTicks = Math.Max(0L, pawn.ageTracker.AgeBiologicalTicks - record.ageAdded);
+            removed = true;
         }
+        RemoveMarker(pawn, MingyuanUtility.TimeBurnFrozenDef);
+        return removed;
+    }
 
-        private static int NextDueTick(MingyuanTimeBurnRecord record)
+    public void Register(Pawn pawn, Pawn caster)
+    {
+        var props = MingyuanTimeBurnUtility.PropsFor(caster);
+        if (MingyuanPowerBalance.Sealed || !MingyuanTimeBurnUtility.CanAge(pawn) || props == null || props.durationTicks <= 0) return;
+        HediffDef marker = MingyuanUtility.TimeBurnFrozenDef;
+        for (int i = records.Count - 1; i >= 0; i--)
         {
-            if (record == null)
-            {
-                return int.MaxValue;
-            }
-
-            int nextAge = record.nextAgeTick > 0 ? record.nextAgeTick : record.endTick;
-            return Mathf.Min(record.endTick, nextAge);
+            if (records[i].pawn != pawn) continue;
+            // Active applications keep their original deadline and budget.
+            if (MingyuanUtility.HasHediff(pawn, marker)) return;
+            records.RemoveAt(i);
         }
-
-        private static long CalculateAge(MingyuanTimeBurnRecord record, int tick)
+        if (MingyuanUtility.EnsureHediff(pawn, marker) == null) return;
+        int tick = Find.TickManager.TicksGame;
+        int interval = Mathf.Clamp(props.tickIntervalTicks, 1, props.durationTicks);
+        records.Add(new MingyuanTimeBurnRecord
         {
-            int remainingTicks = Mathf.Max(0, record.endTick - tick);
-            if (remainingTicks <= 0 || record.durationTicks <= 0 || record.startAgeTicks <= 0L)
-            {
-                return 0L;
-            }
+            pawn = pawn, caster = caster, markerHediff = marker, startTick = tick,
+            endTick = tick + props.durationTicks, durationTicks = props.durationTicks,
+            tickIntervalTicks = interval, nextAgeTick = tick + interval,
+            startAgeTicks = pawn.ageTracker.AgeBiologicalTicks, ageBudget = MingyuanTimeBurnRecord.AgeBudget,
+            collapseMoteDef = props.collapseMoteDef, collapseMoteScale = props.collapseMoteScale, effectSoundDef = props.effectSoundDef
+        });
+        nextProcessTick = Math.Min(nextProcessTick, tick + interval);
+        MingyuanUtility.TryMakeStaticMote(pawn.PositionHeld, pawn.MapHeld, props.startMoteDef, props.startMoteScale);
+    }
 
-            return Math.Max(0L, (long)Math.Floor((double)record.startAgeTicks * remainingTicks / record.durationTicks));
-        }
+    public override void GameComponentTick()
+    {
+        int now = Find.TickManager.TicksGame;
+        if (records.Count == 0 || now < nextProcessTick) return;
+        nextProcessTick = int.MaxValue;
 
-        private static void FinalizePawn(MingyuanTimeBurnRecord record)
+        for (int i = records.Count - 1; i >= 0; i--)
         {
+            MingyuanTimeBurnRecord record = records[i];
             Pawn pawn = record.pawn;
-            if (pawn == null || pawn.Destroyed || pawn.Dead)
+            if (MingyuanPowerBalance.Sealed || !MingyuanTimeBurnUtility.CanAge(pawn)
+                || !MingyuanUtility.HasHediff(pawn, record.markerHediff))
             {
-                return;
+                records.RemoveAt(i);
+                RemoveMarker(pawn, record.markerHediff);
+                continue;
             }
-
-            Map map = pawn.MapHeld;
-            IntVec3 position = pawn.PositionHeld;
-            RemoveMarker(pawn, record.markerHediff);
-            MingyuanTimeBurnUtility.PlayEffectSound(record.effectSoundDef, position, map);
-            MingyuanTimeBurnUtility.TryMakeStaticMote(position, map, record.collapseMoteDef, record.collapseMoteScale);
-
-            bool isMechanoid = pawn.RaceProps?.IsMechanoid ?? false;
-            if (ShouldFinalizeWithoutCorpse(pawn, isMechanoid))
+            if (now >= record.nextAgeTick)
             {
-                FinalizePawnWithoutCorpse(pawn, map, position);
-                DropMechRemains(record, map, position, isMechanoid);
-                return;
-            }
+                long scheduled = record.ageBudget * Math.Clamp(now - record.startTick, 0, record.durationTicks) / record.durationTicks;
+                long before = pawn.ageTracker.AgeBiologicalTicks;
+                long increase = Math.Max(0L, scheduled - record.ageAdded);
+                float expectancy = pawn.RaceProps.lifeExpectancy;
+                bool finiteLifespan = float.IsFinite(expectancy) && expectancy > 0f
+                    && !(pawn.genes?.BiologicalAgeTickFactor <= 0f);
+                double lifespan = (double)expectancy * GenDate.TicksPerYear;
+                if (finiteLifespan)
+                    increase = Math.Min(increase, (long)Math.Clamp(Math.Ceiling(lifespan - before), 0d, increase));
 
-            DamageInfo dinfo = new(DamageDefOf.Burn, 1f, 999f, -1f, record.caster);
-            dinfo.SetIgnoreArmor(true);
-            dinfo.SetIgnoreInstantKillProtection(true);
-            pawn.Kill(dinfo);
+                pawn.ageTracker.AgeBiologicalTicks = before + increase;
+                record.ageAdded += increase;
+                bool expired = finiteLifespan && pawn.ageTracker.AgeBiologicalTicks >= lifespan;
+                if (expired || now >= record.endTick)
+                {
+                    records.RemoveAt(i);
+                    RemoveMarker(pawn, record.markerHediff);
+                    if (expired && !pawn.Dead && !pawn.Destroyed)
+                    {
+                        if (pawn.MapHeld is { } map)
+                            record.effectSoundDef?.PlayOneShot(new TargetInfo(pawn.PositionHeld, map));
+                        MingyuanUtility.TryMakeStaticMote(pawn.PositionHeld, pawn.MapHeld, record.collapseMoteDef, record.collapseMoteScale);
+                        pawn.Kill(new DamageInfo(MX_MingyuanDefOf.MX_Mingyuan_OldAge, 0f, instigator: record.caster));
+                    }
+                    continue;
+                }
+                record.nextAgeTick = Math.Min(now + record.tickIntervalTicks, record.endTick);
+            }
+            nextProcessTick = Math.Min(nextProcessTick, record.nextAgeTick);
         }
+    }
 
-        private static bool ShouldFinalizeWithoutCorpse(Pawn pawn, bool isMechanoid)
+    public override void LoadedGame()
+    {
+        nextProcessTick = int.MaxValue;
+        for (int i = records.Count - 1; i >= 0; i--)
         {
-            return isMechanoid || pawn?.kindDef == null;
+            MingyuanTimeBurnRecord record = records[i];
+            if (record != null && record.ageBudget > 0 && record.durationTicks > 0)
+            {
+                nextProcessTick = Math.Min(nextProcessTick, record.nextAgeTick);
+                continue;
+            }
+            records.RemoveAt(i);
+            if (record == null) continue;
+            record.RestoreLegacyErasure();
+            RemoveMarker(record.pawn, record.markerHediff ?? MingyuanUtility.TimeBurnFrozenDef);
         }
+    }
 
-        private static void FinalizePawnWithoutCorpse(Pawn pawn, Map map, IntVec3 position)
-        {
-            if (pawn == null || pawn.Destroyed)
-            {
-                return;
-            }
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Collections.Look(ref records, "mingyuanTimeBurnRecords", LookMode.Deep);
+        Scribe_Values.Look(ref nextProcessTick, "nextProcessTick");
+        if (Scribe.mode == LoadSaveMode.PostLoadInit) records ??= new();
+    }
 
-            if (!pawn.Dead)
-            {
-                pawn.health?.SetDead();
-            }
-
-            if (!pawn.Destroyed)
-            {
-                pawn.Destroy(DestroyMode.Vanish);
-            }
-        }
-
-        private static void DropMechRemains(MingyuanTimeBurnRecord record, Map map, IntVec3 position, bool isMechanoid)
-        {
-            if (!isMechanoid || map == null)
-            {
-                return;
-            }
-
-            MingyuanTimeBurnUtility.DropThing(ThingDefOf.Steel, record.mechSteelCount, position, map);
-            MingyuanTimeBurnUtility.DropThing(ThingDefOf.Plasteel, record.mechPlasteelCount, position, map);
-        }
-
-        private static void RemoveMarker(Pawn pawn, HediffDef markerHediff)
-        {
-            if (pawn?.health == null || markerHediff == null)
-            {
-                return;
-            }
-
-            var hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = hediffs.Count - 1; i >= 0; i--)
-                if (hediffs[i].def == markerHediff) pawn.health.RemoveHediff(hediffs[i]);
-        }
+    private static void RemoveMarker(Pawn pawn, HediffDef marker)
+    {
+        if (marker != null && pawn?.health?.hediffSet.GetFirstHediffOfDef(marker) is { } hediff)
+            pawn.health.RemoveHediff(hediff);
     }
 }

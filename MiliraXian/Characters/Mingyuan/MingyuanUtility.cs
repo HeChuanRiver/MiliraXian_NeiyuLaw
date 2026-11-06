@@ -18,9 +18,6 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static bool SuppressOnHitLifeBurn;
 
-        private static HediffDef cachedLifeBurnPropsDef;
-        private static HediffCompProperties_MingyuanLifeBurn cachedLifeBurnProps;
-
         public static HediffDef LifeBurnDef => MX_MingyuanDefOf.MX_Mingyuan_LifeBurn ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_LifeBurn");
         public static HediffDef SelfBurnDef => MX_MingyuanDefOf.MX_Mingyuan_SelfBurn ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_SelfBurn");
         public static HediffDef BurningBodyDef => MX_MingyuanDefOf.MX_Mingyuan_BurningBody ?? DefDatabase<HediffDef>.GetNamedSilentFail("MX_Mingyuan_BurningBody");
@@ -132,16 +129,23 @@ namespace MiliraXian.Characters.Mingyuan
             return comp != null && comp.TryTriggerBurstNow(instigator);
         }
 
-        public static float ConsumeLifeBurn(Pawn target)
+        public static float ConsumeLifeBurn(Pawn target, float maximumLayers = float.PositiveInfinity)
         {
             if (target?.health?.hediffSet == null) return 0f;
             float layers = 0f;
             List<Hediff> hediffs = target.health.hediffSet.hediffs;
-            for (int i = hediffs.Count - 1; i >= 0; i--)
+            for (int i = hediffs.Count - 1; i >= 0 && layers < maximumLayers; i--)
             {
-                if (hediffs[i].def != LifeBurnDef) continue;
-                layers += Mathf.Max(0f, hediffs[i].Severity);
-                target.health.RemoveHediff(hediffs[i]);
+                Hediff hediff = hediffs[i];
+                if (hediff.def != LifeBurnDef) continue;
+                float consumed = Mathf.Min(Mathf.Max(0f, hediff.Severity), maximumLayers - layers);
+                layers += consumed;
+                if (consumed >= hediff.Severity) target.health.RemoveHediff(hediff);
+                else
+                {
+                    hediff.Severity -= consumed;
+                    target.health.Notify_HediffChanged(hediff);
+                }
             }
             return layers;
         }
@@ -210,23 +214,8 @@ namespace MiliraXian.Characters.Mingyuan
         public static float GetLifeBurnExecuteThreshold(Pawn pawn)
         {
             if (MingyuanPowerBalance.Sealed) return 100f;
-            if (pawn?.health == null)
-            {
-                return 0f;
-            }
-
-            Hediff existing = pawn.health.hediffSet?.GetFirstHediffOfDef(LifeBurnDef);
-            HediffComp_MingyuanLifeBurn existingComp =
-                (existing as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
-            if (existingComp != null)
-            {
-                return existingComp.ExecuteThreshold;
-            }
-
-            float lethalThreshold = pawn.health.LethalDamageThreshold;
-            HediffCompProperties_MingyuanLifeBurn props = GetLifeBurnProps();
-            float multiplier = props?.executeHealthScaleMultiplier ?? 10f;
-            return Mathf.Max(1f, lethalThreshold * Mathf.Max(0.01f, multiplier));
+            if (pawn == null) return 0f;
+            return Mathf.Max(1000f, Mathf.Floor(15f * pawn.HealthScale) * 100f);
         }
 
         public static float GetLifeBurnRemainingToExecute(Pawn pawn)
@@ -237,36 +226,6 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             return Mathf.Max(0f, GetLifeBurnExecuteThreshold(pawn) - GetLifeBurnLayers(pawn));
-        }
-
-        private static HediffCompProperties_MingyuanLifeBurn GetLifeBurnProps()
-        {
-            HediffDef def = LifeBurnDef;
-            if (cachedLifeBurnPropsDef == def)
-            {
-                return cachedLifeBurnProps;
-            }
-
-            cachedLifeBurnPropsDef = def;
-            cachedLifeBurnProps = null;
-            List<HediffCompProperties> comps = def?.comps;
-            if (comps == null)
-            {
-                return null;
-            }
-
-            for (int i = 0; i < comps.Count; i++)
-            {
-                HediffCompProperties_MingyuanLifeBurn lifeBurnProps =
-                    comps[i] as HediffCompProperties_MingyuanLifeBurn;
-                if (lifeBurnProps != null)
-                {
-                    cachedLifeBurnProps = lifeBurnProps;
-                    break;
-                }
-            }
-
-            return cachedLifeBurnProps;
         }
 
         public static float GetSelfBurnLayers(Pawn pawn)
@@ -432,6 +391,11 @@ namespace MiliraXian.Characters.Mingyuan
             dinfo.SetIgnoreArmor(true);
             dinfo.SetIgnoreInstantKillProtection(true);
             dinfo.SetApplyAllDamage(true);
+            return ApplyDamageWithoutLifeBurn(target, dinfo);
+        }
+
+        internal static DamageWorker.DamageResult ApplyDamageWithoutLifeBurn(Thing target, DamageInfo dinfo)
+        {
             bool previousSuppression = SuppressOnHitLifeBurn;
             try
             {
@@ -478,32 +442,17 @@ namespace MiliraXian.Characters.Mingyuan
             return true;
         }
 
-        public static void HealInjuriesIncludingScars(Pawn pawn, float amount)
+        public static void HealOneInjury(Pawn pawn)
         {
-            if (pawn?.health?.hediffSet == null || pawn.Dead || amount <= 0f)
+            HediffSet set = pawn.health.hediffSet;
+            Hediff_Injury worst = null;
+            foreach (Hediff hediff in set.hediffs)
             {
-                return;
+                if (hediff is Hediff_Injury { Part: { } part, Severity: > 0f } injury
+                    && (worst == null || injury.Severity > worst.Severity) && !set.PartIsMissing(part))
+                    worst = injury;
             }
-
-            List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-            for (int i = hediffs.Count - 1; i >= 0 && amount > 0f; i--)
-            {
-                Hediff_Injury injury = hediffs[i] as Hediff_Injury;
-                if (injury == null || injury.Severity <= 0f)
-                {
-                    continue;
-                }
-
-                float heal = Mathf.Min(amount, injury.Severity);
-                injury.Heal(heal);
-                amount -= heal;
-            }
-        }
-
-        public static bool IsHeatOrExplosionDamage(DamageDef def)
-        {
-            return def != null
-                   && (def.isExplosive || def.armorCategory?.armorRatingStat == StatDefOf.ArmorRating_Heat);
+            worst?.Heal(worst.Severity);
         }
 
         public static void ClearControlStates(Pawn pawn)

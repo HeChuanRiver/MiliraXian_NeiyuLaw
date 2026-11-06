@@ -11,16 +11,12 @@ namespace MiliraXian.Characters.Mingyuan
     public class HediffCompProperties_MingyuanLifeBurn : HediffCompProperties
     {
         public int tickInterval = 120;
-        public float baseDamage = 0.5f;
-        public float damagePer100Layers = 0.25f;
-        public float needDrainPer100Layers = 0.01f;
-        public float ageTicksPerLayer = 60f;
+        public float baseDamage = 10f;
+        public float damagePer100Layers = 2.5f;
         public float transferRadius = 30f;
         public float deathTransferProgressFraction = 0.1f;
-        public float executeHealthScaleMultiplier = 10f;
-        public float burstDamageMultiplier = 1f;
         public float burnSelfStackFraction = 0.05f;
-        public int decayDelayTicks = 1800;
+        public int decayDelayTicks = 600;
         public float decayFraction = 0.1f;
         public float removeBelowLayers = 0.5f;
         public int transferVisualLimit = 3;
@@ -50,26 +46,20 @@ namespace MiliraXian.Characters.Mingyuan
         private int ticksToNextDamage;
         private int lastExternalStackTick;
         private bool burstVisualSpawnedForDeath;
+        private int pendingBurstTick;
+        private bool executingBurst;
 
         public HediffCompProperties_MingyuanLifeBurn PropsLifeBurn => (HediffCompProperties_MingyuanLifeBurn)props;
 
         public float CurrentLayers => Mathf.Max(0f, parent?.Severity ?? 0f);
 
-        public float ExecuteThreshold
-        {
-            get
-            {
-                if (MingyuanPowerBalance.Sealed) return 100f;
-                float lethalThreshold = Pawn?.health?.LethalDamageThreshold ?? ((Pawn?.HealthScale ?? 1f) * 150f);
-                return Mathf.Max(1f, lethalThreshold * Mathf.Max(0.01f, PropsLifeBurn.executeHealthScaleMultiplier));
-            }
-        }
+        public float ExecuteThreshold => MingyuanUtility.GetLifeBurnExecuteThreshold(Pawn);
 
         public float RemainingToExecute => Mathf.Max(0f, ExecuteThreshold - CurrentLayers);
 
         public float ExecuteProgress => Mathf.Clamp01(CurrentLayers / ExecuteThreshold);
 
-        public float BurstDamage => MingyuanPowerBalance.Sealed ? 0f : Mathf.Max(Pawn?.health?.LethalDamageThreshold ?? 1f, ExecuteThreshold * Mathf.Max(0.01f, PropsLifeBurn.burstDamageMultiplier));
+        public float BurstDamage => MingyuanPowerBalance.Sealed ? 0f : ExecuteThreshold;
 
         public override string CompLabelInBracketsExtra => Mathf.RoundToInt(CurrentLayers) + "/" + Mathf.RoundToInt(ExecuteThreshold);
 
@@ -84,14 +74,11 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (MingyuanPowerBalance.Sealed) return null;
                 float layers = CurrentLayers;
-                float per100Percent = Mathf.Min(95f, layers / 100f);
-                float increasedPercent = per100Percent;
+                float moveAndWork = Mathf.Min(60f, layers / 100f * 5f);
+                float combat = MingyuanStatUtility.LifeBurnCombatChange(layers) * 100f;
                 float periodicDamage = PeriodicDamageFor(layers);
                 float selfStack = layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction);
-                float needDrainPercent = PropsLifeBurn.needDrainPer100Layers * (layers / 100f) * 100f;
-                int ageTicks = Mathf.RoundToInt(layers * PropsLifeBurn.ageTicksPerLayer);
-                int equipmentLoss = HitPointLossFor(layers);
-                int decaySeconds = Mathf.CeilToInt(Mathf.Max(0, PropsLifeBurn.decayDelayTicks) / 60f);
+                int waitSeconds = Mathf.CeilToInt(Mathf.Max(0, PropsLifeBurn.decayDelayTicks - (CurrentTick - lastExternalStackTick)) / 60f);
 
                 StringBuilder builder = new();
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipCurrentLayers".Translate(FormatNumber(layers)));
@@ -102,11 +89,13 @@ namespace MiliraXian.Characters.Mingyuan
                 builder.AppendLine();
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipPeriodicDamage".Translate(FormatNumber(periodicDamage)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipSelfStack".Translate(FormatNumber(selfStack)));
-                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDecay".Translate(decaySeconds.ToString(), FormatPercent(PropsLifeBurn.decayFraction * 100f)));
+                builder.AppendLine(waitSeconds > 0
+                    ? "MX_Mingyuan_LifeBurn_TipDecayWait".Translate(waitSeconds, FormatPercent(PropsLifeBurn.decayFraction * 100f))
+                    : "MX_Mingyuan_LifeBurn_TipDecaying".Translate(FormatPercent(PropsLifeBurn.decayFraction * 100f)));
                 builder.AppendLine();
-                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffDown".Translate(FormatPercent(per100Percent)));
-                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffUp".Translate(FormatPercent(increasedPercent)));
-                builder.AppendLine("MX_Mingyuan_LifeBurn_TipNeedsAgeGear".Translate(FormatPercent(needDrainPercent), ageTicks.ToString(), equipmentLoss.ToString()));
+                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffMoveWork".Translate(FormatPercent(moveAndWork)));
+                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffDown".Translate(FormatPercent(combat)));
+                builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffUp".Translate(FormatPercent(combat)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipTransfer".Translate(
                     FormatPercent(PropsLifeBurn.deathTransferProgressFraction * 100f),
                     PropsLifeBurn.transferRadius.ToString("F0"),
@@ -121,6 +110,7 @@ namespace MiliraXian.Characters.Mingyuan
             base.CompExposeData();
             Scribe_References.Look(ref instigator, "instigator", false);
             Scribe_Values.Look(ref ticksToNextDamage, "ticksToNextDamage", 0);
+            Scribe_Values.Look(ref pendingBurstTick, "pendingBurstTick", 0);
             Scribe_Values.Look(ref lastExternalStackTick, "lastExternalStackTick", 0);
         }
 
@@ -154,14 +144,29 @@ namespace MiliraXian.Characters.Mingyuan
                 return false;
             }
 
+            if (executingBurst || pendingBurstTick > 0) return true;
             SetInstigator(burstInstigator);
-            if (parent.Severity <= 0f)
-            {
-                parent.Severity = Mathf.Max(0.0001f, parent.def.initialSeverity);
-            }
-
-            TriggerBurstDamage();
+            ExecuteOrQueueBurst();
             return true;
+        }
+
+        private void ExecuteOrQueueBurst()
+        {
+            if (TryUseTickBudget(ref burstBudgetTick, ref burstExecutionsThisTick, PropsLifeBurn.maxBurstExecutionsPerTick))
+            {
+                pendingBurstTick = 0;
+                TriggerBurstDamage();
+            }
+            else
+            {
+                pendingBurstTick = CurrentTick + BurstRetryDelayTicks();
+            }
+        }
+
+        public override void CompPostPostAdd(DamageInfo? dinfo)
+        {
+            base.CompPostPostAdd(dinfo);
+            ticksToNextDamage = Mathf.Max(1, PropsLifeBurn.tickInterval);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -183,6 +188,12 @@ namespace MiliraXian.Characters.Mingyuan
                 lastExternalStackTick = CurrentTick;
             }
 
+            if (pendingBurstTick > 0)
+            {
+                if (CurrentTick >= pendingBurstTick) ExecuteOrQueueBurst();
+                return;
+            }
+
             ticksToNextDamage--;
             if (ticksToNextDamage > 0)
             {
@@ -202,145 +213,37 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            DrainNeeds(layers);
-            AgePawn(layers);
-            DamageEquipment(layers);
+            MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, PeriodicDamageFor(layers), instigator);
+            if (Pawn.Dead || !Pawn.health.hediffSet.hediffs.Contains(parent)) return;
 
-            float damage = PeriodicDamageFor(layers);
-            MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, damage, instigator);
-            if (Pawn.Dead)
-            {
-                return;
-            }
-
-            AddInternalLayers(layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction));
-            ApplyDecayIfNeeded();
-            if (Pawn.Dead || parent == null || CurrentLayers <= 0f)
-            {
-                return;
-            }
-
-            if (CurrentLayers >= ExecuteThreshold)
-            {
-                if (TryUseTickBudget(ref burstBudgetTick, ref burstExecutionsThisTick, PropsLifeBurn.maxBurstExecutionsPerTick))
-                {
-                    TriggerBurstDamage();
-                }
-                else
-                {
-                    ticksToNextDamage = BurstRetryDelayTicks();
-                }
-            }
-        }
-
-        private void DrainNeeds(float layers)
-        {
-            if (Pawn.needs == null || Pawn.needs.AllNeeds == null)
-            {
-                return;
-            }
-
-            float amount = PropsLifeBurn.needDrainPer100Layers * (layers / 100f);
-            for (int i = 0; i < Pawn.needs.AllNeeds.Count; i++)
-            {
-                Need need = Pawn.needs.AllNeeds[i];
-                if (need == null || need.def?.defName == "Mood")
-                {
-                    continue;
-                }
-
-                need.CurLevel = Mathf.Max(0f, need.CurLevel - amount);
-            }
-        }
-
-        private void AgePawn(float layers)
-        {
-            if (Pawn.ageTracker == null)
-            {
-                return;
-            }
-
-            long addedTicks = Mathf.RoundToInt(layers * PropsLifeBurn.ageTicksPerLayer);
-            if (addedTicks > 0)
-            {
-                Pawn.ageTracker.AgeBiologicalTicks += addedTicks;
-            }
-        }
-
-        private void DamageEquipment(float layers)
-        {
-            if (MingyuanPowerBalance.Sealed) return;
-            int hitPointLoss = HitPointLossFor(layers);
-            if (Pawn.apparel?.WornApparel != null)
-            {
-                for (int i = 0; i < Pawn.apparel.WornApparel.Count; i++)
-                {
-                    DamageThingHitPoints(Pawn.apparel.WornApparel[i], hitPointLoss);
-                }
-            }
-
-            if (Pawn.equipment?.AllEquipmentListForReading != null)
-            {
-                List<ThingWithComps> equipment = Pawn.equipment.AllEquipmentListForReading;
-                for (int i = 0; i < equipment.Count; i++)
-                {
-                    DamageThingHitPoints(equipment[i], hitPointLoss);
-                }
-            }
-        }
-
-        private void DamageThingHitPoints(Thing thing, int amount)
-        {
-            if (thing == null || thing.Destroyed || thing.def.useHitPoints == false)
-            {
-                return;
-            }
-
-            thing.HitPoints = Mathf.Max(1, thing.HitPoints - amount);
-        }
-
-        private void AddInternalLayers(float layers)
-        {
-            if (layers <= 0f || Pawn == null || Pawn.Dead)
-            {
-                return;
-            }
-
-            parent.Severity = Mathf.Clamp(parent.Severity + layers, 0f, parent.def.maxSeverity);
-            Pawn.health.Notify_HediffChanged(parent);
-        }
-
-        private void ApplyDecayIfNeeded()
-        {
-            if (PropsLifeBurn.decayDelayTicks <= 0 || PropsLifeBurn.decayFraction <= 0f)
-            {
-                return;
-            }
-
-            if (CurrentTick - lastExternalStackTick < PropsLifeBurn.decayDelayTicks)
-            {
-                return;
-            }
-
-            parent.Severity = Mathf.Max(0f, parent.Severity - parent.Severity * Mathf.Clamp01(PropsLifeBurn.decayFraction));
-            if (parent.Severity <= Mathf.Max(0f, PropsLifeBurn.removeBelowLayers))
+            float updated = CurrentLayers + layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction);
+            if (CurrentTick - lastExternalStackTick >= PropsLifeBurn.decayDelayTicks)
+                updated *= 1f - Mathf.Clamp01(PropsLifeBurn.decayFraction);
+            if (updated <= PropsLifeBurn.removeBelowLayers)
             {
                 Pawn.health.RemoveHediff(parent);
+                return;
             }
-            else
-            {
-                Pawn.health.Notify_HediffChanged(parent);
-            }
+
+            parent.Severity = Mathf.Min(parent.def.maxSeverity, updated);
+            Pawn.health.Notify_HediffChanged(parent);
+            if (CurrentLayers >= ExecuteThreshold) ExecuteOrQueueBurst();
         }
 
         private void TriggerBurstDamage()
         {
-            burstVisualSpawnedForDeath = true;
-            SpawnBurstMote(Pawn.MapHeld, Pawn.PositionHeld);
-            MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, BurstDamage, instigator);
-            if (!Pawn.Dead && Pawn.health?.hediffSet?.hediffs?.Contains(parent) == true)
+            executingBurst = true;
+            try
             {
-                Pawn.health.RemoveHediff(parent);
+                burstVisualSpawnedForDeath = true;
+                SpawnBurstMote(Pawn.MapHeld, Pawn.PositionHeld);
+                MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, BurstDamage, instigator);
+                if (!Pawn.Dead && Pawn.health.hediffSet.hediffs.Contains(parent))
+                    Pawn.health.RemoveHediff(parent);
+            }
+            finally
+            {
+                executingBurst = false;
             }
         }
 
@@ -447,7 +350,7 @@ namespace MiliraXian.Characters.Mingyuan
                     }
 
                     MarkDeathTransferReceived(target, currentTick);
-                    MingyuanUtility.AddLifeBurn(target, instigator, ExecuteThresholdFor(target) * transferProgress);
+                    MingyuanUtility.AddLifeBurn(target, instigator, MingyuanUtility.GetLifeBurnExecuteThreshold(target) * transferProgress);
                     if (i < visualCount)
                     {
                         SpawnTransferTrail(map, originCell, target);
@@ -480,20 +383,9 @@ namespace MiliraXian.Characters.Mingyuan
             FleckMaker.ConnectingLine(originCell.ToVector3Shifted(), target.DrawPos, lineDef, map, 0.10f);
         }
 
-        private float ExecuteThresholdFor(Pawn pawn)
-        {
-            float lethalThreshold = pawn?.health?.LethalDamageThreshold ?? ((pawn?.HealthScale ?? 1f) * 150f);
-            return Mathf.Max(1f, lethalThreshold * Mathf.Max(0.01f, PropsLifeBurn.executeHealthScaleMultiplier));
-        }
-
         private float PeriodicDamageFor(float layers)
         {
             return Mathf.Max(0f, PropsLifeBurn.baseDamage + (layers / 100f) * PropsLifeBurn.damagePer100Layers);
-        }
-
-        private static int HitPointLossFor(float layers)
-        {
-            return Mathf.Max(1, Mathf.RoundToInt(layers / 100f));
         }
 
         private static int CurrentTick => Find.TickManager?.TicksGame ?? 0;
@@ -831,6 +723,7 @@ namespace MiliraXian.Characters.Mingyuan
             // Spend before damage callbacks, so the explosion cannot inherit the
             // outgoing Overburn bonus or be released recursively by a hit callback.
             parent.Severity = PropsSelfBurn.overburnThreshold;
+            if (!Pawn.Spawned || Pawn.Dead) return;
             MingyuanSkillVfx.Play(Pawn.Map, Pawn.DrawPos, MingyuanSkillVisualKind.OverburnRelease, 5f);
             bool suppression = MingyuanUtility.SuppressOnHitLifeBurn;
             try
@@ -860,13 +753,17 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            float minimumLayers = MingyuanUtility.IsMingyuan(Pawn) ? 1f : 0f;
+            float minimumLayers = HasOmenFloor(Pawn) ? 1f : 0f;
             parent.Severity = Mathf.Max(minimumLayers, parent.Severity - Mathf.Max(0f, PropsSelfBurn.nonCombatDecayLayers));
             if (parent.Severity <= 0f && !MingyuanUtility.IsMingyuan(Pawn))
             {
                 Pawn.health.RemoveHediff(parent);
             }
         }
+
+        internal static bool HasOmenFloor(Pawn pawn) =>
+            MingyuanUtility.IsMingyuan(pawn)
+            && Current.Game?.GetComponent<GameComponent_MingyuanWhiteFlameQuest>()?.IsOmenFor(pawn) == true;
 
         private int CurrentChangeIntervalTicks()
         {
@@ -880,7 +777,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool IsOverburningNow()
         {
-            return (parent?.Severity ?? 0f) > PropsSelfBurn.overburnThreshold;
+            return MingyuanUtility.IsOverburning(Pawn);
         }
 
         private void UpdateOverburnVisuals()
@@ -1004,7 +901,8 @@ namespace MiliraXian.Characters.Mingyuan
                     Pawn.abilities.GainAbility(MX_MingyuanDefOf.MX_Mingyuan_Absorb);
                 absorptionChecked = true;
             }
-            if (Pawn.Drafted && Pawn.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.SelfBurnDef) == null)
+            if ((Pawn.Drafted || HediffComp_MingyuanSelfBurn.HasOmenFloor(Pawn))
+                && !MingyuanUtility.HasHediff(Pawn, MingyuanUtility.SelfBurnDef))
             {
                 MingyuanUtility.EnsureSelfBurnTracker(Pawn);
             }
@@ -1044,11 +942,13 @@ namespace MiliraXian.Characters.Mingyuan
     public class HediffCompProperties_MingyuanProtectiveFlameShield : HediffCompProperties
     {
         public float maxEnergy = 100f;
-        public int repairIntervalTicks = 600;
-        public float heatRefillEnergy = 2f;
-        public int heatRefillCooldownTicks = 60;
+        public int repairIntervalTicks = 120;
+        public float heatRefillEnergy = 1f;
+        public int heatRefillCooldownTicks = 150;
+        public float explosionRefillEnergy = 3f;
+        public int explosionRefillCooldownTicks = 600;
         public int selfBurnRefillIntervalTicks = 300;
-        public int selfBurnRefillCooldownTicks = 1800;
+        public int selfBurnRefillCooldownTicks = 600;
         public float selfBurnPerEnergy = 3f;
         public float selfBurnRefillMaxFractionOfCap = 0.3f;
         public int overburnDrainIntervalTicks = 300;
@@ -1072,6 +972,7 @@ namespace MiliraXian.Characters.Mingyuan
         private int ticksToOverburnDrain;
         private int selfBurnRefillCooldownTicksLeft;
         private int nextHeatRefillTick;
+        private int nextExplosionRefillTick;
 
         public HediffCompProperties_MingyuanProtectiveFlameShield PropsShield => (HediffCompProperties_MingyuanProtectiveFlameShield)props;
 
@@ -1121,16 +1022,24 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref ticksToOverburnDrain, "ticksToOverburnDrain", 0);
             Scribe_Values.Look(ref selfBurnRefillCooldownTicksLeft, "selfBurnRefillCooldownTicksLeft", 0);
             Scribe_Values.Look(ref nextHeatRefillTick, "nextHeatRefillTick", 0);
+            Scribe_Values.Look(ref nextExplosionRefillTick, "nextExplosionRefillTick", 0);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                ticksToRepair = Mathf.Min(ticksToRepair, RepairIntervalTicks);
+                selfBurnRefillCooldownTicksLeft = Mathf.Min(selfBurnRefillCooldownTicksLeft, PropsShield.selfBurnRefillCooldownTicks);
+            }
         }
 
-        public bool TryRefillFromHeat()
+        public void RefillFromAttack(bool explosion)
         {
-            if (MingyuanPowerBalance.Sealed || Find.TickManager == null) return false;
+            if (MingyuanPowerBalance.Sealed || Find.TickManager == null) return;
             int now = Find.TickManager.TicksGame;
-            if (now < nextHeatRefillTick || Energy >= PropsShield.maxEnergy) return false;
-            energy = Mathf.Min(PropsShield.maxEnergy, Energy + Mathf.Max(0f, PropsShield.heatRefillEnergy));
-            nextHeatRefillTick = now + Mathf.Max(1, PropsShield.heatRefillCooldownTicks);
-            return true;
+            ref int nextTick = ref (explosion ? ref nextExplosionRefillTick : ref nextHeatRefillTick);
+            if (now < nextTick || Energy >= PropsShield.maxEnergy) return;
+            float refill = explosion ? PropsShield.explosionRefillEnergy : PropsShield.heatRefillEnergy;
+            int cooldown = explosion ? PropsShield.explosionRefillCooldownTicks : PropsShield.heatRefillCooldownTicks;
+            energy = Mathf.Min(PropsShield.maxEnergy, Energy + Mathf.Max(0f, refill));
+            nextTick = now + Mathf.Max(1, cooldown);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -1165,10 +1074,20 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            if (TryRepairOneBodyPart())
+            List<BodyPartRecord> repaired = CombatTargetSnapshot.Rent(System.Array.Empty<BodyPartRecord>());
+            try
             {
-                energy = Mathf.Max(0f, energy - 1f);
-                TrySpawnShieldSelfBurnMote();
+                while (!Pawn.Dead && repaired.Count < 3 && Energy >= 1f
+                       && TryRepairOneBodyPart(repaired) is { } part)
+                {
+                    repaired.Add(part);
+                    energy -= 1f;
+                }
+                if (repaired.Count > 0) TrySpawnShieldSelfBurnMote();
+            }
+            finally
+            {
+                CombatTargetSnapshot.Return(repaired);
             }
         }
 
@@ -1193,13 +1112,13 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             ticksToSelfBurnRefill--;
-            if (ticksToSelfBurnRefill > 0 || selfBurnRefillCooldownTicksLeft > 0 || Energy >= PropsShield.maxEnergy)
+            if (ticksToSelfBurnRefill > 0)
             {
                 return;
             }
 
             ticksToSelfBurnRefill = SelfBurnRefillIntervalTicks;
-            if (TryConvertSelfBurnToShield())
+            if (selfBurnRefillCooldownTicksLeft <= 0 && TryConvertSelfBurnToShield())
             {
                 selfBurnRefillCooldownTicksLeft = Mathf.Max(1, PropsShield.selfBurnRefillCooldownTicks);
                 TrySpawnShieldSelfBurnMote();
@@ -1237,7 +1156,7 @@ namespace MiliraXian.Characters.Mingyuan
 
             float maxSpend = MaxSelfBurnToSpend();
             float available = Mathf.Min(MingyuanUtility.GetSelfBurnLayers(Pawn), maxSpend);
-            float restore = Mathf.Min(missingEnergy, available / Mathf.Max(0.001f, PropsShield.selfBurnPerEnergy));
+            float restore = Mathf.Floor(Mathf.Min(missingEnergy, available / Mathf.Max(0.001f, PropsShield.selfBurnPerEnergy)));
             if (restore <= 0f)
             {
                 return false;
@@ -1258,66 +1177,41 @@ namespace MiliraXian.Characters.Mingyuan
             return Mathf.Max(0f, MingyuanUtility.DefaultSelfBurnEffectiveCap * Mathf.Clamp01(PropsShield.selfBurnRefillMaxFractionOfCap));
         }
 
-        private bool TryRepairOneBodyPart()
+        private BodyPartRecord TryRepairOneBodyPart(List<BodyPartRecord> repaired)
         {
-            if (Pawn?.health?.hediffSet == null || Pawn.Dead)
+            HediffSet set = Pawn.health.hediffSet;
+            List<Hediff_MissingPart> missing = set.GetMissingPartsCommonAncestors();
+            for (int i = 0; i < missing.Count; i++)
             {
-                return false;
-            }
-
-            if (MingyuanPowerBalance.Sealed) return false;
-            List<Hediff_MissingPart> missingParts = Pawn.health.hediffSet.GetMissingPartsCommonAncestors();
-            if (!missingParts.NullOrEmpty())
-            {
-                for (int i = 0; i < missingParts.Count; i++)
-                {
-                    BodyPartRecord part = missingParts[i]?.Part;
-                    if (part != null)
-                    {
-                        Pawn.health.RestorePart(part);
-                        return true;
-                    }
-                }
+                BodyPartRecord part = missing[i].Part;
+                if (part == null || repaired.Contains(part)) continue;
+                Pawn.health.RestorePart(part);
+                if (!set.PartIsMissing(part)) return part;
             }
 
             BodyPartRecord bestPart = null;
             float bestSeverity = 0f;
-            List<Hediff> hediffs = Pawn.health.hediffSet.hediffs;
-            for (int i = 0; i < hediffs.Count; i++)
+            List<Hediff> hediffs = set.hediffs;
+            foreach (Hediff hediff in hediffs)
             {
-                Hediff_Injury injury = hediffs[i] as Hediff_Injury;
-                if (injury == null || injury.Severity <= 0f)
-                {
-                    continue;
-                }
-
-                float total = TotalInjurySeverityOnPart(injury.Part);
-                if (total > bestSeverity)
-                {
-                    bestSeverity = total;
-                    bestPart = injury.Part;
-                }
+                if (hediff is not Hediff_Injury { Part: { } part, Severity: > 0f }
+                    || repaired.Contains(part) || set.PartIsMissing(part)) continue;
+                float total = TotalInjurySeverityOnPart(part);
+                if (total <= bestSeverity) continue;
+                bestSeverity = total;
+                bestPart = part;
             }
-
-            if (bestSeverity <= 0f)
-            {
-                return false;
-            }
+            if (bestPart == null) return null;
 
             bool healed = false;
             for (int i = hediffs.Count - 1; i >= 0; i--)
             {
-                Hediff_Injury injury = hediffs[i] as Hediff_Injury;
-                if (injury == null || injury.Severity <= 0f || injury.Part != bestPart)
-                {
-                    continue;
-                }
-
-                injury.Heal(injury.Severity);
-                healed = true;
+                if (hediffs[i] is not Hediff_Injury { Severity: > 0f } injury || injury.Part != bestPart) continue;
+                float before = injury.Severity;
+                injury.Heal(before);
+                healed |= injury.Severity < before;
             }
-
-            return healed;
+            return healed ? bestPart : null;
         }
 
         private float TotalInjurySeverityOnPart(BodyPartRecord part)

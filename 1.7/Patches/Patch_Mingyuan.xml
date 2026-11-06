@@ -224,4 +224,14 @@
         </value>
     </Operation>
 
+    <!-- Building wealth uses MarketValueIgnoreHp, which inherits these parts. -->
+    <Operation Class="PatchOperationAdd">
+        <xpath>/Defs/StatDef[@Name='MarketValueBase']/parts</xpath>
+        <value>
+            <li Class="MiliraXian.Characters.Mingyuan.StatPart_MingyuanRebirthFlameMarketValue">
+                <priority>-100</priority>
+            </li>
+        </value>
+    </Operation>
+
 </Patch>

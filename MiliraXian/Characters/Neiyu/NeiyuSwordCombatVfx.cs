@@ -34,7 +34,7 @@ internal static class NeiyuSwordCombatVfx
     {
         if (equipment?.def != NeiyuSwordCombat.Config.sword) return;
         Pawn pawn = MXNeiyuShieldUtility.TryGetEquipmentOwnerPawn(equipment);
-        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution driver) return;
+        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution { IsSingle: false } driver) return;
         float p = driver.Progress;
         NeiyuSwordCombatDef c = NeiyuSwordCombat.Config;
         float angle = p < c.dashFraction ? Mathf.Lerp(-25f, -75f, p / c.dashFraction)
@@ -128,6 +128,17 @@ internal static class NeiyuSwordCombatVfx
         }
     }
 
+    internal static void SingleSound(Pawn pawn, Vector3 at, SoundDef sound) =>
+        Safely(() => sound?.PlayOneShot(new TargetInfo(at.ToIntVec3(), pawn.Map)));
+
+    internal static void SingleAfterimage(Pawn pawn, Vector3 at, Rot4 facing, int startTick, int duration,
+        JobDriver_NeiyuPostureExecution owner)
+    {
+        if (!Enabled || Intensity <= 0f) return;
+        Safely(() => pawn.Map.GetComponent<MapComponent_PawnAfterimages>().AddAfterimage(
+            pawn, at, facing, duration, .42f * Mathf.Min(1f, Intensity), Ice, owner, startTick));
+    }
+
     internal static void Deflect(Pawn defender, Pawn attacker, bool perfect) => Safely(() =>
     {
         Vector3 direction = attacker.DrawPos - defender.DrawPos;
@@ -202,10 +213,14 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 {
     private readonly record struct Flash(Pawn Pawn, Vector3 Position, Vector3 Direction, int Kind, int Tick, int Duration);
     private readonly List<Flash> flashes = new(32);
+    private readonly HashSet<JobDriver_NeiyuPostureExecution> volleys = new();
     private ArcaneParticleBatch batch;
     private int geometryTick = -1;
     private Vector3 geometryRight, geometryUp;
     private float geometryIntensity = -1f;
+
+    internal void TrackVolley(JobDriver_NeiyuPostureExecution execution) => volleys.Add(execution);
+    internal void UntrackVolley(JobDriver_NeiyuPostureExecution execution) => volleys.Remove(execution);
 
     internal void Add(Pawn pawn, Vector3 position, Vector3 direction, int kind)
     {
@@ -231,8 +246,11 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 
     public override void MapComponentDraw()
     {
-        if (Find.CurrentMap != map || !NeiyuSwordCombatVfx.Enabled || flashes.Count == 0
+        if (Find.CurrentMap != map || !NeiyuSwordCombatVfx.Enabled || (flashes.Count == 0 && volleys.Count == 0)
             || Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active || Find.Camera == null) return;
+        foreach (JobDriver_NeiyuPostureExecution execution in volleys)
+            execution.DrawSingleVolley();
+        if (flashes.Count == 0) return;
         batch ??= new ArcaneParticleBatch(MaterialPool.MatFrom(
             "Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow", ShaderDatabase.MoteGlow, Color.white));
         int now = NeiyuSwordCombat.Now;
@@ -340,6 +358,7 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 
     public override void MapRemoved()
     {
+        volleys.Clear();
         flashes.Clear(); batch?.Dispose(); batch = null;
         base.MapRemoved();
     }

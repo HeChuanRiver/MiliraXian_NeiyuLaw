@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using MiliraXian.Characters.Common;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -20,6 +21,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool destroyOldWeapon = true;
         public bool requirePrimary = true;
+        public bool reuseInventoryForm;
         public bool blockWhilePawnBusy;
         public int cooldownTicks = 0;
 
@@ -136,6 +138,10 @@ namespace MiliraXian.Characters.Neiyu
                 return false;
             }
 
+            if (location == HeldLocation.Inventory
+                && thing.TryGetComp<CompWeaponDropProtection>()?.BoundOwner is { } owner && owner != pawn)
+                return false;
+
             int currentIndex = comp.GetCurrentFormIndex(thing);
             if (currentIndex < 0)
             {
@@ -175,6 +181,9 @@ namespace MiliraXian.Characters.Neiyu
             bool onCooldown = Props.cooldownTicks > 0 && Find.TickManager.TicksGame - lastToggleTick < Props.cooldownTicks;
             bool pawnBusy = Props.blockWhilePawnBusy && PawnUnavailableForSwitch(context.Pawn);
             bool directSwitch = Props.formWeaponDefs.Count == 2;
+            if (directSwitch && FindStoredProtectedForm(context.Pawn, Props.formWeaponDefs[previewIndex]) != null)
+                return null;
+
             bool disabledWhileHunting = IsPrimaryWeaponLockedByHunting(context);
 
             string commandLabel = ResolveText(Props.commandLabel, "MX_ModeSwitch_CommandLabel");
@@ -379,24 +388,68 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            ThingDef stuff = targetDef.MadeFromStuff ? sourceThing.Stuff : null;
-            ThingWithComps newThing = ThingMaker.MakeThing(targetDef, stuff) as ThingWithComps;
-            if (newThing == null)
+            ThingOwner heldInventory = pawn.inventory?.innerContainer;
+            if (context.Location == HeldLocation.EquipmentPrimary
+                ? pawn.equipment?.Primary != sourceThing
+                : heldInventory?.Contains(sourceThing) != true)
+                return;
+
+            CompWeaponDropProtection sourceProtection = sourceThing.TryGetComp<CompWeaponDropProtection>();
+            if (sourceProtection?.Transferring == true
+                || (sourceProtection?.BoundOwner is { } owner && owner != pawn))
+                return;
+
+            if (FindStoredProtectedForm(pawn, targetDef, allowUnbound: true) is { } storedForm)
             {
-                Messages.Message("MX_ModeSwitch_TargetFormInvalidThing".Translate(targetDef.defName), pawn, MessageTypeDefOf.RejectInput, false);
+                WeaponDropProtectionUtility.EquipOrReject(pawn, storedForm, allowUnbound: true);
                 return;
             }
 
-            newThing.HitPoints = Math.Min(sourceThing.HitPoints, newThing.MaxHitPoints);
-
-            CompQuality qOld = sourceThing.TryGetComp<CompQuality>();
-            CompQuality qNew = newThing.TryGetComp<CompQuality>();
-            if (qOld != null && qNew != null)
+            ThingWithComps newThing = null;
+            if (Props.reuseInventoryForm && context.Location == HeldLocation.EquipmentPrimary && heldInventory != null)
             {
-                qNew.SetQuality(qOld.Quality, ArtGenerationContext.Colony);
+                for (int i = 0; i < heldInventory.Count; i++)
+                {
+                    if (heldInventory[i] is ThingWithComps alternate && alternate.def == targetDef
+                        && !alternate.HasComp<CompWeaponDropProtection>() && heldInventory.Remove(alternate))
+                    {
+                        newThing = alternate;
+                        break;
+                    }
+                }
             }
 
-            if (context.Location == HeldLocation.EquipmentPrimary)
+            if (newThing == null)
+            {
+                ThingDef stuff = targetDef.MadeFromStuff ? sourceThing.Stuff : null;
+                newThing = ThingMaker.MakeThing(targetDef, stuff) as ThingWithComps;
+                if (newThing == null)
+                {
+                    Messages.Message("MX_ModeSwitch_TargetFormInvalidThing".Translate(targetDef.defName), pawn, MessageTypeDefOf.RejectInput, false);
+                    return;
+                }
+
+                newThing.HitPoints = Math.Min(sourceThing.HitPoints, newThing.MaxHitPoints);
+
+                CompQuality qOld = sourceThing.TryGetComp<CompQuality>();
+                CompQuality qNew = newThing.TryGetComp<CompQuality>();
+                if (qOld != null && qNew != null)
+                {
+                    qNew.SetQuality(qOld.Quality, ArtGenerationContext.Colony);
+                }
+            }
+
+            if (Props.destroyOldWeapon && newThing.TryGetComp<CompWeaponDropProtection>() is { } newProtection)
+            {
+                newProtection.InheritFormOwner(sourceThing, pawn);
+                if (!TryReplaceProtectedForm(context, sourceProtection, newProtection))
+                {
+                    Messages.Message(WeaponDropProtectionUtility.Text("SwapFailed", "未能完成换装。"),
+                        pawn, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+            }
+            else if (context.Location == HeldLocation.EquipmentPrimary)
             {
                 if (pawn.equipment == null)
                 {
@@ -445,6 +498,78 @@ namespace MiliraXian.Characters.Neiyu
             if (newComp != null)
             {
                 newComp.lastToggleTick = tick;
+            }
+        }
+
+        private ThingWithComps FindStoredProtectedForm(Pawn pawn, ThingDef targetDef, bool allowUnbound = false)
+        {
+            if (!Props.reuseInventoryForm || pawn.inventory?.innerContainer is not { } inventory)
+                return null;
+
+            foreach (Thing item in inventory)
+            {
+                if (item is ThingWithComps form && form.def == targetDef
+                    && WeaponDropProtectionUtility.IsStoredWeapon(form, pawn, allowUnbound))
+                    return form;
+            }
+            return null;
+        }
+
+        private static bool TryReplaceProtectedForm(SwitchContext context, CompWeaponDropProtection sourceProtection,
+            CompWeaponDropProtection newProtection)
+        {
+            Pawn pawn = context.Pawn;
+            ThingWithComps source = context.SourceThing;
+            ThingWithComps replacement = newProtection.parent;
+            bool equipped = context.Location == HeldLocation.EquipmentPrimary;
+            ThingOwner holder = equipped ? pawn.equipment.GetDirectlyHeldThings() : pawn.inventory.innerContainer;
+            if (sourceProtection != null)
+                sourceProtection.Transferring = true;
+            newProtection.Transferring = true;
+
+            try
+            {
+                try
+                {
+                    if ((!equipped || (replacement.HasComp<CompEquippable>() && EquipmentUtility.CanEquip(replacement, pawn)))
+                        && holder.Remove(source) && !source.Spawned && source.ParentHolder == null)
+                    {
+                        if (equipped)
+                            pawn.equipment.AddEquipment(replacement);
+                        else
+                            holder.TryAdd(replacement, canMergeWithExistingStacks: false);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Log.Error($"[MiliraXian] Changing form of {source} for {pawn} raised an exception: {exception}");
+                }
+
+                if (equipped ? pawn.equipment.Primary == replacement : holder.Contains(replacement))
+                {
+                    if (source.Destroyed)
+                        return true;
+                    if (!source.Spawned && source.ParentHolder == null)
+                    {
+                        source.Destroy(DestroyMode.Vanish);
+                        return true;
+                    }
+
+                    // Another handler moved the old form during removal. Keep it in its new holder.
+                    replacement.Destroy(DestroyMode.Vanish);
+                    return false;
+                }
+
+                if (!replacement.Destroyed && !replacement.Spawned && replacement.ParentHolder == null)
+                    replacement.Destroy(DestroyMode.Vanish);
+                WeaponDropProtectionUtility.RestoreIfLoose(source, holder, pawn);
+                return false;
+            }
+            finally
+            {
+                newProtection.Transferring = false;
+                if (sourceProtection != null)
+                    sourceProtection.Transferring = false;
             }
         }
 

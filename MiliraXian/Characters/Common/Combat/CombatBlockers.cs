@@ -57,6 +57,7 @@ public abstract class CombatBlocker
 public interface IPostureExecutionDriver
 {
     Pawn Victim { get; }
+    bool DrivesExecutorPosition => false;
 }
 
 // Which blockers a melee block decision asks: all, only the ones that decide

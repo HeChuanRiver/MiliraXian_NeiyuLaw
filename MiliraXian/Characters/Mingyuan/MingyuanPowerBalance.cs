@@ -35,18 +35,9 @@ namespace MiliraXian.Characters.Mingyuan
             p.Stat(crown, "RangedCooldownFactor", 0f, true);
 
             var bow = ThingComp<CompProperties_MingyuanRainbowBow>("MX_Mingyuan_RainbowBow");
-            p.Field(bow, "focusWarmupSeconds", 3.2f);
-            p.Field(bow, "focusRange", 25.9f);
             p.Field(bow, "focusBaseDamage", 17f);
             p.Field(bow, "focusDamagePerLayer", 0f);
             p.Field(bow, "focusMaxDamage", 17f);
-            p.Field(bow, "radiationRange", 9f);
-            p.Field(bow, "radiationArcDegrees", 90f);
-            p.Field(bow, "radiationMinIntervalTicks", 120);
-            p.Field(bow, "radiationDamage", 0f);
-            p.Field(bow, "radiationLayerFraction", 0f);
-            p.Field(bow, "radiationBaseLayers", 0f);
-            p.Field(bow, "radiationMaxLayers", 0f);
             var bowDef = Thing("MX_Mingyuan_RainbowBow");
             p.Field(bowDef.Verbs[0], "range", 25.9f);
             p.Field(bowDef.Verbs[0], "warmupTime", 3.2f);
@@ -65,30 +56,21 @@ namespace MiliraXian.Characters.Mingyuan
             p.Ability("MX_Mingyuan_BurningPillar", 45000, 25f);
 
             p.Ability("MX_Mingyuan_TimeBurn", 45000, 25f);
-            p.Field(AbilityDef("MX_Mingyuan_TimeBurn").verbProperties, "warmupTime", 3f);
             p.Field(AbilityComp<CompProperties_AbilityMingyuanTimeBurn>("MX_Mingyuan_TimeBurn"), "durationTicks", 0);
 
             p.Ability("MX_Mingyuan_AshesOfSelf", 12000, 0f);
             var ashes = AbilityComp<CompProperties_AbilityMingyuanAshesOfSelf>("MX_Mingyuan_AshesOfSelf");
             p.Field(ashes, "bloodLossCost", 0f);
             p.Field(ashes, "selfBurnLayers", 0f);
-            p.Field(ashes, "fieldDurationTicks", 0);
             var aura = ThingComp<CompProperties_MingyuanBurningField>("MX_Mingyuan_AshesField");
             p.Field(aura, "durationTicks", 0);
             p.Field(aura, "pulseIntervalTicks", 120);
             p.Field(aura, "damageAmount", 0f);
             p.Field(aura, "lifeBurnLayers", 0f);
-            p.Field(aura, "selfBurnLifeBurnPer100", 0f);
-            p.Field(aura, "selfHealAmount", 0f);
-            p.Field(aura, "maxSelfBurnGainPerPulse", 0f);
-            p.Field(aura, "destroyBuildings", false);
-            p.Field(aura, "destroyAnimals", false);
 
             var life = HediffComp<HediffCompProperties_MingyuanLifeBurn>("MX_Mingyuan_LifeBurn");
             p.Field(life, "damagePer100Layers", 0f);
             p.Field(life, "baseDamage", 0f);
-            p.Field(life, "ageTicksPerLayer", 0f);
-            p.Field(life, "needDrainPer100Layers", 0f);
             p.Field(life, "burnSelfStackFraction", 0f);
             p.Field(life, "decayDelayTicks", 0);
             p.Field(life, "transferRadius", 0f);

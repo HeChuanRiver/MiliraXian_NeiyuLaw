@@ -61,6 +61,12 @@ public static class CombatPosture
 
     public static HediffComp_CombatPosture Ensure(Pawn pawn) =>
         Get(pawn) ?? PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, Config.posture) as HediffComp_CombatPosture;
+
+    internal static bool ControlsActions(Pawn pawn) => pawn is { Spawned: true, Dead: false }
+        && pawn.health is { isBeingKilled: false } && Get(pawn)?.Broken == true;
+
+    internal static bool BlocksAutonomousJobs(Pawn pawn) => ControlsActions(pawn)
+        || pawn?.jobs?.curDriver is IPostureExecutionDriver { DrivesExecutorPosition: true };
 }
 
 public sealed class Hediff_CombatPosture : HediffWithComps
@@ -85,6 +91,8 @@ public sealed class HediffCompProperties_CombatPosture : HediffCompProperties_Pa
 public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
 {
     private int lastIncreaseTick = -1, fadeUntilTick, brokenUntilTick, openingUntilTick;
+    private int brokenAt = -1;
+    private IntVec3 breakCell = IntVec3.Invalid;
     private int nextUpdateTick, openingGeneration, reservedGeneration;
     private bool broken, openingReserved, holdStarted;
     private Pawn source, executioner;
@@ -99,6 +107,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     public bool Broken => broken;
     public bool Locked => executioner != null;
     public Pawn Executioner => executioner;
+    public int BrokenAt => brokenAt;
     public int LastIncreaseTick => lastIncreaseTick;
     public bool HasOpening => openingUntilTick > Now && !CombatBlockers.OpeningsSuppressed;
     public float BarAlpha => CurrentValue > 0f || broken ? 1f
@@ -115,6 +124,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         Scribe_Values.Look(ref lastIncreaseTick, "lastPostureIncrease", -1);
         Scribe_Values.Look(ref fadeUntilTick, "postureFadeUntil");
         Scribe_Values.Look(ref brokenUntilTick, "postureBrokenUntil");
+        Scribe_Values.Look(ref brokenAt, "postureBrokenAt", -1);
+        Scribe_Values.Look(ref breakCell, "postureBreakCell", IntVec3.Invalid);
         Scribe_Values.Look(ref openingUntilTick, "swordOpeningUntil");
         Scribe_Values.Look(ref openingGeneration, "swordOpeningGeneration");
         Scribe_Values.Look(ref broken, "postureBroken");
@@ -153,12 +164,14 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         if (broken || CurrentValue < MaxValue || CurrentValue <= 0f || !Pawn.Spawned) return;
         CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
         broken = true;
+        brokenAt = Now;
+        breakCell = Pawn.Position;
         brokenUntilTick = Now + Mathf.Max(C.breakWindowTicks, owner?.MinimumBreakWindowTicks ?? 0);
         holdStarted = false;
         Pawn.pather?.StopDead();
         Pawn.stances?.CancelBusyStanceHard();
         // The hold starts on the next tick, not inside the hit that broke it (that may be the
-        // victim's own swing); until then no new job or cast can start (Patch_CombatPostureLock).
+        // victim's own swing); until then no new job or cast can start (CombatPostureControl).
         nextUpdateTick = Now + 1;
         owner?.NotifyPostureBroken(source, Pawn);
     }
@@ -179,12 +192,27 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         base.CompPostTick(ref severityAdjustment);
         if (previous > 0f && CurrentValue <= 0f) fadeUntilTick = Now + C.barFadeTicks;
         if (!broken) return;
-        CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
         if (Now >= brokenUntilTick)
         {
             ReleaseBreak();
             return;
         }
+        // A claimed execution owns the victim from here on (it may move it, as Neiyu's single
+        // execution throws it); its own job validates the reach. A saved lock is valid only while
+        // the matching saved Job owns it.
+        if (executioner != null)
+        {
+            if (executioner.jobs?.curDriver is not IPostureExecutionDriver driver || driver.Victim != Pawn)
+                ReleaseBreak();
+            return;
+        }
+        // Moved by something else before any execution claimed it (knocked back, teleported).
+        if (breakCell.IsValid && Pawn.Position != breakCell)
+        {
+            ReleaseBreak();
+            return;
+        }
+        CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
         if (owner == null || !owner.Executes)
         {
             // Broken by someone who does not execute: hold still for the window, then recover.
@@ -193,15 +221,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         }
         if (!owner.CanExecute(source, Pawn))
         {
-            if (owner.WaitForExecutor && executioner == null) HoldWithoutExecution();
+            if (owner.WaitForExecutor) HoldWithoutExecution();
             else ReleaseBreak();
-            return;
-        }
-        if (executioner != null)
-        {
-            // A saved lock is valid only while the matching saved Job owns it.
-            if (executioner.jobs?.curDriver is not IPostureExecutionDriver driver || driver.Victim != Pawn)
-                ReleaseBreak();
             return;
         }
         EnsureHold();
@@ -225,9 +246,9 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     private void HoldWithoutExecution() => EnsureHold();
 
     /// <summary>
-    /// The victim holds still in the broken job for the whole window. Other jobs and casts cannot
-    /// start meanwhile (Patch_CombatPostureLock); if the hold job still ends (a forced end, a load),
-    /// it starts again instead of the break being dropped.
+    /// The victim holds still in the broken job for the whole window. Other jobs, casts, paths and
+    /// orders cannot start meanwhile (CombatPostureControl); if the hold job still ends (a forced
+    /// end, a load), it starts again instead of the break being dropped.
     /// </summary>
     private void EnsureHold()
     {
@@ -235,9 +256,6 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         if (Pawn.Downed || Pawn.CurJobDef == C.brokenJob || Pawn.jobs == null) return;
         Pawn.jobs.StartJob(JobMaker.MakeJob(C.brokenJob), JobCondition.InterruptForced);
     }
-
-    /// <summary>The victim is held: no job but the hold job and no cast may start.</summary>
-    internal bool HoldsPawn => broken && Pawn.Spawned && !Pawn.Dead && !Pawn.Downed && Now < brokenUntilTick;
 
     // Posture from something other than a block on the attacker (for example a
     // defender's own guard taking the hit). No opening.
@@ -250,6 +268,11 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
 
     public bool Owns(Pawn executor) => broken && executioner == executor && Now < brokenUntilTick;
 
+    internal void HoldThrough(Pawn executor, int untilTick)
+    {
+        if (Owns(executor)) brokenUntilTick = Mathf.Max(brokenUntilTick, untilTick);
+    }
+
     public void ReleaseBreak()
     {
         broken = false;
@@ -257,6 +280,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         source = null;
         holdStarted = false;
         brokenUntilTick = 0;
+        brokenAt = -1;
+        breakCell = IntVec3.Invalid;
         SetValue(0f);
         fadeUntilTick = Now + C.barFadeTicks;
         // The hold job terminates itself; never stop an unrelated replacement job
@@ -330,31 +355,6 @@ internal static class Patch_CombatPostureOpening
         __state?.CompleteOpening(__result?.totalDamageDealt > 0f);
 
     private static void Finalizer(HediffComp_CombatPosture __state) => __state?.ReleaseOpening();
-}
-
-// While the posture is broken nothing the victim does can end the hold: AI, abilities (Milira's
-// burst flight is a CastJump job), mental states and orders all start jobs or casts, so both
-// are refused until the window ends or the execution releases it.
-[HarmonyPatch(typeof(Pawn_JobTracker), nameof(Pawn_JobTracker.StartJob))]
-internal static class Patch_CombatPostureLock
-{
-    private static bool Prefix(Job newJob, Pawn ___pawn)
-    {
-        if (newJob == null || newJob.def == CombatPosture.Config.brokenJob) return true;
-        return CombatPosture.Get(___pawn)?.HoldsPawn != true;
-    }
-}
-
-[HarmonyPatch(typeof(Verb), nameof(Verb.TryStartCastOn),
-    new[] { typeof(LocalTargetInfo), typeof(LocalTargetInfo), typeof(bool), typeof(bool), typeof(bool), typeof(bool) })]
-internal static class Patch_CombatPostureLockCast
-{
-    private static bool Prefix(Verb __instance, ref bool __result)
-    {
-        if (CombatPosture.Get(__instance.CasterPawn)?.HoldsPawn != true) return true;
-        __result = false;
-        return false;
-    }
 }
 
 [HarmonyPatch(typeof(Pawn), nameof(Pawn.DrawGUIOverlay))]

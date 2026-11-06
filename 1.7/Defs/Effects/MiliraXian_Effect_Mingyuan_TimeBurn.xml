@@ -59,4 +59,32 @@
     </mote>
   </ThingDef>
 
+  <ThingDef ParentName="BaseProjectileNeolithic">
+    <defName>MX_Mingyuan_TimeBurnWave</defName>
+    <label>时间燃烧剑气</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.Projectile_MingyuanTimeBurnWave</thingClass>
+    <graphicData>
+      <texPath>MiliraXianMingyuan/Effect/TimeBurnMark</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <projectile>
+      <damageDef>Cut</damageDef>
+      <!-- 剑气直接伤害暂取尘烬的基础值。 -->
+      <damageAmountBase>44</damageAmountBase>
+      <armorPenetrationBase>1.50</armorPenetrationBase>
+      <speed>30</speed>
+      <arcHeightFactor>0</arcHeightFactor>
+    </projectile>
+  </ThingDef>
+
+  <DamageDef>
+    <defName>MX_Mingyuan_OldAge</defName>
+    <label>衰老</label>
+    <deathMessage>{0}因寿命耗尽而死。</deathMessage>
+    <harmsHealth>false</harmsHealth>
+    <makesBlood>false</makesBlood>
+    <hasForcefulImpact>false</hasForcefulImpact>
+    <canInterruptJobs>false</canInterruptJobs>
+  </DamageDef>
+
 </Defs>

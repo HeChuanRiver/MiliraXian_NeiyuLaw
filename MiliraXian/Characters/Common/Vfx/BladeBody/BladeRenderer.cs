@@ -33,6 +33,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
 
         private static readonly Dictionary<(BladeGraphicExtension, int), Mesh> Meshes = new();
         private static readonly Dictionary<(string, Color), Material> Materials = new();
+        private static readonly int BladeReveal = Shader.PropertyToID("_BladeReveal");
 
         /// <param name="bodyCenter">Drawn body centre on the map; its altitude is the body's base altitude.</param>
         public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
@@ -67,7 +68,16 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
                 Vector3 dir = pose.dir.normalized;
                 Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, dir) * dir).normalized * edgeSign;
                 Mesh mesh = MeshFor(ext, q, ext.uvMin.y, q == 0 ? ext.uvMax.y : Mathf.Min(cutV, ext.uvMax.y));
-                DrawQuad(mesh, mat, w, h, a, n, grip, mpp, pose.grip, dir, edge, pose, bodyCenter);
+                // The reveal glow runs along the blade from the grip (0) to the tip (1), in texture
+                // coordinates; only the blade carries it, not the scabbard.
+                Vector4 reveal = default;
+                float bladeLength = Vector2.Dot(tip - grip, a);
+                if (pose.reveal > 0f && bladeLength > 1e-3f)
+                {
+                    reveal = new Vector4(a.x * w / bladeLength, a.y * h / bladeLength,
+                        -Vector2.Dot(grip, a) / bladeLength, Mathf.Clamp01(pose.reveal));
+                }
+                DrawQuad(mesh, mat, w, h, a, n, grip, mpp, pose.grip, dir, edge, pose, bodyCenter, reveal);
             }
 
             if (pose.hasScabbard && pose.scabbardLength > 1e-3f)
@@ -96,8 +106,9 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         }
 
         /// <summary>Lays texture pixel <paramref name="gripPx"/> on <paramref name="at"/>, the blade axis along <paramref name="dir"/>.</summary>
+        /// <param name="reveal">The shader's _BladeReveal (w = lit fraction; 0 = no reveal glow).</param>
         private static void DrawQuad(Mesh mesh, Material mat, float w, float h, Vector2 a, Vector2 n, Vector2 gripPx, float mpp,
-            Vector3 at, Vector3 dir, Vector3 edge, in BladePose pose, Vector3 bodyCenter)
+            Vector3 at, Vector3 dir, Vector3 edge, in BladePose pose, Vector3 bodyCenter, Vector4 reveal = default)
         {
             // World offset of a texture pixel P: at + dir * ((P - G) . a) * mpp + edge * ((P - G) . n) * mpp.
             Vector3 du = dir * (a.x * w * mpp) + edge * (n.x * w * mpp);
@@ -115,7 +126,40 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             m.SetColumn(1, new Vector4(0f, 1e-3f, 0f, 0f));
             m.SetColumn(2, new Vector4(cv.x, cv.y, cv.z, 0f));
             m.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
-            Graphics.DrawMesh(mesh, m, mat, 0);
+            if (reveal.w <= 0f)
+            {
+                Graphics.DrawMesh(mesh, m, mat, 0);
+                return;
+            }
+            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            block.SetVector(BladeReveal, reveal);
+            Graphics.DrawMesh(mesh, m, mat, 0, null, 0, block);
+            block.Clear();
+        }
+
+        /// <summary>
+        /// Map positions of the grip and the blade tip, drawn as <see cref="Draw"/> lays them (the
+        /// same projection, origin height and depth scale).
+        /// </summary>
+        public static void GetGripAndTip(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter,
+            out Vector3 grip, out Vector3 tip)
+        {
+            Texture texture = MaterialFor(ext.texPath, Color.white)?.mainTexture;
+            Vector2 size = texture == null ? Vector2.one : new Vector2(texture.width, texture.height);
+            Vector2 axis = Vector2.Scale(ext.tipUV - ext.pommelUV, size);
+            Vector2 delta = Vector2.Scale(ext.tipUV - ext.gripUV, size);
+            Vector3 direction = pose.dir.normalized;
+            Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, direction) * direction).normalized
+                * Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
+            Vector2 side = new(axis.y, -axis.x);
+            float scale = ext.length / Mathf.Max(.0001f, axis.sqrMagnitude);
+            Vector3 tipOffset = direction * (Vector2.Dot(delta, axis) * scale)
+                + edge * (Vector2.Dot(delta, side) * scale);
+            float k = pose.heightToScreen;
+            float d = pose.DepthScale;
+            Vector3 center = bodyCenter + new Vector3(0f, MidAltitude, pose.heightOrigin * k);
+            grip = center + ToMapLinear(pose.grip, k, d);
+            tip = center + ToMapLinear(pose.grip + tipOffset, k, d);
         }
 
         /// <summary>World offset (x east, y height, z north) to map offset (x, altitude, z).</summary>

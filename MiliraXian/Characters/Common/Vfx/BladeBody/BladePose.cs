@@ -20,6 +20,8 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public float depthToScreen;
         /// <summary>Height of the motion's origin above the drawn body centre, metres (negative = lower).</summary>
         public float heightOrigin;
+        /// <summary>Lit fraction of the blade measured from grip to tip (0 = no light; the shader's reveal glow).</summary>
+        public float reveal;
 
         public float DepthScale => depthToScreen > 0f ? depthToScreen : 1f;
         /// <summary>Share of the blade (grip to tip) inside the scabbard; that part is not drawn. 0 = fully out.</summary>
@@ -31,6 +33,15 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public Vector3 scabbardDir;
         public Vector3 scabbardEdge;
         public float scabbardLength;
+    }
+
+    /// <summary>
+    /// A job driver that poses the held blade itself, outside the motion clips (a procedural blade
+    /// path such as Neiyu's single execution). Asked before <see cref="BladeMotion.BladeMotionPlayer"/>.
+    /// </summary>
+    public interface IBladePoseSource
+    {
+        bool TryGetBladePose(out BladePose pose);
     }
 
     /// <summary>

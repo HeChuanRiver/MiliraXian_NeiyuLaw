@@ -12,6 +12,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
 {
     vec4 _Color;      // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     vec4 _MainTex_ST; // @default = vec4(0.0, 0.0, 1.0, 1.0)
+    vec4 _BladeReveal; // @default = vec4(0.0, 0.0, 0.0, 0.0)
 } uMaterial;
 
 layout(set = 2, binding = 1) uniform sampler2D _MainTex;
@@ -21,5 +22,14 @@ void main()
     vec4 color = texture(_MainTex, vUv * uMaterial._MainTex_ST.zw + uMaterial._MainTex_ST.xy) * uMaterial._Color * vColor;
     if (color.a < 0.5)
         discard;
+    if (uMaterial._BladeReveal.w > 0.0)
+    {
+        float along = dot(vUv, uMaterial._BladeReveal.xy) + uMaterial._BladeReveal.z;
+        float extent = uMaterial._BladeReveal.w;
+        float mask = smoothstep(-0.01, 0.04, along) * (1.0 - smoothstep(extent, extent + 0.06, along));
+        vec3 tint = mix(vec3(1.0, 0.72, 0.88), vec3(0.60, 0.87, 1.0), clamp(along, 0.0, 1.0));
+        float front = exp(-abs(along - extent) * 36.0);
+        color.rgb = mix(color.rgb, mix(tint, vec3(0.96, 0.99, 1.0), front), mask * 0.85);
+    }
     outColor = color;
 }

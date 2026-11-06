@@ -31,33 +31,20 @@ namespace MiliraXian.Characters.Common.Vfx
         /// Interpolated tick. The tick loop leaves a residue in (-curTimePerTick, 0]: the game is that
         /// much real time ahead of the frame, so the frame shows TicksGame minus that share of a tick.
         /// </summary>
-        public static float Ticks
+        public static float Ticks => TicksSince(0);
+
+        // Subtract the origin as integers to retain sub-tick precision in older colonies.
+        internal static float TicksSince(int origin)
         {
-            get
-            {
-                TickManager tm = Find.TickManager;
-                if (tm == null)
-                {
-                    return 0f;
-                }
-                float ticks = tm.TicksGame;
-                if (RealTimeToTickThrough == null || tm.Paused)
-                {
-                    return ticks;
-                }
-                float rate = tm.TickRateMultiplier;
-                if (rate <= 0f)
-                {
-                    return ticks;
-                }
-                float perTick = 1f / (60f * rate);
-                if (perTick <= 0f)
-                {
-                    return ticks;
-                }
-                float residue = RealTimeToTickThrough(tm);
-                return ticks + Mathf.Clamp(residue / perTick, -1f, 0f);
-            }
+            TickManager tm = Find.TickManager;
+            if (tm == null) return 0f;
+            int elapsed = tm.TicksGame - origin;
+            if (RealTimeToTickThrough == null || tm.Paused) return elapsed;
+            float rate = tm.TickRateMultiplier;
+            if (rate <= 0f) return elapsed;
+            float perTick = 1f / (60f * rate);
+            if (perTick <= 0f) return elapsed;
+            return elapsed + Mathf.Clamp(RealTimeToTickThrough(tm) / perTick, -1f, 0f);
         }
     }
 }

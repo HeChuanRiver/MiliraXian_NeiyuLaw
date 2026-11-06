@@ -1,6 +1,7 @@
 using HarmonyLib;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
+using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
 using MiliraXian.Characters.Zhaoli;
 using RimWorld;
@@ -21,9 +22,10 @@ internal static class Patch_CharacterWeaponRendering
     }
 }
 
-// Rigid 3D blade: while the pawn plays a motion with a blade track (BladeMotionPlayer) and the
-// weapon is calibrated (BladeGraphicExtension), the blade is drawn here instead of the vanilla flat
-// weapon. Worn apparel extras are still drawn.
+// Rigid 3D blade: while the job driver poses the blade (IBladePoseSource) or the pawn plays a
+// motion with a blade track (BladeMotionPlayer) and the weapon is calibrated
+// (BladeGraphicExtension), the blade is drawn here instead of the vanilla flat weapon. Worn
+// apparel extras are still drawn.
 [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras))]
 internal static class Patch_CharacterBladeBodyRendering
 {
@@ -35,13 +37,21 @@ internal static class Patch_CharacterBladeBodyRendering
         {
             return true;
         }
-        ThingWithComps weapon = pawn.equipment?.Primary;
-        BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
-        if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !BladeMotionPlayer.TryGetBladePose(pawn, out BladePose pose))
+        // Mingyuan's time burn warmup hides the held weapon (its own effect is drawn instead).
+        if (pawn.stances?.curStance is not Stance_Warmup { verb: Verb_MingyuanTimeBurn }
+            || MingyuanPowerBalance.Sealed)
         {
-            return true;
+            ThingWithComps weapon = pawn.equipment?.Primary;
+            BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
+            if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !TryGetBladePose(pawn, out BladePose pose))
+            {
+                return true;
+            }
+            Vector3 body = pawn.DrawPos;
+            BladeRenderer.Draw(ext, pose, body);
+            if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsSingle: true } execution)
+                execution.DrawSingleVfx(ext, pose, body);
         }
-        BladeRenderer.Draw(ext, pose, pawn.DrawPos);
         if (pawn.apparel != null)
         {
             foreach (Apparel apparel in pawn.apparel.WornApparel)
@@ -50,5 +60,15 @@ internal static class Patch_CharacterBladeBodyRendering
             }
         }
         return false;
+    }
+
+    // A job driver that poses the blade itself (a procedural path) comes before the motion player.
+    private static bool TryGetBladePose(Pawn pawn, out BladePose pose)
+    {
+        if (pawn.jobs?.curDriver is IBladePoseSource source && source.TryGetBladePose(out pose))
+        {
+            return true;
+        }
+        return BladeMotionPlayer.TryGetBladePose(pawn, out pose);
     }
 }

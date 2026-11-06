@@ -50,8 +50,10 @@ void main()
         else if (style < 2.0) position = vec2(orbit.x * radius * (0.45 + life * 0.52), -life * 1.32);
         else if (style < 3.0) position = orbit * (0.90 + 0.16 * life);
         else if (style < 4.0) position = orbit * radius * (1.0 - life * 0.68) + vec2(0.0, life * 0.83);
-        else position = orbit * mix(0.12, 0.92, life);
+        else if (style < 5.0) position = orbit * mix(0.12, 0.92, life);
+        else position = orbit * radius * (1.0 - life * 0.24) + vec2(0.0, life * 0.48);
         float width = mix(0.009, 0.036, jitter) * (style >= 2.0 ? 0.65 : 1.0);
+        if (style == 5.0 && mod(seed, 3.0) == 0.0) width *= 0.45;
         float spin = angle + life * 7.0;
         vec2 feather = vec2(p.x * width, p.z * width * (2.2 + jitter));
         feather = mat2(cos(spin), sin(spin), -sin(spin), cos(spin)) * feather;
