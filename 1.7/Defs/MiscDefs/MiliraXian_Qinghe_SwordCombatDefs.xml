@@ -278,6 +278,24 @@
           旁边一个空格都没有则放弃处决、解除破绽。
           伤害：对核心部位（人类为躯干）一击 100 点、穿甲 2，按原版伤害结算；没死则接致命一击（见 killMotion）。中刀时清荷自己的架势清空（被拦截也一样）。固定给 1 档剑压（不受夏共鸣加成）。处决全程无敌（同樱舞：不受伤害、不加架势、不能被处决、不被眩晕，敌人的雷返也一样），不再弹开攻击。
         -->
+        <!-- 居合收刀中刀那一刻的鞘口闪光：与十字斩开头的收刀闪光同款，粉色（处决开头收刀仍用武器的白色闪光） -->
+        <executionHitFlash>
+            <texPath>MiliraXianQinghe/Effect/SakuraDance/Glow</texPath>
+            <color>(1, 0.55, 0.75, 1)</color>
+            <needleLength>0.9</needleLength>
+            <needleWidth>0.04</needleWidth>
+            <needleSeconds>0.067</needleSeconds>
+            <needleBrightness>4</needleBrightness>
+            <needleAngle>55</needleAngle>
+            <barLength>1.4</barLength>
+            <barWidth>0.08</barWidth>
+            <barSeconds>0.2</barSeconds>
+            <barBrightness>2.5</barBrightness>
+            <haloSize>0.9</haloSize>
+            <haloEndSize>0.5</haloEndSize>
+            <haloSeconds>0.2</haloSeconds>
+            <haloBrightness>1.5</haloBrightness>
+        </executionHitFlash>
         <executionJob>MX_QH_SwordExecution</executionJob>
         <executionAttack>0</executionAttack>
         <executionSeconds>2.7</executionSeconds>
@@ -320,19 +338,42 @@
           不再残心收势，而是从 killStartSeconds（执行秒，即中刀那一刻）起播放这段：
           中刀后先残心 0.3 秒（2.1–2.4，刀在鞘里静止），再接：
           0–0.25 拔刀，刀尖朝前收到腰侧；0.25–0.7 前摇：后坐蓄力、刀往后拉；0.7–0.82 踏前平刺贯穿；
-          0.82–1.4 刺入后停顿（身体前压、刀不动）；1.4–1.52 猛地抽刀（1.46 秒刀出体外的瞬间敌人死亡，
-          伤口处爆出花瓣，压暗、显示「落华」）；1.52–1.85 振刀甩血；2.6 秒回到待机。
+          0.82–1.62 刺入后停顿 0.8 秒（身体前压、刀不动）；1.62–1.74 猛地抽刀（1.68 秒刀出体外的瞬间敌人死亡，
+          伤口处爆出花瓣，压暗、显示「落华」）；1.74–2.07 振刀甩血；2.82 秒回到待机。
           朝向是冲刺落点面向敌人。免死的目标只吃居合伤害，不进入这一段。
           killStartSeconds 最晚 2.4：再往后会先播普通处决的刀出鞘回待机。
         -->
         <killStartSeconds>2.4</killStartSeconds>
-        <killAtSeconds>1.46</killAtSeconds>
+        <killAtSeconds>1.68</killAtSeconds>
         <killBlendSeconds>0.1</killBlendSeconds>
+        <!-- 插刀声在片段 0.78 秒（平刺贯穿），抽刀声在击杀那一刻（killAtSeconds） -->
+        <killThrustSeconds>0.78</killThrustSeconds>
+        <killThrustSound>MX_QH_SwordExecutionThrust</killThrustSound>
+        <killDrawSound>MX_QH_SwordExecutionKillDraw</killDrawSound>
+        <!-- 插刀闪光：贯穿那一刻在刀身 90% 处（刀尖附近）一闪，与收刀闪光同款，粉色 -->
+        <killThrustFlashShare>0.9</killThrustFlashShare>
+        <killThrustFlash>
+            <texPath>MiliraXianQinghe/Effect/SakuraDance/Glow</texPath>
+            <color>(1, 0.55, 0.75, 1)</color>
+            <needleLength>0.9</needleLength>
+            <needleWidth>0.04</needleWidth>
+            <needleSeconds>0.067</needleSeconds>
+            <needleBrightness>4</needleBrightness>
+            <needleAngle>55</needleAngle>
+            <barLength>1.4</barLength>
+            <barWidth>0.08</barWidth>
+            <barSeconds>0.2</barSeconds>
+            <barBrightness>2.5</barBrightness>
+            <haloSize>0.9</haloSize>
+            <haloEndSize>0.5</haloEndSize>
+            <haloSeconds>0.2</haloSeconds>
+            <haloBrightness>1.5</haloBrightness>
+        </killThrustFlash>
         <killMotion>
-            <durationSeconds>2.6</durationSeconds>
+            <durationSeconds>2.82</durationSeconds>
             <turnCarriesBlade>false</turnCarriesBlade>
             <!-- 全程面向敌人（转向 0 = 朝瞄准方向）；没有这条时小人保持冲刺后的朝向 -->
-            <turn><points><li>(0, 0)</li><li>(2.6, 0)</li></points></turn>
+            <turn><points><li>(0, 0)</li><li>(2.82, 0)</li></points></turn>
             <blade>
                 <keys>
                     <li><time>0</time><yaw>-30.0</yaw><pitch>10.0</pitch><roll>-90.0</roll><reach>0.2</reach><offset>(0.000, 0.100, 0.100)</offset></li>
@@ -343,20 +384,20 @@
                     <!-- 平刺贯穿 -->
                     <li><time>0.82</time><yaw>0.0</yaw><pitch>-5.0</pitch><roll>-90.0</roll><reach>1</reach><offset>(0.000, 0.000, 0.100)</offset></li>
                     <!-- 刺入后停顿：只再往里压一点 -->
-                    <li><time>1.4</time><yaw>0.0</yaw><pitch>-5.0</pitch><roll>-90.0</roll><reach>1</reach><offset>(0.000, 0.000, 0.130)</offset></li>
+                    <li><time>1.62</time><yaw>0.0</yaw><pitch>-5.0</pitch><roll>-90.0</roll><reach>1</reach><offset>(0.000, 0.000, 0.130)</offset></li>
                     <!-- 猛地抽出 -->
-                    <li><time>1.52</time><yaw>0.0</yaw><pitch>0.0</pitch><roll>-90.0</roll><reach>0.2</reach><offset>(0.000, 0.050, -0.150)</offset></li>
+                    <li><time>1.74</time><yaw>0.0</yaw><pitch>0.0</pitch><roll>-90.0</roll><reach>0.2</reach><offset>(0.000, 0.050, -0.150)</offset></li>
                     <!-- 振刀甩血 -->
-                    <li><time>1.85</time><yaw>60.0</yaw><pitch>-30.0</pitch><roll>-60.0</roll><reach>0.8</reach><offset>(0.000, 0.000, 0.000)</offset></li>
-                    <li><time>2.6</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                    <li><time>2.07</time><yaw>60.0</yaw><pitch>-30.0</pitch><roll>-60.0</roll><reach>0.8</reach><offset>(0.000, 0.000, 0.000)</offset></li>
+                    <li><time>2.82</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
                 </keys>
             </blade>
             <!-- 刀从鞘里拔出：开头还有一截在鞘内 -->
             <sheathed><points><li>(0, 0.75)</li><li>(0.12, 0)</li></points></sheathed>
             <!-- 前摇后坐，刺出前冲，停顿时再压半步，抽刀时退回 -->
-            <bodyForward><points><li>(0, 0)</li><li>(0.25, -0.05)</li><li>(0.7, -0.12)</li><li>(0.82, 0.3)</li><li>(1.4, 0.34)</li><li>(1.52, 0.2)</li><li>(1.85, 0.1)</li><li>(2.6, 0)</li></points></bodyForward>
-            <height><points><li>(0, 0)</li><li>(0.7, -0.04)</li><li>(0.82, -0.08)</li><li>(1.4, -0.09)</li><li>(1.52, -0.05)</li><li>(2.6, 0)</li></points></height>
-            <tilt><points><li>(0, 0)</li><li>(0.7, -3)</li><li>(0.82, 6)</li><li>(1.4, 7)</li><li>(1.52, 1)</li><li>(1.85, -3)</li><li>(2.6, 0)</li></points></tilt>
+            <bodyForward><points><li>(0, 0)</li><li>(0.25, -0.05)</li><li>(0.7, -0.12)</li><li>(0.82, 0.3)</li><li>(1.62, 0.34)</li><li>(1.74, 0.2)</li><li>(2.07, 0.1)</li><li>(2.82, 0)</li></points></bodyForward>
+            <height><points><li>(0, 0)</li><li>(0.7, -0.04)</li><li>(0.82, -0.08)</li><li>(1.62, -0.09)</li><li>(1.74, -0.05)</li><li>(2.82, 0)</li></points></height>
+            <tilt><points><li>(0, 0)</li><li>(0.7, -3)</li><li>(0.82, 6)</li><li>(1.62, 7)</li><li>(1.74, 1)</li><li>(2.07, -3)</li><li>(2.82, 0)</li></points></tilt>
         </killMotion>
         <!--
           抽刀那一刻从伤口爆出的花瓣：刀身 60% 处（刺穿敌人的那一段），随抽刀方向（朝清荷）散开，

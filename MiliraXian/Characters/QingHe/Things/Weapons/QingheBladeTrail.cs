@@ -122,12 +122,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <param name="flashTick">Game tick of the flash.</param>
         /// <param name="stillOn">Checked until the flash starts; false (the warmup was interrupted) drops it.</param>
         /// <param name="projection">The motion's projection; null = the held weapon's.</param>
+        /// <param name="flash">Replaces the weapon's sheathe flash (another colour); null = the weapon's.</param>
         public static void SpawnFlash(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, float flashTick,
-            System.Func<bool> stillOn, BladeProjection? projection = null)
+            System.Func<bool> stillOn, BladeProjection? projection = null, QingheSheatheFlashProps flash = null)
         {
-            MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
-            QingheSheatheFlashProps f = ext?.sheatheFlash;
-            if (visuals == null || f == null || clip == null || clip.flashTime < 0f
+            QingheSheatheFlashProps f = flash ?? ext?.sheatheFlash;
+            if (ext == null || f == null || clip == null || clip.flashTime < 0f
                 || !BladeMotionUtility.ScabbardMouth(clip, clip.flashTime, aim, out Vector3 mouth))
             {
                 return;
@@ -135,14 +135,25 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             BladeProjection proj = projection ?? ProjectionFor(pawn, ext);
             Vector3 bodyAt = BladeMotionUtility.BodyOffsetWorld(clip, clip.flashTime, aim);
             bodyAt.z /= Mathf.Max(1e-3f, proj.depthToScreen);
-            mouth += bodyAt;
+            SpawnFlashAt(pawn, f, ext.bloom, mouth + bodyAt, flashTick, stillOn, proj);
+        }
+
+        /// <summary>The same flash anywhere on the motion: <paramref name="offset"/> in world metres from the pawn's place on the ground (north-south unscaled).</summary>
+        public static void SpawnFlashAt(Pawn pawn, QingheSheatheFlashProps f, ScreenBloomProperties bloom, Vector3 offset, float flashTick,
+            System.Func<bool> stillOn, BladeProjection proj)
+        {
+            MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
+            if (visuals == null || f == null)
+            {
+                return;
+            }
             SheatheFlashVisual v = new()
             {
                 flash = f,
                 projection = proj,
-                bloom = ext.bloom,
+                bloom = bloom,
                 startTick = Mathf.RoundToInt(flashTick),
-                offset = mouth,
+                offset = offset,
                 pawnAltitude = AltitudeLayer.Pawn.AltitudeFor() + 0.02f,
                 lifeSeconds = Mathf.Max(f.needleSeconds, Mathf.Max(f.barSeconds, f.haloSeconds)),
                 stillOn = stillOn,

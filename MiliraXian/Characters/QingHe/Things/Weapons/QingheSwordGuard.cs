@@ -112,6 +112,14 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public float killStartSeconds = 2.1f;
         public float killAtSeconds = 0.9f;
         public float killBlendSeconds = 0.1f;
+        /// <summary>The thrust runs the enemy through at clip second <see cref="killThrustSeconds"/> (this sound); the draw (the kill) plays its own.</summary>
+        public float killThrustSeconds = 0.8f;
+        public SoundDef killThrustSound, killDrawSound;
+        /// <summary>The flash on the blade with the thrust, at <see cref="killThrustFlashShare"/> of the blade from the grip. Null = none.</summary>
+        public QingheSheatheFlashProps killThrustFlash;
+        public float killThrustFlashShare = 0.9f;
+        /// <summary>The flash at the scabbard mouth of the sheathe the blow lands with, instead of the weapon's. Null = the weapon's.</summary>
+        public QingheSheatheFlashProps executionHitFlash;
         /// <summary>The word over the killed enemy and the darkening around it.</summary>
         public QingheKillVfxProps killVfx;
 

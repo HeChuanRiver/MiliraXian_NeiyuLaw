@@ -37,6 +37,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         // The blow landed and left the enemy alive: the killing thrust follows instead of the return.
         private bool killing;
         private bool killDone;
+        // Sound only, not saved: the thrust's sound played (after a load past it, it does not play again).
+        private bool thrustPlayed;
 
         private static QingheSwordGuardDef C => QingheSwordGuard.Config;
         private static int Now => Find.TickManager.TicksGame;
@@ -180,6 +182,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     posture?.ReleaseBreak(executed: true);
                 }
             }
+            if (killing && !killDone && !thrustPlayed && t >= C.killStartSeconds + C.killThrustSeconds)
+            {
+                thrustPlayed = true;
+                if (t < C.killStartSeconds + C.killThrustSeconds + 0.2f)
+                {
+                    C.killThrustSound?.PlayOneShot(new TargetInfo(Victim?.Position ?? pawn.Position, pawn.Map));
+                    SpawnThrustFlash();
+                }
+            }
             if (killing && !killDone && t >= C.killStartSeconds + C.killAtSeconds)
             {
                 killDone = true;
@@ -204,24 +215,58 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             try
             {
-                Vector3 killAim = Past ? backAim : aim;
-                Common.Vfx.BladeBody.BladeGraphicExtension ext = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>();
-                float length = (ext?.length ?? 1.1f) * C.killPetalShare;
                 // The blade still fully in the wound, as the draw begins (half the draw before the kill).
-                float s = Mathf.Clamp(C.killAtSeconds - 0.05f, 0f, clip.durationSeconds);
-                Common.Vfx.BladeBody.BladePose pose = BladeMotionUtility.Pose(clip, s, killAim, Set.Projection, null);
+                Vector3 offset = KillBladePoint(C.killAtSeconds - 0.05f, C.killPetalShare, out Common.Vfx.BladeBody.BladePose pose);
                 // The pawn's place on the ground; the clip's own body shift and lift are added in world metres.
                 Vector3 ground = pawn.DrawPos - BladeMotionPlayer.BodyOffset(pawn);
-                // The ground shift is a map offset: undo the depth scale BodyOffsetToMap applies (as the sheathe flash does).
-                Vector3 body = BladeMotionUtility.BodyOffsetWorld(clip, s, killAim);
-                body.z /= Mathf.Max(1e-3f, Set.Projection.depthToScreen);
-                Vector3 at = Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(ground, body + pose.grip + pose.dir.normalized * length, pose);
+                Vector3 at = Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(ground, offset, pose);
                 // Thrown back the way the blade is drawn out (toward Qinghe), not on through the enemy.
-                QingheImpactVfx.Spawn(map, C.killPetalVfx, at, -killAim, pawn.Position);
+                QingheImpactVfx.Spawn(map, C.killPetalVfx, at, -KillAim, pawn.Position);
             }
             catch (System.Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution kill petals failed: " + ex, 0x51c7aa);
+            }
+        }
+
+        private Vector3 KillAim => Past ? backAim : aim;
+
+        /// <summary>
+        /// A point <paramref name="share"/> of the blade from the grip at kill clip second
+        /// <paramref name="seconds"/>, in world metres from the pawn's place on the ground, the
+        /// clip's ground shift given unscaled (as the sheathe flash takes it).
+        /// </summary>
+        private Vector3 KillBladePoint(float seconds, float share, out Common.Vfx.BladeBody.BladePose pose)
+        {
+            BladeMotionClip clip = C.killMotion;
+            Common.Vfx.BladeBody.BladeGraphicExtension ext = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>();
+            float length = (ext?.length ?? 1.1f) * share;
+            float s = Mathf.Clamp(seconds, 0f, clip.durationSeconds);
+            pose = BladeMotionUtility.Pose(clip, s, KillAim, Set.Projection, null);
+            // The ground shift is a map offset: undo the depth scale the map conversion applies (as the sheathe flash does).
+            Vector3 body = BladeMotionUtility.BodyOffsetWorld(clip, s, KillAim);
+            body.z /= Mathf.Max(1e-3f, Set.Projection.depthToScreen);
+            return body + pose.grip + pose.dir.normalized * length;
+        }
+
+        /// <summary>The flash on the blade as the thrust runs the enemy through.</summary>
+        private void SpawnThrustFlash()
+        {
+            if (C.killThrustFlash == null || C.killMotion?.blade == null || pawn.Map == null)
+            {
+                return;
+            }
+            try
+            {
+                Vector3 offset = KillBladePoint(C.killThrustSeconds, C.killThrustFlashShare, out _);
+                int id = executionStart;
+                QingheBladeTrail.SpawnFlashAt(pawn, C.killThrustFlash, Weapon.GetModExtension<QingheBladeTrailExtension>()?.bloom,
+                    offset, Now, () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id,
+                    Set.Projection);
+            }
+            catch (System.Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution thrust flash failed: " + ex, 0x51c7ab);
             }
         }
 
@@ -264,7 +309,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 Map map = victim.Map;
                 Vector3 at = victim.DrawPos;
-                SoundDefOf.Execute_Cut.PlayOneShot(new TargetInfo(victim.Position, map));
+                C.killDrawSound?.PlayOneShot(new TargetInfo(victim.Position, map));
                 victim.Kill(new DamageInfo(DamageDefOf.ExecutionCut, 1f, 0f, -1f, pawn, null, Weapon));
                 if (victim.Dead)
                 {
@@ -430,7 +475,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 Hediffs.MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddValue(C.executionSwordPressure);
             }
-            // The vanilla execution cut under the scabbard click (the click is the hit effect's sound).
+            // The vanilla execution cut under the hit effect's own sound.
             SoundDefOf.Execute_Cut.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
             // The one exception: a life-like charge (Qinghe's Flowing Form) takes the whole execution.
             if (ExecutionGuard.TryNegate(victim, blow))
@@ -461,9 +506,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 float at = executionStart + (s.start + (clip.flashTime - s.clipFrom) / speed) * 60f;
                 if (at >= Now)
                 {
+                    // The sheathe the blow lands with has the execution's own flash (pink); the others the weapon's.
+                    float flashSeconds = (at - executionStart) / 60f;
+                    QingheSheatheFlashProps flash = Mathf.Abs(flashSeconds - C.executionHitSeconds) < 0.05f ? C.executionHitFlash : null;
                     QingheBladeTrail.SpawnFlash(pawn, ext, clip, pieceAim, at,
                         () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id,
-                        Set.Projection);
+                        Set.Projection, flash);
                 }
             }
             // The trail is drawn on the moving body, so the dash itself has the slash mark instead.
