@@ -195,49 +195,19 @@ namespace MiliraXian.Characters.QingHe
         [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras))]
         public static class Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras
         {
-            public static bool Prefix(Pawn pawn, Vector3 drawPos, Rot4 facing)
+            /// <summary>Mirror Flower, Water Moon: no weapon from the stance to the end of the re-form; worn extras still drawn.</summary>
+            [HarmonyPriority(Priority.First)]
+            public static bool Prefix(Pawn pawn)
             {
-                ThingWithComps weapon = pawn?.equipment?.Primary;
-                JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
-                if (reflection == null
-                    || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword)
+                // The 3D blade dissolves by the opacity itself (BladeOpacity); the flat vanilla weapon
+                // is shown from half up. Hidden altogether while her body is.
+                if (pawn?.jobs?.curDriver is not JobDriver_IllusoryReflectionStance reflection
+                    || (!reflection.BodyHidden && reflection.WeaponOpacity >= 0.5f)
+                    || (!reflection.BodyHidden && reflection.WeaponOpacity > 0f
+                        && Common.Vfx.BladeMotion.BladeMotionPlayer.DrawnBlade(pawn) != null))
                 {
                     return true;
                 }
-
-                Rot4 stanceFacing = reflection.StanceFacing;
-                float drawFactor = pawn.ageTracker.CurLifeStage.equipmentDrawDistanceFactor;
-                float angle;
-                Vector3 offset;
-                switch (stanceFacing.AsInt)
-                {
-                    case 0:
-                        angle = 18f;
-                        offset = new Vector3(0f, 0f, -0.08f);
-                        break;
-                    case 1:
-                        angle = 72f;
-                        offset = new Vector3(0.20f, 0f, -0.16f);
-                        break;
-                    case 2:
-                        angle = 162f;
-                        offset = new Vector3(0f, 0f, -0.20f);
-                        break;
-                    default:
-                        angle = 288f;
-                        offset = new Vector3(-0.20f, 0f, -0.16f);
-                        break;
-                }
-
-                const float settleDurationTicks = 18f;
-                float settleProgress = Mathf.Clamp01(reflection.StanceElapsedTicks / settleDurationTicks);
-                float settleRemaining = 1f - Mathf.SmoothStep(0f, 1f, settleProgress);
-                float startAngleOffset = stanceFacing == Rot4.North || stanceFacing == Rot4.East
-                    ? -6f
-                    : 6f;
-                angle += startAngleOffset * settleRemaining;
-                offset += new Vector3(0f, 0f, 0.04f * settleRemaining);
-                PawnRenderUtility.DrawEquipmentAiming(weapon, drawPos + offset * drawFactor, angle);
 
                 if (pawn.apparel != null)
                 {
@@ -521,8 +491,7 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 if (hediffDef == MX_QHDefOf.MX_QH_FlowingFormImmunity
-                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable
-                    || hediffDef == MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable)
+                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable)
                 {
                     state.Invulnerable = true;
                 }

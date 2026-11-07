@@ -36,7 +36,29 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         private static readonly int BladeReveal = Shader.PropertyToID("_BladeReveal");
 
         /// <param name="bodyCenter">Drawn body centre on the map; its altitude is the body's base altitude.</param>
-        public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
+        /// <param name="opacity">Share of the blade drawn (<see cref="BladeOpacity"/>): it dissolves by a noise, nothing at 0.</param>
+        public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter, float opacity = 1f)
+        {
+            if (opacity <= 0.001f)
+            {
+                return;
+            }
+            dissolve = opacity;
+            try
+            {
+                DrawBlade(ext, pose, bodyCenter);
+            }
+            finally
+            {
+                dissolve = 1f;
+            }
+        }
+
+        /// <summary>Opacity of the blade being drawn (set by <see cref="Draw"/> for its quads).</summary>
+        private static float dissolve = 1f;
+        private static readonly int BladeDissolve = Shader.PropertyToID("_BladeDissolve");
+
+        private static void DrawBlade(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
         {
             Color scabbardColor = pose.scabbardColor;
             Material mat = MaterialFor(ext, Color.white);
@@ -126,13 +148,14 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             m.SetColumn(1, new Vector4(0f, 1e-3f, 0f, 0f));
             m.SetColumn(2, new Vector4(cv.x, cv.y, cv.z, 0f));
             m.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
-            if (reveal.w <= 0f)
+            if (reveal.w <= 0f && dissolve >= 1f)
             {
                 Graphics.DrawMesh(mesh, m, mat, 0);
                 return;
             }
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.SetVector(BladeReveal, reveal);
+            block.SetFloat(BladeDissolve, dissolve);
             Graphics.DrawMesh(mesh, m, mat, 0, null, 0, block);
             block.Clear();
         }

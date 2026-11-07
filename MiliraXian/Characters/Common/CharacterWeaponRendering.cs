@@ -48,7 +48,7 @@ internal static class Patch_CharacterBladeBodyRendering
                 return true;
             }
             Vector3 body = pawn.DrawPos;
-            BladeRenderer.Draw(ext, pose, body);
+            BladeRenderer.Draw(ext, pose, body, BladeOpacity.For(pawn));
             if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsSingle: true } execution)
                 execution.DrawSingleVfx(ext, pose, body);
         }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 镜花水月的水面：逐像素算预览脚本里的波浪、打光、月影和碎镜。加法混合，不写深度；
+       队列在樱舞刀光（3151 扭曲 / 3152 / 3153）之前，斩击的扭曲会把水面一起扭进去。 -->
+  <ShaderDef>
+    <defName>MX_QH_MirrorWater</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_MirrorWater.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3140</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 镜花水月的人物快照（碎镜、重现、倒影）：细条网格上的快照，混一点粉色水光。预乘透明，画在水面之后。
+       和原版、3D 刀身一样保留 flipTextureST 的默认值，网格 v 朝画面上方。 -->
+  <ShaderDef>
+    <defName>MX_QH_MirrorSprite</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_MirrorSprite.frag.glsl</fragmentShaderFileName>
+      <transparent>true</transparent>
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>One</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3145</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

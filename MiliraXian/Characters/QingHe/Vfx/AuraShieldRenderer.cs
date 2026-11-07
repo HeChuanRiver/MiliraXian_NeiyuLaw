@@ -152,7 +152,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 fullFadeFactor = Mathf.Clamp01(1f - shield.FullEnergyAccumulatedTicks / (float)fadeTicks);
             }
 
-            float drawAlpha = Mathf.Clamp01(Visual.alpha * (0.35f + 0.65f * shieldFactor) * fullFadeFactor);
+            // Mirror Flower, Water Moon fades the shield out over its windup and back over its recovery;
+            // multiplied onto the shield's own visibility, so it never shows a shield that was hidden.
+            float skillFactor = owner.jobs?.curDriver is Jobs.JobDriver_IllusoryReflectionStance mirror ? mirror.ShieldOpacity : 1f;
+            float drawAlpha = Mathf.Clamp01(Visual.alpha * (0.35f + 0.65f * shieldFactor) * fullFadeFactor * skillFactor);
             if (Visual.texPath.NullOrEmpty())
             {
                 return;
@@ -234,9 +237,22 @@ namespace MiliraXian.Characters.QingHe.Vfx
             // The glow is a second submission of the same mesh to the bloom group's layer, with the
             // same property block (bones, colour and fade included). The bloom pass renders every
             // submission of the frame at once, so a shield costs nothing beyond this call.
-            if (Visual.bloom != null && drawAlpha > 0.001f)
+            if (drawAlpha <= 0.001f)
             {
+                // Fully faded (the animator above has still advanced, so it resumes in step).
+                propertyBlock.Clear();
+                return;
+            }
+            if (Visual.bloom != null)
+            {
+                // The halo reads the colour, not the alpha: the skill's fade dims it there too.
+                if (skillFactor < 1f)
+                {
+                    propertyBlock.SetColor(ShaderPropertyIDs.Color,
+                        new Color(0.82f * skillFactor, 0.92f * skillFactor, skillFactor, Mathf.Clamp01(drawAlpha)));
+                }
                 ScreenBloom.Submit(Visual.bloom, shieldMesh, matrix, shieldMat, propertyBlock);
+                propertyBlock.SetColor(ShaderPropertyIDs.Color, new Color(0.82f, 0.92f, 1f, Mathf.Clamp01(drawAlpha)));
             }
             Graphics.DrawMesh(shieldMesh, matrix, shieldMat, 0, null, 0, propertyBlock);
             propertyBlock.Clear();

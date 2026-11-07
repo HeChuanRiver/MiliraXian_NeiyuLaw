@@ -28,12 +28,12 @@ namespace MiliraXian.Characters.QingHe.Verbs
     {
         static QingheBladeMotionGate()
         {
-            // Illusory Reflection draws its own stance blade.
+            // Mirror Flower, Water Moon hides the weapon for most of its course.
             // Decorative mode: the vanilla weapon drawing, no held blade.
             BladeMotionPlayer.RegisterIdleGate(pawn =>
                 !QinghePowerBalance.Sealed
                 && MX_QHCharacterUtility.IsQinghe(pawn)
-                && pawn.jobs?.curDriver is not Jobs.JobDriver_IllusoryReflectionStance
+                && pawn.jobs?.curDriver is not Jobs.JobDriver_IllusoryReflectionStance { WeaponOpacity: <= 0f }
                 && MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance == MX_QHDefOf.MX_QH_Stance_Sword);
         }
     }

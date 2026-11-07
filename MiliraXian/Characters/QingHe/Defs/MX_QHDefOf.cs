@@ -48,7 +48,6 @@ namespace MiliraXian.Characters.QingHe.Defs
 
         public static HediffDef MX_QH_SpringFlow;
         public static HediffDef MX_QH_AscentSlashInvulnerable;
-        public static HediffDef MX_QH_IllusoryReflectionInvulnerable;
         public static HediffDef MX_QH_FlowingForm;
         public static HediffDef MX_QH_FlowingFormImmunity;
         public static HediffDef MX_QH_AuraMastery;
@@ -88,7 +87,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static FleckDef PsycastPsychicEffect;
         public static FleckDef PsycastSkipFlashExit;
         public static HediffDef PsychicInvisibility;
-        public static ShaderTypeDef MX_QH_MirrorSlash;
 
         public static ThingDef MX_QH_Weapon_FlowerBell;
         public static ThingDef MX_QH_Weapon_Sword;

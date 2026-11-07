@@ -1,33 +1,176 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using MiliraXian.Characters.Common.Combat;
+using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.Abilities;
-using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
-using MiliraXian.Characters.QingHe.Things.Weapons;
-using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
-using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Jobs
 {
+    /// <summary>Phases of Mirror Flower, Water Moon, in order.</summary>
+    public enum MirrorPhase
+    {
+        Windup,
+        Stance,
+        Shatter,
+        CutDelay,
+        Cut,
+        ReformDelay,
+        Recover,
+        /// <summary>No hit before the stance ended: the water drains and the weapon returns.</summary>
+        Exit,
+        Done,
+    }
+
+    /// <summary>
+    /// Mirror Flower, Water Moon (镜花水月). One state machine: windup, stance (until hit or the
+    /// duration ends), then on a hit shatter, a hidden beat, a 360° tilted circle cut, another hidden
+    /// beat and the re-form; without a hit a short exit. Untouchable from the start to Done. Only the
+    /// stance counters, once. The cut's damage follows the trail's heading curve (a sweep), so a
+    /// target is struck when the trail passes it; the damage disc is the whole radius, near targets
+    /// included, while the trail itself is only drawn as an outer band.
+    /// The ability's cooldown starts when the job ends.
+    /// </summary>
     public class JobDriver_IllusoryReflectionStance : JobDriver
     {
-        private bool stanceActive;
-        private bool stanceSoundPlayed;
-        private bool counterQueued;
-        private IntVec3 stanceDirectionCell = IntVec3.Invalid;
+        private MirrorPhase phase = MirrorPhase.Windup;
+        private int phaseStartTick = -1;
+        private int stanceStartTick = -1;
+        private Vector3 aim = Vector3.right;
         private int stanceFacingInt = Rot4.South.AsInt;
+        private bool counterQueued;
+        private bool pressureGiven;
+        private bool cooldownStarted;
+        private int cutStartTick = -1;
 
         public override bool PlayerInterruptable => false;
 
         public Rot4 StanceFacing => new(stanceFacingInt);
 
-        public bool StanceActive => stanceActive;
+        public MirrorPhase Phase => phase;
 
-        public int StanceElapsedTicks => Mathf.Max(0, (Find.TickManager?.TicksGame ?? job.startTick) - job.startTick);
+        /// <summary>Ground direction the stance was cast toward (the trail starts at its back-left).</summary>
+        public Vector3 Aim => aim;
+
+        /// <summary>Game tick the current phase started.</summary>
+        public int PhaseStartTick => phaseStartTick;
+
+        /// <summary>From the windup to Done every damage is absorbed, no posture lands and no execution.</summary>
+        public bool Untouchable => phase != MirrorPhase.Done;
+
+        public int StanceStartTick => stanceStartTick;
+
+        /// <summary>Game tick the cut started; -1 before it.</summary>
+        public int CutStartTick => cutStartTick;
+
+        public CompProperties_AbilityIllusoryReflection Properties => Props;
+
+        /// <summary>Seconds into the current phase on the interpolated visual clock (never negative).</summary>
+        public float PhaseSeconds => Mathf.Max(0f, Common.Vfx.VisualClock.TicksSince(phaseStartTick)) / 60f;
+
+        /// <summary>Seconds of the re-form within the recovery (she is drawn from the snapshot until then).</summary>
+        public float ReformSeconds
+        {
+            get
+            {
+                CompProperties_AbilityIllusoryReflection props = Props;
+                return ((props?.recoverTicks ?? 30) - (props?.weaponBackTicks ?? 9)) / 60f;
+            }
+        }
+
+        /// <summary>
+        /// The real body is not drawn: from the shatter until the re-form is complete (the snapshot is
+        /// drawn instead while she breaks apart and while she takes shape again).
+        /// </summary>
+        public bool BodyHidden
+        {
+            get
+            {
+                switch (phase)
+                {
+                    case MirrorPhase.Shatter:
+                    case MirrorPhase.CutDelay:
+                    case MirrorPhase.Cut:
+                    case MirrorPhase.ReformDelay:
+                        return true;
+                    case MirrorPhase.Recover:
+                        return PhaseSeconds < ReformSeconds;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Share of the held weapon drawn: fades out over the windup, none from the stance to the end
+        /// of the re-form, back over the last part of the recovery; back over the exit.
+        /// </summary>
+        public float WeaponOpacity
+        {
+            get
+            {
+                CompProperties_AbilityIllusoryReflection props = Props;
+                float s = PhaseSeconds;
+                switch (phase)
+                {
+                    case MirrorPhase.Windup:
+                        return 1f - Smooth(s / Mathf.Max(1e-3f, (props?.windupTicks ?? 30) / 60f));
+                    case MirrorPhase.Recover:
+                        float back = (props?.weaponBackTicks ?? 9) / 60f;
+                        return Mathf.Clamp01((s - ReformSeconds) / Mathf.Max(1e-3f, back));
+                    case MirrorPhase.Exit:
+                        return Mathf.Clamp01(s / Mathf.Max(1e-3f, (props?.exitTicks ?? 30) / 60f));
+                    case MirrorPhase.Done:
+                        return 1f;
+                    default:
+                        return 0f;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Factor on her shield's own visibility: fades out over the windup, none from the stance to
+        /// the recovery, back over the recovery (or the no-hit exit).
+        /// </summary>
+        public float ShieldOpacity
+        {
+            get
+            {
+                CompProperties_AbilityIllusoryReflection props = Props;
+                float s = PhaseSeconds;
+                switch (phase)
+                {
+                    case MirrorPhase.Windup:
+                        return 1f - Smooth(s / Mathf.Max(1e-3f, (props?.windupTicks ?? 30) / 60f));
+                    case MirrorPhase.Recover:
+                        return Smooth(s / Mathf.Max(1e-3f, (props?.recoverTicks ?? 30) / 60f));
+                    case MirrorPhase.Exit:
+                        return Smooth(s / Mathf.Max(1e-3f, (props?.exitTicks ?? 30) / 60f));
+                    case MirrorPhase.Done:
+                        return 1f;
+                    default:
+                        return 0f;
+                }
+            }
+        }
+
+        /// <summary>The preview's smooth(0, 1, x).</summary>
+        internal static float Smooth(float x)
+        {
+            x = Mathf.Clamp01(x);
+            return x * x * (3f - 2f * x);
+        }
+
+        private int Now => Find.TickManager?.TicksGame ?? 0;
+
+        private int PhaseTicks => Mathf.Max(0, Now - phaseStartTick);
+
+        private CompProperties_AbilityIllusoryReflection Props =>
+            job?.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.Props;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -37,98 +180,208 @@ namespace MiliraXian.Characters.QingHe.Jobs
         public override void Notify_Starting()
         {
             base.Notify_Starting();
-            stanceActive = true;
-            stanceSoundPlayed = false;
+            int now = Now;
+            stanceStartTick = now;
+            SetPhase(MirrorPhase.Windup, now);
             counterQueued = false;
-            stanceDirectionCell = job.GetTarget(TargetIndex.A).Cell;
-            if (!stanceDirectionCell.IsValid || stanceDirectionCell == pawn.Position)
+            pressureGiven = false;
+            cooldownStarted = false;
+            IntVec3 cell = job.GetTarget(TargetIndex.A).Cell;
+            if (!cell.IsValid || cell == pawn.Position)
             {
-                stanceDirectionCell = pawn.Position + pawn.Rotation.FacingCell;
+                cell = pawn.Position + pawn.Rotation.FacingCell;
             }
-            pawn.rotationTracker?.FaceCell(stanceDirectionCell);
+            Vector3 dir = (cell - pawn.Position).ToVector3();
+            dir.y = 0f;
+            aim = dir.sqrMagnitude > 0.001f ? dir.normalized : Vector3.right;
+            pawn.rotationTracker?.FaceCell(cell);
             stanceFacingInt = pawn.Rotation.AsInt;
             pawn.Rotation = StanceFacing;
-
-            // This job bypasses normal casting so it can defend immediately under attack.
-            Ability ability = job.ability;
-            if (ability != null && ability.HasCooldown && ability.CooldownTicksRemaining <= 0)
-            {
-                ability.StartCooldown(ability.def.cooldownTicksRange.RandomInRange);
-            }
         }
 
+        /// <summary>
+        /// Damage reaching her: absorbed in every phase but Done. In the stance it is the hit the
+        /// counter answers.
+        /// </summary>
         public bool TryHandleDamage(ref DamageInfo dinfo, ref bool absorbed)
         {
-            if (!stanceActive || dinfo.Amount <= 0f)
+            if (!Untouchable || dinfo.Amount <= 0f)
             {
                 return false;
             }
-
-            QueueCounter();
+            if (phase == MirrorPhase.Stance)
+            {
+                counterQueued = true;
+            }
             dinfo.SetAmount(0f);
             absorbed = true;
             return true;
         }
 
+        /// <summary>A hostile attack that missed her (a dodge, a projectile reaching her cell) also triggers the counter.</summary>
         public bool TryHandleAttackAttempt(Thing instigator)
         {
-            if (!stanceActive || !IsHostileAttackSource(instigator))
+            if (phase != MirrorPhase.Stance || !IsHostileAttackSource(instigator))
             {
                 return false;
             }
-
-            QueueCounter();
+            counterQueued = true;
             return true;
         }
 
-        public override void ExposeData()
+        /// <summary>A target struck by the cut: the first gives the sword pressure.</summary>
+        internal void NotifyCutHit(Thing target)
         {
-            base.ExposeData();
-            Scribe_Values.Look(ref stanceActive, "mx_qh_illusoryReflection_stanceActive", false);
-            Scribe_Values.Look(ref stanceSoundPlayed, "mx_qh_illusoryReflection_stanceSoundPlayed", false);
-            Scribe_Values.Look(ref counterQueued, "mx_qh_illusoryReflection_counterQueued", false);
-            Scribe_Values.Look(ref stanceDirectionCell, "mx_qh_illusoryReflection_stanceDirectionCell", IntVec3.Invalid);
-            Scribe_Values.Look(ref stanceFacingInt, "mx_qh_illusoryReflection_stanceFacing", Rot4.South.AsInt);
+            if (pressureGiven || !(target is Pawn || target is Building))
+            {
+                return;
+            }
+            pressureGiven = true;
+            MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddValue(Props?.swordPressureGain ?? 1f);
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            Toil stance = ToilMaker.MakeToil("IllusoryReflectionStance");
-            stance.tickAction = delegate
+            AddFinishAction(_ => StartCooldown());
+            Toil toil = ToilMaker.MakeToil("IllusoryReflection");
+            toil.initAction = delegate
             {
-                if (!stanceSoundPlayed)
-                {
-                    ResolveProps()?.stanceSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
-                    stanceSoundPlayed = true;
-                }
-                pawn.Rotation = StanceFacing;
-                if (counterQueued)
-                {
-                    ResolveCounter();
-                    ReadyForNextToil();
-                }
+                Props?.stanceSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
             };
-            stance.AddFinishAction(delegate { stanceActive = false; });
-            stance.defaultCompleteMode = ToilCompleteMode.Delay;
-            stance.defaultDuration = ResolveStanceDuration();
-            yield return stance;
-        }
-
-        private int ResolveStanceDuration()
-        {
-            return ResolveProps()?.durationTicks ?? 300;
-        }
-
-        private CompProperties_AbilityIllusoryReflection ResolveProps()
-        {
-            return job.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.Props;
-        }
-
-        private void QueueCounter()
-        {
-            if (!counterQueued)
+            toil.tickAction = delegate
             {
-                counterQueued = true;
+                StateTick();
+                // The visuals are not saved: the map component picks the stance up again after a load.
+                pawn.Map?.GetComponent<Vfx.MapComponent_MirrorVisuals>()?.Track(pawn);
+            };
+            toil.defaultCompleteMode = ToilCompleteMode.Never;
+            toil.handlingFacing = true;
+            yield return toil;
+        }
+
+        private void StateTick()
+        {
+            CompProperties_AbilityIllusoryReflection props = Props;
+            if (props == null || pawn.Map == null)
+            {
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            pawn.Rotation = StanceFacing;
+            int now = Now;
+            int elapsed = PhaseTicks;
+            switch (phase)
+            {
+                case MirrorPhase.Windup:
+                    if (ShouldLeave())
+                    {
+                        SetPhase(MirrorPhase.Exit, now);
+                    }
+                    else if (elapsed >= props.windupTicks)
+                    {
+                        SetPhase(MirrorPhase.Stance, now);
+                    }
+                    break;
+                case MirrorPhase.Stance:
+                    if (counterQueued)
+                    {
+                        SetPhase(MirrorPhase.Shatter, now);
+                        props.shatterSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+                    }
+                    else if (ShouldLeave() || now - stanceStartTick >= props.durationTicks)
+                    {
+                        SetPhase(MirrorPhase.Exit, now);
+                    }
+                    break;
+                case MirrorPhase.Shatter:
+                    Advance(elapsed, props.shatterTicks, MirrorPhase.CutDelay, now);
+                    break;
+                case MirrorPhase.CutDelay:
+                    if (elapsed >= props.cutDelayTicks)
+                    {
+                        SetPhase(MirrorPhase.Cut, now);
+                        StartCut(props, now);
+                    }
+                    break;
+                case MirrorPhase.Cut:
+                    Advance(elapsed, props.cutTicks, MirrorPhase.ReformDelay, now);
+                    break;
+                case MirrorPhase.ReformDelay:
+                    Advance(elapsed, props.reformDelayTicks, MirrorPhase.Recover, now);
+                    break;
+                case MirrorPhase.Recover:
+                    Advance(elapsed, props.recoverTicks, MirrorPhase.Done, now);
+                    break;
+                case MirrorPhase.Exit:
+                    Advance(elapsed, props.exitTicks, MirrorPhase.Done, now);
+                    break;
+            }
+            if (phase == MirrorPhase.Done)
+            {
+                EndJobWith(JobCondition.Succeeded);
+            }
+        }
+
+        private void Advance(int elapsed, int duration, MirrorPhase next, int now)
+        {
+            if (elapsed >= duration)
+            {
+                SetPhase(next, now);
+            }
+        }
+
+        private void SetPhase(MirrorPhase next, int now)
+        {
+            phase = next;
+            phaseStartTick = now;
+        }
+
+        /// <summary>The stance ends early without a hit: decorative mode, or a player pawn undrafted.</summary>
+        private bool ShouldLeave()
+        {
+            return QinghePowerBalance.Sealed
+                || (pawn.Faction == Faction.OfPlayer && pawn.drafter != null && !pawn.Drafted);
+        }
+
+        private void StartCut(CompProperties_AbilityIllusoryReflection props, int now)
+        {
+            Map map = pawn.Map;
+            cutStartTick = now;
+            props.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
+            if (props.sweepDamage == null)
+            {
+                return;
+            }
+            float factor = MX_QH_PerkUtility.GetSpellEffectFactor(pawn)
+                * pawn.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
+            Vector3 c = pawn.Position.ToVector3Shifted();
+            MapComponent_SweepDamage.Add(map, new SweepDamageSource
+            {
+                def = props.sweepDamage,
+                caster = pawn,
+                weaponDef = pawn.equipment?.Primary?.def,
+                damageDef = props.cutDamageDef,
+                posture = props.posture,
+                center = new Vector3(c.x, 0f, c.z),
+                radius = props.cutRadius,
+                damage = props.damage * factor,
+                armorPenetration = props.armorPenetration,
+                startTick = now,
+                headings = MirrorCutGeometry.Headings(aim, props.cutStartYaw, props.cutTicks),
+            });
+        }
+
+        private void StartCooldown()
+        {
+            if (cooldownStarted)
+            {
+                return;
+            }
+            cooldownStarted = true;
+            Ability ability = job?.ability;
+            if (ability != null && ability.HasCooldown)
+            {
+                ability.StartCooldown(ability.def.cooldownTicksRange.RandomInRange);
             }
         }
 
@@ -141,76 +394,84 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 && GenHostility.HostileTo(pawn, instigator);
         }
 
-        private void ResolveCounter()
+        public override void ExposeData()
         {
-            Map map = pawn.MapHeld;
-            if (map == null)
-            {
-                return;
-            }
+            base.ExposeData();
+            Scribe_Values.Look(ref phase, "mx_qh_mirror_phase", MirrorPhase.Windup);
+            Scribe_Values.Look(ref phaseStartTick, "mx_qh_mirror_phaseStart", -1);
+            Scribe_Values.Look(ref stanceStartTick, "mx_qh_mirror_stanceStart", -1);
+            Scribe_Values.Look(ref aim, "mx_qh_mirror_aim", Vector3.right);
+            Scribe_Values.Look(ref stanceFacingInt, "mx_qh_mirror_facing", Rot4.South.AsInt);
+            Scribe_Values.Look(ref counterQueued, "mx_qh_mirror_counterQueued");
+            Scribe_Values.Look(ref pressureGiven, "mx_qh_mirror_pressureGiven");
+            Scribe_Values.Look(ref cooldownStarted, "mx_qh_mirror_cooldownStarted");
+            Scribe_Values.Look(ref cutStartTick, "mx_qh_mirror_cutStart", -1);
+        }
+    }
 
-            IntVec3 directionCell = stanceDirectionCell.IsValid && stanceDirectionCell != pawn.Position
-                ? stanceDirectionCell
-                : pawn.Position + StanceFacing.FacingCell;
-            pawn.Rotation = StanceFacing;
-            CompProperties_AbilityIllusoryReflection props = ResolveProps();
-            job.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.AddInvulnerability(pawn);
-            props?.slashSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
-            float specialFactor = MX_QH_PerkUtility.GetSpellEffectFactor(pawn);
-            // Snapshot before any target hit can grant pressure or other on-hit buffs.
-            float meleeFactor = pawn.GetStatValue(StatDefOf.MeleeDamageFactor, cacheStaleAfterTicks: -1);
-            PlayEmpoweredCounterSlash(directionCell, props);
-            int hitCount = QingheSwordCombatUtility.ApplyCone(
-                pawn,
-                pawn.Position,
-                directionCell,
-                props?.coneRadius ?? 5.5f,
-                props?.coneAngleDegrees ?? 90f,
-                (props?.empoweredDamage ?? 48f) * specialFactor * meleeFactor,
-                props?.armorPenetration ?? 0.45f,
-                empowered: true);
-            if (hitCount > 0)
-            {
-                MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddValue(1f);
-            }
+    /// <summary>
+    /// The cut's sweep, shared by the damage and the trail. Yaw is relative to the aim, + to the right
+    /// (clockwise seen from above facing east); a west-facing stance mirrors it, as the sprite does.
+    /// The trail runs from <c>startYaw</c> a full turn with an ease-out: yaw(u) = start + 360·(1 − (1 − u)²).
+    /// </summary>
+    public static class MirrorCutGeometry
+    {
+        public static float YawAt(float startYaw, float u)
+        {
+            u = Mathf.Clamp01(u);
+            return startYaw + 360f * (1f - (1f - u) * (1f - u));
         }
 
-        private void PlayEmpoweredCounterSlash(IntVec3 directionCell, CompProperties_AbilityIllusoryReflection props)
+        /// <summary>Ground heading (degrees, counter-clockwise from east) of aim-relative <paramref name="yaw"/>.</summary>
+        public static float HeadingOf(Vector3 aim, float yaw)
         {
-            Map map = pawn.MapHeld;
-            if (map == null || props == null)
-            {
-                return;
-            }
-
-            Vector3 forward = (directionCell - pawn.Position).ToVector3().Yto0();
-            if (forward.sqrMagnitude < 0.001f)
-            {
-                forward = pawn.Rotation.FacingCell.ToVector3();
-            }
-            forward.Normalize();
-
-            map.GetComponent<MapComponent_QingheMirrorSlashVisuals>()?.AddSlash(
-                pawn.DrawPos,
-                forward,
-                props.coneRadius,
-                props.mirrorSlashTexPath,
-                props.mirrorSlashRevealSeconds,
-                props.mirrorSlashHoldSeconds,
-                props.mirrorSlashFadeSeconds,
-                props.mirrorSlashDrawSizeFactor,
-                props.mirrorSlashForwardOffsetFactor,
-                props.mirrorSlashAngleOffsetDegrees,
-                props.mirrorSlashHeadWidth,
-                props.mirrorSlashHeadIntensity,
-                props.mirrorSlashAdditiveIntensity,
-                props.mirrorSlashDistortionStrength,
-                props.mirrorSlashDistortionScale,
-                props.mirrorSlashDistortionScrollX,
-                props.mirrorSlashDistortionScrollY,
-                props.mirrorSlashDistortionOpacity,
-                directionCell.x < pawn.Position.x);
+            float aimHeading = SweepDamageSource.HeadingOf(aim);
+            float sign = aim.x < 0f ? -1f : 1f;
+            return aimHeading - sign * yaw;
         }
 
+        /// <summary>One heading per tick, unwrapped, from the start to the end of the cut.</summary>
+        public static List<float> Headings(Vector3 aim, float startYaw, int cutTicks)
+        {
+            int n = Mathf.Max(1, cutTicks);
+            List<float> list = new(n + 1);
+            for (int i = 0; i <= n; i++)
+            {
+                list.Add(HeadingOf(aim, YawAt(startYaw, (float)i / n)));
+            }
+            return list;
+        }
+    }
+
+    /// <summary>The cut's contacts: the usual technique damage and posture, and the sword pressure of the first hit.</summary>
+    public class SweepDamageWorker_MirrorCut : SweepDamageWorker
+    {
+        public override void ApplyHit(SweepDamageSource source, Thing target)
+        {
+            base.ApplyHit(source, target);
+            if (source.caster?.jobs?.curDriver is JobDriver_IllusoryReflectionStance driver)
+            {
+                driver.NotifyCutHit(target);
+            }
+        }
+    }
+
+    /// <summary>Registers the stance's immunity to posture and executions.</summary>
+    [StaticConstructorOnStartup]
+    public static class IllusoryReflectionInvulnerability
+    {
+        static IllusoryReflectionInvulnerability()
+        {
+            CombatPosture.RegisterImmunity(Active);
+            ExecutionGuard.Register((victim, _) => Active(victim));
+            Common.Vfx.BladeBody.BladeOpacity.Register(pawn =>
+                pawn?.jobs?.curDriver is JobDriver_IllusoryReflectionStance driver ? driver.WeaponOpacity : 1f);
+        }
+
+        public static bool Active(Pawn pawn)
+        {
+            return pawn is { Dead: false }
+                && pawn.jobs?.curDriver is JobDriver_IllusoryReflectionStance { Untouchable: true };
+        }
     }
 }

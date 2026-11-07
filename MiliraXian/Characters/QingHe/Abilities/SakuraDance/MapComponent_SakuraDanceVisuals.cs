@@ -361,7 +361,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 }
                 float noise = Noise(te, v.noisePhase + layer.radialOffset * 13f + layerIndex * 3.1f);
                 float width = baseWidth * Mathf.Lerp(layer.tailWidth, 1f, along01) * (1f + layer.widthNoise * noise);
-                float a = alpha * along * Mathf.Lerp(layer.tailAlpha, 1f, along01) * (1f + layer.alphaNoise * noise);
+                float a = alpha * along * Mathf.Lerp(layer.tailAlpha, 1f, along01) * (1f + layer.alphaNoise * noise)
+                    * v.SampleAlpha(layerIndex, layer, te, t);
                 if (layer.headBoost > 0f)
                 {
                     float h = Mathf.Clamp01(1f - (head - te) / Mathf.Max(layer.headLength * emitted, 1e-4f));
@@ -553,6 +554,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
 
             /// <summary>Checked every frame before drawing; false drops the source.</summary>
             public virtual bool Alive(float ticks) => true;
+
+            /// <summary>Extra opacity of the trail point emitted at <paramref name="te"/>, at source time <paramref name="t"/> (1 = none).</summary>
+            public virtual float SampleAlpha(int layerIndex, SakuraTrailLayer layer, float te, float t) => 1f;
 
             /// <summary>World point of the trail emitted at <paramref name="te"/> and the unit width direction there.</summary>
             public abstract void Sample(int layerIndex, float te, float radialOffset, out Vector3 centre, out Vector3 side);
