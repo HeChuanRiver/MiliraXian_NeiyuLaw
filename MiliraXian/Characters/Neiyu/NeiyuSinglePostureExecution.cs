@@ -14,9 +14,9 @@ public sealed class NeiyuSingleExecutionProps
     public int lockTicks = 150;
     public int readyTicks = 20, enchantTicks = 30, flashTicks = 3, swingTicks = 8, hitStopTicks = 9;
     public int knockbackTicks = 24, approachTicks = 24, spinLeadTicks = 12, spinTicksPerTurn = 30;
-    public int flightTicks = 30, glyphDelayTicks = 8, swordCount = 5, swordStaggerTicks = 20, swordFlightTicks = 36, finishTicks = 24;
+    public int flightTicks = 30, glyphDelayTicks = 8, swordCount = 5, swordStaggerTicks = 24, swordFlightTicks = 36, finishTicks = 24;
     public int waveTicks = 38, glyphHoldTicks = 9, glyphFadeTicks = 15, pierceTicks = 17, afterimageTicks = 20;
-    public SoundDef pierceSound;
+    public SoundDef firstCutSound, swordLaunchSound, pierceSound;
     public BladeKeyframes drawBlade, aimBlade;
 
     internal bool Valid => float.IsFinite(enemyRadius) && enemyRadius > 0f
@@ -180,7 +180,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         if (tick >= FirstCutAt && singleStage == SingleStage.Draw)
         {
             singleStage = SingleStage.FirstCut;
-            NeiyuSwordCombatVfx.SingleSound(pawn, targetDraw, NeiyuSwordCombat.Config.strikeSound);
+            NeiyuSwordCombatVfx.SingleSound(pawn, targetDraw, Single.firstCutSound ?? NeiyuSwordCombat.Config.strikeSound);
         }
         if (tick >= KnockbackAt && singleStage == SingleStage.FirstCut && knockbackTicks > 0)
         {
@@ -258,10 +258,18 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
 
         pawn.Rotation = Rot4.FromAngleFlat(BodyYaw(tick, actorDraw, aimPoint));
+        if (singleStage == SingleStage.Volley)
+        {
+            int launchIndex = (tick - VolleyAt) / swordStaggerTicks;
+            if (launchIndex >= 0 && launchIndex < swordCount && tick == SwordLaunchAt(launchIndex))
+                NeiyuSwordCombatVfx.SingleSound(pawn, actorDraw, Single.swordLaunchSound);
+        }
         while (impacts < swordCount && tick >= SwordImpactAt(impacts))
         {
             impacts++;
-            if (impacts == swordCount && !strikeCommitted)
+            if (impacts < swordCount)
+                NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound);
+            else if (!strikeCommitted)
             {
                 // Set the terminal frame before invoking callbacks which can save the game.
                 singleStage = SingleStage.Recovery;
