@@ -383,9 +383,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             object stance = defender.stances.curStance;
             if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
             {
-                // Executing: the blade turns every blow aside without breaking the motion.
-                QingheSwordGuard.Parry(defender, attacker, c.parryAttackerPosture);
-                return true;
+                // Executing: invulnerable (SakuraDanceInvulnerability), the blow simply does nothing.
+                return false;
             }
             if (sword != null && stance is Stance_Warmup warmup && warmup.verb == sword)
             {
@@ -451,9 +450,10 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             bool parry;
             if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
             {
-                parry = true;
+                // Executing: invulnerable, the shot lands and does nothing.
+                return false;
             }
-            else if (sword != null && stance is Stance_Warmup warmup && warmup.verb == sword)
+            if (sword != null && stance is Stance_Warmup warmup && warmup.verb == sword)
             {
                 // Taken on the sheathing blade without breaking the attack.
                 parry = true;

@@ -62,6 +62,24 @@ public static class CombatPosture
     public static HediffComp_CombatPosture Ensure(Pawn pawn) =>
         Get(pawn) ?? PawnSpecialResourceUtility.EnsureSpecialResourceComp(pawn, Config.posture) as HediffComp_CombatPosture;
 
+    private static readonly List<Predicate<Pawn>> Immunities = new();
+
+    /// <summary>
+    /// A character state in which the pawn takes no posture at all (an invulnerable skill).
+    /// Character code registers these at startup; this file does not depend on any character.
+    /// </summary>
+    public static void RegisterImmunity(Predicate<Pawn> immune)
+    {
+        if (immune != null && !Immunities.Contains(immune)) Immunities.Add(immune);
+    }
+
+    internal static bool Immune(Pawn pawn)
+    {
+        for (int i = 0; i < Immunities.Count; i++)
+            if (Immunities[i](pawn)) return true;
+        return false;
+    }
+
     internal static bool ControlsActions(Pawn pawn) => pawn is { Spawned: true, Dead: false }
         && pawn.health is { isBeingKilled: false } && Get(pawn)?.Broken == true;
 
@@ -143,6 +161,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     // A blocked melee hit: add posture to the attacker; opening leaves a one-hit vulnerability.
     public void ReceiveBlock(Pawn defender, float amount, bool opening)
     {
+        if (CombatPosture.Immune(Pawn)) return;
         // Settle before changing the grace-period origin, including several hits
         // inside one settlement interval. There is exactly one saved resource value.
         Settle(force: true);

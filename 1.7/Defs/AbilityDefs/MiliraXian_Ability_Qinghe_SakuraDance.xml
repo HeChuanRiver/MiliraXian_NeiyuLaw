@@ -39,7 +39,7 @@
       </li>
     </modExtensions>
     <label>樱舞</label>
-    <description>原地旋身跃起，连斩三刀：第一刀斜向上撩起，第二刀紧随其后，第三刀在最高处收势、范围最大。每一刀对刀光扫过的敌人造成一次伤害。\n\n雷返：雨天在露天施放时，刀身会在起手或第三刀前接住落雷。接雷之后的每一刀都带雷，伤害逐刀增加，第三刀化作雷电奉还，伤害最高，并使命中的敌人眩晕。</description>
+    <description>消耗1点剑压，清空自身架势，原地旋身跃起，连斩三刀：第一刀斜向上撩起，第二刀紧随其后，第三刀在最高处收势、范围最大。每一刀对刀光扫过的敌人造成一次伤害。\n\n从起手到收势全程无敌，不受任何伤害与架势伤害。\n\n雷返：雨天在露天施放时，刀身会在起手或第三刀前接住落雷。接雷之后的每一刀都带雷，伤害逐刀增加，第三刀化作雷电奉还，伤害最高，并使命中的敌人眩晕。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>235</displayOrder>
@@ -66,6 +66,10 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.SakuraDance.CompProperties_AbilitySakuraDance">
         <sweepDamage>MX_QH_SakuraDanceSweep</sweepDamage>
+        <!-- 代价：瞄准（前摇）开始时消耗 1 点剑压并清空自己的架势；不足 1 点不能施放。接住敌人雷返的反击不消耗。
+             前摇到樱舞结束全程无敌（伤害、架势、处决、雷返眩晕都免疫，没有例外）。 -->
+        <swordPressureCost>1</swordPressureCost>
+        <clearOwnPosture>true</clearOwnPosture>
         <!-- 伤口和战斗日志里的招式名：普通三刀为樱舞，接雷之后的刀为雷返 -->
         <cutDamageDef>MX_QH_SakuraDanceSlash</cutDamageDef>
         <thunderCutDamageDef>MX_QH_SakuraThunderSlash</thunderCutDamageDef>

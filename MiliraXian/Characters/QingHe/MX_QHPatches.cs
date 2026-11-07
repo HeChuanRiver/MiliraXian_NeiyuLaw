@@ -105,7 +105,7 @@ namespace MiliraXian.Characters.QingHe
                     return false;
                 }
 
-                if (!__state.Invulnerable)
+                if (!__state.Invulnerable && !Abilities.SakuraDance.SakuraDanceInvulnerability.Active(__instance))
                 {
                     return true;
                 }

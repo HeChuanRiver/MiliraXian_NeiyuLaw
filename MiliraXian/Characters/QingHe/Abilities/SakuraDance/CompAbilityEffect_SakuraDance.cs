@@ -13,6 +13,20 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
 
         public new CompProperties_AbilitySakuraDance Props => (CompProperties_AbilitySakuraDance)props;
 
+        private bool LacksPressure =>
+            Props.swordPressureCost > 0f
+            && (Hediffs.MX_QH_HediffUtility.GetSwordPressure(parent.pawn)?.CurrentValue ?? 0f) < Props.swordPressureCost - 1e-4f;
+
+        public override bool GizmoDisabled(out string reason)
+        {
+            if (LacksPressure)
+            {
+                reason = "MX_QH_SwordPressureNotEnough".Translate(Props.swordPressureCost.ToString("0.#"));
+                return true;
+            }
+            return base.GizmoDisabled(out reason);
+        }
+
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
             Pawn caster = parent?.pawn;
