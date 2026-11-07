@@ -36,10 +36,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         new Vector3(-.011f, 0f, -.07f), Quaternion.AngleAxis(35f, Vector3.up), Vector3.one);
     private static Color ExecutionIce => NeiyuSwordCombatVfx.Ice;
 
-    private void FinishSingle()
+    private void FinishScene()
     {
-        executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.UntrackVolley(this);
         executionMap?.GetComponent<MapComponent_PawnAfterimages>()?.RemoveOwnedBy(this);
+        if (IsSingle) executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.UntrackVolley(this);
+        if (multiRing != null) UnityEngine.Object.Destroy(multiRing);
+        multiRing = null;
     }
 
     internal void DrawSingleVfx(BladeGraphicExtension ext, in BladePose pose, Vector3 body)
@@ -121,12 +123,16 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         float p = ProgressBetween(tick, FirstCutAt, FirstCutAt + Single.waveTicks);
         Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.18f, 4f, p);
         at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
-        // The rotated arc covers 52% of the texture width and 81% of its length.
-        float width = Single.slashWidth / .52f;
-        float length = Single.slashWidth * .38f / .81f;
-        Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(initialYaw + 11f, Vector3.up),
-            new Vector3(width * Mathf.Lerp(.97f, 1.07f, p), 1f, length * Mathf.Lerp(.92f, 1.13f, p)));
         float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.28f, 1f, p));
+        DrawSlashArtwork(at, initialYaw + 11f, Single.slashWidth * Mathf.Lerp(.97f, 1.07f, p),
+            Single.slashWidth * .38f * Mathf.Lerp(.92f, 1.13f, p), fade);
+    }
+
+    private static void DrawSlashArtwork(Vector3 at, float yaw, float width, float length, float fade)
+    {
+        // The rotated arc covers 52% of the texture width and 81% of its length.
+        Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(yaw, Vector3.up),
+            new Vector3(width / .52f, 1f, length / .81f));
         DrawMesh(MeshPool.plane10, matrix * SlashArtwork, NeiyuExecutionMaterials.Wave, Color.white, fade);
     }
 

@@ -34,7 +34,7 @@ internal static class NeiyuSwordCombatVfx
     {
         if (equipment?.def != NeiyuSwordCombat.Config.sword) return;
         Pawn pawn = MXNeiyuShieldUtility.TryGetEquipmentOwnerPawn(equipment);
-        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution { IsSingle: false } driver) return;
+        if (pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution { HasScene: false } driver) return;
         float p = driver.Progress;
         NeiyuSwordCombatDef c = NeiyuSwordCombat.Config;
         float angle = p < c.dashFraction ? Mathf.Lerp(-25f, -75f, p / c.dashFraction)

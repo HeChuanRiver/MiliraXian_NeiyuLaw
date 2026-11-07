@@ -51,6 +51,8 @@ internal static class Patch_CharacterBladeBodyRendering
             BladeRenderer.Draw(ext, pose, body);
             if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsSingle: true } execution)
                 execution.DrawSingleVfx(ext, pose, body);
+            else if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsMulti: true } multi)
+                multi.DrawMultiVfx(body);
         }
         if (pawn.apparel != null)
         {

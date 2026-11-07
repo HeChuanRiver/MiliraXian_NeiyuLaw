@@ -161,7 +161,7 @@ public enum NeiyuExecutionPhase { Normal, PostureBroken, ExecutionStart, Executi
 
 public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostureExecutionDriver, IBladePoseSource
 {
-    private enum Branch { Compatibility, Single, Invalid }
+    private enum Branch { Compatibility, Single, Invalid, Multi }
     private Branch branch;
     private int startedAt = -1, duration, dashTick, strikeTick, recoverTick;
     private bool prepared, dashed, strikeCommitted, endedVisual;
@@ -172,6 +172,8 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
 
     public Pawn Victim => job?.targetA.Pawn;
     internal bool IsSingle => branch == Branch.Single;
+    internal bool IsMulti => branch == Branch.Multi;
+    internal bool HasScene => IsSingle || IsMulti;
     public int Elapsed => Mathf.Max(0, NeiyuSwordCombat.Now - startedAt);
     public float Progress => Mathf.Clamp01(Elapsed / (float)Mathf.Max(1, duration));
     public float FacingAngle => (hitCell.ToVector3Shifted() - pawn.DrawPos).AngleFlat();
@@ -207,6 +209,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         }
         branch = ChooseBranch(Victim);
         if (IsSingle) BeginSingle();
+        else if (IsMulti) BeginMulti();
     }
 
     public override void ExposeData()
@@ -226,7 +229,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         Scribe_References.Look(ref executionMap, "swordExecutionMap");
         Scribe_References.Look(ref executionWeapon, "swordExecutionWeapon");
         Scribe_Values.Look(ref branch, "swordExecutionBranch");
+        if (HasScene) ExposeSceneMotion();
         ExposeSingle();
+        ExposeMulti();
         base.ExposeData();
     }
 
@@ -235,16 +240,16 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         AddFinishAction(Finish);
         Toil execution = ToilMaker.MakeToil("NeiyuPostureExecution");
         execution.defaultCompleteMode = ToilCompleteMode.Never;
-        // The single timeline owns its deadline and validates the pawn itself.
+        // The authored timelines own their deadlines and validate the pawns themselves.
         // A lingering combat stance must allow the first Toil to start.
-        execution.atomicWithPrevious = IsSingle;
-        execution.handlingFacing = IsSingle;
+        execution.atomicWithPrevious = HasScene;
+        execution.handlingFacing = HasScene;
         execution.tickAction = TickExecution;
         yield return execution;
     }
 
     private bool ValidExecutor() => startedAt >= 0 && executionMap != null && pawn.Map == executionMap
-        && (executionWeapon == null ? !IsSingle : pawn.equipment?.Primary == executionWeapon)
+        && (executionWeapon == null ? !HasScene : pawn.equipment?.Primary == executionWeapon)
         && NeiyuSwordCombat.CanAct(pawn);
 
     private void TickExecution()
@@ -255,6 +260,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
             return;
         }
         if (IsSingle) TickSingle();
+        else if (IsMulti) TickMulti();
         else TickCompatibility();
     }
 
@@ -306,11 +312,14 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         // Write the event before death callbacks, including callbacks that save,
         // resurrect, move the victim, or replace this job.
         strikeCommitted = true;
+        bool multi = IsMulti;
         int jobId = job.loadID;
         try
         {
             if (IsSingle)
                 NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound ?? NeiyuSwordCombat.Config.endSound);
+            else if (multi)
+                SubmitMultiSlash(victim);
             else
             {
                 NeiyuSwordCombatVfx.Execution(pawn, hitCell, NeiyuExecutionPhase.ExecutionStrike);
@@ -325,7 +334,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
             if (pawn.jobs.curDriver == this) EndJobWith(JobCondition.Errored);
             return false;
         }
-        finally { ReleaseVictim(victim); }
+        finally
+        {
+            if (!multi) ReleaseVictim(victim);
+        }
         return pawn.jobs.curDriver == this && job.loadID == jobId;
     }
 
@@ -338,7 +350,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
     private void Finish(JobCondition condition)
     {
         ReleaseVictim(Victim);
-        if (IsSingle) FinishSingle();
+        if (HasScene) FinishScene();
         // The execution does not resume the interrupted job (see CombatPosture): the AI or the
         // draft picks anew. Never clear the player's queue or revive a saved reference to a
         // pooled old Job.
