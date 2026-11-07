@@ -47,6 +47,10 @@ public abstract class CombatBlocker
     // victim holds still for the rest of the break window and the executor may
     // still come. False: the break ends at once (Neiyu's behaviour).
     public virtual bool WaitForExecutor => false;
+    // Share of its maximum posture a victim this pawn broke keeps when the break ends without
+    // an execution blow (no time to execute it); it then drains as usual after the recovery delay.
+    // 0: the meter empties, as after an execution.
+    public virtual float UnexecutedPostureKept => 0f;
     public virtual void NotifyPostureBroken(Pawn source, Pawn victim) { }
 
     // While true, existing posture openings give no bonus damage.

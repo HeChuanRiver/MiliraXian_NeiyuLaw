@@ -283,6 +283,9 @@
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
         <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>
+        <!-- 清荷打崩、但破绽结束时没被处决的敌人（她忙着处决别人、够不着等）：架势只回落到上限的这个比例，
+             再照常等恢复延迟后自然下降，很快能再次打崩。被处决的敌人照旧清空。 -->
+        <unexecutedPostureKept>0.8</unexecutedPostureKept>
     </MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
 
     <JobDef>
