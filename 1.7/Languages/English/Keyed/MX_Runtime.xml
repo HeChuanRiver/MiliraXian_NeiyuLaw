@@ -20,6 +20,12 @@
   <MX_ModeSwitch_NoInventoryTracker>This pawn has no inventory tracker.</MX_ModeSwitch_NoInventoryTracker>
   <MX_ModeSwitch_DisabledWhileHunting>Cannot switch forms while hunting. Cancel the hunt first.</MX_ModeSwitch_DisabledWhileHunting>
 
+  <MX_WeaponQuickSwap_Label>Switch to {0}</MX_WeaponQuickSwap_Label>
+  <MX_WeaponQuickSwap_Desc>Put {0} into the inventory and take {1} from it.</MX_WeaponQuickSwap_Desc>
+  <MX_WeaponQuickSwap_Cooldown>Cooling down: {0}s</MX_WeaponQuickSwap_Cooldown>
+  <MX_WeaponQuickSwap_Executing>Cannot switch weapons during an execution.</MX_WeaponQuickSwap_Executing>
+  <MX_WeaponQuickSwap_SwordBusy>Cannot switch weapons while guarding, parrying or cutting.</MX_WeaponQuickSwap_SwordBusy>
+
   <MX_NL_ModSettingsTitle>Milira Character Expansion</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>Register characters with the special pawn manager</MX_NL_EnableSpecialPawnIntegrationLabel>
   <MX_NL_EnableSpecialPawnIntegrationDesc>When enabled, special characters are registered with Ariandel's special pawn manager when they join the player faction or during save-load checks, preventing the unique character limiter from removing them because they were not registered.</MX_NL_EnableSpecialPawnIntegrationDesc>

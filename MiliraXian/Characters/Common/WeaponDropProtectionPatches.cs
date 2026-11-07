@@ -104,6 +104,9 @@ namespace MiliraXian.Characters.Common
             Pawn pawn = __instance;
             if (pawn.Faction != Faction.OfPlayer || pawn.inventory?.innerContainer is not { } inventory)
                 yield break;
+            // A weapon with a quick swap has its own button for the same swap.
+            if (WeaponQuickSwap.Covers(pawn))
+                yield break;
 
             ThingWithComps first = null;
             bool multiple = false;
