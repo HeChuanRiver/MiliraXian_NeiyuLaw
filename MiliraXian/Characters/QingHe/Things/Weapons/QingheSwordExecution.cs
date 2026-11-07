@@ -32,6 +32,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         // Visual only, not saved: pieces whose trail and flash have been spawned (after a load the
         // piece in progress spawns again).
         private int visualMask;
+        // Visual only, not saved: the hit effect was added ahead of the blow (its cuts show first).
+        private bool hitVfxShown;
 
         private static QingheSwordGuardDef C => QingheSwordGuard.Config;
         private static int Now => Find.TickManager.TicksGame;
@@ -126,6 +128,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                         SpawnVisuals(m[i]);
                     }
                 }
+            }
+            // The crossing cuts show on the enemy before the click, the burst lands with it.
+            if (!hitDone && !hitVfxShown && C.executionVfx != null && t >= C.executionHitSeconds - C.executionVfx.burstDelay)
+            {
+                hitVfxShown = true;
+                Pawn victim = Victim;
+                QingheImpactVfx.Spawn(victim.Map, C.executionVfx, victim.DrawPos, victim.DrawPos - pawn.DrawPos, victim.Position, sound: false);
             }
             if (!hitDone && t >= C.executionHitSeconds)
             {
@@ -277,7 +286,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private void Strike(Pawn victim)
         {
             Vector3 toward = victim.DrawPos - pawn.DrawPos;
-            QingheImpactVfx.Spawn(victim.Map, C.executionVfx, victim.DrawPos, toward, victim.Position);
+            if (hitVfxShown)
+            {
+                C.executionVfx?.sound?.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
+            }
+            else
+            {
+                // After a load past the early effect: all of it now.
+                QingheImpactVfx.Spawn(victim.Map, C.executionVfx, victim.DrawPos, toward, victim.Position);
+            }
             BodyPartRecord core = victim.RaceProps?.body?.corePart;
             if (core != null && victim.health.hediffSet.PartIsMissing(core))
             {
