@@ -276,7 +276,7 @@
           冲刺是真实移动：格子在拔刀那一刻换到敌人身后，身体沿途画过去。冲刺也是吸附：敌人在 executionRange 内（视线可达）就能处决，
           不必贴身（樱舞等范围技能常打崩远处的敌人）。身后没有空格时：已贴身就原地拔刀；不贴身就落到敌人旁边任一空格；
           旁边一个空格都没有则放弃处决、解除破绽。
-          伤害：对核心部位（人类为躯干）一击 600 点、穿甲 2，按原版伤害结算。固定给 1 档剑压（不受夏共鸣加成）。期间受到的攻击全部弹开。
+          伤害：对核心部位（人类为躯干）一击 100 点、穿甲 2，按原版伤害结算；没死则接致命一击（见 killMotion）。中刀时清荷自己的架势清空（被拦截也一样）。固定给 1 档剑压（不受夏共鸣加成）。期间受到的攻击全部弹开。
         -->
         <executionJob>MX_QH_SwordExecution</executionJob>
         <executionAttack>0</executionAttack>
@@ -313,7 +313,94 @@
         <!-- 处决距离（格）：大约是樱舞的范围，超出则敌人只原地破绽、恢复，不处决 -->
         <executionRange>12</executionRange>
         <executionDamageDef>MX_QH_ExecutionSlash</executionDamageDef>
-        <executionDamage>600</executionDamage>
+        <!-- 居合中刀（判定伤害或被流水之形等拦截）时，清荷自己的架势清空 -->
+        <executionDamage>100</executionDamage>
+        <!--
+          致命一击（手写初值，实机再调）：居合中刀且没被拦截（流水之形等）、敌人仍活着且没有免死保护时，
+          不再残心收势，而是从 killStartSeconds（执行秒，即中刀那一刻）起播放这段：
+          中刀后先残心 0.3 秒（2.1–2.4，刀在鞘里静止），再接：
+          0–0.25 拔刀，刀尖朝前收到腰侧；0.25–0.7 前摇：后坐蓄力、刀往后拉；0.7–0.82 踏前平刺贯穿；
+          0.82–1.4 刺入后停顿（身体前压、刀不动）；1.4–1.52 猛地抽刀（1.46 秒刀出体外的瞬间敌人死亡，
+          伤口处爆出花瓣，压暗、显示「落华」）；1.52–1.85 振刀甩血；2.6 秒回到待机。
+          朝向是冲刺落点面向敌人。免死的目标只吃居合伤害，不进入这一段。
+          killStartSeconds 最晚 2.4：再往后会先播普通处决的刀出鞘回待机。
+        -->
+        <killStartSeconds>2.4</killStartSeconds>
+        <killAtSeconds>1.46</killAtSeconds>
+        <killBlendSeconds>0.1</killBlendSeconds>
+        <killMotion>
+            <durationSeconds>2.6</durationSeconds>
+            <turnCarriesBlade>false</turnCarriesBlade>
+            <!-- 全程面向敌人（转向 0 = 朝瞄准方向）；没有这条时小人保持冲刺后的朝向 -->
+            <turn><points><li>(0, 0)</li><li>(2.6, 0)</li></points></turn>
+            <blade>
+                <keys>
+                    <li><time>0</time><yaw>-30.0</yaw><pitch>10.0</pitch><roll>-90.0</roll><reach>0.2</reach><offset>(0.000, 0.100, 0.100)</offset></li>
+                    <!-- 刀尖朝前收到腰侧 -->
+                    <li><time>0.25</time><yaw>-5.0</yaw><pitch>0.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(0.050, 0.050, -0.150)</offset></li>
+                    <!-- 前摇：刀往后再拉半尺蓄力 -->
+                    <li><time>0.7</time><yaw>-3.0</yaw><pitch>2.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(0.060, 0.060, -0.260)</offset></li>
+                    <!-- 平刺贯穿 -->
+                    <li><time>0.82</time><yaw>0.0</yaw><pitch>-5.0</pitch><roll>-90.0</roll><reach>1</reach><offset>(0.000, 0.000, 0.100)</offset></li>
+                    <!-- 刺入后停顿：只再往里压一点 -->
+                    <li><time>1.4</time><yaw>0.0</yaw><pitch>-5.0</pitch><roll>-90.0</roll><reach>1</reach><offset>(0.000, 0.000, 0.130)</offset></li>
+                    <!-- 猛地抽出 -->
+                    <li><time>1.52</time><yaw>0.0</yaw><pitch>0.0</pitch><roll>-90.0</roll><reach>0.2</reach><offset>(0.000, 0.050, -0.150)</offset></li>
+                    <!-- 振刀甩血 -->
+                    <li><time>1.85</time><yaw>60.0</yaw><pitch>-30.0</pitch><roll>-60.0</roll><reach>0.8</reach><offset>(0.000, 0.000, 0.000)</offset></li>
+                    <li><time>2.6</time><yaw>-12.0</yaw><pitch>65.0</pitch><roll>-90.0</roll><reach>0</reach><offset>(-0.020, 0.130, 0.380)</offset></li>
+                </keys>
+            </blade>
+            <!-- 刀从鞘里拔出：开头还有一截在鞘内 -->
+            <sheathed><points><li>(0, 0.75)</li><li>(0.12, 0)</li></points></sheathed>
+            <!-- 前摇后坐，刺出前冲，停顿时再压半步，抽刀时退回 -->
+            <bodyForward><points><li>(0, 0)</li><li>(0.25, -0.05)</li><li>(0.7, -0.12)</li><li>(0.82, 0.3)</li><li>(1.4, 0.34)</li><li>(1.52, 0.2)</li><li>(1.85, 0.1)</li><li>(2.6, 0)</li></points></bodyForward>
+            <height><points><li>(0, 0)</li><li>(0.7, -0.04)</li><li>(0.82, -0.08)</li><li>(1.4, -0.09)</li><li>(1.52, -0.05)</li><li>(2.6, 0)</li></points></height>
+            <tilt><points><li>(0, 0)</li><li>(0.7, -3)</li><li>(0.82, 6)</li><li>(1.4, 7)</li><li>(1.52, 1)</li><li>(1.85, -3)</li><li>(2.6, 0)</li></points></tilt>
+        </killMotion>
+        <!--
+          抽刀那一刻从伤口爆出的花瓣：刀身 60% 处（刺穿敌人的那一段），随抽刀方向（朝清荷）散开，
+          迅速减速后摇曳飘落。只用花瓣，没有闪光、火花和声音。
+        -->
+        <killPetalShare>0.6</killPetalShare>
+        <killPetalVfx>
+            <petals>16</petals>
+            <petalSpeed>1.5~3.5</petalSpeed>
+            <petalLife>1.8~3</petalLife>
+            <petalSpread>140</petalSpread>
+            <petalDrag>3.5</petalDrag>
+            <petalFall>0.3</petalFall>
+            <petalSway>0.18</petalSway>
+            <petalSize>0.2~0.32</petalSize>
+        </killPetalVfx>
+        <!-- 击杀时（抽刀那一刻）起：被杀单位位置的竖排白字「落华」和周围压暗一起缓缓淡入，
+             停留后文字按噪声溶解、压暗同步淡出；文字带粉色泛光 -->
+        <killVfx>
+            <texPath>MiliraXianQinghe/Effect/Execution/Luohua</texPath>
+            <!-- 贴图高度（格），固定大小，不随敌人体型变化。贴图上下各留 48 像素边距（共 1144 像素），
+                 1.2 格时两个字连同字距正好约 1.1 格 -->
+            <height>1.2</height>
+            <offset>(0, 0.2)</offset>
+            <color>(1, 1, 1, 1)</color>
+            <brightness>1</brightness>
+            <bloom>
+                <group>MX_ScreenBloom_Glow</group>
+                <tint>(1, 0.55, 0.75, 1)</tint>
+                <intensity>1.6</intensity>
+            </bloom>
+            <!-- 淡入 0.7 秒，盖过振刀甩血（抽刀后约 1.1 秒回到待机） -->
+            <fadeInSeconds>0.7</fadeInSeconds>
+            <holdSeconds>1.2</holdSeconds>
+            <dissolveSeconds>0.8</dissolveSeconds>
+            <noiseTexPath>MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</noiseTexPath>
+            <noiseScale>1</noiseScale>
+            <edgeWidth>0.08</edgeWidth>
+            <edgeColor>(1, 0.6, 0.7, 1)</edgeColor>
+            <!-- 压暗：半径 4 格的软边黑圆，中心最暗 65%；flatness 把全暗的中心区扩大，只留外圈渐变 -->
+            <darkenRadius>4</darkenRadius>
+            <darkenAlpha>0.65</darkenAlpha>
+            <darkenFlatness>3</darkenFlatness>
+        </killVfx>
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
         <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>

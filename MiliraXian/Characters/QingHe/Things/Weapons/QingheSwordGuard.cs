@@ -96,6 +96,25 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// </summary>
         public ThingDef executionWeapon;
 
+        /// <summary>
+        /// The killing thrust after a blow that landed (no guard negated it) and left the enemy alive
+        /// and mortal: played from execution second <see cref="killStartSeconds"/> instead of the
+        /// return, toward the enemy; at clip second <see cref="killAtSeconds"/> the blade is drawn out
+        /// and the enemy dies. Null = no thrust.
+        /// </summary>
+        public BladeMotionClip killMotion;
+        /// <summary>
+        /// Petals burst from the wound as the blade is drawn out (the kill): at <see cref="killPetalShare"/>
+        /// of the blade from the grip, where it runs through the enemy, thrown the way the blade is drawn. Null = none.
+        /// </summary>
+        public QingheImpactVfxProps killPetalVfx;
+        public float killPetalShare = 0.6f;
+        public float killStartSeconds = 2.1f;
+        public float killAtSeconds = 0.9f;
+        public float killBlendSeconds = 0.1f;
+        /// <summary>The word over the killed enemy and the darkening around it.</summary>
+        public QingheKillVfxProps killVfx;
+
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 
         public override IEnumerable<string> ConfigErrors()
@@ -113,6 +132,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 && executionRange >= 1.42f && executionDamage > 0f))
             {
                 yield return "处决时间须满足 0 ≤ 出刀 < 收刀 ≤ 总时长，距离至少 1.42，伤害为正。";
+            }
+            if (killMotion != null && (killMotion.blade == null || killMotion.durationSeconds <= 0f
+                || killAtSeconds < 0f || killAtSeconds > killMotion.durationSeconds || killStartSeconds < executionHitSeconds))
+            {
+                yield return "killMotion 需要 blade 关键帧；0 ≤ killAtSeconds ≤ 片段时长，killStartSeconds 不早于 executionHitSeconds。";
             }
             if (guardMotion?.guard?.blade == null)
             {

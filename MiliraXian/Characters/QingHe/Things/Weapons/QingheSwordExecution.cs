@@ -34,6 +34,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private int visualMask;
         // Visual only, not saved: the hit effect was added ahead of the blow (its cuts show first).
         private bool hitVfxShown;
+        // The blow landed and left the enemy alive: the killing thrust follows instead of the return.
+        private bool killing;
+        private bool killDone;
 
         private static QingheSwordGuardDef C => QingheSwordGuard.Config;
         private static int Now => Find.TickManager.TicksGame;
@@ -68,6 +71,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             Scribe_Values.Look(ref dashOrigin, "mxExecutionDashOrigin", IntVec3.Invalid);
             Scribe_Values.Look(ref dashCell, "mxExecutionDashCell", IntVec3.Invalid);
             Scribe_Values.Look(ref backAim, "mxExecutionBackAim", -aim);
+            Scribe_Values.Look(ref killing, "mxExecutionKilling");
+            Scribe_Values.Look(ref killDone, "mxExecutionKillDone");
             base.ExposeData();
         }
 
@@ -89,6 +94,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             if (hitDone)
             {
+                // After the blow the motion plays out; the thrust only needs its target when it kills.
                 return true;
             }
             Pawn victim = Victim;
@@ -145,24 +151,135 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 HediffComp_CombatPosture posture = CombatPosture.Get(victim);
                 // Saved before the damage: a death callback may save, throw or end this job.
                 hitDone = true;
+                bool landed = false;
+                // The blow resets Qinghe's own posture, whether it lands or a guard (Flowing Form) takes it.
+                if (CombatPosture.Get(pawn) is { Broken: false } own)
+                {
+                    own.SetValue(0f);
+                }
                 try
                 {
-                    Strike(victim);
+                    landed = Strike(victim);
                 }
                 catch (System.Exception ex)
                 {
                     Log.ErrorOnce("[MiliraXian] Qinghe execution blow failed, the target is released: " + ex, 0x51c7a5);
+                    posture?.ReleaseBreak(executed: true);
                     EndJobWith(JobCondition.Errored);
                     return;
                 }
-                finally
+                // A blow that landed and left the enemy alive (and mortal) is followed by the killing
+                // thrust: the enemy stays broken until it. Otherwise the break ends with the blow.
+                killing = landed && C.killMotion?.blade != null && Killable(victim) && posture?.Owns(pawn) == true;
+                if (killing)
+                {
+                    posture.HoldThrough(pawn, Now + Mathf.CeilToInt((KillEnd - t) * 60f) + 30);
+                }
+                else
                 {
                     posture?.ReleaseBreak(executed: true);
                 }
             }
-            if (t >= C.executionSeconds)
+            if (killing && !killDone && t >= C.killStartSeconds + C.killAtSeconds)
+            {
+                killDone = true;
+                Kill(Victim);
+            }
+            if (t >= (killing ? KillEnd : C.executionSeconds))
             {
                 EndJobWith(JobCondition.Succeeded);
+            }
+        }
+
+        /// <summary>
+        /// Petals burst from the wound as the blade is drawn out: at <see cref="QingheSwordGuardDef.killPetalShare"/>
+        /// of the blade from the grip, where it still runs through the enemy just before the draw, thrown the way the blade is drawn.
+        /// </summary>
+        private void SpawnKillPetals(Map map)
+        {
+            BladeMotionClip clip = C.killMotion;
+            if (C.killPetalVfx == null || clip?.blade == null || map == null)
+            {
+                return;
+            }
+            try
+            {
+                Vector3 killAim = Past ? backAim : aim;
+                Common.Vfx.BladeBody.BladeGraphicExtension ext = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>();
+                float length = (ext?.length ?? 1.1f) * C.killPetalShare;
+                // The blade still fully in the wound, as the draw begins (half the draw before the kill).
+                float s = Mathf.Clamp(C.killAtSeconds - 0.05f, 0f, clip.durationSeconds);
+                Common.Vfx.BladeBody.BladePose pose = BladeMotionUtility.Pose(clip, s, killAim, Set.Projection, null);
+                // The pawn's place on the ground; the clip's own body shift and lift are added in world metres.
+                Vector3 ground = pawn.DrawPos - BladeMotionPlayer.BodyOffset(pawn);
+                // The ground shift is a map offset: undo the depth scale BodyOffsetToMap applies (as the sheathe flash does).
+                Vector3 body = BladeMotionUtility.BodyOffsetWorld(clip, s, killAim);
+                body.z /= Mathf.Max(1e-3f, Set.Projection.depthToScreen);
+                Vector3 at = Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(ground, body + pose.grip + pose.dir.normalized * length, pose);
+                // Thrown back the way the blade is drawn out (toward Qinghe), not on through the enemy.
+                QingheImpactVfx.Spawn(map, C.killPetalVfx, at, -killAim, pawn.Position);
+            }
+            catch (System.Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution kill petals failed: " + ex, 0x51c7aa);
+            }
+        }
+
+        private static float KillEnd => C.killStartSeconds + (C.killMotion?.durationSeconds ?? 0f);
+
+        /// <summary>
+        /// Alive and mortal: no deathless gene and no hediff that prevents death (as Neiyu's
+        /// execution, the killing thrust never overrides them).
+        /// </summary>
+        private static bool Killable(Pawn victim)
+        {
+            if (victim is not { Spawned: true, Dead: false, Destroyed: false } || victim.health == null
+                || victim.health.isBeingKilled)
+            {
+                return false;
+            }
+            if (ModsConfig.BiotechActive && victim.genes?.HasActiveGene(GeneDefOf.Deathless) == true)
+            {
+                return false;
+            }
+            foreach (Hediff hediff in victim.health.hediffSet.hediffs)
+            {
+                if (hediff.def.preventsDeath)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>The thrust is drawn out: the enemy dies, and the word shows where it fell.</summary>
+        private void Kill(Pawn victim)
+        {
+            HediffComp_CombatPosture posture = CombatPosture.Get(victim);
+            try
+            {
+                if (!Killable(victim) || victim.Map != pawn.Map)
+                {
+                    return;
+                }
+                Map map = victim.Map;
+                Vector3 at = victim.DrawPos;
+                SoundDefOf.Execute_Cut.PlayOneShot(new TargetInfo(victim.Position, map));
+                victim.Kill(new DamageInfo(DamageDefOf.ExecutionCut, 1f, 0f, -1f, pawn, null, Weapon));
+                if (victim.Dead)
+                {
+                    // The word and the darkening start fading in with the death; petals burst from the wound.
+                    MapComponent_QingheKillVfx.Spawn(map, C.killVfx, at);
+                    SpawnKillPetals(map);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution kill failed: " + ex, 0x51c7a9);
+            }
+            finally
+            {
+                posture?.ReleaseBreak(executed: true);
             }
         }
 
@@ -286,7 +403,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         }
 
         /// <summary>The blow: one hit of the execution damage on the target's core part (the torso of a human).</summary>
-        private void Strike(Pawn victim)
+        /// <returns>False when a guard (Flowing Form) negated the whole execution.</returns>
+        private bool Strike(Pawn victim)
         {
             Vector3 toward = victim.DrawPos - pawn.DrawPos;
             if (hitVfxShown)
@@ -317,12 +435,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             // The one exception: a life-like charge (Qinghe's Flowing Form) takes the whole execution.
             if (ExecutionGuard.TryNegate(victim, blow))
             {
-                return;
+                return false;
             }
             BattleLogEntry_MeleeCombat entry = TechniqueDamage.CreateLog(pawn, victim, C.executionDamageDef, blow.Weapon);
             // Past every shield, guard and damage reduction, and through armour: the execution lands as dealt.
             DamageWorker.DamageResult result = DirectDamage.Apply(victim, blow);
             TechniqueDamage.FinishLog(entry, result, C.executionDamageDef);
+            return true;
         }
 
         /// <summary>The scabbard flash and blade trail of one forward piece, where it passes the clip's flash or cut.</summary>
@@ -367,6 +486,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return false;
             }
             float t = Mathf.Max(0f, (Common.Vfx.VisualClock.Ticks - executionStart) / 60f);
+            if (killing && t >= C.killStartSeconds && C.killMotion?.blade != null)
+            {
+                // The killing thrust, toward the enemy from where the dash landed.
+                playback = new MotionPlayback
+                {
+                    clip = C.killMotion,
+                    seconds = Mathf.Min(t - C.killStartSeconds, C.killMotion.durationSeconds),
+                    aim = Past ? backAim : aim,
+                    projection = set.Projection,
+                    scabbard = true,
+                    blade = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>(),
+                    blendSeconds = C.killBlendSeconds,
+                    source = C.killMotion,
+                    sourceId = executionStart,
+                };
+                return true;
+            }
             List<QingheExecutionSegment> m = C.executionMotion;
             QingheExecutionSegment seg = m[m.Count - 1];
             for (int i = 0; i < m.Count; i++)
