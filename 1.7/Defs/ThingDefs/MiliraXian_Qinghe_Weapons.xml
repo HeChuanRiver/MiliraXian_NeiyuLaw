@@ -92,6 +92,13 @@
                     <li>MiliraXian_Qinghe</li>
                 </allowedPawnKinds>
             </li>
+            <!-- 快速切换：与背包里的花信风铃互换（两件都是原物，不新建也不销毁），冷却 1 秒 -->
+            <li Class="MiliraXian.Characters.Common.CompProperties_WeaponQuickSwap">
+                <partnerDefs>
+                    <li>MX_QH_Weapon_FlowerBell</li>
+                </partnerDefs>
+                <cooldownTicks>60</cooldownTicks>
+            </li>
         </comps>
 
         <modExtensions>

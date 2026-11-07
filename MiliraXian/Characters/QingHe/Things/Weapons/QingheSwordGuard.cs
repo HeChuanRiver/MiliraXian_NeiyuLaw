@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
@@ -455,7 +456,27 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     {
         internal static readonly QingheSwordGuardDef Config = DefDatabase<QingheSwordGuardDef>.GetNamed("MX_QH_SwordGuard");
 
-        static QingheSwordGuard() => CombatBlockers.Register(new QingheSwordBlocker());
+        static QingheSwordGuard()
+        {
+            CombatBlockers.Register(new QingheSwordBlocker());
+            WeaponQuickSwap.RegisterBlocker(QuickSwapBlocked);
+        }
+
+        /// <summary>
+        /// No weapon swap while the sword is committed: guarding, recoiling from a parry, or a cut still
+        /// playing its strikes (the windup is refused by the swap itself).
+        /// </summary>
+        private static string QuickSwapBlocked(Pawn pawn)
+        {
+            if (!MX_QHCharacterUtility.IsQinghe(pawn))
+            {
+                return null;
+            }
+            Stance stance = pawn.stances?.curStance;
+            bool busy = stance is Stance_QingheGuard or Stance_QingheParry
+                || (stance is Stance_Busy b && b.verb is Verb_QingheSwordSweep sword && sword.InStrikes(b));
+            return busy ? "MX_WeaponQuickSwap_SwordBusy".Translate().ToString() : null;
+        }
 
         /// <summary>Qinghe in the sword stance with the motion sword, able to act, outside her own defensive skills.</summary>
         internal static bool CanGuard(Pawn pawn, out Verb_QingheSwordSweep sword)

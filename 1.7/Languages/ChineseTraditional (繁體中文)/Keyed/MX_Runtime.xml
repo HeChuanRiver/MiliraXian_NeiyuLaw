@@ -20,6 +20,12 @@
   <MX_ModeSwitch_NoInventoryTracker>該角色沒有物品欄。</MX_ModeSwitch_NoInventoryTracker>
   <MX_ModeSwitch_DisabledWhileHunting>正在狩獵時不能切換形態，請先取消狩獵。</MX_ModeSwitch_DisabledWhileHunting>
 
+  <MX_WeaponQuickSwap_Label>切換為{0}</MX_WeaponQuickSwap_Label>
+  <MX_WeaponQuickSwap_Desc>把{0}收進背包，換上背包裡的{1}。</MX_WeaponQuickSwap_Desc>
+  <MX_WeaponQuickSwap_Cooldown>冷卻中：{0}s</MX_WeaponQuickSwap_Cooldown>
+  <MX_WeaponQuickSwap_Executing>處決中無法切換武器。</MX_WeaponQuickSwap_Executing>
+  <MX_WeaponQuickSwap_SwordBusy>格擋、彈反或出刀時無法切換武器。</MX_WeaponQuickSwap_SwordBusy>
+
   <MX_NL_ModSettingsTitle>米莉拉角色拓展</MX_NL_ModSettingsTitle>
   <MX_NL_EnableSpecialPawnIntegrationLabel>啟用角色接入特殊角色管理器</MX_NL_EnableSpecialPawnIntegrationLabel>
   <MX_NL_EnableSpecialPawnIntegrationDesc>啟用後，特殊角色在加入玩家派系或讀檔巡檢時，會被註冊進 Ariandel 的特殊角色管理器，避免因未註冊而被唯一角色限制器清理。</MX_NL_EnableSpecialPawnIntegrationDesc>
