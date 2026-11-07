@@ -340,11 +340,13 @@
           0–0.25 拔刀，刀尖朝前收到腰侧；0.25–0.7 前摇：后坐蓄力、刀往后拉；0.7–0.82 踏前平刺贯穿；
           0.82–1.62 刺入后停顿 0.8 秒（身体前压、刀不动）；1.62–1.74 猛地抽刀（1.68 秒刀出体外的瞬间敌人死亡，
           伤口处爆出花瓣，压暗、显示「落华」）；1.74–2.07 振刀甩血；2.82 秒回到待机。
-          朝向是冲刺落点面向敌人。免死的目标只吃居合伤害，不进入这一段。
+          朝向是冲刺落点面向敌人。免死的目标（不死基因、免死 Hediff）照样接这一段，但抽刀时不击杀，
+          改为对核心部位造成 killWoundDamage 点伤害，只爆花瓣，不显示「落华」和压暗。
           killStartSeconds 最晚 2.4：再往后会先播普通处决的刀出鞘回待机。
         -->
         <killStartSeconds>2.4</killStartSeconds>
         <killAtSeconds>1.68</killAtSeconds>
+        <killWoundDamage>200</killWoundDamage>
         <killBlendSeconds>0.1</killBlendSeconds>
         <!-- 插刀声在片段 0.78 秒（平刺贯穿），抽刀声在击杀那一刻（killAtSeconds） -->
         <killThrustSeconds>0.78</killThrustSeconds>

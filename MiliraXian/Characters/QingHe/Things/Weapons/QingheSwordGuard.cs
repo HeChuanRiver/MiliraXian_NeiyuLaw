@@ -112,6 +112,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public float killStartSeconds = 2.1f;
         public float killAtSeconds = 0.9f;
         public float killBlendSeconds = 0.1f;
+        /// <summary>Damage of the thrust on a target that cannot die (deathless, prevents death), instead of the kill.</summary>
+        public float killWoundDamage = 200f;
         /// <summary>The thrust runs the enemy through at clip second <see cref="killThrustSeconds"/> (this sound); the draw (the kill) plays its own.</summary>
         public float killThrustSeconds = 0.8f;
         public SoundDef killThrustSound, killDrawSound;

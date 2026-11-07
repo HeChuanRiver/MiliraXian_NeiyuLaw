@@ -172,7 +172,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 // A blow that landed and left the enemy alive (and mortal) is followed by the killing
                 // thrust: the enemy stays broken until it. Otherwise the break ends with the blow.
-                killing = landed && C.killMotion?.blade != null && Killable(victim) && posture?.Owns(pawn) == true;
+                killing = landed && C.killMotion?.blade != null && Alive(victim) && posture?.Owns(pawn) == true;
                 if (killing)
                 {
                     posture.HoldThrough(pawn, Now + Mathf.CeilToInt((KillEnd - t) * 60f) + 30);
@@ -272,14 +272,16 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private static float KillEnd => C.killStartSeconds + (C.killMotion?.durationSeconds ?? 0f);
 
+        private static bool Alive(Pawn victim) =>
+            victim is { Spawned: true, Dead: false, Destroyed: false } && victim.health != null && !victim.health.isBeingKilled;
+
         /// <summary>
         /// Alive and mortal: no deathless gene and no hediff that prevents death (as Neiyu's
-        /// execution, the killing thrust never overrides them).
+        /// execution, the killing thrust never overrides them: such a target is only wounded).
         /// </summary>
         private static bool Killable(Pawn victim)
         {
-            if (victim is not { Spawned: true, Dead: false, Destroyed: false } || victim.health == null
-                || victim.health.isBeingKilled)
+            if (!Alive(victim))
             {
                 return false;
             }
@@ -297,21 +299,35 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             return true;
         }
 
-        /// <summary>The thrust is drawn out: the enemy dies, and the word shows where it fell.</summary>
+        /// <summary>
+        /// The thrust is drawn out: the enemy dies, and the word shows where it fell. A target that
+        /// cannot die (deathless, a hediff that prevents death) takes a heavy wound instead.
+        /// </summary>
         private void Kill(Pawn victim)
         {
             HediffComp_CombatPosture posture = CombatPosture.Get(victim);
             try
             {
-                if (!Killable(victim) || victim.Map != pawn.Map)
+                if (!Alive(victim) || victim.Map != pawn.Map)
                 {
                     return;
                 }
                 Map map = victim.Map;
                 Vector3 at = victim.DrawPos;
                 C.killDrawSound?.PlayOneShot(new TargetInfo(victim.Position, map));
-                victim.Kill(new DamageInfo(DamageDefOf.ExecutionCut, 1f, 0f, -1f, pawn, null, Weapon));
-                if (victim.Dead)
+                if (Killable(victim))
+                {
+                    victim.Kill(new DamageInfo(DamageDefOf.ExecutionCut, 1f, 0f, -1f, pawn, null, Weapon));
+                }
+                else
+                {
+                    Wound(victim);
+                }
+                if (!victim.Dead)
+                {
+                    SpawnKillPetals(map);
+                }
+                else
                 {
                     // The word and the darkening start fading in with the death; petals burst from the wound.
                     MapComponent_QingheKillVfx.Spawn(map, C.killVfx, at);
@@ -482,11 +498,31 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return false;
             }
+            ApplyBlow(victim, blow);
+            return true;
+        }
+
+        /// <summary>The killing thrust on a target that cannot die: one heavy hit on its core part instead.</summary>
+        private void Wound(Pawn victim)
+        {
+            DamageInfo blow = new(C.executionDamageDef, C.killWoundDamage, C.executionArmorPenetration,
+                KillAim.AngleFlat(), pawn, CorePart(victim), pawn.equipment?.Primary?.def);
+            blow.SetTool(TechniqueDamage.ToolFor(C.executionDamageDef));
+            ApplyBlow(victim, blow);
+        }
+
+        private static BodyPartRecord CorePart(Pawn victim)
+        {
+            BodyPartRecord core = victim.RaceProps?.body?.corePart;
+            return core != null && victim.health.hediffSet.PartIsMissing(core) ? null : core;
+        }
+
+        private void ApplyBlow(Pawn victim, DamageInfo blow)
+        {
             BattleLogEntry_MeleeCombat entry = TechniqueDamage.CreateLog(pawn, victim, C.executionDamageDef, blow.Weapon);
             // Past every shield, guard and damage reduction, and through armour: the execution lands as dealt.
             DamageWorker.DamageResult result = DirectDamage.Apply(victim, blow);
             TechniqueDamage.FinishLog(entry, result, C.executionDamageDef);
-            return true;
         }
 
         /// <summary>The scabbard flash and blade trail of one forward piece, where it passes the clip's flash or cut.</summary>
