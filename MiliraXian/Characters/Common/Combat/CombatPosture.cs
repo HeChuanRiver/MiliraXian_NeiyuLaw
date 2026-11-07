@@ -35,6 +35,11 @@ public sealed class CombatPostureDef : Def
     }
 }
 
+public sealed class CombatPostureMutantExtension : DefModExtension
+{
+    public float maximumOffset;
+}
+
 // Engine-independent arithmetic shared by the live system and its focused checks.
 public static class CombatPostureRules
 {
@@ -100,7 +105,8 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     private static CombatPostureDef C => CombatPosture.Config;
     private static int Now => CombatPosture.Now;
     private float HealthRatio => CombatPostureRules.Health(Pawn.health.summaryHealth.SummaryHealthPercent);
-    public override float MaxValue => CombatPostureRules.Maximum(C.basePosture, C.minimumPostureFraction, HealthRatio);
+    public override float MaxValue => CombatPostureRules.Maximum(C.basePosture, C.minimumPostureFraction, HealthRatio)
+        + (Pawn.mutant?.Def?.GetModExtension<CombatPostureMutantExtension>()?.maximumOffset ?? 0f);
     public override float RecoveryPerSecond => broken ? 0f
         : -CombatPostureRules.Recovery(C.recoveryPerSecond, C.minimumRecoveryFraction, HealthRatio);
     protected override int RecoveryStartTick => lastIncreaseTick + C.recoveryDelayTicks;

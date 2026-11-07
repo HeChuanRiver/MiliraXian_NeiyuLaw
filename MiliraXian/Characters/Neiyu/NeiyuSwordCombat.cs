@@ -15,8 +15,9 @@ public sealed class NeiyuSwordCombatDef : Def
 {
     public ThingDef sword;
     public JobDef executionJob;
-    public float successChance = .6f, perfectChance = .15f;
+    public float successChance = .8f, perfectChance = .45f;
     public bool reflectProjectiles = true;
+    public float projectileReflectChance = .6f, projectilePerfectChance = .15f;
     public float projectileReturnSpreadDegrees = 4f;
     public float normalPosture = 25f, perfectPosture = 45f;
     public int perfectStunTicks = 45;
@@ -34,6 +35,9 @@ public sealed class NeiyuSwordCombatDef : Def
             yield return "剑与处决 Job 引用必须完整。";
         if (!(perfectChance >= 0f && perfectChance <= successChance && successChance <= 1f))
             yield return "弹刀概率必须满足 0 ≤ 完美概率 ≤ 总概率 ≤ 1。";
+        if (!(projectilePerfectChance >= 0f && projectilePerfectChance <= projectileReflectChance
+            && projectileReflectChance <= 1f))
+            yield return "弹丸反弹概率必须满足 0 ≤ 完美概率 ≤ 总概率 ≤ 1。";
         if (!(projectileReturnSpreadDegrees >= 0f && projectileReturnSpreadDegrees <= 30f))
             yield return "弹丸弹回方向的偏转角必须在 0–30 度之间。";
         if (!(normalPosture > 0f && perfectPosture > 0f))

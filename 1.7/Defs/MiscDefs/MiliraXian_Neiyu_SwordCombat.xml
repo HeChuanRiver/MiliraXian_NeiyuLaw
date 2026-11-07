@@ -6,9 +6,11 @@
     <executionJob>MX_NeiyuPostureExecution</executionJob>
     <!-- 架势上限、恢复、破绽和崩溃窗口改由通用的 MX_CombatPosture（MiliraXian_CombatPosture.xml）配置 -->
     <!-- 近战先判弹刀，失败后判闪避。完美概率为绝对概率，不作第二次抽签。 -->
-    <successChance>0.60</successChance>
-    <perfectChance>0.15</perfectChance>
+    <successChance>0.80</successChance>
+    <perfectChance>0.45</perfectChance>
     <reflectProjectiles>true</reflectProjectiles>
+    <projectileReflectChance>0.60</projectileReflectChance>
+    <projectilePerfectChance>0.15</projectilePerfectChance>
     <projectileReturnSpreadDegrees>4</projectileReturnSpreadDegrees>
     <normalPosture>25</normalPosture>
     <perfectPosture>45</perfectPosture>
