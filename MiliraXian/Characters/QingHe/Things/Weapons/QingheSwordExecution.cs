@@ -43,8 +43,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 
-        private BladeMotionSetExtension Set => pawn.equipment?.Primary?.def.GetModExtension<BladeMotionSetExtension>();
-        private BladeMotionClip Clip => Set?.Attack(C.executionAttack);
+        // The execution is always the sword's iaido, drawn with the sword, whatever Qinghe holds:
+        // its damage is fixed, so the weapon in hand changes nothing about it.
+        private static ThingDef Weapon => C.executionWeapon;
+        private static BladeMotionSetExtension Set => Weapon?.GetModExtension<BladeMotionSetExtension>();
+        private static BladeMotionClip Clip => Set?.Attack(C.executionAttack);
 
         public override void Notify_Starting()
         {
@@ -326,7 +329,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private void SpawnVisuals(QingheExecutionSegment s)
         {
             BladeMotionClip clip = Clip;
-            QingheBladeTrailExtension ext = pawn.equipment?.Primary?.def.GetModExtension<QingheBladeTrailExtension>();
+            QingheBladeTrailExtension ext = Weapon?.GetModExtension<QingheBladeTrailExtension>();
             if (clip == null || pawn.Map == null || ext == null || s.clipTo <= s.clipFrom)
             {
                 return;
@@ -340,7 +343,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 if (at >= Now)
                 {
                     QingheBladeTrail.SpawnFlash(pawn, ext, clip, pieceAim, at,
-                        () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id);
+                        () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id,
+                        Set.Projection);
                 }
             }
             // The trail is drawn on the moving body, so the dash itself has the slash mark instead.
@@ -349,7 +353,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 float from = Mathf.Max(clip.trailStart, s.clipFrom);
                 int trailTick = Mathf.RoundToInt(executionStart + (s.start + (from - s.clipFrom) / speed) * 60f);
                 QingheBladeTrail.SpawnTrail(pawn, ext, clip, pieceAim, trailTick, speed,
-                    QingheSwordCombatUtility.ResonanceFor(pawn), from, s.clipTo);
+                    QingheSwordCombatUtility.ResonanceFor(pawn), from, s.clipTo, Set.Projection);
             }
         }
 
@@ -388,7 +392,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 seconds = seg.ClipAt(t),
                 aim = AimFor(seg),
                 projection = set.Projection,
-                scabbardSet = set,
+                scabbard = true,
+                blade = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>(),
                 blendSeconds = seg.blend > 0f ? seg.blend : set.blendSeconds,
                 source = seg,
                 sourceId = executionStart,

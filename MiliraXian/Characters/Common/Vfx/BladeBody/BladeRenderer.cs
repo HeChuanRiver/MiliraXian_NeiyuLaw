@@ -32,14 +32,14 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         private const int ScabbardMeshKey = -1;
 
         private static readonly Dictionary<(BladeGraphicExtension, int), Mesh> Meshes = new();
-        private static readonly Dictionary<(string, Color), Material> Materials = new();
+        private static readonly Dictionary<(Texture2D, Color), Material> Materials = new();
         private static readonly int BladeReveal = Shader.PropertyToID("_BladeReveal");
 
         /// <param name="bodyCenter">Drawn body centre on the map; its altitude is the body's base altitude.</param>
         public static void Draw(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter)
         {
             Color scabbardColor = pose.scabbardColor;
-            Material mat = MaterialFor(ext.texPath, Color.white);
+            Material mat = MaterialFor(ext, Color.white);
             Texture tex = mat?.mainTexture;
             if (tex == null)
             {
@@ -86,7 +86,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
                 float gripToTipPx = Vector2.Dot(tip - grip, a);
                 if (gripToTipPx > 1e-3f)
                 {
-                    Material smat = MaterialFor(ext.texPath, scabbardColor.a <= 0f ? new Color(0.24f, 0.16f, 0.14f, 1f) : scabbardColor);
+                    Material smat = MaterialFor(ext, scabbardColor.a <= 0f ? new Color(0.24f, 0.16f, 0.14f, 1f) : scabbardColor);
                     Vector3 sdir = pose.scabbardDir.normalized;
                     Vector3 sedge = pose.scabbardEdge - Vector3.Dot(pose.scabbardEdge, sdir) * sdir;
                     if (sedge.sqrMagnitude < 1e-6f)
@@ -144,7 +144,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public static void GetGripAndTip(BladeGraphicExtension ext, in BladePose pose, Vector3 bodyCenter,
             out Vector3 grip, out Vector3 tip)
         {
-            Texture texture = MaterialFor(ext.texPath, Color.white)?.mainTexture;
+            Texture texture = MaterialFor(ext, Color.white)?.mainTexture;
             Vector2 size = texture == null ? Vector2.one : new Vector2(texture.width, texture.height);
             Vector2 axis = Vector2.Scale(ext.tipUV - ext.pommelUV, size);
             Vector2 delta = Vector2.Scale(ext.tipUV - ext.gripUV, size);
@@ -206,28 +206,28 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             return mesh;
         }
 
-        private static Material MaterialFor(string texPath, Color color)
+        private static Material MaterialFor(BladeGraphicExtension ext, Color color)
         {
-            if (texPath.NullOrEmpty())
+            Texture2D tex = ext?.Texture;
+            if (tex == null)
             {
                 return null;
             }
-            if (Materials.TryGetValue((texPath, color), out Material cached))
+            if (Materials.TryGetValue((tex, color), out Material cached))
             {
                 return cached;
             }
             Shader shader = DefDatabase<ShaderDef>.GetNamedSilentFail("MX_BladeBody")?.Shader;
-            Texture2D tex = ContentFinder<Texture2D>.Get(texPath, reportFailure: false);
             Material mat = null;
-            if (shader != null && tex != null)
+            if (shader != null)
             {
                 mat = MaterialPool.MatFrom(tex, shader, color);
             }
             else
             {
-                Log.ErrorOnce($"[MiliraXian] Blade body: missing shader 'MX_BladeBody' or texture '{texPath}'.", GenText.StableStringHash("MX_BladeBody|" + texPath));
+                Log.ErrorOnce("[MiliraXian] Blade body: missing shader 'MX_BladeBody'.", 0x51c7b0);
             }
-            Materials[(texPath, color)] = mat;
+            Materials[(tex, color)] = mat;
             return mat;
         }
     }

@@ -72,13 +72,14 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         {
             playback = default;
             BladeMotionSetExtension set = pawn.equipment?.Primary?.def.GetModExtension<BladeMotionSetExtension>();
-            if (set == null)
-            {
-                return false;
-            }
+            // The guard belongs to the stance, not the weapon: it plays whatever is held.
             if (pawn.stances?.curStance is IGuardMotionStance guard && guard.TryGetGuardPlayback(set, out playback))
             {
                 return true;
+            }
+            if (set == null)
+            {
+                return false;
             }
             if (pawn.stances?.curStance is Stance_Busy busy && busy.verb is IBladeMotionVerb motionVerb)
             {
@@ -92,7 +93,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                         seconds = seconds,
                         aim = aim,
                         projection = set.Projection,
-                        scabbardSet = set,
+                        scabbard = true,
                         blendSeconds = set.blendSeconds,
                         source = clip,
                         sourceId = attackId,
@@ -115,7 +116,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                 seconds = t,
                 aim = pawn.Rotation.FacingCell.ToVector3(),
                 projection = set.Projection,
-                scabbardSet = set,
+                scabbard = true,
                 blendSeconds = set.blendSeconds,
                 source = set.idle,
                 sourceId = pawn.Rotation.AsInt,
@@ -187,6 +188,25 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         /// <summary>Screen lift of a flying pawn in vanilla (Pawn_DrawTracker: 0.6 cells north at full flight).</summary>
         public const float VanillaFlightLift = 0.6f;
 
+        /// <summary>The blade the playback draws: its own, else the held weapon's calibration (or its default).</summary>
+        private static BladeGraphicExtension BladeOf(Pawn pawn, in MotionPlayback p)
+        {
+            return p.blade ?? BladeGraphicExtension.For(pawn.equipment?.Primary?.def);
+        }
+
+        /// <summary>
+        /// The blade drawn on <paramref name="pawn"/> now: the playing motion's own blade, else the held
+        /// weapon's calibration (or its default). Null without a melee weapon.
+        /// </summary>
+        public static BladeGraphicExtension DrawnBlade(Pawn pawn)
+        {
+            if (pawn != null && MotionSources.TryGet(pawn, out MotionPlayback p) && p.blade != null)
+            {
+                return p.blade;
+            }
+            return BladeGraphicExtension.For(pawn?.equipment?.Primary?.def);
+        }
+
         /// <summary>Held blade of <paramref name="pawn"/> now, cross-faded when the playing motion changes.</summary>
         public static bool TryGetBladePose(Pawn pawn, out BladePose pose)
         {
@@ -206,7 +226,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                 }
                 return false;
             }
-            BladePose target = BladeMotionUtility.Pose(p.clip, p.seconds, p.aim, p.projection, p.scabbardSet);
+            BladePose target = BladeMotionUtility.Pose(p.clip, p.seconds, p.aim, p.projection, p.scabbard ? BladeOf(pawn, p) : null);
             state ??= States[pawn.thingIDNumber] = new State();
             float now = VisualClock.Ticks;
             if (!ReferenceEquals(state.source, p.source) || state.sourceId != p.sourceId)

@@ -84,6 +84,18 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// </summary>
         public float unexecutedPostureKept = 0.8f;
 
+        /// <summary>
+        /// The sword stance's guard motion, the same with any melee weapon: the projection, the guard
+        /// and the guard recoil (guard, guardHit). The deflect before a counter belongs to the cross
+        /// slash and stays on the weapon that has it.
+        /// </summary>
+        public BladeMotionSetExtension guardMotion;
+        /// <summary>
+        /// The execution is always this weapon's iaido, drawn with this weapon (its attack clip
+        /// <see cref="executionAttack"/>, its trail and its scabbard), whatever Qinghe holds.
+        /// </summary>
+        public ThingDef executionWeapon;
+
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 
         public override IEnumerable<string> ConfigErrors()
@@ -101,6 +113,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 && executionRange >= 1.42f && executionDamage > 0f))
             {
                 yield return "处决时间须满足 0 ≤ 出刀 < 收刀 ≤ 总时长，距离至少 1.42，伤害为正。";
+            }
+            if (guardMotion?.guard?.blade == null)
+            {
+                yield return "guardMotion 需要带 blade 关键帧的 guard 片段。";
+            }
+            if (executionWeapon?.GetModExtension<BladeMotionSetExtension>()?.Attack(executionAttack) == null
+                || executionWeapon.GetModExtension<QingheBladeTrailExtension>() == null)
+            {
+                yield return "executionWeapon 必须带动作集（含处决用的攻击片段）和刀光。";
             }
             if (guardTicks < 1 || extendTicks == null || extendTicks.Exists(t => t < 0))
             {
@@ -181,9 +202,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
         }
 
-        public bool TryGetGuardPlayback(BladeMotionSetExtension set, out MotionPlayback playback)
+        public bool TryGetGuardPlayback(BladeMotionSetExtension weaponSet, out MotionPlayback playback)
         {
             playback = default;
+            // The guard is the sword stance's own motion: the same with any weapon.
+            BladeMotionSetExtension set = QingheSwordGuard.Config.guardMotion;
             BladeMotionClip guard = set?.guard;
             if (guard?.blade == null)
             {
@@ -210,7 +233,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 seconds = seconds,
                 aim = aim,
                 projection = set.Projection,
-                scabbardSet = set,
+                scabbard = true,
                 blendSeconds = clip == recoil ? 0.03f : set.blendSeconds,
                 source = clip,
                 sourceId = id,
@@ -264,6 +287,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public bool TryGetGuardPlayback(BladeMotionSetExtension set, out MotionPlayback playback)
         {
             playback = default;
+            // The deflect leads into the cross slash's counter: the weapon's own clip, drawn in the weapon's projection.
             BladeMotionClip clip = set?.parry;
             if (clip?.blade == null)
             {
@@ -276,7 +300,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 seconds = t * clip.durationSeconds,
                 aim = aim,
                 projection = set.Projection,
-                scabbardSet = set,
+                scabbard = true,
                 blendSeconds = 0.04f,
                 source = clip,
                 sourceId = startedTick,
@@ -337,7 +361,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 QingheSwordGuard.Parry(defender, attacker, c.parryAttackerPosture);
                 return true;
             }
-            if (stance is Stance_Warmup warmup && warmup.verb == sword)
+            if (sword != null && stance is Stance_Warmup warmup && warmup.verb == sword)
             {
                 // Past the flash the blade is in and the draw is coming: committed, the hit lands.
                 if (!sword.InCounterWindow(warmup))
@@ -401,7 +425,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 parry = true;
             }
-            else if (stance is Stance_Warmup warmup && warmup.verb == sword)
+            else if (sword != null && stance is Stance_Warmup warmup && warmup.verb == sword)
             {
                 // Taken on the sheathing blade without breaking the attack.
                 parry = true;
@@ -478,7 +502,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             return busy ? "MX_WeaponQuickSwap_SwordBusy".Translate().ToString() : null;
         }
 
-        /// <summary>Qinghe in the sword stance with the motion sword, able to act, outside her own defensive skills.</summary>
+        /// <summary>Qinghe in the sword stance with a melee weapon, able to act, outside her own defensive skills.</summary>
         internal static bool CanGuard(Pawn pawn, out Verb_QingheSwordSweep sword)
         {
             sword = null;
@@ -493,20 +517,25 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return false;
             }
-            List<Verb> verbs = pawn.equipment?.PrimaryEq?.AllVerbs;
-            if (verbs == null)
+            // Any melee weapon guards (the stance's own motion). Only one with the cross slash also
+            // sheathes, and so has the counter (化解) and its chase; sword is null otherwise.
+            if (pawn.equipment?.Primary?.def.IsMeleeWeapon != true)
             {
                 return false;
             }
-            for (int i = 0; i < verbs.Count; i++)
+            List<Verb> verbs = pawn.equipment.PrimaryEq?.AllVerbs;
+            if (verbs != null)
             {
-                if (verbs[i] is Verb_QingheSwordSweep s && s.MotionActive)
+                for (int i = 0; i < verbs.Count; i++)
                 {
-                    sword = s;
-                    return true;
+                    if (verbs[i] is Verb_QingheSwordSweep s && s.MotionActive)
+                    {
+                        sword = s;
+                        break;
+                    }
                 }
             }
-            return false;
+            return true;
         }
 
         /// <summary>A living, spawned target whose death or wounds are not handled elsewhere (quest lodgers).</summary>
@@ -534,12 +563,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 Stance_QingheGuard => true,
                 // The execution replaces the counter the parry was winding up.
                 Stance_QingheParry => true,
-                Stance_Warmup w => w.verb == sword && sword.InCounterWindow(w),
+                Stance_Warmup w => sword != null && w.verb == sword && sword.InCounterWindow(w),
                 _ => Free(executor, sword),
             };
         }
 
-        /// <summary>Not busy with anything but the return to idle after the last strike.</summary>
+        /// <summary>
+        /// Not busy with anything but a melee cooldown: the cross slash's return to idle after the last
+        /// strike, or a plain melee attack's cooldown (another weapon's).
+        /// </summary>
         internal static bool Free(Pawn pawn, Verb_QingheSwordSweep sword)
         {
             Stance stance = pawn.stances.curStance;
@@ -547,7 +579,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return true;
             }
-            return busy is Stance_Cooldown && busy.verb == sword && !sword.InStrikes(busy);
+            if (busy is not Stance_Cooldown)
+            {
+                return false;
+            }
+            if (busy.verb is Verb_QingheSwordSweep cut)
+            {
+                return cut == sword && !cut.InStrikes(busy);
+            }
+            return busy.verb?.verbProps?.IsMeleeAttack == true;
         }
 
         /// <summary>
@@ -565,8 +605,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             Vector3 aim = attacker.DrawPos - pawn.DrawPos;
             aim.y = 0f;
             aim = aim.sqrMagnitude > 0.001f ? aim.normalized : pawn.Rotation.FacingCell.ToVector3();
+            // A plain melee cooldown the guard replaces still runs out under it: guarding never
+            // shortens another weapon's attack interval.
+            int ticks = Config.guardTicks;
+            if (pawn.stances.curStance is Stance_Cooldown cooldown && cooldown.verb is not Verb_QingheSwordSweep)
+            {
+                ticks = Mathf.Max(ticks, cooldown.ticksLeft);
+            }
             // A busy stance holds the pather in place (like a stagger) without dropping the path.
-            pawn.stances.SetStance(new Stance_QingheGuard(Config.guardTicks, attacker, aim));
+            pawn.stances.SetStance(new Stance_QingheGuard(ticks, attacker, aim));
             pawn.rotationTracker.Face(attacker.DrawPos);
         }
 

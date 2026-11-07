@@ -77,8 +77,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         /// <param name="startTick">Game tick of trail second 0 (clip second <paramref name="from"/>).</param>
         /// <param name="from">Clip second the trail starts at; below the clip's trail start = the whole trail.</param>
+        /// <param name="projection">The motion's projection; null = the held weapon's.</param>
         public static void SpawnTrail(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, int startTick, float speed,
-            FlowerBellResonance resonance, float from = -1f, float to = -1f)
+            FlowerBellResonance resonance, float from = -1f, float to = -1f, BladeProjection? projection = null)
         {
             MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
             if (visuals == null || ext == null || clip == null || !clip.HasTrail || ext.layers.NullOrEmpty())
@@ -108,7 +109,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 pawn = pawn,
                 trailFrom = trailFrom,
             };
-            v.projection = ProjectionFor(pawn, ext);
+            v.projection = projection ?? ProjectionFor(pawn, ext);
             float rate = Mathf.Max(0.01f, speed);
             v.clock = ticks => (ticks - startTick) / 60f * rate;
             v.aim = aim;
@@ -120,8 +121,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         /// <param name="flashTick">Game tick of the flash.</param>
         /// <param name="stillOn">Checked until the flash starts; false (the warmup was interrupted) drops it.</param>
+        /// <param name="projection">The motion's projection; null = the held weapon's.</param>
         public static void SpawnFlash(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, float flashTick,
-            System.Func<bool> stillOn)
+            System.Func<bool> stillOn, BladeProjection? projection = null)
         {
             MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
             QingheSheatheFlashProps f = ext?.sheatheFlash;
@@ -130,14 +132,14 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return;
             }
-            BladeProjection projection = ProjectionFor(pawn, ext);
+            BladeProjection proj = projection ?? ProjectionFor(pawn, ext);
             Vector3 bodyAt = BladeMotionUtility.BodyOffsetWorld(clip, clip.flashTime, aim);
-            bodyAt.z /= Mathf.Max(1e-3f, projection.depthToScreen);
+            bodyAt.z /= Mathf.Max(1e-3f, proj.depthToScreen);
             mouth += bodyAt;
             SheatheFlashVisual v = new()
             {
                 flash = f,
-                projection = projection,
+                projection = proj,
                 bloom = ext.bloom,
                 startTick = Mathf.RoundToInt(flashTick),
                 offset = mouth,

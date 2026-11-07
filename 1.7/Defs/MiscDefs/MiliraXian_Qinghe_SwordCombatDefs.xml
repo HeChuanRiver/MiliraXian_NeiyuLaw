@@ -25,6 +25,40 @@
     -->
     <MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
         <defName>MX_QH_SwordGuard</defName>
+        <!-- 处决固定是散华的居合：播放散华动作集里的十字斩片段，手上也画散华（伤害固定，与手持武器无关） -->
+        <executionWeapon>MX_QH_Weapon_Sword</executionWeapon>
+        <!--
+          剑舞的防御动作，任何近战武器都一样（动作是剑舞的，刀长什么样是武器的事）。
+          投影和清荷的身体对齐（同散华动作集）。化解动作接十字斩反击，留在散华上。
+        -->
+        <guardMotion>
+            <heightToScreen>0.35</heightToScreen>
+            <heightOrigin>-0.63</heightOrigin>
+            <depthToScreen>0.55</depthToScreen>
+            <blendSeconds>0.08</blendSeconds>
+            <!-- 防御（手写初值）：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
+            <guard>
+                <durationSeconds>0.12</durationSeconds>
+                <blade>
+                    <keys>
+                        <li><time>0</time><yaw>-80.0</yaw><pitch>20.0</pitch><roll>0</roll><reach>0</reach><offset>(0.140, 0.240, 0.330)</offset></li>
+                        <li><time>0.12</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
+                    </keys>
+                </blade>
+            </guard>
+            <!-- 防御受击：刀被压回半寸、身体后仰一下，0.15 秒回到防御姿势 -->
+            <guardHit>
+                <durationSeconds>0.15</durationSeconds>
+                <blade>
+                    <keys>
+                        <li><time>0</time><yaw>-96.0</yaw><pitch>22.0</pitch><roll>-6.0</roll><reach>0</reach><offset>(0.150, 0.270, 0.240)</offset></li>
+                        <li><time>0.15</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
+                    </keys>
+                </blade>
+                <bodyForward><points><li>(0, -0.07)</li><li>(0.15, 0)</li></points></bodyForward>
+                <tilt><points><li>(0, -4)</li><li>(0.15, 0)</li></points></tilt>
+            </guardHit>
+        </guardMotion>
         <guardTicks>30</guardTicks>
         <extendTicks>
             <li>12</li>
