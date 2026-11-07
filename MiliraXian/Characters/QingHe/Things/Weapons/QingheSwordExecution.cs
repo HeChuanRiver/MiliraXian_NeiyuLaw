@@ -154,7 +154,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 finally
                 {
-                    posture?.ReleaseBreak();
+                    posture?.ReleaseBreak(executed: true);
                 }
             }
             if (t >= C.executionSeconds)

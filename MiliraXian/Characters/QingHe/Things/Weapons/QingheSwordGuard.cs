@@ -77,6 +77,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>Sword pressure the blow grants, fixed (no resonance bonus or strike share).</summary>
         public float executionSwordPressure = 1f;
         public SoundDef executionDrawSound;
+        /// <summary>
+        /// Share of its maximum posture an enemy she broke keeps when its break ends without her
+        /// execution (she was busy with others): it breaks again soon (as Sekiro's posture).
+        /// </summary>
+        public float unexecutedPostureKept = 0.8f;
 
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 
@@ -294,6 +299,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         // Qinghe may be cutting or countering when the posture breaks: the victim waits for her.
         public override bool WaitForExecutor => true;
         public override int MinimumBreakWindowTicks => QingheSwordGuard.Config.ExecutionTicks + 30;
+        public override float UnexecutedPostureKept => QingheSwordGuard.Config.unexecutedPostureKept;
 
         // Decorative mode seals the whole sword defence: no guard, parry, counter, posture or execution.
         // Her ordinary attacks (the motion strikes) stay.
