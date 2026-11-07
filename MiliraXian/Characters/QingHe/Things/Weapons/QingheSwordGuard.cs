@@ -348,8 +348,10 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public override bool TryBlockMelee(Verb_MeleeAttack verb, Pawn defender)
         {
             Pawn attacker = verb.CasterPawn;
+            // A swing aimed at her is an attack whoever makes it: an enemy, or one not hostile yet (a
+            // neutral animal answering her blow, a social fight).
             if (!verb.verbProps.IsMeleeAttack || attacker == null || attacker == defender
-                || !GenHostility.HostileTo(attacker, defender) || !QingheSwordGuard.CanGuard(defender, out Verb_QingheSwordSweep sword))
+                || !QingheSwordGuard.CanGuard(defender, out Verb_QingheSwordSweep sword))
             {
                 return false;
             }
@@ -413,7 +415,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         {
             Thing shooter = projectile.Launcher;
             if (projectile is not { Spawned: true, Destroyed: false } || projectile.Map != defender.Map
-                || shooter == null || shooter == defender || !GenHostility.HostileTo(shooter, defender)
+                || shooter == null || shooter == defender
+                // An enemy's shot, or one aimed at her by anyone not hostile yet.
+                || !GenHostility.HostileTo(shooter, defender) && projectile.intendedTarget.Thing != defender
                 || !QingheSwordGuard.CanGuard(defender, out Verb_QingheSwordSweep sword))
             {
                 return false;
@@ -543,8 +547,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             target is { Spawned: true, Dead: false, Destroyed: false } && target.health != null
             && !target.health.isBeingKilled && !target.IsQuestLodger();
 
+        /// <summary>
+        /// An enemy, or a factionless one (a wild animal she broke while it was answering her blow).
+        /// Members of a faction that is not hostile are never executed: their break just runs out.
+        /// </summary>
+        internal static bool Executable(Pawn executor, Pawn victim) =>
+            GenHostility.HostileTo(executor, victim) || victim.Faction == null;
+
         internal static bool ExecutionPair(Pawn executor, Pawn victim) =>
-            ExecutionTarget(victim) && executor.Map == victim.Map && GenHostility.HostileTo(executor, victim)
+            ExecutionTarget(victim) && executor.Map == victim.Map && Executable(executor, victim)
             && executor.Position.DistanceToSquared(victim.Position) <= Config.executionRange * Config.executionRange
             && GenSight.LineOfSight(executor.Position, victim.Position, executor.Map);
 
