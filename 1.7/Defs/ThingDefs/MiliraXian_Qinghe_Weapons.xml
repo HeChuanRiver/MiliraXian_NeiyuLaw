@@ -3,7 +3,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_QH_Weapon_Sword</defName>
         <label>散华</label>
-        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。\n\n此武器带有特殊战技(替换普通攻击)\n\n十字拔刀斩：\n借收刀之势向前方发动高速二连斩，能同时攻击范围内的所有敌人。攻守兼备的绝技，若在收刀完毕前受到攻击，则可立即拔刀弹开并反击。\n\n拔刀斩化解：\n收刀过程中受到攻击立即拔刀弹开并对攻击者造成硬直，随后发动一次反斩。\n\n必杀剑·残心：\n敌人因架势不稳而失衡时自动使用，闪现到敌人身后对弱点造成大量伤害。\n</description>
+        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。\n\n此武器带有特殊战技(替换普通攻击)\n\n十字拔刀斩：\n借收刀之势向前方发动高速二连斩，能同时攻击范围内的所有敌人。攻守兼备的绝技，若在收刀完毕前受到攻击，则可立即拔刀弹开并反击。\n\n拔刀斩化解：\n收刀过程中受到攻击立即拔刀弹开并对攻击者造成硬直，随后发动一次反斩。\n\n必杀剑·残心：\n敌人因架势不稳而失衡时自动使用，闪现到敌人身后对弱点造成大量伤害。</description>
         <recipeMaker Inherit="False">
             <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
             <workSkill>Crafting</workSkill>

@@ -172,8 +172,47 @@
             <ringColor>(1, 0.55, 0.25, 1)</ringColor>
             <sound>MX_QH_SwordPostureBreak</sound>
         </breakVfx>
-        <!-- 处决命中（收刀"咔"的一声）：白红闪光、红火花、大冲击环 -->
+        <!--
+          处决命中（收刀"咔"的一声）：转身收刀时敌人身上依次浮现三道交错的细斩痕（一刀里藏了几刀），
+          刀完全入鞘的一刻斩痕一起爆开（迅速延长、变宽泛粉光，周围空气扭曲，再收成一线消失），同时白红闪光、针光、红火花、樱花瓣四散。
+          burstDelay：斩痕比爆开早出现的秒数（效果提前这么多秒加入，爆开对准中刀；音效在中刀时播）。
+          斩痕角度相对"清荷→敌人"方向，offset 为侧移，delay 为相对效果加入的出现时间。
+        -->
         <executionVfx>
+            <burstDelay>0.45</burstDelay>
+            <cuts>
+                <li><angle>-12</angle><length>2.0</length><offset>0</offset><delay>0</delay><width>1.2</width></li>
+                <li><angle>58</angle><length>1.6</length><offset>0.08</offset><delay>0.12</delay></li>
+                <li><angle>-74</angle><length>1.5</length><offset>-0.1</offset><delay>0.24</delay><width>0.9</width></li>
+            </cuts>
+            <cutGrowSeconds>0.07</cutGrowSeconds>
+            <cutWaitShare>0.35</cutWaitShare>
+            <cutFadeSeconds>0.4</cutFadeSeconds>
+            <cutWidth>0.08</cutWidth>
+            <cutAlpha>3.5</cutAlpha>
+            <!-- 斩痕外层粉色、内芯淡粉白；爆开时 0.08 秒内向两端延长到 1.5 倍 -->
+            <cutColor>(1, 0.55, 0.72, 1)</cutColor>
+            <cutCoreColor>(1, 0.9, 0.95, 1)</cutCoreColor>
+            <cutBurstStretch>1.5</cutBurstStretch>
+            <cutStretchSeconds>0.08</cutStretchSeconds>
+            <!-- 斩痕自己的泛光（粉） -->
+            <cutBloom>
+                <group>MX_ScreenBloom_Glow</group>
+                <tint>(1, 0.6, 0.78, 1)</tint>
+                <intensity>1.4</intensity>
+            </cutBloom>
+            <!-- 爆开后沿斩痕的扭曲带（同普通刀光的扭曲带），宽 0.5，0.5 秒内减弱消失 -->
+            <cutDistortWidth>0.5</cutDistortWidth>
+            <cutDistortSeconds>0.5</cutDistortSeconds>
+            <cutDistortIntensity>5</cutDistortIntensity>
+            <petals>22</petals>
+            <petalSpeed>1.5~4</petalSpeed>
+            <petalLife>0.9~1.7</petalLife>
+            <petalSpread>360</petalSpread>
+            <petalDrag>4</petalDrag>
+            <petalFall>0.35</petalFall>
+            <petalSway>0.12</petalSway>
+            <petalSize>0.22~0.34</petalSize>
             <flashSize>1.8</flashSize>
             <flashSeconds>0.3</flashSeconds>
             <flashAlpha>3</flashAlpha>
@@ -189,17 +228,6 @@
             <sparkSpread>360</sparkSpread>
             <sparkHot>(1, 0.85, 0.8, 1)</sparkHot>
             <sparkCool>(0.9, 0.12, 0.1, 1)</sparkCool>
-            <ringStart>0.2</ringStart>
-            <ringEnd>1.8</ringEnd>
-            <ringWidth>0.12</ringWidth>
-            <ringSeconds>0.4</ringSeconds>
-            <ringAlpha>2</ringAlpha>
-            <ringColor>(1, 0.75, 0.7, 1)</ringColor>
-            <dustStart>0.3</dustStart>
-            <dustEnd>1.4</dustEnd>
-            <dustWidth>0.35</dustWidth>
-            <dustSeconds>0.8</dustSeconds>
-            <dustAlpha>0.35</dustAlpha>
             <sound>MX_QH_SwordExecutionHit</sound>
         </executionVfx>
 
@@ -255,6 +283,9 @@
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
         <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>
+        <!-- 清荷打崩、但破绽结束时没被处决的敌人（她忙着处决别人、够不着等）：架势只回落到上限的这个比例，
+             再照常等恢复延迟后自然下降，很快能再次打崩。被处决的敌人照旧清空。 -->
+        <unexecutedPostureKept>0.8</unexecutedPostureKept>
     </MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
 
     <JobDef>

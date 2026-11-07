@@ -279,8 +279,13 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         if (Owns(executor)) brokenUntilTick = Mathf.Max(brokenUntilTick, untilTick);
     }
 
-    public void ReleaseBreak()
+    /// <param name="executed">The execution blow landed: the meter empties. Otherwise the breaker's
+    /// blocker decides how much posture stays (<see cref="CombatBlocker.UnexecutedPostureKept"/>).</param>
+    public void ReleaseBreak(bool executed = false)
     {
+        float kept = 0f;
+        if (broken && !executed && Pawn is { Dead: false })
+            kept = Mathf.Clamp01(CombatPostureRules.Finite(CombatBlockers.ExecutionerFor(source)?.UnexecutedPostureKept ?? 0f));
         broken = false;
         executioner = null;
         source = null;
@@ -288,7 +293,10 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         brokenUntilTick = 0;
         brokenAt = -1;
         breakCell = IntVec3.Invalid;
-        SetValue(0f);
+        // Kept below the maximum so the release itself never breaks it again.
+        SetValue(kept > 0f ? Mathf.Min(MaxValue * kept, MaxValue - .01f) : 0f);
+        // The kept posture waits out the usual recovery delay before it drains.
+        if (kept > 0f) lastIncreaseTick = Now;
         fadeUntilTick = Now + C.barFadeTicks;
         // The hold job terminates itself; never stop an unrelated replacement job
         // or clear another system's stunner.
