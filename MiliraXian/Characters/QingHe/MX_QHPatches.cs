@@ -39,8 +39,9 @@ namespace MiliraXian.Characters.QingHe
         [HarmonyPatch(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget")]
         public static class Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget
         {
-            public static void Prefix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target)
+            public static void Prefix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target, out bool __state)
             {
+                __state = false;
                 Pawn caster = __instance.CasterPawn;
                 if (MX_QH_HediffUtility.GetCombatStance(caster)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                     || __instance.EquipmentSource?.def.IsMeleeWeapon != true
@@ -52,6 +53,26 @@ namespace MiliraXian.Characters.QingHe
 
                 // Runs after hit and dodge rolls, once per target rather than per extra damage packet.
                 MX_QH_HediffUtility.GetSwordPressure(caster)?.AddValue(0.25f);
+                __state = true;
+            }
+
+            /// <summary>
+            /// A plain melee weapon's hit in the sword stance strikes posture like a cross-slash strike
+            /// (attackPosture; a quarter when a shield absorbed it). Decorative mode: none.
+            /// </summary>
+            public static void Postfix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target,
+                DamageWorker.DamageResult __result, bool __state)
+            {
+                float posture = QingheSwordGuard.Config.attackPosture;
+                if (!__state || QinghePowerBalance.Sealed || posture <= 0f
+                    || target.Thing is not Pawn { Dead: false, Spawned: true } victim)
+                {
+                    return;
+                }
+                float amount = Common.SweepDamage.SweepDamageWorker.Absorbed(__result)
+                    ? posture * Common.SweepDamage.SweepDamageWorker.AbsorbedPostureShare
+                    : posture;
+                Common.Combat.CombatPosture.Ensure(victim)?.AddPressure(__instance.CasterPawn, amount);
             }
         }
 
