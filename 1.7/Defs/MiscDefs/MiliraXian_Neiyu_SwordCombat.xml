@@ -29,7 +29,7 @@
     <endSound>MX_NeiyuSwordEnd</endSound>
     <single>
       <enemyRadius>8</enemyRadius>
-      <slashWidth>14</slashWidth>
+      <slashWidth>18</slashWidth>
       <knockbackDistance>3.5</knockbackDistance>
       <throwDistance>25</throwDistance>
       <spiritSwordScale>1.45</spiritSwordScale>

@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.Neiyu;
 
 public sealed class NeiyuSingleExecutionProps
 {
-    public float enemyRadius = 8f, slashWidth = 14f, knockbackDistance = 3.5f, throwDistance = 25f, spiritSwordScale = 1.45f;
+    public float enemyRadius = 8f, slashWidth = 18f, knockbackDistance = 3.5f, throwDistance = 25f, spiritSwordScale = 1.45f;
     public int lockTicks = 150;
     public int readyTicks = 20, enchantTicks = 30, flashTicks = 3, swingTicks = 8, hitStopTicks = 9;
     public int knockbackTicks = 24, approachTicks = 24, spinLeadTicks = 12, spinTicksPerTurn = 30;
