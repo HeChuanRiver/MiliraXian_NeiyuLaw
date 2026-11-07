@@ -20,16 +20,29 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private const int MultiHoldTicks = 4;
     private const int MultiReleaseAt = MultiPinAt + 60;
     private const int MultiSwingAt = MultiReleaseAt + 10;
-    private const int MultiHitAt = MultiSwingAt + 4;
-    private const int MultiLandAt = MultiReleaseAt + 24;
-    private const int MultiFollowThroughAt = MultiHitAt + 5;
-    private const int MultiEndAt = MultiHitAt + 18;
+    private const int MultiFirstCutAt = MultiSwingAt + 4;
+    private const int MultiCutInterval = 6;
+    private static readonly float[] MultiCutAngles = [0f, 62f, -52f, 101f, -91f, 39f, -28f, 136f, -132f, 82f, -72f, 16f];
 
     private MultiStage multiStage;
     private float pinReach, previousPinReach;
+    private bool multiCombo;
+    private List<Vector3> multiCutContacts;
+
+    private int MultiLastCut => multiCombo ? MultiCutAngles.Length - 1 : 0;
+    private int MultiHitAt => MultiCutAt(MultiLastCut);
+    private int MultiLandAt => MultiHitAt + (multiCombo ? 15 : 10);
+    private int MultiFollowThroughAt => MultiHitAt + 5;
+    private int MultiEndAt => MultiHitAt + 18;
+    private static int MultiCutAt(int cut) => MultiFirstCutAt + cut * MultiCutInterval;
+    private float MultiCutYaw(int cut) => throwYaw + MultiCutAngles[cut];
+    private float MultiHandYaw(int cut) => throwYaw + MultiCutAngles[cut] * .26f;
+    private float MultiCutPitch(int cut) => cut == 0 || cut == MultiLastCut ? 30f : cut % 2 == 0 ? 19f : 43f;
 
     private void BeginMulti()
     {
+        multiCombo = true;
+        multiCutContacts = new List<Vector3>(MultiCutAngles.Length);
         sceneStart = startedAt;
         BeginSceneMotion();
         previousPinReach = pinReach = Vector3.Distance(actorDraw, targetGround);
@@ -42,6 +55,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref multiStage, "multiExecutionStage");
         Scribe_Values.Look(ref pinReach, "multiExecutionPinReach");
         Scribe_Values.Look(ref previousPinReach, "multiExecutionPreviousPinReach");
+        // The existing air and recovery stages retain their original deadlines in older saves.
+        Scribe_Values.Look(ref multiCombo, "multiExecutionCombo");
+        Scribe_Collections.Look(ref multiCutContacts, "multiExecutionCutContacts", LookMode.Value);
+        if (Scribe.mode == LoadSaveMode.PostLoadInit) multiCutContacts ??= new List<Vector3>(MultiLastCut + 1);
     }
 
     private void TickMulti()
@@ -92,10 +109,20 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
         pawn.Rotation = Rot4.FromAngleFlat(tick <= MultiReleaseAt ? MultiYaw(tick)
             : Mathf.LerpAngle(initialYaw, throwYaw, ProgressBetween(tick, MultiReleaseAt, MultiSwingAt)));
-        if (tick >= MultiHitAt && !strikeCommitted)
+        while (multiStage == MultiStage.Air && !strikeCommitted && multiCutContacts.Count <= MultiLastCut
+            && tick >= MultiCutAt(multiCutContacts.Count))
         {
-            multiStage = MultiStage.Recovery;
-            if (!CommitStrike(target)) return;
+            int cut = multiCutContacts.Count;
+            multiCutContacts.Add(aimPoint);
+            if (cut == MultiLastCut)
+            {
+                multiStage = MultiStage.Recovery;
+                if (!CommitStrike(target)) return;
+            }
+            else if (cut % 3 == 0)
+            {
+                NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.swordLaunchSound);
+            }
         }
         if (tick >= MultiEndAt) EndJobWith(JobCondition.Succeeded);
     }
@@ -142,6 +169,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         return Vector3.Lerp(previousTargetDraw, targetDraw, FrameLerp);
     }
 
+    private Vector3 MultiCutContact(int cut, float tick)
+    {
+        if (multiCutContacts != null && cut < multiCutContacts.Count) return multiCutContacts[cut];
+        return strikeCommitted ? aimPoint : MultiTargetAtFrame(tick);
+    }
+
     private BladePose MultiBladeAt(BladeGraphicExtension blade, float tick)
     {
         float yaw, pitch;
@@ -163,8 +196,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
         else
         {
+            float finalYaw = MultiHandYaw(MultiLastCut);
             Vector3 cocked = actorDraw + Forward(throwYaw - 72f) * .85f + Vector3.forward * .46f;
-            Vector3 follow = actorDraw + Forward(throwYaw + 67f) * 1.58f + Vector3.forward * .28f;
+            Vector3 follow = actorDraw + Forward(finalYaw + 67f) * 1.58f + Vector3.forward * .28f;
             if (tick < MultiSwingAt)
             {
                 float charge = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiReleaseAt, MultiSwingAt));
@@ -173,27 +207,39 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 pitch = Mathf.Lerp(MultiPinnedPitch(MultiReleaseAt, pinReach), 48f, charge);
                 tip = Vector3.Lerp(released, cocked, charge);
             }
-            else if (tick <= MultiHitAt)
+            else if (tick <= MultiFirstCutAt)
             {
-                float cut = ProgressBetween(tick, MultiSwingAt, MultiHitAt);
+                float cut = ProgressBetween(tick, MultiSwingAt, MultiFirstCutAt);
                 cut *= cut;
                 yaw = Mathf.Lerp(throwYaw - 72f, throwYaw, cut);
                 pitch = Mathf.Lerp(48f, 30f, cut);
-                tip = Vector3.Lerp(cocked, strikeCommitted ? aimPoint : MultiTargetAtFrame(tick), cut);
+                tip = Vector3.Lerp(cocked, MultiCutContact(0, tick), cut);
+            }
+            else if (tick < MultiHitAt)
+            {
+                int cut = (int)((tick - MultiFirstCutAt) / MultiCutInterval);
+                float phase = ProgressBetween(tick, MultiCutAt(cut), MultiCutAt(cut + 1));
+                float lift = Mathf.Sin(phase * Mathf.PI);
+                float turn = cut % 2 == 0 ? lift : -lift;
+                yaw = Mathf.LerpAngle(MultiHandYaw(cut), MultiHandYaw(cut + 1), phase);
+                pitch = Mathf.Lerp(MultiCutPitch(cut), MultiCutPitch(cut + 1), phase) + 12f * lift;
+                tip = Vector3.Lerp(MultiCutContact(cut, tick), MultiCutContact(cut + 1, tick), phase)
+                    + Forward(yaw + 90f) * (.92f * turn);
+                yaw += 31f * turn;
             }
             else if (tick < MultiFollowThroughAt)
             {
                 float cut = ProgressBetween(tick, MultiHitAt, MultiFollowThroughAt);
-                yaw = Mathf.Lerp(throwYaw, throwYaw + 67f, cut);
+                yaw = Mathf.Lerp(finalYaw, finalYaw + 67f, cut);
                 pitch = Mathf.Lerp(30f, 3f, cut);
                 tip = Vector3.Lerp(aimPoint, follow, cut);
             }
             else
             {
                 float settle = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiFollowThroughAt, MultiEndAt));
-                yaw = Mathf.Lerp(throwYaw + 67f, throwYaw + 28f, settle);
+                yaw = Mathf.Lerp(finalYaw + 67f, finalYaw + 28f, settle);
                 pitch = Mathf.Lerp(3f, 49f, settle);
-                tip = Vector3.Lerp(follow, actorDraw + Forward(throwYaw + 28f) * .65f + Vector3.forward * .25f, settle);
+                tip = Vector3.Lerp(follow, actorDraw + Forward(finalYaw + 28f) * .65f + Vector3.forward * .25f, settle);
             }
         }
 
@@ -212,6 +258,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         // Solve the grip from the same projected tip that carries the pawn.
         BladeRenderer.GetGripAndTip(blade, pose, actorDraw, out _, out Vector3 neutralTip);
         pose.grip = (tip - neutralTip).Yto0();
+        // After release the wide slash travels to the victim, while the actual hand stays in reach.
+        if (multiCombo && tick > MultiReleaseAt)
+            pose.grip = Vector3.Lerp(pose.grip, Vector3.ClampMagnitude(pose.grip, 1.15f),
+                ProgressBetween(tick, MultiReleaseAt, MultiReleaseAt + 4));
         return pose;
     }
 

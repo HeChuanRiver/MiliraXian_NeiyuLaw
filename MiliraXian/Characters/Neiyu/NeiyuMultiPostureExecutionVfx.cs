@@ -10,6 +10,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private const int MultiRingSegments = 64;
     private const int MultiRingTrailTicks = 27;
     private const int MultiRingFadeTicks = 10;
+    private const int MultiQuickCutFadeTicks = 10;
     private const int MultiSlashFadeTicks = 15;
 
     // Pixel pairs just inside the hole and outside the rim of BladeLight_Neiyu_E.
@@ -44,23 +45,30 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 float fade = 1f - ProgressBetween(tick, MultiReleaseAt, MultiReleaseAt + MultiRingFadeTicks);
                 DrawMultiRing(body, tail, front - tail, MultiRadius, fade, closed: false);
             }
-            if (tick >= MultiHitAt - 2f && tick < MultiHitAt + MultiSlashFadeTicks)
+            for (int cut = 0; cut <= MultiLastCut; cut++)
+            {
+                bool final = cut == MultiLastCut;
+                int hit = MultiCutAt(cut);
+                int fadeTicks = final ? MultiSlashFadeTicks : MultiQuickCutFadeTicks;
+                if (tick < hit - 2f) break;
+                if (tick >= hit + fadeTicks) continue;
+                float p = ProgressBetween(tick, hit, hit + fadeTicks);
+                float entry = ProgressBetween(tick, hit - 2, hit);
+                float fade = entry * (1f - p) * (1f - p);
+                float length = final ? Mathf.Lerp(2.5f, 3.1f, p) : Mathf.Lerp(1.55f, 2.15f, p);
+                float width = final ? Mathf.Lerp(8f, 9.2f, p) : Mathf.Lerp(4.4f, 5.6f, p);
+                float yaw = MultiCutYaw(cut);
+                // Each flash crosses its own airborne contact and then fades at that location.
+                Vector3 at = MultiCutContact(cut, tick) + Forward(yaw) * (p * .68f - length * .52f);
+                at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f + cut * .0002f;
+                DrawSlashArtwork(at, yaw, width, length, fade);
+            }
+            if (strikeCommitted && tick >= MultiHitAt - 1f && tick < MultiHitAt + MultiSlashFadeTicks)
             {
                 float p = ProgressBetween(tick, MultiHitAt, MultiHitAt + MultiSlashFadeTicks);
-                float cut = ProgressBetween(tick, MultiHitAt - 2, MultiHitAt);
-                float fade = cut * (1f - p) * (1f - p);
-                float length = Mathf.Lerp(2.5f, 3.1f, p);
-                // Align the convex leading edge with the airborne hit location.
-                Vector3 target = strikeCommitted ? aimPoint : MultiTargetAtFrame(tick);
-                Vector3 at = target - Forward(throwYaw) * (length * .52f);
-                at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
-                DrawSlashArtwork(at, throwYaw, Mathf.Lerp(8f, 9.2f, p), length, fade);
-                if (strikeCommitted)
-                {
-                    float expand = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiHitAt, MultiHitAt + 6));
-                    DrawMultiRing(body, throwYaw - 90f, 360f, Mathf.Lerp(2.1f, MultiRadius, expand),
-                        .78f * (1f - p), closed: true);
-                }
+                float expand = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiHitAt, MultiHitAt + 6));
+                DrawMultiRing(body, MultiCutYaw(MultiLastCut) - 90f, 360f, Mathf.Lerp(2.1f, MultiRadius, expand),
+                    .78f * (1f - p), closed: true);
             }
         }
         catch (Exception exception)
