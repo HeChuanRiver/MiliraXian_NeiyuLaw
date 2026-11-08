@@ -73,6 +73,14 @@ void main()
         col = u._Sheen.rgb * (u._Sheen.a * 0.5 + crest);
     }
     col *= u._BloomTint.rgb * u._BloomIntensity;
+    if (u._GlowOnly > 0.5)
+    {
+        // Alpha 0 under the premultiplied blend (One, OneMinusSrcAlpha) only adds light: the
+        // bloom layer keeps what was drawn before (the moon under her feet). With alpha a her
+        // opaque body would wipe the water's glow out of the bloom image.
+        outColor = vec4(col * a, 0.0);
+        return;
+    }
     // Premultiplied (blend One, OneMinusSrcAlpha).
     outColor = vec4(col * a, a);
 }

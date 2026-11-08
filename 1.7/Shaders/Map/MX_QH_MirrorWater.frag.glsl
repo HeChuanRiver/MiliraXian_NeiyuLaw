@@ -188,7 +188,10 @@ int nearestSeed(vec2 gw, float R, out float first, out float second)
 }
 
 // shatter_water(): pieces drifting out and fading, the cracks flashing, one crest running out.
-float shatter(vec2 g, float t, float p, float R)
+// pinkShare scales only the dim surface light of the pieces, as the whole water does: the bloom
+// submission passes a small share, so the moon, glints, cracks and crest keep their full halo and
+// the glow carries on from the stance without a drop.
+float shatter(vec2 g, float t, float p, float R, float pinkShare)
 {
     float ease = 1.0 - (1.0 - p) * (1.0 - p);
     float fade = pow(1.0 - p, 1.3);
@@ -209,7 +212,7 @@ float shatter(vec2 g, float t, float p, float R)
             float pw;
             float ww;
             water(src, t, 1.0, 0.0, R, pw, ww);
-            outI += (pw * 1.6 + ww * 1.2) * fade;
+            outI += (pw * 1.6 * pinkShare + ww * 1.2) * fade;
         }
     }
     nearestSeed(warpG(g), R, f, sc);
@@ -245,7 +248,7 @@ void main()
     }
     else
     {
-        col = u._Pink.rgb * shatter(g, t, p, R) * mix(u._Water2.z, 1.0, 0.5);
+        col = u._Pink.rgb * shatter(g, t, p, R, u._Water2.z);
     }
     col *= u._Water2.x * u._Color.a * texture(_MainTex, vec2(0.5)).a * u._BloomTint.rgb * u._BloomIntensity;
     // Additive blend multiplies by source alpha: the colour is the light to add, alpha 1.
