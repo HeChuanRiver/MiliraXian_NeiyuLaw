@@ -9,29 +9,14 @@ namespace MiliraXian.Characters.Common
     [HarmonyPatch(typeof(GenDrop), nameof(GenDrop.TryDropSpawn))]
     internal static class Patch_GenDrop_ProtectedWeapons
     {
-        private static bool Prefix(Thing thing, IntVec3 dropCell, Map map, ref Thing resultingThing, ref bool __result,
-            out bool __state)
+        private static bool Prefix(Thing thing, ref Thing resultingThing, ref bool __result)
         {
-            __state = WeaponDropDiagnostics.ShouldTrace(thing);
-            if (__state)
-                WeaponDropDiagnostics.Write("GenDrop.begin", thing, $"cell={dropCell} map={map?.uniqueID}");
-
-            bool cancel = WeaponDropProtectionUtility.ShouldCancelGroundDrop(thing, __state);
-            if (__state)
-                WeaponDropDiagnostics.Write("GenDrop.decision", thing, $"cancelGroundDrop={cancel}");
-            if (!cancel)
+            if (!WeaponDropProtectionUtility.ShouldCancelGroundDrop(thing))
                 return true;
 
             resultingThing = null;
             __result = false;
             return false;
-        }
-
-        private static void Postfix(Thing thing, ref Thing resultingThing, bool __result, bool __state)
-        {
-            if (__state)
-                WeaponDropDiagnostics.Write("GenDrop.end", thing,
-                    $"result={__result} ground={WeaponDropDiagnostics.ThingId(resultingThing)}");
         }
     }
 
@@ -45,11 +30,7 @@ namespace MiliraXian.Characters.Common
             if (eq.def.equipmentType != EquipmentType.Primary || __instance.Primary is not { } primary)
                 return true;
 
-            bool stowed = WeaponDropProtectionUtility.TryRedirectWeaponDrop(__instance, primary, out _);
-            if (WeaponDropDiagnostics.ShouldTrace(primary, __instance.pawn))
-                WeaponDropDiagnostics.Write("Equipment.MakeRoomFor", primary,
-                    $"incoming={WeaponDropDiagnostics.ThingId(eq)} stowed={stowed}", __instance.pawn);
-            if (!stowed)
+            if (!WeaponDropProtectionUtility.TryRedirectWeaponDrop(__instance, primary, out _))
                 return true;
 
             dropped = null;

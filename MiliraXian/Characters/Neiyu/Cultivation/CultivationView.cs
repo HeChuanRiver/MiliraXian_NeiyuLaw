@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MiliraXian.Characters.Common.PerkSystem;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -54,19 +55,19 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 if (Button(close, "×", CultivationText.Get("Close", "关闭 · Esc"), false, true)) return true;
 
                 float tabsY = header.yMax + Gap;
-                float tabWidth = (inner.width - Gap * 3f) / 4f;
+                float tabWidth = (inner.width - Gap * Math.Max(0, model.Categories.Count - 1)) / Math.Max(1, model.Categories.Count);
                 bool stackedTabs = tabWidth < 150f && !compact;
                 float tabHeight = 48f;
-                for (int i = 0; i < 4; i++)
-                    tabHeight = Mathf.Max(tabHeight, Height(CultivationText.Branch((CultivationBranch)i), tabWidth - (stackedTabs ? 20f : compact ? 50f : 58f))
+                for (int i = 0; i < model.Categories.Count; i++)
+                    tabHeight = Mathf.Max(tabHeight, Height(model.Categories[i].LabelCap, tabWidth - (stackedTabs ? 20f : compact ? 50f : 58f))
                         + (stackedTabs ? 38f : 0f) + 16f);
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < model.Categories.Count; i++)
                 {
-                    var branch = (CultivationBranch)i;
+                    var category = model.Categories[i];
                     Rect tab = new(inner.x + i * (tabWidth + Gap), tabsY, tabWidth, tabHeight);
-                    if (Button(tab, CultivationText.Branch(branch), CultivationText.Branch(branch) + " · " + model.Ranks[i] + " / 3", model.Branch == branch, true, CultivationArt.ForBranch(branch), compact))
+                    if (Button(tab, category.LabelCap, category.LabelCap + " · " + model.CategoryProgress(category), model.Category == category, true, CultivationArt.ForCategory(category), compact))
                     {
-                        model.SelectBranch(branch);
+                        model.SelectCategory(category);
                         listScroll = detailScroll = Vector2.zero;
                         narrowDetails = false;
                     }
@@ -126,24 +127,26 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             Rect viewport = rect.ContractedBy(14f);
             float width = Mathf.Max(1f, viewport.width - 18f);
             float contentHeight = 0f;
-            foreach (var node in model.Nodes)
-                if (node.branch == model.Branch) contentHeight += NodeHeight(node, width) + Gap;
-            string hint = CultivationText.Get("BranchHint", "以羽为引，循光而行。\n选择一项修行，查看所需材料与力量变化。");
+            foreach (var node in model.VisibleNodes)
+                contentHeight += NodeHeight(node, width) + Gap;
+            string hint = model.VisibleNodes.Exists(n => n.ability != null)
+                ? "折跃引羽：固有能力，施法3秒生成12～24根羽毛，冷却300秒。"
+                : "以羽为引，循光而行。";
             contentHeight += Height(hint, width) + 26f;
+            NeiyuCultivationNodeDef clickedNode = null;
             Widgets.BeginScrollView(viewport, ref listScroll, new Rect(0, 0, width, Mathf.Max(viewport.height, contentHeight)));
             try
             {
                 float y = 0f;
-                foreach (var node in model.Nodes)
+                foreach (var node in model.VisibleNodes)
                 {
-                    if (node.branch != model.Branch) continue;
                     float height = NodeHeight(node, width);
                     Rect row = new(0f, y, width, height);
                     y += height + Gap;
                     if (row.yMax < listScroll.y || row.y > listScroll.y + viewport.height) continue;
                     bool selected = model.Selected == node;
-                    bool learned = model.Ranks[(int)node.branch] >= node.rank;
-                    bool next = model.Ranks[(int)node.branch] + 1 == node.rank;
+                    bool learned = model.Learned(node);
+                    bool next = model.Rank(node) + 1 == node.rank;
                     CultivationArt.DrawFrame(row, selected ? CultivationArt.ButtonActive : CultivationArt.Button,
                         Mouse.IsOver(row) && !selected ? new Color(1.10f, 1.10f, 1.10f) : Color.white);
                     Rect text = row.ContractedBy(14f);
@@ -155,17 +158,22 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                     Label(new Rect(text.x, text.y + badgeHeight + 6f, text.width, titleHeight), node.LabelCap, selected ? Gold : Ink);
                     float descY = text.y + badgeHeight + 6f + titleHeight + 8f;
                     Label(new Rect(text.x, descY, text.width, Height(node.description, text.width)), node.description, Muted);
-                    TooltipHandler.TipRegion(row, node.description + "\n" + (node.prerequisite == null ? "" : CultivationText.Get("Previous", "前置") + " · " + node.prerequisite.LabelCap));
+                    TooltipHandler.TipRegion(row, node.description + "\n" + (node.prerequisites.NullOrEmpty() ? "" : CultivationText.Get("Previous", "前置") + " · " + node.prerequisites[0].node.LabelCap));
                     if (Widgets.ButtonInvisible(row))
                     {
-                        model.Select(node);
-                        detailScroll = Vector2.zero;
-                        narrowDetails = narrow;
+                        clickedNode = node;
                     }
                 }
                 Label(new Rect(0, y + 12f, width, Height(hint, width)), hint, Muted);
             }
             finally { Widgets.EndScrollView(); }
+            // Selecting refreshes the model and rebuilds VisibleNodes; finish enumeration first.
+            if (clickedNode != null)
+            {
+                model.Select(clickedNode);
+                detailScroll = Vector2.zero;
+                narrowDetails = narrow;
+            }
         }
 
         private float NodeHeight(NeiyuCultivationNodeDef node, float width)
@@ -194,7 +202,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 if (Button(back, backLabel, null, false, true)) narrowDetails = false;
                 inner.yMin += back.height + Gap;
             }
-            string button = model.Ranks[(int)node.branch] >= node.rank ? CultivationText.Get("Learned", "已领悟") :
+            string button = model.Learned(node) ? CultivationText.Get("Learned", "已领悟") :
                 !model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Learn", "消耗材料 · 领悟");
             float buttonHeight = Mathf.Max(42f, Height(button, inner.width - 24f) + 16f);
             string feedback = model.Result ?? model.DisabledReason ?? (!model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Ready", "材料齐备，可以领悟。"));
@@ -242,7 +250,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             float titleHeight = Mathf.Max(48f, Height(node.LabelCap, titleWidth, GameFont.Medium));
             if (draw)
             {
-                DrawIcon(new Rect(0f, (titleHeight - 48f) / 2f, 48f, 48f), CultivationArt.ForBranch(node.branch));
+                DrawIcon(new Rect(0f, (titleHeight - 48f) / 2f, 48f, 48f), CultivationArt.ForCategory(node.category));
                 Label(new Rect(60f, 0f, titleWidth, titleHeight), node.LabelCap, Ink, GameFont.Medium);
             }
             y += titleHeight + 12f;
@@ -250,8 +258,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             Section(ref y, width, CultivationText.Get("EffectsTitle", "力量变化"), draw);
             DrawEffects(ref y, width, model.Effects, draw);
             Section(ref y, width, CultivationText.Get("Requirements", "修行所需"), draw);
-            if (node.prerequisite != null)
-                Flow(ref y, width, CultivationText.Get("Previous", "前置") + " · " + node.prerequisite.LabelCap, Ink, draw, gap: 8f);
+            if (!node.prerequisites.NullOrEmpty())
+                Flow(ref y, width, CultivationText.Get("Previous", "前置") + " · " + node.prerequisites[0].node.LabelCap, Ink, draw, gap: 8f);
             Flow(ref y, width, model.ConditionText, Muted, draw, gap: 12f);
             foreach (var cost in model.Costs) Cost(ref y, width, cost, draw);
             Flow(ref y, width, CultivationText.Get("MaterialScope", "使用本地图储存区中未禁用、可安全到达且可预留的材料。领悟时立即消耗。"), Muted, draw, GameFont.Tiny, 24f);

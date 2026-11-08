@@ -35,7 +35,7 @@ internal static class NeiyuProjectileReflection
         Vector3 back = returnPoint - contact;
         if (back.sqrMagnitude < .01f) back = (Origin(projectile) - Destination(projectile)).Yto0();
         if (back.sqrMagnitude < .01f || !float.IsFinite(back.sqrMagnitude)) return false;
-        int outcome = NeiyuSwordCombatRules.Deflection(Rand.Value, c.successChance, c.perfectChance);
+        int outcome = NeiyuSwordCombatRules.Deflection(Rand.Value, c.projectileReflectChance, c.projectilePerfectChance);
         if (outcome == 0) return false;
 
         back = Quaternion.AngleAxis(Rand.Range(-c.projectileReturnSpreadDegrees, c.projectileReturnSpreadDegrees), Vector3.up) * back;

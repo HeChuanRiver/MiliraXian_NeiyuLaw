@@ -55,7 +55,6 @@ namespace MiliraXian.Characters.Neiyu
         {
             ThingDef flower = ThingDefNamed("MX_Neiyu_Form_Flower");
             Tool flowerTool = FirstTool(flower);
-            CultivationPower.RegisterTool(flowerTool, 3f, 0.045f);
             Add(flowerTool, () => flowerTool.power, value => flowerTool.power = value, 3f);
             Add(flowerTool, () => flowerTool.armorPenetration, value => flowerTool.armorPenetration = value, 0.045f);
             Add(flowerTool, () => flowerTool.cooldownTime, value => flowerTool.cooldownTime = value, 3f);
@@ -63,7 +62,6 @@ namespace MiliraXian.Characters.Neiyu
 
             ThingDef sword = ThingDefNamed("MX_Neiyu_Form_Weapon");
             Tool swordTool = FirstTool(sword);
-            CultivationPower.RegisterTool(swordTool, 10f, 0.12f);
             Add(swordTool, () => swordTool.power, value => swordTool.power = value, 10f);
             Add(swordTool, () => swordTool.armorPenetration, value => swordTool.armorPenetration = value, 0.12f);
             Add(swordTool, () => swordTool.cooldownTime, value => swordTool.cooldownTime = value, 2.4f);
@@ -193,31 +191,14 @@ namespace MiliraXian.Characters.Neiyu
             if (shieldDef != null) shieldDef.description = ShieldDescription();
             Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
                 "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
-            HediffCompProperties_MXNeiyuCountShield shieldProps = HediffComp<HediffCompProperties_MXNeiyuCountShield>(shieldDef);
-            Add(shieldProps, () => shieldProps.phase2Threshold, value => shieldProps.phase2Threshold = value, 1f);
-            Add(shieldProps, () => shieldProps.phase2MaxChargesNormal, value => shieldProps.phase2MaxChargesNormal = value, 0);
-            Add(shieldProps, () => shieldProps.phase2MaxChargesWeak, value => shieldProps.phase2MaxChargesWeak = value, 0);
-            Add(shieldProps, () => shieldProps.phase2RecoverTicksNoChange, value => shieldProps.phase2RecoverTicksNoChange = value, 60000);
-            Add(shieldProps, () => shieldProps.stage3AbsorbTicks, value => shieldProps.stage3AbsorbTicks = value, 1);
-            Add(shieldProps, () => shieldProps.stage3BuffTicks, value => shieldProps.stage3BuffTicks = value, 1);
-            Add(shieldProps, () => shieldProps.stage3DurationTicks, value => shieldProps.stage3DurationTicks = value, 2);
-            Add(shieldProps, () => shieldProps.weakDurationTicks, value => shieldProps.weakDurationTicks = value, 60000);
-            Add(shieldProps, () => shieldProps.stage3TierA_MaxDamage, value => shieldProps.stage3TierA_MaxDamage = value, 100f);
-            Add(shieldProps, () => shieldProps.stage3TierB_MaxDamage, value => shieldProps.stage3TierB_MaxDamage = value, 500f);
-            Add(shieldProps, () => shieldProps.stage3TierC_MaxDamage, value => shieldProps.stage3TierC_MaxDamage = value, 1000f);
-            Add(shieldProps, () => shieldProps.stage3TierD_ExtraStepDamage, value => shieldProps.stage3TierD_ExtraStepDamage = value, 500f);
-            Add(shieldProps, () => shieldProps.bloodLossTierB, value => shieldProps.bloodLossTierB = value, 0f);
-            Add(shieldProps, () => shieldProps.bloodLossTierC, value => shieldProps.bloodLossTierC = value, 0f);
-            Add(shieldProps, () => shieldProps.bloodLossTierD, value => shieldProps.bloodLossTierD = value, 0f);
+
         }
 
-        private static string ShieldDescription()
-        {
-            const string key = "MX_NL_CultivatedShieldDescription";
-            const string source = "光环修行依次解锁18、42、108层计数护盾，第三级解锁三阶循环。首击被抵消后展开计数护盾；解锁三阶后，致命攻击可直接触发三阶。\n{0}60秒未消耗盾层时恢复首击防护。常态下，剩余盾层抵挡整次伤害；耗尽后，未解锁三阶时等待恢复，已解锁时进入三阶。\n三阶先无敌并蓄伤3小时，再根据蓄伤量获得12小时增益，最多叠加5层。结束后虚弱150秒，护盾上限为24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
-            string rule = CountShieldUtility.RuleDescription(36f, true);
-            return key.CanTranslate() ? key.Translate(rule).ToString() : string.Format(source, rule);
-        }
+        private static string ShieldDescription() =>
+            "首击被抵消后展开计数护盾，致命攻击可直接触发三阶。常态护盾初始24层，可修行至108层。\n"
+            + "单次伤害低于36点时不消耗盾层；达到36点后，每36点伤害消耗1层，向上取整。60秒未消耗盾层时恢复首击防护。\n"
+            + "盾层耗尽后进入三阶：先无敌并蓄伤3个游戏小时，再根据蓄伤量获得12个游戏小时的增益，最多叠加5层。\n"
+            + "结束后虚弱150秒，护盾上限24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
 
         private static void AddAbilityCooldown(AbilityDef def, int decorativeTicks)
         {
@@ -234,7 +215,6 @@ namespace MiliraXian.Characters.Neiyu
         private static void AddStatBase(ThingDef def, StatDef stat, float decorative)
         {
             AddStatModifier(def?.statBases, stat, decorative);
-            CultivationPower.RegisterStat(def, stat, decorative, offset: false);
         }
 
         private static void AddEquipmentDescription(ThingDef def)
@@ -245,7 +225,6 @@ namespace MiliraXian.Characters.Neiyu
         private static void AddEquippedOffset(ThingDef def, StatDef stat, float decorative)
         {
             AddStatModifier(def?.equippedStatOffsets, stat, decorative);
-            CultivationPower.RegisterStat(def, stat, decorative, offset: true);
         }
 
         private static void AddHediffFactor(HediffDef def, StatDef stat, float decorative)
@@ -275,7 +254,6 @@ namespace MiliraXian.Characters.Neiyu
 
         private static void AddProjectileDamage(ProjectileProperties projectile, int decorative)
         {
-            CultivationPower.RegisterProjectile(projectile, decorative, decorative * 0.015f);
             if (projectile == null || ProjectileDamageAmountBaseField == null || ProjectileArmorPenetrationBaseField == null)
                 return;
             Add(projectile, () => (int)ProjectileDamageAmountBaseField.GetValue(projectile),

@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             }
         }
 
-        public void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state)
+        public virtual void Notify_PerkTreeChanged(Pawn pawn, HediffComp_CharacterPerkTree state)
         {
             RebuildCachedStage();
         }
@@ -70,6 +70,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 }
             }
 
+            AddAdditionalStats(offsets, factors);
             if (offsets.Count == 0 && factors.Count == 0)
             {
                 cachedStage = baseStage;
@@ -82,6 +83,8 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 statFactors = ToStatModifierList(factors)
             };
         }
+
+        protected virtual void AddAdditionalStats(Dictionary<StatDef, float> offsets, Dictionary<StatDef, float> factors) { }
 
         private static void AddOffsets(Dictionary<StatDef, float> values, List<StatModifier> modifiers, float multiplier)
         {

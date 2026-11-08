@@ -55,8 +55,8 @@
         <defName>MX_Neiyu_ThunderMarkedStorm</defName>
         <label>&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;</label>
         <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
-每个目标受到108除以目标数、向上取整次数的追踪雷击。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害、15点EMP，并点燃可燃目标。
-冷却60秒；范围内无有效目标时不进入冷却。</description>
+每个目标的雷击次数为雷击预算除以目标数，向上取整。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害与15点EMP，并点燃可燃目标。
+范围内无有效目标时不进入冷却。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -88,7 +88,7 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuThunderSigil">
                 <radius>3</radius>
-                <strikeBudget>108</strikeBudget>
+                <strikeBudget>72</strikeBudget>
                 <warmupMote>MX_Mote_NeiyuThunderWarmup</warmupMote>
                 <firstDelayTicksRange>120~180</firstDelayTicksRange>
                 <strikeIntervalTicksRange>45~75</strikeIntervalTicksRange>
@@ -96,13 +96,15 @@
                 <empDamageAmount>15</empDamageAmount>
                 <markerHediff>MX_Neiyu_ThunderMark</markerHediff>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Thunder1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_Bow_ArrowBarrage</defName>
         <label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</label>
-        <description>需要弓形态。蓄力5秒，沿选定方向发射32支箭，每支基础伤害30点，射程55格。冷却120秒。</description>
+        <description>以弓形态蓄力5秒，沿选定方向释放箭幕。每支箭基础伤害30，射程55格。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -134,23 +136,26 @@
                 <requiredWeapon>MX_Neiyu_Form_Bow</requiredWeapon>
                 <projectileDef>MX_Bullet_BarrageArrow</projectileDef>
                 <!-- 数值：此处为该技能的释放弹丸数量 -->
-                <shotCount>32</shotCount>
+                <shotCount>20</shotCount>
                 <shotIntervalTicks>2</shotIntervalTicks>
                 <maxDistance>55</maxDistance>
                 <lateralSpread>5</lateralSpread>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Barrage1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_BlessingField</defName>
         <label>&lt;color=#F39AD9&gt;花阵·祈生&lt;/color&gt;</label>
-        <description>需要花形态。治愈半径6格内非敌对血肉目标的伤口与旧伤，并提高心情。随后60秒内移动速度提高20%，承伤降低10%，免疫增长速度提高70%。冷却90秒。</description>
+        <description>需要花形态。施法1.1秒，治愈24格内选区中非敌对血肉目标的伤口与旧伤，并提高心情。
+祝福期间移动速度提高20%，承伤降低10%，免疫增长速度提高70%。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>140</displayOrder>
-        <cooldownTicksRange>5400</cooldownTicksRange>
+        <cooldownTicksRange>7200</cooldownTicksRange>
 
         <targetRequired>true</targetRequired>
         <hostile>false</hostile>
@@ -175,22 +180,24 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuFlowerBless">
                 <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
-                <radius>6</radius>
+                <radius>4</radius>
                 <buffHediff>MX_Neiyu_FlowerBlessed</buffHediff>
                 <moodThought>MX_Neiyu_FlowerBlessedThought</moodThought>
-                <buffDurationTicks>3600</buffDurationTicks>
+                <buffDurationTicks>1800</buffDurationTicks>
                 <includeCaster>true</includeCaster>
                 <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
                 <areaFleckDefName>MXNL_ForFeatherCircle</areaFleckDefName>
                 <areaFleckScale>1.0</areaFleckScale>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Blessing1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_ToxinGarden</defName>
         <label>&lt;color=#D786E8&gt;花阵·瘴庭&lt;/color&gt;</label>
-        <description>需要花形态。使半径7格内敌人食物中毒，并有10%概率使其狂暴。冷却120秒。</description>
+        <description>以花形态展开毒庭，使范围内敌人食物中毒，并有10%概率使其狂暴。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -220,20 +227,22 @@
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuFlowerToxinField">
                 <requiredWeapon>MX_Neiyu_Form_Flower</requiredWeapon>
-                <radius>7</radius>
+                <radius>5</radius>
                 <severeFoodPoisoningSeverity>0.25</severeFoodPoisoningSeverity>
                 <berserkChance>0.10</berserkChance>
                 <areaEffecterDefName>MXNL_ForFeatherCastingCircle</areaEffecterDefName>
                 <areaFleckDefName>MXNL_ForFeatherCircle</areaFleckDefName>
                 <areaFleckScale>1.0</areaFleckScale>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Toxin1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_Skyfall</defName>
         <label>&lt;color=#8BD5FF&gt;剑势·天坠&lt;/color&gt;</label>
-        <description>需要剑形态。跃起并预警落点，对半径3格内敌人造成120点无视护甲伤害，随后25秒内使其承伤提高25%。冷却150秒。</description>
+        <description>需要剑形态。施法1秒，跃向35格内指定位置，对落点周围敌人造成无视护甲伤害，并使其承伤提高25%。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -266,11 +275,11 @@
                 <ascendFlyerDef>MX_Neiyu_SwordSkyfallAscendFlyer</ascendFlyerDef>
                 <descendFlyerDef>MX_Neiyu_SwordSkyfallFlyer</descendFlyerDef>
                 <impactDamageDef>Bomb</impactDamageDef>
-                <impactRadius>3</impactRadius>
-                <impactDamage>120</impactDamage>
+                <impactRadius>2</impactRadius>
+                <impactDamage>60</impactDamage>
                 <impactArmorPen>999</impactArmorPen>
                 <vulnerabilityHediff>MX_Neiyu_SwordVulnerability</vulnerabilityHediff>
-                <vulnerabilityDurationTicks>1500</vulnerabilityDurationTicks>
+                <vulnerabilityDurationTicks>900</vulnerabilityDurationTicks>
                 <ascendVisualTicks>8</ascendVisualTicks>
                 <warningDelayTicks>36</warningDelayTicks>
                 <descendVisualTicks>16</descendVisualTicks>
@@ -299,18 +308,20 @@
                 <landingDustRadius>2.8</landingDustRadius>
                 <landingDustScale>2.2</landingDustScale>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Skyfall1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_ExecuteHead</defName>
         <label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</label>
-        <description>需要剑形态。短暂后撤后冲向目标，斩去头部。目标没有头部时，造成75点无视护甲斩击伤害。冷却75秒。</description>
+        <description>以剑形态后撤2格后突进，斩去目标头部；没有可移除头部时，造成75点无视护甲伤害。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
 
         <category>MX_NeiyuSkill</category>
         <displayOrder>170</displayOrder>
-        <cooldownTicksRange>4500</cooldownTicksRange>
+        <cooldownTicksRange>6300</cooldownTicksRange>
 
         <targetRequired>true</targetRequired>
         <hostile>true</hostile>
@@ -321,7 +332,7 @@
         <verbProperties>
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
-            <range>28</range>
+            <range>20</range>
             <warmupTime>0.6</warmupTime>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
@@ -352,7 +363,9 @@
                 <uppercutWeaponScale>2.6</uppercutWeaponScale>
                 <uppercutWeaponAngle>25</uppercutWeaponAngle>
             </li>
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_AbilityNeiyuCultivationInfo" />
         </comps>
+        <modExtensions><li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension"><requirements><li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk"><perk>MX_Neiyu_Cultivation_Execution1</perk></li></requirements></li></modExtensions>
     </AbilityDef>
 
 </Defs>

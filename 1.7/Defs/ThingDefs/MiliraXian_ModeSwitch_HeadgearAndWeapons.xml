@@ -4,7 +4,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Neiyu_Form_Flower</defName>
         <label>霓羽·花形</label>
-        <description>霓羽常持于手中的花形兵装，以花瓣辉光施展赐福与毒庭。近战威力较低，可切换为剑或弓形态。永不损坏。</description>
+        <description>花形兵装，可切换为剑或弓。以花阵治疗友军或侵扰敌人。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
         
         <graphicData>
@@ -52,8 +52,8 @@
                 <capacities>
                     <li>Blunt</li>
                 </capacities>
-                <power>10</power>
-                <armorPenetration>0.25</armorPenetration>
+                <power>6</power>
+                <armorPenetration>0.15</armorPenetration>
                 <cooldownTime>2.4</cooldownTime>
             </li>
         </tools>
@@ -86,6 +86,7 @@
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
             <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
     </ThingDef>
     
@@ -123,7 +124,7 @@
         <statBases>
             <MarketValue>3200</MarketValue>
             <Mass>0.9</Mass>
-            <MeleeWeapon_CooldownMultiplier>0.5</MeleeWeapon_CooldownMultiplier>
+            <MeleeWeapon_CooldownMultiplier>0.8</MeleeWeapon_CooldownMultiplier>
             <AccuracyTouch>0.85</AccuracyTouch>
             <AccuracyShort>0.70</AccuracyShort>
             <AccuracyMedium>0.50</AccuracyMedium>
@@ -136,8 +137,8 @@
                     <li>Cut</li>
                     <li>Stab</li>
                 </capacities>
-                <power>64</power>
-                <armorPenetration>1.20</armorPenetration>
+                <power>40</power>
+                <armorPenetration>0.6</armorPenetration>
                 <cooldownTime>1.8</cooldownTime>
             </li>
         </tools>
@@ -171,6 +172,7 @@
 
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
             <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.MXMeleeSlashGhostExtension">
@@ -210,7 +212,7 @@
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Neiyu_Form_Bow</defName>
         <label>霓羽·弓形</label>
-        <description>霓羽的弓形兵装。主矢分裂为16支具有穿甲能力的追踪碎矢，可切换为花或剑形态。永不损坏。</description>
+        <description>射出的主矢会分裂为追踪碎矢，可切换为花或剑形态。永不损坏。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>        <!--科技时代-->
@@ -286,6 +288,7 @@
             </li>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
             <li Class="MiliraXian.Characters.Common.CompProperties_WeaponDropProtection" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
     </ThingDef>
 
@@ -313,7 +316,7 @@
         <modExtensions>
             <li Class="MiliraXian.Characters.Neiyu.SplitArrowExtension">
                 <splitProjectileDef>MX_Bullet_HomingShard</splitProjectileDef>
-                <splitCount>16</splitCount>
+                <splitCount>8</splitCount>
                 <splitDelayTicks>8</splitDelayTicks>
                 <scatterAngle>120</scatterAngle>
                 <scatterDistance>14</scatterDistance>
@@ -340,8 +343,8 @@
         </graphicData>
         <projectile>
             <damageDef>Arrow</damageDef>
-            <damageAmountBase>12</damageAmountBase>
-            <armorPenetrationBase>0.45</armorPenetrationBase>
+            <damageAmountBase>10</damageAmountBase>
+            <armorPenetrationBase>0.25</armorPenetrationBase>
             <speed>54</speed>
             <arcHeightFactor>0.45</arcHeightFactor>
         </projectile>

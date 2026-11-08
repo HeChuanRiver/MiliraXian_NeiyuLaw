@@ -43,9 +43,9 @@
         <statBases>
             <Mass>1.2</Mass>
             <WorkToMake>600000</WorkToMake>
-            <ArmorRating_Sharp>1.70</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.45</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.80</ArmorRating_Heat>
+            <ArmorRating_Sharp>0.8</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.6</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.9</ArmorRating_Heat>
             <Insulation_Cold>1200</Insulation_Cold>
             <Insulation_Heat>1200</Insulation_Heat>
         </statBases>
@@ -74,12 +74,13 @@
         <tickerType>Normal</tickerType>
         <comps>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
         <equippedStatOffsets>
             <CarryingCapacity>+90</CarryingCapacity>
-            <MeleeDodgeChance>20.0</MeleeDodgeChance>
-            <MoveSpeed>1.80</MoveSpeed>
-            <IncomingDamageFactor>-0.15</IncomingDamageFactor>
+            <MeleeDodgeChance>8</MeleeDodgeChance>
+            <MoveSpeed>0.8</MoveSpeed>
+            <IncomingDamageFactor>-0.06</IncomingDamageFactor>
         </equippedStatOffsets>
     </ThingDef>
 
@@ -293,9 +294,9 @@
         <statBases>
             <Mass>0.35</Mass>
             <WorkToMake>12000</WorkToMake>
-            <ArmorRating_Sharp>0.80</ArmorRating_Sharp>
-            <ArmorRating_Blunt>0.65</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.00</ArmorRating_Heat>
+            <ArmorRating_Sharp>0.35</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.25</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.4</ArmorRating_Heat>
             <Insulation_Cold>8</Insulation_Cold>
             <Insulation_Heat>8</Insulation_Heat>
         </statBases>
@@ -321,10 +322,11 @@
         <tickerType>Normal</tickerType>
         <comps>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
         <equippedStatOffsets>
-            <IncomingDamageFactor>-0.10</IncomingDamageFactor>
-            <MeleeCooldownFactor>-0.10</MeleeCooldownFactor>
+            <IncomingDamageFactor>-0.04</IncomingDamageFactor>
+            <MeleeCooldownFactor>-0.04</MeleeCooldownFactor>
             <WorkSpeedGlobal>0.15</WorkSpeedGlobal>
         </equippedStatOffsets>
     </ThingDef>
@@ -351,9 +353,9 @@
             <MaxHitPoints>80</MaxHitPoints>
             <Flammability>0</Flammability>
             <EquipDelay>0</EquipDelay>
-            <ArmorRating_Sharp>1.40</ArmorRating_Sharp>
-            <ArmorRating_Blunt>1.10</ArmorRating_Blunt>
-            <ArmorRating_Heat>1.50</ArmorRating_Heat>
+            <ArmorRating_Sharp>0.7</ArmorRating_Sharp>
+            <ArmorRating_Blunt>0.45</ArmorRating_Blunt>
+            <ArmorRating_Heat>0.75</ArmorRating_Heat>
         </statBases>
         
         <thingCategories>
@@ -376,11 +378,12 @@
 
         <comps>
             <li Class="MiliraXian.Characters.Common.CompProperties_UnbreakableEquipment" />
+            <li Class="MiliraXian.Characters.Neiyu.Cultivation.CompProperties_NeiyuCultivatedEquipment" />
         </comps>
         <equippedStatOffsets>
             <ImmunityGainSpeed>0.45</ImmunityGainSpeed>
-            <AimingDelayFactor>-0.20</AimingDelayFactor>
-            <RangedCooldownFactor>-0.15</RangedCooldownFactor>
+            <AimingDelayFactor>-0.1</AimingDelayFactor>
+            <RangedCooldownFactor>-0.05</RangedCooldownFactor>
         </equippedStatOffsets>
         
     </ThingDef>

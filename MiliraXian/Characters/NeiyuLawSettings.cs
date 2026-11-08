@@ -83,8 +83,6 @@ namespace MiliraXian.Characters
             // Def-loading hooks (e.g. PawnSpecialResourceStats) must be registered before PlayDataLoader runs;
             // StaticConstructorOnStartup fires too late, so PatchAll lives in the mod constructor.
             new Harmony("HeChuanRiver.MiliraXian.Characters").PatchAll(Assembly.GetExecutingAssembly());
-            Log.Message($"{WeaponDropDiagnostics.Tag} hooks registered "
-                + $"module={typeof(CompWeaponDropProtection).Module.ModuleVersionId} devMode={Prefs.DevMode}");
             Settings = GetSettings<NeiyuLawSettings>();
             Instance = this;
             NeiyuPowerBalance.SetDecorative(Settings.NeiyuDecorativeMode);

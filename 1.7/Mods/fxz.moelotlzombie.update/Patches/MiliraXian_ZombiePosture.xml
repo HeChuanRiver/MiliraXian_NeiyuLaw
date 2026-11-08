@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/MutantDef[defName="RM_PurpleZombie"]</xpath>
+    <value>
+      <li Class="MiliraXian.Characters.Common.Combat.CombatPostureMutantExtension" MayRequire="fxz.moelotlzombie.update">
+        <maximumOffset>300</maximumOffset>
+      </li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/MutantDef[defName="RM_WhiteZombie"]</xpath>
+    <value>
+      <li Class="MiliraXian.Characters.Common.Combat.CombatPostureMutantExtension" MayRequire="fxz.moelotlzombie.update">
+        <maximumOffset>500</maximumOffset>
+      </li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/MutantDef[defName="RM_GreenZombie"]</xpath>
+    <value>
+      <li Class="MiliraXian.Characters.Common.Combat.CombatPostureMutantExtension" MayRequire="fxz.moelotlzombie.update">
+        <maximumOffset>800</maximumOffset>
+      </li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/MutantDef[defName="RM_BeastlyZombie"]</xpath>
+    <value>
+      <li Class="MiliraXian.Characters.Common.Combat.CombatPostureMutantExtension" MayRequire="fxz.moelotlzombie.update">
+        <maximumOffset>1000</maximumOffset>
+      </li>
+    </value>
+  </Operation>
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/MutantDef[defName="RM_FlyingZombie"]</xpath>
+    <value>
+      <li Class="MiliraXian.Characters.Common.Combat.CombatPostureMutantExtension" MayRequire="fxz.moelotlzombie.update">
+        <maximumOffset>1800</maximumOffset>
+      </li>
+    </value>
+  </Operation>
+</Patch>

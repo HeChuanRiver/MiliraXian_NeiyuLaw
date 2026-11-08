@@ -17,7 +17,12 @@ internal static class NeiyuExecutionMaterials
     internal static readonly Material Cut = Sprite("ExecutionCut");
     internal static readonly Material Glow = MaterialPool.MatFrom(
         "Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow", ShaderDatabase.MoteGlow, Color.white);
-    internal static readonly Material Wave = MaterialPool.MatFrom(BaseContent.WhiteTex, ShaderDatabase.Transparent, Color.white);
+    internal static readonly Material Wave = MaterialPool.MatFrom(
+        DefDatabase<FleckDef>.GetNamed("MXNL_Fleck_BladeLight_Neiyu_E").graphicData.texPath,
+        ShaderDatabase.Transparent, Color.white);
+    internal static readonly Material MultiWave = Wave?.mainTexture is Texture2D texture
+        && DefDatabase<ShaderDef>.GetNamedSilentFail("MX_NeiyuExecutionWave")?.Shader is { } shader
+        ? MaterialPool.MatFrom(texture, shader, Color.white) : Wave;
 
     private static Material Sprite(string name)
     {
@@ -29,18 +34,17 @@ internal static class NeiyuExecutionMaterials
 public sealed partial class JobDriver_NeiyuPostureExecution
 {
     private static readonly Color ExecutionPink = new(1f, .64f, .84f);
+    // Turn the diagonal artwork to face forward and center its visible arc.
+    private static readonly Matrix4x4 SlashArtwork = Matrix4x4.TRS(
+        new Vector3(-.011f, 0f, -.07f), Quaternion.AngleAxis(35f, Vector3.up), Vector3.one);
     private static Color ExecutionIce => NeiyuSwordCombatVfx.Ice;
-    private Mesh slashWave;
 
-    private void FinishSingle()
+    private void FinishScene()
     {
-        executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.UntrackVolley(this);
         executionMap?.GetComponent<MapComponent_PawnAfterimages>()?.RemoveOwnedBy(this);
-        if (slashWave != null)
-        {
-            UnityEngine.Object.Destroy(slashWave);
-            slashWave = null;
-        }
+        if (IsSingle) executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.UntrackVolley(this);
+        if (multiRing != null) UnityEngine.Object.Destroy(multiRing);
+        multiRing = null;
     }
 
     internal void DrawSingleVfx(BladeGraphicExtension ext, in BladePose pose, Vector3 body)
@@ -58,7 +62,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             if (tick >= SwingAt && tick < KnockbackAt)
                 DrawBladeTrail(ext, tick, body);
             if (tick >= FirstCutAt && tick < FirstCutAt + Single.waveTicks)
-                DrawSlashWave(ext, tick);
+                DrawSlashWave(tick);
         }
         catch (Exception exception)
         {
@@ -117,71 +121,22 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
     }
 
-    private void DrawSlashWave(BladeGraphicExtension ext, float tick)
+    private void DrawSlashWave(float tick)
     {
-        slashWave ??= BuildSlashWave(ext);
         float p = ProgressBetween(tick, FirstCutAt, FirstCutAt + Single.waveTicks);
         Vector3 at = origin.ToVector3Shifted() + Forward(initialYaw) * Mathf.Lerp(.18f, 4f, p);
         at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
-        Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(initialYaw + 11f, Vector3.up),
-            new Vector3(Mathf.Lerp(.97f, 1.07f, p), 1f, Mathf.Lerp(.92f, 1.13f, p)));
         float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(.28f, 1f, p));
-        DrawMesh(slashWave, matrix, NeiyuExecutionMaterials.Wave, Color.white, fade);
+        DrawSlashArtwork(at, initialYaw + 11f, Single.slashWidth * Mathf.Lerp(.97f, 1.07f, p),
+            Single.slashWidth * .38f * Mathf.Lerp(.92f, 1.13f, p), fade);
     }
 
-    private Mesh BuildSlashWave(BladeGraphicExtension ext)
+    private static void DrawSlashArtwork(Vector3 at, float yaw, float width, float length, float fade, Material material = null)
     {
-        const int segments = 28;
-        // A cold-white edge and a saturated face keep the slash readable on light floors.
-        (float depth, Color color)[] profile =
-        [
-            (.25f, new Color(.22f, .65f, 1f, 0f)),
-            (.10f, new Color(.30f, .73f, 1f, .88f)),
-            (0f, Color.white),
-            (-.20f, new Color(.79f, .95f, 1f, .98f)),
-            (-.78f, new Color(.32f, .76f, 1f, .92f)),
-            (-1.65f, new Color(1f, .55f, .83f, .70f)),
-            (-2.8f, new Color(1f, .64f, .84f, 0f))
-        ];
-        int rows = profile.Length;
-        Vector3[] edge = new Vector3[segments + 1];
-        float min = float.PositiveInfinity, max = float.NegativeInfinity;
-        for (int i = 0; i <= segments; i++)
-        {
-            Single.drawBlade.Evaluate(Mathf.Lerp(.20f, 1f, i / (float)segments),
-                out Vector3 grip, out Vector3 direction, out Vector3 bladeEdge);
-            BladePose sample = new() { grip = grip, dir = direction, edge = bladeEdge, heightToScreen = .68f };
-            BladeRenderer.GetGripAndTip(ext, sample, Vector3.zero, out _, out Vector3 tip);
-            edge[i] = tip;
-            min = Mathf.Min(min, tip.x);
-            max = Mathf.Max(max, tip.x);
-        }
-        Vector3[] vertices = new Vector3[(segments + 1) * rows];
-        Vector2[] uv = new Vector2[vertices.Length];
-        Color[] colors = new Color[vertices.Length];
-        int[] triangles = new int[segments * (rows - 1) * 6];
-        for (int i = 0; i <= segments; i++)
-        {
-            float u = i / (float)segments;
-            float taper = Mathf.Sqrt(Mathf.Max(0f, Mathf.Sin(u * Mathf.PI)));
-            float span = Mathf.Lerp(u, Mathf.InverseLerp(min, max, edge[i].x), .42f);
-            for (int row = 0; row < rows; row++)
-            {
-                int v = i * rows + row;
-                (float depth, Color color) = profile[row];
-                vertices[v] = new Vector3((span - .5f) * Single.slashWidth, 0f,
-                    edge[i].z * 1.45f + depth * taper);
-                uv[v] = new Vector2(u, row / (float)(rows - 1));
-                colors[v] = color.WithAlpha(color.a * taper);
-                if (i == segments || row == rows - 1) continue;
-                int t = (i * (rows - 1) + row) * 6;
-                triangles[t] = v; triangles[t + 1] = v + rows; triangles[t + 2] = v + 1;
-                triangles[t + 3] = v + 1; triangles[t + 4] = v + rows; triangles[t + 5] = v + rows + 1;
-            }
-        }
-        Mesh mesh = new() { name = "MX_NeiyuExecutionWave", vertices = vertices, uv = uv, colors = colors, triangles = triangles };
-        mesh.RecalculateBounds();
-        return mesh;
+        // The rotated arc covers 52% of the texture width and 81% of its length.
+        Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(yaw, Vector3.up),
+            new Vector3(width / .52f, 1f, length / .81f));
+        DrawMesh(MeshPool.plane10, matrix * SlashArtwork, material ?? NeiyuExecutionMaterials.Wave, Color.white, fade);
     }
 
     private void DrawVolley(float tick, Vector3 body)
@@ -193,7 +148,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         float tipOffset = .70f * swordScale;
         float swordWidth = .85f * swordScale, swordLength = 1.5f * swordScale;
         float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
-        float glyphAge = tick - VolleyAt;
+        float glyphAge = tick - (singleAirVolley ? AimAt : VolleyAt);
         if (glyphAge >= 0f && glyphAge < Single.glyphHoldTicks + Single.glyphFadeTicks)
         {
             Vector3 at = body + side * 1.16f + Vector3.forward * .57f;
@@ -216,7 +171,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             if (tick < impact)
             {
                 float p = ProgressBetween(tick, launch, impact);
-                float appear = ProgressBetween(tick, ReleaseAt, AimAt);
+                float appear = singleAirVolley ? 1f : ProgressBetween(tick, ReleaseAt, AimAt);
                 // Keep the enlarged tip on the same contact point, including short throws into walls.
                 Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
                 Vector3 tip = Vector3.Lerp(startTip, contact, p * (.72f + .28f * p));

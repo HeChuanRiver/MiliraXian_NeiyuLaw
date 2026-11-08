@@ -73,4 +73,24 @@
       <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
     </li></subSounds>
   </SoundDef>
+  <SoundDef>
+    <defName>MX_NeiyuExecutionSwordLaunch</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>6</maxSimultaneous>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/ExecutionSwordLaunch</clipPath></li></grains>
+      <volumeRange>28~32</volumeRange><pitchRange>0.98~1.04</pitchRange><distRange>3~30</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>MX_NeiyuExecutionSwordImpact</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>6</maxSimultaneous>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/ExecutionSwordImpact</clipPath></li></grains>
+      <volumeRange>35~40</volumeRange><pitchRange>0.97~1.03</pitchRange><distRange>3~30</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
 </Defs>

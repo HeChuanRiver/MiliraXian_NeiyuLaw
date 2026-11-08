@@ -1,95 +1,340 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Wing1</defName>
-    <label>初羽</label><branch>Wing</branch><rank>1</rank>
-    <description>唤醒花、剑与弓的力量，提高武器伤害、穿透与近战出手速度。</description>
-    <story>羽毛掠过掌心时，霓羽仍记得第一次握住兵刃的重量。让力量停在刃上，比任它倾泻更难。</story>
-    <costs><Milira_Feather>12</Milira_Feather><Steel>60</Steel></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Wing2</defName>
-    <label>流光入刃</label><branch>Wing</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Wing1</prerequisite>
-    <description>进一步提高三种武器形态的威力。</description>
-    <story>她沿着刃脊拭去微光。收束后的锋芒，只在命中之时绽开。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></condition>
-    <costs><Milira_Feather>60</Milira_Feather><Plasteel>40</Plasteel></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Wing3</defName>
-    <label>羽律成锋</label><branch>Wing</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Wing2</prerequisite>
-    <description>完全释放三种武器形态的伤害、穿透与近战出手速度。</description>
-    <story>花、剑、弓在她手中依次浮现。形态不同，回应她的却始终是同一道法则。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></condition>
-    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Arrow1</defName>
-    <label>散羽</label><branch>Arrow</branch><rank>1</rank>
-    <description>增加普攻分裂箭与箭幕的弹丸数量。</description>
-    <story>一支箭离弦，数片羽光随之展开。霓羽开始分辨每一道细小的回声。</story>
-    <costs><Milira_Feather>12</Milira_Feather><Jade>10</Jade></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Arrow2</defName>
-    <label>霁色成阵</label><branch>Arrow</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Arrow1</prerequisite>
-    <description>展开更多箭羽，扩大持续射击的规模。</description>
-    <story>雨停之后，细光横过天空。那些交错的轨迹渐渐有了秩序。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></condition>
-    <costs><Milira_Feather>60</Milira_Feather><Jade>30</Jade></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Arrow3</defName>
-    <label>百羽归弦</label><branch>Arrow</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Arrow2</prerequisite>
-    <description>完全展开普攻分裂箭与箭幕。</description>
-    <story>漫天羽光回到弦上，静得像从未离开。她终于能让每一片羽毛找到自己的去处。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></condition>
-    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Halo1</defName>
-    <label>微环</label><branch>Halo</branch><rank>1</rank>
-    <description>解锁首击防护与十八层计数护盾。盾层耗尽后，需要等待恢复。</description>
-    <story>头顶的光环轻轻一颤。她把最先回应的那缕光，留在了身体之外。</story>
-    <costs><Milira_Feather>12</Milira_Feather><Jade>10</Jade></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Halo2</defName>
-    <label>重环相护</label><branch>Halo</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Halo1</prerequisite>
-    <description>计数护盾增加至四十二层。</description>
-    <story>薄薄的光层相继合拢。每次承受冲击，她都能听见它们在不同的地方鸣响。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></condition>
-    <costs><Milira_Feather>60</Milira_Feather><Plasteel>40</Plasteel></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Halo3</defName>
-    <label>霁光回响</label><branch>Halo</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Halo2</prerequisite>
-    <description>计数护盾增加至一百零八层，解锁三阶蓄伤与增益循环。循环结束后进入虚弱，护盾上限降为二十四层。</description>
-    <story>光环承住最后一次重击，随即向内收拢。霓羽抬起头，积蓄的微光沿羽翼流回刃尖。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></condition>
-    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Law1</defName>
-    <label>衣上微纹</label><branch>Law</branch><rank>1</rank>
-    <description>唤醒常服、内衬与耳饰中的法则，提高防护并恢复部分穿戴增益。</description>
-    <story>衣料上的纹路只有在光下才看得清。她顺着纹路，将散落的力量一寸寸接续。</story>
-    <costs><Milira_Feather>12</Milira_Feather><Cloth>60</Cloth></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Law2</defName>
-    <label>纹律共鸣</label><branch>Law</branch><rank>2</rank><prerequisite>MX_Neiyu_Cultivation_Law1</prerequisite>
-    <description>进一步提高衣装防护、隔温与穿戴增益。</description>
-    <story>耳饰与衣摆同时泛起淡光。原本分散的纹路，开始随着她的呼吸起伏。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></condition>
-    <costs><Milira_Feather>60</Milira_Feather><Jade>30</Jade></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-  <MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
-    <defName>MX_Neiyu_Cultivation_Law3</defName>
-    <label>法衣归身</label><branch>Law</branch><rank>3</rank><prerequisite>MX_Neiyu_Cultivation_Law2</prerequisite>
-    <description>完全释放常服、内衬与耳饰的防护、隔温和穿戴增益。</description>
-    <story>她收起羽翼，衣上的光也随之隐去。法则已经贴合身体，无须再向外宣示。</story>
-    <condition Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></condition>
-    <costs><Milira_Feather>180</Milira_Feather><ComponentSpacer>4</ComponentSpacer></costs>
-  </MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef><defName>MX_Neiyu_Cultivation_Spells</defName><label>术法</label><displayOrder>0</displayOrder><iconPath>MiliraXianNeiyu/UI/Cultivation/Arrow</iconPath></MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef><defName>MX_Neiyu_Cultivation_Weapons</defName><label>兵装</label><displayOrder>100</displayOrder><iconPath>MiliraXianNeiyu/UI/Cultivation/Wing</iconPath></MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef><defName>MX_Neiyu_Cultivation_Apparel</defName><label>衣装</label><displayOrder>200</displayOrder><iconPath>MiliraXianNeiyu/UI/Cultivation/Law</iconPath></MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef><defName>MX_Neiyu_Cultivation_Halo</defName><label>光环</label><displayOrder>300</displayOrder><iconPath>MiliraXianNeiyu/UI/Cultivation/Halo</iconPath></MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <HediffDef>
+    <defName>MX_Neiyu_Cultivation</defName><label>羽律修行</label>
+    <description>已领悟的术法、兵装、衣装与光环修行。</description>
+    <hediffClass>MiliraXian.Characters.Neiyu.Cultivation.Hediff_NeiyuCultivation</hediffClass>
+    <isBad>false</isBad><scenarioCanAdd>false</scenarioCanAdd><initialSeverity>1</initialSeverity><minSeverity>1</minSeverity><maxSeverity>1</maxSeverity>
+    <stages><li /></stages>
+    <comps>
+      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_CharacterPerkTree"><categories><li>MX_Neiyu_Cultivation_Spells</li><li>MX_Neiyu_Cultivation_Weapons</li><li>MX_Neiyu_Cultivation_Apparel</li><li>MX_Neiyu_Cultivation_Halo</li></categories></li>
+      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_PerkEventHandler" />
+    </comps>
+  </HediffDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Weapon1</defName><label>初羽</label>
+    <category>MX_Neiyu_Cultivation_Weapons</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <description>提高花、剑与弓的普通攻击伤害和穿透，缩短剑形攻击间隔，并增加普攻碎矢。</description>
+    <story>花、剑与弓在掌心依次浮现。她将散开的羽光收拢，让每一道锋芒都回应自己的心意。</story>
+    <costs><Milira_Feather>6</Milira_Feather><Steel>60</Steel></costs>
+    <equipmentEffects><li><equipment>MX_Neiyu_Form_Weapon</equipment><meleeDamage>4</meleeDamage><meleePenetration>0.12</meleePenetration><statOffsets><MeleeWeapon_CooldownMultiplier>-0.06</MeleeWeapon_CooldownMultiplier></statOffsets></li><li><equipment>MX_Neiyu_Form_Flower</equipment><meleeDamage>0.8</meleeDamage><meleePenetration>0.02</meleePenetration></li><li><equipment>MX_Neiyu_Form_Bow</equipment><projectileDamage>0</projectileDamage><projectilePenetration>0.04</projectilePenetration><splitCount>1</splitCount></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Apparel1</defName><label>衣上微纹</label>
+    <category>MX_Neiyu_Cultivation_Apparel</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Law</iconActive>
+    <description>提高常服、内衬与珠饰的防护，增强穿戴时的移动、闪避、减伤与攻击间隔收益。</description>
+    <story>衣摆与珠饰泛起柔光。那些细小的纹路随着呼吸接续，渐渐贴合她的身躯。</story>
+    <costs><Milira_Feather>6</Milira_Feather><Cloth>60</Cloth></costs>
+    <equipmentEffects><li><equipment>MiliraXian_NeiyuNormal</equipment><statOffsets><ArmorRating_Sharp>0.18</ArmorRating_Sharp><ArmorRating_Blunt>0.17</ArmorRating_Blunt><ArmorRating_Heat>0.18</ArmorRating_Heat></statOffsets><equippedStatOffsets><MoveSpeed>0.2</MoveSpeed><MeleeDodgeChance>2.4</MeleeDodgeChance><IncomingDamageFactor>-0.018</IncomingDamageFactor></equippedStatOffsets></li><li><equipment>MiliraXian_NeiyuInner</equipment><statOffsets><ArmorRating_Sharp>0.09</ArmorRating_Sharp><ArmorRating_Blunt>0.08</ArmorRating_Blunt><ArmorRating_Heat>0.12</ArmorRating_Heat></statOffsets><equippedStatOffsets><IncomingDamageFactor>-0.012</IncomingDamageFactor><MeleeCooldownFactor>-0.012</MeleeCooldownFactor></equippedStatOffsets></li><li><equipment>MX_Apparel_EarringsZhenzhu</equipment><statOffsets><ArmorRating_Sharp>0.14</ArmorRating_Sharp><ArmorRating_Blunt>0.13</ArmorRating_Blunt><ArmorRating_Heat>0.15</ArmorRating_Heat></statOffsets><equippedStatOffsets><AimingDelayFactor>-0.02</AimingDelayFactor><RangedCooldownFactor>-0.02</RangedCooldownFactor></equippedStatOffsets></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Halo1</defName><label>微环</label>
+    <category>MX_Neiyu_Cultivation_Halo</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <description>常态计数护盾上限提高至42层。虚弱期间上限仍为24层。</description>
+    <story>薄薄的光层相继合拢。她听见每一层微光的回应，将它们留在身体之外。</story>
+    <costs><Milira_Feather>6</Milira_Feather><Jade>12</Jade></costs>
+    <shieldCharges>18</shieldCharges>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Weapon2</defName><label>流光入刃</label>
+    <category>MX_Neiyu_Cultivation_Weapons</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <description>提高花、剑与弓的普通攻击伤害和穿透，缩短剑形攻击间隔，并增加普攻碎矢。</description>
+    <story>花、剑与弓在掌心依次浮现。她将散开的羽光收拢，让每一道锋芒都回应自己的心意。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Weapon1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>2</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Steel>90</Steel><ComponentIndustrial>2</ComponentIndustrial></costs>
+    <equipmentEffects><li><equipment>MX_Neiyu_Form_Weapon</equipment><meleeDamage>5</meleeDamage><meleePenetration>0.12</meleePenetration><statOffsets><MeleeWeapon_CooldownMultiplier>-0.06</MeleeWeapon_CooldownMultiplier></statOffsets></li><li><equipment>MX_Neiyu_Form_Flower</equipment><meleeDamage>0.8</meleeDamage><meleePenetration>0.02</meleePenetration></li><li><equipment>MX_Neiyu_Form_Bow</equipment><projectileDamage>1</projectileDamage><projectilePenetration>0.04</projectilePenetration><splitCount>1</splitCount></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Apparel2</defName><label>纹律共鸣</label>
+    <category>MX_Neiyu_Cultivation_Apparel</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Law</iconActive>
+    <description>提高常服、内衬与珠饰的防护，增强穿戴时的移动、闪避、减伤与攻击间隔收益。</description>
+    <story>衣摆与珠饰泛起柔光。那些细小的纹路随着呼吸接续，渐渐贴合她的身躯。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Apparel1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>2</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Cloth>90</Cloth><Jade>10</Jade></costs>
+    <equipmentEffects><li><equipment>MiliraXian_NeiyuNormal</equipment><statOffsets><ArmorRating_Sharp>0.18</ArmorRating_Sharp><ArmorRating_Blunt>0.17</ArmorRating_Blunt><ArmorRating_Heat>0.18</ArmorRating_Heat></statOffsets><equippedStatOffsets><MoveSpeed>0.2</MoveSpeed><MeleeDodgeChance>2.4</MeleeDodgeChance><IncomingDamageFactor>-0.018</IncomingDamageFactor></equippedStatOffsets></li><li><equipment>MiliraXian_NeiyuInner</equipment><statOffsets><ArmorRating_Sharp>0.09</ArmorRating_Sharp><ArmorRating_Blunt>0.08</ArmorRating_Blunt><ArmorRating_Heat>0.12</ArmorRating_Heat></statOffsets><equippedStatOffsets><IncomingDamageFactor>-0.012</IncomingDamageFactor><MeleeCooldownFactor>-0.012</MeleeCooldownFactor></equippedStatOffsets></li><li><equipment>MX_Apparel_EarringsZhenzhu</equipment><statOffsets><ArmorRating_Sharp>0.14</ArmorRating_Sharp><ArmorRating_Blunt>0.13</ArmorRating_Blunt><ArmorRating_Heat>0.15</ArmorRating_Heat></statOffsets><equippedStatOffsets><AimingDelayFactor>-0.02</AimingDelayFactor><RangedCooldownFactor>-0.02</RangedCooldownFactor></equippedStatOffsets></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Halo2</defName><label>重环相护</label>
+    <category>MX_Neiyu_Cultivation_Halo</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <description>常态计数护盾上限提高至60层。虚弱期间上限仍为24层。</description>
+    <story>薄薄的光层相继合拢。她听见每一层微光的回应，将它们留在身体之外。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Halo1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>2</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>18</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <shieldCharges>18</shieldCharges>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Weapon3</defName><label>羽律成锋</label>
+    <category>MX_Neiyu_Cultivation_Weapons</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <description>提高花、剑与弓的普通攻击伤害和穿透，缩短剑形攻击间隔，并增加普攻碎矢。</description>
+    <story>花、剑与弓在掌心依次浮现。她将散开的羽光收拢，让每一道锋芒都回应自己的心意。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Weapon2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>5</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>20</Plasteel><ComponentIndustrial>2</ComponentIndustrial></costs>
+    <equipmentEffects><li><equipment>MX_Neiyu_Form_Weapon</equipment><meleeDamage>5</meleeDamage><meleePenetration>0.12</meleePenetration><statOffsets><MeleeWeapon_CooldownMultiplier>-0.06</MeleeWeapon_CooldownMultiplier></statOffsets></li><li><equipment>MX_Neiyu_Form_Flower</equipment><meleeDamage>0.8</meleeDamage><meleePenetration>0.02</meleePenetration></li><li><equipment>MX_Neiyu_Form_Bow</equipment><projectileDamage>0</projectileDamage><projectilePenetration>0.04</projectilePenetration><splitCount>2</splitCount></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Apparel3</defName><label>霓裳合光</label>
+    <category>MX_Neiyu_Cultivation_Apparel</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Law</iconActive>
+    <description>提高常服、内衬与珠饰的防护，增强穿戴时的移动、闪避、减伤与攻击间隔收益。</description>
+    <story>衣摆与珠饰泛起柔光。那些细小的纹路随着呼吸接续，渐渐贴合她的身躯。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Apparel2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>5</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Jade>20</Jade><ComponentIndustrial>2</ComponentIndustrial></costs>
+    <equipmentEffects><li><equipment>MiliraXian_NeiyuNormal</equipment><statOffsets><ArmorRating_Sharp>0.18</ArmorRating_Sharp><ArmorRating_Blunt>0.17</ArmorRating_Blunt><ArmorRating_Heat>0.18</ArmorRating_Heat></statOffsets><equippedStatOffsets><MoveSpeed>0.2</MoveSpeed><MeleeDodgeChance>2.4</MeleeDodgeChance><IncomingDamageFactor>-0.018</IncomingDamageFactor></equippedStatOffsets></li><li><equipment>MiliraXian_NeiyuInner</equipment><statOffsets><ArmorRating_Sharp>0.09</ArmorRating_Sharp><ArmorRating_Blunt>0.08</ArmorRating_Blunt><ArmorRating_Heat>0.12</ArmorRating_Heat></statOffsets><equippedStatOffsets><IncomingDamageFactor>-0.012</IncomingDamageFactor><MeleeCooldownFactor>-0.012</MeleeCooldownFactor></equippedStatOffsets></li><li><equipment>MX_Apparel_EarringsZhenzhu</equipment><statOffsets><ArmorRating_Sharp>0.14</ArmorRating_Sharp><ArmorRating_Blunt>0.13</ArmorRating_Blunt><ArmorRating_Heat>0.15</ArmorRating_Heat></statOffsets><equippedStatOffsets><AimingDelayFactor>-0.02</AimingDelayFactor><RangedCooldownFactor>-0.02</RangedCooldownFactor></equippedStatOffsets></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Halo3</defName><label>霁光回响</label>
+    <category>MX_Neiyu_Cultivation_Halo</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <description>常态计数护盾上限提高至78层。虚弱期间上限仍为24层。</description>
+    <story>薄薄的光层相继合拢。她听见每一层微光的回应，将它们留在身体之外。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Halo2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>5</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Jade>24</Jade><ComponentIndustrial>2</ComponentIndustrial></costs>
+    <shieldCharges>18</shieldCharges>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Weapon4</defName><label>刃间霁色</label>
+    <category>MX_Neiyu_Cultivation_Weapons</category><rank>4</rank><displayOrder>4</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <description>提高花、剑与弓的普通攻击伤害和穿透，缩短剑形攻击间隔，并增加普攻碎矢。</description>
+    <story>花、剑与弓在掌心依次浮现。她将散开的羽光收拢，让每一道锋芒都回应自己的心意。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Weapon3</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>24</Milira_Feather><Plasteel>30</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <equipmentEffects><li><equipment>MX_Neiyu_Form_Weapon</equipment><meleeDamage>5</meleeDamage><meleePenetration>0.12</meleePenetration><statOffsets><MeleeWeapon_CooldownMultiplier>-0.06</MeleeWeapon_CooldownMultiplier></statOffsets></li><li><equipment>MX_Neiyu_Form_Flower</equipment><meleeDamage>0.8</meleeDamage><meleePenetration>0.02</meleePenetration></li><li><equipment>MX_Neiyu_Form_Bow</equipment><projectileDamage>1</projectileDamage><projectilePenetration>0.04</projectilePenetration><splitCount>2</splitCount></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Apparel4</defName><label>羽衣流霁</label>
+    <category>MX_Neiyu_Cultivation_Apparel</category><rank>4</rank><displayOrder>4</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Law</iconActive>
+    <description>提高常服、内衬与珠饰的防护，增强穿戴时的移动、闪避、减伤与攻击间隔收益。</description>
+    <story>衣摆与珠饰泛起柔光。那些细小的纹路随着呼吸接续，渐渐贴合她的身躯。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Apparel3</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>24</Milira_Feather><Plasteel>20</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <equipmentEffects><li><equipment>MiliraXian_NeiyuNormal</equipment><statOffsets><ArmorRating_Sharp>0.18</ArmorRating_Sharp><ArmorRating_Blunt>0.17</ArmorRating_Blunt><ArmorRating_Heat>0.18</ArmorRating_Heat></statOffsets><equippedStatOffsets><MoveSpeed>0.2</MoveSpeed><MeleeDodgeChance>2.4</MeleeDodgeChance><IncomingDamageFactor>-0.018</IncomingDamageFactor></equippedStatOffsets></li><li><equipment>MiliraXian_NeiyuInner</equipment><statOffsets><ArmorRating_Sharp>0.09</ArmorRating_Sharp><ArmorRating_Blunt>0.08</ArmorRating_Blunt><ArmorRating_Heat>0.12</ArmorRating_Heat></statOffsets><equippedStatOffsets><IncomingDamageFactor>-0.012</IncomingDamageFactor><MeleeCooldownFactor>-0.012</MeleeCooldownFactor></equippedStatOffsets></li><li><equipment>MX_Apparel_EarringsZhenzhu</equipment><statOffsets><ArmorRating_Sharp>0.14</ArmorRating_Sharp><ArmorRating_Blunt>0.13</ArmorRating_Blunt><ArmorRating_Heat>0.15</ArmorRating_Heat></statOffsets><equippedStatOffsets><AimingDelayFactor>-0.02</AimingDelayFactor><RangedCooldownFactor>-0.02</RangedCooldownFactor></equippedStatOffsets></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Halo4</defName><label>羽环凝光</label>
+    <category>MX_Neiyu_Cultivation_Halo</category><rank>4</rank><displayOrder>4</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <description>常态计数护盾上限提高至96层。虚弱期间上限仍为24层。</description>
+    <story>薄薄的光层相继合拢。她听见每一层微光的回应，将它们留在身体之外。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Halo3</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>24</Milira_Feather><Plasteel>20</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <shieldCharges>18</shieldCharges>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Weapon5</defName><label>花剑归弦</label>
+    <category>MX_Neiyu_Cultivation_Weapons</category><rank>5</rank><displayOrder>5</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <description>提高花、剑与弓的普通攻击伤害和穿透，缩短剑形攻击间隔，并增加普攻碎矢。</description>
+    <story>花、剑与弓在掌心依次浮现。她将散开的羽光收拢，让每一道锋芒都回应自己的心意。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Weapon4</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></li></requiresAll>
+    <costs><Milira_Feather>30</Milira_Feather><Plasteel>40</Plasteel><ComponentSpacer>2</ComponentSpacer></costs>
+    <equipmentEffects><li><equipment>MX_Neiyu_Form_Weapon</equipment><meleeDamage>5</meleeDamage><meleePenetration>0.12</meleePenetration><statOffsets><MeleeWeapon_CooldownMultiplier>-0.06</MeleeWeapon_CooldownMultiplier></statOffsets></li><li><equipment>MX_Neiyu_Form_Flower</equipment><meleeDamage>0.8</meleeDamage><meleePenetration>0.02</meleePenetration></li><li><equipment>MX_Neiyu_Form_Bow</equipment><projectileDamage>0</projectileDamage><projectilePenetration>0.04</projectilePenetration><splitCount>2</splitCount></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Apparel5</defName><label>法衣归身</label>
+    <category>MX_Neiyu_Cultivation_Apparel</category><rank>5</rank><displayOrder>5</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Law</iconActive>
+    <description>提高常服、内衬与珠饰的防护，增强穿戴时的移动、闪避、减伤与攻击间隔收益。</description>
+    <story>衣摆与珠饰泛起柔光。那些细小的纹路随着呼吸接续，渐渐贴合她的身躯。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Apparel4</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></li></requiresAll>
+    <costs><Milira_Feather>30</Milira_Feather><Plasteel>30</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <equipmentEffects><li><equipment>MiliraXian_NeiyuNormal</equipment><statOffsets><ArmorRating_Sharp>0.18</ArmorRating_Sharp><ArmorRating_Blunt>0.17</ArmorRating_Blunt><ArmorRating_Heat>0.18</ArmorRating_Heat></statOffsets><equippedStatOffsets><MoveSpeed>0.2</MoveSpeed><MeleeDodgeChance>2.4</MeleeDodgeChance><IncomingDamageFactor>-0.018</IncomingDamageFactor></equippedStatOffsets></li><li><equipment>MiliraXian_NeiyuInner</equipment><statOffsets><ArmorRating_Sharp>0.09</ArmorRating_Sharp><ArmorRating_Blunt>0.08</ArmorRating_Blunt><ArmorRating_Heat>0.12</ArmorRating_Heat></statOffsets><equippedStatOffsets><IncomingDamageFactor>-0.012</IncomingDamageFactor><MeleeCooldownFactor>-0.012</MeleeCooldownFactor></equippedStatOffsets></li><li><equipment>MX_Apparel_EarringsZhenzhu</equipment><statOffsets><ArmorRating_Sharp>0.14</ArmorRating_Sharp><ArmorRating_Blunt>0.13</ArmorRating_Blunt><ArmorRating_Heat>0.15</ArmorRating_Heat></statOffsets><equippedStatOffsets><AimingDelayFactor>-0.02</AimingDelayFactor><RangedCooldownFactor>-0.02</RangedCooldownFactor></equippedStatOffsets></li></equipmentEffects>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Halo5</defName><label>百羽成环</label>
+    <category>MX_Neiyu_Cultivation_Halo</category><rank>5</rank><displayOrder>5</displayOrder><iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <description>常态计数护盾上限提高至108层。虚弱期间上限仍为24层。</description>
+    <story>薄薄的光层相继合拢。她听见每一层微光的回应，将它们留在身体之外。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Halo4</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></li></requiresAll>
+    <costs><Milira_Feather>30</Milira_Feather><Plasteel>30</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <shieldCharges>12</shieldCharges>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Blessing1</defName><label>花阵·祈生 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
+    <description>需要花形态。施法1.1秒，治愈24格内选区中非敌对血肉目标的伤口与旧伤，并提高心情。
+祝福期间移动速度提高20%，承伤降低10%，免疫增长速度提高70%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <ability>MX_Neiyu_Flower_BlessingField</ability><abilityValues><radius>4</radius><durationTicks>1800</durationTicks><cooldownTicks>7200</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_Flower_BlessingField</li></grantedAbilities><initiallyLearned>true</initiallyLearned>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Blessing2</defName><label>花阵·祈生 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
+    <description>需要花形态。施法1.1秒，治愈24格内选区中非敌对血肉目标的伤口与旧伤，并提高心情。
+祝福期间移动速度提高20%，承伤降低10%，免疫增长速度提高70%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Blessing1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_Flower_BlessingField</ability><abilityValues><radius>5</radius><durationTicks>2700</durationTicks><cooldownTicks>6300</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Blessing3</defName><label>花阵·祈生 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
+    <description>需要花形态。施法1.1秒，治愈24格内选区中非敌对血肉目标的伤口与旧伤，并提高心情。
+祝福期间移动速度提高20%，承伤降低10%，免疫增长速度提高70%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Blessing2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_Flower_BlessingField</ability><abilityValues><radius>6</radius><durationTicks>3600</durationTicks><cooldownTicks>5400</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Skyfall1</defName><label>剑势·天坠 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconActive>
+    <description>需要剑形态。施法1秒，跃向35格内指定位置，对落点周围敌人造成无视护甲伤害，并使其承伤提高25%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <ability>MX_Neiyu_Sword_Skyfall</ability><abilityValues><radius>2</radius><damage>60</damage><durationTicks>900</durationTicks><cooldownTicks>9000</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_Sword_Skyfall</li></grantedAbilities><initiallyLearned>true</initiallyLearned>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Skyfall2</defName><label>剑势·天坠 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconActive>
+    <description>需要剑形态。施法1秒，跃向35格内指定位置，对落点周围敌人造成无视护甲伤害，并使其承伤提高25%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Skyfall1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>3</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_Sword_Skyfall</ability><abilityValues><radius>2.5</radius><damage>90</damage><durationTicks>1200</durationTicks><cooldownTicks>9000</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Skyfall3</defName><label>剑势·天坠 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconActive>
+    <description>需要剑形态。施法1秒，跃向35格内指定位置，对落点周围敌人造成无视护甲伤害，并使其承伤提高25%。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Skyfall2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_Sword_Skyfall</ability><abilityValues><radius>3</radius><damage>120</damage><durationTicks>1500</durationTicks><cooldownTicks>9000</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Barrage1</defName><label>流羽裂界 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <description>以弓形态蓄力5秒，沿选定方向释放箭幕。每支箭基础伤害30，射程55格。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <costs><Milira_Feather>6</Milira_Feather><Jade>10</Jade></costs>
+    <ability>MX_Neiyu_Bow_ArrowBarrage</ability><abilityValues><shotCount>20</shotCount><cooldownTicks>7200</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_Bow_ArrowBarrage</li></grantedAbilities>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Barrage2</defName><label>流羽裂界 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <description>以弓形态蓄力5秒，沿选定方向释放箭幕。每支箭基础伤害30，射程55格。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Barrage1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>5</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_Bow_ArrowBarrage</ability><abilityValues><shotCount>26</shotCount><cooldownTicks>7200</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Barrage3</defName><label>流羽裂界 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <description>以弓形态蓄力5秒，沿选定方向释放箭幕。每支箭基础伤害30，射程55格。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Barrage2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>10</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_Bow_ArrowBarrage</ability><abilityValues><shotCount>32</shotCount><cooldownTicks>7200</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Toxin1</defName><label>花阵·瘴庭 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconActive>
+    <description>以花形态展开毒庭，使范围内敌人食物中毒，并有10%概率使其狂暴。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>2</days></li></requiresAll>
+    <costs><Milira_Feather>6</Milira_Feather><Jade>10</Jade></costs>
+    <ability>MX_Neiyu_Flower_ToxinGarden</ability><abilityValues><radius>5</radius><cooldownTicks>7200</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_Flower_ToxinGarden</li></grantedAbilities>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Toxin2</defName><label>花阵·瘴庭 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconActive>
+    <description>以花形态展开毒庭，使范围内敌人食物中毒，并有10%概率使其狂暴。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Toxin1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>6</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_Flower_ToxinGarden</ability><abilityValues><radius>6</radius><cooldownTicks>7200</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Toxin3</defName><label>花阵·瘴庭 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconActive>
+    <description>以花形态展开毒庭，使范围内敌人食物中毒，并有10%概率使其狂暴。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Toxin2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>10</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_Flower_ToxinGarden</ability><abilityValues><radius>7</radius><cooldownTicks>7200</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Thunder1</defName><label>雷锁印域 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
+每个目标的雷击次数为雷击预算除以目标数，向上取整。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害与15点EMP，并点燃可燃目标。
+范围内无有效目标时不进入冷却。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>5</days></li></requiresAll>
+    <costs><Milira_Feather>6</Milira_Feather><Jade>10</Jade></costs>
+    <ability>MX_Neiyu_ThunderMarkedStorm</ability><abilityValues><strikeBudget>72</strikeBudget><cooldownTicks>3600</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_ThunderMarkedStorm</li></grantedAbilities>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Thunder2</defName><label>雷锁印域 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
+每个目标的雷击次数为雷击预算除以目标数，向上取整。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害与15点EMP，并点燃可燃目标。
+范围内无有效目标时不进入冷却。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Thunder1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_ThunderMarkedStorm</ability><abilityValues><strikeBudget>90</strikeBudget><cooldownTicks>3600</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Thunder3</defName><label>雷锁印域 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
+每个目标的雷击次数为雷击预算除以目标数，向上取整。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害与15点EMP，并点燃可燃目标。
+范围内无有效目标时不进入冷却。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Thunder2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_ThunderMarkedStorm</ability><abilityValues><strikeBudget>108</strikeBudget><cooldownTicks>3600</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Execution1</defName><label>剑势·断首 · 1级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>1</rank><displayOrder>1</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconActive>
+    <description>以剑形态后撤2格后突进，斩去目标头部；没有可移除头部时，造成75点无视护甲伤害。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>8</days></li></requiresAll>
+    <costs><Milira_Feather>6</Milira_Feather><Jade>10</Jade></costs>
+    <ability>MX_Neiyu_Sword_ExecuteHead</ability><abilityValues><range>20</range><cooldownTicks>6300</cooldownTicks></abilityValues><grantedAbilities><li>MX_Neiyu_Sword_ExecuteHead</li></grantedAbilities>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Execution2</defName><label>剑势·断首 · 2级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>2</rank><displayOrder>2</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconActive>
+    <description>以剑形态后撤2格后突进，斩去目标头部；没有可移除头部时，造成75点无视护甲伤害。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Execution1</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>10</days></li></requiresAll>
+    <costs><Milira_Feather>12</Milira_Feather><Jade>15</Jade><ComponentIndustrial>1</ComponentIndustrial></costs>
+    <ability>MX_Neiyu_Sword_ExecuteHead</ability><abilityValues><range>24</range><cooldownTicks>5400</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_Cultivation_Execution3</defName><label>剑势·断首 · 3级</label>
+    <category>MX_Neiyu_Cultivation_Spells</category><rank>3</rank><displayOrder>3</displayOrder><iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconActive>
+    <description>以剑形态后撤2格后突进，斩去目标头部；没有可移除头部时，造成75点无视护甲伤害。</description>
+    <story>记忆中的轨迹逐渐清晰。霓羽试着放慢呼吸，让熟悉的力量重新落在自己能够掌握的地方。</story>
+    <prerequisites><li><node>MX_Neiyu_Cultivation_Execution2</node></li></prerequisites>
+    <requiresAll><li Class="MiliraXian.Characters.Common.Conditions.UnlockCondition_ColonistDays"><days>12</days></li></requiresAll>
+    <costs><Milira_Feather>18</Milira_Feather><Plasteel>10</Plasteel><ComponentSpacer>1</ComponentSpacer></costs>
+    <ability>MX_Neiyu_Sword_ExecuteHead</ability><abilityValues><range>28</range><cooldownTicks>4500</cooldownTicks></abilityValues>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
 </Defs>

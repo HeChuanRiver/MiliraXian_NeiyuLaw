@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Neiyu.Cultivation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -376,6 +377,9 @@ namespace MiliraXian.Characters.Neiyu
     {
         private new CompProperties_AbilityNeiyuFlowerBless Props => (CompProperties_AbilityNeiyuFlowerBless)props;
 
+        private float Radius => CultivationService.AbilityValues(parent.pawn, parent.def)?.radius is >= 0f and var value ? value : Props.radius;
+        private int Duration => CultivationService.AbilityValues(parent.pawn, parent.def)?.durationTicks is >= 0 and var value ? value : Props.buffDurationTicks;
+
         public override bool ShouldHideGizmo
         {
             get
@@ -434,7 +438,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             int affected = 0;
-            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Props.radius);
+            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Radius);
             foreach (Pawn pawn in pawns)
             {
                 if (!Props.includeCaster && pawn == caster)
@@ -452,7 +456,7 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
-                ApplyBlessToPawn(caster, pawn);
+                ApplyBlessToPawn(caster, pawn, Duration);
                 affected++;
             }
 
@@ -469,10 +473,10 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            GenDraw.DrawRadiusRing(target.Cell, Props.radius, Color.green);
+            GenDraw.DrawRadiusRing(target.Cell, Radius, Color.green);
         }
 
-        private void ApplyBlessToPawn(Pawn caster, Pawn pawn)
+        private void ApplyBlessToPawn(Pawn caster, Pawn pawn, int durationTicks)
         {
             if (pawn == null || pawn.health == null)
             {
@@ -493,7 +497,7 @@ namespace MiliraXian.Characters.Neiyu
                     pawn.health.AddHediff(buff);
                 }
 
-                NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(buff, Props.buffDurationTicks);
+                NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(buff, durationTicks);
             }
 
             if (!NeiyuPowerBalance.AbilitiesDisabled)
@@ -533,6 +537,8 @@ namespace MiliraXian.Characters.Neiyu
     {
         private new CompProperties_AbilityNeiyuFlowerToxinField Props => (CompProperties_AbilityNeiyuFlowerToxinField)props;
 
+        private float Radius => CultivationService.AbilityValues(parent.pawn, parent.def)?.radius is >= 0f and var value ? value : Props.radius;
+
         public override bool ShouldHideGizmo
         {
             get
@@ -591,7 +597,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             int affected = 0;
-            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Props.radius);
+            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Radius);
             foreach (Pawn pawn in pawns)
             {
                 if (!NeiyuFlowerSwordSkillUtility.IsHostile(caster, pawn))
@@ -621,7 +627,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            GenDraw.DrawRadiusRing(target.Cell, Props.radius, Color.magenta);
+            GenDraw.DrawRadiusRing(target.Cell, Radius, Color.magenta);
         }
 
         private static void ApplyFoodPoisoningSevere(Pawn pawn, float targetSeverity)
@@ -704,6 +710,15 @@ namespace MiliraXian.Characters.Neiyu
 
         private new CompProperties_AbilityNeiyuSwordSkyfall Props => (CompProperties_AbilityNeiyuSwordSkyfall)props;
 
+        private float snapshotRadius = -1f;
+        private int snapshotDamage = -1, snapshotDuration = -1;
+        private CultivationAbilityValues Values => CultivationService.AbilityValues(parent.pawn, parent.def);
+        private float CurrentRadius => Values?.radius is >= 0f and var value ? value : Props.impactRadius;
+        private int CurrentDamage => Values?.damage is >= 0 and var value ? value : Props.impactDamage;
+        private int CurrentDuration => Values?.durationTicks is >= 0 and var value ? value : Props.vulnerabilityDurationTicks;
+        private float ImpactRadius => stage != SkyfallStage.None && snapshotRadius >= 0f ? snapshotRadius : CurrentRadius;
+        private int ImpactDamage => snapshotDamage >= 0 ? snapshotDamage : CurrentDamage;
+        private int ImpactDuration => snapshotDuration >= 0 ? snapshotDuration : CurrentDuration;
         private SkyfallStage stage;
         private IntVec3 originCell;
         private IntVec3 targetCell;
@@ -782,6 +797,9 @@ namespace MiliraXian.Characters.Neiyu
         public override void PostExposeData()
         {
             base.PostExposeData();
+            Scribe_Values.Look(ref snapshotRadius, "mx_cultivationSkyfallRadius", -1f);
+            Scribe_Values.Look(ref snapshotDamage, "mx_cultivationSkyfallDamage", -1);
+            Scribe_Values.Look(ref snapshotDuration, "mx_cultivationSkyfallDuration", -1);
             int stageInt = (int)stage;
             Scribe_Values.Look(ref stageInt, "mxnl_skyfall_stage", 0);
             Scribe_Values.Look(ref originCell, "mxnl_skyfall_originCell");
@@ -809,6 +827,9 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
+            snapshotRadius = CurrentRadius;
+            snapshotDamage = CurrentDamage;
+            snapshotDuration = CurrentDuration;
             originCell = caster.Position;
             targetCell = target.Cell;
             if (!targetCell.InBounds(map))
@@ -894,7 +915,7 @@ namespace MiliraXian.Characters.Neiyu
                 return;
             }
 
-            GenDraw.DrawRadiusRing(target.Cell, Props.impactRadius, Color.red);
+            GenDraw.DrawRadiusRing(target.Cell, CurrentRadius, Color.red);
         }
 
         private void TickAscending(Pawn caster, Map map, int now)
@@ -915,7 +936,7 @@ namespace MiliraXian.Characters.Neiyu
                     MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallWarning,
                     map,
                     landingCell,
-                    Mathf.Max(0.1f, Props.impactRadius / 3f),
+                    Mathf.Max(0.1f, ImpactRadius / 3f),
                     Mathf.Max(1, Props.warningDelayTicks));
                 if (!usingUnityWarning)
                 {
@@ -952,7 +973,7 @@ namespace MiliraXian.Characters.Neiyu
                     MiliraXian.Characters.Common.CharacterUnityVfxKind.NeiyuSkyfallImpact,
                     map,
                     landingCell,
-                    Mathf.Max(0.1f, Props.impactRadius / 3f),
+                    Mathf.Max(0.1f, ImpactRadius / 3f),
                     Mathf.Max(1, Props.descendVisualTicks + 30));
 
                 IntVec3 dropCell = FindLandingCell(map, landingCell, caster);
@@ -1093,7 +1114,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             DamageDef damageDef = Props.impactDamageDef ?? DamageDefOf.Bomb;
-            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, Props.impactRadius);
+            HashSet<Pawn> pawns = NeiyuFlowerSwordSkillUtility.CollectPawnsInRadius(map, center, ImpactRadius);
             foreach (Pawn pawn in pawns)
             {
                 if (!NeiyuFlowerSwordSkillUtility.IsHostile(caster, pawn))
@@ -1101,7 +1122,7 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
-                DamageInfo dinfo = new(damageDef, Props.impactDamage, Props.impactArmorPen, -1f, caster);
+                DamageInfo dinfo = new(damageDef, ImpactDamage, Props.impactArmorPen, -1f, caster);
                 if (!NeiyuPowerBalance.AbilitiesDisabled)
                 {
                     dinfo.SetIgnoreArmor(true);
@@ -1116,7 +1137,7 @@ namespace MiliraXian.Characters.Neiyu
                         v = HediffMaker.MakeHediff(Props.vulnerabilityHediff, pawn);
                         pawn.health.AddHediff(v);
                     }
-                    NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(v, Props.vulnerabilityDurationTicks);
+                    NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(v, ImpactDuration);
                 }
             }
         }

@@ -24,6 +24,9 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public List<HediffDef> grantedHediffs;
         public CharacterPerkUnlockLetter unlockLetter;
 
+        /// <summary>Character-specific purchase eligibility; grants and migration skip this gate.</summary>
+        public virtual string PurchaseBlockedReason(Pawn pawn) => null;
+
         /// <summary>
         /// Whether this node unlocks itself when the event source changes (mastery level reaching a
         /// threshold, a biography condition becoming true). Purchase-style nodes answer false and

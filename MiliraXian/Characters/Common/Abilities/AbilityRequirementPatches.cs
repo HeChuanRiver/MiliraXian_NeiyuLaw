@@ -12,6 +12,14 @@ namespace MiliraXian.Characters.Common.Abilities
     /// </summary>
     public static class AbilityRequirementUtility
     {
+        public static bool ShouldHide(Ability ability)
+        {
+            var requirements = ability?.def?.GetModExtension<AbilityRequirementExtension>()?.requirements;
+            if (requirements == null || ability.pawn == null) return false;
+            foreach (var requirement in requirements)
+                if (requirement != null && requirement.HideWhenUnmet && !requirement.Met(ability.pawn)) return true;
+            return false;
+        }
         public static AbilityRequirement FirstUnmet(Ability ability)
         {
             List<AbilityRequirement> requirements =
@@ -59,7 +67,7 @@ namespace MiliraXian.Characters.Common.Abilities
     {
         public static IEnumerable<Command> Postfix(IEnumerable<Command> values, Ability __instance)
         {
-            if (AbilityRequirementUtility.FirstUnmet(__instance) != null)
+            if (AbilityRequirementUtility.ShouldHide(__instance))
             {
                 yield break;
             }

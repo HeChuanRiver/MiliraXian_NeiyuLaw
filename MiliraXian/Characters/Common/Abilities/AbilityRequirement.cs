@@ -11,6 +11,7 @@ namespace MiliraXian.Characters.Common.Abilities
     public abstract class AbilityRequirement
     {
         public abstract bool Met(Pawn pawn);
+        public virtual bool HideWhenUnmet => true;
 
         /// <summary>Why the ability refused to cast; the gizmo is already hidden by then.</summary>
         public abstract string DisabledReason(Pawn pawn);

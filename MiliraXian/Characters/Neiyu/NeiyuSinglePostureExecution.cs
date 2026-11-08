@@ -10,13 +10,13 @@ namespace MiliraXian.Characters.Neiyu;
 
 public sealed class NeiyuSingleExecutionProps
 {
-    public float enemyRadius = 8f, slashWidth = 14f, knockbackDistance = 3.5f, throwDistance = 25f, spiritSwordScale = 1.45f;
+    public float enemyRadius = 8f, slashWidth = 18f, knockbackDistance = 3.5f, throwDistance = 25f, spiritSwordScale = 1.45f;
     public int lockTicks = 150;
     public int readyTicks = 20, enchantTicks = 30, flashTicks = 3, swingTicks = 8, hitStopTicks = 9;
     public int knockbackTicks = 24, approachTicks = 24, spinLeadTicks = 12, spinTicksPerTurn = 30;
-    public int flightTicks = 30, glyphDelayTicks = 8, swordCount = 5, swordStaggerTicks = 20, swordFlightTicks = 36, finishTicks = 24;
+    public int flightTicks = 30, glyphDelayTicks = 8, swordCount = 5, swordStaggerTicks = 24, swordFlightTicks = 36, finishTicks = 24;
     public int waveTicks = 38, glyphHoldTicks = 9, glyphFadeTicks = 15, pierceTicks = 17, afterimageTicks = 20;
-    public SoundDef pierceSound;
+    public SoundDef firstCutSound, swordLaunchSound, pierceSound;
     public BladeKeyframes drawBlade, aimBlade;
 
     internal bool Valid => float.IsFinite(enemyRadius) && enemyRadius > 0f
@@ -39,6 +39,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private int hitStopTicks, knockbackTicks, approachTicks, spinLeadTicks, spinTicksPerTurn;
     private int flightTicks, glyphDelayTicks, swordCount, swordStaggerTicks, swordFlightTicks, finishTicks;
     private int volleyStart = -1;
+    private bool singleAirVolley;
     private IntVec3 actorCell, targetCell, approachCell, landingCell;
     private IntVec3 grabStartCell = IntVec3.Invalid;
     private Vector3 actorDraw, targetDraw, previousActorDraw, previousTargetDraw;
@@ -58,35 +59,46 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private int SpinAt => GrabAt + spinLeadTicks;
     private int ReleaseAt => SpinAt + spinTurns * spinTicksPerTurn;
     private int AimAt => ReleaseAt + glyphDelayTicks;
-    private bool VolleyAfterLanding => swordFlightTicks > 0;
-    private int VolleyAt => VolleyAfterLanding
+    private bool VolleyAfterLanding => !singleAirVolley && swordFlightTicks > 0;
+    private int VolleyStagger => singleAirVolley
+        ? Mathf.Min(swordStaggerTicks, Mathf.Max(1, flightTicks / (swordCount + 2))) : swordStaggerTicks;
+    private int VolleyAt => singleAirVolley ? ReleaseAt : VolleyAfterLanding
         ? (volleyStart >= 0 ? volleyStart : AimAt + flightTicks)
         : AimAt;
-    private int SwordLaunchAt(int index) => VolleyAt + index * swordStaggerTicks;
+    private int SwordLaunchAt(int index) => VolleyAt + index * VolleyStagger;
     private int SwordImpactAt(int index) => SwordLaunchAt(index)
-        + (VolleyAfterLanding ? swordFlightTicks : flightTicks - glyphDelayTicks);
+        + (singleAirVolley ? Mathf.Max(1, flightTicks - (swordCount - 1) * VolleyStagger)
+            : VolleyAfterLanding ? swordFlightTicks : flightTicks - glyphDelayTicks);
     private int FinalImpactAt => SwordImpactAt(swordCount - 1);
     private int EndAt => FinalImpactAt + finishTicks;
     private IntVec3 GrabCell => grabStartCell.IsValid ? grabStartCell : hitCell;
 
     private Branch ChooseBranch(Pawn target)
     {
-        if (Single?.Valid != true) return Branch.Compatibility;
-        float radiusSquared = Single.enemyRadius * Single.enemyRadius;
+        if (Single is not { enemyRadius: > 0f } scene || !float.IsFinite(scene.enemyRadius))
+            return Branch.Compatibility;
+        float radiusSquared = scene.enemyRadius * scene.enemyRadius;
         // The original target has already passed the execution eligibility check.
         foreach (Pawn other in executionMap.mapPawns.AllPawnsSpawned)
         {
-            if (other == target || other.Downed || !NeiyuSwordCombat.HostilePair(pawn, other)
+            if (other == target || !SceneEnemy(other)
                 || other.Position.DistanceToSquared(hitCell) > radiusSquared) continue;
-            if (other.Awake() && !other.Deathresting && !other.InContainerEnclosed && !CombatPosture.ControlsActions(other)
-                && other.health.capacities.CanBeAwake && !other.WorkTagIsDisabled(WorkTags.Violent))
-                return Branch.Compatibility;
+            return Branch.Multi;
         }
-        return Branch.Single;
+        return scene.Valid ? Branch.Single : Branch.Compatibility;
     }
+
+    private bool SceneEnemy(Pawn other) => !other.Downed && NeiyuSwordCombat.HostilePair(pawn, other)
+        && other.Awake() && !other.Deathresting && !other.InContainerEnclosed && !CombatPosture.ControlsActions(other)
+        && other.health.capacities.CanBeAwake && !other.WorkTagIsDisabled(WorkTags.Violent);
+
+    private bool ValidSceneTarget(Pawn target) => NeiyuSwordCombat.ExecutionTarget(target)
+        && NeiyuSwordCombat.HostilePair(pawn, target) && target.Position == targetCell
+        && CombatPosture.Get(target)?.Owns(pawn) == true;
 
     private void BeginSingle()
     {
+        singleAirVolley = true;
         HediffComp_CombatPosture posture = CombatPosture.Get(Victim);
         sceneStart = (posture?.BrokenAt is >= 0 ? posture.BrokenAt : startedAt) + Single.lockTicks;
         spinTurns = Rand.RangeInclusive(1, 3);
@@ -103,6 +115,11 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         finishTicks = Single.finishTicks;
         throwDistance = Single.throwDistance;
         posture?.HoldThrough(pawn, sceneStart + EndAt + 1);
+        BeginSceneMotion();
+    }
+
+    private void BeginSceneMotion()
+    {
         actorCell = origin;
         targetCell = hitCell;
         previousActorDraw = actorDraw = origin.ToVector3Shifted().Yto0();
@@ -116,7 +133,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     {
         if (!IsSingle) return;
         Scribe_Values.Look(ref singleStage, "singleExecutionStage");
-        Scribe_Values.Look(ref sceneStart, "singleExecutionSceneStart");
         // Older saves already hold a victim through their original deadlines.
         Scribe_Values.Look(ref hitStopTicks, "singleExecutionHitStopTicks", 5);
         Scribe_Values.Look(ref knockbackTicks, "singleExecutionKnockbackTicks", 0);
@@ -129,15 +145,26 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref swordStaggerTicks, "singleExecutionSwordStaggerTicks", 2);
         Scribe_Values.Look(ref swordFlightTicks, "singleExecutionSwordFlightTicks");
         Scribe_Values.Look(ref volleyStart, "singleExecutionVolleyStart", -1);
+        Scribe_Values.Look(ref singleAirVolley, "singleExecutionAirVolley");
         Scribe_Values.Look(ref finishTicks, "singleExecutionFinishTicks", 14);
         Scribe_Values.Look(ref throwDistance, "singleExecutionThrowDistance", 6f);
         Scribe_Values.Look(ref spinTurns, "singleExecutionTurns");
         Scribe_Values.Look(ref impacts, "singleExecutionImpacts");
+        Scribe_Values.Look(ref approachCell, "singleExecutionApproachCell");
+        Scribe_Values.Look(ref grabStartCell, "singleExecutionGrabCell", IntVec3.Invalid);
+        Scribe_Values.Look(ref curvedApproach, "singleExecutionCurvedApproach");
+        if (Scribe.mode == LoadSaveMode.PostLoadInit
+            && (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery))
+            executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
+    }
+
+    private void ExposeSceneMotion()
+    {
+        // These original keys also restore single executions made before the second scene existed.
+        Scribe_Values.Look(ref sceneStart, "singleExecutionSceneStart");
         Scribe_Values.Look(ref touchdown, "singleExecutionTouchdown");
         Scribe_Values.Look(ref actorCell, "singleExecutionActorCell");
         Scribe_Values.Look(ref targetCell, "singleExecutionTargetCell");
-        Scribe_Values.Look(ref approachCell, "singleExecutionApproachCell");
-        Scribe_Values.Look(ref grabStartCell, "singleExecutionGrabCell", IntVec3.Invalid);
         Scribe_Values.Look(ref landingCell, "singleExecutionLanding");
         Scribe_Values.Look(ref actorDraw, "singleExecutionActorDraw");
         Scribe_Values.Look(ref targetDraw, "singleExecutionTargetDraw");
@@ -148,10 +175,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref aimPoint, "singleExecutionAimPoint");
         Scribe_Values.Look(ref initialYaw, "singleExecutionInitialYaw");
         Scribe_Values.Look(ref throwYaw, "singleExecutionThrowYaw");
-        Scribe_Values.Look(ref curvedApproach, "singleExecutionCurvedApproach");
-        if (Scribe.mode == LoadSaveMode.PostLoadInit
-            && (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery))
-            executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
     }
 
     private void TickSingle()
@@ -160,8 +183,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         int tick = SceneTick;
         bool beforeDisplacement = singleStage is SingleStage.Lock or SingleStage.Draw or SingleStage.FirstCut;
         if (pawn.Position != actorCell || (!strikeCommitted
-            && (!NeiyuSwordCombat.ExecutionTarget(target) || !NeiyuSwordCombat.HostilePair(pawn, target)
-                || target.Position != targetCell || CombatPosture.Get(target)?.Owns(pawn) != true
+            && (!ValidSceneTarget(target)
                 || (beforeDisplacement && !NeiyuSwordCombat.InExecutionReach(pawn, target)))))
         {
             EndJobWith(JobCondition.Incompletable);
@@ -180,7 +202,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         if (tick >= FirstCutAt && singleStage == SingleStage.Draw)
         {
             singleStage = SingleStage.FirstCut;
-            NeiyuSwordCombatVfx.SingleSound(pawn, targetDraw, NeiyuSwordCombat.Config.strikeSound);
+            NeiyuSwordCombatVfx.SingleSound(pawn, targetDraw, Single.firstCutSound ?? NeiyuSwordCombat.Config.strikeSound);
         }
         if (tick >= KnockbackAt && singleStage == SingleStage.FirstCut && knockbackTicks > 0)
         {
@@ -258,10 +280,18 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
 
         pawn.Rotation = Rot4.FromAngleFlat(BodyYaw(tick, actorDraw, aimPoint));
+        if (singleStage == SingleStage.Volley)
+        {
+            int launchIndex = (tick - VolleyAt) / VolleyStagger;
+            if (launchIndex >= 0 && launchIndex < swordCount && tick == SwordLaunchAt(launchIndex))
+                NeiyuSwordCombatVfx.SingleSound(pawn, actorDraw, Single.swordLaunchSound);
+        }
         while (impacts < swordCount && tick >= SwordImpactAt(impacts))
         {
             impacts++;
-            if (impacts == swordCount && !strikeCommitted)
+            if (impacts < swordCount)
+                NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound);
+            else if (!strikeCommitted)
             {
                 // Set the terminal frame before invoking callbacks which can save the game.
                 singleStage = SingleStage.Recovery;
@@ -306,11 +336,11 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             ProgressBetween(tick, ReleaseAt, AimAt)));
     }
 
-    private Vector3 ApproachAtProgress(float progress, IntVec3 destination, bool curved)
+    private Vector3 ApproachAtProgress(float progress, IntVec3 destination, bool curved, float arcWidth = .42f)
     {
         float p = Mathf.SmoothStep(0f, 1f, progress);
         Vector3 start = origin.ToVector3Shifted().Yto0(), end = destination.ToVector3Shifted().Yto0();
-        Vector3 offset = curved ? Vector3.Cross(Vector3.up, end - start).normalized * (.42f * Mathf.Sin(p * Mathf.PI)) : Vector3.zero;
+        Vector3 offset = curved ? Vector3.Cross(Vector3.up, end - start).normalized * (arcWidth * Mathf.Sin(p * Mathf.PI)) : Vector3.zero;
         return Vector3.Lerp(start, end, p) + offset;
     }
 
@@ -366,7 +396,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     {
         throwYaw = SpinYaw(ReleaseAt) + 90f;
         Vector3 tangent = Forward(throwYaw);
-        if (VolleyAfterLanding)
+        if (singleAirVolley || VolleyAfterLanding)
         {
             motionOrigin = targetGround;
             touchdown = ReleaseAt + flightTicks;
@@ -427,22 +457,30 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
     }
 
-    private void MoveTargetAlongMotion(Pawn target, int tick, int startTick, float startHeight, float arcHeight)
+    private void MoveTargetAlongMotion(Pawn target, int tick, int startTick, float startHeight, float arcHeight,
+        bool verticalThrow = false, int groundTravelTicks = 0)
     {
         Vector3 end = landingCell.ToVector3Shifted().Yto0();
         if (tick > touchdown && targetGround == end) return;
         float p = ProgressBetween(tick, startTick, touchdown);
-        Vector3 next = Vector3.Lerp(motionOrigin, end, 1f - (1f - p) * (1f - p));
-        if (!TryTravel(target, targetGround, next, out IntVec3 lastClear, targetCell == actorCell ? pawn : null))
+        float ground = groundTravelTicks > 0 ? ProgressBetween(tick, startTick, startTick + groundTravelTicks) : p;
+        Vector3 next = Vector3.Lerp(motionOrigin, end, 1f - (1f - ground) * (1f - ground));
+        Pawn sharingWith = groundTravelTicks > 0 || targetCell == actorCell ? pawn : null;
+        if (!TryTravel(target, targetGround, next, out IntVec3 lastClear, sharingWith))
         {
             landingCell = lastClear;
-            touchdown = tick;
             next = landingCell.ToVector3Shifted().Yto0();
-            p = 1f;
+            if (verticalThrow) motionOrigin = next;
+            else
+            {
+                touchdown = tick;
+                p = 1f;
+            }
         }
         targetGround = next;
         MovePawn(target, ref targetCell, targetGround.ToIntVec3());
-        float height = Mathf.Lerp(startHeight, 0f, p) + arcHeight * Mathf.Sin(p * Mathf.PI);
+        float arc = verticalThrow ? 4f * p * (1f - p) : Mathf.Sin(p * Mathf.PI);
+        float height = Mathf.Lerp(startHeight, 0f, p) + arcHeight * arc;
         targetDraw = targetGround + Vector3.forward * height;
     }
 
@@ -488,21 +526,23 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private float FrameLerp => Mathf.Clamp01(VisualClock.TicksSince(NeiyuSwordCombat.Now) + 1f);
 
-    bool IPostureExecutionDriver.DrivesExecutorPosition => IsSingle;
+    bool IPostureExecutionDriver.DrivesExecutorPosition => HasScene;
 
     internal static bool TryGetExecutionDrawPos(Pawn subject, out Vector3 position)
     {
-        if (subject.jobs?.curDriver is JobDriver_NeiyuPostureExecution { IsSingle: true } actor
+        if (subject.jobs?.curDriver is JobDriver_NeiyuPostureExecution { HasScene: true } actor
             && subject.Position == actor.actorCell)
         {
             position = Vector3.Lerp(actor.previousActorDraw, actor.actorDraw, actor.FrameLerp);
             return true;
         }
         if (CombatPosture.Get(subject)?.Executioner?.jobs?.curDriver is
-                JobDriver_NeiyuPostureExecution { IsSingle: true, strikeCommitted: false } driver
+                JobDriver_NeiyuPostureExecution { HasScene: true } driver
+            && (!driver.strikeCommitted || driver.IsMulti)
             && driver.Victim == subject && subject.Map == driver.executionMap && subject.Position == driver.targetCell)
         {
-            position = Vector3.Lerp(driver.previousTargetDraw, driver.targetDraw, driver.FrameLerp);
+            position = driver.IsMulti ? driver.MultiTargetAtFrame(driver.SceneFrame)
+                : Vector3.Lerp(driver.previousTargetDraw, driver.targetDraw, driver.FrameLerp);
             return true;
         }
         position = default;
@@ -511,6 +551,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     public bool TryGetBladePose(out BladePose pose)
     {
+        if (IsMulti && pawn.equipment?.Primary == executionWeapon
+            && executionWeapon?.def.GetModExtension<BladeGraphicExtension>() is { } ext)
+        {
+            pose = MultiBladeAt(ext, Mathf.Max(0f, SceneFrame));
+            return true;
+        }
         if (!IsSingle || singleStage == SingleStage.Lock || pawn.equipment?.Primary != executionWeapon)
         {
             pose = default;

@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             }
             Vector2 a = axisPx / lenPx;
             Vector2 n = new(a.y, -a.x); // toward larger u when the blade points up the texture
-            float mpp = ext.length / lenPx;
+            float mpp = ext.length * pose.LengthScale / lenPx;
             float edgeSign = Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
 
             int q = Mathf.Clamp(Mathf.RoundToInt(pose.sheathed * SheatheSteps), 0, SheatheSteps);
@@ -175,7 +175,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
             Vector3 edge = (pose.edge - Vector3.Dot(pose.edge, direction) * direction).normalized
                 * Mathf.Sign(ext.edgeSide == 0f ? 1f : ext.edgeSide);
             Vector2 side = new(axis.y, -axis.x);
-            float scale = ext.length / Mathf.Max(.0001f, axis.sqrMagnitude);
+            float scale = ext.length * pose.LengthScale / Mathf.Max(.0001f, axis.sqrMagnitude);
             Vector3 tipOffset = direction * (Vector2.Dot(delta, axis) * scale)
                 + edge * (Vector2.Dot(delta, side) * scale);
             float k = pose.heightToScreen;

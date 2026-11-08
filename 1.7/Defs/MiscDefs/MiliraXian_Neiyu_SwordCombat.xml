@@ -6,9 +6,11 @@
     <executionJob>MX_NeiyuPostureExecution</executionJob>
     <!-- 架势上限、恢复、破绽和崩溃窗口改由通用的 MX_CombatPosture（MiliraXian_CombatPosture.xml）配置 -->
     <!-- 近战先判弹刀，失败后判闪避。完美概率为绝对概率，不作第二次抽签。 -->
-    <successChance>0.60</successChance>
-    <perfectChance>0.15</perfectChance>
+    <successChance>0.80</successChance>
+    <perfectChance>0.45</perfectChance>
     <reflectProjectiles>true</reflectProjectiles>
+    <projectileReflectChance>0.60</projectileReflectChance>
+    <projectilePerfectChance>0.15</projectilePerfectChance>
     <projectileReturnSpreadDegrees>4</projectileReturnSpreadDegrees>
     <normalPosture>25</normalPosture>
     <perfectPosture>45</perfectPosture>
@@ -29,7 +31,7 @@
     <endSound>MX_NeiyuSwordEnd</endSound>
     <single>
       <enemyRadius>8</enemyRadius>
-      <slashWidth>14</slashWidth>
+      <slashWidth>18</slashWidth>
       <knockbackDistance>3.5</knockbackDistance>
       <throwDistance>25</throwDistance>
       <spiritSwordScale>1.45</spiritSwordScale>
@@ -46,7 +48,7 @@
       <flightTicks>30</flightTicks>
       <glyphDelayTicks>8</glyphDelayTicks>
       <swordCount>5</swordCount>
-      <swordStaggerTicks>20</swordStaggerTicks>
+      <swordStaggerTicks>24</swordStaggerTicks>
       <swordFlightTicks>36</swordFlightTicks>
       <finishTicks>24</finishTicks>
       <waveTicks>38</waveTicks>
@@ -54,7 +56,9 @@
       <glyphFadeTicks>15</glyphFadeTicks>
       <pierceTicks>17</pierceTicks>
       <afterimageTicks>20</afterimageTicks>
-      <pierceSound>MX_NeiyuSwordPerfect</pierceSound>
+      <firstCutSound>MX_NeiyuExecutionSwordImpact</firstCutSound>
+      <swordLaunchSound>MX_NeiyuExecutionSwordLaunch</swordLaunchSound>
+      <pierceSound>MX_NeiyuExecutionSwordImpact</pierceSound>
       <drawBlade>
         <keys>
           <li><time>0</time><yaw>25</yaw><pitch>24</pitch><roll>10</roll><reach>0.72</reach><offset>(0.06,0,0)</offset></li>

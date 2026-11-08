@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.Neiyu
 
         public float phase2Threshold = 36f;
 
-        public int phase2MaxChargesNormal = 108;
+        public int phase2MaxChargesNormal = 24;
         public int phase2MaxChargesWeak = 24;
         
         public int phase2RecoverTicksNoChange = 3600;
@@ -90,8 +90,7 @@ namespace MiliraXian.Characters.Neiyu
         private bool weakShieldExhaustedAnnounced;
         private int lastAbsorbTick = -1;
         private int lastPenetrateTick = -1;
-        private int observedPowerRevision = -1;
-        private int observedCultivationRank = -1;
+
 
         private int weakUntilTick = -1;
         private bool weakWasActive;
@@ -108,7 +107,7 @@ namespace MiliraXian.Characters.Neiyu
         // 基础属性（供 Gizmo 使用）
         public int Stage => stage;
         public int Phase2Charges => phase2Charges;
-        public int Phase2MaxCharges => CultivationPower.ShieldCapacity(Pawn, InWeak ? Props.phase2MaxChargesWeak : Props.phase2MaxChargesNormal);
+        public int Phase2MaxCharges => InWeak ? Props.phase2MaxChargesWeak : CultivationPower.ShieldCapacity(Pawn, Props.phase2MaxChargesNormal);
         public float Phase3StoredDamage => phase3StoredDamage;
         public int Phase3EndTick => phase3EndTick;
         public int Phase3AbsorbUntilTick => phase3AbsorbUntilTick;
@@ -191,23 +190,15 @@ namespace MiliraXian.Characters.Neiyu
             base.CompPostTick(ref severityAdjustment);
 
             int now = CurrentTick;
-            NormalizeForPowerLevelChange(now);
+            AdvanceTimeline(now);
 
             if (!CultivationPower.ShieldEnabled(Pawn))
             {
                 return;
             }
 
-            UpdateWeakTransition(now);
-            NormalizeStage3Ticks(now);
-
             if (stage == 3)
             {
-                if (phase3EndTick > 0 && now >= phase3EndTick)
-                {
-                    FinishStage3AndEnterWeak(now);
-                    return;
-                }
 
                 if (!stage3BuffPhaseAnnounced && IsInStage3BuffWindow(now))
                 {
@@ -237,9 +228,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             int now = CurrentTick;
-            NormalizeForPowerLevelChange(now);
-            UpdateWeakTransition(now);
-            NormalizeStage3Ticks(now);
+            AdvanceTimeline(now);
 
             if (stage == 3)
             {
@@ -258,12 +247,12 @@ namespace MiliraXian.Characters.Neiyu
 
             if (stage == 1)
             {
-                bool lethalOrDowning = CultivationPower.StageThreeEnabled(Pawn) && IsLethalOrDowning(dinfo);
+                bool lethalOrDowning = IsLethalOrDowning(dinfo);
 
                 absorbed = true;
                 PlayAbsorbFx(dinfo);
 
-                if (lethalOrDowning && !InWeak && CultivationPower.StageThreeEnabled(Pawn))
+                if (lethalOrDowning && !InWeak)
                 {
                     EnterStage3(now);
                     NotifyStage1Transition(lethalOrDowning: true, targetStage: 3);
@@ -291,19 +280,7 @@ namespace MiliraXian.Characters.Neiyu
                     return true;
                 }
 
-                // Earlier cultivation stages use the existing count shield and recovery
-                // timer, without the final stage's absorption/buff cycle.
-                if (!CultivationPower.StageThreeEnabled(Pawn))
-                {
-                    if (before <= 0) return false;
-                    phase2Charges = Math.Max(0, before - cost);
-                    phase2LastChargeChangeTick = now;
-                    absorbed = true;
-                    PlayAbsorbFx(dinfo);
-                    RecordPhase2Hit(dinfo.Amount, Math.Min(before, cost), before, phase2Charges);
-                    if (phase2Charges == 0) PlayShieldBreakFx();
-                    return true;
-                }
+
 
                 if (before <= 0)
                 {
@@ -477,7 +454,7 @@ namespace MiliraXian.Characters.Neiyu
 
                 int now = CurrentTick;
                 NormalizeStage3Ticks(now);
-                if (stage == 2 && phase2Charges <= 0 && (InWeak || !CultivationPower.StageThreeEnabled(Pawn)))
+                if (stage == 2 && phase2Charges <= 0 && InWeak)
                     return false;
                 return stage == 2 || IsInStage3AbsorbWindow(now);
             }
@@ -500,8 +477,6 @@ namespace MiliraXian.Characters.Neiyu
         {
             get
             {
-                if (CultivationService.Rank(Pawn, CultivationBranch.Halo) == 0)
-                    return CultivationText.Get("DormantHalo", "光环未唤醒");
                 if (NeiyuPowerBalance.PassivesDisabled)
                 {
                     return "MX_NL_NeiyuPassiveSealedLabel".Translate().ToString();
@@ -554,8 +529,6 @@ namespace MiliraXian.Characters.Neiyu
         {
             get
             {
-                if (CultivationService.Rank(Pawn, CultivationBranch.Halo) == 0)
-                    return CultivationText.Get("DormantShield", "尚未解锁首击防护、计数护盾与三阶循环。");
                 if (NeiyuPowerBalance.PassivesDisabled)
                 {
                     return "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString();
@@ -724,46 +697,16 @@ namespace MiliraXian.Characters.Neiyu
             weakWasActive = weakNow;
         }
 
-        private void NormalizeForPowerLevelChange(int now)
+        private void AdvanceTimeline(int now)
         {
-            int powerRevision = NeiyuPowerBalance.Revision;
-            int cultivationRank = CultivationService.Rank(Pawn, CultivationBranch.Halo);
-            if (observedPowerRevision == powerRevision && observedCultivationRank == cultivationRank)
+            NormalizeStage3Ticks(now);
+            if (stage == 3 && phase3EndTick > 0 && now >= phase3EndTick)
             {
-                return;
+                int endedAt = phase3EndTick;
+                if (NeiyuPowerBalance.PassivesDisabled) EnterWeak(endedAt);
+                else FinishStage3AndEnterWeak(endedAt);
             }
-
-            observedPowerRevision = powerRevision;
-            observedCultivationRank = cultivationRank;
-            // Old saves can carry stage III or a full pre-cultivation shield. Normalizing
-            // must not trigger blood loss, refill charges or grant an unearned buff.
-            if (cultivationRank < 3)
-            {
-                weakUntilTick = -1;
-                weakWasActive = false;
-                if (stage == 3 || cultivationRank == 0) EnterStage1(now);
-            }
-            if (NeiyuPowerBalance.PassivesDisabled)
-            {
-                return;
-            }
-
-            phase2Charges = Mathf.Min(phase2Charges, Phase2MaxCharges);
-            if (weakUntilTick > now)
-            {
-                weakUntilTick = Math.Min(weakUntilTick, now + Mathf.Max(1, Props.weakDurationTicks));
-            }
-
-            if (stage == 3)
-            {
-                if (phase3AbsorbUntilTick > now)
-                {
-                    phase3AbsorbUntilTick = Math.Min(phase3AbsorbUntilTick, now + Mathf.Max(1, Props.stage3AbsorbTicks));
-                }
-
-                int buffStartTick = Math.Max(now, phase3AbsorbUntilTick);
-                phase3EndTick = Math.Min(phase3EndTick, buffStartTick + Mathf.Max(1, Props.stage3BuffTicks));
-            }
+            UpdateWeakTransition(now);
         }
 
         private void ApplyStage3BloodLoss()
@@ -1245,9 +1188,9 @@ namespace MiliraXian.Characters.Neiyu
     public static class Patch_MXNeiyuShield_MeleeDamage
     {
         [HarmonyPostfix]
-        public static void Postfix(Tool tool, Pawn attacker, ref float __result)
+        public static void Postfix(Tool tool, Pawn attacker, Thing __2, ref float __result)
         {
-            __result *= CultivationPower.MeleeFactor(tool, attacker, penetration: false);
+            __result *= CultivationPower.MeleeFactor(tool, attacker, penetration: false, equipment: __2);
             if (attacker == null)
             {
                 return;
@@ -1279,7 +1222,6 @@ namespace MiliraXian.Characters.Neiyu
         [HarmonyPostfix]
         public static void Postfix(ProjectileProperties __instance, Thing weapon, ref int __result)
         {
-            CultivationPower.AdjustProjectileDamage(__instance, weapon, ref __result);
             Pawn ownerPawn = MXNeiyuShieldUtility.TryGetEquipmentOwnerPawn(weapon);
             if (ownerPawn == null)
             {
@@ -1314,7 +1256,7 @@ namespace MiliraXian.Characters.Neiyu
         [HarmonyPostfix]
         public static void Postfix(Verb ownerVerb, Pawn attacker, ref float __result)
         {
-            __result *= CultivationPower.MeleeFactor(ownerVerb?.tool, attacker, penetration: true);
+            __result *= CultivationPower.MeleeFactor(ownerVerb?.tool, attacker, penetration: true, equipment: ownerVerb?.EquipmentSource);
             if (attacker == null)
             {
                 return;

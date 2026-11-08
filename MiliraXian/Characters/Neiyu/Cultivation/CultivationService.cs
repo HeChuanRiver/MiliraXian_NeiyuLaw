@@ -1,194 +1,117 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MiliraXian.Characters.Common.Biography;
+using MiliraXian.Characters.Common.PerkSystem;
 using RimWorld;
 using Verse;
-using Verse.AI;
-using MiliraXian.Characters.Neiyu;
 
 namespace MiliraXian.Characters.Neiyu.Cultivation
 {
     internal static class CultivationService
     {
-        private static readonly string[] RankKeys = { "cultivation_wing", "cultivation_arrow", "cultivation_halo", "cultivation_law" };
+        private static List<NeiyuCultivationNodeDef> nodes;
+        public static IReadOnlyList<NeiyuCultivationNodeDef> Nodes => nodes ??= DefDatabase<CharacterPerkNodeDef>
+            .AllDefsListForReading.OfType<NeiyuCultivationNodeDef>().OrderBy(n => n.rank).ThenBy(n => n.displayOrder).ToList();
+        public static Hediff_NeiyuCultivation State(Pawn pawn) => pawn?.health?.hediffSet?
+            .GetFirstHediffOfDef(CultivationDefOf.MX_Neiyu_Cultivation) as Hediff_NeiyuCultivation;
+        public static CultivationAbilityValues AbilityValues(Pawn pawn, AbilityDef ability) => State(pawn)?.AbilityValues(ability);
+        public static void Refresh(Pawn pawn) => State(pawn)?.Events.RefreshEffects();
 
-        // The biography tracker already persists stable string keys and custom progress.
-        // Missing keys in old saves mean rank zero. There is no new global pawn scan.
-        public static int Rank(Pawn pawn, CultivationBranch branch)
+        public static int Rank(Pawn pawn, CharacterPerkCategoryDef category, AbilityDef ability = null)
         {
-            if (!NeiyuEquipmentUtility.IsNeiyu(pawn)) return 0;
-            float value = BiographyFrameworkUtility.GetTracker(pawn)?.GetProgress(RankKeys[(int)branch]) ?? 0f;
-            return float.IsNaN(value) || float.IsInfinity(value) ? 0 : Math.Max(0, Math.Min(3, (int)value));
+            var tree = State(pawn)?.Tree;
+            int rank = 0;
+            if (tree != null)
+                foreach (var node in Nodes)
+                    if (node.category == category && node.ability == ability && tree.HasNode(node)) rank = Math.Max(rank, node.rank);
+            return rank;
         }
 
-        // Match the shield's 18 / 42 / 108 progression; equipment interpolates from its usable base.
-        public static float Fraction(int rank) => rank <= 0 ? 0f : rank == 1 ? 18f / 108f : rank == 2 ? 42f / 108f : 1f;
-        public static float Fraction(Pawn pawn, CultivationBranch branch) =>
-            NeiyuPowerBalance.PassivesDisabled ? 0f : Fraction(Rank(pawn, branch));
+        public static bool Learned(Pawn pawn, NeiyuCultivationNodeDef node) => State(pawn)?.Tree.HasNode(node) == true;
 
         public static string Eligibility(Pawn pawn)
         {
-            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead)
-                return CultivationText.Get("Unavailable", "角色当前无法修行。");
-            if (pawn.Faction != Faction.OfPlayer || !pawn.IsColonistPlayerControlled)
-                return CultivationText.Get("PlayerOnly", "加入殖民地后才能修行。");
-            if (!pawn.Spawned || pawn.Map == null)
-                return CultivationText.Get("OnMap", "返回地图后才能修行。");
-            if (pawn.Downed || pawn.InMentalState || pawn.Drafted)
-                return CultivationText.Get("AtRest", "需要清醒、未征召，且不处于精神崩溃状态。");
-            if (NeiyuPowerBalance.PassivesDisabled)
-                return CultivationText.Get("DecorativeSealed", "观赏模式封印了力量，修行进度仍会保留。");
+            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead) return "角色当前无法修行。";
+            if (pawn.Faction != Faction.OfPlayer || !pawn.IsColonistPlayerControlled) return "加入殖民地后才能修行。";
+            if (!pawn.Spawned || pawn.Map == null) return "返回地图后才能修行。";
+            if (pawn.Downed || pawn.InMentalState || pawn.Drafted) return "需要清醒、未征召，且不处于精神崩溃状态。";
+            if (NeiyuPowerBalance.PassivesDisabled) return "观赏模式封印了力量，修行进度仍会保留。";
             return null;
         }
 
         public static string Check(Pawn pawn, NeiyuCultivationNodeDef node)
         {
-            string reason = Eligibility(pawn);
-            if (reason != null) return reason;
-            if (node == null) return CultivationText.Get("SelectNode", "选择一项修行。");
-            int rank = Rank(pawn, node.branch);
-            if (rank >= node.rank) return CultivationText.Get("Learned", "已领悟");
-            if (node.rank != rank + 1)
-                return CultivationText.Get("Prerequisite", "需要先领悟前一阶段。");
-            if (node.condition != null && !node.condition.IsSatisfied(pawn, BiographyFrameworkUtility.GetTracker(pawn)))
-                return CultivationText.Get("ConditionMissing", "尚未达成修行条件。");
-            return null;
+            var events = State(pawn)?.Events;
+            if (events == null) return "修行状态尚未就绪。";
+            return events.CanUnlock(node, out string reason, checkCosts: false) ? null : reason;
         }
-
-        // Only lister buckets for the selected costs are visited, never all map things.
-        // Revalidate on the click: cached UI totals are not authority to consume resources.
-        public static bool UsableMaterial(Pawn pawn, Thing thing) =>
-            thing.Spawned && !thing.Destroyed && thing.stackCount > 0 && thing.IsInAnyStorage()
-            && !thing.IsForbidden(pawn) && pawn.CanReserveAndReach(thing, PathEndMode.Touch, Danger.None);
-
-        public static List<Thing> Materials(Pawn pawn, ThingDef def, out int count, int stopAt = int.MaxValue)
-        {
-            var result = new List<Thing>();
-            count = 0;
-            if (pawn?.Map == null || def == null) return result;
-            List<Thing> candidates = pawn.Map.listerThings.ThingsOfDef(def);
-            for (int i = 0; i < candidates.Count; i++)
-            {
-                Thing thing = candidates[i];
-                if (!UsableMaterial(pawn, thing)) continue;
-                result.Add(thing);
-                count += thing.stackCount;
-                if (count >= stopAt) break;
-            }
-            return result;
-        }
-
+        public static bool UsableMaterial(Pawn pawn, Thing thing) => PerkCostUtility.UsableMaterial(pawn, thing);
         public static bool TryLearn(Pawn pawn, NeiyuCultivationNodeDef node, out string message)
         {
-            message = Check(pawn, node);
-            if (message != null) return false;
-            var stacks = new List<List<Thing>>(node.costs.Count);
-            for (int i = 0; i < node.costs.Count; i++)
-            {
-                var cost = node.costs[i];
-                List<Thing> available = Materials(pawn, cost.thingDef, out int count, cost.count);
-                if (count < cost.count)
-                {
-                    message = CultivationText.Get("MaterialsMissing", "可用材料不足。");
-                    return false;
-                }
-                stacks.Add(available);
-            }
-            Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
-            if (tracker == null)
-            {
-                message = CultivationText.Get("Unavailable", "角色当前无法修行。");
-                return false;
-            }
-            // Stage pieces before committing progress. A split failure restores every staged
-            // piece; nothing is destroyed until all costs have been collected successfully.
-            var staged = new List<Thing>();
-            var cells = new List<IntVec3>();
-            try
-            {
-                for (int i = 0; i < node.costs.Count; i++)
-                {
-                    int remaining = node.costs[i].count;
-                    foreach (Thing stack in stacks[i])
-                    {
-                        if (remaining <= 0) break;
-                        int take = Math.Min(remaining, stack.stackCount);
-                        IntVec3 cell = stack.Position;
-                        Thing piece = stack.SplitOff(take);
-                        if (piece == null) throw new InvalidOperationException("Material split returned no item.");
-                        staged.Add(piece);
-                        cells.Add(cell);
-                        remaining -= piece.stackCount;
-                    }
-                    if (remaining != 0) throw new InvalidOperationException("Material availability changed.");
-                }
-            }
-            catch (Exception exception)
-            {
-                for (int i = 0; i < staged.Count; i++)
-                    if (!staged[i].Destroyed && !staged[i].Spawned)
-                        GenPlace.TryPlaceThing(staged[i], cells[i], pawn.Map, ThingPlaceMode.Near);
-                Log.Warning("[MiliraXian] Cultivation materials restored: " + exception.Message);
-                message = CultivationText.Get("Retry", "材料状态已变化，请重新尝试。");
-                return false;
-            }
-            ApplyNodeProgress(pawn, tracker, node);
-            foreach (Thing piece in staged) piece.Destroy(DestroyMode.Vanish);
-            NotifyProgressChanged(pawn);
-            message = CultivationText.Get("Learned", "已领悟") + " · " + node.LabelCap;
+            var events = State(pawn)?.Events;
+            if (events == null) { message = "修行状态尚未就绪。"; return false; }
+            if (!events.TryUnlock(node, out message)) return false;
+            message = "已领悟 · " + node.LabelCap;
             return true;
         }
 
-        // Keep the developer entry independent of storage and branch counts. When cultivation
-        // moves to the shared perk tree, route this and normal learning through its unlock API,
-        // including grants and change notifications; do not add a separate forced-max state.
         public static bool TryCompleteAllForDev(Pawn pawn, out string message)
         {
-            if (!Prefs.DevMode)
+            message = "角色当前无法修行。";
+            if (!Prefs.DevMode) { message = "仅开发者模式可用。"; return false; }
+            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Dead || pawn.Destroyed || pawn.Faction != Faction.OfPlayer) return false;
+            var state = State(pawn);
+            if (state == null) { message = "修行状态尚未就绪。"; return false; }
+            bool changed;
+            do
             {
-                message = CultivationText.Get("DevOnly", "仅开发者模式可用。");
-                return false;
-            }
-            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead
-                || pawn.Faction != Faction.OfPlayer)
-            {
-                message = CultivationText.Get("Unavailable", "角色当前无法修行。");
-                return false;
-            }
-            var nodes = new List<NeiyuCultivationNodeDef>(DefDatabase<NeiyuCultivationNodeDef>.AllDefsListForReading);
-            if (nodes.Count == 0)
-            {
-                message = CultivationText.Get("NoNodes", "未找到修行节点。");
-                return false;
-            }
-            Hediff_BiographyTracker tracker = BiographyFrameworkUtility.GetOrCreateTracker(pawn);
-            if (tracker == null)
-            {
-                message = CultivationText.Get("Unavailable", "角色当前无法修行。");
-                return false;
-            }
-            // Only purchase requirements are bypassed. Stored progress still obeys the seal
-            // when read, and existing cooldowns, shield charges and combat state are retained.
-            nodes.Sort((a, b) => a.rank.CompareTo(b.rank));
-            bool changed = false;
-            foreach (NeiyuCultivationNodeDef node in nodes)
-                changed |= ApplyNodeProgress(pawn, tracker, node);
-            if (changed) NotifyProgressChanged(pawn);
-            message = CultivationText.Get("AllLearned", "已领悟全部修行。");
+                changed = false;
+                foreach (var node in state.Tree.RelevantNodes())
+                    if (!node.displayOnly && state.Tree.GetNodeLevel(node) < node.maxLevel)
+                        changed |= state.Events.TryGrant(node, broadcast: false);
+            } while (changed);
+            state.Events.RefreshEffects();
+            if (state.Tree.RelevantNodes().Exists(n => !n.displayOnly && state.Tree.GetNodeLevel(n) < n.maxLevel))
+            { message = "有修行前置缺失，无法修满。"; return false; }
+            message = "已领悟全部修行。";
             return true;
         }
 
-        private static bool ApplyNodeProgress(Pawn pawn, Hediff_BiographyTracker tracker, NeiyuCultivationNodeDef node)
+        /// <summary>Only old pawns missing the new carrier enter here, once during LoadedGame.</summary>
+        public static void MigrateLegacy(Pawn pawn)
         {
-            if (Rank(pawn, node.branch) >= node.rank) return false;
-            tracker.SetProgress(RankKeys[(int)node.branch], node.rank);
-            return true;
-        }
-
-        private static void NotifyProgressChanged(Pawn pawn)
-        {
-            CultivationPower.InvalidateStats(pawn);
-            pawn.health.capacities.Notify_CapacityLevelsDirty();
+            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.health == null) return;
+            if (State(pawn) is { } existing)
+            {
+                if (!existing.Initialized) existing.InitializeNew();
+                existing.Events.RestoreGrantedContent();
+                return;
+            }
+            HashSet<AbilityDef> owned = new();
+            if (pawn.abilities != null)
+                foreach (var ability in pawn.abilities.AllAbilitiesForReading)
+                    if (pawn.abilities.GetAbility(ability.def, includeTemporary: false) != null) owned.Add(ability.def);
+            var tracker = BiographyFrameworkUtility.GetTracker(pawn);
+            int Read(string key)
+            {
+                float value = tracker?.GetProgress(key) ?? 0f;
+                int rank = float.IsFinite(value) ? Math.Clamp((int)value, 0, 3) : 0;
+                return rank == 3 ? 5 : rank == 2 ? 3 : rank;
+            }
+            int weapon = Math.Max(Read("cultivation_wing"), Read("cultivation_arrow"));
+            int apparel = Read("cultivation_law"), halo = Read("cultivation_halo");
+            var state = (Hediff_NeiyuCultivation)HediffMaker.MakeHediff(CultivationDefOf.MX_Neiyu_Cultivation, pawn);
+            state.SuppressInitialGrant = true;
+            pawn.health.AddHediff(state);
+            foreach (var node in Nodes)
+            {
+                bool grant = node.initiallyLearned || (node.ability != null && owned.Contains(node.ability))
+                    || (node.ability == null && node.rank <= (node.category == CultivationDefOf.MX_Neiyu_Cultivation_Weapons ? weapon
+                        : node.category == CultivationDefOf.MX_Neiyu_Cultivation_Apparel ? apparel : halo));
+                if (grant) state.Events.TryGrant(node, broadcast: false);
+            }
+            state.FinishMigration();
         }
     }
 }
