@@ -65,6 +65,34 @@
       </textureWrapOverrides>
     </shaderProgram>
   </ShaderDef>
+  <!-- 处决击杀后的「落华」文字：预乘透明，按噪声溶解、溶解边缘发光；排在压暗（3152）之后。
+       画在原版平面网格上，保留 flipTextureST 默认值（同 3D 刀身），贴图才不会上下颠倒。 -->
+  <ShaderDef>
+    <defName>MX_QH_ExecutionText</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_ExecutionText.frag.glsl</fragmentShaderFileName>
+      <!-- 原版平面网格的 UV 已是正向，不再翻转（翻转后字上下颠倒） -->
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>One</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3155</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+        <li>
+          <key>_NoiseTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
   <!-- 扭曲带：沿用原版的 DistortionBackground 抓屏点（队列必须同为 3151，否则引擎会警告并保留原队列）。 -->
   <ShaderDef>
     <defName>MX_QH_SakuraDistort</defName>

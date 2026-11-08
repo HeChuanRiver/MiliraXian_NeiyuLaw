@@ -65,7 +65,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             ability = null;
             if (QinghePowerBalance.Sealed || !pawn.Spawned || pawn.Dead || pawn.Downed || !pawn.Drafted
                 || pawn.InMentalState || pawn.stances?.stunner?.Stunned == true
-                || pawn.CurJobDef == MX_QHDefOf.MX_QH_SakuraDance
+                // Dancing, aiming the dance or executing: invulnerable, the cut does nothing and is not caught.
+                || SakuraDanceInvulnerability.Active(pawn)
                 || Common.Combat.CombatPosture.Get(pawn)?.Broken == true
                 || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                 || pawn.abilities == null)

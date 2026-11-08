@@ -110,6 +110,19 @@
       </li>
     </modExtensions>
   </DamageDef>
+  <!-- 镜花水月的反击圆斩（同散华剑技：建筑伤害 ×2，不按命中积累剑压，剑压由技能在首次命中时给 1 点） -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_MirrorSlash</defName>
+    <label>镜花水月</label>
+    <deathMessage>{0}斩向了水中的倒影，倒在了清荷的镜花水月之下。</deathMessage>
+    <buildingDamageFactor>2</buildingDamageFactor>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_SlashSkill</defName>
     <label>散华剑技</label>

@@ -14,6 +14,8 @@
   <MX_QH_SakuraDanceSlash.deathMessage>{0} fell amid the blade light of Qinghe's sakura dance.</MX_QH_SakuraDanceSlash.deathMessage>
   <MX_QH_SakuraThunderSlash.label>sakura dance: lightning reversal</MX_QH_SakuraThunderSlash.label>
   <MX_QH_SakuraThunderSlash.deathMessage>{0} was struck down by the lightning Qinghe's blade returned.</MX_QH_SakuraThunderSlash.deathMessage>
+  <MX_QH_MirrorSlash.label>illusory reflection</MX_QH_MirrorSlash.label>
+  <MX_QH_MirrorSlash.deathMessage>{0} struck at a reflection on the water and fell to Qinghe's illusory reflection.</MX_QH_MirrorSlash.deathMessage>
   <MX_QH_ExecutionSlash.label>zanshin</MX_QH_ExecutionSlash.label>
   <MX_QH_ExecutionSlash.deathMessage>{0} fell as Qinghe's blade clicked home.</MX_QH_ExecutionSlash.deathMessage>
 </LanguageData>

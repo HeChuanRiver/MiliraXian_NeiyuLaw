@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <AbilityCategoryDef>
     <defName>MX_QingheSkill</defName>
@@ -96,6 +96,17 @@
       </li>
     </comps>
   </AbilityDef>
+  <!-- 镜花水月的反击圆斩：只打敌对目标，需要视线，扫到即出伤 -->
+  <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+    <defName>MX_QH_MirrorSweep</defName>
+    <damageDef>MX_QH_MirrorSlash</damageDef>
+    <targetFaction>Hostile</targetFaction>
+    <hitPawns>true</hitPawns>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+    <damageDelayTicks>0</damageDelayTicks>
+    <workerClass>MiliraXian.Characters.QingHe.Jobs.SweepDamageWorker_MirrorCut</workerClass>
+  </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
   <AbilityDef>
     <defName>MX_QH_IllusoryReflection</defName>
     <modExtensions>
@@ -108,7 +119,7 @@
       </li>
     </modExtensions>
     <label>镜花水月</label>
-    <description>向所选方向举刀进入持续5秒的防御架势。若期间受到攻击，则化解此次攻击，并立即向目标方向发动强力反击，命中目标时额外积累剑压。\n\n——镜花水月，如梦似幻。</description>
+    <description>收刀立于水月之上，维持最长5秒的架势。期间受到攻击时，敌人打中的只是镜中幻影：清荷与水面一同碎去，随即一道圆斩扫过四周4.5格内的所有敌人，命中时积累剑压，之后从水中重新显形。\n\n从起手到收势全程无敌；只反击一次。冷却在收势后开始计算。\n\n——镜花水月，如梦似幻。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>225</displayOrder>
@@ -136,30 +147,40 @@
     </verbProperties>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityIllusoryReflection">
+        <!-- 时间单位 tick（60 = 1 秒），照抄预览脚本 mirror_preview.py 的常量。
+             前摇 0.5 秒 → 架势（连前摇最长 5 秒）→ 受击：碎镜 0.5 → 隐身 0.2 → 斩击 0.4 → 隐身 0.5 → 后摇 0.5（最后 0.15 秒武器淡入）。
+             没有受击：0.5 秒淡出。前摇到收势全程无敌；冷却在收势时开始。 -->
         <durationTicks>300</durationTicks>
-        <empoweredDamage>96</empoweredDamage>
+        <windupTicks>30</windupTicks>
+        <shatterTicks>30</shatterTicks>
+        <cutDelayTicks>12</cutDelayTicks>
+        <cutTicks>24</cutTicks>
+        <reformDelayTicks>30</reformDelayTicks>
+        <recoverTicks>30</recoverTicks>
+        <weaponBackTicks>9</weaponBackTicks>
+        <exitTicks>30</exitTicks>
+        <!-- 斩击：360° 整圆，半径内（包括贴身的）敌人在刀光转到它的方位时各挨一下。
+             刀光从架势方向左后方（-135°）起，0.4 秒缓出转满一圈；刀光只画成外圈的光带，出伤范围是整个圆。 -->
+        <sweepDamage>MX_QH_MirrorSweep</sweepDamage>
+        <cutDamageDef>MX_QH_MirrorSlash</cutDamageDef>
+        <damage>96</damage>
         <armorPenetration>1.25</armorPenetration>
-        <coneRadius>4.5</coneRadius>
-        <coneAngleDegrees>180</coneAngleDegrees>
-        <invulnerabilityHediff>MX_QH_IllusoryReflectionInvulnerable</invulnerabilityHediff>
-        <invulnerabilityTicks>120</invulnerabilityTicks>
+        <cutRadius>4.5</cutRadius>
+        <cutStartYaw>-135</cutStartYaw>
+        <posture>15</posture>
+        <swordPressureGain>1</swordPressureGain>
         <stanceSound>MX_QH_MirrorSlash_Stance</stanceSound>
+        <shatterSound>MX_QH_MirrorSlash_Shatter</shatterSound>
         <slashSound>MX_QH_MirrorSlash_Slash</slashSound>
-        <mirrorSlashTexPath>MiliraXianQinghe/Effect/flower_divination_slash_2</mirrorSlashTexPath>
-        <mirrorSlashRevealSeconds>0.11</mirrorSlashRevealSeconds>
-        <mirrorSlashHoldSeconds>0.01</mirrorSlashHoldSeconds>
-        <mirrorSlashFadeSeconds>0.56</mirrorSlashFadeSeconds>
-        <mirrorSlashDrawSizeFactor>1.35</mirrorSlashDrawSizeFactor>
-        <mirrorSlashForwardOffsetFactor>0.02</mirrorSlashForwardOffsetFactor>
-        <mirrorSlashAngleOffsetDegrees>0</mirrorSlashAngleOffsetDegrees>
-        <mirrorSlashHeadWidth>0.238</mirrorSlashHeadWidth>
-        <mirrorSlashHeadIntensity>3.3</mirrorSlashHeadIntensity>
-        <mirrorSlashAdditiveIntensity>3.95</mirrorSlashAdditiveIntensity>
-        <mirrorSlashDistortionStrength>0.155</mirrorSlashDistortionStrength>
-        <mirrorSlashDistortionScale>0.36</mirrorSlashDistortionScale>
-        <mirrorSlashDistortionScrollX>0.17</mirrorSlashDistortionScrollX>
-        <mirrorSlashDistortionScrollY>0</mirrorSlashDistortionScrollY>
-        <mirrorSlashDistortionOpacity>0.65</mirrorSlashDistortionOpacity>
+        <!-- 画面：水面、人物快照、倒影、碎镜、刀光。数值照抄预览脚本，见 MirrorVisualProps 的默认值；
+             刀光的泛光与樱舞同一组。 -->
+        <visuals>
+          <bloom>
+            <group>MX_ScreenBloom_Glow</group>
+            <tint>(1, 0.9, 0.95, 1)</tint>
+            <intensity>1</intensity>
+          </bloom>
+        </visuals>
       </li>
     </comps>
   </AbilityDef>

@@ -68,7 +68,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 return false;
             }
-            float length = pawn.equipment?.Primary?.def.GetModExtension<BladeGraphicExtension>()?.length ?? 1.1f;
+            float length = BladeGraphicExtension.For(pawn.equipment?.Primary?.def)?.length ?? 1.1f;
             ScreenBloomProperties bloom = props.thunderBloom ?? props.bloom;
             // Motion time: the dance plays slowly for a moment after the catch.
             float danceSeconds = driver.MotionSeconds(ticks);

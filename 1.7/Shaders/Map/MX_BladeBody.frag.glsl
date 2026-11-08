@@ -13,15 +13,31 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Color;      // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     vec4 _MainTex_ST; // @default = vec4(0.0, 0.0, 1.0, 1.0)
     vec4 _BladeReveal; // @default = vec4(0.0, 0.0, 0.0, 0.0)
+    // Share of the blade drawn (a skill making the weapon vanish): pixels whose noise is above it drop out.
+    float _BladeDissolve; // @default = 1.0
 } uMaterial;
 
 layout(set = 2, binding = 1) uniform sampler2D _MainTex;
+
+float bladeHash(vec2 p)
+{
+    p = fract(p * vec2(234.34, 435.345));
+    p += dot(p, p + 34.23);
+    return fract(p.x * p.y);
+}
 
 void main()
 {
     vec4 color = texture(_MainTex, vUv * uMaterial._MainTex_ST.zw + uMaterial._MainTex_ST.xy) * uMaterial._Color * vColor;
     if (color.a < 0.5)
         discard;
+    if (uMaterial._BladeDissolve < 1.0)
+    {
+        // Coarse cells of the texture, so the blade breaks up into flecks rather than single pixels.
+        float n = bladeHash(floor(vUv * 48.0));
+        if (n > uMaterial._BladeDissolve)
+            discard;
+    }
     if (uMaterial._BladeReveal.w > 0.0)
     {
         float along = dot(vUv, uMaterial._BladeReveal.xy) + uMaterial._BladeReveal.z;

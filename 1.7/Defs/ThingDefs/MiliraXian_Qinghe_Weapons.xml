@@ -134,6 +134,10 @@
                 <length>1.1</length>
                 <uvMin>(0.38, 0.02)</uvMin>
                 <uvMax>(0.58, 0.97)</uvMax>
+                <!-- 刀鞘：持刀时挂在左腰（身体坐标：右、上、前，米） -->
+                <scabbard>true</scabbard>
+                <scabbardRestMouth>(-0.240, 0.020, 0.100)</scabbardRestMouth>
+                <scabbardRestEnd>(-0.318, -0.718, -0.133)</scabbardRestEnd>
             </li>
             <li Class="MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionSetExtension">
                 <!-- 由 .cache/slash_proto/cross_slash_preview.py（参数 xml）生成，和离线预览完全一致；改动作请改脚本再生成 -->
@@ -142,10 +146,6 @@
                 <heightOrigin>-0.63</heightOrigin>
                 <depthToScreen>0.55</depthToScreen>
                 <blendSeconds>0.08</blendSeconds>
-                <!-- 刀鞘：持刀时挂在左腰（身体坐标：右、上、前，米） -->
-                <scabbard>true</scabbard>
-                <scabbardRestMouth>(-0.240, 0.020, 0.100)</scabbardRestMouth>
-                <scabbardRestEnd>(-0.318, -0.718, -0.133)</scabbardRestEnd>
                 <!-- 征召静止待机：双手持刀前举，刀身在右侧、往左前略倾（不那么标准的中段架势），2 秒一次轻微呼吸 -->
                 <idle>
                     <loop>true</loop>
@@ -158,28 +158,7 @@
                         </keys>
                     </blade>
                 </idle>
-                <!-- 防御（手写初值）：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
-                <guard>
-                    <durationSeconds>0.12</durationSeconds>
-                    <blade>
-                        <keys>
-                            <li><time>0</time><yaw>-80.0</yaw><pitch>20.0</pitch><roll>0</roll><reach>0</reach><offset>(0.140, 0.240, 0.330)</offset></li>
-                            <li><time>0.12</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
-                        </keys>
-                    </blade>
-                </guard>
-                <!-- 防御受击：刀被压回半寸、身体后仰一下，0.15 秒回到防御姿势 -->
-                <guardHit>
-                    <durationSeconds>0.15</durationSeconds>
-                    <blade>
-                        <keys>
-                            <li><time>0</time><yaw>-96.0</yaw><pitch>22.0</pitch><roll>-6.0</roll><reach>0</reach><offset>(0.150, 0.270, 0.240)</offset></li>
-                            <li><time>0.15</time><yaw>-90.0</yaw><pitch>14.0</pitch><roll>0</roll><reach>0</reach><offset>(0.160, 0.250, 0.360)</offset></li>
-                        </keys>
-                    </blade>
-                    <bodyForward><points><li>(0, -0.07)</li><li>(0.15, 0)</li></points></bodyForward>
-                    <tilt><points><li>(0, -4)</li><li>(0.15, 0)</li></points></tilt>
-                </guardHit>
+                <!-- 防御和防御受击是剑舞的动作，写在 MX_QH_SwordGuard 的 guardMotion 里，任何近战武器通用 -->
                 <!--
                   化解（手写初值）：收刀途中以刀横架弹开来招，刀被震向外上方，借势后撤蓄力，
                   转身接到十字斩第二刀的起手（攻击片段 counterFrom 1.64 秒的姿势：刀、转身、高度、前冲都对齐）。

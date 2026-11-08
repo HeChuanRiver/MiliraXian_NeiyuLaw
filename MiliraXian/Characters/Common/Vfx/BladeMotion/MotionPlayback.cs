@@ -15,8 +15,10 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         public float seconds;
         public Vector3 aim;
         public BladeProjection projection;
-        /// <summary>Weapon set whose scabbard is drawn with the blade; null = no scabbard.</summary>
-        public BladeMotionSetExtension scabbardSet;
+        /// <summary>Draw the blade's scabbard (when the blade has one) and hide the sheathed share.</summary>
+        public bool scabbard;
+        /// <summary>Blade drawn instead of the held weapon's (a motion tied to one weapon); null = the held weapon's.</summary>
+        public BladeBody.BladeGraphicExtension blade;
         /// <summary>Cross-fade into this playback when the source changes; 0 = cut.</summary>
         public float blendSeconds;
         /// <summary>Identity of the playing motion: a change of either starts a cross-fade.</summary>
@@ -54,9 +56,10 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         public Vector3 travel;
     }
 
-    /// <summary>A guard stance that plays the weapon set's guard clips while it lasts.</summary>
+    /// <summary>A guard stance that plays its guard clips while it lasts, with any weapon.</summary>
     public interface IGuardMotionStance
     {
+        /// <param name="set">The held weapon's motion set; null when it has none.</param>
         bool TryGetGuardPlayback(BladeMotionSetExtension set, out MotionPlayback playback);
     }
 

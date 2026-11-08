@@ -18,8 +18,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public override void ApplyHit(SweepDamageSource source, Thing target)
         {
             base.ApplyHit(source, target);
+            // An invulnerable Qinghe (dancing, executing) is not stunned either.
             int ticks = def.GetModExtension<SakuraThunderSweepExtension>()?.stunTicks ?? 0;
-            if (ticks > 0 && target is Pawn { Dead: false, Spawned: true } pawn)
+            if (ticks > 0 && target is Pawn { Dead: false, Spawned: true } pawn && !SakuraDanceInvulnerability.Active(pawn))
             {
                 pawn.stances?.stunner?.StunFor(ticks, source.caster);
             }

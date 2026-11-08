@@ -77,8 +77,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         /// <param name="startTick">Game tick of trail second 0 (clip second <paramref name="from"/>).</param>
         /// <param name="from">Clip second the trail starts at; below the clip's trail start = the whole trail.</param>
+        /// <param name="projection">The motion's projection; null = the held weapon's.</param>
         public static void SpawnTrail(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, int startTick, float speed,
-            FlowerBellResonance resonance, float from = -1f, float to = -1f)
+            FlowerBellResonance resonance, float from = -1f, float to = -1f, BladeProjection? projection = null)
         {
             MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
             if (visuals == null || ext == null || clip == null || !clip.HasTrail || ext.layers.NullOrEmpty())
@@ -108,7 +109,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 pawn = pawn,
                 trailFrom = trailFrom,
             };
-            v.projection = ProjectionFor(pawn, ext);
+            v.projection = projection ?? ProjectionFor(pawn, ext);
             float rate = Mathf.Max(0.01f, speed);
             v.clock = ticks => (ticks - startTick) / 60f * rate;
             v.aim = aim;
@@ -120,27 +121,39 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         /// <param name="flashTick">Game tick of the flash.</param>
         /// <param name="stillOn">Checked until the flash starts; false (the warmup was interrupted) drops it.</param>
+        /// <param name="projection">The motion's projection; null = the held weapon's.</param>
+        /// <param name="flash">Replaces the weapon's sheathe flash (another colour); null = the weapon's.</param>
         public static void SpawnFlash(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, float flashTick,
-            System.Func<bool> stillOn)
+            System.Func<bool> stillOn, BladeProjection? projection = null, QingheSheatheFlashProps flash = null)
         {
-            MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
-            QingheSheatheFlashProps f = ext?.sheatheFlash;
-            if (visuals == null || f == null || clip == null || clip.flashTime < 0f
+            QingheSheatheFlashProps f = flash ?? ext?.sheatheFlash;
+            if (ext == null || f == null || clip == null || clip.flashTime < 0f
                 || !BladeMotionUtility.ScabbardMouth(clip, clip.flashTime, aim, out Vector3 mouth))
             {
                 return;
             }
-            BladeProjection projection = ProjectionFor(pawn, ext);
+            BladeProjection proj = projection ?? ProjectionFor(pawn, ext);
             Vector3 bodyAt = BladeMotionUtility.BodyOffsetWorld(clip, clip.flashTime, aim);
-            bodyAt.z /= Mathf.Max(1e-3f, projection.depthToScreen);
-            mouth += bodyAt;
+            bodyAt.z /= Mathf.Max(1e-3f, proj.depthToScreen);
+            SpawnFlashAt(pawn, f, ext.bloom, mouth + bodyAt, flashTick, stillOn, proj);
+        }
+
+        /// <summary>The same flash anywhere on the motion: <paramref name="offset"/> in world metres from the pawn's place on the ground (north-south unscaled).</summary>
+        public static void SpawnFlashAt(Pawn pawn, QingheSheatheFlashProps f, ScreenBloomProperties bloom, Vector3 offset, float flashTick,
+            System.Func<bool> stillOn, BladeProjection proj)
+        {
+            MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
+            if (visuals == null || f == null)
+            {
+                return;
+            }
             SheatheFlashVisual v = new()
             {
                 flash = f,
-                projection = projection,
-                bloom = ext.bloom,
+                projection = proj,
+                bloom = bloom,
                 startTick = Mathf.RoundToInt(flashTick),
-                offset = mouth,
+                offset = offset,
                 pawnAltitude = AltitudeLayer.Pawn.AltitudeFor() + 0.02f,
                 lifeSeconds = Mathf.Max(f.needleSeconds, Mathf.Max(f.barSeconds, f.haloSeconds)),
                 stillOn = stillOn,

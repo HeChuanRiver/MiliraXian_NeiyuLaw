@@ -144,6 +144,7 @@
   <MX_QH_FlowerCourtNodeLearned>已習得</MX_QH_FlowerCourtNodeLearned>
   <MX_QH_FlowerCourtNodeLocked>需要恩典等級 {0}</MX_QH_FlowerCourtNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>劍壓不足（需要 {0} 點）。</MX_QH_SwordPressureNotEnough>
   <MX_QH_SpringFlowMissingResource>花令不足，無法施放春泉湧流。</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>花令不足，無法施放霜月鏡。</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresStance>需要姿態：{0}。</MX_QH_RequiresStance>

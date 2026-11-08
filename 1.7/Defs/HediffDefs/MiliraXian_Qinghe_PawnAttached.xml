@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <HediffDef>
     <defName>MX_QH_FlowerDecree</defName>
@@ -222,20 +222,6 @@
     <comps>
       <li Class="HediffCompProperties_Disappears">
         <disappearsAfterTicks>300</disappearsAfterTicks>
-      </li>
-    </comps>
-  </HediffDef>
-  <HediffDef>
-    <defName>MX_QH_IllusoryReflectionInvulnerable</defName>
-    <label>水月无敌</label>
-    <description>清荷施展镜花水月期间，以水月幻身避开伤害，暂时免疫所有伤害。</description>
-    <hediffClass>Verse.HediffWithComps</hediffClass>
-    <isBad>false</isBad>
-    <scenarioCanAdd>false</scenarioCanAdd>
-    <everCurableByItem>false</everCurableByItem>
-    <comps>
-      <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>120</disappearsAfterTicks>
       </li>
     </comps>
   </HediffDef>

@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.Defs;
-using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -8,32 +7,46 @@ using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe.Abilities
 {
+    /// <summary>
+    /// Mirror Flower, Water Moon. Times are game ticks (60 = 1 s) and copy the preview script's
+    /// constants (.cache/mirror_proto/mirror_preview.py): WINDUP 0.5, SHATTER 0.5, CUT_DELAY 0.2,
+    /// CUT 0.4, REFORM_DELAY 0.5, RECOVER 0.5 (WEAPON_BACK 0.15), EXIT 0.5.
+    /// </summary>
     public class CompProperties_AbilityIllusoryReflection : CompProperties_AbilityEffect
     {
+        /// <summary>Windup plus stance, the longest she waits for a hit.</summary>
         public int durationTicks = 300;
-        public float empoweredDamage = 48f;
-        public float armorPenetration = 0.45f;
-        public float coneRadius = 5.5f;
-        public float coneAngleDegrees = 90f;
-        public HediffDef invulnerabilityHediff;
-        public int invulnerabilityTicks = 120;
+        public int windupTicks = 30;
+        public int shatterTicks = 30;
+        public int cutDelayTicks = 12;
+        public int cutTicks = 24;
+        public int reformDelayTicks = 30;
+        public int recoverTicks = 30;
+        /// <summary>Last part of the recovery in which the weapon comes back.</summary>
+        public int weaponBackTicks = 9;
+        /// <summary>No hit: the water drains and the weapon returns over this long.</summary>
+        public int exitTicks = 30;
+
+        public SweepDamageDef sweepDamage;
+        /// <summary>Wound and combat log name of the cut.</summary>
+        public DamageDef cutDamageDef;
+        public float damage = 96f;
+        public float armorPenetration = 1.25f;
+        /// <summary>Damage reach: the whole disc, near targets included (the trail is drawn as its outer band).</summary>
+        public float cutRadius = 4.5f;
+        /// <summary>Aim-relative yaw the trail starts at (+ = right); −135 = back-left, the ring's low side.</summary>
+        public float cutStartYaw = -135f;
+        /// <summary>Posture each struck pawn takes.</summary>
+        public float posture = 15f;
+        /// <summary>Sword pressure when the cut strikes anything.</summary>
+        public float swordPressureGain = 1f;
+
         public SoundDef stanceSound;
         public SoundDef slashSound;
-        public string mirrorSlashTexPath = "MiliraXianQinghe/Effect/flower_divination_slash_2";
-        public float mirrorSlashRevealSeconds = 0.24f;
-        public float mirrorSlashHoldSeconds = 0.1f;
-        public float mirrorSlashFadeSeconds = 0.46f;
-        public float mirrorSlashDrawSizeFactor = 1.45f;
-        public float mirrorSlashForwardOffsetFactor = 0.12f;
-        public float mirrorSlashAngleOffsetDegrees;
-        public float mirrorSlashHeadWidth = 0.05f;
-        public float mirrorSlashHeadIntensity = 3f;
-        public float mirrorSlashAdditiveIntensity = 1.25f;
-        public float mirrorSlashDistortionStrength = 0.025f;
-        public float mirrorSlashDistortionScale = 0.4f;
-        public float mirrorSlashDistortionScrollX = 0.07f;
-        public float mirrorSlashDistortionScrollY;
-        public float mirrorSlashDistortionOpacity = 0.65f;
+        /// <summary>The mirror breaking, at the moment she is hit.</summary>
+        public SoundDef shatterSound;
+        /// <summary>Water, body, reflection and trail; null = the defaults (the preview's constants).</summary>
+        public Vfx.MirrorVisualProps visuals;
 
         public CompProperties_AbilityIllusoryReflection()
         {
@@ -44,7 +57,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_IllusoryReflection : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
-        private readonly List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
 
@@ -60,21 +72,18 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             Pawn caster = parent?.pawn;
-            if (caster == null || !caster.Spawned || !target.IsValid || target.Cell == caster.Position)
+            if (caster == null || !caster.Spawned)
             {
                 return;
             }
-
-            QingheSwordCombatUtility.FillConeCells(
-                caster,
-                caster.Position,
-                target.Cell,
-                Props.coneRadius,
-                Props.coneAngleDegrees,
-                previewCells);
-            GenDraw.DrawFieldEdges(previewCells, PreviewColor);
+            GenDraw.DrawRadiusRing(caster.Position, Props.cutRadius, PreviewColor);
         }
 
+        /// <summary>
+        /// Only reached when something activates the ability directly (the player's cast runs the
+        /// job straight from the ability's jobDef): the cooldown vanilla just started is dropped,
+        /// it starts when the stance ends.
+        /// </summary>
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Apply(target, dest);
@@ -87,9 +96,11 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 return;
             }
 
+            parent.ResetCooldown();
             caster.rotationTracker?.FaceCell(target.Cell);
             Job stanceJob = JobMaker.MakeJob(MX_QHDefOf.MX_QH_IllusoryReflection);
             stanceJob.ability = parent;
+            stanceJob.verbToUse = parent.verb;
             stanceJob.SetTarget(TargetIndex.A, target.Cell);
             stanceJob.playerForced = true;
             caster.jobs.StartJob(
@@ -97,18 +108,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
                 JobCondition.InterruptForced,
                 cancelBusyStances: false,
                 tag: JobTag.Misc);
-        }
-
-        internal void AddInvulnerability(Pawn caster)
-        {
-            HediffDef hediffDef = Props.invulnerabilityHediff ?? MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable;
-            if (caster?.health?.hediffSet == null || hediffDef == null)
-            {
-                return;
-            }
-
-            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(hediffDef) ?? caster.health.AddHediff(hediffDef);
-            hediff?.TryGetComp<HediffComp_Disappears>()?.SetDuration(Mathf.Max(1, Props.invulnerabilityTicks));
         }
     }
 }

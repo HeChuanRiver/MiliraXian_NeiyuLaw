@@ -41,14 +41,14 @@ internal static class Patch_CharacterBladeBodyRendering
         if (pawn.stances?.curStance is not Stance_Warmup { verb: Verb_MingyuanTimeBurn }
             || MingyuanPowerBalance.Sealed)
         {
-            ThingWithComps weapon = pawn.equipment?.Primary;
-            BladeGraphicExtension ext = weapon?.def.GetModExtension<BladeGraphicExtension>();
+            // The playing motion's own blade, else the held weapon's calibration (or its whole-texture default).
+            BladeGraphicExtension ext = BladeMotionPlayer.DrawnBlade(pawn);
             if (ext == null || pawn.CurJob?.def?.neverShowWeapon != false || !TryGetBladePose(pawn, out BladePose pose))
             {
                 return true;
             }
             Vector3 body = pawn.DrawPos;
-            BladeRenderer.Draw(ext, pose, body);
+            BladeRenderer.Draw(ext, pose, body, BladeOpacity.For(pawn));
             if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsSingle: true } execution)
                 execution.DrawSingleVfx(ext, pose, body);
             else if (pawn.jobs.curDriver is JobDriver_NeiyuPostureExecution { IsMulti: true } multi)

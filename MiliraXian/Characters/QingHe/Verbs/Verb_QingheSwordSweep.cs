@@ -28,12 +28,12 @@ namespace MiliraXian.Characters.QingHe.Verbs
     {
         static QingheBladeMotionGate()
         {
-            // Illusory Reflection draws its own stance blade.
+            // Mirror Flower, Water Moon hides the weapon for most of its course.
             // Decorative mode: the vanilla weapon drawing, no held blade.
             BladeMotionPlayer.RegisterIdleGate(pawn =>
                 !QinghePowerBalance.Sealed
                 && MX_QHCharacterUtility.IsQinghe(pawn)
-                && pawn.jobs?.curDriver is not Jobs.JobDriver_IllusoryReflectionStance
+                && pawn.jobs?.curDriver is not Jobs.JobDriver_IllusoryReflectionStance { WeaponOpacity: <= 0f }
                 && MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance == MX_QHDefOf.MX_QH_Stance_Sword);
         }
     }
@@ -82,13 +82,30 @@ namespace MiliraXian.Characters.QingHe.Verbs
     {
         private static void Prefix() => Verb_QingheSwordSweep.StartRefused = false;
 
-        private static void Postfix(ref bool __result)
+        private static void Postfix(Pawn_MeleeVerbs __instance, ref bool __result)
         {
             if (__result && Verb_QingheSwordSweep.StartRefused)
             {
                 __result = false;
             }
             Verb_QingheSwordSweep.StartRefused = false;
+            // A started windup is not an attack made yet either. A one-attack job (reacting to a melee
+            // threat) would otherwise end as done at once, its cleanup cancel the windup, and the next
+            // job start it again, every tick: she stands in the windup's first frame, forever in the
+            // counter window, and never cuts. The job keeps following until the cut itself.
+            Pawn pawn = __instance.Pawn;
+            if (__result && pawn?.stances?.curStance is Stance_Warmup { verb: Verb_QingheSwordSweep })
+            {
+                __result = false;
+                return;
+            }
+            // The cut counted at its draw used up the job's attacks: end it now, from the job's own
+            // attack try. The cooldown and its strikes stay (only a warmup is cancelled by the cleanup).
+            if (pawn?.stances?.curStance is not Stance_Warmup && Verb_QingheSwordSweep.JobAttacksDone(pawn))
+            {
+                __result = false;
+                pawn.jobs.curDriver.EndJobWith(JobCondition.Succeeded);
+            }
         }
     }
 
@@ -377,6 +394,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 posture: QingheSwordGuard.Config.counterCutPosture);
             // The counter counts as an attack: a melee cooldown follows before the next windup.
             counterHoldUntilTick = now + cooldown + Mathf.Max(0, QingheSwordGuard.Config.counterRecoveryTicks);
+            CountJobAttack(pawn);
             return true;
         }
 
@@ -446,9 +464,34 @@ namespace MiliraXian.Characters.QingHe.Verbs
             }
             QueueStrikes(pawn, primary, clip, clip.windupSeconds, speed, center, now, clip.damageDef,
                 posture: QingheSwordGuard.Config.attackPosture);
-            // Counts as a used attack for vanilla bookkeeping (job attack count, engagement); the hits come later.
+            CountJobAttack(pawn);
+            // Counts as a used attack for vanilla bookkeeping (engagement); the hits come later.
             return true;
         }
+
+        private static readonly AccessTools.FieldRef<JobDriver_AttackMelee, int> MeleeAttacksMade =
+            AccessTools.FieldRefAccess<JobDriver_AttackMelee, int>("numMeleeAttacksMade");
+
+        /// <summary>
+        /// The melee job's attack count, at the draw instead of the windup start (which
+        /// <see cref="Patch_QingheSwordRefusedStart"/> does not report): a one-attack job ends after
+        /// its cut. Ending it now leaves the cooldown, and the strikes bound to it, in place.
+        /// </summary>
+        private static void CountJobAttack(Pawn pawn)
+        {
+            if (pawn.jobs?.curDriver is not JobDriver_AttackMelee driver || pawn.CurJob == null)
+            {
+                return;
+            }
+            // Only counted here: the shot runs inside the verb's burst, before vanilla sets the cooldown.
+            // The job ends from its next attack try (Patch_QingheSwordRefusedStart).
+            MeleeAttacksMade(driver)++;
+        }
+
+        /// <summary>The melee job has made all its attacks (counted at the draws).</summary>
+        internal static bool JobAttacksDone(Pawn pawn) =>
+            pawn.jobs?.curDriver is JobDriver_AttackMelee driver && pawn.CurJob != null
+            && MeleeAttacksMade(driver) >= pawn.CurJob.maxNumMeleeAttacks;
 
         /// <summary>
         /// One sweep per strike of <paramref name="clip"/> from clip second <paramref name="from"/> on (the

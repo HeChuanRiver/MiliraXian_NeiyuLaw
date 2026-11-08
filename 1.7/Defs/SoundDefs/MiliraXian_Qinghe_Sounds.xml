@@ -16,6 +16,23 @@
         </subSounds>
     </SoundDef>
 
+    <!-- 镜花水月受击碎镜：Freesound #784151 "Glass break hammer"（loganzsound，CC0） -->
+    <SoundDef>
+        <defName>MX_QH_MirrorSlash_Shatter</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip">
+                        <clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_shatter</clipPath>
+                    </li>
+                </grains>
+                <volumeRange>60~60</volumeRange>
+                <pitchRange>1~1</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
     <SoundDef>
         <defName>MX_QH_MirrorSlash_Slash</defName>
         <context>MapOnly</context>

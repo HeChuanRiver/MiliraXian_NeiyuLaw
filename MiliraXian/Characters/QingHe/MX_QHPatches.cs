@@ -39,8 +39,9 @@ namespace MiliraXian.Characters.QingHe
         [HarmonyPatch(typeof(Verb_MeleeAttackDamage), "ApplyMeleeDamageToTarget")]
         public static class Patch_VerbMeleeAttackDamage_ApplyMeleeDamageToTarget
         {
-            public static void Prefix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target)
+            public static void Prefix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target, out bool __state)
             {
+                __state = false;
                 Pawn caster = __instance.CasterPawn;
                 if (MX_QH_HediffUtility.GetCombatStance(caster)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                     || __instance.EquipmentSource?.def.IsMeleeWeapon != true
@@ -52,6 +53,26 @@ namespace MiliraXian.Characters.QingHe
 
                 // Runs after hit and dodge rolls, once per target rather than per extra damage packet.
                 MX_QH_HediffUtility.GetSwordPressure(caster)?.AddValue(0.25f);
+                __state = true;
+            }
+
+            /// <summary>
+            /// A plain melee weapon's hit in the sword stance strikes posture like a cross-slash strike
+            /// (attackPosture; a quarter when a shield absorbed it). Decorative mode: none.
+            /// </summary>
+            public static void Postfix(Verb_MeleeAttackDamage __instance, LocalTargetInfo target,
+                DamageWorker.DamageResult __result, bool __state)
+            {
+                float posture = QingheSwordGuard.Config.attackPosture;
+                if (!__state || QinghePowerBalance.Sealed || posture <= 0f
+                    || target.Thing is not Pawn { Dead: false, Spawned: true } victim)
+                {
+                    return;
+                }
+                float amount = Common.SweepDamage.SweepDamageWorker.Absorbed(__result)
+                    ? posture * Common.SweepDamage.SweepDamageWorker.AbsorbedPostureShare
+                    : posture;
+                Common.Combat.CombatPosture.Ensure(victim)?.AddPressure(__instance.CasterPawn, amount);
             }
         }
 
@@ -84,7 +105,7 @@ namespace MiliraXian.Characters.QingHe
                     return false;
                 }
 
-                if (!__state.Invulnerable)
+                if (!__state.Invulnerable && !Abilities.SakuraDance.SakuraDanceInvulnerability.Active(__instance))
                 {
                     return true;
                 }
@@ -174,49 +195,19 @@ namespace MiliraXian.Characters.QingHe
         [HarmonyPatch(typeof(PawnRenderUtility), nameof(PawnRenderUtility.DrawEquipmentAndApparelExtras))]
         public static class Patch_PawnRenderUtility_DrawEquipmentAndApparelExtras
         {
-            public static bool Prefix(Pawn pawn, Vector3 drawPos, Rot4 facing)
+            /// <summary>Mirror Flower, Water Moon: no weapon from the stance to the end of the re-form; worn extras still drawn.</summary>
+            [HarmonyPriority(Priority.First)]
+            public static bool Prefix(Pawn pawn)
             {
-                ThingWithComps weapon = pawn?.equipment?.Primary;
-                JobDriver_IllusoryReflectionStance reflection = pawn?.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
-                if (reflection == null
-                    || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword)
+                // The 3D blade dissolves by the opacity itself (BladeOpacity); the flat vanilla weapon
+                // is shown from half up. Hidden altogether while her body is.
+                if (pawn?.jobs?.curDriver is not JobDriver_IllusoryReflectionStance reflection
+                    || (!reflection.BodyHidden && reflection.WeaponOpacity >= 0.5f)
+                    || (!reflection.BodyHidden && reflection.WeaponOpacity > 0f
+                        && Common.Vfx.BladeMotion.BladeMotionPlayer.DrawnBlade(pawn) != null))
                 {
                     return true;
                 }
-
-                Rot4 stanceFacing = reflection.StanceFacing;
-                float drawFactor = pawn.ageTracker.CurLifeStage.equipmentDrawDistanceFactor;
-                float angle;
-                Vector3 offset;
-                switch (stanceFacing.AsInt)
-                {
-                    case 0:
-                        angle = 18f;
-                        offset = new Vector3(0f, 0f, -0.08f);
-                        break;
-                    case 1:
-                        angle = 72f;
-                        offset = new Vector3(0.20f, 0f, -0.16f);
-                        break;
-                    case 2:
-                        angle = 162f;
-                        offset = new Vector3(0f, 0f, -0.20f);
-                        break;
-                    default:
-                        angle = 288f;
-                        offset = new Vector3(-0.20f, 0f, -0.16f);
-                        break;
-                }
-
-                const float settleDurationTicks = 18f;
-                float settleProgress = Mathf.Clamp01(reflection.StanceElapsedTicks / settleDurationTicks);
-                float settleRemaining = 1f - Mathf.SmoothStep(0f, 1f, settleProgress);
-                float startAngleOffset = stanceFacing == Rot4.North || stanceFacing == Rot4.East
-                    ? -6f
-                    : 6f;
-                angle += startAngleOffset * settleRemaining;
-                offset += new Vector3(0f, 0f, 0.04f * settleRemaining);
-                PawnRenderUtility.DrawEquipmentAiming(weapon, drawPos + offset * drawFactor, angle);
 
                 if (pawn.apparel != null)
                 {
@@ -500,8 +491,7 @@ namespace MiliraXian.Characters.QingHe
                 }
 
                 if (hediffDef == MX_QHDefOf.MX_QH_FlowingFormImmunity
-                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable
-                    || hediffDef == MX_QHDefOf.MX_QH_IllusoryReflectionInvulnerable)
+                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable)
                 {
                     state.Invulnerable = true;
                 }

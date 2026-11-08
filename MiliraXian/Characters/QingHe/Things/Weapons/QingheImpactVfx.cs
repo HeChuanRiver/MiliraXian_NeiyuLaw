@@ -184,7 +184,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return fallback;
             }
-            float length = pawn.equipment?.Primary?.def.GetModExtension<BladeGraphicExtension>()?.length ?? 1.1f;
+            float length = BladeMotionPlayer.DrawnBlade(pawn)?.length ?? 1.1f;
             Vector3 offset = pose.grip + pose.dir.normalized * (length * share);
             return BladeRenderer.BodyOffsetToMap(pawn.DrawPos, offset, pose);
         }

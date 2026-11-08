@@ -68,24 +68,35 @@
     </li></subSounds>
   </SoundDef>
   <!--
-    收刀"咔"的一声和斩中同时响，三层都用本体素材（不依赖 DLC）：
-    刀镡碰鞘口的金属脆响（原版弹丸偏斜·金属，升调）、刀剑碰撞的余音（霓羽刀剑碰撞，低沉）；
+    居合收刀中刀：镜花水月反击的斩击声，降调放慢（Unity 的音调和速度一起变），显得沉重；
     原版处决的斩切声 Execute_Cut 由处决代码同时播放。
   -->
   <SoundDef>
     <defName>MX_QH_SwordExecutionHit</defName>
     <context>MapOnly</context>
-    <subSounds>
-      <li>
-        <grains><li Class="AudioGrain_Folder"><clipFolderPath>Impact/Deflect/Deflect_Metal</clipFolderPath></li></grains>
-        <volumeRange>40~44</volumeRange><pitchRange>1.35~1.45</pitchRange><distRange>3~34</distRange>
-        <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
-      </li>
-      <li>
-        <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianNeiyu/SwordFight/MXNY_SwordFight3</clipPath></li></grains>
-        <volumeRange>22~26</volumeRange><pitchRange>0.7~0.76</pitchRange><distRange>3~30</distRange>
-        <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
-      </li>
-    </subSounds>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_slash</clipPath></li></grains>
+      <volumeRange>38~42</volumeRange><pitchRange>0.8~0.85</pitchRange><distRange>3~34</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <!-- 致命一击：插刀和抽刀都用落樱从空中落下的声音，插刀高而脆，抽刀低而重 -->
+  <SoundDef>
+    <defName>MX_QH_SwordExecutionThrust</defName>
+    <context>MapOnly</context>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath></li></grains>
+      <volumeRange>34~36</volumeRange><pitchRange>1.15~1.2</pitchRange><distRange>3~34</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
+  </SoundDef>
+  <SoundDef>
+    <defName>MX_QH_SwordExecutionKillDraw</defName>
+    <context>MapOnly</context>
+    <subSounds><li>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath></li></grains>
+      <volumeRange>38~40</volumeRange><pitchRange>0.82~0.86</pitchRange><distRange>3~34</distRange>
+      <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
+    </li></subSounds>
   </SoundDef>
 </Defs>

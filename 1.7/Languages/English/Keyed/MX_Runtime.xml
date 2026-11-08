@@ -144,6 +144,7 @@
   <MX_QH_FlowerCourtNodeLearned>learned</MX_QH_FlowerCourtNodeLearned>
   <MX_QH_FlowerCourtNodeLocked>Requires grace level {0}</MX_QH_FlowerCourtNodeLocked>
   <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>Not enough Sword Pressure (needs {0}).</MX_QH_SwordPressureNotEnough>
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresStance>Requires stance: {0}.</MX_QH_RequiresStance>

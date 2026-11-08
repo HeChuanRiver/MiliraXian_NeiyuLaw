@@ -14,6 +14,8 @@
   <MX_QH_SakuraDanceSlash.deathMessage>{0}倒在了清荷櫻舞的刀光之中。</MX_QH_SakuraDanceSlash.deathMessage>
   <MX_QH_SakuraThunderSlash.label>櫻舞·雷返</MX_QH_SakuraThunderSlash.label>
   <MX_QH_SakuraThunderSlash.deathMessage>{0}被清荷刀上奉還的落雷擊倒了。</MX_QH_SakuraThunderSlash.deathMessage>
+  <MX_QH_MirrorSlash.label>鏡花水月</MX_QH_MirrorSlash.label>
+  <MX_QH_MirrorSlash.deathMessage>{0}斬向了水中的倒影，倒在了清荷的鏡花水月之下。</MX_QH_MirrorSlash.deathMessage>
   <MX_QH_ExecutionSlash.label>殘心</MX_QH_ExecutionSlash.label>
   <MX_QH_ExecutionSlash.deathMessage>{0}在清荷收刀的一聲輕響中倒下了。</MX_QH_ExecutionSlash.deathMessage>
 </LanguageData>

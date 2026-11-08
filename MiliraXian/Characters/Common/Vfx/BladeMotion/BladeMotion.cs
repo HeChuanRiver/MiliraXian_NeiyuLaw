@@ -208,13 +208,6 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         /// the attack clip's counter starts from. Played stretched over the parry stance.
         /// </summary>
         public BladeMotionClip parry;
-        /// <summary>Draw a scabbard; it rests at the waist outside the clips' own scabbard keys.</summary>
-        public bool scabbard;
-        public Vector3 scabbardRestMouth;
-        public Vector3 scabbardRestEnd;
-        /// <summary>Scabbard tint; it is drawn with the blade texture (from the grip to the tip), darkened.</summary>
-        public Color scabbardColor = new(0.24f, 0.16f, 0.14f, 1f);
-
         public BladeMotionClip Attack(int index)
         {
             if (attacks.NullOrEmpty())
@@ -385,12 +378,12 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         }
 
         /// <summary>World blade pose of <paramref name="clip"/> at <paramref name="seconds"/> for an aim.</summary>
-        /// <param name="scabbardSet">Adds the set's scabbard and the sheathed share when the set draws a scabbard; null = none.</param>
-        public static BladePose Pose(BladeMotionClip clip, float seconds, Vector3 aim, in BladeProjection projection, BladeMotionSetExtension scabbardSet)
+        /// <param name="scabbardBlade">Adds this blade's scabbard and the sheathed share when it has a scabbard; null = none.</param>
+        public static BladePose Pose(BladeMotionClip clip, float seconds, Vector3 aim, in BladeProjection projection, BladeGraphicExtension scabbardBlade)
         {
             BodyBasis(clip, seconds, aim, out Vector3 right, out Vector3 up, out Vector3 forward);
             clip.blade.Evaluate(seconds, out Vector3 grip, out Vector3 dir, out Vector3 edge);
-            BladeMotionSetExtension set = scabbardSet;
+            BladeGraphicExtension set = scabbardBlade;
             BladePose pose = new()
             {
                 grip = ToWorld(grip, right, up, forward),
