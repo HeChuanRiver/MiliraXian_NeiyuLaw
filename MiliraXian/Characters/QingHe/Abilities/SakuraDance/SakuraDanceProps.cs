@@ -58,10 +58,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public float alphaNoise;
         /// <summary>
         /// Head / tail fades measured against the part of the trail still alive, and no per-sample age
-        /// fade: the FXR tracer rule used by the offline preview. Off = fades against the whole emitted trail.
+        /// fade. Off = fades against the whole emitted trail.
         /// </summary>
         public bool liveFade;
-        /// <summary>Clamp the final opacity to 1 (as the preview does), also for additive layers.</summary>
+        /// <summary>Clamp the final opacity to 1, also for additive layers.</summary>
         public bool clampAlpha;
         /// <summary>Strip tint, written to the vertex colour (keep channels at or below 1; use brightness to go brighter).</summary>
         public Color color = Color.white;
@@ -114,7 +114,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     }
 
     /// <summary>
-    /// One cut: a ring in a tilted plane spun once. Angles follow the Sekiro FXR root node
+    /// One cut: a ring in a tilted plane spun once. Angles are in the body frame
     /// (local x = right, y = up, z = forward, rotation = Rx * Rz in degrees).
     /// </summary>
     public class SakuraCutProps
@@ -143,7 +143,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// <summary>Posture each hit of this cut adds to the enemy, and the extra when it carries the thunder.</summary>
         public float posture;
         public float thunderPosture;
-        /// <summary>Lightning shot out of the charged blade while this cut spins (FXR 440684/440683 tracers).</summary>
+        /// <summary>Lightning shot out of the charged blade while this cut spins.</summary>
         public SakuraDischargeProps thunderDischarge;
         /// <summary>Rising whirlwind spawned with this cut (the take-off of the third cut).</summary>
         public SakuraUpdraftProps updraft;
@@ -184,7 +184,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     }
 
     /// <summary>
-    /// The whirlwind of a jump (FXR 440603/440604): emitters spinning about a forward-tilted axis
+    /// The whirlwind of a jump: emitters spinning about a forward-tilted axis
     /// that rises from the feet, each dragging trail layers into a helix, plus a ring of dust on
     /// the ground. Offsets are in the body frame (right, up, forward), metres.
     /// </summary>
@@ -212,7 +212,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public float dustStartSize = 1f;
         public float dustEndSize = 4f;
         public float dustAlpha = 0.5f;
-        /// <summary>Screen-vertical scale of the dust (the FXR lays it on the ground, seen at a slant); 1 = round.</summary>
+        /// <summary>Screen-vertical scale of the dust (it lies on the ground, seen at a slant); 1 = round.</summary>
         public float dustSquash = 1f;
         public Color dustColor = new(0.85f, 0.85f, 0.85f, 1f);
     }

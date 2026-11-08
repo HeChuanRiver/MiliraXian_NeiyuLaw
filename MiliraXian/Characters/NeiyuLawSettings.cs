@@ -32,6 +32,7 @@ namespace MiliraXian.Characters
         public bool ZhaoliDecorativeMode;
         public bool MingyuanDecorativeMode;
         public bool QingheDecorativeMode;
+        public bool QingheSweepHitsDowned;
         private bool legacyLockSpecialPawnConsciousness = true;
 
         public override void ExposeData()
@@ -50,6 +51,7 @@ namespace MiliraXian.Characters
             CharacterPowerProfile.LookDecorative(ref ZhaoliDecorativeMode, "ZhaoliDecorativeMode", "ZhaoliPowerLevel");
             CharacterPowerProfile.LookDecorative(ref MingyuanDecorativeMode, "MingyuanDecorativeMode", "MingyuanPowerLevel");
             CharacterPowerProfile.LookDecorative(ref QingheDecorativeMode, "QingheDecorativeMode", "QinghePowerLevel");
+            Scribe_Values.Look(ref QingheSweepHitsDowned, "QingheSweepHitsDowned");
 
             bool hasNewConsciousnessLockMode = Scribe.mode != LoadSaveMode.LoadingVars
                 || Scribe.loader.curXmlParent["SpecialPawnConsciousnessLockMode"] != null;
@@ -115,6 +117,10 @@ namespace MiliraXian.Characters
             if (listing.RadioButton("高", Settings.ArcaneVisualQuality == ArcaneVfxQuality.High))
                 Settings.ArcaneVisualQuality = ArcaneVfxQuality.High;
             listing.Gap();
+            listing.CheckboxLabeled(
+                "MX_NL_QingheSweepHitsDownedLabel".Translate().ToString(),
+                ref Settings.QingheSweepHitsDowned,
+                "MX_NL_QingheSweepHitsDownedDesc".Translate().ToString());
             listing.CheckboxLabeled("霓羽：弹刀与处决特效", ref Settings.EnableNeiyuSwordVfx);
             listing.Label($"弹刀特效强度：{Settings.NeiyuSwordVfxIntensity:P0}");
             Settings.NeiyuSwordVfxIntensity = listing.Slider(Settings.NeiyuSwordVfxIntensity, .2f, 1.5f);

@@ -88,6 +88,15 @@ public static class CombatPosture
     internal static bool ControlsActions(Pawn pawn) => pawn is { Spawned: true, Dead: false }
         && pawn.health is { isBeingKilled: false } && Get(pawn)?.Broken == true;
 
+    // A melee attack order on a broken victim: refused while another pawn's execution of it runs or
+    // is ordered, otherwise it may become the orderer's execution.
+    internal static bool TakeAttackOrder(Pawn pawn, Job job)
+    {
+        if (job?.def != JobDefOf.AttackMelee || job.targetA.Thing is not Pawn victim) return true;
+        HediffComp_CombatPosture posture = Get(victim);
+        return posture?.Broken != true || posture.TakeOrder(pawn);
+    }
+
     internal static bool BlocksAutonomousJobs(Pawn pawn) => ControlsActions(pawn)
         || pawn?.jobs?.curDriver is IPostureExecutionDriver { DrivesExecutorPosition: true };
 }
@@ -117,8 +126,9 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     private int brokenAt = -1;
     private IntVec3 breakCell = IntVec3.Invalid;
     private int nextUpdateTick, openingGeneration, reservedGeneration;
-    private bool broken, openingReserved, holdStarted;
-    private Pawn source, executioner;
+    private bool broken, openingReserved, holdStarted, autoDeclined;
+    private int untilBeforeExecution = -1;
+    private Pawn source, executioner, orderedBy;
 
     private static CombatPostureDef C => CombatPosture.Config;
     private static int Now => CombatPosture.Now;
@@ -156,6 +166,9 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         Scribe_Values.Look(ref holdStarted, "postureHoldStarted");
         Scribe_References.Look(ref source, "postureSource");
         Scribe_References.Look(ref executioner, "postureExecutioner");
+        Scribe_References.Look(ref orderedBy, "postureOrderedBy");
+        Scribe_Values.Look(ref autoDeclined, "postureAutoDeclined");
+        Scribe_Values.Look(ref untilBeforeExecution, "postureUntilBeforeExecution", -1);
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             SetValue(CombatPostureRules.Finite(CurrentValue));
@@ -191,7 +204,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         broken = true;
         brokenAt = Now;
         breakCell = Pawn.Position;
-        brokenUntilTick = Now + Mathf.Max(C.breakWindowTicks, owner?.MinimumBreakWindowTicks ?? 0);
+        brokenUntilTick = Now + CombatBlockers.BreakWindowFor(owner, C.breakWindowTicks);
         holdStarted = false;
         Pawn.pather?.StopDead();
         Pawn.stances?.CancelBusyStanceHard();
@@ -222,13 +235,15 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
             ReleaseBreak();
             return;
         }
+        // The first settle after the break, outside the hit that broke it.
+        if (!holdStarted) CombatBlockers.NotifyTargetBroken(Pawn);
         // A claimed execution owns the victim from here on (it may move it, as Neiyu's single
         // execution throws it); its own job validates the reach. A saved lock is valid only while
         // the matching saved Job owns it.
         if (executioner != null)
         {
             if (executioner.jobs?.curDriver is not IPostureExecutionDriver driver || driver.Victim != Pawn)
-                ReleaseBreak();
+                AbandonExecution(executioner);
             return;
         }
         // Moved by something else before any execution claimed it (knocked back, teleported).
@@ -237,10 +252,28 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
             ReleaseBreak();
             return;
         }
+        // An attack order on the victim is carried out as the orderer's execution once it can start.
+        if (orderedBy != null)
+        {
+            if (AttacksVictim(orderedBy))
+            {
+                EnsureHold();
+                CombatBlocker ordered = CombatBlockers.ExecutionerFor(orderedBy);
+                if (ordered.CanExecute(orderedBy, Pawn)) StartExecution(orderedBy, ordered);
+                return;
+            }
+            orderedBy = null;
+        }
         CombatBlocker owner = CombatBlockers.ExecutionerFor(source);
         if (owner == null || !owner.Executes)
         {
             // Broken by someone who does not execute: hold still for the window, then recover.
+            HoldWithoutExecution();
+            return;
+        }
+        ExecutionMode mode = owner.ModeFor(source);
+        if (mode != ExecutionMode.Auto || autoDeclined)
+        {
             HoldWithoutExecution();
             return;
         }
@@ -251,21 +284,61 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
             return;
         }
         EnsureHold();
+        StartExecution(source, owner);
+    }
+
+    private bool AttacksVictim(Pawn pawn) => pawn is { Spawned: true, Dead: false }
+        && pawn.CurJob is { } job && job.def == JobDefOf.AttackMelee && job.targetA.Thing == Pawn;
+
+    private void StartExecution(Pawn executor, CombatBlocker owner)
+    {
         // Multiple broken enemies wait in their own bounded break window while
-        // their source finishes an existing execution. No map search or queue scan.
-        if (source.jobs?.curDriver is IPostureExecutionDriver) return;
+        // their executor finishes an existing execution. No map search or queue scan.
+        if (executor.jobs?.curDriver is IPostureExecutionDriver) return;
         // An executor that waits decides itself (in CanExecute) which of its own stances it may leave.
-        if (source.stances?.curStance is Stance_Warmup && !owner.WaitForExecutor) { ReleaseBreak(); return; }
-        Job job = owner.MakeExecutionJob(source, Pawn);
+        if (executor.stances?.curStance is Stance_Warmup && !owner.WaitForExecutor) { ReleaseBreak(); return; }
+        Job job = owner.MakeExecutionJob(executor, Pawn);
         if (job == null) { ReleaseBreak(); return; }
-        executioner = source;
+        executioner = executor;
+        orderedBy = null;
+        untilBeforeExecution = brokenUntilTick;
         // An executor that waited may start late: the break lasts through its execution.
         if (owner.WaitForExecutor) brokenUntilTick = Mathf.Max(brokenUntilTick, Now + owner.MinimumBreakWindowTicks);
         // Not resumed afterwards: a suspended job goes to the front of the job queue, and an AI
         // pawn whose think tree issues a fresh attack job never takes it back, so each execution
         // left one more stale job queued. After the execution the AI or the draft picks anew.
-        source.jobs.StartJob(job, JobCondition.InterruptForced, resumeCurJobAfterwards: false);
-        if (source.CurJob != job) ReleaseBreak();
+        executor.jobs.StartJob(job, JobCondition.InterruptForced, resumeCurJobAfterwards: false);
+        if (executor.CurJob != job) ReleaseBreak();
+    }
+
+    /// <summary>
+    /// The player's melee attack order on this broken pawn. Refused while an execution of it runs or
+    /// another pawn's order on it stands; an executor that takes orders executes it instead of cutting.
+    /// </summary>
+    internal bool TakeOrder(Pawn pawn)
+    {
+        if (executioner != null || (orderedBy != null && orderedBy != pawn)) return false;
+        CombatBlocker b = CombatBlockers.ExecutionerFor(pawn);
+        if (b is { Executes: true, AcceptsOrders: true } && b.ModeFor(pawn) != ExecutionMode.None) orderedBy = pawn;
+        return true;
+    }
+
+    /// <summary>
+    /// The execution ended before its blow. An executor that keeps the break leaves it on its own
+    /// time and no longer takes it by itself; an attack order can still execute it.
+    /// </summary>
+    public void AbandonExecution(Pawn executor)
+    {
+        if (executioner != executor) return;
+        if (CombatBlockers.ExecutionerFor(executor)?.KeepsBreakOnAbandon != true)
+        {
+            ReleaseBreak();
+            return;
+        }
+        executioner = null;
+        autoDeclined = true;
+        if (untilBeforeExecution >= 0) brokenUntilTick = untilBeforeExecution;
+        untilBeforeExecution = -1;
     }
 
     private void HoldWithoutExecution() => EnsureHold();
@@ -293,9 +366,26 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
 
     public bool Owns(Pawn executor) => broken && executioner == executor && Now < brokenUntilTick;
 
+    /// <summary>The pawn's next move on this broken pawn is an execution, not an ordinary attack.</summary>
+    public bool ExecutesNext(Pawn pawn)
+    {
+        if (!broken || pawn == null) return false;
+        if (executioner == pawn || orderedBy == pawn) return true;
+        CombatBlocker b = CombatBlockers.ExecutionerFor(pawn);
+        return source == pawn && executioner == null && !autoDeclined && b is { Executes: true } && b.ModeFor(pawn) == ExecutionMode.Auto;
+    }
+
     internal void HoldThrough(Pawn executor, int untilTick)
     {
         if (Owns(executor)) brokenUntilTick = Mathf.Max(brokenUntilTick, untilTick);
+    }
+
+    // The break of a move that cannot execute lasts past its end, so the execution can still follow.
+    public void HoldBreakPast(Pawn executor, int endTick)
+    {
+        if (!broken || executioner != null || source != executor) return;
+        int window = CombatBlockers.BreakWindowFor(CombatBlockers.ExecutionerFor(source), C.breakWindowTicks);
+        brokenUntilTick = Mathf.Max(brokenUntilTick, endTick + window);
     }
 
     /// <param name="executed">The execution blow landed: the meter empties. Otherwise the breaker's
@@ -308,6 +398,9 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
         broken = false;
         executioner = null;
         source = null;
+        orderedBy = null;
+        autoDeclined = false;
+        untilBeforeExecution = -1;
         holdStarted = false;
         brokenUntilTick = 0;
         brokenAt = -1;
@@ -339,7 +432,7 @@ public sealed class HediffComp_CombatPosture : HediffComp_PawnSpecialResource
     public override void CompPostPostRemoved()
     {
         broken = false;
-        executioner = source = null;
+        executioner = source = orderedBy = null;
         openingReserved = false;
     }
 }

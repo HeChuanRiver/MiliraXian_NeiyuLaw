@@ -72,7 +72,7 @@
     <description>——领悟使用刀剑近身格斗的新战斗姿态，并习得剑技：镜花水月。</description>
     <unlockLetter>
       <title>剑舞姿态</title>
-      <text>已习得全新的战斗姿态。从背包中取出武器【散华】并装备即可切换到专精近战攻击的剑舞姿态。\n\n剑舞姿态特性：\n - 清荷获得防御、弹开和化解敌人普通攻击的能力。\n - 弹开和化解敌人的近战攻击将给予架势伤害，利用弹开或化解使敌人失衡，将使敌人进入长时间眩晕并可以进行一次高伤害处决攻击。\n - 灵气加护的恢复速率降低、禁用刚毅和硬化效果。\n\n可使用全新剑技：\n - 镜花水月</text>
+      <text>已习得全新的战斗姿态。从背包中取出武器【散华】并装备即可切换到专精近战攻击的剑舞姿态。\n\n剑舞姿态特性：\n - 清荷获得防御、弹开和化解敌人普通攻击的能力。\n - 弹开和化解敌人的近战攻击将给予架势伤害，利用弹开或化解使敌人失衡，将使敌人进入长时间眩晕并可以进行高伤害处决攻击。\n - 灵气加护的恢复速率降低、禁用刚毅和硬化效果。\n\n可使用全新剑技：\n - 镜花水月：隐入幻影，对来袭的攻击进行一次原地反击。可以获得额外剑压。\n - 必杀剑·残心：处决动作。敌人因架势不稳而失衡时可以使用，闪现到敌人身后对弱点造成大量伤害（设置为非致命处决时，不会造成伤害，使目标的意识在24小时内锁定为1%。对机械族和特殊敌人将造成伤害直到倒地）。\n - 落华：致命处决动作，若敌人受到残心的伤害而未致死，则会触发特殊的致命处决（设置为非致命处决时，永远不会使用落华）。</text>
     </unlockLetter>
     <category>MX_QH_Category_Qinghe</category>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
@@ -104,17 +104,40 @@
     </grantedAbilities>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
-    <defName>MX_QH_Node_AscentSlash</defName>
-    <label>落樱</label>
-    <description>清荷与老师霓羽交流后领悟的剑技，以铃音化为剑气，兼有剑势·天坠的惊人速度和清荷独特的斩击技巧。\n\n——习得剑技：落樱。</description>
+    <defName>MX_QH_Node_SakuraDance</defName>
+    <label>樱舞</label>
+    <description>原地旋身跃起，连斩三刀的剑技。雨天露天施放时，刀身会接住落雷。\n\n——习得剑技：樱舞。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconActive>MiliraXianQinghe/UI/Icons/ascend_slash</iconActive>
     <displayOrder>30</displayOrder>
     <requiredAuraMasteryLevel>5</requiredAuraMasteryLevel>
     <grantedAbilities>
-      <li>MX_QH_AscentSlash</li>
       <li>MX_QH_SakuraDance</li>
     </grantedAbilities>
+  </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+  <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+    <defName>MX_QH_Node_Zantetsuken_Guren</defName>
+    <label>斩铁剑【红莲】</label>
+    <description>清荷与老师霓羽交流后领悟的剑技：踢中敌人借力高跃，平举刀身竖直劈落，在落点开出一朵红莲。\n\n——习得剑技：斩铁剑【红莲】。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconActive>MiliraXianQinghe/UI/Icons/ascend_slash</iconActive>
+    <displayOrder>32</displayOrder>
+    <requiredAuraMasteryLevel>8</requiredAuraMasteryLevel>
+    <grantedAbilities>
+      <li>MX_QH_Zantetsuken_Guren</li>
+    </grantedAbilities>
+  </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+  <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+    <defName>MX_QH_Node_Gaeshi_Gekka</defName>
+    <label>燕回返【月华】</label>
+    <description>一刀劈落之后不收刀，翻刃往回斩。\n\n——斩铁剑【红莲】的击晕延长至8秒；落地后翻刃上捞跃回低空，空中居合收刀，合鞘时对荷花内的所有敌人再造成一次高额伤害。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconActive>MiliraXianQinghe/UI/Icons/ascend_slash</iconActive>
+    <displayOrder>34</displayOrder>
+    <requiredAuraMasteryLevel>11</requiredAuraMasteryLevel>
+    <prerequisites>
+      <li><node>MX_QH_Node_Zantetsuken_Guren</node></li>
+    </prerequisites>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
     <defName>MX_QH_Node_Luoshenfu</defName>

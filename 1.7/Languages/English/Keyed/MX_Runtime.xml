@@ -154,10 +154,6 @@
   <MX_QH_ModeSwitchCommandDesc>Switch between the Flower-Tiding Bell and Sanhua.</MX_QH_ModeSwitchCommandDesc>
   <MX_QH_SwordPressureLabel>Sword Pressure</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>Sword Pressure: {0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_AscentSlashNotLearned>Jueying has not been learned, so Qinghe cannot use Sword Form: Jueying.</MX_QH_AscentSlashNotLearned>
-  <MX_QH_AscentSlashInProgress>Sword Form: Jueying is already in progress.</MX_QH_AscentSlashInProgress>
-  <MX_QH_AscentSlashLandingNoLineOfSight>The Sword Form: Jueying landing point must be in Qinghe's line of sight.</MX_QH_AscentSlashLandingNoLineOfSight>
-  <MX_QH_AscentSlashInvalidLanding>Cannot use Sword Form: Jueying at that location.</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LotusPondAssignQingheOnly>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPondAssignQingheOnly>
   <MX_QH_OpenFlowerCourtRequiresQinghe>Open Flower Court (requires Qinghe)</MX_QH_OpenFlowerCourtRequiresQinghe>
   <MX_QH_OpenFlowerCourt>Open Flower Court</MX_QH_OpenFlowerCourt>

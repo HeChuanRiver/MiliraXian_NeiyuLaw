@@ -424,33 +424,6 @@ namespace MiliraXian.Characters.QingHe
             }
         }
 
-        [HarmonyPatch(typeof(Verse.Profile.MemoryUtility), nameof(Verse.Profile.MemoryUtility.ClearAllMapsAndWorld))]
-        public static class Patch_MemoryUtility_ClearAllMapsAndWorld
-        {
-            public static void Postfix()
-            {
-                CompAbilityEffect_AscentSlash.ClearActiveManagers();
-            }
-        }
-
-        [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
-        public static class Patch_Pawn_Kill
-        {
-            public static void Postfix(Pawn __instance)
-            {
-                CompAbilityEffect_AscentSlash.NotifyPawnUnavailable(__instance);
-            }
-        }
-
-        [HarmonyPatch(typeof(Pawn), nameof(Pawn.DeSpawn), new[] { typeof(DestroyMode) })]
-        public static class Patch_Pawn_DeSpawn
-        {
-            public static void Postfix(Pawn __instance)
-            {
-                CompAbilityEffect_AscentSlash.NotifyPawnUnavailable(__instance);
-            }
-        }
-
         /// <summary>Flowing Form is the one guard an execution respects (one charge = one life).</summary>
         [StaticConstructorOnStartup]
         internal static class FlowingFormExecutionGuard
@@ -490,8 +463,7 @@ namespace MiliraXian.Characters.QingHe
                     state.FlowingForm = hediff.TryGetComp<HediffComp_FlowingForm>();
                 }
 
-                if (hediffDef == MX_QHDefOf.MX_QH_FlowingFormImmunity
-                    || hediffDef == MX_QHDefOf.MX_QH_AscentSlashInvulnerable)
+                if (hediffDef == MX_QHDefOf.MX_QH_FlowingFormImmunity)
                 {
                     state.Invulnerable = true;
                 }

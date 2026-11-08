@@ -168,8 +168,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 if (cut.updraft != null && (updraftMask & (1 << i)) == 0
                     && elapsed >= RealTicks(motion.CutTime(cut, i) + cut.updraft.delay))
                 {
-                    // Like the FXR (spawned at the ground dummy 220, then not following the body),
-                    // the whirlwind rises from the ground under the pawn, whatever height the jump
+                    // The whirlwind rises from the ground under the pawn, whatever height the jump
                     // is at, and stays there.
                     // It runs on the motion clock, so a catch hit-stop freezes it with the body.
                     updraftMask |= 1 << i;

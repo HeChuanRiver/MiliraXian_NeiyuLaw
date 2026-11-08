@@ -154,10 +154,6 @@
   <MX_QH_ModeSwitchCommandDesc>在花信風鈴與散華之間切換武器。</MX_QH_ModeSwitchCommandDesc>
   <MX_QH_SwordPressureLabel>劍壓</MX_QH_SwordPressureLabel>
   <MX_QH_SwordPressureValueLine>劍壓：{0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_AscentSlashNotLearned>尚未習得絕影，無法使用劍勢·絕影。</MX_QH_AscentSlashNotLearned>
-  <MX_QH_AscentSlashInProgress>劍勢·絕影仍在施展中。</MX_QH_AscentSlashInProgress>
-  <MX_QH_AscentSlashLandingNoLineOfSight>劍勢·絕影的落點需要在清荷視線內。</MX_QH_AscentSlashLandingNoLineOfSight>
-  <MX_QH_AscentSlashInvalidLanding>無法在該位置施展劍勢·絕影。</MX_QH_AscentSlashInvalidLanding>
   <MX_QH_LotusPondAssignQingheOnly>荷池只可分配給清荷。</MX_QH_LotusPondAssignQingheOnly>
   <MX_QH_OpenFlowerCourtRequiresQinghe>打開花神庭（需要清荷本人）</MX_QH_OpenFlowerCourtRequiresQinghe>
   <MX_QH_OpenFlowerCourt>打開花神庭</MX_QH_OpenFlowerCourt>

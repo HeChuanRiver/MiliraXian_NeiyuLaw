@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         internal static readonly int AdditiveId = Shader.PropertyToID("_Additive");
         internal static readonly int ColorId = Shader.PropertyToID("_Color");
         /// <summary>
-        /// Vertex alpha is written divided by this so the FXR opacities above 1 (up to 3 here) are
+        /// Vertex alpha is written divided by this so opacities above 1 (up to 3 here) are
         /// kept; with the 8-bit vertex colour that still leaves 64 levels per unit.
         /// </summary>
         private const float AlphaScale = 4f;
@@ -302,7 +302,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         }
 
         /// <summary>
-        /// One strip along the source curve between the trail's tail and head. U follows the FXR tracer rule:
+        /// One strip along the source curve between the trail's tail and head. U is
         /// per segment <c>textureFraction</c> of the texture plus the integrated U speed, or the whole
         /// trail mapped to <c>textureFraction</c> when the UV is attached to the source.
         /// The end fades are measured against the whole emitted trail, not the part still alive, and
@@ -697,7 +697,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     int frame = (int)(h % DustFrames);
                     float rot = (h >> 8) % 360u;
                     float size = Mathf.Lerp(up.dustStartSize, up.dustEndSize, x);
-                    // FXR alpha: 0.5 -> 1 over the first 10 %, then down to 0.
+                    // Alpha: 0.5 -> 1 over the first 10 %, then down to 0.
                     float a = up.dustAlpha * (x < 0.1f ? Mathf.Lerp(0.5f, 1f, x / 0.1f) : Mathf.Lerp(1f, 0f, (x - 0.1f) / 0.9f));
                     float u0 = frame % DustColumns * cell;
                     float v1 = 1f - frame / DustColumns * cell;

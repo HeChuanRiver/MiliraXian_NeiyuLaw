@@ -20,7 +20,8 @@ namespace MiliraXian.Characters.Common.SweepDamage
             }
             if (thing is Pawn pawn)
             {
-                if (!def.hitPawns || pawn.Dead)
+                if (!def.hitPawns || pawn.Dead
+                    || (def.skipDowned && pawn.Downed && !NeiyuLawMod.Instance.Settings.QingheSweepHitsDowned))
                 {
                     return false;
                 }

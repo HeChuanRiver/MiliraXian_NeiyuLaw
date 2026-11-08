@@ -12,6 +12,7 @@
         <hitPawns>true</hitPawns>
         <hitBuildings>true</hitBuildings>
         <requireLineOfSight>true</requireLineOfSight>
+        <skipDowned>true</skipDowned>
         <damageDelayTicks>0</damageDelayTicks>
         <workerClass>MiliraXian.Characters.Common.SweepDamage.SweepDamageWorker_Verb</workerClass>
     </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
@@ -107,7 +108,7 @@
         <struckSelfPosture>10</struckSelfPosture>
 
         <!--
-          特效（照只狼 201001 格挡、252001/253001 弹刀、261001 尘环的结构重做，贴图用樱舞的 Glow）。
+          特效（贴图用樱舞的 Glow）。
           位置在清荷刀身上（contactShare：从握把起算的刀长比例），火花朝攻击者方向喷出、减速后下坠。
           单位：地图格、秒；加法部分的 alpha 可以大于 1（更亮）。
         -->
@@ -447,9 +448,14 @@
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
         <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>
+        <!-- 弱震屏：第一段收刀中刀、第二段拔刀致死（原版 CameraShaker，上限 0.2） -->
+        <executionShake>0.06</executionShake>
+        <killShake>0.06</killShake>
         <!-- 清荷打崩、但破绽结束时没被处决的敌人（她忙着处决别人、够不着等）：架势只回落到上限的这个比例，
              再照常等恢复延迟后自然下降，很快能再次打崩。被处决的敌人照旧清空。 -->
         <unexecutedPostureKept>0.8</unexecutedPostureKept>
+        <!-- 清荷打崩的敌人崩溃 8 秒，给手动下令处决留出时间 -->
+        <breakWindowTicks>480</breakWindowTicks>
     </MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
 
     <JobDef>

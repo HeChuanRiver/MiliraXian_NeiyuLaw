@@ -26,6 +26,8 @@ namespace MiliraXian.Characters.Common.SweepDamage
         public bool hitBuildings = true;
         /// <summary>Blocked when the caster has no line of sight to the target.</summary>
         public bool requireLineOfSight = true;
+        /// <summary>Downed pawns are left out unless the mod setting lets them be hit.</summary>
+        public bool skipDowned;
         /// <summary>Contact is decided on the tick the sweep reaches the target; damage lands this many ticks later.</summary>
         public int damageDelayTicks;
         /// <summary>Applies the damage of one contact. Subclass it for character-specific hit effects.</summary>

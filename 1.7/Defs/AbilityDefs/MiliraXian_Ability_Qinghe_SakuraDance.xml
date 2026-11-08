@@ -7,6 +7,7 @@
     <hitPawns>true</hitPawns>
     <hitBuildings>true</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
     <damageDelayTicks>0</damageDelayTicks>
   </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
 
@@ -18,6 +19,7 @@
     <hitPawns>true</hitPawns>
     <hitBuildings>true</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
     <damageDelayTicks>0</damageDelayTicks>
     <workerClass>MiliraXian.Characters.QingHe.Abilities.SakuraDance.SakuraThunderSweepWorker</workerClass>
     <modExtensions>
@@ -39,10 +41,10 @@
       </li>
     </modExtensions>
     <label>樱舞</label>
-    <description>消耗1点剑压，清空自身架势，原地旋身跃起，连斩三刀：第一刀斜向上撩起，第二刀紧随其后，第三刀在最高处收势、范围最大。每一刀对刀光扫过的敌人造成一次伤害。\n\n从起手到收势全程无敌，不受任何伤害与架势伤害。\n\n雷返：雨天在露天施放时，刀身会在起手或第三刀前接住落雷。接雷之后的每一刀都带雷，伤害逐刀增加，第三刀化作雷电奉还，伤害最高，并使命中的敌人眩晕。</description>
+    <description>传说中源自遥远东国的华丽舞蹈。以旋转之势跃入空中并发动三次连续斩击，并可借机调整架势。\n\n传说记载，雨天在空中起舞，似乎容易引下雷电。“此乃神之怒号，若以此舞跃起，可令刀身承之，是曰：足不沾地、雷电奉还”。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
     <category>MX_QingheSkill</category>
-    <displayOrder>235</displayOrder>
+    <displayOrder>230</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>
     <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
@@ -51,7 +53,8 @@
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
       <targetable>true</targetable>
-      <range>30</range>
+      <!-- 略大于第三刀半径 4，原版施法圈套在出伤圈外面 -->
+      <range>5</range>
       <warmupTime>0.5</warmupTime>
       <requireLineOfSight>false</requireLineOfSight>
       <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
@@ -75,10 +78,10 @@
         <thunderCutDamageDef>MX_QH_SakuraThunderSlash</thunderCutDamageDef>
         <!-- 动作曲线用单调三次插值：关键帧是姿势，之间缓入缓出、不过冲。
              高度单位米（负数是下蹲），转身单位度（朝东时顺时针）。
-             转身曲线取自《只狼》根骨骼朝向（按出刀时刻对齐时间），不是每刀转一圈：第一刀约转 210°，
+             转身不是每刀转一圈：第一刀约转 210°，
              第一、二刀之间约 130°，第二刀约 130°，第二、三刀之间约 270°（空中借旋转蓄势），第三刀只转约 45°。
-             朝向基准：原作根骨骼的局部 Z 是侧向，换算时另减 90°；这样第三刀和前摇起点都正对目标。 -->
-        <!-- 瞄准前摇（原版施法预热，动作取《只狼》316700：旋身下蹲、把刀横架到脑后）。原片 0.4 秒，按实际预热时长拉伸；
+             第三刀和前摇起点都正对目标。 -->
+        <!-- 瞄准前摇（原版施法预热：旋身下蹲、把刀横架到脑后）。动作 0.4 秒，按实际预热时长拉伸；
              结束姿势就是樱舞动作的第一帧，转身曲线终点与樱舞 turn 的起点一致。 -->
         <warmup>
           <durationSeconds>0.4</durationSeconds>
@@ -187,9 +190,7 @@
                yaw 0 = 正前、正值向右；pitch 正值向上；roll 是刃口绕刀身的扭转；reach 是手臂伸展比例；
                需要额外挪手时写 offset（米）。
                第 0 帧是瞄准前摇的结束姿势（刀横在脑后，刀尖向左略低），一直保持到发力。之后直到第三刀收势，每 1/30 秒一帧，
-               刀身方向、刃口和握点直接取《只狼》骨骼（.cache/slash_proto/sakura_blade_from_bones.py），
-               按出刀时刻分段对齐时间；握点相对骨盆、缩放 0.5，写成 reach 0 + offset。
-               只对刀的位置和朝向，不还原手部动作。 -->
+               握点相对骨盆，写成 reach 0 + offset。只定刀的位置和朝向，不做手部动作。 -->
           <blade>
             <shoulder>(0.12, 0.25, 0)</shoulder>
             <armLength>0.55</armLength>
@@ -396,8 +397,7 @@
         <petalKeepFraction>0.3</petalKeepFraction>
         <petalSpeedScale>0.25</petalSpeedScale>
         <petalSpreadDegrees>12</petalSpreadDegrees>
-        <!-- 参数照抄预览 v28；贴图是自制的 Sakura* 系列（尺寸、方向、透明度分布对齐预览所用的参考图）。
-             花瓣大小 0.063 × 1.5 × 3.5，颜色 = 贴图 × 樱粉 (1, 0.8, 0.86) × 1.25 -->
+        <!-- 花瓣大小 0.063 × 1.5 × 3.5，颜色 = 贴图 × 樱粉 (1, 0.8, 0.86) × 1.25 -->
         <petalTexPath>MiliraXianQinghe/Effect/SakuraDance/SakuraPetals</petalTexPath>
         <petalSize>0.33</petalSize>
         <!-- 顶点色是 8 位，各通道不能超过 1；亮度在着色器里乘 -->
@@ -412,7 +412,7 @@
           <intensity>1</intensity>
         </bloom>
         <cutSound>MX_QH_AscentSlash_Slash</cutSound>
-        <!-- 雷返（雨天、头顶无屋顶）：原作黄色电光。外层用漏电异常的颜色，中心白色。
+        <!-- 雷返（雨天、头顶无屋顶）：外层用漏电异常的颜色，中心白色。
              亮度大于 1 进泛光；顶点色各通道不能超过 1。 -->
         <thunderSweepDamage>MX_QH_SakuraThunderSweep</thunderSweepDamage>
         <!-- 接雷条件（头顶都必须没有屋顶，施放时判一次）：
@@ -446,7 +446,7 @@
         <thunderSparkSize>0.35</thunderSparkSize>
         <thunderSparkAfterRelease>0.5</thunderSparkAfterRelease>
         <cuts>
-          <!-- 第一刀：倾斜最大，从左侧最低处贴地撩起，经身前斩向右上（FXR 原起始角 90°，这里改 180°） -->
+          <!-- 第一刀：倾斜最大，从左侧最低处贴地撩起，经身前斩向右上 -->
           <li>
             <time>0.033</time>
             <offset>(0, 0, 0.2)</offset>
@@ -464,9 +464,7 @@
             <petalStartAngle>157.5</petalStartAngle>
             <petalRadius>2.75</petalRadius>
             <layers>
-              <!-- 照抄预览 v28（slash_preview21/22/26/27）的 CUT12_LAYERS / DIST12 / UV12 / DCOL12，贴图用自制 Sakura* 系列。
-                   预览里的平滑插值（H）按 1/4 间隔取点换成折线；liveFade / clampAlpha 按预览的首尾淡出和不透明度截断。 -->
-              <!-- 扭曲带：遮罩 s02010 的 alpha，法线 s11665，强度 5 → 0.4 -->
+              <!-- 扭曲带：遮罩取 alpha，强度 5 → 0.4 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
                 <normalTexPath>MiliraXianQinghe/Effect/SakuraDance/SakuraNormal</normalTexPath>
@@ -485,7 +483,7 @@
                 <speedUCurve><points><li>(0, 8)</li><li>(0.183, 6.77)</li><li>(0.367, 4.05)</li><li>(0.55, 1.33)</li><li>(0.733, 0.1)</li></points></speedUCurve>
                 <distortionIntensityCurve><points><li>(0, 5)</li><li>(1.5, 0.4)</li></points></distortionIntensityCurve>
               </li>
-              <!-- 暗带：扭曲带的黑色本体，预览 v27 把不透明度乘 0.22（DARK_ALPHA）。预览另有 2.5 像素模糊，这里没有。 -->
+              <!-- 暗带：扭曲带的黑色本体，不透明度乘 0.22。 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
                 <color>(0, 0, 0, 1)</color>
@@ -658,9 +656,7 @@
             <petalStartAngle>67.5</petalStartAngle>
             <petalRadius>2.95</petalRadius>
             <layers>
-              <!-- 照抄预览 v28（slash_preview21/22/26/27）的 CUT12_LAYERS / DIST12 / UV12 / DCOL12，贴图用自制 Sakura* 系列。
-                   预览里的平滑插值（H）按 1/4 间隔取点换成折线；liveFade / clampAlpha 按预览的首尾淡出和不透明度截断。 -->
-              <!-- 扭曲带：遮罩 s02010 的 alpha，法线 s11665，强度 5 → 0.4 -->
+              <!-- 扭曲带：遮罩取 alpha，强度 5 → 0.4 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
                 <normalTexPath>MiliraXianQinghe/Effect/SakuraDance/SakuraNormal</normalTexPath>
@@ -679,7 +675,7 @@
                 <speedUCurve><points><li>(0, 8)</li><li>(0.183, 6.77)</li><li>(0.367, 4.05)</li><li>(0.55, 1.33)</li><li>(0.733, 0.1)</li></points></speedUCurve>
                 <distortionIntensityCurve><points><li>(0, 5)</li><li>(1.5, 0.4)</li></points></distortionIntensityCurve>
               </li>
-              <!-- 暗带：扭曲带的黑色本体，预览 v27 把不透明度乘 0.22（DARK_ALPHA）。预览另有 2.5 像素模糊，这里没有。 -->
+              <!-- 暗带：扭曲带的黑色本体，不透明度乘 0.22。 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
                 <color>(0, 0, 0, 1)</color>
@@ -833,7 +829,6 @@
             <thunderPosture>60</thunderPosture>
             <petalStartAngle>90</petalStartAngle>
             <petalRadius>3.5</petalRadius>
-            <!-- 照抄预览 v28 的 CUT3_LAYERS / DIST3 / UV3 / DCOL3 / INNER3，贴图用自制 Sakura* 系列 -->
             <layers>
               <!-- 扭曲带 1：内侧，强度 2.5 → 0.4 -->
               <li>
@@ -904,7 +899,7 @@
                 <attachedUV>true</attachedUV>
                 <flipV>true</flipV>
               </li>
-              <!-- 细丝 s26031（普通混合）：外侧两条、内侧两条，透明度 (1 → 0) × 1.5，亮度 1.5 -->
+              <!-- 细丝（普通混合）：外侧两条、内侧两条，透明度 (1 → 0) × 1.5，亮度 1.5 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraThread</texPath>
                 <liveFade>true</liveFade>
@@ -965,7 +960,7 @@
                 <segmentInterval>0.033</segmentInterval>
                 <speedUCurve><points><li>(0, 0.5)</li><li>(0.25, 0.43)</li><li>(0.5, 0.275)</li><li>(0.75, 0.12)</li><li>(1, 0.05)</li></points></speedUCurve>
               </li>
-              <!-- 灰带 s02010：颜色 0.835 × (2 → 1) -->
+              <!-- 灰带：颜色 0.835 × (2 → 1) -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraBand</texPath>
                 <liveFade>true</liveFade>
@@ -980,7 +975,7 @@
                 <textureFraction>0.01</textureFraction>
                 <segmentInterval>0.033</segmentInterval>
               </li>
-              <!-- 外圈亮丝 s26030（加法）：透明度 (1 → 0) × 2，亮度 8 → 4 -->
+              <!-- 外圈亮丝（加法）：透明度 (1 → 0) × 2，亮度 8 → 4 -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
                 <additive>true</additive>
@@ -997,7 +992,7 @@
                 <textureFraction>0.1</textureFraction>
                 <speedUCurve><points><li>(0, 8.4)</li><li>(0.333, 7.11)</li><li>(0.667, 4.25)</li><li>(1, 1.4)</li><li>(1.333, 0.1)</li></points></speedUCurve>
               </li>
-              <!-- 外圈芯线 s26030（加法）：透明度 (1, 1 → 0) × (3 → 1.5)，亮度 2 × color3 (500 → 10 → 0)，照抄不压缩 -->
+              <!-- 外圈芯线（加法）：透明度 (1, 1 → 0) × (3 → 1.5)，亮度 2 × color3 (500 → 10 → 0) -->
               <li>
                 <texPath>MiliraXianQinghe/Effect/SakuraDance/SakuraFilament</texPath>
                 <additive>true</additive>
@@ -1120,10 +1115,10 @@
                 <attachedUV>true</attachedUV>
               </li>
             </thunderLayers>
-            <!-- 起跳气旋（对应 440604）：第二刀转完、第三刀起跳下蹲时（出刀前 0.35 秒）从角色脚下的地面生成（不论人此时有多高），原地不跟人走。
+            <!-- 起跳气旋：第二刀转完、第三刀起跳下蹲时（出刀前 0.35 秒）从角色脚下的地面生成（不论人此时有多高），原地不跟人走。
                  两股气流每秒转 900°，转心 0.6 秒内从地面竖直升 2.6 米（和人的起跳方向一致，不再往前斜），
                  拖尾放出 0.5 秒、每段留 0.6–0.9 秒，大约在人跳到最高点时散开。
-                 脚下一圈烟尘 0.7 秒内从 0.4 米扩到 1.4 米；原作平铺在地面上、带透视，这里竖向压扁一半，和 heightToScreen 一致。 -->
+                 脚下一圈烟尘 0.7 秒内从 0.4 米扩到 1.4 米，竖向压扁一半，和 heightToScreen 一致。 -->
             <updraft>
               <delay>-0.35</delay>
               <startOffset>(0, -0.6, 0)</startOffset>

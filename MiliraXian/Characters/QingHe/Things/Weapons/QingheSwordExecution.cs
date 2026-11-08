@@ -153,6 +153,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 HediffComp_CombatPosture posture = CombatPosture.Get(victim);
                 // Saved before the damage: a death callback may save, throw or end this job.
                 hitDone = true;
+                Shake(C.executionShake);
                 bool landed = false;
                 // The blow resets Qinghe's own posture, whether it lands or a guard (Flowing Form) takes it.
                 if (CombatPosture.Get(pawn) is { Broken: false } own)
@@ -194,6 +195,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             if (killing && !killDone && t >= C.killStartSeconds + C.killAtSeconds)
             {
                 killDone = true;
+                Shake(C.killShake);
                 Kill(Victim);
             }
             if (t >= (killing ? KillEnd : C.executionSeconds))
@@ -226,6 +228,14 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             catch (System.Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution kill petals failed: " + ex, 0x51c7aa);
+            }
+        }
+
+        private void Shake(float magnitude)
+        {
+            if (pawn.Map == Find.CurrentMap)
+            {
+                Find.CameraDriver.shaker.DoShake(magnitude);
             }
         }
 
@@ -498,8 +508,26 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 return false;
             }
+            if (Hediff_QingheExecutionSettings.Get(pawn)?.nonLethal == true)
+            {
+                KnockDown(victim);
+                return false;
+            }
             ApplyBlow(victim, blow);
             return true;
+        }
+
+        /// <summary>A flesh target takes the mortal wound (no injury, out for a day); any other is hurt until downed.</summary>
+        private void KnockDown(Pawn victim)
+        {
+            if (!victim.RaceProps.IsFlesh)
+            {
+                HealthUtility.DamageUntilDowned(victim, allowBleedingWounds: false, sourceDef: Weapon);
+                return;
+            }
+            victim.health.forceDowned = true;
+            victim.health.AddHediff(Defs.MX_QHDefOf.MX_QH_MortalWound);
+            victim.health.forceDowned = false;
         }
 
         /// <summary>The killing thrust on a target that cannot die: one heavy hit on its core part instead.</summary>
@@ -625,9 +653,18 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private void Finish(JobCondition condition)
         {
             HediffComp_CombatPosture posture = CombatPosture.Get(Victim);
-            if (posture?.Executioner == pawn)
+            if (posture?.Executioner != pawn)
+            {
+                return;
+            }
+            // Before the blow it is given up and the break runs on; after it the break is done.
+            if (hitDone)
             {
                 posture.ReleaseBreak();
+            }
+            else
+            {
+                posture.AbandonExecution(pawn);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 using MiliraXian.Characters;
 using MiliraXian.Characters.Common.PerkSystem;
@@ -12,7 +12,9 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static CharacterPerkNodeDef MX_QH_Node_FlyingFlowerDecree;
         public static CharacterPerkNodeDef MX_QH_Node_SwordDance;
         public static CharacterPerkNodeDef MX_QH_Node_SeasonalResonance;
-        public static CharacterPerkNodeDef MX_QH_Node_AscentSlash;
+        public static CharacterPerkNodeDef MX_QH_Node_SakuraDance;
+        public static CharacterPerkNodeDef MX_QH_Node_Zantetsuken_Guren;
+        public static CharacterPerkNodeDef MX_QH_Node_Gaeshi_Gekka;
         public static CharacterPerkNodeDef MX_QH_Node_Luoshenfu;
         public static CharacterPerkNodeDef MX_QH_Node_FlowerDecree1;
         public static CharacterPerkNodeDef MX_QH_Node_FlowerDecree2;

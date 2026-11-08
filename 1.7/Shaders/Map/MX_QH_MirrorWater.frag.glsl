@@ -1,8 +1,7 @@
 #version 450
 
-// Mirror Flower, Water Moon: the water disc under Qinghe, computed per pixel exactly as the offline
-// preview does it (.cache/mirror_proto/mirror_preview.py: surface, shade, sparkle, water and
-// shatter_water). vUv is the ground offset from the disc centre in cells (x east, y north); the
+// Mirror Flower, Water Moon: the water disc under Qinghe, computed per pixel (surface, shading,
+// sparkle and shatter). vUv is the ground offset from the disc centre in cells (x east, y north); the
 // mesh itself is squashed north-south on the map, so a circle here is the ellipse on screen.
 layout(location = 0) in vec4 vColor;
 layout(location = 1) in vec2 vUv;
@@ -29,7 +28,7 @@ layout(set = 2, binding = 1) uniform sampler2D _MainTex;
 const float PI = 3.14159265;
 const int SEEDS = 22;
 
-// The preview's smooth(e0, e1, x): also works with e0 > e1 (a falling edge).
+// Smoothstep that also works with e0 > e1 (a falling edge).
 float sm(float e0, float e1, float x)
 {
     float t = clamp((x - e0) / (e1 - e0), 0.0, 1.0);
@@ -43,7 +42,7 @@ float hash(vec2 p)
     return fract(p.x * p.y);
 }
 
-// Smooth value noise in about -0.25..0.25 (the preview's blurred random fields).
+// Smooth value noise in about -0.25..0.25.
 float vnoise(vec2 p)
 {
     vec2 i = floor(p);

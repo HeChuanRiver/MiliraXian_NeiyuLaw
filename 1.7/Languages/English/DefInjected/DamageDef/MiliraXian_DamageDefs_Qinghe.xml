@@ -18,4 +18,8 @@
   <MX_QH_MirrorSlash.deathMessage>{0} struck at a reflection on the water and fell to Qinghe's illusory reflection.</MX_QH_MirrorSlash.deathMessage>
   <MX_QH_ExecutionSlash.label>zanshin</MX_QH_ExecutionSlash.label>
   <MX_QH_ExecutionSlash.deathMessage>{0} fell as Qinghe's blade clicked home.</MX_QH_ExecutionSlash.deathMessage>
+  <MX_QH_Zantetsuken_Guren.label>Zantetsuken: Guren</MX_QH_Zantetsuken_Guren.label>
+  <MX_QH_Zantetsuken_Guren.deathMessage>{0} was cut down by Qinghe's Zantetsuken: Guren falling from the sky.</MX_QH_Zantetsuken_Guren.deathMessage>
+  <MX_QH_Gaeshi_Gekka.label>Tsubame Gaeshi: Gekka</MX_QH_Gaeshi_Gekka.label>
+  <MX_QH_Gaeshi_Gekka.deathMessage>{0} fell to Tsubame Gaeshi: Gekka as Qinghe's blade clicked into its sheath.</MX_QH_Gaeshi_Gekka.deathMessage>
 </LanguageData>

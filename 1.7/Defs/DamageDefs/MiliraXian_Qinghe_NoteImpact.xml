@@ -123,6 +123,31 @@
       </li>
     </modExtensions>
   </DamageDef>
+  <!-- 斩铁剑【红莲】落地的 5 次判定、燕回返【月华】合鞘的一次判定（建筑伤害 ×1.5，不按命中积累剑压：剑压在起跳时一次花光） -->
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_Zantetsuken_Guren</defName>
+    <label>斩铁剑【红莲】</label>
+    <deathMessage>{0}被清荷从天而降的斩铁剑【红莲】劈倒了。</deathMessage>
+    <buildingDamageFactor>1.5</buildingDamageFactor>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
+  <DamageDef ParentName="MX_QH_TechniqueSlashBase">
+    <defName>MX_QH_Gaeshi_Gekka</defName>
+    <label>燕回返【月华】</label>
+    <deathMessage>{0}在清荷合鞘的一声轻响中倒在了燕回返【月华】之下。</deathMessage>
+    <buildingDamageFactor>1.5</buildingDamageFactor>
+    <modExtensions Inherit="True">
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
+        <canGainSwordPressure>false</canGainSwordPressure>
+        <resonanceAccumulationMultiplier>1.75</resonanceAccumulationMultiplier>
+      </li>
+    </modExtensions>
+  </DamageDef>
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_SlashSkill</defName>
     <label>散华剑技</label>

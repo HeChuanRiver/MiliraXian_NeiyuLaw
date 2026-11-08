@@ -25,6 +25,18 @@
     <checkOverrideOnDamage>Never</checkOverrideOnDamage>
   </JobDef>
   <JobDef>
+    <defName>MX_QH_Zantetsuken_Guren</defName>
+    <driverClass>MiliraXian.Characters.QingHe.Abilities.Zantetsuken.JobDriver_Zantetsuken</driverClass>
+    <reportString>正在施展斩铁剑【红莲】。</reportString>
+    <playerInterruptible>false</playerInterruptible>
+    <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <checkOverrideOnDamage>Never</checkOverrideOnDamage>
+    <collideWithPawns>false</collideWithPawns>
+  </JobDef>
+  <JobDef>
     <defName>MX_QH_TuneResonance</defName>
     <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_TuneResonance</driverClass>
     <reportString>正在调谐四时共鸣。</reportString>

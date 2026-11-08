@@ -13,6 +13,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static JobDef MX_QH_IllusoryReflection;
         public static JobDef MX_QH_TuneResonance;
         public static JobDef MX_QH_SakuraDance;
+        public static JobDef MX_QH_Zantetsuken_Guren;
 
         public static MiliraXian.Characters.Common.SweepDamage.SweepDamageDef MX_QH_SwordSweep;
 
@@ -32,6 +33,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static ThingDef MX_QingheNormal;
         public static ThingDef MX_QingheHeaddress;
 
+        public static ShaderDef MX_QH_Lotus;
+
         public static DamageDef MX_QH_NoteImpact;
         public static DamageDef MX_QH_Slash;
         public static DamageDef MX_QH_SlashSkill;
@@ -47,7 +50,6 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_ParryChance;
 
         public static HediffDef MX_QH_SpringFlow;
-        public static HediffDef MX_QH_AscentSlashInvulnerable;
         public static HediffDef MX_QH_FlowingForm;
         public static HediffDef MX_QH_FlowingFormImmunity;
         public static HediffDef MX_QH_AuraMastery;
@@ -59,6 +61,8 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_SwordPressure;
         public static HediffDef MX_QH_ResonanceTracker;
         public static HediffDef MX_QH_CombatStance;
+        public static HediffDef MX_QH_ExecutionSettings;
+        public static HediffDef MX_QH_MortalWound;
         public static HediffDef MX_QH_ResonanceSpring;
         public static HediffDef MX_QH_ResonanceSummer;
         public static HediffDef MX_QH_ResonanceAutumn;

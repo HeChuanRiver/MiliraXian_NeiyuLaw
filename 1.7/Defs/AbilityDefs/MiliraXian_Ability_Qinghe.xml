@@ -104,6 +104,7 @@
     <hitPawns>true</hitPawns>
     <hitBuildings>true</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
     <damageDelayTicks>0</damageDelayTicks>
     <workerClass>MiliraXian.Characters.QingHe.Jobs.SweepDamageWorker_MirrorCut</workerClass>
   </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
@@ -119,7 +120,7 @@
       </li>
     </modExtensions>
     <label>镜花水月</label>
-    <description>收刀立于水月之上，维持最长5秒的架势。期间受到攻击时，敌人打中的只是镜中幻影：清荷与水面一同碎去，随即一道圆斩扫过四周4.5格内的所有敌人，命中时积累剑压，之后从水中重新显形。\n\n从起手到收势全程无敌；只反击一次。冷却在收势后开始计算。\n\n——镜花水月，如梦似幻。</description>
+    <description>令地面变为水镜幻象，自身隐入其中。幻影最多可以维持5秒，期间受到任何攻击后，清荷的真身会立即发动一次反击。反击击中任意敌对目标时，可以获得一层剑压。\n\n——镜花水月，如梦似幻。触之即碎，可望而不可即。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>225</displayOrder>
@@ -133,7 +134,8 @@
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
       <targetable>true</targetable>
-      <range>30</range>
+      <!-- 略大于圆斩半径 4.5，原版施法圈套在出伤圈外面 -->
+      <range>5.5</range>
       <warmupTime>0</warmupTime>
       <requireLineOfSight>false</requireLineOfSight>
       <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
@@ -147,7 +149,7 @@
     </verbProperties>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityIllusoryReflection">
-        <!-- 时间单位 tick（60 = 1 秒），照抄预览脚本 mirror_preview.py 的常量。
+        <!-- 时间单位 tick（60 = 1 秒）。
              前摇 0.5 秒 → 架势（连前摇最长 5 秒）→ 受击：碎镜 0.5 → 隐身 0.2 → 斩击 0.4 → 隐身 0.5 → 后摇 0.5（最后 0.15 秒武器淡入）。
              没有受击：0.5 秒淡出。前摇到收势全程无敌；冷却在收势时开始。 -->
         <durationTicks>300</durationTicks>
@@ -172,7 +174,7 @@
         <stanceSound>MX_QH_MirrorSlash_Stance</stanceSound>
         <shatterSound>MX_QH_MirrorSlash_Shatter</shatterSound>
         <slashSound>MX_QH_MirrorSlash_Slash</slashSound>
-        <!-- 画面：水面、人物快照、倒影、碎镜、刀光。数值照抄预览脚本，见 MirrorVisualProps 的默认值；
+        <!-- 画面：水面、人物快照、倒影、碎镜、刀光。其余数值见 MirrorVisualProps 的默认值；
              刀光的泛光与樱舞同一组。 -->
         <visuals>
           <bloom>
@@ -184,8 +186,30 @@
       </li>
     </comps>
   </AbilityDef>
+  <!-- 斩铁剑【红莲】/ 燕回返【月华】的落地判定和回返判定：荷花圆内所有敌对目标，从荷花中心看视线 -->
+  <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+    <defName>MX_QH_ZantetsukenBurst</defName>
+    <damageDef>MX_QH_Zantetsuken_Guren</damageDef>
+    <targetFaction>Hostile</targetFaction>
+    <hitPawns>true</hitPawns>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
+    <damageDelayTicks>0</damageDelayTicks>
+  </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+  <!-- 斩铁剑冲刺沿途的钝击：冲刺经过的胶囊内所有敌对目标，每个目标只打一次 -->
+  <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+    <defName>MX_QH_ZantetsukenDash</defName>
+    <damageDef>Blunt</damageDef>
+    <targetFaction>Hostile</targetFaction>
+    <hitPawns>true</hitPawns>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
+    <damageDelayTicks>0</damageDelayTicks>
+  </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
   <AbilityDef>
-    <defName>MX_QH_AscentSlash</defName>
+    <defName>MX_QH_Zantetsuken_Guren</defName>
     <modExtensions>
       <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
         <requirements>
@@ -195,11 +219,11 @@
         </requirements>
       </li>
     </modExtensions>
-    <label>落樱</label>
-    <description>向指定方向高速冲刺，对撞上的第一个目标造成少量踢击伤害；若踢中敌对单位或建筑，则借力跃入空中并乘势消耗全部剑压发动多次高威力斩击。剑压不足1层时也能发动，但斩击次数和威力将大幅削弱。\n\n嗯...你说你好像在哪里见过这招？可能吧。啊，我不是那个...什么叫虾头？</description>
+    <label>斩铁剑【红莲】</label>
+    <description>清荷的剑舞绝招。向目标位置高速冲刺，对沿途的敌人造成钝击伤害；随后眩晕目标点附近的所有敌人并借势跃入空中，消耗全部剑压向下发动凌厉的连续斩击，对范围内所有敌人造成多次伤害。发动时需要至少一层剑压，消耗的剑压越多伤害越高。\n\n该技能具有可习得的连段：\n\n燕回返【月华】\n习得后，在下落斩击结束后，将追加一段回返斩击，对范围内的敌人造成一次追加高额伤害。会略微延长震击造成的眩晕时长。\n\n——与霓羽交手无数次后领悟的绝技。等等……你是说……这招很虾头？</description>
     <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
     <category>MX_QingheSkill</category>
-    <displayOrder>230</displayOrder>
+    <displayOrder>235</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>
     <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
@@ -208,59 +232,152 @@
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
       <targetable>true</targetable>
-      <range>19</range>
-      <warmupTime>0.55</warmupTime>
-      <requireLineOfSight>false</requireLineOfSight>
-      <drawHighlightWithLineOfSight>false</drawHighlightWithLineOfSight>
+      <range>26</range>
+      <warmupTime>0.3</warmupTime>
+      <requireLineOfSight>true</requireLineOfSight>
+      <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
       <targetParams>
         <canTargetSelf>false</canTargetSelf>
-        <canTargetPawns>false</canTargetPawns>
+        <canTargetPawns>true</canTargetPawns>
         <canTargetLocations>true</canTargetLocations>
-        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetBuildings>true</canTargetBuildings>
         <canTargetItems>false</canTargetItems>
       </targetParams>
     </verbProperties>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityAscentSlash">
+      <!-- 时间单位秒，从冲到终点（击晕）算起。
+           冲刺 → 到达（击晕）→ 0.1 起跳 → 0.6 最高点 → 0.75 下坠 → 0.88 落地 → 落地 0.3 秒后每 0.08 秒一次判定共 5 次 → 保持到 2.58。
+           没学燕回返：0.3 秒地上收刀结束。学会：0.5 秒上捞跃回 2.2 米 → 1 秒空中居合 → 合鞘判定 → 0.3 秒落地。 -->
+      <li Class="MiliraXian.Characters.QingHe.Abilities.Zantetsuken.CompProperties_AbilityZantetsuken">
         <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
-        <dashDurationMinTicks>8</dashDurationMinTicks>
+        <dashMinTicks>8</dashMinTicks>
+        <!-- 冲刺不被敌人挡住，沿途 1.35 格内的敌人各受一次 5 点钝击；墙和关着的门会让冲刺停下。
+             对目标施放时冲到目标 3 格内离它最近、看得见的空位，对空地施放时冲到那一格 -->
+        <dashBurst>MX_QH_ZantetsukenDash</dashBurst>
         <dashCollisionRadius>1.35</dashCollisionRadius>
-        <dashImpactRadius>1.5</dashImpactRadius>
-        <dashDamageAmount>5</dashDamageAmount>
-        <takeoffDelayTicks>10</takeoffDelayTicks>
-        <ascentTicks>52</ascentTicks>
-        <hoverTicks>22</hoverTicks>
-        <descentTicks>14</descentTicks>
-        <trackingSpeedCellsPerSecond>6</trackingSpeedCellsPerSecond>
-        <trackingRampFraction>0.5</trackingRampFraction>
-        <trackingDecayStartFraction>0.7</trackingDecayStartFraction>
-        <descentStraightnessPower>1.15</descentStraightnessPower>
-        <secondStageMaxForwardOffset>8</secondStageMaxForwardOffset>
-        <secondStageMaxAltitudeLayers>32</secondStageMaxAltitudeLayers>
-        <secondImpactRadius>4</secondImpactRadius>
-        <damageAmount>28</damageAmount>
+        <dashDamage>5</dashDamage>
+        <approachRadius>3</approachRadius>
+        <takeoffSeconds>0.10</takeoffSeconds>
+        <apexSeconds>0.60</apexSeconds>
+        <fallSeconds>0.75</fallSeconds>
+        <landSeconds>0.88</landSeconds>
+        <holdSeconds>1.7</holdSeconds>
+        <firstHitDelay>0.3</firstHitDelay>
+        <hitInterval>0.08</hitInterval>
+        <landHits>5</landHits>
+        <plainSheatheSeconds>0.3</plainSheatheSeconds>
+        <plainFadeSeconds>0.6</plainFadeSeconds>
+        <scoopRiseSeconds>0.5</scoopRiseSeconds>
+        <scoopSwingSeconds>0.3</scoopSwingSeconds>
+        <turnBackSeconds>0.1</turnBackSeconds>
+        <turnSouthSeconds>0.1</turnSouthSeconds>
+        <sheatheSeconds>1.0</sheatheSeconds>
+        <sheatheAlignShare>0.25</sheatheAlignShare>
+        <gaeshiHoldSeconds>0.4</gaeshiHoldSeconds>
+        <dropSeconds>0.3</dropSeconds>
+        <burstSeconds>0.6</burstSeconds>
+        <apexHeight>16</apexHeight>
+        <gaeshiHeight>2.2</gaeshiHeight>
+        <roofedHeight>1.2</roofedHeight>
+        <!-- 出伤：落地每次 40（共 5 次），回返合鞘一次 150；伤害乘近战伤害系数和法术效果系数。建筑倍率在伤害定义里（×1.5） -->
+        <burstDamage>MX_QH_ZantetsukenBurst</burstDamage>
+        <landDamageDef>MX_QH_Zantetsuken_Guren</landDamageDef>
+        <gaeshiDamageDef>MX_QH_Gaeshi_Gekka</gaeshiDamageDef>
+        <lotusRadius>6</lotusRadius>
+        <landDamage>40</landDamage>
+        <gaeshiDamage>150</gaeshiDamage>
         <armorPenetration>1.35</armorPenetration>
-        <buildingDamageMultiplier>1.5</buildingDamageMultiplier>
-        <empoweredDamagePerPressurePoint>0.25</empoweredDamagePerPressurePoint>
-        <empoweredSlashCount>7</empoweredSlashCount>
-        <empoweredSlashIntervalTicks>6</empoweredSlashIntervalTicks>
-        <empoweredSlashRadius>3</empoweredSlashRadius>
-        <empoweredSlashFleck>MX_QH_Fleck_MirrorSlashNormal</empoweredSlashFleck>
-        <empoweredSlashVisualScale>3.2</empoweredSlashVisualScale>
-        <empoweredSlashVisualAngleJitter>12</empoweredSlashVisualAngleJitter>
-        <normalSlashCount>3</normalSlashCount>
-        <postHitRecoveryHediff>MX_QH_SwordPressureAfterglow</postHitRecoveryHediff>
-        <postHitRecoveryTicks>600</postHitRecoveryTicks>
-        <normalPostHitRecoveryTicks>300</normalPostHitRecoveryTicks>
-        <impactDelayTicks>30</impactDelayTicks>
-        <dropSound>MX_QH_AscentSlash_Drop</dropSound>
-        <slashSound>MX_QH_AscentSlash_Slash</slashSound>
-        <takeoffGroundFleck>MXNL_Skyfall_FlyBegin_G</takeoffGroundFleck>
-        <takeoffGroundFleckSize>(4.8,1.9)</takeoffGroundFleckSize>
-        <takeoffGroundFleckOffset>(0,0)</takeoffGroundFleckOffset>
-        <ascentTrailFleck>MXNL_Skyfall_FlyBegin_F</ascentTrailFleck>
-        <ascentTrailFleckSize>(1.1,10.1)</ascentTrailFleckSize>
-        <ascentTrailFleckOffset>(0,4)</ascentTrailFleckOffset>
+        <!-- 每一击 10 架势，燕回返那一击另加 30。动作中途不处决：打崩的敌人一直崩到动作结束后再持续原本的时长 -->
+        <hitPosture>10</hitPosture>
+        <gaeshiExtraPosture>30</gaeshiExtraPosture>
+        <stunTicks>300</stunTicks>
+        <gaeshiStunTicks>480</gaeshiStunTicks>
+        <minSwordPressure>1</minSwordPressure>
+        <gaeshiNode>MX_QH_Node_Gaeshi_Gekka</gaeshiNode>
+        <!-- 投影和散华的十字斩一致 -->
+        <heightToScreen>0.35</heightToScreen>
+        <depthToScreen>0.55</depthToScreen>
+        <heightOrigin>-0.63</heightOrigin>
+        <!-- 音效：落下用原落樱的落下斩，每次判定和合鞘用原落樱的连续斩击（放大音量的版本）；冲刺撞到敌人借格挡声 -->
+        <dashHitSound>MX_QH_SwordBlock</dashHitSound>
+        <landSound>MX_QH_Zantetsuken_Drop</landSound>
+        <hitSound>MX_QH_Zantetsuken_Slash</hitSound>
+        <burstSound>MX_QH_Zantetsuken_Slash</burstSound>
+        <clickSound>MX_QH_Gaeshi_Shatter</clickSound>
+        <!-- 震屏（原版 CameraShaker，上限 0.2，每秒衰减 0.5）：落地弱、每次斩击很弱、合鞘略强 -->
+        <landShake>0.1</landShake>
+        <hitShake>0.035</hitShake>
+        <gaeshiShake>0.15</gaeshiShake>
+        <visuals>
+          <rimWidth>0.07</rimWidth>
+          <rimStrength>1.3</rimStrength>
+          <bloom>
+            <group>MX_ScreenBloom_Glow</group>
+            <tint>(1, 0.8, 0.9, 1)</tint>
+            <intensity>1.6</intensity>
+          </bloom>
+          <markLengthShare>0.75</markLengthShare>
+          <markVfx>
+            <cutGrowSeconds>0.05</cutGrowSeconds>
+            <cutWaitShare>1</cutWaitShare>
+            <cutFadeSeconds>0.55</cutFadeSeconds>
+            <cutWidth>0.12</cutWidth>
+            <cutAlpha>4</cutAlpha>
+            <cutColor>(1, 0.55, 0.72, 1)</cutColor>
+            <cutCoreColor>(1, 0.92, 0.96, 1)</cutCoreColor>
+            <cutBurstStretch>1.5</cutBurstStretch>
+            <cutStretchSeconds>0.1</cutStretchSeconds>
+            <burstDelay>0.05</burstDelay>
+            <cutBloom>
+              <group>MX_ScreenBloom_Glow</group>
+              <tint>(1, 0.6, 0.78, 1)</tint>
+              <intensity>1.8</intensity>
+            </cutBloom>
+            <cutDistortWidth>0.9</cutDistortWidth>
+            <cutDistortSeconds>0.6</cutDistortSeconds>
+            <cutDistortIntensity>9</cutDistortIntensity>
+          </markVfx>
+          <gaeshiMarkVfx>
+            <cutGrowSeconds>0.05</cutGrowSeconds>
+            <cutWaitShare>1</cutWaitShare>
+            <cutFadeSeconds>0.6</cutFadeSeconds>
+            <cutWidth>0.13</cutWidth>
+            <cutAlpha>4</cutAlpha>
+            <cutColor>(0.62, 0.55, 1, 1)</cutColor>
+            <cutCoreColor>(0.92, 0.89, 1, 1)</cutCoreColor>
+            <cutBurstStretch>1.5</cutBurstStretch>
+            <cutStretchSeconds>0.1</cutStretchSeconds>
+            <burstDelay>0.05</burstDelay>
+            <cutBloom>
+              <group>MX_ScreenBloom_Glow</group>
+              <tint>(0.7, 0.62, 1, 1)</tint>
+              <intensity>1.9</intensity>
+            </cutBloom>
+            <cutDistortWidth>1</cutDistortWidth>
+            <cutDistortSeconds>0.7</cutDistortSeconds>
+            <cutDistortIntensity>10</cutDistortIntensity>
+          </gaeshiMarkVfx>
+          <splitVfx>
+            <cutGrowSeconds>0.08</cutGrowSeconds>
+            <cutWaitShare>1</cutWaitShare>
+            <cutFadeSeconds>0.9</cutFadeSeconds>
+            <cutWidth>0.11</cutWidth>
+            <cutAlpha>4</cutAlpha>
+            <cutColor>(1, 0.6, 0.78, 1)</cutColor>
+            <cutCoreColor>(1, 0.95, 0.98, 1)</cutCoreColor>
+            <cutBurstStretch>1.1</cutBurstStretch>
+            <cutStretchSeconds>0.1</cutStretchSeconds>
+            <burstDelay>0.08</burstDelay>
+            <cutBloom>
+              <group>MX_ScreenBloom_Glow</group>
+              <tint>(1, 0.62, 0.8, 1)</tint>
+              <intensity>1.8</intensity>
+            </cutBloom>
+            <cutDistortWidth>0.8</cutDistortWidth>
+            <cutDistortSeconds>0.9</cutDistortSeconds>
+            <cutDistortIntensity>8</cutDistortIntensity>
+          </splitVfx>
+        </visuals>
       </li>
     </comps>
   </AbilityDef>

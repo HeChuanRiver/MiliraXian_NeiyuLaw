@@ -188,10 +188,12 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 StartRefused = true;
                 return false;
             }
-            if (UsesMotion && castTarg.Thing is Pawn broken && CombatPosture.Get(broken)?.Broken == true
-                && CombatBlockers.ExecutionerFor(CasterPawn) is { Executes: true })
+            if (UsesMotion && castTarg.Thing is Pawn broken && CombatPosture.Get(broken) is { Broken: true } posture
+                && (posture.ExecutesNext(CasterPawn)
+                    || CombatBlockers.ExecutionerFor(CasterPawn)?.ModeFor(CasterPawn) == ExecutionMode.Manual))
             {
                 // Its posture is broken: the execution takes it (at the posture's next settle), not a cut.
+                // Manual execution: no cut either, only an attack order (which executes) acts on it.
                 StartRefused = true;
                 return false;
             }
@@ -709,7 +711,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 {
                     if (thing == pawn || !thing.Spawned || thing.Destroyed
                         || thing is not Pawn && thing is not Building
-                        || thing is Pawn victim && victim.Dead
+                        || thing is Pawn victim && (victim.Dead || victim.Downed && !NeiyuLawMod.Instance.Settings.QingheSweepHitsDowned)
                         || !GenHostility.HostileTo(pawn, thing)
                         || !seen.Add(thing))
                     {

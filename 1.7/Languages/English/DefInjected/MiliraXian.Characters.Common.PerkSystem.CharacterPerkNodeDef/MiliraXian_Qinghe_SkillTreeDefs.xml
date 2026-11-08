@@ -17,8 +17,6 @@
   <MX_QH_Node_SeasonalResonance.description>Attune the rhythm of your aura to grant different harmony effects to yourself and your weapons.</MX_QH_Node_SeasonalResonance.description>
   <MX_QH_Node_LingeringSnow.label>Lingering Snow</MX_QH_Node_LingeringSnow.label>
   <MX_QH_Node_LingeringSnow.description>—Learn the ability: Lunar Mirror.</MX_QH_Node_LingeringSnow.description>
-  <MX_QH_Node_AscentSlash.label>Falling Blossoms</MX_QH_Node_AscentSlash.label>
-  <MX_QH_Node_AscentSlash.description>A sword art Qinghe learned through exchanges with her teacher Neiyu, turning bell tones into sword qi. It combines the astonishing speed of Sword Art: Skyfall with Qinghe's distinctive cutting techniques.&#10;&#10;—Learn the sword art: Falling Blossoms.</MX_QH_Node_AscentSlash.description>
   <MX_QH_Node_FlowerDecree1.label>Flower Decree Enhancement I</MX_QH_Node_FlowerDecree1.label>
   <MX_QH_Node_FlowerDecree1.description>—Passive effect: Maximum Flower Decree +1.</MX_QH_Node_FlowerDecree1.description>
   <MX_QH_Node_FlowerDecree2.label>Flower Decree Enhancement II</MX_QH_Node_FlowerDecree2.label>
@@ -30,4 +28,10 @@
   <MX_QH_Trait_FlowingForm.label>Flowing Form</MX_QH_Trait_FlowingForm.label>
   <MX_QH_Trait_FlowingForm.description>—Passive effect: Enables protection against damage that could be lethal or destroy a body part.</MX_QH_Trait_FlowingForm.description>
   <MX_QH_Node_SwordDance.unlockLetter.text>Qinghe has learned the sword art: Illusory Reflection.</MX_QH_Node_SwordDance.unlockLetter.text>
+  <MX_QH_Node_SakuraDance.label>Sakura Dance</MX_QH_Node_SakuraDance.label>
+  <MX_QH_Node_SakuraDance.description>A sword art of three cuts made while spinning up into the air. Cast in the rain under the open sky, the blade catches a falling thunderbolt.&#10;&#10;—Learn the sword art: Sakura Dance.</MX_QH_Node_SakuraDance.description>
+  <MX_QH_Node_Zantetsuken_Guren.label>Zantetsuken: Guren</MX_QH_Node_Zantetsuken_Guren.label>
+  <MX_QH_Node_Zantetsuken_Guren.description>A sword art Qinghe learned through exchanges with her teacher Neiyu: kick off an enemy, leap high, and drop straight down with the blade held flat, leaving a crimson lotus where she lands.&#10;&#10;—Learn the sword art: Zantetsuken: Guren.</MX_QH_Node_Zantetsuken_Guren.description>
+  <MX_QH_Node_Gaeshi_Gekka.label>Tsubame Gaeshi: Gekka</MX_QH_Node_Gaeshi_Gekka.label>
+  <MX_QH_Node_Gaeshi_Gekka.description>After the blade falls, it does not return to the sheath, but turns and cuts back.&#10;&#10;—Zantetsuken: Guren stuns for 8 seconds; after landing Qinghe turns the edge and scoops back up into low air, sheathes in mid-air, and the click of the sheath strikes every enemy in the lotus once more for heavy damage.</MX_QH_Node_Gaeshi_Gekka.description>
 </LanguageData>

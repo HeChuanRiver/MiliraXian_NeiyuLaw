@@ -10,6 +10,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     public class CompAbilityEffect_SakuraDance : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(1f, 0.62f, 0.75f, 0.6f);
+        private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilitySakuraDance Props => (CompProperties_AbilitySakuraDance)props;
 
@@ -48,7 +49,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 r = Mathf.Max(r, cut.radius);
             }
-            GenDraw.DrawRadiusRing(caster.Position, r, PreviewColor);
+            previewCells.Clear();
+            previewCells.AddRange(GenRadial.RadialCellsAround(caster.Position, r, useCenter: true));
+            GenDraw.DrawFieldEdges(previewCells, PreviewColor);
         }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)

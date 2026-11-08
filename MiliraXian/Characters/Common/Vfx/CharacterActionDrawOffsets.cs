@@ -1,7 +1,6 @@
 using HarmonyLib;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
-using MiliraXian.Characters.QingHe.Abilities;
 using UnityEngine;
 using Verse;
 
@@ -18,7 +17,6 @@ internal static class Patch_CharacterActionDrawOffsets
             __result = executionPosition.WithY(__result.y);
             return;
         }
-        CompAbilityEffect_AscentSlash.ApplyActiveActionDrawPos(___pawn, ref __result);
         __result += CompMingyuanBurningPillarTornado.PullDrawOffset(___pawn);
     }
 }

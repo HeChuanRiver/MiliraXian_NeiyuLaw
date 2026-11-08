@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerDecree.label>Flower Decree</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>Hidden Hediff: resource counter.</MX_QH_FlowerDecree.description>
@@ -16,8 +16,6 @@
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>Hidden resource; not displayed directly.</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>Resonance</MX_QH_FlowerResonance.label>
   <MX_QH_FlowerResonance.description>Hidden Hediff: Qinghe skill data.</MX_QH_FlowerResonance.description>
-  <MX_QH_AscentSlashInvulnerable.label>damage immunity (Falling Blossoms)</MX_QH_AscentSlashInvulnerable.label>
-  <MX_QH_AscentSlashInvulnerable.description>Airborne and temporarily immune to all damage.</MX_QH_AscentSlashInvulnerable.description>
 
 
 

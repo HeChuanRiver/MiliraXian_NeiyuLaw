@@ -3,7 +3,7 @@
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_QH_Weapon_Sword</defName>
         <label>散华</label>
-        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。\n\n此武器带有特殊战技(替换普通攻击)\n\n十字拔刀斩：\n借收刀之势向前方发动高速二连斩，能同时攻击范围内的所有敌人。攻守兼备的绝技，若在收刀完毕前受到攻击，则可立即拔刀弹开并反击。\n\n拔刀斩化解：\n收刀过程中受到攻击立即拔刀弹开并对攻击者造成硬直，随后发动一次反斩。\n\n必杀剑·残心：\n敌人因架势不稳而失衡时自动使用，闪现到敌人身后对弱点造成大量伤害。</description>
+        <description>清荷的随身佩刀。外形优雅，比起武器更像一件精致的艺术品。\n\n只可由清荷使用。\n\n此武器带有特殊战技(替换普通攻击)\n\n十字拔刀斩：\n借收刀之势向前方发动高速二连斩，能同时攻击范围内的所有敌人。攻守兼备的绝技，若在收刀完毕前受到攻击，则可立即拔刀弹开并反击。\n\n拔刀斩化解：\n收刀过程中受到攻击立即拔刀弹开并对攻击者造成硬直，随后发动一次反斩。</description>
         <recipeMaker Inherit="False">
             <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
             <workSkill>Crafting</workSkill>
@@ -140,7 +140,6 @@
                 <scabbardRestEnd>(-0.318, -0.718, -0.133)</scabbardRestEnd>
             </li>
             <li Class="MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionSetExtension">
-                <!-- 由 .cache/slash_proto/cross_slash_preview.py（参数 xml）生成，和离线预览完全一致；改动作请改脚本再生成 -->
                 <!-- 投影：高度压到 0.35；原点（骨骼的骨盆）放在贴图实测的骨盆（小人中心下 0.22 格 = 0.63 米 × 0.35）；南北方向缩到 0.55 -->
                 <heightToScreen>0.35</heightToScreen>
                 <heightOrigin>-0.63</heightOrigin>
@@ -182,7 +181,7 @@
                 </parry>
                 <attacks>
                     <!--
-                      苇名十字斩（8 字斩），骨骼取自只狼 a104_316210（收刀）和 a104_316000（出刀），握点按刀长比例放大 1.24 倍。
+                      十字斩（8 字斩）。
                       0–0.15 秒离开待机；收刀入鞘（0.783 秒完全入鞘，鞘口闪光）；入鞘蓄势；
                       1.45 秒拔刀：斜撩 → 往右下摆 → 向左横斩；停刀、慢速回挥；最后 0.3 秒回到待机。
                       举刀（原版施法预热）到 1.45 秒；之后的 1.72 秒走冷却，冷却比动作短时按比例加速。
@@ -411,7 +410,7 @@
                 </attacks>
             </li>
             <!--
-              十字斩刀光（跟刀身走）和收刀闪光，层次照只狼 FFX 440071（刀光）和 440070（收刀闪光，去掉径向模糊）。
+              十字斩刀光（跟刀身走）和收刀闪光。
               刀光带沿刀身方向展开，radialOffset 从刀身 bandCentre（握点起算的比例）处量，正 = 往刀尖。
               灰白为主；亮丝按花铃共鸣换色（春、夏、秋、冬），没有共鸣为白色。
             -->
@@ -533,7 +532,7 @@
                         <speedU>0.02</speedU>
                     </li>
                 </layers>
-                <!-- 收刀闪光：刀完全入鞘时在鞘口一闪（星芒 1–2 帧、横向光条 0.2 秒、光晕 0.2 秒），去掉原作的径向模糊 -->
+                <!-- 收刀闪光：刀完全入鞘时在鞘口一闪（星芒 1–2 帧、横向光条 0.2 秒、光晕 0.2 秒） -->
                 <sheatheFlash>
                     <texPath>MiliraXianQinghe/Effect/SakuraDance/Glow</texPath>
                     <color>(0.88, 0.93, 0.96, 1)</color>

@@ -37,12 +37,25 @@ public abstract class CombatBlocker
     // Decide and apply one projectile block; true consumes the impact.
     public virtual bool TryBlockProjectile(Projectile projectile, Pawn defender) => false;
 
-    // Execution of a posture-broken victim by the pawn who broke it.
+    // How the pawn handles a victim it broke: execute it at once, wait for an attack order, or never.
+    public virtual ExecutionMode ModeFor(Pawn executor) => ExecutionMode.Auto;
+    // True: the player's melee attack order on a broken victim is carried out as this pawn's execution,
+    // whoever broke it.
+    public virtual bool AcceptsOrders => false;
+    // True: an execution given up before its blow leaves the break running on its own time, and an
+    // attack order can start it again. False: the break ends with it.
+    public virtual bool KeepsBreakOnAbandon => false;
+
+    // The pawn can start the execution of a posture-broken victim now.
     public virtual bool CanExecute(Pawn executor, Pawn victim) => false;
     public virtual Job MakeExecutionJob(Pawn executor, Pawn victim) => null;
     // Extra break window an execution needs beyond the posture's own. Also the
     // least time left on the break once the execution job takes the victim.
     public virtual int MinimumBreakWindowTicks => 0;
+    // Break window of a victim this pawn broke, when longer than the shared one.
+    public virtual int BreakWindowTicks => 0;
+    // A pawn the covered pawn is attacking (job or busy stance) has just broken, whoever broke it.
+    public virtual void NotifyTargetBroken(Pawn pawn, Pawn victim) { }
     // True: while CanExecute is false (the executor is busy or out of reach) the
     // victim holds still for the rest of the break window and the executor may
     // still come. False: the break ends at once (Neiyu's behaviour).
@@ -56,6 +69,8 @@ public abstract class CombatBlocker
     // While true, existing posture openings give no bonus damage.
     public virtual bool SuppressOpenings => false;
 }
+
+public enum ExecutionMode { Auto, Manual, None }
 
 // A running execution job; the posture lock is valid only while it owns the victim.
 public interface IPostureExecutionDriver
@@ -128,6 +143,23 @@ public static class CombatBlockers
             if (Blockers[i].Covers(executor)) return Blockers[i];
         return null;
     }
+
+    // Once per break: every pawn attacking the victim hears of it from its own blocker.
+    public static void NotifyTargetBroken(Pawn victim)
+    {
+        IReadOnlyList<Pawn> pawns = victim.Map.mapPawns.AllPawnsSpawned;
+        for (int i = pawns.Count - 1; i >= 0; i--)
+        {
+            Pawn p = pawns[i];
+            if (p == victim) continue;
+            bool attacking = p.CurJob is { } job && job.def == JobDefOf.AttackMelee && job.targetA.Thing == victim
+                || p.stances?.curStance is Stance_Busy busy && busy.focusTarg.Thing == victim;
+            if (attacking) ExecutionerFor(p)?.NotifyTargetBroken(p, victim);
+        }
+    }
+
+    public static int BreakWindowFor(CombatBlocker owner, int shared) =>
+        System.Math.Max(shared, System.Math.Max(owner?.MinimumBreakWindowTicks ?? 0, owner?.BreakWindowTicks ?? 0));
 
     public static bool CanExecute(Pawn executor, Pawn victim) =>
         ExecutionerFor(executor)?.CanExecute(executor, victim) == true;

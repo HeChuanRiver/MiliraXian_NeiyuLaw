@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 斩铁剑【红莲】的荷花和光条：逐像素画花瓣、叶脉和往上叠的光条。加法混合，不写深度；
+       排在水月水面（3140）之后、樱舞刀光（3151 扭曲）之前。 -->
+  <ShaderDef>
+    <defName>MX_QH_Lotus</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_Lotus.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3142</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

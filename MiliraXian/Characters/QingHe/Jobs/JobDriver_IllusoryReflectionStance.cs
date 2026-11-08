@@ -158,7 +158,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             }
         }
 
-        /// <summary>The preview's smooth(0, 1, x).</summary>
+        /// <summary>Smoothstep from 0 to 1.</summary>
         internal static float Smooth(float x)
         {
             x = Mathf.Clamp01(x);

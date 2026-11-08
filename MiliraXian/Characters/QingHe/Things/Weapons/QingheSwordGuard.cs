@@ -78,11 +78,14 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>Sword pressure the blow grants, fixed (no resonance bonus or strike share).</summary>
         public float executionSwordPressure = 1f;
         public SoundDef executionDrawSound;
+        public float executionShake, killShake;
         /// <summary>
         /// Share of its maximum posture an enemy she broke keeps when its break ends without her
-        /// execution (she was busy with others): it breaks again soon (as Sekiro's posture).
+        /// execution (she was busy with others): it breaks again soon.
         /// </summary>
         public float unexecutedPostureKept = 0.8f;
+        /// <summary>How long an enemy she broke stays broken, ticks (at least the execution's own length).</summary>
+        public int breakWindowTicks = 480;
 
         /// <summary>
         /// The sword stance's guard motion, the same with any melee weapon: the projection, the guard
@@ -359,6 +362,30 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public override bool WaitForExecutor => true;
         public override int MinimumBreakWindowTicks => QingheSwordGuard.Config.ExecutionTicks + 30;
         public override float UnexecutedPostureKept => QingheSwordGuard.Config.unexecutedPostureKept;
+        public override bool AcceptsOrders => true;
+        public override bool KeepsBreakOnAbandon => true;
+        public override int BreakWindowTicks => QingheSwordGuard.Config.breakWindowTicks;
+
+        // Manual execution: the attack on a target that just broke stops at once, the blade back to idle.
+        public override void NotifyTargetBroken(Pawn pawn, Pawn victim)
+        {
+            if (ModeFor(pawn) != ExecutionMode.Manual || pawn.jobs?.curDriver is IPostureExecutionDriver)
+            {
+                return;
+            }
+            if (pawn.stances.curStance is Stance_Busy busy && busy.focusTarg.Thing == victim)
+            {
+                pawn.stances.CancelBusyStanceHard();
+            }
+            if (pawn.CurJob is { } job && job.def == JobDefOf.AttackMelee && job.targetA.Thing == victim)
+            {
+                pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+            }
+        }
+
+        public override ExecutionMode ModeFor(Pawn executor) => executor.Faction == Faction.OfPlayer
+            ? Hediff_QingheExecutionSettings.Get(executor)?.mode ?? ExecutionMode.Auto
+            : ExecutionMode.Auto;
 
         // Decorative mode seals the whole sword defence: no guard, parry, counter, posture or execution.
         // Her ordinary attacks (the motion strikes) stay.
@@ -376,7 +403,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return;
             }
             Vector3 toward = source != null && source.Spawned && source.Map == victim.Map ? victim.DrawPos - source.DrawPos : Vector3.forward;
-            QingheImpactVfx.Spawn(victim.Map, c.breakVfx, victim.DrawPos, toward, victim.Position);
+            QingheImpactVfx.Spawn(victim.Map, c.breakVfx, victim.DrawPos, toward, victim.Position,
+                sound: source?.jobs?.curDriver is not Abilities.Zantetsuken.JobDriver_Zantetsuken);
         }
 
         public override bool TryBlockMelee(Verb_MeleeAttack verb, Pawn defender)
@@ -551,6 +579,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
                 || pawn.jobs?.curDriver is JobDriver_IllusoryReflectionStance
                 || pawn.CurJobDef == MX_QHDefOf.MX_QH_SakuraDance
+                || pawn.jobs?.curDriver is Abilities.Zantetsuken.JobDriver_Zantetsuken
                 || CombatPosture.Get(pawn)?.Broken == true)
             {
                 return false;
@@ -685,7 +714,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 CombatPosture.Ensure(attacker)?.ReceiveBlock(defender, attackerPosture, opening: false);
             }
             // The deflected attacker recoils: its next swing (its cooldown pauses while stunned) comes
-            // after Qinghe's answer, as in Sekiro where a deflect hands the next move to the defender.
+            // after Qinghe's answer.
             // A posture break above has already put it on hold; the stun does not disturb that.
             int stagger = staggerTicks >= 0 ? staggerTicks : Config.parryStaggerTicks;
             if (stagger > 0 && attacker.Spawned && !attacker.Dead)

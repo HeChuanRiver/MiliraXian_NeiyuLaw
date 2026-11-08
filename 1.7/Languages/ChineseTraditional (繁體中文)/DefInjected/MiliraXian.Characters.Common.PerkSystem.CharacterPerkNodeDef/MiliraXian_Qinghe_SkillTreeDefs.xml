@@ -51,8 +51,6 @@
   <MX_QH_Node_SeasonalResonance.description>調諧自身靈氣律動，為自身和武器附加不同的和鳴效果。</MX_QH_Node_SeasonalResonance.description>
   <MX_QH_Node_LingeringSnow.label>殘雪</MX_QH_Node_LingeringSnow.label>
   <MX_QH_Node_LingeringSnow.description>——習得技能：霜月鏡。</MX_QH_Node_LingeringSnow.description>
-  <MX_QH_Node_AscentSlash.label>落櫻</MX_QH_Node_AscentSlash.label>
-  <MX_QH_Node_AscentSlash.description>清荷與老師霓羽交流後領悟的劍技，以鈴音化為劍氣，兼有劍勢·天墜的驚人速度和清荷獨特的斬擊技巧。&#10;&#10;——習得劍技：落櫻。</MX_QH_Node_AscentSlash.description>
   <MX_QH_Node_FlowerDecree1.label>花令強化I</MX_QH_Node_FlowerDecree1.label>
   <MX_QH_Node_FlowerDecree1.description>——被動效果：花令的積累上限 +1。</MX_QH_Node_FlowerDecree1.description>
   <MX_QH_Node_FlowerDecree2.label>花令強化II</MX_QH_Node_FlowerDecree2.label>
@@ -64,4 +62,10 @@
   <MX_QH_Trait_FlowingForm.label>流水之形</MX_QH_Trait_FlowingForm.label>
   <MX_QH_Trait_FlowingForm.description>——被動效果：啟用受可能致命或損失部位的傷害時的免傷能力。</MX_QH_Trait_FlowingForm.description>
   <MX_QH_Node_SwordDance.unlockLetter.text>清荷已習得劍技：鏡花水月。</MX_QH_Node_SwordDance.unlockLetter.text>
+  <MX_QH_Node_SakuraDance.label>櫻舞</MX_QH_Node_SakuraDance.label>
+  <MX_QH_Node_SakuraDance.description>原地旋身躍起，連斬三刀的劍技。雨天露天施放時，刀身會接住落雷。&#10;&#10;——習得劍技：櫻舞。</MX_QH_Node_SakuraDance.description>
+  <MX_QH_Node_Zantetsuken_Guren.label>斬鐵劍【紅蓮】</MX_QH_Node_Zantetsuken_Guren.label>
+  <MX_QH_Node_Zantetsuken_Guren.description>清荷與老師霓羽交流後領悟的劍技：踢中敵人借力高躍，平舉刀身豎直劈落，在落點開出一朵紅蓮。&#10;&#10;——習得劍技：斬鐵劍【紅蓮】。</MX_QH_Node_Zantetsuken_Guren.description>
+  <MX_QH_Node_Gaeshi_Gekka.label>燕回返【月華】</MX_QH_Node_Gaeshi_Gekka.label>
+  <MX_QH_Node_Gaeshi_Gekka.description>一刀劈落之後不收刀，翻刃往回斬。&#10;&#10;——斬鐵劍【紅蓮】的擊暈延長至8秒；落地後翻刃上撈躍回低空，空中居合收刀，合鞘時對荷花內的所有敵人再造成一次高額傷害。</MX_QH_Node_Gaeshi_Gekka.description>
 </LanguageData>

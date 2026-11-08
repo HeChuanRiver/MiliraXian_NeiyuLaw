@@ -12,7 +12,8 @@ namespace MiliraXian.Characters.Common.Combat;
 internal static class Patch_PostureOrderedJob
 {
     // An uninterruptible Job still accepts queued orders through this method.
-    private static bool Prefix(Pawn ___pawn) => !CombatPosture.ControlsActions(___pawn);
+    private static bool Prefix(Pawn ___pawn, Job job) =>
+        !CombatPosture.ControlsActions(___pawn) && CombatPosture.TakeAttackOrder(___pawn, job);
 }
 
 [HarmonyPatch(typeof(Pawn_JobTracker), "DetermineNextJob")]

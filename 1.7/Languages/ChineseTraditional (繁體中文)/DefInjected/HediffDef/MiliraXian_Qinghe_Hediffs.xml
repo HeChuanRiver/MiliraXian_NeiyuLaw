@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MX_QH_FlowerDecree.label>花令</MX_QH_FlowerDecree.label>
   <MX_QH_FlowerDecree.description>隱藏Hediff：資源計數器</MX_QH_FlowerDecree.description>
@@ -16,8 +16,6 @@
   <MX_QH_MeditativeStillness.comps.0.resourceDescription>隱藏資源，不直接顯示</MX_QH_MeditativeStillness.comps.0.resourceDescription>
   <MX_QH_FlowerResonance.label>和鳴</MX_QH_FlowerResonance.label>
   <MX_QH_FlowerResonance.description>隱藏Hediff：清荷技能數據</MX_QH_FlowerResonance.description>
-  <MX_QH_AscentSlashInvulnerable.label>傷害免疫（落櫻）</MX_QH_AscentSlashInvulnerable.label>
-  <MX_QH_AscentSlashInvulnerable.description>躍入空中，暫時免疫所有傷害。</MX_QH_AscentSlashInvulnerable.description>
 
 
 

@@ -48,9 +48,9 @@ void main()
     float t = u._Wave.x;
     float k = u._Wave.y;
     float seed = u._Wave.z;
-    // v from the bottom of the picture; rows in preview pixels (the picture is 4 cells, 72 px per cell).
+    // v from the bottom of the picture; rows in pixels (the picture is 4 cells, 72 px per cell).
     float rowPx = vUv.y * 288.0;
-    // The preview's two row waves, now continuous in v, plus a slow noise instead of per-strip jitter.
+    // Two row waves, continuous in v, plus a slow noise.
     float wave = sin(rowPx * 0.11 / u._Wave.w + t * 40.0) * 9.0 + sin(rowPx * 0.037 / u._Wave.w - t * 25.0) * 14.0;
     float tear = vnoise(vec2(vUv.y * 22.0 + seed, t * 3.0 + seed * 0.37)) * 22.0;
     float dxPx = k * (wave + tear);

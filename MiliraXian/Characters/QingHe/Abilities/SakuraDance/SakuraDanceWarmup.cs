@@ -8,7 +8,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
 {
     /// <summary>
     /// The aim of Sakura Dance (the vanilla ability warmup, <see cref="Stance_Warmup"/>): the pawn spins
-    /// into the crouch and lays the blade behind its head (Sekiro 316700). The warmup clip is
+    /// into the crouch and lays the blade behind its head. The warmup clip is
     /// stretched over the actual warmup ticks and ends in the pose the dance starts from. Purely
     /// visual: the stance and the cast are vanilla. Played by <see cref="BladeMotionPlayer"/>.
     /// </summary>

@@ -49,6 +49,57 @@
         </subSounds>
     </SoundDef>
 
+    <!-- 斩铁剑【红莲】：原落樱的落下斩和连续斩击，音量放大（落樱原值 35） -->
+    <SoundDef>
+        <defName>MX_QH_Zantetsuken_Drop</defName>
+        <context>MapOnly</context>
+        <maxSimultaneous>2</maxSimultaneous>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip">
+                        <clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath>
+                    </li>
+                </grains>
+                <volumeRange>70~70</volumeRange>
+                <pitchRange>1~1</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
+    <SoundDef>
+        <defName>MX_QH_Zantetsuken_Slash</defName>
+        <context>MapOnly</context>
+        <maxSimultaneous>4</maxSimultaneous>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip">
+                        <clipPath>MiliraXianQinghe/AscentSlash/ascendslash_slash</clipPath>
+                    </li>
+                </grains>
+                <volumeRange>60~60</volumeRange>
+                <pitchRange>0.96~1.04</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
+    <!-- 燕回返合鞘：Freesound #861044 "Hard Glass Break 3"（ElevatorFan2020，CC0），mp3 转 ogg -->
+    <SoundDef>
+        <defName>MX_QH_Gaeshi_Shatter</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/MirrorSlash/zantetsuken_glass</clipPath></li>
+                </grains>
+                <volumeRange>85~85</volumeRange>
+                <pitchRange>1~1</pitchRange>
+                <distRange>3~34</distRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
     <SoundDef>
         <defName>MX_QH_AscentSlash_Drop</defName>
         <context>MapOnly</context>

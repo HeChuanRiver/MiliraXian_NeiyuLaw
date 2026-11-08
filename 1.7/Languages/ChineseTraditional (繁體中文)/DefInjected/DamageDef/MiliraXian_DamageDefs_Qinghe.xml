@@ -18,4 +18,8 @@
   <MX_QH_MirrorSlash.deathMessage>{0}斬向了水中的倒影，倒在了清荷的鏡花水月之下。</MX_QH_MirrorSlash.deathMessage>
   <MX_QH_ExecutionSlash.label>殘心</MX_QH_ExecutionSlash.label>
   <MX_QH_ExecutionSlash.deathMessage>{0}在清荷收刀的一聲輕響中倒下了。</MX_QH_ExecutionSlash.deathMessage>
+  <MX_QH_Zantetsuken_Guren.label>斬鐵劍【紅蓮】</MX_QH_Zantetsuken_Guren.label>
+  <MX_QH_Zantetsuken_Guren.deathMessage>{0}被清荷從天而降的斬鐵劍【紅蓮】劈倒了。</MX_QH_Zantetsuken_Guren.deathMessage>
+  <MX_QH_Gaeshi_Gekka.label>燕回返【月華】</MX_QH_Gaeshi_Gekka.label>
+  <MX_QH_Gaeshi_Gekka.deathMessage>{0}在清荷合鞘的一聲輕響中倒在了燕回返【月華】之下。</MX_QH_Gaeshi_Gekka.deathMessage>
 </LanguageData>

@@ -10,13 +10,10 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Vfx
 {
-    /// <summary>
-    /// Visual settings of Mirror Flower, Water Moon. Every number copies a constant of the offline
-    /// preview (.cache/mirror_proto/mirror_preview.py); change the script first, then copy here.
-    /// </summary>
+    /// <summary>Visual settings of Mirror Flower, Water Moon.</summary>
     public class MirrorVisualProps
     {
-        // Projection (the game's blade projection, as the preview).
+        // Projection (the game's blade projection).
         public float heightToScreen = 0.35f;
         public float heightOrigin = -0.63f;
         public float depthToScreen = 0.55f;
@@ -36,7 +33,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         /// <summary>The reflection's own sway in the still water (0..1 of the shatter's disturbance).</summary>
         public float reflectionSway = 0.18f;
 
-        /// <summary>Moon and moon halo brightness (the preview's 1).</summary>
+        /// <summary>Moon and moon halo brightness.</summary>
         public float moonBrightness = 2.2f;
         /// <summary>Share of the dim pink surface light that joins the bloom (the moon, glints and shards always do).</summary>
         public float waterBloomPinkShare = 0.15f;
@@ -63,7 +60,6 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public string lineTexPath = "MiliraXianQinghe/Effect/SakuraDance/DistortMask";
         public string distortTexPath = "MiliraXianQinghe/Effect/SakuraDance/DistortMask";
         public string distortNormalTexPath = "MiliraXianQinghe/Effect/SakuraDance/DistortNormal";
-        // The preview adds the band at about 0.32 to 0.7 (with its glow) and the line at 1.1; bloom comes on top in the game.
         public float bandBrightness = 0.5f;
         public float coreBrightness = 1.1f;
         public float coreWidth = 0.08f;
@@ -428,8 +424,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
         }
 
         /// <summary>
-        /// The snapshot on one quad. The shader moves every pixel by a smooth flowing field (the
-        /// preview's row waves, continuous, plus a soft tearing noise), scaled by <paramref name="k"/>,
+        /// The snapshot on one quad. The shader moves every pixel by a smooth flowing field (row
+        /// waves plus a soft tearing noise), scaled by <paramref name="k"/>,
         /// with the pink sheen; <paramref name="alpha"/> fades it.
         /// </summary>
         private static void DrawBody(Instance inst, MirrorVisualProps vp, Vector3 center, float t, float k, float alpha, int seed, float alt)
@@ -759,7 +755,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             public override float HeightToScreen => vp.heightToScreen;
             public override float DepthToScreen => vp.depthToScreen;
-            // Ring heights are from the pelvis, as the preview's ring_point.
+            // Ring heights are from the pelvis.
             public override float HeightOrigin => vp.heightOrigin;
             public override string DistortionNormalTexPath => vp.distortNormalTexPath;
             public override float DistortionMetresPerUnit => vp.distortionMetresPerUnit;
@@ -865,7 +861,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             private Vector3 RingPoint(float yaw, float r)
             {
                 float heading = MirrorCutGeometry.HeadingOf(aim, yaw) * Mathf.Deg2Rad;
-                // Lowest at the start yaw (the back-left), highest opposite, as the preview's ring_point.
+                // Lowest at the start yaw (the back-left), highest opposite.
                 float h = 0.35f - vp.cutTilt * Mathf.Cos((yaw - startYaw) * Mathf.Deg2Rad);
                 return new Vector3(center.x + Mathf.Cos(heading) * r, h * r / vp.cutOuterRadius, center.z + Mathf.Sin(heading) * r);
             }
@@ -879,7 +875,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 side = RingPoint(yaw, r + 1f) - centre;
             }
 
-            /// <summary>Every point fades by its own age over its layer's life (the preview's per-part age fade).</summary>
+            /// <summary>Every point fades by its own age over its layer's life.</summary>
             public override float SampleAlpha(int layerIndex, SakuraTrailLayer layer, float te, float t)
             {
                 float age = t - te;

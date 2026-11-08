@@ -39,8 +39,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     }
 
     /// <summary>
-    /// The "ting" at the scabbard mouth when the blade goes fully in (Sekiro FFX 440070, without its
-    /// radial blur): two crossed needles for one frame or two, a horizontal light bar and a halo.
+    /// The "ting" at the scabbard mouth when the blade goes fully in: two crossed needles for one
+    /// frame or two, a horizontal light bar and a halo.
     /// Sizes in metres, times in seconds.
     /// </summary>
     public class QingheSheatheFlashProps

@@ -51,7 +51,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             try
             {
                 float pathSpeed = cut.petalRadius * Mathf.Abs(cut.angularSpeed) * Mathf.Deg2Rad;
-                // Local launch direction of the FXR emitter: mostly forward along the spin, a bit outward.
+                // Local launch direction: mostly forward along the spin, a bit outward.
                 const float launch = 157.5f * Mathf.Deg2Rad;
                 Vector3 baseDir = new(Mathf.Sin(launch), 0f, Mathf.Cos(launch));
                 foreach (SakuraPetalEmitter e in cut.petals)

@@ -17,7 +17,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     float _AlphaScale;    // @default = 1.0
     // 1 for the additive layers: alpha above 1 then adds more light instead of being clipped.
     float _Additive;      // @default = 0.0
-    // Upper limit of the final opacity (1 = clamp like the offline preview; large = no clamp).
+    // Upper limit of the final opacity (1 = clamp; large = no clamp).
     float _AlphaMax;      // @default = 1000000.0
 } u;
 

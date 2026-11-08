@@ -11,8 +11,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     /// <summary>
     /// One tier of Qinghe's sword impact effect (block, parry, counter, posture break, execution),
-    /// modelled on Sekiro's guard and deflect FFX (201001 / 252001 / 253001 / 261001) and drawn with
-    /// a soft glow texture: a flash with optional needles, sparks thrown towards the attacker that
+    /// drawn with a soft glow texture: a flash with optional needles, sparks thrown towards the attacker that
     /// slow down and fall, an expanding light ring and a grey dust ring. Map units and seconds;
     /// alphas above 1 add more light (additive parts).
     /// </summary>
@@ -128,6 +127,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public float petalBrightness = 1.25f;
 
         public SoundDef sound;
+
+        internal QingheImpactVfxProps WithCut(float length, float delay = 0f, float width = 1f)
+        {
+            QingheImpactVfxProps copy = (QingheImpactVfxProps)MemberwiseClone();
+            copy.cuts = new List<QingheImpactCut> { new() { angle = 0f, length = length, delay = delay, width = width } };
+            return copy;
+        }
 
         public float LifeSeconds
         {

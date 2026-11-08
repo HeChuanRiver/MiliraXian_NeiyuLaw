@@ -8,9 +8,7 @@ using Verse.AI;
 namespace MiliraXian.Characters.QingHe.Abilities
 {
     /// <summary>
-    /// Mirror Flower, Water Moon. Times are game ticks (60 = 1 s) and copy the preview script's
-    /// constants (.cache/mirror_proto/mirror_preview.py): WINDUP 0.5, SHATTER 0.5, CUT_DELAY 0.2,
-    /// CUT 0.4, REFORM_DELAY 0.5, RECOVER 0.5 (WEAPON_BACK 0.15), EXIT 0.5.
+    /// Mirror Flower, Water Moon. Times are game ticks (60 = 1 s).
     /// </summary>
     public class CompProperties_AbilityIllusoryReflection : CompProperties_AbilityEffect
     {
@@ -45,7 +43,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public SoundDef slashSound;
         /// <summary>The mirror breaking, at the moment she is hit.</summary>
         public SoundDef shatterSound;
-        /// <summary>Water, body, reflection and trail; null = the defaults (the preview's constants).</summary>
+        /// <summary>Water, body, reflection and trail; null = the defaults.</summary>
         public Vfx.MirrorVisualProps visuals;
 
         public CompProperties_AbilityIllusoryReflection()
@@ -57,6 +55,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_IllusoryReflection : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
+        private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
 
@@ -76,7 +75,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
             {
                 return;
             }
-            GenDraw.DrawRadiusRing(caster.Position, Props.cutRadius, PreviewColor);
+            previewCells.Clear();
+            previewCells.AddRange(GenRadial.RadialCellsAround(caster.Position, Props.cutRadius, useCenter: true));
+            GenDraw.DrawFieldEdges(previewCells, PreviewColor);
         }
 
         /// <summary>
