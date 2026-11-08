@@ -7,6 +7,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
     public class AbilityRequirement_Perk : AbilityRequirement
     {
         public CharacterPerkNodeDef perk;
+        public override bool HideWhenUnmet => false;
 
         public override bool Met(Pawn pawn)
         {

@@ -12,6 +12,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
     public class CharacterPerkCategoryDef : Def
     {
         public int displayOrder;
+        public string iconPath;
     }
 
 }

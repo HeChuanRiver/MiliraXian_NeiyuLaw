@@ -27,6 +27,9 @@ namespace MiliraXian.Characters.Neiyu
         private bool splitDone;
 
         private int splitTick;
+        private int plannedSplitCount;
+        private int plannedShardDamage = -1;
+        private float plannedShardPenetration = -1f;
 
         private SplitArrowExtension Ext => def.GetModExtension<SplitArrowExtension>();
 
@@ -35,6 +38,9 @@ namespace MiliraXian.Characters.Neiyu
             base.ExposeData();
             Scribe_Values.Look(ref splitDone, "splitDone", false);
             Scribe_Values.Look(ref splitTick, "splitTick", 0);
+            Scribe_Values.Look(ref plannedSplitCount, "mx_cultivationSplitCount", 0);
+            Scribe_Values.Look(ref plannedShardDamage, "mx_cultivationShardDamage", -1);
+            Scribe_Values.Look(ref plannedShardPenetration, "mx_cultivationShardPenetration", -1f);
         }
 
         public override void Launch(
@@ -50,6 +56,15 @@ namespace MiliraXian.Characters.Neiyu
             base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
             SplitArrowExtension ext = Ext;
             splitTick = Find.TickManager.TicksGame + Mathf.Max(1, ext?.splitDelayTicks ?? 8);
+            plannedSplitCount = CultivationPower.SplitCount(launcher as Pawn, ext?.splitCount ?? 8, equipment);
+            if (ResolveSplitProjectileDef()?.projectile is { } shard)
+            {
+                float baseline = shard.GetDamageAmount(1f, null);
+                plannedShardDamage = Mathf.Max(1, Mathf.RoundToInt(shard.GetDamageAmount(equipment)
+                    * CultivationPower.ProjectileDamageFactor(equipment, baseline)));
+                plannedShardPenetration = shard.GetArmorPenetration(equipment) + CultivationPower.ProjectilePenetrationBonus(equipment)
+                    * (equipment?.GetStatValue(StatDefOf.RangedWeapon_ArmorPenetrationMultiplier) ?? 1f);
+            }
         }
 
         protected override void TickInterval(int delta)
@@ -104,7 +119,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             forward = forward.normalized;
-            int count = Cultivation.CultivationPower.SplitCount(launcher as Pawn, ext?.splitCount ?? 6);
+            int count = plannedSplitCount > 0 ? plannedSplitCount : CultivationPower.SplitCount(launcher as Pawn, ext?.splitCount ?? 8, equipment);
             Vector3 aimPoint = destination;
             if (intendedTarget.IsValid)
             {
@@ -190,6 +205,7 @@ namespace MiliraXian.Characters.Neiyu
                     if (shard != null)
                     {
                         shard.SetSequentialDelay(Rand.RangeInclusive(2, 6));
+                        shard.SetCultivationSnapshot(plannedShardDamage, plannedShardPenetration);
                     }
                     child.Launch(launcher, ExactPosition, usedTarget, homingTarget, HitFlags, preventFriendlyFire, equipment, targetCoverDef);
                 }
@@ -224,11 +240,22 @@ namespace MiliraXian.Characters.Neiyu
     public class Projectile_HomingShard : ProjectileHomingCurveBase
     {
         private int sequentialDelayTicks;
+        private int snapshotDamage = -1;
+        private float snapshotPenetration = -1f;
+        public override int DamageAmount => snapshotDamage >= 0 ? snapshotDamage : base.DamageAmount;
+        public override float ArmorPenetration => snapshotPenetration >= 0f ? snapshotPenetration : base.ArmorPenetration;
+        public void SetCultivationSnapshot(int damage, float penetration)
+        {
+            snapshotDamage = damage;
+            snapshotPenetration = penetration;
+        }
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref sequentialDelayTicks, "sequentialDelayTicks", 0);
+            Scribe_Values.Look(ref snapshotDamage, "mx_cultivationDamage", -1);
+            Scribe_Values.Look(ref snapshotPenetration, "mx_cultivationPenetration", -1f);
         }
 
         public void SetSequentialDelay(int delayTicks)
@@ -247,6 +274,12 @@ namespace MiliraXian.Characters.Neiyu
             ThingDef targetCoverDef = null)
         {
             base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
+            float baseline = def.projectile.GetDamageAmount(1f, null);
+            if (snapshotDamage < 0)
+                snapshotDamage = Mathf.Max(1, Mathf.RoundToInt(base.DamageAmount * CultivationPower.ProjectileDamageFactor(equipment, baseline)));
+            if (snapshotPenetration < 0f)
+                snapshotPenetration = base.ArmorPenetration + CultivationPower.ProjectilePenetrationBonus(equipment)
+                    * (equipment?.GetStatValue(StatDefOf.RangedWeapon_ArmorPenetrationMultiplier) ?? 1f);
             int delay = Mathf.Max(1, sequentialDelayTicks);
             GetComp<CompProjectileHomingCurve>()?.NotifyLaunch(Find.TickManager.TicksGame + delay);
         }

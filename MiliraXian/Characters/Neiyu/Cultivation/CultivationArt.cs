@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using MiliraXian.Characters.Common.PerkSystem;
 using UnityEngine;
 using Verse;
 
@@ -13,18 +15,16 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public static readonly Texture2D Panel = ContentFinder<Texture2D>.Get(Folder + "Panel");
         public static readonly Texture2D Button = ContentFinder<Texture2D>.Get(Folder + "Button");
         public static readonly Texture2D ButtonActive = ContentFinder<Texture2D>.Get(Folder + "ButtonActive");
-        private static readonly Texture2D Wing = ContentFinder<Texture2D>.Get(Folder + "Wing");
-        private static readonly Texture2D Arrow = ContentFinder<Texture2D>.Get(Folder + "Arrow");
-        private static readonly Texture2D Halo = ContentFinder<Texture2D>.Get(Folder + "Halo");
-        private static readonly Texture2D Law = ContentFinder<Texture2D>.Get(Folder + "Law");
-
-        public static Texture2D ForBranch(CultivationBranch branch) => branch switch
+        private static readonly Dictionary<CharacterPerkCategoryDef, Texture2D> CategoryIcons = LoadCategoryIcons();
+        private static Dictionary<CharacterPerkCategoryDef, Texture2D> LoadCategoryIcons()
         {
-            CultivationBranch.Wing => Wing,
-            CultivationBranch.Arrow => Arrow,
-            CultivationBranch.Halo => Halo,
-            _ => Law
-        };
+            Dictionary<CharacterPerkCategoryDef, Texture2D> icons = new();
+            foreach (var category in DefDatabase<CharacterPerkCategoryDef>.AllDefsListForReading)
+                if (!category.iconPath.NullOrEmpty()) icons[category] = ContentFinder<Texture2D>.Get(category.iconPath);
+            return icons;
+        }
+        public static Texture2D ForCategory(CharacterPerkCategoryDef category) =>
+            category != null && CategoryIcons.TryGetValue(category, out var icon) ? icon : Emblem;
 
         public static void DrawFrame(Rect rect, Texture2D texture, Color tint, float corner = 28f)
         {

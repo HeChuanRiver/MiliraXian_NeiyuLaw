@@ -145,12 +145,8 @@
         <abilities>
             <!-- This is an ability from "Milira Faction: Milira Imperium", so I commented out it. ↓↓↓ 这个技能来自“米莉拉派系扩展：米莉拉帝国”所以我把它注释掉了。↓↓↓-->
             <li>MX_Neiyu_WarpFeather</li>
-            <li>MX_Neiyu_ThunderMarkedStorm</li>
-            <li>MX_Neiyu_Bow_ArrowBarrage</li>
             <li>MX_Neiyu_Flower_BlessingField</li>
-            <li>MX_Neiyu_Flower_ToxinGarden</li>
             <li>MX_Neiyu_Sword_Skyfall</li>
-            <li>MX_Neiyu_Sword_ExecuteHead</li>
             <!-- <li>MI_ShroudPower_Skip</li> -->
         </abilities>
 
@@ -171,7 +167,7 @@
         <!-- 默认 true，且老年伤病随年龄加重；本角色 180 岁，不关闭必然一身伤残。 -->
         <allowOldAgeInjuries>false</allowOldAgeInjuries>
 
-        <startingHediffs><li><def>MXNL_NeiyuShield</def><severity>1</severity></li></startingHediffs>
+        <startingHediffs><li><def>MXNL_NeiyuShield</def><severity>1</severity></li><li><def>MX_Neiyu_Cultivation</def><severity>1</severity></li></startingHediffs>
 
         <modExtensions>
             <!-- —————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— -->

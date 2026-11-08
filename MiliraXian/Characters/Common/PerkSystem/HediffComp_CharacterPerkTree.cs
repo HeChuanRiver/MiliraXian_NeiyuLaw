@@ -15,6 +15,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
     public class HediffComp_CharacterPerkTree : HediffComp
     {
         private Dictionary<CharacterPerkNodeDef, int> nodeLevels = new();
+        public int Revision { get; private set; }
 
         public HediffCompProperties_CharacterPerkTree Props => (HediffCompProperties_CharacterPerkTree)props;
 
@@ -74,13 +75,18 @@ namespace MiliraXian.Characters.Common.PerkSystem
         /// <summary>Stored level narrowed by the node's own seal; the seal never rewrites storage.</summary>
         public int EffectiveNodeLevel(CharacterPerkNodeDef node)
         {
-            return node == null ? 0 : node.EffectiveLevel(Pawn, GetNodeLevel(node));
+            int stored = GetNodeLevel(node);
+            return node == null ? 0 : Mathf.Clamp(node.EffectiveLevel(Pawn, stored), 0, stored);
         }
 
         internal void SetNodeLevel(CharacterPerkNodeDef node, int level)
         {
             NormalizeCollections();
-            nodeLevels[node] = level;
+            if (!IsRelevantNode(node) || node.displayOnly) return;
+            int next = Mathf.Clamp(level, GetNodeLevel(node), Mathf.Max(1, node.maxLevel));
+            if (next == GetNodeLevel(node)) return;
+            nodeLevels[node] = next;
+            Revision++;
         }
 
         public bool HasNode(CharacterPerkNodeDef node)
@@ -91,6 +97,16 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public override void CompExposeData()
         {
             Scribe_Collections.Look(ref nodeLevels, "mx_perkTree_nodeLevels", LookMode.Def, LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                Dictionary<CharacterPerkNodeDef, int> valid = new();
+                if (nodeLevels != null)
+                    foreach (var pair in nodeLevels)
+                        if (IsRelevantNode(pair.Key) && !pair.Key.displayOnly && pair.Value > 0)
+                            valid[pair.Key] = Mathf.Min(pair.Value, Mathf.Max(1, pair.Key.maxLevel));
+                nodeLevels = valid;
+                Revision++;
+            }
         }
     }
 }

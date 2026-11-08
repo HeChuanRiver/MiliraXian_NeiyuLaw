@@ -77,6 +77,7 @@ namespace MiliraXian.Characters.Common
             }
             if (nPawn || zPawn || mPawn)
             {
+                if (nPawn) Neiyu.Cultivation.CultivationService.Refresh(pawn);
                 pawn.health.hediffSet.DirtyCache();
                 pawn.needs?.AddOrRemoveNeedsAsAppropriate();
                 bool changed = nPawn ? nChanged : zPawn ? zChanged : mChanged;
@@ -94,7 +95,7 @@ namespace MiliraXian.Characters.Common
                     {
                         if (!ability.def.defName.StartsWith(prefix)) continue;
                         if (changed) ability.verb?.Reset();
-                        if (ability.CooldownTicksRemaining > 0 && ability.HasCooldown)
+                        if (!nPawn && ability.CooldownTicksRemaining > 0 && ability.HasCooldown)
                         {
                             int total = ability.def.cooldownTicksRange.max;
                             if (total == ability.CooldownTicksTotal) continue;

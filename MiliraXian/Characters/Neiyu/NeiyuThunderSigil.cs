@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Neiyu.Cultivation;
 using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
@@ -238,7 +239,8 @@ public partial class NeiyuCombatMapComponent
         {
             int count = CollectThunderTargets(caster, center, props.radius, targets);
             if (count == 0) return 0;
-            int strikes = 1 + (props.strikeBudget - 1) / count;
+            int budget = CultivationService.AbilityValues(caster, DefDatabase<AbilityDef>.GetNamed("MX_Neiyu_ThunderMarkedStorm"))?.strikeBudget ?? props.strikeBudget;
+            int strikes = 1 + (budget - 1) / count;
             int now = Find.TickManager.TicksGame;
             foreach (Pawn target in targets)
             {
