@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ShaderDef>
+    <defName>MX_NeiyuExecutionWave</defName>
+    <shaderProgram>
+      <vertexShaderFileName>Transparent.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_NeiyuExecutionWave.frag.glsl</fragmentShaderFileName>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>2900</renderQueue>
+      <textureWrapOverrides>
+        <li><key>_MainTex</key><value>Clamp</value></li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

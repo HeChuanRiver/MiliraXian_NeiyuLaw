@@ -23,6 +23,8 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         /// <summary>Lit fraction of the blade measured from grip to tip (0 = no light; the shader's reveal glow).</summary>
         public float reveal;
 
+        public float lengthScale;
+        public float LengthScale => lengthScale > 0f ? lengthScale : 1f;
         public float DepthScale => depthToScreen > 0f ? depthToScreen : 1f;
         /// <summary>Share of the blade (grip to tip) inside the scabbard; that part is not drawn. 0 = fully out.</summary>
         public float sheathed;

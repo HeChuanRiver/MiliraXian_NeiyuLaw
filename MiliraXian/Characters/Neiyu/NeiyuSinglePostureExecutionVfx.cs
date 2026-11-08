@@ -20,6 +20,9 @@ internal static class NeiyuExecutionMaterials
     internal static readonly Material Wave = MaterialPool.MatFrom(
         DefDatabase<FleckDef>.GetNamed("MXNL_Fleck_BladeLight_Neiyu_E").graphicData.texPath,
         ShaderDatabase.Transparent, Color.white);
+    internal static readonly Material MultiWave = Wave?.mainTexture is Texture2D texture
+        && DefDatabase<ShaderDef>.GetNamedSilentFail("MX_NeiyuExecutionWave")?.Shader is { } shader
+        ? MaterialPool.MatFrom(texture, shader, Color.white) : Wave;
 
     private static Material Sprite(string name)
     {
@@ -128,12 +131,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             Single.slashWidth * .38f * Mathf.Lerp(.92f, 1.13f, p), fade);
     }
 
-    private static void DrawSlashArtwork(Vector3 at, float yaw, float width, float length, float fade)
+    private static void DrawSlashArtwork(Vector3 at, float yaw, float width, float length, float fade, Material material = null)
     {
         // The rotated arc covers 52% of the texture width and 81% of its length.
         Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(yaw, Vector3.up),
             new Vector3(width / .52f, 1f, length / .81f));
-        DrawMesh(MeshPool.plane10, matrix * SlashArtwork, NeiyuExecutionMaterials.Wave, Color.white, fade);
+        DrawMesh(MeshPool.plane10, matrix * SlashArtwork, material ?? NeiyuExecutionMaterials.Wave, Color.white, fade);
     }
 
     private void DrawVolley(float tick, Vector3 body)
@@ -145,7 +148,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         float tipOffset = .70f * swordScale;
         float swordWidth = .85f * swordScale, swordLength = 1.5f * swordScale;
         float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
-        float glyphAge = tick - VolleyAt;
+        float glyphAge = tick - (singleAirVolley ? AimAt : VolleyAt);
         if (glyphAge >= 0f && glyphAge < Single.glyphHoldTicks + Single.glyphFadeTicks)
         {
             Vector3 at = body + side * 1.16f + Vector3.forward * .57f;
@@ -168,7 +171,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             if (tick < impact)
             {
                 float p = ProgressBetween(tick, launch, impact);
-                float appear = ProgressBetween(tick, ReleaseAt, AimAt);
+                float appear = singleAirVolley ? 1f : ProgressBetween(tick, ReleaseAt, AimAt);
                 // Keep the enlarged tip on the same contact point, including short throws into walls.
                 Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
                 Vector3 tip = Vector3.Lerp(startTip, contact, p * (.72f + .28f * p));

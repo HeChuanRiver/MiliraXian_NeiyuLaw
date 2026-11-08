@@ -317,7 +317,10 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         try
         {
             if (IsSingle)
+            {
                 NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound ?? NeiyuSwordCombat.Config.endSound);
+                if (singleAirVolley) NeiyuSwordCombatVfx.SingleLandingBurst(pawn, targetCell);
+            }
             else if (multi)
                 SubmitMultiSlash(victim);
             else

@@ -12,6 +12,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private const int MultiRingFadeTicks = 10;
     private const int MultiQuickCutFadeTicks = 10;
     private const int MultiSlashFadeTicks = 15;
+    private const float MultiWaveRadius = 9.5f;
 
     // Pixel pairs just inside the hole and outside the rim of BladeLight_Neiyu_E.
     // Unwrap this continuous blue-to-pink brush stroke onto an open annular strip.
@@ -43,7 +44,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 float tail = MultiYaw(tick - MultiRingTrailTicks);
                 float front = MultiYaw(tick);
                 float fade = 1f - ProgressBetween(tick, MultiReleaseAt, MultiReleaseAt + MultiRingFadeTicks);
-                DrawMultiRing(body, tail, front - tail, MultiRadius, fade, closed: false);
+                DrawMultiRing(origin.ToVector3Shifted(), tail, front - tail, MultiWaveRadius, fade, closed: false);
             }
             for (int cut = 0; cut <= MultiLastCut; cut++)
             {
@@ -54,21 +55,21 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 if (tick >= hit + fadeTicks) continue;
                 float p = ProgressBetween(tick, hit, hit + fadeTicks);
                 float entry = ProgressBetween(tick, hit - 2, hit);
-                float fade = entry * (1f - p) * (1f - p);
-                float length = final ? Mathf.Lerp(2.5f, 3.1f, p) : Mathf.Lerp(1.55f, 2.15f, p);
-                float width = final ? Mathf.Lerp(8f, 9.2f, p) : Mathf.Lerp(4.4f, 5.6f, p);
+                float fade = entry * (1f - Mathf.SmoothStep(0f, 1f, p));
+                float length = final ? Mathf.Lerp(7.8f, 9f, p) : Mathf.Lerp(5.8f, 7f, p);
+                float width = final ? Mathf.Lerp(20f, 23f, p) : Mathf.Lerp(16f, 19f, p);
                 float yaw = MultiCutYaw(cut);
                 // Each flash crosses its own airborne contact and then fades at that location.
                 Vector3 at = MultiCutContact(cut, tick) + Forward(yaw) * (p * .68f - length * .52f);
                 at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f + cut * .0002f;
-                DrawSlashArtwork(at, yaw, width, length, fade);
+                DrawSlashArtwork(at, yaw, width, length, fade, NeiyuExecutionMaterials.MultiWave);
             }
             if (strikeCommitted && tick >= MultiHitAt - 1f && tick < MultiHitAt + MultiSlashFadeTicks)
             {
                 float p = ProgressBetween(tick, MultiHitAt, MultiHitAt + MultiSlashFadeTicks);
                 float expand = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiHitAt, MultiHitAt + 6));
-                DrawMultiRing(body, MultiCutYaw(MultiLastCut) - 90f, 360f, Mathf.Lerp(2.1f, MultiRadius, expand),
-                    .78f * (1f - p), closed: true);
+                DrawMultiRing(body, MultiCutYaw(MultiLastCut) - 90f, 360f, Mathf.Lerp(3.5f, MultiWaveRadius, expand),
+                    .94f * (1f - p), closed: true);
             }
         }
         catch (Exception exception)
@@ -85,7 +86,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         {
             float u = i / (float)MultiRingSegments;
             Vector3 radial = Forward(startYaw + sweep * u);
-            float width = closed ? .62f : Mathf.Lerp(.12f, .86f, Mathf.Sqrt(u));
+            float width = closed ? 1.35f : Mathf.Lerp(.15f, 1.55f, Mathf.Sqrt(u));
             float alpha = closed ? 1f : Mathf.SmoothStep(0f, 1f, u) * (1f - .18f * Mathf.Pow(u, 32f));
             // Fold the brush back on itself for the closed floor wave so its join has matching UVs.
             float brush = closed ? .5f - .5f * Mathf.Cos(u * 2f * Mathf.PI) : u;
@@ -105,7 +106,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         multiRing.colors = multiRingColors;
         multiRing.RecalculateBounds();
         center.y = AltitudeLayer.MoteLow.AltitudeFor();
-        DrawMesh(multiRing, Matrix4x4.Translate(center), NeiyuExecutionMaterials.Wave, Color.white, fade);
+        DrawMesh(multiRing, Matrix4x4.Translate(center), NeiyuExecutionMaterials.MultiWave, Color.white, fade);
     }
 
     private static Vector2 MultiBrushUv(Vector2 pixel) => new(pixel.x / 512f, 1f - pixel.y / 512f);

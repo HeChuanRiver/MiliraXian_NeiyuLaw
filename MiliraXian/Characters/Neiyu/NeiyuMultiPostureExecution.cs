@@ -16,6 +16,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private const float MultiRadius = 4f;
     private const float MultiReleaseHeight = .78f;
+    private const float MultiPursuitArc = 1.35f;
     private const int MultiPinAt = 8;
     private const int MultiHoldTicks = 4;
     private const int MultiReleaseAt = MultiPinAt + 60;
@@ -26,7 +27,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private MultiStage multiStage;
     private float pinReach, previousPinReach;
-    private bool multiCombo;
+    private bool multiCombo, multiPursuit;
     private List<Vector3> multiCutContacts;
 
     private int MultiLastCut => multiCombo ? MultiCutAngles.Length - 1 : 0;
@@ -42,6 +43,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private void BeginMulti()
     {
         multiCombo = true;
+        multiPursuit = true;
         multiCutContacts = new List<Vector3>(MultiCutAngles.Length);
         sceneStart = startedAt;
         BeginSceneMotion();
@@ -57,6 +59,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref previousPinReach, "multiExecutionPreviousPinReach");
         // The existing air and recovery stages retain their original deadlines in older saves.
         Scribe_Values.Look(ref multiCombo, "multiExecutionCombo");
+        Scribe_Values.Look(ref multiPursuit, "multiExecutionPursuit");
+        if (multiPursuit)
+        {
+            Scribe_Values.Look(ref approachCell, "multiExecutionPursuitCell", IntVec3.Invalid);
+            Scribe_Values.Look(ref curvedApproach, "multiExecutionPursuitCurved");
+        }
         Scribe_Collections.Look(ref multiCutContacts, "multiExecutionCutContacts", LookMode.Value);
         if (Scribe.mode == LoadSaveMode.PostLoadInit) multiCutContacts ??= new List<Vector3>(MultiLastCut + 1);
     }
@@ -74,6 +82,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
 
         if (pawn.pather.Moving) pawn.pather.StopDead();
+        previousActorDraw = actorDraw;
         previousTargetDraw = targetDraw;
         previousPinReach = pinReach;
         if (tick >= MultiPinAt && multiStage == MultiStage.Thrust)
@@ -94,17 +103,21 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 multiStage = MultiStage.Air;
                 // A short tangent carries the upward flick away from Neiyu. The landing
                 // search clips that motion against doors, walls and occupied cells.
-                BeginTargetMotion(target, Forward(initialYaw + 67f), 1.2f, MultiLandAt, .20f);
-                Vector3 aim = landingCell.ToVector3Shifted().Yto0() - actorDraw;
-                throwYaw = aim.sqrMagnitude > .001f ? aim.AngleFlat() : initialYaw;
+                BeginTargetMotion(target, Forward(initialYaw + 67f), multiPursuit ? 2.8f : 1.2f, MultiLandAt, .20f);
+                if (multiPursuit) ChooseMultiPursuit(target);
+                SetMultiAim(approachCell.IsValid && multiPursuit
+                    ? approachCell.ToVector3Shifted().Yto0() : actorDraw);
                 NeiyuSwordCombatVfx.SingleAfterimage(pawn, actorDraw - Forward(initialYaw) * .20f,
                     Rot4.FromAngleFlat(MultiYaw(MultiReleaseAt - 8)), NeiyuSwordCombat.Now, 12, this);
             }
         }
         if (ownsTarget && (multiStage is MultiStage.Air or MultiStage.Recovery))
         {
-            MoveTargetAlongMotion(target, tick, MultiReleaseAt, MultiReleaseHeight, 1.48f, verticalThrow: true);
+            MoveTargetAlongMotion(target, tick, MultiReleaseAt, MultiReleaseHeight, 1.48f,
+                verticalThrow: true, groundTravelTicks: multiPursuit ? 24 : 0);
             if (!strikeCommitted) aimPoint = targetDraw;
+            if (multiPursuit && multiStage == MultiStage.Air && tick <= MultiSwingAt)
+                MoveMultiPursuit(target, tick);
         }
 
         pawn.Rotation = Rot4.FromAngleFlat(tick <= MultiReleaseAt ? MultiYaw(tick)
@@ -133,6 +146,11 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private static float MultiLift(float tick) =>
         Mathf.SmoothStep(0f, MultiReleaseHeight, ProgressBetween(tick, MultiReleaseAt - 12, MultiReleaseAt));
 
+    private float MultiBladeScale(float tick) => multiPursuit
+        ? 1f + .85f * (ProgressBetween(tick, MultiPinAt, MultiReleaseAt)
+            - ProgressBetween(tick, MultiReleaseAt, MultiSwingAt))
+        : 1f;
+
     private bool MovePinnedTarget(Pawn target, int tick)
     {
         // The blade makes contact in the original cell and holds before pulling the victim off it.
@@ -140,7 +158,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         float initialReach = Vector3.Distance(origin.ToVector3Shifted().Yto0(), hitCell.ToVector3Shifted().Yto0());
         float preferred = Mathf.Lerp(initialReach, Mathf.Clamp(initialReach, .92f, 1.52f),
             ProgressBetween(tick, MultiPinAt + MultiHoldTicks, MultiPinAt + 19));
-        float reach = Mathf.Min(preferred, pinReach + .16f);
+        float reach = Mathf.Min(preferred * MultiBladeScale(tick), pinReach + .16f);
         float yaw = MultiYaw(tick);
         Vector3 radial = Forward(yaw);
         Vector3 next = actorDraw + radial * reach;
@@ -159,12 +177,68 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         return true;
     }
 
+    private void ChooseMultiPursuit(Pawn target)
+    {
+        approachCell = IntVec3.Invalid;
+        Vector3 landing = landingCell.ToVector3Shifted().Yto0();
+        Vector3 axis = (landing - actorDraw).normalized;
+        if (axis.sqrMagnitude < .001f) axis = Forward(initialYaw + 67f);
+        float best = .10f;
+        foreach (IntVec3 offset in GenAdj.AdjacentCells)
+        {
+            IntVec3 cell = landingCell + offset;
+            float alignment = Vector3.Dot(offset.ToVector3().normalized, axis);
+            if (alignment <= best || !CanOccupy(pawn, cell)) continue;
+            bool curved = ClearMultiPursuitArc(target, cell);
+            if (!curved && !CanTravel(pawn, actorDraw, cell.ToVector3Shifted().Yto0(), target)) continue;
+            approachCell = cell;
+            curvedApproach = curved;
+            best = alignment;
+        }
+    }
+
+    private bool ClearMultiPursuitArc(Pawn target, IntVec3 cell)
+    {
+        Vector3 previous = actorDraw;
+        for (int step = 1; step <= 12; step++)
+        {
+            Vector3 next = ApproachAtProgress(step / 12f, cell, true, MultiPursuitArc);
+            if (!CanTravel(pawn, previous, next, target)) return false;
+            previous = next;
+        }
+        return true;
+    }
+
+    private void MoveMultiPursuit(Pawn target, int tick)
+    {
+        if (!approachCell.IsValid) return;
+        Vector3 next = ApproachAtProgress(ProgressBetween(tick, MultiReleaseAt, MultiSwingAt),
+            approachCell, curvedApproach, MultiPursuitArc);
+        if (!CanTravel(pawn, actorDraw, next, target) ||
+            (tick == MultiSwingAt && !CanOccupy(pawn, approachCell)))
+        {
+            // Keep the last legal position if the path becomes blocked during the dash.
+            approachCell = IntVec3.Invalid;
+            SetMultiAim(actorDraw);
+            return;
+        }
+        actorDraw = next;
+        MovePawn(pawn, ref actorCell, next.ToIntVec3());
+        if (tick == MultiSwingAt) SetMultiAim(actorDraw);
+    }
+
+    private void SetMultiAim(Vector3 from)
+    {
+        Vector3 aim = landingCell.ToVector3Shifted().Yto0() - from;
+        throwYaw = aim.sqrMagnitude > .001f ? aim.AngleFlat() : initialYaw;
+    }
+
     private Vector3 MultiTargetAtFrame(float tick)
     {
         if (tick >= MultiPinAt && tick <= MultiReleaseAt)
         {
             float reach = Mathf.Lerp(previousPinReach, pinReach, FrameLerp);
-            return actorDraw + Forward(MultiYaw(tick)) * reach + Vector3.forward * MultiLift(tick);
+            return origin.ToVector3Shifted().Yto0() + Forward(MultiYaw(tick)) * reach + Vector3.forward * MultiLift(tick);
         }
         return Vector3.Lerp(previousTargetDraw, targetDraw, FrameLerp);
     }
@@ -177,6 +251,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private BladePose MultiBladeAt(BladeGraphicExtension blade, float tick)
     {
+        Vector3 body = Vector3.Lerp(previousActorDraw, actorDraw, FrameLerp);
         float yaw, pitch;
         Vector3 tip;
         if (tick < MultiPinAt)
@@ -184,27 +259,27 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             float thrust = ProgressBetween(tick, 0, MultiPinAt);
             yaw = initialYaw;
             pitch = Mathf.Lerp(56f, 6f, thrust);
-            Vector3 ready = actorDraw + Forward(yaw) * .65f + Vector3.forward * .28f;
+            Vector3 ready = body + Forward(yaw) * .65f + Vector3.forward * .28f;
             tip = Vector3.Lerp(ready, hitCell.ToVector3Shifted().Yto0(), thrust * thrust);
         }
         else if (tick <= MultiReleaseAt)
         {
             yaw = MultiYaw(tick);
             float reach = Mathf.Lerp(previousPinReach, pinReach, FrameLerp);
-            pitch = MultiPinnedPitch(tick, reach);
+            pitch = MultiPinnedPitch(tick, reach / MultiBladeScale(tick));
             tip = MultiTargetAtFrame(tick);
         }
         else
         {
             float finalYaw = MultiHandYaw(MultiLastCut);
-            Vector3 cocked = actorDraw + Forward(throwYaw - 72f) * .85f + Vector3.forward * .46f;
-            Vector3 follow = actorDraw + Forward(finalYaw + 67f) * 1.58f + Vector3.forward * .28f;
+            Vector3 cocked = body + Forward(throwYaw - 72f) * .85f + Vector3.forward * .46f;
+            Vector3 follow = body + Forward(finalYaw + 67f) * 1.58f + Vector3.forward * .28f;
             if (tick < MultiSwingAt)
             {
                 float charge = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiReleaseAt, MultiSwingAt));
-                Vector3 released = actorDraw + Forward(initialYaw) * pinReach + Vector3.forward * MultiReleaseHeight;
+                Vector3 released = origin.ToVector3Shifted().Yto0() + Forward(initialYaw) * pinReach + Vector3.forward * MultiReleaseHeight;
                 yaw = Mathf.LerpAngle(initialYaw, throwYaw - 72f, charge);
-                pitch = Mathf.Lerp(MultiPinnedPitch(MultiReleaseAt, pinReach), 48f, charge);
+                pitch = Mathf.Lerp(MultiPinnedPitch(MultiReleaseAt, pinReach / MultiBladeScale(MultiReleaseAt)), 48f, charge);
                 tip = Vector3.Lerp(released, cocked, charge);
             }
             else if (tick <= MultiFirstCutAt)
@@ -239,7 +314,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 float settle = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiFollowThroughAt, MultiEndAt));
                 yaw = Mathf.Lerp(finalYaw + 67f, finalYaw + 28f, settle);
                 pitch = Mathf.Lerp(3f, 49f, settle);
-                tip = Vector3.Lerp(follow, actorDraw + Forward(finalYaw + 28f) * .65f + Vector3.forward * .25f, settle);
+                tip = Vector3.Lerp(follow, body + Forward(finalYaw + 28f) * .65f + Vector3.forward * .25f, settle);
             }
         }
 
@@ -250,13 +325,14 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             dir = direction,
             edge = Quaternion.AngleAxis(18f, direction) * Forward(yaw + 90f),
             heightToScreen = .68f,
+            lengthScale = MultiBladeScale(tick),
             reveal = NeiyuSwordCombatVfx.Enabled && NeiyuSwordCombatVfx.Intensity > 0f
                 ? ProgressBetween(tick, MultiReleaseAt, MultiSwingAt)
                     * (1f - ProgressBetween(tick, MultiHitAt, MultiFollowThroughAt))
                 : 0f
         };
         // Solve the grip from the same projected tip that carries the pawn.
-        BladeRenderer.GetGripAndTip(blade, pose, actorDraw, out _, out Vector3 neutralTip);
+        BladeRenderer.GetGripAndTip(blade, pose, body, out _, out Vector3 neutralTip);
         pose.grip = (tip - neutralTip).Yto0();
         // After release the wide slash travels to the victim, while the actual hand stays in reach.
         if (multiCombo && tick > MultiReleaseAt)

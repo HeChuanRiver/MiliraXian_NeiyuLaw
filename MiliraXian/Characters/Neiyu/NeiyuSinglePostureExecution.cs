@@ -39,6 +39,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private int hitStopTicks, knockbackTicks, approachTicks, spinLeadTicks, spinTicksPerTurn;
     private int flightTicks, glyphDelayTicks, swordCount, swordStaggerTicks, swordFlightTicks, finishTicks;
     private int volleyStart = -1;
+    private bool singleAirVolley;
     private IntVec3 actorCell, targetCell, approachCell, landingCell;
     private IntVec3 grabStartCell = IntVec3.Invalid;
     private Vector3 actorDraw, targetDraw, previousActorDraw, previousTargetDraw;
@@ -58,13 +59,16 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private int SpinAt => GrabAt + spinLeadTicks;
     private int ReleaseAt => SpinAt + spinTurns * spinTicksPerTurn;
     private int AimAt => ReleaseAt + glyphDelayTicks;
-    private bool VolleyAfterLanding => swordFlightTicks > 0;
-    private int VolleyAt => VolleyAfterLanding
+    private bool VolleyAfterLanding => !singleAirVolley && swordFlightTicks > 0;
+    private int VolleyStagger => singleAirVolley
+        ? Mathf.Min(swordStaggerTicks, Mathf.Max(1, flightTicks / (swordCount + 2))) : swordStaggerTicks;
+    private int VolleyAt => singleAirVolley ? ReleaseAt : VolleyAfterLanding
         ? (volleyStart >= 0 ? volleyStart : AimAt + flightTicks)
         : AimAt;
-    private int SwordLaunchAt(int index) => VolleyAt + index * swordStaggerTicks;
+    private int SwordLaunchAt(int index) => VolleyAt + index * VolleyStagger;
     private int SwordImpactAt(int index) => SwordLaunchAt(index)
-        + (VolleyAfterLanding ? swordFlightTicks : flightTicks - glyphDelayTicks);
+        + (singleAirVolley ? Mathf.Max(1, flightTicks - (swordCount - 1) * VolleyStagger)
+            : VolleyAfterLanding ? swordFlightTicks : flightTicks - glyphDelayTicks);
     private int FinalImpactAt => SwordImpactAt(swordCount - 1);
     private int EndAt => FinalImpactAt + finishTicks;
     private IntVec3 GrabCell => grabStartCell.IsValid ? grabStartCell : hitCell;
@@ -94,6 +98,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private void BeginSingle()
     {
+        singleAirVolley = true;
         HediffComp_CombatPosture posture = CombatPosture.Get(Victim);
         sceneStart = (posture?.BrokenAt is >= 0 ? posture.BrokenAt : startedAt) + Single.lockTicks;
         spinTurns = Rand.RangeInclusive(1, 3);
@@ -140,6 +145,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref swordStaggerTicks, "singleExecutionSwordStaggerTicks", 2);
         Scribe_Values.Look(ref swordFlightTicks, "singleExecutionSwordFlightTicks");
         Scribe_Values.Look(ref volleyStart, "singleExecutionVolleyStart", -1);
+        Scribe_Values.Look(ref singleAirVolley, "singleExecutionAirVolley");
         Scribe_Values.Look(ref finishTicks, "singleExecutionFinishTicks", 14);
         Scribe_Values.Look(ref throwDistance, "singleExecutionThrowDistance", 6f);
         Scribe_Values.Look(ref spinTurns, "singleExecutionTurns");
@@ -276,7 +282,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         pawn.Rotation = Rot4.FromAngleFlat(BodyYaw(tick, actorDraw, aimPoint));
         if (singleStage == SingleStage.Volley)
         {
-            int launchIndex = (tick - VolleyAt) / swordStaggerTicks;
+            int launchIndex = (tick - VolleyAt) / VolleyStagger;
             if (launchIndex >= 0 && launchIndex < swordCount && tick == SwordLaunchAt(launchIndex))
                 NeiyuSwordCombatVfx.SingleSound(pawn, actorDraw, Single.swordLaunchSound);
         }
@@ -330,11 +336,11 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             ProgressBetween(tick, ReleaseAt, AimAt)));
     }
 
-    private Vector3 ApproachAtProgress(float progress, IntVec3 destination, bool curved)
+    private Vector3 ApproachAtProgress(float progress, IntVec3 destination, bool curved, float arcWidth = .42f)
     {
         float p = Mathf.SmoothStep(0f, 1f, progress);
         Vector3 start = origin.ToVector3Shifted().Yto0(), end = destination.ToVector3Shifted().Yto0();
-        Vector3 offset = curved ? Vector3.Cross(Vector3.up, end - start).normalized * (.42f * Mathf.Sin(p * Mathf.PI)) : Vector3.zero;
+        Vector3 offset = curved ? Vector3.Cross(Vector3.up, end - start).normalized * (arcWidth * Mathf.Sin(p * Mathf.PI)) : Vector3.zero;
         return Vector3.Lerp(start, end, p) + offset;
     }
 
@@ -390,7 +396,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     {
         throwYaw = SpinYaw(ReleaseAt) + 90f;
         Vector3 tangent = Forward(throwYaw);
-        if (VolleyAfterLanding)
+        if (singleAirVolley || VolleyAfterLanding)
         {
             motionOrigin = targetGround;
             touchdown = ReleaseAt + flightTicks;
@@ -452,13 +458,15 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     }
 
     private void MoveTargetAlongMotion(Pawn target, int tick, int startTick, float startHeight, float arcHeight,
-        bool verticalThrow = false)
+        bool verticalThrow = false, int groundTravelTicks = 0)
     {
         Vector3 end = landingCell.ToVector3Shifted().Yto0();
         if (tick > touchdown && targetGround == end) return;
         float p = ProgressBetween(tick, startTick, touchdown);
-        Vector3 next = Vector3.Lerp(motionOrigin, end, 1f - (1f - p) * (1f - p));
-        if (!TryTravel(target, targetGround, next, out IntVec3 lastClear, targetCell == actorCell ? pawn : null))
+        float ground = groundTravelTicks > 0 ? ProgressBetween(tick, startTick, startTick + groundTravelTicks) : p;
+        Vector3 next = Vector3.Lerp(motionOrigin, end, 1f - (1f - ground) * (1f - ground));
+        Pawn sharingWith = groundTravelTicks > 0 || targetCell == actorCell ? pawn : null;
+        if (!TryTravel(target, targetGround, next, out IntVec3 lastClear, sharingWith))
         {
             landingCell = lastClear;
             next = landingCell.ToVector3Shifted().Yto0();

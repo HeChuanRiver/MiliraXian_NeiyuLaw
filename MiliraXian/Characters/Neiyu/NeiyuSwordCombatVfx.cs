@@ -131,6 +131,20 @@ internal static class NeiyuSwordCombatVfx
     internal static void SingleSound(Pawn pawn, Vector3 at, SoundDef sound) =>
         Safely(() => sound?.PlayOneShot(new TargetInfo(at.ToIntVec3(), pawn.Map)));
 
+    internal static void SingleLandingBurst(Pawn pawn, IntVec3 cell)
+    {
+        Vector3 center = cell.ToVector3Shifted();
+        SingleSound(pawn, center, DamageDefOf.Bomb.soundExplosion);
+        if (!Enabled || Intensity <= 0f) return;
+        Safely(() =>
+        {
+            Map map = pawn.Map;
+            FleckMaker.Static(center, map, FleckDefOf.ExplosionFlash, 5f);
+            FleckMaker.ThrowSmoke(center, map, 2.4f);
+            FleckMaker.ThrowDustPuff(center, map, 2f);
+        });
+    }
+
     internal static void SingleAfterimage(Pawn pawn, Vector3 at, Rot4 facing, int startTick, int duration,
         JobDriver_NeiyuPostureExecution owner)
     {
