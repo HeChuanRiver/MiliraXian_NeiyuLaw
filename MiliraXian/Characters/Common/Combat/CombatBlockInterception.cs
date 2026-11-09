@@ -157,21 +157,100 @@ internal static class Patch_CombatBlockOrder
     }
 }
 
+internal static class CombatBlockPatchRegistration
+{
+    internal static void Register()
+    {
+        Harmony harmony = new("HeChuanRiver.MiliraXian.Characters.Subclasses");
+        Patch_CombatBlockProjectile.Register(harmony);
+        Patch_CombatBlockMeleeDamage.Register(harmony);
+    }
+
+    internal static void PatchOverrides(Harmony harmony, Type baseType, string methodName, Type[] parameters,
+        HarmonyMethod prefix, HarmonyMethod finalizer, HarmonyMethod postfix = null, bool includeBase = false)
+    {
+        string signature = $"{methodName}({string.Join(", ", Array.ConvertAll(parameters, type => type.FullName))})";
+        if (includeBase)
+        {
+            PatchTarget(baseType);
+        }
+
+        List<Type> subclasses;
+        try
+        {
+            subclasses = GenTypes.AllSubclasses(baseType);
+        }
+        catch (Exception exception)
+        {
+            Log.Warning($"[MiliraXian] 无法扫描 {baseType.FullName}.{signature} 的子类格挡补丁目标。\n{exception}");
+            return;
+        }
+
+        foreach (Type type in subclasses)
+        {
+            PatchTarget(type);
+        }
+
+        void PatchTarget(Type type)
+        {
+            MethodInfo method;
+            try
+            {
+                if (type.ContainsGenericParameters)
+                {
+                    return;
+                }
+
+                method = AccessTools.DeclaredMethod(type, methodName, parameters);
+                if (method == null && type == baseType)
+                {
+                    throw new MissingMethodException(type.FullName, signature);
+                }
+                if (method is not { IsAbstract: false } || method.GetBaseDefinition().DeclaringType != baseType)
+                {
+                    return;
+                }
+            }
+            catch (Exception exception)
+            {
+                WarnTargetFailure(type, signature, "查找方法", exception);
+                return;
+            }
+
+            try
+            {
+                harmony.Patch(method, prefix: prefix, postfix: postfix, finalizer: finalizer);
+            }
+            catch (Exception exception)
+            {
+                WarnTargetFailure(type, signature, "注册补丁", exception);
+            }
+        }
+    }
+
+    private static void WarnTargetFailure(Type type, string signature, string stage, Exception exception)
+    {
+        Assembly assembly = type.Assembly;
+        ModContentPack owner = LoadedModManager.RunningModsListForReading.Find(
+            mod => mod.assemblies?.loadedAssemblies.Contains(assembly) == true);
+        string source = owner == null ? assembly.FullName : $"{owner.Name} ({owner.PackageId})";
+        Log.Warning($"[MiliraXian] {stage}失败。{source} 的 {type.FullName}.{signature} 未安装通用格挡补丁。\n{exception}");
+    }
+}
+
 // This second boundary prevents the entire main/extra/surprise damage group.
 // Declared overrides are discovered once because some melee verbs replace the
 // loop entirely (including the local sweep and innate mechanoid attacks).
-[HarmonyPatch]
 internal static class Patch_CombatBlockMeleeDamage
 {
-    private static IEnumerable<MethodBase> TargetMethods()
+    internal static void Register(Harmony harmony)
     {
-        foreach (Type type in GenTypes.AllSubclasses(typeof(Verb_MeleeAttack)))
-        {
-            if (type.ContainsGenericParameters) continue;
-            MethodInfo method = AccessTools.DeclaredMethod(type, "ApplyMeleeDamageToTarget", [typeof(LocalTargetInfo)]);
-            if (method is { IsAbstract: false } && method.GetBaseDefinition().DeclaringType == typeof(Verb_MeleeAttack))
-                yield return method;
-        }
+        Type patchType = typeof(Patch_CombatBlockMeleeDamage);
+        CombatBlockPatchRegistration.PatchOverrides(harmony, typeof(Verb_MeleeAttack), "ApplyMeleeDamageToTarget",
+            [typeof(LocalTargetInfo)],
+            prefix: new HarmonyMethod(AccessTools.DeclaredMethod(patchType, nameof(Prefix))),
+            postfix: new HarmonyMethod(AccessTools.DeclaredMethod(patchType, nameof(Postfix))),
+            finalizer: new HarmonyMethod(AccessTools.DeclaredMethod(patchType, nameof(Finalizer))));
     }
 
     [HarmonyPriority(Priority.First)]
@@ -201,7 +280,6 @@ internal static class Patch_CombatBlockMeleeDamage
 // Bullet destroys itself in base.Impact BEFORE applying damage. Each declared
 // override must therefore be intercepted before its own body, including special
 // arrows/explosives. The invocation scope avoids rerolling through base calls.
-[HarmonyPatch]
 internal static class Patch_CombatBlockProjectile
 {
     [ThreadStatic] private static Projectile activeProjectile;
@@ -210,17 +288,14 @@ internal static class Patch_CombatBlockProjectile
         internal void Restore() { if (owns) activeProjectile = previous; }
     }
 
-    private static IEnumerable<MethodBase> TargetMethods()
+    internal static void Register(Harmony harmony)
     {
-        Type[] parameters = [typeof(Thing), typeof(bool)];
-        yield return AccessTools.DeclaredMethod(typeof(Projectile), "Impact", parameters);
-        foreach (Type type in GenTypes.AllSubclasses(typeof(Projectile)))
-        {
-            if (type.ContainsGenericParameters) continue;
-            MethodInfo method = AccessTools.DeclaredMethod(type, "Impact", parameters);
-            if (method is { IsAbstract: false } && method.GetBaseDefinition().DeclaringType == typeof(Projectile))
-                yield return method;
-        }
+        Type patchType = typeof(Patch_CombatBlockProjectile);
+        CombatBlockPatchRegistration.PatchOverrides(harmony, typeof(Projectile), "Impact",
+            [typeof(Thing), typeof(bool)],
+            prefix: new HarmonyMethod(AccessTools.DeclaredMethod(patchType, nameof(Prefix))),
+            finalizer: new HarmonyMethod(AccessTools.DeclaredMethod(patchType, nameof(Finalizer))),
+            includeBase: true);
     }
 
     [HarmonyPriority(Priority.First)]

@@ -1,6 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using MiliraXian.Characters.Common;
+using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Mingyuan;
 using MiliraXian.Characters.Neiyu;
@@ -70,6 +71,7 @@ namespace MiliraXian.Characters
     public class NeiyuLawMod : Mod
     {
         public static NeiyuLawMod Instance { get; private set; }
+        internal static bool QingheSweepHitsDowned => Instance?.Settings?.QingheSweepHitsDowned ?? false;
 
         public NeiyuLawSettings Settings;
         private Vector2 settingsScroll;
@@ -78,6 +80,8 @@ namespace MiliraXian.Characters
         public NeiyuLawMod(ModContentPack content)
             : base(content)
         {
+            Settings = GetSettings<NeiyuLawSettings>();
+            Instance = this;
             // ShaderDefRegistry discovers Shaders automatically. Keep this mod's source
             // in its established authoring directory using Waylith's public search API.
             Waylith.Rendering.ShaderSourceLoader.RegisterShaderSourceDirectory(
@@ -85,8 +89,7 @@ namespace MiliraXian.Characters
             // Def-loading hooks (e.g. PawnSpecialResourceStats) must be registered before PlayDataLoader runs;
             // StaticConstructorOnStartup fires too late, so PatchAll lives in the mod constructor.
             new Harmony("HeChuanRiver.MiliraXian.Characters").PatchAll(Assembly.GetExecutingAssembly());
-            Settings = GetSettings<NeiyuLawSettings>();
-            Instance = this;
+            CombatBlockPatchRegistration.Register();
             NeiyuPowerBalance.SetDecorative(Settings.NeiyuDecorativeMode);
             ZhaoliPowerBalance.SetDecorative(Settings.ZhaoliDecorativeMode);
             MingyuanPowerBalance.SetDecorative(Settings.MingyuanDecorativeMode);

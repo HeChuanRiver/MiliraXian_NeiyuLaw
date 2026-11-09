@@ -711,7 +711,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 {
                     if (thing == pawn || !thing.Spawned || thing.Destroyed
                         || thing is not Pawn && thing is not Building
-                        || thing is Pawn victim && (victim.Dead || victim.Downed && !NeiyuLawMod.Instance.Settings.QingheSweepHitsDowned)
+                        || thing is Pawn victim && (victim.Dead || victim.Downed && !NeiyuLawMod.QingheSweepHitsDowned)
                         || !GenHostility.HostileTo(pawn, thing)
                         || !seen.Add(thing))
                     {
