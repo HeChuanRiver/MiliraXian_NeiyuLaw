@@ -33,6 +33,10 @@
   <MX_NL_EnableUpdateLogLettersDesc>When enabled, each save receives one letter for the latest update log the first time it runs a new version. When disabled, that version is recorded as checked and older logs will not be sent later.</MX_NL_EnableUpdateLogLettersDesc>
   <MX_NL_EnableScreenBloomLabel>Screen bloom</MX_NL_EnableScreenBloomLabel>
   <MX_NL_EnableScreenBloomDesc>When enabled, screen bloom effects such as character shield halos are shown. Disabling it saves a little performance at the cost of the halos.</MX_NL_EnableScreenBloomDesc>
+  <MX_NL_SweepHitsNeutralLabel>Area attacks hit neutral targets</MX_NL_SweepHitsNeutralLabel>
+  <MX_NL_SweepHitsNeutralDesc>When enabled, sweeps, shock waves and other area attacks also damage neutral pawns and buildings in reach (no faction, or neither your own nor an ally). When disabled they hit only hostiles. Either way the target you ordered to attack is hit; your own side, allies and prisoners are never caught.</MX_NL_SweepHitsNeutralDesc>
+  <MX_NL_SweepHitsTerrainLabel>Area attacks damage terrain</MX_NL_SweepHitsTerrainLabel>
+  <MX_NL_SweepHitsTerrainDesc>When enabled, sweeps, shock waves and other area attacks damage natural rock walls and ore in reach.</MX_NL_SweepHitsTerrainDesc>
   <MX_NL_ViewUpdateLogsButton>View all update logs</MX_NL_ViewUpdateLogsButton>
   <MX_NL_UpdateLogDialogTitle>Milira Character Expansion Update Logs</MX_NL_UpdateLogDialogTitle>
   <MX_NL_UpdateLogLetterLabel>Milira Character Expansion update log {0}</MX_NL_UpdateLogLetterLabel>
@@ -174,6 +178,17 @@
   <MX_QH_FlowerBellResonanceDescriptionSummer>Summer resonance is heavy and fervent. Hits build toxins in flesh targets and corrode mechanical structure.</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>Autumn resonance is clear and severe. Hits pressure the mind of flesh targets and push mechanoids toward overload.</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>Winter resonance sinks into cold. Hits build chill on the target until it is frozen in place.</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <!-- Flower Bell charge (RangedRework.md 2.9) -->
+  <MX_QH_BellReleaseNow>Premature\nDischarge</MX_QH_BellReleaseNow>
+  <MX_QH_BellReleaseTip>Release now: {0} notes.</MX_QH_BellReleaseTip>
+  <MX_QH_BellReleaseDisabled>Only while charging, from tier 1.</MX_QH_BellReleaseDisabled>
+  <MX_QH_BellChargeTip>Charge: {0} s (tier {1}).\nAuto-release at tier {2}.\nOne tier every 2 s, five at most; each tier adds a note. An interrupted charge decays, faster and faster.</MX_QH_BellChargeTip>
+  <MX_QH_BellDecaying>Decaying.</MX_QH_BellDecaying>
+  <MX_QH_BellThresholdSet>Auto-release at tier {0}.</MX_QH_BellThresholdSet>
+  <MX_QH_BellThresholdLocked>The threshold can be changed only with no charge.</MX_QH_BellThresholdLocked>
+  <MX_QH_BellThreatHold>Melee threat: hold</MX_QH_BellThreatHold>
+  <MX_QH_BellThreatRetreat>Melee threat: step away</MX_QH_BellThreatRetreat>
+  <MX_QH_BellThreatDesc>What Qinghe does when struck in melee while holding the bell.\n\nWith at least one tier charged she releases at once either way.\nHold: below one tier she keeps charging where she stands and takes the blows.\nStep away: below one tier she retreats a few cells and attacks again; the charge decays meanwhile.\n\nClick to switch.</MX_QH_BellThreatDesc>
   <MX_QH_SwordResonanceDescriptionSpring>Spring Dawn resonance: Hits grant Qinghe Spring Flow Baptism and build Bleeding and Electric Leakage.</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>Lotus Rain resonance: Sword Pressure gained from hits is increased by 50%, and hits build Toxin and Corrosion.</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>Impermanence resonance: Attacks gain 50% armor penetration and build Fear and Overload.</MX_QH_SwordResonanceDescriptionAutumn>

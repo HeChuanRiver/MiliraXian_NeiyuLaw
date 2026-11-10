@@ -21,11 +21,25 @@ namespace MiliraXian.Characters.Common.SweepDamage
     public class SweepDamageDef : Def
     {
         public DamageDef damageDef;
+        /// <summary>Optional damage type per kind of target; unset falls back to the source's or <see cref="damageDef"/>.</summary>
+        public DamageDef damageDefPawn;
+        public DamageDef damageDefBuilding;
+        /// <summary>Rock walls and ore (hit only with the terrain setting on); unset falls back to <see cref="damageDefBuilding"/>.</summary>
+        public DamageDef damageDefTerrain;
+        /// <summary>
+        /// Hostile by default. The mod settings add neutral targets and the terrain to every sweep;
+        /// the attacked target is hit whatever its side (as a vanilla attack).
+        /// </summary>
         public SweepTargetFaction targetFaction = SweepTargetFaction.Hostile;
         public bool hitPawns = true;
         public bool hitBuildings = true;
         /// <summary>Blocked when the caster has no line of sight to the target.</summary>
         public bool requireLineOfSight = true;
+        /// <summary>
+        /// Expanding rings only: a hit on a thing that blocks sight (a wall, rock) also reaches this many
+        /// cells straight behind it, away from the centre, whatever stands there (the Flower Bell's resonance).
+        /// </summary>
+        public int pierceCells;
         /// <summary>Downed pawns are left out unless the mod setting lets them be hit.</summary>
         public bool skipDowned;
         /// <summary>Contact is decided on the tick the sweep reaches the target; damage lands this many ticks later.</summary>

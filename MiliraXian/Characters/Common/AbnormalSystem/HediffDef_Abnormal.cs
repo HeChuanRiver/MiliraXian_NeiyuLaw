@@ -28,6 +28,21 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         public Vector3 triggerMoteOffset = new(0f, 0f, 0.85f);
         public float triggerMoteScale = 1f;
 
+        // --- aggravation (RangedRework.md 3.4, owner 11-11): build-up while the effect is active
+        /// <summary>
+        /// While the effect is active, hits fill a second bar this share of the normal limit; full, the
+        /// effect aggravates (settles what is left of it at once, <see cref="IAbnormalAggravation"/>).
+        /// 0 = no aggravation (the hits still give their on-hit extras).
+        /// </summary>
+        public float aggravationLimitFactor = 0.5f;
+        /// <summary>Floating text on aggravation (falls back to <see cref="triggerText"/>).</summary>
+        public string aggravationText;
+        /// <summary>Optional damage on aggravation: base + per second of the effect left (the shatter of a freeze).</summary>
+        public DamageDef aggravationDamageDef;
+        public float aggravationDamageBase;
+        public float aggravationDamagePerSecond;
+        public float aggravationArmorPenetration;
+
         public HediffDef_Abnormal()
         {
             hediffClass = typeof(Hediff_Abnormal);

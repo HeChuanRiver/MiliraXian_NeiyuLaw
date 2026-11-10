@@ -12,7 +12,12 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         InvalidDefinition,
         InvalidAmount,
         DisabledForTarget,
-        EffectAlreadyActive
+        /// <summary>The effect is active and the abnormal has no aggravation: only the on-hit extras were given.</summary>
+        EffectAlreadyActive,
+        /// <summary>The effect is active: the hit filled the aggravation bar (and its on-hit extras were given).</summary>
+        AggravationApplied,
+        /// <summary>The aggravation bar was filled: the effect aggravated.</summary>
+        Aggravated
     }
 
     public struct AbnormalApplyResult
@@ -24,7 +29,8 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         public float accumulationLimit;
         public Hediff_Abnormal abnormal;
 
-        public bool Applied => status == AbnormalApplyStatus.Applied || status == AbnormalApplyStatus.Triggered;
+        public bool Applied => status == AbnormalApplyStatus.Applied || status == AbnormalApplyStatus.Triggered
+            || status == AbnormalApplyStatus.AggravationApplied || status == AbnormalApplyStatus.Aggravated;
 
         public bool Triggered => status == AbnormalApplyStatus.Triggered;
     }
@@ -75,12 +81,8 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
                 return result;
             }
 
-            if (abnormalDef.effectHediff != null && target.health.hediffSet.GetFirstHediffOfDef(abnormalDef.effectHediff) != null)
-            {
-                result.status = AbnormalApplyStatus.EffectAlreadyActive;
-                return result;
-            }
-
+            // While the effect is active the hit goes on (owner 11-11): its on-hit extras are given and
+            // it fills the aggravation bar (Hediff_Abnormal.ApplyAccumulation decides which).
             float efficiencyFactor = source != null
                 ? Mathf.Max(0f, source.GetStatValue(abnormalDef.applicationEfficiencyFactorStat, true, -1))
                 : 1f;
@@ -115,9 +117,8 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
                 target.health.AddHediff(abnormal);
             }
 
-            bool triggered = abnormal.ApplyAccumulation(source, appliedAmount, accumulationLimit);
+            result.status = abnormal.ApplyAccumulation(source, appliedAmount, accumulationLimit);
             result.abnormal = abnormal;
-            result.status = triggered ? AbnormalApplyStatus.Triggered : AbnormalApplyStatus.Applied;
             return result;
         }
 

@@ -63,6 +63,8 @@ namespace MiliraXian.Characters.Common.SweepDamage
         /// this tick; it stops when that stance ends early or the caster is stunned.
         /// </summary>
         public int boundStanceTick = -1;
+        /// <summary>The projectile whose impact made this area (an expanding ring), for workers that read its on-hit data.</summary>
+        public ThingDef projectileDef;
 
         private int lastProcessedOffset = -1;
         private List<Thing> hit = new();
@@ -207,7 +209,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 {
                     continue;
                 }
-                if (def.requireLineOfSight && !GenSight.LineOfSight(caster.Position, t.Position, map, skipFirstCell: true))
+                if (def.requireLineOfSight && !SweepTargeting.InSight(caster.Position, t, map))
                 {
                     continue;
                 }
@@ -263,6 +265,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
             Scribe_Values.Look(ref posture, "posture");
             Scribe_References.Look(ref primaryTarget, "primaryTarget");
             Scribe_Values.Look(ref boundStanceTick, "boundStanceTick", -1);
+            Scribe_Defs.Look(ref projectileDef, "projectileDef");
             Scribe_Collections.Look(ref hit, "hit", LookMode.Reference);
             Scribe_Collections.Look(ref pending, "pending", LookMode.Deep);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)

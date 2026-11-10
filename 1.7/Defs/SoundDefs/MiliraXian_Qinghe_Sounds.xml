@@ -100,6 +100,54 @@
         </subSounds>
     </SoundDef>
 
+    <!-- 花信风铃（RangedRework.md 第 2.9 节）：VCSL 铃树单颗铃（BellTree_Hit_E5_rr1_Mid，CC0，
+         github.com/sgossner/VCSL），实测 1317 Hz。代码按 pitchFactor 换到五声音阶各音（宫 = 1047 Hz），
+         所以这里不随机音高。 -->
+    <SoundDef>
+        <defName>MX_QH_BellNote</defName>
+        <context>MapOnly</context>
+        <maxSimultaneous>10</maxSimultaneous>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/FlowerBell/bell_note</clipPath></li>
+                </grains>
+                <volumeRange>40~40</volumeRange>
+                <pitchRange>1~1</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
+    <!-- 发射时的敲击：同一颗铃的起音段 -->
+    <SoundDef>
+        <defName>MX_QH_BellKnock</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/FlowerBell/bell_knock</clipPath></li>
+                </grains>
+                <volumeRange>35~35</volumeRange>
+                <pitchRange>1~1</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
+    <!-- 衰减掉档：同一颗铃低通、缩短 -->
+    <SoundDef>
+        <defName>MX_QH_BellDull</defName>
+        <context>MapOnly</context>
+        <subSounds>
+            <li>
+                <grains>
+                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/FlowerBell/bell_dull</clipPath></li>
+                </grains>
+                <volumeRange>30~30</volumeRange>
+                <pitchRange>1~1</pitchRange>
+            </li>
+        </subSounds>
+    </SoundDef>
+
     <SoundDef>
         <defName>MX_QH_AscentSlash_Drop</defName>
         <context>MapOnly</context>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 铃音冲击波：逐像素求视线与压扁半球的交点，画上面敞开的弧形光幕和地面亮线（Documents/RangedRework.md 2.11）。
+       加法混合，不写深度；和斩铁剑荷花（MX_QH_Lotus）同在 3142。 -->
+  <ShaderDef>
+    <defName>MX_QH_BellWave</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_BellWave.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3142</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 铃音冲击波的扭曲：同一个罩子当透镜。沿用原版的 DistortionBackground 抓屏点（队列必须同为 3151）。 -->
+  <ShaderDef>
+    <defName>MX_QH_BellWaveDistort</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_BellWaveDistort.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3151</renderQueue>
+      <sceneGrab>
+        <name>DistortionBackground</name>
+        <queue>3151</queue>
+      </sceneGrab>
+    </shaderProgram>
+  </ShaderDef>
+</Defs>

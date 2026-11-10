@@ -34,6 +34,10 @@ namespace MiliraXian.Characters
         public bool MingyuanDecorativeMode;
         public bool QingheDecorativeMode;
         public bool QingheSweepHitsDowned;
+        /// <summary>Area attacks (sweeps, rings, bursts) also hit neutral things, not only hostile ones.</summary>
+        public bool SweepHitsNeutral;
+        /// <summary>Area attacks also hit natural rock walls and ore.</summary>
+        public bool SweepHitsTerrain;
         private bool legacyLockSpecialPawnConsciousness = true;
 
         public override void ExposeData()
@@ -53,6 +57,8 @@ namespace MiliraXian.Characters
             CharacterPowerProfile.LookDecorative(ref MingyuanDecorativeMode, "MingyuanDecorativeMode", "MingyuanPowerLevel");
             CharacterPowerProfile.LookDecorative(ref QingheDecorativeMode, "QingheDecorativeMode", "QinghePowerLevel");
             Scribe_Values.Look(ref QingheSweepHitsDowned, "QingheSweepHitsDowned");
+            Scribe_Values.Look(ref SweepHitsNeutral, "SweepHitsNeutral");
+            Scribe_Values.Look(ref SweepHitsTerrain, "SweepHitsTerrain");
 
             bool hasNewConsciousnessLockMode = Scribe.mode != LoadSaveMode.LoadingVars
                 || Scribe.loader.curXmlParent["SpecialPawnConsciousnessLockMode"] != null;
@@ -72,6 +78,8 @@ namespace MiliraXian.Characters
     {
         public static NeiyuLawMod Instance { get; private set; }
         internal static bool QingheSweepHitsDowned => Instance?.Settings?.QingheSweepHitsDowned ?? false;
+        internal static bool SweepHitsNeutral => Instance?.Settings?.SweepHitsNeutral ?? false;
+        internal static bool SweepHitsTerrain => Instance?.Settings?.SweepHitsTerrain ?? false;
 
         public NeiyuLawSettings Settings;
         private Vector2 settingsScroll;
@@ -124,6 +132,14 @@ namespace MiliraXian.Characters
                 "MX_NL_QingheSweepHitsDownedLabel".Translate().ToString(),
                 ref Settings.QingheSweepHitsDowned,
                 "MX_NL_QingheSweepHitsDownedDesc".Translate().ToString());
+            listing.CheckboxLabeled(
+                "MX_NL_SweepHitsNeutralLabel".Translate().ToString(),
+                ref Settings.SweepHitsNeutral,
+                "MX_NL_SweepHitsNeutralDesc".Translate().ToString());
+            listing.CheckboxLabeled(
+                "MX_NL_SweepHitsTerrainLabel".Translate().ToString(),
+                ref Settings.SweepHitsTerrain,
+                "MX_NL_SweepHitsTerrainDesc".Translate().ToString());
             listing.CheckboxLabeled("霓羽：弹刀与处决特效", ref Settings.EnableNeiyuSwordVfx);
             listing.Label($"弹刀特效强度：{Settings.NeiyuSwordVfxIntensity:P0}");
             Settings.NeiyuSwordVfxIntensity = listing.Slider(Settings.NeiyuSwordVfxIntensity, .2f, 1.5f);

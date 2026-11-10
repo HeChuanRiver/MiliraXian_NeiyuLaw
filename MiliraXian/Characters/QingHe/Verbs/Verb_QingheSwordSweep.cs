@@ -712,7 +712,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                     if (thing == pawn || !thing.Spawned || thing.Destroyed
                         || thing is not Pawn && thing is not Building
                         || thing is Pawn victim && (victim.Dead || victim.Downed && !NeiyuLawMod.QingheSweepHitsDowned)
-                        || !GenHostility.HostileTo(pawn, thing)
+                        || !Common.SweepDamage.SweepTargeting.FactionAllows(pawn, thing, Common.SweepDamage.SweepTargetFaction.Hostile)
                         || !seen.Add(thing))
                     {
                         continue;
@@ -742,7 +742,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
                     }
                     if (target.Destroyed || !target.Spawned || target.MapHeld != map
                         || target is Pawn victim && victim.Dead
-                        || !GenHostility.HostileTo(pawn, target))
+                        || !Common.SweepDamage.SweepTargeting.FactionAllows(pawn, target, Common.SweepDamage.SweepTargetFaction.Hostile))
                     {
                         continue;
                     }

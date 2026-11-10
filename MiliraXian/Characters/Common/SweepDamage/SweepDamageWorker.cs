@@ -30,23 +30,24 @@ namespace MiliraXian.Characters.Common.SweepDamage
             {
                 return false;
             }
+            return SweepTargeting.FactionAllows(caster, thing, def.targetFaction);
+        }
 
-            switch (def.targetFaction)
+        /// <summary>
+        /// The damage type of a hit on <paramref name="target"/>: the def's per-kind type when it has
+        /// one (buildings, terrain), else the source's named cut, else the def's.
+        /// </summary>
+        public DamageDef DamageDefFor(SweepDamageSource source, Thing target)
+        {
+            DamageDef general = source.damageDef ?? def.damageDef ?? DamageDefOf.Cut;
+            switch (SweepTargeting.KindOf(target))
             {
-                case SweepTargetFaction.Hostile:
-                    return caster != null && GenHostility.HostileTo(caster, thing);
-                case SweepTargetFaction.HostileAndNeutral:
-                {
-                    Faction own = caster?.Faction;
-                    Faction other = thing.Faction;
-                    if (own == null || other == null)
-                    {
-                        return true;
-                    }
-                    return other != own && other.RelationKindWith(own) != FactionRelationKind.Ally;
-                }
+                case SweepHitKind.Terrain:
+                    return def.damageDefTerrain ?? def.damageDefBuilding ?? general;
+                case SweepHitKind.Building:
+                    return def.damageDefBuilding ?? general;
                 default:
-                    return true;
+                    return def.damageDefPawn ?? general;
             }
         }
 
@@ -56,7 +57,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
             Vector3 dir = GenThing.TrueCenter(target) - source.center;
             float angle = dir.sqrMagnitude > 0.0001f ? dir.AngleFlat() : -1f;
             DamageInfo dinfo = new(
-                source.damageDef ?? def.damageDef ?? DamageDefOf.Cut,
+                DamageDefFor(source, target),
                 source.damage,
                 source.armorPenetration,
                 angle,

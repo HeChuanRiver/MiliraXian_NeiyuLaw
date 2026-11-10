@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.AbnormalSystem;
 using Verse;
 
 namespace MiliraXian.Characters.Common
@@ -14,8 +15,19 @@ namespace MiliraXian.Characters.Common
         }
     }
 
-    public class HediffComp_AddHediffPerTick : HediffComp
+    public class HediffComp_AddHediffPerTick : HediffComp, IAbnormalAggravation
     {
+        /// <summary>Aggravated: what the rest of the effect would have added, at once (RangedRework.md 3.4).</summary>
+        public void Aggravate(Pawn source, int remainingTicks, ref bool keepEffect)
+        {
+            if (Pawn == null || Pawn.Dead || PropsAdd.addHediff == null || remainingTicks <= 0
+                || (PropsAdd.fleshOnly && Pawn.RaceProps?.IsFlesh != true))
+            {
+                return;
+            }
+            AddSeverity(PropsAdd.severityPerTick * remainingTicks);
+        }
+
         private Hediff cachedHediff;
 
         private HediffCompProperties_AddHediffPerTick PropsAdd => (HediffCompProperties_AddHediffPerTick)props;

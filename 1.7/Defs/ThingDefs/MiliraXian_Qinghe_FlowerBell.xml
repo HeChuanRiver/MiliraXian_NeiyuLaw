@@ -51,7 +51,8 @@
       <AccuracyShort>1.0</AccuracyShort>
       <AccuracyMedium>1.0</AccuracyMedium>
       <AccuracyLong>1.0</AccuracyLong>
-      <RangedWeapon_Cooldown>5.5</RangedWeapon_Cooldown>
+      <!-- 主人 11-11：去掉射击后摇（原 5.5 秒）。属性下限 0.01 秒，换算后约 1 tick -->
+      <RangedWeapon_Cooldown>0.01</RangedWeapon_Cooldown>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -69,8 +70,12 @@
           <li>MX_QH_FlowerBellResonanceDescriptionWinter</li>
         </resonanceDescriptions>
       </li>
-      <li>
-        <compClass>CompEquippable</compClass>
+      <!-- 五档蓄力（Documents/RangedRework.md 第 2.9 节）：取代原版 CompEquippable，蓄力、阈值、调式存在这里 -->
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellCharge">
+        <tierSeconds>2</tierSeconds>
+        <tiers>5</tiers>
+        <decayR0>0.5</decayR0>
+        <decayA>1</decayA>
       </li>
       <li Class="CompProperties_Styleable" />
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellResonance">
@@ -113,11 +118,16 @@
         <verbClass>MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell</verbClass>
         <hasStandardCommand>true</hasStandardCommand>
         <defaultProjectile>MX_Bullet_Qinghe_FlowerBell_None</defaultProjectile>
-        <warmupTime>1.80</warmupTime>
-        <range>16</range>
-        <burstShotCount>3</burstShotCount>
-        <ticksBetweenBurstShots>9</ticksBetweenBurstShots>
-        <defaultCooldownTime>2.5</defaultCooldownTime>
+        <!-- warmupTime 只为让原版走起手检查并建预热姿态（> 0 即可），随即换成蓄力姿态；
+             发数由蓄力档位决定，一次连发里一起射出，burstShotCount 必须是 1 -->
+        <warmupTime>0.5</warmupTime>
+        <drawAimPie>false</drawAimPie>
+        <!-- 原版 AI 贴身有近战威胁时远程武器不可用；铃不受此限（贴身时够一档就放出，第 2.9 节） -->
+        <ai_ProjectileLaunchingIgnoresMeleeThreats>true</ai_ProjectileLaunchingIgnoresMeleeThreats>
+        <!-- 主人 11-11：突出远距离攻城和控场，射程 16 → 26（初值，实机再调） -->
+        <range>26</range>
+        <burstShotCount>1</burstShotCount>
+        <defaultCooldownTime>0.01</defaultCooldownTime>
       </li>
     </verbs>
   </ThingDef>
@@ -130,38 +140,54 @@
       <drawSize>(0.36,1.05)</drawSize>
       <shaderType>TransparentPostLight</shaderType>
     </graphicData>
+    <!-- 铃音不画自己的图形（graphicData 只为满足弹丸 Def 的要求）：弹体、声纹、花瓣、冲击波和扭曲都由
+         FlowerBellVfx 合批绘制，规格见 Documents/RangedRework.md 第 2.11 节。
+         速度 30 → 15（主人 11-09）；速度减半后飞行时间翻倍，摆动频率跟着减半（0.12 → 0.06，主人 11-10），
+         一次飞行里的摆动周数和原来一样。命中后的扩张环出伤见 MX_QH_FlowerBellWave。 -->
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
       <damageAmountBase>6</damageAmountBase>
       <armorPenetrationBase>2.00</armorPenetrationBase>
-      <speed>30</speed>
+      <speed>15</speed>
       <arcHeightFactor>0.10</arcHeightFactor>
     </projectile>
     <comps>
-      <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileContinuousTrail">
-        <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <trailMaxPoints>22</trailMaxPoints>
-        <trailMinPointDistance>0.10</trailMinPointDistance>
-        <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
-        <trailWidthStart>0.18</trailWidthStart>
-        <trailWidthEnd>0.05</trailWidthEnd>
-        <trailAlpha>1.00</trailAlpha>
-        <trailAltitudeOffset>0.70</trailAltitudeOffset>
-        <useProjectileGraphicColor>true</useProjectileGraphicColor>
-      </li>
       <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileHomingCurve">
         <homingStartDelayTicks>5</homingStartDelayTicks>
+        <!-- 主人 11-11：弹速减半后逃跑的敌人容易追不上。寿命 = 射程 / 弹速 × 系数，1.2 → 2.5（26 格约 4.3 秒）；
+             目标丢失后改追附近敌人的次数 2 → 4 -->
+        <homingLifetimeFactor>2.5</homingLifetimeFactor>
+        <retargetMaxCount>4</retargetMaxCount>
         <minHomingTicksToImpact>10</minHomingTicksToImpact>
         <homingTurnLerp>0.13</homingTurnLerp>
         <curveAmplitudeMin>0.60</curveAmplitudeMin>
         <curveAmplitudeMax>0.80</curveAmplitudeMax>
-        <curveFrequency>0.12</curveFrequency>
-      </li>
-      <li Class="CompProperties_ProjectileEffecter">
-        <effecterDef>MX_QH_ProjectileScatterTrail</effecterDef>
+        <curveFrequency>0.06</curveFrequency>
       </li>
     </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.FlowerBellNoteExtension">
+        <color>(0.95, 0.92, 0.95, 1)</color>
+      </li>
+    </modExtensions>
   </ThingDef>
+
+  <!-- 铃音冲击波：扩张环扫到才出伤，只打敌对，从落点看视线；命中后叠该季的异常（第 2.11 节、第 3.3 节） -->
+  <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+    <defName>MX_QH_FlowerBellWave</defName>
+    <damageDef>MX_QH_NoteImpact</damageDef>
+    <!-- 建筑和地形吃共振（×3），挡视线的目标穿透一格（主人 11-11） -->
+    <damageDefBuilding>MX_QH_NoteResonance</damageDefBuilding>
+    <damageDefTerrain>MX_QH_NoteResonance</damageDefTerrain>
+    <pierceCells>1</pierceCells>
+    <targetFaction>Hostile</targetFaction>
+    <hitPawns>true</hitPawns>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
+    <damageDelayTicks>0</damageDelayTicks>
+    <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.SweepDamageWorker_FlowerBell</workerClass>
+  </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
 
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
     <defName>MX_Bullet_Qinghe_FlowerBell_None</defName>
@@ -180,6 +206,11 @@
     <projectile>
       <damageAmountBase>6</damageAmountBase>
     </projectile>
+    <modExtensions Inherit="False">
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.FlowerBellNoteExtension">
+        <color>(1.0, 0.62, 0.80, 1)</color>
+      </li>
+    </modExtensions>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <abnormals>
@@ -202,6 +233,11 @@
     <projectile>
       <damageAmountBase>6</damageAmountBase>
     </projectile>
+    <modExtensions Inherit="False">
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.FlowerBellNoteExtension">
+        <color>(0.60, 0.95, 0.50, 1)</color>
+      </li>
+    </modExtensions>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <abnormals>
@@ -224,6 +260,11 @@
     <projectile>
       <damageAmountBase>6</damageAmountBase>
     </projectile>
+    <modExtensions Inherit="False">
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.FlowerBellNoteExtension">
+        <color>(0.78, 0.60, 1.00, 1)</color>
+      </li>
+    </modExtensions>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <abnormals>
@@ -246,6 +287,11 @@
     <projectile>
       <damageAmountBase>6</damageAmountBase>
     </projectile>
+    <modExtensions Inherit="False">
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.FlowerBellNoteExtension">
+        <color>(0.60, 0.85, 1.00, 1)</color>
+      </li>
+    </modExtensions>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <abnormals>

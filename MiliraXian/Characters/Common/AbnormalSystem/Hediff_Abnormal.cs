@@ -19,6 +19,8 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         private Mote progressBarMote;
         private float cachedAccumulationLimit = -1f;
         private int accumulationLimitCachedAtTick = int.MinValue;
+        /// <summary>Build-up while the effect is active (RangedRework.md 3.4); full at the limit × aggravationLimitFactor.</summary>
+        private float aggravation;
 
         public HediffDef_Abnormal AbnormalDef => def as HediffDef_Abnormal;
 
@@ -30,10 +32,24 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         {
             get
             {
+                if (EffectActive)
+                {
+                    float aLimit = AggravationLimit;
+                    return aLimit > 0f ? Mathf.Clamp01(aggravation / aLimit) : 0f;
+                }
                 float limit = AccumulationLimit;
                 return limit > 0f ? Mathf.Clamp01(Severity / limit) : 0f;
             }
         }
+
+        /// <summary>The abnormal's effect is on the pawn: hits fill the aggravation bar instead.</summary>
+        public bool EffectActive => ActiveEffect != null;
+
+        private Hediff ActiveEffect => AbnormalDef?.effectHediff == null ? null : pawn?.health?.hediffSet?.GetFirstHediffOfDef(AbnormalDef.effectHediff);
+
+        public float AggravationLimit => AccumulationLimit * Mathf.Max(0f, AbnormalDef?.aggravationLimitFactor ?? 0f);
+
+        public float Aggravation => aggravation;
 
         public override string LabelInBrackets
         {
@@ -45,28 +61,100 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
             }
         }
 
-        public override bool ShouldRemove => base.ShouldRemove || Severity <= 0f;
+        public override bool ShouldRemove => (base.ShouldRemove || Severity <= 0f) && aggravation <= 0f && !EffectActive;
 
-        public bool ApplyAccumulation(Pawn newSource, float amount, float accumulationLimit)
+        public AbnormalApplyStatus ApplyAccumulation(Pawn newSource, float amount, float accumulationLimit)
         {
             if (amount <= 0f || accumulationLimit <= 0f)
             {
-                return false;
+                return AbnormalApplyStatus.InvalidAmount;
             }
 
             source = newSource;
             ticksUntilDecay = Mathf.Max(0, AbnormalDef?.ticksUntilDecayAfterRefresh ?? 0);
             cachedAccumulationLimit = accumulationLimit;
             accumulationLimitCachedAtTick = CurrentTick;
-            Severity += amount;
+            // The on-hit extras (blood loss, toxic build-up, hypothermia, mech energy) come with every hit,
+            // the effect active or not (owner 11-11).
             NotifyApplied(amount);
+            Hediff effect = ActiveEffect;
+            if (effect != null)
+            {
+                float aLimit = accumulationLimit * Mathf.Max(0f, AbnormalDef?.aggravationLimitFactor ?? 0f);
+                if (aLimit <= 0f)
+                {
+                    return AbnormalApplyStatus.EffectAlreadyActive;
+                }
+                aggravation += amount;
+                if (aggravation < aLimit)
+                {
+                    return AbnormalApplyStatus.AggravationApplied;
+                }
+                Aggravate(effect);
+                return AbnormalApplyStatus.Aggravated;
+            }
+
+            Severity += amount;
             if (Severity < accumulationLimit)
             {
-                return false;
+                return AbnormalApplyStatus.Applied;
             }
 
             Trigger();
-            return true;
+            return AbnormalApplyStatus.Triggered;
+        }
+
+        /// <summary>
+        /// The aggravation bar is full: what is left of the effect is settled at once by its parts
+        /// (<see cref="IAbnormalAggravation"/>), plus the def's aggravation damage; then the effect ends
+        /// (unless a part kept it) and the abnormal builds up from zero again.
+        /// </summary>
+        protected virtual void Aggravate(Hediff effect)
+        {
+            Pawn target = pawn;
+            HediffDef_Abnormal abnormalDef = AbnormalDef;
+            aggravation = 0f;
+            if (target == null || target.Dead || abnormalDef == null || effect == null)
+            {
+                return;
+            }
+            int remaining = effect.TryGetComp<HediffComp_Disappears>()?.ticksToDisappear ?? 0;
+            bool keep = false;
+            if (effect is IAbnormalAggravation self)
+            {
+                self.Aggravate(source, remaining, ref keep);
+            }
+            if (effect is HediffWithComps withComps && withComps.comps != null)
+            {
+                for (int i = 0; i < withComps.comps.Count && !target.Dead; i++)
+                {
+                    if (withComps.comps[i] is IAbnormalAggravation part)
+                    {
+                        part.Aggravate(source, remaining, ref keep);
+                    }
+                }
+            }
+            if (!target.Dead && abnormalDef.aggravationDamageDef != null)
+            {
+                float amount = abnormalDef.aggravationDamageBase + abnormalDef.aggravationDamagePerSecond * remaining / 60f;
+                if (amount > 0f)
+                {
+                    target.TakeDamage(new DamageInfo(abnormalDef.aggravationDamageDef, amount, abnormalDef.aggravationArmorPenetration, -1f, source));
+                }
+            }
+            string text = abnormalDef.aggravationText.NullOrEmpty() ? abnormalDef.triggerText : abnormalDef.aggravationText;
+            if (!text.NullOrEmpty() && target.Spawned && target.MapHeld != null)
+            {
+                MoteMaker.ThrowText(target.DrawPos + abnormalDef.triggerTextOffset, target.MapHeld, text, abnormalDef.triggerTextColor, abnormalDef.triggerTextDuration);
+            }
+            if (abnormalDef.triggerMoteDef != null && target.Spawned && target.MapHeld != null)
+            {
+                MoteMaker.MakeAttachedOverlay(target, abnormalDef.triggerMoteDef, abnormalDef.triggerMoteOffset, Mathf.Max(0.01f, abnormalDef.triggerMoteScale));
+            }
+            if (!keep && !target.Dead && target.health.hediffSet.hediffs.Contains(effect))
+            {
+                target.health.RemoveHediff(effect);
+            }
         }
 
         public override void Tick()
@@ -86,13 +174,18 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
                     return;
                 }
 
-                if (Severity >= limit)
+                if (Severity >= limit && !EffectActive)
                 {
                     Trigger();
                     return;
                 }
             }
 
+            if (aggravation > 0f && !EffectActive)
+            {
+                // The effect ran out before the bar filled: the bar goes with it.
+                aggravation = 0f;
+            }
             MaintainProgressBarMote();
             TickDecay();
         }
@@ -113,6 +206,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
             base.ExposeData();
             Scribe_Values.Look(ref ticksUntilDecay, "abnormalTicksUntilDecay", 0);
             Scribe_References.Look(ref source, "abnormalSource");
+            Scribe_Values.Look(ref aggravation, "abnormalAggravation", 0f);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 cachedAccumulationLimit = -1f;
@@ -166,6 +260,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
             if (decay > 0f)
             {
                 Severity = Mathf.Max(0f, Severity - decay);
+                aggravation = Mathf.Max(0f, aggravation - decay);
             }
         }
 

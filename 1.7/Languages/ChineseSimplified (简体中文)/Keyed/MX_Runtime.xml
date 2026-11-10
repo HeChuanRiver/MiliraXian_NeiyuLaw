@@ -36,6 +36,10 @@
   <MX_NL_EnableScreenBloomLabel>屏幕泛光</MX_NL_EnableScreenBloomLabel>
   <MX_NL_QingheSweepHitsDownedLabel>清荷：范围斩击波及倒地目标</MX_NL_QingheSweepHitsDownedLabel>
   <MX_NL_QingheSweepHitsDownedDesc>开启后，清荷的普通攻击扫斩、樱舞、镜花水月和斩铁剑会伤到范围内倒地的敌人。关闭时它们会避开倒地的敌人，但用攻击指令点名的目标照常受击。</MX_NL_QingheSweepHitsDownedDesc>
+  <MX_NL_SweepHitsNeutralLabel>范围攻击波及中立目标</MX_NL_SweepHitsNeutralLabel>
+  <MX_NL_SweepHitsNeutralDesc>开启后，扫斩、冲击波等范围攻击也会伤到范围内的中立单位和建筑（无阵营，或既非己方也非盟友）。关闭时只伤敌对目标。无论开关，用攻击指令点名的目标照常受击；己方、盟友和囚犯不会被波及。</MX_NL_SweepHitsNeutralDesc>
+  <MX_NL_SweepHitsTerrainLabel>范围攻击破坏地形</MX_NL_SweepHitsTerrainLabel>
+  <MX_NL_SweepHitsTerrainDesc>开启后，扫斩、冲击波等范围攻击会伤到范围内的天然岩壁和矿石。</MX_NL_SweepHitsTerrainDesc>
   <MX_NL_EnableScreenBloomDesc>启用后，角色的护盾光晕等屏幕泛光效果会正常显示。关闭后可省下少许性能，代价是失去光晕。</MX_NL_EnableScreenBloomDesc>
   <MX_NL_ViewUpdateLogsButton>查看所有更新日志</MX_NL_ViewUpdateLogsButton>
   <MX_NL_UpdateLogDialogTitle>米莉拉角色拓展 更新日志</MX_NL_UpdateLogDialogTitle>
@@ -177,6 +181,17 @@
   <MX_QH_FlowerBellResonanceDescriptionSummer>和鸣【夏】：\n附有能引起剧毒或腐蚀异常的魔力。</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>和鸣【秋】：\n附有能引起恐惧或过载异常的魔力。</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>和鸣【冬】：\n附有能引起冻结异常的魔力。</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <!-- 花信风铃的蓄力（RangedRework.md 第 2.9 节） -->
+  <MX_QH_BellReleaseNow>立即发射</MX_QH_BellReleaseNow>
+  <MX_QH_BellReleaseTip>立即发射：{0} 发铃音。</MX_QH_BellReleaseTip>
+  <MX_QH_BellReleaseDisabled>只能在蓄力中、至少一档时发射。</MX_QH_BellReleaseDisabled>
+  <MX_QH_BellChargeTip>蓄力：{0} 秒（{1} 档）。\n蓄到 {2} 档时自动发射。\n每 2 秒一档，最多五档，每档多一发铃音。蓄力中断后会衰减，越来越快。</MX_QH_BellChargeTip>
+  <MX_QH_BellDecaying>衰减中。</MX_QH_BellDecaying>
+  <MX_QH_BellThresholdSet>蓄到 {0} 档时自动发射。</MX_QH_BellThresholdSet>
+  <MX_QH_BellThresholdLocked>有蓄力时不能调整阈值。</MX_QH_BellThresholdLocked>
+  <MX_QH_BellThreatHold>近身应对：原地蓄力</MX_QH_BellThreatHold>
+  <MX_QH_BellThreatRetreat>近身应对：后撤</MX_QH_BellThreatRetreat>
+  <MX_QH_BellThreatDesc>清荷持铃时被近战攻击的应对方式。\n\n已蓄到一档以上时，两种方式都会立即发射。\n原地蓄力：不到一档时站着继续蓄，硬吃近战伤害。\n后撤：不到一档时后退几格再重新攻击，期间蓄力照常衰减。\n\n点击切换。</MX_QH_BellThreatDesc>
   <!-- 散华的四季共鸣效果 -->
   <MX_QH_SwordResonanceDescriptionSpring>和鸣【春晓】：\n附有能引起流血或漏电异常的魔力，攻击命中后还会为清荷附加春泉洗礼效果。</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>和鸣【荷雨】：\n附有能引起剧毒或腐蚀异常的魔力，攻击命中后回复的剑压+50%。</MX_QH_SwordResonanceDescriptionSummer>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
+  <!-- 恶化（RangedRework.md 第 3.4 节，主人 11-11）：效果期间命中照给附带效果（失血、毒素、低温、扣能量），并积累到第二条槽，
+       上限为正常的 aggravationLimitFactor 倍（默认 0.5）。满了就把剩余效果一次结清并结束效果，目标重新开始正常积累；
+       恐惧、过载改为重置时长并眩晕 2 秒。 -->
   <!-- Bleed / electric leak -->
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalBleed</defName>
@@ -19,6 +22,7 @@
     <effectHediff>MX_AbnormalBleeding</effectHediff>
     <effectDurationTicks>2400</effectDurationTicks>
     <triggerText>流血</triggerText>
+    <aggravationText>撕裂</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(1.00, 0.36, 0.42)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -48,6 +52,7 @@
     <effectHediff>MX_AbnormalShortCircuit</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>短路</triggerText>
+    <aggravationText>再短路</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(1.00, 0.86, 0.28)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -151,6 +156,7 @@
     <effectHediff>MX_AbnormalVenom</effectHediff>
     <effectDurationTicks>3600</effectDurationTicks>
     <triggerText>中毒</triggerText>
+    <aggravationText>毒发</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.62, 0.95, 0.42)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -180,6 +186,7 @@
     <effectHediff>MX_AbnormalCorroded</effectHediff>
     <effectDurationTicks>1440</effectDurationTicks>
     <triggerText>腐蚀</triggerText>
+    <aggravationText>蚀穿</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.66, 0.90, 0.58)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -287,6 +294,7 @@
     <effectHediff>MX_AbnormalFeared</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>恐惧</triggerText>
+    <aggravationText>惊惧</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -309,6 +317,7 @@
     <effectHediff>MX_AbnormalOverloaded</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>过载</triggerText>
+    <aggravationText>再过载</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -382,6 +391,11 @@
     <effectHediff>MX_AbnormalFrozen</effectHediff>
     <effectDurationTicks>300</effectDurationTicks>
     <triggerText>冻结</triggerText>
+    <aggravationText>碎冰</aggravationText>
+    <aggravationDamageDef>MX_AbnormalShatterDamage</aggravationDamageDef>
+    <aggravationDamageBase>15</aggravationDamageBase>
+    <aggravationDamagePerSecond>6</aggravationDamagePerSecond>
+    <aggravationArmorPenetration>1</aggravationArmorPenetration>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.56, 0.88, 1.00)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>

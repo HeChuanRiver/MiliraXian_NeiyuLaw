@@ -74,7 +74,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 {
                     continue;
                 }
-                if (def.requireLineOfSight && !GenSight.LineOfSight(c, t.Position, map, skipFirstCell: true))
+                if (def.requireLineOfSight && !SweepTargeting.InSight(c, t, map))
                 {
                     continue;
                 }

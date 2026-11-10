@@ -19,6 +19,21 @@
         <defaultArmorPenetration>2</defaultArmorPenetration>
         <deathMessage>{0}死于花信铃的剧毒。</deathMessage>
     </DamageDef>
+    <!-- 冻结恶化（碎冰）：冻结期间再叠满寒冷时一次大伤害并解冻（RangedRework.md 第 3.4 节） -->
+    <DamageDef>
+        <defName>MX_AbnormalShatterDamage</defName>
+        <label>碎冰</label>
+        <description>冻结中的目标再次受寒，连同冰壳一起碎裂。</description>
+        <workerClass>DamageWorker_AddInjury</workerClass>
+        <hasForcefulImpact>true</hasForcefulImpact>
+        <makesBlood>true</makesBlood>
+        <externalViolence>true</externalViolence>
+        <armorCategory>Blunt</armorCategory>
+        <isRanged>true</isRanged>
+        <hediff>Crush</hediff>
+        <defaultArmorPenetration>1</defaultArmorPenetration>
+        <deathMessage>{0}连同冰壳一起碎裂了。</deathMessage>
+    </DamageDef>
     <DamageDef>
         <defName>MX_AbnormalShortCircuitDamage</defName>
         <label>短路放电</label>

@@ -19,7 +19,26 @@ namespace MiliraXian.Characters.Common.SweepDamage
         {
             if (source.verb is ISweepHitVerb verb)
             {
-                verb.ResolveSweepHit(source, target);
+                // A per-kind damage type of the def (buildings, terrain) replaces the named cut for this hit.
+                DamageDef named = source.damageDef;
+                DamageDef perKind = SweepTargeting.KindOf(target) switch
+                {
+                    SweepHitKind.Terrain => def.damageDefTerrain ?? def.damageDefBuilding,
+                    SweepHitKind.Building => def.damageDefBuilding,
+                    _ => def.damageDefPawn,
+                };
+                if (perKind != null)
+                {
+                    source.damageDef = perKind;
+                }
+                try
+                {
+                    verb.ResolveSweepHit(source, target);
+                }
+                finally
+                {
+                    source.damageDef = named;
+                }
             }
             // Without its verb (lost on load) the amount is only a share: deal nothing rather than a wrong value.
         }
