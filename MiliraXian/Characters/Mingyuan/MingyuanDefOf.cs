@@ -24,6 +24,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         public static ThingDef MX_Mingyuan_BurningPillarField;
         public static ThingDef MX_Mingyuan_FireCastVisual;
+        public static ThingDef MX_Mingyuan_CombustionVolley;
         public static JobDef MX_Mingyuan_ControlBurningPillar;
         public static ThingDef MX_Mingyuan_AshesField;
         public static ThingDef MX_Mingyuan_AscendantFlameDashFlyer;

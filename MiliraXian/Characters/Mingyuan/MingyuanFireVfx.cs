@@ -16,7 +16,12 @@ internal static class MingyuanFireVfx
     private static readonly Material PhoenixTakeoff;
     private static readonly Material PhoenixDive;
     private static readonly Material CinderSword;
+    private static readonly Material CombustionSigil;
+    private static readonly Material SmallFireball;
+    private static readonly Material CoreFireball;
+    private static readonly Material ImpactFlame;
     private static readonly MaterialPropertyBlock Properties = new();
+    private static readonly MaterialPropertyBlock CombustionProperties = new();
     private static readonly int ParamsId = Shader.PropertyToID("_FireParams");
     private static readonly int ShapeId = Shader.PropertyToID("_FireShape");
     private static readonly ScreenBloomProperties Bloom;
@@ -36,6 +41,10 @@ internal static class MingyuanFireVfx
         FireMaterial = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
         PhoenixTakeoff = LoadPhoenixMaterial(shader, "PhoenixTakeoff");
         PhoenixDive = LoadPhoenixMaterial(shader, "PhoenixDive");
+        CombustionSigil = LoadCombustionMaterial("Sigil");
+        SmallFireball = LoadCombustionMaterial("SmallFireball");
+        CoreFireball = LoadCombustionMaterial("CoreFireball");
+        ImpactFlame = LoadCombustionMaterial("ImpactFlame");
         string swordPath = MX_MingyuanDefOf.MX_Mingyuan_CinderSword?.graphicData?.texPath;
         if (swordPath != null && ContentFinder<Texture2D>.Get(swordPath) is { } sword)
             CinderSword = MaterialPool.MatFrom(new MaterialRequest(sword, shader, Color.white));
@@ -63,6 +72,9 @@ internal static class MingyuanFireVfx
         Texture2D texture = ContentFinder<Texture2D>.Get("MiliraXianMingyuan/Effect/AscendantFlameDash/" + name);
         return texture == null ? null : MaterialPool.MatFrom(new MaterialRequest(texture, shader, Color.white));
     }
+
+    private static Material LoadCombustionMaterial(string name) =>
+        MaterialPool.MatFrom("MiliraXianMingyuan/Effect/InstantCombustion/" + name, ShaderDatabase.MoteGlow, Color.white);
 
     private static void Draw(Shape shape, Mesh mesh, Matrix4x4 matrix, float time, float progress,
         float alpha, Vector4 options = default, bool bloom = false, Material material = null)
@@ -178,9 +190,7 @@ internal static class MingyuanFireVfx
         float time = Find.TickManager.TicksGame / 60f;
         if (verb?.Combustion is { } combustion)
         {
-            DrawSigil(origin, combustion.Props.radius, progress, alpha, time);
-            Sparks(origin, Quaternion.identity, Mathf.Lerp(1f, combustion.Props.radius * 0.72f, progress),
-                time, 2f, alpha, 12);
+            DrawCombustionWarmup(target, combustion.Props, progress, alpha);
         }
         else
         {
@@ -195,6 +205,107 @@ internal static class MingyuanFireVfx
             }
             DrawWarning(target, alpha * Mathf.Lerp(0.55f, 1f, progress));
         }
+    }
+
+    private static float CombustionVisualTicks
+    {
+        get
+        {
+            int now = Find.TickManager.TicksGame;
+            // Keep the rotating sprites smooth even when the absolute tick count is large.
+            return VisualClock.TicksSince(now - now % 3600);
+        }
+    }
+
+    private static Vector3 CombustionCore(Vector3 center) => center.WithY(AirAltitude) + Vector3.forward * 3.2f;
+
+    private static Vector3 CombustionOrbit(Vector3 core, int index, int count, float ticks)
+    {
+        float phase = (index / (float)count + ticks / 120f) * (2f * Mathf.PI);
+        return core + new Vector3(2.25f * Mathf.Cos(phase), 0.02f, 1.35f * Mathf.Sin(phase));
+    }
+
+    private static void CombustionSprite(Material material, Vector3 center, float size, float angle, float alpha, bool bloom = false)
+    {
+        if (alpha <= 0f || material == null) return;
+        var matrix = Matrix4x4.TRS(center, Quaternion.AngleAxis(angle, Vector3.up), new Vector3(size, 1f, size));
+        CombustionProperties.SetColor(ShaderPropertyIDs.Color, new Color(1f, 1f, 1f, alpha));
+        if (bloom) ScreenBloom.Submit(Bloom, MeshPool.plane10, matrix, material, CombustionProperties);
+        Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, CombustionProperties);
+    }
+
+    private static void DrawCombustionWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion settings,
+        float progress, float alpha)
+    {
+        if (!Visible(center, settings.radius + 4f)) return;
+        float ticks = CombustionVisualTicks;
+        float etch = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress / 0.35f));
+        CombustionSprite(CombustionSigil, center.WithY(GroundAltitude), settings.radius * Mathf.Lerp(1.45f, 2.12f, etch),
+            ticks * 0.2f, alpha * etch * 0.8f);
+        Vector3 core = CombustionCore(center);
+        float coreFade = Mathf.InverseLerp(0.28f, 0.57f, progress);
+        CombustionSprite(CoreFireball, core, Mathf.Lerp(0.7f, 2.45f, coreFade), ticks * 0.9f, alpha * coreFade, bloom: true);
+        for (int i = 0; i < settings.smallFireballCount; i++)
+        {
+            float reveal = 0.42f + 0.39f * i / settings.smallFireballCount;
+            float fade = Mathf.InverseLerp(reveal, reveal + 0.14f, progress);
+            Vector3 position = CombustionOrbit(core, i, settings.smallFireballCount, ticks);
+            if (i == 0) position = Vector3.Lerp(position, core, Mathf.InverseLerp(0.96f, 1f, progress));
+            CombustionSprite(SmallFireball, position, 1.04f, i * 43f - ticks * 0.7f, alpha * fade);
+        }
+    }
+
+    internal static void DrawCombustionVolley(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion settings,
+        List<IntVec3> landings, float elapsed, int nextImpact)
+    {
+        if (!Visible(center, settings.radius + 4f)) return;
+        float ticks = CombustionVisualTicks;
+        int coreLaunch = settings.CoreLaunchAt(landings.Count);
+        int coreImpact = settings.CoreImpactAt(landings.Count);
+        float ringFade = 1f - Mathf.InverseLerp(coreImpact, coreImpact + Thing_MingyuanCombustionVolley.ImpactFadeTicks, elapsed);
+        CombustionSprite(CombustionSigil, center.WithY(GroundAltitude), settings.radius * 2.12f, ticks * 0.2f, ringFade * 0.8f);
+        Vector3 core = CombustionCore(center);
+        if (nextImpact <= landings.Count)
+        {
+            float fall = Mathf.InverseLerp(coreLaunch, coreImpact, elapsed);
+            Vector3 corePosition = Vector3.Lerp(core, center.WithY(AirAltitude), fall * fall);
+            float pulse = elapsed > coreLaunch ? 1f + 0.16f * fall : 1f + 0.08f * Mathf.Sin(ticks * 0.21f);
+            CombustionSprite(CoreFireball, corePosition, 2.45f * pulse, ticks * 0.9f, 1f, bloom: true);
+        }
+        else
+            DrawCombustionImpact(center, settings.coreFireball.radius, elapsed - coreImpact, 0f, true);
+
+        for (int i = 0; i < landings.Count; i++)
+        {
+            float angle = i * 43f - ticks * 0.7f;
+            int launch = settings.SmallLaunchAt(i);
+            Vector3 landing = landings[i].ToVector3Shifted();
+            if (i < nextImpact)
+                DrawCombustionImpact(landing, settings.smallFireball.radius, elapsed - settings.SmallImpactAt(i), i * 47f, false);
+            else if (elapsed < launch)
+            {
+                Vector3 orbit = CombustionOrbit(core, i, landings.Count, ticks);
+                CombustionSprite(SmallFireball, Vector3.Lerp(orbit, core, Mathf.InverseLerp(launch - 6, launch, elapsed)),
+                    1.04f, angle, 1f);
+            }
+            else
+            {
+                float fall = Mathf.InverseLerp(launch, settings.SmallImpactAt(i), elapsed);
+                Vector3 destination = landing.WithY(AirAltitude);
+                Vector3 trail = Vector3.Lerp(core, destination, fall * fall * 0.77f);
+                Vector3 position = Vector3.Lerp(core, destination, fall * fall);
+                CombustionSprite(SmallFireball, trail, 0.82f, angle, fall * 0.35f);
+                CombustionSprite(SmallFireball, position, 1.15f, angle, 1f);
+            }
+        }
+    }
+
+    private static void DrawCombustionImpact(Vector3 center, float radius, float age, float angle, bool core)
+    {
+        if (age >= Thing_MingyuanCombustionVolley.ImpactFadeTicks) return;
+        float fade = 1f - Mathf.Clamp01(age / Thing_MingyuanCombustionVolley.ImpactFadeTicks);
+        float size = radius * Mathf.Lerp(1.25f, 2.1f, Mathf.Clamp01(age / 7f));
+        CombustionSprite(ImpactFlame, center.WithY(AirAltitude + 0.04f), size, angle, fade * fade, bloom: core);
     }
 
     internal static void DrawSigil(Vector3 center, float radius, float progress, float alpha, float time)
@@ -415,8 +526,6 @@ public class Thing_MingyuanFireCastVisual : Thing
         origin = pawn.Position.ToVector3Shifted();
         aimCell = target;
         duration = stance.verb is Verb_MingyuanTimeBurn ? 14 : 20;
-        radius = (stance.verb as Verb_MingyuanFireCast)?.Combustion?.Props.radius ?? 0f;
-        sigil = radius > 0f;
     }
 
     internal void InitBurst(Vector3 center, float effectRadius, int ticks, bool isSigil)
@@ -433,7 +542,8 @@ public class Thing_MingyuanFireCastVisual : Thing
 
     private bool IsWarming(Verb_CastAbility verb) => !MingyuanPowerBalance.Sealed
         && caster is { Spawned: true, Dead: false } && caster.Map == Map
-        && verb?.WarmupStance is { } stance && stance.startedTick == stanceStart;
+        && verb?.WarmupStance is { } stance && stance.startedTick == stanceStart
+        && (verb is not Verb_MingyuanFireCast { Combustion: { } combustion } || combustion.CanRelease(stance.focusTarg));
 
     protected override void Tick()
     {
@@ -482,7 +592,7 @@ public class Thing_MingyuanFireCastVisual : Thing
         if (!etchPlayed && elapsed >= fire.JumpTicks && fire.Combustion is { } combustion)
         {
             etchPlayed = true;
-            combustion.Props.etchSound?.PlayOneShot(new TargetInfo(Position, Map));
+            combustion.Props.etchSound?.PlayOneShot(new TargetInfo(aimCell, Map));
         }
     }
 
@@ -498,6 +608,17 @@ public class Thing_MingyuanFireCastVisual : Thing
                 ? Mathf.Clamp01((VisualClock.Ticks - stanceStart) / Mathf.Max(1, timeBurn.CastTicks))
                 : progress;
             MingyuanFireVfx.DrawTimeBurnCast(caster, props, aimCell.ToVector3Shifted(), phase, remaining, warming);
+        }
+        else if (Verb is Verb_MingyuanFireCast { Combustion: not null } fire && !sigil)
+        {
+            float phase = progress;
+            if (IsWarming(fire))
+            {
+                float elapsed = fire.CastTicks - fire.WarmupTicksLeft - fire.JumpTicks;
+                if (!caster.stances.stunner.Stunned) elapsed += VisualClock.TicksSince(Find.TickManager.TicksGame);
+                phase = Mathf.Clamp01(elapsed / (fire.CastTicks - fire.JumpTicks));
+            }
+            MingyuanFireVfx.DrawWarmup(fire, origin, aimCell.ToVector3Shifted(), phase, remaining);
         }
         else if (sigil && endTick > 0)
             MingyuanFireVfx.DrawSigil(origin, radius, progress, remaining, Find.TickManager.TicksGame / 60f);

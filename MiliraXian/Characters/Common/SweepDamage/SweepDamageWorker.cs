@@ -65,9 +65,12 @@ namespace MiliraXian.Characters.Common.SweepDamage
                 null,
                 source.weaponDef);
             // A technique damage def names the cut in the wound and writes it to the combat log.
-            DamageWorker.DamageResult result = Combat.TechniqueDamage.Apply(target, dinfo);
+            DamageWorker.DamageResult result = ApplyDamage(source, target, dinfo);
             AddPosture(source, target, result);
         }
+
+        protected virtual DamageWorker.DamageResult ApplyDamage(SweepDamageSource source, Thing target, DamageInfo dinfo) =>
+            Combat.TechniqueDamage.Apply(target, dinfo);
 
         /// <summary>Share of a hit's posture that still lands when a shield or another effect absorbed its damage.</summary>
         public const float AbsorbedPostureShare = 0.25f;
