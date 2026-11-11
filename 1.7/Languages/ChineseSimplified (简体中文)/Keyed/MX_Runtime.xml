@@ -189,9 +189,6 @@
   <MX_QH_BellDecaying>衰减中。</MX_QH_BellDecaying>
   <MX_QH_BellThresholdSet>蓄到 {0} 档时自动发射。</MX_QH_BellThresholdSet>
   <MX_QH_BellThresholdLocked>有蓄力时不能调整阈值。</MX_QH_BellThresholdLocked>
-  <MX_QH_BellThreatHold>近身应对：原地蓄力</MX_QH_BellThreatHold>
-  <MX_QH_BellThreatRetreat>近身应对：后撤</MX_QH_BellThreatRetreat>
-  <MX_QH_BellThreatDesc>清荷持铃时被近战攻击的应对方式。\n\n已蓄到一档以上时，两种方式都会立即发射。\n原地蓄力：不到一档时站着继续蓄，硬吃近战伤害。\n后撤：不到一档时后退几格再重新攻击，期间蓄力照常衰减。\n\n点击切换。</MX_QH_BellThreatDesc>
   <MX_QH_BellAimFocus>瞄准：集中</MX_QH_BellAimFocus>
   <MX_QH_BellAimScatter>瞄准：散射</MX_QH_BellAimScatter>
   <MX_QH_BellAimDesc>一次发射的铃音如何选择目标。\n\n集中：所有铃音都追踪选中的目标。\n散射：必定有一颗打向选中的目标，其余随机打向它周围 {0} 格内的敌对单位和建筑（开启“范围攻击波及中立目标”时也包括中立的），目标够多时每个一颗。周围没有其他目标时全部打向选中的目标。\n\n点击切换。</MX_QH_BellAimDesc>

@@ -188,9 +188,6 @@
   <MX_QH_BellDecaying>衰減中。</MX_QH_BellDecaying>
   <MX_QH_BellThresholdSet>蓄到 {0} 檔時自動發射。</MX_QH_BellThresholdSet>
   <MX_QH_BellThresholdLocked>有蓄力時不能調整閾值。</MX_QH_BellThresholdLocked>
-  <MX_QH_BellThreatHold>近身應對：原地蓄力</MX_QH_BellThreatHold>
-  <MX_QH_BellThreatRetreat>近身應對：後撤</MX_QH_BellThreatRetreat>
-  <MX_QH_BellThreatDesc>清荷持鈴時被近戰攻擊的應對方式。\n\n已蓄到一檔以上時，兩種方式都會立即發射。\n原地蓄力：不到一檔時站著繼續蓄，硬吃近戰傷害。\n後撤：不到一檔時後退幾格再重新攻擊，期間蓄力照常衰減。\n\n點擊切換。</MX_QH_BellThreatDesc>
   <MX_QH_BellAimFocus>瞄準：集中</MX_QH_BellAimFocus>
   <MX_QH_BellAimScatter>瞄準：散射</MX_QH_BellAimScatter>
   <MX_QH_BellAimDesc>一次發射的鈴音如何選擇目標。\n\n集中：所有鈴音都追蹤選中的目標。\n散射：必定有一顆打向選中的目標，其餘隨機打向它周圍 {0} 格內的敵對單位和建築（開啟「範圍攻擊波及中立目標」時也包括中立的），目標夠多時每個一顆。周圍沒有其他目標時全部打向選中的目標。\n\n點擊切換。</MX_QH_BellAimDesc>

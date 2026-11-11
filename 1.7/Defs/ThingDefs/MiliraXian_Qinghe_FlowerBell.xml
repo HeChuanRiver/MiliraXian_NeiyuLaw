@@ -122,7 +122,7 @@
              发数由蓄力档位决定，一次连发里一起射出，burstShotCount 必须是 1 -->
         <warmupTime>0.5</warmupTime>
         <drawAimPie>false</drawAimPie>
-        <!-- 原版 AI 贴身有近战威胁时远程武器不可用；铃不受此限（贴身时够一档就放出，见 FlowerBellMeleeThreat） -->
+        <!-- 原版 AI 贴身有近战威胁时远程武器不可用；铃不受此限（贴身照样摇铃，见 FlowerBellMeleeThreat） -->
         <ai_ProjectileLaunchingIgnoresMeleeThreats>true</ai_ProjectileLaunchingIgnoresMeleeThreats>
         <range>33</range>
         <burstShotCount>1</burstShotCount>
