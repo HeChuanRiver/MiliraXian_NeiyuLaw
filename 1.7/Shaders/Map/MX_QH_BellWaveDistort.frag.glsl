@@ -1,6 +1,6 @@
 #version 450
 
-// Flower Bell note: the shock wave's refraction (owner 11-10). The same dome as MX_QH_BellWave is
+// Flower Bell note: the shock wave's refraction. The same dome as MX_QH_BellWave is
 // used as a lens: the scene behind is shifted along the falling slope of the sight line's length
 // through the dome below the curtain height (thickest in the middle, steepest at the outline), so
 // it swells outwards and bends hardest along the dome's edge. vUv is the map offset from the

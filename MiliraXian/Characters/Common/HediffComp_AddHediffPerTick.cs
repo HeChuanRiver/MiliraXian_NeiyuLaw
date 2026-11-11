@@ -17,7 +17,7 @@ namespace MiliraXian.Characters.Common
 
     public class HediffComp_AddHediffPerTick : HediffComp, IAbnormalAggravation
     {
-        /// <summary>Aggravated: what the rest of the effect would have added, at once (RangedRework.md 3.4).</summary>
+        /// <summary>Aggravated: what the rest of the effect would have added, at once.</summary>
         public void Aggravate(Pawn source, int remainingTicks, ref bool keepEffect)
         {
             if (Pawn == null || Pawn.Dead || PropsAdd.addHediff == null || remainingTicks <= 0

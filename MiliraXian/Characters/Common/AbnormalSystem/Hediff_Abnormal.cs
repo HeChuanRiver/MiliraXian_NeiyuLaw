@@ -19,7 +19,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         private Mote progressBarMote;
         private float cachedAccumulationLimit = -1f;
         private int accumulationLimitCachedAtTick = int.MinValue;
-        /// <summary>Build-up while the effect is active (RangedRework.md 3.4); full at the limit × aggravationLimitFactor.</summary>
+        /// <summary>Build-up while the effect is active; full at the limit × aggravationLimitFactor.</summary>
         private float aggravation;
 
         public HediffDef_Abnormal AbnormalDef => def as HediffDef_Abnormal;
@@ -75,7 +75,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
             cachedAccumulationLimit = accumulationLimit;
             accumulationLimitCachedAtTick = CurrentTick;
             // The on-hit extras (blood loss, toxic build-up, hypothermia, mech energy) come with every hit,
-            // the effect active or not (owner 11-11).
+            // the effect active or not.
             NotifyApplied(amount);
             Hediff effect = ActiveEffect;
             if (effect != null)

@@ -6,13 +6,22 @@ using Verse.AI;
 
 namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
-    /// <summary>How the Flower Bell answers a melee threat (RangedRework.md 2.9, owner 11-11; a Gizmo toggle).</summary>
+    /// <summary>How the Flower Bell answers a melee threat (a Gizmo toggle).</summary>
     public enum FlowerBellThreatMode
     {
         /// <summary>Keep charging where she stands; the melee hits are taken.</summary>
         Hold,
         /// <summary>Step away from the attacker, then attack again (the charge decays meanwhile).</summary>
         Retreat,
+    }
+
+    /// <summary>How the notes of a volley pick their targets (a Gizmo toggle).</summary>
+    public enum FlowerBellAimMode
+    {
+        /// <summary>Every note homes on the selected target.</summary>
+        Focus,
+        /// <summary>The first note on the selected target, the others on random hostiles around it.</summary>
+        Scatter,
     }
 
     /// <summary>

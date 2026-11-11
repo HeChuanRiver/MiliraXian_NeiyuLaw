@@ -7,14 +7,14 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
-    /// <summary>Season colour of a note (RangedRework.md 2.11), on each Flower Bell projectile def.</summary>
+    /// <summary>Season colour of a note, on each Flower Bell projectile def.</summary>
     public class FlowerBellNoteExtension : DefModExtension
     {
         public Color color = new(0.95f, 0.92f, 0.95f, 1f);
     }
 
     /// <summary>
-    /// Every Flower Bell note on a map, drawn together (owner 11-09/10, RangedRework.md 2.11): the
+    /// Every Flower Bell note on a map, drawn together: the
     /// bell sprite, the two sound-print strands, the petals shed along the way, the release and
     /// impact flashes, the shock wave and its refraction. The projectiles only report where they
     /// are each tick (the homing curve stays theirs); the picture is interpolated between those
@@ -23,14 +23,13 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
     [StaticConstructorOnStartup]
     internal sealed class FlowerBellVfx : IQingheVfxRenderer
     {
-        // --- shape and timing (the preview's constants, cells and seconds)
+        // --- shape and timing (cells, seconds)
         /// <summary>Quad side of the bell: 0.55 / 4 cells of flower (the texture is padded: the flower fills 70.3 % of it).</summary>
         private const float BellQuad = 0.1375f * 0.8926f / 0.7031f;
         private const float FilLife = 0.5f;
         private const float FilAmp = 0.13f;
         private const float FilWavelength = 2f;
         private const float FilOpen = 0.06f;
-        // The preview's strand: 0.7 px core plus a 2.5 px halo at 60 px a cell; here one soft strip.
         private const float FilWidth = 0.06f;
         private const float FilGain = 0.5f;
         private const int FilSubdivisions = 4;
@@ -42,11 +41,11 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private const float ShellThickness = 0.05f;
         private const float ShellCap = 4f;
         private const float ShellBack = 0.5f;
-        /// <summary>The preview's 0.35, times its sharp (1) plus soft (0.6) copies of the curtain.</summary>
+        /// <summary>Curtain brightness seen face on (the soft part is left to the bloom).</summary>
         private const float ShellGain = 0.56f;
         private const float DistortCells = 10f / 60f;
         private const float DistortGain = 1.5f;
-        /// <summary>Central difference step: stands in for the preview's 3 px smoothing (a ramp just outside the edge).</summary>
+        /// <summary>Central difference step; also smooths the offset into a ramp just outside the edge.</summary>
         private const float DistortStep = 0.05f;
         private const float FlashRise = 0.03f;
         private const float FlashHold = 0.06f;
@@ -78,7 +77,6 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             {
                 group = DefDatabase<ScreenBloomGroupDef>.GetNamedSilentFail("MX_ScreenBloom_Glow"),
                 tint = Color.white,
-                // Owner 11-10: the glow was a little weak in the game at 1.
                 intensity = 1.35f,
             };
         }
@@ -180,7 +178,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                     {
                         t0 = s,
                         pos = at,
-                        // The ground is not squashed, but the burst is flattened north-south as in the preview.
+                        // The ground is not squashed, but the burst is flattened north-south.
                         vel = new Vector3(Mathf.Cos(a) * v, 0f, Mathf.Sin(a) * v * 0.55f),
                         life = Rand.Range(0.6f, 0.9f),
                         size = Rand.Range(0.20f, 0.26f),
@@ -467,7 +465,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             }
         }
 
-        // --- the bell: the owner's flat lily-of-the-valley, the flower base leading
+        // --- the bell: a flat lily-of-the-valley, the flower base leading
         private void DrawBells(float vt)
         {
             Material mat = MapComponent_SakuraDanceVisuals.Material(BellTexPath, "MX_QH_SakuraPetal");
@@ -615,7 +613,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             DrawAdditive(flashMesh, mat);
         }
 
-        /// <summary>A gaussian spot of the preview (sigma in cells, amp in the preview's px units), as a soft quad.</summary>
+        /// <summary>A gaussian spot (sigma in cells, amp in px units at PreviewPixelsPerCell), as a soft quad.</summary>
         private static void AddFlash(Vector3 at, float y, float sigma, float amp, Color color)
         {
             float sigmaPx = sigma * PreviewPixelsPerCell;
@@ -685,7 +683,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                 block.Clear();
                 block.SetVector(WaveId, new Vector4(r, kappa, cut, WaveAlpha * fade));
                 block.SetVector(ShellId, new Vector4(ShellThickness, ShellCap, ShellBack, ShellGain));
-                // The ground line of the preview: core blur 0.8 px (drawn at 1.2 px, energy kept) and a 3.5 px halo, at 60 px a cell.
+                // The ground line: core blur 0.8 px (drawn at 1.2 px, energy kept) and a 3.5 px halo, at 60 px a cell.
                 block.SetVector(FootId, new Vector4(0.02f, 0.53f, 0.058f, 0.164f));
                 block.SetColor(GlowId, glow);
                 block.SetColor(CoreId, core);

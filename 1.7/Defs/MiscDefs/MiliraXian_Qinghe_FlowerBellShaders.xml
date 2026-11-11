@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- 铃音冲击波：逐像素求视线与压扁半球的交点，画上面敞开的弧形光幕和地面亮线（Documents/RangedRework.md 2.11）。
+  <!-- 铃音冲击波：逐像素求视线与压扁半球的交点，画上面敞开的弧形光幕和地面亮线。
        加法混合，不写深度；和斩铁剑荷花（MX_QH_Lotus）同在 3142。 -->
   <ShaderDef>
     <defName>MX_QH_BellWave</defName>

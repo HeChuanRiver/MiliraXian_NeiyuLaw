@@ -6,9 +6,9 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.UI
 {
     /// <summary>
-    /// The Flower Bell's charge (RangedRework.md 2.9 "Gizmo", owner 11-11): a peach blossom on the
+    /// The Flower Bell's charge: a peach blossom on the
     /// left (one petal a tier, display only), on the right a five-segment charge bar that also sets
-    /// the auto-release threshold, and the release button. Laid out after out/gizmo_states.png.
+    /// the auto-release threshold, and the release button.
     /// </summary>
     [StaticConstructorOnStartup]
     public class Gizmo_FlowerBellCharge : Gizmo

@@ -9,7 +9,7 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     /// <summary>
-    /// The Flower Bell's charge on the map (RangedRework.md 2.9, the preview charge_preview.py):
+    /// The Flower Bell's charge on the map:
     /// a static five-petal peach blossom of light on the ground under Qinghe (one petal a tier,
     /// fixed to the map, the first petal south, then clockwise), a hovering note over the tip of
     /// every lit petal (the notes leave from there), a small ring effect at the bell on each tier up,
@@ -20,14 +20,16 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     [StaticConstructorOnStartup]
     internal sealed class FlowerBellChargeVfx : IQingheVfxRenderer
     {
-        // --- the preview's constants (cells, seconds)
+        // --- shape and timing (cells, seconds)
         private const int Tiers = 5;
-        /// <summary>Petal length, centre to tip (owner 11-11: 0.8 of the preview was too small in game).</summary>
+        /// <summary>Ground petal length, centre to tip.</summary>
         private const float FlowerR = 1.2f;
-        /// <summary>The hovering notes keep the preview's place (owner 11-11: fine as it is).</summary>
+        /// <summary>Petal length the hovering notes are placed by (smaller than the ground petals).</summary>
         private const float HoverRadius = 0.8f;
         /// <summary>Drawn centre of a pawn to the ground under it (as the notes' wave).</summary>
         private const float FootDrop = 0.3f;
+        /// <summary>Drawn centre of a pawn to the ground flower's centre: her lower edge.</summary>
+        private const float FlowerDrop = 0.5f;
         private const float Depth = 0.55f;
         private const float FirstPetal = 180f;
         private const float PetalDim = 0.14f;
@@ -68,12 +70,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private const int AtlasColumns = 8;
         private const int AtlasFrames = 64;
 
-        // Owner 11-11: petals and hovering notes were upside down with the plain uv (the image's top
-        // came out at the quad's south end: these textures load with v flipped); sampled with v flipped.
+        // Petals and hovering notes sample with v flipped: with the plain uv the image's top comes
+        // out at the quad's south end.
         private static readonly Vector2 FlipV0 = new(0f, 1f);
         private static readonly Vector2 FlipV1 = new(1f, 0f);
         private static readonly Color White = new(1f, 0.95f, 0.98f, 1f);
-        /// <summary>The stamens: 55 % white, 45 % warm gold (the preview's mix).</summary>
+        /// <summary>The stamens: 55 % white, 45 % warm gold.</summary>
         private static readonly Color Warm = new(1f, 0.905f, 0.741f, 1f);
         private static readonly ScreenBloomProperties GroundBloom;
         private static readonly ScreenBloomProperties NoteBloom;
@@ -219,7 +221,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             int now = Find.TickManager.TicksGame;
             s.offTick[index] = now;
-            Vector3 c = Centre(pawn);
+            Vector3 c = Centre(pawn, FlowerDrop);
             Vector2 tip = PetalTip(index, FlowerR);
             Rand.PushState(Gen.HashCombineInt(pawn.thingIDNumber, now + index * 31));
             for (int k = 0; k < 3; k++)
@@ -263,19 +265,19 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>The ground under note <paramref name="index"/>, and its height above it (shown up the screen).</summary>
         internal static Vector3 HoverGround(Pawn pawn, int index, out float lift, float seconds)
         {
-            Vector3 c = Centre(pawn);
+            Vector3 c = Centre(pawn, FootDrop);
             Vector2 tip = PetalTip(index, HoverRadius * HoverAt);
             lift = HoverLift + HoverBobAmp * Mathf.Sin(2f * Mathf.PI * HoverBobHz * seconds + 1.7f * index);
             return new Vector3(c.x + tip.x, 0f, c.z + tip.y * Depth);
         }
 
-        private static Vector3 Centre(Pawn pawn)
+        private static Vector3 Centre(Pawn pawn, float drop)
         {
             Vector3 p = pawn.DrawPos;
-            return new Vector3(p.x, 0f, p.z - FootDrop);
+            return new Vector3(p.x, 0f, p.z - drop);
         }
 
-        /// <summary>Clockwise from north by FirstPetal + 72 i; the tip at 0.8 r (as the preview).</summary>
+        /// <summary>Clockwise from north by FirstPetal + 72 i; the tip at 0.8 r.</summary>
         private static Vector2 PetalTip(int i, float r)
         {
             float a = (FirstPetal + 72f * i) * Mathf.Deg2Rad;
@@ -435,7 +437,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                         bloom = BloomFlash * Mathf.Exp(-Mathf.Max(0f, vt - s.onTick[Tiers - 1]) / 60f / BloomFlashDecay);
                     }
                     Color col = decaying ? Grey(s.color, DecayGrey) : s.color;
-                    Vector3 c = Centre(s.pawn);
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
                     c.y = y;
                     if (pass == 0)
                     {
@@ -642,7 +644,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             DrawAdditive(glowMesh, mat, NoteBloom);
         }
 
-        /// <summary>A gaussian spot of the preview (sigma in cells, amp in its px units) as a soft quad.</summary>
+        /// <summary>A gaussian spot (sigma in cells, amp in px units at PreviewPixelsPerCell) as a soft quad.</summary>
         private static void AddFlash(Vector3 at, float sigma, float amp, Color color)
         {
             float sigmaPx = sigma * PreviewPixelsPerCell;

@@ -4,12 +4,12 @@ using UnityEngine;
 namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
     /// <summary>
-    /// Time curves of a note's shock wave, shared by the damage ring and the picture (owner 11-09/10,
-    /// see RangedRework.md 2.11). Seconds are game seconds (60 ticks).
+    /// Time curves of a note's shock wave, shared by the damage ring and the picture.
+    /// Seconds are game seconds (60 ticks).
     /// </summary>
     public static class FlowerBellWave
     {
-        /// <summary>The damage (and ground ring) radius; the same at every charge tier (owner 11-10).</summary>
+        /// <summary>The default damage (and ground ring) radius; a charged note sets its own.</summary>
         public const float Radius = 1.6f;
         /// <summary>Expansion to the full radius.</summary>
         public const float RingSeconds = 0.9f;

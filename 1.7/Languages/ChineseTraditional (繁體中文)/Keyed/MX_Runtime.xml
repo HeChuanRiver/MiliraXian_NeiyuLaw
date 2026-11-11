@@ -180,7 +180,7 @@
   <MX_QH_FlowerBellResonanceDescriptionSummer>夏季共鳴使鈴音熾盛而濃烈，命中血肉目標時會累積毒素，命中機械目標時則會侵蝕結構。</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>秋季共鳴使鈴音肅殺而清冷，命中血肉目標時會壓迫心神，命中機械目標時則會推動過載。</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>冬季共鳴使鈴音沉入寒意，命中目標時會不斷累積寒冷，最終將其凍結。</MX_QH_FlowerBellResonanceDescriptionWinter>
-  <!-- 花信風鈴的蓄力（RangedRework.md 第 2.9 節） -->
+  <!-- 花信風鈴的蓄力 -->
   <MX_QH_BellReleaseNow>立即發射</MX_QH_BellReleaseNow>
   <MX_QH_BellReleaseTip>立即發射：{0} 發鈴音。</MX_QH_BellReleaseTip>
   <MX_QH_BellReleaseDisabled>只能在蓄力中、至少一檔時發射。</MX_QH_BellReleaseDisabled>
@@ -191,6 +191,9 @@
   <MX_QH_BellThreatHold>近身應對：原地蓄力</MX_QH_BellThreatHold>
   <MX_QH_BellThreatRetreat>近身應對：後撤</MX_QH_BellThreatRetreat>
   <MX_QH_BellThreatDesc>清荷持鈴時被近戰攻擊的應對方式。\n\n已蓄到一檔以上時，兩種方式都會立即發射。\n原地蓄力：不到一檔時站著繼續蓄，硬吃近戰傷害。\n後撤：不到一檔時後退幾格再重新攻擊，期間蓄力照常衰減。\n\n點擊切換。</MX_QH_BellThreatDesc>
+  <MX_QH_BellAimFocus>瞄準：集中</MX_QH_BellAimFocus>
+  <MX_QH_BellAimScatter>瞄準：散射</MX_QH_BellAimScatter>
+  <MX_QH_BellAimDesc>一次發射的鈴音如何選擇目標。\n\n集中：所有鈴音都追蹤選中的目標。\n散射：必定有一顆打向選中的目標，其餘隨機打向它周圍 {0} 格內的敵對單位和建築（開啟「範圍攻擊波及中立目標」時也包括中立的），目標夠多時每個一顆。周圍沒有其他目標時全部打向選中的目標。\n\n點擊切換。</MX_QH_BellAimDesc>
   <MX_QH_SwordResonanceDescriptionSpring>春曉共鳴：攻擊命中後為清荷附加春泉洗禮，並累積流血與漏電。</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>荷雨共鳴：攻擊命中時獲得的劍壓提高50%，並累積劇毒與腐蝕。</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>無常共鳴：攻擊的穿甲能力提高50%，並累積恐懼與過載。</MX_QH_SwordResonanceDescriptionAutumn>

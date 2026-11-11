@@ -180,7 +180,7 @@
   <MX_QH_FlowerBellResonanceDescriptionSummer>Summer resonance is heavy and fervent. Hits build toxins in flesh targets and corrode mechanical structure.</MX_QH_FlowerBellResonanceDescriptionSummer>
   <MX_QH_FlowerBellResonanceDescriptionAutumn>Autumn resonance is clear and severe. Hits pressure the mind of flesh targets and push mechanoids toward overload.</MX_QH_FlowerBellResonanceDescriptionAutumn>
   <MX_QH_FlowerBellResonanceDescriptionWinter>Winter resonance sinks into cold. Hits build chill on the target until it is frozen in place.</MX_QH_FlowerBellResonanceDescriptionWinter>
-  <!-- Flower Bell charge (RangedRework.md 2.9) -->
+  <!-- Flower Bell charge -->
   <MX_QH_BellReleaseNow>Premature\nDischarge</MX_QH_BellReleaseNow>
   <MX_QH_BellReleaseTip>Release now: {0} notes.</MX_QH_BellReleaseTip>
   <MX_QH_BellReleaseDisabled>Only while charging, from tier 1.</MX_QH_BellReleaseDisabled>
@@ -191,6 +191,9 @@
   <MX_QH_BellThreatHold>Melee threat: hold</MX_QH_BellThreatHold>
   <MX_QH_BellThreatRetreat>Melee threat: step away</MX_QH_BellThreatRetreat>
   <MX_QH_BellThreatDesc>What Qinghe does when struck in melee while holding the bell.\n\nWith at least one tier charged she releases at once either way.\nHold: below one tier she keeps charging where she stands and takes the blows.\nStep away: below one tier she retreats a few cells and attacks again; the charge decays meanwhile.\n\nClick to switch.</MX_QH_BellThreatDesc>
+  <MX_QH_BellAimFocus>Aim: focus</MX_QH_BellAimFocus>
+  <MX_QH_BellAimScatter>Aim: scatter</MX_QH_BellAimScatter>
+  <MX_QH_BellAimDesc>How the notes of one release pick their targets.\n\nFocus: every note homes on the selected target.\nScatter: one note always goes to the selected target; the others go to random hostile pawns and buildings within {0} cells of it (neutral ones too with "Area attacks hit neutral targets" on), each to a different one while there are enough. With nothing else around they all go to the selected target.\n\nClick to switch.</MX_QH_BellAimDesc>
   <MX_QH_SwordResonanceDescriptionSpring>Spring Dawn resonance: Hits grant Qinghe Spring Flow Baptism and build Bleeding and Electric Leakage.</MX_QH_SwordResonanceDescriptionSpring>
   <MX_QH_SwordResonanceDescriptionSummer>Lotus Rain resonance: Sword Pressure gained from hits is increased by 50%, and hits build Toxin and Corrosion.</MX_QH_SwordResonanceDescriptionSummer>
   <MX_QH_SwordResonanceDescriptionAutumn>Impermanence resonance: Attacks gain 50% armor penetration and build Fear and Overload.</MX_QH_SwordResonanceDescriptionAutumn>

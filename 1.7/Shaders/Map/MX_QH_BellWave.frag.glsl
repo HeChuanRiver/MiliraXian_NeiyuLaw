@@ -1,6 +1,6 @@
 #version 450
 
-// Flower Bell note: the shock wave, computed per pixel (owner 11-10, RangedRework.md 2.11).
+// Flower Bell note: the shock wave, computed per pixel.
 // vUv is the map offset from the wave centre in cells (x east, y north on screen). Height above
 // the ground is drawn as a plain shift up the screen, so a pixel's line of sight is the column
 // x = X with z + h = Y. The curtain lies on a flattened hemisphere x^2 + z^2 + (h/k)^2 = r^2 and

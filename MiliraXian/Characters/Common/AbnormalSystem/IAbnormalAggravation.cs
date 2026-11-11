@@ -4,7 +4,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
 {
     /// <summary>
     /// An abnormal's effect (the hediff or one of its comps) that answers an aggravation: what is left
-    /// of it is settled at once (RangedRework.md 3.4). The effect then ends, so the target can build the
+    /// of it is settled at once. The effect then ends, so the target can build the
     /// abnormal up anew, unless an implementer keeps it (fear and overload refresh instead).
     /// </summary>
     public interface IAbnormalAggravation

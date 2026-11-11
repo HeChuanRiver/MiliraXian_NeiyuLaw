@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
     /// A Flower Bell note. It flies the homing curve of <see cref="ProjectileHomingCurveBase"/>
     /// unchanged; it does not draw itself but reports its place (with the vanilla arc height) to
     /// <see cref="FlowerBellVfx"/> every tick. On impact it starts the expanding damage ring
-    /// (<see cref="FlowerBellWave"/>), which hits only hostiles (RangedRework.md 2.11).
+    /// (<see cref="FlowerBellWave"/>).
     /// </summary>
     public class Projectile_FlowerBell : ProjectileHomingCurveBase
     {
@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private static SweepDamageDef sweepDef;
 
         private int degree = -1;
-        // The note's own damage from the charge (RangedRework.md 2.9 伤害设计); damage < 0 = the def's.
+        // The note's own damage from the charge; damage < 0 = the def's.
         private float noteDamage = -1f;
         private float notePenetrationFactor = 1f;
         private float noteRadius = FlowerBellWave.Radius;
@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private FlowerBellVfx.Note note;
         private const int LiftTicks = 9;
 
-        /// <summary>The note's degree in the run's mode (RangedRework.md 2.9); rung on impact. -1 = none.</summary>
+        /// <summary>The note's degree in the run's mode; rung on impact. -1 = none.</summary>
         public int Degree => degree;
 
         public override int DamageAmount => noteDamage >= 0f ? Mathf.Max(1, GenMath.RoundRandom(noteDamage)) : base.DamageAmount;
@@ -117,13 +117,13 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         {
             degree = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingDegree;
             var charge = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingCharge;
-            int index = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingIndex;
-            if (charge != null && index >= 0)
+            int tier = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingTier;
+            if (charge != null && tier >= 1)
             {
-                noteDamage = charge.NoteDamage(launcher as Pawn, index);
-                notePenetrationFactor = charge.NotePenetrationFactor(index);
-                noteRadius = charge.NoteRadius(index);
-                noteAbnormalFactor = charge.NoteAbnormalFactor(index);
+                noteDamage = charge.NoteDamage(launcher as Pawn, tier);
+                notePenetrationFactor = charge.NotePenetrationFactor(tier);
+                noteRadius = charge.NoteRadius(tier);
+                noteAbnormalFactor = charge.NoteAbnormalFactor(tier);
             }
             if (MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingOrigin is Vector3 hover)
             {
@@ -172,7 +172,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             }
             if (map != null && degree >= 0)
             {
-                // Each note rings its own degree on impact (owner 11-11: back in after a try without).
+                // Each note rings its own degree on impact.
                 MiliraXian.Characters.QingHe.Things.Weapons.FlowerBellChimes.Ring(map, impactPos.ToIntVec3(), degree, 0.7f);
             }
 
@@ -196,7 +196,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                         abnormalFactor = noteAbnormalFactor,
                         guaranteedTarget = resolvedHitThing,
                         // The attacked thing is hit whatever its side, as any vanilla attack on a
-                        // selected target (it was filtered out as neutral before: owner 11-11 bug).
+                        // selected target.
                         primaryTarget = intendedTarget.Thing,
                     });
                 }
@@ -205,9 +205,9 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             base.Impact(null, blockedByShield);
         }
 
-        /// <summary>A pawn's drawn centre to the ground under it (the preview's 0.45 at a body of 1).</summary>
+        /// <summary>A pawn's drawn centre to the ground under it.</summary>
         private const float PawnFootOffset = 0.3f;
-        /// <summary>Camera shake of an impact (owner 11-10).</summary>
+        /// <summary>Camera shake of an impact.</summary>
         private const float ImpactShake = 0.02f;
     }
 }

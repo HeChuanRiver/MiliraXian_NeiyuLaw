@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public float soleOffset = -0.62f;
         public float waterBrightness = 1f;
 
-        // Body (BODY_FADE) and reflection (alpha 0.32, squash 0.8). She does not move up or down (owner, 11-08).
+        // Body (BODY_FADE) and reflection (alpha 0.32, squash 0.8). She does not move up or down.
         public float bodyFadeSeconds = 0.25f;
         public float reflectionAlpha = 0.32f;
         public float reflectionSquash = 0.8f;
