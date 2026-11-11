@@ -359,39 +359,9 @@ internal static class MingyuanFireVfx
         }
     }
 
-    internal static void PlayCombustionImpact(IntVec3 cell, Map map, float radius, bool core)
-    {
-        Vector3 center = cell.ToVector3Shifted();
-        if (!center.ShouldSpawnMotesAt(map)) return;
-
-        DamageDef flame = DamageDefOf.Flame;
-        Rand.PushState();
-        try
-        {
-            FleckMaker.Static(center, map, FleckDefOf.ExplosionFlash, radius * (core ? 1.35f : 0.86f));
-            if (core) FleckMaker.Static(center, map, FleckDefOf.FireGlow, radius * 1.65f);
-            foreach (IntVec3 flameCell in GenRadial.RadialCellsAround(cell, radius, useCenter: true))
-            {
-                if (!flameCell.InBounds(map) || (flameCell != cell && (!GenSight.LineOfSight(cell, flameCell, map, skipFirstCell: true)
-                    || flameCell.Impassable(map)))) continue;
-                float size = Rand.Range(0.78f, 1.08f) * (core ? 1.48f : 1f);
-                ThrowCombustionBlastFlame(flameCell.ToVector3Shifted(), map, flame, size, flameCell.DistanceTo(cell) / radius);
-            }
-
-            ThrowCombustionSparks(center, map, core ? 22 : 5, core ? 1.7f : 1f);
-            int dustCount = core ? 6 : 2;
-            for (int i = 0; i < dustCount; i++)
-            {
-                Vector3 dust = center + Gen.RandomHorizontalVector(radius * (core ? 0.75f : 0.4f));
-                if (dust.InBounds(map))
-                    FleckMaker.ThrowDustPuffThick(dust, map, radius * (core ? 0.67f : 0.48f), new Color(0.58f, 0.50f, 0.43f, 0.7f));
-            }
-        }
-        finally
-        {
-            Rand.PopState();
-        }
-    }
+    internal static void PlayCombustionImpact(IntVec3 cell, Map map, float radius) =>
+        VanillaExplosionVfx.Play(cell, map, radius, DamageDefOf.Flame,
+            Gen.HashCombineInt(Find.TickManager.TicksGame, cell.GetHashCode()));
 
     private static void ThrowCombustionBlastFlame(Vector3 position, Map map, DamageDef flame, float size, float edge)
     {

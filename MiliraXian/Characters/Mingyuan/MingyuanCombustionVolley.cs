@@ -114,23 +114,23 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
                 MingyuanFireVfx.PlayCombustionAirburst(Position, landings[index], Map, burstOffset / (float)settings.smallFlightTicks);
         }
         while (nextImpact < landings.Count && elapsed >= settings.SmallImpactAt(nextImpact) && CasterCanSustain)
-            Explode(landings[nextImpact++], settings.smallFireball, settings.hitSound, core: false);
+            Explode(landings[nextImpact++], settings.smallFireball, settings.hitSound);
 
         int coreImpact = settings.CoreImpactAt(landings.Count);
         if (nextImpact == landings.Count && elapsed >= coreImpact && CasterCanSustain)
         {
             nextImpact++;
-            Explode(Position, settings.coreFireball, settings.resolveSound, core: true);
+            Explode(Position, settings.coreFireball, settings.resolveSound);
         }
 
         if (elapsed >= coreImpact + RingFadeTicks) Destroy();
     }
 
-    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound, bool core)
+    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound)
     {
         if (fireball == null || !cell.InBounds(Map)) return;
         sound?.PlayOneShot(new TargetInfo(cell, Map));
-        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius, core);
+        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius);
         if (cell.Impassable(Map)) return;
 
         new AreaDamageBurst

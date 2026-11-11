@@ -135,35 +135,10 @@ internal static class NeiyuSwordCombatVfx
     {
         const float radius = 5f;
         DamageDef bomb = DamageDefOf.Bomb;
-        Vector3 center = cell.ToVector3Shifted();
-        SingleSound(pawn, center, bomb.soundExplosion);
+        SingleSound(pawn, cell.ToVector3Shifted(), bomb.soundExplosion);
         if (!Enabled || Intensity <= 0f) return;
-        Safely(() =>
-        {
-            Map map = pawn.Map;
-            if (map == null || !cell.InBounds(map)) return;
-
-            // Use the bomb's visual footprint without starting a damage-dealing Explosion.
-            Rand.PushState(unchecked(pawn.thingIDNumber * 397 ^ NeiyuSwordCombat.Now));
-            try
-            {
-                FleckMaker.Static(center, map, FleckDefOf.ExplosionFlash, radius * 6f);
-                for (int i = 0; i < 4; i++)
-                    FleckMaker.ThrowSmoke(center + Gen.RandomHorizontalVector(radius * .7f), map, radius * .6f);
-                foreach (IntVec3 blastCell in bomb.Worker.ExplosionCellsToHit(cell, map, radius))
-                {
-                    float distance = (blastCell - cell).LengthHorizontal;
-                    Color color = Color.Lerp(bomb.explosionColorCenter, bomb.explosionColorEdge, distance / radius);
-                    FleckMaker.ThrowExplosionCell(blastCell, map, bomb.explosionCellFleck, color);
-                }
-            }
-            finally { Rand.PopState(); }
-            if (map == Find.CurrentMap && Find.Camera != null)
-            {
-                float distance = Vector3.Distance(center, Find.Camera.transform.position);
-                Find.CameraDriver?.shaker.DoShake(4f * radius / Mathf.Max(1f, distance));
-            }
-        });
+        Safely(() => VanillaExplosionVfx.Play(cell, pawn.Map, radius, bomb,
+            unchecked(pawn.thingIDNumber * 397 ^ NeiyuSwordCombat.Now)));
     }
 
     internal static void SingleAfterimage(Pawn pawn, Vector3 at, Rot4 facing, int startTick, int duration,
