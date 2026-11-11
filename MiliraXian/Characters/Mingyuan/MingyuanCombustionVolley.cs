@@ -43,7 +43,7 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
 
 public sealed class Thing_MingyuanCombustionVolley : Thing
 {
-    internal const int ImpactFadeTicks = 22;
+    internal const int RingFadeTicks = 22;
 
     private Pawn caster;
     private AbilityDef ability;
@@ -114,13 +114,14 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
             Explode(Position, settings.coreFireball, settings.resolveSound);
         }
 
-        if (elapsed >= coreImpact + ImpactFadeTicks) Destroy();
+        if (elapsed >= coreImpact + RingFadeTicks) Destroy();
     }
 
     private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound)
     {
         if (fireball == null || !cell.InBounds(Map)) return;
         sound?.PlayOneShot(new TargetInfo(cell, Map));
+        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius);
         if (cell.Impassable(Map)) return;
 
         new AreaDamageBurst

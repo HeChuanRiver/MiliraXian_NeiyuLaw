@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -16,10 +18,9 @@ internal static class MingyuanFireVfx
     private static readonly Material PhoenixTakeoff;
     private static readonly Material PhoenixDive;
     private static readonly Material CinderSword;
-    private static readonly Material CombustionSigil;
-    private static readonly Material SmallFireball;
-    private static readonly Material CoreFireball;
-    private static readonly Material ImpactFlame;
+    private static readonly Material[] CombustionFireFrames;
+    private static readonly Material CombustionFireGlow;
+    private static readonly Material CombustionDust;
     private static readonly MaterialPropertyBlock Properties = new();
     private static readonly MaterialPropertyBlock CombustionProperties = new();
     private static readonly int ParamsId = Shader.PropertyToID("_FireParams");
@@ -41,10 +42,13 @@ internal static class MingyuanFireVfx
         FireMaterial = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
         PhoenixTakeoff = LoadPhoenixMaterial(shader, "PhoenixTakeoff");
         PhoenixDive = LoadPhoenixMaterial(shader, "PhoenixDive");
-        CombustionSigil = LoadCombustionMaterial("Sigil");
-        SmallFireball = LoadCombustionMaterial("SmallFireball");
-        CoreFireball = LoadCombustionMaterial("CoreFireball");
-        ImpactFlame = LoadCombustionMaterial("ImpactFlame");
+        GraphicData fire = ThingDefOf.Fire.graphicData;
+        CombustionFireFrames = ContentFinder<Texture2D>.GetAllInFolder(fire.texPath)
+            .Where(frame => !frame.name.EndsWith(Graphic_Single.MaskSuffix, StringComparison.Ordinal))
+            .OrderBy(frame => frame.name, StringComparer.Ordinal)
+            .Select(frame => MaterialPool.MatFrom(frame, fire.shaderType.Shader, Color.white)).ToArray();
+        CombustionFireGlow = FleckDefOf.FireGlow.graphicData.Graphic.MatSingle;
+        CombustionDust = FleckDefOf.DustPuff.graphicData.Graphic.MatSingle;
         string swordPath = MX_MingyuanDefOf.MX_Mingyuan_CinderSword?.graphicData?.texPath;
         if (swordPath != null && ContentFinder<Texture2D>.Get(swordPath) is { } sword)
             CinderSword = MaterialPool.MatFrom(new MaterialRequest(sword, shader, Color.white));
@@ -72,9 +76,6 @@ internal static class MingyuanFireVfx
         Texture2D texture = ContentFinder<Texture2D>.Get("MiliraXianMingyuan/Effect/AscendantFlameDash/" + name);
         return texture == null ? null : MaterialPool.MatFrom(new MaterialRequest(texture, shader, Color.white));
     }
-
-    private static Material LoadCombustionMaterial(string name) =>
-        MaterialPool.MatFrom("MiliraXianMingyuan/Effect/InstantCombustion/" + name, ShaderDatabase.MoteGlow, Color.white);
 
     private static void Draw(Shape shape, Mesh mesh, Matrix4x4 matrix, float time, float progress,
         float alpha, Vector4 options = default, bool bloom = false, Material material = null)
@@ -225,13 +226,38 @@ internal static class MingyuanFireVfx
         return core + new Vector3(2.25f * Mathf.Cos(phase), 0.02f, 1.35f * Mathf.Sin(phase));
     }
 
-    private static void CombustionSprite(Material material, Vector3 center, float size, float angle, float alpha, bool bloom = false)
+    private static void DrawCombustionQuad(Material material, Vector3 center, float size, Color color)
     {
-        if (alpha <= 0f || material == null) return;
-        var matrix = Matrix4x4.TRS(center, Quaternion.AngleAxis(angle, Vector3.up), new Vector3(size, 1f, size));
-        CombustionProperties.SetColor(ShaderPropertyIDs.Color, new Color(1f, 1f, 1f, alpha));
-        if (bloom) ScreenBloom.Submit(Bloom, MeshPool.plane10, matrix, material, CombustionProperties);
+        if (color.a <= 0f || material == null) return;
+        var matrix = Matrix4x4.TRS(center, Quaternion.identity, new Vector3(size, 1f, size));
+        CombustionProperties.SetColor(ShaderPropertyIDs.Color, color);
         Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0, null, 0, CombustionProperties);
+    }
+
+    private static void DrawCombustionRing(Vector3 center, float radius, float alpha)
+    {
+        if (alpha > 0f)
+            GenDraw.DrawRadiusRing(center.ToIntVec3(), radius, new Color(0.95f, 0.49f, 0.19f, 0.72f * alpha));
+    }
+
+    private static void DrawCombustionFireball(Vector3 position, float size, float alpha, int phase)
+    {
+        if (alpha <= 0f) return;
+        DrawCombustionQuad(CombustionFireGlow, position.WithY(position.y - 0.003f), size * 1.55f,
+            new Color(1f, 0.86f, 0.68f, 0.55f * alpha));
+        if (CombustionFireFrames.Length == 0) return;
+        int frame = (Find.TickManager.TicksGame / 15 + phase) % CombustionFireFrames.Length;
+        DrawCombustionQuad(CombustionFireFrames[frame], position, size, Color.white.WithAlpha(alpha));
+    }
+
+    private static void DrawFallingCombustionFireball(Vector3 origin, Vector3 destination, float fall, float size, int phase)
+    {
+        Vector3 position = Vector3.Lerp(origin, destination, fall * fall);
+        float trailProgress = Mathf.Max(0f, fall - 0.22f);
+        Vector3 trail = Vector3.Lerp(origin, destination, trailProgress * trailProgress);
+        DrawCombustionQuad(CombustionDust, trail.WithY(position.y - 0.006f), size * 0.82f,
+            new Color(0.54f, 0.47f, 0.39f, fall * 0.44f));
+        DrawCombustionFireball(position, size, 1f, phase);
     }
 
     private static void DrawCombustionWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion settings,
@@ -240,18 +266,17 @@ internal static class MingyuanFireVfx
         if (!Visible(center, settings.radius + 4f)) return;
         float ticks = CombustionVisualTicks;
         float etch = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress / 0.35f));
-        CombustionSprite(CombustionSigil, center.WithY(GroundAltitude), settings.radius * Mathf.Lerp(1.45f, 2.12f, etch),
-            ticks * 0.2f, alpha * etch * 0.8f);
+        DrawCombustionRing(center, settings.radius, alpha * etch);
         Vector3 core = CombustionCore(center);
         float coreFade = Mathf.InverseLerp(0.28f, 0.57f, progress);
-        CombustionSprite(CoreFireball, core, Mathf.Lerp(0.7f, 2.45f, coreFade), ticks * 0.9f, alpha * coreFade, bloom: true);
+        DrawCombustionFireball(core, Mathf.Lerp(0.64f, 1.9f, coreFade), alpha * coreFade, 0);
         for (int i = 0; i < settings.smallFireballCount; i++)
         {
             float reveal = 0.42f + 0.39f * i / settings.smallFireballCount;
             float fade = Mathf.InverseLerp(reveal, reveal + 0.14f, progress);
             Vector3 position = CombustionOrbit(core, i, settings.smallFireballCount, ticks);
             if (i == 0) position = Vector3.Lerp(position, core, Mathf.InverseLerp(0.96f, 1f, progress));
-            CombustionSprite(SmallFireball, position, 1.04f, i * 43f - ticks * 0.7f, alpha * fade);
+            DrawCombustionFireball(position, 0.72f, alpha * fade, i + 1);
         }
     }
 
@@ -262,50 +287,67 @@ internal static class MingyuanFireVfx
         float ticks = CombustionVisualTicks;
         int coreLaunch = settings.CoreLaunchAt(landings.Count);
         int coreImpact = settings.CoreImpactAt(landings.Count);
-        float ringFade = 1f - Mathf.InverseLerp(coreImpact, coreImpact + Thing_MingyuanCombustionVolley.ImpactFadeTicks, elapsed);
-        CombustionSprite(CombustionSigil, center.WithY(GroundAltitude), settings.radius * 2.12f, ticks * 0.2f, ringFade * 0.8f);
+        float ringFade = 1f - Mathf.InverseLerp(coreImpact, coreImpact + Thing_MingyuanCombustionVolley.RingFadeTicks, elapsed);
+        DrawCombustionRing(center, settings.radius, ringFade);
         Vector3 core = CombustionCore(center);
         if (nextImpact <= landings.Count)
         {
-            float fall = Mathf.InverseLerp(coreLaunch, coreImpact, elapsed);
-            Vector3 corePosition = Vector3.Lerp(core, center.WithY(AirAltitude), fall * fall);
-            float pulse = elapsed > coreLaunch ? 1f + 0.16f * fall : 1f + 0.08f * Mathf.Sin(ticks * 0.21f);
-            CombustionSprite(CoreFireball, corePosition, 2.45f * pulse, ticks * 0.9f, 1f, bloom: true);
+            if (elapsed < coreLaunch)
+                DrawCombustionFireball(core, 1.9f, 1f, 0);
+            else
+                DrawFallingCombustionFireball(core, center.WithY(AirAltitude), Mathf.InverseLerp(coreLaunch, coreImpact, elapsed), 1.9f, 0);
         }
-        else
-            DrawCombustionImpact(center, settings.coreFireball.radius, elapsed - coreImpact, 0f, true);
 
-        for (int i = 0; i < landings.Count; i++)
+        for (int i = nextImpact; i < landings.Count; i++)
         {
-            float angle = i * 43f - ticks * 0.7f;
             int launch = settings.SmallLaunchAt(i);
-            Vector3 landing = landings[i].ToVector3Shifted();
-            if (i < nextImpact)
-                DrawCombustionImpact(landing, settings.smallFireball.radius, elapsed - settings.SmallImpactAt(i), i * 47f, false);
-            else if (elapsed < launch)
+            if (elapsed < launch)
             {
                 Vector3 orbit = CombustionOrbit(core, i, landings.Count, ticks);
-                CombustionSprite(SmallFireball, Vector3.Lerp(orbit, core, Mathf.InverseLerp(launch - 6, launch, elapsed)),
-                    1.04f, angle, 1f);
+                DrawCombustionFireball(Vector3.Lerp(orbit, core, Mathf.InverseLerp(launch - 6, launch, elapsed)),
+                    0.72f, 1f, i + 1);
             }
             else
             {
                 float fall = Mathf.InverseLerp(launch, settings.SmallImpactAt(i), elapsed);
-                Vector3 destination = landing.WithY(AirAltitude);
-                Vector3 trail = Vector3.Lerp(core, destination, fall * fall * 0.77f);
-                Vector3 position = Vector3.Lerp(core, destination, fall * fall);
-                CombustionSprite(SmallFireball, trail, 0.82f, angle, fall * 0.35f);
-                CombustionSprite(SmallFireball, position, 1.15f, angle, 1f);
+                DrawFallingCombustionFireball(core, landings[i].ToVector3ShiftedWithAltitude(AirAltitude), fall, 0.78f, i + 1);
             }
         }
     }
 
-    private static void DrawCombustionImpact(Vector3 center, float radius, float age, float angle, bool core)
+    internal static void PlayCombustionImpact(IntVec3 cell, Map map, float radius)
     {
-        if (age >= Thing_MingyuanCombustionVolley.ImpactFadeTicks) return;
-        float fade = 1f - Mathf.Clamp01(age / Thing_MingyuanCombustionVolley.ImpactFadeTicks);
-        float size = radius * Mathf.Lerp(1.25f, 2.1f, Mathf.Clamp01(age / 7f));
-        CombustionSprite(ImpactFlame, center.WithY(AirAltitude + 0.04f), size, angle, fade * fade, bloom: core);
+        Vector3 center = cell.ToVector3Shifted();
+        if (!center.ShouldSpawnMotesAt(map)) return;
+
+        DamageDef flame = DamageDefOf.Flame;
+        Rand.PushState();
+        try
+        {
+            FleckMaker.Static(center, map, FleckDefOf.ExplosionFlash, radius * 0.78f);
+            foreach (IntVec3 flameCell in GenRadial.RadialCellsAround(cell, radius, useCenter: true))
+            {
+                if (!flameCell.InBounds(map) || (flameCell != cell && (!GenSight.LineOfSight(cell, flameCell, map, skipFirstCell: true)
+                    || flameCell.Impassable(map)))) continue;
+                FleckCreationData data = FleckMaker.GetDataStatic(flameCell.ToVector3Shifted(), map, flame.explosionCellFleck,
+                    Rand.Range(0.78f, 1.08f));
+                data.rotation = Rand.Range(0f, 360f);
+                data.instanceColor = Color.Lerp(flame.explosionColorCenter, flame.explosionColorEdge, flameCell.DistanceTo(cell) / radius);
+                map.flecks.CreateFleck(data);
+            }
+
+            int dustCount = radius >= 3f ? 3 : 1;
+            for (int i = 0; i < dustCount; i++)
+            {
+                Vector3 dust = center + Gen.RandomHorizontalVector(radius * 0.4f);
+                if (dust.InBounds(map))
+                    FleckMaker.ThrowDustPuffThick(dust, map, radius * 0.48f, new Color(0.58f, 0.50f, 0.43f, 0.7f));
+            }
+        }
+        finally
+        {
+            Rand.PopState();
+        }
     }
 
     internal static void DrawSigil(Vector3 center, float radius, float progress, float alpha, float time)
