@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
 using RimWorld;
@@ -8,13 +9,15 @@ using Verse.AI;
 
 namespace MiliraXian.Characters.Neiyu;
 
-// Neiyu's block and execution values live in MX_NeiyuSwordCombat. The posture
+// Neiyu's sword, block and execution values live in MX_NeiyuSwordCombat. The posture
 // meter itself (maximum, recovery, break window, openings) is the shared
 // MX_CombatPosture. Visual preferences use the existing mod settings.
 public sealed class NeiyuSwordCombatDef : Def
 {
+    internal const int FastestSwingTicks = 20;
     public ThingDef sword;
     public JobDef executionJob;
+    public int swingsToFullSpeed = 6, swingStreakTimeoutTicks = 180;
     public float successChance = .8f, perfectChance = .45f;
     public bool reflectProjectiles = true;
     public float projectileReflectChance = .6f, projectilePerfectChance = .15f;
@@ -33,6 +36,8 @@ public sealed class NeiyuSwordCombatDef : Def
         foreach (string error in base.ConfigErrors()) yield return error;
         if (sword == null || executionJob == null)
             yield return "剑与处决 Job 引用必须完整。";
+        if (swingsToFullSpeed < 2 || swingStreakTimeoutTicks <= FastestSwingTicks)
+            yield return "连砍提速至少需要两次挥击，中断时间须大于最快挥击间隔。";
         if (!(perfectChance >= 0f && perfectChance <= successChance && successChance <= 1f))
             yield return "弹刀概率必须满足 0 ≤ 完美概率 ≤ 总概率 ≤ 1。";
         if (!(projectilePerfectChance >= 0f && projectilePerfectChance <= projectileReflectChance
@@ -84,12 +89,59 @@ internal sealed class NeiyuSwordBlocker : CombatBlocker
 [StaticConstructorOnStartup]
 internal static class NeiyuSwordCombat
 {
+    private sealed class SwingStreak
+    {
+        public int WeaponId;
+        public int LastSwingTick;
+        public int Swings;
+
+        public bool ContinuesWith(ThingWithComps weapon, int now) => Swings > 0
+            && WeaponId == weapon.thingIDNumber && now - LastSwingTick < Config.swingStreakTimeoutTicks;
+    }
+
+    private static readonly ConditionalWeakTable<Pawn, SwingStreak> SwingStreaks = new();
     internal static readonly NeiyuSwordCombatDef Config = DefDatabase<NeiyuSwordCombatDef>.GetNamed("MX_NeiyuSwordCombat");
     internal static int Now => Find.TickManager?.TicksGame ?? 0;
 
     static NeiyuSwordCombat() => CombatBlockers.Register(new NeiyuSwordBlocker());
     internal static bool SwordEquipped(Pawn pawn) => NeiyuEquipmentUtility.IsNeiyu(pawn)
         && NeiyuFlowerSwordSkillUtility.HasRequiredWeapon(pawn, Config.sword);
+
+    private static ThingWithComps SwingWeapon(Verb verb, Pawn pawn)
+    {
+        if (verb is not Verb_MeleeAttack || !SwordEquipped(pawn)) return null;
+        ThingWithComps weapon = verb.EquipmentSource;
+        return weapon == pawn.equipment.Primary ? weapon : null;
+    }
+
+    internal static void NotifySwordSwing(Verb_MeleeAttack verb)
+    {
+        Pawn pawn = verb.CasterPawn;
+        ThingWithComps weapon = SwingWeapon(verb, pawn);
+        if (weapon == null) return;
+
+        int now = Now;
+        SwingStreak streak = SwingStreaks.GetOrCreateValue(pawn);
+        int maxSwings = Mathf.Max(2, Config.swingsToFullSpeed);
+        streak.Swings = streak.ContinuesWith(weapon, now) ? Mathf.Min(streak.Swings + 1, maxSwings) : 1;
+        streak.WeaponId = weapon.thingIDNumber;
+        streak.LastSwingTick = now;
+    }
+
+    internal static float AdjustSwingCooldown(Verb verb, Pawn pawn, float cooldown)
+    {
+        ThingWithComps weapon = SwingWeapon(verb, pawn);
+        if (weapon == null) return cooldown;
+
+        float minimum = NeiyuSwordCombatDef.FastestSwingTicks.TicksToSeconds();
+        cooldown = Mathf.Max(cooldown, minimum);
+        if (!SwingStreaks.TryGetValue(pawn, out SwingStreak streak) || !streak.ContinuesWith(weapon, Now)
+            || streak.Swings == 1) return cooldown;
+
+        float progress = (streak.Swings - 1f) / (Mathf.Max(2, Config.swingsToFullSpeed) - 1);
+        // Interpolate attacks per second, then convert back to the native cooldown.
+        return 1f / Mathf.Lerp(1f / cooldown, 1f / minimum, progress);
+    }
 
     internal static bool CanAct(Pawn pawn) => pawn is { Spawned: true, Dead: false, Destroyed: false, Downed: false }
         && !NeiyuPowerBalance.PassivesDisabled && !pawn.InMentalState && !pawn.Deathresting
