@@ -48,6 +48,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_FlowingFormRechargeSpeed;
         public static StatDef MX_QH_SpellEffectFactor;
         public static StatDef MX_QH_ParryChance;
+        public static StatDef MX_QH_RangedEvadeChance;
 
         public static HediffDef MX_QH_SpringFlow;
         public static HediffDef MX_QH_FlowingForm;
@@ -58,6 +59,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static HediffDef MX_QH_StillnessGathering;
         public static HediffDef MX_QH_FlowerResonance;
         public static HediffDef MX_QH_FlowerDecree;
+        public static HediffDef MX_QH_FlowerDecreeEvasionBoost;
         public static HediffDef MX_QH_SwordPressure;
         public static HediffDef MX_QH_ResonanceTracker;
         public static HediffDef MX_QH_CombatStance;

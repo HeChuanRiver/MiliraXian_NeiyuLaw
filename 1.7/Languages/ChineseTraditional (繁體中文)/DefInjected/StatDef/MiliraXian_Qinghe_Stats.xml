@@ -20,4 +20,6 @@
   <MX_QH_FlowingFormRechargeSpeed.description>流水之形的充能速度，單位為次/秒。</MX_QH_FlowingFormRechargeSpeed.description>
   <MX_QH_SpellEffectFactor.label>法術效果系數</MX_QH_SpellEffectFactor.label>
   <MX_QH_SpellEffectFactor.description>特殊法術效果的倍率修正。影響清荷的技能傷害、通過技能和共鳴附加異常狀態的效率和技能增益產生的效果量。</MX_QH_SpellEffectFactor.description>
+  <MX_QH_RangedEvadeChance.label>遠程閃避機率</MX_QH_RangedEvadeChance.label>
+  <MX_QH_RangedEvadeChance.description>在華彩姿態下閃開遠程彈丸的機率。由戰鬥姿態提供。</MX_QH_RangedEvadeChance.description>
 </LanguageData>

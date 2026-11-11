@@ -20,4 +20,6 @@
   <MX_QH_FlowingFormRechargeSpeed.description>Flowing Form's recharge speed, in charges per second.</MX_QH_FlowingFormRechargeSpeed.description>
   <MX_QH_SpellEffectFactor.label>spell effect factor</MX_QH_SpellEffectFactor.label>
   <MX_QH_SpellEffectFactor.description>Multiplier applied to special spell effects. Affects Qinghe's ability damage, abnormal buildup applied by abilities and resonance, and the strength of ability buffs.</MX_QH_SpellEffectFactor.description>
+  <MX_QH_RangedEvadeChance.label>ranged evade chance</MX_QH_RangedEvadeChance.label>
+  <MX_QH_RangedEvadeChance.description>Chance to evade a ranged projectile while in the Florescence stance. Provided by the combat stance.</MX_QH_RangedEvadeChance.description>
 </LanguageData>

@@ -49,7 +49,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private int lastChargeTick = -1;
         private int threshold = 5;
         private int modeStart = -1;
-        private FlowerBellThreatMode threatMode = FlowerBellThreatMode.Hold;
         private FlowerBellAimMode aimMode = FlowerBellAimMode.Focus;
         /// <summary>Set by the Gizmo; the charge stance releases on its next tick. Not saved.</summary>
         internal bool releaseRequested;
@@ -110,13 +109,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public bool Charging => Holder?.stances?.curStance is Stance_FlowerBellCharge s && s.verb?.EquipmentSource == parent;
 
         public bool CanRelease => Charging && Tier >= 1;
-
-        /// <summary>The answer to a melee threat below tier 1 (the player's toggle; the AI always steps away).</summary>
-        public FlowerBellThreatMode ThreatMode
-        {
-            get => Holder != null && Holder.Faction != Faction.OfPlayer ? FlowerBellThreatMode.Retreat : threatMode;
-            set => threatMode = value;
-        }
 
         /// <summary>The threshold can change only with no charge at all.</summary>
         public bool ThresholdLocked => Charge > 0f;
@@ -226,7 +218,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             Scribe_Values.Look(ref lastChargeTick, "mx_bellLastChargeTick", -1);
             Scribe_Values.Look(ref threshold, "mx_bellThreshold", 5);
             Scribe_Values.Look(ref modeStart, "mx_bellModeStart", -1);
-            Scribe_Values.Look(ref threatMode, "mx_bellThreatMode", FlowerBellThreatMode.Hold);
             Scribe_Values.Look(ref aimMode, "mx_bellAimMode", FlowerBellAimMode.Focus);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && charge > 0f)
             {
@@ -244,16 +235,6 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             if (pawn != null && pawn.Faction == Faction.OfPlayer)
             {
                 yield return new Gizmo_FlowerBellCharge(this);
-                bool retreat = threatMode == FlowerBellThreatMode.Retreat;
-                yield return new Command_Action
-                {
-                    defaultLabel = (retreat ? "MX_QH_BellThreatRetreat" : "MX_QH_BellThreatHold").Translate(),
-                    defaultDesc = "MX_QH_BellThreatDesc".Translate(),
-                    // Placeholder icons: vanilla's "pause caravan" for hold, "release animals" (running) for retreat.
-                    icon = retreat ? TexCommand.ReleaseAnimals : TexCommand.PauseCaravan,
-                    Order = -97f,
-                    action = () => threatMode = retreat ? FlowerBellThreatMode.Hold : FlowerBellThreatMode.Retreat,
-                };
                 bool scatter = aimMode == FlowerBellAimMode.Scatter;
                 yield return new Command_Action
                 {
