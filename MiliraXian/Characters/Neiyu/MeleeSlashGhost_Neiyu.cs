@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -8,7 +10,7 @@ namespace MiliraXian.Characters.Neiyu
 {
     public class MXMeleeSlashGhostExtension : DefModExtension
     {
-        public string effecterDefName = "MXNL_Effecter_NeiyuSwordSlashGhost";
+        public string effecterDefName;
         public string fallbackFleckDefName = "ExplosionFlash";
         public FloatRange scaleRange = new(4.6f, 6.2f);
         public int minIntervalTicks = 5;
@@ -27,55 +29,53 @@ namespace MiliraXian.Characters.Neiyu
             public int NextCycleIndex;
         }
 
-        private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Verb_MeleeAttack, SlashState> StateByVerb =
-            new();
+        private readonly record struct Swing(Pawn Caster, Map Map, MXMeleeSlashGhostExtension Extension,
+            IntVec3 SourceCell, IntVec3 TargetCell, Vector3 Position, float Rotation);
+
+        // Cut and Stab are separate verbs on the same weapon and must advance one cycle.
+        private static readonly ConditionalWeakTable<Pawn, SlashState> StateByPawn = new();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.Last)]
+        private static void Prefix(Verb_MeleeAttack __instance, out Swing __state)
+        {
+            __state = default;
+
+            MXMeleeSlashGhostExtension ext = __instance.EquipmentSource?.def.GetModExtension<MXMeleeSlashGhostExtension>();
+            if (ext == null || __instance is IBladeMotionVerb { MotionActive: true })
+            {
+                return;
+            }
+
+            // Match the native early exits and capture the aim before hit effects move the target.
+            Pawn caster = __instance.CasterPawn;
+            if (caster is not { Spawned: true } || caster.stances.FullBodyBusy
+                || __instance.CurrentTarget.Thing is not { } target)
+            {
+                return;
+            }
+
+            Vector3 position = target.DrawPos;
+            Vector3 direction = position - caster.DrawPos;
+            float rotation = direction.x * direction.x + direction.z * direction.z < 0.0001f
+                ? caster.Rotation.AsAngle
+                : direction.AngleFlat();
+            __state = new Swing(caster, caster.Map, ext, caster.Position, target.Position, position,
+                rotation + ext.facingAngleOffset);
+        }
 
         [HarmonyPostfix]
-        public static void Postfix(Verb_MeleeAttack __instance, bool __result)
+        private static void Postfix(Swing __state, bool __result, bool __runOriginal)
         {
-            if (__instance == null)
+            MXMeleeSlashGhostExtension ext = __state.Extension;
+            if (!__runOriginal || ext == null || (!__result && !ext.playOnMiss))
             {
                 return;
             }
 
-            Pawn caster = __instance.CasterPawn;
-            if (caster == null || !caster.Spawned)
-            {
-                return;
-            }
-
-            ThingWithComps weapon = __instance.EquipmentSource;
-            if (weapon?.def == null)
-            {
-                return;
-            }
-
-            MXMeleeSlashGhostExtension ext = weapon.def.GetModExtension<MXMeleeSlashGhostExtension>();
-            if (ext == null)
-            {
-                return;
-            }
-            // Attacks that play a blade motion draw their own trail along the blade.
-            if (__instance is MiliraXian.Characters.Common.Vfx.BladeMotion.IBladeMotionVerb { MotionActive: true })
-            {
-                return;
-            }
-
-            if (!__result && !ext.playOnMiss)
-            {
-                return;
-            }
-
-            Map map = caster.MapHeld;
-            if (map == null)
-            {
-                return;
-            }
-
-            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
-            int minInterval = Mathf.Max(0, ext.minIntervalTicks);
-            SlashState state = StateByVerb.GetValue(__instance, CreateState);
-            if (minInterval > 0 && state.HasFxTick && now - state.LastFxTick < minInterval)
+            int now = Find.TickManager.TicksGame;
+            SlashState state = StateByPawn.GetOrCreateValue(__state.Caster);
+            if (state.HasFxTick && now - state.LastFxTick < ext.minIntervalTicks)
             {
                 return;
             }
@@ -83,27 +83,30 @@ namespace MiliraXian.Characters.Neiyu
             state.LastFxTick = now;
             state.HasFxTick = true;
 
-            LocalTargetInfo curTarget = __instance.CurrentTarget;
-            IntVec3 targetCell = curTarget.IsValid ? curTarget.Cell : caster.Position;
-            if (!targetCell.IsValid || !targetCell.InBounds(map))
+            Rand.PushState();
+            try
             {
-                targetCell = caster.Position;
+                PlaySlash(__state, state);
             }
-
-            float scale = ext.scaleRange.RandomInRange;
-            float rotation = ComputeSlashRotation(caster, curTarget) + ext.facingAngleOffset;
-            Vector3 spawnPos = curTarget.IsValid ? curTarget.CenterVector3 : targetCell.ToVector3Shifted();
-
-            if (ext.cycleFleckDefNames != null && ext.cycleFleckDefNames.Count > 0)
+            finally
             {
-                int nextIndex = state.NextCycleIndex;
-                string fleckName = ext.cycleFleckDefNames[nextIndex % ext.cycleFleckDefNames.Count];
-                state.NextCycleIndex = (nextIndex + 1) % Mathf.Max(1, ext.cycleFleckDefNames.Count);
+                Rand.PopState();
+            }
+        }
 
-                FleckDef cycleFleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(fleckName);
+        private static void PlaySlash(Swing swing, SlashState state)
+        {
+            MXMeleeSlashGhostExtension ext = swing.Extension;
+            float scale = ext.scaleRange.RandomInRange;
+
+            if (ext.cycleFleckDefNames is { Count: > 0 } cycle)
+            {
+                int index = state.NextCycleIndex % cycle.Count;
+                state.NextCycleIndex = (index + 1) % cycle.Count;
+                FleckDef cycleFleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(cycle[index]);
                 if (cycleFleckDef != null)
                 {
-                    SpawnDirectionalFleck(map, spawnPos, cycleFleckDef, scale, rotation);
+                    SpawnDirectionalFleck(swing.Map, swing.Position, cycleFleckDef, scale, swing.Rotation);
                     return;
                 }
             }
@@ -114,13 +117,9 @@ namespace MiliraXian.Characters.Neiyu
 
             if (fxDef != null)
             {
-                TargetInfo source = new(caster.Position, map);
-                TargetInfo target = new(targetCell, map);
-                Effecter fx = fxDef.Spawn(source, target, scale);
-                if (fx != null)
-                {
-                    fx.Cleanup();
-                }
+                TargetInfo source = new(swing.SourceCell, swing.Map);
+                TargetInfo target = new(swing.TargetCell, swing.Map);
+                fxDef.Spawn(source, target, scale)?.Cleanup();
                 return;
             }
 
@@ -130,31 +129,8 @@ namespace MiliraXian.Characters.Neiyu
 
             if (fallback != null)
             {
-                SpawnDirectionalFleck(map, spawnPos, fallback, scale, rotation);
+                SpawnDirectionalFleck(swing.Map, swing.Position, fallback, scale, swing.Rotation);
             }
-        }
-
-        private static SlashState CreateState(Verb_MeleeAttack verb)
-        {
-            return new SlashState();
-        }
-
-        private static float ComputeSlashRotation(Pawn caster, LocalTargetInfo target)
-        {
-            if (caster == null)
-            {
-                return 0f;
-            }
-
-            Vector3 origin = caster.DrawPos;
-            Vector3 dest = target.IsValid ? target.CenterVector3 : origin;
-            Vector3 vec = dest - origin;
-            if (vec.x * vec.x + vec.z * vec.z < 0.0001f)
-            {
-                return caster.Rotation.AsAngle;
-            }
-
-            return Mathf.Atan2(0f - vec.z, vec.x) * 57.29578f;
         }
 
         internal static void SpawnDirectionalFleck(Map map, Vector3 pos, FleckDef fleckDef, float scale, float rotation)
