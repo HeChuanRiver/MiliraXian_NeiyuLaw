@@ -33,6 +33,8 @@
   <MX_NL_EnableUpdateLogLettersDesc>啟用後，當前存檔第一次執行新版本時，只會收到最新版本的更新日誌信件一次。關閉後，該版本會被記錄為已檢查，不會補發舊日誌。</MX_NL_EnableUpdateLogLettersDesc>
   <MX_NL_EnableScreenBloomLabel>螢幕泛光</MX_NL_EnableScreenBloomLabel>
   <MX_NL_EnableScreenBloomDesc>啟用後，角色的護盾光暈等螢幕泛光效果會正常顯示。關閉後可省下少許效能，代價是失去光暈。</MX_NL_EnableScreenBloomDesc>
+  <MX_NL_SweepHitsDownedLabel>範圍攻擊波及倒地目標</MX_NL_SweepHitsDownedLabel>
+  <MX_NL_SweepHitsDownedDesc>開啟後，掃斬、衝擊波等範圍攻擊也會傷到範圍內倒地的單位。關閉時會避開它們，但用攻擊指令點名的目標照常受擊。</MX_NL_SweepHitsDownedDesc>
   <MX_NL_SweepHitsNeutralLabel>範圍攻擊波及中立目標</MX_NL_SweepHitsNeutralLabel>
   <MX_NL_SweepHitsNeutralDesc>開啟後，掃斬、衝擊波等範圍攻擊也會傷到範圍內的中立單位和建築（無陣營，或既非己方也非盟友）。關閉時只傷敵對目標。無論開關，用攻擊指令點名的目標照常受擊；己方、盟友和囚犯不會被波及。</MX_NL_SweepHitsNeutralDesc>
   <MX_NL_SweepHitsTerrainLabel>範圍攻擊破壞地形</MX_NL_SweepHitsTerrainLabel>

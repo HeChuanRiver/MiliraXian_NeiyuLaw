@@ -38,7 +38,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
             if (KindOf(thing) == SweepHitKind.Terrain)
             {
                 // Rock has no side: only the setting decides.
-                return NeiyuLawMod.SweepHitsTerrain;
+                return NeiyuLawMod.Instance?.Settings?.SweepHitsTerrain == true;
             }
             if (rule == SweepTargetFaction.All)
             {
@@ -48,7 +48,7 @@ namespace MiliraXian.Characters.Common.SweepDamage
             {
                 return true;
             }
-            if (rule == SweepTargetFaction.HostileAndNeutral || NeiyuLawMod.SweepHitsNeutral)
+            if (rule == SweepTargetFaction.HostileAndNeutral || NeiyuLawMod.Instance?.Settings?.SweepHitsNeutral == true)
             {
                 return IsNeutral(caster, thing);
             }

@@ -33,6 +33,8 @@
   <MX_NL_EnableUpdateLogLettersDesc>When enabled, each save receives one letter for the latest update log the first time it runs a new version. When disabled, that version is recorded as checked and older logs will not be sent later.</MX_NL_EnableUpdateLogLettersDesc>
   <MX_NL_EnableScreenBloomLabel>Screen bloom</MX_NL_EnableScreenBloomLabel>
   <MX_NL_EnableScreenBloomDesc>When enabled, screen bloom effects such as character shield halos are shown. Disabling it saves a little performance at the cost of the halos.</MX_NL_EnableScreenBloomDesc>
+  <MX_NL_SweepHitsDownedLabel>Area attacks hit downed targets</MX_NL_SweepHitsDownedLabel>
+  <MX_NL_SweepHitsDownedDesc>When enabled, sweeps, shock waves and other area attacks also damage downed pawns in reach. When disabled they pass over them, but the target you ordered to attack is still hit.</MX_NL_SweepHitsDownedDesc>
   <MX_NL_SweepHitsNeutralLabel>Area attacks hit neutral targets</MX_NL_SweepHitsNeutralLabel>
   <MX_NL_SweepHitsNeutralDesc>When enabled, sweeps, shock waves and other area attacks also damage neutral pawns and buildings in reach (no faction, or neither your own nor an ally). When disabled they hit only hostiles. Either way the target you ordered to attack is hit; your own side, allies and prisoners are never caught.</MX_NL_SweepHitsNeutralDesc>
   <MX_NL_SweepHitsTerrainLabel>Area attacks damage terrain</MX_NL_SweepHitsTerrainLabel>

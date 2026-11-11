@@ -33,7 +33,8 @@ namespace MiliraXian.Characters
         public bool ZhaoliDecorativeMode;
         public bool MingyuanDecorativeMode;
         public bool QingheDecorativeMode;
-        public bool QingheSweepHitsDowned;
+        /// <summary>Area attacks also hit downed pawns.</summary>
+        public bool SweepHitsDowned;
         /// <summary>Area attacks (sweeps, rings, bursts) also hit neutral things, not only hostile ones.</summary>
         public bool SweepHitsNeutral;
         /// <summary>Area attacks also hit natural rock walls and ore.</summary>
@@ -56,7 +57,7 @@ namespace MiliraXian.Characters
             CharacterPowerProfile.LookDecorative(ref ZhaoliDecorativeMode, "ZhaoliDecorativeMode", "ZhaoliPowerLevel");
             CharacterPowerProfile.LookDecorative(ref MingyuanDecorativeMode, "MingyuanDecorativeMode", "MingyuanPowerLevel");
             CharacterPowerProfile.LookDecorative(ref QingheDecorativeMode, "QingheDecorativeMode", "QinghePowerLevel");
-            Scribe_Values.Look(ref QingheSweepHitsDowned, "QingheSweepHitsDowned");
+            Scribe_Values.Look(ref SweepHitsDowned, "SweepHitsDowned");
             Scribe_Values.Look(ref SweepHitsNeutral, "SweepHitsNeutral");
             Scribe_Values.Look(ref SweepHitsTerrain, "SweepHitsTerrain");
 
@@ -77,9 +78,6 @@ namespace MiliraXian.Characters
     public class NeiyuLawMod : Mod
     {
         public static NeiyuLawMod Instance { get; private set; }
-        internal static bool QingheSweepHitsDowned => Instance?.Settings?.QingheSweepHitsDowned ?? false;
-        internal static bool SweepHitsNeutral => Instance?.Settings?.SweepHitsNeutral ?? false;
-        internal static bool SweepHitsTerrain => Instance?.Settings?.SweepHitsTerrain ?? false;
 
         public NeiyuLawSettings Settings;
         private Vector2 settingsScroll;
@@ -129,9 +127,9 @@ namespace MiliraXian.Characters
                 Settings.ArcaneVisualQuality = ArcaneVfxQuality.High;
             listing.Gap();
             listing.CheckboxLabeled(
-                "MX_NL_QingheSweepHitsDownedLabel".Translate().ToString(),
-                ref Settings.QingheSweepHitsDowned,
-                "MX_NL_QingheSweepHitsDownedDesc".Translate().ToString());
+                "MX_NL_SweepHitsDownedLabel".Translate().ToString(),
+                ref Settings.SweepHitsDowned,
+                "MX_NL_SweepHitsDownedDesc".Translate().ToString());
             listing.CheckboxLabeled(
                 "MX_NL_SweepHitsNeutralLabel".Translate().ToString(),
                 ref Settings.SweepHitsNeutral,

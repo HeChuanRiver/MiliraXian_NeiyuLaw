@@ -34,8 +34,8 @@
   <MX_NL_EnableUpdateLogLettersLabel>推送更新日志信件</MX_NL_EnableUpdateLogLettersLabel>
   <MX_NL_EnableUpdateLogLettersDesc>启用后，当前存档第一次运行新版本时，只会收到最新版本的更新日志信件一次。关闭后，该版本会被记录为已检查，不会补发旧日志。</MX_NL_EnableUpdateLogLettersDesc>
   <MX_NL_EnableScreenBloomLabel>屏幕泛光</MX_NL_EnableScreenBloomLabel>
-  <MX_NL_QingheSweepHitsDownedLabel>清荷：范围斩击波及倒地目标</MX_NL_QingheSweepHitsDownedLabel>
-  <MX_NL_QingheSweepHitsDownedDesc>开启后，清荷的普通攻击扫斩、樱舞、镜花水月和斩铁剑会伤到范围内倒地的敌人。关闭时它们会避开倒地的敌人，但用攻击指令点名的目标照常受击。</MX_NL_QingheSweepHitsDownedDesc>
+  <MX_NL_SweepHitsDownedLabel>范围攻击波及倒地目标</MX_NL_SweepHitsDownedLabel>
+  <MX_NL_SweepHitsDownedDesc>开启后，扫斩、冲击波等范围攻击也会伤到范围内倒地的单位。关闭时会避开它们，但用攻击指令点名的目标照常受击。</MX_NL_SweepHitsDownedDesc>
   <MX_NL_SweepHitsNeutralLabel>范围攻击波及中立目标</MX_NL_SweepHitsNeutralLabel>
   <MX_NL_SweepHitsNeutralDesc>开启后，扫斩、冲击波等范围攻击也会伤到范围内的中立单位和建筑（无阵营，或既非己方也非盟友）。关闭时只伤敌对目标。无论开关，用攻击指令点名的目标照常受击；己方、盟友和囚犯不会被波及。</MX_NL_SweepHitsNeutralDesc>
   <MX_NL_SweepHitsTerrainLabel>范围攻击破坏地形</MX_NL_SweepHitsTerrainLabel>
