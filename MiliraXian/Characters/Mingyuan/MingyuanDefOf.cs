@@ -10,6 +10,7 @@ namespace MiliraXian.Characters.Mingyuan
         public static DutyDef MX_Mingyuan_AssaultRebirthFlame;
         public static DamageDef MX_Mingyuan_StructuralBurn;
         public static DamageDef MX_Mingyuan_OldAge;
+        public static DamageDef MX_Mingyuan_CombustionVisualExplosion;
         public static AbilityDef MX_Mingyuan_TimeBurn;
         public static ThingDef MX_Mingyuan_CinderSword;
         public static AbilityDef MX_Mingyuan_Absorb;

@@ -102,8 +102,6 @@
                 <warmupLoop>MX_Mingyuan_FireCastHum</warmupLoop>
                 <etchSound>MX_ArcaneCircle_Etch</etchSound>
                 <sealSound>MX_ArcaneCircle_Seal</sealSound>
-                <resolveSound>MX_ArcaneStrike_Impact</resolveSound>
-                <hitSound>FireSpew_Resolve</hitSound>
             </li>
         </comps>
     </AbilityDef>

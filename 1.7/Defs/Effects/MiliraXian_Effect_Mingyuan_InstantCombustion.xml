@@ -12,6 +12,14 @@
     <isSaveable>true</isSaveable>
   </ThingDef>
 
+  <DamageDef ParentName="Flame">
+    <defName>MX_Mingyuan_CombustionVisualExplosion</defName>
+    <label>火焰爆炸</label>
+    <workerClass>MiliraXian.Characters.Mingyuan.DamageWorker_MingyuanCombustionVisual</workerClass>
+    <explosionHeatEnergyPerCell>0</explosionHeatEnergyPerCell>
+    <explosionSnowMeltAmount>0</explosionSnowMeltAmount>
+  </DamageDef>
+
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef Name="MX_Mingyuan_CombustionFireballBase" Abstract="True">
     <workerClass>MiliraXian.Characters.Mingyuan.SweepDamageWorker_MingyuanCombustion</workerClass>
     <damageDef>Burn</damageDef>

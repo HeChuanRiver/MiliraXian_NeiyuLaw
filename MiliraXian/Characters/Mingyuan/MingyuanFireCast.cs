@@ -22,8 +22,6 @@ public class CompProperties_AbilityMingyuanInstantCombustion : CompProperties_Ab
     public SoundDef warmupLoop;
     public SoundDef etchSound;
     public SoundDef sealSound;
-    public SoundDef resolveSound;
-    public SoundDef hitSound;
 
     public CompProperties_AbilityMingyuanInstantCombustion() =>
         compClass = typeof(CompAbilityEffect_MingyuanInstantCombustion);

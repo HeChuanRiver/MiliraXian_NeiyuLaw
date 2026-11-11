@@ -359,10 +359,6 @@ internal static class MingyuanFireVfx
         }
     }
 
-    internal static void PlayCombustionImpact(IntVec3 cell, Map map, float radius) =>
-        VanillaExplosionVfx.Play(cell, map, radius, DamageDefOf.Flame,
-            Gen.HashCombineInt(Find.TickManager.TicksGame, cell.GetHashCode()));
-
     private static void ThrowCombustionBlastFlame(Vector3 position, Map map, DamageDef flame, float size, float edge)
     {
         if (flame.explosionCellFleck == null) return;

@@ -4,7 +4,6 @@ using MiliraXian.Characters.Common.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
-using Verse.Sound;
 
 namespace MiliraXian.Characters.Mingyuan;
 
@@ -114,23 +113,22 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
                 MingyuanFireVfx.PlayCombustionAirburst(Position, landings[index], Map, burstOffset / (float)settings.smallFlightTicks);
         }
         while (nextImpact < landings.Count && elapsed >= settings.SmallImpactAt(nextImpact) && CasterCanSustain)
-            Explode(landings[nextImpact++], settings.smallFireball, settings.hitSound);
+            Explode(landings[nextImpact++], settings.smallFireball);
 
         int coreImpact = settings.CoreImpactAt(landings.Count);
         if (nextImpact == landings.Count && elapsed >= coreImpact && CasterCanSustain)
         {
             nextImpact++;
-            Explode(Position, settings.coreFireball, settings.resolveSound);
+            Explode(Position, settings.coreFireball);
         }
 
         if (elapsed >= coreImpact + RingFadeTicks) Destroy();
     }
 
-    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound)
+    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball)
     {
         if (fireball == null || !cell.InBounds(Map)) return;
-        sound?.PlayOneShot(new TargetInfo(cell, Map));
-        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius);
+        DamageWorker_MingyuanCombustionVisual.Play(cell, Map, fireball.radius);
         if (cell.Impassable(Map)) return;
 
         new AreaDamageBurst
