@@ -104,24 +104,33 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         }
 
         int elapsed = Find.TickManager.TicksGame - startTick;
+        int burstOffset = settings.smallFlightTicks * 2 / 3;
+        int burstElapsed = elapsed - burstOffset;
+        if (settings.smallFlightTicks > 1 && settings.shotIntervalTicks > 0
+            && burstElapsed >= 0 && burstElapsed % settings.shotIntervalTicks == 0)
+        {
+            int index = burstElapsed / settings.shotIntervalTicks;
+            if (index < landings.Count)
+                MingyuanFireVfx.PlayCombustionAirburst(Position, landings[index], Map, burstOffset / (float)settings.smallFlightTicks);
+        }
         while (nextImpact < landings.Count && elapsed >= settings.SmallImpactAt(nextImpact) && CasterCanSustain)
-            Explode(landings[nextImpact++], settings.smallFireball, settings.hitSound);
+            Explode(landings[nextImpact++], settings.smallFireball, settings.hitSound, core: false);
 
         int coreImpact = settings.CoreImpactAt(landings.Count);
         if (nextImpact == landings.Count && elapsed >= coreImpact && CasterCanSustain)
         {
             nextImpact++;
-            Explode(Position, settings.coreFireball, settings.resolveSound);
+            Explode(Position, settings.coreFireball, settings.resolveSound, core: true);
         }
 
         if (elapsed >= coreImpact + RingFadeTicks) Destroy();
     }
 
-    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound)
+    private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball, SoundDef sound, bool core)
     {
         if (fireball == null || !cell.InBounds(Map)) return;
         sound?.PlayOneShot(new TargetInfo(cell, Map));
-        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius);
+        MingyuanFireVfx.PlayCombustionImpact(cell, Map, fireball.radius, core);
         if (cell.Impassable(Map)) return;
 
         new AreaDamageBurst
