@@ -30,14 +30,6 @@ public class CompAbilityEffect_MingyuanTimeBurn : CompAbilityEffect_MingyuanPowe
 {
     internal new CompProperties_AbilityMingyuanTimeBurn Props => (CompProperties_AbilityMingyuanTimeBurn)props;
 
-    public override void PostExposeData()
-    {
-        base.PostExposeData();
-        // VerbTracker can replace the saved vanilla verb after Ability.Initialize has already bound it.
-        if (Scribe.mode == LoadSaveMode.PostLoadInit && parent.verb is Verb_MingyuanTimeBurn verb)
-            verb.Ability = parent;
-    }
-
     public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
     {
         if (!base.Valid(target, throwMessages)) return false;
