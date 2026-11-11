@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -14,11 +12,14 @@ internal static class MingyuanFireVfx
 {
     private enum Shape { Scorch, Sigil, Phoenix, Vortex, Funnel, Crystal, Burst, Wake, Particles, AshesField, TimeHourglass, TimeSword, TimeWave }
     private const int MaxParticles = 32;
+    private const float SmallFireballDrawSize = 1.05f;
+    private const float CoreFireballDrawSize = 2.1f;
     private static readonly Material FireMaterial;
     private static readonly Material PhoenixTakeoff;
     private static readonly Material PhoenixDive;
     private static readonly Material CinderSword;
-    private static readonly Material[] CombustionFireFrames;
+    private static readonly Material SmallCombustionFireball;
+    private static readonly Material CoreCombustionFireball;
     private static readonly Material CombustionFireGlow;
     private static readonly Material CombustionDust;
     private static readonly MaterialPropertyBlock Properties = new();
@@ -42,11 +43,10 @@ internal static class MingyuanFireVfx
         FireMaterial = MaterialPool.MatFrom(new MaterialRequest(BaseContent.WhiteTex, shader, Color.white));
         PhoenixTakeoff = LoadPhoenixMaterial(shader, "PhoenixTakeoff");
         PhoenixDive = LoadPhoenixMaterial(shader, "PhoenixDive");
-        GraphicData fire = ThingDefOf.Fire.graphicData;
-        CombustionFireFrames = ContentFinder<Texture2D>.GetAllInFolder(fire.texPath)
-            .Where(frame => !frame.name.EndsWith(Graphic_Single.MaskSuffix, StringComparison.Ordinal))
-            .OrderBy(frame => frame.name, StringComparer.Ordinal)
-            .Select(frame => MaterialPool.MatFrom(frame, fire.shaderType.Shader, Color.white)).ToArray();
+        const string fireballFolder = "MiliraXianMingyuan/Effect/InstantCombustion/";
+        Shader fireShader = ThingDefOf.Fire.graphicData.shaderType.Shader;
+        SmallCombustionFireball = MaterialPool.MatFrom(fireballFolder + "SmallFireball", fireShader, Color.white);
+        CoreCombustionFireball = MaterialPool.MatFrom(fireballFolder + "CoreFireball", fireShader, Color.white);
         CombustionFireGlow = FleckDefOf.FireGlow.graphicData.Graphic.MatSingle;
         CombustionDust = FleckDefOf.DustPuff.graphicData.Graphic.MatSingle;
         string swordPath = MX_MingyuanDefOf.MX_Mingyuan_CinderSword?.graphicData?.texPath;
@@ -240,24 +240,22 @@ internal static class MingyuanFireVfx
             GenDraw.DrawRadiusRing(center.ToIntVec3(), radius, new Color(0.95f, 0.49f, 0.19f, 0.72f * alpha));
     }
 
-    private static void DrawCombustionFireball(Vector3 position, float size, float alpha, int phase)
+    private static void DrawCombustionFireball(Material fireball, Vector3 position, float size, float alpha)
     {
         if (alpha <= 0f) return;
-        DrawCombustionQuad(CombustionFireGlow, position.WithY(position.y - 0.003f), size * 1.55f,
-            new Color(1f, 0.86f, 0.68f, 0.55f * alpha));
-        if (CombustionFireFrames.Length == 0) return;
-        int frame = (Find.TickManager.TicksGame / 15 + phase) % CombustionFireFrames.Length;
-        DrawCombustionQuad(CombustionFireFrames[frame], position, size, Color.white.WithAlpha(alpha));
+        DrawCombustionQuad(CombustionFireGlow, position.WithY(position.y - 0.003f), size * 0.86f,
+            new Color(1f, 0.86f, 0.68f, 0.34f * alpha));
+        DrawCombustionQuad(fireball, position, size, Color.white.WithAlpha(alpha));
     }
 
-    private static void DrawFallingCombustionFireball(Vector3 origin, Vector3 destination, float fall, float size, int phase)
+    private static void DrawFallingCombustionFireball(Material fireball, Vector3 origin, Vector3 destination, float fall, float size)
     {
         Vector3 position = Vector3.Lerp(origin, destination, fall * fall);
         float trailProgress = Mathf.Max(0f, fall - 0.22f);
         Vector3 trail = Vector3.Lerp(origin, destination, trailProgress * trailProgress);
-        DrawCombustionQuad(CombustionDust, trail.WithY(position.y - 0.006f), size * 0.82f,
+        DrawCombustionQuad(CombustionDust, trail.WithY(position.y - 0.006f), size * 0.65f,
             new Color(0.54f, 0.47f, 0.39f, fall * 0.44f));
-        DrawCombustionFireball(position, size, 1f, phase);
+        DrawCombustionFireball(fireball, position, size, 1f);
     }
 
     private static void DrawCombustionWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion settings,
@@ -269,14 +267,14 @@ internal static class MingyuanFireVfx
         DrawCombustionRing(center, settings.radius, alpha * etch);
         Vector3 core = CombustionCore(center);
         float coreFade = Mathf.InverseLerp(0.28f, 0.57f, progress);
-        DrawCombustionFireball(core, Mathf.Lerp(0.64f, 1.9f, coreFade), alpha * coreFade, 0);
+        DrawCombustionFireball(CoreCombustionFireball, core, Mathf.Lerp(0.64f, CoreFireballDrawSize, coreFade), alpha * coreFade);
         for (int i = 0; i < settings.smallFireballCount; i++)
         {
             float reveal = 0.42f + 0.39f * i / settings.smallFireballCount;
             float fade = Mathf.InverseLerp(reveal, reveal + 0.14f, progress);
             Vector3 position = CombustionOrbit(core, i, settings.smallFireballCount, ticks);
             if (i == 0) position = Vector3.Lerp(position, core, Mathf.InverseLerp(0.96f, 1f, progress));
-            DrawCombustionFireball(position, 0.72f, alpha * fade, i + 1);
+            DrawCombustionFireball(SmallCombustionFireball, position, SmallFireballDrawSize, alpha * fade);
         }
     }
 
@@ -293,9 +291,10 @@ internal static class MingyuanFireVfx
         if (nextImpact <= landings.Count)
         {
             if (elapsed < coreLaunch)
-                DrawCombustionFireball(core, 1.9f, 1f, 0);
+                DrawCombustionFireball(CoreCombustionFireball, core, CoreFireballDrawSize, 1f);
             else
-                DrawFallingCombustionFireball(core, center.WithY(AirAltitude), Mathf.InverseLerp(coreLaunch, coreImpact, elapsed), 1.9f, 0);
+                DrawFallingCombustionFireball(CoreCombustionFireball, core, center.WithY(AirAltitude),
+                    Mathf.InverseLerp(coreLaunch, coreImpact, elapsed), CoreFireballDrawSize);
         }
 
         for (int i = nextImpact; i < landings.Count; i++)
@@ -304,13 +303,14 @@ internal static class MingyuanFireVfx
             if (elapsed < launch)
             {
                 Vector3 orbit = CombustionOrbit(core, i, landings.Count, ticks);
-                DrawCombustionFireball(Vector3.Lerp(orbit, core, Mathf.InverseLerp(launch - 6, launch, elapsed)),
-                    0.72f, 1f, i + 1);
+                DrawCombustionFireball(SmallCombustionFireball,
+                    Vector3.Lerp(orbit, core, Mathf.InverseLerp(launch - 6, launch, elapsed)), SmallFireballDrawSize, 1f);
             }
             else
             {
                 float fall = Mathf.InverseLerp(launch, settings.SmallImpactAt(i), elapsed);
-                DrawFallingCombustionFireball(core, landings[i].ToVector3ShiftedWithAltitude(AirAltitude), fall, 0.78f, i + 1);
+                DrawFallingCombustionFireball(SmallCombustionFireball, core,
+                    landings[i].ToVector3ShiftedWithAltitude(AirAltitude), fall, SmallFireballDrawSize);
             }
         }
     }
