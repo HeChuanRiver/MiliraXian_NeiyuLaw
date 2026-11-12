@@ -71,6 +71,21 @@
     </grantedAbilities>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+    <defName>MX_QH_Node_LotusRain</defName>
+    <label>荷雨</label>
+    <description>——习得飞花令：荷雨。\n\n在敌人来路上横起一道雨幕，踏入者被淋透而大幅减速，血肉积累毒素、机械积累腐蚀。雨的落点由你的视线决定，正好挡在冲锋的路上。</description>
+    <category>MX_QH_Category_Qinghe</category>
+    <iconActive>MiliraXianQinghe/UI/Icons/spring_flow</iconActive>
+    <displayOrder>12</displayOrder>
+    <requiredAuraMasteryLevel>3</requiredAuraMasteryLevel>
+    <prerequisites>
+      <li><node>MX_QH_Node_FlyingFlowerDecree</node></li>
+    </prerequisites>
+    <grantedAbilities>
+      <li>MX_QH_SummerRain</li>
+    </grantedAbilities>
+  </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
+  <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
     <defName>MX_QH_Node_SwordDance</defName>
     <label>剑舞</label>
     <description>——领悟使用刀剑近身格斗的新战斗姿态“剑舞”，并习得剑舞技：镜花水月。</description>

@@ -16,6 +16,10 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         /// <summary>After reaching the full radius the wave fades out over this.</summary>
         public const float OutSeconds = 0.18f;
         public const float LifeSeconds = RingSeconds + OutSeconds;
+        /// <summary>The frost retaliation's wave: a smaller ring, opening in half the time of a note's.</summary>
+        public const float FrostRadius = 1f;
+        public const float FrostRingSeconds = 0.5f;
+        public const float FrostLifeSeconds = FrostRingSeconds + OutSeconds;
         /// <summary>r = R (1 - (1 - u)^p): fast at first, slowing to 0 at R.</summary>
         private const float EasePow = 5f;
         /// <summary>Full brightness for this share of the life, then (1 - u)^FadePow down to 0.</summary>
@@ -31,14 +35,26 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         /// <summary>Share of the full radius after <paramref name="seconds"/>.</summary>
         public static float Expansion(float seconds)
         {
-            float u = Mathf.Clamp01(seconds / RingSeconds);
+            return Expansion(seconds, RingSeconds);
+        }
+
+        /// <summary>Share of the full radius after <paramref name="seconds"/>, over a given expansion time.</summary>
+        public static float Expansion(float seconds, float ringSeconds)
+        {
+            float u = Mathf.Clamp01(seconds / Mathf.Max(0.01f, ringSeconds));
             return 1f - Mathf.Pow(1f - u, EasePow);
         }
 
         /// <summary>Brightness (and distortion strength) after <paramref name="seconds"/>, by time, not by radius.</summary>
         public static float Fade(float seconds)
         {
-            float u = seconds / LifeSeconds;
+            return Fade(seconds, LifeSeconds);
+        }
+
+        /// <summary>Brightness after <paramref name="seconds"/>, over a given total life.</summary>
+        public static float Fade(float seconds, float lifeSeconds)
+        {
+            float u = seconds / Mathf.Max(0.01f, lifeSeconds);
             if (u < 0f || u >= 1f)
             {
                 return 0f;
@@ -58,11 +74,17 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         /// <summary>The damage ring's radius at every tick of the expansion (tick 0 = impact).</summary>
         public static List<float> Radii(float radius)
         {
-            int n = Mathf.RoundToInt(RingSeconds * 60f);
+            return Radii(radius, RingSeconds);
+        }
+
+        /// <summary>The damage ring's radius at every tick of an expansion lasting <paramref name="ringSeconds"/>.</summary>
+        public static List<float> Radii(float radius, float ringSeconds)
+        {
+            int n = Mathf.RoundToInt(Mathf.Max(0.01f, ringSeconds) * 60f);
             List<float> list = new(n + 1);
             for (int i = 0; i <= n; i++)
             {
-                list.Add(radius * Expansion(i / 60f));
+                list.Add(radius * Expansion(i / 60f, ringSeconds));
             }
             return list;
         }

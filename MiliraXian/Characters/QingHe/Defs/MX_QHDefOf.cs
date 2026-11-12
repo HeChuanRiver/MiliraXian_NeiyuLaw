@@ -28,6 +28,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static PawnKindDef MiliraXian_Neiyu;
 
         public static ThingDef SpringFlowField;
+        public static ThingDef MX_QH_SummerRainWall;
         public static ThingDef MX_QH_LunarMirror;
         public static ThingDef MX_QH_LotusPond;
         public static ThingDef MX_QingheNormal;
@@ -51,6 +52,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_RangedEvadeChance;
 
         public static HediffDef MX_QH_SpringFlow;
+        public static HediffDef MX_QH_RainDrenched;
         public static HediffDef MX_QH_FlowingForm;
         public static HediffDef MX_QH_FlowingFormImmunity;
         public static HediffDef MX_QH_AuraMastery;

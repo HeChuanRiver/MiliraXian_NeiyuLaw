@@ -15,7 +15,7 @@
       </li>
     </modExtensions>
     <label>春泉涌流</label>
-    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累20点流血；若已处于流血状态，则改为积累15点毒素。机械敌人先积累15点腐蚀；若已处于腐蚀状态，则改为积累20点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
+    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累12点流血，为机械敌人积累12点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>201</displayOrder>
@@ -43,6 +43,51 @@
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
         <fieldDef>SpringFlowField</fieldDef>
         <fieldDurationTicks>900</fieldDurationTicks>
+        <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
+        <resourceCost>2</resourceCost>
+        <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
+      </li>
+    </comps>
+  </AbilityDef>
+  <AbilityDef>
+    <defName>MX_QH_SummerRain</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.QingHe.CombatStance.AbilityRequirement_Stance">
+            <stance>MX_QH_Stance_Bell</stance>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+    <label>荷雨</label>
+    <description>消耗2点花令，在目标地点召来一道雨幕。雨幕垂直于你的视线横陈，长15格、宽3格，持续15秒，不阻挡通行。\n\n踏入雨幕的敌人会被淋透，移动速度减半；离开雨幕6秒后才会干透。血肉敌人每秒积累30点毒素，机械敌人每秒积累30点腐蚀。积累量受法术效果系数与对应异常附加效率影响。\n\n雨水在起手时就开始落下，雨幕落下时才正式生效；结束时雨先停，积水再慢慢淡去。友方不受影响。</description>
+    <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
+    <category>MX_QingheSkill</category>
+    <displayOrder>202</displayOrder>
+    <cooldownTicksRange>480</cooldownTicksRange>
+    <targetRequired>true</targetRequired>
+    <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <targetable>true</targetable>
+      <range>12</range>
+      <warmupTime>1.8</warmupTime>
+      <requireLineOfSight>true</requireLineOfSight>
+      <drawHighlightWithLineOfSight>true</drawHighlightWithLineOfSight>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySummerRain">
+        <wallDefName>MX_QH_SummerRainWall</wallDefName>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
         <resourceCost>2</resourceCost>
         <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>

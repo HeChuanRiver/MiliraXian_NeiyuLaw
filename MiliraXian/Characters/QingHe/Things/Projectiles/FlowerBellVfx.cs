@@ -35,18 +35,8 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private const int FilSubdivisions = 4;
         private const float PetalEvery = 0.06f;
         private const float PetalChance = 0.3f;
+        /// <summary>Season colour pushed away from grey, for the bell's halo (the wave's is in the drawer).</summary>
         private const float WaveSaturation = 1.8f;
-        private const float WaveAlpha = 0.55f;
-        /// <summary>Shell thickness (3 px at 60 px a cell).</summary>
-        private const float ShellThickness = 0.05f;
-        private const float ShellCap = 4f;
-        private const float ShellBack = 0.5f;
-        /// <summary>Curtain brightness seen face on (the soft part is left to the bloom).</summary>
-        private const float ShellGain = 0.56f;
-        private const float DistortCells = 10f / 60f;
-        private const float DistortGain = 1.5f;
-        /// <summary>Central difference step; also smooths the offset into a ramp just outside the edge.</summary>
-        private const float DistortStep = 0.05f;
         private const float FlashRise = 0.03f;
         private const float FlashHold = 0.06f;
         private const float FlashFall = 0.33f;
@@ -60,26 +50,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private const int PetalAtlasFrames = 64;
 
         private static readonly Color White = new(1f, 0.95f, 0.98f, 1f);
-        private static readonly int WaveId = Shader.PropertyToID("_Wave");
-        private static readonly int ShellId = Shader.PropertyToID("_Shell");
-        private static readonly int FootId = Shader.PropertyToID("_Foot");
-        private static readonly int GlowId = Shader.PropertyToID("_Glow");
-        private static readonly int CoreId = Shader.PropertyToID("_Core");
-        private static readonly int FadePowId = Shader.PropertyToID("_FadePow");
-        private static readonly int DistortScaleId = Shader.PropertyToID("_DistortScale");
-        private static readonly ScreenBloomProperties Bloom;
-        private static Material waveMat;
-        private static Material distortMat;
-
-        static FlowerBellVfx()
-        {
-            Bloom = new ScreenBloomProperties
-            {
-                group = DefDatabase<ScreenBloomGroupDef>.GetNamedSilentFail("MX_ScreenBloom_Glow"),
-                tint = Color.white,
-                intensity = 1.35f,
-            };
-        }
+        private static readonly ScreenBloomProperties Bloom = FlowerBellWaveDrawer.Bloom;
 
         internal sealed class Note
         {
@@ -227,8 +198,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
 
         private readonly Map map;
         private readonly List<Note> notes = new();
-        private readonly List<Mesh> waveMeshes = new();
-        private readonly List<Mesh> distortMeshes = new();
+        private readonly FlowerBellWaveDrawer waveDrawer = new();
         private Mesh trailMesh;
         private Mesh bellMesh;
         private Mesh bellBloomMesh;
@@ -300,16 +270,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             Object.Destroy(bellBloomMesh);
             Object.Destroy(petalMesh);
             Object.Destroy(flashMesh);
-            foreach (Mesh m in waveMeshes)
-            {
-                Object.Destroy(m);
-            }
-            foreach (Mesh m in distortMeshes)
-            {
-                Object.Destroy(m);
-            }
-            waveMeshes.Clear();
-            distortMeshes.Clear();
+            waveDrawer.Dispose();
         }
 
         public void Draw(Map map)
@@ -637,109 +598,18 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             block.Clear();
         }
 
-        // --- the shock wave: an open curtain on a flattened dome, plus the ground ring; and its refraction
+        // --- the shock wave: drawn by the shared drawer, one entry per note that has landed
         private void DrawWaves(float vt)
         {
-            waveMat ??= MatFor("MX_QH_BellWave");
-            distortMat ??= MatFor("MX_QH_BellWaveDistort");
-            if (waveMat == null)
-            {
-                return;
-            }
-            Camera cam = Find.Camera;
-            Vector4 screenPerCell = Vector4.zero;
-            if (cam != null && cam.orthographicSize > 0f)
-            {
-                float h = 2f * cam.orthographicSize;
-                // The grab image's rows run down the screen, north is up: y is negative.
-                screenPerCell = new Vector4(1f / (h * Mathf.Max(0.1f, cam.aspect)), -1f / h, DistortGain, DistortStep);
-            }
-            float y = AltitudeLayer.MoteOverhead.AltitudeFor() - 0.01f;
-            int used = 0;
-            MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            waveDrawer.Begin();
             foreach (Note n in notes)
             {
                 if (n.impactTick < 0)
                 {
                     continue;
                 }
-                float a = (vt - n.impactTick) / 60f;
-                if (a < 0f || a > FlowerBellWave.LifeSeconds)
-                {
-                    continue;
-                }
-                float e = FlowerBellWave.Expansion(a);
-                float r = n.waveRadius * e;
-                float fade = FlowerBellWave.Fade(a);
-                if (r < 0.02f || fade <= 0f)
-                {
-                    continue;
-                }
-                FlowerBellWave.Shape(e, out float kappa, out float cut);
-                Mesh mesh = MeshAt(waveMeshes, used);
-                BuildBox(mesh, n.waveCentre, r, kappa, y);
-                Color glow = Saturate(n.color, WaveSaturation);
-                Color core = Mix(White, glow, 0.65f);
-                block.Clear();
-                block.SetVector(WaveId, new Vector4(r, kappa, cut, WaveAlpha * fade));
-                block.SetVector(ShellId, new Vector4(ShellThickness, ShellCap, ShellBack, ShellGain));
-                // The ground line: core blur 0.8 px (drawn at 1.2 px, energy kept) and a 3.5 px halo, at 60 px a cell.
-                block.SetVector(FootId, new Vector4(0.02f, 0.53f, 0.058f, 0.164f));
-                block.SetColor(GlowId, glow);
-                block.SetColor(CoreId, core);
-                block.SetFloat(FadePowId, 1f);
-                ScreenBloom.Submit(Bloom, mesh, Matrix4x4.identity, waveMat, block);
-                Graphics.DrawMesh(mesh, Matrix4x4.identity, waveMat, 0, null, 0, block);
-
-                if (distortMat != null && screenPerCell.x > 0f)
-                {
-                    Mesh dm = MeshAt(distortMeshes, used);
-                    BuildBox(dm, n.waveCentre, r, kappa, y);
-                    block.Clear();
-                    block.SetVector(WaveId, new Vector4(r, kappa, cut, DistortCells * fade));
-                    block.SetVector(DistortScaleId, screenPerCell);
-                    Graphics.DrawMesh(dm, Matrix4x4.identity, distortMat, 0, null, 0, block);
-                }
-                block.Clear();
-                used++;
+                waveDrawer.Draw(n.waveCentre, n.waveRadius, n.color, (vt - n.impactTick) / 60f, FlowerBellWave.RingSeconds);
             }
-        }
-
-        private static Material MatFor(string shaderDef)
-        {
-            Shader shader = DefDatabase<ShaderDef>.GetNamedSilentFail(shaderDef)?.Shader;
-            if (shader == null)
-            {
-                Log.ErrorOnce($"[MiliraXian] Flower Bell: missing shader '{shaderDef}'.", GenText.StableStringHash(shaderDef));
-                return null;
-            }
-            return MaterialPool.MatFrom(BaseContent.WhiteTex, shader, Color.white);
-        }
-
-        private static Mesh MeshAt(List<Mesh> pool, int i)
-        {
-            while (pool.Count <= i)
-            {
-                pool.Add(MapComponent_SakuraDanceVisuals.NewMesh());
-            }
-            return pool[i];
-        }
-
-        /// <summary>A quad over the dome; the uv is the map offset from the centre in cells.</summary>
-        private static void BuildBox(Mesh mesh, Vector3 c, float r, float kappa, float y)
-        {
-            const float pad = 0.2f;
-            Vector2 lo = new(-r - pad, -r - pad);
-            Vector2 hi = new(r + pad, r * Mathf.Sqrt(1f + kappa * kappa) + pad);
-            Color w = Color.white;
-            MapComponent_QingheVfx.ClearBuffers();
-            MapComponent_QingheVfx.AddVertex(new Vector3(c.x + lo.x, y, c.z + lo.y), new Vector2(lo.x, lo.y), w);
-            MapComponent_QingheVfx.AddVertex(new Vector3(c.x + lo.x, y, c.z + hi.y), new Vector2(lo.x, hi.y), w);
-            MapComponent_QingheVfx.AddVertex(new Vector3(c.x + hi.x, y, c.z + hi.y), new Vector2(hi.x, hi.y), w);
-            MapComponent_QingheVfx.AddVertex(new Vector3(c.x + hi.x, y, c.z + lo.y), new Vector2(hi.x, lo.y), w);
-            MapComponent_QingheVfx.AddTriangle(0, 1, 2);
-            MapComponent_QingheVfx.AddTriangle(0, 2, 3);
-            MapComponent_QingheVfx.Upload(mesh);
         }
     }
 }

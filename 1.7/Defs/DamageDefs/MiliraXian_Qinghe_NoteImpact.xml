@@ -6,12 +6,10 @@
     <externalViolence>true</externalViolence>
     <armorCategory>Sharp</armorCategory>
     <isRanged>true</isRanged>
-    <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.DamageWorker_FlowerBellExplosion</workerClass>
+    <!-- 铃音和冰霜弹都只在扩张环里出伤（SweepDamage），伤害走 DamageWorker_AddInjury 写入伤口与 PsychicInjury。 -->
+    <workerClass>DamageWorker_AddInjury</workerClass>
     <deathMessage>{0}被花信铃带有灵力的声音击倒了。</deathMessage>
     <hediff>PsychicInjury</hediff>
-    <explosionCellFleck>BlastEMP</explosionCellFleck>
-    <explosionColorCenter>(0.95, 0.78, 1.00, 0.85)</explosionColorCenter>
-    <explosionColorEdge>(0.85, 0.30, 0.50, 0.15)</explosionColorEdge>
   </DamageDef>
   <!-- 铃音对建筑和地形的伤害：建筑不吃异常，改用共振拆墙。
        冲击波打到挡视线的东西（墙、岩石）时穿透一格，伤到墙后那一格（SweepDamageDef.pierceCells）。 -->

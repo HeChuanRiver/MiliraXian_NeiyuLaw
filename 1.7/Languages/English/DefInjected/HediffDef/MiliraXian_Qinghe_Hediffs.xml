@@ -28,6 +28,8 @@
   <MX_QH_Trickle.description>Qinghe slowly recovers from wounds over time, eventually restoring permanent injuries and missing body parts.</MX_QH_Trickle.description>
   <MX_QH_SpringFlow.label>spring flow blessing</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>Bathed in spring flow, gaining &lt;color=#FF69B4&gt;increased melee and ranged damage, reduced incoming damage, reduced pain, and immunity to Death Sentence accumulation&lt;/color&gt;.</MX_QH_SpringFlow.description>
+  <MX_QH_RainDrenched.label>drenched</MX_QH_RainDrenched.label>
+  <MX_QH_RainDrenched.description>Soaked through by the Lotus Rain, &lt;color=#7ADA9E&gt;moving at half speed&lt;/color&gt;. It takes a few moments out of the rain to dry off.</MX_QH_RainDrenched.description>
   <MX_QH_FlowingForm.label>Flowing Form</MX_QH_FlowingForm.label>
   <MX_QH_FlowingForm.description>When taking damage that could be lethal or destroy a body part, negate the hit, repair all injuries, and gain brief invulnerability and 10 seconds of psychic invisibility. Unavailable when charges are depleted.&#10;&#10;—A form like flowing water, a spirit like a gentle breeze.</MX_QH_FlowingForm.description>
   <MX_QH_FlowingFormImmunity.label>Divine Response</MX_QH_FlowingFormImmunity.label>

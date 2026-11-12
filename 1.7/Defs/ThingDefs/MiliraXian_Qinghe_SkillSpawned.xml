@@ -28,10 +28,10 @@
         <fadeOutTicks>45</fadeOutTicks>
         <ambientVisualIntervalTicks>45</ambientVisualIntervalTicks>
         <ambientVisualFlecksPerBurst>2</ambientVisualFlecksPerBurst>
-        <bleedAccumulationPerSecond>20</bleedAccumulationPerSecond>
-        <toxinAccumulationPerSecond>15</toxinAccumulationPerSecond>
-        <corrosionAccumulationPerSecond>15</corrosionAccumulationPerSecond>
-        <electricLeakAccumulationPerSecond>20</electricLeakAccumulationPerSecond>
+        <!-- 春泉弱化（2.1）：只保留春之共鸣自己的两种异常（血肉流血 / 机械漏电），
+             去掉夏的毒素与腐蚀；速率 20 → 12，让位给荷雨的 30/秒。 -->
+        <bleedAccumulationPerSecond>12</bleedAccumulationPerSecond>
+        <electricLeakAccumulationPerSecond>12</electricLeakAccumulationPerSecond>
         <fieldMoteDef>Mote_QH_SpringFlowField</fieldMoteDef>
         <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Pink</ambientSplashFleckDef>
       </li>
@@ -122,33 +122,116 @@
       <drawSize>12.0</drawSize>
     </graphicData>
   </ThingDef>
+
+  <!-- 荷雨的雨幕。墙心 = 目标格，长轴垂直于「施法者 → 目标」连线（由组件在 Init 里算）。
+       长 9、厚 3、生效 15 秒；雨在蓄力期就开始下，收尾时雨先停、地面再淡出（两段生命周期）。
+       图形由 MapComponent_QingheVfx 的自定义渲染器画，Thing 自己不画。 -->
+  <ThingDef>
+    <defName>MX_QH_SummerRainWall</defName>
+    <label>荷雨</label>
+    <thingClass>ThingWithComps</thingClass>
+    <!-- 不要设 category=Mote：ListerThings.EverListable 会把未开 drawGUIOverlay 的 Mote 排除，
+         渲染器就再也找不到这堵墙。和 SpringFlowField 一样留空即可。 -->
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <altitudeLayer>MoteLow</altitudeLayer>
+    <useHitPoints>false</useHitPoints>
+    <drawOffscreen>true</drawOffscreen>
+    <!-- 图形由 RainWallVfx 画（DontDrawParent），这里给一个合法贴图避免退化成 BadGraphic。 -->
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Mote/PsycastCast</texPath>
+      <drawSize>0.1</drawSize>
+    </graphicData>
+    <comps>
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_SummerRainWall">
+        <halfLength>7.5</halfLength>
+        <halfThickness>1.5</halfThickness>
+        <effectDurationTicks>900</effectDurationTicks>
+        <fadeInTicks>24</fadeInTicks>
+        <fadeOutTicks>54</fadeOutTicks>
+        <pulseIntervalTicks>10</pulseIntervalTicks>
+        <toxinAccumulationPerSecond>30</toxinAccumulationPerSecond>
+        <corrosionAccumulationPerSecond>30</corrosionAccumulationPerSecond>
+        <drenchedHediff>MX_QH_RainDrenched</drenchedHediff>
+        <ambientSplashFleckDef>MX_QH_GroundWaterSplash_Summer</ambientSplashFleckDef>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <FleckDef>
+    <defName>MX_QH_GroundWaterSplash_Summer</defName>
+    <fleckSystemClass>FleckSystemThrown</fleckSystemClass>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_FleckPulse</graphicClass>
+        <shaderType>Mote</shaderType>
+        <texPath>Things/Mote/GroundSplash/GroundSplashA</texPath>
+        <drawSize>(1,1)</drawSize>
+        <color>(0.72, 0.95, 0.66, 0.40)</color>
+      </li>
+      <li>
+        <graphicClass>Graphic_FleckPulse</graphicClass>
+        <shaderType>Mote</shaderType>
+        <texPath>Things/Mote/GroundSplash/GroundSplashB</texPath>
+        <drawSize>(1,1)</drawSize>
+        <color>(0.72, 0.95, 0.66, 0.40)</color>
+      </li>
+    </randomGraphics>
+    <unattachedDrawOffset>(0, 0, 0)</unattachedDrawOffset>
+    <fadeInTime>0</fadeInTime>
+    <solidTime>.3</solidTime>
+    <fadeOutTime>.35</fadeOutTime>
+    <archHeight>0</archHeight>
+    <growthRate>1</growthRate>
+    <scalingAnchor>(.5, .2, 0)</scalingAnchor>
+    <scalers>
+      <li>
+        <scaleAmt>1</scaleAmt>
+        <scaleTime>.65</scaleTime>
+        <axisMask>(1, 0, 0)</axisMask>
+        <curve>
+          <points>
+            <li>(0,0.5)</li>
+            <li>(0.16,0.2971286)</li>
+            <li>(1,0)</li>
+          </points>
+        </curve>
+      </li>
+    </scalers>
+  </FleckDef>
+  <!-- 霜月镜的反击霜弹：一枚小雪花，被弹开时迅速射出。贴图借用冰异常的图标。
+       弹速 60（0.6 格/tick）介于铃音 15 与原版步枪 70 之间，比原来的 36 明显更快，
+       近乎直线（arcHeightFactor 0.02），尾迹短而细，观感是被快速反弹出去而不是缓缓飘出。 -->
   <ThingDef ParentName="BaseBullet">
     <defName>MX_Bullet_QH_LunarMirrorRetaliation</defName>
     <label>霜寒</label>
     <thingClass>MiliraXian.Characters.QingHe.Things.Projectiles.Projectile_LunarMirrorRetaliation</thingClass>
     <graphicData>
-      <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_freeze</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>(0.30,0.86)</drawSize>
+      <drawSize>(0.40,0.40)</drawSize>
       <shaderType>TransparentPostLight</shaderType>
-      <color>(170,225,255)</color>
+      <color>(0.88,0.96,1.00)</color>
     </graphicData>
     <projectile>
       <damageDef>MX_QH_NoteImpact</damageDef>
       <damageAmountBase>8</damageAmountBase>
       <armorPenetrationBase>1.50</armorPenetrationBase>
-      <speed>36</speed>
-      <arcHeightFactor>0.05</arcHeightFactor>
+      <speed>60</speed>
+      <arcHeightFactor>0.02</arcHeightFactor>
+      <spinRate>2.5</spinRate>
     </projectile>
     <comps>
       <li Class="MiliraXian.Characters.Common.CompProperties_ProjectileContinuousTrail">
         <trailTexPath>UI/Overlays/ThingLine</trailTexPath>
-        <trailMaxPoints>18</trailMaxPoints>
-        <trailMinPointDistance>0.10</trailMinPointDistance>
+        <trailMaxPoints>6</trailMaxPoints>
+        <trailMinPointDistance>0.25</trailMinPointDistance>
         <trailSmoothSubdivisions>4</trailSmoothSubdivisions>
-        <trailWidthStart>0.14</trailWidthStart>
-        <trailWidthEnd>0.04</trailWidthEnd>
-        <trailAlpha>0.75</trailAlpha>
+        <trailWidthStart>0.12</trailWidthStart>
+        <trailWidthEnd>0.02</trailWidthEnd>
+        <trailAlpha>0.55</trailAlpha>
         <trailAltitudeOffset>0.65</trailAltitudeOffset>
         <useProjectileGraphicColor>true</useProjectileGraphicColor>
       </li>

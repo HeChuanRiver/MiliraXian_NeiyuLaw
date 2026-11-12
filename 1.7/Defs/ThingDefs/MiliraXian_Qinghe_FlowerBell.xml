@@ -186,6 +186,21 @@
     <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.SweepDamageWorker_FlowerBell</workerClass>
   </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
 
+  <!-- 冰霜弹的冲击波：和铃音同一套扩张环与绘制，但更小更快（半径 1.0、0.5 秒扩到满，见 FlowerBellWave.Frost*）。
+       半径和扩散时间写在 Projectile_LunarMirrorRetaliation，这里只管谁能被打到、伤害类型和异常。 -->
+  <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+    <defName>MX_QH_FrostRetaliationWave</defName>
+    <damageDef>MX_QH_NoteImpact</damageDef>
+    <targetFaction>Hostile</targetFaction>
+    <hitPawns>true</hitPawns>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+    <skipDowned>true</skipDowned>
+    <damageDelayTicks>0</damageDelayTicks>
+    <!-- 命中叠寒冷：读弹体 def 上的 CompProperties_FlowerBellStatusOnHit，和铃音同一个 worker -->
+    <workerClass>MiliraXian.Characters.QingHe.Things.Projectiles.SweepDamageWorker_FlowerBell</workerClass>
+  </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
+
   <ThingDef ParentName="MX_QH_BaseFlowerBellBullet">
     <defName>MX_Bullet_Qinghe_FlowerBell_None</defName>
     <label>铃音</label>

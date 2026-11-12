@@ -1,14 +1,23 @@
-﻿using MiliraXian.Characters;
-using MiliraXian.Characters.QingHe;
+using MiliraXian.Characters.Common.SweepDamage;
 using RimWorld;
 using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Things.Projectiles
 {
+    /// <summary>
+    /// The frost retaliation of the Lunar Mirror: a small snowflake answered at a projectile. On
+    /// impact it opens the same shock wave a bell note does (see <see cref="FlowerBellWave"/>), only
+    /// smaller and quicker, and the ring that deals the damage is the ring that is drawn.
+    /// </summary>
     public class Projectile_LunarMirrorRetaliation : Bullet
     {
-        private const float ExplosionRadius = 1f;
+        private const string SweepDefName = "MX_QH_FrostRetaliationWave";
+
+        private static SweepDamageDef sweepDef;
+
+        /// <summary>Full radius of this wave (the def's <c>MX_QH_FrostRetaliationWave</c> owns the damage).</summary>
+        public const float WaveRadius = FlowerBellWave.FrostRadius;
 
         protected override void Impact(Thing hitThing, bool blockedByShield = false)
         {
@@ -17,46 +26,42 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
 
             if (map != null && !blockedByShield)
             {
-                IntVec3 center = impactPos.ToIntVec3();
-                if (!center.InBounds(map))
+                // The wave stands on the ground under the snowflake; a struck pawn's feet are where
+                // the picture and the damage agree.
+                Vector3 waveCentre = impactPos.Yto0();
+                if (hitThing is Pawn pawn && pawn.Spawned)
                 {
-                    center = Position;
+                    waveCentre = pawn.DrawPos.Yto0() + Vector3.back * PawnFootOffset;
                 }
 
-                GenExplosion.DoExplosion(
-                    center,
-                    map,
-                    ExplosionRadius,
-                    DamageDef,
-                    launcher,
-                    Mathf.RoundToInt(DamageAmount * MX_QH_PerkUtility.GetSpellEffectFactor(launcher as Pawn)),
-                    ArmorPenetration,
-                    null,
-                    equipmentDef,
-                    def,
-                    hitThing,
-                    null,
-                    0f,
-                    1,
-                    null,
-                    null,
-                    255,
-                    applyDamageToExplosionCellsNeighbors: false,
-                    null,
-                    0f,
-                    1,
-                    chanceToStartFire: 0f,
-                    damageFalloff: false,
-                    ExactRotation.eulerAngles.y,
-                    null,
-                    null,
-                    doVisualEffects: true,
-                    propagationSpeed: 1f,
-                    excludeRadius: 0f,
-                    doSoundEffects: false);
+                sweepDef ??= DefDatabase<SweepDamageDef>.GetNamedSilentFail(SweepDefName);
+                if (sweepDef != null)
+                {
+                    int now = Find.TickManager.TicksGame;
+                    MapComponent_SweepDamage.AddRing(map, new ExpandingRingDamage
+                    {
+                        def = sweepDef,
+                        caster = launcher as Pawn,
+                        weaponDef = equipmentDef,
+                        damageDef = DamageDef,
+                        projectileDef = def,
+                        center = waveCentre,
+                        damage = DamageAmount * MX_QH_PerkUtility.GetSpellEffectFactor(launcher as Pawn),
+                        armorPenetration = ArmorPenetration,
+                        startTick = now,
+                        radii = FlowerBellWave.Radii(WaveRadius, FlowerBellWave.FrostRingSeconds),
+                        guaranteedTarget = hitThing,
+                        // The attacked thing is hit whatever its side, as with the notes.
+                        primaryTarget = intendedTarget.Thing,
+                    });
+                    FrostRetaliationVfx.Notify(map, waveCentre, WaveRadius, now);
+                }
             }
 
             base.Impact(null, blockedByShield);
         }
+
+        /// <summary>A pawn's drawn centre to the ground under it.</summary>
+        private const float PawnFootOffset = 0.3f;
     }
 }
