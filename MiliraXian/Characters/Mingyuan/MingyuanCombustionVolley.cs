@@ -42,14 +42,13 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
 
 public sealed class Thing_MingyuanCombustionVolley : Thing
 {
-    internal const int RingFadeTicks = 22;
-
     private Pawn caster;
     private AbilityDef ability;
     private CompProperties_AbilityMingyuanInstantCombustion props;
     private List<IntVec3> landings;
     private int startTick;
     private int nextImpact;
+    private MingyuanCombustionVfx visual;
 
     private CompProperties_AbilityMingyuanInstantCombustion Props => props ??=
         caster?.abilities?.GetAbility(ability)?.CompOfType<CompAbilityEffect_MingyuanInstantCombustion>()?.Props;
@@ -103,15 +102,6 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         }
 
         int elapsed = Find.TickManager.TicksGame - startTick;
-        int burstOffset = settings.smallFlightTicks * 2 / 3;
-        int burstElapsed = elapsed - burstOffset;
-        if (settings.smallFlightTicks > 1 && settings.shotIntervalTicks > 0
-            && burstElapsed >= 0 && burstElapsed % settings.shotIntervalTicks == 0)
-        {
-            int index = burstElapsed / settings.shotIntervalTicks;
-            if (index < landings.Count)
-                MingyuanFireVfx.PlayCombustionAirburst(Position, landings[index], Map, burstOffset / (float)settings.smallFlightTicks);
-        }
         while (nextImpact < landings.Count && elapsed >= settings.SmallImpactAt(nextImpact) && CasterCanSustain)
             Explode(landings[nextImpact++], settings.smallFireball);
 
@@ -122,13 +112,14 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
             Explode(Position, settings.coreFireball);
         }
 
-        if (elapsed >= coreImpact + RingFadeTicks) Destroy();
+        if (elapsed >= coreImpact + Mathf.Max(MingyuanCombustionVfx.Tuning.coreRemnantTicks,
+            MingyuanCombustionVfx.Tuning.smallRemnantTicks)) Destroy();
     }
 
     private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball)
     {
         if (fireball == null || !cell.InBounds(Map)) return;
-        DamageWorker_MingyuanCombustionVisual.Play(cell, Map, fireball.radius);
+        DamageWorker_MingyuanCombustionVisual.PlayImpact(cell, Map, fireball.radius);
         if (cell.Impassable(Map)) return;
 
         new AreaDamageBurst
@@ -144,8 +135,10 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
     protected override void DrawAt(Vector3 drawLoc, bool flip = false)
     {
         if (Props is { } settings && landings is { Count: > 0 } && CasterCanSustain)
-            MingyuanFireVfx.DrawCombustionVolley(Position.ToVector3Shifted(), settings, landings,
-                VisualClock.TicksSince(startTick), nextImpact);
+        {
+            visual ??= new MingyuanCombustionVfx(Position, landings, settings, caster.thingIDNumber);
+            visual.Draw(VisualClock.TicksSince(startTick), nextImpact);
+        }
     }
 
     public override void ExposeData()

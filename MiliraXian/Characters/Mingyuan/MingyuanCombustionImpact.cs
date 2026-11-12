@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
@@ -8,6 +9,19 @@ namespace MiliraXian.Characters.Mingyuan;
 
 public sealed class DamageWorker_MingyuanCombustionVisual : DamageWorker
 {
+    internal static void PlayImpact(IntVec3 cell, Map map, float radius)
+    {
+        try
+        {
+            if (MingyuanCombustionVfx.NeedsFallback) Play(cell, map, radius);
+            else DamageDefOf.Flame.soundExplosion.PlayOneShot(new TargetInfo(cell, map));
+        }
+        catch (Exception ex)
+        {
+            Log.ErrorOnce("[明渊瞬时燃烧] 撞击音画播放失败。" + ex, 197633804);
+        }
+    }
+
     // The volley applies its own damage and Life Burn with hostile-only targeting.
     protected override void ExplosionDamageThing(Explosion explosion, Thing thing, List<Thing> damagedThings,
         List<Thing> ignoredThings, IntVec3 cell)
