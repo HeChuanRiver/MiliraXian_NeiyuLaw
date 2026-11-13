@@ -2,7 +2,7 @@
 <Defs>
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionVfxDef>
     <defName>MX_Mingyuan_CombustionVfx</defName>
-    <smallSize>2.4</smallSize>
+    <smallSize>3.6</smallSize>
     <coreSize>8.4</coreSize>
     <height>12.5</height>
     <trailWidth>1.02</trailWidth>

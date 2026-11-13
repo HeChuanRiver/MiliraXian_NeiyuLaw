@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.Sound;
 
@@ -13,8 +14,26 @@ public sealed class DamageWorker_MingyuanCombustionVisual : DamageWorker
     {
         try
         {
-            if (MingyuanCombustionVfx.NeedsFallback) Play(cell, map, radius);
-            else DamageDefOf.Flame.soundExplosion.PlayOneShot(new TargetInfo(cell, map));
+            if (MingyuanCombustionVfx.NeedsFallback)
+            {
+                Play(cell, map, radius);
+                return;
+            }
+
+            DamageDef flame = DamageDefOf.Flame;
+            flame.soundExplosion.PlayOneShot(new TargetInfo(cell, map));
+            if (!cell.ShouldSpawnMotesAt(map)) return;
+            Rand.PushState();
+            try
+            {
+                FleckMaker.Static(cell, map, FleckDefOf.ExplosionFlash, Mathf.Clamp(radius * 1.8f, 2.6f, 10f));
+                if (flame.explosionCellFleck is { } blast)
+                    FleckMaker.ThrowExplosionCell(cell, map, blast, flame.explosionColorCenter);
+            }
+            finally
+            {
+                Rand.PopState();
+            }
         }
         catch (Exception ex)
         {

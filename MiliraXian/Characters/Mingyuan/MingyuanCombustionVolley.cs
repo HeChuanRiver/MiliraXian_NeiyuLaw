@@ -33,9 +33,15 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
             MingyuanUtility.SuppressOnHitLifeBurn = previous;
         }
 
-        if (result is { totalDamageDealt: > 0f } && target is Pawn { Dead: false } pawn
-            && def is MingyuanCombustionFireballDef fireball)
-            MingyuanUtility.AddLifeBurnFraction(pawn, source.caster, fireball.lifeBurnFraction, scaleWithOverburn: true);
+        if (result is { totalDamageDealt: > 0f } && target is Pawn pawn)
+        {
+            if (!pawn.Dead && def is MingyuanCombustionFireballDef fireball)
+                MingyuanUtility.AddLifeBurnFraction(pawn, source.caster, fireball.lifeBurnFraction, scaleWithOverburn: true);
+
+            var entry = new BattleLogEntry_ExplosionImpact(source.caster, pawn, dinfo.Weapon, null, dinfo.Def);
+            Find.BattleLog.Add(entry);
+            result.AssociateWithLog(entry);
+        }
         return result;
     }
 }
@@ -89,7 +95,10 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         }
 
         landings = new List<IntVec3>(props.smallFireballCount);
-        for (int i = 0; i < props.smallFireballCount; i++)
+        if (!center.Impassable(map))
+            landings.Add(center);
+        int scatterCount = props.smallFireballCount - landings.Count;
+        for (int i = 0; i < scatterCount; i++)
             landings.Add(candidates[i % candidates.Count]);
     }
 
@@ -119,18 +128,27 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
 
     private void Explode(IntVec3 cell, MingyuanCombustionFireballDef fireball)
     {
-        if (fireball == null || !cell.InBounds(Map)) return;
-        DamageWorker_MingyuanCombustionVisual.PlayImpact(cell, Map, fireball.radius);
-        if (cell.Impassable(Map)) return;
+        Map map = Map;
+        if (fireball == null || !cell.InBounds(map)) return;
 
-        new AreaDamageBurst
+        try
         {
-            def = fireball,
-            caster = caster,
-            center = cell.ToVector3Shifted(),
-            radius = fireball.radius,
-            damage = fireball.damage,
-        }.Fire(Map);
+            if (!cell.Impassable(map))
+            {
+                new AreaDamageBurst
+                {
+                    def = fireball,
+                    caster = caster,
+                    center = cell.ToVector3Shifted(),
+                    radius = fireball.radius,
+                    damage = fireball.damage,
+                }.Fire(map);
+            }
+        }
+        finally
+        {
+            DamageWorker_MingyuanCombustionVisual.PlayImpact(cell, map, fireball.radius);
+        }
     }
 
     protected override void DrawAt(Vector3 drawLoc, bool flip = false)
@@ -138,7 +156,7 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         if (Props is { } settings && landings is { Count: > 0 } && CasterCanSustain)
         {
             visual ??= new MingyuanCombustionVfx(Position, landings, settings, caster.thingIDNumber);
-            visual.Draw(VisualClock.TicksSince(startTick), nextImpact);
+            visual.Draw(Map, VisualClock.TicksSince(startTick), nextImpact);
         }
     }
 

@@ -9,7 +9,7 @@ namespace MiliraXian.Characters.Mingyuan;
 
 public sealed class MingyuanCombustionVfxDef : Def
 {
-    public float smallSize = 2.4f;
+    public float smallSize = 3.6f;
     public float coreSize = 8.4f;
     public float height = 12.5f;
     public float trailWidth = 1.02f;
@@ -21,24 +21,28 @@ public sealed class MingyuanCombustionVfxDef : Def
 }
 
 // One cache per saved volley. Everything is derived from its authoritative schedule and impact cursor.
+[StaticConstructorOnStartup]
 internal sealed class MingyuanCombustionVfx
 {
     private enum ParticleMotion { Inflow, Impact, Wake, Corona }
     private const float CoreLaunchScale = 1.14f;
+    private const int WarningLeadTicks = 16;
 
     private readonly struct Fireball
     {
-        internal readonly Vector3 Landing;
+        internal readonly IntVec3 Cell;
+        internal Vector3 Landing => Cell.ToVector3Shifted();
         internal readonly int Launch, Impact;
-        internal readonly float Seed, Size;
+        internal readonly float Seed, Size, Radius;
 
-        internal Fireball(IntVec3 cell, int launch, int impact, float seed, float size)
+        internal Fireball(IntVec3 cell, int launch, int impact, float seed, float size, float radius)
         {
-            Landing = cell.ToVector3Shifted();
+            Cell = cell;
             Launch = launch;
             Impact = impact;
             Seed = seed;
             Size = size;
+            Radius = radius;
         }
     }
 
@@ -56,19 +60,22 @@ internal sealed class MingyuanCombustionVfx
         balls = new Fireball[landings.Count + 1];
         for (int i = 0; i < landings.Count; i++)
             balls[i] = new Fireball(landings[i], props.SmallLaunchAt(i), props.SmallImpactAt(i),
-                seed + i * 13.71f, Tuning.smallSize * (0.86f + 0.28f * Hash(seed + i)));
+                seed + i * 13.71f, Tuning.smallSize * (0.86f + 0.28f * Hash(seed + i)), props.smallFireball.radius);
         balls[^1] = new Fireball(cell, props.CoreLaunchAt(landings.Count), props.CoreImpactAt(landings.Count),
-            seed + 91.3f, Tuning.coreSize);
+            seed + 91.3f, Tuning.coreSize, props.coreFireball.radius);
     }
 
     internal static MingyuanCombustionVfxDef Tuning =>
         DefDatabase<MingyuanCombustionVfxDef>.GetNamed("MX_Mingyuan_CombustionVfx");
 
-    internal void Draw(float elapsed, int settled)
+    internal void Draw(Map map, float elapsed, int settled)
     {
         if (!Visible(center, Mathf.Max(settings.Radius * 2.4f, Tuning.height + Tuning.coreSize * 1.4f))) return;
         try
         {
+            for (int i = settled; i < balls.Length; i++)
+                DrawLandingWarning(map, balls[i], elapsed);
+
             EnsureResources();
             float time = elapsed / 60f;
             Fireball core = balls[^1];
@@ -82,8 +89,8 @@ internal sealed class MingyuanCombustionVfx
                 bool finisher = i == balls.Length - 1;
                 if (i < settled)
                 {
-                    Impact(ball.Landing, elapsed - ball.Impact, finisher, ball.Seed,
-                        finisher ? settings.coreFireball.radius : settings.smallFireball.radius);
+                    // A settled hit can appear before the interpolated clock catches up to its tick.
+                    Impact(ball.Landing, Mathf.Max(0f, elapsed - ball.Impact), finisher, ball.Seed, ball.Radius);
                     continue;
                 }
                 if (elapsed < ball.Launch)
@@ -107,6 +114,21 @@ internal sealed class MingyuanCombustionVfx
             failed = true;
             Log.ErrorOnce("[明渊瞬时燃烧] 视觉绘制失败，切换简化显示。" + ex, 197633801);
         }
+    }
+
+    private static void DrawLandingWarning(Map map, Fireball ball, float elapsed)
+    {
+        float warningStart = ball.Launch - WarningLeadTicks;
+        if (elapsed < warningStart || elapsed >= ball.Impact || !Visible(ball.Landing, ball.Radius))
+            return;
+        if (ball.Cell.Impassable(map)) return;
+
+        float approach = Mathf.InverseLerp(warningStart, ball.Impact, elapsed);
+        Color color = Color.Lerp(new Color(0.97f, 0.25f, 0.08f, 0.68f),
+            new Color(1f, 0.77f, 0.30f, 1f), approach);
+        GenDraw.DrawRadiusRing(ball.Cell, ball.Radius, color, cell =>
+            cell.InBounds(map) && !cell.Fogged(map)
+            && GenSight.LineOfSight(ball.Cell, cell, map, skipFirstCell: true));
     }
 
     internal static void DrawWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion props,
@@ -306,9 +328,9 @@ internal sealed class MingyuanCombustionVfx
     {
         if (initialized) return;
         initialized = true;
-        fallback = fallbackCore = FleckDefOf.FireGlow.graphicData.Graphic.MatSingle;
         try
         {
+            fallback = fallbackCore = FleckDefOf.FireGlow.graphicData.Graphic.MatSingle;
             Shader fireShader = ThingDefOf.Fire.graphicData.shaderType.Shader;
             const string path = "MiliraXianMingyuan/Effect/InstantCombustion/";
             fallback = MaterialPool.MatFrom(path + "SmallFireball", fireShader, Color.white);
@@ -362,8 +384,10 @@ internal sealed class MingyuanCombustionVfx
         if (failed)
         {
             if (ground || mode != 0) return;
+            Material sprite = detail > 0f ? fallbackCore : fallback;
+            if (sprite == null) return;
             Block.SetColor(ShaderPropertyIDs.Color, Color.white.WithAlpha(alpha));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, detail > 0f ? fallbackCore : fallback, 0, null, 0, Block);
+            Graphics.DrawMesh(MeshPool.plane10, matrix, sprite, 0, null, 0, Block);
             return;
         }
         if (material == flame && mode == 1) time *= Tuning.trailFlowSpeed * (0.65f + progress);
