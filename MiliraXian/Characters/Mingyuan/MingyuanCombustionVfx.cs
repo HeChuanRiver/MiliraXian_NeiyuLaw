@@ -24,7 +24,7 @@ public sealed class MingyuanCombustionVfxDef : Def
 [StaticConstructorOnStartup]
 internal sealed class MingyuanCombustionVfx
 {
-    private enum ParticleMotion { Inflow, Impact, Wake, Corona }
+    private enum ParticleMotion { Inflow, Impact, Wake, Corona, PreviewOrbit }
     private const float CoreLaunchScale = 1.14f;
     private const int WarningLeadTicks = 16;
 
@@ -134,7 +134,14 @@ internal sealed class MingyuanCombustionVfx
     internal static void DrawSigilPreview(IntVec3 cell, float radius, int casterId)
     {
         EnsureResources();
-        Sigil(cell.ToVector3Shifted(), radius, 0f, 1f, 0.65f, Seed(casterId, cell));
+        // Targeting is an interface animation and can stay active while the map is paused.
+        float time = Time.realtimeSinceStartup;
+        float angle = Mathf.Repeat(time * 15f, 360f);
+        Vector3 center = cell.ToVector3Shifted();
+        float seed = Seed(casterId, IntVec3.Zero);
+        Sigil(center, radius, time, 1f, 0.65f, seed, angle: angle);
+        Particles(center, radius * 2f, time, 0f, seed, 0.68f, ParticleMotion.PreviewOrbit,
+            angle, glow: 0.055f);
     }
 
     internal static void DrawWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion props,
@@ -286,7 +293,8 @@ internal sealed class MingyuanCombustionVfx
             Particles(at, size, time, stretch, seed, alpha * 0.75f, ParticleMotion.Corona, angle, 0.11f);
     }
 
-    private static void Sigil(Vector3 at, float radius, float time, float progress, float alpha, float seed, float charge = 0f)
+    private static void Sigil(Vector3 at, float radius, float time, float progress, float alpha, float seed,
+        float charge = 0f, float angle = 0f)
     {
         if (alpha <= 0f) return;
         if (failed)
@@ -295,7 +303,7 @@ internal sealed class MingyuanCombustionVfx
             return;
         }
         float diameter = radius * (2f / 0.93f);
-        DrawLayer(sigil, MeshPool.plane10, at, 0, diameter, diameter,
+        DrawLayer(sigil, MeshPool.plane10, at, angle, diameter, diameter,
             time, progress, seed, alpha, 0, charge, 0.045f + charge * 0.035f, ground: true);
     }
 

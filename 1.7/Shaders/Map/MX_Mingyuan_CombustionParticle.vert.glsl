@@ -18,20 +18,26 @@ float hash(float x) { return fract(sin(x*127.1)*43758.5453); }
 void main() {
     float id=inUv1.x,seed=u._CombustionFrame.z;
     float rnd=hash(id+seed),mode=u._CombustionShape.x;
+    bool previewOrbit=mode==4.0;
     float life=mode==1.0?clamp(u._CombustionFrame.y/(0.30+rnd*0.70),0.0,1.0):
         fract(u._CombustionFrame.x*(0.64+rnd*0.85)+rnd);
-    float angle=id*2.399963+seed+u._CombustionFrame.x*(mode==3.0?1.9:0.28);
+    float orbitSpeed=mode==3.0?1.9:0.28;
+    if(previewOrbit) orbitSpeed=mix(-0.92,-0.64,rnd);
+    float angle=id*2.399963+seed+u._CombustionFrame.x*orbitSpeed;
     vec2 dir=vec2(cos(angle),sin(angle));
     vec2 position;
     if(mode==0.0) position=dir*(1.2-life)*0.75;
     else if(mode==1.0) position=dir*(1.0-exp(-life*4.1))*(0.25+rnd*0.36)
         +vec2(0,life*0.56-life*life*0.43);
     else if(mode==2.0) position=vec2(dir.x*life*0.35,-life*(0.35+0.48*rnd));
+    else if(previewOrbit) position=dir*(mix(0.45,0.495,rnd)+life*0.045);
     else position=dir*mix(0.36,0.67,rnd)*vec2(1.0,0.79)+dir*life*0.12;
     float width=mix(0.010,0.031,rnd)*(1.0-life);
+    if(previewOrbit) width*=0.36;
     float streak=mix(2.2,5.2,rnd)*(1.0-0.6*life);
     vec2 quad=vec2(inPosition.x*width,inPosition.z*width*streak);
     vec2 motion=mode==2.0?vec2(0.0,-1.0):(mode==3.0?vec2(-dir.y,dir.x):dir);
+    if(previewOrbit) motion=vec2(dir.y,-dir.x);
     vec2 rotated=mat2(motion.y,-motion.x,motion.x,motion.y)*quad;
     vUv=inUv0.xy;
     vLife=life;
