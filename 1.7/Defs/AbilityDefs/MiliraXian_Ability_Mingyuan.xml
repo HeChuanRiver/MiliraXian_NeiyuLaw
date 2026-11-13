@@ -62,7 +62,7 @@
         <defName>MX_Mingyuan_InstantCombustion</defName>
         <label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</label>
         <description>选定30格内的位置，跃起并蓄力3秒，在半径10格的法阵内依次落下12颗小火球，最后在阵心落下一颗大火球。
-小火球爆炸半径4.5格，造成75点基础爆炸伤害。大火球爆炸半径10格，造成150点基础爆炸伤害。爆炸受墙体阻隔，仅伤及敌人。受伤后存活的敌人分别叠加其引爆阈值2.5%和15%的生命燃烧。
+小火球爆炸半径4.5格，造成75点基础爆炸伤害。大火球爆炸半径10格，造成150点基础爆炸伤害。爆炸伤及敌对单位和各阵营建筑，墙体本身也会受伤并阻隔爆炸。受伤后存活的敌人分别叠加其引爆阈值2.5%和15%的生命燃烧。
 大火球落地后留下持续15秒的灼痕，效果与升焰疾行的灼痕相同。冷却120秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>

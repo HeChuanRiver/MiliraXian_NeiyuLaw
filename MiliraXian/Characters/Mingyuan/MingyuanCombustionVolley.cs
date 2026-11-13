@@ -17,8 +17,12 @@ public sealed class MingyuanCombustionFireballDef : SweepDamageDef
 
 public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
 {
-    public override bool CanTarget(SweepDamageSource source, Thing thing) =>
-        thing is { Spawned: true, Destroyed: false } && MingyuanUtility.IsHostilePawn(thing, source.caster, out _);
+    public override bool CanTarget(SweepDamageSource source, Thing thing)
+    {
+        if (thing is not { Spawned: true, Destroyed: false }) return false;
+        if (thing is Building) return def.hitBuildings;
+        return MingyuanUtility.IsHostilePawn(thing, source.caster, out _);
+    }
 
     protected override DamageWorker.DamageResult ApplyDamage(SweepDamageSource source, Thing target, DamageInfo dinfo)
     {

@@ -23,7 +23,7 @@
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef Name="MX_Mingyuan_CombustionFireballBase" Abstract="True">
     <workerClass>MiliraXian.Characters.Mingyuan.SweepDamageWorker_MingyuanCombustion</workerClass>
     <damageDef>Bomb</damageDef>
-    <hitBuildings>false</hitBuildings>
+    <hitBuildings>true</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
 
