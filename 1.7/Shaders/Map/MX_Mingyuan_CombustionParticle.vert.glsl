@@ -13,23 +13,28 @@ layout(set=2,binding=0) uniform MaterialUniforms {
 } u;
 layout(location=0) out vec2 vUv;
 layout(location=1) out float vLife;
+layout(location=2) flat out float vSpark;
 float hash(float x) { return fract(sin(x*127.1)*43758.5453); }
 void main() {
     float id=inUv1.x,seed=u._CombustionFrame.z;
     float rnd=hash(id+seed),mode=u._CombustionShape.x;
-    float life=mode==1.0?u._CombustionFrame.y/(0.35+rnd*0.65):
-        fract(u._CombustionFrame.x*(0.6+rnd*0.7)+rnd);
-    float angle=id*2.399963+seed;
+    float life=mode==1.0?clamp(u._CombustionFrame.y/(0.30+rnd*0.70),0.0,1.0):
+        fract(u._CombustionFrame.x*(0.64+rnd*0.85)+rnd);
+    float angle=id*2.399963+seed+u._CombustionFrame.x*(mode==3.0?1.9:0.28);
     vec2 dir=vec2(cos(angle),sin(angle));
     vec2 position;
-    if(mode==0.0) position=dir*(1.2-life)*0.8;
-    else if(mode==1.0) position=dir*(1.0-exp(-life*3.5))*(0.3+rnd*0.6)
-        +vec2(0,life*0.65-life*life*0.55);
-    else position=vec2(dir.x*life*0.4,life*0.8);
-    float width=(0.014+rnd*0.023)*(1.0-clamp(life,0.0,1.0));
-    vec2 quad=vec2(inPosition.x*width,inPosition.z*width*(2.0+rnd*4.0));
-    vec2 rotated=mat2(dir.x,dir.y,-dir.y,dir.x)*quad;
+    if(mode==0.0) position=dir*(1.2-life)*0.75;
+    else if(mode==1.0) position=dir*(1.0-exp(-life*4.1))*(0.25+rnd*0.36)
+        +vec2(0,life*0.56-life*life*0.43);
+    else if(mode==2.0) position=vec2(dir.x*life*0.35,-life*(0.35+0.48*rnd));
+    else position=dir*mix(0.36,0.67,rnd)*vec2(1.0,0.79)+dir*life*0.12;
+    float width=mix(0.010,0.031,rnd)*(1.0-life);
+    float streak=mix(2.2,5.2,rnd)*(1.0-0.6*life);
+    vec2 quad=vec2(inPosition.x*width,inPosition.z*width*streak);
+    vec2 motion=mode==2.0?vec2(0.0,-1.0):(mode==3.0?vec2(-dir.y,dir.x):dir);
+    vec2 rotated=mat2(motion.y,-motion.x,motion.x,motion.y)*quad;
     vUv=inUv0.xy;
     vLife=life;
+    vSpark=rnd;
     gl_Position=camera.ViewProj*push.modelMatrix*vec4(position.x+rotated.x,0,position.y+rotated.y,1);
 }

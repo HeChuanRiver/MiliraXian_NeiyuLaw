@@ -31,31 +31,36 @@ void main() {
     vec2 p=vUv*2.0-1.0;
     float t=u._CombustionFrame.x,seed=u._CombustionFrame.z;
     float mode=u._CombustionShape.x,core=u._CombustionShape.y;
-    float angle=atan(p.y,p.x);
     float r=length(p);
+    float along=mode<1.5?1.0-vUv.y:vUv.y;
     float spin=t*(0.65+core*0.45)+r*(1.3+core*1.7);
     vec2 swirl=mat2(cos(spin),sin(spin),-sin(spin),cos(spin))*p;
-    vec2 flow=mode<0.5?swirl:vec2(p.x,p.y-t*1.7);
+    vec2 flow=mode<0.5?swirl:vec2(p.x,along*2.0-t*1.7);
     vec2 warp=vec2(noise(flow*2.3+seed+t*0.33),
         noise(flow*2.3-seed-t*0.29))-0.5;
     float fuel=fbm(flow*3.3+warp*1.5+vec2(seed,-t*0.8));
     float fine=noise(flow*7.0+warp+seed-t);
     float distance,heat;
     if(mode<0.5) {
-        // Polar flow breaks the solar crown while preserving a compact, textured core.
-        float crown=noise(vec2(angle*3.2+seed,r*2.0-t*1.4));
-        float boundary=0.65+(fuel-0.43)*0.32+(crown-0.5)*0.17*core;
+        // Sample around a circle so the crown has no seam at the angle wrap.
+        vec2 radial=p/max(r,0.001);
+        float crown=noise(radial*(4.4+r*1.5)+warp*1.2+vec2(seed,t*1.6));
+        float tongue=smoothstep(0.43,0.88,crown+0.12*fine);
+        float boundary=min(0.92,0.61+(fuel-0.43)*0.31+tongue*(0.18+0.16*core));
         distance=r-boundary;
-        heat=clamp((boundary-r)*1.45+fuel*0.65+fine*0.11,0.0,1.0);
-        heat=mix(heat,0.81+fuel*0.15,1.0-smoothstep(0.08,0.24,r));
+        float seams=1.0-smoothstep(0.05,0.17,abs(fuel-0.46));
+        float surface=pow(max(0.0,1.0-r/boundary),0.62);
+        heat=clamp(surface*0.64+fuel*0.44+fine*0.13+seams*0.11,0.0,1.0);
+        heat=mix(heat,0.84+fuel*0.15,1.0-smoothstep(0.09,0.31,r));
     } else {
         // Two intertwined streams taper into an eroded tail.
-        float along=mode<1.5?1.0-vUv.y:vUv.y;
-        float width=mix(0.56,0.02,pow(along,0.75));
+        float width=mix(0.62+0.06*core,0.02,pow(along,0.78));
         float bend=(fuel-0.42)*0.45+sin(along*7.0-t*3.0+seed)*0.07;
-        distance=abs(p.x+bend)-width-(fuel-0.46)*0.32;
+        float stream=abs(p.x+bend);
+        distance=stream-width-(fuel-0.46)*0.42;
         distance=max(distance,along-0.95+(1.0-fine)*0.13);
-        heat=clamp(0.65-abs(p.x+bend)*0.6+fuel*0.50-along*0.38,0.0,1.0);
+        float filaments=1.0-smoothstep(0.03,0.18,abs(stream-width*0.39+(fine-0.5)*0.11));
+        heat=clamp(0.48-stream*0.4+fuel*0.60+filaments*0.17-along*0.36,0.0,1.0);
     }
     float aa=max(fwidth(distance)*1.3,0.009);
     float alpha=(1.0-smoothstep(-aa,aa,distance))*u._CombustionFrame.w;

@@ -36,7 +36,7 @@
 
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
     <defName>MX_Mingyuan_CombustionCoreFireball</defName>
-    <radius>3.5</radius>
+    <radius>10</radius>
     <damage>48</damage>
     <lifeBurnFraction>0.15</lifeBurnFraction>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>

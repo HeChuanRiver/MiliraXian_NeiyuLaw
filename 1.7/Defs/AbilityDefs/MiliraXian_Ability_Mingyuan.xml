@@ -61,8 +61,8 @@
     <AbilityDef>
         <defName>MX_Mingyuan_InstantCombustion</defName>
         <label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</label>
-        <description>锁定30格内敌人脚下的位置，跃起并蓄力3秒，在半径5格的法阵内依次落下12颗小火球，最后在阵心落下一颗大火球。
-小火球爆炸半径1.4格，造成12点燃烧伤害。大火球爆炸半径3.5格，造成48点燃烧伤害。仅伤及敌人。受伤后存活的敌人分别叠加其引爆阈值2.5%和15%的生命燃烧。冷却120秒。</description>
+        <description>锁定30格内敌人脚下的位置，跃起并蓄力3秒，在半径10格的法阵内依次落下12颗小火球，最后在阵心落下一颗大火球。
+小火球爆炸半径1.4格，造成12点燃烧伤害。大火球爆炸半径10格，造成48点燃烧伤害。爆炸受墙体阻隔，仅伤及敌人。受伤后存活的敌人分别叠加其引爆阈值2.5%和15%的生命燃烧。冷却120秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>110</displayOrder>
@@ -89,8 +89,6 @@
         </verbProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanInstantCombustion">
-                <radius>5</radius>
-                <landingRadius>3.5</landingRadius>
                 <jumpTicks>12</jumpTicks>
                 <smallFireballCount>12</smallFireballCount>
                 <shotIntervalTicks>8</shotIntervalTicks>

@@ -9,8 +9,6 @@ namespace MiliraXian.Characters.Mingyuan;
 
 public class CompProperties_AbilityMingyuanInstantCombustion : CompProperties_AbilityEffect
 {
-    public float radius = 5f;
-    public float landingRadius = 3.5f;
     public int jumpTicks = 12;
     public int smallFireballCount = 12;
     public int shotIntervalTicks = 8;
@@ -26,6 +24,9 @@ public class CompProperties_AbilityMingyuanInstantCombustion : CompProperties_Ab
     public CompProperties_AbilityMingyuanInstantCombustion() =>
         compClass = typeof(CompAbilityEffect_MingyuanInstantCombustion);
 
+    internal float Radius => coreFireball?.radius ?? 0f;
+    internal float LandingRadius => Radius - (smallFireball?.radius ?? 0f);
+
     internal int SmallLaunchAt(int index) => index * shotIntervalTicks;
     internal int SmallImpactAt(int index) => SmallLaunchAt(index) + smallFlightTicks;
     internal int CoreLaunchAt(int count) => SmallImpactAt(count - 1) + finisherDelayTicks;
@@ -36,7 +37,7 @@ public class CompProperties_AbilityMingyuanInstantCombustion : CompProperties_Ab
         foreach (string error in base.ConfigErrors(parentDef)) yield return error;
         if (smallFireball == null || coreFireball == null)
             yield return "瞬时燃烧必须指定大小火球的爆炸定义。";
-        if (!(radius > 0f && landingRadius > 0f && landingRadius <= radius)
+        if (!(Radius < GenRadial.MaxRadialPatternRadius && smallFireball?.radius > 0f && LandingRadius > 0f)
             || smallFireballCount < 1 || shotIntervalTicks < 1 || smallFlightTicks < 1
             || finisherDelayTicks < 0 || coreFlightTicks < 1)
             yield return "瞬时燃烧的法阵范围或火球时序无效。";
@@ -59,7 +60,7 @@ public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect_Min
     public override void DrawEffectPreview(LocalTargetInfo target)
     {
         if (Valid(target))
-            GenDraw.DrawRadiusRing(target.Cell, Props.radius, new Color(1f, 0.63f, 0.22f, 0.64f));
+            GenDraw.DrawRadiusRing(target.Cell, Props.Radius, new Color(1f, 0.63f, 0.22f, 0.64f));
     }
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)

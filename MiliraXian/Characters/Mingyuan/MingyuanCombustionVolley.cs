@@ -66,7 +66,8 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
 
         Map map = source.Map;
         var candidates = new List<IntVec3>();
-        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, props.landingRadius, useCenter: false))
+        // The small explosions fit inside the same circle as the finisher.
+        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, props.LandingRadius, useCenter: false))
         {
             if (cell.InBounds(map) && !cell.Impassable(map)) candidates.Add(cell);
         }

@@ -2,15 +2,15 @@
 <Defs>
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionVfxDef>
     <defName>MX_Mingyuan_CombustionVfx</defName>
-    <smallSize>1.25</smallSize>
-    <coreSize>3.2</coreSize>
-    <height>4.5</height>
-    <trailWidth>0.85</trailWidth>
-    <trailDistortion>0.10</trailDistortion>
-    <trailFlowSpeed>1.3</trailFlowSpeed>
+    <smallSize>2.4</smallSize>
+    <coreSize>8.4</coreSize>
+    <height>12.5</height>
+    <trailWidth>1.02</trailWidth>
+    <trailDistortion>0.13</trailDistortion>
+    <trailFlowSpeed>1.5</trailFlowSpeed>
     <smallRemnantTicks>52</smallRemnantTicks>
-    <coreRemnantTicks>110</coreRemnantTicks>
-    <bloomIntensity>0.16</bloomIntensity>
+    <coreRemnantTicks>146</coreRemnantTicks>
+    <bloomIntensity>0.18</bloomIntensity>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionVfxDef>
   <ShaderDef>
     <defName>MX_Mingyuan_CombustionFlame</defName>

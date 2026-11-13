@@ -9,20 +9,23 @@ namespace MiliraXian.Characters.Mingyuan;
 
 public sealed class MingyuanCombustionVfxDef : Def
 {
-    public float smallSize = 1.25f;
-    public float coreSize = 3.2f;
-    public float height = 4.5f;
-    public float trailWidth = 0.85f;
-    public float trailDistortion = 0.10f;
-    public float trailFlowSpeed = 1.3f;
+    public float smallSize = 2.4f;
+    public float coreSize = 8.4f;
+    public float height = 12.5f;
+    public float trailWidth = 1.02f;
+    public float trailDistortion = 0.13f;
+    public float trailFlowSpeed = 1.5f;
     public int smallRemnantTicks = 52;
-    public int coreRemnantTicks = 110;
-    public float bloomIntensity = 0.16f;
+    public int coreRemnantTicks = 146;
+    public float bloomIntensity = 0.18f;
 }
 
 // One cache per saved volley. Everything is derived from its authoritative schedule and impact cursor.
 internal sealed class MingyuanCombustionVfx
 {
+    private enum ParticleMotion { Inflow, Impact, Wake, Corona }
+    private const float CoreLaunchScale = 1.14f;
+
     private readonly struct Fireball
     {
         internal readonly Vector3 Landing;
@@ -63,14 +66,15 @@ internal sealed class MingyuanCombustionVfx
 
     internal void Draw(float elapsed, int settled)
     {
-        if (!Visible(center, settings.radius + Tuning.height + 5f)) return;
+        if (!Visible(center, Mathf.Max(settings.Radius * 2.4f, Tuning.height + Tuning.coreSize * 1.4f))) return;
         try
         {
             EnsureResources();
             float time = elapsed / 60f;
             Fireball core = balls[^1];
             float fade = 1f - Mathf.InverseLerp(core.Impact, core.Impact + 22f, elapsed);
-            Sigil(center, settings.radius, time, 1f, fade * 0.64f, seed);
+            float finisherCharge = Mathf.InverseLerp(core.Launch - 24f, core.Impact, elapsed);
+            Sigil(center, settings.Radius, time, 1f, fade * 0.64f, seed, finisherCharge);
             Vector3 origin = CorePosition(center);
             for (int i = 0; i < balls.Length; i++)
             {
@@ -88,29 +92,14 @@ internal sealed class MingyuanCombustionVfx
                     Vector3 at = finisher ? origin : Vector3.Lerp(
                         Orbit(origin, i, balls.Length - 1, time, seed), origin,
                         Mathf.InverseLerp(ball.Launch - 6, ball.Launch, elapsed));
-                    Body(at, ball.Size * (finisher ? 0.8f + charge * 0.3f : 1f), time, ball.Seed, 1f, finisher);
-                    if (finisher) Particles(at, ball.Size, time, charge, ball.Seed, 0.65f, 0);
+                    float scale = finisher ? Mathf.SmoothStep(0.8f, CoreLaunchScale, charge) : 1f;
+                    Body(at, ball.Size * scale, time, ball.Seed, 1f, finisher);
+                    if (finisher)
+                        Particles(at, ball.Size * (1.55f - charge * 0.25f), time, charge, ball.Seed,
+                            0.55f + charge * 0.35f, ParticleMotion.Inflow, glow: 0.12f);
                     continue;
                 }
-                float fall = Mathf.Clamp01((elapsed - ball.Launch) / Math.Max(1f, ball.Impact - ball.Launch));
-                Vector3 head = Flight(origin, ball.Landing, fall, ball.Seed);
-                Vector3 tail = Flight(origin, ball.Landing, Mathf.Max(0f, fall - 0.36f), ball.Seed);
-                Vector3 direction = (head - tail).Yto0();
-                float angle = direction.AngleFlat();
-                float speed = Mathf.Lerp(0.25f, 1f, fall);
-                float size = ball.Size * Mathf.Lerp(0.88f, 1.12f, fall * fall);
-                DrawLayer(flame, Strip, (head + tail) * 0.5f, angle,
-                    size * Tuning.trailWidth, direction.magnitude + size * 0.65f, time, fall,
-                    ball.Seed, speed, 1, finisher ? 1f : 0f, 0.09f);
-                Body(head, size, time, ball.Seed, 1f, finisher, angle, speed);
-                DrawLayer(impact, MeshPool.plane10, ball.Landing, 0, size * (1.2f - 0.6f * fall),
-                    size * (1.2f - 0.6f * fall), time, 0.5f, ball.Seed, fall * 0.24f, 3, 0, 0, ground: true);
-                Particles(tail, size, time, fall, ball.Seed, 0.7f, 2);
-                // A short midair rupture travels with the head and never drives an impact.
-                float burst = 1f - Mathf.Clamp01(Mathf.Abs(fall - 0.68f) / 0.12f);
-                if (!finisher && burst > 0f)
-                    DrawLayer(impact, MeshPool.plane10, head, 0, size * 1.7f, size * 1.7f,
-                        time, (fall - 0.56f) / 0.24f, ball.Seed, burst * 0.55f, 0, 0, 0.07f);
+                DrawFlight(origin, ball, elapsed, time, finisher);
             }
         }
         catch (Exception ex)
@@ -123,18 +112,19 @@ internal sealed class MingyuanCombustionVfx
     internal static void DrawWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion props,
         float progress, float alpha, int casterId)
     {
-        if (!Visible(center, props.radius + Tuning.height + 5f)) return;
+        if (!Visible(center, Mathf.Max(props.Radius, Tuning.height + Tuning.coreSize * 1.4f))) return;
         try
         {
             EnsureResources();
             float seed = Seed(casterId, center.ToIntVec3());
             float time = (progress - 1f) * 3f;
-            Sigil(center, props.radius, time, Mathf.Clamp01(progress * 2.4f), alpha * 0.65f, seed);
+            Sigil(center, props.Radius, time, Mathf.Clamp01(progress * 2.4f), alpha * 0.65f, seed);
             Vector3 core = CorePosition(center);
             float growth = Mathf.InverseLerp(0.24f, 0.7f, progress);
             Body(core, Tuning.coreSize * Mathf.Lerp(0.16f, 0.8f, growth), time, seed + 91.3f,
                 alpha * growth, true);
-            Particles(core, Tuning.coreSize, time, growth, seed, alpha * growth, 0);
+            Particles(core, Tuning.coreSize * 1.45f, time, growth, seed,
+                alpha * growth * 0.68f, ParticleMotion.Inflow, glow: 0.10f);
             for (int i = 0; i < props.smallFireballCount; i++)
             {
                 float reveal = 0.34f + i * 0.40f / props.smallFireballCount;
@@ -153,6 +143,43 @@ internal sealed class MingyuanCombustionVfx
         }
     }
 
+    private static void DrawFlight(Vector3 origin, Fireball ball, float elapsed, float time, bool core)
+    {
+        float fall = Mathf.Clamp01((elapsed - ball.Launch) / Math.Max(1f, ball.Impact - ball.Launch));
+        Vector3 head = Flight(origin, ball.Landing, fall, ball.Seed);
+        Vector3 tail = Flight(origin, ball.Landing, Mathf.Max(0f, fall - (core ? 0.54f : 0.36f)), ball.Seed);
+        Vector3 direction = (head - tail).Yto0();
+        float angle = direction.sqrMagnitude > 0.001f ? direction.AngleFlat() : (ball.Landing - origin).AngleFlat();
+        float speed = Mathf.SmoothStep(0f, 1f, fall);
+        float size = ball.Size * (core ? CoreLaunchScale + 0.16f * speed : 1f + 0.12f * speed);
+
+        float projection = size * Mathf.Lerp(1.45f, 0.64f, fall);
+        DrawLayer(impact, MeshPool.plane10, ball.Landing, 0, projection, projection, time, fall, ball.Seed,
+            speed * (core ? 0.52f : 0.32f), 3, core ? 1 : 0, 0, ground: true);
+        if (speed > 0f)
+        {
+            DrawLayer(flame, Strip, (head + tail) * 0.5f, angle,
+                size * Tuning.trailWidth, direction.magnitude + size * 0.72f, time, fall,
+                ball.Seed, speed, 1, core ? 1 : 0, core ? 0.16f : 0.075f, altitudeOffset: -0.006f);
+            Particles(tail, size, time, fall, ball.Seed, speed * 0.85f, ParticleMotion.Wake, angle,
+                core ? 0.10f : 0f);
+        }
+        Body(head, size, time, ball.Seed, 1f, core, angle, speed);
+
+        if (core)
+        {
+            // Release the tension built by the converging sparks before the long dive.
+            float launchAge = elapsed - ball.Launch;
+            float release = 1f - Mathf.Clamp01(launchAge / 7f);
+            DrawLayer(impact, MeshPool.plane10, origin, angle, size * 1.25f, size * 1.25f,
+                time, fall, ball.Seed, release * 0.61f, 2, 1, 0.16f);
+        }
+        float burst = 1f - Mathf.Clamp01(Mathf.Abs(fall - 0.68f) / 0.14f);
+        if (!core && burst > 0f)
+            DrawLayer(impact, MeshPool.plane10, head, 0, size * 2.1f, size * 2.1f,
+                time, (fall - 0.54f) / 0.28f, ball.Seed, burst * 0.62f, 0, 0, 0.075f);
+    }
+
     private static void Impact(Vector3 at, float age, bool core, float seed, float radius)
     {
         if (failed) return;
@@ -160,49 +187,76 @@ internal sealed class MingyuanCombustionVfx
         if (age < 0 || age >= duration) return;
         float time = age / 60f;
         float life = age / duration;
-        float flash = 1f - Mathf.Clamp01(age / (core ? 7f : 4f));
+        float flash = 1f - Mathf.Clamp01(age / (core ? 9f : 4f));
         if (flash > 0)
             DrawLayer(impact, MeshPool.plane10, at, 0, radius * 1.2f, radius * 1.2f,
                 time, life, seed, flash * 0.94f, 2, core ? 1 : 0, 0.19f);
+        if (core)
+        {
+            float surge = 1f - Mathf.Clamp01(age / 22f);
+            float haloSize = radius * Mathf.Lerp(1.4f, 0.55f, surge);
+            DrawLayer(impact, MeshPool.plane10, at, 0, haloSize, haloSize,
+                time, life, seed, surge * 0.56f, 5, 1, 0.19f, ground: true);
+        }
         int waves = core ? 3 : 1;
         for (int i = 0; i < waves; i++)
         {
-            float wave = (age - i * 3f) / (core ? 23f + i * 9f : 18f);
+            float wave = (age - i * 4f) / (core ? 27f + i * 10f : 18f);
             if (wave < 0f || wave >= 1f) continue;
-            float size = radius * 2.5f * (1f + i * 0.12f);
+            float size = radius * (2f / 0.92f) * (1f - i * 0.16f);
             DrawLayer(impact, MeshPool.plane10, at, i * 67f, size, size, time, wave,
-                seed + i * 9.1f, (1f - wave) * (i == 2 ? 0.24f : 0.72f),
-                0, i, i == 0 ? 0.12f : 0.035f, ground: true);
+                seed + i * 9.1f, Mathf.Lerp(0.83f, 0.36f, wave) * (i == 2 ? 0.5f : 1f)
+                    * (1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.90f, 1f, wave))),
+                0, i, i == 0 ? 0.14f : 0.045f, ground: true);
         }
-        float plume = Mathf.Clamp01(age / (core ? 44f : 24f));
-        if (plume < 1f)
-        {
-            int lobes = core ? 3 : 1;
-            for (int i = 0; i < lobes; i++)
-            {
-                float side = i == 0 ? 0f : i == 1 ? -0.62f : 0.62f;
-                Vector3 position = at + new Vector3(side * radius * plume, 0f, radius * (0.35f + 0.8f * plume));
-                float size = radius * (1.6f + 0.8f * Mathf.Sin(plume * Mathf.PI));
-                DrawLayer(flame, Strip, position, -side * 26f, size, size * (core ? 1.6f : 1.1f),
-                    time, plume, seed + i * 16f, Mathf.Pow(1f - plume, 1.3f) * 0.92f,
-                    2, core ? 1 : 0, i == 0 ? 0.10f : 0.035f);
-            }
-        }
+        DrawPlumes(at, age, time, core, seed, radius);
         DrawLayer(impact, MeshPool.plane10, at, seed * 17f, radius * 2.3f, radius * 2.3f,
             time, life, seed, (1f - life) * 0.65f, 1, core ? 1 : 0, 0, ground: true);
         if (Quality > 0)
             DrawLayer(impact, MeshPool.plane10, at + Vector3.forward * life * radius, 0,
-                radius * (1f + life * 1.6f), radius * (1f + life * 1.6f),
+                radius * (0.65f + life * 1.4f), radius * (0.65f + life * 1.4f),
                 time, life, seed, Mathf.Sin(life * Mathf.PI) * 0.21f, 4, 0, 0);
-        Particles(at, radius * (core ? 1.8f : 1.4f), time, life, seed, 1f, 1);
+        Particles(at, radius * (core ? 1.7f : 1.8f), time, life, seed, 1f, ParticleMotion.Impact,
+            glow: core ? 0.16f : 0.05f);
+    }
+
+    private static void DrawPlumes(Vector3 at, float age, float time, bool core, float seed, float radius)
+    {
+        int lobes = core ? (Quality > 0 ? 5 : 3) : 1;
+        for (int i = 0; i < lobes; i++)
+        {
+            int side = i % 2 == 0 ? -(i / 2) : (i + 1) / 2;
+            float progress = (age - Math.Abs(side) * 3f) / (core ? 52f : 24f);
+            if (progress < 0f || progress >= 1f) continue;
+            float expansion = 1f - Mathf.Pow(1f - progress, 3f);
+            float angle = side * (25f + expansion * 9f);
+            Vector3 direction = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
+            float height = radius * Mathf.Lerp(0.42f, core ? 1.68f : 1.85f, expansion) / (1f + 0.32f * Math.Abs(side));
+            float width = radius * Mathf.Lerp(0.62f, core ? 0.97f : 1.45f, expansion);
+            float alpha = Mathf.SmoothStep(0f, 1f, progress * 14f) * Mathf.Pow(1f - progress, 1.45f);
+            DrawLayer(flame, Strip, at + direction * (height * 0.44f), angle, width, height,
+                time, progress, seed + i * 16f, alpha, 2, core ? 1 : 0, i == 0 ? 0.16f : 0.04f);
+        }
     }
 
     private static void Body(Vector3 at, float size, float time, float seed, float alpha,
-        bool core, float angle = 0f, float stretch = 0f) =>
+        bool core, float angle = 0f, float stretch = 0f)
+    {
+        if (alpha <= 0.001f) return;
+        if (!failed)
+        {
+            float halo = size * (core ? 1.85f : 1.65f);
+            DrawLayer(impact, MeshPool.plane10, at, angle, halo, halo * (1f + stretch * 0.22f),
+                time, stretch, seed, alpha * (core ? 0.65f : 0.38f), 5, core ? 1 : 0,
+                core ? 0.14f : 0f, altitudeOffset: -0.01f);
+        }
         DrawLayer(flame, MeshPool.plane10, at, angle, size, size * (1f + stretch * 0.18f),
             time, stretch, seed, alpha, 0, core ? 1 : 0, core ? 0.16f : 0.08f);
+        if (core)
+            Particles(at, size, time, stretch, seed, alpha * 0.75f, ParticleMotion.Corona, angle, 0.11f);
+    }
 
-    private static void Sigil(Vector3 at, float radius, float time, float progress, float alpha, float seed)
+    private static void Sigil(Vector3 at, float radius, float time, float progress, float alpha, float seed, float charge = 0f)
     {
         if (alpha <= 0f) return;
         if (failed)
@@ -210,22 +264,24 @@ internal sealed class MingyuanCombustionVfx
             GenDraw.DrawRadiusRing(at.ToIntVec3(), radius, new Color(1f, 0.55f, 0.2f, alpha * progress));
             return;
         }
-        DrawLayer(sigil, MeshPool.plane10, at, 0, radius * 2.12f, radius * 2.12f,
-            time, progress, seed, alpha, 0, 0, 0.035f, ground: true);
+        float diameter = radius * (2f / 0.93f);
+        DrawLayer(sigil, MeshPool.plane10, at, 0, diameter, diameter,
+            time, progress, seed, alpha, 0, charge, 0.045f + charge * 0.035f, ground: true);
     }
 
-    private static void Particles(Vector3 at, float size, float time, float life, float seed, float alpha, int mode)
+    private static void Particles(Vector3 at, float size, float time, float life, float seed, float alpha,
+        ParticleMotion motion, float angle = 0f, float glow = 0f)
     {
         if (failed) return;
-        DrawLayer(particle, particleMeshes[Quality], at, 0, size, size, time, life, seed,
-            alpha, mode, 0, 0);
+        DrawLayer(particle, particleMeshes[Quality], at, angle, size, size, time, life, seed,
+            alpha, (int)motion, 0, glow);
     }
 
     private static Vector3 CorePosition(Vector3 center) => center + Vector3.forward * Tuning.height;
     private static Vector3 Orbit(Vector3 center, int i, int count, float time, float seed)
     {
         float angle = i * Mathf.PI * 2f / count + time * 1.3f + seed;
-        return center + new Vector3(2.25f * Mathf.Cos(angle), 0, 1.1f * Mathf.Sin(angle));
+        return center + new Vector3(0.61f * Mathf.Cos(angle), 0, 0.32f * Mathf.Sin(angle)) * Tuning.coreSize;
     }
     private static Vector3 Flight(Vector3 from, Vector3 to, float progress, float seed) =>
         Vector3.Lerp(from, to, Mathf.Pow(progress, 2.15f))
@@ -266,7 +322,7 @@ internal sealed class MingyuanCombustionVfx
             for (int i = 0; i < 3; i++)
             {
                 strips[i] = BuildMesh(i == 0 ? 6 : i == 1 ? 10 : 16, false);
-                particleMeshes[i] = BuildMesh(i == 0 ? 12 : i == 1 ? 24 : 40, true);
+                particleMeshes[i] = BuildMesh(i == 0 ? 16 : i == 1 ? 32 : 56, true);
             }
             bloom = new ScreenBloomProperties { group = DefDatabase<ScreenBloomGroupDef>.GetNamed("MX_ScreenBloom_Glow") };
         }
@@ -296,10 +352,11 @@ internal sealed class MingyuanCombustionVfx
     }
 
     private static void DrawLayer(Material material, Mesh mesh, Vector3 at, float angle, float width, float height,
-        float time, float progress, float seed, float alpha, int mode, float detail, float glow, bool ground = false)
+        float time, float progress, float seed, float alpha, int mode, float detail, float glow,
+        bool ground = false, float altitudeOffset = 0f)
     {
-        if (alpha <= 0.001f) return;
-        at.y = (ground ? AltitudeLayer.MoteLow : AltitudeLayer.MoteOverheadLow).AltitudeFor();
+        if (alpha <= 0.001f || !Visible(at, Mathf.Max(width, height))) return;
+        at.y = (ground ? AltitudeLayer.MoteLow : AltitudeLayer.MoteOverheadLow).AltitudeFor() + altitudeOffset;
         var matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(angle, Vector3.up), new Vector3(width, 1, height));
         Block.Clear();
         if (failed)
