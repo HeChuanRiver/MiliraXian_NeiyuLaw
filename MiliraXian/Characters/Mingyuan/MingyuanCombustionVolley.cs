@@ -12,6 +12,7 @@ public sealed class MingyuanCombustionFireballDef : SweepDamageDef
     public float radius;
     public float damage;
     public float lifeBurnFraction;
+    public bool leavesScorch;
 }
 
 public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
@@ -143,6 +144,17 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
                     radius = fireball.radius,
                     damage = fireball.damage,
                 }.Fire(map);
+
+                if (fireball.leavesScorch && CasterCanSustain)
+                {
+                    var scorch = Thing_MingyuanAscendantFlameScorch.For(map, cell);
+                    foreach (IntVec3 ground in GenRadial.RadialCellsAround(cell, fireball.radius, useCenter: true))
+                    {
+                        if (ground.InBounds(map) && !ground.Impassable(map)
+                            && GenSight.LineOfSight(cell, ground, map, skipFirstCell: true))
+                            scorch.Ignite(ground, caster);
+                    }
+                }
             }
         }
         finally

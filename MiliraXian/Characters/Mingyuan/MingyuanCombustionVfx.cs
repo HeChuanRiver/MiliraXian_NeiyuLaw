@@ -33,16 +33,17 @@ internal sealed class MingyuanCombustionVfx
         internal readonly IntVec3 Cell;
         internal Vector3 Landing => Cell.ToVector3Shifted();
         internal readonly int Launch, Impact;
-        internal readonly float Seed, Size, Radius;
+        internal readonly float Seed, Size;
+        internal readonly MingyuanCombustionFireballDef Def;
 
-        internal Fireball(IntVec3 cell, int launch, int impact, float seed, float size, float radius)
+        internal Fireball(IntVec3 cell, int launch, int impact, float seed, float size, MingyuanCombustionFireballDef def)
         {
             Cell = cell;
             Launch = launch;
             Impact = impact;
             Seed = seed;
             Size = size;
-            Radius = radius;
+            Def = def;
         }
     }
 
@@ -60,9 +61,9 @@ internal sealed class MingyuanCombustionVfx
         balls = new Fireball[landings.Count + 1];
         for (int i = 0; i < landings.Count; i++)
             balls[i] = new Fireball(landings[i], props.SmallLaunchAt(i), props.SmallImpactAt(i),
-                seed + i * 13.71f, Tuning.smallSize * (0.86f + 0.28f * Hash(seed + i)), props.smallFireball.radius);
+                seed + i * 13.71f, Tuning.smallSize * (0.86f + 0.28f * Hash(seed + i)), props.smallFireball);
         balls[^1] = new Fireball(cell, props.CoreLaunchAt(landings.Count), props.CoreImpactAt(landings.Count),
-            seed + 91.3f, Tuning.coreSize, props.coreFireball.radius);
+            seed + 91.3f, Tuning.coreSize, props.coreFireball);
     }
 
     internal static MingyuanCombustionVfxDef Tuning =>
@@ -90,7 +91,7 @@ internal sealed class MingyuanCombustionVfx
                 if (i < settled)
                 {
                     // A settled hit can appear before the interpolated clock catches up to its tick.
-                    Impact(ball.Landing, Mathf.Max(0f, elapsed - ball.Impact), finisher, ball.Seed, ball.Radius);
+                    Impact(ball.Landing, Mathf.Max(0f, elapsed - ball.Impact), finisher, ball.Seed, ball.Def);
                     continue;
                 }
                 if (elapsed < ball.Launch)
@@ -119,14 +120,15 @@ internal sealed class MingyuanCombustionVfx
     private static void DrawLandingWarning(Map map, Fireball ball, float elapsed)
     {
         float warningStart = ball.Launch - WarningLeadTicks;
-        if (elapsed < warningStart || elapsed >= ball.Impact || !Visible(ball.Landing, ball.Radius))
+        float radius = ball.Def.radius;
+        if (elapsed < warningStart || elapsed >= ball.Impact || !Visible(ball.Landing, radius))
             return;
         if (ball.Cell.Impassable(map)) return;
 
         float approach = Mathf.InverseLerp(warningStart, ball.Impact, elapsed);
         Color color = Color.Lerp(new Color(0.97f, 0.25f, 0.08f, 0.68f),
             new Color(1f, 0.77f, 0.30f, 1f), approach);
-        GenDraw.DrawRadiusRing(ball.Cell, ball.Radius, color, cell =>
+        GenDraw.DrawRadiusRing(ball.Cell, radius, color, cell =>
             cell.InBounds(map) && !cell.Fogged(map)
             && GenSight.LineOfSight(ball.Cell, cell, map, skipFirstCell: true));
     }
@@ -202,13 +204,14 @@ internal sealed class MingyuanCombustionVfx
                 time, (fall - 0.54f) / 0.28f, ball.Seed, burst * 0.62f, 0, 0, 0.075f);
     }
 
-    private static void Impact(Vector3 at, float age, bool core, float seed, float radius)
+    private static void Impact(Vector3 at, float age, bool core, float seed, MingyuanCombustionFireballDef fireball)
     {
         if (failed) return;
         int duration = core ? Tuning.coreRemnantTicks : Tuning.smallRemnantTicks;
         if (age < 0 || age >= duration) return;
         float time = age / 60f;
         float life = age / duration;
+        float radius = fireball.radius;
         float flash = 1f - Mathf.Clamp01(age / (core ? 9f : 4f));
         if (flash > 0)
             DrawLayer(impact, MeshPool.plane10, at, 0, radius * 1.2f, radius * 1.2f,
@@ -232,8 +235,9 @@ internal sealed class MingyuanCombustionVfx
                 0, i, i == 0 ? 0.14f : 0.045f, ground: true);
         }
         DrawPlumes(at, age, time, core, seed, radius);
-        DrawLayer(impact, MeshPool.plane10, at, seed * 17f, radius * 2.3f, radius * 2.3f,
-            time, life, seed, (1f - life) * 0.65f, 1, core ? 1 : 0, 0, ground: true);
+        if (!fireball.leavesScorch)
+            DrawLayer(impact, MeshPool.plane10, at, seed * 17f, radius * 2.3f, radius * 2.3f,
+                time, life, seed, (1f - life) * 0.65f, 1, core ? 1 : 0, 0, ground: true);
         if (Quality > 0)
             DrawLayer(impact, MeshPool.plane10, at + Vector3.forward * life * radius, 0,
                 radius * (0.65f + life * 1.4f), radius * (0.65f + life * 1.4f),

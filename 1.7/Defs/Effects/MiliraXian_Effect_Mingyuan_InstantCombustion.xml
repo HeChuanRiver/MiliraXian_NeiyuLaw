@@ -39,6 +39,7 @@
     <radius>10</radius>
     <damage>48</damage>
     <lifeBurnFraction>0.15</lifeBurnFraction>
+    <leavesScorch>true</leavesScorch>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
 
   <ThingDef>
