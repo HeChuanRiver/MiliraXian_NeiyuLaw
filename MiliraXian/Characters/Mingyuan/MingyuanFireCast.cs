@@ -1,116 +1,77 @@
-using System;
-using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
-using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan;
 
 public class CompProperties_AbilityMingyuanInstantCombustion : CompProperties_AbilityEffect
 {
-    public float radius = 12f;
     public int jumpTicks = 12;
-    public float lifeBurnDoubleCapFraction = 0.5f;
-    public int eyeRequiredStunTicks = 180;
-    public bool destroyEyesWhenMovingTowardCaster = true;
-    public float movementConeDegrees = 90f;
-    public int visualFadeTicks = 30;
-    public int maxTargetMotes = 16;
-    public ThingDef targetMoteDef;
+    public int smallFireballCount = 12;
+    public int shotIntervalTicks = 8;
+    public int smallFlightTicks = 18;
+    public int finisherDelayTicks = 12;
+    public int coreFlightTicks = 24;
+    public MingyuanCombustionFireballDef smallFireball;
+    public MingyuanCombustionFireballDef coreFireball;
     public SoundDef warmupLoop;
     public SoundDef etchSound;
     public SoundDef sealSound;
-    public SoundDef resolveSound;
-    public SoundDef hitSound;
 
     public CompProperties_AbilityMingyuanInstantCombustion() =>
         compClass = typeof(CompAbilityEffect_MingyuanInstantCombustion);
+
+    internal float Radius => coreFireball?.radius ?? 0f;
+    internal float LandingRadius => Radius - (smallFireball?.radius ?? 0f);
+
+    internal int SmallLaunchAt(int index) => index * shotIntervalTicks;
+    internal int SmallImpactAt(int index) => SmallLaunchAt(index) + smallFlightTicks;
+    internal int CoreLaunchAt(int count) => SmallImpactAt(count - 1) + finisherDelayTicks;
+    internal int CoreImpactAt(int count) => CoreLaunchAt(count) + coreFlightTicks;
+
+    public override System.Collections.Generic.IEnumerable<string> ConfigErrors(AbilityDef parentDef)
+    {
+        foreach (string error in base.ConfigErrors(parentDef)) yield return error;
+        if (smallFireball == null || coreFireball == null)
+            yield return "瞬时燃烧必须指定大小火球的爆炸定义。";
+        if (!(Radius < GenRadial.MaxRadialPatternRadius && smallFireball?.radius > 0f && LandingRadius > 0f)
+            || smallFireballCount < 1 || shotIntervalTicks < 1 || smallFlightTicks < 1
+            || finisherDelayTicks < 0 || coreFlightTicks < 1)
+            yield return "瞬时燃烧的法阵范围或火球时序无效。";
+    }
 }
 
 public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect_MingyuanPowerLimited
 {
     internal new CompProperties_AbilityMingyuanInstantCombustion Props => (CompProperties_AbilityMingyuanInstantCombustion)props;
 
+    public override bool Valid(LocalTargetInfo target, bool throwMessages = false) =>
+        CanRelease(new LocalTargetInfo(target.Cell))
+        && (!target.HasThing || target.Thing.Map == parent.pawn.Map)
+        && base.Valid(target, throwMessages);
+
+    internal bool CanRelease(LocalTargetInfo target) => !MingyuanPowerBalance.Sealed
+        && parent.pawn is { Spawned: true, Dead: false } caster
+        && target.IsValid && !target.HasThing && target.Cell.InBounds(caster.Map);
+
     public override void DrawEffectPreview(LocalTargetInfo target)
     {
-        if (parent.pawn.Spawned)
-            GenDraw.DrawRadiusRing(parent.pawn.Position, Props.radius, new Color(1f, 0.63f, 0.22f, 0.64f));
+        if (Valid(target) && parent.verb.CanHitTarget(target))
+            MingyuanCombustionVfx.DrawSigilPreview(target.Cell, Props.Radius, parent.pawn.thingIDNumber);
     }
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
     {
-        Pawn caster = parent.pawn;
-        if (MingyuanPowerBalance.Sealed || !caster.Spawned || caster.Dead) return;
+        if (!CanRelease(target)) return;
         base.Apply(target, dest);
-        Map map = caster.Map;
-        MingyuanFireVfx.PlayBurst(map, caster.Position.ToVector3Shifted(), Props.radius, Props.visualFadeTicks, sigil: true);
-        Props.sealSound?.PlayOneShot(new TargetInfo(caster.Position, map));
-        Props.resolveSound?.PlayOneShot(new TargetInfo(caster.Position, map));
-        List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(caster.Position, map, Props.radius, true));
-        List<BodyPartRecord> eyes = CombatTargetSnapshot.Rent(Array.Empty<BodyPartRecord>());
-        int visualCount = 0;
-        try
-        {
-            foreach (Thing thing in targets)
-            {
-                if (!MingyuanUtility.IsHostilePawn(thing, caster, out Pawn pawn) || !pawn.Spawned || pawn.Map != map)
-                    continue;
-
-                eyes.Clear();
-                HediffSet hediffs = pawn.health.hediffSet;
-                foreach (BodyPartRecord part in hediffs.GetNotMissingParts())
-                    if (part != pawn.RaceProps.body.corePart && (part.def == BodyPartDefOf.Eye
-                        || (part.def.alive && part.def.tags?.Contains(BodyPartTagDefOf.SightSource) == true))
-                        && hediffs.GetPartHealth(part) > 0f)
-                        eyes.Add(part);
-
-                bool destroyEyes = eyes.Count > 0 && Props.destroyEyesWhenMovingTowardCaster
-                    && IsWalkingToward(pawn, caster.Position, Props.movementConeDegrees);
-                MingyuanUtility.DoubleLifeBurn(pawn, caster, Props.lifeBurnDoubleCapFraction);
-                if (eyes.Count > 0)
-                    pawn.stances?.stunner?.StunFor(Props.eyeRequiredStunTicks, caster, false, true, false);
-
-                if (destroyEyes)
-                {
-                    foreach (BodyPartRecord part in eyes)
-                    {
-                        if (pawn.Dead) break;
-                        if (!hediffs.PartIsMissing(part))
-                            pawn.health.AddHediff(HediffDefOf.MissingBodyPart, part);
-                    }
-                }
-
-                if (visualCount < Props.maxTargetMotes && pawn.Spawned)
-                {
-                    MingyuanUtility.TryMakeAttachedMote(pawn, Props.targetMoteDef);
-                    if (destroyEyes) MingyuanFireVfx.PlayBurst(map, pawn.DrawPos, 0.65f, 22);
-                    if (visualCount++ == 0) Props.hitSound?.PlayOneShot(new TargetInfo(pawn.Position, map));
-                }
-            }
-        }
-        finally
-        {
-            CombatTargetSnapshot.Return(eyes);
-            CombatTargetSnapshot.Return(targets);
-        }
-    }
-
-    private static bool IsWalkingToward(Pawn pawn, IntVec3 casterPosition, float cone)
-    {
-        Pawn_PathFollower path = pawn.pather;
-        if (pawn.Downed || pawn.Flying || pawn.stances.stunner.Stunned || path?.MovingNow != true
-            || path.NextCellDoorToWaitForOrManuallyOpen() != null || path.LastMovedTick < Find.TickManager.TicksGame - 1 || !path.nextCell.IsValid)
-            return false;
-
-        Vector3 step = (path.nextCell - pawn.Position).ToVector3();
-        Vector3 toCaster = (casterPosition - pawn.Position).ToVector3();
-        float threshold = Mathf.Cos(Mathf.Clamp(cone, 0f, 180f) * 0.5f * Mathf.Deg2Rad);
-        return step.sqrMagnitude > 0f && toCaster.sqrMagnitude > 0f
-            && Vector3.Dot(step.normalized, toCaster.normalized) > Mathf.Max(0f, threshold);
+        Pawn caster = parent.pawn;
+        var volley = (Thing_MingyuanCombustionVolley)ThingMaker.MakeThing(MX_MingyuanDefOf.MX_Mingyuan_CombustionVolley);
+        volley.Initialize(caster, parent.def, Props, target.Cell);
+        GenSpawn.Spawn(volley, target.Cell, caster.Map);
+        Props.sealSound?.PlayOneShot(new TargetInfo(target.Cell, caster.Map));
     }
 }
 
@@ -141,20 +102,25 @@ public class Verb_MingyuanFireCast : Verb_CastAbility
     public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false,
         bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
     {
-        if (!ValidateTarget(castTarg, false)
-            || !base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
+        if (!ValidateTarget(castTarg, false)) return false;
+        bool lockCell = Combustion != null;
+        LocalTargetInfo castTarget = lockCell ? new LocalTargetInfo(castTarg.Cell) : castTarg;
+        if (!base.TryStartCastOn(castTarget, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
             return false;
 
         if (WarmupStance is { } stance)
         {
             stance.ticksLeft = CastTicks;
-            MingyuanFireVfx.PlayWarmup(CasterPawn, Ability.def, stance, castTarg.Cell);
+            // The native casting job watches target A for despawns even during warmup.
+            if (lockCell && CasterPawn.CurJob is { } job && job.verbToUse == this && job.targetA == castTarg)
+                job.targetA = castTarget;
+            MingyuanFireVfx.PlayWarmup(CasterPawn, Ability.def, stance, castTarget.Cell);
         }
         return true;
     }
 
     protected override bool TryCastShot() =>
-        ValidateTarget(currentTarget, false) && base.TryCastShot();
+        (Combustion?.CanRelease(currentTarget) ?? ValidateTarget(currentTarget, false)) && base.TryCastShot();
 }
 
 public class CompProperties_AbilityMingyuanBurningPillar : CompProperties_AbilityEffect

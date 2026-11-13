@@ -118,7 +118,7 @@ namespace MiliraXian.Characters
                 ref Settings.EnableAriandelSpecialPawnIntegration,
                 "MX_NL_EnableSpecialPawnIntegrationDesc".Translate().ToString());
             listing.Gap();
-            listing.Label("世界奥术打击：特效质量");
+            listing.Label("世界奥术打击／瞬时燃烧：特效质量");
             if (listing.RadioButton("低", Settings.ArcaneVisualQuality == ArcaneVfxQuality.Low))
                 Settings.ArcaneVisualQuality = ArcaneVfxQuality.Low;
             if (listing.RadioButton("中", Settings.ArcaneVisualQuality == ArcaneVfxQuality.Medium))

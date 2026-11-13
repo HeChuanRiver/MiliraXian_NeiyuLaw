@@ -61,13 +61,14 @@
     <AbilityDef>
         <defName>MX_Mingyuan_InstantCombustion</defName>
         <label>&lt;color=#FFD37A&gt;瞬时燃烧&lt;/color&gt;</label>
-        <description>跃起后绘制法阵3秒，使半径12格内敌人已有的生命燃烧翻倍，最多叠至其引爆阈值的50%。
-有眼睛的敌人眩晕3秒。施放完成时，正朝明渊行走的敌人会失去现存眼睛。冷却120秒。</description>
+        <description>选定30格内的位置，跃起并蓄力3秒，在半径10格的法阵内依次落下12颗小火球，最后在阵心落下一颗大火球。
+小火球爆炸半径4.5格，造成75点基础爆炸伤害。大火球爆炸半径10格，造成150点基础爆炸伤害。爆炸伤及敌对单位和各阵营建筑，墙体本身也会受伤并阻隔爆炸。受伤后存活的敌人分别叠加其引爆阈值2.5%和15%的生命燃烧。
+大火球落地后留下持续15秒的灼痕，效果与升焰疾行的灼痕相同。冷却120秒。</description>
         <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
         <category>MX_MingyuanSkill</category>
         <displayOrder>110</displayOrder>
         <cooldownTicksRange>7200</cooldownTicksRange>
-        <targetRequired>false</targetRequired>
+        <targetRequired>true</targetRequired>
         <hostile>true</hostile>
         <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
         <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
@@ -75,29 +76,31 @@
         <jobDef>MX_Mingyuan_CastInstantCombustion</jobDef>
         <verbProperties>
             <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanFireCast</verbClass>
-            <targetable>false</targetable>
+            <targetable>true</targetable>
             <range>30</range>
             <warmupTime>3</warmupTime>
+            <requireLineOfSight>false</requireLineOfSight>
             <targetParams>
-                <canTargetSelf>true</canTargetSelf>
+                <canTargetSelf>false</canTargetSelf>
+                <canTargetPawns>false</canTargetPawns>
+                <canTargetLocations>true</canTargetLocations>
+                <canTargetBuildings>false</canTargetBuildings>
+                <canTargetItems>false</canTargetItems>
             </targetParams>
         </verbProperties>
         <comps>
             <li Class="MiliraXian.Characters.Mingyuan.CompProperties_AbilityMingyuanInstantCombustion">
-                <radius>12</radius>
                 <jumpTicks>12</jumpTicks>
-                <lifeBurnDoubleCapFraction>0.50</lifeBurnDoubleCapFraction>
-                <eyeRequiredStunTicks>180</eyeRequiredStunTicks>
-                <destroyEyesWhenMovingTowardCaster>true</destroyEyesWhenMovingTowardCaster>
-                <movementConeDegrees>90</movementConeDegrees>
-                <visualFadeTicks>30</visualFadeTicks>
-                <maxTargetMotes>16</maxTargetMotes>
-                <targetMoteDef>MX_Mingyuan_Mote_InstantCombustionMark</targetMoteDef>
+                <smallFireballCount>12</smallFireballCount>
+                <shotIntervalTicks>8</shotIntervalTicks>
+                <smallFlightTicks>18</smallFlightTicks>
+                <finisherDelayTicks>12</finisherDelayTicks>
+                <coreFlightTicks>24</coreFlightTicks>
+                <smallFireball>MX_Mingyuan_CombustionSmallFireball</smallFireball>
+                <coreFireball>MX_Mingyuan_CombustionCoreFireball</coreFireball>
                 <warmupLoop>MX_Mingyuan_FireCastHum</warmupLoop>
                 <etchSound>MX_ArcaneCircle_Etch</etchSound>
                 <sealSound>MX_ArcaneCircle_Seal</sealSound>
-                <resolveSound>MX_ArcaneStrike_Impact</resolveSound>
-                <hitSound>FireSpew_Resolve</hitSound>
             </li>
         </comps>
     </AbilityDef>
