@@ -22,7 +22,7 @@
 
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef Name="MX_Mingyuan_CombustionFireballBase" Abstract="True">
     <workerClass>MiliraXian.Characters.Mingyuan.SweepDamageWorker_MingyuanCombustion</workerClass>
-    <damageDef>Burn</damageDef>
+    <damageDef>Bomb</damageDef>
     <hitBuildings>false</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
@@ -30,14 +30,14 @@
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
     <defName>MX_Mingyuan_CombustionSmallFireball</defName>
     <radius>4.5</radius>
-    <damage>12</damage>
+    <damage>75</damage>
     <lifeBurnFraction>0.025</lifeBurnFraction>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
 
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
     <defName>MX_Mingyuan_CombustionCoreFireball</defName>
     <radius>10</radius>
-    <damage>48</damage>
+    <damage>150</damage>
     <lifeBurnFraction>0.15</lifeBurnFraction>
     <leavesScorch>true</leavesScorch>
   </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>

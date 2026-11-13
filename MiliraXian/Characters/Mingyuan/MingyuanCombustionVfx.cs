@@ -123,14 +123,18 @@ internal sealed class MingyuanCombustionVfx
         float radius = ball.Def.radius;
         if (elapsed < warningStart || elapsed >= ball.Impact || !Visible(ball.Landing, radius))
             return;
-        if (ball.Cell.Impassable(map)) return;
-
         float approach = Mathf.InverseLerp(warningStart, ball.Impact, elapsed);
         Color color = Color.Lerp(new Color(0.97f, 0.25f, 0.08f, 0.68f),
             new Color(1f, 0.77f, 0.30f, 1f), approach);
         GenDraw.DrawRadiusRing(ball.Cell, radius, color, cell =>
             cell.InBounds(map) && !cell.Fogged(map)
             && GenSight.LineOfSight(ball.Cell, cell, map, skipFirstCell: true));
+    }
+
+    internal static void DrawSigilPreview(IntVec3 cell, float radius, int casterId)
+    {
+        EnsureResources();
+        Sigil(cell.ToVector3Shifted(), radius, 0f, 1f, 0.65f, Seed(casterId, cell));
     }
 
     internal static void DrawWarmup(Vector3 center, CompProperties_AbilityMingyuanInstantCombustion props,

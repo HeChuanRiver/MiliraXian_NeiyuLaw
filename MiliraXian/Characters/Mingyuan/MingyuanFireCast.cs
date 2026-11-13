@@ -49,9 +49,9 @@ public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect_Min
     internal new CompProperties_AbilityMingyuanInstantCombustion Props => (CompProperties_AbilityMingyuanInstantCombustion)props;
 
     public override bool Valid(LocalTargetInfo target, bool throwMessages = false) =>
-        base.Valid(target, throwMessages) && parent.pawn.Spawned
-        && MingyuanUtility.IsHostilePawn(target.Thing, parent.pawn, out Pawn enemy)
-        && enemy.Spawned && enemy.Map == parent.pawn.Map && !enemy.Position.Fogged(enemy.Map);
+        CanRelease(new LocalTargetInfo(target.Cell))
+        && (!target.HasThing || target.Thing.Map == parent.pawn.Map)
+        && base.Valid(target, throwMessages);
 
     internal bool CanRelease(LocalTargetInfo target) => !MingyuanPowerBalance.Sealed
         && parent.pawn is { Spawned: true, Dead: false } caster
@@ -59,8 +59,8 @@ public class CompAbilityEffect_MingyuanInstantCombustion : CompAbilityEffect_Min
 
     public override void DrawEffectPreview(LocalTargetInfo target)
     {
-        if (Valid(target))
-            GenDraw.DrawRadiusRing(target.Cell, Props.Radius, new Color(1f, 0.63f, 0.22f, 0.64f));
+        if (Valid(target) && parent.verb.CanHitTarget(target))
+            MingyuanCombustionVfx.DrawSigilPreview(target.Cell, Props.Radius, parent.pawn.thingIDNumber);
     }
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)

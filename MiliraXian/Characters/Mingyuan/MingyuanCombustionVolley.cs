@@ -96,8 +96,7 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         }
 
         landings = new List<IntVec3>(props.smallFireballCount);
-        if (!center.Impassable(map))
-            landings.Add(center);
+        landings.Add(center);
         int scatterCount = props.smallFireballCount - landings.Count;
         for (int i = 0; i < scatterCount; i++)
             landings.Add(candidates[i % candidates.Count]);
@@ -134,26 +133,26 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
 
         try
         {
-            if (!cell.Impassable(map))
+            new AreaDamageBurst
             {
-                new AreaDamageBurst
-                {
-                    def = fireball,
-                    caster = caster,
-                    center = cell.ToVector3Shifted(),
-                    radius = fireball.radius,
-                    damage = fireball.damage,
-                }.Fire(map);
+                def = fireball,
+                caster = caster,
+                center = cell.ToVector3Shifted(),
+                radius = fireball.radius,
+                damage = fireball.damage,
+            }.Fire(map);
 
-                if (fireball.leavesScorch && CasterCanSustain)
+            if (fireball.leavesScorch && CasterCanSustain)
+            {
+                CompMingyuanAscendantFlameScorch scorch = null;
+                foreach (IntVec3 ground in GenRadial.RadialCellsAround(cell, fireball.radius, useCenter: true))
                 {
-                    var scorch = Thing_MingyuanAscendantFlameScorch.For(map, cell);
-                    foreach (IntVec3 ground in GenRadial.RadialCellsAround(cell, fireball.radius, useCenter: true))
-                    {
-                        if (ground.InBounds(map) && !ground.Impassable(map)
-                            && GenSight.LineOfSight(cell, ground, map, skipFirstCell: true))
-                            scorch.Ignite(ground, caster);
-                    }
+                    if (!ground.InBounds(map) || ground.Impassable(map)
+                        || !GenSight.LineOfSight(cell, ground, map, skipFirstCell: true))
+                        continue;
+
+                    scorch ??= Thing_MingyuanAscendantFlameScorch.For(map, ground);
+                    scorch.Ignite(ground, caster);
                 }
             }
         }
