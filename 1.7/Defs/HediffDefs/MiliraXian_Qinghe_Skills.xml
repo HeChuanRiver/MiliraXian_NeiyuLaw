@@ -67,4 +67,30 @@
         </comps>
     </HediffDef>
 
+    <!-- 荷雨的淋雨：墙内每 10 tick 刷新，离墙后 6 秒才消失（360 tick）。
+         残留时长是设计支点：铃音要站定蓄力 10 秒，靠这 6 秒半速把敌人拖住才够满档。 -->
+    <HediffDef>
+        <defName>MX_QH_RainDrenched</defName>
+        <label>淋雨</label>
+        <description>被荷雨的雨水浇透，&lt;color=#7ADA9E&gt;移动速度减半&lt;/color&gt;。离开雨幕片刻后才会干透。</description>
+        <isBad>true</isBad>
+        <hediffClass>Verse.HediffWithComps</hediffClass>
+        <defaultLabelColor>(0.60, 0.95, 0.50)</defaultLabelColor>
+        <initialSeverity>1.0</initialSeverity>
+        <maxSeverity>1.0</maxSeverity>
+        <stages>
+            <li>
+                <statFactors>
+                    <MoveSpeed>0.2</MoveSpeed>
+                </statFactors>
+            </li>
+        </stages>
+        <comps>
+            <li Class="HediffCompProperties_Disappears">
+                <disappearsAfterTicks>360</disappearsAfterTicks>
+                <showRemainingTime>false</showRemainingTime>
+            </li>
+        </comps>
+    </HediffDef>
+
 </Defs>

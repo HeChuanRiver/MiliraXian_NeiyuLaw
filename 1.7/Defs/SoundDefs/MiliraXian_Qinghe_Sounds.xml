@@ -100,7 +100,7 @@
         </subSounds>
     </SoundDef>
 
-    <!-- 花信风铃（RangedRework.md 第 2.9 节）：VCSL 铃树单颗铃（BellTree_Hit_E5_rr1_Mid，CC0，
+    <!-- 花信风铃：VCSL 铃树单颗铃（BellTree_Hit_E5_rr1_Mid，CC0，
          github.com/sgossner/VCSL），实测 1317 Hz。代码按 pitchFactor 换到五声音阶各音（宫 = 1047 Hz），
          所以这里不随机音高。 -->
     <SoundDef>

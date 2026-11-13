@@ -28,7 +28,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
         public Vector3 triggerMoteOffset = new(0f, 0f, 0.85f);
         public float triggerMoteScale = 1f;
 
-        // --- aggravation (RangedRework.md 3.4, owner 11-11): build-up while the effect is active
+        // --- aggravation: build-up while the effect is active
         /// <summary>
         /// While the effect is active, hits fill a second bar this share of the normal limit; full, the
         /// effect aggravates (settles what is left of it at once, <see cref="IAbnormalAggravation"/>).

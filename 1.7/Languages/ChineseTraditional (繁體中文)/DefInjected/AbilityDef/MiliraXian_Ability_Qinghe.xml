@@ -2,6 +2,8 @@
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>消耗2點花令，在目標地點召喚出春泉，短時間內治療范圍內的友方單位并附加春泉洗禮效果，提升近戰攻擊造成的傷害、降低受到的傷害并凈化部分負面效果。效果持續15秒。&#10;&#10;習得“四時和鳴”後，每秒為泉水中的血肉敵人積累20點流血；若已處于流血狀態，則改為積累15點毒素。機械敵人先積累15點腐蝕；若已處于腐蝕狀態，則改為積累20點漏電。積累量受法術效果系數與對應異常附加效率影響。&#10;&#10;此效果可以驅散由告死流場施加的死亡宣告。</MX_QH_SpringFlow.description>
+  <MX_QH_SummerRain.label>荷雨</MX_QH_SummerRain.label>
+  <MX_QH_SummerRain.description>消耗2點花令，在目標地點召來一道雨幕。雨幕垂直於你的視線橫陳，長15格、寬3格，持續15秒，不阻擋通行。&#10;&#10;踏入雨幕的敵人會被淋透，移動速度減半；離開雨幕6秒後才會乾透。血肉敵人每秒積累30點毒素，機械敵人每秒積累30點腐蝕。積累量受法術效果係數與對應異常附加效率影響。&#10;&#10;雨水在起手時就開始落下，雨幕落下時才正式生效；結束時雨先停，積水再慢慢淡去。友方不受影響。</MX_QH_SummerRain.description>
   <MX_QH_LunarMirror.label>霜月鏡</MX_QH_LunarMirror.label>
   <MX_QH_LunarMirror.description>消耗2點花令，在目標地點召喚出冰雪般的護盾，短時間內攔截穿過范圍邊界的敵方投射物，每次攔截都會以冰霜子彈還擊攻擊者。護盾持續20秒，吸收一定量傷害後將會破碎。&#10;&#10;習得“四時和鳴”後，每秒為護盾內的非機械敵人積累15點恐懼，為機械敵人積累15點過載；冰霜子彈命中時僅積累寒冷，達到上限後觸發凍結。積累量受法術效果系數與對應異常附加效率影響。</MX_QH_LunarMirror.description>
   <MX_QH_IllusoryReflection.label>鏡花水月</MX_QH_IllusoryReflection.label>

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Verse;
 using System.Collections.Generic;
 using RimWorld;
@@ -68,6 +68,11 @@ namespace MiliraXian.Characters.Common
         private bool launchInitialized;
         private int retargetCount;
         private int nextRetargetTryTick;
+        /// <summary>
+        /// Things this projectile must not retarget onto (accumulated each time a target evades it).
+        /// Never saved: on load a flying projectile simply loses the exclusion list.
+        /// </summary>
+        private HashSet<Thing> evadeExcluded;
 
         private CompProperties_ProjectileHomingCurve Props => (CompProperties_ProjectileHomingCurve)props;
         public CompProperties_ProjectileHomingCurve Settings => Props;
@@ -208,7 +213,8 @@ namespace MiliraXian.Characters.Common
                 Props.retargetSearchRadius,
                 Props.retargetPawnWeight,
                 Props.retargetNonPawnWeight,
-                excludeTarget);
+                excludeTarget,
+                evadeExcluded);
 
             nextRetargetTryTick = currentTick + Mathf.Max(1, Props.retargetRetryIntervalTicks);
             if (newTarget == null)
@@ -530,6 +536,19 @@ namespace MiliraXian.Characters.Common
             float nonPawnWeight,
             Thing excludeTarget = null)
         {
+            return TryPickRandomHostileTarget(map, center, seeker, radius, pawnWeight, nonPawnWeight, excludeTarget, null);
+        }
+
+        public static Thing TryPickRandomHostileTarget(
+            Map map,
+            Vector3 center,
+            Thing seeker,
+            float radius,
+            float pawnWeight,
+            float nonPawnWeight,
+            Thing excludeTarget,
+            HashSet<Thing> extraExcluded)
+        {
             List<Thing> candidates = SimplePool<List<Thing>>.Get();
             HashSet<int> seenIds = SimplePool<HashSet<int>>.Get();
             try
@@ -542,6 +561,7 @@ namespace MiliraXian.Characters.Common
                     pawnWeight,
                     nonPawnWeight,
                     excludeTarget,
+                    extraExcluded,
                     candidates,
                     seenIds);
                 return PickRandomHostileTarget(candidates, pawnWeight, nonPawnWeight, totalWeight);
@@ -563,6 +583,21 @@ namespace MiliraXian.Characters.Common
             float pawnWeight,
             float nonPawnWeight,
             Thing excludeTarget,
+            List<Thing> candidates,
+            HashSet<int> seenIds)
+        {
+            return GatherHostileTargets(map, center, seeker, radius, pawnWeight, nonPawnWeight, excludeTarget, null, candidates, seenIds);
+        }
+
+        public static float GatherHostileTargets(
+            Map map,
+            Vector3 center,
+            Thing seeker,
+            float radius,
+            float pawnWeight,
+            float nonPawnWeight,
+            Thing excludeTarget,
+            HashSet<Thing> extraExcluded,
             List<Thing> candidates,
             HashSet<int> seenIds)
         {
@@ -599,7 +634,7 @@ namespace MiliraXian.Characters.Common
                 for (int i = 0; i < thingList.Count; i++)
                 {
                     Thing thing = thingList[i];
-                    if (!IsViableRetargetCandidate(seeker, thing, excludeTarget))
+                    if (!IsViableRetargetCandidate(seeker, thing, excludeTarget, extraExcluded))
                     {
                         continue;
                     }
@@ -648,9 +683,13 @@ namespace MiliraXian.Characters.Common
             return candidates[candidates.Count - 1];
         }
 
-        private static bool IsViableRetargetCandidate(Thing seeker, Thing candidate, Thing excludeTarget)
+        private static bool IsViableRetargetCandidate(Thing seeker, Thing candidate, Thing excludeTarget, HashSet<Thing> extraExcluded = null)
         {
             if (candidate == null || candidate == seeker || candidate == excludeTarget || candidate.Destroyed || !candidate.Spawned)
+            {
+                return false;
+            }
+            if (extraExcluded != null && extraExcluded.Contains(candidate))
             {
                 return false;
             }
@@ -694,6 +733,23 @@ namespace MiliraXian.Characters.Common
             curveAmplitude = 0f;
             retargetCount = 0;
             nextRetargetTryTick = 0;
+            evadeExcluded?.Clear();
+        }
+
+        /// <summary>
+        /// Marks <paramref name="thing"/> as one this projectile must not retarget onto, then clears
+        /// the projectile's intended target so the homing system treats it as lost. Called when the
+        /// target evaded the shot: the projectile flies on and, if it retargets, skips the evader.
+        /// </summary>
+        public void NotifyEvadedBy(Thing thing)
+        {
+            evadeExcluded ??= new HashSet<Thing>();
+            evadeExcluded.Add(thing);
+            if (ProjectileParent != null)
+            {
+                ProjectileParent.intendedTarget = LocalTargetInfo.Invalid;
+                ProjectileParent.usedTarget = LocalTargetInfo.Invalid;
+            }
         }
     }
 }

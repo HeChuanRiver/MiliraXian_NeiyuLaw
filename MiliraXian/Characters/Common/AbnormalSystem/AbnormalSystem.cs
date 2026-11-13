@@ -81,7 +81,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem
                 return result;
             }
 
-            // While the effect is active the hit goes on (owner 11-11): its on-hit extras are given and
+            // While the effect is active the hit goes on: its on-hit extras are given and
             // it fills the aggravation bar (Hediff_Abnormal.ApplyAccumulation decides which).
             float efficiencyFactor = source != null
                 ? Mathf.Max(0f, source.GetStatValue(abnormalDef.applicationEfficiencyFactorStat, true, -1))

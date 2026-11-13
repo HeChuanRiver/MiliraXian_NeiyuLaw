@@ -120,4 +120,112 @@
       </textureWrapOverrides>
     </shaderProgram>
   </ShaderDef>
+  <!-- 荷雨的水面：微波扭曲 + 落点法线涟漪，不贴图。沿用原版抓屏点（queue 3151）。
+       荷花在 3152 之后画，不会被水下扭曲扭到。 -->
+  <ShaderDef>
+    <defName>MX_QH_RainWallWater</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_RainWallWater.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3151</renderQueue>
+      <sceneGrab>
+        <name>DistortionBackground</name>
+        <queue>3151</queue>
+      </sceneGrab>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 荷雨的水花：离散元素走几何合批——每个雨丝落点一个小 quad，顶点色带（相位、落速、
+       出环标志），片元里解析地算单环折射 + 泡沫闪光。沿用同一抓屏点（queue 3151），
+       画在基础水面之上、荷花之下。 -->
+  <ShaderDef>
+    <defName>MX_QH_RainWallSplash</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_RainWallSplash.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3151</renderQueue>
+      <sceneGrab>
+        <name>DistortionBackground</name>
+        <queue>3151</queue>
+      </sceneGrab>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 荷雨的雨幕：一个 quad，uv 是相对墙心的格偏移，水雾在片元里逐像素积分。
+       雨丝不在 shader 里——雨丝是离散元素，由 RainWallVfx 在 CPU 上模拟、AddStreak 合批画出。
+       和铃音冲击波同构；加法混合、不写深度、双面。 -->
+  <ShaderDef>
+    <defName>MX_QH_RainWall</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_RainWall.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3153</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 荷雨地面：水痕压暗 + 涟漪 + 边界。预乘透明是必须的：输出的 alpha 就是压暗量，
+       rgb 是叠在上面的光，一次混合同时做到「乘法压暗」和「加法提亮」。
+       加法混合做不到压暗，这就是之前地面一片空白的原因。 -->
+  <ShaderDef>
+    <defName>MX_QH_RainWallGround</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_RainWallGround.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>One</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <!-- 排在地面高度，但要让原版地块先画完：3100 早于本 Mod 的其他特效，仍晚于地形。 -->
+      <renderQueue>3100</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+  <!-- 荷雨的荷花：贴图裁切后按 alpha 混合，不做加法（花是要有实体的）。
+      和花瓣（MX_QH_SakuraPetal）同参数：SrcAlpha / OneMinusSrcAlpha，不是预乘——
+      预乘会把半透明边缘的黑底带出来，看起来像 Cutout。
+      排在雨幕之前（3152 < 3153）：预览里是先落花、再蒙一层薄雨纱。 -->
+  <ShaderDef>
+    <defName>MX_QH_RainWallLotus</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SakuraTrail.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <blendMode>Custom</blendMode>
+      <blendSrcFactor>SrcAlpha</blendSrcFactor>
+      <blendDstFactor>OneMinusSrcAlpha</blendDstFactor>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3152</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
 </Defs>

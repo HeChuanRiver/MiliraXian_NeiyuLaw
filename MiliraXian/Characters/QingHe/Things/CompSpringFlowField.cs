@@ -1,4 +1,4 @@
-﻿using Verse;
+using Verse;
 
 using System.Collections.Generic;
 using MiliraXian.Characters;
@@ -20,10 +20,8 @@ namespace MiliraXian.Characters.QingHe.Things
         public int fadeOutTicks = 45;
         public int ambientVisualIntervalTicks = 45;
         public int ambientVisualFlecksPerBurst = 2;
-        public float bleedAccumulationPerSecond = 20f;
-        public float toxinAccumulationPerSecond = 15f;
-        public float corrosionAccumulationPerSecond = 15f;
-        public float electricLeakAccumulationPerSecond = 20f;
+        public float bleedAccumulationPerSecond = 12f;
+        public float electricLeakAccumulationPerSecond = 12f;
         public ThingDef fieldMoteDef;
         public FleckDef ambientSplashFleckDef;
 
@@ -200,18 +198,10 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                bool bleeding = pawn.health.hediffSet.HasHediff(MX_AbnormalDefOf.MX_AbnormalBleeding);
-                bool corroded = pawn.health.hediffSet.HasHediff(MX_AbnormalDefOf.MX_AbnormalCorroded);
+                // Spring owns one condition per kind (2.1): bleed on flesh, electric leak on
+                // machinery. The summer pair (toxin, corrosion) belongs to the Lotus Rain wall.
                 AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalBleed, Props.bleedAccumulationPerSecond * effectFactor);
-                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalCorrosion, Props.corrosionAccumulationPerSecond * effectFactor);
-                if (bleeding)
-                {
-                    AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalToxin, Props.toxinAccumulationPerSecond * effectFactor);
-                }
-                if (corroded)
-                {
-                    AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalElectricLeak, Props.electricLeakAccumulationPerSecond * effectFactor);
-                }
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalElectricLeak, Props.electricLeakAccumulationPerSecond * effectFactor);
             }
         }
 

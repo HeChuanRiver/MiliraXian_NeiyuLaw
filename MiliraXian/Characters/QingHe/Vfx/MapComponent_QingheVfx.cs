@@ -92,6 +92,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         internal static bool BuffersEmpty => Verts.Count == 0;
 
+        /// <summary>How many vertices are buffered right now, for diagnostics.</summary>
+        internal static int VertexCount => Verts.Count;
+
         internal static void Upload(Mesh mesh)
         {
             mesh.Clear();
@@ -148,6 +151,58 @@ namespace MiliraXian.Characters.QingHe.Vfx
             AddVertex(new Vector3(c.x + h, c.y, c.z - h), new Vector2(1f, 0f), col);
             AddTriangle(n, n + 1, n + 2);
             AddTriangle(n, n + 2, n + 3);
+        }
+
+        /// <summary>A quad from four explicit corners, in counter-clockwise order.</summary>
+        internal static void AddQuadRaw(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, Color col)
+        {
+            int n = Verts.Count;
+            AddVertex(p0, new Vector2(0f, 0f), col);
+            AddVertex(p1, new Vector2(0f, 1f), col);
+            AddVertex(p2, new Vector2(1f, 1f), col);
+            AddVertex(p3, new Vector2(1f, 0f), col);
+            AddTriangle(n, n + 1, n + 2);
+            AddTriangle(n, n + 2, n + 3);
+        }
+
+        /// <summary><see cref="AddLine"/> with the flat (ground-plane) width in cells and no uv tricks.</summary>
+        internal static void AddLineRaw(Vector3 a, Vector3 b, float width, Color ca, Color cb)
+        {
+            AddLine(a, b, width, ca, cb);
+        }
+
+        /// <summary>
+        /// A ribbon between two points in any orientation — including straight up.
+        ///
+        /// <see cref="AddLine"/> is for lines lying on the ground and deliberately drops the Y
+        /// difference, so it cannot draw a vertical segment: the direction comes out zero, the width
+        /// axis is zero, and the quad has no area. This one keeps its width axis horizontal and
+        /// perpendicular to the segment's ground direction, falling back to east-west when the
+        /// segment is exactly vertical (a falling raindrop's streak).
+        /// </summary>
+        internal static void AddStreak(Vector3 a, Vector3 b, float width, Color ca, Color cb)
+        {
+            Vector3 d = b - a;
+            Vector3 flat = new(d.x, 0f, d.z);
+            Vector3 s;
+            if (flat.sqrMagnitude < 1e-8f)
+            {
+                // perfectly vertical: any horizontal axis will do, so use east-west
+                s = new Vector3(width * 0.5f, 0f, 0f);
+            }
+            else
+            {
+                flat.Normalize();
+                s = new Vector3(-flat.z, 0f, flat.x) * (width * 0.5f);
+            }
+
+            int n = Verts.Count;
+            AddVertex(a - s, new Vector2(0f, 0f), ca);
+            AddVertex(a + s, new Vector2(0f, 1f), ca);
+            AddVertex(b - s, new Vector2(1f, 0f), cb);
+            AddVertex(b + s, new Vector2(1f, 1f), cb);
+            AddTriangle(n, n + 2, n + 1);
+            AddTriangle(n + 1, n + 2, n + 3);
         }
     }
 }

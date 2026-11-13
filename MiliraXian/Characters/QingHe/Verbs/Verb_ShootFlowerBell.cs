@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.Things.Projectiles;
 using MiliraXian.Characters.QingHe.Things.Weapons;
 using RimWorld;
@@ -7,7 +9,7 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.Verbs
 {
     /// <summary>
-    /// The Flower Bell's attack (RangedRework.md 2.9, five tiers): the warmup is a charge
+    /// The Flower Bell's five-tier attack: the warmup is a charge
     /// (<see cref="Stance_FlowerBellCharge"/>); on release she holds still for the throw, then all
     /// the notes of the reached tier leave at once. One burst shot casts them all. Once the throw has
     /// begun only a stun stops it (vanilla resets a bursting verb only then).
@@ -19,9 +21,9 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         /// <summary>Degree of the note being cast now; read by the note's launch. -1 outside a cast.</summary>
         internal static int CastingDegree = -1;
-        /// <summary>The charge comp and the note's index in the volley, while it is cast (for its damage).</summary>
+        /// <summary>The charge comp and the volley's tier, while a note is cast (for its damage).</summary>
         internal static CompFlowerBellCharge CastingCharge;
-        internal static int CastingIndex = -1;
+        internal static int CastingTier;
         /// <summary>Ground point the note being cast leaves from (under its hovering place), and its height there.</summary>
         internal static Vector3? CastingOrigin;
         internal static float CastingLift;
@@ -116,32 +118,132 @@ namespace MiliraXian.Characters.QingHe.Verbs
                 currentTarget = targetCell;
             }
             bool any = false;
+            LocalTargetInfo selected = currentTarget;
+            CompFlowerBellCharge comp = Charge;
+            List<LocalTargetInfo> targets = AssignTargets(comp, selected, pendingNotes);
             try
             {
                 float seconds = Find.TickManager.TicksGame / 60f;
                 for (int i = 0; i < pendingNotes; i++)
                 {
                     CastingDegree = pendingModeStart + i;
-                    CastingCharge = Charge;
-                    CastingIndex = i;
+                    CastingCharge = comp;
+                    CastingTier = pendingNotes;
                     if (CasterIsPawn)
                     {
-                        // Each note leaves from where it hovered, over its petal (RangedRework.md 2.9).
+                        // Each note leaves from where it hovered, over its petal.
                         CastingOrigin = FlowerBellChargeVfx.HoverGround(CasterPawn, i, out CastingLift, seconds);
                     }
-                    any |= base.TryCastShot();
+                    currentTarget = targets[i];
+                    bool shot = base.TryCastShot();
+                    if (!shot && currentTarget != selected)
+                    {
+                        // No shot line to the scattered target: this note goes to the selected one.
+                        currentTarget = selected;
+                        shot = base.TryCastShot();
+                    }
+                    any |= shot;
                 }
             }
             finally
             {
+                currentTarget = selected;
                 CastingDegree = -1;
                 CastingCharge = null;
-                CastingIndex = -1;
+                CastingTier = 0;
                 CastingOrigin = null;
                 CastingLift = 0f;
             }
             pendingNotes = 0;
             return any;
+        }
+
+        /// <summary>
+        /// The target of each note. Focus: all the selected one. Scatter: the first the selected one,
+        /// the others random pawns and buildings within the scatter radius of it (see <see cref="ScatterCandidates"/>),
+        /// those no note of this volley has yet first; with none around, the selected one.
+        /// </summary>
+        private List<LocalTargetInfo> AssignTargets(CompFlowerBellCharge comp, LocalTargetInfo selected, int count)
+        {
+            List<LocalTargetInfo> targets = new(count);
+            for (int i = 0; i < count; i++)
+            {
+                targets.Add(selected);
+            }
+            if (comp == null || comp.AimMode != FlowerBellAimMode.Scatter || count < 2 || caster?.Map == null)
+            {
+                return targets;
+            }
+            List<Thing> pool = ScatterCandidates(selected, comp.ScatterRadius);
+            if (pool.Count == 0)
+            {
+                return targets;
+            }
+            List<Thing> fresh = new(pool);
+            for (int i = 1; i < count; i++)
+            {
+                if (fresh.Count == 0)
+                {
+                    fresh.AddRange(pool);
+                    if (selected.Thing is { Spawned: true } first)
+                    {
+                        fresh.Add(first);
+                    }
+                }
+                Thing pick = fresh.RandomElement();
+                fresh.Remove(pick);
+                targets[i] = pick;
+            }
+            return targets;
+        }
+
+        /// <summary>
+        /// Standing pawns and targetable buildings within <paramref name="radius"/> of the selected target,
+        /// other than it, that an area attack may hit: hostile ones, and neutral ones with that setting on.
+        /// Natural rock is left out.
+        /// </summary>
+        private List<Thing> ScatterCandidates(LocalTargetInfo selected, float radius)
+        {
+            List<Thing> list = new();
+            Pawn self = CasterPawn;
+            if (self == null)
+            {
+                return list;
+            }
+            foreach (Thing t in GenRadial.RadialDistinctThingsAround(selected.Cell, caster.Map, radius, useCenter: true))
+            {
+                if (t == caster || t == selected.Thing || t.Destroyed || !t.Spawned)
+                {
+                    continue;
+                }
+                if (t is Pawn pawn)
+                {
+                    if (pawn.Dead || pawn.Downed)
+                    {
+                        continue;
+                    }
+                }
+                else if (t is not Building b || b.def.building?.isTargetable != true || !b.def.useHitPoints
+                    || SweepTargeting.KindOf(b) == SweepHitKind.Terrain)
+                {
+                    continue;
+                }
+                if (SweepTargeting.FactionAllows(self, t, SweepTargetFaction.Hostile))
+                {
+                    list.Add(t);
+                }
+            }
+            return list;
+        }
+
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            base.DrawHighlight(target);
+            CompFlowerBellCharge comp = Charge;
+            if (target.IsValid && comp != null && comp.AimMode == FlowerBellAimMode.Scatter)
+            {
+                GenDraw.DrawRadiusRing(target.Cell, comp.ScatterRadius);
+            }
         }
 
         public override void Reset()

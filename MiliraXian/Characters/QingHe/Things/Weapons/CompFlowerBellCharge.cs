@@ -10,24 +10,25 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     public class CompProperties_FlowerBellCharge : CompProperties
     {
-        /// <summary>One tier every this many seconds (RangedRework.md 2.9: 2/4/6/8/10 s).</summary>
+        /// <summary>One tier every this many seconds.</summary>
         public float tierSeconds = 2f;
         public int tiers = 5;
         /// <summary>Loss after an interruption: L(t) = r0 t + a t² / 2 seconds of charge.</summary>
         public float decayR0 = 0.5f;
         public float decayA = 1f;
 
-        // --- damage (RangedRework.md 2.9 "伤害设计", owner 11-11): the k-th note of a volley hits harder
-        /// <summary>Damage of the k-th note (0-based) as a multiple of the base: later notes hurt more.</summary>
-        public List<float> noteDamageFactors = new() { 1f, 1.5f, 2.2f, 3f, 4f };
+        /// <summary>Damage of every note of a volley released at tier k (1-based, index k - 1), as a multiple of the base.</summary>
+        public List<float> tierDamageFactors = new() { 1f, 1.5f, 2f, 2.5f, 3f };
         /// <summary>Base damage of a note by aura mastery level (replaces the projectile's damage and RangedWeapon_DamageMultiplier).</summary>
         public SimpleCurve baseDamageByMastery = new() { new CurvePoint(0f, 10f), new CurvePoint(12f, 18f), new CurvePoint(24f, 28f) };
-        /// <summary>Armour penetration of the k-th note: projectile's × (penetrationBase + penetrationPerNote k), k from 1.</summary>
+        /// <summary>Armour penetration at tier k: projectile's × (penetrationBase + penetrationPerTier k).</summary>
         public float penetrationBase = 0.8f;
-        public float penetrationPerNote = 0.1f;
-        /// <summary>Shock wave radius of the k-th note (k from 1): radiusBase + radiusPerNote k.</summary>
+        public float penetrationPerTier = 0.1f;
+        /// <summary>Shock wave radius at tier k: radiusBase + radiusPerTier k.</summary>
         public float radiusBase = 1.2f;
-        public float radiusPerNote = 0.2f;
+        public float radiusPerTier = 0.2f;
+        /// <summary>Scatter aim: the other notes pick targets within this radius of the selected one.</summary>
+        public float scatterRadius = 4f;
 
         public CompProperties_FlowerBellCharge()
         {
@@ -36,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     }
 
     /// <summary>
-    /// The Flower Bell's charge (RangedRework.md 2.9, five tiers), kept on the weapon so it survives
+    /// The Flower Bell's five-tier charge, kept on the weapon so it survives
     /// an interrupted cast. The charge stance adds to it each tick; once nothing adds to it (the
     /// stance was replaced: moving, a new job, a lost target) it decays, computed lazily from the
     /// last charge tick. Also holds the auto-release threshold and the run's random mode.
@@ -48,7 +49,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private int lastChargeTick = -1;
         private int threshold = 5;
         private int modeStart = -1;
-        private FlowerBellThreatMode threatMode = FlowerBellThreatMode.Hold;
+        private FlowerBellAimMode aimMode = FlowerBellAimMode.Focus;
         /// <summary>Set by the Gizmo; the charge stance releases on its next tick. Not saved.</summary>
         internal bool releaseRequested;
         /// <summary>Tier shown last tick, to hear the decay drop tier by tier. Not saved.</summary>
@@ -109,40 +110,42 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public bool CanRelease => Charging && Tier >= 1;
 
-        /// <summary>The answer to a melee threat below tier 1 (the player's toggle; the AI always steps away).</summary>
-        public FlowerBellThreatMode ThreatMode
-        {
-            get => Holder != null && Holder.Faction != Faction.OfPlayer ? FlowerBellThreatMode.Retreat : threatMode;
-            set => threatMode = value;
-        }
-
-        /// <summary>The threshold can change only with no charge at all (owner 11-09).</summary>
+        /// <summary>The threshold can change only with no charge at all.</summary>
         public bool ThresholdLocked => Charge > 0f;
 
-        /// <summary>Damage factor of note <paramref name="index"/> (0-based) of a volley.</summary>
-        public float NoteFactor(int index)
+        /// <summary>Damage factor of every note of a volley released at <paramref name="tier"/> (1-based).</summary>
+        public float TierFactor(int tier)
         {
-            List<float> f = PropsCharge.noteDamageFactors;
+            List<float> f = PropsCharge.tierDamageFactors;
             if (f == null || f.Count == 0)
             {
                 return 1f;
             }
-            return f[Mathf.Clamp(index, 0, f.Count - 1)];
+            return f[Mathf.Clamp(tier - 1, 0, f.Count - 1)];
         }
 
-        /// <summary>Damage of note <paramref name="index"/> fired by <paramref name="pawn"/>.</summary>
-        public float NoteDamage(Pawn pawn, int index)
+        /// <summary>Damage of each note fired by <paramref name="pawn"/> at <paramref name="tier"/>.</summary>
+        public float NoteDamage(Pawn pawn, int tier)
         {
             int level = MX_QH_HediffUtility.GetAuraMasteryLevel(pawn);
-            return PropsCharge.baseDamageByMastery.Evaluate(level) * NoteFactor(index);
+            return PropsCharge.baseDamageByMastery.Evaluate(level) * TierFactor(tier);
         }
 
-        public float NotePenetrationFactor(int index) => PropsCharge.penetrationBase + PropsCharge.penetrationPerNote * (index + 1);
+        public float NotePenetrationFactor(int tier) => PropsCharge.penetrationBase + PropsCharge.penetrationPerTier * tier;
 
-        public float NoteRadius(int index) => PropsCharge.radiusBase + PropsCharge.radiusPerNote * (index + 1);
+        public float NoteRadius(int tier) => PropsCharge.radiusBase + PropsCharge.radiusPerTier * tier;
 
-        /// <summary>Abnormal build-up of note <paramref name="index"/>: the square root of its damage factor.</summary>
-        public float NoteAbnormalFactor(int index) => Mathf.Sqrt(NoteFactor(index));
+        /// <summary>Abnormal build-up of each note at <paramref name="tier"/>: the square root of its damage factor.</summary>
+        public float NoteAbnormalFactor(int tier) => Mathf.Sqrt(TierFactor(tier));
+
+        public float ScatterRadius => PropsCharge.scatterRadius;
+
+        /// <summary>How the notes of a volley pick their targets (the player's toggle; the AI always focuses).</summary>
+        public FlowerBellAimMode AimMode
+        {
+            get => Holder != null && Holder.Faction != Faction.OfPlayer ? FlowerBellAimMode.Focus : aimMode;
+            set => aimMode = value;
+        }
 
         /// <summary>Degree (0 = gong of the lowest octave) of the run's first note; picked when a run starts.</summary>
         public int ModeStart => modeStart < 0 ? 0 : modeStart;
@@ -215,7 +218,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             Scribe_Values.Look(ref lastChargeTick, "mx_bellLastChargeTick", -1);
             Scribe_Values.Look(ref threshold, "mx_bellThreshold", 5);
             Scribe_Values.Look(ref modeStart, "mx_bellModeStart", -1);
-            Scribe_Values.Look(ref threatMode, "mx_bellThreatMode", FlowerBellThreatMode.Hold);
+            Scribe_Values.Look(ref aimMode, "mx_bellAimMode", FlowerBellAimMode.Focus);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && charge > 0f)
             {
                 FlowerBellChargeTracker.Track(this);
@@ -232,15 +235,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             if (pawn != null && pawn.Faction == Faction.OfPlayer)
             {
                 yield return new Gizmo_FlowerBellCharge(this);
-                bool retreat = threatMode == FlowerBellThreatMode.Retreat;
+                bool scatter = aimMode == FlowerBellAimMode.Scatter;
                 yield return new Command_Action
                 {
-                    defaultLabel = (retreat ? "MX_QH_BellThreatRetreat" : "MX_QH_BellThreatHold").Translate(),
-                    defaultDesc = "MX_QH_BellThreatDesc".Translate(),
-                    // Placeholder icons: vanilla's "pause caravan" for hold, "release animals" (running) for retreat.
-                    icon = retreat ? TexCommand.ReleaseAnimals : TexCommand.PauseCaravan,
-                    Order = -97f,
-                    action = () => threatMode = retreat ? FlowerBellThreatMode.Hold : FlowerBellThreatMode.Retreat,
+                    defaultLabel = (scatter ? "MX_QH_BellAimScatter" : "MX_QH_BellAimFocus").Translate(),
+                    defaultDesc = "MX_QH_BellAimDesc".Translate(ScatterRadius.ToString("0.#")),
+                    // Placeholder icons: vanilla's attack for focus, squad attack for scatter.
+                    icon = scatter ? TexCommand.SquadAttack : TexCommand.Attack,
+                    Order = -96f,
+                    action = () => aimMode = scatter ? FlowerBellAimMode.Focus : FlowerBellAimMode.Scatter,
                 };
             }
         }

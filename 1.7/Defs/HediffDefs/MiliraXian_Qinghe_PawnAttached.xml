@@ -581,4 +581,33 @@
       </li>
     </comps>
   </HediffDef>
+
+  <!-- 华彩闪避后的花令回复加速：每次闪避给 1 秒，反复闪避只刷新计时 -->
+  <HediffDef>
+    <defName>MX_QH_FlowerDecreeEvasionBoost</defName>
+    <hediffClass>HediffWithComps</hediffClass>
+    <label>花令涌流</label>
+    <description>闪避远程攻击后，花令的回复速度暂时大幅提升。</description>
+    <defaultLabelColor>(0.95, 0.74, 0.84)</defaultLabelColor>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>1</initialSeverity>
+    <minSeverity>0</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>60</disappearsAfterTicks>
+        <showRemainingTime>false</showRemainingTime>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <statFactors>
+          <MX_QH_FlowerDecreeRecovery>3</MX_QH_FlowerDecreeRecovery>
+        </statFactors>
+      </li>
+    </stages>
+  </HediffDef>
+
 </Defs>

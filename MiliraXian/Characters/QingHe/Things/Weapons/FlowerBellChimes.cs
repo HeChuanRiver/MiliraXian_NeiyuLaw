@@ -6,7 +6,7 @@ using Verse.Sound;
 namespace MiliraXian.Characters.QingHe.Things.Weapons
 {
     /// <summary>
-    /// The bell's notes (RangedRework.md 2.9 "音效", owner 11-11): the pentatonic scale gong, shang,
+    /// The bell's notes: the pentatonic scale gong, shang,
     /// jue, zhi, yu (1, 9/8, 5/4, 3/2, 5/3) on gong = 1047 Hz. One sample (the bell tree note,
     /// measured at 1317 Hz) is shifted to every degree with <see cref="SoundInfo.pitchFactor"/>.
     /// A degree counts up the scale from the lowest gong; five degrees make an octave.
@@ -16,7 +16,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private const float SampleHz = 1317.1f;
         private const float GongHz = 1046.5f;
         private static readonly float[] Ratios = { 1f, 9f / 8f, 5f / 4f, 3f / 2f, 5f / 3f };
-        /// <summary>The release arpeggio runs over this (owner 11-11: 0.2 s).</summary>
+        /// <summary>The release arpeggio runs over this many ticks.</summary>
         public const int ArpeggioTicks = 12;
         /// <summary>A dropped tier: the same note a little lower (and the duller sample).</summary>
         private const float DullPitch = 0.94f;

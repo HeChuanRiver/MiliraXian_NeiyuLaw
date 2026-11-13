@@ -44,6 +44,8 @@
   <MX_QH_Node_FlowerFairy.description>我與盛花之景本為一體。隨風而動，隨水而居。&#10;&#10;——初始習得靈氣加護、靜思、涓流、流水之形和七夕節慶特性。</MX_QH_Node_FlowerFairy.description>
   <MX_QH_Node_FlyingFlowerDecree.label>飛花令</MX_QH_Node_FlyingFlowerDecree.label>
   <MX_QH_Node_FlyingFlowerDecree.description>——習得飛花令：春泉涌流。</MX_QH_Node_FlyingFlowerDecree.description>
+  <MX_QH_Node_LotusRain.label>荷雨</MX_QH_Node_LotusRain.label>
+  <MX_QH_Node_LotusRain.description>——習得飛花令：荷雨。&#10;&#10;在敵人來路上橫起一道雨幕，踏入者被淋透而大幅減速，血肉積累毒素、機械積累腐蝕。雨的落點由你的視線決定，正好擋在衝鋒的路上。</MX_QH_Node_LotusRain.description>
   <MX_QH_Node_SwordDance.label>劍舞</MX_QH_Node_SwordDance.label>
   <MX_QH_Node_SwordDance.description>——習得劍技：鏡花水月。</MX_QH_Node_SwordDance.description>
   <MX_QH_Node_SwordDance.unlockLetter.title>劍舞姿態</MX_QH_Node_SwordDance.unlockLetter.title>

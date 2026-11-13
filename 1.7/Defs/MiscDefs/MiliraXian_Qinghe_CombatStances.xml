@@ -16,5 +16,10 @@
     <label>华彩</label>
     <description>以远程武器施展法术的姿态风格。立于花影之间，通过飞花令多样的异常效果削弱敌人。</description>
     <weaponClass>Ranged</weaponClass>
+    <stanceEffect>
+      <statOffsets>
+        <MX_QH_RangedEvadeChance>0.75</MX_QH_RangedEvadeChance>
+      </statOffsets>
+    </stanceEffect>
   </MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
 </Defs>

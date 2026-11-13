@@ -4,7 +4,7 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.Verbs
 {
     /// <summary>
-    /// The Flower Bell's charge (RangedRework.md 2.9). A vanilla warmup underneath: its checks
+    /// The Flower Bell's charge. A vanilla warmup underneath: its checks
     /// (target lost, out of reach, moved, a new job) end it as they end any warmup, and the charge
     /// left on the weapon then decays. Each tick it adds to the charge; a tier reached rings the
     /// run's next note. It ends by releasing (the warmup completes) when the threshold tier is
