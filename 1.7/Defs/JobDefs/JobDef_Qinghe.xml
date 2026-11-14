@@ -3,7 +3,7 @@
   <JobDef>
     <defName>MX_QH_IllusoryReflection</defName>
     <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_IllusoryReflectionStance</driverClass>
-    <reportString>正在维持反击架势。</reportString>
+    <reportString>正隐入幻象之中。</reportString>
     <playerInterruptible>false</playerInterruptible>
     <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>
     <casualInterruptible>false</casualInterruptible>

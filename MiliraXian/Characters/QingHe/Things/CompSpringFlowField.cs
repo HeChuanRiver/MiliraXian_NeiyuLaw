@@ -55,15 +55,7 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostDraw()
         {
             base.PostDraw();
-            if (parent?.Map == null)
-            {
-                return;
-            }
-
-            float pulse = 0.28f + Mathf.Sin(Find.TickManager.TicksGame * 0.06666667f) * 0.08f;
-            var color = new Color(1f, 0.68f, 0.82f, pulse * VisualAlpha);
-            var material = MX_QHGraphicsUtility.FieldEdgeMaterial();
-            MX_QHGraphicsUtility.DrawRadiusRingWithMaterial(parent.Position, CurrentRadius, material, color, parent.Map);
+            // The boundary is drawn by SpringFlowVfx, not here.
         }
 
         public override void CompTick()
@@ -113,6 +105,12 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_References.Look<Verse.Mote>(ref fieldMote, "fieldMote", false);
         }
 
+        public override void PostDeSpawn(Map map, DestroyMode mode)
+        {
+            base.PostDeSpawn(map, mode);
+            SpringFlowVfx.Remove(map, this);
+        }
+
         public void Init(Pawn newCaster)
         {
             caster = newCaster;
@@ -130,6 +128,11 @@ namespace MiliraXian.Characters.QingHe.Things
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
+            // Register with the VFX renderer immediately
+            if (parent?.Map != null)
+            {
+                SpringFlowVfx.Add(parent.Map, this);
+            }
         }
 
         public override bool DontDrawParent()

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- 恶化：效果期间命中照给附带效果（失血、毒素、低温、扣能量），并积累到第二条槽，
-       上限为正常的 aggravationLimitFactor 倍（默认 0.5）。满了就把剩余效果一次结清并结束效果，目标重新开始正常积累；
-       恐惧、过载改为重置时长并眩晕 2 秒。 -->
   <!-- Bleed / electric leak -->
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalBleed</defName>
-    <label>流血积累</label>
-    <description>花信铃的春之共鸣扰动了目标的血液。积累达到上限时会触发流血效果。</description>
+    <label>渗流</label>
+    <description>血液循环被扰乱，积累达到上限时会引发严重的失血反应。</description>
     <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -21,7 +18,7 @@
     <triggerMoteDef>MX_Mote_AbnormalBleedBurstIcon</triggerMoteDef>
     <effectHediff>MX_AbnormalBleeding</effectHediff>
     <effectDurationTicks>2400</effectDurationTicks>
-    <triggerText>流血</triggerText>
+    <triggerText>渗血</triggerText>
     <aggravationText>撕裂</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(1.00, 0.36, 0.42)</triggerTextColor>
@@ -36,8 +33,8 @@
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalElectricLeak</defName>
-    <label>电漏积累</label>
-    <description>花信铃的春之共鸣扰乱了机械结构。积累达到上限时会触发短路效果。</description>
+    <label>漏电</label>
+    <description>内部的电路正在被渗入的水雾影响。积累达到上限时会引发短路爆炸。</description>
     <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -52,7 +49,7 @@
     <effectHediff>MX_AbnormalShortCircuit</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>短路</triggerText>
-    <aggravationText>再短路</aggravationText>
+    <aggravationText>短路</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(1.00, 0.86, 0.28)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -64,8 +61,8 @@
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <HediffDef>
     <defName>MX_AbnormalBleeding</defName>
-    <label>流血</label>
-    <description>目标受到花信铃春之共鸣的影响，正在持续流血。</description>
+    <label>渗血</label>
+    <description>血液循环被严重扰乱，引起剧烈的疼痛和渗血伤口。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(1.00, 0.36, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -100,7 +97,7 @@
   <HediffDef>
     <defName>MX_AbnormalShortCircuit</defName>
     <label>短路</label>
-    <description>机械体受到花信铃春之共鸣的影响，控制与供能系统发生短路。</description>
+    <description>受到水雾渗入的影响，控制与供能系统发生临时性短路。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(1.00, 0.86, 0.28)</defaultLabelColor>
     <isBad>true</isBad>
@@ -140,8 +137,8 @@
   <!-- Toxin / corrosion -->
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalToxin</defName>
-    <label>毒素积累</label>
-    <description>花信铃的夏之共鸣在目标体内留下毒素。积累达到上限时会触发剧毒效果。</description>
+    <label>剧毒</label>
+    <description>体内正在不断积累从环境中清出的毒素，积累达到上限时会引起严重的中毒反应。</description>
     <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -156,7 +153,7 @@
     <effectHediff>MX_AbnormalVenom</effectHediff>
     <effectDurationTicks>3600</effectDurationTicks>
     <triggerText>中毒</triggerText>
-    <aggravationText>毒发</aggravationText>
+    <aggravationText>猛毒</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.62, 0.95, 0.42)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
@@ -170,8 +167,8 @@
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalCorrosion</defName>
-    <label>腐蚀积累</label>
-    <description>花信铃的夏之共鸣正在侵蚀机械结构。积累达到上限时会触发腐蚀效果。</description>
+    <label>腐蚀</label>
+    <description>机械结构受到析出酸性物质的侵蚀，积累达到上限时会导致结构强度严重下降。</description>
     <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -194,7 +191,7 @@
   <HediffDef>
     <defName>MX_AbnormalVenom</defName>
     <label>剧毒</label>
-    <description>目标受到花信铃夏之共鸣的影响，毒素正在持续侵蚀其身体。</description>
+    <description>体内积累的毒素超过限度，毒素正在持续侵蚀身体。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.62, 0.95, 0.42)</defaultLabelColor>
     <isBad>true</isBad>
@@ -202,7 +199,7 @@
     <everCurableByItem>false</everCurableByItem>
     <stages>
       <li>
-        <vomitMtbDays>0.25</vomitMtbDays>
+        <vomitMtbDays>0.005</vomitMtbDays>
         <capMods>
           <li>
             <capacity>Consciousness</capacity>
@@ -210,7 +207,7 @@
           </li>
         </capMods>
         <statFactors>
-          <MoveSpeed>0.25</MoveSpeed>
+          <MoveSpeed>0.2</MoveSpeed>
         </statFactors>
       </li>
     </stages>
@@ -239,7 +236,7 @@
   <HediffDef>
     <defName>MX_AbnormalCorroded</defName>
     <label>腐蚀</label>
-    <description>机械体受到花信铃夏之共鸣的影响，结构与装甲正在持续腐蚀。</description>
+    <description>结构与装甲正在快速腐蚀，暂时无法提供任何防护能力。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.66, 0.90, 0.58)</defaultLabelColor>
     <isBad>true</isBad>
@@ -267,19 +264,19 @@
   <!-- Fear / overload -->
   <MentalStateDef ParentName="BaseMentalState">
     <defName>MX_AbnormalFearedMentalState</defName>
-    <label>恐惧</label>
+    <label>混乱</label>
     <stateClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates.MentalState_AbnormalFeared</stateClass>
     <category>Misc</category>
     <nameColor>(0.92, 0.74, 1.00)</nameColor>
     <blockNormalThoughts>true</blockNormalThoughts>
     <minTicksBeforeRecovery>600</minTicksBeforeRecovery>
     <maxTicksBeforeRecovery>600</maxTicksBeforeRecovery>
-    <baseInspectLine>恐惧</baseInspectLine>
+    <baseInspectLine>混乱</baseInspectLine>
   </MentalStateDef>
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalFear</defName>
-    <label>恐惧积累</label>
-    <description>花信铃的秋之共鸣正在扰乱目标心神。积累达到上限时会触发恐惧效果。</description>
+    <label>混乱</label>
+    <description>受到特定频率的次声波影响，精神状态变得不太稳定。积累到上限会引起精神失常。</description>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -293,7 +290,7 @@
     <triggerMoteDef>MX_Mote_AbnormalFearBurstIcon</triggerMoteDef>
     <effectHediff>MX_AbnormalFeared</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
-    <triggerText>恐惧</triggerText>
+    <triggerText>混乱</triggerText>
     <aggravationText>惊惧</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
@@ -301,8 +298,8 @@
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalOverload</defName>
-    <label>过载积累</label>
-    <description>花信铃的秋之共鸣正在压迫机械控制核心。积累达到上限时会触发过载效果。</description>
+    <label>过载</label>
+    <description>特定频率的次声波正在持续影响中央处理器和目标识别系统，积累到上限会引起识别系统错乱。</description>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -317,15 +314,15 @@
     <effectHediff>MX_AbnormalOverloaded</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>过载</triggerText>
-    <aggravationText>再过载</aggravationText>
+    <aggravationText>错乱</aggravationText>
     <triggerTextOffset>(0.20, 0, 0.55)</triggerTextOffset>
     <triggerTextColor>(0.92, 0.74, 1.00)</triggerTextColor>
     <triggerTextDuration>1.25</triggerTextDuration>
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <HediffDef>
     <defName>MX_AbnormalFeared</defName>
-    <label>恐惧</label>
-    <description>目标受到花信铃秋之共鸣的影响，陷入了无法自控的恐惧。</description>
+    <label>混乱</label>
+    <description>令人发疯的次声波引发了精神崩溃，当前会不断攻击友军。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -349,8 +346,8 @@
   </HediffDef>
   <HediffDef>
     <defName>MX_AbnormalOverloaded</defName>
-    <label>过载</label>
-    <description>机械体受到花信铃秋之共鸣的影响，控制核心陷入了过载状态。</description>
+    <label>传感器过载</label>
+    <description>受次声波影响，传感器和敌我识别系统出现故障，会攻击附近的任何目标。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
@@ -375,8 +372,8 @@
   <!-- Cold / freeze -->
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
     <defName>MX_AbnormalCold</defName>
-    <label>寒冷积累</label>
-    <description>花信铃的冬之共鸣正在侵入目标。积累达到上限时会触发冻结效果。</description>
+    <label>结霜</label>
+    <description>极度低温的寒气正在使组织和机械结构运转变缓。积累到上限时会完全冻结。</description>
     <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -391,7 +388,7 @@
     <effectHediff>MX_AbnormalFrozen</effectHediff>
     <effectDurationTicks>300</effectDurationTicks>
     <triggerText>冻结</triggerText>
-    <aggravationText>碎冰</aggravationText>
+    <aggravationText>碎裂</aggravationText>
     <aggravationDamageDef>MX_AbnormalShatterDamage</aggravationDamageDef>
     <aggravationDamageBase>15</aggravationDamageBase>
     <aggravationDamagePerSecond>6</aggravationDamagePerSecond>
@@ -411,7 +408,7 @@
   <HediffDef>
     <defName>MX_AbnormalFrozen</defName>
     <label>冻结</label>
-    <description>目标受到花信铃冬之共鸣的影响，被短暂冻结而无法行动。</description>
+    <description>被冻结的水雾包裹，完全无法行动，需要等待一段时间温度恢复后才能挣脱。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalFrozen</hediffClass>
     <defaultLabelColor>(0.56, 0.88, 1.00)</defaultLabelColor>
     <isBad>true</isBad>

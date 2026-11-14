@@ -40,7 +40,7 @@
         <showBubble>false</showBubble>
         <stages>
             <li>
-                <label>倾听清荷的演奏</label>
+                <label>倾听了清荷的演奏</label>
                 <description>清荷婉转的乐声在屋内缓缓流转，令人心绪安宁。</description>
                 <baseMoodEffect>5</baseMoodEffect>
             </li>
@@ -53,9 +53,9 @@
         <thoughtClass>Thought_Situational</thoughtClass>
         <stages>
             <li>
-                <label>缺少荷池</label>
+                <label>缺少荷雨池</label>
                 <description>我需要一个合适的修行之所。</description>
-                <baseMoodEffect>-6</baseMoodEffect>
+                <baseMoodEffect>-1</baseMoodEffect>
             </li>
         </stages>
     </ThoughtDef>
@@ -68,7 +68,7 @@
             <li>
                 <label>荷雨亭不够美观</label>
                 <description>我的修行地点环境非常糟糕，这让我很难过。</description>
-                <baseMoodEffect>-4</baseMoodEffect>
+                <baseMoodEffect>-1</baseMoodEffect>
             </li>
         </stages>
     </ThoughtDef>

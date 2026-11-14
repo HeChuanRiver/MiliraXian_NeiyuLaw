@@ -203,6 +203,26 @@
       </textureWrapOverrides>
     </shaderProgram>
   </ShaderDef>
+  <!-- 春泉涌流的边界光幕：格子边界 + 光幕，加法混合，进泛光。
+       边界形状由 _MainTex 提供（CPU 计算的格子边界距离场）。 -->
+  <ShaderDef>
+    <defName>MX_QH_SpringFlowBoundary</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SpringFlowBoundary.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3153</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_MainTex</key>
+          <value>Clamp</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
   <!-- 荷雨的荷花：贴图裁切后按 alpha 混合，不做加法（花是要有实体的）。
       和花瓣（MX_QH_SakuraPetal）同参数：SrcAlpha / OneMinusSrcAlpha，不是预乘——
       预乘会把半透明边缘的黑底带出来，看起来像 Cutout。

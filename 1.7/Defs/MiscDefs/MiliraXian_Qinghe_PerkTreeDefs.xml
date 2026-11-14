@@ -36,7 +36,7 @@
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
     <defName>MX_QH_Node_AuraCirculation</defName>
     <label>灵气流转</label>
-    <description>——被动效果：灵气护盾受击回复延迟变为0秒。</description>
+    <description>——被动效果：移除灵气护盾的受击回复延迟。</description>
     <category>MX_QH_Category_Qinghe</category>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <displayOrder>85</displayOrder>
