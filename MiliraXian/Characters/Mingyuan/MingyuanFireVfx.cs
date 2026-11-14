@@ -178,9 +178,7 @@ internal static class MingyuanFireVfx
         float time = Find.TickManager.TicksGame / 60f;
         if (verb?.Combustion is { } combustion)
         {
-            DrawSigil(origin, combustion.Props.radius, progress, alpha, time);
-            Sparks(origin, Quaternion.identity, Mathf.Lerp(1f, combustion.Props.radius * 0.72f, progress),
-                time, 2f, alpha, 12);
+            MingyuanCombustionVfx.DrawWarmup(target, combustion.Props, progress, alpha, verb.CasterPawn.thingIDNumber);
         }
         else
         {
@@ -415,8 +413,6 @@ public class Thing_MingyuanFireCastVisual : Thing
         origin = pawn.Position.ToVector3Shifted();
         aimCell = target;
         duration = stance.verb is Verb_MingyuanTimeBurn ? 14 : 20;
-        radius = (stance.verb as Verb_MingyuanFireCast)?.Combustion?.Props.radius ?? 0f;
-        sigil = radius > 0f;
     }
 
     internal void InitBurst(Vector3 center, float effectRadius, int ticks, bool isSigil)
@@ -433,7 +429,8 @@ public class Thing_MingyuanFireCastVisual : Thing
 
     private bool IsWarming(Verb_CastAbility verb) => !MingyuanPowerBalance.Sealed
         && caster is { Spawned: true, Dead: false } && caster.Map == Map
-        && verb?.WarmupStance is { } stance && stance.startedTick == stanceStart;
+        && verb?.WarmupStance is { } stance && stance.startedTick == stanceStart
+        && (verb is not Verb_MingyuanFireCast { Combustion: { } combustion } || combustion.CanRelease(stance.focusTarg));
 
     protected override void Tick()
     {
@@ -482,7 +479,7 @@ public class Thing_MingyuanFireCastVisual : Thing
         if (!etchPlayed && elapsed >= fire.JumpTicks && fire.Combustion is { } combustion)
         {
             etchPlayed = true;
-            combustion.Props.etchSound?.PlayOneShot(new TargetInfo(Position, Map));
+            combustion.Props.etchSound?.PlayOneShot(new TargetInfo(aimCell, Map));
         }
     }
 
@@ -498,6 +495,17 @@ public class Thing_MingyuanFireCastVisual : Thing
                 ? Mathf.Clamp01((VisualClock.Ticks - stanceStart) / Mathf.Max(1, timeBurn.CastTicks))
                 : progress;
             MingyuanFireVfx.DrawTimeBurnCast(caster, props, aimCell.ToVector3Shifted(), phase, remaining, warming);
+        }
+        else if (Verb is Verb_MingyuanFireCast { Combustion: not null } fire && !sigil)
+        {
+            float phase = progress;
+            if (IsWarming(fire))
+            {
+                float elapsed = fire.CastTicks - fire.WarmupTicksLeft - fire.JumpTicks;
+                if (!caster.stances.stunner.Stunned) elapsed += VisualClock.TicksSince(Find.TickManager.TicksGame);
+                phase = Mathf.Clamp01(elapsed / (fire.CastTicks - fire.JumpTicks));
+            }
+            MingyuanCombustionVfx.DrawWarmup(aimCell.ToVector3Shifted(), fire.Combustion.Props, phase, remaining, caster.thingIDNumber);
         }
         else if (sigil && endTick > 0)
             MingyuanFireVfx.DrawSigil(origin, radius, progress, remaining, Find.TickManager.TicksGame / 60f);

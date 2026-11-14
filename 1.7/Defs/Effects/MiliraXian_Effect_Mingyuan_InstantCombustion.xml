@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>MX_Mingyuan_CombustionVolley</defName>
+    <label>瞬时燃烧</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanCombustionVolley</thingClass>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <drawOffscreen>true</drawOffscreen>
+    <selectable>false</selectable>
+    <isSaveable>true</isSaveable>
+  </ThingDef>
+
+  <DamageDef ParentName="Flame">
+    <defName>MX_Mingyuan_CombustionVisualExplosion</defName>
+    <label>火焰爆炸</label>
+    <workerClass>MiliraXian.Characters.Mingyuan.DamageWorker_MingyuanCombustionVisual</workerClass>
+    <explosionHeatEnergyPerCell>0</explosionHeatEnergyPerCell>
+    <explosionSnowMeltAmount>0</explosionSnowMeltAmount>
+  </DamageDef>
+
+  <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef Name="MX_Mingyuan_CombustionFireballBase" Abstract="True">
+    <workerClass>MiliraXian.Characters.Mingyuan.SweepDamageWorker_MingyuanCombustion</workerClass>
+    <damageDef>Bomb</damageDef>
+    <hitBuildings>true</hitBuildings>
+    <requireLineOfSight>true</requireLineOfSight>
+  </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
+
+  <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
+    <defName>MX_Mingyuan_CombustionSmallFireball</defName>
+    <radius>4.5</radius>
+    <damage>75</damage>
+    <lifeBurnFraction>0.025</lifeBurnFraction>
+  </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
+
+  <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
+    <defName>MX_Mingyuan_CombustionCoreFireball</defName>
+    <radius>10</radius>
+    <damage>150</damage>
+    <lifeBurnFraction>0.15</lifeBurnFraction>
+    <leavesScorch>true</leavesScorch>
+  </MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef>
+
   <ThingDef>
     <defName>MX_Mingyuan_Mote_InstantCombustionFlash</defName>
     <label>特效</label>
