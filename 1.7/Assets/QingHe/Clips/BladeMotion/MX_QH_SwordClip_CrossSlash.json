@@ -1,8 +1,6 @@
 {
   "durationSeconds": 3.17,
   "windupSeconds": 1.45,
-  "damageDef": "MX_QH_CrossSlash",
-  "counterDamageDef": "MX_QH_CounterSlash",
   "trailStart": 1.45,
   "trailEnd": 1.8,
   "drawPushStart": 1.45,

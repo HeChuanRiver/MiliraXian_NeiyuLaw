@@ -3,7 +3,8 @@
   <!--
     刀剑动作片段（BladeMotionClip）的 Def。Def 只给名字，关键帧数据在 dataPath 指向的 JSON
     （相对 Mod 根目录），游戏内用 debug 动作 "Reload JSON assets (meshes, skeletal/blade clips)" 热重载，
-    重载失败保留旧数据。JSON 结构见 BladeMotionClipDef 的类注释：
+    重载失败保留旧数据。JSON 是纯美术资产：自洽的数值，没有交叉引用；Def 接线（damageDef 等）
+    留在 XML，由 RimWorld 加载器照常校验。JSON 结构见 BladeMotionClipDef 的类注释：
     曲线是 [[秒, 值], ...]，刀关键帧是 { time, yaw, pitch, roll, reach, offset: [x, y, z] }，
     缺省字段沿用 BladeMotionClip 的默认值（trailStart/flashTime/counterFrom 等缺省 -1 = 无）。
     樱舞的地面/空中片段用 SakuraDanceClipDef，多 skipSeconds/cutTimes/thunderCatchTimes 等字段。
@@ -44,6 +45,9 @@
   <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
     <defName>MX_QH_SwordClip_CrossSlash</defName>
     <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_CrossSlash.json</dataPath>
+    <!-- 伤口和战斗日志里的招式名：两斩为拔刀十字斩，收刀途中化解后的反击为拔刀斩·化解 -->
+    <damageDef>MX_QH_CrossSlash</damageDef>
+    <counterDamageDef>MX_QH_CounterSlash</counterDamageDef>
   </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
 
   <!-- 防御：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->

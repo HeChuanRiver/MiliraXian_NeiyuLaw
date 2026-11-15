@@ -9,10 +9,12 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
     /// <summary>
     /// A blade motion clip as a Def. The def only names the clip; its data (keyframe tracks,
     /// strikes, trail/flash timing) lives in the JSON file at dataPath, relative to the mod root
-    /// (reloadable via the "Reload JSON assets" debug action). Missing scalar fields keep the
-    /// defaults of <see cref="BladeMotionClip"/>; a missing curve or track stays null. JSON shape:
+    /// (reloadable via the "Reload JSON assets" debug action). The JSON is a pure art asset:
+    /// self-contained numbers, no cross-references. Def wiring (the combat-log damage names)
+    /// stays in XML on this def. Missing scalar fields keep the defaults of
+    /// <see cref="BladeMotionClip"/>; a missing curve or track stays null. JSON shape:
     /// { "durationSeconds": 3.17, "windupSeconds": 1.45, "loop": false,
-    ///   "damageDef": "MX_QH_CrossSlash", "counterFrom": 1.64, "flashTime": 0.783,
+    ///   "counterFrom": 1.64, "flashTime": 0.783,
     ///   "trailStart": 1.45, "trailEnd": 1.8, "drawPushStart": 1.45, "drawPushEnd": 1.5,
     ///   "turn": [[t, v], ...], "height": [...], "bodyForward": [...], "bodySide": [...],
     ///   "tilt": [...], "tiltSide": [...], "sheathed": [...],
@@ -46,8 +48,6 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
             public float[][] sheathed { get; set; }
             public ScabbardKeyData[] scabbardKeys { get; set; }
             public float counterFrom { get; set; } = -1f;
-            public string damageDef { get; set; }
-            public string counterDamageDef { get; set; }
 
             // Sakura Dance extras, read by SakuraDanceClipDef only.
             public float skipSeconds { get; set; }
@@ -93,6 +93,11 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         }
 
         public string dataPath;
+
+        /// <summary>Named damage of this attack's strikes and of its counter (shown in wounds and
+        /// the combat log); null = the verb's own. XML wiring, stamped onto the clip after a load.</summary>
+        public DamageDef damageDef;
+        public DamageDef counterDamageDef;
 
         private JsonModAsset<ClipData> asset;
         private BladeMotionClip clip;
@@ -224,8 +229,8 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                 }
             }
             c.counterFrom = d.counterFrom;
-            c.damageDef = DamageNamed(d.damageDef);
-            c.counterDamageDef = DamageNamed(d.counterDamageDef);
+            c.damageDef = damageDef;
+            c.counterDamageDef = counterDamageDef;
         }
 
         private static BladeKeyframes BuildBlade(BladeData d)
@@ -280,22 +285,6 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
         private static Vector3 Vec3(float[] a)
         {
             return new Vector3(a[0], a[1], a[2]);
-        }
-
-        private DamageDef DamageNamed(string name)
-        {
-            if (name.NullOrEmpty())
-            {
-                return null;
-            }
-            DamageDef def = DefDatabase<DamageDef>.GetNamedSilentFail(name);
-            // A name that does not resolve falls back to the verb's own damage (null), like a
-            // missing field; warn rather than reject the whole clip.
-            if (def == null)
-            {
-                Log.Warning($"[MiliraXian] Blade motion clip '{defName}' references unknown DamageDef '{name}'.");
-            }
-            return def;
         }
 
         private static string ValidateData(ClipData d)
