@@ -21,6 +21,22 @@
     <comboTrialCount>10</comboTrialCount>
     <combatMemoryTicks>600</combatMemoryTicks>
     <resourceEventCooldownTicks>120</resourceEventCooldownTicks>
+    <retiredAbilities>
+      <li>MX_Mingyuan_EmberArt_k3</li>
+      <li>MX_Mingyuan_EmberArt_k4</li>
+      <li>MX_Mingyuan_EmberArt_k5</li>
+      <li>MX_Mingyuan_EmberArt_k6</li>
+      <li>MX_Mingyuan_EmberArt_k7</li>
+      <li>MX_Mingyuan_EmberArt_k8</li>
+      <li>MX_Mingyuan_EmberArt_k9</li>
+    </retiredAbilities>
+    <mainSkills>
+      <li>MX_Mingyuan_AscendantFlameDash</li>
+      <li>MX_Mingyuan_InstantCombustion</li>
+      <li>MX_Mingyuan_BurningPillar</li>
+      <li>MX_Mingyuan_TimeBurn</li>
+      <li>MX_Mingyuan_AshesOfSelf</li>
+    </mainSkills>
   </MiliraXian.Characters.Mingyuan.MingyuanEmberBookDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
     <defName>MX_Mingyuan_Ember_Origin</defName>
@@ -120,12 +136,12 @@
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_s3</defName>
     <label>凝火定息</label>
-    <description>新增余烬术式的准备时间减少 4% / 级，最高 2 级。</description>
-    <tradeoff>只作用于余烬术式；最短准备时间 0.3 秒。</tradeoff>
-    <role>动作效率</role>
+    <description>施放明渊的主动技能后，受到的伤害减少 4% / 级，持续 3 秒，最高 2 级。</description>
+    <tradeoff>重复触发只刷新持续时间；与升焰·护身分别结算。</tradeoff>
+    <role>施法防护</role>
     <category>MX_Mingyuan_Ember_Stat</category>
     <nodeId>s3</nodeId>
-    <effect>Preparation</effect>
+    <effect>CastGuard</effect>
     <displayOrder>3</displayOrder>
     <position>(475,520)</position>
     <shape>Notable</shape>
@@ -136,13 +152,13 @@
     <trial>None</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>0.04</value>
-    <threshold>0.3</threshold>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_s1</node>
       </li>
     </prerequisites>
+    <value>0.04</value>
+    <durationTicks>180</durationTicks>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_s4</defName>
@@ -535,8 +551,8 @@
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_m9</defName>
     <label>焰律合一</label>
-    <description>过燃期间，新增余烬术式的伤害提高 8%。</description>
-    <tradeoff>只强化余烬术式，不改变原有主动技能和护焰消耗。</tradeoff>
+    <description>过燃期间，五项主动技能及其灼痕造成的伤害提高 8%。</description>
+    <tradeoff>仅在过燃期间生效；不影响时间燃烧的老化速度与旋风的装备损耗。</tradeoff>
     <role>机制终局</role>
     <category>MX_Mingyuan_Ember_Mechanic</category>
     <nodeId>m9</nodeId>
@@ -551,23 +567,22 @@
     <trial>Overburn</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>0.08</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_m8</node>
       </li>
     </prerequisites>
+    <value>0.08</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k1</defName>
-    <label>启焰观式</label>
-    <description>实战施放主动技能后，显示 3 秒连章提示。20 秒内施放三种不同主动技能可完成一次连章。</description>
-    <tradeoff>仅显示进度，不直接增加伤害。</tradeoff>
-    <role>技能起点</role>
+    <label>启焰回息</label>
+    <description>实战施放明渊的主动技能后，自动获得 5 层自我燃烧。</description>
+    <tradeoff>每 3 秒最多触发一次。</tradeoff>
+    <role>施法续燃</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k1</nodeId>
-    <effect>ComboInsight</effect>
+    <effect>CastKindling</effect>
     <displayOrder>19</displayOrder>
     <position>(1540,350)</position>
     <shape>Minor</shape>
@@ -578,22 +593,23 @@
     <trial>None</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <durationTicks>180</durationTicks>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_core</node>
       </li>
     </prerequisites>
+    <value>5</value>
+    <cooldownTicks>180</cooldownTicks>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k2</defName>
-    <label>升焰·折返</label>
-    <description>升焰疾行结束后，3 秒内可选择一次不超过 6 格的折返位移。</description>
-    <tradeoff>只能向起跳点方向折返；不造成伤害，不留下灼痕。</tradeoff>
-    <role>额外位移</role>
+    <label>升焰·护身</label>
+    <description>升焰疾行落地后，受到的伤害减少 15%，持续 3 秒。</description>
+    <tradeoff>重复触发只刷新持续时间；与凝火定息分别结算。</tradeoff>
+    <role>落地防护</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k2</nodeId>
-    <effect>DashReturn</effect>
+    <effect>DashGuard</effect>
     <displayOrder>20</displayOrder>
     <position>(1425,520)</position>
     <shape>Notable</shape>
@@ -604,24 +620,23 @@
     <trial>None</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <radius>6</radius>
-    <penalty>0</penalty>
-    <durationTicks>180</durationTicks>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k1</node>
       </li>
     </prerequisites>
+    <value>0.15</value>
+    <durationTicks>180</durationTicks>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k3</defName>
-    <label>余烬·双星</label>
-    <description>学会独立术式「双星」：在目标处连续发动两次焰击，每次对半径 1.5 格内的敌人造成 15 点灼烧伤害。冷却 20 秒。</description>
-    <tradeoff>两次焰击间隔 0.3 秒，不附加生命燃烧。伤害随自燃与过燃提高。</tradeoff>
-    <role>范围焰击</role>
+    <label>瞬燃·添薪</label>
+    <description>瞬时燃烧的小火球附加的生命燃烧增加 10%。</description>
+    <tradeoff>按本次原有叠层量增加 10%；沿用生命燃烧的免疫与过燃增幅。</tradeoff>
+    <role>叠层强化</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k3</nodeId>
-    <effect>TwinStars</effect>
+    <effect>CombustionKindling</effect>
     <displayOrder>21</displayOrder>
     <position>(1655,520)</position>
     <shape>Notable</shape>
@@ -632,24 +647,18 @@
     <trial>None</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>15</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k1</node>
       </li>
     </prerequisites>
-    <radius>1.5</radius>
-    <durationTicks>60</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k3</li>
-    </grantedAbilities>
+    <value>0.1</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k4</defName>
-    <label>余烬·烬迹</label>
-    <description>学会独立术式「烬迹」：在目标处留下半径 2 格、持续 3 秒的余火，每秒造成 5 点灼烧伤害。冷却 25 秒。</description>
-    <tradeoff>不附加生命燃烧。同一术式的余火同时只保留一处，伤害随自燃与过燃提高。</tradeoff>
+    <label>灼痕·续焰</label>
+    <description>升焰疾行与瞬时燃烧留下的灼痕额外持续 3 秒。</description>
+    <tradeoff>同一格的灼痕再次被点燃时刷新持续时间。</tradeoff>
     <role>持续施压</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k4</nodeId>
@@ -664,28 +673,22 @@
     <trial>None</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>5</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k2</node>
       </li>
     </prerequisites>
-    <radius>2</radius>
-    <durationTicks>180</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k4</li>
-    </grantedAbilities>
+    <value>3</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k5</defName>
-    <label>余烬·引线</label>
-    <description>学会独立术式「引线」：向一名敌人施加 50 层生命燃烧。冷却 30 秒。</description>
-    <tradeoff>沿用生命燃烧的免疫、过燃增幅与引爆规则。</tradeoff>
-    <role>爆发规划</role>
+    <label>瞬燃·焰心</label>
+    <description>瞬时燃烧的核心火球对已有生命燃烧的敌人额外造成 10% 伤害。</description>
+    <tradeoff>以核心火球命中前的层数判断，不消耗生命燃烧。</tradeoff>
+    <role>叠层爆发</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k5</nodeId>
-    <effect>CombustionMark</effect>
+    <effect>CombustionFocus</effect>
     <displayOrder>23</displayOrder>
     <position>(1655,720)</position>
     <shape>Keystone</shape>
@@ -696,23 +699,19 @@
     <trial>Cast</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>50</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k3</node>
       </li>
     </prerequisites>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k5</li>
-    </grantedAbilities>
+    <value>0.1</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k6</defName>
-    <label>余烬·火域</label>
-    <description>学会独立术式「火域」：在目标处留下半径 3 格、持续 5 秒的余火，每秒造成 8 点灼烧伤害。冷却 60 秒。</description>
-    <tradeoff>不附加生命燃烧。同一术式的火域同时只保留一处，伤害随自燃与过燃提高。</tradeoff>
-    <role>持续控场</role>
+    <label>焚我·余域</label>
+    <description>焚我余烬的随身火场半径增加 1 格。</description>
+    <tradeoff>持续时间与每次脉冲效果按焚我余烬结算。</tradeoff>
+    <role>火场拓展</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k6</nodeId>
     <effect>AshesRadius</effect>
@@ -724,30 +723,24 @@
     <ashCost>4</ashCost>
     <branchInvestment>0</branchInvestment>
     <trial>None</trial>
-    <iconActive>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconActive>
+    <iconActive>MiliraXianMingyuan/UI/Ability_AshesOfSelf</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <radius>3</radius>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k4</node>
       </li>
     </prerequisites>
-    <value>8</value>
-    <durationTicks>300</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k6</li>
-    </grantedAbilities>
+    <value>1</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k7</defName>
-    <label>余烬·御风</label>
-    <description>学会独立术式「御风」：移动速度提高 10%，持续 10 秒。冷却 45 秒。</description>
-    <tradeoff>再次施放只刷新持续时间。</tradeoff>
-    <role>机动术式</role>
+    <label>焰柱·卷生</label>
+    <description>燃烧之柱可卷入敌人的体型上限提高 0.3。</description>
+    <tradeoff>仍需目标接触旋风；倒地目标不被卷入。</tradeoff>
+    <role>牵引拓展</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k7</nodeId>
-    <effect>PillarTurn</effect>
+    <effect>PillarCapture</effect>
     <displayOrder>25</displayOrder>
     <position>(1655,925)</position>
     <shape>Notable</shape>
@@ -758,27 +751,22 @@
     <trial>Cast</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_BurningPillar</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>0.1</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k5</node>
       </li>
     </prerequisites>
-    <durationTicks>600</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k7</li>
-    </grantedAbilities>
+    <value>0.3</value>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k8</defName>
-    <label>余烬·借刻</label>
-    <description>学会独立术式「借刻」：对一名敌人造成 20 点灼烧伤害，并施加 2 秒眩晕。冷却 60 秒。</description>
-    <tradeoff>眩晕受目标的抗性与免疫影响；伤害随自燃与过燃提高。</tradeoff>
-    <role>单体控制</role>
+    <label>时燃·封烬</label>
+    <description>时间燃烧使目标老化期间，该目标的生命燃烧暂停衰减。</description>
+    <tradeoff>生命燃烧仍会造成伤害、增长层数和引爆；老化结束后恢复原有衰减。</tradeoff>
+    <role>燃烧维持</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k8</nodeId>
-    <effect>TimeTargets</effect>
+    <effect>TimeEmberHold</effect>
     <displayOrder>26</displayOrder>
     <position>(1425,1130)</position>
     <shape>Keystone</shape>
@@ -789,24 +777,18 @@
     <trial>Overburn</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_TimeBurn</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>20</value>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k6</node>
       </li>
     </prerequisites>
-    <durationTicks>120</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k8</li>
-    </grantedAbilities>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k9</defName>
-    <label>余烬·烬核</label>
-    <description>学会独立术式「烬核」：在目标处留下半径 3 格、持续 3 秒的烬核，每秒造成 20 点灼烧伤害。冷却 90 秒。</description>
-    <tradeoff>不附加生命燃烧。同一术式的烬核同时只保留一处，伤害随自燃与过燃提高。</tradeoff>
-    <role>阵地强化</role>
+    <label>焰柱·烬核</label>
+    <description>接触燃烧之柱且位于柱心 3 格内的敌人，每秒额外获得相当于其引爆阈值 2% 的生命燃烧。</description>
+    <tradeoff>与旋风原有叠层一起结算，沿用生命燃烧的过燃增幅。</tradeoff>
+    <role>柱心压制</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k9</nodeId>
     <effect>PillarCore</effect>
@@ -820,28 +802,23 @@
     <trial>Spread</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_BurningPillar</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <value>20</value>
-    <radius>3</radius>
-    <penalty>0</penalty>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k7</node>
       </li>
     </prerequisites>
-    <durationTicks>180</durationTicks>
-    <grantedAbilities>
-      <li>MX_Mingyuan_EmberArt_k9</li>
-    </grantedAbilities>
+    <value>0.02</value>
+    <radius>3</radius>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
   <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Mingyuan.MingyuanEmberNodeDef">
     <defName>MX_Mingyuan_Ember_k10</defName>
     <label>余烬连章</label>
-    <description>实战中在 20 秒内施放三种不同主动技能，获得一次不超过 6 格的「余烬步」。</description>
-    <tradeoff>余烬步不造成伤害；最多保留一次。每 60 秒最多获得一次。</tradeoff>
+    <description>实战中在 20 秒内施放明渊的三种不同主动技能，自动恢复 10 点护焰储备。</description>
+    <tradeoff>每 60 秒最多触发一次，不超过当前护焰上限。</tradeoff>
     <role>技能终局</role>
     <category>MX_Mingyuan_Ember_Skill</category>
     <nodeId>k10</nodeId>
-    <effect>ComboReset</effect>
+    <effect>ComboShield</effect>
     <displayOrder>28</displayOrder>
     <position>(1540,1360)</position>
     <shape>Capstone</shape>
@@ -852,9 +829,6 @@
     <trial>Combo</trial>
     <iconActive>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconActive>
     <anyPrerequisite>true</anyPrerequisite>
-    <penalty>0</penalty>
-    <durationTicks>1200</durationTicks>
-    <cooldownTicks>3600</cooldownTicks>
     <prerequisites>
       <li>
         <node>MX_Mingyuan_Ember_k8</node>
@@ -863,6 +837,8 @@
         <node>MX_Mingyuan_Ember_k9</node>
       </li>
     </prerequisites>
-    <radius>6</radius>
+    <value>10</value>
+    <durationTicks>1200</durationTicks>
+    <cooldownTicks>3600</cooldownTicks>
   </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
 </Defs>

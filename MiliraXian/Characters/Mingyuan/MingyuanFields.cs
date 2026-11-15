@@ -12,7 +12,7 @@ public class Thing_MingyuanAshesField : ThingWithComps
     {
         var field = GetComp<CompMingyuanBurningField>();
         if (field.Active)
-            MingyuanFireVfx.DrawAshesField(field.Caster.DrawPos, field.PropsField.radius, field.RemainingTicks);
+            MingyuanFireVfx.DrawAshesField(field.Caster.DrawPos, field.Radius, field.RemainingTicks);
     }
 }
 
@@ -37,6 +37,9 @@ public class CompMingyuanBurningField : ThingComp
 
     public CompProperties_MingyuanBurningField PropsField => (CompProperties_MingyuanBurningField)props;
     internal Pawn Caster => caster;
+    internal float Radius => RadiusFor(caster, PropsField);
+    internal static float RadiusFor(Pawn pawn, CompProperties_MingyuanBurningField props) =>
+        props.radius + MingyuanEmberBook.Value(pawn, EmberEffect.AshesRadius);
     internal int RemainingTicks => expireTick - Find.TickManager.TicksGame;
     internal bool Active => !MingyuanPowerBalance.Sealed && RemainingTicks > 0
         && caster is { Spawned: true, Dead: false, Destroyed: false } && caster.Map == parent.Map;
@@ -73,21 +76,22 @@ public class CompMingyuanBurningField : ThingComp
 
     public override string CompInspectStringExtra() =>
         "MX_Mingyuan_AshesField_Inspect".Translate(
-            PropsField.radius.ToString("0.#"), PropsField.damageAmount.ToString("0.#"),
+            Radius.ToString("0.#"), PropsField.damageAmount.ToString("0.#"),
             PropsField.lifeBurnLayers.ToString("0.#"), Mathf.CeilToInt(Mathf.Max(0, RemainingTicks) / 60f));
 
     private void Pulse()
     {
         Map map = parent.Map;
         IntVec3 center = caster.Position;
-        List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(center, map, PropsField.radius, true));
+        float radius = Radius;
+        List<Thing> targets = CombatTargetSnapshot.Rent(GenRadial.RadialDistinctThingsAround(center, map, radius, true));
         try
         {
             foreach (Thing thing in targets)
             {
                 if (!Active) break;
                 if (!MingyuanUtility.IsHostilePawn(thing, caster, out Pawn target)
-                    || !target.Spawned || target.Map != map || !center.InHorDistOf(target.Position, PropsField.radius)) continue;
+                    || !target.Spawned || target.Map != map || !center.InHorDistOf(target.Position, radius)) continue;
 
                 DamageWorker.DamageResult result = MingyuanUtility.ApplyTrueDamage(
                     target, DamageDefOf.Burn, PropsField.damageAmount, caster, scaleWithSelfBurn: true);

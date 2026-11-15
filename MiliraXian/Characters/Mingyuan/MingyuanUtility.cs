@@ -307,6 +307,9 @@ namespace MiliraXian.Characters.Mingyuan
             return selfBurn > 0f ? 1f + selfBurn * 0.004f : 1f;
         }
 
+        internal static float GetEmberSkillDamageFactor(Pawn pawn) => IsOverburning(pawn)
+            ? 1f + MingyuanEmberBook.Value(pawn, EmberEffect.OverburnDamage) : 1f;
+
         public static float GetSelfBurnRangedWeaponDamageFactor(Pawn pawn)
         {
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
@@ -387,6 +390,7 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 amount *= GetSelfBurnSkillDamageFactor(instigator);
                 amount *= GetOverburnDamageFactor(instigator);
+                amount *= GetEmberSkillDamageFactor(instigator);
             }
 
             DamageInfo dinfo = new(damageDef ?? DamageDefOf.Burn, amount, 999f, -1f, instigator, hitPart);

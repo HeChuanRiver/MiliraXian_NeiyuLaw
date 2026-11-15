@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
+  <!-- Load-only carrier: an old save taken mid-flight must still land its pawn safely. Nothing spawns it now. -->
   <ThingDef ParentName="PawnFlyerBase">
     <defName>MX_Mingyuan_EmberStepFlyer</defName>
     <label>余烬步</label>

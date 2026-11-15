@@ -94,6 +94,7 @@ public class CompMingyuanBurningPillarTornado : ThingComp
     private int Age => Mathf.Max(0, Find.TickManager.TicksGame - spawnTick);
     private float Growth => Mathf.Clamp01(Age / (float)Mathf.Max(1, Props.radiusGrowTicks));
     private float Radius => Mathf.SmoothStep(Props.startRadius, Props.maxRadius, Growth);
+    private float CaptureSizeLimit => Props.smallPawnBodySizeThreshold + MingyuanEmberBook.Value(caster, EmberEffect.PillarCapture);
     internal bool Active => parent.Spawned && !MingyuanPowerBalance.Sealed && caster is { Dead: false, Destroyed: false }
         && caster.MapHeld == parent.Map && fadeStart < 0 && Find.TickManager.TicksGame <= expireTick;
     internal bool ControlsUnlocked => Active && caster.Spawned && !caster.Downed
@@ -226,7 +227,7 @@ public class CompMingyuanBurningPillarTornado : ThingComp
                 if (MingyuanUtility.IsHostilePawn(thing, caster, out Pawn pawn))
                 {
                     Contact contact = Track(pawn, now);
-                    if (pawn.BodySize < Props.smallPawnBodySizeThreshold && !pawn.Downed && pawn.pather != null)
+                    if (pawn.BodySize < CaptureSizeLimit && !pawn.Downed && pawn.pather != null)
                         Pull(pawn, contact, point, elapsed);
                     if (AdvancePulse(contact, elapsed)) AffectPawn(pawn);
                 }
@@ -301,7 +302,11 @@ public class CompMingyuanBurningPillarTornado : ThingComp
         }
 
         if (pawn.Dead) return;
-        MingyuanUtility.AddLifeBurnFraction(pawn, caster, Props.lifeBurnFractionPerSecond, scaleWithOverburn: true);
+        float fraction = Props.lifeBurnFractionPerSecond;
+        var core = MingyuanEmberBook.Config.Node(EmberEffect.PillarCore);
+        if ((pawn.Position.ToVector3Shifted().Yto0() - Center.Yto0()).sqrMagnitude <= core.radius * core.radius)
+            fraction += MingyuanEmberBook.Value(caster, EmberEffect.PillarCore);
+        MingyuanUtility.AddLifeBurnFraction(pawn, caster, fraction, scaleWithOverburn: true);
         float amount = pawn.health.LethalDamageThreshold * Props.pawnLifeDamageFractionPerSecond;
         if (MingyuanUtility.ApplyPillarDamage(pawn, caster, amount))
             expireTick += Mathf.Max(0, Props.killBonusDurationTicks);
@@ -309,7 +314,8 @@ public class CompMingyuanBurningPillarTornado : ThingComp
 
     private void AffectBuilding(Thing thing, Contact contact, int ticks)
     {
-        float accrued = thing.MaxHitPoints * Props.buildingMaxHealthDamagePerSecond * (ticks / 60f) + contact.StructuralRemainder;
+        float accrued = thing.MaxHitPoints * Props.buildingMaxHealthDamagePerSecond * (ticks / 60f)
+            * MingyuanUtility.GetEmberSkillDamageFactor(caster) + contact.StructuralRemainder;
         int damage = Mathf.FloorToInt(accrued);
         contact.StructuralRemainder = accrued - damage;
         if (damage <= 0) return;
@@ -365,7 +371,7 @@ public class CompMingyuanBurningPillarTornado : ThingComp
         foreach (Thing thing in pillars)
         {
             var tornado = ((Thing_MingyuanBurningPillarField)thing).Tornado;
-            if (pawn.BodySize >= tornado.Props.smallPawnBodySizeThreshold
+            if (pawn.BodySize >= tornado.CaptureSizeLimit
                 || !tornado.contacts.TryGetValue(pawn, out Contact contact)) continue;
             float time = (Find.TickManager.TicksGame - contact.Entered) / 60f;
             float lift = Mathf.Clamp01(time * 2.5f);

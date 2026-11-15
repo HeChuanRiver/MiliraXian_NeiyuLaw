@@ -216,7 +216,6 @@ public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
     protected override void RespawnPawn()
     {
         Pawn landingPawn = FlyingPawn;
-        Map landingMap = Map;
         if (Props != null && FlyingThing != null && !MingyuanPowerBalance.Sealed)
         {
             Vector3 land = DestinationPos;
@@ -224,7 +223,7 @@ public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
         }
         base.RespawnPawn();
         if (Props != null && landingPawn is { Spawned: true, Dead: false })
-            MingyuanEmberBook.For(landingPawn)?.OfferReturn(startVec.ToIntVec3(), landingMap);
+            MingyuanEmberBook.For(landingPawn)?.NotifyDashLanded();
     }
 
     private void ResolveContact(Pawn caster)
@@ -287,6 +286,9 @@ public class CompMingyuanAscendantFlameScorch : ThingComp
         public Pawn Caster;
         public int Expires;
         public int NextPulse;
+        internal int RenderedExpiry;
+        internal int EffectiveExpiry => Expires
+            + Mathf.RoundToInt(MingyuanEmberBook.Value(Caster, EmberEffect.ScorchDuration) * 60f);
 
         public void ExposeData()
         {
@@ -394,11 +396,13 @@ public class CompMingyuanAscendantFlameScorch : ThingComp
         foreach (var (cell, data) in cells)
         {
             Pawn caster = data.Caster;
-            if (data.Expires < now || caster == null || caster.Dead || caster.Destroyed || caster.MapHeld != map)
+            int effectiveExpiry = data.EffectiveExpiry;
+            if (effectiveExpiry < now || caster == null || caster.Dead || caster.Destroyed || caster.MapHeld != map)
             {
                 expired.Add(cell);
                 continue;
             }
+            meshDirty |= data.RenderedExpiry != effectiveExpiry;
 
             if (now >= data.NextPulse)
             {
@@ -409,7 +413,7 @@ public class CompMingyuanAscendantFlameScorch : ThingComp
                         victims.TryAdd(pawn, caster);
             }
 
-            if (data.Expires == now) expired.Add(cell);
+            if (effectiveExpiry == now) expired.Add(cell);
         }
 
         foreach (IntVec3 cell in expired) cells.Remove(cell);

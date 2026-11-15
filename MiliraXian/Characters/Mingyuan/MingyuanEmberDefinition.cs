@@ -10,11 +10,11 @@ namespace MiliraXian.Characters.Mingyuan;
 
 public enum EmberEffect
 {
-    Origin, CombatMove, MeleeDamage, Preparation, ShieldRecovery, MeleeSpeed, CastMove,
+    Origin, CombatMove, MeleeDamage, CastGuard, ShieldRecovery, MeleeSpeed, CastMove,
     BowAccuracy, LowBurnDefense, ShieldCapacity, BurnInsight, DecayDelay, SpreadRadius,
     KillRecovery, EmberGround, ShieldFeedback, SafeOverburn, ExtraStack, OverburnDamage,
-    ComboInsight, DashReturn, TwinStars, ScorchDuration, CombustionMark, AshesRadius,
-    PillarTurn, TimeTargets, PillarCore, ComboReset
+    CastKindling, DashGuard, CombustionKindling, ScorchDuration, CombustionFocus, AshesRadius,
+    PillarCapture, TimeEmberHold, PillarCore, ComboShield
 }
 
 public enum EmberTrial { None, Cast, Burn, Shield, Spread, Overburn, Combo }
@@ -80,6 +80,8 @@ public sealed class MingyuanEmberNodeDef : CharacterPerkNodeDef
             yield return defName + ": invalid ember node identity, category, level or cost.";
         if (grantedHediffs?.Count > 0)
             yield return defName + ": ember nodes do not remove or recreate state containers.";
+        if (grantedAbilities?.Count > 0)
+            yield return defName + ": ember nodes modify existing skills; they must not grant additional active abilities.";
         if (effect != EmberEffect.Origin && prerequisites.NullOrEmpty()) yield return defName + ": missing prerequisite.";
         HashSet<CharacterPerkNodeDef> visiting = new();
         bool Cycle(CharacterPerkNodeDef node)
@@ -114,6 +116,8 @@ public sealed class MingyuanEmberBookDef : Def
     public int combatMemoryTicks = 600;
     public int resourceEventCooldownTicks = 120;
     public string iconPath;
+    public List<AbilityDef> retiredAbilities = new();
+    public List<AbilityDef> mainSkills = new();
     private List<MingyuanEmberNodeDef> nodes;
     private Dictionary<EmberEffect, MingyuanEmberNodeDef> byEffect;
     public List<MingyuanEmberNodeDef> Nodes => nodes ??= DefDatabase<CharacterPerkNodeDef>.AllDefs
@@ -128,7 +132,6 @@ public static class MingyuanEmberDefOf
     public static MingyuanEmberBookDef MX_Mingyuan_EmberBook;
     public static HediffDef MX_Mingyuan_EmberBoons;
     public static ThingDef MX_Mingyuan_EmberGround;
-    public static ThingDef MX_Mingyuan_EmberStepFlyer;
     static MingyuanEmberDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(MingyuanEmberDefOf));
 }
 

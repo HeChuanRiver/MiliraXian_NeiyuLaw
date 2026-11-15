@@ -187,6 +187,8 @@ namespace MiliraXian.Characters.Mingyuan
             if (!absorbed && explosion) dinfo.SetAmount(dinfo.Amount * 0.30f);
             if (!absorbed && MingyuanUtility.GetSelfBurnLayers(pawn) <= MingyuanUtility.GetSelfBurnOverburnThreshold(pawn))
                 dinfo.SetAmount(dinfo.Amount * (1f - MingyuanEmberBook.Value(pawn, EmberEffect.LowBurnDefense)));
+            if (!absorbed && MingyuanEmberBook.For(pawn) is { } book)
+                dinfo.SetAmount(dinfo.Amount * book.DamageTakenFactor);
         }
     }
 

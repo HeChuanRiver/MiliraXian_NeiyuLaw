@@ -25,14 +25,10 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
     private Dictionary<Pawn, int> stackTargets = new(), groundTargets = new();
     private List<Pawn> stackTargetKeys, groundTargetKeys;
     private List<int> stackTargetValues, groundTargetValues;
-    private int lastCombatTick = -99999, nextCastRewardTick, nextKillRecoveryTick, nextComboResetTick;
-    private int castMoveUntil, comboHintUntil, overburnStarted = -1;
-    private int emberWindUntil;
+    private int lastCombatTick = -99999, nextCastRewardTick, nextKillRecoveryTick, nextComboShieldTick;
+    private int castMoveUntil, overburnStarted = -1;
+    private int castGuardUntil, dashGuardUntil, nextKindlingTick;
     private int feedbackWindowTick, feedbackLayers;
-    private bool echoStepReady;
-    private IntVec3 returnOrigin;
-    private Map returnMap;
-    private int returnUntil;
     private readonly Dictionary<EmberEffect, int> levels = new();
     private int cachedRevision = -1, cachedSealRevision = -1;
     public static MingyuanEmberBookDef Config => MingyuanEmberDefOf.MX_Mingyuan_EmberBook;
@@ -44,13 +40,21 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
     private int Now => Find.TickManager?.TicksGame ?? 0;
     internal bool InCombat => Now - lastCombatTick <= Config.combatMemoryTicks;
     internal bool CastMoveActive => Now < castMoveUntil;
-    internal bool ComboHintActive => Now < comboHintUntil && Level(EmberEffect.ComboInsight) > 0;
     public static MingyuanEmberBook For(Pawn pawn) =>
         pawn?.health?.hediffSet?.GetFirstHediffOfDef(MingyuanUtility.BurningBodyDef)?.TryGetComp<MingyuanEmberBook>();
 
     private void Initialize()
     {
         if (Tree == null || Handler == null || !MingyuanUtility.IsMingyuan(Pawn)) return;
+        // These seven abilities were explicitly withdrawn, not temporarily sealed.
+        // Keep their Def aliases readable, then remove only their instances from old saves.
+        if (Pawn.abilities != null)
+            foreach (var ability in Config.retiredAbilities)
+                if (ability != null)
+                {
+                    comboCasts.Remove(ability);
+                    if (Pawn.abilities.GetAbility(ability) != null) Pawn.abilities.RemoveAbility(ability);
+                }
         if (!initialized)
         {
             insight = Config.startingInsight;
@@ -91,17 +95,14 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
         Scribe_Values.Look(ref lastCombatTick, "emberLastCombatTick", -99999);
         Scribe_Values.Look(ref nextCastRewardTick, "emberNextCastRewardTick");
         Scribe_Values.Look(ref nextKillRecoveryTick, "emberNextKillRecoveryTick");
-        Scribe_Values.Look(ref nextComboResetTick, "emberNextComboResetTick");
+        Scribe_Values.Look(ref nextComboShieldTick, "emberNextComboShieldTick");
         Scribe_Values.Look(ref castMoveUntil, "emberCastMoveUntil");
-        Scribe_Values.Look(ref emberWindUntil, "emberWindUntil");
-        Scribe_Values.Look(ref comboHintUntil, "emberComboHintUntil");
+        Scribe_Values.Look(ref castGuardUntil, "emberCastGuardUntil");
+        Scribe_Values.Look(ref dashGuardUntil, "emberDashGuardUntil");
+        Scribe_Values.Look(ref nextKindlingTick, "emberNextKindlingTick");
         Scribe_Values.Look(ref overburnStarted, "emberOverburnStarted", -1);
         Scribe_Values.Look(ref feedbackWindowTick, "emberFeedbackWindowTick");
         Scribe_Values.Look(ref feedbackLayers, "emberFeedbackLayers");
-        Scribe_Values.Look(ref echoStepReady, "emberEchoStepReady");
-        Scribe_Values.Look(ref returnOrigin, "emberReturnOrigin");
-        Scribe_References.Look(ref returnMap, "emberReturnMap");
-        Scribe_Values.Look(ref returnUntil, "emberReturnUntil");
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             paidInsight ??= new(); paidAsh ??= new(); comboCasts ??= new();
@@ -176,11 +177,16 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
     }
     internal void NotifyCast(Ability ability)
     {
-        if (!CanEarn || ability == null) return;
+        if (!CanEarn || ability == null || !Config.mainSkills.Contains(ability.def)) return;
         if (Level(EmberEffect.CastMove) > 0) castMoveUntil = Now + Config.Node(EmberEffect.CastMove).durationTicks;
+        if (Level(EmberEffect.CastGuard) > 0) castGuardUntil = Now + Config.Node(EmberEffect.CastGuard).durationTicks;
         RefreshBoons();
         if (!InCombat) return;
-        comboHintUntil = Now + Config.Node(EmberEffect.ComboInsight).durationTicks;
+        if (Level(EmberEffect.CastKindling) > 0 && Now >= nextKindlingTick)
+        {
+            nextKindlingTick = Now + Config.Node(EmberEffect.CastKindling).cooldownTicks;
+            MingyuanUtility.AddSelfBurn(Pawn, Value(EmberEffect.CastKindling));
+        }
         casts++;
         if (Now >= nextCastRewardTick)
         {
@@ -191,16 +197,17 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
             nextCastRewardTick = Now + Config.resourceEventCooldownTicks;
         }
         comboCasts[ability.def] = Now;
-        int window = Config.Node(EmberEffect.ComboReset).durationTicks;
+        int window = Config.Node(EmberEffect.ComboShield).durationTicks;
         foreach (var key in comboCasts.Where(p => Now - p.Value > window).Select(p => p.Key).ToArray()) comboCasts.Remove(key);
         if (comboCasts.Count >= 3)
         {
             combos++;
             comboCasts.Clear();
-            if (Level(EmberEffect.ComboReset) > 0 && Now >= nextComboResetTick)
+            if (Level(EmberEffect.ComboShield) > 0 && Now >= nextComboShieldTick)
             {
-                echoStepReady = true;
-                nextComboResetTick = Now + Config.Node(EmberEffect.ComboReset).cooldownTicks;
+                nextComboShieldTick = Now + Config.Node(EmberEffect.ComboShield).cooldownTicks;
+                Pawn.health.hediffSet.GetFirstHediffOfDef(MingyuanUtility.ShieldDef)
+                    ?.TryGetComp<HediffComp_MingyuanProtectiveFlameShield>()?.RestoreEnergy(Value(EmberEffect.ComboShield));
             }
         }
         ClaimTrials();
@@ -304,12 +311,31 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
             insight += Config.trialInsightReward; ash += Config.trialAshReward;
         }
     }
-    internal void OfferReturn(IntVec3 origin, Map map)
+
+    internal void NotifyDashLanded()
     {
-        if (Level(EmberEffect.DashReturn) <= 0) return;
-        returnOrigin = origin; returnMap = map; returnUntil = Now + Config.Node(EmberEffect.DashReturn).durationTicks;
+        if (Level(EmberEffect.DashGuard) > 0)
+            dashGuardUntil = Now + Config.Node(EmberEffect.DashGuard).durationTicks;
     }
 
+    internal float DamageTakenFactor =>
+        (Now < castGuardUntil ? 1f - Value(EmberEffect.CastGuard) : 1f)
+        * (Now < dashGuardUntil ? 1f - Value(EmberEffect.DashGuard) : 1f);
+
+    public override string CompTipStringExtra
+    {
+        get
+        {
+            List<string> active = new();
+            if (Now < castGuardUntil && Level(EmberEffect.CastGuard) > 0)
+                active.Add(EmberText.Get("CastGuardTip", "施法余护：减伤 {0}，剩余 {1} 秒。")
+                    .Formatted(Value(EmberEffect.CastGuard).ToStringPercent(), ((castGuardUntil - Now) / 60f).ToString("0.#")));
+            if (Now < dashGuardUntil && Level(EmberEffect.DashGuard) > 0)
+                active.Add(EmberText.Get("DashGuardTip", "升焰护身：减伤 {0}，剩余 {1} 秒。")
+                    .Formatted(Value(EmberEffect.DashGuard).ToStringPercent(), ((dashGuardUntil - Now) / 60f).ToString("0.#")));
+            return active.Count == 0 ? null : string.Join("\n", active);
+        }
+    }
     public override IEnumerable<Gizmo> CompGetGizmos()
     {
         if (!MingyuanUtility.IsMingyuan(Pawn) || !Pawn.IsColonistPlayerControlled || Pawn.Dead) yield break;
@@ -319,32 +345,7 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
             icon = ContentFinder<Texture2D>.Get(Config.iconPath),
             action = () => Find.WindowStack.Add(new Dialog_MingyuanEmberBook(this))
         };
-        if (Level(EmberEffect.DashReturn) > 0 && returnMap == Pawn.Map && Now < returnUntil && Pawn.Spawned)
-            yield return MingyuanEmberEffects.ReturnCommand(this, returnOrigin, returnMap);
-        if (Level(EmberEffect.ComboReset) > 0 && echoStepReady && Pawn.Spawned)
-            yield return MingyuanEmberEffects.EchoStepCommand(this);
-        if (ComboHintActive)
-            yield return new Command_Action
-            {
-                defaultLabel = EmberText.Get("ComboWindow", "连章窗口"),
-                defaultDesc = EmberText.Get("ComboTip", "20 秒内施放三种不同主动技能，记录一次连章。"),
-                icon = ContentFinder<Texture2D>.Get(Config.iconPath),
-                action = () => Find.WindowStack.Add(new Dialog_MingyuanEmberBook(this))
-            };
     }
-    internal bool ConsumeReturn()
-    {
-        if (Level(EmberEffect.DashReturn) <= 0 || Now >= returnUntil || Pawn.Map != returnMap || Pawn.Dead) return false;
-        returnUntil = 0; return true;
-    }
-    internal bool ConsumeEchoStep()
-    {
-        if (Level(EmberEffect.ComboReset) <= 0 || !echoStepReady || Pawn.Dead) return false;
-        echoStepReady = false; return true;
-    }
-    internal bool EmberWindActive => Now < emberWindUntil;
-    internal void GrantEmberWind()
-    { emberWindUntil = Now + Config.Node(EmberEffect.PillarTurn).durationTicks; RefreshBoons(); }
     internal void RefreshBoons()
     {
         if (Pawn?.health?.hediffSet?.GetFirstHediffOfDef(MingyuanEmberDefOf.MX_Mingyuan_EmberBoons) is Hediff_MingyuanEmberBoons boons)
@@ -356,7 +357,7 @@ public sealed class MingyuanEmberBook : HediffComp, IPerkEventListener
     public override void CompPostTick(ref float severityAdjustment)
     {
         // Only local expiry boundaries; no pawn or map scan and no progress repair polling.
-        if (Now == castMoveUntil || Now == emberWindUntil || Now == lastCombatTick + Config.combatMemoryTicks + 1)
+        if (Now == castMoveUntil || Now == lastCombatTick + Config.combatMemoryTicks + 1)
             RefreshBoons();
     }
 }
@@ -370,7 +371,6 @@ public sealed class Hediff_MingyuanEmberBoons : Hediff_CharacterPerkTree
         if (book == null || MingyuanPowerBalance.Sealed) return;
         float speed = book.InCombat ? book.Value(EmberEffect.CombatMove) : 0f;
         if (book.CastMoveActive) speed += book.Value(EmberEffect.CastMove);
-        if (book.EmberWindActive) speed += book.Value(EmberEffect.PillarTurn);
         if (speed > 0f) factors[StatDefOf.MoveSpeed] = 1f + speed;
     }
 }
