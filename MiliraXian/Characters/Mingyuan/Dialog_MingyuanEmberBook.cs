@@ -202,8 +202,8 @@ public sealed class Dialog_MingyuanEmberBook : Window
             for (int i = 0; i < labels.Length; i++)
             {
                 float x = 12 + i * legendWidth;
-                Symbol(new Rect(x, legendY + 4, 10, 10), (EmberNodeVisual)i, i == 0 ? Muted : Gold);
-                Label(new Rect(x + 17, legendY, legendWidth - 18, 23), labels[i], Muted, GameFont.Tiny);
+                Symbol(new Rect(x, legendY + 4, 14, 14), (EmberNodeVisual)i, i == 0 ? Muted : Gold);
+                Label(new Rect(x + 22, legendY, legendWidth - 22, 22), labels[i], Muted, GameFont.Tiny, TextAnchor.MiddleLeft);
             }
             Label(new Rect(12, rect.height - 26, Mathf.Max(70, rect.width - 146), 22),
                 T("MapHintShort", "拖动平移 · 滚轮缩放"), Muted, GameFont.Tiny);
@@ -358,7 +358,7 @@ public sealed class Dialog_MingyuanEmberBook : Window
                 T("LevelShort", "等级") + "  " + state.Rank + " / " + selected.maxLevel, Muted);
             y += Mathf.Max(iconSize, titleHeight + 30) + 17;
             Rect statusRect = new(0, y, content.width, 26);
-            Symbol(new Rect(1, y + 7, 12, 12), state.Visual, state.CanLearn ? Gold : Muted);
+            Symbol(new Rect(1, y + 6, 14, 14), state.Visual, state.CanLearn ? Gold : Muted);
             Label(new Rect(23, y, content.width - 23, 26), state.State, state.CanLearn ? Gold : Ink);
             y += 34;
             string reason = message ?? (!state.CanLearn && state.Rank < selected.maxLevel || MingyuanPowerBalance.Sealed ? state.Reason : null);

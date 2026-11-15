@@ -21,6 +21,11 @@ internal static class MingyuanEmberArt
     internal static readonly Color Rule = new(.34f, .26f, .18f);
     internal static readonly Color Dark = new(.09f, .075f, .065f);
     private static readonly Vector2[] RingPoints = MakeRing();
+    private static readonly Texture2D[] StatusSymbols =
+    {
+        MakeSymbol(EmberNodeVisual.Locked), MakeSymbol(EmberNodeVisual.Available),
+        MakeSymbol(EmberNodeVisual.Learned), MakeSymbol(EmberNodeVisual.Mastered)
+    };
 
     private static Dictionary<MingyuanEmberNodeDef, Texture2D> LoadIcons()
     {
@@ -31,7 +36,8 @@ internal static class MingyuanEmberArt
     internal static Texture2D Icon(MingyuanEmberNodeDef node) => Icons[node];
     internal static string T(string id, string source) => EmberText.Get(id, source);
 
-    internal static void Frame(Rect rect, Color tint, float corner = 24f) => CharacterUiFrame.Draw(rect, Panel, tint, corner);
+    internal static void Frame(Rect rect, Color tint, float corner = 24f, bool drawCenter = true) =>
+        CharacterUiFrame.Draw(rect, Panel, tint, corner, drawCenter);
 
     internal static void Label(Rect rect, string text, Color color, GameFont font = GameFont.Small,
         TextAnchor anchor = TextAnchor.UpperLeft)
@@ -108,32 +114,75 @@ internal static class MingyuanEmberArt
                 Widgets.DrawLine(p, p + new Vector2(0, p.y == mark.y ? length : -length), Ink, 1.4f);
             }
         }
-        Rect badge = new(rect.xMax - 8, rect.yMax - 10, 15, 15);
+        Rect badge = new(rect.xMax - 9, rect.yMax - 10, 16, 16);
         Widgets.DrawBoxSolid(badge, Dark);
-        Symbol(badge.ContractedBy(2), state, edge);
+        Symbol(badge, state, edge);
     }
     internal static void Symbol(Rect rect, EmberNodeVisual state, Color color)
     {
-        Vector2 c = rect.center;
-        if (state == EmberNodeVisual.Available)
+        if (Event.current.type != EventType.Repaint) return;
+        float size = Mathf.Min(rect.width, rect.height);
+        Rect square = new(rect.center.x - size * .5f, rect.center.y - size * .5f, size, size);
+        Texture(LudeonTK.UIScaling.AdjustRectToUIScaling(square), StatusSymbols[(int)state], color);
+    }
+
+    // Bake each vector silhouette once, including its joins, rather than rotating
+    // separate tiny GUI strokes. Every use shares the same proportions and padding.
+    private static Texture2D MakeSymbol(EmberNodeVisual state)
+    {
+        const int size = 64;
+        (Vector2 a, Vector2 b)[] strokes = state switch
         {
-            Widgets.DrawLine(new(rect.x, c.y), new(rect.xMax, c.y), color, 1.2f);
-            Widgets.DrawLine(new(c.x, rect.y), new(c.x, rect.yMax), color, 1.2f);
-        }
-        else if (state == EmberNodeVisual.Mastered)
+            EmberNodeVisual.Available => new[]
+            {
+                (new Vector2(.20f, .50f), new Vector2(.80f, .50f)),
+                (new Vector2(.50f, .20f), new Vector2(.50f, .80f))
+            },
+            EmberNodeVisual.Mastered => new[]
+            {
+                (new Vector2(.18f, .51f), new Vector2(.40f, .73f)),
+                (new Vector2(.40f, .73f), new Vector2(.83f, .25f))
+            },
+            EmberNodeVisual.Locked => new[]
+            {
+                (new Vector2(.23f, .45f), new Vector2(.77f, .45f)),
+                (new Vector2(.77f, .45f), new Vector2(.77f, .83f)),
+                (new Vector2(.77f, .83f), new Vector2(.23f, .83f)),
+                (new Vector2(.23f, .83f), new Vector2(.23f, .45f)),
+                (new Vector2(.33f, .45f), new Vector2(.33f, .28f)),
+                (new Vector2(.33f, .28f), new Vector2(.41f, .20f)),
+                (new Vector2(.41f, .20f), new Vector2(.59f, .20f)),
+                (new Vector2(.59f, .20f), new Vector2(.67f, .28f)),
+                (new Vector2(.67f, .28f), new Vector2(.67f, .45f))
+            },
+            _ => System.Array.Empty<(Vector2, Vector2)>()
+        };
+        Color[] pixels = new Color[size * size];
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                Vector2 p = new((x + .5f) / size, 1f - (y + .5f) / size);
+                float distance = float.MaxValue;
+                foreach (var (a, b) in strokes)
+                {
+                    Vector2 delta = b - a;
+                    Vector2 nearest = a + delta * Mathf.Clamp01(Vector2.Dot(p - a, delta) / delta.sqrMagnitude);
+                    distance = Mathf.Min(distance, (p - nearest).magnitude);
+                }
+                float coverage = state == EmberNodeVisual.Learned
+                    ? (.28f - Mathf.Abs(p.x - .5f) - Mathf.Abs(p.y - .5f)) * size
+                    : ((state == EmberNodeVisual.Locked ? .055f : .075f) - distance) * size;
+                pixels[y * size + x] = new Color(1, 1, 1, Mathf.Clamp01(coverage + .5f));
+            }
+        Texture2D texture = new(size, size, TextureFormat.RGBA32, false)
         {
-            Widgets.DrawLine(new(rect.x, c.y), new(c.x - 1, rect.yMax), color, 1.1f);
-            Widgets.DrawLine(new(c.x - 1, rect.yMax), new(rect.xMax, rect.y), color, 1.1f);
-        }
-        else if (state == EmberNodeVisual.Learned) Widgets.DrawBoxSolid(rect.ContractedBy(2), color);
-        else
-        {
-            Rect body = new(rect.x, c.y, rect.width, rect.height * .5f);
-            Color old = GUI.color; GUI.color = color; Widgets.DrawBox(body); GUI.color = old;
-            Widgets.DrawLine(new(rect.x + 2, c.y), new(rect.x + 2, rect.y), color, 1);
-            Widgets.DrawLine(new(rect.x + 2, rect.y), new(rect.xMax - 2, rect.y), color, 1);
-            Widgets.DrawLine(new(rect.xMax - 2, rect.y), new(rect.xMax - 2, c.y), color, 1);
-        }
+            name = "Mingyuan status " + state,
+            filterMode = FilterMode.Bilinear,
+            wrapMode = TextureWrapMode.Clamp
+        };
+        texture.SetPixels(pixels);
+        texture.Apply();
+        return texture;
     }
     internal static void Ranks(Vector2 center, int rank, int maximum, Color color)
     {

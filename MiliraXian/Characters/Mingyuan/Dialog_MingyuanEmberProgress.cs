@@ -6,17 +6,32 @@ using static MiliraXian.Characters.Mingyuan.MingyuanEmberArt;
 namespace MiliraXian.Characters.Mingyuan;
 
 /// <summary>Secondary progress stays outside the node's reading and purchase card.</summary>
-internal sealed class Dialog_MingyuanEmberProgress(MingyuanEmberBook book) : Window
+internal sealed class Dialog_MingyuanEmberProgress : Window
 {
+    private readonly MingyuanEmberBook book;
     private Vector2 scroll;
     private float contentHeight = 680;
     public override Vector2 InitialSize => new(Mathf.Min(520, UI.screenWidth - 48), Mathf.Min(740, UI.screenHeight - 48));
+    protected override float Margin => 0;
+
+    public Dialog_MingyuanEmberProgress(MingyuanEmberBook book)
+    {
+        this.book = book;
+        doWindowBackground = false;
+    }
 
     public override void DoWindowContents(Rect rect)
     {
-        Label(new Rect(0, 0, rect.width - 42, 35), T("Trials", "试炼与资源"), Ink, GameFont.Medium);
-        if (Button(new Rect(rect.xMax - 34, 0, 32, 32), "×", quiet: true)) Close();
-        Rect area = new(0, 46, rect.width, rect.height - 46);
+        Color previous = GUI.color;
+        GUI.color = Color.white;
+        GUI.DrawTexture(rect, Backdrop, ScaleMode.ScaleAndCrop);
+        GUI.color = previous;
+        Frame(rect, Color.white, 28, drawCenter: false);
+        rect = rect.ContractedBy(20);
+        Label(new Rect(rect.x, rect.y, rect.width - 42, 35), T("Trials", "试炼与资源"), Ink, GameFont.Medium);
+        if (Button(new Rect(rect.xMax - 34, rect.y, 32, 32), "×", quiet: true)) Close();
+        Widgets.DrawBoxSolid(new Rect(rect.x, rect.y + 42, rect.width, 1), Rule);
+        Rect area = new(rect.x, rect.y + 56, rect.width, rect.height - 56);
         Rect view = new(0, 0, area.width - 20, contentHeight);
         Widgets.BeginScrollView(area, ref scroll, view);
         try
@@ -29,8 +44,8 @@ internal sealed class Dialog_MingyuanEmberProgress(MingyuanEmberBook book) : Win
                 if (trial == EmberTrial.None) continue;
                 y += 12;
                 TextBlock(view.width, ref y, book.TrialDescription(trial), Ink);
-                TextBlock(view.width, ref y, book.TrialProgress(trial).ToString("0") + " / " + book.TrialTarget(trial).ToString("0")
-                    + (book.TrialComplete(trial) ? "  ✓" : ""), Gold, GameFont.Tiny);
+                if (book.TrialComplete(trial)) Symbol(new Rect(view.width - 16, y + 4, 14, 14), EmberNodeVisual.Mastered, Gold);
+                TextBlock(view.width - 22, ref y, book.TrialProgress(trial).ToString("0") + " / " + book.TrialTarget(trial).ToString("0"), Gold, GameFont.Tiny);
                 Widgets.DrawBoxSolid(new Rect(0, y, view.width, 2), Rule);
                 Widgets.DrawBoxSolid(new Rect(0, y, view.width * Mathf.Clamp01(book.TrialProgress(trial) / Mathf.Max(1, book.TrialTarget(trial))), 2), Gold);
                 y += 8;

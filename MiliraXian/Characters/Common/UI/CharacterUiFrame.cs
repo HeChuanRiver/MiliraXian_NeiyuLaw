@@ -6,7 +6,7 @@ namespace MiliraXian.Characters.Common.UI;
 /// <summary>Nine-slice artwork with fixed display corners, independent of source resolution.</summary>
 internal static class CharacterUiFrame
 {
-    internal static void Draw(Rect rect, Texture2D texture, Color tint, float corner = 28f)
+    internal static void Draw(Rect rect, Texture2D texture, Color tint, float corner = 28f, bool drawCenter = true)
     {
         if (Event.current.type != EventType.Repaint || rect.width <= 0f || rect.height <= 0f) return;
         float aspect = (float)texture.height / texture.width;
@@ -19,6 +19,7 @@ internal static class CharacterUiFrame
             for (int row = 0; row < 3; row++)
                 for (int column = 0; column < 3; column++)
                 {
+                    if (!drawCenter && row == 1 && column == 1) continue;
                     Rect cell = new(
                         column == 0 ? rect.x : column == 1 ? rect.x + xEdge : rect.xMax - xEdge,
                         row == 0 ? rect.y : row == 1 ? rect.y + yEdge : rect.yMax - yEdge,
