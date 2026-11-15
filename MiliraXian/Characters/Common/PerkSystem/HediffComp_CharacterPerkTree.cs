@@ -94,6 +94,11 @@ namespace MiliraXian.Characters.Common.PerkSystem
             return GetNodeLevel(node) > 0;
         }
 
+        internal void ResetNode(CharacterPerkNodeDef node)
+        {
+            if (IsRelevantNode(node) && node.AllowsReset && nodeLevels.Remove(node)) Revision++;
+        }
+
         public override void CompExposeData()
         {
             Scribe_Collections.Look(ref nodeLevels, "mx_perkTree_nodeLevels", LookMode.Def, LookMode.Value);

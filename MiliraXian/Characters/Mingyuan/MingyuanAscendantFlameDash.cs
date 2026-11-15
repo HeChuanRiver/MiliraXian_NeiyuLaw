@@ -215,12 +215,16 @@ public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
 
     protected override void RespawnPawn()
     {
+        Pawn landingPawn = FlyingPawn;
+        Map landingMap = Map;
         if (Props != null && FlyingThing != null && !MingyuanPowerBalance.Sealed)
         {
             Vector3 land = DestinationPos;
             MingyuanFireVfx.PlayBurst(Map, land, 2.7f, Props.landingVisualTicks);
         }
         base.RespawnPawn();
+        if (Props != null && landingPawn is { Spawned: true, Dead: false })
+            MingyuanEmberBook.For(landingPawn)?.OfferReturn(startVec.ToIntVec3(), landingMap);
     }
 
     private void ResolveContact(Pawn caster)

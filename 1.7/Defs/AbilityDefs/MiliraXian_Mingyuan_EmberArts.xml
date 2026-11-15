@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <AbilityDef Name="MX_Mingyuan_EmberArtBase" Abstract="True">
+    <category>MX_MingyuanSkill</category>
+    <targetRequired>true</targetRequired>
+    <hostile>true</hostile>
+    <casterMustBeCapableOfViolence>true</casterMustBeCapableOfViolence>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
+    <verbProperties>
+      <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanEmberArt</verbClass>
+      <range>25</range>
+      <warmupTime>0.8</warmupTime>
+      <targetable>true</targetable>
+      <soundCast>FireSpew_Resolve</soundCast>
+    </verbProperties>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k3</defName>
+    <label>余烬·双星</label>
+    <description>学会独立术式「双星」：在目标处连续发动两次焰击，每次对半径 1.5 格内的敌人造成 15 点灼烧伤害。冷却 20 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
+    <displayOrder>200</displayOrder>
+    <cooldownTicksRange>1200</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k3</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k3</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k4</defName>
+    <label>余烬·烬迹</label>
+    <description>学会独立术式「烬迹」：在目标处留下半径 2 格、持续 3 秒的余火，每秒造成 5 点灼烧伤害。冷却 25 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_AscendantFlameDash</iconPath>
+    <displayOrder>201</displayOrder>
+    <cooldownTicksRange>1500</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k4</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k4</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k5</defName>
+    <label>余烬·引线</label>
+    <description>学会独立术式「引线」：向一名敌人施加 50 层生命燃烧。冷却 30 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
+    <displayOrder>202</displayOrder>
+    <cooldownTicksRange>1800</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetLocations>false</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k5</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k5</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k6</defName>
+    <label>余烬·火域</label>
+    <description>学会独立术式「火域」：在目标处留下半径 3 格、持续 5 秒的余火，每秒造成 8 点灼烧伤害。冷却 60 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_InstantCombustion</iconPath>
+    <displayOrder>203</displayOrder>
+    <cooldownTicksRange>3600</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k6</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k6</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k7</defName>
+    <label>余烬·御风</label>
+    <description>学会独立术式「御风」：移动速度提高 10%，持续 10 秒。冷却 45 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
+    <displayOrder>204</displayOrder>
+    <cooldownTicksRange>2700</cooldownTicksRange>
+    <targetRequired>false</targetRequired>
+    <hostile>false</hostile>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>true</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>false</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k7</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k7</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k8</defName>
+    <label>余烬·借刻</label>
+    <description>学会独立术式「借刻」：对一名敌人造成 20 点灼烧伤害，并施加 2 秒眩晕。冷却 60 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_TimeBurn</iconPath>
+    <displayOrder>205</displayOrder>
+    <cooldownTicksRange>3600</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>true</canTargetPawns>
+        <canTargetLocations>false</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k8</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k8</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_EmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k9</defName>
+    <label>余烬·烬核</label>
+    <description>学会独立术式「烬核」：在目标处留下半径 3 格、持续 3 秒的烬核，每秒造成 20 点灼烧伤害。冷却 90 秒。</description>
+    <iconPath>MiliraXianMingyuan/UI/Ability_BurningPillar</iconPath>
+    <displayOrder>206</displayOrder>
+    <cooldownTicksRange>5400</cooldownTicksRange>
+    <verbProperties>
+      <targetParams>
+        <canTargetSelf>false</canTargetSelf>
+        <canTargetPawns>false</canTargetPawns>
+        <canTargetLocations>true</canTargetLocations>
+        <canTargetBuildings>false</canTargetBuildings>
+        <canTargetItems>false</canTargetItems>
+      </targetParams>
+    </verbProperties>
+    <comps>
+      <li Class="MiliraXian.Characters.Mingyuan.CompProperties_MingyuanEmberArt">
+        <node>MX_Mingyuan_Ember_k9</node>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Common.PerkSystem.AbilityRequirement_Perk">
+            <perk>MX_Mingyuan_Ember_k9</perk>
+          </li>
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+</Defs>

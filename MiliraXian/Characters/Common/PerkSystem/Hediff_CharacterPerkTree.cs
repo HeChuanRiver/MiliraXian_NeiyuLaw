@@ -9,6 +9,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
     {
         private HediffStage cachedStage;
         private bool stageDirty = true;
+        protected virtual HediffComp_CharacterPerkTree SourceTree => GetComp<HediffComp_CharacterPerkTree>();
 
         public override HediffStage CurStage
         {
@@ -54,7 +55,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             AddOffsets(offsets, baseStage?.statOffsets, 1f);
             AddFactors(factors, baseStage?.statFactors, 1f);
 
-            HediffComp_CharacterPerkTree state = GetComp<HediffComp_CharacterPerkTree>();
+            HediffComp_CharacterPerkTree state = SourceTree;
             if (state != null)
             {
                 foreach (CharacterPerkNodeDef node in state.LearnedNodes)

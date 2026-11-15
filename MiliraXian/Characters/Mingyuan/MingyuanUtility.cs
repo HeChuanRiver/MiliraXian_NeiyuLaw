@@ -79,7 +79,7 @@ namespace MiliraXian.Characters.Mingyuan
             return hediff;
         }
 
-        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false)
+        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false, bool fromPropagation = false)
         {
             if (MingyuanPowerBalance.Sealed) return;
             if (target == null || layers <= 0f || target.Dead || IsLifeBurnImmunePawn(target))
@@ -92,9 +92,11 @@ namespace MiliraXian.Characters.Mingyuan
                 layers *= GetOverburnLifeBurnFactor(instigator);
             }
 
+            if (!fromPropagation) layers = MingyuanEmberBook.For(instigator)?.ExtraStack(target, layers) ?? layers;
             Hediff hediff = EnsureHediff(target, LifeBurnDef, layers);
             HediffComp_MingyuanLifeBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
             comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
+            comp?.RecordEmberSource(fromPropagation);
         }
 
         public static void AddLifeBurnFraction(Pawn target, Pawn instigator, float fraction, bool scaleWithOverburn = false)

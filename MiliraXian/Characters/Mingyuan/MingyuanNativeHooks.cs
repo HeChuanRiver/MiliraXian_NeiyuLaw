@@ -185,6 +185,8 @@ namespace MiliraXian.Characters.Mingyuan
                     || dinfo.Weapon?.IsMeleeWeapon == true);
             absorbed = heat || body.Invulnerable || (melee && MingyuanUtility.IsOverburning(pawn));
             if (!absorbed && explosion) dinfo.SetAmount(dinfo.Amount * 0.30f);
+            if (!absorbed && MingyuanUtility.GetSelfBurnLayers(pawn) <= MingyuanUtility.GetSelfBurnOverburnThreshold(pawn))
+                dinfo.SetAmount(dinfo.Amount * (1f - MingyuanEmberBook.Value(pawn, EmberEffect.LowBurnDefense)));
         }
     }
 
@@ -275,6 +277,8 @@ namespace MiliraXian.Characters.Mingyuan
         {
             base.Notify_PawnDamagedThing(thing, dinfo, result);
             if (MingyuanPowerBalance.Sealed) return;
+            if (result is { totalDamageDealt: > 0f } && thing is Pawn hostile && hostile.HostileTo(pawn))
+                MingyuanEmberBook.For(pawn)?.NotifyCombat();
             if (MingyuanUtility.SuppressOnHitLifeBurn || result == null || result.totalDamageDealt <= 0f)
             {
                 return;
