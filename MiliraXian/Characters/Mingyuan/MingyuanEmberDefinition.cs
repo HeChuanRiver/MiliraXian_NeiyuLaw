@@ -38,6 +38,7 @@ public sealed class MingyuanEmberNodeDef : CharacterPerkNodeDef
     public int cooldownTicks;
     [MustTranslate] public string tradeoff;
     [MustTranslate] public string role;
+    [MustTranslate] public string flavorText;
 
     public int InsightCost(int level) => insightCost + (maxLevel > 1 ? level / 2 : 0);
     public int AshCost(int level) => ashCost + (maxLevel > 1 ? level : 0);
