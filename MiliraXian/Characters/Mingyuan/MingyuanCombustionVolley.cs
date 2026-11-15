@@ -13,6 +13,7 @@ public sealed class MingyuanCombustionFireballDef : SweepDamageDef
     public float damage;
     public float lifeBurnFraction;
     public bool leavesScorch;
+    public EmberEffect emberEffect;
 }
 
 public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
@@ -26,6 +27,12 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
 
     protected override DamageWorker.DamageResult ApplyDamage(SweepDamageSource source, Thing target, DamageInfo dinfo)
     {
+        var fireball = def as MingyuanCombustionFireballDef;
+        float factor = MingyuanUtility.GetEmberSkillDamageFactor(source.caster);
+        if (fireball?.emberEffect == EmberEffect.CombustionFocus && target is Pawn burning
+            && MingyuanUtility.GetLifeBurnLayers(burning) > 0f)
+            factor *= 1f + MingyuanEmberBook.Value(source.caster, EmberEffect.CombustionFocus);
+        dinfo.SetAmount(dinfo.Amount * factor);
         DamageWorker.DamageResult result;
         bool previous = MingyuanUtility.SuppressOnHitLifeBurn;
         try
@@ -40,8 +47,13 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
 
         if (result is { totalDamageDealt: > 0f } && target is Pawn pawn)
         {
-            if (!pawn.Dead && def is MingyuanCombustionFireballDef fireball)
-                MingyuanUtility.AddLifeBurnFraction(pawn, source.caster, fireball.lifeBurnFraction, scaleWithOverburn: true);
+            if (!pawn.Dead && fireball != null)
+            {
+                float fraction = fireball.lifeBurnFraction;
+                if (fireball.emberEffect == EmberEffect.CombustionKindling)
+                    fraction *= 1f + MingyuanEmberBook.Value(source.caster, EmberEffect.CombustionKindling);
+                MingyuanUtility.AddLifeBurnFraction(pawn, source.caster, fraction, scaleWithOverburn: true);
+            }
 
             var entry = new BattleLogEntry_ExplosionImpact(source.caster, pawn, dinfo.Weapon, null, dinfo.Def);
             Find.BattleLog.Add(entry);

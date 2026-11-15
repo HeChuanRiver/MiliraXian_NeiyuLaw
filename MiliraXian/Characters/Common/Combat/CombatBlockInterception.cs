@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using MiliraXian.Characters.Neiyu;
 using RimWorld;
 using Verse;
 
@@ -133,12 +134,18 @@ internal static class Patch_CombatBlockOrder
 
     private static void Finalizer(CombatBlock.Scope __state) => __state.Dispose();
 
+    private static bool ResolveNativeSwing(Verb_MeleeAttack verb, LocalTargetInfo target)
+    {
+        NeiyuSwordCombat.NotifySwordSwing(verb);
+        return CombatBlock.RollHit(verb, target);
+    }
+
     private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         List<CodeInstruction> code = new(instructions);
         MethodInfo chance = AccessTools.Method(typeof(Rand), nameof(Rand.Chance), [typeof(float)]);
         MethodInfo resolveDodge = AccessTools.Method(typeof(CombatBlock), nameof(CombatBlock.RollDodge));
-        MethodInfo resolveHit = AccessTools.Method(typeof(CombatBlock), nameof(CombatBlock.RollHit));
+        MethodInfo resolveHit = AccessTools.Method(typeof(Patch_CombatBlockOrder), nameof(ResolveNativeSwing));
         int dodges = 0, hits = 0;
         for (int i = 0; i < code.Count - 1; i++)
         {

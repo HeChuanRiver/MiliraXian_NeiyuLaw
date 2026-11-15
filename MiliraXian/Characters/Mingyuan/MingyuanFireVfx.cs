@@ -131,7 +131,8 @@ internal static class MingyuanFireVfx
             int mask = 0;
             for (int i = 0; i < Edges.Length; i++)
                 if (!cells.ContainsKey(cell + Edges[i])) mask |= 1 << i;
-            Vector4 data = new(mask, state.Expires, 0f, 0f);
+            state.RenderedExpiry = state.EffectiveExpiry;
+            Vector4 data = new(mask, state.RenderedExpiry, 0f, 0f);
             AddQuad(ScorchVertices, ScorchUv, ScorchCellData, ScorchTriangles,
                 cell.ToVector3ShiftedWithAltitude(GroundAltitude), data);
         }

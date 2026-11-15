@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Read-only aliases for saves from the withdrawn active-skill version. No node grants these abilities. -->
+  <AbilityDef Name="MX_Mingyuan_RetiredEmberArtBase" Abstract="True">
+    <label>旧余烬术式</label>
+    <description>此术式已停用。</description>
+    <targetRequired>false</targetRequired>
+    <hostile>false</hostile>
+    <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
+    <verbProperties>
+      <verbClass>MiliraXian.Characters.Mingyuan.Verb_MingyuanEmberArt</verbClass>
+      <targetable>false</targetable>
+      <range>0</range>
+    </verbProperties>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
+        <requirements>
+          <li Class="MiliraXian.Characters.Mingyuan.AbilityRequirement_RetiredEmberArt" />
+        </requirements>
+      </li>
+    </modExtensions>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k3</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k4</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k5</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k6</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k7</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k8</defName>
+  </AbilityDef>
+  <AbilityDef ParentName="MX_Mingyuan_RetiredEmberArtBase">
+    <defName>MX_Mingyuan_EmberArt_k9</defName>
+  </AbilityDef>
+</Defs>

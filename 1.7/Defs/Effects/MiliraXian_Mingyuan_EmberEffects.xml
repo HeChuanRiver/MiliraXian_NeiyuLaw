@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Load-only carrier: an old save taken mid-flight must still land its pawn safely. Nothing spawns it now. -->
+  <ThingDef ParentName="PawnFlyerBase">
+    <defName>MX_Mingyuan_EmberStepFlyer</defName>
+    <label>余烬步</label>
+    <thingClass>PawnFlyer</thingClass>
+    <pawnFlyer>
+      <flightDurationMin>0.15</flightDurationMin><flightSpeed>30</flightSpeed><heightFactor>0.4</heightFactor>
+    </pawnFlyer>
+  </ThingDef>
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>MX_Mingyuan_EmberGround</defName>
+    <label>余火</label>
+    <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanEmberGround</thingClass>
+    <drawerType>RealtimeOnly</drawerType>
+    <tickerType>Normal</tickerType>
+    <selectable>false</selectable>
+    <passability>Standable</passability>
+  </ThingDef>
+</Defs>

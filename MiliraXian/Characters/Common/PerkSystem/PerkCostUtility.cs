@@ -88,7 +88,12 @@ namespace MiliraXian.Characters.Common.PerkSystem
     }
 
     /// <summary>Owns split pieces until the stored node commits; disposal restores an incomplete purchase.</summary>
-    public sealed class PerkCostTransaction : IDisposable
+    public interface IPerkCostTransaction : IDisposable
+    {
+        void Commit();
+    }
+
+    public sealed class PerkCostTransaction : IPerkCostTransaction
     {
         private readonly Map map;
         private readonly List<(Thing thing, IntVec3 cell)> pieces = new();

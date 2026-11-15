@@ -14,6 +14,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public string iconInactive;
         public bool displayOnly;
         public List<CharacterPerkNodeRef> prerequisites;
+        public bool anyPrerequisite;
         public List<UnlockCondition> requiresAll;
         public List<UnlockCondition> requiresAny;
         public List<ThingDefCountClass> costs;
@@ -26,6 +27,20 @@ namespace MiliraXian.Characters.Common.PerkSystem
 
         /// <summary>Character-specific purchase eligibility; grants and migration skip this gate.</summary>
         public virtual string PurchaseBlockedReason(Pawn pawn) => null;
+
+        public virtual bool HasCosts(Pawn pawn, int level) => PerkCostUtility.HasCosts(pawn, costs);
+
+        public virtual bool TryStageCosts(Pawn pawn, int level, out IPerkCostTransaction payment)
+        {
+            bool success = PerkCostUtility.TryStageCosts(pawn, costs, out var materials);
+            payment = materials;
+            return success;
+        }
+
+        // Respec is an explicit progress edit, never a consequence of sealing a node.
+        public virtual bool AllowsReset => false;
+        public virtual bool CanRetain(Pawn pawn, System.Func<CharacterPerkNodeDef, int> levels) => true;
+        public virtual void Refund(Pawn pawn) { }
 
         /// <summary>
         /// Whether this node unlocks itself when the event source changes (mastery level reaching a

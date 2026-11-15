@@ -43,7 +43,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             if (Props.fieldDef?.GetCompProperties<CompProperties_MingyuanBurningField>() is { } field)
-                GenDraw.DrawRadiusRing(caster.Position, field.radius, field.previewRingColor);
+                GenDraw.DrawRadiusRing(caster.Position, CompMingyuanBurningField.RadiusFor(caster, field), field.previewRingColor);
         }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)

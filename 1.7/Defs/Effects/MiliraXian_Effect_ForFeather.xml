@@ -149,7 +149,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_A</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>
@@ -163,7 +163,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_B</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>
@@ -177,7 +177,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_C</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>
@@ -191,7 +191,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_D</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>
@@ -205,7 +205,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_E</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>
@@ -219,7 +219,7 @@
         </graphicData>
     </FleckDef>
 
-    <FleckDef ParentName="FleckBase_Thrown">
+    <FleckDef ParentName="FleckBase">
         <defName>MXNL_Fleck_BladeLight_Neiyu_F</defName>
         <altitudeLayer>MoteOverheadLow</altitudeLayer>
         <fadeInTime>0.01</fadeInTime>

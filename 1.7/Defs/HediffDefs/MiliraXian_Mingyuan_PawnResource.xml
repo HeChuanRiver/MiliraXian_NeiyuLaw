@@ -456,6 +456,14 @@
             </li>
         </stages>
         <comps>
+            <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_CharacterPerkTree">
+                <categories>
+                    <li>MX_Mingyuan_Ember_Origin</li><li>MX_Mingyuan_Ember_Stat</li>
+                    <li>MX_Mingyuan_Ember_Mechanic</li><li>MX_Mingyuan_Ember_Skill</li>
+                </categories>
+            </li>
+            <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_PerkEventHandler"/>
+            <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanEmberBook"/>
             <li Class="MiliraXian.Characters.Mingyuan.HediffCompProperties_MingyuanBurningBody">
                 <restoreIntervalTicks>3600</restoreIntervalTicks>
                 <restoreHealAmount>15</restoreHealAmount>

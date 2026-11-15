@@ -78,6 +78,7 @@ namespace MiliraXian.Characters.Common
             if (nPawn || zPawn || mPawn)
             {
                 if (nPawn) Neiyu.Cultivation.CultivationService.Refresh(pawn);
+                if (mPawn) MingyuanEmberBook.For(pawn)?.Handler?.RefreshEffects();
                 pawn.health.hediffSet.DirtyCache();
                 pawn.needs?.AddOrRemoveNeedsAsAppropriate();
                 bool changed = nPawn ? nChanged : zPawn ? zChanged : mChanged;

@@ -318,19 +318,6 @@ namespace MiliraXian.Characters.Zhaoli
         }
     }
 
-    [HarmonyPatch(typeof(VerbProperties), nameof(VerbProperties.AdjustedCooldown), new Type[] { typeof(Verb), typeof(Pawn) })]
-    internal static class Patch_VerbProperties_AdjustedCooldown_ZhaoliMinghuo
-    {
-        public static void Postfix(Verb ownerVerb, Pawn attacker, ref float __result)
-        {
-            HediffComp_ZhaoliMinghuo comp = ZhaoliMinghuoUtility.GetActiveComp(ownerVerb);
-            if (comp != null && comp.PropsMinghuo.attackSpeedMultiplier > 0f)
-            {
-                __result = Mathf.Max(0.1f, __result / comp.PropsMinghuo.attackSpeedMultiplier);
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(VerbProperties), nameof(VerbProperties.AdjustedRange), new Type[] { typeof(Verb), typeof(Thing) })]
     internal static class Patch_VerbProperties_AdjustedRange_ZhaoliMinghuo
     {

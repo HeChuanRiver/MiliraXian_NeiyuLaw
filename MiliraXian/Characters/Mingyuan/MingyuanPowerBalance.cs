@@ -118,6 +118,13 @@ namespace MiliraXian.Characters.Mingyuan
     public abstract class CompAbilityEffect_MingyuanPowerLimited : CompAbilityEffect_CharacterPowerLimited
     {
         protected override bool PowerSealed => MingyuanPowerBalance.Sealed;
+        public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
+        {
+            base.Apply(target, dest);
+            var book = MingyuanEmberBook.For(parent.pawn);
+            if (target.Thing is Pawn victim && victim.HostileTo(parent.pawn)) book?.NotifyCombat();
+            book?.NotifyCast(parent);
+        }
     }
 
     [StaticConstructorOnStartup]

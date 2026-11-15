@@ -29,6 +29,7 @@
 
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
     <defName>MX_Mingyuan_CombustionSmallFireball</defName>
+    <emberEffect>CombustionKindling</emberEffect>
     <radius>4.5</radius>
     <damage>75</damage>
     <lifeBurnFraction>0.025</lifeBurnFraction>
@@ -36,6 +37,7 @@
 
   <MiliraXian.Characters.Mingyuan.MingyuanCombustionFireballDef ParentName="MX_Mingyuan_CombustionFireballBase">
     <defName>MX_Mingyuan_CombustionCoreFireball</defName>
+    <emberEffect>CombustionFocus</emberEffect>
     <radius>10</radius>
     <damage>150</damage>
     <lifeBurnFraction>0.15</lifeBurnFraction>

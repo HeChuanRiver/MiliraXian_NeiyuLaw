@@ -79,7 +79,7 @@ namespace MiliraXian.Characters.Mingyuan
             return hediff;
         }
 
-        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false)
+        public static void AddLifeBurn(Pawn target, Pawn instigator, float layers, bool refreshDecayTimer = true, bool scaleWithOverburn = false, bool fromPropagation = false)
         {
             if (MingyuanPowerBalance.Sealed) return;
             if (target == null || layers <= 0f || target.Dead || IsLifeBurnImmunePawn(target))
@@ -92,9 +92,11 @@ namespace MiliraXian.Characters.Mingyuan
                 layers *= GetOverburnLifeBurnFactor(instigator);
             }
 
+            if (!fromPropagation) layers = MingyuanEmberBook.For(instigator)?.ExtraStack(target, layers) ?? layers;
             Hediff hediff = EnsureHediff(target, LifeBurnDef, layers);
             HediffComp_MingyuanLifeBurn comp = (hediff as HediffWithComps)?.GetComp<HediffComp_MingyuanLifeBurn>();
             comp?.NotifyLifeBurnStack(instigator, refreshDecayTimer);
+            comp?.RecordEmberSource(fromPropagation);
         }
 
         public static void AddLifeBurnFraction(Pawn target, Pawn instigator, float fraction, bool scaleWithOverburn = false)
@@ -305,6 +307,9 @@ namespace MiliraXian.Characters.Mingyuan
             return selfBurn > 0f ? 1f + selfBurn * 0.004f : 1f;
         }
 
+        internal static float GetEmberSkillDamageFactor(Pawn pawn) => IsOverburning(pawn)
+            ? 1f + MingyuanEmberBook.Value(pawn, EmberEffect.OverburnDamage) : 1f;
+
         public static float GetSelfBurnRangedWeaponDamageFactor(Pawn pawn)
         {
             float selfBurn = GetSelfBurnEffectiveLayers(pawn);
@@ -385,6 +390,7 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 amount *= GetSelfBurnSkillDamageFactor(instigator);
                 amount *= GetOverburnDamageFactor(instigator);
+                amount *= GetEmberSkillDamageFactor(instigator);
             }
 
             DamageInfo dinfo = new(damageDef ?? DamageDefOf.Burn, amount, 999f, -1f, instigator, hitPart);

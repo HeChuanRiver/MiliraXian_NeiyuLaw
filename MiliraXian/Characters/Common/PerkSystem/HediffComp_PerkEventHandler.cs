@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             { reason = "MX_Perk_MaxLevel".Translate(); return false; }
             reason = node.PurchaseBlockedReason(Pawn);
             if (reason != null || !PrerequisitesMet(node, out reason) || !ConditionsMet(node, out reason)) return false;
-            if (checkCosts && !PerkCostUtility.HasCosts(Pawn, node.costs))
+            if (checkCosts && !node.HasCosts(Pawn, Tree.GetNodeLevel(node)))
             { reason = "MX_Perk_MaterialsMissing".Translate(); return false; }
             return true;
         }
@@ -43,7 +43,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
         public bool TryUnlock(CharacterPerkNodeDef node, out string failReason)
         {
             if (!CanUnlock(node, out failReason)) return false;
-            if (!PerkCostUtility.TryStageCosts(Pawn, node.costs, out var payment))
+            if (!node.TryStageCosts(Pawn, Tree.GetNodeLevel(node), out var payment))
             { failReason = "材料状态已变化，请重新尝试。"; return false; }
             using (payment) Commit(node, payment, notify: true, broadcast: true);
             return true;
@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.Common.PerkSystem
             return true;
         }
 
-        private void Commit(CharacterPerkNodeDef node, PerkCostTransaction payment, bool notify, bool broadcast)
+        private void Commit(CharacterPerkNodeDef node, IPerkCostTransaction payment, bool notify, bool broadcast)
         {
             Tree.SetNodeLevel(node, Tree.GetNodeLevel(node) + 1);
             payment?.Commit();
@@ -79,11 +79,62 @@ namespace MiliraXian.Characters.Common.PerkSystem
                 {
                     if (prerequisite?.node == null)
                     { missing.AppendLine("修行前置配置缺失。"); continue; }
+                    if (node.anyPrerequisite && Tree.GetNodeLevel(prerequisite.node) >= prerequisite.minLevel)
+                    { reason = null; return true; }
                     if (Tree.GetNodeLevel(prerequisite.node) < prerequisite.minLevel)
                         missing.AppendLine("MX_Perk_RequiresPrerequisite".Translate(prerequisite.node.LabelCap, prerequisite.minLevel));
                 }
             reason = missing.Length > 0 ? missing.ToString().TrimEnd() : null;
             return reason == null;
+        }
+
+        public List<CharacterPerkNodeDef> ResetPlan(CharacterPerkNodeDef selected = null)
+        {
+            List<CharacterPerkNodeDef> result = new();
+            if (Tree == null || (selected != null && (!Tree.IsRelevantNode(selected) || !selected.AllowsReset))) return result;
+            var learned = Tree.LearnedNodes;
+            HashSet<CharacterPerkNodeDef> removed = new();
+            foreach (var node in learned)
+                if (node.AllowsReset && (selected == null || node == selected)) removed.Add(node);
+            int Level(CharacterPerkNodeDef node) => removed.Contains(node) ? 0 : Tree.GetNodeLevel(node);
+            bool changed;
+            do
+            {
+                changed = false;
+                foreach (var node in learned)
+                {
+                    if (removed.Contains(node)) continue;
+                    bool prerequisitesMet = node.prerequisites.NullOrEmpty();
+                    if (!prerequisitesMet)
+                    {
+                        prerequisitesMet = !node.anyPrerequisite;
+                        foreach (var prerequisite in node.prerequisites)
+                        {
+                            bool met = prerequisite?.node != null && Level(prerequisite.node) >= prerequisite.minLevel;
+                            prerequisitesMet = node.anyPrerequisite ? prerequisitesMet || met : prerequisitesMet && met;
+                        }
+                    }
+                    if (prerequisitesMet && node.CanRetain(Pawn, Level)) continue;
+                    // A dependent non-resettable node prevents a destructive partial reset.
+                    if (!node.AllowsReset) return new();
+                    changed |= removed.Add(node);
+                }
+            } while (changed);
+            foreach (var node in learned) if (removed.Contains(node)) result.Add(node);
+            return result;
+        }
+
+        public bool TryReset(CharacterPerkNodeDef selected, out string reason)
+        {
+            reason = null;
+            if (Pawn == null || Pawn.Dead || !Pawn.IsColonistPlayerControlled)
+            { reason = "当前无法重置。"; return false; }
+            List<CharacterPerkNodeDef> plan = ResetPlan(selected);
+            if (plan.Count == 0) { reason = "没有可以返还的节点。"; return false; }
+            foreach (var node in plan) node.Refund(Pawn);
+            foreach (var node in plan) Tree.ResetNode(node);
+            RefreshEffects();
+            return true;
         }
 
         private bool ConditionsMet(CharacterPerkNodeDef node, out string reason)

@@ -4,6 +4,8 @@
     <defName>MX_NeiyuSwordCombat</defName>
     <sword>MX_Neiyu_Form_Weapon</sword>
     <executionJob>MX_NeiyuPostureExecution</executionJob>
+    <swingsToFullSpeed>6</swingsToFullSpeed>
+    <swingStreakTimeoutTicks>300</swingStreakTimeoutTicks>
     <!-- 架势上限、恢复、破绽和崩溃窗口改由通用的 MX_CombatPosture（MiliraXian_CombatPosture.xml）配置 -->
     <!-- 近战先判弹刀，失败后判闪避。完美概率为绝对概率，不作第二次抽签。 -->
     <successChance>0.80</successChance>

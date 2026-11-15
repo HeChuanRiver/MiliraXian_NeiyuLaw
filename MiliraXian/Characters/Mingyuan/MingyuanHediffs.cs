@@ -48,6 +48,12 @@ namespace MiliraXian.Characters.Mingyuan
         private bool burstVisualSpawnedForDeath;
         private int pendingBurstTick;
         private bool executingBurst;
+        private bool lastStackWasPropagation;
+        internal void RecordEmberSource(bool propagation) => lastStackWasPropagation = propagation;
+        private int EmberDecayDelay => PropsLifeBurn.decayDelayTicks
+            + Mathf.RoundToInt(MingyuanEmberBook.Value(instigator, EmberEffect.DecayDelay) * 60f);
+        private float EmberTransferRadius => PropsLifeBurn.transferRadius + MingyuanEmberBook.Value(instigator, EmberEffect.SpreadRadius);
+        private bool DecayHeld => Current.Game?.GetComponent<GameComponent_MingyuanTimeBurn>()?.HoldsLifeBurn(Pawn) == true;
 
         public HediffCompProperties_MingyuanLifeBurn PropsLifeBurn => (HediffCompProperties_MingyuanLifeBurn)props;
 
@@ -78,9 +84,13 @@ namespace MiliraXian.Characters.Mingyuan
                 float combat = MingyuanStatUtility.LifeBurnCombatChange(layers) * 100f;
                 float periodicDamage = PeriodicDamageFor(layers);
                 float selfStack = layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction);
-                int waitSeconds = Mathf.CeilToInt(Mathf.Max(0, PropsLifeBurn.decayDelayTicks - (CurrentTick - lastExternalStackTick)) / 60f);
+                int waitSeconds = Mathf.CeilToInt(Mathf.Max(0, EmberDecayDelay - (CurrentTick - lastExternalStackTick)) / 60f);
 
                 StringBuilder builder = new();
+                if (MingyuanEmberBook.Has(instigator, EmberEffect.BurnInsight))
+                    builder.AppendLine(EmberText.Get("StackSource", "最近叠层来源：")
+                        + (lastStackWasPropagation ? EmberText.Get("Propagation", "死亡传播") : EmberText.Get("DirectStack", "直接施加"))
+                        + " · " + (instigator?.LabelShort ?? ""));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipCurrentLayers".Translate(FormatNumber(layers)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipExecuteThreshold".Translate(FormatNumber(ExecuteThreshold)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipRemaining".Translate(FormatNumber(RemainingToExecute)));
@@ -89,7 +99,7 @@ namespace MiliraXian.Characters.Mingyuan
                 builder.AppendLine();
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipPeriodicDamage".Translate(FormatNumber(periodicDamage)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipSelfStack".Translate(FormatNumber(selfStack)));
-                builder.AppendLine(waitSeconds > 0
+                builder.AppendLine(DecayHeld ? EmberText.Get("TimeEmberHoldTip", "时燃封存：老化期间，生命燃烧暂停衰减。") : waitSeconds > 0
                     ? "MX_Mingyuan_LifeBurn_TipDecayWait".Translate(waitSeconds, FormatPercent(PropsLifeBurn.decayFraction * 100f))
                     : "MX_Mingyuan_LifeBurn_TipDecaying".Translate(FormatPercent(PropsLifeBurn.decayFraction * 100f)));
                 builder.AppendLine();
@@ -98,7 +108,7 @@ namespace MiliraXian.Characters.Mingyuan
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipDebuffUp".Translate(FormatPercent(combat)));
                 builder.AppendLine("MX_Mingyuan_LifeBurn_TipTransfer".Translate(
                     FormatPercent(PropsLifeBurn.deathTransferProgressFraction * 100f),
-                    PropsLifeBurn.transferRadius.ToString("F0"),
+                    EmberTransferRadius.ToString("F0"),
                     Mathf.Max(1, PropsLifeBurn.maxTransferTargets).ToString(),
                     Mathf.CeilToInt(Mathf.Max(0, PropsLifeBurn.deathTransferTargetCooldownTicks) / 60f).ToString()));
                 return builder.ToString().TrimEnd('\r', '\n');
@@ -112,6 +122,7 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref ticksToNextDamage, "ticksToNextDamage", 0);
             Scribe_Values.Look(ref pendingBurstTick, "pendingBurstTick", 0);
             Scribe_Values.Look(ref lastExternalStackTick, "lastExternalStackTick", 0);
+            Scribe_Values.Look(ref lastStackWasPropagation, "emberLastStackWasPropagation");
         }
 
         public void SetInstigator(Pawn pawn)
@@ -213,11 +224,13 @@ namespace MiliraXian.Characters.Mingyuan
                 return;
             }
 
-            MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, PeriodicDamageFor(layers), instigator);
+            var periodicResult = MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, PeriodicDamageFor(layers), instigator);
+            if (instigator != null && Pawn.HostileTo(instigator))
+                MingyuanEmberBook.For(instigator)?.NotifyBurnDamage(periodicResult?.totalDamageDealt ?? 0f);
             if (Pawn.Dead || !Pawn.health.hediffSet.hediffs.Contains(parent)) return;
 
             float updated = CurrentLayers + layers * Mathf.Max(0f, PropsLifeBurn.burnSelfStackFraction);
-            if (CurrentTick - lastExternalStackTick >= PropsLifeBurn.decayDelayTicks)
+            if (!DecayHeld && CurrentTick - lastExternalStackTick >= EmberDecayDelay)
                 updated *= 1f - Mathf.Clamp01(PropsLifeBurn.decayFraction);
             if (updated <= PropsLifeBurn.removeBelowLayers)
             {
@@ -237,7 +250,10 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 burstVisualSpawnedForDeath = true;
                 SpawnBurstMote(Pawn.MapHeld, Pawn.PositionHeld);
-                MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, BurstDamage, instigator);
+                MingyuanEmberBook.For(instigator)?.NotifyBurst(Pawn);
+                var burstResult = MingyuanUtility.ApplyTrueDamage(Pawn, DamageDefOf.Burn, BurstDamage, instigator);
+                if (instigator != null && Pawn.HostileTo(instigator))
+                    MingyuanEmberBook.For(instigator)?.NotifyBurnDamage(burstResult?.totalDamageDealt ?? 0f);
                 if (!Pawn.Dead && Pawn.health.hediffSet.hediffs.Contains(parent))
                     Pawn.health.RemoveHediff(parent);
             }
@@ -252,6 +268,8 @@ namespace MiliraXian.Characters.Mingyuan
             base.Notify_PawnDied(dinfo, culprit);
             try
             {
+                if (instigator != null && Pawn.HostileTo(instigator))
+                    MingyuanEmberBook.For(instigator)?.NotifyBurnKill(!executingBurst && dinfo?.Instigator == instigator);
                 if (MingyuanUtility.IsPillarDeath(Pawn, dinfo) && !burstVisualSpawnedForDeath)
                 {
                     burstVisualSpawnedForDeath = true;
@@ -287,7 +305,7 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             IntVec3 originCell = Pawn.PositionHeld;
-            int radiusSquared = Mathf.CeilToInt(PropsLifeBurn.transferRadius * PropsLifeBurn.transferRadius);
+            int radiusSquared = Mathf.CeilToInt(EmberTransferRadius * EmberTransferRadius);
             List<Pawn> transferTargets = CombatTargetSnapshot.Rent(System.Array.Empty<Pawn>());
             try
             {
@@ -350,7 +368,10 @@ namespace MiliraXian.Characters.Mingyuan
                     }
 
                     MarkDeathTransferReceived(target, currentTick);
-                    MingyuanUtility.AddLifeBurn(target, instigator, MingyuanUtility.GetLifeBurnExecuteThreshold(target) * transferProgress);
+                    float beforeTransfer = MingyuanUtility.GetLifeBurnLayers(target);
+                    MingyuanUtility.AddLifeBurn(target, instigator, MingyuanUtility.GetLifeBurnExecuteThreshold(target) * transferProgress, fromPropagation: true);
+                    if (MingyuanUtility.GetLifeBurnLayers(target) > beforeTransfer)
+                        MingyuanEmberBook.For(instigator)?.NotifySpread();
                     if (i < visualCount)
                     {
                         SpawnTransferTrail(map, originCell, target);
@@ -711,6 +732,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private void TickOverburnRelease()
         {
+            MingyuanEmberBook.For(Pawn)?.ObserveOverburn(IsOverburningNow());
             if (!IsOverburningNow())
             {
                 ticksToOverburnRelease = 600;
@@ -730,7 +752,8 @@ namespace MiliraXian.Characters.Mingyuan
             {
                 MingyuanUtility.SuppressOnHitLifeBurn = true;
                 GenExplosion.DoExplosion(Pawn.Position, Pawn.Map, 5f, DamageDefOf.Bomb, Pawn,
-                    Mathf.Max(1, Mathf.RoundToInt(excess)), 0f, damageFalloff: false, ignoredThings: new List<Thing> { Pawn });
+                    Mathf.Max(1, Mathf.RoundToInt(excess)), 0f, damageFalloff: false,
+                    ignoredThings: MingyuanEmberEffects.OverburnIgnored(Pawn, 5f));
             }
             finally { MingyuanUtility.SuppressOnHitLifeBurn = suppression; }
         }
@@ -932,6 +955,7 @@ namespace MiliraXian.Characters.Mingyuan
             Pawn attacker = dinfo.Instigator as Pawn;
             if (attacker != null && attacker != Pawn && attacker.HostileTo(Pawn) && !attacker.Dead)
             {
+                MingyuanEmberBook.For(Pawn)?.NotifyCombat();
                 float reflected = Mathf.Max(1f, dinfo.Amount);
                 MingyuanUtility.ApplyTrueDamage(attacker, dinfo.Def ?? DamageDefOf.Burn, reflected, Pawn);
                 MingyuanUtility.AddLifeBurn(attacker, Pawn, PropsBody.reflectLifeBurnLayers);
@@ -976,9 +1000,19 @@ namespace MiliraXian.Characters.Mingyuan
 
         public HediffCompProperties_MingyuanProtectiveFlameShield PropsShield => (HediffCompProperties_MingyuanProtectiveFlameShield)props;
 
-        public float Energy => Mathf.Clamp(energy < 0f ? PropsShield.maxEnergy : energy, 0f, PropsShield.maxEnergy);
+        private float MaxEnergy => PropsShield.maxEnergy * (1f +
+            (MingyuanUtility.GetSelfBurnLayers(Pawn) >= MingyuanEmberBook.Config.Node(EmberEffect.ShieldCapacity).threshold
+             && !MingyuanUtility.IsOverburning(Pawn) ? MingyuanEmberBook.Value(Pawn, EmberEffect.ShieldCapacity) : 0f));
 
-        public override string CompLabelInBracketsExtra => Mathf.RoundToInt(Energy) + "/" + Mathf.RoundToInt(PropsShield.maxEnergy);
+        public float Energy => Mathf.Clamp(energy < 0f ? MaxEnergy : energy, 0f, MaxEnergy);
+
+        internal void RestoreEnergy(float amount)
+        {
+            if (MingyuanPowerBalance.Sealed || Pawn == null || Pawn.Dead || amount <= 0f) return;
+            energy = Mathf.Min(MaxEnergy, Energy + amount);
+        }
+
+        public override string CompLabelInBracketsExtra => Mathf.RoundToInt(Energy) + "/" + Mathf.RoundToInt(MaxEnergy);
 
         public override string CompTipStringExtra
         {
@@ -991,10 +1025,10 @@ namespace MiliraXian.Characters.Mingyuan
 
                 if (MingyuanPowerBalance.Sealed) return null;
                 bool overburning = MingyuanUtility.IsOverburning(Pawn);
-                bool canRefill = !overburning && MingyuanUtility.GetSelfBurnLayers(Pawn) >= PropsShield.selfBurnPerEnergy && Energy < PropsShield.maxEnergy;
+                bool canRefill = !overburning && MingyuanUtility.GetSelfBurnLayers(Pawn) >= PropsShield.selfBurnPerEnergy && Energy < MaxEnergy;
 
                 StringBuilder builder = new();
-                builder.AppendLine("MX_Mingyuan_Shield_TipStatus".Translate(FormatNumber(Energy), FormatNumber(PropsShield.maxEnergy)));
+                builder.AppendLine("MX_Mingyuan_Shield_TipStatus".Translate(FormatNumber(Energy), FormatNumber(MaxEnergy)));
                 builder.AppendLine("MX_Mingyuan_Shield_TipRepair".Translate(
                     (Mathf.Max(0, ticksToRepair) / 60f).ToString("0.##"),
                     (RepairIntervalTicks / 60f).ToString("0.##")));
@@ -1035,10 +1069,10 @@ namespace MiliraXian.Characters.Mingyuan
             if (MingyuanPowerBalance.Sealed || Find.TickManager == null) return;
             int now = Find.TickManager.TicksGame;
             ref int nextTick = ref (explosion ? ref nextExplosionRefillTick : ref nextHeatRefillTick);
-            if (now < nextTick || Energy >= PropsShield.maxEnergy) return;
+            if (now < nextTick || Energy >= MaxEnergy) return;
             float refill = explosion ? PropsShield.explosionRefillEnergy : PropsShield.heatRefillEnergy;
             int cooldown = explosion ? PropsShield.explosionRefillCooldownTicks : PropsShield.heatRefillCooldownTicks;
-            energy = Mathf.Min(PropsShield.maxEnergy, Energy + Mathf.Max(0f, refill));
+            RestoreEnergy(Mathf.Max(0f, refill));
             nextTick = now + Mathf.Max(1, cooldown);
         }
 
@@ -1053,9 +1087,9 @@ namespace MiliraXian.Characters.Mingyuan
             if (MingyuanPowerBalance.Sealed) return;
             if (energy < 0f)
             {
-                energy = PropsShield.maxEnergy;
+                energy = MaxEnergy;
             }
-            energy = Mathf.Clamp(energy, 0f, PropsShield.maxEnergy);
+            energy = Mathf.Clamp(energy, 0f, MaxEnergy);
 
             TickRepairReserve();
             TickSelfBurnRefillOrOverburnDrain();
@@ -1078,10 +1112,11 @@ namespace MiliraXian.Characters.Mingyuan
             try
             {
                 while (!Pawn.Dead && repaired.Count < 3 && Energy >= 1f
-                       && TryRepairOneBodyPart(repaired) is { } part)
+                       && TryRepairOneBodyPart(repaired, out float actualHealed) is { } part)
                 {
                     repaired.Add(part);
                     energy -= 1f;
+                    MingyuanEmberBook.For(Pawn)?.NotifyShieldRepair(actualHealed);
                 }
                 if (repaired.Count > 0) TrySpawnShieldSelfBurnMote();
             }
@@ -1148,7 +1183,7 @@ namespace MiliraXian.Characters.Mingyuan
 
         private bool TryConvertSelfBurnToShield()
         {
-            float missingEnergy = PropsShield.maxEnergy - Energy;
+            float missingEnergy = MaxEnergy - Energy;
             if (missingEnergy <= 0f)
             {
                 return false;
@@ -1168,7 +1203,8 @@ namespace MiliraXian.Characters.Mingyuan
                 return false;
             }
 
-            energy = Mathf.Min(PropsShield.maxEnergy, energy + spent / Mathf.Max(0.001f, PropsShield.selfBurnPerEnergy));
+            RestoreEnergy(spent / Mathf.Max(0.001f, PropsShield.selfBurnPerEnergy)
+                * (1f + MingyuanEmberBook.Value(Pawn, EmberEffect.ShieldRecovery)));
             return true;
         }
 
@@ -1177,8 +1213,9 @@ namespace MiliraXian.Characters.Mingyuan
             return Mathf.Max(0f, MingyuanUtility.DefaultSelfBurnEffectiveCap * Mathf.Clamp01(PropsShield.selfBurnRefillMaxFractionOfCap));
         }
 
-        private BodyPartRecord TryRepairOneBodyPart(List<BodyPartRecord> repaired)
+        private BodyPartRecord TryRepairOneBodyPart(List<BodyPartRecord> repaired, out float actualHealed)
         {
+            actualHealed = 0f;
             HediffSet set = Pawn.health.hediffSet;
             List<Hediff_MissingPart> missing = set.GetMissingPartsCommonAncestors();
             for (int i = 0; i < missing.Count; i++)
@@ -1186,7 +1223,7 @@ namespace MiliraXian.Characters.Mingyuan
                 BodyPartRecord part = missing[i].Part;
                 if (part == null || repaired.Contains(part)) continue;
                 Pawn.health.RestorePart(part);
-                if (!set.PartIsMissing(part)) return part;
+                if (!set.PartIsMissing(part)) { actualHealed = part.def.GetMaxHealth(Pawn); return part; }
             }
 
             BodyPartRecord bestPart = null;
@@ -1209,6 +1246,7 @@ namespace MiliraXian.Characters.Mingyuan
                 if (hediffs[i] is not Hediff_Injury { Severity: > 0f } injury || injury.Part != bestPart) continue;
                 float before = injury.Severity;
                 injury.Heal(before);
+                actualHealed += Mathf.Max(0f, before - injury.Severity);
                 healed |= injury.Severity < before;
             }
             return healed ? bestPart : null;

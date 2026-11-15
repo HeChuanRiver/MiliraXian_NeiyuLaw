@@ -199,7 +199,7 @@ public class Projectile_MingyuanTimeBurnWave : Projectile
                 Pawn pawn = contact.Pawn;
                 if (!MingyuanTimeBurnUtility.IsTarget(pawn, caster, map)) continue;
                 attemptedIds.Add(pawn.thingIDNumber);
-                DamageInfo hit = new(DamageDef, DamageAmount, ArmorPenetration, direction.AngleFlat(),
+                DamageInfo hit = new(DamageDef, DamageAmount * MingyuanUtility.GetEmberSkillDamageFactor(caster), ArmorPenetration, direction.AngleFlat(),
                     caster, intendedTarget: intendedTarget.Thing);
                 DamageWorker.DamageResult result = MingyuanUtility.ApplyDamageWithoutLifeBurn(pawn, hit);
                 if (result != null && !result.deflected)
@@ -325,6 +325,17 @@ public class GameComponent_MingyuanTimeBurn : GameComponent
         });
         nextProcessTick = Math.Min(nextProcessTick, tick + interval);
         MingyuanUtility.TryMakeStaticMote(pawn.PositionHeld, pawn.MapHeld, props.startMoteDef, props.startMoteScale);
+    }
+
+    internal bool HoldsLifeBurn(Pawn pawn)
+    {
+        if (pawn == null || MingyuanPowerBalance.Sealed || !MingyuanUtility.HasHediff(pawn, MingyuanUtility.TimeBurnFrozenDef))
+            return false;
+        int now = Find.TickManager.TicksGame;
+        foreach (var record in records)
+            if (record.pawn == pawn && now < record.endTick
+                && MingyuanEmberBook.Has(record.caster, EmberEffect.TimeEmberHold)) return true;
+        return false;
     }
 
     public override void GameComponentTick()
