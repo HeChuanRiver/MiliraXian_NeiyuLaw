@@ -173,7 +173,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 // A blow that landed and left the enemy alive (and mortal) is followed by the killing
                 // thrust: the enemy stays broken until it. Otherwise the break ends with the blow.
-                killing = landed && C.killMotion?.blade != null && Alive(victim) && posture?.Owns(pawn) == true;
+                killing = landed && C.killMotion?.Clip?.blade != null && Alive(victim) && posture?.Owns(pawn) == true;
                 if (killing)
                 {
                     posture.HoldThrough(pawn, Now + Mathf.CeilToInt((KillEnd - t) * 60f) + 30);
@@ -210,7 +210,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// </summary>
         private void SpawnKillPetals(Map map)
         {
-            BladeMotionClip clip = C.killMotion;
+            BladeMotionClip clip = C.killMotion?.Clip;
             if (C.killPetalVfx == null || clip?.blade == null || map == null)
             {
                 return;
@@ -248,7 +248,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// </summary>
         private Vector3 KillBladePoint(float seconds, float share, out Common.Vfx.BladeBody.BladePose pose)
         {
-            BladeMotionClip clip = C.killMotion;
+            BladeMotionClip clip = C.killMotion?.Clip;
             Common.Vfx.BladeBody.BladeGraphicExtension ext = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>();
             float length = (ext?.length ?? 1.1f) * share;
             float s = Mathf.Clamp(seconds, 0f, clip.durationSeconds);
@@ -262,7 +262,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>The flash on the blade as the thrust runs the enemy through.</summary>
         private void SpawnThrustFlash()
         {
-            if (C.killThrustFlash == null || C.killMotion?.blade == null || pawn.Map == null)
+            if (C.killThrustFlash == null || C.killMotion?.Clip?.blade == null || pawn.Map == null)
             {
                 return;
             }
@@ -280,7 +280,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
         }
 
-        private static float KillEnd => C.killStartSeconds + (C.killMotion?.durationSeconds ?? 0f);
+        private static float KillEnd => C.killStartSeconds + (C.killMotion?.Clip?.durationSeconds ?? 0f);
 
         private static bool Alive(Pawn victim) =>
             victim is { Spawned: true, Dead: false, Destroyed: false } && victim.health != null && !victim.health.isBeingKilled;
@@ -598,19 +598,20 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 return false;
             }
             float t = Mathf.Max(0f, (Common.Vfx.VisualClock.Ticks - executionStart) / 60f);
-            if (killing && t >= C.killStartSeconds && C.killMotion?.blade != null)
+            if (killing && t >= C.killStartSeconds && C.killMotion?.Clip?.blade != null)
             {
+                BladeMotionClip killClip = C.killMotion.Clip;
                 // The killing thrust, toward the enemy from where the dash landed.
                 playback = new MotionPlayback
                 {
-                    clip = C.killMotion,
-                    seconds = Mathf.Min(t - C.killStartSeconds, C.killMotion.durationSeconds),
+                    clip = killClip,
+                    seconds = Mathf.Min(t - C.killStartSeconds, killClip.durationSeconds),
                     aim = Past ? backAim : aim,
                     projection = set.Projection,
                     scabbard = true,
                     blade = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>(),
                     blendSeconds = C.killBlendSeconds,
-                    source = C.killMotion,
+                    source = killClip,
                     sourceId = executionStart,
                 };
                 return true;

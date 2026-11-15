@@ -31,7 +31,7 @@ namespace MiliraXian.Characters.Common.Skeletal2D
         /// </summary>
         public static Mesh GetMesh(Skeletal2DRigDef rig)
         {
-            Skeletal2DJsonAsset<Skeletal2DSkinnedMesh.AssetData> asset = Skeletal2DSkinnedMesh.GetAsset(rig);
+            JsonModAsset<Skeletal2DSkinnedMesh.AssetData> asset = Skeletal2DSkinnedMesh.GetAsset(rig);
             Skeletal2DSkinnedMesh.AssetData data = asset?.Data;
             if (data == null)
             {

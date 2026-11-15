@@ -6,30 +6,40 @@ using LudeonTK;
 using RimWorld;
 using Verse;
 
-namespace MiliraXian.Characters.Common.Skeletal2D
+namespace MiliraXian.Characters.Common
 {
     /// <summary>
-    /// Registry of every Skeletal2D JSON asset, so a debug action can reload them all.
+    /// Registry of every JSON data asset under the mod root (skeletal meshes and clips, blade
+    /// motion clips), so a debug action can reload them all.
     /// </summary>
-    internal abstract class Skeletal2DJsonAsset
+    internal abstract class JsonModAsset
     {
-        private static readonly List<Skeletal2DJsonAsset> All = new();
+        private static readonly List<JsonModAsset> All = new();
 
-        protected Skeletal2DJsonAsset()
+        protected JsonModAsset()
         {
-            All.Add(this);
+            // Def ConfigErrors run in parallel over def types, so assets are created concurrently.
+            lock (All)
+            {
+                All.Add(this);
+            }
         }
 
         /// <summary>Re-parses the file; returns false (keeping the previous data) on failure.</summary>
         protected abstract bool Reload();
 
-        [DebugAction("Milira Xian - Common", "Reload Skeletal2D assets (mesh/clip JSON)", false, false, false, false, false, 0, false,
+        [DebugAction("Milira Xian - Common", "Reload JSON assets (meshes, skeletal/blade clips)", false, false, false, false, false, 0, false,
             allowedGameStates = AllowedGameStates.PlayingOnMap)]
         private static void ReloadAll()
         {
             int reloaded = 0;
             int failed = 0;
-            foreach (Skeletal2DJsonAsset asset in All)
+            JsonModAsset[] snapshot;
+            lock (All)
+            {
+                snapshot = All.ToArray();
+            }
+            foreach (JsonModAsset asset in snapshot)
             {
                 if (asset.Reload())
                 {
@@ -40,26 +50,31 @@ namespace MiliraXian.Characters.Common.Skeletal2D
                     failed++;
                 }
             }
-            string text = $"Skeletal2D: reloaded {reloaded} asset(s)" + (failed > 0 ? $", {failed} failed (see log)" : "") + ".";
+            string text = $"JSON assets: reloaded {reloaded}" + (failed > 0 ? $", {failed} failed (see log)" : "") + ".";
             Messages.Message(text, failed > 0 ? MessageTypeDefOf.RejectInput : MessageTypeDefOf.NeutralEvent, false);
         }
     }
 
     /// <summary>
     /// A JSON data file under the mod root, parsed on first use. Reloaded only through the
-    /// "Reload Skeletal2D assets" debug action. Version increments on every successful load so
+    /// "Reload JSON assets" debug action. Version increments on every successful load so
     /// consumers can rebuild derived data; a failed reload keeps the previous data.
     /// </summary>
-    internal sealed class Skeletal2DJsonAsset<T> : Skeletal2DJsonAsset where T : class
+    internal sealed class JsonModAsset<T> : JsonModAsset where T : class
     {
         private readonly string relativePath;
         private readonly string fullPath;
         private readonly Func<T, string> validate;
-        private T data;
-        private bool attempted;
+        // Def ConfigErrors run in parallel over def types, and the first read of a def's clip may
+        // race with another def's (e.g. the sword guard reading the weapon's attack clip): the load
+        // must be serialized or the second reader sees the half-loaded state. The steady-state read
+        // stays lock-free (double-checked on the volatile flags).
+        private readonly object loadLock = new();
+        private volatile T data;
+        private volatile bool attempted;
 
         /// <param name="validate">Returns an error message for malformed data, or null if valid.</param>
-        public Skeletal2DJsonAsset(string relativePath, Func<T, string> validate)
+        public JsonModAsset(string relativePath, Func<T, string> validate)
         {
             this.relativePath = relativePath;
             this.validate = validate;
@@ -76,8 +91,14 @@ namespace MiliraXian.Characters.Common.Skeletal2D
             {
                 if (!attempted)
                 {
-                    attempted = true;
-                    TryLoad();
+                    lock (loadLock)
+                    {
+                        if (!attempted)
+                        {
+                            TryLoad();
+                            attempted = true;
+                        }
+                    }
                 }
                 return data;
             }
@@ -85,8 +106,12 @@ namespace MiliraXian.Characters.Common.Skeletal2D
 
         protected override bool Reload()
         {
-            attempted = true;
-            return TryLoad();
+            lock (loadLock)
+            {
+                bool ok = TryLoad();
+                attempted = true;
+                return ok;
+            }
         }
 
         private bool TryLoad()
@@ -111,11 +136,11 @@ namespace MiliraXian.Characters.Common.Skeletal2D
             {
                 if (data == null)
                 {
-                    Log.Error($"[MiliraXian] Failed to load Skeletal2D asset {fullPath}: {ex.Message}");
+                    Log.Error($"[MiliraXian] Failed to load JSON asset {fullPath}: {ex.Message}");
                 }
                 else
                 {
-                    Log.Warning($"[MiliraXian] Reload of Skeletal2D asset {relativePath} failed, keeping previous data: {ex.Message}");
+                    Log.Warning($"[MiliraXian] Reload of JSON asset {relativePath} failed, keeping previous data: {ex.Message}");
                 }
                 return false;
             }

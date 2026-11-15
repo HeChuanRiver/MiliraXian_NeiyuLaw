@@ -101,24 +101,25 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                     return true;
                 }
             }
-            if (set.idle?.blade == null || !InCombat(pawn) || !IdleAllowed(pawn))
+            BladeMotionClip idle = set.idle?.Clip;
+            if (idle?.blade == null || !InCombat(pawn) || !IdleAllowed(pawn))
             {
                 return false;
             }
             float t = VisualClock.Ticks / 60f;
-            if (set.idle.loop && set.idle.durationSeconds > 0f)
+            if (idle.loop && idle.durationSeconds > 0f)
             {
-                t = Mathf.Repeat(t + pawn.thingIDNumber * 0.37f, set.idle.durationSeconds);
+                t = Mathf.Repeat(t + pawn.thingIDNumber * 0.37f, idle.durationSeconds);
             }
             playback = new MotionPlayback
             {
-                clip = set.idle,
+                clip = idle,
                 seconds = t,
                 aim = pawn.Rotation.FacingCell.ToVector3(),
                 projection = set.Projection,
                 scabbard = true,
                 blendSeconds = set.blendSeconds,
-                source = set.idle,
+                source = idle,
                 sourceId = pawn.Rotation.AsInt,
             };
             return true;

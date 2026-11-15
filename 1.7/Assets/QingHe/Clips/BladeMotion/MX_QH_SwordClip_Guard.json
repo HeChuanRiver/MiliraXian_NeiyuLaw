@@ -1,0 +1,9 @@
+{
+  "durationSeconds": 0.12,
+  "blade": {
+    "keys": [
+      { "time": 0, "yaw": -80.0, "pitch": 20.0, "roll": 0, "reach": 0, "offset": [0.140, 0.240, 0.330] },
+      { "time": 0.12, "yaw": -90.0, "pitch": 14.0, "roll": 0, "reach": 0, "offset": [0.160, 0.250, 0.360] }
+    ]
+  }
+}

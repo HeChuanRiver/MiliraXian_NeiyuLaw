@@ -105,7 +105,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// return, toward the enemy; at clip second <see cref="killAtSeconds"/> the blade is drawn out
         /// and the enemy dies. Null = no thrust.
         /// </summary>
-        public BladeMotionClip killMotion;
+        public BladeMotionClipDef killMotion;
         /// <summary>
         /// Petals burst from the wound as the blade is drawn out (the kill): at <see cref="killPetalShare"/>
         /// of the blade from the grip, where it runs through the enemy, thrown the way the blade is drawn. Null = none.
@@ -146,12 +146,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 yield return "MX_QH_ConfigError_ExecutionTiming".Translate();
             }
-            if (killMotion != null && (killMotion.blade == null || killMotion.durationSeconds <= 0f
-                || killAtSeconds < 0f || killAtSeconds > killMotion.durationSeconds || killStartSeconds < executionHitSeconds))
+            BladeMotionClip kill = killMotion?.Clip;
+            if (killMotion != null && (kill == null || kill.blade == null || kill.durationSeconds <= 0f
+                || killAtSeconds < 0f || killAtSeconds > kill.durationSeconds || killStartSeconds < executionHitSeconds))
             {
                 yield return "MX_QH_ConfigError_KillMotion".Translate();
             }
-            if (guardMotion?.guard?.blade == null)
+            if (guardMotion?.guard?.Clip?.blade == null)
             {
                 yield return "MX_QH_ConfigError_GuardMotion".Translate();
             }
@@ -244,7 +245,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             playback = default;
             // The guard is the sword stance's own motion: the same with any weapon.
             BladeMotionSetExtension set = QingheSwordGuard.Config.guardMotion;
-            BladeMotionClip guard = set?.guard;
+            BladeMotionClip guard = set?.guard?.Clip;
             if (guard?.blade == null)
             {
                 return false;
@@ -253,7 +254,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             BladeMotionClip clip = guard;
             float seconds = Mathf.Min((now - startedTick) / 60f, guard.durationSeconds);
             int id = startedTick;
-            BladeMotionClip recoil = set.guardHit;
+            BladeMotionClip recoil = set.guardHit?.Clip;
             if (recoil?.blade != null && lastHitTick >= 0)
             {
                 float since = (now - lastHitTick) / 60f;
@@ -325,7 +326,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         {
             playback = default;
             // The deflect leads into the cross slash's counter: the weapon's own clip, drawn in the weapon's projection.
-            BladeMotionClip clip = set?.parry;
+            BladeMotionClip clip = set?.parry?.Clip;
             if (clip?.blade == null)
             {
                 return false;

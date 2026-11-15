@@ -35,7 +35,7 @@ namespace MiliraXian.Characters.Common.Skeletal2D
     /// arbitrary fractional ticks so clips can be interrupted and retriggered freely.
     /// Tick 0 is the first frame of the source Blender action (60 ticks = 1 second).
     /// The Def only names the clip; its data (length, looping, tracks) lives in the JSON file
-    /// at dataPath, relative to the mod root (reloadable via the "Reload Skeletal2D assets"
+    /// at dataPath, relative to the mod root (reloadable via the "Reload JSON assets"
     /// debug action). JSON shape:
     /// { "durationTicks": 119, "loop": true, "tracks": [ { "bone": "PetalC_root",
     ///   "rotation": [[tick, value, inTick, inValue, outTick, outValue], ...],
@@ -63,11 +63,14 @@ namespace MiliraXian.Characters.Common.Skeletal2D
 
         public string dataPath;
 
-        private Skeletal2DJsonAsset<ClipData> asset;
+        private JsonModAsset<ClipData> asset;
         private List<Skeletal2DBoneTrack> tracks;
         private int durationTicks = 60;
         private bool loop = true;
-        private int dataVersion = -1;
+        // Volatile: Sync's steady state reads it lock-free (a reload publishes the new tracks by
+        // writing dataVersion last).
+        private volatile int dataVersion = -1;
+        private readonly object syncLock = new();
 
         public int DurationTicks
         {
@@ -124,26 +127,35 @@ namespace MiliraXian.Characters.Common.Skeletal2D
             {
                 return;
             }
-            asset ??= new Skeletal2DJsonAsset<ClipData>(dataPath, Validate);
-            ClipData data = asset.Data;
-            if (data == null || dataVersion == asset.Version)
+            // Lock-free steady state: once loaded, the version only changes on a reload.
+            JsonModAsset<ClipData> current = asset;
+            if (current != null && dataVersion == current.Version)
             {
                 return;
             }
-            durationTicks = Mathf.Max(1, data.durationTicks);
-            loop = data.loop;
-            tracks = new List<Skeletal2DBoneTrack>(data.tracks.Length);
-            foreach (TrackData track in data.tracks)
+            lock (syncLock)
             {
-                tracks.Add(new Skeletal2DBoneTrack
+                asset ??= new JsonModAsset<ClipData>(dataPath, Validate);
+                ClipData data = asset.Data;
+                if (data == null || dataVersion == asset.Version)
                 {
-                    bone = track.bone,
-                    rotationKeys = ToKeys(track.rotation),
-                    scaleAlongKeys = ToKeys(track.scaleAlong),
-                    scaleAcrossKeys = ToKeys(track.scaleAcross),
-                });
+                    return;
+                }
+                durationTicks = Mathf.Max(1, data.durationTicks);
+                loop = data.loop;
+                tracks = new List<Skeletal2DBoneTrack>(data.tracks.Length);
+                foreach (TrackData track in data.tracks)
+                {
+                    tracks.Add(new Skeletal2DBoneTrack
+                    {
+                        bone = track.bone,
+                        rotationKeys = ToKeys(track.rotation),
+                        scaleAlongKeys = ToKeys(track.scaleAlong),
+                        scaleAcrossKeys = ToKeys(track.scaleAcross),
+                    });
+                }
+                dataVersion = asset.Version;
             }
-            dataVersion = asset.Version;
         }
 
         private static string Validate(ClipData data)

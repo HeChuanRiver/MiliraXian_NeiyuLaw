@@ -197,17 +197,19 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
 
         public BladeProjection Projection => new(heightToScreen, depthToScreen, heightOrigin);
 
-        public BladeMotionClip idle;
-        public List<BladeMotionClip> attacks = new();
+        // Clips are JSON-backed defs (BladeMotionClipDef): the keyframes live outside the XML and
+        // reload through the "Reload JSON assets" debug action.
+        public BladeMotionClipDef idle;
+        public List<BladeMotionClipDef> attacks = new();
         /// <summary>The guard: raised into the block pose, then held (the last key) while the guard lasts.</summary>
-        public BladeMotionClip guard;
+        public BladeMotionClipDef guard;
         /// <summary>Recoil of the guard when a hit lands on it; it ends in the guard's held pose.</summary>
-        public BladeMotionClip guardHit;
+        public BladeMotionClipDef guardHit;
         /// <summary>
         /// The deflect before a counter: the blade knocks the attack aside, then winds up into the pose
         /// the attack clip's counter starts from. Played stretched over the parry stance.
         /// </summary>
-        public BladeMotionClip parry;
+        public BladeMotionClipDef parry;
         public BladeMotionClip Attack(int index)
         {
             if (attacks.NullOrEmpty())
@@ -215,7 +217,7 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
                 return null;
             }
             int n = attacks.Count;
-            return attacks[((index % n) + n) % n];
+            return attacks[((index % n) + n) % n]?.Clip;
         }
 
         public override IEnumerable<string> ConfigErrors()
@@ -224,22 +226,29 @@ namespace MiliraXian.Characters.Common.Vfx.BladeMotion
             {
                 yield return error;
             }
-            if (idle != null && (idle.blade == null || idle.durationSeconds <= 0f))
+            BladeMotionClip idleClip = idle?.Clip;
+            if (idle != null && idleClip != null && (idleClip.blade == null || idleClip.durationSeconds <= 0f))
             {
                 yield return "idle 片段需要 blade 关键帧和正的 durationSeconds。";
             }
             if (attacks != null)
             {
-                foreach (BladeMotionClip a in attacks)
+                foreach (BladeMotionClipDef a in attacks)
                 {
-                    if (a?.blade == null || a.windupSeconds <= 0f || a.durationSeconds <= a.windupSeconds || a.strikes.NullOrEmpty())
+                    // A null clip means the JSON failed to load; that error is already logged.
+                    BladeMotionClip clip = a?.Clip;
+                    if (clip == null)
+                    {
+                        continue;
+                    }
+                    if (clip.blade == null || clip.windupSeconds <= 0f || clip.durationSeconds <= clip.windupSeconds || clip.strikes.NullOrEmpty())
                     {
                         yield return "攻击片段需要 blade 关键帧和至少一段 strikes，且 0 < windupSeconds < durationSeconds。";
                         continue;
                     }
-                    foreach (BladeStrike s in a.strikes)
+                    foreach (BladeStrike s in clip.strikes)
                     {
-                        if (s == null || s.start < a.windupSeconds || s.end <= s.start || s.end > a.durationSeconds || s.damageFactor < 0f)
+                        if (s == null || s.start < clip.windupSeconds || s.end <= s.start || s.end > clip.durationSeconds || s.damageFactor < 0f)
                         {
                             yield return "攻击片段的每段 strike 必须落在举刀之后、片段之内，end > start，damageFactor 不能为负。";
                         }

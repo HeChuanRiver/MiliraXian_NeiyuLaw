@@ -7,7 +7,7 @@ namespace MiliraXian.Characters.Common.Skeletal2D
     /// Mesh asset bound to a Skeletal2DRigDef. Mesh data (rest positions, UVs, triangles,
     /// per-vertex bone weights by bone name) is authored in Blender and exported as JSON;
     /// rig.meshAssetPath locates the file relative to the mod root. One asset per path,
-    /// reloadable via the "Reload Skeletal2D assets" debug action. Skinning runs on the GPU
+    /// reloadable via the "Reload JSON assets" debug action. Skinning runs on the GPU
     /// (see Skeletal2DGpuSkin). Asset JSON shape:
     /// { "vertices": [[x,y],...], "uvs": [[u,v],...], "triangles": [a,b,c,...],
     ///   "weights": [[{"bone":"PetalC","weight":0.8},...], ...] } (one entry per vertex).
@@ -28,10 +28,10 @@ namespace MiliraXian.Characters.Common.Skeletal2D
             public float weight { get; set; }
         }
 
-        private static readonly Dictionary<string, Skeletal2DJsonAsset<AssetData>> Assets = new();
+        private static readonly Dictionary<string, JsonModAsset<AssetData>> Assets = new();
 
         /// <summary>The rig's mesh asset, or null if the rig has no mesh path or no bones.</summary>
-        internal static Skeletal2DJsonAsset<AssetData> GetAsset(Skeletal2DRigDef rig)
+        internal static JsonModAsset<AssetData> GetAsset(Skeletal2DRigDef rig)
         {
             string path = rig.meshAssetPath ?? "";
             if (path.NullOrEmpty() || rig.bones.NullOrEmpty())
@@ -41,12 +41,15 @@ namespace MiliraXian.Characters.Common.Skeletal2D
                     GenText.StableStringHash(rig.defName));
                 return null;
             }
-            if (!Assets.TryGetValue(path, out Skeletal2DJsonAsset<AssetData> asset))
+            lock (Assets)
             {
-                asset = new Skeletal2DJsonAsset<AssetData>(path, Validate);
-                Assets[path] = asset;
+                if (!Assets.TryGetValue(path, out JsonModAsset<AssetData> asset))
+                {
+                    asset = new JsonModAsset<AssetData>(path, Validate);
+                    Assets[path] = asset;
+                }
+                return asset;
             }
-            return asset;
         }
 
         private static string Validate(AssetData data)

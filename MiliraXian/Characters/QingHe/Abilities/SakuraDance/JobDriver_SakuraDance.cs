@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 {
                     return null;
                 }
-                return airborne && props.airMotion != null ? props.airMotion : props.groundMotion;
+                return airborne && props.airMotion != null ? props.airMotion.Motion : props.groundMotion?.Motion;
             }
         }
 

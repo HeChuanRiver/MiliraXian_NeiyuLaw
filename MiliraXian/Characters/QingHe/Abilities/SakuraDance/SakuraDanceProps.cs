@@ -220,6 +220,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     /// <summary>
     /// The body motion of one variant (ground or airborne cast). Curves are interpolated with a
     /// monotone cubic, so keys mark the poses and the motion eases between them without overshoot.
+    /// Instances are built from the JSON of a <see cref="SakuraDanceClipDef"/>.
     /// </summary>
     public class SakuraDanceMotion : BladeMotionClip
     {
@@ -261,16 +262,35 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     }
 
     /// <summary>
-    /// The aim (ability warmup): the turn into the stance and the blade, written over
-    /// <see cref="durationSeconds"/> and stretched over the actual warmup. It should end in the
-    /// pose the dance starts from.
+    /// A blade motion clip carrying the Sakura Dance extras (skip, cut and thunder catch times);
+    /// the JSON data is the base clip data plus these fields (see <see cref="BladeMotionClipDef"/>).
+    /// The aim (the vanilla ability warmup) is a plain <see cref="BladeMotionClipDef"/>: the turn
+    /// into the stance and the blade, stretched over the actual warmup, ending in the pose the
+    /// dance starts from.
     /// </summary>
-    public class SakuraWarmupMotion : BladeMotionClip
+    public class SakuraDanceClipDef : BladeMotionClipDef
     {
-        // turn should end at the dance's first value.
-        public SakuraWarmupMotion()
+        /// <summary>The clip as the dance motion; null while the JSON has never loaded.</summary>
+        public SakuraDanceMotion Motion => Clip as SakuraDanceMotion;
+
+        protected override BladeMotionClip NewClip()
         {
-            durationSeconds = 0.4f;
+            return new SakuraDanceMotion();
+        }
+
+        protected override void MapExtra(BladeMotionClip target, ClipData data)
+        {
+            if (target is not SakuraDanceMotion m)
+            {
+                return;
+            }
+            m.skipSeconds = data.skipSeconds;
+            m.cutTimes = data.cutTimes != null ? new List<float>(data.cutTimes) : new List<float>();
+            m.landTime = data.landTime;
+            m.thunderCatchTime = data.thunderCatchTime;
+            m.thunderCatchTimes = data.thunderCatchTimes != null ? new List<float>(data.thunderCatchTimes) : new List<float>();
+            m.thunderSlowSeconds = data.thunderSlowSeconds;
+            m.thunderSlowPower = data.thunderSlowPower;
         }
     }
 
@@ -280,14 +300,14 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// <summary>Named damage of the cuts and of the charged cuts (shown in wounds and the combat log); null = the sweep def's.</summary>
         public DamageDef cutDamageDef;
         public DamageDef thunderCutDamageDef;
-        public SakuraWarmupMotion warmup;
-        public SakuraDanceMotion groundMotion;
+        public BladeMotionClipDef warmup;
+        public SakuraDanceClipDef groundMotion;
         /// <summary>Sword pressure spent when the aim starts; the cast needs at least this much.</summary>
         public float swordPressureCost;
         /// <summary>Qinghe's own posture meter empties when the aim starts.</summary>
         public bool clearOwnPosture;
         /// <summary>Used when the pawn is flying at cast time; falls back to the ground motion.</summary>
-        public SakuraDanceMotion airMotion;
+        public SakuraDanceClipDef airMotion;
         /// <summary>Screen offset to the north per metre of height.</summary>
         public float heightToScreen = 0.5f;
         /// <summary>Screen scale of north-south offsets of the held blade from the body (not the rings); see BladeMotionSetExtension.</summary>
@@ -384,7 +404,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 yield return "groundMotion is not set";
             }
-
+            else if (groundMotion.Motion == null)
+            {
+                yield return "groundMotion clip failed to load";
+            }
         }
     }
 }
