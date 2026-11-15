@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <MX_QH_FlowingFormLowResourceWarning>【警告】清荷已无可用的灵气结晶，受到伤害将无法再抵消！</MX_QH_FlowingFormLowResourceWarning>
+  <MX_QH_FlowingFormTriggered>【流水之形】已触发：抵消了一次致命伤害。</MX_QH_FlowingFormTriggered>
+  <MX_QH_DevAddAuraMasteryLevelLabel>DEV：精通等级 +1</MX_QH_DevAddAuraMasteryLevelLabel>
+  <MX_QH_DevAddAuraMasteryLevelDesc>直接令灵气精通等级提高 1 级。</MX_QH_DevAddAuraMasteryLevelDesc>
+  <MX_QH_AuraMasteryGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_AuraMasteryGainedMessage>
+  <MX_QH_AuraMasteryGainedLetterLabel>灵气精通提升</MX_QH_AuraMasteryGainedLetterLabel>
+  <MX_QH_SkillTreeAuraMasteryLine>灵气精通：{0} / {1}</MX_QH_SkillTreeAuraMasteryLine>
+  <MX_QH_ResonanceTab_Label>调谐</MX_QH_ResonanceTab_Label>
+  <MX_QH_SkillTreeTab_Label>修行</MX_QH_SkillTreeTab_Label>
+  <MX_QH_AuraMasteryProgressLine>经验：{0} / {1}（{2}）</MX_QH_AuraMasteryProgressLine>
+  <MX_QH_AuraMasteryProgressMax>已达最高等级</MX_QH_AuraMasteryProgressMax>
+  <MX_QH_SkillTreeNodeLevel>Lv.{0}</MX_QH_SkillTreeNodeLevel>
+  <MX_QH_SkillTreeNodeLearned>已习得</MX_QH_SkillTreeNodeLearned>
+  <MX_QH_SkillTreeNodeLocked>习得等级：Lv.{0}</MX_QH_SkillTreeNodeLocked>
+  <MX_QH_SkillTreeNodeStateLocked>已锁定</MX_QH_SkillTreeNodeStateLocked>
+  <MX_QH_SkillTreeNodeStateNotLearned>未习得</MX_QH_SkillTreeNodeStateNotLearned>
+  <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>剑压不足（需要 {0} 点）。</MX_QH_SwordPressureNotEnough>
+  <MX_QH_ZantetsukenNoRoom>无法使用斩铁剑：目标周围没有可以落脚的空位。</MX_QH_ZantetsukenNoRoom>
+  <MX_QH_ExecutionMode_Auto>处决：自动</MX_QH_ExecutionMode_Auto>
+  <MX_QH_ExecutionMode_Manual>处决：手动</MX_QH_ExecutionMode_Manual>
+  <MX_QH_ExecutionMode_None>处决：禁止</MX_QH_ExecutionMode_None>
+  <MX_QH_ExecutionModeDesc>点击切换清荷对失去平衡的敌人的处理方式。\n\n自动处决：将敌人打至失去平衡时，自动使用必杀剑·残心和落华进行处决。\n\n手动处决：敌人失去平衡时，清荷会停下攻击，对失衡的敌人下达攻击指令即可执行处决动作。\n\n禁止处决：禁止使用必杀剑·残心，完全不进行处决。</MX_QH_ExecutionModeDesc>
+  <MX_QH_NonLethalExecutionLabel>非致命处决</MX_QH_NonLethalExecutionLabel>
+  <MX_QH_NonLethalExecutionDesc>点击切换是否使用非致命处决。\n\n开启后，使用必杀剑·残心进行处决时不会造成伤害，而是附加使目标昏迷的“致命伤”状态，且不会再触发落华。无法通过附加致命伤使其昏迷的目标将受到多次伤害直到倒地为止。</MX_QH_NonLethalExecutionDesc>
+  <MX_QH_RequiresStance>需要姿态：{0}。</MX_QH_RequiresStance>
+  <MX_QH_SwordPressureLabel>剑压</MX_QH_SwordPressureLabel>
+  <MX_QH_SwordPressureValueLine>剑压：{0} / {1}</MX_QH_SwordPressureValueLine>
+  <MX_QH_LotusPondAssignQingheOnly>荷雨池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>
+  <MX_QH_LotusPondOnlyOne>每个殖民地只能建造一座荷雨池。</MX_QH_LotusPondOnlyOne>
+  <MX_QH_LotusPondStatsTooltip>美观度：{0}\t清洁度：{1}\n静思获取加成：{2}</MX_QH_LotusPondStatsTooltip>
+  <MX_QH_LotusPondRitualQualityBonus>七夕节质量加成：{0}</MX_QH_LotusPondRitualQualityBonus>
+  <MX_QH_OpenSkillTreeRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenSkillTreeRequiresQinghe>
+  <MX_QH_OpenSkillTree>打开修习面板</MX_QH_OpenSkillTree>
+  <MX_QH_LotusPondCannotReach>清荷现在无法接近荷雨池。</MX_QH_LotusPondCannotReach>
+  <MX_QH_SkillTreeMissing>地图上找不到荷雨池。</MX_QH_SkillTreeMissing>
+  <MX_QH_ResonanceCurrentSuffix>（当前）</MX_QH_ResonanceCurrentSuffix>
+  <MX_QH_TuneConfirmText>清荷需要静心调律片刻，之后24小时内无法再次调谐。确认切换到「{0}」？</MX_QH_TuneConfirmText>
+  <MX_QH_TuneCooldownRemaining>调谐冷却中（剩余 {0} 小时）</MX_QH_TuneCooldownRemaining>
+  <MX_QH_SeasonalResonanceDescription>{0}\n\n{1}\n\n{2}</MX_QH_SeasonalResonanceDescription>
+
+  <!-- 武器名称后缀 -->
+  <MX_QH_FlowerBellResonanceSpring>红杏</MX_QH_FlowerBellResonanceSpring>
+  <MX_QH_FlowerBellResonanceSummer>青莲</MX_QH_FlowerBellResonanceSummer>
+  <MX_QH_FlowerBellResonanceAutumn>雏菊</MX_QH_FlowerBellResonanceAutumn>
+  <MX_QH_FlowerBellResonanceWinter>腊梅</MX_QH_FlowerBellResonanceWinter>
+  <MX_QH_SwordResonanceSpring>春晓</MX_QH_SwordResonanceSpring>
+  <MX_QH_SwordResonanceSummer>荷雨</MX_QH_SwordResonanceSummer>
+  <MX_QH_SwordResonanceAutumn>无常</MX_QH_SwordResonanceAutumn>
+  <MX_QH_SwordResonanceWinter>凝霜</MX_QH_SwordResonanceWinter>
+  <!-- 调谐界面的四季共鸣说明 -->
+  <MX_QH_TuneResonanceDescriptionSpring>调律·春：\n春风乍起，万物复苏。可令武器传导能影响水脉流动和生命气息的魔力，对敌人造成渗血或漏电效果。</MX_QH_TuneResonanceDescriptionSpring>
+  <MX_QH_TuneResonanceDescriptionSummer>调律·夏：\n出淤泥而不染，濯清涟而不妖。可令武器附上从环境中净化汲取的毒素，造成剧毒或腐蚀效果。</MX_QH_TuneResonanceDescriptionSummer>
+  <MX_QH_TuneResonanceDescriptionAutumn>调律·秋：\n自古逢秋悲寂寥——可令武器攻击时产生特殊频率的次声波，携带的魔力可以扰乱敌人的感知，造成混乱效果。</MX_QH_TuneResonanceDescriptionAutumn>
+  <MX_QH_TuneResonanceDescriptionWinter>调律·冬：\n冰清玉洁，香自苦寒。可令武器和音符附上彻骨寒霜，对接触的敌人造成低温冻结效果。</MX_QH_TuneResonanceDescriptionWinter>
+  <!-- 花信风铃的四季共鸣效果 -->
+  <MX_QH_FlowerBellResonanceDescriptionSpring>花语【红杏】：\n攻击除了能造成范围伤害外，还会治疗范围内的友方殖民者，并包扎所有流血的伤口。</MX_QH_FlowerBellResonanceDescriptionSpring>
+  <MX_QH_FlowerBellResonanceDescriptionSummer>花语【青莲】：\n每次攻击都能随机地削弱自身或周围小范围内友方殖民者身上的负面状态，并清除所有毒素。</MX_QH_FlowerBellResonanceDescriptionSummer>
+  <MX_QH_FlowerBellResonanceDescriptionAutumn>花语【雏菊】：\n攻击对心灵敏感度较高的敌人和所有暗黑实体造成额外的伤害和混乱效果。</MX_QH_FlowerBellResonanceDescriptionAutumn>
+  <MX_QH_FlowerBellResonanceDescriptionWinter>花语【腊梅】：\n攻击会在命中的地面结霜一小段时间，对范围内的敌人施加微弱的持续冻结积累。</MX_QH_FlowerBellResonanceDescriptionWinter>
+  <!-- 花信风铃蓄力 -->
+  <MX_QH_BellReleaseNow>立即发射</MX_QH_BellReleaseNow>
+  <MX_QH_BellReleaseTip>立即发射：{0} 发铃音。</MX_QH_BellReleaseTip>
+  <MX_QH_BellReleaseDisabled>当前无法发射：充能不足或未在瞄准中。</MX_QH_BellReleaseDisabled>
+  <MX_QH_BellChargeTip>蓄力：{0} 秒（{1} 档）</MX_QH_BellChargeTip>
+  <MX_QH_BellDecaying>衰减中。</MX_QH_BellDecaying>
+  <MX_QH_BellThresholdSet>自动快速发射：{0} 档时发射。</MX_QH_BellThresholdSet>
+  <MX_QH_BellThresholdLocked>正在蓄力时不能调整阈值。</MX_QH_BellThresholdLocked>
+  <MX_QH_BellAimFocus>瞄准模式：集中</MX_QH_BellAimFocus>
+  <MX_QH_BellAimScatter>瞄准模式：散射</MX_QH_BellAimScatter>
+  <MX_QH_BellAimDesc>设置花信风铃的索敌追踪模式。\n\n集中：所有音符都追踪选中的目标。\n散射：优先追踪选中的目标，其余随机打向它周围 {0} 格内的敌对单位和建筑（开启“范围攻击波及中立目标”时也包括中立的）。\n\n点击可在两种模式之间切换。</MX_QH_BellAimDesc>
+  <!-- 散华的四季共鸣效果 -->
+  <MX_QH_SwordResonanceDescriptionSpring>和鸣【春晓】：\n攻击命中后可以为清荷自身附加短暂的春泉洗礼效果。</MX_QH_SwordResonanceDescriptionSpring>
+  <MX_QH_SwordResonanceDescriptionSummer>和鸣【荷雨】：\n攻击命中后回复的剑压+25%，略微降低剑技的冷却时间。</MX_QH_SwordResonanceDescriptionSummer>
+  <MX_QH_SwordResonanceDescriptionAutumn>和鸣【无常】：\n近战攻击的穿甲能力提升50%，对护甲值较高的敌人造成无视护甲的额外伤害。</MX_QH_SwordResonanceDescriptionAutumn>
+  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n攻击命中后可以为清荷回复护盾，数值为造成伤害量的100%。</MX_QH_SwordResonanceDescriptionWinter>
+  
+  <!-- 帮助面板 -->
+  <MX_QH_FlowerPanelHelpTitle>面板说明</MX_QH_FlowerPanelHelpTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeTitle>资源条</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
+  <MX_QH_FlowerPanelHelpFlowerDecreeBody>装备近战武器时进入剑舞姿态，显示剑压；\n装备远程武器时进入华彩姿态，显示花令。\n未装备武器或无法识别武器类型时，不显示资源。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
+  <MX_QH_FlowerPanelHelpShieldTitle>灵气条</MX_QH_FlowerPanelHelpShieldTitle>
+  <MX_QH_FlowerPanelHelpShieldBody>显示灵气加护的状态。</MX_QH_FlowerPanelHelpShieldBody>
+  <MX_QH_FlowerPanelHelpFlowingFormTitle>灵气结晶</MX_QH_FlowerPanelHelpFlowingFormTitle>
+  <MX_QH_FlowerPanelHelpFlowingFormBody>绿色方块表示可用充能，黄色填充表示正在恢复。</MX_QH_FlowerPanelHelpFlowingFormBody>
+  <MX_QH_FlowerPanelHelpSkillTreeTitle>修行面板</MX_QH_FlowerPanelHelpSkillTreeTitle>
+  <MX_QH_FlowerPanelHelpSkillTreeBody>点击可以随时打开修行面板。外侧的绿线指示静思的积累进度。</MX_QH_FlowerPanelHelpSkillTreeBody>
+  
+  <!-- 静思 -->
+  <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
+  <MX_QH_LongNightStillnessDescription>下一次进行涉及品质的建造、制作或艺术创作时，将消耗全部静思并使品质等级 +2。</MX_QH_LongNightStillnessDescription>
+  <MX_QH_MeditativeStillnessFullMessage>【静思】已积累到上限。</MX_QH_MeditativeStillnessFullMessage>
+  <MX_QH_MeditativeStillnessGainMote>静思 +{0}%</MX_QH_MeditativeStillnessGainMote>
+
+  <!-- 技能树面板 -->
+  <MX_QH_AuraMasteryGainMote>灵气精通 +{0}经验</MX_QH_AuraMasteryGainMote>
+  <MX_QH_EvadeMote>闪避</MX_QH_EvadeMote>
+  <MX_Perk_RequiresPerk>需要领悟：{0}</MX_Perk_RequiresPerk>
+  <MX_Perk_RequiresPrerequisite>需要前置：{0}（{1} 层）</MX_Perk_RequiresPrerequisite>
+  <MX_Perk_MaterialsMissing>可用材料不足。</MX_Perk_MaterialsMissing>
+  <MX_Perk_MaxLevel>已达到最高层级。</MX_Perk_MaxLevel>
+
+  <!-- 灵气护盾面板 -->
+  <MX_QH_ShieldInactive>未激活</MX_QH_ShieldInactive>
+  <MX_QH_AuraShieldStatusActive>已激活</MX_QH_AuraShieldStatusActive>
+  <MX_QH_AuraShieldStatusDown>！！已失效！！（剩余 {0}s）</MX_QH_AuraShieldStatusDown>
+  <MX_QH_AuraShieldCapacity>灵气容量：{0}</MX_QH_AuraShieldCapacity>
+  <MX_QH_AuraShieldRegen>回复速率：{0} /s</MX_QH_AuraShieldRegen>
+  <MX_QH_AuraShieldTooltip>灵气加护\n\n{0}\n灵气值：{1} / {2}\n回复速率：{3} /秒</MX_QH_AuraShieldTooltip>
+  <MX_QH_AuraShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_AuraShieldRegenDelayLine>
+  <MX_QH_DevShieldKeepVisibleLabel>DEV 护盾常显</MX_QH_DevShieldKeepVisibleLabel>
+  <MX_QH_DevShieldKeepVisibleDesc>开启后护盾保持显示、不再因满能量渐消，便于调试护盾外观；关闭后从满显示状态正常渐消。</MX_QH_DevShieldKeepVisibleDesc>
+
+  <!-- 面板修习按钮 -->
+  <MX_QH_SkillTreeTooltip>修习面板\n\n灵气精通：{0} / {1}\n当前精通等级：{2}\n静思：{3} % / {4} %</MX_QH_SkillTreeTooltip>
+  <MX_QH_SkillTreeTooltipMissing>修习面板\n\n地图上找不到荷雨池。</MX_QH_SkillTreeTooltipMissing>
+
+  <!-- 面板资源条 -->
+  <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
+  <MX_QH_AuraShieldLabel>灵气</MX_QH_AuraShieldLabel>
+  <MX_QH_FlowingFormTooltipEmpty>流水之形：0 / 1 可用</MX_QH_FlowingFormTooltipEmpty>
+  <MX_QH_FlowingFormTooltipRecharging>流水之形：{0} / {1} 可用\n正在回充\n恢复进度：{2}\n剩余时间：{3}</MX_QH_FlowingFormTooltipRecharging>
+  <MX_QH_FlowingFormTooltipReady>流水之形：{0} / {1} 可用\n已充满</MX_QH_FlowingFormTooltipReady>
+  <MX_QH_FlowingFormTooltipDepleted>流水之形：{0} / {1} 可用\n充能耗尽</MX_QH_FlowingFormTooltipDepleted>
+  <MX_QH_FlowerDecreeTooltipEmpty>花令：0 / 3</MX_QH_FlowerDecreeTooltipEmpty>
+  <MX_QH_FlowerDecreeTooltip>花令：{0} / {1}\n下个充能：{2}%\n充能速度：{3} /秒</MX_QH_FlowerDecreeTooltip>
+
+  <!-- 仪式相关 -->
+  <MX_QH_QixiRequiresQinghe>只有清荷可以主持七夕节。</MX_QH_QixiRequiresQinghe>
+  <MX_QH_QixiRequiresFemaleOrGenderless>七夕节参与者必须是女性或无性别。</MX_QH_QixiRequiresFemaleOrGenderless>
+  <MX_QH_QixiCooldown>七夕节仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
+  <MX_QH_QixiOutcomeInspirations>获得灵感的参与者：{0}。</MX_QH_QixiOutcomeInspirations>
+  <MX_QH_QixiInspirationReason>受七夕节启发。</MX_QH_QixiInspirationReason>
+
+  <!-- 任务线相关 -->
+  <MX_QH_FlowerCourtDesignLocked>尚未获得荷雨池的设计图。</MX_QH_FlowerCourtDesignLocked>
+  <MX_QH_FlowerCourtDesignUnlockedMessage>已获得荷雨池设计图。</MX_QH_FlowerCourtDesignUnlockedMessage>
+  <MX_QH_FlowerCourtQingheArrivedLetterLabel>清荷抵达</MX_QH_FlowerCourtQingheArrivedLetterLabel>
+  <MX_QH_FlowerCourtQingheArrivedLetterText>清荷已加入殖民地。</MX_QH_FlowerCourtQingheArrivedLetterText>
+  <MX_QH_FlowerCourtImpressivenessProgress>房间印象值：{0} / {1}</MX_QH_FlowerCourtImpressivenessProgress>
+  <MX_QH_FlowerCourtMasteryProgress>清荷精通等级：{0} / 1</MX_QH_FlowerCourtMasteryProgress>
+  <MX_QH_FlowerCourtPondUnavailable>需要建造荷雨池。</MX_QH_FlowerCourtPondUnavailable>
+  <MX_QH_FlowerCourtQingheUnavailable>任务无法继续：清荷已死亡或离失。</MX_QH_FlowerCourtQingheUnavailable>
+
+  <!-- ConfigErrors -->
+  <MX_QH_ConfigError_ExecutionParts>处决 Job、伤害类型和动作分段必须完整，每段 end &gt; start。</MX_QH_ConfigError_ExecutionParts>
+  <MX_QH_ConfigError_ExecutionTiming>处决时间须满足 0 ≤ 出刀 &lt; 收刀 ≤ 总时长，距离至少 1.42，伤害为正。</MX_QH_ConfigError_ExecutionTiming>
+  <MX_QH_ConfigError_KillMotion>killMotion 需要 blade 关键帧；0 ≤ killAtSeconds ≤ 片段时长，killStartSeconds 不早于 executionHitSeconds。</MX_QH_ConfigError_KillMotion>
+  <MX_QH_ConfigError_GuardMotion>guardMotion 需要带 blade 关键帧的 guard 片段。</MX_QH_ConfigError_GuardMotion>
+  <MX_QH_ConfigError_ExecutionWeapon>executionWeapon 必须带动作集（含处决用的攻击片段）和刀光。</MX_QH_ConfigError_ExecutionWeapon>
+  <MX_QH_ConfigError_GuardDuration>防御时长必须为正，延长量不能为负。</MX_QH_ConfigError_GuardDuration>
+  <MX_QH_ConfigError_PostureDamage>架势伤害不能为负。</MX_QH_ConfigError_PostureDamage>
+</LanguageData>

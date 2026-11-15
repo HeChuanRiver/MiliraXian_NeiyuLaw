@@ -21,7 +21,7 @@
   <MX_ModeSwitch_NoEquipmentTracker>该角色没有装备栏。</MX_ModeSwitch_NoEquipmentTracker>
   <MX_ModeSwitch_NoInventoryTracker>该角色没有物品栏。</MX_ModeSwitch_NoInventoryTracker>
   <MX_ModeSwitch_DisabledWhileHunting>正在狩猎时不能切换形态，请先取消狩猎。</MX_ModeSwitch_DisabledWhileHunting>
-
+  <!-- 快速切换武器。目前只有清荷在用 -->
   <MX_WeaponQuickSwap_Label>切换为{0}</MX_WeaponQuickSwap_Label>
   <MX_WeaponQuickSwap_Desc>把{0}收进背包，换上背包里的{1}。</MX_WeaponQuickSwap_Desc>
   <MX_WeaponQuickSwap_Cooldown>冷却中：{0}s</MX_WeaponQuickSwap_Cooldown>
@@ -119,126 +119,6 @@
   <MX_NL_ShieldBuffMeleeArmorPen>近战护甲穿透 +{0}%</MX_NL_ShieldBuffMeleeArmorPen>
   <MX_NL_ShieldBuffMeleeDodge>近战闪避 +{0}%</MX_NL_ShieldBuffMeleeDodge>
   <MX_NL_ShieldBuffRangedDodge>远程闪避 +{0}%</MX_NL_ShieldBuffRangedDodge>
-
-  <MX_QH_ShieldInactive>未激活</MX_QH_ShieldInactive>
-  <MX_QH_AuraShieldStatusActive>已激活</MX_QH_AuraShieldStatusActive>
-  <MX_QH_AuraShieldStatusDown>！！已失效！！（剩余 {0}s）</MX_QH_AuraShieldStatusDown>
-  <MX_QH_AuraShieldCapacity>灵气容量：{0}</MX_QH_AuraShieldCapacity>
-  <MX_QH_AuraShieldRegen>回复速率：{0} /s</MX_QH_AuraShieldRegen>
-  <MX_QH_FlowingFormLowResourceWarning>【警告】清荷已无可用的流水之形充能，受到伤害可能会致命！</MX_QH_FlowingFormLowResourceWarning>
-  <MX_QH_FlowingFormTriggered>【流水之形】已触发：抵消了一次可能致命或损坏部位的伤害。</MX_QH_FlowingFormTriggered>
-  <MX_QH_DevAddAuraMasteryLevelLabel>DEV：精通等级 +1</MX_QH_DevAddAuraMasteryLevelLabel>
-  <MX_QH_DevAddAuraMasteryLevelDesc>直接令灵气精通等级提高 1 级。</MX_QH_DevAddAuraMasteryLevelDesc>
-  <MX_QH_AuraMasteryGainedMessage>清荷获得了新的精通等级！当前等级：{0} 级。</MX_QH_AuraMasteryGainedMessage>
-  <MX_QH_AuraMasteryGainedLetterLabel>灵气精通提升</MX_QH_AuraMasteryGainedLetterLabel>
-  <MX_QH_SkillTreeAuraMasteryLine>灵气精通：{0} / {1}</MX_QH_SkillTreeAuraMasteryLine>
-  <MX_QH_ResonanceTab_Label>调谐</MX_QH_ResonanceTab_Label>
-  <MX_QH_SkillTreeTab_Label>修行</MX_QH_SkillTreeTab_Label>
-  <MX_QH_AuraMasteryProgressLine>经验：{0} / {1}（{2}）</MX_QH_AuraMasteryProgressLine>
-  <MX_QH_AuraMasteryProgressMax>已达最高等级</MX_QH_AuraMasteryProgressMax>
-  <MX_QH_SkillTreeNodeLevel>Lv.{0}</MX_QH_SkillTreeNodeLevel>
-  <MX_QH_SkillTreeNodeLearned>已习得</MX_QH_SkillTreeNodeLearned>
-  <MX_QH_SkillTreeNodeLocked>习得等级：Lv.{0}</MX_QH_SkillTreeNodeLocked>
-  <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_SwordPressureNotEnough>剑压不足（需要 {0} 点）。</MX_QH_SwordPressureNotEnough>
-  <MX_QH_ZantetsukenNoRoom>斩铁剑：目标周围没有可以落脚的空位。</MX_QH_ZantetsukenNoRoom>
-  <MX_QH_ExecutionMode_Auto>自动处决</MX_QH_ExecutionMode_Auto>
-  <MX_QH_ExecutionMode_Manual>手动处决</MX_QH_ExecutionMode_Manual>
-  <MX_QH_ExecutionMode_None>禁止处决</MX_QH_ExecutionMode_None>
-  <MX_QH_ExecutionModeDesc>点击切换清荷对架势崩溃敌人的处理方式。\n\n自动处决：自动处决她打崩架势的敌人。\n手动处决：敌人架势崩溃时，清荷立刻收刀，停下对它的攻击和反击，对它下达攻击指令才会处决。\n禁止处决：不进行处决，攻击指令只是普通攻击。\n\n处决落刀前被其他指令打断视为放弃处决：敌人照常保持崩溃，之后可以再下达攻击指令处决。</MX_QH_ExecutionModeDesc>
-  <MX_QH_NonLethalExecutionLabel>非致命处决</MX_QH_NonLethalExecutionLabel>
-  <MX_QH_NonLethalExecutionDesc>开启时，处决的第一刀不造成伤害，直接击倒敌人，也不再接第二段处决。\n\n血肉目标受到致命伤，不留伤口，昏迷一天后自行醒来，期间无法治疗；非血肉目标（如机械体）会被打到倒地为止。</MX_QH_NonLethalExecutionDesc>
-  <MX_QH_RequiresStance>需要姿态：{0}。</MX_QH_RequiresStance>
-  <MX_QH_SwordPressureLabel>剑压</MX_QH_SwordPressureLabel>
-  <MX_QH_SwordPressureValueLine>剑压：{0} / {1}</MX_QH_SwordPressureValueLine>
-  <MX_QH_LotusPondAssignQingheOnly>荷池只可分配给清荷。</MX_QH_LotusPondAssignQingheOnly>
-  <MX_QH_LotusPondOnlyOne>每个殖民地只能建造一座荷池。</MX_QH_LotusPondOnlyOne>
-  <MX_QH_LotusPondBeauty>美观度：{0}　清洁度：{1}</MX_QH_LotusPondBeauty>
-  <MX_QH_LotusPondStillnessBonus>静思获取加成：{0}</MX_QH_LotusPondStillnessBonus>
-  <MX_QH_LotusPondRitualQualityBonus>七夕节质量加成：{0}</MX_QH_LotusPondRitualQualityBonus>
-  <MX_QH_OpenSkillTreeRequiresQinghe>打开清荷的修习界面（需要清荷本人）</MX_QH_OpenSkillTreeRequiresQinghe>
-  <MX_QH_OpenSkillTree>打开修习面板</MX_QH_OpenSkillTree>
-  <MX_QH_LotusPondCannotReach>清荷现在无法接近荷池。</MX_QH_LotusPondCannotReach>
-  <MX_QH_SkillTreeMissing>地图上找不到荷池。</MX_QH_SkillTreeMissing>
-  <MX_QH_CurrentSuffix>（当前）</MX_QH_CurrentSuffix>
-  <MX_QH_TuneConfirmText>清荷需要静心调律片刻，之后24小时内无法再次调谐。确认切换到「{0}」？</MX_QH_TuneConfirmText>
-  <MX_QH_TuneCooldownRemaining>调谐冷却中（剩余 {0} 小时）</MX_QH_TuneCooldownRemaining>
-  <MX_QH_FlowerBellResonanceSpring>春</MX_QH_FlowerBellResonanceSpring>
-  <MX_QH_FlowerBellResonanceSummer>夏</MX_QH_FlowerBellResonanceSummer>
-  <MX_QH_FlowerBellResonanceAutumn>秋</MX_QH_FlowerBellResonanceAutumn>
-  <MX_QH_FlowerBellResonanceWinter>冬</MX_QH_FlowerBellResonanceWinter>
-  <MX_QH_SwordResonanceSpring>春晓</MX_QH_SwordResonanceSpring>
-  <MX_QH_SwordResonanceSummer>荷雨</MX_QH_SwordResonanceSummer>
-  <MX_QH_SwordResonanceAutumn>无常</MX_QH_SwordResonanceAutumn>
-  <MX_QH_SwordResonanceWinter>凝霜</MX_QH_SwordResonanceWinter>
-  <!-- 调谐界面的四季共鸣说明 -->
-  <MX_QH_TuneResonanceDescriptionSpring>和鸣【春】：\n附有能引起流血或漏电异常的魔力。</MX_QH_TuneResonanceDescriptionSpring>
-  <MX_QH_TuneResonanceDescriptionSummer>和鸣【夏】：\n附有能引起剧毒或腐蚀异常的魔力。</MX_QH_TuneResonanceDescriptionSummer>
-  <MX_QH_TuneResonanceDescriptionAutumn>和鸣【秋】：\n附有能引起恐惧或过载异常的魔力。</MX_QH_TuneResonanceDescriptionAutumn>
-  <MX_QH_TuneResonanceDescriptionWinter>和鸣【冬】：\n附有能引起冻结异常的魔力。</MX_QH_TuneResonanceDescriptionWinter>
-  <!-- 花信风铃的四季共鸣效果 -->
-  <MX_QH_FlowerBellResonanceDescriptionSpring>和鸣【春】：\n附有能引起流血或漏电异常的魔力。</MX_QH_FlowerBellResonanceDescriptionSpring>
-  <MX_QH_FlowerBellResonanceDescriptionSummer>和鸣【夏】：\n附有能引起剧毒或腐蚀异常的魔力。</MX_QH_FlowerBellResonanceDescriptionSummer>
-  <MX_QH_FlowerBellResonanceDescriptionAutumn>和鸣【秋】：\n附有能引起恐惧或过载异常的魔力。</MX_QH_FlowerBellResonanceDescriptionAutumn>
-  <MX_QH_FlowerBellResonanceDescriptionWinter>和鸣【冬】：\n附有能引起冻结异常的魔力。</MX_QH_FlowerBellResonanceDescriptionWinter>
-  <!-- 花信风铃的蓄力 -->
-  <MX_QH_BellReleaseNow>立即发射</MX_QH_BellReleaseNow>
-  <MX_QH_BellReleaseTip>立即发射：{0} 发铃音。</MX_QH_BellReleaseTip>
-  <MX_QH_BellReleaseDisabled>只能在蓄力中、至少一档时发射。</MX_QH_BellReleaseDisabled>
-  <MX_QH_BellChargeTip>蓄力：{0} 秒（{1} 档）。\n蓄到 {2} 档时自动发射。\n每 2 秒一档，最多五档，每档多一发铃音。蓄力中断后会衰减，越来越快。</MX_QH_BellChargeTip>
-  <MX_QH_BellDecaying>衰减中。</MX_QH_BellDecaying>
-  <MX_QH_BellThresholdSet>蓄到 {0} 档时自动发射。</MX_QH_BellThresholdSet>
-  <MX_QH_BellThresholdLocked>有蓄力时不能调整阈值。</MX_QH_BellThresholdLocked>
-  <MX_QH_BellAimFocus>瞄准：集中</MX_QH_BellAimFocus>
-  <MX_QH_BellAimScatter>瞄准：散射</MX_QH_BellAimScatter>
-  <MX_QH_BellAimDesc>一次发射的铃音如何选择目标。\n\n集中：所有铃音都追踪选中的目标。\n散射：必定有一颗打向选中的目标，其余随机打向它周围 {0} 格内的敌对单位和建筑（开启“范围攻击波及中立目标”时也包括中立的），目标够多时每个一颗。周围没有其他目标时全部打向选中的目标。\n\n点击切换。</MX_QH_BellAimDesc>
-  <!-- 散华的四季共鸣效果 -->
-  <MX_QH_SwordResonanceDescriptionSpring>和鸣【春晓】：\n附有能引起流血或漏电异常的魔力，攻击命中后还会为清荷附加春泉洗礼效果。</MX_QH_SwordResonanceDescriptionSpring>
-  <MX_QH_SwordResonanceDescriptionSummer>和鸣【荷雨】：\n附有能引起剧毒或腐蚀异常的魔力，攻击命中后回复的剑压+50%。</MX_QH_SwordResonanceDescriptionSummer>
-  <MX_QH_SwordResonanceDescriptionAutumn>和鸣【无常】：\n附有能引起恐惧或过载异常的魔力，近战攻击的穿甲能力提升50%。</MX_QH_SwordResonanceDescriptionAutumn>
-  <MX_QH_SwordResonanceDescriptionWinter>和鸣【凝霜】：\n每次攻击命中时，回复4点灵气加上当前每秒护盾回复量的20%，两者之和再乘以修正后的法术系数：法术系数1～5线性对应恢复倍率1～2.5。攻击被护盾或护甲阻挡也可回复，破盾等待期间无法回复。造成实际伤害时累积冻结异常。</MX_QH_SwordResonanceDescriptionWinter>
-  <MX_QH_FlowerPanelHelpTitle>面板说明</MX_QH_FlowerPanelHelpTitle>
-  <MX_QH_FlowerPanelHelpFlowerDecreeTitle>资源条</MX_QH_FlowerPanelHelpFlowerDecreeTitle>
-  <MX_QH_FlowerPanelHelpFlowerDecreeBody>装备近战武器时进入剑姿态，显示剑压；装备远程武器时进入铃姿态，显示花令。未装备武器或无法识别武器类型时，不显示姿态资源。四季共鸣的追加效果仅在装备散华或花信风铃时生效，普通近战武器命中仍可获得剑压。</MX_QH_FlowerPanelHelpFlowerDecreeBody>
-  <MX_QH_FlowerPanelHelpShieldTitle>灵气条</MX_QH_FlowerPanelHelpShieldTitle>
-  <MX_QH_FlowerPanelHelpShieldBody>显示灵气加护的状态。</MX_QH_FlowerPanelHelpShieldBody>
-  <MX_QH_FlowerPanelHelpFlowingFormTitle>流水之形</MX_QH_FlowerPanelHelpFlowingFormTitle>
-  <MX_QH_FlowerPanelHelpFlowingFormBody>绿色方块表示可用充能，黄色填充表示正在恢复。</MX_QH_FlowerPanelHelpFlowingFormBody>
-  <MX_QH_FlowerPanelHelpSkillTreeTitle>修行面板</MX_QH_FlowerPanelHelpSkillTreeTitle>
-  <MX_QH_FlowerPanelHelpSkillTreeBody>点击可以随时打开修行面板。外侧的绿线指示静思的积累进度。</MX_QH_FlowerPanelHelpSkillTreeBody>
-  <MX_QH_LongNightStillnessLabel>长夜静思</MX_QH_LongNightStillnessLabel>
-  <MX_QH_LongNightStillnessDescription>下一次进行涉及品质的建造、制作或艺术创作时，将消耗全部静思并使品质等级 +2。</MX_QH_LongNightStillnessDescription>
-  <MX_QH_MeditativeStillnessFullMessage>【静思】已积累到上限。</MX_QH_MeditativeStillnessFullMessage>
-  <MX_QH_MeditativeStillnessGainMote>静思 +{0}%</MX_QH_MeditativeStillnessGainMote>
-  <MX_QH_AuraMasteryGainMote>灵气精通 +{0}经验</MX_QH_AuraMasteryGainMote>
-  <MX_Perk_RequiresPerk>需要领悟：{0}</MX_Perk_RequiresPerk>
-  <MX_Perk_RequiresPrerequisite>需要前置：{0}（{1} 层）</MX_Perk_RequiresPrerequisite>
-  <MX_Perk_MaterialsMissing>可用材料不足。</MX_Perk_MaterialsMissing>
-  <MX_Perk_MaxLevel>已达到最高层级。</MX_Perk_MaxLevel>
-  <MX_QH_AuraShieldTooltipTitle>灵气加护</MX_QH_AuraShieldTooltipTitle>
-  <MX_QH_AuraShieldEnergyLine>灵气值：{0} / {1}</MX_QH_AuraShieldEnergyLine>
-  <MX_QH_AuraShieldRegenLine>回复速率：{0} /秒</MX_QH_AuraShieldRegenLine>
-  <MX_QH_AuraShieldRegenDelayLine>回复延迟：{0}秒</MX_QH_AuraShieldRegenDelayLine>
-  <MX_QH_SkillTreeTitle>修习面板</MX_QH_SkillTreeTitle>
-  <MX_QH_SkillTreeCurrentAuraMasteryLevelLine>当前精通等级：{0}</MX_QH_SkillTreeCurrentAuraMasteryLevelLine>
-  <MX_QH_SkillTreeStillnessLine>静思：{0} % / {1} %</MX_QH_SkillTreeStillnessLine>
-  <MX_QH_FlowerDecreeLabel>花令</MX_QH_FlowerDecreeLabel>
-  <MX_QH_AuraShieldLabel>灵气</MX_QH_AuraShieldLabel>
-  <MX_QH_FlowingFormChargesLine>流水之形：{0} / {1} 可用</MX_QH_FlowingFormChargesLine>
-  <MX_QH_StatusLine>{0}</MX_QH_StatusLine>
-  <MX_QH_FlowingFormStateRecharging>正在回充</MX_QH_FlowingFormStateRecharging>
-  <MX_QH_FlowingFormStateReady>已充满</MX_QH_FlowingFormStateReady>
-  <MX_QH_FlowingFormStateEmpty>充能耗尽</MX_QH_FlowingFormStateEmpty>
-  <MX_QH_RechargeProgressLine>恢复进度：{0}</MX_QH_RechargeProgressLine>
-  <MX_QH_RemainingTimeLine>剩余时间：{0}</MX_QH_RemainingTimeLine>
-  <MX_QH_FlowerDecreeValueLine>花令：{0} / {1}</MX_QH_FlowerDecreeValueLine>
-  <MX_QH_RecoveryProgressLine>下个充能：{0}%</MX_QH_RecoveryProgressLine>
-  <MX_QH_RecoverySpeedLine>充能速度：{0} /秒</MX_QH_RecoverySpeedLine>
-  <MX_QH_QixiRequiresQinghe>只有清荷可以主持七夕节。</MX_QH_QixiRequiresQinghe>
-  <MX_QH_QixiRequiresFemaleOrGenderless>七夕节参与者必须是女性或无性别。</MX_QH_QixiRequiresFemaleOrGenderless>
-  <MX_QH_QixiCooldown>七夕节仍在冷却中，剩余时间：{0}。</MX_QH_QixiCooldown>
-  <MX_QH_QixiOutcomeInspirations>获得灵感的参与者：{0}。</MX_QH_QixiOutcomeInspirations>
-  <MX_QH_QixiInspirationReason>受七夕节启发。</MX_QH_QixiInspirationReason>
 
   <MX_ZL_DebugAddKarmaLabel>DEV：+10因果</MX_ZL_DebugAddKarmaLabel>
   <MX_ZL_DebugAddKarmaDesc>开发者测试用：手动为昭离增加10点因果。</MX_ZL_DebugAddKarmaDesc>

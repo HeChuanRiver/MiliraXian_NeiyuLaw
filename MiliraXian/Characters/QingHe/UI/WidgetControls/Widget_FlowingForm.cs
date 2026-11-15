@@ -97,26 +97,23 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (comp == null)
             {
-                return "MX_QH_FlowingFormChargesLine".Translate(0, 1);
+                return "MX_QH_FlowingFormTooltipEmpty".Translate();
             }
 
-            string tip = "MX_QH_FlowingFormChargesLine".Translate(comp.CurrentCharges, comp.MaxCharges);
             if (comp.IsRecharging)
             {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateRecharging".Translate());
-                tip += "\n" + "MX_QH_RechargeProgressLine".Translate(comp.RechargeProgressPercent.ToStringPercent());
-                tip += "\n" + "MX_QH_RemainingTimeLine".Translate(comp.RechargeTicksLeft.ToStringTicksToPeriod(true, false, true, true, false));
-            }
-            else if (comp.CurrentCharges > 0)
-            {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateReady".Translate());
-            }
-            else
-            {
-                tip += "\n" + "MX_QH_StatusLine".Translate("MX_QH_FlowingFormStateEmpty".Translate());
+                return "MX_QH_FlowingFormTooltipRecharging".Translate(
+                    comp.CurrentCharges, comp.MaxCharges,
+                    comp.RechargeProgressPercent.ToStringPercent(),
+                    comp.RechargeTicksLeft.ToStringTicksToPeriod(true, false, true, true, false));
             }
 
-            return tip;
+            if (comp.CurrentCharges > 0)
+            {
+                return "MX_QH_FlowingFormTooltipReady".Translate(comp.CurrentCharges, comp.MaxCharges);
+            }
+
+            return "MX_QH_FlowingFormTooltipDepleted".Translate(comp.CurrentCharges, comp.MaxCharges);
         }
 
         private int GetStableTipId()

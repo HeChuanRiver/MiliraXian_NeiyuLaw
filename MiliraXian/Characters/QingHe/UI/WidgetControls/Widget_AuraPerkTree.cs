@@ -1,4 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Hediffs;
+using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters;
 using MiliraXian.Characters.QingHe.Vfx;
 using MiliraXian.Characters.Common.UI;
@@ -104,13 +104,15 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (state == null)
             {
-                return "MX_QH_SkillTreeTitle".Translate() + "\n\n" + "MX_QH_SkillTreeMissing".Translate();
+                return "MX_QH_SkillTreeTooltipMissing".Translate();
             }
 
-            return "MX_QH_SkillTreeTitle".Translate() + "\n\n"
-                   + "MX_QH_SkillTreeAuraMasteryLine".Translate(MX_QH_HediffUtility.GetAuraMasteryLevel(pawn), 24) + "\n"
-                   + "MX_QH_SkillTreeCurrentAuraMasteryLevelLine".Translate(MX_QH_HediffUtility.GetAuraMasteryComp(pawn).CurrentLevel) + "\n"
-                   + "MX_QH_SkillTreeStillnessLine".Translate((stillness?.CurrentValue ?? 0f).ToString("0"), (stillness?.MaxValue ?? 100f).ToString("0"));
+            return "MX_QH_SkillTreeTooltip".Translate(
+                MX_QH_HediffUtility.GetAuraMasteryLevel(pawn),
+                24,
+                MX_QH_HediffUtility.GetAuraMasteryComp(pawn).CurrentLevel,
+                (stillness?.CurrentValue ?? 0f).ToString("0"),
+                (stillness?.MaxValue ?? 100f).ToString("0"));
         }
 
         private int GetStableTipId()

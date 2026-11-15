@@ -1,4 +1,4 @@
-﻿using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.Common.UI;
 using UnityEngine;
@@ -93,7 +93,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
         {
             if (comp == null)
             {
-                return "MX_QH_FlowerDecreeValueLine".Translate(0, 3);
+                return "MX_QH_FlowerDecreeTooltipEmpty".Translate();
             }
 
             int current = Mathf.FloorToInt(comp.CurrentValue);
@@ -101,9 +101,7 @@ namespace MiliraXian.Characters.QingHe.UI.WidgetControls
             // One decimal: the value advances ~0.83 points per settle, so whole percent would
             // visibly skip a number every few steps.
             string recoveryProgress = (Mathf.Repeat(comp.CurrentValue, 1f) * 100f).ToString("F1");
-            string tip = "MX_QH_FlowerDecreeValueLine".Translate(current, max).ToString()
-                         + "\n" + "MX_QH_RecoveryProgressLine".Translate(recoveryProgress)
-                         + "\n" + "MX_QH_RecoverySpeedLine".Translate(comp.RecoveryPerSecond.ToString("F2"));
+            string tip = "MX_QH_FlowerDecreeTooltip".Translate(current, max, recoveryProgress, comp.RecoveryPerSecond.ToString("F2"));
             if (!comp.ResourceDescription.NullOrEmpty())
             {
                 tip += "\n\n" + comp.ResourceDescription;

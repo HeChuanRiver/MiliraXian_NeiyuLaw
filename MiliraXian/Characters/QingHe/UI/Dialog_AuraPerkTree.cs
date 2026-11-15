@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MiliraXian.Characters.QingHe.Defs;
@@ -263,7 +263,7 @@ namespace MiliraXian.Characters.QingHe.UI
             string label = CompFlowerBellResonance.LabelFor(resonance);
             if (selected)
             {
-                label += "MX_QH_CurrentSuffix".Translate();
+                label += "MX_QH_ResonanceCurrentSuffix".Translate();
             }
 
             Text.Font = GameFont.Small;
@@ -379,7 +379,7 @@ namespace MiliraXian.Characters.QingHe.UI
             Text.Anchor = TextAnchor.MiddleCenter;
             bool reachedCurrentMax = actualLevel >= maxLevel;
             string progressText = reachedCurrentMax || (auraMastery != null && auraMastery.IsMaxLevel)
-                ? "已达当前最大等级"
+                ? "MX_QH_AuraMasteryProgressMax".Translate()
                 : "MX_QH_AuraMasteryProgressLine".Translate(progress.ToString("0"), required.ToString("0"), percent.ToStringPercent());
             GUI.color = percent < 0.4f ? Color.white : Color.black;
             Widgets.Label(barRect, progressText);
@@ -490,11 +490,11 @@ namespace MiliraXian.Characters.QingHe.UI
                 string label = node.LabelCap.ToString();
                 if (locked)
                 {
-                    label += "\n已锁定";
+                    label += "\n" + "MX_QH_SkillTreeNodeStateLocked".Translate();
                 }
                 else if (!learned)
                 {
-                    label += "\n未习得";
+                    label += "\n" + "MX_QH_SkillTreeNodeStateNotLearned".Translate();
                 }
                 Widgets.Label(labelRect, label);
             }
@@ -510,7 +510,7 @@ namespace MiliraXian.Characters.QingHe.UI
                 ? "MX_QH_SkillTreeNodeLearned".Translate()
                 : locked
                     ? "MX_QH_SkillTreeNodeLocked".Translate(RequiredMasteryLevel(node))
-                    : "未习得";
+                    : "MX_QH_SkillTreeNodeStateNotLearned".Translate();
             return tip + "\n\n" + stateText;
         }
 

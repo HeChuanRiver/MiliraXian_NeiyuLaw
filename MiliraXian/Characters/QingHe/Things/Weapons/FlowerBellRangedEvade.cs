@@ -54,7 +54,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             // does not pick her again when it retargets.
             projectile.TryGetComp<CompProjectileHomingCurve>()?.NotifyEvadedBy(defender);
 
-            MoteMaker.ThrowText(defender.DrawPos + new Vector3(0f, 0f, 1.5f), defender.Map, "闪避", Color.white, 1.5f);
+            MoteMaker.ThrowText(defender.DrawPos + new Vector3(0f, 0f, 1.5f), defender.Map, "MX_QH_EvadeMote".Translate(), Color.white, 1.5f);
 
             FlowerBellEvadeVfx.GetOrCreate(defender.Map)?.Notify(defender);
 

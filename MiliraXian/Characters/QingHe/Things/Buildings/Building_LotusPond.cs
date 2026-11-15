@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters;
 using System.Linq;
 using MiliraXian.Characters.QingHe.Defs;
@@ -32,10 +32,9 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 
             string beauty = room == null ? "—" : room.GetStat(RoomStatDefOf.Beauty).ToString("0.##");
             string cleanliness = room == null ? "—" : room.GetStat(RoomStatDefOf.Cleanliness).ToString("0.##");
-            text += "MX_QH_LotusPondBeauty".Translate(beauty, cleanliness);
             float lotusPondFactor = MX_QHDefOf.MX_QH_MeditativeStillness.comps
                 .OfType<HediffCompProperties_MeditativeStillness>().First().lotusPondFactor;
-            text += "\n" + "MX_QH_LotusPondStillnessBonus".Translate((lotusPondFactor - 1f).ToStringPercentSigned());
+            text += "MX_QH_LotusPondStatsTooltip".Translate(beauty, cleanliness, (lotusPondFactor - 1f).ToStringPercentSigned());
             if (ModsConfig.IdeologyActive)
             {
                 RitualOutcomeComp_RoomStat beautyComp = MX_QHDefOf.MX_QH_QixiRitualPattern.ritualOutcomeEffect.comps

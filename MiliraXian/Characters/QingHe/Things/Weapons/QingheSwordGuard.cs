@@ -139,35 +139,35 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             if (executionJob == null || executionDamageDef == null || executionMotion.NullOrEmpty()
                 || executionMotion.Exists(s => s == null || s.end <= s.start))
             {
-                yield return "处决 Job、伤害类型和动作分段必须完整，每段 end > start。";
+                yield return "MX_QH_ConfigError_ExecutionParts".Translate();
             }
             if (!(executionCutSeconds >= 0f && executionCutSeconds < executionHitSeconds && executionHitSeconds <= executionSeconds
                 && executionRange >= 1.42f && executionDamage > 0f))
             {
-                yield return "处决时间须满足 0 ≤ 出刀 < 收刀 ≤ 总时长，距离至少 1.42，伤害为正。";
+                yield return "MX_QH_ConfigError_ExecutionTiming".Translate();
             }
             if (killMotion != null && (killMotion.blade == null || killMotion.durationSeconds <= 0f
                 || killAtSeconds < 0f || killAtSeconds > killMotion.durationSeconds || killStartSeconds < executionHitSeconds))
             {
-                yield return "killMotion 需要 blade 关键帧；0 ≤ killAtSeconds ≤ 片段时长，killStartSeconds 不早于 executionHitSeconds。";
+                yield return "MX_QH_ConfigError_KillMotion".Translate();
             }
             if (guardMotion?.guard?.blade == null)
             {
-                yield return "guardMotion 需要带 blade 关键帧的 guard 片段。";
+                yield return "MX_QH_ConfigError_GuardMotion".Translate();
             }
             if (executionWeapon?.GetModExtension<BladeMotionSetExtension>()?.Attack(executionAttack) == null
                 || executionWeapon.GetModExtension<QingheBladeTrailExtension>() == null)
             {
-                yield return "executionWeapon 必须带动作集（含处决用的攻击片段）和刀光。";
+                yield return "MX_QH_ConfigError_ExecutionWeapon".Translate();
             }
             if (guardTicks < 1 || extendTicks == null || extendTicks.Exists(t => t < 0))
             {
-                yield return "防御时长必须为正，延长量不能为负。";
+                yield return "MX_QH_ConfigError_GuardDuration".Translate();
             }
             if (blockSelfPosture < 0f || blockAttackerPosture < 0f || parryAttackerPosture < 0f
                 || projectileBlockSelfPosture < 0f || struckSelfPosture < 0f)
             {
-                yield return "架势伤害不能为负。";
+                yield return "MX_QH_ConfigError_PostureDamage".Translate();
             }
         }
     }

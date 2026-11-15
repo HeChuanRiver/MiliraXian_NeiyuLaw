@@ -152,12 +152,12 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 yield return gizmo;
             }
-            if (Prefs.DevMode)
+            if (Prefs.DevMode && DebugSettings.ShowDevGizmos)
             {
                 yield return new Command_Toggle
                 {
-                    defaultLabel = "DEV 护盾常显",
-                    defaultDesc = "开启后护盾保持显示、不再因满能量渐消，便于调试护盾外观；关闭后从满显示状态正常渐消。",
+                    defaultLabel = "MX_QH_DevShieldKeepVisibleLabel".Translate(),
+                    defaultDesc = "MX_QH_DevShieldKeepVisibleDesc".Translate(),
                     isActive = () => devKeepVisible,
                     toggleAction = ToggleDevKeepVisible,
                 };
@@ -422,11 +422,17 @@ namespace MiliraXian.Characters.QingHe.Things
                 ? "MX_QH_AuraShieldStatusDown".Translate(Mathf.CeilToInt(BreakTicksLeft / 60f)).ToString()
                 : "MX_QH_AuraShieldStatusActive".Translate().ToString();
 
-            return "MX_QH_AuraShieldTooltipTitle".Translate().ToString() + "\n\n"
-                   + status + "\n"
-                   + "MX_QH_AuraShieldEnergyLine".Translate(Energy.ToString("F0"), MaxEnergy.ToString("F0")).ToString() + "\n"
-                   + "MX_QH_AuraShieldRegenLine".Translate(CurrentRegenPerSecond.ToString("F2")).ToString()
-                   + (InRegenDelay ? "\n" + "MX_QH_AuraShieldRegenDelayLine".Translate(Mathf.CeilToInt(RegenDelayTicksLeft / 60f)).ToString() : "");
+            string tooltip = "MX_QH_AuraShieldTooltip".Translate(
+                status,
+                Energy.ToString("F0"), MaxEnergy.ToString("F0"),
+                CurrentRegenPerSecond.ToString("F2"));
+
+            if (InRegenDelay)
+            {
+                tooltip += "\n" + "MX_QH_AuraShieldRegenDelayLine".Translate(Mathf.CeilToInt(RegenDelayTicksLeft / 60f));
+            }
+
+            return tooltip;
         }
 
     }

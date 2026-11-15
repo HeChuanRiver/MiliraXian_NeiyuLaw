@@ -12,9 +12,10 @@ namespace MiliraXian.Characters.QingHe.Hediffs
             : def == MX_QHDefOf.MX_QH_ResonanceWinter ? FlowerBellResonance.Winter
             : FlowerBellResonance.None;
 
-        public override string Description => base.Description + "\n\n"
-            + ("MX_QH_FlowerBellResonanceDescription" + Resonance).Translate() + "\n\n"
-            + ("MX_QH_SwordResonanceDescription" + Resonance).Translate();
+        public override string Description => "MX_QH_SeasonalResonanceDescription".Translate(
+            base.Description,
+            ("MX_QH_FlowerBellResonanceDescription" + Resonance).Translate(),
+            ("MX_QH_SwordResonanceDescription" + Resonance).Translate());
 
         public override void PostRemoved()
         {
