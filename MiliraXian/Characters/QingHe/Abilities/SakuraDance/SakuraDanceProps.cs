@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
@@ -317,7 +318,45 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public BladeProjection Projection => new(heightToScreen, depthToScreen, heightOrigin);
         /// <summary>Height of the ring origin above the pawn's drawn body centre, metres.</summary>
         public float ringHeightOffset = 0.6f;
-        public List<SakuraCutProps> cuts = new();
+        /// <summary>
+        /// The three cuts: ring trail layers, petals and thunder effects. Pure art data, loaded from
+        /// the JSON at <see cref="cutsDataPath"/> (relative to the mod root; reloaded by the
+        /// "Reload JSON assets" debug action).
+        /// </summary>
+        public string cutsDataPath;
+
+        private JsonModAsset<SakuraCutData.CutsData> cutsAsset;
+        private List<SakuraCutProps> cutsSynced;
+        private int cutsVersion = -1;
+        private readonly object cutsSyncLock = new();
+
+        /// <summary>The current cuts; re-mapped in place after every successful (re)load.</summary>
+        public List<SakuraCutProps> Cuts
+        {
+            get
+            {
+                if (cutsDataPath.NullOrEmpty())
+                {
+                    return new List<SakuraCutProps>();
+                }
+                JsonModAsset<SakuraCutData.CutsData> current = cutsAsset;
+                if (current != null && cutsVersion == current.Version && cutsSynced != null)
+                {
+                    return cutsSynced;
+                }
+                lock (cutsSyncLock)
+                {
+                    cutsAsset ??= new JsonModAsset<SakuraCutData.CutsData>(cutsDataPath, SakuraCutData.Validate);
+                    SakuraCutData.CutsData data = cutsAsset.Data;
+                    if (data != null && cutsVersion != cutsAsset.Version)
+                    {
+                        cutsSynced = SakuraCutData.Map(data);
+                        cutsVersion = cutsAsset.Version;
+                    }
+                    return cutsSynced ?? new List<SakuraCutProps>();
+                }
+            }
+        }
 
         public float petalKeepFraction = 0.3f;
         public float petalSpeedScale = 0.25f;
@@ -396,7 +435,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 yield return "sweepDamage is not set";
             }
-            if (cuts.NullOrEmpty())
+            if (cutsDataPath.NullOrEmpty())
+            {
+                yield return "cutsDataPath is not set";
+            }
+            else if (Cuts.NullOrEmpty())
             {
                 yield return "no cuts defined";
             }

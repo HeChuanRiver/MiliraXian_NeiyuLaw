@@ -133,9 +133,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 return;
             }
             float catchSeconds = driver.MotionSeconds(driver.ThunderCatchTick);
-            for (int ci = 0; ci < props.cuts.Count; ci++)
+            for (int ci = 0; ci < props.Cuts.Count; ci++)
             {
-                SakuraCutProps cut = props.cuts[ci];
+                SakuraCutProps cut = props.Cuts[ci];
                 SakuraDischargeProps d = cut.thunderDischarge;
                 if (d == null)
                 {

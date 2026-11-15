@@ -40,12 +40,12 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             Pawn caster = parent?.pawn;
-            if (caster == null || !caster.Spawned || Props.cuts.NullOrEmpty())
+            if (caster == null || !caster.Spawned || Props.Cuts.NullOrEmpty())
             {
                 return;
             }
             float r = 0f;
-            foreach (SakuraCutProps cut in Props.cuts)
+            foreach (SakuraCutProps cut in Props.Cuts)
             {
                 r = Mathf.Max(r, cut.radius);
             }
