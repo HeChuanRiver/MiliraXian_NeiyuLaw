@@ -15,7 +15,7 @@
       </li>
     </modExtensions>
     <label>春泉涌流</label>
-    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n习得“四时和鸣”后，每秒为泉水中的血肉敌人积累12点流血，为机械敌人积累12点漏电。积累量受法术效果系数与对应异常附加效率影响。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
+    <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n对范围内的敌人持续附加渗血和漏电效果。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>201</displayOrder>
@@ -61,7 +61,7 @@
       </li>
     </modExtensions>
     <label>荷雨</label>
-    <description>消耗2点花令，在目标地点召来一道雨幕。雨幕垂直于你的视线横陈，长15格、宽3格，持续15秒，不阻挡通行。\n\n踏入雨幕的敌人会被淋透，移动速度减半；离开雨幕6秒后才会干透。血肉敌人每秒积累30点毒素，机械敌人每秒积累30点腐蚀。积累量受法术效果系数与对应异常附加效率影响。\n\n雨水在起手时就开始落下，雨幕落下时才正式生效；结束时雨先停，积水再慢慢淡去。友方不受影响。</description>
+    <description>消耗2点花令，在目标地点召来一道垂直于视线方向的雨幕。\n\n踏入雨幕的敌人会被淋透，移动速度大幅降低，同时持续附加剧毒或腐蚀效果。\n\n持续20秒。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>202</displayOrder>
@@ -106,7 +106,7 @@
       </li>
     </modExtensions>
     <label>霜月镜</label>
-    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截穿过范围边界的敌方投射物，每次拦截都会以冰霜子弹还击攻击者。护盾持续20秒，吸收一定量伤害后将会破碎。\n\n习得“四时和鸣”后，每秒为护盾内的非机械敌人积累15点恐惧，为机械敌人积累15点过载；冰霜子弹命中时仅积累寒冷，达到上限后触发冻结。积累量受法术效果系数与对应异常附加效率影响。</description>
+    <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截所有穿过范围边界的敌方投射物，并以冰霜子弹还击攻击者。护盾持续60秒，吸收一定量伤害后将会破碎。\n\n被反击命中的敌人会被附加冻结效果。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/lunarfrost_mirror</iconPath>
     <category>MX_QingheSkill</category>
     <displayOrder>204</displayOrder>
@@ -133,7 +133,7 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
         <shieldDef>MX_QH_LunarMirror</shieldDef>
-        <durationTicks>1200</durationTicks>
+        <durationTicks>7200</durationTicks>
         <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
         <resourceCost>2</resourceCost>
@@ -296,8 +296,6 @@
       <li Class="MiliraXian.Characters.QingHe.Abilities.Zantetsuken.CompProperties_AbilityZantetsuken">
         <dashSpeedCellsPerSecond>40</dashSpeedCellsPerSecond>
         <dashMinTicks>8</dashMinTicks>
-        <!-- 冲刺不被敌人挡住，沿途 1.35 格内的敌人各受一次 5 点钝击；墙和关着的门会让冲刺停下。
-             对目标施放时冲到目标 3 格内离它最近、看得见的空位，对空地施放时冲到那一格 -->
         <dashBurst>MX_QH_ZantetsukenDash</dashBurst>
         <dashCollisionRadius>1.35</dashCollisionRadius>
         <dashDamage>5</dashDamage>
@@ -324,7 +322,6 @@
         <apexHeight>16</apexHeight>
         <gaeshiHeight>2.2</gaeshiHeight>
         <roofedHeight>1.2</roofedHeight>
-        <!-- 出伤：落地每次 40（共 5 次），回返合鞘一次 150；伤害乘近战伤害系数和法术效果系数。建筑倍率在伤害定义里（×1.5） -->
         <burstDamage>MX_QH_ZantetsukenBurst</burstDamage>
         <landDamageDef>MX_QH_Zantetsuken_Guren</landDamageDef>
         <gaeshiDamageDef>MX_QH_Gaeshi_Gekka</gaeshiDamageDef>
@@ -332,14 +329,12 @@
         <landDamage>40</landDamage>
         <gaeshiDamage>150</gaeshiDamage>
         <armorPenetration>1.35</armorPenetration>
-        <!-- 每一击 10 架势，燕回返那一击另加 30。动作中途不处决：打崩的敌人一直崩到动作结束后再持续原本的时长 -->
         <hitPosture>10</hitPosture>
         <gaeshiExtraPosture>30</gaeshiExtraPosture>
         <stunTicks>300</stunTicks>
         <gaeshiStunTicks>480</gaeshiStunTicks>
         <minSwordPressure>1</minSwordPressure>
         <gaeshiNode>MX_QH_Node_Gaeshi_Gekka</gaeshiNode>
-        <!-- 投影和散华的十字斩一致 -->
         <heightToScreen>0.35</heightToScreen>
         <depthToScreen>0.55</depthToScreen>
         <heightOrigin>-0.63</heightOrigin>

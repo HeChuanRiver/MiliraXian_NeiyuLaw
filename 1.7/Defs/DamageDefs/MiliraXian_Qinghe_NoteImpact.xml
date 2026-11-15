@@ -23,13 +23,16 @@
     <buildingDamageFactor>3</buildingDamageFactor>
     <deathMessage>{0}被花信铃的共振震碎了。</deathMessage>
   </DamageDef>
+
+  <!-- 基础斩击类型 -->
   <DamageDef Name="MX_QH_SlashBase" Abstract="True">
     <workerClass>MiliraXian.Characters.QingHe.Things.Weapons.DamageWorker_QingheSlash</workerClass>
     <externalViolence>true</externalViolence>
     <armorCategory>Sharp</armorCategory>
     <hediff>Cut</hediff>
-    <deathMessage>{0}被清荷的剑势斩倒了。</deathMessage>
+    <deathMessage>{0}被清荷的剑气斩倒了。</deathMessage>
   </DamageDef>
+  <!-- 散华 -->
   <DamageDef ParentName="MX_QH_SlashBase">
     <defName>MX_QH_Slash</defName>
     <label>散华斩击</label>
@@ -60,7 +63,7 @@
   <DamageDef ParentName="MX_QH_TechniqueSlashBase">
     <defName>MX_QH_CrossSlash</defName>
     <label>拔刀十字斩</label>
-    <deathMessage>{0}倒在了清荷的拔刀十字斩之下。</deathMessage>
+    <deathMessage>{0}倒在了清荷的十字斩之下。</deathMessage>
     <modExtensions Inherit="True">
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
         <canGainSwordPressure>true</canGainSwordPressure>
@@ -73,7 +76,7 @@
   <DamageDef ParentName="MX_QH_TechniqueSlashBase">
     <defName>MX_QH_CounterSlash</defName>
     <label>拔刀斩化解</label>
-    <deathMessage>{0}的攻势被化解，随即倒在清荷的反击之下。</deathMessage>
+    <deathMessage>{0}的攻击被巧妙地化解，随即倒在清荷的反击之下。</deathMessage>
     <modExtensions Inherit="True">
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
         <canGainSwordPressure>true</canGainSwordPressure>
@@ -98,7 +101,7 @@
   <!-- 樱舞接雷之后的刀（雷返，含第三刀雷电奉还） -->
   <DamageDef ParentName="MX_QH_TechniqueSlashBase">
     <defName>MX_QH_SakuraThunderSlash</defName>
-    <label>樱舞·雷返</label>
+    <label>雷电奉还</label>
     <deathMessage>{0}被清荷击出的落雷击倒了。</deathMessage>
     <buildingDamageFactor>2</buildingDamageFactor>
     <modExtensions Inherit="True">
@@ -133,11 +136,11 @@
       </li>
     </modExtensions>
   </DamageDef>
-  <!-- 斩铁剑【红莲】落地的 5 次判定、燕回返【月华】合鞘的一次判定（建筑伤害 ×1.5，不按命中积累剑压：剑压在起跳时一次花光） -->
+
   <DamageDef ParentName="MX_QH_TechniqueSlashBase">
     <defName>MX_QH_Zantetsuken_Guren</defName>
     <label>斩铁剑【红莲】</label>
-    <deathMessage>{0}被清荷从天而降的斩铁剑【红莲】劈倒了。</deathMessage>
+    <deathMessage>{0}被清荷从天而降的斩铁剑【红莲】打倒了。</deathMessage>
     <buildingDamageFactor>1.5</buildingDamageFactor>
     <modExtensions Inherit="True">
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">
@@ -146,10 +149,11 @@
       </li>
     </modExtensions>
   </DamageDef>
+
   <DamageDef ParentName="MX_QH_TechniqueSlashBase">
     <defName>MX_QH_Gaeshi_Gekka</defName>
     <label>燕回返【月华】</label>
-    <deathMessage>{0}在清荷合鞘的一声轻响中倒在了燕回返【月华】之下。</deathMessage>
+    <deathMessage>{0}在侥幸躲过清荷的攻击后，被回身追击打倒了。</deathMessage>
     <buildingDamageFactor>1.5</buildingDamageFactor>
     <modExtensions Inherit="True">
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.QingheSlashExtension">

@@ -5,7 +5,6 @@
         <label>散华斩击</label>
     </ToolCapacityDef>
 
-    <!-- 剑舞架势普攻的扫掠出伤：每次接触交回散华斩击自己判定命中、闪避、格挡和战斗日志 -->
     <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
         <defName>MX_QH_SwordSweep</defName>
         <targetFaction>Hostile</targetFaction>
@@ -17,27 +16,16 @@
         <workerClass>MiliraXian.Characters.Common.SweepDamage.SweepDamageWorker_Verb</workerClass>
     </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
 
-    <!--
-      剑舞架势的防御（初值，实机再调）。防御在敌人命中判定之前：
-      空闲或最后一斩之后：停下举刀防御，按「化解几率」弹开，否则普通格挡；
-      防御中再受击：必定弹开，防御延长（逐次递减）；
-      收刀和蓄势（举刀）中受近战攻击：必定弹开并立即反击追斩；
-      拔刀到最后一斩结束：不防御，被近战打中时自身额外受架势伤害。
-    -->
     <MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
         <defName>MX_QH_SwordGuard</defName>
         <!-- 处决固定是散华的居合：播放散华动作集里的十字斩片段，手上也画散华（伤害固定，与手持武器无关） -->
         <executionWeapon>MX_QH_Weapon_Sword</executionWeapon>
-        <!--
-          剑舞的防御动作，任何近战武器都一样（动作是剑舞的，刀长什么样是武器的事）。
-          投影和清荷的身体对齐（同散华动作集）。化解动作接十字斩反击，留在散华上。
-        -->
         <guardMotion>
             <heightToScreen>0.35</heightToScreen>
             <heightOrigin>-0.63</heightOrigin>
             <depthToScreen>0.55</depthToScreen>
             <blendSeconds>0.08</blendSeconds>
-            <!-- 防御（手写初值）：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
+            <!-- 防御：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
             <guard>
                 <durationSeconds>0.12</durationSeconds>
                 <blade>

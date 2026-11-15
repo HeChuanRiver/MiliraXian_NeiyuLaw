@@ -60,8 +60,8 @@
   <FactionDef ParentName="PlayerFactionBase">
     <defName>MiliraXian_QinghePlayerFaction</defName>
     <!-- TODO：记得改名字 -->
-    <label>清荷测试玩家派系</label>
-    <description>清荷测试玩家派系</description>
+    <label>荷雨亭</label>
+    <description>此为剧本「花庭初绽」中清荷的玩家开局派系。清荷孤身一人在边缘世界世界落脚，其后的一切仍未可知。</description>
     <isPlayer>true</isPlayer>
     <basicMemberKind>Milira_Colonist</basicMemberKind>
     <pawnSingular>居民</pawnSingular>

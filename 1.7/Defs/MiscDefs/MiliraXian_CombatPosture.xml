@@ -18,9 +18,8 @@
 
   <HediffDef>
     <defName>MX_CombatPosture</defName>
-    <label>兵刃架势</label>
-    <description>被兵刃格挡时积累的架势压力。健康越差，承受上限越低，恢复越慢。架势崩溃后暂时无法行动，格挡者可趁隙处决。
-部分格挡会留下短暂破绽，使下一次有效直接攻击伤害翻倍，生效一次后消失。</description>
+    <label>架势</label>
+    <description>近身战斗时需要集中精神维持身体平衡。\n\n攻击被招架或弹开、化解，或是自身被特定攻击命中时架势值会增加。架势值越高，身体平衡越难维持，若失去平衡则会露出致命破绽。健康状态决定架势值的上限，状态越差上限越低。部分格挡会留下短暂破绽，使下一次有效直接攻击伤害翻倍，生效一次后消失。</description>
     <hediffClass>MiliraXian.Characters.Common.Combat.Hediff_CombatPosture</hediffClass>
     <isBad>true</isBad>
     <initialSeverity>1</initialSeverity>
@@ -41,7 +40,7 @@
   <JobDef>
     <defName>MX_CombatPostureBroken</defName>
     <driverClass>MiliraXian.Characters.Common.Combat.JobDriver_CombatPostureBroken</driverClass>
-    <reportString>正在重整架势。</reportString>
+    <reportString>正在重整姿态。</reportString>
     <!-- 受伤不重新选 Job：原版受伤时会重算 Job，崩溃的敌人一挨打就站起来，破绽随之解除，等不到处决 -->
     <checkOverrideOnDamage>Never</checkOverrideOnDamage>
     <allowOpportunisticPrefix>false</allowOpportunisticPrefix>

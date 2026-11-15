@@ -17,7 +17,7 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->接取后解锁荷池。建成荷池后，清荷加入殖民地，并开启整理荷雨亭和升级引导任务。</li>
+        <li>questDescription->一封带着幽香的神秘信件飘到了殖民地。信纸上画着一位美丽女性米莉拉的背影，另附了一根素雅的图签，夹在题着“莲花种植图解”的画册里。\n\n特殊角色【清荷】支线：\n - 接取后解锁建造个人建筑“荷雨池”，继续推进任务即可招募清荷并开启后续的角色养成支线。\n - Mod: 米莉拉角色拓展</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourt_AvailableQuest" />
@@ -38,7 +38,7 @@
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->已获得荷池设计图，可以建造荷池。建成后开启整理荷雨亭和升级引导任务。</li>
+        <li>questDescription->现在可以建造“荷雨池”了。虽然荷花只能观赏，但是多种一些也许会有好事发生吧。\n\n完成后开启后续任务：整理荷雨亭、初探灵力</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="MiliraXian.Characters.QingHe.QuestNode_Root_QingheFlowerCourt_AvailableQuest">
@@ -77,12 +77,12 @@
     <endOnColonyMove>false</endOnColonyMove>
     <questNameRules>
       <rulesStrings>
-        <li>questName->升级引导</li>
+        <li>questName->初探灵力</li>
       </rulesStrings>
     </questNameRules>
     <questDescriptionRules>
       <rulesStrings>
-        <li>questDescription->让清荷的精通等级达到1级。</li>
+        <li>questDescription->通过制作物品、读书或对敌人造成伤害，令清荷的精通等级达到1级。</li>
       </rulesStrings>
     </questDescriptionRules>
     <root Class="MiliraXian.Characters.QingHe.Quests.QuestNode_Root_QingheFlowerCourtGuide">

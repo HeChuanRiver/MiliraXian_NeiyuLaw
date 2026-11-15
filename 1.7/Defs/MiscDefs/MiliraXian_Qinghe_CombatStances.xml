@@ -3,7 +3,7 @@
   <MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
     <defName>MX_QH_Stance_Sword</defName>
     <label>剑舞</label>
-    <description>以灵巧的剑术近身战斗的姿态风格。远看身影如同起舞。空闲时自动以刀防御近战和弹丸，有一定几率将攻击弹开；收刀蓄势时受到近战攻击，必定弹开并立即拔刀反击。敌人的架势被打满后，会以居合将其处决。</description>
+    <description>以灵巧的剑术近身战斗的姿态风格。远看身影如同起舞。可以招架敌人的攻击，并有一定几率弹开（完美招架）。</description>
     <weaponClass>Melee</weaponClass>
     <stanceEffect>
       <statOffsets>
@@ -14,7 +14,7 @@
   <MiliraXian.Characters.QingHe.CombatStance.CombatStanceDef>
     <defName>MX_QH_Stance_Bell</defName>
     <label>华彩</label>
-    <description>以远程武器施展法术的姿态风格。立于花影之间，通过飞花令多样的异常效果削弱敌人。</description>
+    <description>以远程武器进行长距离压制和施展法术的姿态风格。立于花影之间，通过飞花令多样的异常效果削弱敌人。可以闪避敌人的远程攻击。</description>
     <weaponClass>Ranged</weaponClass>
     <stanceEffect>
       <statOffsets>
