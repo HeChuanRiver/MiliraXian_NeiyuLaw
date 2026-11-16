@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,18 +15,17 @@ public sealed class Dialog_MingyuanEmberBook : Window
     private readonly MingyuanEmberBook book;
     private readonly List<MingyuanEmberNodeDef> nodes;
     private readonly List<CharacterPerkCategoryDef> categories;
-    private readonly Dictionary<MingyuanEmberNodeDef, Rect> hits = new();
     private readonly Dictionary<MingyuanEmberNodeDef, NodeView> views = new();
-    private readonly HashSet<MingyuanEmberNodeDef> selectedPath = new();
+    private readonly CharacterPerkCanvas<MingyuanEmberNodeDef> canvas;
     private MingyuanEmberNodeDef selected;
     private CharacterPerkCategoryDef branch;
-    private Vector2 pan, viewportSize, detailsScroll, dragStart, panStart;
-    private float zoom = .5f, detailHeight = 440;
-    private bool fitted, dragging, searchOpen;
+    private Vector2 viewportSize, detailsScroll;
+    private float detailHeight = 440;
+    private bool fitted, searchOpen;
     private string search = "", lastSearch = "", message;
     private int searchCursor;
     private (int tree, int seal, int insight, int ash, int tick) stateKey = (-1, -1, -1, -1, -1);
-    private readonly record struct NodeView(int Rank, bool CanLearn, string State, string Reason, EmberNodeVisual Visual);
+    private readonly record struct NodeView(int Rank, bool CanLearn, string State, string Reason, PerkNodeVisual Visual);
 
     public override Vector2 InitialSize => new(Mathf.Min(1680, UI.screenWidth - 32), Mathf.Min(1000, UI.screenHeight - 32));
     protected override float Margin => 0;
@@ -35,6 +35,11 @@ public sealed class Dialog_MingyuanEmberBook : Window
         this.book = book;
         nodes = MingyuanEmberBook.Config.Nodes;
         categories = nodes.Where(n => n.effect != EmberEffect.Origin).Select(n => n.category).Distinct().ToList();
+        canvas = new(nodes, n => n.position,
+            n => new PerkCanvasState(views[n].Rank, views[n].Rank > 0 && !MingyuanPowerBalance.Sealed,
+                n.LabelCap + "  " + views[n].Rank + "/" + n.maxLevel + " · " + views[n].State + "\n" + n.description
+                + (n.tradeoff.NullOrEmpty() ? "" : "\n" + n.tradeoff)),
+            (r, n, chosen, dim) => Node(r, Icon(n), views[n].Visual, chosen, dim), Ink, Muted, Rule, Gold);
         Select(nodes.FirstOrDefault(n => n.effect == EmberEffect.CombatMove) ?? nodes.FirstOrDefault());
         forcePause = true;
         absorbInputAroundWindow = true;
@@ -100,9 +105,9 @@ public sealed class Dialog_MingyuanEmberBook : Window
                     + " / " + book.TrialTarget(node.trial).ToString("0");
             }
             else state = T("PrerequisiteMissing", "前置不足");
-            EmberNodeVisual visual = MingyuanPowerBalance.Sealed ? EmberNodeVisual.Locked
-                : rank >= node.maxLevel ? EmberNodeVisual.Mastered : rank > 0 ? EmberNodeVisual.Learned
-                : can ? EmberNodeVisual.Available : EmberNodeVisual.Locked;
+            PerkNodeVisual visual = MingyuanPowerBalance.Sealed ? PerkNodeVisual.Locked
+                : rank >= node.maxLevel ? PerkNodeVisual.Mastered : rank > 0 ? PerkNodeVisual.Learned
+                : can ? PerkNodeVisual.Available : PerkNodeVisual.Locked;
             views[node] = new NodeView(rank, can, state, reason, visual);
         }
     }
@@ -191,9 +196,10 @@ public sealed class Dialog_MingyuanEmberBook : Window
             }
             Rect viewport = new(0, top, rect.width, Mathf.Max(80, rect.height - top - 62));
             if (viewportSize != viewport.size) { viewportSize = viewport.size; fitted = false; }
+            canvas.Size = viewportSize;
             if (!fitted) { Fit(); fitted = true; }
             GUI.BeginGroup(viewport);
-            try { DrawGraph(viewport.size); }
+            try { if (canvas.Draw(selected, Dim) is { } clicked) Select(clicked); }
             finally { GUI.EndGroup(); }
 
             float legendY = rect.height - 54;
@@ -202,7 +208,7 @@ public sealed class Dialog_MingyuanEmberBook : Window
             for (int i = 0; i < labels.Length; i++)
             {
                 float x = 12 + i * legendWidth;
-                Symbol(new Rect(x, legendY + 4, 14, 14), (EmberNodeVisual)i, i == 0 ? Muted : Gold);
+                Symbol(new Rect(x, legendY + 4, 14, 14), (PerkNodeVisual)i, i == 0 ? Muted : Gold);
                 Label(new Rect(x + 22, legendY, legendWidth - 22, 22), labels[i], Muted, GameFont.Tiny, TextAnchor.MiddleLeft);
             }
             Label(new Rect(12, rect.height - 26, Mathf.Max(70, rect.width - 146), 22),
@@ -214,21 +220,8 @@ public sealed class Dialog_MingyuanEmberBook : Window
         finally { GUI.EndGroup(); }
     }
 
-    private void Fit()
-    {
-        var visible = branch == null ? nodes : nodes.Where(n => n.category == branch).ToList();
-        if (visible.Count == 0) return;
-        Vector2 min = new(visible.Min(n => n.position.x), visible.Min(n => n.position.y));
-        Vector2 max = new(visible.Max(n => n.position.x), visible.Max(n => n.position.y));
-        zoom = Mathf.Clamp(Mathf.Min((viewportSize.x - 126) / Mathf.Max(230, max.x - min.x),
-            (viewportSize.y - 112) / Mathf.Max(200, max.y - min.y)), .18f, .84f);
-        pan = viewportSize * .5f - (min + max) * .5f * zoom - new Vector2(0, 12);
-    }
-    private void ZoomAt(float factor, Vector2 point)
-    {
-        float previous = zoom; zoom = Mathf.Clamp(zoom * factor, .18f, 1.5f);
-        pan = point - (point - pan) * (zoom / previous);
-    }
+    private void Fit() => canvas.Fit(branch == null ? nodes : nodes.Where(n => n.category == branch));
+    private void ZoomAt(float factor, Vector2 point) => canvas.ZoomAt(factor, point);
     private bool Matches(MingyuanEmberNodeDef node) => search.NullOrEmpty()
         || (node.label + " " + node.description).IndexOf(search.Trim(), StringComparison.OrdinalIgnoreCase) >= 0;
     private void LocateSearch()
@@ -238,101 +231,16 @@ public sealed class Dialog_MingyuanEmberBook : Window
         if (matches.Count == 0) { message = T("NoMatch", "没有匹配的节点。"); return; }
         Select(matches[searchCursor % matches.Count]);
         branch = null;
-        zoom = .70f; pan = viewportSize * .5f - selected.position * zoom;
+        canvas.Focus(selected);
     }
     private void Select(MingyuanEmberNodeDef node)
     {
         selected = node; detailsScroll = Vector2.zero; message = null;
-        selectedPath.Clear();
-        void Visit(MingyuanEmberNodeDef current)
-        {
-            if (current == null || !selectedPath.Add(current) || current.prerequisites == null) return;
-            foreach (var parent in current.prerequisites) Visit(parent.node as MingyuanEmberNodeDef);
-        }
-        Visit(node);
+        canvas.Select(node);
     }
     private bool Dim(MingyuanEmberNodeDef node) =>
         (branch != null && node.category != branch && node.effect != EmberEffect.Origin)
-        || (!Matches(node) && !selectedPath.Contains(node));
-
-    private void DrawGraph(Vector2 size)
-    {
-        Rect viewport = new(0, 0, size.x, size.y);
-        bool captions = zoom >= .29f;
-        float diameter = Mathf.Clamp(zoom * 92, 26, 62);
-        float labelWidth = Mathf.Min(116, Mathf.Max(70, zoom * 220));
-        hits.Clear();
-        foreach (var node in nodes)
-        {
-            Vector2 c = pan + node.position * zoom;
-            float width = captions ? labelWidth : Mathf.Max(32, diameter);
-            hits[node] = new Rect(c.x - width * .5f, c.y - diameter * .5f, width, diameter + (captions ? 32 : 5));
-        }
-        HandleGraphInput(viewport);
-        foreach (var node in nodes)
-        {
-            if (node.prerequisites == null) continue;
-            foreach (var requirement in node.prerequisites)
-            {
-                if (requirement.node is not MingyuanEmberNodeDef parent) continue;
-                Vector2 a = pan + parent.position * zoom, b = pan + node.position * zoom;
-                a.y += diameter * .5f + (captions ? 31 : 4);
-                b.y -= diameter * .5f + 5;
-                bool learned = views[node].Rank > 0 && views[parent].Rank > 0 && !MingyuanPowerBalance.Sealed;
-                bool path = selectedPath.Contains(node) && selectedPath.Contains(parent);
-                Color color = path ? Gold : learned ? new Color(.66f, .40f, .18f) : Rule;
-                if (Dim(node)) color.a = .18f;
-                Vector2 bendA = new(a.x, Mathf.Lerp(a.y, b.y, .45f)), bendB = new(b.x, bendA.y);
-                DrawConnection(a, bendA, bendB, b, color, path || learned);
-            }
-        }
-        foreach (var node in nodes)
-        {
-            Rect hit = hits[node];
-            if (!hit.Overlaps(viewport)) continue;
-            NodeView view = views[node];
-            bool dim = Dim(node);
-            Rect icon = new(hit.center.x - diameter * .5f, hit.y, diameter, diameter);
-            Node(icon, Icon(node), view.Visual, node == selected, dim);
-            if (captions)
-            {
-                Rect caption = new(hit.x, icon.yMax + 6, hit.width, 20);
-                Label(caption, node.LabelCap, dim ? Rule : view.Visual == EmberNodeVisual.Locked ? Muted : Ink,
-                    GameFont.Tiny, TextAnchor.MiddleCenter);
-                if (node.maxLevel > 1) Ranks(new(hit.center.x, caption.yMax + 5), view.Rank, node.maxLevel, dim ? Rule : Gold);
-            }
-            if (!dim)
-            {
-                if (!dragging && Widgets.ButtonInvisible(hit)) Select(node);
-                TooltipHandler.TipRegion(hit, node.LabelCap + "  " + view.Rank + "/" + node.maxLevel + " · " + view.State
-                    + "\n" + node.description + (node.tradeoff.NullOrEmpty() ? "" : "\n" + node.tradeoff));
-            }
-        }
-    }
-    private static void DrawConnection(Vector2 a, Vector2 bendA, Vector2 bendB, Vector2 b, Color color, bool lit)
-    {
-        if (Event.current.type != EventType.Repaint) return;
-        if (lit)
-        {
-            Color glow = new(color.r, color.g, color.b, color.a * .12f);
-            Widgets.DrawLine(a, bendA, glow, 3); Widgets.DrawLine(bendA, bendB, glow, 3); Widgets.DrawLine(bendB, b, glow, 3);
-        }
-        Widgets.DrawLine(a, bendA, color, lit ? 1.2f : .65f);
-        Widgets.DrawLine(bendA, bendB, color, lit ? 1.2f : .65f);
-        Widgets.DrawLine(bendB, b, color, lit ? 1.2f : .65f);
-    }
-    private void HandleGraphInput(Rect viewport)
-    {
-        Event e = Event.current;
-        bool overNode = hits.Any(p => !Dim(p.Key) && p.Value.Contains(e.mousePosition));
-        if (e.type == EventType.ScrollWheel && viewport.Contains(e.mousePosition))
-        { ZoomAt(e.delta.y < 0 ? 1.12f : 1 / 1.12f, e.mousePosition); e.Use(); }
-        if (e.type == EventType.MouseDown && viewport.Contains(e.mousePosition) && (e.button == 2 || e.button == 0 && !overNode))
-        { dragging = true; dragStart = e.mousePosition; panStart = pan; GUI.FocusControl(null); e.Use(); }
-        if (dragging && e.type == EventType.MouseDrag) { pan = panStart + e.mousePosition - dragStart; e.Use(); }
-        if (dragging && e.rawType == EventType.MouseUp) { dragging = false; e.Use(); }
-        if (e.type == EventType.Ignore) dragging = false;
-    }
+        || (!Matches(node) && !canvas.SelectedPath.Contains(node));
 
     private void DrawDetails(Rect rect)
     {

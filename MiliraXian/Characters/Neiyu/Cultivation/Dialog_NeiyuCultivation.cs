@@ -25,8 +25,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         }
 
         internal static Vector2 FitSize(float width, float height) => new(
-            Mathf.Min(1260f, Mathf.Max(240f, width - 32f)),
-            Mathf.Min(820f, Mathf.Max(240f, height - 32f)));
+            Mathf.Min(1680f, Mathf.Max(240f, width - 32f)),
+            Mathf.Min(1000f, Mathf.Max(240f, height - 32f)));
 
         public override void DoWindowContents(Rect inRect)
         {

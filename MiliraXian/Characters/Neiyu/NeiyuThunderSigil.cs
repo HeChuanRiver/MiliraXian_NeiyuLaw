@@ -247,7 +247,8 @@ public partial class NeiyuCombatMapComponent
                 ThunderTask task = new()
                 {
                     caster = caster, target = target, remainingStrikes = strikes,
-                    nextStrikeTick = now + Mathf.Max(1, props.firstDelayTicksRange.RandomInRange),
+                    nextStrikeTick = now + Mathf.Max(1, props.firstDelayTicksRange.RandomInRange
+                        - Mathf.RoundToInt((CultivationService.State(caster)?.Bonus(CultivationEffect.ThunderHaste) ?? 0f) * 60f)),
                     intervalMin = Mathf.Max(1, props.strikeIntervalTicksRange.min),
                     intervalMax = Mathf.Max(1, props.strikeIntervalTicksRange.max),
                     damageAmount = Mathf.Max(0, props.damageAmount), empDamageAmount = Mathf.Max(0, props.empDamageAmount),

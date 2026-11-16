@@ -103,7 +103,9 @@ public static class CombatBlock
         // A successful block never rolls dodge. A failed block reaches the exact
         // native chance, including other mods' patches on GetDodgeChance.
         if (Blocked(verb, target)) return false;
-        return Rand.Chance(NativeCall.Dodge(verb, target));
+        bool dodged = Rand.Chance(NativeCall.Dodge(verb, target));
+        if (dodged) Neiyu.Cultivation.CultivationService.State(target.Pawn)?.NotifyDodge(verb.CasterPawn);
+        return dodged;
     }
 
     // Damage is about to be applied and no blocker stopped it.
@@ -290,6 +292,7 @@ internal static class Patch_CombatBlockMeleeDamage
 internal static class Patch_CombatBlockProjectile
 {
     [ThreadStatic] private static Projectile activeProjectile;
+    internal static Projectile Current => activeProjectile;
     internal readonly struct Scope(Projectile previous, bool owns)
     {
         internal void Restore() { if (owns) activeProjectile = previous; }
@@ -309,10 +312,10 @@ internal static class Patch_CombatBlockProjectile
     private static bool Prefix(Projectile __instance, Thing __0, bool __1, out Scope __state)
     {
         __state = default;
-        if (activeProjectile == __instance || __1 || __0 is not Pawn defender
-            || !CombatBlockers.Covers(defender)) return true;
+        if (activeProjectile == __instance) return true;
         __state = new Scope(activeProjectile, true);
         activeProjectile = __instance;
+        if (__1 || __0 is not Pawn defender || !CombatBlockers.Covers(defender)) return true;
         return !CombatBlockers.TryBlockProjectile(__instance, defender);
     }
 

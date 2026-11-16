@@ -1,401 +1,211 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MiliraXian.Characters.Common.PerkSystem;
-using RimWorld;
+using MiliraXian.Characters.Common.UI;
 using UnityEngine;
 using Verse;
+using static MiliraXian.Characters.Neiyu.Cultivation.CultivationArt;
 
-namespace MiliraXian.Characters.Neiyu.Cultivation
+namespace MiliraXian.Characters.Neiyu.Cultivation;
+
+internal sealed class CultivationView
 {
-    // A bounded, immediate-mode view. Geometry is derived from available space and text
-    // measurements; no business state, material searches, or textures are created here.
-    internal sealed class CultivationView
+    private CharacterPerkCanvas<NeiyuCultivationNodeDef> canvas;
+    private Vector2 detailsScroll, lastSize;
+    private bool fitted, detailOnly;
+    private string search = "", lastSelected;
+    private float contentHeight = 600;
+
+    internal bool Draw(Rect rect, CultivationViewModel model)
     {
-        private const float Gap = 12f;
-        private static readonly Color Accent = new(.72f, .87f, .84f);
-        private static readonly Color Gold = new(.92f, .82f, .60f);
-        private static readonly Color Ink = new(.95f, .94f, .88f);
-        private static readonly Color Muted = new(.78f, .83f, .80f);
-        private static readonly Color Warning = new(.94f, .71f, .61f);
-        private readonly Dictionary<(string, int, GameFont), float> textHeights = new();
-        private Vector2 listScroll, detailScroll;
-        private bool narrowDetails;
-        private bool compact;
-        private string selectedId;
-
-        internal static bool SingleColumn(float width) => width < 720f;
-        internal static float ListWidth(float width) => Mathf.Clamp(width * .34f, 225f, 360f);
-        internal static bool StackEffectValues(float width) => width < 340f;
-
-        public bool Draw(Rect rect, CultivationViewModel model)
+        Color color = GUI.color; GameFont font = Text.Font; TextAnchor anchor = Text.Anchor; bool wrap = Text.WordWrap;
+        try
         {
-            Color oldColor = GUI.color;
-            GameFont oldFont = Text.Font;
-            TextAnchor oldAnchor = Text.Anchor;
-            bool oldWrap = Text.WordWrap;
-            try
+            GUI.color = Color.white; Text.Font = GameFont.Small; Text.Anchor = TextAnchor.UpperLeft; Text.WordWrap = true;
+            if (model.State == null) { Theme.Label(rect.ContractedBy(30), "修行状态尚未就绪。", Ink); return false; }
+            canvas ??= new(model.Nodes, n => model.Positions[n],
+                n => new PerkCanvasState(model.States[n].Rank, model.State.Tree.EffectiveNodeLevel(n) > 0,
+                    n.LabelCap + "  " + model.States[n].Rank + "/" + n.maxLevel + " · " + model.States[n].Status + "\n" + n.EffectText(Math.Max(1, model.States[n].Rank))),
+                (r, n, chosen, dim) => Theme.Node(r, Icon(n), model.States[n].Visual, chosen, dim), Ink, Muted, Rule, Accent, horizontal: true);
+            if (lastSelected != model.Selected?.defName)
+            { lastSelected = model.Selected?.defName; detailsScroll = Vector2.zero; canvas.Select(model.Selected); }
+            GUI.DrawTexture(rect, TreeBackdrop, ScaleMode.ScaleAndCrop);
+            Widgets.DrawBoxSolid(rect.ContractedBy(4), new Color(.04f, .08f, .14f, .36f));
+            if (Header(new Rect(rect.x, rect.y, rect.width, 76), model)) return true;
+            Rect body = new(rect.x + 18, rect.y + 86, rect.width - 36, rect.height - 104);
+            bool narrow = body.width < 740;
+            float side = body.width < 1060 ? 0 : 160;
+            float detail = Mathf.Clamp(body.width * .26f, 280, 350);
+            if (side > 0) Sidebar(new Rect(body.x, body.y, side, body.height), model);
+            Rect graph = new(body.x + side, body.y, body.width - side - (narrow ? 0 : detail + 16), body.height);
+            if (narrow && detailOnly)
             {
-                GUI.color = Color.white;
-                Text.Font = GameFont.Small;
-                Text.Anchor = TextAnchor.UpperLeft;
-                Text.WordWrap = true;
-                compact = rect.height < 520f;
-                // Keep the generated alpha silhouette clear of the content. The same
-                // inset scales both the nine-slice corners and the safe reading area.
-                float rim = Mathf.Min(40f, Mathf.Min(rect.width, rect.height) * .065f);
-                CultivationArt.DrawFrame(rect, CultivationArt.SoftBackdrop, Color.white, rim * 2.4f);
-                Rect inner = rect.ContractedBy(rim);
-                float headerTextWidth = inner.width - (!compact && inner.width > 480f ? 104f : 0f) - 44f;
-                float headerHeight = (compact ? 0f : 23f) + Height(CultivationText.Title, headerTextWidth, GameFont.Medium) + 4f
-                    + Height(model.Pawn.LabelShortCap + "   ·   " + model.Progress, headerTextWidth, GameFont.Tiny);
-                Rect header = new(inner.x, inner.y, inner.width, headerHeight);
-                CultivationArt.DrawFrame(header.ExpandedBy(rim * .2f), CultivationArt.Panel, new Color(1f, 1f, 1f, .88f), 18f);
-                DrawHeader(header, model);
-                Rect close = new(header.xMax - 32f, header.y, 32f, 32f);
-                if (Button(close, "×", CultivationText.Get("Close", "关闭 · Esc"), false, true)) return true;
-
-                float tabsY = header.yMax + Gap;
-                float tabWidth = (inner.width - Gap * Math.Max(0, model.Categories.Count - 1)) / Math.Max(1, model.Categories.Count);
-                bool stackedTabs = tabWidth < 150f && !compact;
-                float tabHeight = 48f;
-                for (int i = 0; i < model.Categories.Count; i++)
-                    tabHeight = Mathf.Max(tabHeight, Height(model.Categories[i].LabelCap, tabWidth - (stackedTabs ? 20f : compact ? 50f : 58f))
-                        + (stackedTabs ? 38f : 0f) + 16f);
-                for (int i = 0; i < model.Categories.Count; i++)
-                {
-                    var category = model.Categories[i];
-                    Rect tab = new(inner.x + i * (tabWidth + Gap), tabsY, tabWidth, tabHeight);
-                    if (Button(tab, category.LabelCap, category.LabelCap + " · " + model.CategoryProgress(category), model.Category == category, true, CultivationArt.ForCategory(category), compact))
-                    {
-                        model.SelectCategory(category);
-                        listScroll = detailScroll = Vector2.zero;
-                        narrowDetails = false;
-                    }
-                }
-                float bodyY = tabsY + tabHeight + Gap;
-                Rect body = new(inner.x, bodyY, inner.width, Mathf.Max(0f, inner.yMax - bodyY));
-                if (model.Selected?.defName != selectedId)
-                {
-                    selectedId = model.Selected?.defName;
-                    detailScroll = Vector2.zero;
-                }
-                if (SingleColumn(body.width))
-                {
-                    if (narrowDetails) DrawDetails(body, model, true);
-                    else DrawNodes(body, model, true);
-                }
-                else
-                {
-                    float width = ListWidth(body.width);
-                    DrawNodes(new Rect(body.x, body.y, width, body.height), model, false);
-                    DrawDetails(new Rect(body.x + width + Gap, body.y, body.width - width - Gap, body.height), model, false);
-                }
-                return false;
+                if (Theme.Button(new Rect(body.x, body.y, 100, 30), "返回图谱", quiet: true)) detailOnly = false;
+                Details(new Rect(body.x, body.y + 38, body.width, body.height - 38), model);
             }
-            finally
+            else
             {
-                GUI.color = oldColor;
-                Text.Font = oldFont;
-                Text.Anchor = oldAnchor;
-                Text.WordWrap = oldWrap;
+                Graph(graph, model, side == 0, narrow);
+                if (!narrow) Details(new Rect(body.xMax - detail, body.y, detail, body.height), model);
             }
+            return false;
         }
-
-        private void DrawHeader(Rect rect, CultivationViewModel model)
-        {
-            if (!compact && rect.width > 480f) DrawIcon(new Rect(rect.x, rect.y, 86f, rect.height), CultivationArt.Emblem);
-            float offset = !compact && rect.width > 480f ? 104f : 0f;
-            float width = rect.width - offset - 44f;
-            float y = rect.y;
-            if (!compact)
-            {
-                Label(new Rect(rect.x + offset, y, width, 22f), CultivationText.Get("Header", "米莉拉 · 羽律"), Gold, GameFont.Tiny);
-                y += 23f;
-            }
-            float titleHeight = Height(CultivationText.Title, width, GameFont.Medium);
-            Label(new Rect(rect.x + offset, y, width, titleHeight), CultivationText.Title, Ink, GameFont.Medium);
-            y += titleHeight + 4f;
-            string sub = model.Pawn.LabelShortCap + "   ·   " + model.Progress;
-            float subHeight = Height(sub, width, GameFont.Tiny);
-            Label(new Rect(rect.x + offset, y, width, subHeight), sub, Muted, GameFont.Tiny);
-            TooltipHandler.TipRegion(new Rect(rect.x + offset, y, width, subHeight), sub);
-        }
-
-        private void DrawNodes(Rect rect, CultivationViewModel model, bool narrow)
-        {
-            CultivationArt.DrawFrame(rect, CultivationArt.Panel, Color.white);
-            Rect viewport = rect.ContractedBy(14f);
-            float width = Mathf.Max(1f, viewport.width - 18f);
-            float contentHeight = 0f;
-            foreach (var node in model.VisibleNodes)
-                contentHeight += NodeHeight(node, width) + Gap;
-            string hint = model.VisibleNodes.Exists(n => n.ability != null)
-                ? "折跃引羽：固有能力，施法3秒生成12～24根羽毛，冷却300秒。"
-                : "以羽为引，循光而行。";
-            contentHeight += Height(hint, width) + 26f;
-            NeiyuCultivationNodeDef clickedNode = null;
-            Widgets.BeginScrollView(viewport, ref listScroll, new Rect(0, 0, width, Mathf.Max(viewport.height, contentHeight)));
-            try
-            {
-                float y = 0f;
-                foreach (var node in model.VisibleNodes)
-                {
-                    float height = NodeHeight(node, width);
-                    Rect row = new(0f, y, width, height);
-                    y += height + Gap;
-                    if (row.yMax < listScroll.y || row.y > listScroll.y + viewport.height) continue;
-                    bool selected = model.Selected == node;
-                    bool learned = model.Learned(node);
-                    bool next = model.Rank(node) + 1 == node.rank;
-                    CultivationArt.DrawFrame(row, selected ? CultivationArt.ButtonActive : CultivationArt.Button,
-                        Mouse.IsOver(row) && !selected ? new Color(1.10f, 1.10f, 1.10f) : Color.white);
-                    Rect text = row.ContractedBy(14f);
-                    string status = learned ? CultivationText.Get("Learned", "已领悟") : next ? CultivationText.Get("Next", "待领悟") : CultivationText.Get("Locked", "未解锁");
-                    string badge = "0" + node.rank + "   /   " + status;
-                    float badgeHeight = Height(badge, text.width, GameFont.Tiny);
-                    Label(new Rect(text.x, text.y, text.width, badgeHeight), badge, learned || next ? Gold : Muted, GameFont.Tiny);
-                    float titleHeight = Height(node.LabelCap, text.width);
-                    Label(new Rect(text.x, text.y + badgeHeight + 6f, text.width, titleHeight), node.LabelCap, selected ? Gold : Ink);
-                    float descY = text.y + badgeHeight + 6f + titleHeight + 8f;
-                    Label(new Rect(text.x, descY, text.width, Height(node.description, text.width)), node.description, Muted);
-                    TooltipHandler.TipRegion(row, node.description + "\n" + (node.prerequisites.NullOrEmpty() ? "" : CultivationText.Get("Previous", "前置") + " · " + node.prerequisites[0].node.LabelCap));
-                    if (Widgets.ButtonInvisible(row))
-                    {
-                        clickedNode = node;
-                    }
-                }
-                Label(new Rect(0, y + 12f, width, Height(hint, width)), hint, Muted);
-            }
-            finally { Widgets.EndScrollView(); }
-            // Selecting refreshes the model and rebuilds VisibleNodes; finish enumeration first.
-            if (clickedNode != null)
-            {
-                model.Select(clickedNode);
-                detailScroll = Vector2.zero;
-                narrowDetails = narrow;
-            }
-        }
-
-        private float NodeHeight(NeiyuCultivationNodeDef node, float width)
-        {
-            // Reserve enough height for the longest translated state label, not a fixed line.
-            float badge = Mathf.Max(Height("0" + node.rank + "   /   " + CultivationText.Get("Learned", "已领悟"), width - 28f, GameFont.Tiny),
-                Mathf.Max(Height("0" + node.rank + "   /   " + CultivationText.Get("Next", "待领悟"), width - 28f, GameFont.Tiny),
-                    Height("0" + node.rank + "   /   " + CultivationText.Get("Locked", "未解锁"), width - 28f, GameFont.Tiny)));
-            return 28f + badge + 6f + Height(node.LabelCap, width - 28f) + 8f + Height(node.description, width - 28f);
-        }
-
-        private void DrawDetails(Rect rect, CultivationViewModel model, bool narrow)
-        {
-            CultivationArt.DrawFrame(rect, CultivationArt.Panel, Color.white);
-            Rect inner = rect.ContractedBy(18f);
-            var node = model.Selected;
-            if (node == null)
-            {
-                Label(inner, CultivationText.Get("SelectNode", "选择一项修行。"), Muted);
-                return;
-            }
-            if (narrow)
-            {
-                string backLabel = CultivationText.Get("Back", "‹ 返回修行分支");
-                Rect back = new(inner.x, inner.y, inner.width, Mathf.Max(32f, Height(backLabel, inner.width - 20f) + 16f));
-                if (Button(back, backLabel, null, false, true)) narrowDetails = false;
-                inner.yMin += back.height + Gap;
-            }
-            string button = model.Learned(node) ? CultivationText.Get("Learned", "已领悟") :
-                !model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Learn", "消耗材料 · 领悟");
-            float buttonHeight = Mathf.Max(42f, Height(button, inner.width - 24f) + 16f);
-            string feedback = model.Result ?? model.DisabledReason ?? (!model.Ready ? CultivationText.Get("Checking", "核验材料…") : CultivationText.Get("Ready", "材料齐备，可以领悟。"));
-            bool active = model.Ready && model.DisabledReason == null;
-            Color feedbackColor = model.Result != null || active ? Gold : Warning;
-            // Short windows keep every control reachable in one scroll instead of
-            // letting a fixed footer cover the entire reading area.
-            if (inner.height < 260f || Height(feedback, inner.width) > 54f || buttonHeight > inner.height * .3f)
-            {
-                float scrollWidth = Mathf.Max(1f, inner.width - 18f);
-                float readingHeight = DetailsFlow(scrollWidth, model, false);
-                float messageHeight = Height(feedback, scrollWidth);
-                float actionHeight = Mathf.Max(44f, Height(button, scrollWidth - 20f) + 16f);
-                Widgets.BeginScrollView(inner, ref detailScroll, new Rect(0, 0, scrollWidth, readingHeight + messageHeight + actionHeight + 24f));
-                try
-                {
-                    DetailsFlow(scrollWidth, model, true);
-                    Label(new Rect(0, readingHeight + 4f, scrollWidth, messageHeight), feedback, feedbackColor);
-                    if (Button(new Rect(0, readingHeight + messageHeight + 16f, scrollWidth, actionHeight), button, model.DisabledReason, true, active)) model.Learn();
-                }
-                finally { Widgets.EndScrollView(); }
-                return;
-            }
-            // Anchor concise feedback and the action when there is enough reading space.
-            float feedbackHeight = Height(feedback, inner.width);
-            Rect action = new(inner.x, inner.yMax - buttonHeight, inner.width, buttonHeight);
-            Rect reason = new(inner.x, action.y - feedbackHeight - 8f, inner.width, feedbackHeight);
-            Label(reason, feedback, feedbackColor);
-            TooltipHandler.TipRegion(reason, feedback);
-            if (Button(action, button, model.DisabledReason, true, active)) model.Learn();
-
-            Rect viewport = new(inner.x, inner.y, inner.width, Mathf.Max(1f, reason.y - inner.y - Gap));
-            float width = Mathf.Max(1f, viewport.width - 18f);
-            float height = DetailsFlow(width, model, false);
-            Widgets.BeginScrollView(viewport, ref detailScroll, new Rect(0, 0, width, Mathf.Max(viewport.height, height)));
-            try { DetailsFlow(width, model, true); }
-            finally { Widgets.EndScrollView(); }
-        }
-
-        private float DetailsFlow(float width, CultivationViewModel model, bool draw)
-        {
-            float y = 0f;
-            var node = model.Selected;
-            float titleWidth = Mathf.Max(1f, width - 60f);
-            float titleHeight = Mathf.Max(48f, Height(node.LabelCap, titleWidth, GameFont.Medium));
-            if (draw)
-            {
-                DrawIcon(new Rect(0f, (titleHeight - 48f) / 2f, 48f, 48f), CultivationArt.ForCategory(node.category));
-                Label(new Rect(60f, 0f, titleWidth, titleHeight), node.LabelCap, Ink, GameFont.Medium);
-            }
-            y += titleHeight + 12f;
-            Flow(ref y, width, node.description, Muted, draw, gap: 22f);
-            Section(ref y, width, CultivationText.Get("EffectsTitle", "力量变化"), draw);
-            DrawEffects(ref y, width, model.Effects, draw);
-            Section(ref y, width, CultivationText.Get("Requirements", "修行所需"), draw);
-            if (!node.prerequisites.NullOrEmpty())
-                Flow(ref y, width, CultivationText.Get("Previous", "前置") + " · " + node.prerequisites[0].node.LabelCap, Ink, draw, gap: 8f);
-            Flow(ref y, width, model.ConditionText, Muted, draw, gap: 12f);
-            foreach (var cost in model.Costs) Cost(ref y, width, cost, draw);
-            Flow(ref y, width, CultivationText.Get("MaterialScope", "使用本地图储存区中未禁用、可安全到达且可预留的材料。领悟时立即消耗。"), Muted, draw, GameFont.Tiny, 24f);
-            Section(ref y, width, CultivationText.Get("Memory", "羽间拾忆"), draw);
-            float storyHeight = Height(node.story, width - 24f);
-            if (draw)
-            {
-                Widgets.DrawBoxSolid(new Rect(0f, y, width, storyHeight + 24f), new Color(.025f, .04f, .04f, .35f));
-                Label(new Rect(12f, y + 12f, width - 24f, storyHeight), node.story, Muted);
-            }
-            y += storyHeight + 36f;
-            return y;
-        }
-
-        private void Section(ref float y, float width, string title, bool draw)
-        {
-            y += 12f;
-            if (draw) Widgets.DrawBoxSolid(new Rect(0f, y, width, 1f), new Color(Gold.r, Gold.g, Gold.b, .25f));
-            y += 10f;
-            Flow(ref y, width, title, Gold, draw, gap: 12f);
-        }
-
-        private void DrawEffects(ref float y, float width, List<CultivationEffectRow> rows, bool draw)
-        {
-            bool stacked = StackEffectValues(width);
-            float nameWidth = stacked ? 0f : width * .5f;
-            float valueWidth = (width - nameWidth - 32f) * .5f;
-            float beforeX = nameWidth + 8f, afterX = beforeX + valueWidth + 24f;
-            string beforeTitle = CultivationText.Get("Current", "当前");
-            string afterTitle = CultivationText.Get("After", "领悟后");
-            float headerHeight = Mathf.Max(Height(beforeTitle, valueWidth, GameFont.Tiny), Height(afterTitle, valueWidth, GameFont.Tiny));
-            if (draw)
-            {
-                Label(new Rect(beforeX, y, valueWidth, headerHeight), beforeTitle, Muted, GameFont.Tiny);
-                Label(new Rect(afterX, y, valueWidth, headerHeight), afterTitle, Gold, GameFont.Tiny);
-            }
-            y += headerHeight + 6f;
-            foreach (var row in rows)
-            {
-                if (!row.HasValues)
-                {
-                    y += row.Heading ? 10f : 4f;
-                    Flow(ref y, width, row.Label, row.Heading ? Accent : Muted, draw, gap: 8f);
-                    continue;
-                }
-                float labelHeight = Height(row.Label, stacked ? width - 16f : nameWidth - 8f);
-                float valuesHeight = Mathf.Max(Height(row.Before, valueWidth), Height(row.After, valueWidth));
-                float rowHeight = (stacked ? labelHeight + 6f + valuesHeight : Mathf.Max(labelHeight, valuesHeight)) + 16f;
-                if (draw)
-                {
-                    Widgets.DrawBoxSolid(new Rect(0f, y, width, rowHeight), new Color(.02f, .035f, .04f, .28f));
-                    Label(new Rect(8f, y + 8f, stacked ? width - 16f : nameWidth - 8f, labelHeight), row.Label, Ink);
-                    float valuesY = y + 8f + (stacked ? labelHeight + 6f : 0f);
-                    Label(new Rect(beforeX, valuesY, valueWidth, valuesHeight), row.Before, Muted);
-                    Label(new Rect(beforeX + valueWidth, valuesY, 24f, valuesHeight), "→", Muted);
-                    Label(new Rect(afterX, valuesY, valueWidth, valuesHeight), row.After, row.Before == row.After ? Ink : Gold);
-                }
-                y += rowHeight + 3f;
-            }
-            y += 8f;
-        }
-
-        private void Cost(ref float y, float width, CultivationViewModel.CostRow cost, bool draw)
-        {
-            float numberWidth = Mathf.Min(115f, width * .43f);
-            float labelWidth = Mathf.Max(1f, width - numberWidth - 40f);
-            float height = Mathf.Max(28f, Mathf.Max(Height(cost.Cost.thingDef.LabelCap, labelWidth), Height(cost.Quantity, numberWidth))) + 12f;
-            if (draw)
-            {
-                Widgets.ThingIcon(new Rect(0f, y + 6f, 28f, 28f), cost.Cost.thingDef);
-                Label(new Rect(36f, y + 6f, labelWidth, height - 12f), cost.Cost.thingDef.LabelCap, Ink);
-                Color color = !cost.Complete ? Muted : cost.Available >= cost.Cost.count ? Gold : Warning;
-                Label(new Rect(width - numberWidth, y + 6f, numberWidth, height - 12f), cost.Quantity, color);
-                TooltipHandler.TipRegion(new Rect(0f, y, width, height), cost.Text);
-            }
-            y += height;
-        }
-
-        private void Flow(ref float y, float width, string text, Color color, bool draw, GameFont font = GameFont.Small, float gap = 6f)
-        {
-            float height = Height(text, width, font);
-            if (draw) Label(new Rect(0, y, width, height), text, color, font);
-            y += height + gap;
-        }
-
-        private float Height(string text, float width, GameFont font = GameFont.Small)
-        {
-            var key = (text ?? "", Mathf.Max(1, Mathf.FloorToInt(width)), font);
-            if (textHeights.TryGetValue(key, out float value)) return value;
-            if (textHeights.Count > 768) textHeights.Clear();
-            GameFont old = Text.Font;
-            Text.Font = font;
-            value = Mathf.Max(Text.LineHeight, Text.CalcHeight(key.Item1, key.Item2));
-            Text.Font = old;
-            textHeights[key] = value;
-            return value;
-        }
-
-        private static void Label(Rect rect, string text, Color color, GameFont font = GameFont.Small)
-        {
-            GUI.color = color;
-            Text.Font = font;
-            Widgets.Label(rect, text ?? string.Empty);
-            Text.Font = GameFont.Small;
-            GUI.color = Color.white;
-        }
-
-        private static bool Button(Rect rect, string text, string tip, bool selected, bool active, Texture2D icon = null, bool compact = false)
-        {
-            bool hovered = active && Mouse.IsOver(rect);
-            Color tint = !active ? new Color(.65f, .69f, .68f) : hovered && !selected ? new Color(1.12f, 1.12f, 1.12f) : Color.white;
-            CultivationArt.DrawFrame(rect, selected && active ? CultivationArt.ButtonActive : CultivationArt.Button, tint);
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Rect label = rect.ContractedBy(rect.width <= 40f ? 4f : 10f, rect.height <= 36f ? 4f : 8f);
-            if (icon != null)
-            {
-                bool stacked = rect.width < 150f && !compact;
-                float iconSize = compact ? 24f : 32f;
-                DrawIcon(new Rect(stacked ? label.center.x - iconSize / 2f : label.x,
-                    stacked ? label.y : label.center.y - iconSize / 2f, iconSize, iconSize), icon);
-                if (stacked) label.yMin += iconSize + 6f;
-                else label.xMin += iconSize + 6f;
-            }
-            Label(label, text, active ? selected ? Gold : Ink : Muted);
-            Text.Anchor = TextAnchor.UpperLeft;
-            if (!tip.NullOrEmpty()) TooltipHandler.TipRegion(rect, tip);
-            return active && Widgets.ButtonInvisible(rect);
-        }
-
-        private static void DrawIcon(Rect rect, Texture2D icon)
-        {
-            if (Event.current.type != EventType.Repaint) return;
-            Color previous = GUI.color;
-            GUI.color = Color.white;
-            GUI.DrawTexture(rect, icon, ScaleMode.ScaleToFit, true);
-            GUI.color = previous;
-        }
+        finally { GUI.color = color; Text.Font = font; Text.Anchor = anchor; Text.WordWrap = wrap; }
     }
+    private bool Header(Rect rect, CultivationViewModel model)
+    {
+        Theme.Texture(new Rect(rect.x + 22, rect.y + 15, 42, 42), Emblem, Color.white);
+        Theme.Label(new Rect(rect.x + 76, rect.y + 13, 220, 32), "羽律之书", Ink, GameFont.Medium);
+        Theme.Label(new Rect(rect.x + 78, rect.y + 46, 220, 22), model.Pawn.LabelShortCap, Muted, GameFont.Tiny);
+        if (rect.width > 840)
+        {
+            string[] names = { "Milira_Feather", "Jade", "ComponentSpacer" };
+            for (int i = 0; i < names.Length; i++)
+            {
+                var def = DefDatabase<ThingDef>.GetNamed(names[i]);
+                Theme.Label(new Rect(rect.xMax - 500 + i * 118, rect.y + 25, 116, 25), def.LabelCap + "  " + model.InventoryText(def), i == 0 ? Accent : Muted, GameFont.Tiny);
+            }
+        }
+        if (Theme.Button(new Rect(rect.xMax - 127, rect.y + 22, 68, 32), "试炼", quiet: true))
+            Find.WindowStack.Add(new Dialog_NeiyuCultivationTrials(model.State));
+        bool close = Theme.Button(new Rect(rect.xMax - 47, rect.y + 22, 28, 32), "×", quiet: true);
+        Widgets.DrawLine(new(rect.x + 20, rect.yMax), new(rect.xMax - 20, rect.yMax), Rule, .8f);
+        return close;
+    }
+    private void Choose(CultivationViewModel model, CharacterPerkCategoryDef category, bool foundation = false)
+    { model.Choose(category, foundation); search = ""; fitted = false; }
+    private void FoundationMenu(CultivationViewModel model)
+    {
+        Find.WindowStack.Add(new FloatMenu(model.Foundations.Select(c => new FloatMenuOption(c.LabelCap, () => Choose(model, c, true))).ToList()));
+    }
+    private void Sidebar(Rect rect, CultivationViewModel model)
+    {
+        Theme.Label(new Rect(rect.x + 10, rect.y + 10, 140, 24), "修行之路", Muted, GameFont.Tiny);
+        float y = rect.y + 45;
+        if (Theme.Button(new Rect(rect.x, y, 144, 42), "完整羽律", !model.Foundation && model.Category == null)) Choose(model, null);
+        y += 52;
+        foreach (var category in model.Categories)
+        {
+            if (Theme.Button(new Rect(rect.x, y, 144, 42), category.LabelCap, model.Category == category, quiet: true)) Choose(model, category);
+            y += 50;
+        }
+        y += 15;
+        Widgets.DrawLine(new(rect.x + 12, y), new(rect.x + 134, y), Rule, .6f); y += 16;
+        if (Theme.Button(new Rect(rect.x, y, 144, 42), model.Foundation ? "基础 · " + model.Category.LabelCap : "基础修行", model.Foundation, quiet: true)) FoundationMenu(model);
+        y += 80;
+        Theme.Label(new Rect(rect.x + 12, y, 132, 24), "已投入", Muted, GameFont.Tiny);
+        Theme.Label(new Rect(rect.x + 12, y + 28, 132, 32), model.Investment, Ink, GameFont.Medium);
+        Widgets.DrawLine(new(rect.xMax - 5, rect.y + 5), new(rect.xMax - 5, rect.yMax - 5), Rule, .5f);
+    }
+    private bool Matches(NeiyuCultivationNodeDef node) => string.IsNullOrWhiteSpace(search)
+        || (node.label + " " + node.description).IndexOf(search.Trim(), StringComparison.OrdinalIgnoreCase) >= 0;
+    private void Graph(Rect rect, CultivationViewModel model, bool compact, bool narrow)
+    {
+        GUI.BeginGroup(rect);
+        try
+        {
+            float toolbar = compact ? 40 : 0;
+            if (compact && Theme.Button(new Rect(8, 0, 150, 32), model.Foundation ? "基础 · " + model.Category.LabelCap : model.Category?.LabelCap ?? "完整羽律", quiet: true))
+            {
+                List<FloatMenuOption> options = new() { new("完整羽律", () => Choose(model, null)) };
+                foreach (var c in model.Categories) options.Add(new(c.LabelCap, () => Choose(model, c)));
+                foreach (var c in model.Foundations) options.Add(new("基础 · " + c.LabelCap, () => Choose(model, c, true)));
+                Find.WindowStack.Add(new FloatMenu(options));
+            }
+            if (compact) Theme.Label(new Rect(175, 6, rect.width - 190, 24), "已投入  " + model.Investment, Muted, GameFont.Tiny);
+            Theme.Label(new Rect(12, toolbar + 3, 46, 25), "查找", Muted, GameFont.Tiny);
+            string entered = Widgets.TextField(new Rect(58, toolbar, Mathf.Max(70, rect.width - 70), 27), search);
+            if (entered != search)
+            {
+                search = entered;
+                var match = model.Nodes.FirstOrDefault(n => model.Shown(n) && Matches(n));
+                if (!string.IsNullOrWhiteSpace(search) && match != null) { model.Select(match); canvas.Focus(match); }
+            }
+            Rect viewport = new(0, toolbar + 40, rect.width, Mathf.Max(40, rect.height - toolbar - 103));
+            canvas.Size = viewport.size;
+            if (lastSize != viewport.size) { lastSize = viewport.size; fitted = false; }
+            if (!fitted) { canvas.Fit(model.Nodes.Where(model.InBranch)); fitted = true; }
+            GUI.BeginGroup(viewport);
+            try
+            {
+                var clicked = canvas.Draw(model.Selected, n => !model.InBranch(n) || !Matches(n) && !canvas.SelectedPath.Contains(n), model.Shown);
+                if (clicked != null) { model.Select(clicked); if (narrow) detailOnly = true; }
+            }
+            finally { GUI.EndGroup(); }
+            string[] labels = { "未解锁", "可学习", "已领悟", "已满级" };
+            float slot = Mathf.Min(92, (rect.width - 20) / 4);
+            for (int i = 0; i < 4; i++)
+            {
+                Theme.Symbol(new Rect(10 + i * slot, rect.height - 55, 14, 14), (PerkNodeVisual)i, i < 2 ? Accent : Pink);
+                Theme.Label(new Rect(32 + i * slot, rect.height - 59, slot - 23, 23), labels[i], Muted, GameFont.Tiny);
+            }
+            Theme.Label(new Rect(10, rect.height - 28, rect.width - 155, 23), "拖动平移 · 滚轮缩放", Muted, GameFont.Tiny);
+            if (Theme.Button(new Rect(rect.width - 139, rect.height - 30, 32, 27), "−", quiet: true)) canvas.ZoomAt(.83f, canvas.Size * .5f);
+            if (Theme.Button(new Rect(rect.width - 103, rect.height - 30, 62, 27), "适应", quiet: true)) canvas.Fit(model.Nodes.Where(model.InBranch));
+            if (Theme.Button(new Rect(rect.width - 37, rect.height - 30, 29, 27), "+", quiet: true)) canvas.ZoomAt(1.2f, canvas.Size * .5f);
+        }
+        finally { GUI.EndGroup(); }
+    }
+    private void Details(Rect rect, CultivationViewModel model)
+    {
+        Theme.Frame(rect, Color.white, 24);
+        var node = model.Selected;
+        if (node == null || !model.States.TryGetValue(node, out var state)) return;
+        Rect scroll = new(rect.x + 20, rect.y + 24, rect.width - 40, Mathf.Max(20, rect.height - 112));
+        Rect content = new(0, 0, scroll.width - 16, Mathf.Max(scroll.height, contentHeight));
+        Widgets.BeginScrollView(scroll, ref detailsScroll, content);
+        try
+        {
+            float y = 0, width = content.width;
+            Theme.TextBlock(width, ref y, (node.IsExtension ? "" : "基础修行 · ") + node.category.LabelCap, Muted, GameFont.Tiny);
+            y += 5;
+            Theme.Texture(new Rect(0, y, 48, 48), Icon(node), Color.white);
+            float titleHeight = Theme.Height(node.LabelCap, width - 60, GameFont.Medium);
+            Theme.Label(new Rect(60, y, width - 60, titleHeight), node.LabelCap, Ink, GameFont.Medium);
+            Theme.Label(new Rect(60, y + titleHeight + 3, width - 60, 24), "等级  " + state.Rank + " / " + node.maxLevel, Muted, GameFont.Tiny);
+            y += Mathf.Max(58, titleHeight + 33) + 14;
+            Theme.Symbol(new Rect(0, y + 5, 14, 14), state.Visual, state.CanLearn ? Accent : Pink);
+            Theme.Label(new Rect(23, y, width - 23, 26), state.Status, state.CanLearn ? Accent : Ink); y += 32;
+            if (!string.IsNullOrEmpty(model.Result)) Theme.TextBlock(width, ref y, model.Result, Accent, GameFont.Tiny);
+            else if (!state.CanLearn && state.Rank < node.maxLevel && !string.IsNullOrEmpty(state.Reason)) Theme.TextBlock(width, ref y, state.Reason, Muted, GameFont.Tiny);
+            Divider(width, ref y);
+            Theme.TextBlock(width, ref y, "节点效果", Muted, GameFont.Tiny);
+            if (node.IsExtension)
+            {
+                if (node.maxLevel > 1 && state.Rank > 0 && state.Rank < node.maxLevel)
+                    Theme.TextBlock(width, ref y, "当前  " + node.EffectText(state.Rank), Ink);
+                Theme.TextBlock(width, ref y, (node.maxLevel > 1 && state.Rank < node.maxLevel ? "下一级  " : "")
+                    + node.EffectText(Math.Min(node.maxLevel, state.Rank + 1)), Ink);
+            }
+            else
+            {
+                Theme.TextBlock(width, ref y, node.description, Ink);
+                foreach (var effect in model.FoundationEffects)
+                    Theme.TextBlock(width, ref y, effect.Heading || effect.Before == null ? effect.Label : effect.Label + "  " + effect.Before + " → " + effect.After,
+                        effect.Heading ? Muted : Accent, GameFont.Tiny);
+            }
+            if (node.trial != CultivationTrial.None)
+            {
+                Divider(width, ref y);
+                Theme.TextBlock(width, ref y, CultivationTrials.Label(node.trial) + "  " + model.State.Progress(node.trial) + " / " + node.trialTarget, Muted, GameFont.Tiny);
+            }
+            if (state.Rank < node.maxLevel && node.CostsAt(state.Rank) is { Count: > 0 } costs)
+            {
+                Divider(width, ref y);
+                foreach (var cost in costs)
+                    Theme.TextBlock(width, ref y, cost.thingDef.LabelCap + "  " + model.Available(cost.thingDef) + " / " + cost.count,
+                        model.Available(cost.thingDef) >= cost.count ? Accent : Pink, GameFont.Tiny);
+            }
+            Divider(width, ref y);
+            Theme.TextBlock(width, ref y, node.story ?? "片羽之间，渐有回响。", Muted, GameFont.Tiny);
+            contentHeight = y + 12;
+        }
+        finally { Widgets.EndScrollView(); }
+        Rect button = new(rect.x + 22, rect.yMax - 64, rect.width - 44, 42);
+        if (Theme.Button(button, state.Rank >= node.maxLevel ? "已掌握" : state.Rank > 0 ? "升级节点" : "领悟节点", state.CanLearn, state.CanLearn)) model.ConfirmLearn();
+        if (!state.CanLearn && !string.IsNullOrEmpty(state.Reason)) TooltipHandler.TipRegion(button, state.Reason);
+    }
+    private static void Divider(float width, ref float y)
+    { y += 8; Widgets.DrawLine(new(0, y), new(width, y), Rule, .6f); y += 18; }
 }

@@ -12,125 +12,123 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 {
     internal sealed class CultivationViewModel
     {
-        internal sealed class CostRow
+        internal readonly record struct NodeState(int Rank, bool CanLearn, string Status, string Reason, Common.UI.PerkNodeVisual Visual);
+        private sealed class InventoryScan
         {
-            public ThingDefCountClass Cost;
-            public int Available, Index;
-            public bool Complete;
-            public string Text, Quantity;
+            internal ThingDef Def;
+            internal int Index, Count;
+            internal bool Complete;
         }
-        public readonly Pawn Pawn;
-        public readonly List<NeiyuCultivationNodeDef> Nodes;
-        public readonly List<CharacterPerkCategoryDef> Categories;
-        public readonly List<NeiyuCultivationNodeDef> VisibleNodes = new();
-        public readonly List<CostRow> Costs = new();
-        public NeiyuCultivationNodeDef Selected { get; private set; }
-        public CharacterPerkCategoryDef Category { get; private set; }
-        public List<CultivationEffectRow> Effects { get; private set; } = new();
-        public string ConditionText { get; private set; }
-        public string DisabledReason { get; private set; }
-        public string Result { get; private set; }
-        public string Progress { get; private set; }
-        public bool Ready { get; private set; }
+        internal readonly Pawn Pawn;
+        internal readonly List<NeiyuCultivationNodeDef> Nodes;
+        internal readonly List<CharacterPerkCategoryDef> Categories, Foundations;
+        internal readonly Dictionary<NeiyuCultivationNodeDef, NodeState> States = new();
+        internal readonly Dictionary<NeiyuCultivationNodeDef, Vector2> Positions = new();
+        private readonly List<InventoryScan> inventory = new();
+        private readonly Dictionary<ThingDef, InventoryScan> byMaterial = new();
+        internal NeiyuCultivationNodeDef Selected { get; private set; }
+        internal CharacterPerkCategoryDef Category { get; private set; }
+        internal bool Foundation { get; private set; }
+        internal readonly Hediff_NeiyuCultivation State;
+        internal List<CultivationEffectRow> FoundationEffects { get; private set; } = new();
+        internal string Result { get; private set; }
         private float nextRefresh;
-        private int observedRevision = -1, observedPowerRevision = -1, lastFrame = -1;
-
-        public CultivationViewModel(Pawn pawn)
+        private int revision = -1, powerRevision = -1, trialRevision = -1;
+        internal CultivationViewModel(Pawn pawn)
         {
             Pawn = pawn;
-            var tree = CultivationService.State(pawn)?.Tree;
-            Nodes = CultivationService.Nodes.Where(n => tree?.IsRelevantNode(n) == true).OrderBy(n => n.displayOrder).ThenBy(n => n.rank).ToList();
-            Categories = tree?.Props.categories?.OrderBy(c => c.displayOrder).ToList() ?? new();
-            SelectCategory(Categories.FirstOrDefault());
-        }
-        public bool Learned(NeiyuCultivationNodeDef node) => CultivationService.Learned(Pawn, node);
-        public int Rank(NeiyuCultivationNodeDef node) => CultivationService.Rank(Pawn, node.category, node.ability);
-        public string CategoryProgress(CharacterPerkCategoryDef category)
-        {
-            var nodes = Nodes.Where(n => n.category == category).ToList();
-            if (nodes.Count == 0) return "0 / 0";
-            if (nodes[0].ability != null)
-                return nodes.Where(n => n.rank == 1 && Learned(n)).Count() + " / " + nodes.Count(n => n.rank == 1);
-            return CultivationService.Rank(Pawn, category) + " / " + nodes.Max(n => n.rank);
-        }
-        public void SelectCategory(CharacterPerkCategoryDef category)
-        {
-            Category = category;
-            RebuildCards();
-            Select(VisibleNodes.FirstOrDefault(n => CultivationService.Check(Pawn, n) == null)
-                ?? VisibleNodes.FirstOrDefault(n => !Learned(n)) ?? VisibleNodes.FirstOrDefault());
-        }
-        private void RebuildCards()
-        {
-            VisibleNodes.Clear();
-            foreach (var group in Nodes.Where(n => n.category == Category).GroupBy(n => n.ability))
+            State = CultivationService.State(pawn);
+            Nodes = CultivationService.Nodes.Where(n => State?.Tree.IsRelevantNode(n) == true).ToList();
+            Categories = Nodes.Where(n => n.IsExtension && n.effect != CultivationEffect.Origin).Select(n => n.category).Distinct().OrderBy(c => c.displayOrder).ToList();
+            Foundations = Nodes.Where(n => !n.IsExtension).Select(n => n.category).Distinct().OrderBy(c => c.displayOrder).ToList();
+            foreach (var node in Nodes.Where(n => n.IsExtension)) Positions[node] = node.position;
+            foreach (var category in Foundations)
             {
-                var ordered = group.OrderBy(n => n.rank).ToList();
-                if (group.Key == null) VisibleNodes.AddRange(ordered);
-                else VisibleNodes.Add(ordered.FirstOrDefault(n => !Learned(n)) ?? ordered[^1]);
-            }
-        }
-        public void Select(NeiyuCultivationNodeDef node)
-        {
-            Selected = node;
-            Result = null;
-            Refresh();
-        }
-        public void Update()
-        {
-            if (lastFrame == Time.frameCount) return;
-            lastFrame = Time.frameCount;
-            int revision = CultivationService.State(Pawn)?.Tree.Revision ?? 0;
-            if (revision != observedRevision || observedPowerRevision != NeiyuPowerBalance.Revision
-                || (Ready && Time.realtimeSinceStartup >= nextRefresh)) Refresh();
-            int budget = 12;
-            long deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 500;
-            foreach (CostRow row in Costs)
-            {
-                if (row.Complete || Pawn.Map == null) { row.Complete = true; continue; }
-                var things = Pawn.Map.listerThings.ThingsOfDef(row.Cost.thingDef);
-                while (budget > 0 && (budget == 12 || Stopwatch.GetTimestamp() < deadline)
-                    && row.Index < things.Count && row.Available < row.Cost.count)
+                int row = 0;
+                foreach (var group in Nodes.Where(n => !n.IsExtension && n.category == category).GroupBy(n => n.ability))
                 {
-                    Thing thing = things[row.Index++];
-                    budget--;
-                    if (CultivationService.UsableMaterial(Pawn, thing)) row.Available += thing.stackCount;
+                    foreach (var node in group) Positions[node] = new Vector2(180 + (node.rank - 1) * 240, 150 + row * 200);
+                    row++;
                 }
-                row.Complete = row.Index >= things.Count || row.Available >= row.Cost.count;
-                row.Quantity = (row.Available >= row.Cost.count ? "≥ " : "") + Math.Min(row.Available, row.Cost.count) + " / " + row.Cost.count;
-                row.Text = row.Cost.thingDef.LabelCap + "   " + row.Quantity;
+            }
+            foreach (var def in Nodes.Where(n => n.costs != null).SelectMany(n => n.costs).Select(c => c.thingDef).Distinct())
+            { InventoryScan scan = new() { Def = def }; inventory.Add(scan); byMaterial[def] = scan; }
+            Selected = Nodes.FirstOrDefault(n => n.effect == CultivationEffect.SwordDamage) ?? Nodes.FirstOrDefault();
+        }
+        internal bool Shown(NeiyuCultivationNodeDef node) => Foundation ? !node.IsExtension && node.category == Category : node.IsExtension;
+        internal bool InBranch(NeiyuCultivationNodeDef node) => Shown(node) && (Foundation || Category == null || node.category == Category || node.effect == CultivationEffect.Origin);
+        internal void Choose(CharacterPerkCategoryDef category, bool foundation = false)
+        {
+            Category = category; Foundation = foundation;
+            Select(Nodes.FirstOrDefault(n => InBranch(n) && !n.initiallyLearned) ?? Nodes.FirstOrDefault(InBranch));
+        }
+        internal void Select(NeiyuCultivationNodeDef node)
+        { Selected = node; Result = null; RefreshFoundationEffects(); }
+        private void RefreshFoundationEffects() => FoundationEffects = Selected?.IsExtension == false
+            ? CultivationEffectText.Build(Pawn, Selected) : new();
+        internal string Investment => Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => State?.Tree.GetNodeLevel(n) ?? 0)
+            + " / " + Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => n.maxLevel);
+        internal int Available(ThingDef def) => byMaterial.TryGetValue(def, out var row) ? row.Count : 0;
+        internal string InventoryText(ThingDef def) => byMaterial.TryGetValue(def, out var row) && row.Complete ? row.Count.ToString() : "…";
+        internal void Invalidate() { revision = -1; }
+        internal void Update()
+        {
+            if (State == null) return;
+            bool refresh = revision != State.Tree.Revision || powerRevision != NeiyuPowerBalance.Revision
+                || trialRevision != State.ProgressRevision || Time.realtimeSinceStartup >= nextRefresh;
+            if (refresh)
+            {
+                revision = State.Tree.Revision; powerRevision = NeiyuPowerBalance.Revision; trialRevision = State.ProgressRevision;
+                RefreshFoundationEffects();
+                nextRefresh = Time.realtimeSinceStartup + 2;
+                foreach (var row in inventory) { row.Index = row.Count = 0; row.Complete = false; }
+            }
+            int budget = 24;
+            long deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 500;
+            foreach (var row in inventory)
+            {
+                if (row.Complete) continue;
+                if (Pawn.Map == null) { row.Complete = true; continue; }
+                var things = Pawn.Map.listerThings.ThingsOfDef(row.Def);
+                while (row.Index < things.Count && budget > 0 && (budget == 24 || Stopwatch.GetTimestamp() < deadline))
+                {
+                    var thing = things[row.Index++]; budget--;
+                    if (CultivationService.UsableMaterial(Pawn, thing)) row.Count += thing.stackCount;
+                }
+                row.Complete = row.Index >= things.Count;
                 if (budget == 0 || Stopwatch.GetTimestamp() >= deadline) break;
             }
-            Ready = Costs.All(r => r.Complete);
-            if (Ready && DisabledReason == null && Costs.Any(r => r.Available < r.Cost.count)) DisabledReason = "可用材料不足。";
+            foreach (var node in Nodes)
+            {
+                int rank = State.Tree.GetNodeLevel(node);
+                bool eligible = State.Events.CanUnlock(node, out string reason, checkCosts: false);
+                bool enough = node.CostsAt(rank)?.All(c => Available(c.thingDef) >= c.count) != false;
+                bool can = eligible && enough;
+                string status = rank >= node.maxLevel ? "已满级" : can ? rank > 0 ? "可升级" : "可学习" : eligible ? "材料不足" : "条件未满足";
+                if (!eligible && rank < node.maxLevel && node.IsExtension)
+                    status = node.trial != CultivationTrial.None && State.Progress(node.trial) < node.trialTarget ? "待试炼"
+                        : node.prerequisites?.Any(p => State.Tree.GetNodeLevel(p.node) < p.minLevel) == true ? "前置不足" : "暂不可学习";
+                if (eligible && !enough) reason = "所需材料尚未备齐。";
+                if (NeiyuPowerBalance.PassivesDisabled) { status = "已封印"; reason = "已学等级保留，节点效果暂停。"; }
+                var visual = NeiyuPowerBalance.PassivesDisabled ? Common.UI.PerkNodeVisual.Locked
+                    : rank >= node.maxLevel ? Common.UI.PerkNodeVisual.Mastered : rank > 0 ? Common.UI.PerkNodeVisual.Learned
+                    : can ? Common.UI.PerkNodeVisual.Available : Common.UI.PerkNodeVisual.Locked;
+                States[node] = new(rank, can, status, reason, visual);
+            }
         }
-        private void Refresh()
+        internal void ConfirmLearn()
         {
-            observedRevision = CultivationService.State(Pawn)?.Tree.Revision ?? 0;
-            observedPowerRevision = NeiyuPowerBalance.Revision;
-            nextRefresh = Time.realtimeSinceStartup + 1f;
-            RebuildCards();
-            Progress = "已领悟 " + Nodes.Count(n => !n.initiallyLearned && Learned(n)) + " / " + Nodes.Count(n => !n.initiallyLearned);
-            DisabledReason = CultivationService.Check(Pawn, Selected);
-            Effects = CultivationEffectText.Build(Pawn, Selected);
-            ConditionText = Selected?.requiresAll.NullOrEmpty() != false ? "无额外经历要求。"
-                : string.Join("\n", Selected.requiresAll.Select(c => c.GetProgressText(Pawn, null)));
-            Costs.Clear();
-            if (Selected?.costs != null)
-                foreach (var cost in Selected.costs)
-                    Costs.Add(new CostRow { Cost = cost, Text = cost.thingDef.LabelCap + "   … / " + cost.count, Quantity = "… / " + cost.count });
-            Ready = Costs.Count == 0;
-        }
-        public void Learn()
-        {
-            bool success = CultivationService.TryLearn(Pawn, Selected, out string message);
-            if (success)
-                Selected = Nodes.Where(n => n.category == Selected.category && n.ability == Selected.ability)
-                    .OrderBy(n => n.rank).FirstOrDefault(n => !Learned(n)) ?? Selected;
-            Refresh();
-            Result = message;
-            if (success) SoundDefOf.Tick_High.PlayOneShotOnCamera();
-            else SoundDefOf.ClickReject.PlayOneShotOnCamera();
+            var node = Selected;
+            if (node == null || !States[node].CanLearn) return;
+            int level = State.Tree.GetNodeLevel(node);
+            string costs = string.Join(" · ", node.CostsAt(level)?.Select(c => c.thingDef.LabelCap + " × " + c.count) ?? System.Array.Empty<string>());
+            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(node.LabelCap + "  " + level + " → " + (level + 1) + "\n\n" + costs, () =>
+            {
+                if (State.Tree.GetNodeLevel(node) != level) { Result = "节点状态已变化，请重新确认。"; return; }
+                bool success = CultivationService.TryLearn(Pawn, node, out string message);
+                Result = message; Invalidate(); Update();
+                if (success) SoundDefOf.Tick_High.PlayOneShotOnCamera(); else SoundDefOf.ClickReject.PlayOneShotOnCamera();
+            }));
         }
     }
 

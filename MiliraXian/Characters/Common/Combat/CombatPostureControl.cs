@@ -93,6 +93,14 @@ internal static class Patch_PostureDraft
 internal static class Patch_PostureStartCast
 {
     private static bool Prefix(Verb __instance) => !CombatPosture.ControlsActions(__instance.CasterPawn);
+    private static void Postfix(Verb __instance, LocalTargetInfo __0, bool __result)
+    {
+        if (!__result || __instance is not Verb_CastAbility { ability.def.defName: "MX_Neiyu_Sword_ExecuteHead" }
+            || CombatPosture.Get(__0.Pawn)?.Broken != true
+            || __instance.CasterPawn?.stances?.curStance is not Stance_Warmup stance || stance.verb != __instance) return;
+        float reduction = Neiyu.Cultivation.CultivationService.State(__instance.CasterPawn)?.Bonus(Neiyu.Cultivation.CultivationEffect.ExecuteFocus) ?? 0f;
+        stance.ticksLeft = UnityEngine.Mathf.Max(1, stance.ticksLeft - UnityEngine.Mathf.RoundToInt(reduction * 60f));
+    }
 }
 
 [HarmonyPatch(typeof(Verb), "TryCastNextBurstShot")]

@@ -10,9 +10,10 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
     [HarmonyPatch(typeof(Ability), "PreActivate")]
     internal static class Patch_NeiyuCultivation_CastCooldown
     {
-        private static void Postfix(Ability __instance)
+        private static void Postfix(Ability __instance, LocalTargetInfo? target)
         {
             if (NeiyuPowerBalance.AbilitiesDisabled || !NeiyuEquipmentUtility.IsNeiyu(__instance.pawn)) return;
+            CultivationService.State(__instance.pawn)?.NotifyCast(__instance, target);
             var values = CultivationService.AbilityValues(__instance.pawn, __instance.def);
             if (values == null || values.cooldownTicks < 0 || !__instance.HasCooldown
                 || __instance.def.groupDef != null || __instance.CooldownTicksTotal == values.cooldownTicks) return;

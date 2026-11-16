@@ -11,10 +11,13 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
     internal static class CultivationService
     {
         private static List<NeiyuCultivationNodeDef> nodes;
+        private static Dictionary<CultivationEffect, NeiyuCultivationNodeDef> extensionNodes;
+        internal static IReadOnlyDictionary<CultivationEffect, NeiyuCultivationNodeDef> ExtensionNodes => extensionNodes ??=
+            Nodes.Where(n => n.IsExtension).ToDictionary(n => n.effect);
         public static IReadOnlyList<NeiyuCultivationNodeDef> Nodes => nodes ??= DefDatabase<CharacterPerkNodeDef>
             .AllDefsListForReading.OfType<NeiyuCultivationNodeDef>().OrderBy(n => n.rank).ThenBy(n => n.displayOrder).ToList();
-        public static Hediff_NeiyuCultivation State(Pawn pawn) => pawn?.health?.hediffSet?
-            .GetFirstHediffOfDef(CultivationDefOf.MX_Neiyu_Cultivation) as Hediff_NeiyuCultivation;
+        public static Hediff_NeiyuCultivation State(Pawn pawn) => NeiyuEquipmentUtility.IsNeiyu(pawn)
+            ? pawn.health?.hediffSet?.GetFirstHediffOfDef(CultivationDefOf.MX_Neiyu_Cultivation) as Hediff_NeiyuCultivation : null;
         public static CultivationAbilityValues AbilityValues(Pawn pawn, AbilityDef ability) => State(pawn)?.AbilityValues(ability);
         public static void Refresh(Pawn pawn) => State(pawn)?.Events.RefreshEffects();
 
@@ -106,9 +109,10 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             pawn.health.AddHediff(state);
             foreach (var node in Nodes)
             {
-                bool grant = node.initiallyLearned || (node.ability != null && owned.Contains(node.ability))
-                    || (node.ability == null && node.rank <= (node.category == CultivationDefOf.MX_Neiyu_Cultivation_Weapons ? weapon
-                        : node.category == CultivationDefOf.MX_Neiyu_Cultivation_Apparel ? apparel : halo));
+                int oldRank = node.category == CultivationDefOf.MX_Neiyu_Cultivation_Weapons ? weapon
+                    : node.category == CultivationDefOf.MX_Neiyu_Cultivation_Apparel ? apparel : halo;
+                bool grant = node.initiallyLearned || (!node.IsExtension
+                    && (node.ability != null ? owned.Contains(node.ability) : node.rank <= oldRank));
                 if (grant) state.Events.TryGrant(node, broadcast: false);
             }
             state.FinishMigration();
