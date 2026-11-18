@@ -32,16 +32,16 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private static readonly int ParamsId = Shader.PropertyToID("_Params");
         private static readonly int GlowId = Shader.PropertyToID("_Glow");
-        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int FieldCenterId = Shader.PropertyToID("_FieldCenter");
         private static readonly int FieldSizeId = Shader.PropertyToID("_FieldSize");
+        private static readonly int FieldRadiusId = Shader.PropertyToID("_FieldRadius");
 
         private readonly HashSet<CompSpringFlowField> fields = new();
         private static readonly Dictionary<Map, SpringFlowVfx> Instances = new();
 
         private Map map;
         private Material boundaryMat;
-        private Mesh quadMesh;
+        private readonly List<Mesh> quadMeshes = new();
 
         public bool Active
         {
@@ -113,8 +113,8 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            quadMesh ??= MapComponent_QingheVfx.NewMesh("MX_QH_SpringFlowBoundary");
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
+            int meshIndex = 0;
 
             foreach (CompSpringFlowField field in fields)
             {
@@ -124,70 +124,40 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                // Get or create the cached field texture
-                Texture2D fieldTex = GetFieldTexture(field);
-                if (fieldTex == null)
-                {
-                    continue;
-                }
+                // The shader derives the cell set from the radius threshold, so the field
+                // only needs its centre and extent; no occupancy texture is built.
+                int radius = Mathf.CeilToInt(field.CurrentRadius);
+                int size = radius * 2 + 3;
+
+                // One mesh per field: DrawMesh is deferred to the end of the frame, so
+                // sharing a single mesh would leave only the last field's quad visible.
+                Mesh mesh = MeshAt(meshIndex++);
 
                 // Build a single quad covering the whole field area
                 MapComponent_QingheVfx.ClearBuffers();
                 AddFieldQuad(field);
-                MapComponent_QingheVfx.Upload(quadMesh);
+                MapComponent_QingheVfx.Upload(mesh);
 
                 block.Clear();
                 block.SetColor(GlowId, SpringPink);
                 block.SetVector(ParamsId, new Vector4(CurtainHeight, strength, LineSigma, CurtainGain));
-                block.SetTexture(MainTexId, fieldTex);
-                block.SetVector(FieldCenterId, new Vector4(field.parent.Position.x, field.parent.Position.z, 0f, 0f));
-                block.SetFloat(FieldSizeId, fieldTex.width);
+                block.SetVector(FieldCenterId, new Vector4(field.parent.Position.x + 0.5f, field.parent.Position.z + 0.5f, 0f, 0f));
+                block.SetFloat(FieldSizeId, size);
+                block.SetFloat(FieldRadiusId, field.CurrentRadius);
 
-                ScreenBloom.Submit(Bloom, quadMesh, Matrix4x4.identity, boundaryMat, block);
-                Graphics.DrawMesh(quadMesh, Matrix4x4.identity, boundaryMat, 0, null, 0, block);
+                ScreenBloom.Submit(Bloom, mesh, Matrix4x4.identity, boundaryMat, block);
+                Graphics.DrawMesh(mesh, Matrix4x4.identity, boundaryMat, 0, null, 0, block);
             }
             block.Clear();
         }
 
-        /// <summary>
-        /// Get or create the cached field texture. One pixel per cell, alpha = 1 if in field, 0 if not.
-        /// The texture is lazily initialized and cached per field.
-        /// </summary>
-        private Texture2D GetFieldTexture(CompSpringFlowField field)
+        private Mesh MeshAt(int index)
         {
-            // TODO: Cache the texture per field (or per radius) to avoid regenerating every frame
-            int radius = Mathf.CeilToInt(field.CurrentRadius);
-            int size = radius * 2 + 3;  // 15x15，留一圈黑边
-
-            Texture2D tex = new(size, size, TextureFormat.RGBA32, false);
-            tex.filterMode = FilterMode.Point;  // 着色器用 texelFetch 直接读格，不需要过滤
-            tex.wrapMode = TextureWrapMode.Clamp;
-
-            Color[] pixels = new Color[size * size];
-            IntVec3 center = field.parent.Position;
-
-            // Collect all cells in the field using vanilla GenRadial
-            HashSet<IntVec3> fieldCells = new();
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, field.CurrentRadius, true))
+            while (quadMeshes.Count <= index)
             {
-                fieldCells.Add(cell);
+                quadMeshes.Add(MapComponent_QingheVfx.NewMesh("MX_QH_SpringFlowBoundary"));
             }
-
-            // Fill the texture: alpha = 1 if in field, 0 if not
-            for (int z = 0; z < size; z++)
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    // x ∈ [0, size-1], 映射到 cell 坐标 x - size/2 ∈ [-size/2, size/2]
-                    IntVec3 cell = center + new IntVec3(x - size / 2, 0, z - size / 2);
-                    bool inField = fieldCells.Contains(cell);
-                    pixels[z * size + x] = new Color(0f, 0f, 0f, inField ? 1f : 0f);
-                }
-            }
-
-            tex.SetPixels(pixels);
-            tex.Apply();
-            return tex;
+            return quadMeshes[index];
         }
 
         /// <summary>
@@ -204,11 +174,15 @@ namespace MiliraXian.Characters.QingHe.Things
             float y = AltitudeLayer.MoteLow.AltitudeFor();
             float halfSize = size / 2f;
 
+            // IntVec3 是格子的左下角，世界坐标里的格子中心是 +0.5
+            float cx = center.x + 0.5f;
+            float cz = center.z + 0.5f;
+
             // Quad vertices: centered at field position, size = size x size cells
-            Vector3 p0 = new(center.x - halfSize, y, center.z - halfSize);
-            Vector3 p1 = new(center.x + halfSize, y, center.z - halfSize);
-            Vector3 p2 = new(center.x + halfSize, y, center.z + halfSize + CurtainHeight);
-            Vector3 p3 = new(center.x - halfSize, y, center.z + halfSize + CurtainHeight);
+            Vector3 p0 = new(cx - halfSize, y, cz - halfSize);
+            Vector3 p1 = new(cx + halfSize, y, cz - halfSize);
+            Vector3 p2 = new(cx + halfSize, y, cz + halfSize + CurtainHeight);
+            Vector3 p3 = new(cx - halfSize, y, cz + halfSize + CurtainHeight);
 
             int n = MapComponent_QingheVfx.VertexCount;
             MapComponent_QingheVfx.AddVertex(p0, new Vector2(0f, 0f), Color.white);
@@ -233,11 +207,14 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public void Dispose()
         {
-            if (quadMesh != null)
+            foreach (Mesh mesh in quadMeshes)
             {
-                Object.Destroy(quadMesh);
-                quadMesh = null;
+                if (mesh != null)
+                {
+                    Object.Destroy(mesh);
+                }
             }
+            quadMeshes.Clear();
             fields.Clear();
             if (map != null && Instances.TryGetValue(map, out SpringFlowVfx self) && ReferenceEquals(self, this))
             {

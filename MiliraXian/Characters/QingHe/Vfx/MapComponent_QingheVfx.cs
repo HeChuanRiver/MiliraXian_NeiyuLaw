@@ -15,7 +15,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         void Dispose();
     }
 
-    public sealed class MapComponent_QingheVfx : MapComponent
+    public sealed class MapComponent_QingheVfx : MapComponent, System.IDisposable
     {
         private readonly List<IQingheVfxRenderer> renderers = new();
 
@@ -73,6 +73,31 @@ namespace MiliraXian.Characters.QingHe.Vfx
             foreach (IQingheVfxRenderer r in renderers)
             {
                 r.Dispose();
+            }
+            renderers.Clear();
+        }
+
+        /// <summary>
+        /// Quitting to the main menu and loading another save both go through <see cref="Verse.Game.Dispose"/>
+        /// and <see cref="Verse.Map.Dispose"/>, which never call <see cref="Verse.MapComponent.MapRemoved"/>:
+        /// only components implementing <see cref="System.IDisposable"/> get invoked there (the same hook
+        /// <see cref="Verse.VacuumComponent"/> uses to clear its buffers). Without this call the renderers'
+        /// static per-map caches would keep the old map, its meshes and its textures reachable for the rest
+        /// of the process, and <see cref="UnityEngine.Resources.UnloadUnusedAssets"/> could not reclaim them.
+        /// The normal in-game removal runs <see cref="MapRemoved"/> first and leaves this list empty.
+        /// </summary>
+        public void Dispose()
+        {
+            for (int i = renderers.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    renderers[i].Dispose();
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error("[MiliraXian] Failed to release a Qinghe VFX renderer during map teardown: " + ex);
+                }
             }
             renderers.Clear();
         }
