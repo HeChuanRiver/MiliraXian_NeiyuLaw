@@ -21,11 +21,11 @@
         </recipeMaker>
 
         <graphicData>
-            <texPath>MiliraXianNeiyu/Items/SwordForNeiyu</texPath>
+            <texPath>MiliraXianQinghe/Things/Weapon_Sanhua_Blade</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(2,2)</drawSize>
         </graphicData>
-        <uiIconPath>MiliraXianNeiyu/Items/SwordForNeiyu</uiIconPath>
+        <uiIconPath>MiliraXianQinghe/Things/Weapon_Sanhua_Blade</uiIconPath>
         <generateCommonality>0</generateCommonality>
         <scatterableOnMapGen>false</scatterableOnMapGen>
         <tradeability>Sellable</tradeability>
@@ -119,25 +119,33 @@
             </li>
             <li Class="AncotLibrary.ExtraGraphicData_Extension">
                 <graphicData>
-                    <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
+                    <texPath>MiliraXianQinghe/Things/Weapon_Sanhua_Blade</texPath>
                     <graphicClass>Graphic_Single</graphicClass>
                     <drawSize>(1.5,4.5)</drawSize>
                 </graphicData>
             </li>
-            <!-- 3D 刀身标定（樱舞等动作用）：UV 的 v 向上，按手持贴图 626×1334 量取 -->
+            <!-- 3D 刀身标定（散华新贴图，1024×1024，UV 的 v 向上）：
+                 刃口朝右(+u)，edgeSide=1；刀身略往左弯(cx 从尖 0.432 到柄尾 0.528)。
+                 锚点按贴图实测：柄尾 pommel、刀尖 tip、柄中握点 grip。 -->
             <li Class="MiliraXian.Characters.Common.Vfx.BladeBody.BladeGraphicExtension">
-                <texPath>MiliraXianNeiyu/Items/MX_Neiyu_Form_Weapon_OnHand</texPath>
-                <pommelUV>(0.504, 0.034)</pommelUV>
-                <tipUV>(0.446, 0.954)</tipUV>
-                <gripUV>(0.494, 0.138)</gripUV>
+                <texPath>MiliraXianQinghe/Things/Weapon_Sanhua_Blade</texPath>
+                <pommelUV>(0.528, 0.040)</pommelUV>
+                <tipUV>(0.432, 0.966)</tipUV>
+                <gripUV>(0.516, 0.150)</gripUV>
                 <edgeSide>1</edgeSide>
                 <length>1.1</length>
-                <uvMin>(0.38, 0.02)</uvMin>
-                <uvMax>(0.58, 0.97)</uvMax>
-                <!-- 刀鞘：持刀时挂在左腰（身体坐标：右、上、前，米） -->
+                <uvMin>(0.40, 0.03)</uvMin>
+                <uvMax>(0.60, 0.98)</uvMax>
+                <!-- 刀鞘：持刀时挂在左腰（身体坐标：右、上、前，米）。独立刀鞘贴图（雕金花鞘），
+                     鞘口朝下(v小)、鞘尖朝上(v大)，刃口同刀朝右。 -->
                 <scabbard>true</scabbard>
                 <scabbardRestMouth>(-0.240, 0.020, 0.100)</scabbardRestMouth>
                 <scabbardRestEnd>(-0.318, -0.718, -0.133)</scabbardRestEnd>
+                <scabbardTexPath>MiliraXianQinghe/Things/Weapon_Sanhua_Scabbard</scabbardTexPath>
+                <scabbardMouthUV>(0.538, 0.285)</scabbardMouthUV>
+                <scabbardTipUV>(0.438, 0.996)</scabbardTipUV>
+                <scabbardUvMin>(0.40, 0.28)</scabbardUvMin>
+                <scabbardUvMax>(0.56, 1.00)</scabbardUvMax>
             </li>
             <li Class="MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionSetExtension">
                 <!-- 投影：高度压到 0.35；原点（骨骼的骨盆）放在贴图实测的骨盆（小人中心下 0.22 格 = 0.63 米 × 0.35）；南北方向缩到 0.55 -->

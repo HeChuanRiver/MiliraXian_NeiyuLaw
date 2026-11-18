@@ -23,8 +23,18 @@ namespace MiliraXian.Characters.QingHe.UI
         private const float ButtonHeight = 22f;
         private const float SegmentGap = 2f;
 
-        private static readonly Texture2D PetalTex = ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/PeachPetalSolid");
-        private static readonly Texture2D CenterTex = ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/PeachCenter");
+        // 五瓣一瓣一张灰度贴图（与地面特效同一套；图里已按整花方位摆好），描边为整朵轮廓，
+        // 花心用新贴图但不随季节染色（乘固定暖金）。
+        private static readonly Texture2D[] PetalTexes =
+        {
+            ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花瓣d_Gray"),
+            ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花瓣e_Gray"),
+            ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花瓣a_Gray"),
+            ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花瓣b_Gray"),
+            ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花瓣c_Gray"),
+        };
+        private static readonly Texture2D OutlineTex = ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/描边_Gray");
+        private static readonly Texture2D CenterTex = ContentFinder<Texture2D>.Get("MiliraXianQinghe/Effect/FlowerBell/花心_Gray");
 
         private static readonly Color Dark = new(0.30f, 0.31f, 0.33f, 1f);
         private static readonly Color Stamen = new(1f, 0.85f, 0.45f, 1f);
@@ -101,7 +111,16 @@ namespace MiliraXian.Characters.QingHe.UI
             }
             Vector2 c = r.center;
             float s = r.width / 2f;
-            Rect petal = new(c.x - s / 2f, c.y - s, s, s);
+            // 三套贴图（花瓣五张 / 描边 / 花心）都是 512 的整花分层图，图中各元素位置与比例已正确：
+            // 全部画同一个方框、同一中心、不旋转，直接叠加。
+            Rect flower = new(c.x - r.width / 2f, c.y - r.width / 2f, r.width, r.width);
+
+            // 描边：勾边清晰，用偏白的亮季节色。衰减时变灰。
+            Color oc = decaying ? Grey(season, 0.6f) : Color.Lerp(Color.white, season, 0.65f);
+            oc.a = 1f;
+            GUI.color = oc;
+            GUI.DrawTexture(flower, OutlineTex);
+
             for (int i = 0; i < comp.Tiers; i++)
             {
                 Color pc;
@@ -118,18 +137,14 @@ namespace MiliraXian.Characters.QingHe.UI
                     pc = Dark;
                 }
                 pc.a = 1f;
-                Matrix4x4 m = GUI.matrix;
-                Verse.UI.RotateAroundPivot(72f * i, c);
                 GUI.color = pc;
-                GUI.DrawTexture(petal, PetalTex);
-                GUI.matrix = m;
+                GUI.DrawTexture(flower, PetalTexes[i % PetalTexes.Length]);
             }
-            float k = tier / (float)comp.Tiers;
-            Color cc = Color.Lerp(Dark, decaying ? new Color(0.6f, 0.58f, 0.55f, 1f) : Stamen, k);
+            // 花心亮度恒定：始终暖金色（衰减时变灰）。
+            Color cc = decaying ? new Color(0.6f, 0.58f, 0.55f, 1f) : Stamen;
             cc.a = 1f;
             GUI.color = cc;
-            float cs = s * 0.42f;
-            GUI.DrawTexture(new Rect(c.x - cs / 2f, c.y - cs / 2f, cs, cs), CenterTex);
+            GUI.DrawTexture(flower, CenterTex);
             GUI.color = Color.white;
         }
 

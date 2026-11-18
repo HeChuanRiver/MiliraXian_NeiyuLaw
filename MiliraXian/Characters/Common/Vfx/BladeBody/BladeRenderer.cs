@@ -104,25 +104,46 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
 
             if (pose.hasScabbard && pose.scabbardLength > 1e-3f)
             {
-                // Grip-to-tip of the texture laid from the mouth to the end of the scabbard.
-                float gripToTipPx = Vector2.Dot(tip - grip, a);
-                if (gripToTipPx > 1e-3f)
+                // A separate scabbard texture when the extension provides one, else the blade texture
+                // (grip-to-tip) darkened. The scabbard runs from its mouth (scabbardMouth) to its end.
+                Texture2D stex = ext.ScabbardTexture;
+                bool ownTex = stex != null;
+                Color scol = ownTex ? Color.white
+                    : (scabbardColor.a <= 0f ? new Color(0.24f, 0.16f, 0.14f, 1f) : scabbardColor);
+                Material smat = ownTex ? MaterialFor(stex, scol) : MaterialFor(ext, scol);
+                if (smat != null)
                 {
-                    Material smat = MaterialFor(ext, scabbardColor.a <= 0f ? new Color(0.24f, 0.16f, 0.14f, 1f) : scabbardColor);
-                    Vector3 sdir = pose.scabbardDir.normalized;
-                    Vector3 sedge = pose.scabbardEdge - Vector3.Dot(pose.scabbardEdge, sdir) * sdir;
-                    if (sedge.sqrMagnitude < 1e-6f)
+                    // The texture axis laid from mouth to end: the blade grip->tip, or the scabbard's
+                    // own mouth->tip UVs for a separate texture.
+                    Vector2 sgripUV = ownTex ? ext.scabbardMouthUV : ext.gripUV;
+                    Vector2 stipUV = ownTex ? ext.scabbardTipUV : ext.tipUV;
+                    float sw = smat.mainTexture.width;
+                    float sh = smat.mainTexture.height;
+                    Vector2 sgrip = Vector2.Scale(sgripUV, new Vector2(sw, sh));
+                    Vector2 stip = Vector2.Scale(stipUV, new Vector2(sw, sh));
+                    Vector2 saxisPx = stip - sgrip;
+                    float sgripToTipPx = saxisPx.magnitude;
+                    if (sgripToTipPx > 1e-3f)
                     {
-                        sedge = Vector3.Cross(sdir, Vector3.up);
+                        Vector2 sa = saxisPx / sgripToTipPx;
+                        Vector2 sn = new(sa.y, -sa.x);
+                        Vector3 sdir = pose.scabbardDir.normalized;
+                        Vector3 sedge = pose.scabbardEdge - Vector3.Dot(pose.scabbardEdge, sdir) * sdir;
                         if (sedge.sqrMagnitude < 1e-6f)
                         {
-                            sedge = Vector3.right;
+                            sedge = Vector3.Cross(sdir, Vector3.up);
+                            if (sedge.sqrMagnitude < 1e-6f)
+                            {
+                                sedge = Vector3.right;
+                            }
                         }
+                        sedge = sedge.normalized * edgeSign;
+                        float smpp = pose.scabbardLength / sgripToTipPx;
+                        Vector2 uvMin = ownTex ? ext.scabbardUvMin : ext.uvMin;
+                        Vector2 uvMax = ownTex ? ext.scabbardUvMax : ext.uvMax;
+                        Mesh smesh = MeshFor(ext, ScabbardMeshKey, sgripUV.y, uvMax.y, uvMin.x, uvMax.x);
+                        DrawQuad(smesh, smat, sw, sh, sa, sn, sgrip, smpp, pose.scabbardMouth, sdir, sedge, pose, bodyCenter);
                     }
-                    sedge = sedge.normalized * edgeSign;
-                    float smpp = pose.scabbardLength / gripToTipPx;
-                    Mesh smesh = MeshFor(ext, ScabbardMeshKey, ext.gripUV.y, ext.uvMax.y);
-                    DrawQuad(smesh, smat, w, h, a, n, grip, smpp, pose.scabbardMouth, sdir, sedge, pose, bodyCenter);
                 }
             }
         }
@@ -201,12 +222,22 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         /// <summary>A quad over the calibrated texture area between two v values, vertices at (u, 0, v).</summary>
         private static Mesh MeshFor(BladeGraphicExtension ext, int key, float loY, float hiY)
         {
+            return MeshFor(ext, key, loY, hiY, ext.uvMin.x, ext.uvMax.x);
+        }
+
+        /// <summary>Same as <see cref="MeshFor(BladeGraphicExtension, int, float, float)"/> with an explicit u range.</summary>
+        private static Mesh MeshFor(BladeGraphicExtension ext, int key, float loY, float hiY, float lx, float hx)
+        {
+            // The u range is folded into the key for the (rare) non-default u range, so the blade and
+            // a separate scabbard texture never share a cached mesh.
+            if (lx != ext.uvMin.x || hx != ext.uvMax.x)
+            {
+                key = key * 131071 + lx.GetHashCode() * 31 + hx.GetHashCode();
+            }
             if (Meshes.TryGetValue((ext, key), out Mesh mesh) && mesh != null)
             {
                 return mesh;
             }
-            float lx = ext.uvMin.x;
-            float hx = ext.uvMax.x;
             mesh = new Mesh { name = "MX_BladeBody" };
             mesh.SetVertices(new List<Vector3>
             {
@@ -231,7 +262,12 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
 
         private static Material MaterialFor(BladeGraphicExtension ext, Color color)
         {
-            Texture2D tex = ext?.Texture;
+            return ext == null ? null : MaterialFor(ext.Texture, color);
+        }
+
+        /// <summary>A blade-body material over an explicit texture.</summary>
+        private static Material MaterialFor(Texture2D tex, Color color)
+        {
             if (tex == null)
             {
                 return null;
