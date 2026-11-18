@@ -28,6 +28,12 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             Mathf.Min(1680f, Mathf.Max(240f, width - 32f)),
             Mathf.Min(1000f, Mathf.Max(240f, height - 32f)));
 
+        public override void WindowUpdate()
+        {
+            base.WindowUpdate();
+            if (model.Pawn is { Destroyed: false, Dead: false }) model.Update();
+        }
+
         public override void DoWindowContents(Rect inRect)
         {
             if (model.Pawn == null || model.Pawn.Destroyed || model.Pawn.Dead) { Close(); return; }
@@ -37,7 +43,6 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 windowRect = new Rect((Verse.UI.screenWidth - fit.x) / 2f, (Verse.UI.screenHeight - fit.y) / 2f, fit.x, fit.y);
                 return;
             }
-            model.Update();
             if (view.Draw(inRect, model)) Close();
         }
     }

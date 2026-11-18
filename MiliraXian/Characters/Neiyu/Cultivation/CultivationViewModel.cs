@@ -12,28 +12,37 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 {
     internal sealed class CultivationViewModel
     {
+        private const int InventoryStacksPerFrame = 24;
+        private const float InventoryRefreshInterval = 2f;
+        private const string InventoryPendingText = "正在统计";
+
         internal readonly record struct NodeState(int Rank, bool CanLearn, string Status, string Reason, Common.UI.PerkNodeVisual Visual);
-        private sealed class InventoryScan
+        private enum MaterialStatus { Ready, Pending, Missing }
+
+        private sealed class InventoryScan(ThingDef def)
         {
-            internal ThingDef Def;
-            internal int Index, Count;
-            internal bool Complete;
+            internal readonly ThingDef Def = def;
+            internal int Index, Accumulated;
+            internal int? Count;
         }
         internal readonly Pawn Pawn;
         internal readonly List<NeiyuCultivationNodeDef> Nodes;
         internal readonly List<CharacterPerkCategoryDef> Categories, Foundations;
         internal readonly Dictionary<NeiyuCultivationNodeDef, NodeState> States = new();
         internal readonly Dictionary<NeiyuCultivationNodeDef, Vector2> Positions = new();
-        private readonly List<InventoryScan> inventory = new();
         private readonly Dictionary<ThingDef, InventoryScan> byMaterial = new();
+        private readonly Queue<InventoryScan> pendingInventory = new();
         internal NeiyuCultivationNodeDef Selected { get; private set; }
         internal CharacterPerkCategoryDef Category { get; private set; }
         internal bool Foundation { get; private set; }
         internal readonly Hediff_NeiyuCultivation State;
         internal List<CultivationEffectRow> FoundationEffects { get; private set; } = new();
         internal string Result { get; private set; }
-        private float nextRefresh;
-        private int revision = -1, powerRevision = -1, trialRevision = -1;
+        private Map inventoryMap;
+        private float nextInventoryScan;
+        private bool inventoryInvalidated;
+        private int revision = -1, powerRevision = -1, trialRevision = -1, conditionTick = -1;
+        private string lastEligibility;
         internal CultivationViewModel(Pawn pawn)
         {
             Pawn = pawn;
@@ -52,8 +61,10 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 }
             }
             foreach (var def in Nodes.Where(n => n.costs != null).SelectMany(n => n.costs).Select(c => c.thingDef).Distinct())
-            { InventoryScan scan = new() { Def = def }; inventory.Add(scan); byMaterial[def] = scan; }
+                byMaterial.Add(def, new InventoryScan(def));
             Selected = Nodes.FirstOrDefault(n => n.effect == CultivationEffect.SwordDamage) ?? Nodes.FirstOrDefault();
+            inventoryMap = pawn?.Map;
+            RefreshStates(inventoryChanged: true);
         }
         internal bool Shown(NeiyuCultivationNodeDef node) => Foundation ? !node.IsExtension && node.category == Category : node.IsExtension;
         internal bool InBranch(NeiyuCultivationNodeDef node) => Shown(node) && (Foundation || Category == null || node.category == Category || node.effect == CultivationEffect.Origin);
@@ -68,47 +79,106 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             ? CultivationEffectText.Build(Pawn, Selected) : new();
         internal string Investment => Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => State?.Tree.GetNodeLevel(n) ?? 0)
             + " / " + Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => n.maxLevel);
-        internal int Available(ThingDef def) => byMaterial.TryGetValue(def, out var row) ? row.Count : 0;
-        internal string InventoryText(ThingDef def) => byMaterial.TryGetValue(def, out var row) && row.Complete ? row.Count.ToString() : "…";
-        internal void Invalidate() { revision = -1; }
+        internal int? Available(ThingDef def) => byMaterial.TryGetValue(def, out var row) ? row.Count : null;
+        internal string InventoryText(int? count) => count?.ToString() ?? (inventoryMap == null ? "—" : InventoryPendingText);
+
+        private void InvalidateInventory()
+        {
+            pendingInventory.Clear();
+            foreach (var row in byMaterial.Values) row.Count = null;
+            nextInventoryScan = 0f;
+            inventoryInvalidated = true;
+        }
+
         internal void Update()
         {
             if (State == null) return;
-            bool refresh = revision != State.Tree.Revision || powerRevision != NeiyuPowerBalance.Revision
-                || trialRevision != State.ProgressRevision || Time.realtimeSinceStartup >= nextRefresh;
-            if (refresh)
+            Map map = Pawn.Map;
+            if (map != inventoryMap)
             {
-                revision = State.Tree.Revision; powerRevision = NeiyuPowerBalance.Revision; trialRevision = State.ProgressRevision;
-                RefreshFoundationEffects();
-                nextRefresh = Time.realtimeSinceStartup + 2;
-                foreach (var row in inventory) { row.Index = row.Count = 0; row.Complete = false; }
+                inventoryMap = map;
+                InvalidateInventory();
             }
-            int budget = 24;
-            long deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 500;
-            foreach (var row in inventory)
+
+            bool inventoryChanged = UpdateInventory();
+            RefreshStates(inventoryChanged || inventoryInvalidated);
+            inventoryInvalidated = false;
+        }
+
+        private bool UpdateInventory()
+        {
+            if (inventoryMap == null || byMaterial.Count == 0) return false;
+            if (pendingInventory.Count == 0)
             {
-                if (row.Complete) continue;
-                if (Pawn.Map == null) { row.Complete = true; continue; }
-                var things = Pawn.Map.listerThings.ThingsOfDef(row.Def);
-                while (row.Index < things.Count && budget > 0 && (budget == 24 || Stopwatch.GetTimestamp() < deadline))
+                if (Time.realtimeSinceStartup < nextInventoryScan) return false;
+                // Keep the last completed counts visible while the next pass is in progress.
+                foreach (var row in byMaterial.Values)
                 {
-                    var thing = things[row.Index++]; budget--;
-                    if (CultivationService.UsableMaterial(Pawn, thing)) row.Count += thing.stackCount;
+                    row.Index = row.Accumulated = 0;
+                    pendingInventory.Enqueue(row);
                 }
-                row.Complete = row.Index >= things.Count;
-                if (budget == 0 || Stopwatch.GetTimestamp() >= deadline) break;
             }
+
+            bool changed = false;
+            int checkedStacks = 0;
+            long deadline = Stopwatch.GetTimestamp() + Stopwatch.Frequency / 500;
+            do
+            {
+                var row = pendingInventory.Dequeue();
+                var things = inventoryMap.listerThings.ThingsOfDef(row.Def);
+                if (row.Index < things.Count)
+                {
+                    var thing = things[row.Index++];
+                    checkedStacks++;
+                    if (CultivationService.UsableMaterial(Pawn, thing)) row.Accumulated += thing.stackCount;
+                }
+                if (row.Index < things.Count)
+                {
+                    pendingInventory.Enqueue(row);
+                }
+                else if (row.Count != row.Accumulated)
+                {
+                    row.Count = row.Accumulated;
+                    changed = true;
+                }
+            }
+            while (pendingInventory.Count > 0 && checkedStacks < InventoryStacksPerFrame && Stopwatch.GetTimestamp() < deadline);
+
+            if (pendingInventory.Count == 0) nextInventoryScan = Time.realtimeSinceStartup + InventoryRefreshInterval;
+            return changed;
+        }
+
+        private void RefreshStates(bool inventoryChanged)
+        {
+            if (State == null) return;
+            int treeRevision = State.Tree.Revision;
+            int currentPowerRevision = NeiyuPowerBalance.Revision;
+            int progressRevision = State.ProgressRevision;
+            int tick = Find.TickManager?.TicksGame ?? 0;
+            string eligibility = CultivationService.Eligibility(Pawn);
+            bool effectsChanged = revision != treeRevision || powerRevision != currentPowerRevision;
+            if (!effectsChanged && !inventoryChanged && trialRevision == progressRevision
+                && conditionTick == tick && lastEligibility == eligibility) return;
+
+            revision = treeRevision;
+            powerRevision = currentPowerRevision;
+            trialRevision = progressRevision;
+            conditionTick = tick;
+            lastEligibility = eligibility;
+            if (effectsChanged) RefreshFoundationEffects();
+
             foreach (var node in Nodes)
             {
                 int rank = State.Tree.GetNodeLevel(node);
                 bool eligible = State.Events.CanUnlock(node, out string reason, checkCosts: false);
-                bool enough = node.CostsAt(rank)?.All(c => Available(c.thingDef) >= c.count) != false;
-                bool can = eligible && enough;
-                string status = rank >= node.maxLevel ? "已满级" : can ? rank > 0 ? "可升级" : "可学习" : eligible ? "材料不足" : "条件未满足";
+                MaterialStatus materials = eligible ? CheckMaterials(node, rank) : MaterialStatus.Ready;
+                bool can = eligible && materials == MaterialStatus.Ready;
+                string status = rank >= node.maxLevel ? "已满级" : can ? rank > 0 ? "可升级" : "可学习" : "条件未满足";
                 if (!eligible && rank < node.maxLevel && node.IsExtension)
                     status = node.trial != CultivationTrial.None && State.Progress(node.trial) < node.trialTarget ? "待试炼"
                         : node.prerequisites?.Any(p => State.Tree.GetNodeLevel(p.node) < p.minLevel) == true ? "前置不足" : "暂不可学习";
-                if (eligible && !enough) reason = "所需材料尚未备齐。";
+                if (materials == MaterialStatus.Pending) { status = InventoryPendingText; reason = "正在统计可用材料。"; }
+                if (materials == MaterialStatus.Missing) { status = "材料不足"; reason = "所需材料尚未备齐。"; }
                 if (NeiyuPowerBalance.PassivesDisabled) { status = "已封印"; reason = "已学等级保留，节点效果暂停。"; }
                 var visual = NeiyuPowerBalance.PassivesDisabled ? Common.UI.PerkNodeVisual.Locked
                     : rank >= node.maxLevel ? Common.UI.PerkNodeVisual.Mastered : rank > 0 ? Common.UI.PerkNodeVisual.Learned
@@ -116,6 +186,22 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 States[node] = new(rank, can, status, reason, visual);
             }
         }
+
+        private MaterialStatus CheckMaterials(NeiyuCultivationNodeDef node, int rank)
+        {
+            var costs = node.CostsAt(rank);
+            if (costs.NullOrEmpty()) return MaterialStatus.Ready;
+
+            MaterialStatus status = MaterialStatus.Ready;
+            foreach (var cost in costs)
+            {
+                int? count = Available(cost.thingDef);
+                if (!count.HasValue) status = MaterialStatus.Pending;
+                else if (count.Value < cost.count) return MaterialStatus.Missing;
+            }
+            return status;
+        }
+
         internal void ConfirmLearn()
         {
             var node = Selected;
@@ -126,7 +212,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             {
                 if (State.Tree.GetNodeLevel(node) != level) { Result = "节点状态已变化，请重新确认。"; return; }
                 bool success = CultivationService.TryLearn(Pawn, node, out string message);
-                Result = message; Invalidate(); Update();
+                Result = message;
+                InvalidateInventory();
                 if (success) SoundDefOf.Tick_High.PlayOneShotOnCamera(); else SoundDefOf.ClickReject.PlayOneShotOnCamera();
             }));
         }

@@ -64,7 +64,7 @@ internal sealed class CultivationView
             for (int i = 0; i < names.Length; i++)
             {
                 var def = DefDatabase<ThingDef>.GetNamed(names[i]);
-                Theme.Label(new Rect(rect.xMax - 500 + i * 118, rect.y + 25, 116, 25), def.LabelCap + "  " + model.InventoryText(def), i == 0 ? Accent : Muted, GameFont.Tiny);
+                Theme.Label(new Rect(rect.xMax - 500 + i * 118, rect.y + 25, 116, 25), def.LabelCap + "  " + model.InventoryText(model.Available(def)), i == 0 ? Accent : Muted, GameFont.Tiny);
             }
         }
         if (Theme.Button(new Rect(rect.xMax - 127, rect.y + 22, 68, 32), "试炼", quiet: true))
@@ -194,8 +194,12 @@ internal sealed class CultivationView
             {
                 Divider(width, ref y);
                 foreach (var cost in costs)
-                    Theme.TextBlock(width, ref y, cost.thingDef.LabelCap + "  " + model.Available(cost.thingDef) + " / " + cost.count,
-                        model.Available(cost.thingDef) >= cost.count ? Accent : Pink, GameFont.Tiny);
+                {
+                    int? count = model.Available(cost.thingDef);
+                    Color color = count.HasValue ? count.Value >= cost.count ? Accent : Pink : Muted;
+                    Theme.TextBlock(width, ref y, cost.thingDef.LabelCap + "  " + model.InventoryText(count) + " / " + cost.count,
+                        color, GameFont.Tiny);
+                }
             }
             Divider(width, ref y);
             Theme.TextBlock(width, ref y, node.story ?? "片羽之间，渐有回响。", Muted, GameFont.Tiny);
