@@ -224,9 +224,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 case MirrorPhase.Exit:
                     // One snapshot serves the reflection while she waits and, frozen, the body that
                     // shatters (the frame before the hit). She stands still: every few frames is enough.
-                    if (inst.body == null || Time.frameCount - inst.bodyFrame >= 4)
+                    if (inst.captureId <= 0 || Time.frameCount - inst.bodyFrame >= 4)
                     {
-                        Snap(ref inst.body, pawn, facing);
+                        Snap(ref inst.captureId, pawn, facing);
                         inst.bodyFrame = Time.frameCount;
                     }
                     inst.reformTaken = false;
@@ -236,38 +236,35 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     if (!inst.reformTaken && driver.Phase == MirrorPhase.Recover)
                     {
                         // She takes shape again as she stands now (the weapon still hidden).
-                        Snap(ref inst.body, pawn, facing);
+                        Snap(ref inst.captureId, pawn, facing);
                         inst.reformTaken = true;
                     }
                     break;
             }
         }
 
-        private static void Snap(ref RenderTexture rt, Pawn pawn, Rot4 facing)
+        private static void Snap(ref int captureId, Pawn pawn, Rot4 facing)
         {
             if (pawn?.Drawer?.renderer == null || Find.PawnCacheRenderer == null)
             {
                 return;
             }
-            if (rt == null)
+            // The stance re-renders into the same texture every few frames; the texture itself is
+            // owned by the game-scoped capture service, so the instance only carries the handle.
+            if (!GameComponent_MxVfxCaptures.TryGetTexture(captureId, out _))
             {
-                rt = RenderTexture.GetTemporary(SnapshotSize, SnapshotSize, 24, RenderTextureFormat.ARGB32);
-                rt.name = "MX_QH_MirrorSnapshot";
+                captureId = GameComponent_MxVfxCaptures.RequestExclusive(pawn, facing);
+                return;
             }
-            snapping = true;
-            try
-            {
-                Find.PawnCacheRenderer.RenderPawn(pawn, rt, Vector3.zero, SnapshotZoom, 0f, facing,
-                    renderHead: true, renderHeadgear: true, renderClothes: true);
-            }
-            finally
-            {
-                snapping = false;
-            }
+            GameComponent_MxVfxCaptures.Recapture(captureId, pawn, facing);
         }
 
+        /// <summary>The current snapshot of this stance, or false while the capture is unavailable.</summary>
+        private static bool TryCapture(Instance inst, out RenderTexture body) =>
+            GameComponent_MxVfxCaptures.TryGetTexture(inst.captureId, out body);
+
         /// <summary>A snapshot is being taken: the body must be drawn whatever the phase.</summary>
-        internal static bool snapping;
+        private static bool Snapping => GameComponent_MxVfxCaptures.IsCapturing;
 
         // ---------------------------------------------------------------- drawing
 
@@ -430,7 +427,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         /// </summary>
         private static void DrawBody(Instance inst, MirrorVisualProps vp, Vector3 center, float t, float k, float alpha, int seed, float alt)
         {
-            if (inst.body == null || alpha <= 0.002f)
+            if (!TryCapture(inst, out RenderTexture body) || alpha <= 0.002f)
             {
                 return;
             }
@@ -446,7 +443,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             Upload(inst.bodyMesh);
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
-            block.SetTexture(MainTexId, inst.body);
+            block.SetTexture(MainTexId, body);
             block.SetColor(ShaderPropertyIDs.Color, new Color(1f, 1f, 1f, alpha));
             block.SetVector(SheenId, new Vector4(1f, 170f / 255f, 210f / 255f, k * 0.5f));
             block.SetVector(WaveId, new Vector4(t, k, seed, 1f));
@@ -467,7 +464,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static void DrawReflection(Instance inst, MirrorVisualProps vp, Vector3 feet, Vector3 center, float t, float alpha,
             float scatter, float alt)
         {
-            if (inst.body == null || alpha <= 0.002f)
+            if (!TryCapture(inst, out RenderTexture body) || alpha <= 0.002f)
             {
                 return;
             }
@@ -514,7 +511,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             Upload(inst.reflectionMesh);
             MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
             block.Clear();
-            block.SetTexture(MainTexId, inst.body);
+            block.SetTexture(MainTexId, body);
             block.SetColor(ShaderPropertyIDs.Color, new Color(1f, 1f, 1f, alpha));
             block.SetVector(SheenId, new Vector4(1f, 175f / 255f, 215f / 255f, 0.45f));
             // The water's own sway: always a little (slower, wider rows), more as it shatters.
@@ -684,8 +681,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
             public Pawn pawn;
             public JobDriver_IllusoryReflectionStance driver;
             public int seed;
-            /// <summary>The one snapshot: her reflection in the stance, the body that shatters, then the re-form.</summary>
-            public RenderTexture body;
+            /// <summary>Handle into the game-scoped capture service: the one snapshot of her body.</summary>
+            public int captureId;
             public int bodyFrame;
             public bool reformTaken;
             public Mesh bodyMesh;
@@ -695,10 +692,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             public void Release()
             {
-                if (body != null)
+                if (captureId > 0)
                 {
-                    RenderTexture.ReleaseTemporary(body);
-                    body = null;
+                    GameComponent_MxVfxCaptures.Release(captureId);
+                    captureId = 0;
                 }
                 Destroy(ref bodyMesh);
                 Destroy(ref reflectionMesh);
@@ -905,7 +902,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
         [HarmonyPriority(Priority.First)]
         private static bool Prefix(PawnRenderer __instance)
         {
-            return MapComponent_MirrorVisuals.snapping || !MapComponent_MirrorVisuals.HidesBody(PawnRef(__instance));
+            return GameComponent_MxVfxCaptures.IsCapturing
+                || !MapComponent_MirrorVisuals.HidesBody(PawnRef(__instance));
         }
     }
 }

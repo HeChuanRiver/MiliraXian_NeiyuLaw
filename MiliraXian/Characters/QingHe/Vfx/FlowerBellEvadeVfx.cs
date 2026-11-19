@@ -18,7 +18,8 @@ namespace MiliraXian.Characters.QingHe.Vfx
         public Pawn pawn;
         public int startTick;
         public Rot4 facing;
-        public RenderTexture snapshot;
+        /// <summary>Handle into the capture service; the texture itself is owned there.</summary>
+        public int captureId;
         public Mesh mesh;
 
         // ---- timing (seconds of game time = ticks / 60) ----
@@ -82,10 +83,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         public void Release()
         {
-            if (snapshot != null)
+            if (captureId > 0)
             {
-                RenderTexture.ReleaseTemporary(snapshot);
-                snapshot = null;
+                GameComponent_MxVfxCaptures.Release(captureId);
+                captureId = 0;
             }
             if (mesh != null)
             {
@@ -93,6 +94,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 mesh = null;
             }
         }
+
+        /// <summary>True once the service has finished baking the snapshot for this instance.</summary>
+        public bool SnapshotReady =>
+            captureId > 0 && GameComponent_MxVfxCaptures.TryGetTexture(captureId, out _);
     }
 
     /// <summary>
@@ -102,7 +107,6 @@ namespace MiliraXian.Characters.QingHe.Vfx
     [StaticConstructorOnStartup]
     internal sealed class FlowerBellEvadeVfx : IQingheVfxRenderer
     {
-        private const int SnapshotSize = 512;
         private const float SnapshotZoom = 0.5f;
         private const float SnapshotCells = 2f / SnapshotZoom;
 
@@ -170,17 +174,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 return;
             }
 
-            RenderTexture rt = RenderTexture.GetTemporary(SnapshotSize, SnapshotSize, 24, RenderTextureFormat.ARGB32);
-            rt.name = "MX_QH_EvadeSnapshot";
-            MapComponent_MirrorVisuals.snapping = true;
-            try
+            int captureId = GameComponent_MxVfxCaptures.Request(pawn, pawn.Rotation);
+            if (captureId <= 0)
             {
-                Find.PawnCacheRenderer.RenderPawn(pawn, rt, Vector3.zero, SnapshotZoom, 0f, pawn.Rotation,
-                    renderHead: true, renderHeadgear: true, renderClothes: true);
-            }
-            finally
-            {
-                MapComponent_MirrorVisuals.snapping = false;
+                return;
             }
 
             var inst = new FlowerBellEvadeInstance
@@ -188,7 +185,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 pawn = pawn,
                 startTick = Find.TickManager.TicksGame,
                 facing = pawn.Rotation,
-                snapshot = rt,
+                captureId = captureId,
             };
             instances.Add(inst);
         }
@@ -207,6 +204,32 @@ namespace MiliraXian.Characters.QingHe.Vfx
             foreach (FlowerBellEvadeInstance inst in vfx.instances)
             {
                 if (inst.pawn == pawn && inst.BodyHidden)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Render-time counterpart of <see cref="HidesBody"/>: the body is only hidden once the
+        /// snapshot that stands in for it has actually been baked. <see cref="HidesBody"/> itself
+        /// keeps its gameplay meaning (execution immunity) and must not wait for the capture.
+        /// </summary>
+        public static bool BodyHiddenForRender(Pawn pawn)
+        {
+            if (pawn?.Map == null)
+            {
+                return false;
+            }
+            FlowerBellEvadeVfx vfx = MapComponent_QingheVfx.Find<FlowerBellEvadeVfx>(pawn.Map, v => true);
+            if (vfx == null)
+            {
+                return false;
+            }
+            foreach (FlowerBellEvadeInstance inst in vfx.instances)
+            {
+                if (inst.pawn == pawn && inst.BodyHidden && inst.SnapshotReady)
                 {
                     return true;
                 }
@@ -239,7 +262,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
             foreach (FlowerBellEvadeInstance inst in instances)
             {
-                if (inst.snapshot == null || inst.pawn == null || !inst.pawn.Spawned || inst.pawn.IsHiddenFromPlayer())
+                if (inst.pawn == null || !inst.pawn.Spawned || inst.pawn.IsHiddenFromPlayer())
+                {
+                    continue;
+                }
+                // Captured in the frame the flash started, so this is ready immediately.
+                if (!GameComponent_MxVfxCaptures.TryGetTexture(inst.captureId, out RenderTexture shot))
                 {
                     continue;
                 }
@@ -265,7 +293,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 MapComponent_QingheVfx.Upload(inst.mesh);
                 MaterialPropertyBlock block = MX_RenderStatics.SharedPropertyBlock;
                 block.Clear();
-                block.SetTexture(MainTexId, inst.snapshot);
+                block.SetTexture(MainTexId, shot);
                 block.SetColor(ShaderPropertyIDs.Color, col);
                 // t = time for wave animation; k = disturbance (0→1 during fade-out tears the picture apart);
                 // seed from pawn id for variety; w = 1 (body scale, same as DrawBody in MirrorVisuals).
@@ -298,7 +326,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
         [HarmonyPriority(Priority.First - 1)]  // just after the mirror hide patch
         private static bool Prefix(PawnRenderer __instance)
         {
-            return MapComponent_MirrorVisuals.snapping || !FlowerBellEvadeVfx.HidesBody(PawnRef(__instance));
+            // Never hide the body while a snapshot is being baked: the render would come out empty.
+            return GameComponent_MxVfxCaptures.IsCapturing
+                || !FlowerBellEvadeVfx.BodyHiddenForRender(PawnRef(__instance));
         }
     }
 }
