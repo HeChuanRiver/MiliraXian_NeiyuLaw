@@ -62,26 +62,24 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>Bell quad side: as the flying note (FlowerBellVfx.BellQuad).</summary>
         private const float BellQuad = 0.1375f * 0.8926f / 0.7031f;
 
-        // 整朵花做成一张图集（4×2 格、每格 512）：五瓣 + 描边 + 花心合起来可以
-        // 一个 mesh、一次 Upload、一次绘制（与旧代码一样只有 1 个 draw call；
-        // 拆成多次绘制会让 bloom 累加，并且共用 mesh 时顶点色会被最后一次上传覆盖）。
-        // 图集格序：0..4 = 花瓣 d,e,a,b,c（对应游戏瓣序 0..4），5 = 描边，6 = 花心。
+        // 五瓣各一张灰度贴图，图里已按整花方位摆好（叠加即整花）。
         // 贴图里各瓣的真实方位（从北顺时针）：a=330.6° b=35.6° c=104° d=181.6° e=260.6°；
         // 游戏第 i 瓣在 FirstPetal(180°, 正南) + 72i，故索引顺序是 d,e,a,b,c。
-        private const string FlowerAtlasTexPath = "MiliraXianQinghe/Effect/FlowerBell/FlowerAtlas_Gray";
-        private const int FlowerAtlasCols = 4;
-        private const int FlowerAtlasRows = 2;
-        private const int FlowerAtlasTile = 512;
-        private const int FlowerAtlasOutline = 5;
-        private const int FlowerAtlasCenter = 6;
+        private static readonly string[] PetalTexPaths =
+        {
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣d_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣e_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣a_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣b_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣c_Gray",
+        };
+        private const string OutlineTexPath = "MiliraXianQinghe/Effect/FlowerBell/描边_Gray";
+        // 花心用新贴图（灰度，红黄细节在亮度里），不随季节染色，乘固定暖金。
+        private const string CenterTexPath = "MiliraXianQinghe/Effect/FlowerBell/花心_Gray";
         /// <summary>整朵花 quad 边长 = FlowerR × 此系数（贴图里各元素相对位置/比例已正确）。</summary>
         private const float FlowerQuadShare = 1.9f;
-        /// <summary>描边恒定亮度（不随蓄力变化）。</summary>
+        /// <summary>描边的基础亮度；蓄满时再叠一份与花瓣同口径的爆亮（见 <see cref="BloomSpike"/>）。</summary>
         private const float OutlineBright = 0.9f;
-        /// <summary>每瓣点亮后过渡到全亮所需秒数（让点亮有过程，不是瞬变）。</summary>
-        private const float LitRamp = 0.18f;
-        /// <summary>多瓣同时点亮时，按索引逐瓣错开的间隔秒数（保证快速级联而非一起亮）。</summary>
-        private const float LitStagger = 0.05f;
         private const string BellTexPath = "MiliraXianQinghe/Effect/FlowerBell/BellNote";
         private const string GlowTexPath = "MiliraXianQinghe/Effect/SakuraDance/Glow";
         private const string FallTexPath = "MiliraXianQinghe/Effect/SakuraDance/SakuraPetals";
@@ -137,7 +135,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private readonly Map map;
         private readonly Dictionary<CompFlowerBellCharge, State> states = new();
         private readonly List<CompFlowerBellCharge> removeBuffer = new();
-        private Mesh groundMesh;
+        private Mesh[] petalMeshes;
+        private Mesh outlineMesh;
+        private Mesh centerMesh;
         private Mesh bellMesh;
         private Mesh bellBloomMesh;
         private Mesh glowMesh;
@@ -373,7 +373,16 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public void Dispose()
         {
-            Object.Destroy(groundMesh);
+            if (petalMeshes != null)
+            {
+                foreach (Mesh m in petalMeshes)
+                {
+                    Object.Destroy(m);
+                }
+                petalMeshes = null;
+            }
+            Object.Destroy(outlineMesh);
+            Object.Destroy(centerMesh);
             Object.Destroy(bellMesh);
             Object.Destroy(bellBloomMesh);
             Object.Destroy(glowMesh);
@@ -424,77 +433,99 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             return fade;
         }
 
-        /// <summary>图集里第 <paramref name="index"/> 格的 UV（uv0 取格子上缘、uv1 取格子下缘，
-        /// 沿用花瓣的翻转 v 约定）。每格四周内缩 1 像素，避免双线性采样串到相邻格。</summary>
-        private static void AtlasUv(int index, out Vector2 uv0, out Vector2 uv1)
-        {
-            int col = index % FlowerAtlasCols;
-            int row = index / FlowerAtlasCols;
-            float tw = 1f / (FlowerAtlasCols * FlowerAtlasTile);
-            float th = 1f / (FlowerAtlasRows * FlowerAtlasTile);
-            float u0 = (col * FlowerAtlasTile) * tw + tw;
-            float u1 = ((col + 1) * FlowerAtlasTile) * tw - tw;
-            float vTop = 1f - (row * FlowerAtlasTile) * th - th;
-            float vBottom = 1f - ((row + 1) * FlowerAtlasTile) * th + th;
-            uv0 = new Vector2(u0, vTop);
-            uv1 = new Vector2(u1, vBottom);
-        }
-
         private void DrawGround(float vt)
         {
-            Material mat = MapComponent_SakuraDanceVisuals.Material(FlowerAtlasTexPath, "MX_QH_SakuraTrailAdd");
-            if (mat == null)
+            Material[] petalMats = new Material[Tiers];
+            for (int i = 0; i < Tiers; i++)
             {
-                return;
+                petalMats[i] = MapComponent_SakuraDanceVisuals.Material(PetalTexPaths[i], "MX_QH_SakuraTrailAdd");
+                if (petalMats[i] == null)
+                {
+                    return;
+                }
             }
+            Material outlineMat = MapComponent_SakuraDanceVisuals.Material(OutlineTexPath, "MX_QH_SakuraTrailAdd");
+            Material centerMat = MapComponent_SakuraDanceVisuals.Material(CenterTexPath, "MX_QH_SakuraTrailAdd");
             float y = AltitudeLayer.FloorEmplacement.AltitudeFor() + 0.02f;
             float quad = FlowerR * FlowerQuadShare;
 
-            // 整朵花一次 Upload、一次绘制（与旧代码一样只有 1 个 draw call）。
-            // 每瓣用自己的图集格 + 自己的顶点色，所以逐瓣亮度各自独立。
-            MapComponent_SakuraDanceVisuals.ClearBuffers();
-            foreach (State s in states.Values)
+            // 五瓣：一瓣一张贴图、一瓣一个独立 mesh、一次绘制，每瓣自己的顶点色。
+            // 独立 mesh 是关键：Graphics.DrawMesh 延迟到帧末，共用 mesh 会被最后一次 Upload 覆盖。
+            petalMeshes ??= new Mesh[Tiers];
+            for (int i = 0; i < Tiers; i++)
             {
-                float fade = FlowerFade(s, vt);
-                if (fade <= 0f)
-                {
-                    continue;
-                }
-                bool decaying = s.releaseTick < 0 && s.comp.Decaying;
-                Color col = decayingColor(s);
-                Vector3 c = Centre(s.pawn, FlowerDrop);
-
-                // 描边：整朵五瓣轮廓，恒定亮度（不随蓄力变化），垫在花瓣下。
-                Vector3 below = c;
-                below.y = y - 0.001f;
-                AtlasUv(FlowerAtlasOutline, out Vector2 o0, out Vector2 o1);
-                MapComponent_SakuraDanceVisuals.AddQuad(below, quad, 0f, o0, o1,
-                    Light(col, OutlineBright * fade * (decaying ? DecayDim : 1f)), Depth);
-
-                // 五瓣：逐瓣增益。
-                c.y = y;
-                for (int i = 0; i < Tiers; i++)
+                MapComponent_SakuraDanceVisuals.ClearBuffers();
+                foreach (State s in states.Values)
                 {
                     if (!PetalGain(s, i, vt, out float g))
                     {
                         continue;
                     }
-                    AtlasUv(i, out Vector2 p0, out Vector2 p1);
-                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, p0, p1, Light(col, g), Depth);
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
+                    c.y = y;
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(decayingColor(s), g), Depth);
                 }
+                if (MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                {
+                    continue;
+                }
+                Mesh mesh = petalMeshes[i] ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                MapComponent_SakuraDanceVisuals.Upload(mesh);
+                DrawAdditive(mesh, petalMats[i], GroundBloom);
+            }
 
-                // 花心：亮度恒定（不随蓄力变化）。
-                AtlasUv(FlowerAtlasCenter, out Vector2 m0, out Vector2 m1);
-                MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, m0, m1,
-                    Light(Warm, fade * (decaying ? DecayDim : 1f) * GroundGain), Depth);
-            }
-            if (MapComponent_SakuraDanceVisuals.BuffersEmpty)
+            // 描边：整朵五瓣轮廓，垫在花瓣下；蓄满时与花瓣叠同一份爆亮。
+            if (outlineMat != null)
             {
-                return;
+                MapComponent_SakuraDanceVisuals.ClearBuffers();
+                foreach (State s in states.Values)
+                {
+                    float fade = FlowerFade(s, vt);
+                    if (fade <= 0f)
+                    {
+                        continue;
+                    }
+                    bool decaying = s.releaseTick < 0 && s.comp.Decaying;
+                    float spike = BloomSpike(s, LitCount(s), vt);
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
+                    c.y = y - 0.001f;
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(decayingColor(s), (OutlineBright + spike) * fade * (decaying ? DecayDim : 1f)), Depth);
+                }
+                if (!MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                {
+                    outlineMesh ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                    MapComponent_SakuraDanceVisuals.Upload(outlineMesh);
+                    DrawAdditive(outlineMesh, outlineMat, GroundBloom);
+                }
             }
-            groundMesh ??= MapComponent_SakuraDanceVisuals.NewMesh();
-            MapComponent_SakuraDanceVisuals.Upload(groundMesh);
-            DrawAdditive(groundMesh, mat, GroundBloom);
+
+            // 花心：固定的暖金色，随季节不染色；蓄满时与花瓣叠同一份爆亮。
+            if (centerMat != null)
+            {
+                MapComponent_SakuraDanceVisuals.ClearBuffers();
+                foreach (State s in states.Values)
+                {
+                    float fade = FlowerFade(s, vt);
+                    if (fade <= 0f)
+                    {
+                        continue;
+                    }
+                    bool decaying = s.releaseTick < 0 && s.comp.Decaying;
+                    float spike = BloomSpike(s, LitCount(s), vt);
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
+                    c.y = y;
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(Warm, (1f + spike) * fade * (decaying ? DecayDim : 1f) * GroundGain), Depth);
+                }
+                if (!MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                {
+                    centerMesh ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                    MapComponent_SakuraDanceVisuals.Upload(centerMesh);
+                    DrawAdditive(centerMesh, centerMat, GroundBloom);
+                }
+            }
         }
 
         /// <summary>衰减时整朵变灰的染色。</summary>
@@ -505,10 +536,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         }
 
         /// <summary>
-        /// 花瓣 <paramref name="i"/> 此刻的增益。已点亮的瓣从它自己点亮的时刻起，在
-        /// <see cref="LitRamp"/> 秒内由暗过渡到全亮；若多瓣在同一刻点亮（例如释放时 lit 从 0 跳到 5），
-        /// 按索引用 <see cref="LitStagger"/> 逐瓣错开，因此永远是快速一瓣接一瓣，不会一起亮。
-        /// 正在蓄的瓣仍按旧逻辑由 PetalDim 升到 PetalCharging。
+        /// 整朵花蓄满那一下的爆亮：第 <see cref="Tiers"/> 瓣点亮的时刻取
+        /// <see cref="BloomFlash"/>，之后按 <see cref="BloomFlashDecay"/> 衰减。花瓣、花心、
+        /// 描边共用这一份，口径一致。
+        /// </summary>
+        private static float BloomSpike(State s, int lit, float vt)
+        {
+            if (lit < Tiers || s.onTick[Tiers - 1] <= int.MinValue)
+            {
+                return 0f;
+            }
+            return BloomFlash * Mathf.Exp(-Mathf.Max(0f, vt - s.onTick[Tiers - 1]) / 60f / BloomFlashDecay);
+        }
+
+        /// <summary>
+        /// 花瓣 <paramref name="i"/> 此刻的增益：已点亮的瓣恒定全亮，只在它自己点亮的那一刻叠一个
+        /// <see cref="LitFlash"/> 闪光；正在蓄的瓣由 PetalDim 升到 PetalCharging；未亮的瓣保持
+        /// PetalDim。蓄满时整朵花的爆亮由 <see cref="BloomSpike"/> 给出。
         /// </summary>
         private static bool PetalGain(State s, int i, float vt, out float gain)
         {
@@ -521,17 +565,16 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             bool decaying = s.releaseTick < 0 && s.comp.Decaying;
             int lit = LitCount(s);
             float progress = s.releaseTick >= 0 ? 0f : s.comp.TierProgress;
+            float bloom = BloomSpike(s, lit, vt);
             float g;
             if (i < lit)
             {
-                // 这一瓣已点亮：从"它自己点亮的那一刻"起过渡。缺自己的点亮时刻时（例如释放瞬间
-                // lit 从 0 直接跳到 5），用这一档里最新的点亮时刻做基准，再按索引错开，
-                // 这样是随时间真正一瓣接一瓣亮起，而不是同一帧全部到终值。
-                float baseTick = s.onTick[i] > int.MinValue ? s.onTick[i] : LatestOnTick(s);
-                float since = baseTick > int.MinValue ? Mathf.Max(0f, (vt - baseTick) / 60f - LitStagger * i) : 0f;
-                float k = Mathf.Clamp01(since / LitRamp);
-                g = PetalDim + (1f - PetalDim) * k;
-                g += LitFlash * Mathf.Exp(-since / LitFlashDecay);
+                // 已点亮的瓣：恒定全亮，只在刚点亮那一下加个 LitFlash 闪光（与旧代码一致）。
+                g = 1f;
+                if (s.onTick[i] > int.MinValue && vt >= s.onTick[i])
+                {
+                    g += LitFlash * Mathf.Exp(-(vt - s.onTick[i]) / 60f / LitFlashDecay);
+                }
             }
             else if (i == lit && !decaying && s.releaseTick < 0)
             {
@@ -550,22 +593,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 g *= DecayDim;
             }
-            gain = g * fade * GroundGain;
+            gain = (g + bloom) * fade * GroundGain;
             return true;
-        }
-
-        /// <summary>这一档里最新的点亮时刻（各瓣 onTick 的最大值）；没有则返回 int.MinValue。</summary>
-        private static int LatestOnTick(State s)
-        {
-            int best = int.MinValue;
-            for (int i = 0; i < Tiers; i++)
-            {
-                if (s.onTick[i] > best)
-                {
-                    best = s.onTick[i];
-                }
-            }
-            return best;
         }
 
         private void DrawNotes(float vt)
