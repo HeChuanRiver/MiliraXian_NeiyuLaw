@@ -123,6 +123,14 @@ namespace MiliraXian.Characters.Zhaoli
             return true;
         }
 
+        internal static void TryScheduleAfterDeath(Pawn pawn)
+        {
+            if (!ZhaoliKarmaUtility.IsZhaoli(pawn) || pawn.health == null || !pawn.Dead
+                || ShouldBlockTenDayRebirth(pawn) || ZhaoliScenarioUtility.IsHideoutState(pawn)) return;
+
+            TryScheduleRebirth(pawn);
+        }
+
         public static bool TryFindRebirthLocation(out Map map, out IntVec3 cell)
         {
             map = null;
@@ -366,20 +374,7 @@ namespace MiliraXian.Characters.Zhaoli
     internal static class Patch_Pawn_Kill_ZhaoliRebirthFallback
     {
         [HarmonyPriority(Priority.Last)]
-        public static void Postfix(Pawn __instance)
-        {
-            if (!ZhaoliKarmaUtility.IsZhaoli(__instance) || __instance.health == null || !__instance.Dead)
-            {
-                return;
-            }
-
-            if (ZhaoliRebirthUtility.ShouldBlockTenDayRebirth(__instance) || ZhaoliScenarioUtility.IsHideoutState(__instance))
-            {
-                return;
-            }
-
-            ZhaoliRebirthUtility.TryScheduleRebirth(__instance);
-        }
+        public static void Postfix(Pawn __instance) => ZhaoliRebirthUtility.TryScheduleAfterDeath(__instance);
     }
 
     public class ZhaoliPendingRebirth : IExposable

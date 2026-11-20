@@ -80,14 +80,20 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public static float MeleeFactor(Tool tool, Pawn pawn, bool penetration, Thing equipment = null)
         {
             var comp = equipment?.TryGetComp<CompNeiyuCultivatedEquipment>() ?? Weapon(pawn);
-            if (tool == null || comp?.parent.def.tools?.Contains(tool) != true || comp.Bonus is not { } bonus) return 1f;
+            if (tool == null || comp?.parent.def.tools?.Contains(tool) != true) return 1f;
+            var bonus = comp.Bonus;
             float baseline = penetration ? tool.armorPenetration : tool.power;
-            return baseline <= 0f ? 1f : (baseline + (penetration ? bonus.MeleePenetration : bonus.MeleeDamage)) / baseline;
+            var state = CultivationService.State(pawn);
+            float addition = penetration ? bonus?.MeleePenetration ?? 0f : bonus?.MeleeDamage ?? 0f;
+            if (penetration && comp.parent.def.defName == "MX_Neiyu_Form_Weapon") addition += state?.Bonus(CultivationEffect.SwordPenetration) ?? 0f;
+            return (baseline <= 0f ? 1f : (baseline + addition) / baseline)
+                * (penetration ? 1f : state?.AttackFactor(comp.parent.def) ?? 1f);
         }
         public static int SplitCount(Pawn pawn, int baseline, Thing equipment = null) => Mathf.Max(1, baseline
             + ((equipment?.TryGetComp<CompNeiyuCultivatedEquipment>() ?? Weapon(pawn))?.Bonus?.SplitCount ?? 0));
         public static float ProjectileDamageFactor(Thing equipment, float baseline) => baseline <= 0f ? 1f
-            : 1f + (equipment?.TryGetComp<CompNeiyuCultivatedEquipment>()?.Bonus?.ProjectileDamage ?? 0f) / baseline;
+            : (1f + (equipment?.TryGetComp<CompNeiyuCultivatedEquipment>()?.Bonus?.ProjectileDamage ?? 0f) / baseline)
+                * (CultivationService.State(Owner(equipment))?.AttackFactor(equipment?.def) ?? 1f);
         public static float ProjectilePenetrationBonus(Thing equipment) =>
             equipment?.TryGetComp<CompNeiyuCultivatedEquipment>()?.Bonus?.ProjectilePenetration ?? 0f;
         public static bool ShieldEnabled(Pawn pawn) => NeiyuEquipmentUtility.IsNeiyu(pawn) && !NeiyuPowerBalance.PassivesDisabled;

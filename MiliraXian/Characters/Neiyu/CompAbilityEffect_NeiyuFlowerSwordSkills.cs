@@ -126,22 +126,26 @@ namespace MiliraXian.Characters.Neiyu
             }
         }
 
-        public static void HealAllInjuries(Pawn pawn)
+        public static float HealAllInjuries(Pawn pawn)
         {
             if (pawn == null || pawn.health == null || pawn.health.hediffSet == null)
             {
-                return;
+                return 0;
             }
 
             List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+            float healed = 0;
             for (int i = hediffs.Count - 1; i >= 0; i--)
             {
                 Hediff_Injury injury = hediffs[i] as Hediff_Injury;
                 if (injury != null && injury.Severity > 0f)
                 {
-                    injury.Heal(injury.Severity);
+                    float amount = injury.Severity;
+                    injury.Heal(amount);
+                    healed += amount;
                 }
             }
+            return healed;
         }
 
         public static void HealInjuries(Pawn pawn, float maxTotalHealing)
@@ -464,6 +468,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 Messages.Message("MX_NL_NoValidAllyInRange".Translate(), caster, MessageTypeDefOf.RejectInput);
             }
+            map.GetComponent<NeiyuCombatMapComponent>().AddCultivationField(caster, center, Radius, healing: true);
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
@@ -502,7 +507,8 @@ namespace MiliraXian.Characters.Neiyu
 
             if (!NeiyuPowerBalance.AbilitiesDisabled)
             {
-                NeiyuFlowerSwordSkillUtility.HealAllInjuries(pawn);
+                float healed = NeiyuFlowerSwordSkillUtility.HealAllInjuries(pawn);
+                CultivationService.State(caster)?.NotifyHealing(healed);
             }
 
             if (Props.moodThought != null && pawn.needs != null && pawn.needs.mood != null)
@@ -605,11 +611,7 @@ namespace MiliraXian.Characters.Neiyu
                     continue;
                 }
 
-                ApplyFoodPoisoningSevere(pawn, Props.severeFoodPoisoningSeverity);
-                if (pawn.mindState != null && pawn.mindState.mentalStateHandler != null && Rand.Chance(Props.berserkChance))
-                {
-                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "MX_NL_FlowerToxinMentalStateReason".Translate().ToString(), false, false, false, null, false, false, false);
-                }
+                ApplyToxin(pawn, Props.severeFoodPoisoningSeverity, Props.berserkChance);
 
                 affected++;
             }
@@ -618,6 +620,8 @@ namespace MiliraXian.Characters.Neiyu
             {
                 Messages.Message("MX_NL_NoHostileInRange".Translate(), caster, MessageTypeDefOf.RejectInput);
             }
+            map.GetComponent<NeiyuCombatMapComponent>().AddCultivationField(caster, center, Radius, false,
+                pawns.Where(p => p.HostileTo(caster)), Props.severeFoodPoisoningSeverity, Props.berserkChance);
         }
 
         public override void DrawEffectPreview(LocalTargetInfo target)
@@ -628,6 +632,14 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             GenDraw.DrawRadiusRing(target.Cell, Radius, Color.magenta);
+        }
+
+        internal static void ApplyToxin(Pawn pawn, float targetSeverity, float berserkChance)
+        {
+            ApplyFoodPoisoningSevere(pawn, targetSeverity);
+            if (pawn.mindState?.mentalStateHandler != null && Rand.Chance(berserkChance))
+                pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk,
+                    "MX_NL_FlowerToxinMentalStateReason".Translate().ToString(), false, false, false, null, false, false, false);
         }
 
         private static void ApplyFoodPoisoningSevere(Pawn pawn, float targetSeverity)
@@ -1139,6 +1151,12 @@ namespace MiliraXian.Characters.Neiyu
                     }
                     NeiyuFlowerSwordSkillUtility.TrySetHediffDuration(v, ImpactDuration);
                 }
+            }
+            if (CultivationService.State(caster)?.Has(CultivationEffect.SkyfallEcho) == true)
+            {
+                var echo = Hediff_NeiyuCultivation.Definition(CultivationEffect.SkyfallEcho);
+                NeiyuCombatMapComponent.CultivationSplash(caster, map, center, echo.secondary,
+                    ImpactDamage * echo.value, damageDef, Props.impactArmorPen);
             }
         }
     }

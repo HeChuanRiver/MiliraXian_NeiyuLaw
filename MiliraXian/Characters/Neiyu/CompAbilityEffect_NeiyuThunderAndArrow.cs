@@ -176,6 +176,8 @@ namespace MiliraXian.Characters.Neiyu
             public int shotIntervalTicks;
             public float maxDistance;
             public float lateralSpread;
+            public int baseShots, volleyId;
+            public float guidanceAngle, splashFactor, splashRadius, successiveFactor = 1f;
 
             public void ExposeData()
             {
@@ -191,6 +193,12 @@ namespace MiliraXian.Characters.Neiyu
                 Scribe_Values.Look(ref shotIntervalTicks, "shotIntervalTicks", 2);
                 Scribe_Values.Look(ref maxDistance, "maxDistance", 999f);
                 Scribe_Values.Look(ref lateralSpread, "lateralSpread", 5f);
+                Scribe_Values.Look(ref baseShots, "baseShots", totalShots);
+                Scribe_Values.Look(ref volleyId, "volleyId");
+                Scribe_Values.Look(ref guidanceAngle, "guidanceAngle");
+                Scribe_Values.Look(ref splashFactor, "splashFactor");
+                Scribe_Values.Look(ref splashRadius, "splashRadius");
+                Scribe_Values.Look(ref successiveFactor, "successiveFactor", 1f);
             }
         }
 
@@ -204,6 +212,7 @@ namespace MiliraXian.Characters.Neiyu
         {
             base.ExposeData();
             ExposeThunderData();
+            ExposeCultivationData();
             Scribe_Collections.Look(ref barrageTasks, "mxnl_barrageTasks", LookMode.Deep);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -225,6 +234,14 @@ namespace MiliraXian.Characters.Neiyu
             task.fireDirection = GetFireDirection(caster, aimCell);
             task.projectileDef = props.projectileDef;
             task.totalShots = CultivationService.AbilityValues(caster, DefDatabase<AbilityDef>.GetNamed("MX_Neiyu_Bow_ArrowBarrage"))?.shotCount ?? props.shotCount;
+            task.baseShots = task.totalShots;
+            var cultivation = CultivationService.State(caster);
+            task.totalShots += Mathf.RoundToInt(cultivation?.Bonus(CultivationEffect.BarrageExtra) ?? 0f);
+            task.volleyId = BeginCultivationVolley();
+            task.guidanceAngle = cultivation?.Bonus(CultivationEffect.BarrageGuidance) ?? 0f;
+            task.splashFactor = cultivation?.Bonus(CultivationEffect.BarrageSplash) ?? 0f;
+            task.splashRadius = Hediff_NeiyuCultivation.Definition(CultivationEffect.BarrageSplash).secondary;
+            task.successiveFactor = Hediff_NeiyuCultivation.Definition(CultivationEffect.BarrageExtra).secondary;
             task.remainingShots = task.totalShots;
             task.firedShots = 0;
             task.spreadSeed = Rand.Int;
@@ -246,6 +263,7 @@ namespace MiliraXian.Characters.Neiyu
             }
 
             TickThunder();
+            TickCultivationFields();
 
             if (!barrageTasks.NullOrEmpty())
             {
@@ -277,7 +295,8 @@ namespace MiliraXian.Characters.Neiyu
                 return true;
             }
 
-            task.remainingShots = Mathf.Min(task.remainingShots, NeiyuPowerBalance.BarrageShotCap);
+            int cap = NeiyuPowerBalance.BarrageShotCap;
+            task.remainingShots = Mathf.Min(task.remainingShots, cap == int.MaxValue ? cap : cap + Mathf.Max(0, task.totalShots - task.baseShots));
 
             LaunchBarrageProjectile(task);
 
@@ -341,6 +360,27 @@ namespace MiliraXian.Characters.Neiyu
             Thing equipment = task.caster.equipment != null ? task.caster.equipment.Primary : null;
             LocalTargetInfo usedTarget = new(hitCell);
             LocalTargetInfo intendedTarget = new(hitCell);
+            bool tail = task.totalShots - task.firedShots <= 6;
+            if (tail && task.guidanceAngle > 0 && CultivationService.State(task.caster)?.Has(CultivationEffect.BarrageGuidance) == true)
+            {
+                Pawn best = null; float closest = float.MaxValue;
+                Vector3 launchDirection = (hitCell.ToVector3Shifted() - origin).Yto0();
+                foreach (Pawn enemy in map.mapPawns.AllPawnsSpawned)
+                {
+                    if (enemy.Dead || enemy.Downed || !enemy.HostileTo(task.caster)) continue;
+                    Vector3 delta = (enemy.DrawPos - origin).Yto0();
+                    float distanceToAim = (enemy.Position - hitCell).LengthHorizontalSquared;
+                    if (delta.magnitude <= task.maxDistance && Vector3.Angle(launchDirection, delta) <= task.guidanceAngle && distanceToAim < closest)
+                    { best = enemy; closest = distanceToAim; }
+                }
+                if (best != null) usedTarget = intendedTarget = new LocalTargetInfo(best);
+            }
+            if (projectile is Projectile_NeiyuBarrageArrow arrow)
+            {
+                arrow.volleyId = task.volleyId; arrow.extra = task.firedShots >= task.baseShots;
+                arrow.successiveFactor = task.successiveFactor;
+                arrow.splashFactor = tail ? task.splashFactor : 0f; arrow.splashRadius = task.splashRadius;
+            }
             projectile.Launch(task.caster, origin, usedTarget, intendedTarget, ProjectileHitFlags.All, preventFriendlyFire: false, equipment: equipment, targetCoverDef: null);
         }
 

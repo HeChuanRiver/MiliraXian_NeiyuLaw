@@ -499,6 +499,7 @@ namespace MiliraXian.Characters.Neiyu
             {
                 newComp.lastToggleTick = tick;
             }
+            CultivationService.State(pawn)?.NotifySwitch(sourceThing.def, targetDef);
         }
 
         private ThingWithComps FindStoredProtectedForm(Pawn pawn, ThingDef targetDef, bool allowUnbound = false)

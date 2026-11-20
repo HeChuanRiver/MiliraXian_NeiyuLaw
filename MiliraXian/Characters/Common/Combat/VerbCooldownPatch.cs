@@ -18,5 +18,6 @@ internal static class Patch_VerbProperties_AdjustedCooldown
         }
 
         __result = NeiyuSwordCombat.AdjustSwingCooldown(ownerVerb, attacker, __result);
+        __result = Neiyu.Cultivation.CultivationService.State(attacker)?.AttackCooldown(ownerVerb, __result) ?? __result;
     }
 }

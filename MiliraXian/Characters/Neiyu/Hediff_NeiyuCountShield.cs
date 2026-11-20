@@ -222,6 +222,27 @@ namespace MiliraXian.Characters.Neiyu
 
         public bool TryAbsorb(ref DamageInfo dinfo, ref bool absorbed)
         {
+            int before = phase2Charges, previousStage = stage, recoveryStart = phase2LastChargeChangeTick;
+            bool result = TryAbsorbCore(ref dinfo, ref absorbed);
+            if (result || before > phase2Charges)
+            {
+                bool broke = previousStage != 3 && stage == 3 || previousStage == 2 && before > 0 && phase2Charges == 0;
+                bool preserve = CultivationService.State(Pawn)?.NotifyShield(dinfo, broke) == true;
+                if (preserve && previousStage == 2 && stage == 2 && recoveryStart > 0)
+                    phase2LastChargeChangeTick = recoveryStart;
+            }
+            return result;
+        }
+
+        internal void RestoreCultivationCharges(int amount, int ceiling = int.MaxValue)
+        {
+            if (stage != 2 || !CultivationPower.ShieldEnabled(Pawn) || amount <= 0) return;
+            int maximum = Math.Min(Phase2MaxCharges, ceiling);
+            if (phase2Charges < maximum) phase2Charges = Math.Min(maximum, phase2Charges + amount);
+        }
+
+        private bool TryAbsorbCore(ref DamageInfo dinfo, ref bool absorbed)
+        {
             if (!CultivationPower.ShieldEnabled(Pawn) || absorbed || Pawn == null || Pawn.Dead || dinfo.Amount <= 0f)
             {
                 return false;

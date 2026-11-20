@@ -242,7 +242,7 @@ namespace MiliraXian.Characters.Zhaoli
 
         public Pawn GetRandomLiveLinkedPawn()
         {
-            if (ZhaoliPowerBalance.Sealed) return null;
+            if (!CanUseSubstitute()) return null;
             List<Pawn> liveLinkedPawns = new();
             CleanupInvalidLinks();
             for (int i = 0; i < linkedPawns.Count; i++)
@@ -262,6 +262,32 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             return liveLinkedPawns[Rand.Range(0, liveLinkedPawns.Count)];
+        }
+
+        internal bool TryResurrectWithSubstitute(Pawn substitute)
+        {
+            if (!CanUseSubstitute() || !Pawn.Dead || Pawn.Discarded
+                || substitute == null || substitute.Dead || substitute.Destroyed
+                || !linkedPawns.Contains(substitute) || !ZhaoliKarmaUtility.HasLinkFrom(substitute, Pawn))
+            {
+                return false;
+            }
+
+            substitute.Kill(null);
+            if (!substitute.Dead) return false;
+
+            BreakLink(substitute);
+            return Pawn.Dead && ResurrectionUtility.TryResurrect(Pawn, new ResurrectionParams
+            {
+                gettingScarsChance = 0f,
+                canKidnap = false,
+                canTimeoutOrFlee = false,
+                useAvoidGridSmart = true,
+                canSteal = false,
+                noLord = true,
+                invisibleStun = true,
+                removeDiedThoughts = true
+            });
         }
 
         private List<Pawn> GetEligibleOverflowPawns()
@@ -671,32 +697,15 @@ namespace MiliraXian.Characters.Zhaoli
             }
 
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(pawn);
-            Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
-            if (sacrificePawn == null)
+            if (linkComp?.TryResurrectWithSubstitute(linkComp.GetRandomLiveLinkedPawn()) != true)
             {
+                ZhaoliRebirthUtility.TryScheduleAfterDeath(pawn);
                 return;
             }
 
-            if (!linkComp.CanUseSubstitute()) return;
-            linkComp.BreakLink(sacrificePawn);
-            sacrificePawn.Kill(null);
-
-            if (ResurrectionUtility.TryResurrect(pawn, new ResurrectionParams
-            {
-                gettingScarsChance = 0f,
-                canKidnap = false,
-                canTimeoutOrFlee = false,
-                useAvoidGridSmart = true,
-                canSteal = false,
-                noLord = true,
-                invisibleStun = true,
-                removeDiedThoughts = true
-            }))
-            {
-                ZhaoliRebirthUtility.FinalizeReturnedPawn(pawn);
-                ZhaoliScenarioUtility.EnsureDefaultLoadout(pawn);
-                ZhaoliRebirthUtility.NotifyApparelResurrected(pawn);
-            }
+            ZhaoliRebirthUtility.FinalizeReturnedPawn(pawn);
+            ZhaoliScenarioUtility.EnsureDefaultLoadout(pawn);
+            ZhaoliRebirthUtility.NotifyApparelResurrected(pawn);
         }
     }
 
@@ -719,13 +728,11 @@ namespace MiliraXian.Characters.Zhaoli
 
             HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
             Pawn sacrificePawn = linkComp?.GetRandomLiveLinkedPawn();
-            if (sacrificePawn == null || sacrificePawn.Dead || sacrificePawn.Destroyed)
+            if (sacrificePawn == null)
             {
                 pendingSubstitutePawns.Remove(__instance);
                 return;
             }
-
-            if (!linkComp.CanUseSubstitute()) return;
 
             pendingSubstitutePawns[__instance] = sacrificePawn;
         }
@@ -733,56 +740,23 @@ namespace MiliraXian.Characters.Zhaoli
         public static void Postfix(Pawn __instance)
         {
             if (!ZhaoliKarmaUtility.IsZhaoli(__instance)) return;
-            if (__instance.health == null || !__instance.Dead)
+            if (!pendingSubstitutePawns.Remove(__instance, out Pawn sacrificePawn)
+                || __instance.health == null || !__instance.Dead) return;
+
+            bool isRaidState = ZhaoliScenarioUtility.IsRaidState(__instance);
+            HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
+            if (linkComp?.TryResurrectWithSubstitute(sacrificePawn) != true) return;
+
+            ZhaoliScenarioUtility.EnsureDefaultLoadout(__instance);
+            ZhaoliRebirthUtility.NotifyApparelResurrected(__instance);
+            if (isRaidState)
             {
-                pendingSubstitutePawns.Remove(__instance);
+                ZhaoliRebirthUtility.RemoveRebirthHediff(__instance);
+                ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.NotifySubstituteTriggered();
                 return;
             }
 
-            if (pendingSubstitutePawns.TryGetValue(__instance, out Pawn sacrificePawn))
-            {
-                pendingSubstitutePawns.Remove(__instance);
-                bool isRaidState = ZhaoliScenarioUtility.IsRaidState(__instance);
-
-                HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.GetLinkComp(__instance);
-                linkComp.BreakLink(sacrificePawn);
-                if (!sacrificePawn.Dead && !sacrificePawn.Destroyed)
-                {
-                    sacrificePawn.Kill(null);
-                }
-
-                if (ResurrectionUtility.TryResurrect(__instance, new ResurrectionParams
-                {
-                    gettingScarsChance = 0f,
-                    canKidnap = false,
-                    canTimeoutOrFlee = false,
-                    useAvoidGridSmart = true,
-                    canSteal = false,
-                    noLord = true,
-                    invisibleStun = true,
-                    removeDiedThoughts = true
-                }))
-                {
-                    ZhaoliScenarioUtility.EnsureDefaultLoadout(__instance);
-                    ZhaoliRebirthUtility.NotifyApparelResurrected(__instance);
-                    if (isRaidState)
-                    {
-                        ZhaoliRebirthUtility.RemoveRebirthHediff(__instance);
-                        ZhaoliScenarioUtility.GetRaidStateComp(__instance)?.NotifySubstituteTriggered();
-                        return;
-                    }
-
-                    ZhaoliRebirthUtility.RegisterRecruitGrowthDeath(__instance);
-                    return;
-                }
-
-                if (isRaidState)
-                {
-                    return;
-                }
-
-                ZhaoliRebirthUtility.TryScheduleRebirth(__instance);
-            }
+            ZhaoliRebirthUtility.RegisterRecruitGrowthDeath(__instance);
         }
     }
 }

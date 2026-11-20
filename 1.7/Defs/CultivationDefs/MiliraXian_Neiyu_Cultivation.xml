@@ -11,7 +11,7 @@
     <isBad>false</isBad><scenarioCanAdd>false</scenarioCanAdd><initialSeverity>1</initialSeverity><minSeverity>1</minSeverity><maxSeverity>1</maxSeverity>
     <stages><li /></stages>
     <comps>
-      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_CharacterPerkTree"><categories><li>MX_Neiyu_Cultivation_Spells</li><li>MX_Neiyu_Cultivation_Weapons</li><li>MX_Neiyu_Cultivation_Apparel</li><li>MX_Neiyu_Cultivation_Halo</li></categories></li>
+      <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_CharacterPerkTree"><categories><li>MX_Neiyu_Cultivation_Spells</li><li>MX_Neiyu_Cultivation_Weapons</li><li>MX_Neiyu_Cultivation_Apparel</li><li>MX_Neiyu_Cultivation_Halo</li><li>MX_Neiyu_FeatherLaw_stat</li><li>MX_Neiyu_FeatherLaw_mech</li><li>MX_Neiyu_FeatherLaw_skill</li></categories></li>
       <li Class="MiliraXian.Characters.Common.PerkSystem.HediffCompProperties_PerkEventHandler" />
     </comps>
   </HediffDef>

@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.UI;
 using System;
 using UnityEngine;
 using Verse;
@@ -44,7 +45,7 @@ internal sealed class Dialog_MingyuanEmberProgress : Window
                 if (trial == EmberTrial.None) continue;
                 y += 12;
                 TextBlock(view.width, ref y, book.TrialDescription(trial), Ink);
-                if (book.TrialComplete(trial)) Symbol(new Rect(view.width - 16, y + 4, 14, 14), EmberNodeVisual.Mastered, Gold);
+                if (book.TrialComplete(trial)) Symbol(new Rect(view.width - 16, y + 4, 14, 14), PerkNodeVisual.Mastered, Gold);
                 TextBlock(view.width - 22, ref y, book.TrialProgress(trial).ToString("0") + " / " + book.TrialTarget(trial).ToString("0"), Gold, GameFont.Tiny);
                 Widgets.DrawBoxSolid(new Rect(0, y, view.width, 2), Rule);
                 Widgets.DrawBoxSolid(new Rect(0, y, view.width * Mathf.Clamp01(book.TrialProgress(trial) / Mathf.Max(1, book.TrialTarget(trial))), 2), Gold);

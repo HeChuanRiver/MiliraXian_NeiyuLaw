@@ -380,6 +380,7 @@
 
     <ThingDef ParentName="BaseBullet">
         <defName>MX_Bullet_BarrageArrow</defName>
+        <thingClass>MiliraXian.Characters.Neiyu.Projectile_NeiyuBarrageArrow</thingClass>
         <label>霓羽·流羽矢</label>
         <graphicData>
             <texPath>MiliraXianNeiyu/Projectile/Shard</texPath>

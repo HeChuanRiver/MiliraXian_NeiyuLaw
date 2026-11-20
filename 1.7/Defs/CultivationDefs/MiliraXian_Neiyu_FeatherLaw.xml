@@ -1,0 +1,863 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+    <defName>MX_Neiyu_FeatherLaw_stat</defName>
+    <label>数值精修</label>
+    <displayOrder>400</displayOrder>
+    <iconPath>MiliraXianNeiyu/UI/Cultivation/Wing</iconPath>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+    <defName>MX_Neiyu_FeatherLaw_mech</defName>
+    <label>战斗律动</label>
+    <displayOrder>500</displayOrder>
+    <iconPath>MiliraXianNeiyu/UI/Cultivation/Halo</iconPath>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+    <defName>MX_Neiyu_FeatherLaw_skill</defName>
+    <label>术式演化</label>
+    <displayOrder>600</displayOrder>
+    <iconPath>MiliraXianNeiyu/UI/Cultivation/Arrow</iconPath>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkCategoryDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_origin</defName>
+    <label>羽律初识</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>400</displayOrder>
+    <effect>Origin</effect>
+    <position>(140, 580)</position>
+    <maxLevel>1</maxLevel>
+    <description>花、剑、弓三形态修行由此展开。</description>
+    <story>三道微光交汇于指尖。她要做的，是学会如何让这份力量回应选择。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Emblem</iconActive>
+    <initiallyLearned>true</initiallyLearned>
+    <levelDescriptions>
+      <li>花、剑、弓三形态修行由此展开。</li>
+    </levelDescriptions>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s1</defName>
+    <label>初锋微鸣</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>401</displayOrder>
+    <effect>SwordDamage</effect>
+    <position>(365, 160)</position>
+    <maxLevel>2</maxLevel>
+    <description>剑形普通攻击伤害累计 +6%。</description>
+    <story>不是更重的剑，而是让每一次挥刃都更准确。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>10</trialTarget>
+    <value>0.03</value>
+    <levelDescriptions>
+      <li>剑形普通攻击伤害 +3%。</li>
+      <li>剑形普通攻击伤害累计 +6%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_origin</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>6</Milira_Feather>
+      <Steel>40</Steel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s2</defName>
+    <label>弦羽校准</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>402</displayOrder>
+    <effect>BowDamage</effect>
+    <position>(580, 105)</position>
+    <maxLevel>2</maxLevel>
+    <description>弓形普通攻击伤害累计 +4%。</description>
+    <story>羽矢的飞行轨迹，逐渐成为了她能预见的线。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>30</trialTarget>
+    <value>0.02</value>
+    <levelDescriptions>
+      <li>弓形普通攻击伤害 +2%。</li>
+      <li>弓形普通攻击伤害累计 +4%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>8</Milira_Feather>
+      <Steel>55</Steel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s3</defName>
+    <label>轻步覆霓</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>403</displayOrder>
+    <effect>MoveSpeed</effect>
+    <position>(580, 248)</position>
+    <maxLevel>2</maxLevel>
+    <description>移动速度累计 +0.16 格/秒。</description>
+    <story>脚步与羽翼间，轻盈不再只是天赋。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Switch</trial>
+    <trialTarget>8</trialTarget>
+    <value>0.08</value>
+    <levelDescriptions>
+      <li>移动速度 +0.08 格/秒。</li>
+      <li>移动速度累计 +0.16 格/秒。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>8</Milira_Feather>
+      <Cloth>50</Cloth>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s4</defName>
+    <label>甲隙凝光</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>404</displayOrder>
+    <effect>SwordPenetration</effect>
+    <position>(810, 105)</position>
+    <maxLevel>2</maxLevel>
+    <description>剑形护甲穿透累计 +0.04。</description>
+    <story>不求蛮力，只在最薄的缝隙间落下锋芒。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>60</trialTarget>
+    <value>0.02</value>
+    <levelDescriptions>
+      <li>剑形护甲穿透 +0.02。</li>
+      <li>剑形护甲穿透累计 +0.04。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s2</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>12</Milira_Feather>
+      <Plasteel>12</Plasteel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s5</defName>
+    <label>薄霁护衣</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>405</displayOrder>
+    <effect>ApparelArmor</effect>
+    <position>(810, 248)</position>
+    <maxLevel>2</maxLevel>
+    <description>专属衣装锐器护甲累计 +0.06。</description>
+    <story>她把光藏在衣料的纹路里。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Block</trial>
+    <trialTarget>12</trialTarget>
+    <value>0.03</value>
+    <levelDescriptions>
+      <li>穿戴霓羽专属衣装时，锐器护甲 +0.03。</li>
+      <li>专属衣装锐器护甲累计 +0.06。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s3</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>12</Milira_Feather>
+      <Cloth>90</Cloth>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s6</defName>
+    <label>箭息归弦</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>406</displayOrder>
+    <effect>BowCooldown</effect>
+    <position>(1045, 105)</position>
+    <maxLevel>2</maxLevel>
+    <description>弓形射击冷却累计 -4%。</description>
+    <story>急促的弓弦终于找到了自己的节拍。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>100</trialTarget>
+    <value>0.02</value>
+    <levelDescriptions>
+      <li>弓形射击冷却 -2%。</li>
+      <li>弓形射击冷却累计 -4%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s4</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>16</Milira_Feather>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s7</defName>
+    <label>霁律稳心</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>407</displayOrder>
+    <effect>DamageReduction</effect>
+    <position>(1045, 248)</position>
+    <maxLevel>2</maxLevel>
+    <description>受到伤害系数累计 -3%（乘算）。</description>
+    <story>守住呼吸时，疼痛也会迟到半拍。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Block</trial>
+    <trialTarget>30</trialTarget>
+    <value>0.015</value>
+    <levelDescriptions>
+      <li>受到伤害系数 -1.5%（乘算）。</li>
+      <li>受到伤害系数累计 -3%（乘算）。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s5</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>16</Milira_Feather>
+      <Jade>14</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s8</defName>
+    <label>羽相同调</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>408</displayOrder>
+    <effect>FormDamage</effect>
+    <position>(1275, 160)</position>
+    <maxLevel>1</maxLevel>
+    <description>三形态普通攻击伤害 +4%；与本树其他加成乘算，不影响技能伤害。</description>
+    <story>三条不同的路，在心中回归同一段旋律。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Switch</trial>
+    <trialTarget>35</trialTarget>
+    <value>0.04</value>
+    <levelDescriptions>
+      <li>三形态普通攻击伤害 +4%；与本树其他加成乘算，不影响技能伤害。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s6</node>
+      </li>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s7</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>24</Milira_Feather>
+      <Plasteel>24</Plasteel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_s9</defName>
+    <label>霓光定式</label>
+    <category>MX_Neiyu_FeatherLaw_stat</category>
+    <displayOrder>409</displayOrder>
+    <effect>FinalDamage</effect>
+    <position>(1500, 160)</position>
+    <maxLevel>1</maxLevel>
+    <description>剑、弓普通攻击伤害额外 +3%；本树常驻普攻伤害加成乘算，最多 +15%。</description>
+    <story>剑不再迟疑，弦不再颤动。她已知道何时出手。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
+    <trial>Kills</trial>
+    <trialTarget>20</trialTarget>
+    <value>0.03</value>
+    <secondary>0.15</secondary>
+    <levelDescriptions>
+      <li>剑、弓普通攻击伤害额外 +3%；本树常驻普攻伤害加成乘算，最多 +15%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_s8</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>32</Milira_Feather>
+      <ComponentSpacer>1</ComponentSpacer>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m1</defName>
+    <label>换形余韵</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>410</displayOrder>
+    <effect>SwitchTempo</effect>
+    <position>(365, 530)</position>
+    <maxLevel>1</maxLevel>
+    <description>形态切换后 2 秒内，第一次普通攻击命中返还 0.3 秒攻击间隔；4 秒内最多触发一次。</description>
+    <story>形态交替时留下的那一丝余韵，被她握在了手里。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Switch</trial>
+    <trialTarget>5</trialTarget>
+    <value>0.3</value>
+    <durationTicks>120</durationTicks>
+    <cooldownTicks>240</cooldownTicks>
+    <levelDescriptions>
+      <li>形态切换后 2 秒内，第一次普通攻击命中返还 0.3 秒攻击间隔；4 秒内最多触发一次。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_origin</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>6</Milira_Feather>
+      <Steel>40</Steel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m2</defName>
+    <label>回羽步</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>411</displayOrder>
+    <effect>DodgeStep</effect>
+    <position>(580, 458)</position>
+    <maxLevel>1</maxLevel>
+    <description>成功闪避后获得 2 秒移动速度 +8%；触发冷却 8 秒。</description>
+    <story>她向后退去，飞羽却仍停留在原处。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Dodge</trial>
+    <trialTarget>8</trialTarget>
+    <value>0.08</value>
+    <durationTicks>120</durationTicks>
+    <cooldownTicks>480</cooldownTicks>
+    <levelDescriptions>
+      <li>成功闪避后获得 2 秒移动速度 +8%；触发冷却 8 秒。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>9</Milira_Feather>
+      <Cloth>60</Cloth>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m3</defName>
+    <label>护环自整</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>412</displayOrder>
+    <effect>QuietShield</effect>
+    <position>(580, 604)</position>
+    <maxLevel>1</maxLevel>
+    <description>非战斗状态下，护盾低于上限 25% 时每 40 秒恢复 1 层；最多恢复至 25%。</description>
+    <story>残缺的光环在无人看见的时候，缓慢合拢。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Block</trial>
+    <trialTarget>14</trialTarget>
+    <value>1</value>
+    <secondary>0.25</secondary>
+    <cooldownTicks>2400</cooldownTicks>
+    <levelDescriptions>
+      <li>非战斗状态下，护盾低于上限 25% 时每 40 秒恢复 1 层；最多恢复至 25%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>9</Milira_Feather>
+      <Jade>12</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m4</defName>
+    <label>借势反击</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>413</displayOrder>
+    <effect>DodgeCounter</effect>
+    <position>(810, 458)</position>
+    <maxLevel>1</maxLevel>
+    <description>成功闪避后的首次剑形普通攻击伤害 +10%；3 秒内有效，冷却 12 秒。</description>
+    <story>有时退后一步，正是为了那一道前进的剑光。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Dodge</trial>
+    <trialTarget>20</trialTarget>
+    <value>0.1</value>
+    <durationTicks>180</durationTicks>
+    <cooldownTicks>720</cooldownTicks>
+    <levelDescriptions>
+      <li>成功闪避后的首次剑形普通攻击伤害 +10%；3 秒内有效，冷却 12 秒。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m2</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>14</Milira_Feather>
+      <Steel>80</Steel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m5</defName>
+    <label>羽环负载</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>414</displayOrder>
+    <effect>ShieldMemory</effect>
+    <position>(810, 604)</position>
+    <maxLevel>1</maxLevel>
+    <description>每 15 秒的一次有效护盾承伤，保留受击前已累计的自然恢复等待时间；不提高护盾上限。</description>
+    <story>不是制造更多光环，而是减少每一环的浪费。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Block</trial>
+    <trialTarget>30</trialTarget>
+    <value>1</value>
+    <cooldownTicks>900</cooldownTicks>
+    <levelDescriptions>
+      <li>每 15 秒的一次有效护盾承伤，保留受击前已累计的自然恢复等待时间；不提高护盾上限。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m3</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>14</Milira_Feather>
+      <Jade>20</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m6</defName>
+    <label>花剑衔接</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>415</displayOrder>
+    <effect>FlowerSword</effect>
+    <position>(1045, 458)</position>
+    <maxLevel>1</maxLevel>
+    <description>由花形切至剑形后，首次剑击命中额外回复 1 层护盾；10 秒冷却。</description>
+    <story>花瓣散尽之时，锋刃刚好出鞘。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Switch</trial>
+    <trialTarget>25</trialTarget>
+    <value>1</value>
+    <cooldownTicks>600</cooldownTicks>
+    <levelDescriptions>
+      <li>由花形切至剑形后，首次剑击命中额外回复 1 层护盾；10 秒冷却。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m4</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>19</Milira_Feather>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m7</defName>
+    <label>断环归护</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>416</displayOrder>
+    <effect>BreakStep</effect>
+    <position>(1045, 604)</position>
+    <maxLevel>1</maxLevel>
+    <description>护盾被击破时获得 1.5 秒移动速度 +12%；每 45 秒触发一次，不提供无敌。</description>
+    <story>光环破碎不意味着落败，反而指明了退路。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Block</trial>
+    <trialTarget>65</trialTarget>
+    <value>0.12</value>
+    <durationTicks>90</durationTicks>
+    <cooldownTicks>2700</cooldownTicks>
+    <levelDescriptions>
+      <li>护盾被击破时获得 1.5 秒移动速度 +12%；每 45 秒触发一次，不提供无敌。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m5</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>19</Milira_Feather>
+      <Jade>26</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m8</defName>
+    <label>羽律互照</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>417</displayOrder>
+    <effect>SwitchRhythm</effect>
+    <position>(1275, 530)</position>
+    <maxLevel>1</maxLevel>
+    <description>形态切换触发的本树机制冷却时间 -15%；不影响主动技能冷却。</description>
+    <story>她终于能在不同的节奏中找到相同的起点。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Switch</trial>
+    <trialTarget>50</trialTarget>
+    <value>0.15</value>
+    <levelDescriptions>
+      <li>形态切换触发的本树机制冷却时间 -15%；不影响主动技能冷却。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m6</node>
+      </li>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m7</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>27</Milira_Feather>
+      <ComponentSpacer>1</ComponentSpacer>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_m9</defName>
+    <label>片羽不坠</label>
+    <category>MX_Neiyu_FeatherLaw_mech</category>
+    <displayOrder>418</displayOrder>
+    <effect>LastFeather</effect>
+    <position>(1500, 530)</position>
+    <maxLevel>1</maxLevel>
+    <description>每场战斗首次护盾破碎时获得 2 秒受伤系数 -10%；180 秒冷却，不叠加。</description>
+    <story>只要还剩一片羽光，她就依然不会停下。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
+    <trial>Block</trial>
+    <trialTarget>110</trialTarget>
+    <value>0.1</value>
+    <durationTicks>120</durationTicks>
+    <cooldownTicks>10800</cooldownTicks>
+    <levelDescriptions>
+      <li>每场战斗首次护盾破碎时获得 2 秒受伤系数 -10%；180 秒冷却，不叠加。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m8</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>34</Milira_Feather>
+      <Plasteel>35</Plasteel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k1</defName>
+    <label>术式引羽</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>419</displayOrder>
+    <effect>SpellRoot</effect>
+    <position>(365, 930)</position>
+    <maxLevel>1</maxLevel>
+    <description>开启花阵、剑势与流羽的术式专精。</description>
+    <story>术式并非更多，而是学会如何把每一道法令用在恰当之处。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Arrow</iconActive>
+    <trial>Skill</trial>
+    <trialTarget>4</trialTarget>
+    <levelDescriptions>
+      <li>开启花阵、剑势与流羽的术式专精。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_origin</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>6</Milira_Feather>
+      <Jade>10</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k2</defName>
+    <label>祈生·春息</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>420</displayOrder>
+    <effect>BlessRadius</effect>
+    <position>(580, 800)</position>
+    <maxLevel>1</maxLevel>
+    <description>花阵·祈生作用半径 +0.5 格。</description>
+    <story>春息越过花瓣，轻轻落到更远的肩头。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
+    <trial>Heal</trial>
+    <trialTarget>10</trialTarget>
+    <value>0.5</value>
+    <levelDescriptions>
+      <li>花阵·祈生作用半径 +0.5 格。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>12</Milira_Feather>
+      <MedicineIndustrial>8</MedicineIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k3</defName>
+    <label>天坠·回响</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>421</displayOrder>
+    <effect>SkyfallEcho</effect>
+    <position>(580, 930)</position>
+    <maxLevel>1</maxLevel>
+    <description>剑势·天坠命中后产生一次半径 1.5 格的余波，对敌人造成主体伤害的 20%。</description>
+    <story>剑光落下之后，仍有一声轻而长的鸣响。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconActive>
+    <trial>Skill</trial>
+    <trialTarget>16</trialTarget>
+    <value>0.2</value>
+    <secondary>1.5</secondary>
+    <levelDescriptions>
+      <li>剑势·天坠命中后产生一次半径 1.5 格的余波，对敌人造成主体伤害的 20%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>12</Milira_Feather>
+      <Steel>90</Steel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k4</defName>
+    <label>流羽·齐发</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>422</displayOrder>
+    <effect>BarrageExtra</effect>
+    <position>(580, 1060)</position>
+    <maxLevel>1</maxLevel>
+    <description>流羽裂界额外发射 4 支箭；额外箭对同一目标的伤害依次减半，原有箭矢不变。</description>
+    <story>箭矢不必满天，只需要在同一瞬间抵达。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>35</trialTarget>
+    <value>4</value>
+    <secondary>0.5</secondary>
+    <levelDescriptions>
+      <li>流羽裂界额外发射 4 支箭；额外箭对同一目标的伤害依次减半，原有箭矢不变。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k1</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>12</Milira_Feather>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k5</defName>
+    <label>祈生·留香</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>423</displayOrder>
+    <effect>BlessAfterglow</effect>
+    <position>(810, 800)</position>
+    <maxLevel>1</maxLevel>
+    <description>祈生施放处留下 3 秒恢复区，每秒恢复范围内友方当时剩余伤势的 25%。</description>
+    <story>花落了，却还有一些温柔不肯散去。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
+    <trial>Heal</trial>
+    <trialTarget>35</trialTarget>
+    <value>0.25</value>
+    <durationTicks>180</durationTicks>
+    <levelDescriptions>
+      <li>祈生施放处留下 3 秒恢复区，每秒恢复范围内友方当时剩余伤势的 25%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k2</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>19</Milira_Feather>
+      <MedicineIndustrial>16</MedicineIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k6</defName>
+    <label>断首·凝意</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>424</displayOrder>
+    <effect>ExecuteFocus</effect>
+    <position>(810, 930)</position>
+    <maxLevel>1</maxLevel>
+    <description>剑势·断首对已处于架势破坏状态的目标缩短 0.4 秒前摇；不降低处决触发门槛。</description>
+    <story>真正的决断，不需要再多一瞬的犹豫。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconActive>
+    <trial>Kills</trial>
+    <trialTarget>8</trialTarget>
+    <value>0.4</value>
+    <levelDescriptions>
+      <li>剑势·断首对已处于架势破坏状态的目标缩短 0.4 秒前摇；不降低处决触发门槛。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k3</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>19</Milira_Feather>
+      <Plasteel>18</Plasteel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k7</defName>
+    <label>流羽·牵星</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>425</displayOrder>
+    <effect>BarrageGuidance</effect>
+    <position>(810, 1060)</position>
+    <maxLevel>1</maxLevel>
+    <description>流羽裂界末段 6 支箭在发射时向附近敌人校正，最大偏转 12°。</description>
+    <story>她听见了羽矢落下之前，风替它们说出的方向。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <trial>Attack</trial>
+    <trialTarget>75</trialTarget>
+    <value>12</value>
+    <secondary>6</secondary>
+    <levelDescriptions>
+      <li>流羽裂界末段 6 支箭在发射时向附近敌人校正，最大偏转 12°。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k4</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>19</Milira_Feather>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k8</defName>
+    <label>瘴庭·延香</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>426</displayOrder>
+    <effect>ToxinAfterglow</effect>
+    <position>(1045, 800)</position>
+    <maxLevel>1</maxLevel>
+    <description>瘴庭施放处留下 2 秒残留区，仅对新进入的敌人施加一次原有效果。</description>
+    <story>芳香的尽头，也可以是一道温柔却难解的禁令。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconActive>
+    <trial>Skill</trial>
+    <trialTarget>40</trialTarget>
+    <durationTicks>120</durationTicks>
+    <levelDescriptions>
+      <li>瘴庭施放处留下 2 秒残留区，仅对新进入的敌人施加一次原有效果。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k5</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>26</Milira_Feather>
+      <Jade>24</Jade>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k9</defName>
+    <label>雷锁·缓缚</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>427</displayOrder>
+    <effect>ThunderHaste</effect>
+    <position>(1045, 930)</position>
+    <maxLevel>1</maxLevel>
+    <description>雷锁印域首次雷击标记延迟 -0.3 秒；连击次数与总伤害不变。</description>
+    <story>云还未散开，细碎的雷纹就已锁定归处。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
+    <trial>Skill</trial>
+    <trialTarget>55</trialTarget>
+    <value>0.3</value>
+    <levelDescriptions>
+      <li>雷锁印域首次雷击标记延迟 -0.3 秒；连击次数与总伤害不变。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k6</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>26</Milira_Feather>
+      <ComponentSpacer>1</ComponentSpacer>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k10</defName>
+    <label>流羽·终雨</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>428</displayOrder>
+    <effect>BarrageSplash</effect>
+    <position>(1045, 1060)</position>
+    <maxLevel>1</maxLevel>
+    <description>流羽裂界末段 6 支箭命中时，对半径 1.5 格内其他敌人造成单箭伤害的 15%。</description>
+    <story>飞羽落尽，余下一场细雨般的光。</story>
+    <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
+    <trial>Kills</trial>
+    <trialTarget>15</trialTarget>
+    <value>0.15</value>
+    <secondary>1.5</secondary>
+    <levelDescriptions>
+      <li>流羽裂界末段 6 支箭命中时，对半径 1.5 格内其他敌人造成单箭伤害的 15%。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k7</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>26</Milira_Feather>
+      <Plasteel>30</Plasteel>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+  <MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef Class="MiliraXian.Characters.Neiyu.Cultivation.NeiyuCultivationNodeDef">
+    <defName>MX_Neiyu_FeatherLaw_k11</defName>
+    <label>羽间终奏</label>
+    <category>MX_Neiyu_FeatherLaw_skill</category>
+    <displayOrder>429</displayOrder>
+    <effect>Finale</effect>
+    <position>(1300, 930)</position>
+    <maxLevel>1</maxLevel>
+    <description>同一场战斗中花、剑、弓各使用过一次主动技能后，下一次武器形态切换获得 3 秒 +12% 移速；60 秒冷却。</description>
+    <story>不是所有法术一起绽放，而是在恰好的一刻，将它们连成一曲。</story>
+    <iconActive>MiliraXianNeiyu/UI/Cultivation/Arrow</iconActive>
+    <trial>Skill</trial>
+    <trialTarget>100</trialTarget>
+    <value>0.12</value>
+    <durationTicks>180</durationTicks>
+    <cooldownTicks>3600</cooldownTicks>
+    <levelDescriptions>
+      <li>同一场战斗中花、剑、弓各使用过一次主动技能后，下一次武器形态切换获得 3 秒 +12% 移速；60 秒冷却。</li>
+    </levelDescriptions>
+    <prerequisites>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k8</node>
+      </li>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k9</node>
+      </li>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_k10</node>
+      </li>
+      <li>
+        <node>MX_Neiyu_FeatherLaw_m8</node>
+      </li>
+    </prerequisites>
+    <costs>
+      <Milira_Feather>40</Milira_Feather>
+      <ComponentSpacer>2</ComponentSpacer>
+    </costs>
+  </MiliraXian.Characters.Common.PerkSystem.CharacterPerkNodeDef>
+</Defs>
