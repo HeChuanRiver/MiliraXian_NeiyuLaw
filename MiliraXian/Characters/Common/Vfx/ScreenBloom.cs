@@ -112,6 +112,50 @@ namespace MiliraXian.Characters.Common.Vfx
         }
 
         /// <summary>
+        /// The instanced twin of <see cref="Submit"/>: draws the same instances into the group's layer,
+        /// so an instanced stroke (many instances, one draw call) can glow like any other.
+        /// </summary>
+        /// <remarks>
+        /// The block keeps its storage bindings (the per-instance data) while the tint is written and
+        /// restored, so the halo sees the same instance rows as the main draw.
+        /// </remarks>
+        public static void SubmitInstanced(
+            ScreenBloomProperties bloom,
+            Mesh mesh,
+            Matrix4x4[] matrices,
+            int count,
+            Material material,
+            MaterialPropertyBlock block)
+        {
+            if (NeiyuLawMod.Instance?.Settings?.EnableScreenBloom == false)
+            {
+                return;
+            }
+
+            ScreenBloomGroupDef group = bloom?.group;
+            if (group == null || mesh == null || material == null || matrices == null || count <= 0
+                || GravshipCapturer.IsGravshipRenderInProgress || !EnsureLayers() || group.layer < 0)
+            {
+                return;
+            }
+
+            block.SetColor(BloomTintId, bloom.tint);
+            block.SetFloat(BloomIntensityId, bloom.intensity);
+            Graphics.DrawMeshInstanced(mesh, 0, material, matrices, count, block,
+                UnityEngine.Rendering.ShadowCastingMode.Off, false, group.layer);
+            block.SetColor(BloomTintId, Color.white);
+            block.SetFloat(BloomIntensityId, 1f);
+
+            int frame = Time.frameCount;
+            if (pendingFrame != frame)
+            {
+                pendingFrame = frame;
+                pendingMask = 0;
+            }
+            pendingMask |= 1 << group.layer;
+        }
+
+        /// <summary>
         /// Called by the render feature on the main thread when the frame is captured: returns the
         /// layers that received glows this frame and clears them.
         /// </summary>

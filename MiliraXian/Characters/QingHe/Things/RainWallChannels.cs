@@ -1,0 +1,19 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
+using Verse;
+
+namespace MiliraXian.Characters.QingHe.Things
+{
+    /// <summary>
+    /// The rain wall's vec4 channels. They must be registered before any <c>VfxDef</c>'s
+    /// <c>ConfigErrors</c> runs, which is why this is a startup class rather than a lazy field.
+    /// </summary>
+    [StaticConstructorOnStartup]
+    internal static class RainWallChannels
+    {
+        /// <summary>The wall's frame: (along.x, along.y, across.x, across.y).</summary>
+        internal static readonly int Axis = VfxChannels.RegisterVector("rainWallAxis");
+
+        /// <summary>The wall's band: (halfLength, halfThickness, seconds, strength).</summary>
+        internal static readonly int Band = VfxChannels.RegisterVector("rainWallBand");
+    }
+}

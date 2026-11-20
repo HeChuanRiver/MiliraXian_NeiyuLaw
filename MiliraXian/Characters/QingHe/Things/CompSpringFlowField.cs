@@ -39,6 +39,12 @@ namespace MiliraXian.Characters.QingHe.Things
         private int ageTicks;
         private int ticksToNextAmbientVisual;
         private Verse.Mote fieldMote;
+
+        /// <summary>
+        /// The boundary's emitter. It is maintained every tick while the field is alive and dies with
+        /// it: this comp never holds a map-wide renderer, and there is no per-map lookup table.
+        /// </summary>
+        private MiliraXian.Characters.Common.Vfx.Emitter.VfxEmitterHandle visual;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
         public float CurrentRadius => Props.radius;
@@ -55,7 +61,36 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostDraw()
         {
             base.PostDraw();
-            // The boundary is drawn by SpringFlowVfx, not here.
+            // The boundary is drawn by the emitter system, not here.
+        }
+
+        /// <summary>
+        /// Keeps the boundary alive: one <c>Maintain</c> per tick is the only lifetime signal the
+        /// emitter needs, and the two numbers it reads are written as channels.
+        /// </summary>
+        private void MaintainVisual()
+        {
+            Map map = parent?.Map;
+            MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost host =
+                map?.GetComponent<MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost>();
+            if (host == null)
+            {
+                return;
+            }
+            if (visual.IsNone)
+            {
+                visual = host.Spawn(
+                    MiliraXian.Characters.Common.Vfx.Emitter.VfxDefOf.MX_Vfx_SpringFlow,
+                    MiliraXian.Characters.Common.Vfx.Emitter.VfxAnchor.Attached(parent));
+            }
+            if (visual.IsNone)
+            {
+                return;
+            }
+
+            host.Maintain(visual);
+            host.SetChannel(visual, MiliraXian.Characters.Common.Vfx.Emitter.VfxChannels.Radius, CurrentRadius);
+            host.SetChannel(visual, MiliraXian.Characters.Common.Vfx.Emitter.VfxChannels.Strength, VisualAlpha);
         }
 
         public override void CompTick()
@@ -67,6 +102,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
             ageTicks++;
             MaintainFieldMote();
+            MaintainVisual();
             lifetimeTicks--;
             if (lifetimeTicks <= 0)
             {
@@ -108,7 +144,11 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostDeSpawn(Map map, DestroyMode mode)
         {
             base.PostDeSpawn(map, mode);
-            SpringFlowVfx.Remove(map, this);
+            if (!visual.IsNone)
+            {
+                visual.Host.Destroy(visual);
+                visual = default;
+            }
         }
 
         public void Init(Pawn newCaster)
@@ -128,11 +168,8 @@ namespace MiliraXian.Characters.QingHe.Things
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
-            // Register with the VFX renderer immediately
-            if (parent?.Map != null)
-            {
-                SpringFlowVfx.Add(parent.Map, this);
-            }
+            // The emitter is created on the first tick by MaintainVisual, so nothing has to be
+            // registered here and no map-wide table is touched.
         }
 
         public override bool DontDrawParent()

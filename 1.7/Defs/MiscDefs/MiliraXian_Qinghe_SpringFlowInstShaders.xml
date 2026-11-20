@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 春泉边界的实例化版本：一块共享四边形 + 逐实例数据，N 个春泉一次提交。 -->
+
+  <ShaderDef>
+    <defName>MX_QH_SpringFlowInstanced</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MX_QH_SpringFlowInst.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_QH_SpringFlowInst.frag.glsl</fragmentShaderFileName>
+      <blendMode>Additive</blendMode>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3191</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+
+</Defs>

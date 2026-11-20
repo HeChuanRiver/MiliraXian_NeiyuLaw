@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 发射器系统的特效定义。一个特效 = 若干「笔（pass）」，每笔自带渲染器种类、材质、层与参数。
+       层与泛光写在每笔上，而不是整个特效上：地面压暗不该进泛光，光幕该进。 -->
+
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_SpringFlow</defName>
+    <fadeOutSeconds>0.35</fadeOutSeconds>
+
+    <!-- 春泉：目前只有一笔 —— 边界光幕。以后加地面水痕、涟漪、水滴，各加一个 <li> 即可，
+         宿主与渲染器都不用改。 -->
+    <passes>
+      <li>
+        <name>boundary</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_SpringFlowInstanced</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>0.8</bloomIntensity>
+        <!-- 实例化：一块共享四边形，逐实例数据带中心/尺寸/半径/强度，N 个春泉一次提交。 -->
+        <instanceMesh>quad</instanceMesh>
+        <instanceVectors>2</instanceVectors>
+        <field>
+          <!-- 四边形跟着半径走：边长 = ceil(R) * 2 + 3 -->
+          <sizeFromRadius>true</sizeFromRadius>
+          <radiusPadding>3</radiusPadding>
+          <radiusChannel>radius</radiusChannel>
+          <strengthChannel>strength</strengthChannel>
+          <!-- 光幕向北溢出的那一截；shader 也按同一公式重建几何 -->
+          <extraHeight>0.4</extraHeight>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <bindings>
+            <!-- 春粉；幕高/线宽/增益等全实例共享的常量 -->
+            <li>
+              <uniform>_Glow</uniform>
+              <value>(1, 0.62, 0.80, 1)</value>
+            </li>
+            <li>
+              <uniform>_Params</uniform>
+              <value>(0.4, 1, 0.024, 4.23)</value>
+            </li>
+          </bindings>
+        </field>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_RainWallStrands</defName>
+    <!-- 每面墙约 500 根雨丝 + 同样数量的落点水花。 -->
+    <capacity>1024</capacity>
+    <emitterClass>MiliraXian.Characters.QingHe.Things.RainWallEmitter</emitterClass>
+
+    <!-- 荷雨：雨丝与它的落点水花由同一个 LCG 循环产出，所以水花永远落在雨丝脚下。 -->
+    <passes>
+      <li>
+        <name>strands</name>
+        <renderer>Streak</renderer>
+        <texture>MiliraXianQinghe/Effect/rain_strand</texture>
+        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>0.45</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <streak>
+          <width>0.018</width>
+          <!-- 尾端 = 头端的 1 - 0.75 -->
+          <tailAlpha>0.25</tailAlpha>
+          <useAltitude>false</useAltitude>
+          <bindings>
+            <li><uniform>_Brightness</uniform><value>(1, 0, 0, 0)</value></li>
+            <li><uniform>_AlphaScale</uniform><value>(1, 0, 0, 0)</value></li>
+            <li><uniform>_Additive</uniform><value>(1, 0, 0, 0)</value></li>
+          </bindings>
+        </streak>
+      </li>
+
+      <li>
+        <name>splashes</name>
+        <renderer>Sprite</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_RainWallSplash</shaderDef>
+        <layer>0</layer>
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <!-- 每颗水花一个四边形，边长 2 × 0.45；uv 就是到落点的格偏移，不用图集。 -->
+          <quadSize>(0.9, 0.9)</quadSize>
+          <useParticleSize>false</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useUvRect>true</useUvRect>
+          <uvMin>(-0.45, -0.45)</uvMin>
+          <uvMax>(0.45, 0.45)</uvMax>
+          <bindings>
+            <li><uniform>_Band</uniform><vecChannel>rainWallBand</vecChannel></li>
+            <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
+          </bindings>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
+</Defs>

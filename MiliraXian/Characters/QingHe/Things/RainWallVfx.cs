@@ -38,34 +38,11 @@ namespace MiliraXian.Characters.QingHe.Things
         /// <summary>The longest strand; the quad has to reach this far above the sheet too.</summary>
         private const float RainLenMax = 1.45f;
 
-        // --- the strands: the preview's own numbers (rain_wall_preview.py, the SPEC) ------------
+        // --- the strands' fall speeds: shared by the emitter's strands and their landings ----------
         private const float FallSpeedLo = 1.70f;                 // RAIN_SPEED
         private const float FallSpeedHi = 2.60f;
-        private const float StrandLenLo = 0.85f;                 // RAIN_LEN
-        private const float StrandLenHi = 1.45f;
-        private const float StrandTilt = 0.10f;                  // RAIN_TILT
-        private const float StrandFadeIn = 0.18f;                // RAIN_FADE_IN
-        private const float StrandFadeOut = 0.22f;               // RAIN_FADE_OUT
-        private const float StrandTailDim = 0.75f;               // tail = 1 - 0.75·s
         /// <summary>Strands per cell² of band: the preview's RAIN_COUNT = 300 over 9x3 = 27 cells.</summary>
         private const float StrandDensity = 300f / 27f;
-
-        /// <summary>
-        /// Half-extent of one splash quad, in cells: has to cover the ripple's final radius
-        /// (0.35) with room for the ring's Gaussian skirt.
-        /// </summary>
-        private const float SplashQuadHalf = 0.45f;
-
-        /// <summary>The speed splitting splash-only strands from ringing ones (the preview's midpoint).</summary>
-        private const float SplashMidSpeed = (FallSpeedLo + FallSpeedHi) * 0.5f;
-        /// <summary>Full width of one streak, in cells (~1.3 px at the preview's 44 px/cell).</summary>
-        private const float StrandWidth = 0.018f;
-        /// <summary>
-        /// Peak light of a strand's head: the preview's RAIN_GAIN × RAIN_POINT = 0.48 × 0.48.
-        /// A streak is world-space geometry, so this scales with zoom exactly like the preview —
-        /// no fitting needed (the old per-pixel version needed RainGain=0.16).
-        /// </summary>
-        private const float StrandGain = 0.48f * 0.48f;
 
         /// <summary>
         /// Padding around the footprint so nothing is clipped at the quad's edge. Has to cover the
@@ -81,8 +58,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private const float LotusOpenSeconds = 1.1f;
 
-        /// <summary>The strands' colour: a dim cold water tint; the gains carry the light.</summary>
-        private static readonly Color StrandWhite = new(0.88f, 0.96f, 1f);
+        /// <summary>The wall's colour constants.</summary>
         private static readonly Color Season = new(0.60f, 0.95f, 0.50f);
         private static readonly Color LotusTint = new(0.94f, 1f, 1.02f, 1f);
 
@@ -125,9 +101,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private const string LotusBloomTexPath = "MiliraXianQinghe/Effect/lotus_bloom";
         private const string LotusPadTexPath = "MiliraXianQinghe/Effect/lotus_pad";
 
-        /// <summary>Strand cross-section: white, alpha = exp(-0.5·(2v−1)²) across, solid along.</summary>
-        private const string StrandTexPath = "MiliraXianQinghe/Effect/rain_strand";
-
         /// <summary>Aspect ratio (height/width) of each pre-cut texture.</summary>
         private const float BloomAspect = 333f / 544f;
         private const float PadAspect = 231f / 373f;
@@ -142,21 +115,16 @@ namespace MiliraXian.Characters.QingHe.Things
         private Material rainMat;
         private Material groundMat;
         private Material waterMat;
-        private Material splashMat;
         private Material lotusBloomMat;
         private Material lotusPadMat;
-        private Material strandMat;
         private Texture2D lotusBloomTex;
         private Texture2D lotusPadTex;
-        private Texture2D strandTex;
 
         private readonly List<Mesh> groundMeshes = new();
         private readonly List<Mesh> rainMeshes = new();
         private readonly List<Mesh> waterMeshes = new();
-        private readonly List<Mesh> splashMeshes = new();
         private readonly List<Mesh> lotusBloomMeshes = new();
         private readonly List<Mesh> lotusPadMeshes = new();
-        private Mesh strandMesh;
 
         /// <summary>Reused between frames: <see cref="Draw"/> runs every frame and must not allocate.</summary>
         private readonly List<CompSummerRainWall> liveBuffer = new();
@@ -246,9 +214,7 @@ namespace MiliraXian.Characters.QingHe.Things
             groundMat ??= MatFor("MX_QH_RainWallGround");
             rainMat ??= MatFor("MX_QH_RainWall");
             waterMat ??= MatFor("MX_QH_RainWallWater");
-            splashMat ??= MatFor("MX_QH_RainWallSplash");
             LotusMaterials();
-            StrandMaterial();
             if (rainMat == null || groundMat == null || waterMat == null)
             {
                 return;
@@ -326,22 +292,11 @@ namespace MiliraXian.Characters.QingHe.Things
                 block.SetVector(DistortScaleId, screenPerCell);
                 Graphics.DrawMesh(wm, Matrix4x4.identity, waterMat, 0, null, 0, block);
 
-                // --- 1c. the splashes: every strand's landing, batched into one mesh -------------
-                // One small quad per strand: the vertex colour carries the strand's phase, speed
-                // and whether it rings, the uv is the cell offset from the landing point. Drawn
-                // above the water, below the flowers.
-                if (splashMat != null)
-                {
-                    Mesh sm = MeshAt(splashMeshes, i);
-                    BuildSplashes(sm, wall, centre);
-                    if (!MapComponent_QingheVfx.BuffersEmpty)
-                    {
-                        block.Clear();
-                        block.SetVector(BandId, new Vector4(wall.HalfLength, wall.HalfThickness, seconds, s));
-                        block.SetVector(DistortScaleId, screenPerCell);
-                        Graphics.DrawMesh(sm, Matrix4x4.identity, splashMat, 0, null, 0, block);
-                    }
-                }
+                // --- 1c. the splashes now belong to the emitter -------------------------------
+                // They used to be built here from a second walk of the same random stream, which is
+                // exactly the coupling that had to stay in lockstep by hand. The emitter produces
+                // them in the same loop as the strands, so the landing point and the birth time are
+                // the same fact, not a convention.
 
                 // --- 2. the mist: the standing curtain ----------------------------------------
                 Mesh rm = MeshAt(rainMeshes, i);
@@ -386,46 +341,6 @@ namespace MiliraXian.Characters.QingHe.Things
 
                 block.Clear();
             }
-
-            // --- 4. the strands: CPU-simulated, one batched mesh for every wall on the map ------
-            DrawStrands(live, block);
-        }
-
-        /// <summary>
-        /// Every strand of every wall, batched into a single additive mesh — the same pattern as
-        /// the Flower Bell's petals: hundreds of quads, one draw call.
-        /// </summary>
-        private void DrawStrands(List<CompSummerRainWall> live, MaterialPropertyBlock block)
-        {
-            if (strandMat == null)
-            {
-                return;
-            }
-            MapComponent_QingheVfx.ClearBuffers();
-            for (int i = 0; i < live.Count; i++)
-            {
-                CompSummerRainWall wall = live[i];
-                float s = wall.Strength;
-                if (s > 0.01f)
-                {
-                    AddStrands(wall, wall.SecondsSinceStart, s);
-                }
-            }
-            if (MapComponent_QingheVfx.BuffersEmpty)
-            {
-                return;
-            }
-            strandMesh ??= MapComponent_QingheVfx.NewMesh("MX_QH_RainStrands");
-            MapComponent_QingheVfx.Upload(strandMesh);
-            block.Clear();
-            block.SetFloat(BrightnessId, 1f);
-            block.SetFloat(AlphaScaleId, 1f);
-            block.SetFloat(AdditiveId, 1f);
-            // Submitted at a dimmed intensity (StrandBloom): full bloom blew the strands out
-            // into bright threads, none at all left them flat.
-            ScreenBloom.Submit(StrandBloom, strandMesh, Matrix4x4.identity, strandMat, block);
-            Graphics.DrawMesh(strandMesh, Matrix4x4.identity, strandMat, 0, null, 0, block);
-            block.Clear();
         }
 
         /// <summary>
@@ -437,84 +352,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private static Vector3 OriginOf(CompSummerRainWall wall)
         {
             return new Vector3(wall.parent.Position.x + 0.5f, 0f, wall.parent.Position.z + 0.5f);
-        }
-
-        /// <summary>
-        /// One wall's falling drops, simulated exactly the way the preview's <c>_strands()</c>
-        /// does: each drop has a fixed (along, across) place in the band, a fall speed, a phase
-        /// and a length; it loops from the top of the sheet to the ground, leaning a touch as it
-        /// falls. Deterministic per wall, so a reloaded save shows the same rain.
-        /// </summary>
-        private static void AddStrands(CompSummerRainWall wall, float t, float strength)
-        {
-            float hl = wall.HalfLength;
-            float ht = wall.HalfThickness;
-            int count = Mathf.CeilToInt(StrandDensity * 4f * hl * ht);
-            Vector2 al = wall.AxisLength;
-            Vector2 ac = wall.AxisThickness;
-            Vector3 origin = OriginOf(wall);
-            float y = AltitudeLayer.MoteOverhead.AltitudeFor();
-
-            uint state = (uint)(wall.parent.thingIDNumber * 2654435761u + 97u);
-            for (int i = 0; i < count; i++)
-            {
-                float along = (NextRand(ref state) * 2f - 1f) * hl;
-                float across = (NextRand(ref state) * 2f - 1f) * ht;
-                float speed = Mathf.Lerp(FallSpeedLo, FallSpeedHi, NextRand(ref state));
-                float phase = NextRand(ref state);
-                float len = Mathf.Lerp(StrandLenLo, StrandLenHi, NextRand(ref state));
-
-                // progress through the fall: 0 at the top of the sheet, 1 at landing
-                float u = (t * speed / SheetHeight + phase) % 1f;
-                float env = FallEnvelope(u);
-                if (env <= 0.01f)
-                {
-                    continue;
-                }
-
-                float head = (1f - u) * SheetHeight;
-                float bx = origin.x + al.x * along + ac.x * across;
-                float bz = origin.z + al.y * along + ac.y * across;
-                // The drop slides along the streak's own slant: the line leans up-left at
-                // StrandTilt·½ per cell, so anchoring the LANDING point at (bx, bz) and shifting
-                // the head left by the same slope per cell of height makes the whole streak
-                // sweep down-right along itself — and land exactly on its ripple.
-                float slide = StrandTilt * 0.5f * head;
-                // the bright head is the DROP and sits at the bottom; the tail trails upward and
-                // fades (tail = 1 − 0.75·s, the same linear ramp the shader used — a vertex colour
-                // lerp reproduces it exactly).
-                Vector3 a = new(bx - slide, y, bz + head);
-                Vector3 b = new(bx - slide - StrandTilt * len * 0.5f, y, bz + head + len);
-                float headI = env * strength * StrandGain;
-                Color ca = new(StrandWhite.r, StrandWhite.g, StrandWhite.b, headI);
-                Color cb = new(StrandWhite.r, StrandWhite.g, StrandWhite.b, headI * (1f - StrandTailDim));
-                MapComponent_QingheVfx.AddStreak(a, b, StrandWidth, ca, cb);
-            }
-        }
-
-        /// <summary>Deterministic per-wall random stream (same LCG as <see cref="LotusColumns"/>).</summary>
-        private static float NextRand(ref uint state)
-        {
-            state = state * 1664525u + 1013904223u;
-            return (state >> 8) / 16777216f;
-        }
-
-        /// <summary>
-        /// Brightness of a drop at its progress through the fall (0 = top, 1 = landing).
-        /// Fading in at the top and out before landing keeps the recycle invisible.
-        /// </summary>
-        private static float FallEnvelope(float u)
-        {
-            if (u < StrandFadeIn)
-            {
-                return u / StrandFadeIn;
-            }
-            float left = 1f - u;
-            if (left < StrandFadeOut)
-            {
-                return left / StrandFadeOut;
-            }
-            return 1f;
         }
 
         /// <summary>
@@ -572,56 +409,6 @@ namespace MiliraXian.Characters.QingHe.Things
 
                 WindBuffer[i] = new Vector4(along, across, lam, amp);
             }
-        }
-
-        /// <summary>
-        /// One quad per strand landing point, batched into a single mesh — the discrete half of
-        /// the water, the same way the strands are the discrete half of the rain. This walks the
-        /// same random stream, in the same order, as <see cref="AddStrands"/> (keep the two in
-        /// lockstep), so every splash sits exactly under its strand and lives on that strand's
-        /// fall period.
-        ///
-        /// The vertex colour carries what the shader cannot hold in uniforms for 300 splashes:
-        /// (fall phase, speed normalised to [0,1], rings ? 1 : 0, 1). The owner's split by fall
-        /// speed: drops slower than <see cref="SplashMidSpeed"/> only flash their foam; faster
-        /// ones also ring — every landing splashes, half of them ring.
-        /// </summary>
-        private static void BuildSplashes(Mesh mesh, CompSummerRainWall wall, Vector3 origin)
-        {
-            float hl = wall.HalfLength;
-            float ht = wall.HalfThickness;
-            int count = Mathf.CeilToInt(StrandDensity * 4f * hl * ht);
-            Vector2 al = wall.AxisLength;
-            Vector2 ac = wall.AxisThickness;
-            float y = AltitudeLayer.MoteLow.AltitudeFor() + 0.015f;
-
-            uint state = (uint)(wall.parent.thingIDNumber * 2654435761u + 97u);
-            MapComponent_QingheVfx.ClearBuffers();
-            for (int i = 0; i < count; i++)
-            {
-                float along = (NextRand(ref state) * 2f - 1f) * hl;
-                float across = (NextRand(ref state) * 2f - 1f) * ht;
-                float speed = Mathf.Lerp(FallSpeedLo, FallSpeedHi, NextRand(ref state));
-                float phase = NextRand(ref state);
-                NextRand(ref state); // strand length — drawn by AddStrands, irrelevant to the splash
-
-                float bx = origin.x + al.x * along + ac.x * across;
-                float bz = origin.z + al.y * along + ac.y * across;
-                Color data = new(phase, Mathf.InverseLerp(FallSpeedLo, FallSpeedHi, speed),
-                    speed >= SplashMidSpeed ? 1f : 0f, 1f);
-                int n = MapComponent_QingheVfx.VertexCount;
-                MapComponent_QingheVfx.AddVertex(new Vector3(bx - SplashQuadHalf, y, bz - SplashQuadHalf),
-                    new Vector2(-SplashQuadHalf, -SplashQuadHalf), data);
-                MapComponent_QingheVfx.AddVertex(new Vector3(bx - SplashQuadHalf, y, bz + SplashQuadHalf),
-                    new Vector2(-SplashQuadHalf, SplashQuadHalf), data);
-                MapComponent_QingheVfx.AddVertex(new Vector3(bx + SplashQuadHalf, y, bz + SplashQuadHalf),
-                    new Vector2(SplashQuadHalf, SplashQuadHalf), data);
-                MapComponent_QingheVfx.AddVertex(new Vector3(bx + SplashQuadHalf, y, bz - SplashQuadHalf),
-                    new Vector2(SplashQuadHalf, -SplashQuadHalf), data);
-                MapComponent_QingheVfx.AddTriangle(n, n + 1, n + 2);
-                MapComponent_QingheVfx.AddTriangle(n, n + 2, n + 3);
-            }
-            MapComponent_QingheVfx.Upload(mesh);
         }
 
         /// <summary>
@@ -798,40 +585,12 @@ namespace MiliraXian.Characters.QingHe.Things
             }
         }
 
-        private void StrandMaterial()
-        {
-            if (strandMat != null)
-            {
-                return;
-            }
-            Shader shader = DefDatabase<ShaderDef>.GetNamedSilentFail("MX_QH_SakuraTrailAdd")?.Shader;
-            if (shader == null)
-            {
-                Log.ErrorOnce("[MiliraXian] Lotus Rain: missing shader 'MX_QH_SakuraTrailAdd'.",
-                    GenText.StableStringHash("MX_QH_SakuraTrailAdd"));
-                return;
-            }
-            strandTex = ContentFinder<Texture2D>.Get(StrandTexPath, false);
-            if (strandTex == null)
-            {
-                Log.WarningOnce("[MiliraXian] Lotus Rain: missing texture '" + StrandTexPath + "'.",
-                    GenText.StableStringHash(StrandTexPath));
-                return;
-            }
-            strandMat = MaterialPool.MatFrom(strandTex, shader, Color.white);
-        }
-
         public void Dispose()
         {
             DestroyAll(groundMeshes);
             DestroyAll(rainMeshes);
             DestroyAll(lotusBloomMeshes);
             DestroyAll(lotusPadMeshes);
-            if (strandMesh != null)
-            {
-                Object.Destroy(strandMesh);
-                strandMesh = null;
-            }
             walls.Clear();
             if (map != null && Instances.TryGetValue(map, out RainWallVfx self) && ReferenceEquals(self, this))
             {

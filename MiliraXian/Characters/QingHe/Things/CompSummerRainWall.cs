@@ -145,6 +145,35 @@ namespace MiliraXian.Characters.QingHe.Things
                 && Mathf.Abs(Vector2.Dot(v, axisThickness)) <= Props.halfThickness;
         }
 
+        /// <summary>
+        /// The strands' emitter. Maintained every tick while the wall lives; the emitter class reads
+        /// the wall's own axis, size and strength, so nothing is handed across here.
+        /// </summary>
+        private MiliraXian.Characters.Common.Vfx.Emitter.VfxEmitterHandle strands;
+
+        private void MaintainVisual()
+        {
+            Map map = parent?.Map;
+            MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost host =
+                map?.GetComponent<MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost>();
+            if (host == null)
+            {
+                return;
+            }
+
+            if (strands.IsNone)
+            {
+                strands = host.Spawn(
+                    MiliraXian.Characters.Common.Vfx.Emitter.VfxDefOf.MX_Vfx_RainWallStrands,
+                    MiliraXian.Characters.Common.Vfx.Emitter.VfxAnchor.Attached(this));
+            }
+            if (strands.IsNone)
+            {
+                return;
+            }
+            host.Maintain(strands);
+        }
+
         public override void CompTick()
         {
             base.CompTick();
@@ -152,6 +181,8 @@ namespace MiliraXian.Characters.QingHe.Things
             {
                 return;
             }
+
+            MaintainVisual();
 
             int now = Find.TickManager.TicksGame;
             if (now >= endTick + Props.fadeOutTicks)
@@ -297,6 +328,11 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             base.PostDestroy(mode, previousMap);
             RainWallVfx.Remove(previousMap ?? parent.Map, this);
+            if (!strands.IsNone)
+            {
+                strands.Host.Destroy(strands);
+                strands = default;
+            }
         }
 
         public override void PostExposeData()
