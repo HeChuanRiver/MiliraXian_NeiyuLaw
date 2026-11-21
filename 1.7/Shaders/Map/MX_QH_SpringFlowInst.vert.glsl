@@ -2,7 +2,7 @@
 
 // 春泉边界（实例化版）：一块共享四边形，逐实例的数据从 _InstanceData 读。
 //
-// 实例布局：每实例固定 4 个 vec4 的步长（与 VfxInstanceBatch.MaxVectors 一致），只用前两行：
+// 实例布局：每实例 <instanceVectors> 个 vec4（本项为 2），缓冲步长就等于它。
 //   row0 = (center.x, center.z, size, extraHeight)
 //   row1 = (radius, strength, altitude, 0)
 //
@@ -20,7 +20,7 @@ layout(set = 0, binding = 0) uniform VertexUniforms
     mat4 ViewProj;
 } uVertex;
 
-// 每实例固定 4 个 vec4 的步长；与 MX_QH_SpringFlowInst.frag.glsl 的声明必须一致（材质布局从 frag 解析）。
+// 每实例 2 个 vec4；与 MX_QH_SpringFlowInst.frag.glsl 的声明必须一致（材质布局从 frag 解析）。
 layout(set = 2, binding = 3) readonly buffer _InstanceData
 {
     vec4 data[];
@@ -30,7 +30,7 @@ layout(location = 0) out vec4 vColor;
 layout(location = 1) out vec3 vField;   // (X, Z, strength) —— 相对场心的格坐标与强度
 layout(location = 2) out float vRadius;
 
-const int INSTANCE_STRIDE = 4;
+const int INSTANCE_STRIDE = 2;
 
 void main()
 {

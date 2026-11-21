@@ -313,19 +313,21 @@ internal static class RainWallChannels
 
 ```xml
 <instanceMesh>quad</instanceMesh>     <!-- 共享几何：quad 或 plane（1×1 平面） -->
-<instanceVectors>2</instanceVectors>  <!-- shader 每实例读几个 vec4（1..4） -->
+<instanceVectors>2</instanceVectors>  <!-- shader 每实例读几个 vec4（1..16），也是缓冲步长 -->
 ```
 
 ### 布局契约
 
-缓冲的步长固定是 **4 个 vec4**，与 `instanceVectors` 无关。即使只写了 2，shader 也必须按 4 跳，否则会读到上一行的残值：
+缓冲的步长就是这一项自己的 `instanceVectors`：需要两行就付两行，需要七行才付七行。所以 shader 里的步长常量必须与该值相等，否则会读到上一行的残值：
 
 ```glsl
-const int INSTANCE_STRIDE = 4;
+const int INSTANCE_STRIDE = 2;   // == 本项的 <instanceVectors>
 int base = gl_InstanceIndex * INSTANCE_STRIDE;
 ```
 
-春泉用的布局：
+每一步实例的字节数由此得出：`instanceVectors × 16`。春泉用 2，即每实例 32 字节。
+
+春泉用的布局（`instanceVectors = 2`）：
 
 | 行 | 内容 |
 |---|---|
@@ -617,7 +619,7 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 |---|---|
 | 同一帧里只看得见最后一个 | 两块几何共用了一块网格，被后一次上传覆盖 |
 | 实例化后所有实例参数一样 | 逐实例的差异写进了 uniform，而不是实例数据 |
-| 实例数据读成乱序 | shader 按 2 行步长读，而缓冲步长是 4 个 vec4 |
+| 实例数据读成乱序 | shader 的 `INSTANCE_STRIDE` 与本项 `<instanceVectors>` 不相等 |
 | uv 变成位置 | `TexCoord0` 声明在 `location = 0`，应是 3 |
 | 实例化 shader 读到全 0 | `_InstanceData` 的名字与属性 id 不符，或 frag 里没声明 |
 | 特效贴在地面 | 实例化路径丢了 altitude，顶点 y 不能写 0 |
@@ -634,7 +636,7 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 - [ ] 每个绘制项都有对应参数块：`Field` 用 `<field>`，`Sprite` 用 `<sprite>`，`Streak` 用 `<streak>`
 - [ ] 用到的浮点通道与 vec4 通道都已在启动类注册
 - [ ] uniform 名字与 shader 声明逐字符一致
-- [ ] 实例化项写了 `instanceMesh` 与 `instanceVectors`，shader 按 4 行步长读
+- [ ] 实例化项写了 `instanceMesh` 与 `instanceVectors`，shader 的 `INSTANCE_STRIDE` 等于该值
 - [ ] 同形状多实例的绘制项考虑过实例化
 - [ ] 需要泛光的 shader 声明了 `_BloomTint` 与 `_BloomIntensity`
 - [ ] 贴图路径没有反斜杠；纯程序图案用 `White`

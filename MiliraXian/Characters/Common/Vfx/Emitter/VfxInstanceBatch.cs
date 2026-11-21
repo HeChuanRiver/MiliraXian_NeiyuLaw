@@ -8,13 +8,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     ///
     /// This is what makes "many instances of the same shape with different parameters" a single
     /// draw call: the geometry is shared, and everything that differs rides in the instance data.
+    ///
+    /// The row stride is the batch's own <see cref="Vectors"/>, not a global maximum: a stroke that
+    /// needs two vec4 per instance pays for two, and only the stroke that really carries seven pays
+    /// for seven. <see cref="MaxVectors"/> is merely the legal upper bound.
     /// </summary>
     internal sealed class VfxInstanceBatch
     {
-        /// <summary>How many vec4 a shader may read per instance.</summary>
-        internal const int MaxVectors = 4;
-
-        private const int Stride = MaxVectors * 16;
+        /// <summary>How many vec4 one instance may carry at most. Not the stride.</summary>
+        internal const int MaxVectors = 16;
 
         private Matrix4x4[] matrices = System.Array.Empty<Matrix4x4>();
         private Vector4[] data = System.Array.Empty<Vector4>();
@@ -23,7 +25,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         internal int Count { get; private set; }
 
+        /// <summary>Vec4 per instance for this batch; the shader's stride constant must equal it.</summary>
         internal int Vectors { get; private set; }
+
+        /// <summary>Bytes per instance, derived from <see cref="Vectors"/>.</summary>
+        internal int Stride => Mathf.Max(1, Vectors) * 16;
+
+        internal Matrix4x4[] Matrices => matrices;
+
+        internal ComputeBuffer Buffer => buffer;
 
         /// <summary>
         /// The batch's own property block: its uniforms are written by the stroke at append time and
@@ -32,44 +42,16 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// </summary>
         internal MaterialPropertyBlock Block => block ??= new MaterialPropertyBlock();
 
-        internal Matrix4x4[] Matrices => matrices;
-
-        internal ComputeBuffer Buffer => buffer;
-
-        internal Vector4[] Data => data;
-
-        /// <summary>
-        /// Allocates the instance buffer for up to <paramref name="capacity"/> instances ahead of time,
-        /// so the first stroke drawn does not pay for a GPU buffer allocation mid-frame.
-        /// </summary>
-        internal void Reserve(int capacity, int vectors)
-        {
-            int size = Mathf.Max(1, capacity);
-            if (matrices.Length >= size && buffer != null)
-            {
-                return;
-            }
-            if (matrices.Length < size)
-            {
-                System.Array.Resize(ref matrices, size);
-                System.Array.Resize(ref data, size * MaxVectors);
-            }
-            buffer?.Release();
-            buffer = new ComputeBuffer(size, Stride);
-            Vectors = Mathf.Clamp(vectors, 1, MaxVectors);
-        }
-
-        /// <summary>Empties the frame's instance list without releasing the buffer.</summary>
-        internal void ClearInstances()
-        {
-            Count = 0;
-        }
-
         /// <summary>Starts a frame with a layout of <paramref name="vectors"/> vec4 per instance.</summary>
         internal void Begin(int vectors)
         {
+            int wanted = Mathf.Clamp(vectors, 1, MaxVectors);
+            if (wanted != Vectors)
+            {
+                Vectors = wanted;
+                Relayout(matrices.Length);
+            }
             Count = 0;
-            Vectors = Mathf.Clamp(vectors, 1, MaxVectors);
         }
 
         /// <summary>Appends one instance; returns false when the batch is full.</summary>
@@ -81,7 +63,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
 
             matrices[Count] = matrix;
-            int target = Count * MaxVectors;
+            int target = Count * Vectors;
             for (int i = 0; i < Vectors; i++)
             {
                 data[target + i] = row[rowOffset + i];
@@ -97,12 +79,29 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 return;
             }
-            if (buffer == null || buffer.count < matrices.Length)
-            {
-                buffer?.Release();
-                buffer = new ComputeBuffer(Mathf.Max(1, matrices.Length), Stride);
-            }
+            EnsureBuffer();
             buffer.SetData(data);
+        }
+
+        /// <summary>
+        /// Allocates the instance buffer for up to <paramref name="capacity"/> instances ahead of time,
+        /// so the first stroke drawn does not pay for a GPU buffer allocation mid-frame.
+        /// </summary>
+        internal void Reserve(int capacity, int vectors)
+        {
+            Begin(vectors);
+            int size = Mathf.Max(1, capacity);
+            if (matrices.Length < size)
+            {
+                Relayout(size);
+            }
+            EnsureBuffer();
+        }
+
+        /// <summary>Empties the frame's instance list without releasing the buffer.</summary>
+        internal void ClearInstances()
+        {
+            Count = 0;
         }
 
         internal void Dispose()
@@ -115,6 +114,16 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Count = 0;
         }
 
+        private void EnsureBuffer()
+        {
+            if (buffer != null && buffer.count == matrices.Length && buffer.stride == Stride)
+            {
+                return;
+            }
+            buffer?.Release();
+            buffer = new ComputeBuffer(Mathf.Max(1, matrices.Length), Stride);
+        }
+
         private bool Grow()
         {
             int size = matrices.Length == 0 ? 64 : matrices.Length * 2;
@@ -122,9 +131,23 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 return false;
             }
-            System.Array.Resize(ref matrices, size);
-            System.Array.Resize(ref data, size * MaxVectors);
+            Relayout(size);
             return true;
+        }
+
+        /// <summary>Resizes the instance count and keeps the row array exactly <c>count * Vectors</c> long.</summary>
+        private void Relayout(int instances)
+        {
+            int size = Mathf.Max(1, instances);
+            if (matrices.Length != size)
+            {
+                System.Array.Resize(ref matrices, size);
+            }
+            int need = size * Mathf.Max(1, Vectors);
+            if (data.Length != need)
+            {
+                System.Array.Resize(ref data, need);
+            }
         }
     }
 }
