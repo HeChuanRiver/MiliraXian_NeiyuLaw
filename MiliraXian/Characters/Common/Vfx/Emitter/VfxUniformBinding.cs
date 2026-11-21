@@ -13,6 +13,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Frame-uniform id for the camera-derived screen-per-cell value.</summary>
         internal const int ScreenPerCell = 1;
 
+        /// <summary>Frame-uniform id for the shader's animation clock, in seconds.</summary>
+        internal const int Time = 2;
+
         internal int Uniform;
 
         /// <summary>-1 writes a float uniform; 0..3 fills that slot of a vec4.</summary>
@@ -101,8 +104,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             if (binding.Frame > 0)
             {
-                block.SetVector(binding.Uniform, frame.ScreenPerCell);
-                return;
+                switch (binding.Frame)
+                {
+                    case Time:
+                        block.SetFloat(binding.Uniform, frame.Time);
+                        return;
+                    default:
+                        block.SetVector(binding.Uniform, frame.ScreenPerCell);
+                        return;
+                }
             }
 
             if (binding.VecChannel >= 0)

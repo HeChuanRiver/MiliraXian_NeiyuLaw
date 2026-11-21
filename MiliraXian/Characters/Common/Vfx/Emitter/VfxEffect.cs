@@ -141,6 +141,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Tint = source.tint,
                 AtlasColumns = Mathf.Max(1, source.atlasColumns),
                 AtlasRows = Mathf.Max(1, source.atlasRows),
+                RotationRate = source.rotationRate,
                 FrameChannel = source.frameChannel.NullOrEmpty()
                     ? -1
                     : VfxChannels.TryFind(source.frameChannel, out int frame) ? frame : -1,
@@ -268,6 +269,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 case "screenPerCell":
                     return VfxUniformBinding.ScreenPerCell;
+                case "time":
+                    return VfxUniformBinding.Time;
                 default:
                     Log.ErrorOnce("[MiliraXian] Unknown VFX frame uniform '" + name + "'.",
                         GenText.StableStringHash("MX_Vfx_Frame_" + name));

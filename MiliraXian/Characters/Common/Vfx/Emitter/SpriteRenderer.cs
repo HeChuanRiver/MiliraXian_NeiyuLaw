@@ -16,6 +16,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         private readonly VfxMeshWriter writer = new();
 
+        /// <summary>Reused per-instance row; the draw pass runs every frame and must not allocate.</summary>
+        private readonly Vector4[] instanceRow = new Vector4[VfxInstanceBatch.MaxVectors];
         public void Render(VfxEmitter emitter, VfxPass pass, int passIndex, in VfxRenderContext context)
         {
             VfxSpriteParams sprite = pass?.Sprite;
@@ -27,6 +29,18 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Material material = context.Assets.Material(pass);
             if (material == null)
             {
+                return;
+            }
+
+            // Instanced sprite: one shared quad, one row per particle. The geometry never changes, so
+            // the shader owns orientation, rotation and animation — it has the clock and each
+            // particle's spawn time. Rows:
+            //   row0 = (center.x, center.z, halfSize, spawnSeconds)
+            //   row1 = (center.y, rotation0, rotationRate, atlasFrame)
+            //   row2 = colour rgba, written only when the pass asks for three rows
+            if (pass.InstanceVectors > 0 && pass.Mesh != null)
+            {
+                RenderInstanced(emitter, pass, sprite, context, material);
                 return;
             }
 
@@ -116,6 +130,69 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             context.Engine.Draw(mesh, material, pass.Layer);
             block.Clear();
+        }
+
+        /// <summary>
+        /// Appends one instance row per particle instead of building vertices. The geometry is the
+        /// shared quad, so nothing is uploaded per particle and the shader can animate from the clock.
+        /// </summary>
+        private void RenderInstanced(VfxEmitter emitter, VfxPass pass, VfxSpriteParams sprite,
+            in VfxRenderContext context, Material material)
+        {
+            MaterialPropertyBlock constants = context.Engine.BlockFor(pass);
+            if (constants == null)
+            {
+                return;
+            }
+
+            constants.Clear();
+            for (int i = 0; i < sprite.Bindings.Count; i++)
+            {
+                VfxUniformBinding.Apply(constants, emitter, sprite.Bindings[i], 0, context.Engine.Frame);
+            }
+
+            float alpha = emitter.Alpha;
+            float rotationRate = sprite.RotationRate;
+            int vectors = pass.InstanceVectors;
+
+            for (int i = 0; i < emitter.Count; i++)
+            {
+                VfxParticle particle = emitter.Particles[i];
+                if (!particle.Alive)
+                {
+                    continue;
+                }
+                if (pass.ParticleGroup >= 0 && particle.ParticleGroup != pass.ParticleGroup)
+                {
+                    continue;
+                }
+
+                float size = sprite.QuadSize.x * (sprite.UseParticleSize ? particle.Size : 1f);
+                if (size <= 0.001f)
+                {
+                    continue;
+                }
+
+                instanceRow[0] = new Vector4(
+                    particle.Position.x, particle.Position.z, size * 0.5f, particle.SpawnSeconds);
+                instanceRow[1] = new Vector4(
+                    particle.Position.y,
+                    sprite.UseParticleRotation ? particle.RotationDegrees : 0f,
+                    rotationRate,
+                    sprite.FrameChannel >= 0 ? Mathf.FloorToInt(emitter.Channel(i, sprite.FrameChannel)) : 0f);
+
+                if (vectors >= 3)
+                {
+                    Color color = sprite.UseParticleColor ? particle.Color : Color.white;
+                    color.a *= alpha * sprite.Tint.a;
+                    color.r *= sprite.Tint.r;
+                    color.g *= sprite.Tint.g;
+                    color.b *= sprite.Tint.b;
+                    instanceRow[2] = new Vector4(color.r, color.g, color.b, color.a);
+                }
+
+                context.Engine.AddInstance(pass, Matrix4x4.identity, instanceRow, 0);
+            }
         }
 
         /// <summary>The uv rect of the particle's atlas frame, or the whole texture when there is no atlas.</summary>

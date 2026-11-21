@@ -81,6 +81,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Tint = Color.white;
             AtlasColumns = 1;
             AtlasRows = 1;
+            RotationRate = 0f;
             FrameChannel = -1;
             UseUvRect = false;
             UvMin = Vector2.zero;
@@ -107,6 +108,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Horizontal and vertical slice counts of the texture; 1 × 1 means "whole texture".</summary>
         internal int AtlasColumns;
         internal int AtlasRows;
+
+        /// <summary>
+        /// Degrees per second the instanced mode hands to the shader. There is no per-particle rotation
+        /// field on purpose: the shader derives the angle from <c>spawnSeconds</c> and the clock.
+        /// </summary>
+        internal float RotationRate;
 
         /// <summary>Channel holding the atlas frame index, or -1 for a fixed frame 0.</summary>
         internal int FrameChannel;

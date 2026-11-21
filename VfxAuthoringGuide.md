@@ -126,7 +126,7 @@ public override void CompTick()
 
 `VfxEffect` 是**不可变**的：它只存「这个特效长什么样」，被这个特效的所有播放共享。粒子与年龄在 `VfxEmitter` 上，所以同一个特效同时放两次互不干扰。
 
-绘制项的定义可以写死成这样一句：**一个渲染器 + 一份材质 + 一个渲染层 + 一组粒子**。四者都写在同一层 —— 因此地面压暗不进泛光、光幕要进泛光这种差异，是在绘制项上表达，而不是在特效上。
+绘制项的定义可以写死成这样一句：**一个渲染器 + 一份材质 + 一个渲染层 + 一组粒子**。这四样都落在单个绘制项上，所以一个特效里不同的部分可以有各自的材质、层与泛光设置，不需要在一个绘制函数里兼顾彼此不同的需求。
 
 ---
 
@@ -266,7 +266,7 @@ Streak 的几何完全由粒子决定：**位置是头端，`Velocity` 是方向
 |---|---|---|---|
 | 顶点 | 渲染器写进网格 | 每个顶点 | 可以 |
 | 实例数据 | 发射器每帧写一行 | 每个实例 | 可以（一次 draw 画 N 个） |
-| 帧级 uniform | 引擎按相机算 | 全屏一份，每帧变 | 同帧内只能一个值 |
+| 帧级 uniform | 引擎每帧算 | 全屏一份，每帧变 | 同帧内只能一个值 |
 | 绘制项常量 | XML 里写死 | 全特效一份 | 可以 |
 | 通道 → uniform | 发射器每帧写 | **每个发射器一份** | 不可以 |
 
@@ -361,6 +361,60 @@ float worldX = row0.x - row0.z * 0.5 + inUv0.x * row0.z;
 
 ---
 
+## 把动画交给 shader
+
+一段时间驱动的变化——自转、缩放脉动、淡出、uv 滚动、闪烁——不需要在 C# 里逐帧算。这类动画的输入只有两样：**一个时钟**和**每颗粒子的出生时刻**。两样都已经递到 shader 手边了。
+
+### 时钟
+
+`<frame>time</frame>` 会把当前秒数写进指定的 uniform：
+
+```xml
+<li><uniform>_Time</uniform><frame>time</frame></li>
+```
+
+```glsl
+float _Time;  // 与 _Band 等同在 MaterialUniforms 里声明
+```
+
+这个时钟走的是游戏时间（受游戏速度影响，暂停即停），与粒子记录的出生时刻同一刻度。
+
+### 每颗粒子的相位
+
+粒子在发射时记下了自己的 `SpawnSeconds`，渲染器在实例化模式下把它写进实例行。于是：
+
+```glsl
+float age = u._Time - spawnSeconds;      // 这一颗活了多久
+float rot = rotation0 + rotationRate * age;   // 它现在转到哪
+```
+
+每颗粒子的出生时刻不同，所以它们不会同步旋转——**不需要任何逐帧的 C# 代码**。
+
+### `Sprite` 的实例化模式
+
+给绘制项加上 `instanceMesh` 与 `instanceVectors`，`Sprite` 就改成写实例行而不是写顶点：几何永远是同一块四边形，逐帧只更新一个时钟 uniform。
+
+```xml
+<instanceMesh>quad</instanceMesh>
+<instanceVectors>3</instanceVectors>
+```
+
+实例行的布局：
+
+| 行 | 内容 |
+|---|---|
+| `row0` | `(center.x, center.z, halfSize, spawnSeconds)` |
+| `row1` | `(center.y, rotation0, rotationRate, atlasFrame)` |
+| `row2` | 颜色 `rgba`，仅在 `instanceVectors >= 3` 时写入 |
+
+`center.y` 是高度，`halfSize` 是半个边长（页内尺寸乘粒子尺寸），`rotationRate` 来自该项的 `<rotationRate>`（度/秒）。朝向（躺地 / 竖立 / 面向镜头）由 shader 自己决定，因为只有它知道自己在什么平面上画。
+
+值得留意的是这条形态顺带解决了粒度问题：实例化之后，`Sprite` 与其他实例化绘制项共用同一套合批，同屏多少颗都只有一次提交。
+
+**速度积分仍然留在 C#**。`Position += Velocity * dt` 依赖上一帧，要搬进 GPU 就得保存上一帧状态，那是另一套工程量；旋转这类"给定参数就能算出来"的才适合进 shader。
+
+---
+
 ## 写 shader
 
 大多数新特效需要一个新 shader，因为现有 shader 都是为某个具体画面写的。
@@ -399,7 +453,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
 } u;
 ```
 
-后面两个不是可选的：泛光会把**同一份材质**再画进泛光层，那张副本用 `_BloomTint` 与 `_BloomIntensity` 着色。不声明它们，泛光要么全白要么全黑。
+后面两个只在需要单独调整光晕时才有必要：泛光会把**同一份材质**再画进泛光层，那一遍只改这两个值。声明了它们并在颜色上乘一次，光晕就能比本体更亮或偏色；不声明也能发光，只是光晕与本体同色同亮（详见「如何加入泛光」）。
 
 ### 顶点属性位置
 
@@ -591,7 +645,41 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 
 材质由 `MaterialPool` 创建并全 mod 共享，同样的组合只建一次，框架从不销毁它们（它们属于池）。
 
-写泛光前先想清楚这一项该不该进：地面的压暗图层是「让这里更暗」，把它送进只会加光的泛光层，结果会是亮得发白。春泉的边界光幕该进，荷雨的地面水痕不该进。
+### 如何加入泛光
+
+在已有的绘制项里加这两个字段：
+
+```xml
+<bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+<bloomIntensity>0.8</bloomIntensity>
+```
+
+`bloomGroup` 指向一个 `ScreenBloomGroupDef`，写错组名或组不存在，Def 校验会直接报出来。这两个字段都不写，这一项就不进泛光。
+
+光有 XML 就已经能发光了：泛光副本会照原样被缩小、模糊、叠加。但如果想单独调整**光晕**的颜色与亮度（让它比本体更亮、或者偏色），shader 就得读两个 uniform——泛光那一遍只会改这两个值：
+
+```glsl
+layout(set = 2, binding = 0) uniform MaterialUniforms
+{
+    vec4 _Color;           // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
+    vec4 _BloomTint;       // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
+    float _BloomIntensity; // @default = 1.0
+    // …其余你自己的参数
+} u;
+
+vec3 col = u._Glow.rgb * boundary * u._BloomTint.rgb * u._BloomIntensity;
+```
+
+它们的默认值分别是纯白与 1，所以这行乘法对主绘制没有影响，只在泛光那一遍起作用。shader 不声明它们也不会报错——引擎找不到对应槽位就静默跳过——只是光晕会与本体同色同亮，`bloomIntensity` 也就失去作用。
+
+提交由框架完成，作者不用管：
+
+| 绘制项 | 谁提交泛光副本 |
+|---|---|
+| 非实例化（`Field` / `Sprite` / `Streak`） | 渲染器在提交主绘制之前调用 `Engine.Bloom`，用同一块网格与同一份材质 |
+| 实例化（带 `instanceMesh` 的项） | 宿主在帧末 `FlushInstances` 里调用 `ScreenBloom.SubmitInstanced`，用同一批实例矩阵与实例缓冲 |
+
+需要知道的是泛光层的机制：它把收到的内容缩小、模糊，然后**叠加**到画面上，只能加光，不能压暗。所以一项能不能达到想要的画面，取决于它进这层之后的样子是否符合预期的画面需求——压暗类的绘制项送进去，得到的是被加亮的结果，而不是变暗。
 
 ---
 
@@ -626,7 +714,7 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 | 某个量每帧漂移、周期翻倍 | 把「当前进度」当成「相位」传给 shader |
 | 日志报 from a different thread | 在后台线程碰了材质或贴图 |
 | Def 校验说通道未知 | 通道没有在启动类里注册 |
-| 泛光全白或全黑 | shader 没声明 `_BloomTint` / `_BloomIntensity` |
+| 光晕与本体同色同亮，调 `bloomIntensity` 无效 | shader 没有声明并乘上 `_BloomTint` / `_BloomIntensity` |
 
 ---
 
@@ -638,7 +726,7 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 - [ ] uniform 名字与 shader 声明逐字符一致
 - [ ] 实例化项写了 `instanceMesh` 与 `instanceVectors`，shader 的 `INSTANCE_STRIDE` 等于该值
 - [ ] 同形状多实例的绘制项考虑过实例化
-- [ ] 需要泛光的 shader 声明了 `_BloomTint` 与 `_BloomIntensity`
+- [ ] 需要单独调整光晕时，shader 声明并乘上了 `_BloomTint` 与 `_BloomIntensity`
 - [ ] 贴图路径没有反斜杠；纯程序图案用 `White`
 - [ ] `ConfigErrors` 里没有访问资源
 - [ ] 覆盖 `Reset` / `Advance` 时都先调了 `base`
@@ -666,7 +754,7 @@ context.Engine.AddInstance(pass, matrix, row, 0);
 | 渲染器 `Field`、`Sprite`、`Streak` | 已实现 |
 | 粒子分组、实例化、帧级 uniform、vec4 通道 | 已实现 |
 | `Field` 实例化 | 已实现，春泉在用 |
-| `Sprite`、`Streak` 实例化 | 尚未：它们仍按「每发射器一块网格」绘制 |
+| `Sprite`、`Streak` 实例化 | `Sprite` 已支持（写实例行，动画交给 shader）；`Streak` 尚未 |
 | `Ribbon`（沿路径的条带）、`Mesh`（自定义网格）渲染器 | 尚未 |
 | 曲线参数（`SimpleCurve`） | 尚未 |
 | 已迁移的特效 | 春泉、荷雨的雨丝与水花 |

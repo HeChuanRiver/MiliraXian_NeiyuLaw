@@ -31,5 +31,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// renderer having to know which is which.
         /// </summary>
         internal int ParticleGroup;
+
+        /// <summary>
+        /// When this particle was born, on <see cref="VfxFrameUniforms.Time"/>'s clock. A shader that
+        /// animates from time needs the particle's own phase, otherwise every particle would move in
+        /// lockstep.
+        /// </summary>
+        internal float SpawnSeconds;
     }
 }

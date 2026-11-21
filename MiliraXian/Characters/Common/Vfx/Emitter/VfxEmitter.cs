@@ -245,6 +245,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Color = color,
                 Alive = true,
                 ParticleGroup = particleGroup,
+                SpawnSeconds = UnityEngine.Time.time,
             };
 
             if (Channels != null)

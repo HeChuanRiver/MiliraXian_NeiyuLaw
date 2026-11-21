@@ -15,9 +15,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>How far one map cell moves in screen space: (1/(2·size·aspect), -1/(2·size), 0.25, 0.05).</summary>
         internal Vector4 ScreenPerCell = new(0f, 0f, 0.25f, 0.05f);
 
+        /// <summary>
+        /// The clock shaders animate against, on the same scale as <see cref="VfxParticle.SpawnSeconds"/>:
+        /// scaled game time, so a sped-up game animates faster and a paused one stands still.
+        /// </summary>
+        internal float Time;
+
         /// <summary>Recomputes the camera-derived values. Called once per draw frame, on the main thread.</summary>
         internal void Refresh()
         {
+            Time = UnityEngine.Time.time;
+
             Camera camera = Find.Camera;
             if (camera != null && camera.orthographicSize > 0f)
             {

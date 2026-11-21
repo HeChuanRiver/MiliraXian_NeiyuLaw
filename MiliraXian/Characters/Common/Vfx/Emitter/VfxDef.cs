@@ -262,6 +262,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         public int atlasRows = 1;
 
+        /// <summary>
+        /// Degrees per second for the instanced mode. Rotation is left to the shader: it has the
+        /// clock and each instance's spawn time, so no per-particle angle needs maintaining here.
+        /// </summary>
+        public float rotationRate;
+
         /// <summary>Channel holding the atlas frame index; empty for a fixed frame.</summary>
         public string frameChannel;
 
