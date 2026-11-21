@@ -11,7 +11,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 {
     public class CompProperties_AbilitySpringFlow : CompProperties_AbilityEffect
     {
-        public ThingDef fieldDef = MX_QHDefOf.SpringFlowField;
+        public ThingDef fieldDef = MX_QHDefOf.MX_QH_SpringFlowField;
         public int fieldDurationTicks = 900;
         public HediffDef resourceCostDef;
         public float resourceCost = 0f;

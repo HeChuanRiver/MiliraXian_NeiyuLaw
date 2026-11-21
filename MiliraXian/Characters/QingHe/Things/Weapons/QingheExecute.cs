@@ -16,7 +16,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     /// sword's attack clip replayed piece by piece (<see cref="QingheSwordGuardDef.executionMotion"/>).
     /// Blows meanwhile are parried (see <see cref="QingheSwordBlocker"/>).
     /// </summary>
-    public sealed class JobDriver_QingheSwordExecution : JobDriver, IPostureExecutionDriver, IMotionPlaybackSource
+    public sealed class JobDriver_QingheExecute : JobDriver, IPostureExecutionDriver, IMotionPlaybackSource
     {
         private int executionStart = -1;
         private Vector3 aim = Vector3.right;
@@ -81,7 +81,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         protected override IEnumerable<Toil> MakeNewToils()
         {
             AddFinishAction(Finish);
-            Toil execution = ToilMaker.MakeToil("QingheSwordExecution");
+            Toil execution = ToilMaker.MakeToil("QingheExecute");
             execution.defaultCompleteMode = ToilCompleteMode.Never;
             execution.handlingFacing = true;
             execution.tickAction = TickExecution;
@@ -271,7 +271,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 Vector3 offset = KillBladePoint(C.killThrustSeconds, C.killThrustFlashShare, out _);
                 int id = executionStart;
                 QingheBladeTrail.SpawnFlashAt(pawn, C.killThrustFlash, Weapon.GetModExtension<QingheBladeTrailExtension>()?.bloom,
-                    offset, Now, () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id,
+                    offset, Now, () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheExecute d && d.executionStart == id,
                     Set.Projection);
             }
             catch (System.Exception ex)
@@ -340,7 +340,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 else
                 {
                     // The word and the darkening start fading in with the death; petals burst from the wound.
-                    MapComponent_QingheKillVfx.Spawn(map, C.killVfx, at);
+                    MapComponent_LuohuaVfx.Spawn(map, C.killVfx, at);
                     SpawnKillPetals(map);
                 }
             }
@@ -574,7 +574,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     float flashSeconds = (at - executionStart) / 60f;
                     QingheSheatheFlashProps flash = Mathf.Abs(flashSeconds - C.executionHitSeconds) < 0.05f ? C.executionHitFlash : null;
                     QingheBladeTrail.SpawnFlash(pawn, ext, clip, pieceAim, at,
-                        () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheSwordExecution d && d.executionStart == id,
+                        () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheExecute d && d.executionStart == id,
                         Set.Projection, flash);
                 }
             }

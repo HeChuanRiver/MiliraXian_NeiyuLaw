@@ -16,10 +16,10 @@
   <MX_AbnormalCorrosionLimitFactor.description>觸發腐蝕效果所需異常積累量的乘數。數值為0時，腐蝕異常無效。</MX_AbnormalCorrosionLimitFactor.description>
   <MX_AbnormalCorrosionEfficiencyFactor.label>腐蝕附加效率乘數</MX_AbnormalCorrosionEfficiencyFactor.label>
   <MX_AbnormalCorrosionEfficiencyFactor.description>該角色施加腐蝕異常積累量時使用的效率乘數。</MX_AbnormalCorrosionEfficiencyFactor.description>
-  <MX_AbnormalFearLimitFactor.label>恐懼積累上限乘數</MX_AbnormalFearLimitFactor.label>
-  <MX_AbnormalFearLimitFactor.description>觸發恐懼效果所需異常積累量的乘數。數值為0時，恐懼異常無效。</MX_AbnormalFearLimitFactor.description>
-  <MX_AbnormalFearEfficiencyFactor.label>恐懼附加效率乘數</MX_AbnormalFearEfficiencyFactor.label>
-  <MX_AbnormalFearEfficiencyFactor.description>該角色施加恐懼異常積累量時使用的效率乘數。</MX_AbnormalFearEfficiencyFactor.description>
+  <MX_AbnormalConfusionLimitFactor.label>混亂積累上限乘數</MX_AbnormalConfusionLimitFactor.label>
+  <MX_AbnormalConfusionLimitFactor.description>觸發混亂效果所需異常積累量的乘數。數值為0時，混亂異常無效。</MX_AbnormalConfusionLimitFactor.description>
+  <MX_AbnormalConfusionEfficiencyFactor.label>混亂附加效率乘數</MX_AbnormalConfusionEfficiencyFactor.label>
+  <MX_AbnormalConfusionEfficiencyFactor.description>該角色施加混亂異常積累量時使用的效率乘數。</MX_AbnormalConfusionEfficiencyFactor.description>
   <MX_AbnormalOverloadLimitFactor.label>過載積累上限乘數</MX_AbnormalOverloadLimitFactor.label>
   <MX_AbnormalOverloadLimitFactor.description>觸發過載效果所需異常積累量的乘數。數值為0時，過載異常無效。</MX_AbnormalOverloadLimitFactor.description>
   <MX_AbnormalOverloadEfficiencyFactor.label>過載附加效率乘數</MX_AbnormalOverloadEfficiencyFactor.label>

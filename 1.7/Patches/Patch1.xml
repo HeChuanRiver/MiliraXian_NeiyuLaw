@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Patch>
     <Operation  Class="PatchOperationAdd">
         <xpath>/Defs/AlienRace.ThingDef_AlienRace[defName="Milira_Race"]/alienRace/raceRestriction/apparelList</xpath>
@@ -9,8 +9,8 @@
             <li>MX_ZhaoliNormal</li>
             <li>MX_Apparel_EarringsZhenzhu</li>
             <li>MX_ZhaoliHood</li>
-            <li>MX_QingheNormal</li>
-            <li>MX_QingheHeaddress</li>
+            <li>MX_QH_Apparel_Normal</li>
+            <li>MX_QH_Apparel_Headdress</li>
             <li>MX_Mingyuan_InfernoArmor</li>
             <li>MX_Mingyuan_BurningFeatherCrown</li>
         </value>

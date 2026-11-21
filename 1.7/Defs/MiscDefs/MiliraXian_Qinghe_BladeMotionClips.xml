@@ -73,8 +73,8 @@
     刀从鞘里拔出：开头还有一截在鞘内。前摇后坐，刺出前冲，停顿时再压半步，抽刀时退回。
   -->
   <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
-    <defName>MX_QH_SwordClip_Kill</defName>
-    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Kill.json</dataPath>
+    <defName>MX_QH_SwordClip_Luohua</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Luohua.json</dataPath>
   </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
 
   <!--

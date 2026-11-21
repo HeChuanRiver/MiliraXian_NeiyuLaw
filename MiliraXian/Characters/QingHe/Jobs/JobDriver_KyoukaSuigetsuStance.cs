@@ -12,7 +12,7 @@ using Verse.Sound;
 namespace MiliraXian.Characters.QingHe.Jobs
 {
     /// <summary>Phases of Mirror Flower, Water Moon, in order.</summary>
-    public enum MirrorPhase
+    public enum KyoukaPhase
     {
         Windup,
         Stance,
@@ -35,9 +35,9 @@ namespace MiliraXian.Characters.QingHe.Jobs
     /// included, while the trail itself is only drawn as an outer band.
     /// The ability's cooldown starts when the job ends.
     /// </summary>
-    public class JobDriver_IllusoryReflectionStance : JobDriver
+    public class JobDriver_KyoukaSuigetsuStance : JobDriver
     {
-        private MirrorPhase phase = MirrorPhase.Windup;
+        private KyoukaPhase phase = KyoukaPhase.Windup;
         private int phaseStartTick = -1;
         private int stanceStartTick = -1;
         private Vector3 aim = Vector3.right;
@@ -51,7 +51,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         public Rot4 StanceFacing => new(stanceFacingInt);
 
-        public MirrorPhase Phase => phase;
+        public KyoukaPhase Phase => phase;
 
         /// <summary>Ground direction the stance was cast toward (the trail starts at its back-left).</summary>
         public Vector3 Aim => aim;
@@ -60,14 +60,14 @@ namespace MiliraXian.Characters.QingHe.Jobs
         public int PhaseStartTick => phaseStartTick;
 
         /// <summary>From the windup to Done every damage is absorbed, no posture lands and no execution.</summary>
-        public bool Untouchable => phase != MirrorPhase.Done;
+        public bool Untouchable => phase != KyoukaPhase.Done;
 
         public int StanceStartTick => stanceStartTick;
 
         /// <summary>Game tick the cut started; -1 before it.</summary>
         public int CutStartTick => cutStartTick;
 
-        public CompProperties_AbilityIllusoryReflection Properties => Props;
+        public CompProperties_AbilityKyoukaSuigetsu Properties => Props;
 
         /// <summary>Seconds into the current phase on the interpolated visual clock (never negative).</summary>
         public float PhaseSeconds => Mathf.Max(0f, Common.Vfx.VisualClock.TicksSince(phaseStartTick)) / 60f;
@@ -77,7 +77,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         {
             get
             {
-                CompProperties_AbilityIllusoryReflection props = Props;
+                CompProperties_AbilityKyoukaSuigetsu props = Props;
                 return ((props?.recoverTicks ?? 30) - (props?.weaponBackTicks ?? 9)) / 60f;
             }
         }
@@ -92,12 +92,12 @@ namespace MiliraXian.Characters.QingHe.Jobs
             {
                 switch (phase)
                 {
-                    case MirrorPhase.Shatter:
-                    case MirrorPhase.CutDelay:
-                    case MirrorPhase.Cut:
-                    case MirrorPhase.ReformDelay:
+                    case KyoukaPhase.Shatter:
+                    case KyoukaPhase.CutDelay:
+                    case KyoukaPhase.Cut:
+                    case KyoukaPhase.ReformDelay:
                         return true;
-                    case MirrorPhase.Recover:
+                    case KyoukaPhase.Recover:
                         return PhaseSeconds < ReformSeconds;
                     default:
                         return false;
@@ -113,18 +113,18 @@ namespace MiliraXian.Characters.QingHe.Jobs
         {
             get
             {
-                CompProperties_AbilityIllusoryReflection props = Props;
+                CompProperties_AbilityKyoukaSuigetsu props = Props;
                 float s = PhaseSeconds;
                 switch (phase)
                 {
-                    case MirrorPhase.Windup:
+                    case KyoukaPhase.Windup:
                         return 1f - Smooth(s / Mathf.Max(1e-3f, (props?.windupTicks ?? 30) / 60f));
-                    case MirrorPhase.Recover:
+                    case KyoukaPhase.Recover:
                         float back = (props?.weaponBackTicks ?? 9) / 60f;
                         return Mathf.Clamp01((s - ReformSeconds) / Mathf.Max(1e-3f, back));
-                    case MirrorPhase.Exit:
+                    case KyoukaPhase.Exit:
                         return Mathf.Clamp01(s / Mathf.Max(1e-3f, (props?.exitTicks ?? 30) / 60f));
-                    case MirrorPhase.Done:
+                    case KyoukaPhase.Done:
                         return 1f;
                     default:
                         return 0f;
@@ -140,17 +140,17 @@ namespace MiliraXian.Characters.QingHe.Jobs
         {
             get
             {
-                CompProperties_AbilityIllusoryReflection props = Props;
+                CompProperties_AbilityKyoukaSuigetsu props = Props;
                 float s = PhaseSeconds;
                 switch (phase)
                 {
-                    case MirrorPhase.Windup:
+                    case KyoukaPhase.Windup:
                         return 1f - Smooth(s / Mathf.Max(1e-3f, (props?.windupTicks ?? 30) / 60f));
-                    case MirrorPhase.Recover:
+                    case KyoukaPhase.Recover:
                         return Smooth(s / Mathf.Max(1e-3f, (props?.recoverTicks ?? 30) / 60f));
-                    case MirrorPhase.Exit:
+                    case KyoukaPhase.Exit:
                         return Smooth(s / Mathf.Max(1e-3f, (props?.exitTicks ?? 30) / 60f));
-                    case MirrorPhase.Done:
+                    case KyoukaPhase.Done:
                         return 1f;
                     default:
                         return 0f;
@@ -169,8 +169,8 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         private int PhaseTicks => Mathf.Max(0, Now - phaseStartTick);
 
-        private CompProperties_AbilityIllusoryReflection Props =>
-            job?.ability?.CompOfType<CompAbilityEffect_IllusoryReflection>()?.Props;
+        private CompProperties_AbilityKyoukaSuigetsu Props =>
+            job?.ability?.CompOfType<CompAbilityEffect_KyoukaSuigetsu>()?.Props;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
@@ -182,7 +182,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             base.Notify_Starting();
             int now = Now;
             stanceStartTick = now;
-            SetPhase(MirrorPhase.Windup, now);
+            SetPhase(KyoukaPhase.Windup, now);
             counterQueued = false;
             pressureGiven = false;
             cooldownStarted = false;
@@ -209,7 +209,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             {
                 return false;
             }
-            if (phase == MirrorPhase.Stance)
+            if (phase == KyoukaPhase.Stance)
             {
                 counterQueued = true;
             }
@@ -221,7 +221,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         /// <summary>A hostile attack that missed her (a dodge, a projectile reaching her cell) also triggers the counter.</summary>
         public bool TryHandleAttackAttempt(Thing instigator)
         {
-            if (phase != MirrorPhase.Stance || !IsHostileAttackSource(instigator))
+            if (phase != KyoukaPhase.Stance || !IsHostileAttackSource(instigator))
             {
                 return false;
             }
@@ -243,7 +243,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         protected override IEnumerable<Toil> MakeNewToils()
         {
             AddFinishAction(_ => StartCooldown());
-            Toil toil = ToilMaker.MakeToil("IllusoryReflection");
+            Toil toil = ToilMaker.MakeToil("KyoukaSuigetsu");
             toil.initAction = delegate
             {
                 Props?.stanceSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
@@ -252,7 +252,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             {
                 StateTick();
                 // The visuals are not saved: the map component picks the stance up again after a load.
-                pawn.Map?.GetComponent<Vfx.MapComponent_MirrorVisuals>()?.Track(pawn);
+                pawn.Map?.GetComponent<Vfx.MapComponent_KyoukaVisuals>()?.Track(pawn);
             };
             toil.defaultCompleteMode = ToilCompleteMode.Never;
             toil.handlingFacing = true;
@@ -261,7 +261,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
         private void StateTick()
         {
-            CompProperties_AbilityIllusoryReflection props = Props;
+            CompProperties_AbilityKyoukaSuigetsu props = Props;
             if (props == null || pawn.Map == null)
             {
                 EndJobWith(JobCondition.Incompletable);
@@ -272,57 +272,57 @@ namespace MiliraXian.Characters.QingHe.Jobs
             int elapsed = PhaseTicks;
             switch (phase)
             {
-                case MirrorPhase.Windup:
+                case KyoukaPhase.Windup:
                     if (ShouldLeave())
                     {
-                        SetPhase(MirrorPhase.Exit, now);
+                        SetPhase(KyoukaPhase.Exit, now);
                     }
                     else if (elapsed >= props.windupTicks)
                     {
-                        SetPhase(MirrorPhase.Stance, now);
+                        SetPhase(KyoukaPhase.Stance, now);
                     }
                     break;
-                case MirrorPhase.Stance:
+                case KyoukaPhase.Stance:
                     if (counterQueued)
                     {
-                        SetPhase(MirrorPhase.Shatter, now);
+                        SetPhase(KyoukaPhase.Shatter, now);
                         props.shatterSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
                     }
                     else if (ShouldLeave() || now - stanceStartTick >= props.durationTicks)
                     {
-                        SetPhase(MirrorPhase.Exit, now);
+                        SetPhase(KyoukaPhase.Exit, now);
                     }
                     break;
-                case MirrorPhase.Shatter:
-                    Advance(elapsed, props.shatterTicks, MirrorPhase.CutDelay, now);
+                case KyoukaPhase.Shatter:
+                    Advance(elapsed, props.shatterTicks, KyoukaPhase.CutDelay, now);
                     break;
-                case MirrorPhase.CutDelay:
+                case KyoukaPhase.CutDelay:
                     if (elapsed >= props.cutDelayTicks)
                     {
-                        SetPhase(MirrorPhase.Cut, now);
+                        SetPhase(KyoukaPhase.Cut, now);
                         StartCut(props, now);
                     }
                     break;
-                case MirrorPhase.Cut:
-                    Advance(elapsed, props.cutTicks, MirrorPhase.ReformDelay, now);
+                case KyoukaPhase.Cut:
+                    Advance(elapsed, props.cutTicks, KyoukaPhase.ReformDelay, now);
                     break;
-                case MirrorPhase.ReformDelay:
-                    Advance(elapsed, props.reformDelayTicks, MirrorPhase.Recover, now);
+                case KyoukaPhase.ReformDelay:
+                    Advance(elapsed, props.reformDelayTicks, KyoukaPhase.Recover, now);
                     break;
-                case MirrorPhase.Recover:
-                    Advance(elapsed, props.recoverTicks, MirrorPhase.Done, now);
+                case KyoukaPhase.Recover:
+                    Advance(elapsed, props.recoverTicks, KyoukaPhase.Done, now);
                     break;
-                case MirrorPhase.Exit:
-                    Advance(elapsed, props.exitTicks, MirrorPhase.Done, now);
+                case KyoukaPhase.Exit:
+                    Advance(elapsed, props.exitTicks, KyoukaPhase.Done, now);
                     break;
             }
-            if (phase == MirrorPhase.Done)
+            if (phase == KyoukaPhase.Done)
             {
                 EndJobWith(JobCondition.Succeeded);
             }
         }
 
-        private void Advance(int elapsed, int duration, MirrorPhase next, int now)
+        private void Advance(int elapsed, int duration, KyoukaPhase next, int now)
         {
             if (elapsed >= duration)
             {
@@ -330,7 +330,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
             }
         }
 
-        private void SetPhase(MirrorPhase next, int now)
+        private void SetPhase(KyoukaPhase next, int now)
         {
             phase = next;
             phaseStartTick = now;
@@ -343,7 +343,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 || (pawn.Faction == Faction.OfPlayer && pawn.drafter != null && !pawn.Drafted);
         }
 
-        private void StartCut(CompProperties_AbilityIllusoryReflection props, int now)
+        private void StartCut(CompProperties_AbilityKyoukaSuigetsu props, int now)
         {
             Map map = pawn.Map;
             cutStartTick = now;
@@ -367,7 +367,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
                 damage = props.damage * factor,
                 armorPenetration = props.armorPenetration,
                 startTick = now,
-                headings = MirrorCutGeometry.Headings(aim, props.cutStartYaw, props.cutTicks),
+                headings = KyoukaCutGeometry.Headings(aim, props.cutStartYaw, props.cutTicks),
             });
         }
 
@@ -397,7 +397,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref phase, "mx_qh_mirror_phase", MirrorPhase.Windup);
+            Scribe_Values.Look(ref phase, "mx_qh_mirror_phase", KyoukaPhase.Windup);
             Scribe_Values.Look(ref phaseStartTick, "mx_qh_mirror_phaseStart", -1);
             Scribe_Values.Look(ref stanceStartTick, "mx_qh_mirror_stanceStart", -1);
             Scribe_Values.Look(ref aim, "mx_qh_mirror_aim", Vector3.right);
@@ -414,7 +414,7 @@ namespace MiliraXian.Characters.QingHe.Jobs
     /// (clockwise seen from above facing east); a west-facing stance mirrors it, as the sprite does.
     /// The trail runs from <c>startYaw</c> a full turn with an ease-out: yaw(u) = start + 360·(1 − (1 − u)²).
     /// </summary>
-    public static class MirrorCutGeometry
+    public static class KyoukaCutGeometry
     {
         public static float YawAt(float startYaw, float u)
         {
@@ -444,12 +444,12 @@ namespace MiliraXian.Characters.QingHe.Jobs
     }
 
     /// <summary>The cut's contacts: the usual technique damage and posture, and the sword pressure of the first hit.</summary>
-    public class SweepDamageWorker_MirrorCut : SweepDamageWorker
+    public class SweepDamageWorker_KyoukaCut : SweepDamageWorker
     {
         public override void ApplyHit(SweepDamageSource source, Thing target)
         {
             base.ApplyHit(source, target);
-            if (source.caster?.jobs?.curDriver is JobDriver_IllusoryReflectionStance driver)
+            if (source.caster?.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance driver)
             {
                 driver.NotifyCutHit(target);
             }
@@ -458,20 +458,20 @@ namespace MiliraXian.Characters.QingHe.Jobs
 
     /// <summary>Registers the stance's immunity to posture and executions.</summary>
     [StaticConstructorOnStartup]
-    public static class IllusoryReflectionInvulnerability
+    public static class KyoukaSuigetsuInvulnerability
     {
-        static IllusoryReflectionInvulnerability()
+        static KyoukaSuigetsuInvulnerability()
         {
             CombatPosture.RegisterImmunity(Active);
             ExecutionGuard.Register((victim, _) => Active(victim));
             Common.Vfx.BladeBody.BladeOpacity.Register(pawn =>
-                pawn?.jobs?.curDriver is JobDriver_IllusoryReflectionStance driver ? driver.WeaponOpacity : 1f);
+                pawn?.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance driver ? driver.WeaponOpacity : 1f);
         }
 
         public static bool Active(Pawn pawn)
         {
             return pawn is { Dead: false }
-                && pawn.jobs?.curDriver is JobDriver_IllusoryReflectionStance { Untouchable: true };
+                && pawn.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance { Untouchable: true };
         }
     }
 }

@@ -99,7 +99,7 @@ namespace MiliraXian.Characters.QingHe
 
                 __state = ScanDamageHediffs(__instance.health.hediffSet.hediffs);
 
-                JobDriver_IllusoryReflectionStance reflection = __instance.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+                JobDriver_KyoukaSuigetsuStance reflection = __instance.jobs?.curDriver as JobDriver_KyoukaSuigetsuStance;
                 if (reflection?.TryHandleDamage(ref dinfo, ref absorbed) == true)
                 {
                     return false;
@@ -201,7 +201,7 @@ namespace MiliraXian.Characters.QingHe
             {
                 // The 3D blade dissolves by the opacity itself (BladeOpacity); the flat vanilla weapon
                 // is shown from half up. Hidden altogether while her body is.
-                if (pawn?.jobs?.curDriver is not JobDriver_IllusoryReflectionStance reflection
+                if (pawn?.jobs?.curDriver is not JobDriver_KyoukaSuigetsuStance reflection
                     || (!reflection.BodyHidden && reflection.WeaponOpacity >= 0.5f)
                     || (!reflection.BodyHidden && reflection.WeaponOpacity > 0f
                         && Common.Vfx.BladeMotion.BladeMotionPlayer.DrawnBlade(pawn) != null))
@@ -368,12 +368,12 @@ namespace MiliraXian.Characters.QingHe
                 Vector3 newExactPos,
                 ref bool __result)
             {
-                if (__instance?.Map == null || __instance.Destroyed || MX_QHDefOf.MX_QH_LunarMirror == null)
+                if (__instance?.Map == null || __instance.Destroyed || MX_QHDefOf.MX_QH_LunarMirrorShield == null)
                 {
                     return true;
                 }
 
-                var shields = __instance.Map.listerThings.ThingsOfDef(MX_QHDefOf.MX_QH_LunarMirror);
+                var shields = __instance.Map.listerThings.ThingsOfDef(MX_QHDefOf.MX_QH_LunarMirrorShield);
                 for (int i = 0; i < shields.Count; i++)
                 {
                     if (shields[i]?.TryGetComp<CompLunarMirrorShield>()?.TryInterceptProjectile(__instance, lastExactPos, newExactPos) == true)
@@ -479,7 +479,7 @@ namespace MiliraXian.Characters.QingHe
                 return;
             }
 
-            JobDriver_IllusoryReflectionStance reflection = target.jobs?.curDriver as JobDriver_IllusoryReflectionStance;
+            JobDriver_KyoukaSuigetsuStance reflection = target.jobs?.curDriver as JobDriver_KyoukaSuigetsuStance;
             reflection?.TryHandleAttackAttempt(instigator);
         }
 

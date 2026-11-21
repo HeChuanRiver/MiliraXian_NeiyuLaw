@@ -82,7 +82,7 @@
       <li><node>MX_QH_Node_FlyingFlowerDecree</node></li>
     </prerequisites>
     <grantedAbilities>
-      <li>MX_QH_SummerRain</li>
+      <li>MX_QH_LotusRain</li>
     </grantedAbilities>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
@@ -98,7 +98,7 @@
     <displayOrder>15</displayOrder>
     <requiredAuraMasteryLevel>1</requiredAuraMasteryLevel>
     <grantedAbilities>
-      <li>MX_QH_IllusoryReflection</li>
+      <li>MX_QH_Kyouka_Suigetsu</li>
     </grantedAbilities>
   </MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>
   <MiliraXian.Characters.QingHe.MX_QH_AuraPerkNodeDef>

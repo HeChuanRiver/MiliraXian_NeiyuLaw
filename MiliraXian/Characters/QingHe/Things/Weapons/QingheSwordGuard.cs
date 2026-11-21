@@ -126,7 +126,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>The flash at the scabbard mouth of the sheathe the blow lands with, instead of the weapon's. Null = the weapon's.</summary>
         public QingheSheatheFlashProps executionHitFlash;
         /// <summary>The word over the killed enemy and the darkening around it.</summary>
-        public QingheKillVfxProps killVfx;
+        public LuohuaVfxProps killVfx;
 
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 
@@ -420,7 +420,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             QingheSwordGuardDef c = QingheSwordGuard.Config;
             object stance = defender.stances.curStance;
-            if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
+            if (defender.jobs?.curDriver is JobDriver_QingheExecute)
             {
                 // Executing: invulnerable (SakuraDanceInvulnerability), the blow simply does nothing.
                 return false;
@@ -487,7 +487,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             QingheSwordGuardDef c = QingheSwordGuard.Config;
             object stance = defender.stances.curStance;
             bool parry;
-            if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
+            if (defender.jobs?.curDriver is JobDriver_QingheExecute)
             {
                 // Executing: invulnerable, the shot lands and does nothing.
                 return false;
@@ -578,7 +578,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 || pawn.IsBurning() || pawn.stances?.stunner?.Stunned != false
                 || pawn.WorkTagIsDisabled(WorkTags.Violent)
                 || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
-                || pawn.jobs?.curDriver is JobDriver_IllusoryReflectionStance
+                || pawn.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance
                 || pawn.CurJobDef == MX_QHDefOf.MX_QH_SakuraDance
                 || pawn.jobs?.curDriver is Abilities.Zantetsuken.JobDriver_Zantetsuken
                 || CombatPosture.Get(pawn)?.Broken == true)

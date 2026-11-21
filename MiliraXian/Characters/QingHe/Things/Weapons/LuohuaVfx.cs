@@ -12,9 +12,9 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     /// quickly, hold, then the word dissolves through a noise texture while the darkening fades.
     /// Map units and seconds.
     /// </summary>
-    public class QingheKillVfxProps
+    public class LuohuaVfxProps
     {
-        public string texPath = "MiliraXianQinghe/Effect/Execution/Luohua";
+        public string texPath = "MiliraXianQinghe/Effect/Luohua/Luohua";
         /// <summary>Height of the word, map units; its width follows the texture.</summary>
         public float height = 2.6f;
         public Vector2 offset;
@@ -43,11 +43,11 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     }
 
     /// <summary>Draws the execution kill words of the map. Visual only and not saved (a couple of seconds each).</summary>
-    public sealed class MapComponent_QingheKillVfx : MapComponent
+    public sealed class MapComponent_LuohuaVfx : MapComponent
     {
         private sealed class Kill
         {
-            public QingheKillVfxProps props;
+            public LuohuaVfxProps props;
             public Vector3 at;
             public float startTicks;
         }
@@ -61,18 +61,18 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private readonly List<Kill> kills = new();
 
-        public MapComponent_QingheKillVfx(Map map) : base(map)
+        public MapComponent_LuohuaVfx(Map map) : base(map)
         {
         }
 
-        internal static void Spawn(Map map, QingheKillVfxProps props, Vector3 at)
+        internal static void Spawn(Map map, LuohuaVfxProps props, Vector3 at)
         {
             if (map == null || props == null)
             {
                 return;
             }
             props.sound?.PlayOneShot(new TargetInfo(at.ToIntVec3(), map));
-            map.GetComponent<MapComponent_QingheKillVfx>()?.kills.Add(new Kill
+            map.GetComponent<MapComponent_LuohuaVfx>()?.kills.Add(new Kill
             {
                 props = props,
                 at = at,
@@ -108,7 +108,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private static void Draw(Kill k, float t)
         {
-            QingheKillVfxProps p = k.props;
+            LuohuaVfxProps p = k.props;
             float fadeIn = p.fadeInSeconds > 0f ? Mathf.Clamp01(t / p.fadeInSeconds) : 1f;
             float dissolve = p.dissolveSeconds > 0f
                 ? Mathf.Clamp01((t - p.fadeInSeconds - p.holdSeconds) / p.dissolveSeconds)
@@ -132,7 +132,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 block.Clear();
             }
 
-            Material text = MapComponent_SakuraDanceVisuals.Material(p.texPath, "MX_QH_ExecutionText");
+            Material text = MapComponent_SakuraDanceVisuals.Material(p.texPath, "MX_QH_LuohuaText");
             Texture tex = text?.mainTexture;
             if (text == null || tex == null || dissolve >= 1f)
             {

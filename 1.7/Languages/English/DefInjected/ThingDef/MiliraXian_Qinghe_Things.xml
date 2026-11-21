@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <SpringFlowField.label>spring flow field</SpringFlowField.label>
+  <MX_QH_SpringFlowField.label>spring flow field</MX_QH_SpringFlowField.label>
   <MX_QH_LotusPond.label>lotus pond</MX_QH_LotusPond.label>
   <MX_QH_LotusPond.description>Qinghe's cultivation site, where she meditates. Prepare a quiet, beautiful environment for her.</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>The lotus pond can only be assigned to Qinghe.</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
@@ -14,8 +14,5 @@
   <MX_Bullet_Qinghe_FlowerBell_Autumn.label>bell note: autumn</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
   <MX_Bullet_Qinghe_FlowerBell_Winter.label>bell note: winter</MX_Bullet_Qinghe_FlowerBell_Winter.label>
   <MX_Bullet_QH_LunarMirrorRetaliation.label>frost chill</MX_Bullet_QH_LunarMirrorRetaliation.label>
-  <MX_QH_LunarMirror.label>Lunar Mirror shield</MX_QH_LunarMirror.label>
-  <MX_QH_Mote_FlowerDivinationBurst.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBurst.label>
-  <MX_QH_Mote_FlowerDivinationBokeh.label>Qinghe effect</MX_QH_Mote_FlowerDivinationBokeh.label>
-  <MX_QH_Mote_FlowerDivinationFootRing.label>Qinghe effect</MX_QH_Mote_FlowerDivinationFootRing.label>
+  <MX_QH_LunarMirrorShield.label>Lunar Mirror shield</MX_QH_LunarMirrorShield.label>
 </LanguageData>

@@ -296,10 +296,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 block.SetTexture(MainTexId, shot);
                 block.SetColor(ShaderPropertyIDs.Color, col);
                 // t = time for wave animation; k = disturbance (0→1 during fade-out tears the picture apart);
-                // seed from pawn id for variety; w = 1 (body scale, same as DrawBody in MirrorVisuals).
+                // seed from pawn id for variety; w = 1 (body scale, same as DrawBody in KyoukaVisuals).
                 float seed = (inst.pawn.thingIDNumber * 7919) % 1000f;
                 block.SetVector(Shader.PropertyToID("_Wave"), new Vector4(t, k, seed, 1f));
-                // Light pink sheen, strengthens as k rises — mirrors the scatter tint from MirrorVisuals.DrawBody.
+                // Light pink sheen, strengthens as k rises — mirrors the scatter tint from KyoukaVisuals.DrawBody.
                 block.SetVector(Shader.PropertyToID("_Sheen"), new Vector4(1f, 0.72f, 0.85f, k * 0.35f));
                 Graphics.DrawMesh(inst.mesh, Matrix4x4.identity, mat, 0, null, 0, block);
                 block.Clear();

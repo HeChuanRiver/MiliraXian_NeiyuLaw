@@ -14,10 +14,10 @@
   <MX_QH_SakuraDanceSlash.deathMessage>{0} fell amid the blade light of Qinghe's sakura dance.</MX_QH_SakuraDanceSlash.deathMessage>
   <MX_QH_SakuraThunderSlash.label>sakura dance: lightning reversal</MX_QH_SakuraThunderSlash.label>
   <MX_QH_SakuraThunderSlash.deathMessage>{0} was struck down by the lightning Qinghe's blade returned.</MX_QH_SakuraThunderSlash.deathMessage>
-  <MX_QH_MirrorSlash.label>illusory reflection</MX_QH_MirrorSlash.label>
-  <MX_QH_MirrorSlash.deathMessage>{0} struck at a reflection on the water and fell to Qinghe's illusory reflection.</MX_QH_MirrorSlash.deathMessage>
-  <MX_QH_ExecutionSlash.label>zanshin</MX_QH_ExecutionSlash.label>
-  <MX_QH_ExecutionSlash.deathMessage>{0} fell as Qinghe's blade clicked home.</MX_QH_ExecutionSlash.deathMessage>
+  <MX_QH_Kyouka_SuigetsuSlash.label>kyouka suigetsu</MX_QH_Kyouka_SuigetsuSlash.label>
+  <MX_QH_Kyouka_SuigetsuSlash.deathMessage>{0} struck at a reflection on the water and fell to Qinghe's Kyouka Suigetsu.</MX_QH_Kyouka_SuigetsuSlash.deathMessage>
+  <MX_QH_Zanshin.label>Hissatsu: Zanshin</MX_QH_Zanshin.label>
+  <MX_QH_Zanshin.deathMessage>{0} fell as Qinghe's blade clicked home.</MX_QH_Zanshin.deathMessage>
   <MX_QH_Zantetsuken_Guren.label>Zantetsuken: Guren</MX_QH_Zantetsuken_Guren.label>
   <MX_QH_Zantetsuken_Guren.deathMessage>{0} was cut down by Qinghe's Zantetsuken: Guren falling from the sky.</MX_QH_Zantetsuken_Guren.deathMessage>
   <MX_QH_Gaeshi_Gekka.label>Tsubame Gaeshi: Gekka</MX_QH_Gaeshi_Gekka.label>

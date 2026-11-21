@@ -11,7 +11,7 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.Vfx
 {
     /// <summary>Visual settings of Mirror Flower, Water Moon.</summary>
-    public class MirrorVisualProps
+    public class KyoukaVisualProps
     {
         // Projection (the game's blade projection).
         public float heightToScreen = 0.35f;
@@ -78,7 +78,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
     /// reflection is a snapshot too. At most two render textures per stance, released at once.
     /// </summary>
     [StaticConstructorOnStartup]
-    public sealed class MapComponent_MirrorVisuals : MapComponent
+    public sealed class MapComponent_KyoukaVisuals : MapComponent
     {
         private const int SnapshotSize = 512;
         private const float SnapshotZoom = 0.5f;
@@ -99,11 +99,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static Material waterMat;
         private static Material spriteMat;
         private static bool warned;
-        private static readonly MirrorVisualProps DefaultProps = new();
+        private static readonly KyoukaVisualProps DefaultProps = new();
 
         private readonly List<Instance> instances = new();
 
-        public MapComponent_MirrorVisuals(Map map) : base(map)
+        public MapComponent_KyoukaVisuals(Map map) : base(map)
         {
         }
 
@@ -123,7 +123,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         /// <summary>The real body of <paramref name="pawn"/> is not drawn now (the snapshot is).</summary>
         public static bool HidesBody(Pawn pawn)
         {
-            return pawn?.jobs?.curDriver is JobDriver_IllusoryReflectionStance { BodyHidden: true };
+            return pawn?.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance { BodyHidden: true };
         }
 
         public override void MapComponentUpdate()
@@ -132,7 +132,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             for (int i = instances.Count - 1; i >= 0; i--)
             {
                 Instance inst = instances[i];
-                if (!Valid(inst, out JobDriver_IllusoryReflectionStance driver))
+                if (!Valid(inst, out JobDriver_KyoukaSuigetsuStance driver))
                 {
                     // The trail is drawn by the strip renderer and fades on its own.
                     inst.Release();
@@ -161,7 +161,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 Instance inst = instances[i];
                 try
                 {
-                    if (Valid(inst, out JobDriver_IllusoryReflectionStance driver) && !inst.pawn.IsHiddenFromPlayer())
+                    if (Valid(inst, out JobDriver_KyoukaSuigetsuStance driver) && !inst.pawn.IsHiddenFromPlayer())
                     {
                         Draw(inst, driver);
                     }
@@ -185,16 +185,16 @@ namespace MiliraXian.Characters.QingHe.Vfx
             instances.Clear();
         }
 
-        private static bool Valid(Instance inst, out JobDriver_IllusoryReflectionStance driver)
+        private static bool Valid(Instance inst, out JobDriver_KyoukaSuigetsuStance driver)
         {
-            driver = inst.pawn is { Spawned: true, Dead: false } p ? p.jobs?.curDriver as JobDriver_IllusoryReflectionStance : null;
+            driver = inst.pawn is { Spawned: true, Dead: false } p ? p.jobs?.curDriver as JobDriver_KyoukaSuigetsuStance : null;
             if (driver != null && inst.driver != driver)
             {
                 // A new cast by the same pawn: start clean.
                 inst.Release();
                 inst.driver = driver;
             }
-            return driver != null && driver.Phase != MirrorPhase.Done;
+            return driver != null && driver.Phase != KyoukaPhase.Done;
         }
 
         private static void Warn(System.Exception ex)
@@ -206,22 +206,22 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
         }
 
-        private static MirrorVisualProps PropsOf(JobDriver_IllusoryReflectionStance driver)
+        private static KyoukaVisualProps PropsOf(JobDriver_KyoukaSuigetsuStance driver)
         {
             return driver.Properties?.visuals ?? DefaultProps;
         }
 
         // ---------------------------------------------------------------- snapshots
 
-        private static void Capture(Instance inst, JobDriver_IllusoryReflectionStance driver)
+        private static void Capture(Instance inst, JobDriver_KyoukaSuigetsuStance driver)
         {
             Pawn pawn = inst.pawn;
             Rot4 facing = driver.StanceFacing;
             switch (driver.Phase)
             {
-                case MirrorPhase.Windup:
-                case MirrorPhase.Stance:
-                case MirrorPhase.Exit:
+                case KyoukaPhase.Windup:
+                case KyoukaPhase.Stance:
+                case KyoukaPhase.Exit:
                     // One snapshot serves the reflection while she waits and, frozen, the body that
                     // shatters (the frame before the hit). She stands still: every few frames is enough.
                     if (inst.captureId <= 0 || Time.frameCount - inst.bodyFrame >= 4)
@@ -231,9 +231,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     }
                     inst.reformTaken = false;
                     break;
-                case MirrorPhase.Recover:
-                case MirrorPhase.ReformDelay:
-                    if (!inst.reformTaken && driver.Phase == MirrorPhase.Recover)
+                case KyoukaPhase.Recover:
+                case KyoukaPhase.ReformDelay:
+                    if (!inst.reformTaken && driver.Phase == KyoukaPhase.Recover)
                     {
                         // She takes shape again as she stands now (the weapon still hidden).
                         Snap(ref inst.captureId, pawn, facing);
@@ -268,10 +268,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         // ---------------------------------------------------------------- drawing
 
-        private void Draw(Instance inst, JobDriver_IllusoryReflectionStance driver)
+        private void Draw(Instance inst, JobDriver_KyoukaSuigetsuStance driver)
         {
-            MirrorVisualProps vp = PropsOf(driver);
-            CompProperties_AbilityIllusoryReflection props = driver.Properties;
+            KyoukaVisualProps vp = PropsOf(driver);
+            CompProperties_AbilityKyoukaSuigetsu props = driver.Properties;
             Pawn pawn = inst.pawn;
             // The drawn body centre on the ground (no motion plays during the stance).
             Vector3 center = pawn.DrawPos;
@@ -286,25 +286,25 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             switch (driver.Phase)
             {
-                case MirrorPhase.Windup:
+                case KyoukaPhase.Windup:
                 {
-                    float grow = JobDriver_IllusoryReflectionStance.Smooth(s / Mathf.Max(1e-3f, windup));
+                    float grow = JobDriver_KyoukaSuigetsuStance.Smooth(s / Mathf.Max(1e-3f, windup));
                     DrawWater(vp, feet, waterT, grow, -1f, alt);
                     DrawReflection(inst, vp, feet, center, waterT, vp.reflectionAlpha * grow, 0f, alt);
                     break;
                 }
-                case MirrorPhase.Stance:
+                case KyoukaPhase.Stance:
                     DrawWater(vp, feet, waterT, 1f, -1f, alt);
                     DrawReflection(inst, vp, feet, center, waterT, vp.reflectionAlpha, 0f, alt);
                     break;
-                case MirrorPhase.Exit:
+                case KyoukaPhase.Exit:
                 {
                     float k = Mathf.Clamp01(s / Mathf.Max(1e-3f, exit));
                     DrawWater(vp, feet, waterT, 1f - k, -1f, alt);
                     DrawReflection(inst, vp, feet, center, waterT, vp.reflectionAlpha * (1f - k), 0f, alt);
                     break;
                 }
-                case MirrorPhase.Shatter:
+                case KyoukaPhase.Shatter:
                 {
                     float p = Mathf.Clamp01(s / Mathf.Max(1e-3f, shatter));
                     float pb = Mathf.Clamp01(s / Mathf.Max(1e-3f, vp.bodyFadeSeconds));
@@ -319,12 +319,12 @@ namespace MiliraXian.Characters.QingHe.Vfx
                     DrawFlash(vp, center + new Vector3(0f, 0f, 0.1f), vp.flashBrightness * Mathf.Exp(-f * f), alt);
                     break;
                 }
-                case MirrorPhase.Recover:
+                case KyoukaPhase.Recover:
                 {
                     float q = s / Mathf.Max(1e-3f, reform);
                     if (q < 1f)
                     {
-                        float e = JobDriver_IllusoryReflectionStance.Smooth(q);
+                        float e = JobDriver_KyoukaSuigetsuStance.Smooth(q);
                         DrawBody(inst, vp, center, waterT, (1f - e) * 0.9f, e, 5, alt);
                     }
                     break;
@@ -336,7 +336,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 // Handed to the Sakura Dance strip renderer, which draws it and drops it when it has faded
                 // (also after the job has ended).
                 inst.trailSpawned = true;
-                MirrorTrailSource.Spawn(map, vp, props, driver);
+                KyoukaTrailSource.Spawn(map, vp, props, driver);
             }
         }
 
@@ -366,7 +366,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static Mesh waterMesh;
 
         /// <summary>The water disc: a fan over the disc radius, UV = ground offset in cells.</summary>
-        private static void DrawWater(MirrorVisualProps vp, Vector3 feet, float t, float strength, float shatterP, float alt)
+        private static void DrawWater(KyoukaVisualProps vp, Vector3 feet, float t, float strength, float shatterP, float alt)
         {
             if (strength <= 0.002f)
             {
@@ -379,7 +379,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
             if (waterMesh == null)
             {
-                waterMesh = NewMesh("MX_QH_MirrorWater");
+                waterMesh = NewMesh("MX_QH_Kyouka_SuigetsuWater");
             }
             ClearBuffers();
             // A little past the radius: the shards drift out and the crest runs past the edge.
@@ -425,7 +425,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         /// waves plus a soft tearing noise), scaled by <paramref name="k"/>,
         /// with the pink sheen; <paramref name="alpha"/> fades it.
         /// </summary>
-        private static void DrawBody(Instance inst, MirrorVisualProps vp, Vector3 center, float t, float k, float alpha, int seed, float alt)
+        private static void DrawBody(Instance inst, KyoukaVisualProps vp, Vector3 center, float t, float k, float alpha, int seed, float alt)
         {
             if (!TryCapture(inst, out RenderTexture body) || alpha <= 0.002f)
             {
@@ -461,7 +461,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         /// Her mirror image: the snapshot flipped about her soles, squashed, each row swayed by the
         /// waves (more and dimmer further from her feet), half pink, only inside the water.
         /// </summary>
-        private static void DrawReflection(Instance inst, MirrorVisualProps vp, Vector3 feet, Vector3 center, float t, float alpha,
+        private static void DrawReflection(Instance inst, KyoukaVisualProps vp, Vector3 feet, Vector3 center, float t, float alpha,
             float scatter, float alt)
         {
             if (!TryCapture(inst, out RenderTexture body) || alpha <= 0.002f)
@@ -520,9 +520,9 @@ namespace MiliraXian.Characters.QingHe.Vfx
             block.Clear();
         }
 
-        private static float Fade(float depthMap, float rimZ, MirrorVisualProps vp)
+        private static float Fade(float depthMap, float rimZ, KyoukaVisualProps vp)
         {
-            float away = 1f - JobDriver_IllusoryReflectionStance.Smooth(depthMap / 1.1f);
+            float away = 1f - JobDriver_KyoukaSuigetsuStance.Smooth(depthMap / 1.1f);
             // Ground distance of the row below the soles (map z / depth factor) against the disc's soft rim.
             float g = depthMap / Mathf.Max(1e-3f, vp.depthToScreen);
             float inside = 1f - Mathf.Clamp01((g - 0.6f * vp.waterRadius) / (0.4f * vp.waterRadius));
@@ -564,7 +564,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return (h & 0xffff) / 32767.5f - 1f;
         }
 
-        private static void DrawDrops(Instance inst, MirrorVisualProps vp, Vector3 feet, float p, float alt)
+        private static void DrawDrops(Instance inst, KyoukaVisualProps vp, Vector3 feet, float p, float alt)
         {
             Material mat = MapComponent_SakuraDanceVisuals.Material(vp.coreTexPath, "MX_QH_SakuraTrailAdd");
             if (mat == null || p >= 1f)
@@ -602,7 +602,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         private static Mesh flashMesh;
 
-        private static void DrawFlash(MirrorVisualProps vp, Vector3 at, float brightness, float alt)
+        private static void DrawFlash(KyoukaVisualProps vp, Vector3 at, float brightness, float alt)
         {
             if (brightness <= 0.01f)
             {
@@ -645,10 +645,10 @@ namespace MiliraXian.Characters.QingHe.Vfx
             {
                 if (waterMat == null)
                 {
-                    Shader shader = DefDatabase<ShaderDef>.GetNamedSilentFail("MX_QH_MirrorWater")?.Shader;
+                    Shader shader = DefDatabase<ShaderDef>.GetNamedSilentFail("MX_QH_Kyouka_SuigetsuWater")?.Shader;
                     if (shader == null)
                     {
-                        Log.ErrorOnce("[MiliraXian] Illusory Reflection: missing shader 'MX_QH_MirrorWater'.", 0x51c7c1);
+                        Log.ErrorOnce("[MiliraXian] Kyouka Suigetsu: missing shader 'MX_QH_Kyouka_SuigetsuWater'.", 0x51c7c1);
                         return null;
                     }
                     waterMat = MaterialPool.MatFrom(BaseContent.WhiteTex, shader, Color.white);
@@ -679,7 +679,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private sealed class Instance
         {
             public Pawn pawn;
-            public JobDriver_IllusoryReflectionStance driver;
+            public JobDriver_KyoukaSuigetsuStance driver;
             public int seed;
             /// <summary>Handle into the game-scoped capture service: the one snapshot of her body.</summary>
             public int captureId;
@@ -716,24 +716,24 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
         /// <summary>
         /// The cut's trail: the tilted ring band from the inner to the outer radius, swept on the
-        /// cut's own curve (<see cref="MirrorCutGeometry"/>). Every part fades by its own age: bright
-        /// for <see cref="MirrorVisualProps.lightLife"/>, distorting for <see cref="MirrorVisualProps.distortLife"/>.
+        /// cut's own curve (<see cref="KyoukaCutGeometry"/>). Every part fades by its own age: bright
+        /// for <see cref="KyoukaVisualProps.lightLife"/>, distorting for <see cref="KyoukaVisualProps.distortLife"/>.
         /// Brightest on the high front side. Drawn by the Sakura Dance strip renderer. Only the band is
         /// drawn; the damage reaches the whole disc inside it.
         /// </summary>
-        internal sealed class MirrorTrailSource : MapComponent_SakuraDanceVisuals.StripSource
+        internal sealed class KyoukaTrailSource : MapComponent_SakuraDanceVisuals.StripSource
         {
-            public MirrorVisualProps vp;
+            public KyoukaVisualProps vp;
             public Vector3 aim;
             public Vector3 center;
             public float startYaw;
             public float cutSeconds;
 
-            public static void Spawn(Map map, MirrorVisualProps vp, CompProperties_AbilityIllusoryReflection props, JobDriver_IllusoryReflectionStance driver)
+            public static void Spawn(Map map, KyoukaVisualProps vp, CompProperties_AbilityKyoukaSuigetsu props, JobDriver_KyoukaSuigetsuStance driver)
             {
                 float cutSeconds = (props?.cutTicks ?? 24) / 60f;
                 int start = driver.CutStartTick;
-                MirrorTrailSource s = new()
+                KyoukaTrailSource s = new()
                 {
                     vp = vp,
                     aim = driver.Aim,
@@ -795,7 +795,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             /// filaments at different radii that live longer the further out they are, and the
             /// bright outer line. Offsets are from the middle of the band.
             /// </summary>
-            private static List<SakuraTrailLayer> DefaultLayers(MirrorVisualProps vp)
+            private static List<SakuraTrailLayer> DefaultLayers(KyoukaVisualProps vp)
             {
                 float band = vp.cutOuterRadius - vp.cutInnerRadius;
                 float outer = band * 0.5f;
@@ -853,11 +853,11 @@ namespace MiliraXian.Characters.QingHe.Vfx
             }
 
             /// <summary>Aim-relative yaw the head has reached at trail second <paramref name="te"/>.</summary>
-            private float YawAt(float te) => MirrorCutGeometry.YawAt(startYaw, te / Mathf.Max(1e-3f, cutSeconds));
+            private float YawAt(float te) => KyoukaCutGeometry.YawAt(startYaw, te / Mathf.Max(1e-3f, cutSeconds));
 
             private Vector3 RingPoint(float yaw, float r)
             {
-                float heading = MirrorCutGeometry.HeadingOf(aim, yaw) * Mathf.Deg2Rad;
+                float heading = KyoukaCutGeometry.HeadingOf(aim, yaw) * Mathf.Deg2Rad;
                 // Lowest at the start yaw (the back-left), highest opposite.
                 float h = 0.35f - vp.cutTilt * Mathf.Cos((yaw - startYaw) * Mathf.Deg2Rad);
                 return new Vector3(center.x + Mathf.Cos(heading) * r, h * r / vp.cutOuterRadius, center.z + Mathf.Sin(heading) * r);
@@ -894,7 +894,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
     /// snapshot stands in for it. Selection, label and bars are left alone.
     /// </summary>
     [HarmonyPatch(typeof(PawnRenderer), nameof(PawnRenderer.RenderPawnAt))]
-    internal static class Patch_PawnRenderer_MirrorHide
+    internal static class Patch_PawnRenderer_KyoukaHide
     {
         private static readonly AccessTools.FieldRef<PawnRenderer, Pawn> PawnRef =
             AccessTools.FieldRefAccess<PawnRenderer, Pawn>("pawn");
@@ -903,7 +903,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         private static bool Prefix(PawnRenderer __instance)
         {
             return GameComponent_MxVfxCaptures.IsCapturing
-                || !MapComponent_MirrorVisuals.HidesBody(PawnRef(__instance));
+                || !MapComponent_KyoukaVisuals.HidesBody(PawnRef(__instance));
         }
     }
 }

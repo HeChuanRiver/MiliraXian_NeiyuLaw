@@ -5,7 +5,7 @@ using MiliraXian.Characters.Common.AbnormalSystem;
 
 namespace MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates
 {
-    public class MentalState_AbnormalFeared : MentalState
+    public class MentalState_AbnormalConfused : MentalState
     {
         public IntVec3 wanderRoot = IntVec3.Invalid;
 

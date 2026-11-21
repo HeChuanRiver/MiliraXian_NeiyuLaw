@@ -45,12 +45,12 @@ namespace MiliraXian.Characters.QingHe.Things
         private static readonly Color StrandWhite = new(0.88f, 0.96f, 1f);
 
         /// <summary>How many strands (and therefore landings) one wall carries.</summary>
-        internal static int CountFor(CompProperties_SummerRainWall props)
+        internal static int CountFor(CompProperties_LotusRainWall props)
         {
             return Mathf.Max(1, Mathf.CeilToInt(StrandDensity * 4f * props.halfLength * props.halfThickness));
         }
 
-        private CompSummerRainWall wall;
+        private CompLotusRainWall wall;
         private int strands;
         private int splashes;
 
@@ -58,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.Things
         {
             base.Reset(effect, anchor, version, nowTick, position);
 
-            wall = anchor.Kind == VfxAnchorKind.ThingComp ? anchor.Comp as CompSummerRainWall : null;
+            wall = anchor.Kind == VfxAnchorKind.ThingComp ? anchor.Comp as CompLotusRainWall : null;
             strands = wall == null ? 0 : CountFor(wall.Props);
             strands = Mathf.Min(strands, Particles.Length / 2);
             splashes = strands;
@@ -81,7 +81,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return false;
             }
 
-            CompSummerRainWall owner = wall;
+            CompLotusRainWall owner = wall;
             if (owner == null || owner.parent == null || owner.parent.Destroyed || owner.parent.Map != map)
             {
                 return false;

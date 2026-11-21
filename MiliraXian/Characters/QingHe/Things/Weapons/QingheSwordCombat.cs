@@ -260,12 +260,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private static void ApplySpringBlessing(Pawn caster)
         {
-            if (caster.health?.hediffSet == null || MX_QHDefOf.MX_QH_SpringFlow == null)
+            if (caster.health?.hediffSet == null || MX_QHDefOf.MX_QH_SpringFlowHealing == null)
             {
                 return;
             }
 
-            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlow);
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlowHealing) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlowHealing);
             hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
         }
     }

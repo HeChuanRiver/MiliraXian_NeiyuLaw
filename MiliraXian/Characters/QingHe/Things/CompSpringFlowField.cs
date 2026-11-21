@@ -213,7 +213,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private static void ApplySpringFlow(Pawn pawn, float effectFactor)
         {
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlowHealing);
             if (hediff != null)
             {
                 hediff.Severity = Mathf.Max(hediff.Severity, effectFactor);
@@ -221,7 +221,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
+            hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlowHealing, pawn);
             hediff.Severity = effectFactor;
             pawn.health.AddHediff(hediff);
         }

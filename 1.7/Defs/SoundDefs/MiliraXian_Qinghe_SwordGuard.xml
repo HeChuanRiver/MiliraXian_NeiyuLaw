@@ -59,7 +59,7 @@
     </li></subSounds>
   </SoundDef>
   <SoundDef>
-    <defName>MX_QH_SwordExecutionDraw</defName>
+    <defName>MX_QH_Zanshin_Draw</defName>
     <context>MapOnly</context>
     <subSounds><li>
       <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_slash</clipPath></li></grains>
@@ -72,17 +72,17 @@
     原版处决的斩切声 Execute_Cut 由处决代码同时播放。
   -->
   <SoundDef>
-    <defName>MX_QH_SwordExecutionHit</defName>
+    <defName>MX_QH_Zanshin_Hit</defName>
     <context>MapOnly</context>
     <subSounds><li>
-      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_slash</clipPath></li></grains>
+      <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/KyoukaSuigetsu/kyoukasuigetsu_slash</clipPath></li></grains>
       <volumeRange>38~42</volumeRange><pitchRange>0.8~0.85</pitchRange><distRange>3~34</distRange>
       <muteWhenPaused>true</muteWhenPaused><tempoAffectedByGameSpeed>true</tempoAffectedByGameSpeed>
     </li></subSounds>
   </SoundDef>
   <!-- 致命一击：插刀和抽刀都用落樱从空中落下的声音，插刀高而脆，抽刀低而重 -->
   <SoundDef>
-    <defName>MX_QH_SwordExecutionThrust</defName>
+    <defName>MX_QH_Luohua_Thrust</defName>
     <context>MapOnly</context>
     <subSounds><li>
       <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath></li></grains>
@@ -91,7 +91,7 @@
     </li></subSounds>
   </SoundDef>
   <SoundDef>
-    <defName>MX_QH_SwordExecutionKillDraw</defName>
+    <defName>MX_QH_Luohua_Draw</defName>
     <context>MapOnly</context>
     <subSounds><li>
       <grains><li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath></li></grains>

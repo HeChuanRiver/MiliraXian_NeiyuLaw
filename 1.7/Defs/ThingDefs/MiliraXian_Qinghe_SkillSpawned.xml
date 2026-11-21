@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <ThingDef>
-    <defName>SpringFlowField</defName>
+    <defName>MX_QH_SpringFlowField</defName>
     <label>涌泉力场</label>
     <thingClass>ThingWithComps</thingClass>
     <tickerType>Normal</tickerType>
@@ -127,11 +127,11 @@
        长 9、厚 3、生效 15 秒；雨在蓄力期就开始下，收尾时雨先停、地面再淡出（两段生命周期）。
        图形由 MapComponent_QingheVfx 的自定义渲染器画，Thing 自己不画。 -->
   <ThingDef>
-    <defName>MX_QH_SummerRainWall</defName>
+    <defName>MX_QH_LotusRainWall</defName>
     <label>荷雨</label>
     <thingClass>ThingWithComps</thingClass>
     <!-- 不要设 category=Mote：ListerThings.EverListable 会把未开 drawGUIOverlay 的 Mote 排除，
-         渲染器就再也找不到这堵墙。和 SpringFlowField 一样留空即可。 -->
+         渲染器就再也找不到这堵墙。和 MX_QH_SpringFlowField 一样留空即可。 -->
     <tickerType>Normal</tickerType>
     <drawerType>RealtimeOnly</drawerType>
     <altitudeLayer>MoteLow</altitudeLayer>
@@ -144,7 +144,7 @@
       <drawSize>0.1</drawSize>
     </graphicData>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_SummerRainWall">
+      <li Class="MiliraXian.Characters.QingHe.Things.CompProperties_LotusRainWall">
         <halfLength>7.5</halfLength>
         <halfThickness>1.5</halfThickness>
         <effectDurationTicks>900</effectDurationTicks>
@@ -246,7 +246,7 @@
     </comps>
   </ThingDef>
   <ThingDef>
-    <defName>MX_QH_LunarMirror</defName>
+    <defName>MX_QH_LunarMirrorShield</defName>
     <label>霜月镜护盾</label>
     <thingClass>ThingWithComps</thingClass>
     <category>None</category>

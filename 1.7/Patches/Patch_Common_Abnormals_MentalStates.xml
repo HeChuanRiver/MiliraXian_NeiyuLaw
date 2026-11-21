@@ -4,9 +4,9 @@
     <xpath>/Defs/ThinkTreeDef[defName="MentalStateNonCritical"]/thinkRoot/subNodes</xpath>
     <value>
       <li Class="ThinkNode_ConditionalMentalState">
-        <state>MX_AbnormalFearedMentalState</state>
+        <state>MX_AbnormalConfusedMentalState</state>
         <subNodes>
-          <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates.JobGiver_AbnormalFearedWander" />
+          <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates.JobGiver_AbnormalConfusedWander" />
         </subNodes>
       </li>
     </value>

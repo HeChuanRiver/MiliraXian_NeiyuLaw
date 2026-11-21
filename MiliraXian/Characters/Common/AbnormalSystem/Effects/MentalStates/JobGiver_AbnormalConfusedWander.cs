@@ -5,9 +5,9 @@ using MiliraXian.Characters.Common.AbnormalSystem;
 
 namespace MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates
 {
-    public class JobGiver_AbnormalFearedWander : JobGiver_Wander
+    public class JobGiver_AbnormalConfusedWander : JobGiver_Wander
     {
-        public JobGiver_AbnormalFearedWander()
+        public JobGiver_AbnormalConfusedWander()
         {
             wanderRadius = 6f;
             locomotionUrgency = LocomotionUrgency.Jog;
@@ -18,7 +18,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates
 
         protected override IntVec3 GetWanderRoot(Pawn pawn)
         {
-            MentalState_AbnormalFeared mentalState = pawn.MentalState as MentalState_AbnormalFeared;
+            MentalState_AbnormalConfused mentalState = pawn.MentalState as MentalState_AbnormalConfused;
             if (mentalState?.wanderRoot.IsValid == true)
             {
                 return mentalState.wanderRoot;

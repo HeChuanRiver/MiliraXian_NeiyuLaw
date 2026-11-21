@@ -263,9 +263,9 @@
   </HediffDef>
   <!-- Fear / overload -->
   <MentalStateDef ParentName="BaseMentalState">
-    <defName>MX_AbnormalFearedMentalState</defName>
+    <defName>MX_AbnormalConfusedMentalState</defName>
     <label>混乱</label>
-    <stateClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates.MentalState_AbnormalFeared</stateClass>
+    <stateClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates.MentalState_AbnormalConfused</stateClass>
     <category>Misc</category>
     <nameColor>(0.92, 0.74, 1.00)</nameColor>
     <blockNormalThoughts>true</blockNormalThoughts>
@@ -274,7 +274,7 @@
     <baseInspectLine>混乱</baseInspectLine>
   </MentalStateDef>
   <MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
-    <defName>MX_AbnormalFear</defName>
+    <defName>MX_AbnormalConfusion</defName>
     <label>混乱</label>
     <description>受到特定频率的次声波影响，精神状态变得不太稳定。积累到上限会引起精神失常。</description>
     <defaultLabelColor>(0.92, 0.74, 1.00)</defaultLabelColor>
@@ -282,13 +282,13 @@
     <scenarioCanAdd>false</scenarioCanAdd>
     <everCurableByItem>false</everCurableByItem>
     <baseAccumulationLimit>100</baseAccumulationLimit>
-    <accumulationLimitFactorStat>MX_AbnormalFearLimitFactor</accumulationLimitFactorStat>
-    <applicationEfficiencyFactorStat>MX_AbnormalFearEfficiencyFactor</applicationEfficiencyFactorStat>
+    <accumulationLimitFactorStat>MX_AbnormalConfusionLimitFactor</accumulationLimitFactorStat>
+    <applicationEfficiencyFactorStat>MX_AbnormalConfusionEfficiencyFactor</applicationEfficiencyFactorStat>
     <ticksUntilDecayAfterRefresh>300</ticksUntilDecayAfterRefresh>
     <accumulationDecayPerTick>0.1</accumulationDecayPerTick>
-    <progressBarMoteDef>MX_Mote_AbnormalFearBar</progressBarMoteDef>
-    <triggerMoteDef>MX_Mote_AbnormalFearBurstIcon</triggerMoteDef>
-    <effectHediff>MX_AbnormalFeared</effectHediff>
+    <progressBarMoteDef>MX_Mote_AbnormalConfusionBar</progressBarMoteDef>
+    <triggerMoteDef>MX_Mote_AbnormalConfusionBurstIcon</triggerMoteDef>
+    <effectHediff>MX_AbnormalConfused</effectHediff>
     <effectDurationTicks>600</effectDurationTicks>
     <triggerText>混乱</triggerText>
     <aggravationText>惊惧</aggravationText>
@@ -320,7 +320,7 @@
     <triggerTextDuration>1.25</triggerTextDuration>
   </MiliraXian.Characters.Common.AbnormalSystem.HediffDef_Abnormal>
   <HediffDef>
-    <defName>MX_AbnormalFeared</defName>
+    <defName>MX_AbnormalConfused</defName>
     <label>混乱</label>
     <description>令人发疯的次声波引发了精神崩溃，当前会不断攻击友军。</description>
     <hediffClass>MiliraXian.Characters.Common.AbnormalSystem.Effects.Hediff_AbnormalPlaceholderEffect</hediffClass>
@@ -333,14 +333,14 @@
         <disappearsAfterTicks>600</disappearsAfterTicks>
         <showRemainingTime>true</showRemainingTime>
       </li>
-      <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.HediffCompProperties_AbnormalFeared">
-        <mentalStateDef>MX_AbnormalFearedMentalState</mentalStateDef>
+      <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.HediffCompProperties_AbnormalConfused">
+        <mentalStateDef>MX_AbnormalConfusedMentalState</mentalStateDef>
         <mentalStateDurationTicks>600</mentalStateDurationTicks>
         <forced>true</forced>
         <forceWake>true</forceWake>
       </li>
       <li Class="MiliraXian.Characters.Common.AbnormalSystem.Effects.HediffCompProperties_AttachedMote">
-        <moteDef>MX_Mote_AbnormalFearedIcon</moteDef>
+        <moteDef>MX_Mote_AbnormalConfusedIcon</moteDef>
       </li>
     </comps>
   </HediffDef>

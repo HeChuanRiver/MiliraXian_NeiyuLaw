@@ -10,7 +10,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
     /// <summary>
     /// Mirror Flower, Water Moon. Times are game ticks (60 = 1 s).
     /// </summary>
-    public class CompProperties_AbilityIllusoryReflection : CompProperties_AbilityEffect
+    public class CompProperties_AbilityKyoukaSuigetsu : CompProperties_AbilityEffect
     {
         /// <summary>Windup plus stance, the longest she waits for a hit.</summary>
         public int durationTicks = 300;
@@ -44,20 +44,20 @@ namespace MiliraXian.Characters.QingHe.Abilities
         /// <summary>The mirror breaking, at the moment she is hit.</summary>
         public SoundDef shatterSound;
         /// <summary>Water, body, reflection and trail; null = the defaults.</summary>
-        public Vfx.MirrorVisualProps visuals;
+        public Vfx.KyoukaVisualProps visuals;
 
-        public CompProperties_AbilityIllusoryReflection()
+        public CompProperties_AbilityKyoukaSuigetsu()
         {
-            compClass = typeof(CompAbilityEffect_IllusoryReflection);
+            compClass = typeof(CompAbilityEffect_KyoukaSuigetsu);
         }
     }
 
-    public class CompAbilityEffect_IllusoryReflection : CompAbilityEffect
+    public class CompAbilityEffect_KyoukaSuigetsu : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
         private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
 
-        public new CompProperties_AbilityIllusoryReflection Props => (CompProperties_AbilityIllusoryReflection)props;
+        public new CompProperties_AbilityKyoukaSuigetsu Props => (CompProperties_AbilityKyoukaSuigetsu)props;
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
@@ -90,7 +90,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
             base.Apply(target, dest);
             Pawn caster = parent?.pawn;
             if (caster?.jobs == null
-                || MX_QHDefOf.MX_QH_IllusoryReflection == null
+                || MX_QHDefOf.MX_QH_Kyouka_Suigetsu_Job == null
                 || !target.IsValid
                 || target.Cell == caster.Position)
             {
@@ -99,7 +99,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
             parent.ResetCooldown();
             caster.rotationTracker?.FaceCell(target.Cell);
-            Job stanceJob = JobMaker.MakeJob(MX_QHDefOf.MX_QH_IllusoryReflection);
+            Job stanceJob = JobMaker.MakeJob(MX_QHDefOf.MX_QH_Kyouka_Suigetsu_Job);
             stanceJob.ability = parent;
             stanceJob.verbToUse = parent.verb;
             stanceJob.SetTarget(TargetIndex.A, target.Cell);

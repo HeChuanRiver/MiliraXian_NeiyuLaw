@@ -8,14 +8,14 @@ using Verse;
 
 namespace MiliraXian.Characters.QingHe.Abilities
 {
-    public class CompProperties_AbilitySummerRain : CompProperties_AbilityEffect
+    public class CompProperties_AbilityLotusRain : CompProperties_AbilityEffect
     {
         /// <summary>
         /// The wall def, by name. Resolved on use rather than through a DefOf field: CompProperties
         /// are constructed while the XML is being loaded, which is before DefOf injection, so a
         /// DefOf reference here can be null and quietly make the whole ability do nothing.
         /// </summary>
-        public string wallDefName = "MX_QH_SummerRainWall";
+        public string wallDefName = "MX_QH_LotusRainWall";
 
         public HediffDef resourceCostDef;
         public float resourceCost = 2f;
@@ -25,9 +25,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
         public float previewHalfLength = 7.5f;
         public float previewHalfThickness = 1.5f;
 
-        public CompProperties_AbilitySummerRain()
+        public CompProperties_AbilityLotusRain()
         {
-            compClass = typeof(CompAbilityEffect_SummerRain);
+            compClass = typeof(CompAbilityEffect_LotusRain);
         }
     }
 
@@ -36,13 +36,13 @@ namespace MiliraXian.Characters.QingHe.Abilities
     /// not fall during the warm-up; that was tried and it left the player with no feedback while
     /// winding up, so the effect now begins at the moment it actually happens.
     /// </summary>
-    public class CompAbilityEffect_SummerRain : CompAbilityEffect
+    public class CompAbilityEffect_LotusRain : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(0.60f, 0.95f, 0.50f, 0.60f);
 
         private readonly List<IntVec3> previewCells = new();
 
-        public new CompProperties_AbilitySummerRain Props => (CompProperties_AbilitySummerRain)props;
+        public new CompProperties_AbilityLotusRain Props => (CompProperties_AbilityLotusRain)props;
 
         public override bool GizmoDisabled(out string reason)
         {
@@ -86,10 +86,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
             }
 
             Thing wall = GenSpawn.Spawn(wallDef, cell, map);
-            CompSummerRainWall comp = wall?.TryGetComp<CompSummerRainWall>();
+            CompLotusRainWall comp = wall?.TryGetComp<CompLotusRainWall>();
             if (comp == null)
             {
-                Log.ErrorOnce("[MiliraXian] Lotus Rain: the wall def has no CompSummerRainWall.", 0x71f0a3);
+                Log.ErrorOnce("[MiliraXian] Lotus Rain: the wall def has no CompLotusRainWall.", 0x71f0a3);
                 return;
             }
             comp.Init(caster);

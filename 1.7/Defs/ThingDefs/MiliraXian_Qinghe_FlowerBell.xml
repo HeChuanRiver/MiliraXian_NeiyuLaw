@@ -280,7 +280,7 @@
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Things.Weapons.CompProperties_FlowerBellStatusOnHit">
         <abnormals>
-          <li>MX_AbnormalFear</li>
+          <li>MX_AbnormalConfusion</li>
           <li>MX_AbnormalOverload</li>
         </abnormals>
         <accumulationAmount>8</accumulationAmount>

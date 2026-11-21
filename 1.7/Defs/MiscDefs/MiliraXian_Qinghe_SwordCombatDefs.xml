@@ -233,7 +233,7 @@
             <sparkSpread>360</sparkSpread>
             <sparkHot>(1, 0.85, 0.8, 1)</sparkHot>
             <sparkCool>(0.9, 0.12, 0.1, 1)</sparkCool>
-            <sound>MX_QH_SwordExecutionHit</sound>
+            <sound>MX_QH_Zanshin_Hit</sound>
         </executionVfx>
 
         <!--
@@ -267,7 +267,7 @@
             <haloSeconds>0.2</haloSeconds>
             <haloBrightness>1.5</haloBrightness>
         </executionHitFlash>
-        <executionJob>MX_QH_SwordExecution</executionJob>
+        <executionJob>MX_QH_Execute</executionJob>
         <executionAttack>0</executionAttack>
         <executionSeconds>2.7</executionSeconds>
         <executionCutSeconds>0.85</executionCutSeconds>
@@ -301,7 +301,7 @@
         </executionDashVfx>
         <!-- 处决距离（格）：大约是樱舞的范围，超出则敌人只原地破绽、恢复，不处决 -->
         <executionRange>12</executionRange>
-        <executionDamageDef>MX_QH_ExecutionSlash</executionDamageDef>
+        <executionDamageDef>MX_QH_Zanshin</executionDamageDef>
         <!-- 居合中刀（判定伤害或被流水之形等拦截）时，清荷自己的架势清空 -->
         <executionDamage>100</executionDamage>
         <!--
@@ -321,8 +321,8 @@
         <killBlendSeconds>0.1</killBlendSeconds>
         <!-- 插刀声在片段 0.78 秒（平刺贯穿），抽刀声在击杀那一刻（killAtSeconds） -->
         <killThrustSeconds>0.78</killThrustSeconds>
-        <killThrustSound>MX_QH_SwordExecutionThrust</killThrustSound>
-        <killDrawSound>MX_QH_SwordExecutionKillDraw</killDrawSound>
+        <killThrustSound>MX_QH_Luohua_Thrust</killThrustSound>
+        <killDrawSound>MX_QH_Luohua_Draw</killDrawSound>
         <!-- 插刀闪光：贯穿那一刻在刀身 90% 处（刀尖附近）一闪，与收刀闪光同款，粉色 -->
         <killThrustFlashShare>0.9</killThrustFlashShare>
         <killThrustFlash>
@@ -342,7 +342,7 @@
             <haloSeconds>0.2</haloSeconds>
             <haloBrightness>1.5</haloBrightness>
         </killThrustFlash>
-        <killMotion>MX_QH_SwordClip_Kill</killMotion>
+        <killMotion>MX_QH_SwordClip_Luohua</killMotion>
         <!--
           抽刀那一刻从伤口爆出的花瓣：刀身 60% 处（刺穿敌人的那一段），随抽刀方向（朝清荷）散开，
           迅速减速后摇曳飘落。只用花瓣，没有闪光、火花和声音。
@@ -361,7 +361,7 @@
         <!-- 击杀时（抽刀那一刻）起：被杀单位位置的竖排白字「落华」和周围压暗一起缓缓淡入，
              停留后文字按噪声溶解、压暗同步淡出；文字带粉色泛光 -->
         <killVfx>
-            <texPath>MiliraXianQinghe/Effect/Execution/Luohua</texPath>
+            <texPath>MiliraXianQinghe/Effect/Luohua/Luohua</texPath>
             <!-- 贴图高度（格），固定大小，不随敌人体型变化。贴图上下各留 48 像素边距（共 1144 像素），
                  1.2 格时两个字连同字距正好约 1.1 格 -->
             <height>1.2</height>
@@ -388,7 +388,7 @@
         </killVfx>
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
-        <executionDrawSound>MX_QH_SwordExecutionDraw</executionDrawSound>
+        <executionDrawSound>MX_QH_Zanshin_Draw</executionDrawSound>
         <!-- 弱震屏：第一段收刀中刀、第二段拔刀致死（原版 CameraShaker，上限 0.2） -->
         <executionShake>0.06</executionShake>
         <killShake>0.06</killShake>
@@ -400,8 +400,8 @@
     </MiliraXian.Characters.QingHe.Things.Weapons.QingheSwordGuardDef>
 
     <JobDef>
-        <defName>MX_QH_SwordExecution</defName>
-        <driverClass>MiliraXian.Characters.QingHe.Things.Weapons.JobDriver_QingheSwordExecution</driverClass>
+        <defName>MX_QH_Execute</defName>
+        <driverClass>MiliraXian.Characters.QingHe.Things.Weapons.JobDriver_QingheExecute</driverClass>
         <reportString>正在以居合处决TargetA。</reportString>
         <checkOverrideOnDamage>Never</checkOverrideOnDamage>
         <allowOpportunisticPrefix>false</allowOpportunisticPrefix>

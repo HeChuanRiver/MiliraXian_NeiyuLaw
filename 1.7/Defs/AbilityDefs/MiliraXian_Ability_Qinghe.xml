@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <AbilityCategoryDef>
-    <defName>MX_QingheSkill</defName>
+    <defName>MX_QH_Category_QingheSkill</defName>
   </AbilityCategoryDef>
   <AbilityDef>
     <defName>MX_QH_SpringFlow</defName>
@@ -17,7 +17,7 @@
     <label>春泉涌流</label>
     <description>消耗2点花令，在目标地点召唤出春泉，短时间内治疗范围内的友方单位并附加春泉洗礼效果，提升近战攻击造成的伤害、降低受到的伤害并净化部分负面效果。效果持续15秒。\n\n对范围内的敌人持续附加渗血和漏电效果。\n\n此效果可以驱散由告死流场施加的死亡宣告。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>201</displayOrder>
     <cooldownTicksRange>480</cooldownTicksRange>
     <targetRequired>true</targetRequired>
@@ -41,7 +41,7 @@
     </verbProperties>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
-        <fieldDef>SpringFlowField</fieldDef>
+        <fieldDef>MX_QH_SpringFlowField</fieldDef>
         <fieldDurationTicks>900</fieldDurationTicks>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
         <resourceCost>2</resourceCost>
@@ -50,7 +50,7 @@
     </comps>
   </AbilityDef>
   <AbilityDef>
-    <defName>MX_QH_SummerRain</defName>
+    <defName>MX_QH_LotusRain</defName>
     <modExtensions>
       <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
         <requirements>
@@ -63,7 +63,7 @@
     <label>荷雨</label>
     <description>消耗2点花令，在目标地点召来一道垂直于视线方向的雨幕。\n\n踏入雨幕的敌人会被淋透，移动速度大幅降低，同时持续附加剧毒或腐蚀效果。\n\n持续20秒。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/spring_flow</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>202</displayOrder>
     <cooldownTicksRange>480</cooldownTicksRange>
     <targetRequired>true</targetRequired>
@@ -86,8 +86,8 @@
       </targetParams>
     </verbProperties>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySummerRain">
-        <wallDefName>MX_QH_SummerRainWall</wallDefName>
+      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLotusRain">
+        <wallDefName>MX_QH_LotusRainWall</wallDefName>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
         <resourceCost>2</resourceCost>
         <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
@@ -108,7 +108,7 @@
     <label>霜月镜</label>
     <description>消耗2点花令，在目标地点召唤出冰雪般的护盾，短时间内拦截所有穿过范围边界的敌方投射物，并以冰霜子弹还击攻击者。护盾持续60秒，吸收一定量伤害后将会破碎。\n\n被反击命中的敌人会被附加冻结效果。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/lunarfrost_mirror</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>204</displayOrder>
     <cooldownTicksRange>600</cooldownTicksRange>
     <targetRequired>true</targetRequired>
@@ -132,7 +132,7 @@
     </verbProperties>
     <comps>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
-        <shieldDef>MX_QH_LunarMirror</shieldDef>
+        <shieldDef>MX_QH_LunarMirrorShield</shieldDef>
         <durationTicks>7200</durationTicks>
         <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
         <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
@@ -143,18 +143,18 @@
   </AbilityDef>
   <!-- 镜花水月的反击圆斩：只打敌对目标，需要视线，扫到即出伤 -->
   <MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
-    <defName>MX_QH_MirrorSweep</defName>
-    <damageDef>MX_QH_MirrorSlash</damageDef>
+    <defName>MX_QH_Kyouka_SuigetsuSweep</defName>
+    <damageDef>MX_QH_Kyouka_SuigetsuSlash</damageDef>
     <targetFaction>Hostile</targetFaction>
     <hitPawns>true</hitPawns>
     <hitBuildings>true</hitBuildings>
     <requireLineOfSight>true</requireLineOfSight>
     <skipDowned>true</skipDowned>
     <damageDelayTicks>0</damageDelayTicks>
-    <workerClass>MiliraXian.Characters.QingHe.Jobs.SweepDamageWorker_MirrorCut</workerClass>
+    <workerClass>MiliraXian.Characters.QingHe.Jobs.SweepDamageWorker_KyoukaCut</workerClass>
   </MiliraXian.Characters.Common.SweepDamage.SweepDamageDef>
   <AbilityDef>
-    <defName>MX_QH_IllusoryReflection</defName>
+    <defName>MX_QH_Kyouka_Suigetsu</defName>
     <modExtensions>
       <li Class="MiliraXian.Characters.Common.Abilities.AbilityRequirementExtension">
         <requirements>
@@ -167,14 +167,14 @@
     <label>镜花水月</label>
     <description>令地面变为水镜幻象，自身隐入其中。幻影最多可以维持5秒，期间受到任何攻击后，清荷的真身会立即发动一次反击。反击击中任意敌对目标时，可以获得一层剑压。\n\n——镜花水月，如梦似幻。触之即碎，可望而不可即。</description>
     <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>225</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>
     <casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
     <displayGizmoWhileUndrafted>false</displayGizmoWhileUndrafted>
     <disableGizmoWhileUndrafted>true</disableGizmoWhileUndrafted>
-    <jobDef>MX_QH_IllusoryReflection</jobDef>
+    <jobDef>MX_QH_Kyouka_Suigetsu_Job</jobDef>
     <waitForJobEnd>true</waitForJobEnd>
     <verbProperties>
       <verbClass>Verb_CastAbility</verbClass>
@@ -193,7 +193,7 @@
       </targetParams>
     </verbProperties>
     <comps>
-      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityIllusoryReflection">
+      <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityKyoukaSuigetsu">
         <!-- 时间单位 tick（60 = 1 秒）。
              前摇 0.5 秒 → 架势（连前摇最长 5 秒）→ 受击：碎镜 0.5 → 隐身 0.2 → 斩击 0.4 → 隐身 0.5 → 后摇 0.5（最后 0.15 秒武器淡入）。
              没有受击：0.5 秒淡出。前摇到收势全程无敌；冷却在收势时开始。 -->
@@ -208,18 +208,18 @@
         <exitTicks>30</exitTicks>
         <!-- 斩击：360° 整圆，半径内（包括贴身的）敌人在刀光转到它的方位时各挨一下。
              刀光从架势方向左后方（-135°）起，0.4 秒缓出转满一圈；刀光只画成外圈的光带，出伤范围是整个圆。 -->
-        <sweepDamage>MX_QH_MirrorSweep</sweepDamage>
-        <cutDamageDef>MX_QH_MirrorSlash</cutDamageDef>
+        <sweepDamage>MX_QH_Kyouka_SuigetsuSweep</sweepDamage>
+        <cutDamageDef>MX_QH_Kyouka_SuigetsuSlash</cutDamageDef>
         <damage>96</damage>
         <armorPenetration>1.25</armorPenetration>
         <cutRadius>4.5</cutRadius>
         <cutStartYaw>-135</cutStartYaw>
         <posture>15</posture>
         <swordPressureGain>1</swordPressureGain>
-        <stanceSound>MX_QH_MirrorSlash_Stance</stanceSound>
-        <shatterSound>MX_QH_MirrorSlash_Shatter</shatterSound>
-        <slashSound>MX_QH_MirrorSlash_Slash</slashSound>
-        <!-- 画面：水面、人物快照、倒影、碎镜、刀光。其余数值见 MirrorVisualProps 的默认值；
+        <stanceSound>MX_QH_Kyouka_Suigetsu_Stance</stanceSound>
+        <shatterSound>MX_QH_Kyouka_Suigetsu_Shatter</shatterSound>
+        <slashSound>MX_QH_Kyouka_Suigetsu_Slash</slashSound>
+        <!-- 画面：水面、人物快照、倒影、碎镜、刀光。其余数值见 KyoukaVisualProps 的默认值；
              刀光的泛光与樱舞同一组。 -->
         <visuals>
           <bloom>
@@ -267,7 +267,7 @@
     <label>斩铁剑【红莲】</label>
     <description>清荷的剑舞绝招。向目标位置高速冲刺，对沿途的敌人造成钝击伤害；随后眩晕目标点附近的所有敌人并借势跃入空中，消耗全部剑压向下发动凌厉的连续斩击，对范围内所有敌人造成多次伤害。发动时需要至少一层剑压，消耗的剑压越多伤害越高。\n\n该技能具有可习得的连段：\n\n燕回返【月华】\n习得后，在下落斩击结束后，将追加一段回返斩击，对范围内的敌人造成一次追加高额伤害。会略微延长震击造成的眩晕时长。\n\n——与霓羽交手无数次后领悟的绝技。等等……你是说……这招很虾头？</description>
     <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>235</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>

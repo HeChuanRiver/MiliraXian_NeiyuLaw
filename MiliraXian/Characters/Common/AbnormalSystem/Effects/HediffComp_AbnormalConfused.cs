@@ -4,24 +4,24 @@ using MiliraXian.Characters.Common.AbnormalSystem;
 
 namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
 {
-    public class HediffCompProperties_AbnormalFeared : HediffCompProperties
+    public class HediffCompProperties_AbnormalConfused : HediffCompProperties
     {
         public MentalStateDef mentalStateDef;
         public int mentalStateDurationTicks = 600;
         public bool forced = true;
         public bool forceWake = true;
 
-        public HediffCompProperties_AbnormalFeared()
+        public HediffCompProperties_AbnormalConfused()
         {
-            compClass = typeof(HediffComp_AbnormalFeared);
+            compClass = typeof(HediffComp_AbnormalConfused);
         }
     }
 
-    public class HediffComp_AbnormalFeared : HediffComp
+    public class HediffComp_AbnormalConfused : HediffComp
     {
         private bool startedMentalState;
 
-        private HediffCompProperties_AbnormalFeared PropsFeared => (HediffCompProperties_AbnormalFeared)props;
+        private HediffCompProperties_AbnormalConfused PropsConfused => (HediffCompProperties_AbnormalConfused)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
@@ -53,7 +53,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
                 return;
             }
 
-            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef;
+            MentalStateDef mentalStateDef = PropsConfused.mentalStateDef;
             if (mentalStateDef == null)
             {
                 return;
@@ -62,8 +62,8 @@ namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
             bool started = Pawn.mindState.mentalStateHandler.TryStartMentalState(
                 mentalStateDef,
                 reason: parent.LabelCap,
-                forced: PropsFeared.forced,
-                forceWake: PropsFeared.forceWake,
+                forced: PropsConfused.forced,
+                forceWake: PropsConfused.forceWake,
                 causedByMood: false,
                 otherPawn: causedBy,
                 transitionSilently: true,
@@ -76,15 +76,15 @@ namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
             }
 
             startedMentalState = true;
-            if (PropsFeared.mentalStateDurationTicks > 0)
+            if (PropsConfused.mentalStateDurationTicks > 0)
             {
-                Pawn.MentalState.forceRecoverAfterTicks = PropsFeared.mentalStateDurationTicks;
+                Pawn.MentalState.forceRecoverAfterTicks = PropsConfused.mentalStateDurationTicks;
             }
         }
 
         private void RecoverStartedMentalState()
         {
-            MentalStateDef mentalStateDef = PropsFeared.mentalStateDef;
+            MentalStateDef mentalStateDef = PropsConfused.mentalStateDef;
             if (!startedMentalState || Pawn == null || Pawn.Dead || Pawn.MentalStateDef != mentalStateDef)
             {
                 return;

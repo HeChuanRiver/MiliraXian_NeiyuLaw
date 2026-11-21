@@ -108,7 +108,7 @@ namespace MiliraXian.Characters.QingHe.Things
         /// <summary>Opacity of the reflection against the flower's own.</summary>
         private const float ReflectionAlpha = 0.20f;
 
-        private readonly HashSet<CompSummerRainWall> walls = new();
+        private readonly HashSet<CompLotusRainWall> walls = new();
         private static readonly Dictionary<Map, RainWallVfx> Instances = new();
 
         private Map map;
@@ -127,7 +127,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private readonly List<Mesh> lotusPadMeshes = new();
 
         /// <summary>Reused between frames: <see cref="Draw"/> runs every frame and must not allocate.</summary>
-        private readonly List<CompSummerRainWall> liveBuffer = new();
+        private readonly List<CompLotusRainWall> liveBuffer = new();
 
         /// <summary>The four flowers' (along, across, radius, start) — refilled by <see cref="LotusColumns"/>.</summary>
         private static readonly Vector4[] LotusBuffer = new Vector4[LotusCount];
@@ -152,7 +152,7 @@ namespace MiliraXian.Characters.QingHe.Things
         }
 
         /// <summary>The walls still standing, into <see cref="liveBuffer"/>.</summary>
-        private List<CompSummerRainWall> LiveWalls()
+        private List<CompLotusRainWall> LiveWalls()
         {
             walls.RemoveWhere(w => w == null || w.parent == null || w.parent.Destroyed);
             liveBuffer.Clear();
@@ -160,7 +160,7 @@ namespace MiliraXian.Characters.QingHe.Things
             return liveBuffer;
         }
 
-        internal static void Add(Map map, CompSummerRainWall wall)
+        internal static void Add(Map map, CompLotusRainWall wall)
         {
             if (map == null || wall == null)
             {
@@ -169,7 +169,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Ensure(map)?.walls.Add(wall);
         }
 
-        internal static void Remove(Map map, CompSummerRainWall wall)
+        internal static void Remove(Map map, CompLotusRainWall wall)
         {
             if (map != null && Instances.TryGetValue(map, out RainWallVfx renderer))
             {
@@ -205,7 +205,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            List<CompSummerRainWall> live = LiveWalls();
+            List<CompLotusRainWall> live = LiveWalls();
             if (live.Count == 0)
             {
                 return;
@@ -233,7 +233,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
             for (int i = 0; i < live.Count; i++)
             {
-                CompSummerRainWall wall = live[i];
+                CompLotusRainWall wall = live[i];
                 float s = wall.Strength;
                 if (s <= 0.01f)
                 {
@@ -349,7 +349,7 @@ namespace MiliraXian.Characters.QingHe.Things
         /// one value, so they cannot drift apart. IntVec3 is the cell's south-west corner; the
         /// band's centre is the cell's centre, half a cell east and north of it.
         /// </summary>
-        private static Vector3 OriginOf(CompSummerRainWall wall)
+        private static Vector3 OriginOf(CompLotusRainWall wall)
         {
             return new Vector3(wall.parent.Position.x + 0.5f, 0f, wall.parent.Position.z + 0.5f);
         }
@@ -363,7 +363,7 @@ namespace MiliraXian.Characters.QingHe.Things
         /// inside 70 % of the thickness, and opens them one after another. It is refilled in place
         /// because <see cref="Draw"/> runs every frame.
         /// </summary>
-        private static void LotusColumns(CompSummerRainWall wall)
+        private static void LotusColumns(CompLotusRainWall wall)
         {
             float hl = wall.HalfLength;
             float ht = wall.HalfThickness;
@@ -390,7 +390,7 @@ namespace MiliraXian.Characters.QingHe.Things
         /// Wind wave packets driving the water's background refraction: each is (along, across,
         /// wavelength, amplitude). Deterministic per wall.
         /// </summary>
-        private static void WindColumns(CompSummerRainWall wall)
+        private static void WindColumns(CompLotusRainWall wall)
         {
             float hl = wall.HalfLength;
             float ht = wall.HalfThickness;
@@ -425,7 +425,7 @@ namespace MiliraXian.Characters.QingHe.Things
         /// artefact: not clipping, not altitude, just a ghost sitting in the wrong place. It now
         /// sits clear of the flower at <see cref="ReflectionDrop"/> sprite heights below.
         /// </summary>
-        private static void BuildLotus(Mesh mesh, Vector3 centre, CompSummerRainWall wall, float seconds,
+        private static void BuildLotus(Mesh mesh, Vector3 centre, CompLotusRainWall wall, float seconds,
             float strength, bool wantBloom)
         {
             Vector2 al = wall.AxisLength;

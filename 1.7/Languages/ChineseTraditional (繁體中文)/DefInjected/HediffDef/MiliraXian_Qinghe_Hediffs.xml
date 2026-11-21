@@ -26,8 +26,8 @@
 
   <MX_QH_Trickle.label>涓流</MX_QH_Trickle.label>
   <MX_QH_Trickle.description>清荷會持續緩慢回復傷口，并逐步修復永久損傷與失去的身體部位。</MX_QH_Trickle.description>
-  <MX_QH_SpringFlow.label>春泉洗禮</MX_QH_SpringFlow.label>
-  <MX_QH_SpringFlow.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，并免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlow.description>
+  <MX_QH_SpringFlowHealing.label>春泉洗禮</MX_QH_SpringFlowHealing.label>
+  <MX_QH_SpringFlowHealing.description>沐浴在春泉之中，&lt;color=#FF69B4&gt;近戰與遠程傷害提升、受到的傷害降低、疼痛感減輕，并免疫告死積累&lt;/color&gt;。</MX_QH_SpringFlowHealing.description>
   <MX_QH_RainDrenched.label>淋雨</MX_QH_RainDrenched.label>
   <MX_QH_RainDrenched.description>被荷雨的雨水澆透，&lt;color=#7ADA9E&gt;移動速度減半&lt;/color&gt;。離開雨幕片刻後才會乾透。</MX_QH_RainDrenched.description>
   <MX_QH_FlowingForm.label>流水之形</MX_QH_FlowingForm.label>

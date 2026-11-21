@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using RimWorld;
 using UnityEngine;
@@ -111,7 +111,7 @@ namespace MiliraXian.Characters.QingHe.Things
                     continue;
                 }
 
-                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalFear, Props.fearAccumulationPerSecond * effectFactor);
+                AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalConfusion, Props.fearAccumulationPerSecond * effectFactor);
                 AbnormalSystem.ApplyAccumulation(caster, pawn, MX_AbnormalDefOf.MX_AbnormalOverload, Props.overloadAccumulationPerSecond * effectFactor);
             }
         }

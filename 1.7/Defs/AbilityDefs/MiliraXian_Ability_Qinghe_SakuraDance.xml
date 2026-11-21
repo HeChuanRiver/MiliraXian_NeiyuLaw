@@ -43,7 +43,7 @@
     <label>樱舞</label>
     <description>源自遥远东国的华丽舞蹈。以旋转之势跃入空中并发动三次连续斩击，并可借机调整架势。\n\n传说记载，雨天在空中起舞，似乎容易引下雷电。“此乃神之怒号，若以此舞跃起，可令刀身承之，是曰：足不沾地、雷电奉还”。</description>
     <iconPath>MiliraXianQinghe/UI/Icons/ascend_slash</iconPath>
-    <category>MX_QingheSkill</category>
+    <category>MX_QH_Category_QingheSkill</category>
     <displayOrder>230</displayOrder>
     <cooldownTicksRange>1800</cooldownTicksRange>
     <targetRequired>true</targetRequired>

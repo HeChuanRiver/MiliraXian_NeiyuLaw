@@ -34,7 +34,7 @@
 
         <!-- 仅作用于随机补充，对 apparelRequired 无影响。 -->
         <apparelTags>
-            <li>MX_QingheNormal</li>
+            <li>MX_QH_Apparel_Normal</li>
         </apparelTags>
 
         <!--    TODO: Specific Apparel Req for QingHe-->
@@ -44,8 +44,8 @@
         <!-- apparel you force to spawn 强制要求生成的装备 -->
         <!--        TODO: Add Apparel for QingHe -->
         <apparelRequired>
-            <li>MX_QingheNormal</li>
-            <li>MX_QingheHeaddress</li>
+            <li>MX_QH_Apparel_Normal</li>
+            <li>MX_QH_Apparel_Headdress</li>
         </apparelRequired>
         <!-- Disabled apparel tags if you want to spawn randomly 如果你想要使用随机生成装备，禁用的装备tag -->
         <apparelDisallowTags>

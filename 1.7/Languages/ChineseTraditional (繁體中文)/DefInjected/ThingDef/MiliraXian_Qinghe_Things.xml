@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <SpringFlowField.label>涌泉力場</SpringFlowField.label>
+  <MX_QH_SpringFlowField.label>涌泉力場</MX_QH_SpringFlowField.label>
   <MX_QH_LotusPond.label>荷池</MX_QH_LotusPond.label>
   <MX_QH_LotusPond.description>清荷的修行場所。她會在這裡進行冥想，最好為她準備一個安靜、漂亮的環境。</MX_QH_LotusPond.description>
   <MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>荷池只可分配給清荷。</MX_QH_LotusPond.comps.1.noAssignablePawnsDesc>
@@ -14,8 +14,5 @@
   <MX_Bullet_Qinghe_FlowerBell_Autumn.label>鈴音·秋</MX_Bullet_Qinghe_FlowerBell_Autumn.label>
   <MX_Bullet_Qinghe_FlowerBell_Winter.label>鈴音·冬</MX_Bullet_Qinghe_FlowerBell_Winter.label>
   <MX_Bullet_QH_LunarMirrorRetaliation.label>霜寒</MX_Bullet_QH_LunarMirrorRetaliation.label>
-  <MX_QH_LunarMirror.label>霜月鏡護盾</MX_QH_LunarMirror.label>
-  <MX_QH_Mote_FlowerDivinationBurst.label>清荷特效</MX_QH_Mote_FlowerDivinationBurst.label>
-  <MX_QH_Mote_FlowerDivinationBokeh.label>清荷特效</MX_QH_Mote_FlowerDivinationBokeh.label>
-  <MX_QH_Mote_FlowerDivinationFootRing.label>清荷特效</MX_QH_Mote_FlowerDivinationFootRing.label>
+  <MX_QH_LunarMirrorShield.label>霜月鏡護盾</MX_QH_LunarMirrorShield.label>
 </LanguageData>

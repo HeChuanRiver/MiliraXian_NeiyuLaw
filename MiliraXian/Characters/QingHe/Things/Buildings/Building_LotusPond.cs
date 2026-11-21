@@ -48,7 +48,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
         }
     }
 
-    public class RoomRoleWorker_QingheLotusRainPavilion : RoomRoleWorker
+    public class RoomRoleWorker_QingheLotusPavilion : RoomRoleWorker
     {
         private const float LotusPondScore = 3000f;
 
@@ -59,7 +59,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
 
         public override float GetScoreDeltaIfBuildingPlaced(Room room, ThingDef buildingDef)
         {
-            if (room?.Role?.Worker is RoomRoleWorker_QingheLotusRainPavilion)
+            if (room?.Role?.Worker is RoomRoleWorker_QingheLotusPavilion)
             {
                 return 0f;
             }

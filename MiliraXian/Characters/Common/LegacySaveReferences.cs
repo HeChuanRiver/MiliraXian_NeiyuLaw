@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using MiliraXian.Characters.Common.Biography;
 using MiliraXian.Characters.Common.Vfx;
+using RimWorld;
 using Verse;
 
 namespace MiliraXian.Characters.Common
@@ -20,16 +21,25 @@ namespace MiliraXian.Characters.Common
             { "MiliraXian.Characters.Biography.Hediff_BiographyTracker", typeof(Hediff_BiographyTracker) },
             { "MiliraXian.Characters.Neiyu.GameComponent_NeiyuLawUpdateLog", typeof(GameComponent_NeiyuLawUpdateLog) },
             { "MiliraXian.Characters.Vfx.MapComponent_PawnAfterimages", typeof(MapComponent_PawnAfterimages) },
-            // Neiyu's posture moved to the shared combat posture (Common/Combat).
+            // Qinghe's posture moved to the shared combat posture (Common/Combat).
             { "MiliraXian.Characters.Neiyu.Hediff_NeiyuPosture", typeof(Combat.Hediff_CombatPosture) },
-            { "MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureBroken", typeof(Combat.JobDriver_CombatPostureBroken) }
+            { "MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureBroken", typeof(Combat.JobDriver_CombatPostureBroken) },
+            // Qinghe's per-map VFX components, renamed with the Kyouka Suigetsu / Luohua moves.
+            { "MiliraXian.Characters.QingHe.Vfx.MapComponent_MirrorVisuals", typeof(MiliraXian.Characters.QingHe.Vfx.MapComponent_KyoukaVisuals) },
+            { "MiliraXian.Characters.QingHe.Things.Weapons.MapComponent_QingheKillVfx", typeof(MiliraXian.Characters.QingHe.Things.Weapons.MapComponent_LuohuaVfx) }
         };
 
         // Defs renamed in place; the saved data keeps its meaning under the new name.
         internal static readonly Dictionary<(Type, string), string> RenamedDefs = new()
         {
             { (typeof(HediffDef), "MX_NeiyuSwordPosture"), "MX_CombatPosture" },
-            { (typeof(JobDef), "MX_NeiyuPostureBroken"), "MX_CombatPostureBroken" }
+            { (typeof(JobDef), "MX_NeiyuPostureBroken"), "MX_CombatPostureBroken" },
+            // Qinghe's apparel: worn or stored items would otherwise vanish from old saves.
+            { (typeof(ThingDef), "MX_QingheNormal"), "MX_QH_Apparel_Normal" },
+            { (typeof(ThingDef), "MX_QingheHeaddress"), "MX_QH_Apparel_Headdress" },
+            // Qinghe's learned skills: the perk tree never re-grants them, so a missing def means losing the ability.
+            { (typeof(AbilityDef), "MX_QH_IllusoryReflection"), "MX_QH_Kyouka_Suigetsu" },
+            { (typeof(AbilityDef), "MX_QH_SummerRain"), "MX_QH_LotusRain" }
         };
 
         internal static readonly Dictionary<string, string> FlightAnimations = CreateFlightAliases();

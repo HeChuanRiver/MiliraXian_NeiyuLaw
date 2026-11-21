@@ -13,7 +13,7 @@ namespace MiliraXian.Characters.QingHe.Things
     /// perpendicular to the caster -> target line. It slows and poisons hostiles that walk into
     /// it; it does not block movement or projectiles (that is the Lunar Mirror's job).
     /// </summary>
-    public class CompProperties_SummerRainWall : CompProperties
+    public class CompProperties_LotusRainWall : CompProperties
     {
         /// <summary>Half of the wall's length, in cells (15 long).</summary>
         public float halfLength = 7.5f;
@@ -43,9 +43,9 @@ namespace MiliraXian.Characters.QingHe.Things
 
         public FleckDef ambientSplashFleckDef;
 
-        public CompProperties_SummerRainWall()
+        public CompProperties_LotusRainWall()
         {
-            compClass = typeof(CompSummerRainWall);
+            compClass = typeof(CompLotusRainWall);
         }
     }
 
@@ -53,7 +53,7 @@ namespace MiliraXian.Characters.QingHe.Things
     /// The wall's logic. It is spawned once the cast succeeds and lives for its duration, fading
     /// in at the start and out at the end; the rain and the wet ground share that one curve.
     /// </summary>
-    public class CompSummerRainWall : ThingComp
+    public class CompLotusRainWall : ThingComp
     {
         private Pawn caster;
         private Vector2 axisLength = Vector2.right;
@@ -63,7 +63,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private int nextPulseTick;
         private int ticksToNextAmbientVisual;
 
-        public CompProperties_SummerRainWall Props => (CompProperties_SummerRainWall)props;
+        public CompProperties_LotusRainWall Props => (CompProperties_LotusRainWall)props;
 
         /// <summary>The wall's direction along its length, in map cells.</summary>
         public Vector2 AxisLength => axisLength;
