@@ -16,8 +16,8 @@
   <MX_QH_SkillTreeNodeLocked>习得等级：Lv.{0}</MX_QH_SkillTreeNodeLocked>
   <MX_QH_SkillTreeNodeStateLocked>已锁定</MX_QH_SkillTreeNodeStateLocked>
   <MX_QH_SkillTreeNodeStateNotLearned>未习得</MX_QH_SkillTreeNodeStateNotLearned>
-  <MX_QH_FlowerDecreeNotEnough>花令不足。</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_SwordPressureNotEnough>剑压不足（需要 {0} 点）。</MX_QH_SwordPressureNotEnough>
+  <MX_QH_FlowerDecreeNotEnough>花令不足（需要 {0} 点，当前可用 {1} 点）。</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>剑压不足（需要 {0} 点，当前可用 {1} 点）。</MX_QH_SwordPressureNotEnough>
   <MX_QH_ZantetsukenNoRoom>无法使用斩铁剑：目标周围没有可以落脚的空位。</MX_QH_ZantetsukenNoRoom>
   <MX_QH_ExecutionMode_Auto>处决：自动</MX_QH_ExecutionMode_Auto>
   <MX_QH_ExecutionMode_Manual>处决：手动</MX_QH_ExecutionMode_Manual>

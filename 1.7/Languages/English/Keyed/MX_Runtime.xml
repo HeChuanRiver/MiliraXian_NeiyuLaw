@@ -146,8 +146,8 @@
   <MX_QH_FlowerCourtNodeLevel>Lv.{0}</MX_QH_FlowerCourtNodeLevel>
   <MX_QH_FlowerCourtNodeLearned>learned</MX_QH_FlowerCourtNodeLearned>
   <MX_QH_FlowerCourtNodeLocked>Requires grace level {0}</MX_QH_FlowerCourtNodeLocked>
-  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_SwordPressureNotEnough>Not enough Sword Pressure (needs {0}).</MX_QH_SwordPressureNotEnough>
+  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree (needs {0}, {1} available).</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>Not enough Sword Pressure (needs {0}, {1} available).</MX_QH_SwordPressureNotEnough>
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresStance>Requires stance: {0}.</MX_QH_RequiresStance>
@@ -254,7 +254,7 @@
   <MX_ZL_LinkTargetTipNamed>This target is maintaining a karmic link with {0}.</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>Fixed Fate cannot be used on Zhaoli herself.</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>Fixed Fate cannot be used during a raid state.</MX_ZL_DingshuCannotUseDuringRaid>
-  <MXZL_ZhaoliKarmaNotEnough>Not enough Karma (needs {0}).</MXZL_ZhaoliKarmaNotEnough>
+  <MXZL_ZhaoliKarmaNotEnough>Not enough Karma (needs {0}, {1} available).</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>The target died while marked by Fixed Fate and cannot be resurrected again.</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>Fixed Fate failed to complete the resurrection.</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>Fixed Fate</MX_ZL_DingshuMote>

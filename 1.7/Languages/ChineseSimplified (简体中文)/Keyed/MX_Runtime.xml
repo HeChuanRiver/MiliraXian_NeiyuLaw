@@ -136,7 +136,7 @@
   <MX_ZL_LinkTargetTipNamed>该目标正与{0}保持因果链接。</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>定数无法对昭离自己使用。</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>定数无法在袭击状态下使用。</MX_ZL_DingshuCannotUseDuringRaid>
-  <MXZL_ZhaoliKarmaNotEnough>因果不足（需要 {0} 点）。</MXZL_ZhaoliKarmaNotEnough>
+  <MXZL_ZhaoliKarmaNotEnough>因果不足（需要 {0} 点，当前可用 {1} 点）。</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>目标在定数标记期间死亡，无法再次被复活。</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>定数未能完成复活。</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>定数</MX_ZL_DingshuMote>
