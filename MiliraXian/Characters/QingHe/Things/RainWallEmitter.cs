@@ -31,6 +31,12 @@ namespace MiliraXian.Characters.QingHe.Things
         /// <summary>The splash sits just above the water so it is not clipped by it.</summary>
         internal const float SplashLift = 0.015f;
 
+        /// <summary>
+        /// How far the quad extends past the band so its soft edge is not cut off mid-slope. Matches
+        /// the old renderer's padding, which the shaders' falloff was tuned against.
+        /// </summary>
+        internal const float QuadPadding = 0.4f;
+
         private const float FallSpeedLo = 1.70f;
         private const float FallSpeedHi = 2.60f;
         private const float StrandLenLo = 0.85f;
@@ -98,6 +104,12 @@ namespace MiliraXian.Characters.QingHe.Things
             // The strokes read these as uniforms; they are the wall's own geometry, not per particle.
             SetVectorChannel(RainWallChannels.Axis, new Vector4(along.x, along.y, across.x, across.y));
             SetVectorChannel(RainWallChannels.Band, new Vector4(halfLength, halfThickness, seconds, strength));
+
+            // The axis-aligned quad that covers the band, padding included: the band is rotated, so
+            // its footprint depends on the wall's direction and cannot be a pass constant.
+            float halfX = halfLength * Mathf.Abs(along.x) + halfThickness * Mathf.Abs(across.x) + QuadPadding;
+            float halfZ = halfLength * Mathf.Abs(along.y) + halfThickness * Mathf.Abs(across.y) + QuadPadding;
+            SetVectorChannel(RainWallChannels.Quad, new Vector4(halfX, halfZ, 0f, 0f));
 
             if (strength <= 0.01f)
             {

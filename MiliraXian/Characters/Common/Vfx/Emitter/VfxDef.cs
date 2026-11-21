@@ -314,6 +314,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Channel carrying the field's strength 0..1, for the instanced path.</summary>
         public string strengthChannel;
 
+        /// <summary>Vec4 channel carrying the quad's half extents as (halfX, halfZ), or empty.</summary>
+        public string sizeChannel;
+
         public List<VfxBindingDef> bindings = new();
     }
 

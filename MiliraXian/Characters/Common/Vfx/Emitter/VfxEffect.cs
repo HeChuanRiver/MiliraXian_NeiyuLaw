@@ -182,6 +182,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 SizeUniform = UniformOf(source.sizeUniform),
                 RadiusChannel = ChannelOf(source.radiusChannel),
                 StrengthChannel = ChannelOf(source.strengthChannel),
+                SizeChannel = source.sizeChannel.NullOrEmpty()
+                    ? -1
+                    : VfxChannels.TryFindVector(source.sizeChannel, out int size) ? size : -1,
             };
 
             AddBindings(field.Bindings, source.bindings);

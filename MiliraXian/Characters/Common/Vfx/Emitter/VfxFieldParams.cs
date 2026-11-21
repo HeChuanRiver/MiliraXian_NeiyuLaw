@@ -24,6 +24,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             SizeUniform = 0;
             RadiusChannel = -1;
             StrengthChannel = -1;
+            SizeChannel = -1;
             Bindings = new List<VfxUniformBinding>();
         }
 
@@ -47,8 +48,18 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// </summary>
         internal int CenterUniform;
 
-        /// <summary>Uniform the renderer writes the quad's edge length into, or zero for none.</summary>
+        /// <summary>
+        /// Uniform the renderer writes the quad's extents into as (sizeX, sizeZ, 0, 0). A field shader
+        /// that rebuilds its geometry from uv needs them; one edge length is not enough for a quad
+        /// that covers an oriented band.
+        /// </summary>
         internal int SizeUniform;
+
+        /// <summary>
+        /// A vec4 channel carrying the quad's half extents in cells as (halfX, halfZ). Needed when
+        /// the quad only has to cover an oriented band, so its size is not a pass constant.
+        /// </summary>
+        internal int SizeChannel;
 
         /// <summary>Uniforms written every frame, on top of the two geometry uniforms above.</summary>
         internal List<VfxUniformBinding> Bindings;

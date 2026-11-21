@@ -79,6 +79,29 @@
       </li>
 
       <li>
+        <name>mist</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_RainWall</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>1.1</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <field>
+          <!-- 四边形覆盖整条带子；半宽随墙的朝向变化，所以由发射器写进通道，渲染器再写进 _FieldSize -->
+          <sizeChannel>rainWallQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <extraHeight>3.05</extraHeight>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <bindings>
+            <li><uniform>_Axis</uniform><vecChannel>rainWallAxis</vecChannel></li>
+            <li><uniform>_Band</uniform><vecChannel>rainWallBand</vecChannel></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
         <name>splashes</name>
         <renderer>Sprite</renderer>
         <texture>White</texture>

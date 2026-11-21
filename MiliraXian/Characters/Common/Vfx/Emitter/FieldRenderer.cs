@@ -51,7 +51,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 : emitter.Particles[particleIndex].Position;
 
             Vector2 size = field.QuadSize;
-            if (field.SizeFromRadius)
+            if (field.SizeChannel >= 0)
+            {
+                // The quad only has to cover an oriented band, so its extents come from the emitter.
+                Vector4 half = emitter.VectorChannel(field.SizeChannel);
+                size = new Vector2(half.x * 2f, half.y * 2f);
+            }
+            else if (field.SizeFromRadius)
             {
                 // Cell coverage is integral: the field occupies whole cells, so the quad must be
                 // sized from the ceiling of the radius, exactly as the old renderer did.
@@ -82,7 +88,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     constants.Clear();
                     if (field.SizeUniform != 0)
                     {
-                        constants.SetFloat(field.SizeUniform, size.x);
+                        constants.SetVector(field.SizeUniform, new Vector4(size.x, height, 0f, 0f));
                     }
                     for (int i = 0; i < field.Bindings.Count; i++)
                     {
@@ -121,7 +127,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             if (field.SizeUniform != 0)
             {
-                block.SetFloat(field.SizeUniform, size.x);
+                block.SetVector(field.SizeUniform, new Vector4(size.x, height, 0f, 0f));
             }
             for (int i = 0; i < field.Bindings.Count; i++)
             {

@@ -32,12 +32,6 @@ namespace MiliraXian.Characters.QingHe.Things
     [StaticConstructorOnStartup]
     internal sealed class RainWallVfx : IQingheVfxRenderer
     {
-        /// <summary>How far above the band the rain wall reaches, in cells (the preview's CURTAIN_H).</summary>
-        private const float SheetHeight = 2.20f;
-
-        /// <summary>The longest strand; the quad has to reach this far above the sheet too.</summary>
-        private const float RainLenMax = 1.45f;
-
         // --- the strands' fall speeds: shared by the emitter's strands and their landings ----------
         private const float FallSpeedLo = 1.70f;                 // RAIN_SPEED
         private const float FallSpeedHi = 2.60f;
@@ -61,13 +55,6 @@ namespace MiliraXian.Characters.QingHe.Things
         /// <summary>The wall's colour constants.</summary>
         private static readonly Color Season = new(0.60f, 0.95f, 0.50f);
         private static readonly Color LotusTint = new(0.94f, 1f, 1.02f, 1f);
-
-        private static readonly ScreenBloomProperties Bloom = new()
-        {
-            group = DefDatabase<ScreenBloomGroupDef>.GetNamedSilentFail("MX_ScreenBloom_Glow"),
-            tint = Color.white,
-            intensity = 1.1f,
-        };
 
         /// <summary>
         /// The strands' own bloom submission: same group as the mist, but dim — without it the
@@ -124,7 +111,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private static readonly Dictionary<Map, RainWallVfx> Instances = new();
 
         private Map map;
-        private Material rainMat;
         private Material groundMat;
         private Material waterMat;
         private Material lotusBloomMat;
@@ -133,7 +119,6 @@ namespace MiliraXian.Characters.QingHe.Things
         private Texture2D lotusPadTex;
 
         private readonly List<Mesh> groundMeshes = new();
-        private readonly List<Mesh> rainMeshes = new();
         private readonly List<Mesh> waterMeshes = new();
         private readonly List<Mesh> lotusBloomMeshes = new();
         private readonly List<Mesh> lotusPadMeshes = new();
@@ -224,10 +209,9 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             groundMat ??= MatFor("MX_QH_RainWallGround");
-            rainMat ??= MatFor("MX_QH_RainWall");
             waterMat ??= MatFor("MX_QH_RainWallWater");
             LotusMaterials();
-            if (rainMat == null || groundMat == null || waterMat == null)
+            if (groundMat == null || waterMat == null)
             {
                 return;
             }
@@ -308,15 +292,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 // them in the same loop as the strands, so the landing point and the birth time are
                 // the same fact, not a convention.
 
-                // --- 2. the mist: the standing curtain ----------------------------------------
-                Mesh rm = MeshAt(rainMeshes, i);
-                BuildQuad(rm, centre.x, centre.z, ex + Pad, ez + Pad, SheetHeight + RainLenMax + Pad,
-                    AltitudeLayer.MoteOverhead.AltitudeFor());
-                block.Clear();
-                block.SetVector(AxisId, new Vector4(al.x, al.y, ac.x, ac.y));
-                block.SetVector(BandId, new Vector4(wall.HalfLength, wall.HalfThickness, seconds, s));
-                ScreenBloom.Submit(Bloom, rm, Matrix4x4.identity, rainMat, block);
-                Graphics.DrawMesh(rm, Matrix4x4.identity, rainMat, 0, null, 0, block);
+                // --- 2. the mist now belongs to the emitter -------------------------------
 
                 // --- 3. the flowers ----------------------------------------------------------
                 // One mesh per texture used, so each draw call binds the right lotus sprite.
@@ -598,7 +574,6 @@ namespace MiliraXian.Characters.QingHe.Things
         public void Dispose()
         {
             DestroyAll(groundMeshes);
-            DestroyAll(rainMeshes);
             DestroyAll(lotusBloomMeshes);
             DestroyAll(lotusPadMeshes);
             walls.Clear();
