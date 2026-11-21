@@ -55,12 +55,9 @@
   <MX_NL_NeiyuPowerLevelLabel>霓羽強度檔位（僅影響霓羽）</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>第一檔：原始強度（預設）</MX_NL_NeiyuPowerLevelOriginalLabel>
   <MX_NL_NeiyuPowerLevelOriginalDesc>霓羽的完整技能、武器、護盾與穿戴加成，以及饑餓保護和意識保底。</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>第二檔：適度強度</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>完整的武器形態、斬首、群體治療與多階段護盾，搭配適中的傷害、增益和技能冷卻。</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>第三檔：觀賞模式</MX_NL_NeiyuPowerLevelDecorativeLabel>
   <MX_NL_NeiyuPowerLevelDecorativeDesc>以陪伴、外觀和劇情為主。主動技能、護盾、饑餓保護、意識保底與專屬裝備加成停用，裝備提供基礎戰鬥能力。</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>目前強度檔位已封禁霓羽的主動技能。</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>技能效果見說明，屬性與冷卻見信息面板。</MX_NL_NeiyuAbilityBalancedNotice>
   <MX_NL_NeiyuAbilityDecorativeNotice>此技能當前無法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>目前為觀賞模式，霓羽的護身被動不會生效。</MX_NL_NeiyuPassiveSealedDesc>

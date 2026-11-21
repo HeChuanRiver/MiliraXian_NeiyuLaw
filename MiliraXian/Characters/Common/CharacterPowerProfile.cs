@@ -29,8 +29,9 @@ namespace MiliraXian.Characters.Common
             for (int i = 0; i < tunings.Count; i++) tunings[i](Sealed);
         }
 
-        // Old enum names are read as strings so removing Balanced never reaches Enum.Parse.
-        // Only the new boolean is written; its presence takes precedence over legacy data.
+        // Legacy enum names are read as strings; only their decorative state is carried over.
+        // Only the new boolean is written, and its presence takes precedence over legacy data.
+        // Returns whether the saved mode must be re-applied to existing pawns.
         public static bool LookDecorative(ref bool decorative, string label, string legacyLabel)
         {
             bool readLegacy = Scribe.mode == LoadSaveMode.LoadingVars
@@ -41,7 +42,7 @@ namespace MiliraXian.Characters.Common
             string legacy = null;
             Scribe_Values.Look(ref legacy, legacyLabel);
             decorative = legacy == "Decorative" || legacy == "2";
-            return legacy == "Balanced" || legacy == "1";
+            return decorative;
         }
 
         public void Value<T>(Func<T> getter, Action<T> setter, T decorative)

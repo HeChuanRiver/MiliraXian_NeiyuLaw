@@ -55,12 +55,9 @@
   <MX_NL_NeiyuPowerLevelLabel>Neiyu power level (Neiyu only)</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>Level 1: Original (default)</MX_NL_NeiyuPowerLevelOriginalLabel>
   <MX_NL_NeiyuPowerLevelOriginalDesc>Neiyu's full abilities, weapons, shield and equipment bonuses, with hunger protection and a consciousness floor.</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>Tier 2: moderate power</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>All weapon forms, decapitation, group healing and shield phases, with moderate damage, bonuses and cooldowns.</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>Level 3: Decorative</MX_NL_NeiyuPowerLevelDecorativeLabel>
   <MX_NL_NeiyuPowerLevelDecorativeDesc>Focused on companionship, appearance and story. Abilities, shield, hunger protection, consciousness floor and special equipment bonuses are inactive. Equipment provides basic combat capability.</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>Neiyu's active abilities are sealed at the current power level.</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>See the description for effects and the information panel for stats and cooldowns.</MX_NL_NeiyuAbilityBalancedNotice>
   <MX_NL_NeiyuAbilityDecorativeNotice>This ability is unavailable.</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>

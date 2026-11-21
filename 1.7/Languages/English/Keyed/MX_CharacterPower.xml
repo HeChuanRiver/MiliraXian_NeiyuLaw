@@ -8,8 +8,6 @@
   <MX_Power_PassiveInactive>This effect is inactive.</MX_Power_PassiveInactive>
   <MX_Power_Zhaoli_Original>Zhaoli's full abilities and default combat stats.</MX_Power_Zhaoli_Original>
   <MX_Power_Mingyuan_Original>Mingyuan's full abilities and default combat stats.</MX_Power_Mingyuan_Original>
-  <MX_Power_Zhaoli_Balanced>Execution, healing, resurrection, Karma Links and growth, with moderate damage, bonuses and ability costs.</MX_Power_Zhaoli_Balanced>
-  <MX_Power_Mingyuan_Balanced>Life Burn, Self Burn, Overburn, both bow forms, Time Burn, flame repair and rebirth, with moderate damage, layer gain and cooldowns.</MX_Power_Mingyuan_Balanced>
   <MX_Power_Zhaoli_Decorative>Focused on companionship, appearance and story. Abilities, growth, Karma income, linked death substitution and automatic rebirth are inactive. Equipment provides basic combat capability. Existing fields and enchantments end.</MX_Power_Zhaoli_Decorative>
   <MX_Power_Mingyuan_Decorative>Focused on companionship, appearance and story. Abilities and combat passives are inactive; the bow fires ordinary single arrows. Existing sustained effects end. Rebirth already in progress completes.</MX_Power_Mingyuan_Decorative>
   <MX_Power_Zhaoli_Duanzhan>Unleashes a circular slash followed by a stronger forward cut, favoring torso hits. An active Netherflame enchantment adds fire damage.</MX_Power_Zhaoli_Duanzhan>
@@ -35,7 +33,6 @@ Radiation: fires into a 10-cell, 108-degree cone at most once every 1.5 seconds.
   <MX_Power_Mingyuan_RebirthFlame>At the brink of death, Mingyuan releases an explosion that damages and stuns nearby enemies, then leaves temporarily. She returns fully restored when the flame reforms.</MX_Power_Mingyuan_RebirthFlame>
   <MX_Power_Zhaoli_Shield>Each unit absorbed through Death Pronouncement grants 5 Deathward Shield layers.
 The shield blocks damage, consuming 1 layer per 36 damage, rounded up to a minimum of 1. If too few layers remain, all remaining layers are spent and the hit is still blocked. Each damage-over-time application is counted separately.</MX_Power_Zhaoli_Shield>
-  <MX_Power_BalancedEquipment>Dedicated armor that provides protection and equipped bonuses.</MX_Power_BalancedEquipment>
   <MX_Power_MX_Neiyu_WarpFeather>After a brief cast, creates 12–24 Milira feathers. Cooldown: 360 seconds.</MX_Power_MX_Neiyu_WarpFeather>
   <MX_Power_MX_Neiyu_ThunderMarkedStorm>Marks enemies within 3 cells. After a delay, each target receives 3 strikes, each dealing 30 base damage plus a 13-point EMP effect. Cooldown: 96 seconds.</MX_Power_MX_Neiyu_ThunderMarkedStorm>
   <MX_Power_MX_Neiyu_Bow_ArrowBarrage>Requires bow form. Charges for 5 seconds, then fires 32 arrows in the selected direction, each with 26 base damage and a 55-cell range. Cooldown: 144 seconds.</MX_Power_MX_Neiyu_Bow_ArrowBarrage>

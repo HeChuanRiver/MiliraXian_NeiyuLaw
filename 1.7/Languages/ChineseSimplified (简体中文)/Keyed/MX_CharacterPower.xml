@@ -8,8 +8,6 @@
   <MX_Power_PassiveInactive>此效果当前未生效。</MX_Power_PassiveInactive>
   <MX_Power_Zhaoli_Original>昭离的完整能力与默认战斗数值。</MX_Power_Zhaoli_Original>
   <MX_Power_Mingyuan_Original>明渊的完整能力与默认战斗数值。</MX_Power_Mingyuan_Original>
-  <MX_Power_Zhaoli_Balanced>完整的处决、治疗、复活、因果链接与成长能力，搭配适中的伤害、增益和技能消耗。</MX_Power_Zhaoli_Balanced>
-  <MX_Power_Mingyuan_Balanced>完整的燃命、自燃、过燃、长虹双形态、燃时、护焰与重生能力，搭配适中的伤害、叠层速度和技能冷却。</MX_Power_Mingyuan_Balanced>
   <MX_Power_Zhaoli_Decorative>以陪伴、外观和剧情为主。主动技能、成长、因果收益、链接替死与自动复活停用；装备提供基础战斗能力。已有力场和附魔会结束。</MX_Power_Zhaoli_Decorative>
   <MX_Power_Mingyuan_Decorative>以陪伴、外观和剧情为主。主动技能与战斗被动停用，长虹发射普通单箭。已有持续效果会结束，已开始的重生流程会完成。</MX_Power_Mingyuan_Decorative>
   <MX_Power_Zhaoli_Duanzhan>挥出圆形斩击，并沿前方直线追加更强的追斩，优先命中躯干。武器附有冥火时，斩击会追加火焰伤害。</MX_Power_Zhaoli_Duanzhan>
@@ -35,7 +33,6 @@
   <MX_Power_Mingyuan_RebirthFlame>明渊濒死时爆发重生之焰，对周围敌人造成爆炸伤害与眩晕，随后暂时离场。火焰重新凝聚后，明渊以完整状态返回。</MX_Power_Mingyuan_RebirthFlame>
   <MX_Power_Zhaoli_Shield>每通过告死吸纳一个单位，获得5层讳亡护盾。
 护盾抵挡伤害，每36点消耗1层，向上取整，至少消耗1层。剩余层数不足时，耗尽护盾并抵挡本次伤害。持续伤害每次生效时单独计算。</MX_Power_Zhaoli_Shield>
-  <MX_Power_BalancedEquipment>专属防具，提供防护与穿戴加成。</MX_Power_BalancedEquipment>
   <MX_Power_MX_Neiyu_WarpFeather>短暂施法后生成12–24根米莉拉羽毛。冷却360秒。</MX_Power_MX_Neiyu_WarpFeather>
   <MX_Power_MX_Neiyu_ThunderMarkedStorm>标记半径3格内的敌人。延迟后每个目标受到3次雷击，每次造成30点基础伤害，并附加13点EMP效果。冷却96秒。</MX_Power_MX_Neiyu_ThunderMarkedStorm>
   <MX_Power_MX_Neiyu_Bow_ArrowBarrage>需要弓形态。蓄力5秒，沿选定方向发射32支箭，每支基础伤害26点，射程55格。冷却144秒。</MX_Power_MX_Neiyu_Bow_ArrowBarrage>
