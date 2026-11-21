@@ -303,8 +303,6 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public DamageDef thunderCutDamageDef;
         public BladeMotionClipDef warmup;
         public SakuraDanceClipDef groundMotion;
-        /// <summary>Sword pressure spent when the aim starts; the cast needs at least this much.</summary>
-        public float swordPressureCost;
         /// <summary>Qinghe's own posture meter empties when the aim starts.</summary>
         public bool clearOwnPosture;
         /// <summary>Used when the pawn is flying at cast time; falls back to the ground motion.</summary>

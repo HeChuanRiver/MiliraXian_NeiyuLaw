@@ -67,11 +67,24 @@
       </targetParams>
     </verbProperties>
     <comps>
+      <!-- 剑压代价：够 1 层才能施放，本 comp 不扣——瞄准（前摇）开始时由 SakuraDanceCastCost 扣掉并清空自己的架势。
+           接住敌人雷返的反击不消耗；前摇到樱舞结束全程无敌（伤害、架势、处决、雷返眩晕都免疫，没有例外）。 -->
+      <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+        <requirements>
+          <li>
+            <resourceDef>MX_QH_SwordPressure</resourceDef>
+            <minAmount>1</minAmount>
+          </li>
+        </requirements>
+        <onCast>
+          <li>
+            <resourceDef>MX_QH_SwordPressure</resourceDef>
+            <amount>0</amount>
+          </li>
+        </onCast>
+      </li>
       <li Class="MiliraXian.Characters.QingHe.Abilities.SakuraDance.CompProperties_AbilitySakuraDance">
         <sweepDamage>MX_QH_SakuraDanceSweep</sweepDamage>
-        <!-- 代价：瞄准（前摇）开始时消耗 1 点剑压并清空自己的架势；不足 1 点不能施放。接住敌人雷返的反击不消耗。
-             前摇到樱舞结束全程无敌（伤害、架势、处决、雷返眩晕都免疫，没有例外）。 -->
-        <swordPressureCost>1</swordPressureCost>
         <clearOwnPosture>true</clearOwnPosture>
         <!-- 伤口和战斗日志里的招式名：普通三刀为樱舞，接雷之后的刀为雷返 -->
         <cutDamageDef>MX_QH_SakuraDanceSlash</cutDamageDef>

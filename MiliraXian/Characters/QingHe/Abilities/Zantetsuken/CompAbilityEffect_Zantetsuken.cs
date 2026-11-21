@@ -57,7 +57,6 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         public float gaeshiExtraPosture = 30f;
         public int stunTicks = 300;
         public int gaeshiStunTicks = 480;
-        public float minSwordPressure = 1f;
         public CharacterPerkNodeDef gaeshiNode;
 
         public float heightToScreen = 0.35f;
@@ -150,23 +149,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
 
         public new CompProperties_AbilityZantetsuken Props => (CompProperties_AbilityZantetsuken)props;
 
-        private bool LacksPressure =>
-            Hediffs.MX_QH_HediffUtility.GetSwordPressure(parent.pawn).CurrentValue < Props.minSwordPressure - 1e-4f;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (LacksPressure)
-            {
-                reason = "MX_QH_SwordPressureNotEnough".Translate(Props.minSwordPressure.ToString("0.#"));
-                return true;
-            }
-            return base.GizmoDisabled(out reason);
-        }
-
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
             Pawn caster = parent.pawn;
-            return target.Cell != caster.Position && !LacksPressure
+            return target.Cell != caster.Position
                 && (target.HasThing || target.Cell.Standable(caster.Map))
                 && base.Valid(target, throwMessages);
         }

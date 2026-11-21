@@ -13,9 +13,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     {
         public ThingDef fieldDef = MX_QHDefOf.MX_QH_SpringFlowField;
         public int fieldDurationTicks = 900;
-        public HediffDef resourceCostDef;
-        public float resourceCost = 0f;
-        public string missingResourceMessage = "MX_QH_FlowerDecreeNotEnough";
 
         public CompProperties_AbilitySpringFlow()
         {
@@ -27,26 +24,9 @@ namespace MiliraXian.Characters.QingHe.Abilities
     {
         public new CompProperties_AbilitySpringFlow Props => (CompProperties_AbilitySpringFlow)props;
 
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (Props.resourceCostDef != null
-                && Props.resourceCost > 0f
-                && PawnSpecialResourceUtility.GetCurrentResource(parent.pawn, Props.resourceCostDef) < Props.resourceCost)
-            {
-                reason = Props.missingResourceMessage.Translate();
-                return true;
-            }
-
-            return base.GizmoDisabled(out reason);
-        }
-
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Apply(target, dest);
-            if (Props.resourceCostDef != null && Props.resourceCost > 0f)
-            {
-                PawnSpecialResourceUtility.TryConsumeResource(parent.pawn, Props.resourceCostDef, Props.resourceCost);
-            }
 
             if (Props.fieldDef == null || parent?.pawn == null) return;
             var map = parent.pawn.Map;

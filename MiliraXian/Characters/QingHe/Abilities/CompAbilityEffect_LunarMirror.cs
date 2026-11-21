@@ -12,13 +12,10 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompProperties_AbilityLunarMirror : CompProperties_AbilityEffect
     {
         public ThingDef shieldDef;
-        public HediffDef resourceCostDef;
-        public float resourceCost = 1f;
         public int durationTicks = 900;
         public string summonEffecterDefName;
         public float summonEffectScale = 1f;
         public string fallbackSummonFleckDefName = "PsycastAreaEffect";
-        public string missingResourceMessage = "MX_QH_FlowerDecreeNotEnough";
 
         public CompProperties_AbilityLunarMirror()
         {
@@ -29,19 +26,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_LunarMirror : CompAbilityEffect
     {
         public new CompProperties_AbilityLunarMirror Props => (CompProperties_AbilityLunarMirror)props;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (Props.resourceCostDef != null
-                && Props.resourceCost > 0f
-                && PawnSpecialResourceUtility.GetCurrentResource(parent.pawn, Props.resourceCostDef) < Props.resourceCost)
-            {
-                reason = Props.missingResourceMessage.Translate();
-                return true;
-            }
-
-            return base.GizmoDisabled(out reason);
-        }
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
@@ -56,15 +40,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             if (!cell.IsValid || !cell.InBounds(caster.Map) || !cell.Standable(caster.Map))
             {
                 return;
-            }
-
-            if (Props.resourceCostDef != null && Props.resourceCost > 0f)
-            {
-                if (!PawnSpecialResourceUtility.TryConsumeResource(caster, Props.resourceCostDef, Props.resourceCost))
-                {
-                    Messages.Message(Props.missingResourceMessage.Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                    return;
-                }
             }
 
             Thing thing = GenSpawn.Spawn(Props.shieldDef, cell, caster.Map, WipeMode.Vanish);

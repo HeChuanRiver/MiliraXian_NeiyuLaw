@@ -17,10 +17,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
         /// </summary>
         public string wallDefName = "MX_QH_LotusRainWall";
 
-        public HediffDef resourceCostDef;
-        public float resourceCost = 2f;
-        public string missingResourceMessage = "MX_QH_FlowerDecreeNotEnough";
-
         /// <summary>Half the wall's length and thickness, only for drawing the preview.</summary>
         public float previewHalfLength = 7.5f;
         public float previewHalfThickness = 1.5f;
@@ -44,19 +40,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
 
         public new CompProperties_AbilityLotusRain Props => (CompProperties_AbilityLotusRain)props;
 
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (Props.resourceCostDef != null
-                && Props.resourceCost > 0f
-                && PawnSpecialResourceUtility.GetCurrentResource(parent.pawn, Props.resourceCostDef) < Props.resourceCost)
-            {
-                reason = Props.missingResourceMessage.Translate();
-                return true;
-            }
-
-            return base.GizmoDisabled(out reason);
-        }
-
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Apply(target, dest);
@@ -78,11 +61,6 @@ namespace MiliraXian.Characters.QingHe.Abilities
             if (!cell.IsValid || !cell.InBounds(map))
             {
                 return;
-            }
-
-            if (Props.resourceCostDef != null && Props.resourceCost > 0f)
-            {
-                PawnSpecialResourceUtility.TryConsumeResource(caster, Props.resourceCostDef, Props.resourceCost);
             }
 
             Thing wall = GenSpawn.Spawn(wallDef, cell, map);

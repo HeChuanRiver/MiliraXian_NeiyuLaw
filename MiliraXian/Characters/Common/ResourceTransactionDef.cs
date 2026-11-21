@@ -21,13 +21,11 @@ namespace MiliraXian.Characters.Common
     {
         public HediffDef resourceDef;
         public float minAmount;
-        public string disabledReasonKey;
 
         public void ExposeData()
         {
             Scribe_Defs.Look(ref resourceDef, "resourceDef");
             Scribe_Values.Look(ref minAmount, "minAmount", 0f);
-            Scribe_Values.Look(ref disabledReasonKey, "disabledReasonKey");
         }
     }
 

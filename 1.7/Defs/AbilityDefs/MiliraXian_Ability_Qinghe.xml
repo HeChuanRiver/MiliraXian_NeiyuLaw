@@ -40,12 +40,23 @@
       </targetParams>
     </verbProperties>
     <comps>
+      <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+        <requirements>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <minAmount>2</minAmount>
+          </li>
+        </requirements>
+        <onCast>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <amount>-2</amount>
+          </li>
+        </onCast>
+      </li>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilitySpringFlow">
         <fieldDef>MX_QH_SpringFlowField</fieldDef>
         <fieldDurationTicks>900</fieldDurationTicks>
-        <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-        <resourceCost>2</resourceCost>
-        <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
       </li>
     </comps>
   </AbilityDef>
@@ -86,11 +97,24 @@
       </targetParams>
     </verbProperties>
     <comps>
+      <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+        <requirements>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <minAmount>2</minAmount>
+          </li>
+        </requirements>
+        <onCast>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <amount>-2</amount>
+          </li>
+        </onCast>
+      </li>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLotusRain">
         <wallDefName>MX_QH_LotusRainWall</wallDefName>
-        <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-        <resourceCost>2</resourceCost>
-        <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
+        <previewHalfLength>7.5</previewHalfLength>
+        <previewHalfThickness>1.5</previewHalfThickness>
       </li>
     </comps>
   </AbilityDef>
@@ -131,13 +155,24 @@
       </targetParams>
     </verbProperties>
     <comps>
+      <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+        <requirements>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <minAmount>2</minAmount>
+          </li>
+        </requirements>
+        <onCast>
+          <li>
+            <resourceDef>MX_QH_FlowerDecree</resourceDef>
+            <amount>-2</amount>
+          </li>
+        </onCast>
+      </li>
       <li Class="MiliraXian.Characters.QingHe.Abilities.CompProperties_AbilityLunarMirror">
         <shieldDef>MX_QH_LunarMirrorShield</shieldDef>
         <durationTicks>7200</durationTicks>
         <fallbackSummonFleckDefName>PsycastAreaEffect</fallbackSummonFleckDefName>
-        <resourceCostDef>MX_QH_FlowerDecree</resourceCostDef>
-        <resourceCost>2</resourceCost>
-        <missingResourceMessage>MX_QH_FlowerDecreeNotEnough</missingResourceMessage>
       </li>
     </comps>
   </AbilityDef>
@@ -290,6 +325,21 @@
       </targetParams>
     </verbProperties>
     <comps>
+      <!-- 剑压代价：够 1 层才能施放，本 comp 不扣——冲刺落地那一刻由 JobDriver 一次花光。 -->
+      <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+        <requirements>
+          <li>
+            <resourceDef>MX_QH_SwordPressure</resourceDef>
+            <minAmount>1</minAmount>
+          </li>
+        </requirements>
+        <onCast>
+          <li>
+            <resourceDef>MX_QH_SwordPressure</resourceDef>
+            <amount>0</amount>
+          </li>
+        </onCast>
+      </li>
       <!-- 时间单位秒，从冲到终点（击晕）算起。
            冲刺 → 到达（击晕）→ 0.1 起跳 → 0.6 最高点 → 0.75 下坠 → 0.88 落地 → 落地 0.3 秒后每 0.08 秒一次判定共 5 次 → 保持到 2.58。
            没学燕回返：0.3 秒地上收刀结束。学会：0.5 秒上捞跃回 2.2 米 → 1 秒空中居合 → 合鞘判定 → 0.3 秒落地。 -->
@@ -333,7 +383,6 @@
         <gaeshiExtraPosture>30</gaeshiExtraPosture>
         <stunTicks>300</stunTicks>
         <gaeshiStunTicks>480</gaeshiStunTicks>
-        <minSwordPressure>1</minSwordPressure>
         <gaeshiNode>MX_QH_Node_Gaeshi_Gekka</gaeshiNode>
         <heightToScreen>0.35</heightToScreen>
         <depthToScreen>0.55</depthToScreen>

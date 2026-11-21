@@ -1,4 +1,6 @@
 using HarmonyLib;
+using MiliraXian.Characters.Common;
+using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using Verse;
 
@@ -10,12 +12,20 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     {
         private static void Postfix(Verb_CastAbility __instance, bool __result)
         {
-            if (!__result || __instance.CasterPawn is not { } pawn
-                || __instance.Ability?.CompOfType<CompAbilityEffect_SakuraDance>()?.Props is not { } props)
+            if (!__result || __instance.CasterPawn is not { } pawn || __instance.Ability is not { } ability)
             {
                 return;
             }
-            SakuraDanceInvulnerability.PayCast(pawn, props);
+
+            CompAbilityEffect_SakuraDance dance = ability.CompOfType<CompAbilityEffect_SakuraDance>();
+            if (dance?.Props is not { } props)
+            {
+                return;
+            }
+
+            // The amount lives once, in the ability's CastResource requirement; payment reads it from there.
+            float cost = CompAbilityEffect_CastResource.RequiredAmountFor(ability, MX_QHDefOf.MX_QH_SwordPressure);
+            SakuraDanceInvulnerability.PayCast(pawn, props, cost);
         }
     }
 }
