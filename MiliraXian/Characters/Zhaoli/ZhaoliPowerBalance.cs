@@ -44,11 +44,7 @@ namespace MiliraXian.Characters.Zhaoli
             p.Field(HediffComp<HediffCompProperties_ZhaoliDeathSentence>("MX_AbnormalDeathSentence"), "cutSeverity", 0f);
 
             p.Ability("MX_Zhaoli_Guiyi", 15000, 20f);
-            p.Field(AbilityComp<CompProperties_AbilityZhaoliGuiyi>("MX_Zhaoli_Guiyi"), "karmaCost", 2f);
             p.Ability("MX_Zhaoli_Dingshu", 180000, 15f);
-            var revive = AbilityComp<CompProperties_AbilityZhaoliDingshu>("MX_Zhaoli_Dingshu");
-            p.Field(revive, "karmaCost", 8f);
-            p.Field(revive, "channelDurationTicks", 5000);
             var links = HediffComp<HediffCompProperties_ZhaoliKarmaLinks>("MXZL_ZhaoliKarma");
             p.Field(links, "maxLinks", 0);
             p.Field(links, "linkDurationTicks", 300000);

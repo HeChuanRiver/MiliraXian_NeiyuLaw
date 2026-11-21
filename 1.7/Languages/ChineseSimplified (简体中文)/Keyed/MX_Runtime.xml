@@ -136,7 +136,7 @@
   <MX_ZL_LinkTargetTipNamed>该目标正与{0}保持因果链接。</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>定数无法对昭离自己使用。</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>定数无法在袭击状态下使用。</MX_ZL_DingshuCannotUseDuringRaid>
-  <MX_ZL_NotEnoughKarmaDingshu>因果不足，无法施放定数。</MX_ZL_NotEnoughKarmaDingshu>
+  <MXZL_ZhaoliKarmaNotEnough>因果不足（需要 {0} 点）。</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>目标在定数标记期间死亡，无法再次被复活。</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>定数未能完成复活。</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>定数</MX_ZL_DingshuMote>
@@ -145,12 +145,10 @@
   <MX_ZL_ReportDingshu>施放定数</MX_ZL_ReportDingshu>
   <MX_ZL_DuanzhanInvalidTargetCell>断斩的目标位置无效。</MX_ZL_DuanzhanInvalidTargetCell>
   <MX_ZL_DuanzhanNeedWeapon>断斩只能由昭离装备离断时施放。</MX_ZL_DuanzhanNeedWeapon>
-  <MX_ZL_NotEnoughKarmaGuiyi>因果不足，无法施放诡医。</MX_ZL_NotEnoughKarmaGuiyi>
   <MX_ZL_GuiyiMote>诡医</MX_ZL_GuiyiMote>
   <MX_ZL_GuiyiCannotTargetSelf>诡医无法对昭离自己使用。</MX_ZL_GuiyiCannotTargetSelf>
   <MX_ZL_GuiyiCannotTargetHostile>诡医无法对敌对目标使用。</MX_ZL_GuiyiCannotTargetHostile>
   <MX_ZL_GuiyiNoTreatableInjuries>目标没有需要诡医处理的伤病。</MX_ZL_GuiyiNoTreatableInjuries>
-  <MX_ZL_NotEnoughKarmaMinghuo>因果不足，无法施放冥火。</MX_ZL_NotEnoughKarmaMinghuo>
   <MX_ZL_MinghuoMote>冥火</MX_ZL_MinghuoMote>
   <MX_ZL_MinghuoAttached>冥火已附着于当前主武器：伤害/破甲/命中/攻速 x1.5，攻击距离 +2，并附加额外火焰伤害。</MX_ZL_MinghuoAttached>
   <MX_ZL_MinghuoSelfOnly>冥火只能由昭离对自己施放。</MX_ZL_MinghuoSelfOnly>
@@ -163,7 +161,6 @@
   <MX_ZL_MinghuoAttackSpeedMultiplier>攻速：x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
   <MX_ZL_MinghuoRangeOffset>攻击距离：+{0}</MX_ZL_MinghuoRangeOffset>
   <MX_ZL_MinghuoExtraFireDamageEnabled>额外火焰伤害：已启用</MX_ZL_MinghuoExtraFireDamageEnabled>
-  <MX_ZL_NotEnoughKarmaMinshen>因果不足，无法施放泯神。</MX_ZL_NotEnoughKarmaMinshen>
   <MX_ZL_MinshenMote>泯神</MX_ZL_MinshenMote>
   <MX_ZL_MinshenMentalStateReason>昭离的泯神使其失神。</MX_ZL_MinshenMentalStateReason>
   <MX_ZL_RebirthAccepted>昭离被死亡接纳，十日后将于玩家基地归来。</MX_ZL_RebirthAccepted>

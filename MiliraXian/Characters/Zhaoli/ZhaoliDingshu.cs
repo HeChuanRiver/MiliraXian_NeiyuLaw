@@ -9,11 +9,8 @@ namespace MiliraXian.Characters.Zhaoli
 {
     public class CompProperties_AbilityZhaoliDingshu : CompProperties_AbilityEffect
     {
-        public float karmaCost = 2f;
         public int markDurationTicks = 720000;
-        public int channelDurationTicks = 2083;
         public float overlayScale = 1.75f;
-        public int lineMoteIntervalTicks = 30;
         public int pulseMoteIntervalTicks = 120;
 
         public CompProperties_AbilityZhaoliDingshu()
@@ -193,23 +190,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     internal static class ZhaoliDingshuVisualUtility
     {
-        public static MoteDualAttached SpawnOrMaintainLine(MoteDualAttached existingLine, Pawn caster, Thing targetThing)
-        {
-            ThingDef lineDef = ZhaoliEffectUtility.DingshuLinkLineMoteDef;
-            if (caster == null || targetThing == null || lineDef == null || !caster.Spawned || !targetThing.Spawned || caster.MapHeld != targetThing.MapHeld)
-            {
-                return null;
-            }
-
-            if (existingLine == null || existingLine.Destroyed)
-            {
-                existingLine = MoteMaker.MakeInteractionOverlay(lineDef, caster, targetThing);
-            }
-
-            existingLine?.Maintain();
-            return existingLine;
-        }
-
         public static void SpawnPulse(Pawn caster, Thing targetThing, bool useStripe = false)
         {
             ThingDef pulseDef = useStripe ? ZhaoliEffectUtility.DingshuLinkStripeMoteDef : ZhaoliEffectUtility.DingshuLinkPulseMoteDef;
@@ -237,6 +217,50 @@ namespace MiliraXian.Characters.Zhaoli
     {
         private new CompProperties_AbilityZhaoliDingshu Props => (CompProperties_AbilityZhaoliDingshu)props;
 
+        private bool openingPulseSpawned;
+        private int lastPulseTick = -99999;
+
+        public override IEnumerable<Mote> CustomWarmupMotes(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            Corpse corpse = target.Thing as Corpse;
+            ThingDef lineDef = ZhaoliEffectUtility.DingshuLinkLineMoteDef;
+            if (caster == null || corpse == null || lineDef == null)
+            {
+                yield break;
+            }
+
+            yield return MoteMaker.MakeInteractionOverlay(lineDef, caster, corpse);
+        }
+
+        // Cast visuals belong here because every ability comp is ticked each tick regardless of the
+        // pawn's job, so Casting is what keeps motes off when this ability is not being used.
+        public override void CompTick()
+        {
+            if (!parent.Casting)
+            {
+                openingPulseSpawned = false;
+                return;
+            }
+
+            Pawn caster = parent.pawn;
+            if (caster == null || !caster.Spawned || !(parent.verb?.CurrentTarget.Thing is Corpse corpse))
+            {
+                return;
+            }
+
+            int ticksGame = Find.TickManager.TicksGame;
+            if (ticksGame - lastPulseTick < Mathf.Max(1, Props.pulseMoteIntervalTicks))
+            {
+                return;
+            }
+
+            lastPulseTick = ticksGame;
+            ZhaoliDingshuVisualUtility.SpawnPulse(caster, corpse, useStripe: !openingPulseSpawned);
+            ZhaoliDingshuVisualUtility.SpawnReviveGlow(corpse, Props.overlayScale);
+            openingPulseSpawned = true;
+        }
+
         public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
         {
             return base.CanApplyOn(target, dest) && Valid(target);
@@ -257,16 +281,6 @@ namespace MiliraXian.Characters.Zhaoli
                 if (throwMessages)
                 {
                     Messages.Message("MX_ZL_DingshuCannotUseDuringRaid".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return false;
-            }
-
-            if (ZhaoliKarmaUtility.GetCurrentKarma(caster) < Props.karmaCost)
-            {
-                if (throwMessages)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaDingshu".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
@@ -325,16 +339,6 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
-            {
-                if (caster.Faction == Faction.OfPlayer)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaDingshu".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return;
-            }
-
             if (!ResurrectionUtility.TryResurrect(targetPawn, new ResurrectionParams
             {
                 gettingScarsChance = 0f,
@@ -390,35 +394,6 @@ namespace MiliraXian.Characters.Zhaoli
 
     public class JobDriver_MX_Dingshu : JobDriver_CastAbility
     {
-        private MoteDualAttached lineMote;
-
-        private Corpse TargetCorpse => TargetThingA as Corpse;
-
-        private CompProperties_AbilityZhaoliDingshu Props
-        {
-            get
-            {
-                Ability ability = job?.ability;
-                if (ability?.def?.comps == null)
-                {
-                    return null;
-                }
-
-                for (int i = 0; i < ability.def.comps.Count; i++)
-                {
-                    CompProperties_AbilityZhaoliDingshu compProps = ability.def.comps[i] as CompProperties_AbilityZhaoliDingshu;
-                    if (compProps != null)
-                    {
-                        return compProps;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        public override bool PlayerInterruptable => false;
-
         public override string GetReport()
         {
             return "MX_ZL_ReportDingshu".Translate().ToString();
@@ -436,95 +411,11 @@ namespace MiliraXian.Characters.Zhaoli
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
-            this.FailOnDespawnedOrNull(TargetIndex.A);
-            this.FailOn(() => job?.ability == null);
-            this.FailOn(() =>
-            {
-                Corpse corpse = TargetCorpse;
-                return ZhaoliPowerBalance.Sealed || corpse == null || corpse.InnerPawn == null || !corpse.InnerPawn.Dead;
-            });
-
-            AddFinishAction(delegate
-            {
-                lineMote = null;
-                if (job?.ability != null && job.def.abilityCasting && job.ability.HasCooldown)
-                {
-                    job.ability.StartCooldown(job.ability.def.cooldownTicksRange.RandomInRange);
-                }
-            });
-
             yield return Toils_Combat.GotoCastPosition(TargetIndex.A, TargetIndex.B);
-
-            Toil channel = ToilMaker.MakeToil("ZhaoliDingshu_Channel");
-            int channelTicks = ResolveChannelTicks();
-            channel.initAction = delegate
+            foreach (Toil toil in base.MakeNewToils())
             {
-                CompAbilityEffect_ZhaoliDingshu effect = job?.ability?.CompOfType<CompAbilityEffect_ZhaoliDingshu>();
-                if (effect == null || !effect.Valid(TargetA, pawn.Faction == Faction.OfPlayer))
-                {
-                    EndJobWith(JobCondition.Incompletable);
-                    return;
-                }
-
-                pawn.pather.StopDead();
-                ZhaoliDingshuVisualUtility.SpawnPulse(pawn, TargetCorpse, useStripe: true);
-                ZhaoliDingshuVisualUtility.SpawnReviveGlow(TargetCorpse, Props != null ? Props.overlayScale : 1.5f);
-            };
-            channel.defaultCompleteMode = ToilCompleteMode.Delay;
-            channel.defaultDuration = channelTicks;
-            channel.handlingFacing = true;
-            channel.tickAction = delegate
-            {
-                Corpse corpse = TargetCorpse;
-                CompProperties_AbilityZhaoliDingshu props = Props;
-                if (corpse == null || props == null)
-                {
-                    return;
-                }
-
-                pawn.rotationTracker.FaceCell(corpse.Position);
-                lineMote = ZhaoliDingshuVisualUtility.SpawnOrMaintainLine(lineMote, pawn, corpse);
-
-                int elapsedTicks = channelTicks - ticksLeftThisToil;
-                if (elapsedTicks < 0)
-                {
-                    elapsedTicks = 0;
-                }
-
-                if (elapsedTicks == 0 || elapsedTicks % Mathf.Max(1, props.pulseMoteIntervalTicks) == 0)
-                {
-                    ZhaoliDingshuVisualUtility.SpawnPulse(pawn, corpse);
-                    ZhaoliDingshuVisualUtility.SpawnReviveGlow(corpse, props.overlayScale);
-                }
-            };
-            channel.WithProgressBar(TargetIndex.A, () => 1f - (float)ticksLeftThisToil / Mathf.Max(1f, channelTicks));
-            yield return channel;
-
-            Toil finish = ToilMaker.MakeToil("ZhaoliDingshu_Finish");
-            finish.initAction = delegate
-            {
-                CompAbilityEffect_ZhaoliDingshu effect = job?.ability?.CompOfType<CompAbilityEffect_ZhaoliDingshu>();
-                if (effect == null || !effect.Valid(TargetA, pawn.Faction == Faction.OfPlayer))
-                {
-                    EndJobWith(JobCondition.Incompletable);
-                    return;
-                }
-
-                job.ability.Activate(TargetA, TargetB);
-            };
-            finish.defaultCompleteMode = ToilCompleteMode.Instant;
-            yield return finish;
-        }
-
-        public override void Notify_Starting()
-        {
-            base.Notify_Starting();
-            job?.ability?.Notify_StartedCasting();
-        }
-
-        private int ResolveChannelTicks()
-        {
-            return Mathf.Max(1, Props?.channelDurationTicks ?? 2083);
+                yield return toil;
+            }
         }
     }
 

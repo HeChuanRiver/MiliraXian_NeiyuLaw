@@ -10,7 +10,6 @@ namespace MiliraXian.Characters.Zhaoli
 {
     public class CompProperties_AbilityZhaoliMinghuo : CompProperties_AbilityEffect
     {
-        public float karmaCost = 3f;
         public int durationTicks = 60000;
         public float overlayScale = 1.8f;
 
@@ -53,16 +52,6 @@ namespace MiliraXian.Characters.Zhaoli
             ThingWithComps weapon = caster.equipment?.Primary;
             if (weapon == null)
             {
-                return;
-            }
-
-            if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
-            {
-                if (caster.Faction == Faction.OfPlayer)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaMinghuo".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
                 return;
             }
 
@@ -133,16 +122,6 @@ namespace MiliraXian.Characters.Zhaoli
                 if (throwMessages)
                 {
                     Messages.Message("MX_ZL_MinghuoNoPrimaryWeapon".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return false;
-            }
-
-            if (ZhaoliKarmaUtility.GetCurrentKarma(caster) < Props.karmaCost)
-            {
-                if (throwMessages)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaMinghuo".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;

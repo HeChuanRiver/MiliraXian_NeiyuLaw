@@ -254,7 +254,7 @@
   <MX_ZL_LinkTargetTipNamed>This target is maintaining a karmic link with {0}.</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>Fixed Fate cannot be used on Zhaoli herself.</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>Fixed Fate cannot be used during a raid state.</MX_ZL_DingshuCannotUseDuringRaid>
-  <MX_ZL_NotEnoughKarmaDingshu>Not enough Karma to cast Fixed Fate.</MX_ZL_NotEnoughKarmaDingshu>
+  <MXZL_ZhaoliKarmaNotEnough>Not enough Karma (needs {0}).</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>The target died while marked by Fixed Fate and cannot be resurrected again.</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>Fixed Fate failed to complete the resurrection.</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>Fixed Fate</MX_ZL_DingshuMote>
@@ -263,12 +263,10 @@
   <MX_ZL_ReportDingshu>casting Fixed Fate</MX_ZL_ReportDingshu>
   <MX_ZL_DuanzhanInvalidTargetCell>Severing Slash target location is invalid.</MX_ZL_DuanzhanInvalidTargetCell>
   <MX_ZL_DuanzhanNeedWeapon>Severing Slash can only be cast by Zhaoli while Severance is equipped.</MX_ZL_DuanzhanNeedWeapon>
-  <MX_ZL_NotEnoughKarmaGuiyi>Not enough Karma to cast Strange Medicine.</MX_ZL_NotEnoughKarmaGuiyi>
   <MX_ZL_GuiyiMote>Strange Medicine</MX_ZL_GuiyiMote>
   <MX_ZL_GuiyiCannotTargetSelf>Strange Medicine cannot be used on Zhaoli herself.</MX_ZL_GuiyiCannotTargetSelf>
   <MX_ZL_GuiyiCannotTargetHostile>Strange Medicine cannot be used on hostile targets.</MX_ZL_GuiyiCannotTargetHostile>
   <MX_ZL_GuiyiNoTreatableInjuries>The target has no injuries or conditions for Strange Medicine to treat.</MX_ZL_GuiyiNoTreatableInjuries>
-  <MX_ZL_NotEnoughKarmaMinghuo>Not enough Karma to cast Netherfire.</MX_ZL_NotEnoughKarmaMinghuo>
   <MX_ZL_MinghuoMote>Netherfire</MX_ZL_MinghuoMote>
   <MX_ZL_MinghuoAttached>Netherfire has attached to the current primary weapon: damage, armor penetration, hit chance, and attack speed x1.5, range +2, and extra fire damage enabled.</MX_ZL_MinghuoAttached>
   <MX_ZL_MinghuoSelfOnly>Netherfire can only be cast by Zhaoli on herself.</MX_ZL_MinghuoSelfOnly>
@@ -281,7 +279,6 @@
   <MX_ZL_MinghuoAttackSpeedMultiplier>Attack speed: x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
   <MX_ZL_MinghuoRangeOffset>Attack range: +{0}</MX_ZL_MinghuoRangeOffset>
   <MX_ZL_MinghuoExtraFireDamageEnabled>Extra fire damage: enabled</MX_ZL_MinghuoExtraFireDamageEnabled>
-  <MX_ZL_NotEnoughKarmaMinshen>Not enough Karma to cast Mindbreak.</MX_ZL_NotEnoughKarmaMinshen>
   <MX_ZL_MinshenMote>Mindbreak</MX_ZL_MinshenMote>
   <MX_ZL_MinshenMentalStateReason>Zhaoli's Mindbreak left them dazed.</MX_ZL_MinshenMentalStateReason>
   <MX_ZL_RebirthAccepted>Zhaoli has been accepted by death. She will return to a player base in ten days.</MX_ZL_RebirthAccepted>

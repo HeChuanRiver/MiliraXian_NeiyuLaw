@@ -7,7 +7,6 @@ namespace MiliraXian.Characters.Zhaoli
 {
     public class CompProperties_AbilityZhaoliGuiyi : CompProperties_AbilityEffect
     {
-        public float karmaCost = 1f;
         public float overlayScale = 1.5f;
 
         public CompProperties_AbilityZhaoliGuiyi()
@@ -19,14 +18,6 @@ namespace MiliraXian.Characters.Zhaoli
     public class CompAbilityEffect_ZhaoliGuiyi : CompAbilityEffect_ZhaoliPowerLimited
     {
         private new CompProperties_AbilityZhaoliGuiyi Props => (CompProperties_AbilityZhaoliGuiyi)props;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (base.GizmoDisabled(out reason)) return true;
-            ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
-            reason = null;
-            return false;
-        }
 
         public override IEnumerable<PreCastAction> GetPreCastActions()
         {
@@ -84,33 +75,16 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            HediffComp_ZhaoliKarmaLinks linkComp = null;
-            bool createdNewLink = false;
             if (ZhaoliKarmaUtility.CanCarryKarmaLink(targetPawn))
             {
-                linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
+                HediffComp_ZhaoliKarmaLinks linkComp = ZhaoliKarmaUtility.EnsureLinkComp(caster);
                 if (linkComp == null) return;
-                if (!linkComp.TryAddOrRefreshLink(targetPawn, out createdNewLink, out string failureReason))
+                if (!linkComp.TryAddOrRefreshLink(targetPawn, out _, out string failureReason))
                 {
                     if (!failureReason.NullOrEmpty() && caster.Faction == Faction.OfPlayer)
                         Messages.Message(failureReason, targetPawn, MessageTypeDefOf.RejectInput, historical: false);
                     return;
                 }
-            }
-
-            if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
-            {
-                if (createdNewLink)
-                {
-                    linkComp.BreakLink(targetPawn);
-                }
-
-                if (caster.Faction == Faction.OfPlayer)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaGuiyi".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return;
             }
 
             int restoredParts = RestoreMissingParts(targetPawn);
@@ -163,16 +137,6 @@ namespace MiliraXian.Characters.Zhaoli
                 if (throwMessages)
                 {
                     Messages.Message("MX_ZL_GuiyiCannotTargetHostile".Translate(), targetPawn, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return false;
-            }
-
-            if (ZhaoliKarmaUtility.GetCurrentKarma(caster) < Props.karmaCost)
-            {
-                if (throwMessages)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaGuiyi".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
                 }
 
                 return false;
