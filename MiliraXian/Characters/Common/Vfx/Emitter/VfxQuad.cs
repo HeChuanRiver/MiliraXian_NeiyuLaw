@@ -2,28 +2,18 @@ using UnityEngine;
 
 namespace MiliraXian.Characters.Common.Vfx.Emitter
 {
-    /// <summary>Which basis a quad lies in.</summary>
-    internal enum VfxPlane
-    {
-        /// <summary>Lying on the map floor (XZ), normal up. Decals, petals, feet rings.</summary>
-        Ground,
-
-        /// <summary>Standing upright in world space (XY), face toward +Z. Upright sprites, text, bodies.</summary>
-        Vertical,
-
-        /// <summary>Facing the camera; the caller supplies the basis (<c>camera.transform.right/up</c>).</summary>
-        Billboard,
-    }
-
     /// <summary>
     /// Everything one quad needs. Pivot is normalised inside the quad: (0.5, 0.5) is the centre,
     /// (0.5, 0) sits the anchor on the bottom edge (feet on the ground).
     ///
     /// Use <see cref="Of"/> rather than <c>default</c>: a zeroed size or a zeroed uv rect draws nothing.
+    ///
+    /// Every quad lies on the map floor (XZ). A quad spanning world Y would be seen edge-on by the
+    /// map camera, so "upright" is not expressed here; a standing curtain is an XZ quad stretched
+    /// along +Z instead.
     /// </summary>
     internal struct VfxQuadOptions
     {
-        public VfxPlane Plane;
         public float RotationDegrees;
         public Vector2 Size;
         public Vector2 Pivot;
@@ -47,7 +37,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             return new VfxQuadOptions
             {
-                Plane = VfxPlane.Ground,
                 RotationDegrees = 0f,
                 Size = size,
                 Pivot = new Vector2(0.5f, 0.5f),
@@ -59,14 +48,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 GroundSquash = 1f,
             };
         }
-
-        internal static VfxQuadOptions Picture(Vector2 size)
-        {
-            VfxQuadOptions o = Of(size);
-            o.Plane = VfxPlane.Vertical;
-            o.Pivot = new Vector2(0.5f, 0.5f);
-            return o;
-        }
     }
 
     /// <summary>
@@ -74,7 +55,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     ///
     /// It owns the four conventions that used to be re-decided at every call site:
     /// <list type="bullet">
-    /// <item>the plane basis (ground / upright / camera-facing),</summary>
+    /// <item>the ground basis and its rotation,</summary>
     /// <item>the uv orientation — v = 1 is the top of the picture, v = 0 the bottom (for a ground
     /// quad: v = 1 faces north), which is how this mod's textures are authored,</item>
     /// <item>the corner order and triangle winding (BL, TL, TR, BR, as the existing helpers use),</item>
@@ -89,15 +70,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             Vector3 right;
             Vector3 up;
-            Basis(options.Plane, options.RotationDegrees, out right, out up);
+            Basis(options.RotationDegrees, out right, out up);
             AddWithBasis(writer, center, right, up, options);
-        }
-
-        /// <summary>A camera-facing quad; the basis is the camera's own right/up.</summary>
-        internal static void AddBillboard(VfxMeshWriter writer, Vector3 center, Vector3 right, Vector3 up,
-            in VfxQuadOptions options)
-        {
-            AddWithBasis(writer, center, right.normalized, up.normalized, options);
         }
 
         /// <summary>
@@ -130,7 +104,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             // The ground squash is the existing helpers' behaviour exactly: the world-north/south
             // displacement is scaled, the east/west one is not (a decal seen at a slant).
-            if (options.Plane == VfxPlane.Ground && options.GroundSquash != 1f)
+            if (options.GroundSquash != 1f)
             {
                 SquashZ(ref bottomLeft, center.z, options.GroundSquash);
                 SquashZ(ref topLeft, center.z, options.GroundSquash);
@@ -166,23 +140,14 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             br = new Vector2(min.x + size.x * u1, min.y + size.y * v0);
         }
 
-        private static void Basis(VfxPlane plane, float degrees, out Vector3 right, out Vector3 up)
+        /// <summary>Rotating tilts the decal on the ground: right along the floor, "up" toward north.</summary>
+        private static void Basis(float degrees, out Vector3 right, out Vector3 up)
         {
             float radians = degrees * Mathf.Deg2Rad;
             float c = Mathf.Cos(radians);
             float s = Mathf.Sin(radians);
-            if (plane == VfxPlane.Ground)
-            {
-                // Right along the floor, "up" toward north: rotating tilts the decal on the ground.
-                right = new Vector3(c, 0f, s);
-                up = new Vector3(-s, 0f, c);
-            }
-            else
-            {
-                // Upright plane facing +Z; rotating spins the sprite in its own plane.
-                right = new Vector3(c, s, 0f);
-                up = new Vector3(-s, c, 0f);
-            }
+            right = new Vector3(c, 0f, s);
+            up = new Vector3(-s, 0f, c);
         }
     }
 }

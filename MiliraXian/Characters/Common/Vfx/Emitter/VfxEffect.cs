@@ -131,9 +131,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             VfxSpriteParams sprite = new VfxSpriteParams
             {
-                Plane = source.plane == VfxSpritePlane.Vertical ? VfxPlane.Vertical
-                    : source.plane == VfxSpritePlane.Billboard ? VfxPlane.Billboard
-                    : VfxPlane.Ground,
                 QuadSize = source.quadSize,
                 UseParticleSize = source.useParticleSize,
                 UseParticleRotation = source.useParticleRotation,

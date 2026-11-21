@@ -243,9 +243,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     /// <summary>How a Sprite stroke turns each particle into a quad.</summary>
     public class VfxSpriteDef
     {
-        /// <summary>Ground (flat on the floor), Vertical (standing) or Billboard (camera-facing).</summary>
-        public VfxSpritePlane plane = VfxSpritePlane.Ground;
-
         /// <summary>Base size in cells; multiplied by the particle's size when that is used.</summary>
         public Vector2 quadSize = new(1f, 1f);
 
@@ -285,13 +282,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public List<VfxBindingDef> bindings = new();
     }
 
-    /// <summary>Which way a sprite quad faces. Mirrors the runtime plane enum.</summary>
-    public enum VfxSpritePlane
-    {
-        Ground,
-        Vertical,
-        Billboard,
-    }
 
     /// <summary>What a Field stroke covers and which uniforms its shader reads.</summary>
     public class VfxFieldDef

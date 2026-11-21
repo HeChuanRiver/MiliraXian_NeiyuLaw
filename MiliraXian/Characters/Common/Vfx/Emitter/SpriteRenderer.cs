@@ -44,12 +44,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 return;
             }
 
-            Camera camera = sprite.Plane == VfxPlane.Billboard ? Find.Camera : null;
-            if (sprite.Plane == VfxPlane.Billboard && camera == null)
-            {
-                return;
-            }
-
             MaterialPropertyBlock block = context.Engine.Block;
             block.Clear();
             for (int i = 0; i < sprite.Bindings.Count; i++)
@@ -82,7 +76,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
 
                 VfxQuadOptions options = VfxQuadOptions.Of(size);
-                options.Plane = sprite.Plane;
                 options.RotationDegrees = sprite.UseParticleRotation ? particle.RotationDegrees : 0f;
                 options.Color = sprite.UseParticleColor ? particle.Color : Color.white;
                 options.Color.a *= alpha * sprite.Tint.a;
@@ -99,14 +92,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     center.y = sprite.Altitude;
                 }
 
-                if (camera != null)
-                {
-                    VfxQuad.AddBillboard(writer, center, camera.transform.right, camera.transform.up, options);
-                }
-                else
-                {
-                    VfxQuad.Add(writer, center, options);
-                }
+                VfxQuad.Add(writer, center, options);
             }
 
             if (writer.IsEmpty)

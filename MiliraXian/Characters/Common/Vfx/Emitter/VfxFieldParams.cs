@@ -64,8 +64,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     }
 
     /// <summary>
-    /// What a sprite stroke needs: how each particle becomes a quad (plane, size, rotation,
-    /// colour), and how its texture is sliced.
+    /// What a sprite stroke needs: how each particle becomes a quad (size, rotation, colour), and how
+    /// its texture is sliced.
     ///
     /// Like the field, everything here is data so one renderer serves every sprite effect.
     /// </summary>
@@ -73,7 +73,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     {
         internal VfxSpriteParams()
         {
-            Plane = VfxPlane.Ground;
             QuadSize = new Vector2(1f, 1f);
             UseParticleSize = true;
             UseParticleRotation = true;
@@ -89,9 +88,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Altitude = 0f;
             Bindings = new List<VfxUniformBinding>();
         }
-
-        /// <summary>Which way the quad faces: flat on the floor, standing up, or camera-facing.</summary>
-        internal VfxPlane Plane;
 
         /// <summary>Base size in cells, multiplied by the particle's size when that is used.</summary>
         internal Vector2 QuadSize;

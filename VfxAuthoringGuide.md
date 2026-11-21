@@ -234,7 +234,6 @@ Field 的关键在于**它的 shader 要自己知道「场地有多大、边界�
 
 | 字段 | 含义 |
 |---|---|
-| `plane` | `Ground`（躺地）、`Vertical`（竖立）、`Billboard`（面向镜头） |
 | `quadSize` | 基础尺寸，`useParticleSize` 开启时再乘粒子的 `Size` |
 | `useParticleSize` | 尺寸是否跟随粒子 |
 | `useParticleRotation` | 面内旋转是否跟随粒子 |
@@ -245,6 +244,8 @@ Field 的关键在于**它的 shader 要自己知道「场地有多大、边界�
 | `useAltitude`、`altitude` | 抬到某一高度层 |
 
 `useUvRect` 是给「把 uv 当坐标用」的 shader 准备的。荷雨的水花 shader 里，uv 不是纹理坐标，而是**到落点的格偏移**（±0.45），所以它必须关闭图集、直接给 uv。
+
+`Sprite` 的四边形一律躺在地面（XZ）上，没有「竖立」或「面向镜头」的选项。原因见下面「为什么没有竖直面」一节。
 
 ### Streak
 
@@ -407,7 +408,15 @@ float rot = rotation0 + rotationRate * age;   // 它现在转到哪
 | `row1` | `(center.y, rotation0, rotationRate, atlasFrame)` |
 | `row2` | 颜色 `rgba`，仅在 `instanceVectors >= 3` 时写入 |
 
-`center.y` 是高度，`halfSize` 是半个边长（页内尺寸乘粒子尺寸），`rotationRate` 来自该项的 `<rotationRate>`（度/秒）。朝向（躺地 / 竖立 / 面向镜头）由 shader 自己决定，因为只有它知道自己在什么平面上画。
+`center.y` 是高度，`halfSize` 是半个边长（页内尺寸乘粒子尺寸），`rotationRate` 来自该项的 `<rotationRate>`（度/秒）。
+
+### 为什么没有竖直面
+
+地图视角是无透视的长轴投影，镜头始终朝下且不能旋转（玩家只能缩放与平移）。在这种投影下，任何沿世界 Y 伸展的几何都会被压成一条线，所以一块「竖立」的四边形既看不见、也没有意义。世界地图才有真正可转的三维镜头，那是另一套渲染。
+
+代码里曾经有 `Vertical` 与 `Billboard` 两个选项，是从别的渲染语境搬过来的，现在已经删除；`VfxQuad` 只造躺在地面上的四边形。
+
+要做出「立起来的东西」，正确的手法是把一块 XZ 四边形沿 +Z（北）方向拉长：北在屏幕上就是上，所以一张向北延展的地面四边形读起来就是一面上升的幕。荷雨的雨幕、春泉的光幕用的都是这个办法，`Field` 的 `extraHeight`（向北额外溢出的那一截）就是给它的。
 
 值得留意的是这条形态顺带解决了粒度问题：实例化之后，`Sprite` 与其他实例化绘制项共用同一套合批，同屏多少颗都只有一次提交。
 
