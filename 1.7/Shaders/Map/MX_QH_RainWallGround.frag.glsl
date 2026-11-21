@@ -40,7 +40,7 @@ const float STAIN_DARKEN = 0.34;    // 湿地面比干地面暗这么多
 const float STAIN_TINT = 0.10;      // ……而且偏冷一点
 const float STAIN_EDGE = 0.30;      // 水痕边缘的柔度（格）
 const float BOUNDARY_HALF = 0.040;  // 边界线每侧的半宽（格）：按格定宽，不随镜头缩放变细
-const float BOUNDARY_GAIN = 0.22;   // 线是判定的边界，要读得出来；预览的 0.13 在亮地上太暗
+const float BOUNDARY_GAIN = 1.0;    // 线是判定的边界，要读得出来；预览的 0.13 在亮地上太暗
 const float LOTUS_OPEN = 1.1;        // 开花用多少秒
 const float LOTUS_BLOOM = 0.55;      // 花周围多出来的一圈光
 const vec3 TINT_COLOR = vec3(0.06, 0.13, 0.16);
@@ -125,6 +125,8 @@ void main()
     light += lotusHalo(u._LotusD, vUv, al, ac, t);
 
     // 预乘：(rgb, alpha)。alpha 压暗，rgb 加光。
-    vec3 col = light * u._Color.rgb * u._Color.a * vColor.rgb * vColor.a;
+    // 泛光只取 rgb，所以乘在这部分是让泛光副本按 tint / 强度着色；主绘制时这两个值被复原为白与 1。
+    vec3 col = light * u._Color.rgb * u._Color.a * vColor.rgb * vColor.a
+        * u._BloomTint.rgb * u._BloomIntensity;
     outColor = vec4(max(col, vec3(0.0)), clamp(darken, 0.0, 0.95));
 }

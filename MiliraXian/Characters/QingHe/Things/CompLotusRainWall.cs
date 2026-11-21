@@ -291,18 +291,25 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
+            // 沿墙自身的两个轴撒点，而不是沿世界的 x/z：墙是垂直于施法者与目标连线的，
+            // 用世界轴撒出来的是一块方方正正的区域，与画出来的墙对不上。
+            Vector2 along = AxisLength;
+            Vector2 across = AxisThickness;
+            Vector3 origin = parent.Position.ToVector3Shifted();
+
             int placed = 0;
             for (int attempt = 0; attempt < 6 && placed < 2; attempt++)
             {
-                IntVec3 cell = parent.Position + new IntVec3(
-                    Mathf.RoundToInt(Rand.Range(-Props.halfLength, Props.halfLength)),
-                    0,
-                    Mathf.RoundToInt(Rand.Range(-Props.halfThickness, Props.halfThickness)));
-                if (!cell.InBounds(map))
+                float a = Rand.Range(-Props.halfLength, Props.halfLength);
+                float b = Rand.Range(-Props.halfThickness, Props.halfThickness);
+                Vector3 world = origin + new Vector3(along.x * a + across.x * b, 0f, along.y * a + across.y * b);
+
+                // Static(Vector3, ...) 不做边界检查，越界的水花会画到地图外面去。
+                if (!world.ToIntVec3().InBounds(map))
                 {
                     continue;
                 }
-                FleckMaker.Static(cell, map, splash, Rand.Range(0.22f, 0.5f) * strength);
+                FleckMaker.Static(world, map, splash, Rand.Range(0.22f, 0.5f) * strength);
                 placed++;
             }
         }

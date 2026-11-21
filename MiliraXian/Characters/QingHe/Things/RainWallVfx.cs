@@ -80,6 +80,18 @@ namespace MiliraXian.Characters.QingHe.Things
             intensity = 0.45f,
         };
 
+        /// <summary>
+        /// The ground's bloom submission. Only the pass's rgb contributes: the edge line and the
+        /// flowers' halo are additive there, while the darkening lives in alpha and is not read by
+        /// the bloom layer.
+        /// </summary>
+        private static readonly ScreenBloomProperties GroundBloom = new()
+        {
+            group = DefDatabase<ScreenBloomGroupDef>.GetNamedSilentFail("MX_ScreenBloom_Glow"),
+            tint = Color.white,
+            intensity = 0.35f,
+        };
+
         private static readonly int GlowId = Shader.PropertyToID("_Glow");
         private static readonly int AxisId = Shader.PropertyToID("_Axis");
         private static readonly int BandId = Shader.PropertyToID("_Band");
@@ -267,10 +279,8 @@ namespace MiliraXian.Characters.QingHe.Things
                 block.SetVector(LotusBId, LotusBuffer[1]);
                 block.SetVector(LotusCId, LotusBuffer[2]);
                 block.SetVector(LotusDId, LotusBuffer[3]);
-                // Not submitted to the bloom: this pass is a premultiplied blend whose alpha is the
-                // darkening, so sending it to the bloom layer would push "make this darker" into a
-                // pass that only ever adds light. The flowers' halo is additive inside the shader
-                // and already falls off smoothly, which is what reads as glow on the ground.
+                // 泛光只取 rgb：那里是亮线与荷花光晕，压暗在 alpha 里，不会被当成加光。
+                ScreenBloom.Submit(GroundBloom, gm, Matrix4x4.identity, groundMat, block);
                 Graphics.DrawMesh(gm, Matrix4x4.identity, groundMat, 0, null, 0, block);
 
                 // --- 1b. the water: refraction --------------------------------------------------
