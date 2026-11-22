@@ -256,8 +256,8 @@
 
     <ThingDef ParentName="Milira_OverheadBase">
         <defName>MX_Apparel_EarringsZhenzhu</defName>
-        <label>霓羽·珠饰</label>
-        <description>霓羽佩戴的珍珠耳饰，以柔光护住头部上方。缩短瞄准时间和远程攻击间隔，并提高免疫增长速度。永不损坏。</description>
+        <label>【霓羽】珠饰</label>
+        <description>霓羽在海边捡到的一些贝壳里面蕴含的珍珠，经过简单处理被霓羽戴在了耳朵上</description>
         <smeltable>false</smeltable>
         <burnableByRecipe>false</burnableByRecipe>
         <recipeMaker Inherit="False" IsNull="True" />
