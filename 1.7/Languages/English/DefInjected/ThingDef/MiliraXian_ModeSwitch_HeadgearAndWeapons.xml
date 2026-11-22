@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_Form_Flower.label>[Neiyu] Raiment Blossom</MX_Neiyu_Form_Flower.label>
+  <MX_Neiyu_Form_Flower.label>【Neiyu】 Raiment Blossom</MX_Neiyu_Form_Flower.label>
   <MX_Neiyu_Form_Flower.description>An ever-blooming Raiment Blossom, often seen between Neiyu's fingers. In her hands it can take other forms to help her fight.&#10;&#10;"An artificially bred variety. I can shape it over time into whatever I want. This is the mother branch, too. I'll put in the effort to temper it into a weapon."&#10;"It's the finest thing my friends ever made with plant engineering and the Law of Life. When I hold it, I always, always feel like they're still here beside me."</MX_Neiyu_Form_Flower.description>
   <MX_Neiyu_Form_Flower.tools.0.label>Flower Sweep</MX_Neiyu_Form_Flower.tools.0.label>
-  <MX_Neiyu_Form_Weapon.label>[Neiyu] Angel's Stone</MX_Neiyu_Form_Weapon.label>
+  <MX_Neiyu_Form_Weapon.label>【Neiyu】 Angel's Stone</MX_Neiyu_Form_Weapon.label>
   <MX_Neiyu_Form_Weapon.description>Angelite, also called blue angel stone, is a gentle mineral with a healing quality. Fine-grained and usually a quiet gray-blue or a soft sky blue, it gives off a sense of stillness.&#10;As Neiyu nurtured the stone, hints of other colors gradually appeared. She carved this sword from one enormous piece of angelite. It is seamless, with a different kind of energy running through it.&#10;"If only my master could see this blade. She wouldn't want to put it down, would she? If I ever find where she was buried, I'll..."</MX_Neiyu_Form_Weapon.description>
   <MX_Neiyu_Form_Weapon.tools.0.label>Neon Blade</MX_Neiyu_Form_Weapon.tools.0.label>
-  <MX_Neiyu_Form_Bow.label>[Neiyu] Angel's Horn</MX_Neiyu_Form_Bow.label>
+  <MX_Neiyu_Form_Bow.label>【Neiyu】 Angel's Horn</MX_Neiyu_Form_Bow.label>
   <MX_Neiyu_Form_Bow.description>Angelite, also called blue angel stone, is a gentle mineral with a healing quality. Fine-grained and usually a quiet gray-blue or a soft sky blue, it gives off a sense of stillness.&#10;The bow was carved from the same stone. In Neiyu's hands the stone bends far more than it should. She can call the bowstring into being at will to nock and charge an energy arrow. Once fired, her arrows follow her intent and keep striking the enemy.&#10;&#10;"On this planet we need a ranged weapon. We're still too weak to fight those beasts up close."&#10;"Then let me make you a bow. I'll use the bits you carved off."&#10;"Then... thank you, ⬛⬛."</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>Neiyu: Rending Main Arrow</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>Neiyu: Pursuing Feather Shard</MX_Bullet_HomingShard.label>
