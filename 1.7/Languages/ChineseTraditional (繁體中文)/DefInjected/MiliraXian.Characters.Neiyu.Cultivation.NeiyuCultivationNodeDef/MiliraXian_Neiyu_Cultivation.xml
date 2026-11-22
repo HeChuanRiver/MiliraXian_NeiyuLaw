@@ -13,11 +13,11 @@
   <MX_Neiyu_Cultivation_Arrow3.label>百羽歸弦</MX_Neiyu_Cultivation_Arrow3.label>
   <MX_Neiyu_Cultivation_Arrow3.description>完全展開普攻分裂箭與箭幕。</MX_Neiyu_Cultivation_Arrow3.description>
   <MX_Neiyu_Cultivation_Halo1.label>微環</MX_Neiyu_Cultivation_Halo1.label>
-  <MX_Neiyu_Cultivation_Halo1.description>解鎖首擊防護與六層計數護盾。盾層耗盡後，需要等待恢復。</MX_Neiyu_Cultivation_Halo1.description>
+  <MX_Neiyu_Cultivation_Halo1.description>對霓羽的護身層數上限提升至42層。</MX_Neiyu_Cultivation_Halo1.description>
   <MX_Neiyu_Cultivation_Halo2.label>重環相護</MX_Neiyu_Cultivation_Halo2.label>
-  <MX_Neiyu_Cultivation_Halo2.description>計數護盾增加至十八層。</MX_Neiyu_Cultivation_Halo2.description>
+  <MX_Neiyu_Cultivation_Halo2.description>對霓羽的護身層數上限提升至60層。</MX_Neiyu_Cultivation_Halo2.description>
   <MX_Neiyu_Cultivation_Halo3.label>霽光回響</MX_Neiyu_Cultivation_Halo3.label>
-  <MX_Neiyu_Cultivation_Halo3.description>完全展開計數護盾，解鎖三階蓄傷與增益循環。循環結束後進入虛弱。</MX_Neiyu_Cultivation_Halo3.description>
+  <MX_Neiyu_Cultivation_Halo3.description>對霓羽的護身層數上限提升至78層。</MX_Neiyu_Cultivation_Halo3.description>
   <MX_Neiyu_Cultivation_Law1.label>衣上微紋</MX_Neiyu_Cultivation_Law1.label>
   <MX_Neiyu_Cultivation_Law1.description>喚醒常服、內襯與耳飾中的法則，提高防護并恢復部分穿戴增益。</MX_Neiyu_Cultivation_Law1.description>
   <MX_Neiyu_Cultivation_Law2.label>紋律共鳴</MX_Neiyu_Cultivation_Law2.label>
@@ -30,10 +30,48 @@
   <MX_Neiyu_Cultivation_Arrow1.story>一支箭離弦，數片羽光隨之展開。霓羽開始分辨每一道細小的回聲。</MX_Neiyu_Cultivation_Arrow1.story>
   <MX_Neiyu_Cultivation_Arrow2.story>雨停之後，細光橫過天空。那些交錯的軌跡漸漸有了秩序。</MX_Neiyu_Cultivation_Arrow2.story>
   <MX_Neiyu_Cultivation_Arrow3.story>漫天羽光回到弦上，靜得像從未離開。她終于能讓每一片羽毛找到自己的去處。</MX_Neiyu_Cultivation_Arrow3.story>
-  <MX_Neiyu_Cultivation_Halo1.story>頭頂的光環輕輕一顫。她把最先回應的那縷光，留在了身體之外。</MX_Neiyu_Cultivation_Halo1.story>
-  <MX_Neiyu_Cultivation_Halo2.story>薄薄的光層相繼合攏。每次承受沖擊，她都能聽見它們在不同的地方鳴響。</MX_Neiyu_Cultivation_Halo2.story>
-  <MX_Neiyu_Cultivation_Halo3.story>光環承住最後一次重擊，隨即向內收攏。霓羽抬起頭，積蓄的微光沿羽翼流回刃尖。</MX_Neiyu_Cultivation_Halo3.story>
+  <MX_Neiyu_Cultivation_Halo1.story>逐漸良好的身體狀態讓霓羽可以漸漸的塑煉自己的光環，她用花瓣粉飾自己的光環，自身的護身力量來自自己的光環，光環的力量得到增強對於霓羽的反饋便是更加堅硬的護身力量。</MX_Neiyu_Cultivation_Halo1.story>
+  <MX_Neiyu_Cultivation_Halo2.story>米莉拉的光環可以不止存在一個。開玩笑的，通過一些手段創造一些真實光環的鏡像光環，疊加在一起同樣可以得到更加優秀的效果。現在的護身可以防禦住更多頻次的攻擊了。</MX_Neiyu_Cultivation_Halo2.story>
+  <MX_Neiyu_Cultivation_Halo3.story>光環逐漸充盈飽滿的光輝逐漸在“霽”的影響下有了一絲絲的回應。它似乎生長出了自己的一絲絲薄弱的意志。再此影響下，護身的力量再次得到提升。</MX_Neiyu_Cultivation_Halo3.story>
   <MX_Neiyu_Cultivation_Law1.story>衣料上的紋路只有在光下才看得清。她順著紋路，將散落的力量一寸寸接續。</MX_Neiyu_Cultivation_Law1.story>
   <MX_Neiyu_Cultivation_Law2.story>耳飾與衣擺同時泛起淡光。原本分散的紋路，開始隨著她的呼吸起伏。</MX_Neiyu_Cultivation_Law2.story>
   <MX_Neiyu_Cultivation_Law3.story>她收起羽翼，衣上的光也隨之隱去。法則已經貼合身體，無須再向外宣示。</MX_Neiyu_Cultivation_Law3.story>
+  <MX_Neiyu_Cultivation_Weapon1.label>初醒</MX_Neiyu_Cultivation_Weapon1.label>
+  <MX_Neiyu_Cultivation_Weapon1.story>殘魂逐漸被喚醒，肉身在長時間的凝練中塑煉出來。初醒的霓羽迷茫中握住了在身旁的一枝霓裳花，粉色的花瓣接觸的第一時刻她逐漸清楚了自己要做的事情。要做的事情，還有很多。</MX_Neiyu_Cultivation_Weapon1.story>
+  <MX_Neiyu_Cultivation_Apparel1.description>提高常規衣物的防護，增強穿戴時候的移動速度、閃避概率、承傷係數與攻擊間隔的數值。</MX_Neiyu_Cultivation_Apparel1.description>
+  <MX_Neiyu_Cultivation_Apparel1.story>找回了一部分關於【法紋】的記憶，霓羽成功在自己凝練的衣物上面刻畫增強防護力的法紋。【法紋】的力量多種多樣，呈現的效果大多取決於施法者的想像力。“一切皆有可能。”</MX_Neiyu_Cultivation_Apparel1.story>
+  <MX_Neiyu_Cultivation_Weapon2.description>提升武器的攻擊傷害與穿透屬性。縮短劍形態的攻擊間隔，增加弓形態普通攻擊的分裂箭矢數量。</MX_Neiyu_Cultivation_Weapon2.description>
+  <MX_Neiyu_Cultivation_Weapon2.story>以恆星的能量又或者說是光照來淬鍊自己的武備，能量充盈的武器們可以做到更多的事情。</MX_Neiyu_Cultivation_Weapon2.story>
+  <MX_Neiyu_Cultivation_Apparel2.description>提高常規的防護，增強穿戴時候的移動速度、閃避概率、承傷係數與攻擊間隔的數值。</MX_Neiyu_Cultivation_Apparel2.description>
+  <MX_Neiyu_Cultivation_Apparel2.story>法紋與法紋的疊加可以得到更加好的效果，細小的紋路也會在層層迭代中得到超過他們體積的威力。衣物將會更加具有韌性和抗震性。</MX_Neiyu_Cultivation_Apparel2.story>
+  <MX_Neiyu_Cultivation_Weapon3.description>提升武器的攻擊傷害與穿透屬性。縮短劍形態的攻擊間隔，增加弓形態普通攻擊的分裂箭矢數量。</MX_Neiyu_Cultivation_Weapon3.description>
+  <MX_Neiyu_Cultivation_Weapon3.story>將自己的羽毛融入武備中，經過磨鍊後的武器將會更加具有威力，與霓羽的相合性也得到了極大的提升，總而言之，更加順手了。</MX_Neiyu_Cultivation_Weapon3.story>
+  <MX_Neiyu_Cultivation_Apparel3.description>提高常規的防護，增強穿戴時候的移動速度、閃避概率、承傷係數與攻擊間隔的數值。</MX_Neiyu_Cultivation_Apparel3.description>
+  <MX_Neiyu_Cultivation_Apparel3.story>在逐漸打磨的衣物中加入自己的一絲心意，與自身常備的霓裳花瓣，使得衣服的防禦性能再次得到提升。</MX_Neiyu_Cultivation_Apparel3.story>
+  <MX_Neiyu_Cultivation_Weapon4.description>提升武器的攻擊傷害與穿透屬性。縮短劍形態的攻擊間隔，增加弓形態普通攻擊的分裂箭矢數量。</MX_Neiyu_Cultivation_Weapon4.description>
+  <MX_Neiyu_Cultivation_Weapon4.story>武備的每一次攻擊都會附帶有“霽”的力量，在得心應手的操控下武器的力量得到了更加卓越性的提升。</MX_Neiyu_Cultivation_Weapon4.story>
+  <MX_Neiyu_Cultivation_Apparel4.description>提高常規的防護，增強穿戴時候的移動速度、閃避概率、承傷係數與攻擊間隔的數值。</MX_Neiyu_Cultivation_Apparel4.description>
+  <MX_Neiyu_Cultivation_Apparel4.story>衣物的身旁閃爍著“霽”的流光，在此影響下使得自身的衣物得到了超越常規的防禦性能。</MX_Neiyu_Cultivation_Apparel4.story>
+  <MX_Neiyu_Cultivation_Halo4.description>對霓羽的護身層數上限提升至96層。</MX_Neiyu_Cultivation_Halo4.description>
+  <MX_Neiyu_Cultivation_Weapon5.description>提升武器的攻擊傷害與穿透屬性。縮短劍形態的攻擊間隔，增加弓形態普通攻擊的分裂箭矢數量。</MX_Neiyu_Cultivation_Weapon5.description>
+  <MX_Neiyu_Cultivation_Apparel5.description>提高常規的防護，增強穿戴時候的移動速度、閃避概率、承傷係數與攻擊間隔的數值。</MX_Neiyu_Cultivation_Apparel5.description>
+  <MX_Neiyu_Cultivation_Halo5.description>對霓羽的護身層數上限提升至108層。</MX_Neiyu_Cultivation_Halo5.description>
+  <MX_Neiyu_Cultivation_Blessing1.description>需要花形態。施法1.1秒，治癒24格內選區中非敵對血肉目標的傷口與舊傷，並提高心情。&#10;祝福期間移動速度提高20%，承傷降低10%，免疫增長速度提高70%。&#10;作用範圍4格，buff持續時間30s，冷卻120s。</MX_Neiyu_Cultivation_Blessing1.description>
+  <MX_Neiyu_Cultivation_Blessing2.description>需要花形態。施法1.1秒，治癒24格內選區中非敵對血肉目標的傷口與舊傷，並提高心情。&#10;祝福期間移動速度提高20%，承傷降低10%，免疫增長速度提高70%。&#10;作用範圍5格，buff持續時間45s，冷卻105s。</MX_Neiyu_Cultivation_Blessing2.description>
+  <MX_Neiyu_Cultivation_Blessing3.description>需要花形態。施法1.1秒，治癒24格內選區中非敵對血肉目標的傷口與舊傷，並提高心情。&#10;祝福期間移動速度提高20%，承傷降低10%，免疫增長速度提高70%。&#10;作用範圍6格，buff持續時間60s，冷卻90s。</MX_Neiyu_Cultivation_Blessing3.description>
+  <MX_Neiyu_Cultivation_Skyfall1.description>需要劍形態。施法1秒，躍向35格內指定位置，對落點周圍敵人造成無視護甲傷害，並使其承傷提高25%。&#10;作用半徑2格，落地傷害60點，buff持續時間為15s。</MX_Neiyu_Cultivation_Skyfall1.description>
+  <MX_Neiyu_Cultivation_Skyfall2.description>需要劍形態。施法1秒，躍向35格內指定位置，對落點周圍敵人造成無視護甲傷害，並使其承傷提高25%。&#10;作用半徑2.5格，落地傷害90點，buff持續時間為20s。</MX_Neiyu_Cultivation_Skyfall2.description>
+  <MX_Neiyu_Cultivation_Skyfall3.description>需要劍形態。施法1秒，躍向35格內指定位置，對落點周圍敵人造成無視護甲傷害，並使其承傷提高25%。&#10;作用半徑3格，落地傷害120點，buff持續時間為25s。</MX_Neiyu_Cultivation_Skyfall3.description>
+  <MX_Neiyu_Cultivation_Barrage1.description>以弓形態蓄力5秒，沿選定方向釋放箭幕。每支箭基礎傷害30，射程55格。發射20支箭矢。</MX_Neiyu_Cultivation_Barrage1.description>
+  <MX_Neiyu_Cultivation_Barrage2.description>以弓形態蓄力5秒，沿選定方向釋放箭幕。每支箭基礎傷害30，射程55格。發射26支箭矢。</MX_Neiyu_Cultivation_Barrage2.description>
+  <MX_Neiyu_Cultivation_Barrage3.description>以弓形態蓄力5秒，沿選定方向釋放箭幕。每支箭基礎傷害30，射程55格。發射32支箭矢。</MX_Neiyu_Cultivation_Barrage3.description>
+  <MX_Neiyu_Cultivation_Toxin1.description>以花形態展開毒庭，使範圍內敵人食物中毒，並有10%概率使其狂暴。作用半徑5格。</MX_Neiyu_Cultivation_Toxin1.description>
+  <MX_Neiyu_Cultivation_Toxin2.description>以花形態展開毒庭，使範圍內敵人食物中毒，並有10%概率使其狂暴。作用半徑6格。</MX_Neiyu_Cultivation_Toxin2.description>
+  <MX_Neiyu_Cultivation_Toxin3.description>以花形態展開毒庭，使範圍內敵人食物中毒，並有10%概率使其狂暴。作用半徑7格。</MX_Neiyu_Cultivation_Toxin3.description>
+  <MX_Neiyu_Cultivation_Thunder1.description>施法1.2秒，無視視線標記30格內選定位置周圍3格的非同派系單位，不包括自身。&#10;每個目標的雷擊次數為雷擊預算除以目標數，向上取整。首次等待2～3秒，後續間隔0.75～1.25秒；每擊造成25點無視護甲傷害與15點EMP，並點燃可燃目標。雷擊預算為72次。</MX_Neiyu_Cultivation_Thunder1.description>
+  <MX_Neiyu_Cultivation_Thunder2.description>施法1.2秒，無視視線標記30格內選定位置周圍3格的非同派系單位，不包括自身。&#10;每個目標的雷擊次數為雷擊預算除以目標數，向上取整。首次等待2～3秒，後續間隔0.75～1.25秒；每擊造成25點無視護甲傷害與15點EMP，並點燃可燃目標。雷擊預算為90次。</MX_Neiyu_Cultivation_Thunder2.description>
+  <MX_Neiyu_Cultivation_Thunder3.description>施法1.2秒，無視視線標記30格內選定位置周圍3格的非同派系單位，不包括自身。&#10;每個目標的雷擊次數為雷擊預算除以目標數，向上取整。首次等待2～3秒，後續間隔0.75～1.25秒；每擊造成25點無視護甲傷害與15點EMP，並點燃可燃目標。雷擊預算為108次。</MX_Neiyu_Cultivation_Thunder3.description>
+  <MX_Neiyu_Cultivation_Execution1.description>以劍形態後撤2格後突進，斬去目標頭部；沒有可移除頭部時，造成75點無視護甲傷害。釋放距離為20格，冷卻105s。</MX_Neiyu_Cultivation_Execution1.description>
+  <MX_Neiyu_Cultivation_Execution2.description>以劍形態後撤2格後突進，斬去目標頭部；沒有可移除頭部時，造成75點無視護甲傷害。釋放距離為24格，冷卻90s。</MX_Neiyu_Cultivation_Execution2.description>
+  <MX_Neiyu_Cultivation_Execution3.description>以劍形態後撤2格後突進，斬去目標頭部；沒有可移除頭部時，造成75點無視護甲傷害。釋放距離為28格，冷卻75s。</MX_Neiyu_Cultivation_Execution3.description>
 </LanguageData>

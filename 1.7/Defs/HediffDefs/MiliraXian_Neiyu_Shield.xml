@@ -3,7 +3,7 @@
 
     <HediffDef>
         <defName>MXNL_NeiyuShield</defName>
-        <label>&lt;color=#79CBFF&gt;护身&lt;/color&gt;</label>
+        <label>护身</label>
         <description>首击被抵消后展开计数护盾，致命攻击可直接触发三阶。常态护盾初始24层，可修行至108层。&#10;单次伤害低于36点时不消耗盾层；达到36点后，每36点伤害消耗1层，向上取整。60秒未消耗盾层时恢复首击防护。&#10;三阶先无敌并蓄伤3个游戏小时，再根据蓄伤量获得12个游戏小时增益，最多叠加5层。结束后虚弱150秒，护盾上限24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。</description>
         <hediffClass>Verse.HediffWithComps</hediffClass>
         <defaultLabelColor>(0.44, 0.80, 1.00)</defaultLabelColor>

@@ -3,7 +3,7 @@
 
   <IncidentDef>
     <defName>MXNL_NeiyuProjectionRecruit</defName>
-    <label>异界羽影</label>
+    <label>无终旅人</label>
     <category>Misc</category>
     <targetTags>
       <li>Map_PlayerHome</li>
@@ -11,8 +11,8 @@
     <workerClass>MiliraXian.Characters.Neiyu.IncidentWorker_NeiyuProjectionRecruit</workerClass>
     <questScriptDef>MXNL_NeiyuProjectionRecruitQuest</questScriptDef>
     <baseChance>1.0</baseChance>
-    <letterLabel>异界羽影</letterLabel>
-    <letterText>殖民地附近出现了一道羽状投影。来者自称霓羽，是一位米莉拉在此界的分影。她好奇地打量着四周，笑着询问能否在这里住下。若你愿意接纳她，她便留下；若不愿，她也可以自行散去。</letterText>
+    <letterLabel>无终旅人</letterLabel>
+    <letterText>殖民地附近出现了一位旅人米莉拉，她拥有着蓝色带有桃红色挑染的头发。头上顶着似乎是她自己点缀上去的花环状态的光环。一身的服饰与大家常见的天空精灵有着明显的差异。她自称自己的名字叫做：霓羽。她说明自己是一个旅人，在四处游荡居住，这次想要在你的殖民地度过一个较长的时间。如果你愿意接纳她的话，霓羽承诺将会一直为你提供超出常人的力量。如果不愿意的话她便会继续寻找下一个聚落，继续不知终点的旅途。</letterText>
   </IncidentDef>
 
 </Defs>

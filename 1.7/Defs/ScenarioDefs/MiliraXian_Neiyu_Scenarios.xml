@@ -3,10 +3,10 @@
 
   <ScenarioDef ParentName="ScenarioBase">
     <defName>MXNL_NeiyuProjectionStart</defName>
-    <label>界外羽痕</label>
-    <description>你是仙人米莉拉投向此界的一道羽影，名为霓羽。你带着零散的记忆和一部分力量，也带着对陌生世界的好奇。随身的专属武装是你最可靠的依靠。接下来，找一处落脚之地，搭起住所，再慢慢认识这里的人。&#10;&#10;警告：该剧本会显著降低游戏难度，不建议新玩家首次游玩时选择。</description>
+    <label>无终旅人</label>
+    <description>你是一个为了补全自身的旅人“米莉拉”，名为霓羽。你带着零散的记忆和一部分力量，也带着对陌生世界的好奇。随身的专属武装是你最可靠的依靠。接下来，找一处落脚之地，搭起住所，再慢慢认识这里的人。&#10;&#10;警告：该剧本会显著降低游戏难度，不建议新玩家首次游玩时选择。</description>
     <scenario>
-      <summary>一位异界投影霓羽，独自携带专属武装开局。</summary>
+      <summary>一位无终旅人，一个不知终点的旅途。</summary>
       <playerFaction Inherit="false">
         <def>PlayerFaction</def>
         <factionDef>MiliraXian_NeiyuPlayerFaction</factionDef>
@@ -14,7 +14,7 @@
       <parts>
         <li Class="ScenPart_GameStartDialog">
           <def>GameStartDialog</def>
-          <text>你是仙人米莉拉投向此界的一道羽影，名为霓羽。你带着零散的记忆和一部分力量，也带着对陌生世界的好奇。随身的专属武装是你最可靠的依靠。接下来，找一处落脚之地，搭起住所，再慢慢认识这里的人。&#10;&#10;警告：该剧本会显著降低游戏难度，不建议新玩家首次游玩时选择。</text>
+          <text>走走停停，你走到了这处看起来还算不错的地方，经过了漫长的旅途你想要找到一处定居一段时间。&#10;脑海中一直有着断断续续的记忆，但是一个最终的目标却格外的清晰：补全自身，记录世界。&#10;你不知道这是因为什么或是为了什么，但是你本来就是一个随性的米莉拉。不妨就在旅途中或者生活中成长下去。</text>
             
             
           <closeSound>GameStartSting</closeSound>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_Form_Flower.label>霓羽·花形</MX_Neiyu_Form_Flower.label>
-  <MX_Neiyu_Form_Flower.description>霓羽常持于手中的花形兵裝，以花瓣輝光施展賜福與毒庭。近戰威力較低，可切換為劍或弓形態。永不損壞。</MX_Neiyu_Form_Flower.description>
+  <MX_Neiyu_Form_Flower.label>[霓羽]霓裳花</MX_Neiyu_Form_Flower.label>
+  <MX_Neiyu_Form_Flower.description>一枝常年盛放的霓裳花，是霓羽常常捏在手中的一枝。在霓羽手中它不僅僅是一枝花，還可以轉化成其他的形態來協助作戰。&#10;&#10;“人工培育的品種，可以隨著我的心意來逐步的塑造我想要的樣子。除此之外，這枝是母枝，我願以我的精力逐步塑煉使其成為我的兵裝”&#10;“友人的植物工程與生命法則的極致體現之物，手上持有的時候我一直一直會有ta們還在我身邊的感覺。”</MX_Neiyu_Form_Flower.description>
   <MX_Neiyu_Form_Flower.tools.0.label>拂花</MX_Neiyu_Form_Flower.tools.0.label>
-  <MX_Neiyu_Form_Weapon.label>霓羽·劍形</MX_Neiyu_Form_Weapon.label>
-  <MX_Neiyu_Form_Weapon.description>由花形轉化而來的劍形兵裝，擅長高速斬擊與穿透重甲。可切換為花或弓形態。永不損壞。</MX_Neiyu_Form_Weapon.description>
+  <MX_Neiyu_Form_Weapon.label>[霓羽]天使之石</MX_Neiyu_Form_Weapon.label>
+  <MX_Neiyu_Form_Weapon.description>天使石（Angelite）是一種非常溫柔且充滿療愈氣息的礦石，也被稱為“藍天使石”。它通常呈現寧靜的灰藍色或柔和的天藍色，質地細膩，帶有一種沉靜的能量感。&#10;在霓羽的潤養下，天使石逐漸的沾染了一絲絲其他的顏色，一顆巨大的天使石被霓羽雕刻為這樣一柄劍。通體又一顆石頭雕刻而成，渾然一體的同時蘊含著別樣的能量。&#10;“倘若————師傅她老人家也能看著這柄劍的話也會愛不釋手吧，如果有機會找到她的埋骨地的話，我一定會......”</MX_Neiyu_Form_Weapon.description>
   <MX_Neiyu_Form_Weapon.tools.0.label>霓刃</MX_Neiyu_Form_Weapon.tools.0.label>
-  <MX_Neiyu_Form_Bow.label>霓羽·弓形</MX_Neiyu_Form_Bow.label>
-  <MX_Neiyu_Form_Bow.description>霓羽的弓形兵裝。主矢分裂為16支具有穿甲能力的追蹤碎矢，可切換為花或劍形態。永不損壞。</MX_Neiyu_Form_Bow.description>
+  <MX_Neiyu_Form_Bow.label>[霓羽]天使之角</MX_Neiyu_Form_Bow.label>
+  <MX_Neiyu_Form_Bow.description>天使石（Angelite）是一種非常溫柔且充滿療愈氣息的礦石，也被稱為“藍天使石”。它通常呈現寧靜的灰藍色或柔和的天藍色，質地細膩，帶有一種沉靜的能量感。&#10;同樣由此石雕刻而成的弓身，在霓羽的影響下居然擁有了超越常規的柔韌度。隨心而動的弓弦可以憑空上弦續航能量箭矢，並且發射的箭矢也會隨心而動對敵人進行持續的打擊。&#10;&#10;“一柄遠程武器在這顆星球是必要的，我們還太過弱小，我們做不到與那些猛獸近身作戰。”&#10;“那讓我為你打造一張弓吧，就用你雕下的這些碎屑。”&#10;“那......謝謝你，⬛⬛”</MX_Neiyu_Form_Bow.description>
   <MX_Bullet_BigSplitArrow.label>霓羽·裂羽主矢</MX_Bullet_BigSplitArrow.label>
   <MX_Bullet_HomingShard.label>霓羽·追羽碎矢</MX_Bullet_HomingShard.label>
   <MX_Bullet_BarrageArrow.label>霓羽·流羽矢</MX_Bullet_BarrageArrow.label>

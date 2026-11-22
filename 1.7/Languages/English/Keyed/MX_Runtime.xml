@@ -64,25 +64,25 @@
   <MX_NL_NeiyuAbilityDecorativeNotice>This ability is unavailable.</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>
-  <MX_NL_NeedFlowerForm>Requires flower form.</MX_NL_NeedFlowerForm>
-  <MX_NL_NeedSwordForm>Requires sword form.</MX_NL_NeedSwordForm>
-  <MX_NL_NeedBowForm>Requires bow form.</MX_NL_NeedBowForm>
+  <MX_NL_NeedFlowerForm>[Equip flower form to use this ability~]</MX_NL_NeedFlowerForm>
+  <MX_NL_NeedSwordForm>[Equip sword form to use this ability~]</MX_NL_NeedSwordForm>
+  <MX_NL_NeedBowForm>[Equip bow form to use this ability~]</MX_NL_NeedBowForm>
   <MX_NL_ProjectileDefMissing>projectileDef is not configured.</MX_NL_ProjectileDefMissing>
-  <MX_NL_NeedTargetCell>Select a target location.</MX_NL_NeedTargetCell>
-  <MX_NL_NoMarkTargetsInRange>No markable targets in range.</MX_NL_NoMarkTargetsInRange>
-  <MX_NL_NoValidAllyInRange>No valid allied target in range.</MX_NL_NoValidAllyInRange>
-  <MX_NL_NoHostileInRange>No hostile target in range.</MX_NL_NoHostileInRange>
-  <MX_NL_SkyfallInProgress>Skyfall is already in progress.</MX_NL_SkyfallInProgress>
-  <MX_NL_MustTargetPawn>You must target a pawn.</MX_NL_MustTargetPawn>
-  <MX_NL_TargetMustBeHostile>The target must be hostile.</MX_NL_TargetMustBeHostile>
-  <MX_NL_FlowerToxinMentalStateReason>Neiyu's flower miasma drove them into a frenzy.</MX_NL_FlowerToxinMentalStateReason>
-  <MX_NL_RecruitLetterTitle>Otherworldly Feather Shadow</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>A feather-shaped projection has appeared near the colony. She introduces herself as Neiyu, a Milira's projection in this world. Looking around with curiosity, she smiles and asks whether she may stay. You may welcome her or let the projection disperse.</MX_NL_RecruitLetterText>
+  <MX_NL_NeedTargetCell>[Choose a target location to cast this ability.]</MX_NL_NeedTargetCell>
+  <MX_NL_NoMarkTargetsInRange>[There's nobody to mark in that area! Try casting it somewhere else.]</MX_NL_NoMarkTargetsInRange>
+  <MX_NL_NoValidAllyInRange>[There are no valid friendly targets in that area! Try casting it somewhere else.]</MX_NL_NoValidAllyInRange>
+  <MX_NL_NoHostileInRange>[There are no valid hostile targets in that area! Try casting it somewhere else.]</MX_NL_NoHostileInRange>
+  <MX_NL_SkyfallInProgress>[Neiyu is preparing to cast Skyfall at the selected location.]</MX_NL_SkyfallInProgress>
+  <MX_NL_MustTargetPawn>[Neiyu can't use this sword art on thin air~]</MX_NL_MustTargetPawn>
+  <MX_NL_TargetMustBeHostile>[Neiyu can't use this sword art on her friends~]</MX_NL_TargetMustBeHostile>
+  <MX_NL_FlowerToxinMentalStateReason>[The Milira cooking Neiyu found somewhere left the enemy so shaken they went berserk.]</MX_NL_FlowerToxinMentalStateReason>
+  <MX_NL_RecruitLetterTitle>The Endless Traveler</MX_NL_RecruitLetterTitle>
+  <MX_NL_RecruitLetterText>A Milira traveler has appeared near the colony. She has blue hair streaked with pink and a halo that seems to have been dressed like a wreath by her own hand. Her clothes look quite unlike those of the skyfolk you're used to seeing. She introduces herself as Neiyu. She says she wanders from place to place and would like to stay in your colony for a good while. If you welcome her, she promises to keep lending you her remarkable strength. If you turn her away, she'll look for another settlement and continue her journey without a destination.</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>Accept Neiyu</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>Not now</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>No player home map is available.</MX_NL_NoPlayerHomeMap>
-  <MX_NL_RecruitJoined>Neiyu has decided to remain in this world and has joined your colony.</MX_NL_RecruitJoined>
-  <MX_NL_RecruitDeferred>The feather shadow fades for now. If the connection remains, she may appear again later.</MX_NL_RecruitDeferred>
+  <MX_NL_RecruitJoined>Neiyu thanked the people of your colony and promised to lend them her strength and do all she could to keep everyone safe.</MX_NL_RecruitJoined>
+  <MX_NL_RecruitDeferred>Neiyu told the colonists she was sorry, then set off as they watched her go.</MX_NL_RecruitDeferred>
   <MX_NL_WeakBadge>W</MX_NL_WeakBadge>
   <MX_NL_ShieldStage3BuffStarted>[{0}] Shield has entered its buff phase: it no longer stores damage and is no longer invincible.</MX_NL_ShieldStage3BuffStarted>
   <MX_NL_ShieldStage3Ended>[{0}] Shield stage III has ended. Weakened state begins.</MX_NL_ShieldStage3Ended>

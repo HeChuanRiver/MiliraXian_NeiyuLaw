@@ -3,7 +3,7 @@
   <HediffDef>
     <defName>MX_Neiyu_SoulRemnantState</defName>
     <label>残魂化身</label>
-    <description>多余营养逐渐完善肉体。每日最多存储5点营养，于当地零点刷新；死亡后累计营养清空。</description>
+    <description>多余营养逐渐完善肉体。每日最多存储5点营养。当营养完善的过程中会逐渐提升霓羽的基础数值。当霓羽死亡时会重置。</description>
     <hediffClass>MiliraXian.Characters.Neiyu.Hediff_NeiyuSoulRemnant</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -72,7 +72,7 @@
         <dailyStorageLimit>5</dailyStorageLimit>
         <dailyAutomaticNutrition>2</dailyAutomaticNutrition>
         <extraNutritionLabel>额外进食</extraNutritionLabel>
-        <extraNutritionDescription>允许在日常饮食之外额外进食，每日自动存储至2点营养。每日总存储量最多5点，于当地零点刷新。</extraNutritionDescription>
+        <extraNutritionDescription>允许在日常饮食之外额外进食，每日自动存储至2点营养。每日总存储量最多5点。</extraNutritionDescription>
         <nutritionStatusFormat>累计营养：{0}/{1}&#10;今日存储：{2}/{3}</nutritionStatusFormat>
       </li>
     </modExtensions>
@@ -80,7 +80,7 @@
   <HediffDef>
     <defName>MX_Neiyu_SoulRecovery</defName>
     <label>残魂休眠</label>
-    <description>肉体正在重塑，强制睡眠12小时。休眠期间无需进食。</description>
+    <description>霓羽正在处于肉体重塑期间，持续时间12小时。期间处于无敌与不可移动和操控状态。</description>
     <hediffClass>MiliraXian.Characters.Neiyu.Hediff_NeiyuSoulRecovery</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>

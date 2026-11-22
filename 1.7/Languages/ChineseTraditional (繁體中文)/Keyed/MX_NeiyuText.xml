@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_NL_PostureExecutionLocking>霓羽正在鎖定{0}，剩餘 {1} 秒。</MX_NL_PostureExecutionLocking>
+  <MX_Cultivation_DecorativeBlocked>角色目前處於觀賞模式，無法進行修行喔。</MX_Cultivation_DecorativeBlocked>
+  <MX_Cultivation_CompleteContents>完整內容</MX_Cultivation_CompleteContents>
+  <MX_Cultivation_PanZoomHint>拖動平移，滾輪縮放</MX_Cultivation_PanZoomHint>
+  <MX_Cultivation_ShieldWeakCap>虛弱期上限24層。</MX_Cultivation_ShieldWeakCap>
+</LanguageData>

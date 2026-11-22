@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_FeatherLaw_s1.description>對於劍形態，每一級可以提升3%的攻擊傷害加成。</MX_Neiyu_FeatherLaw_s1.description>
+  <MX_Neiyu_FeatherLaw_s2.description>對於弓形態，每一級可以提升2%的攻擊傷害加成。</MX_Neiyu_FeatherLaw_s2.description>
+  <MX_Neiyu_FeatherLaw_s3.description>移動速度每一級別可以提升0.08格的移動速度</MX_Neiyu_FeatherLaw_s3.description>
+  <MX_Neiyu_FeatherLaw_s4.description>對於劍形態，每一級可以提升0.02的護甲穿透</MX_Neiyu_FeatherLaw_s4.description>
+  <MX_Neiyu_FeatherLaw_s5.description>對於裝備而言，每一級可以提升0.03的銳器護甲</MX_Neiyu_FeatherLaw_s5.description>
+  <MX_Neiyu_FeatherLaw_s6.description>對於弓形態而言，普攻的射擊冷卻每級-2%</MX_Neiyu_FeatherLaw_s6.description>
+  <MX_Neiyu_FeatherLaw_s7.description>對於受到的傷害會額外乘算，每一級減少1.5%的傷害</MX_Neiyu_FeatherLaw_s7.description>
+  <MX_Neiyu_FeatherLaw_s8.description>三形態的普攻傷害增加4%，且與其他加成乘算。</MX_Neiyu_FeatherLaw_s8.description>
+  <MX_Neiyu_FeatherLaw_s8.levelDescriptions.0>三形態的普攻傷害增加4%，且與其他加成乘算。</MX_Neiyu_FeatherLaw_s8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s9.description>劍、弓普通攻擊傷害額外 +3%</MX_Neiyu_FeatherLaw_s9.description>
+  <MX_Neiyu_FeatherLaw_s9.levelDescriptions.0>劍、弓普通攻擊傷害額外 +3%</MX_Neiyu_FeatherLaw_s9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m1.description>實戰換形後 2 秒內，首次普攻命中敵人並造成傷害，縮短 0.3 秒攻擊間隔。弓箭命中時，霓羽須仍處於對應武器的普攻冷卻中才會扣減剩餘時間。觸發冷卻 4 秒。</MX_Neiyu_FeatherLaw_m1.description>
+  <MX_Neiyu_FeatherLaw_m1.levelDescriptions.0>實戰換形後 2 秒內，首次普攻命中敵人並造成傷害，縮短 0.3 秒攻擊間隔。弓箭命中時，霓羽須仍處於對應武器的普攻冷卻中才會扣減剩餘時間。觸發冷卻 4 秒。</MX_Neiyu_FeatherLaw_m1.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m2.description>成功閃避敵人的近戰攻擊後，移動速度 +8%，持續 2 秒。觸發冷卻 8 秒。</MX_Neiyu_FeatherLaw_m2.description>
+  <MX_Neiyu_FeatherLaw_m2.levelDescriptions.0>成功閃避敵人的近戰攻擊後，移動速度 +8%，持續 2 秒。觸發冷卻 8 秒。</MX_Neiyu_FeatherLaw_m2.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m3.description>脫戰約 40 秒後，二階段護盾每 40 秒可額外恢復 1 層，補到當前護盾上限的 25% 為止，層數向下取整。比如上限 24 層時，此效果最多補到 6 層。</MX_Neiyu_FeatherLaw_m3.description>
+  <MX_Neiyu_FeatherLaw_m3.levelDescriptions.0>脫戰約 40 秒後，二階段護盾每 40 秒可額外恢復 1 層，補到當前護盾上限的 25% 為止，層數向下取整。比如上限 24 層時，此效果最多補到 6 層。</MX_Neiyu_FeatherLaw_m3.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m4.description>成功近戰閃避後開啟 3 秒反擊窗口，窗口內首次命中敵人的劍形普攻傷害 +10%。觸發冷卻 12 秒，從閃避時開始。</MX_Neiyu_FeatherLaw_m4.description>
+  <MX_Neiyu_FeatherLaw_m4.levelDescriptions.0>成功近戰閃避後開啟 3 秒反擊窗口，窗口內首次命中敵人的劍形普攻傷害 +10%。觸發冷卻 12 秒，從閃避時開始。</MX_Neiyu_FeatherLaw_m4.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m5.description>二階段護盾承受敵人攻擊後若仍處於二階段，可保留這次受擊前已經累計的自然回層等待時間。觸發冷卻 15 秒。</MX_Neiyu_FeatherLaw_m5.description>
+  <MX_Neiyu_FeatherLaw_m5.levelDescriptions.0>二階段護盾承受敵人攻擊後若仍處於二階段，可保留這次受擊前已經累計的自然回層等待時間。觸發冷卻 15 秒。</MX_Neiyu_FeatherLaw_m5.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m6.description>實戰中直接從花形切到劍形，首次劍形普攻命中敵人並造成傷害時，給二階段護盾恢復 1 層。觸發冷卻 10 秒。再次換形會重新判定這次銜接。</MX_Neiyu_FeatherLaw_m6.description>
+  <MX_Neiyu_FeatherLaw_m6.levelDescriptions.0>實戰中直接從花形切到劍形，首次劍形普攻命中敵人並造成傷害時，給二階段護盾恢復 1 層。觸發冷卻 10 秒。再次換形會重新判定這次銜接。</MX_Neiyu_FeatherLaw_m6.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m7.description>護盾被敵人擊破時，移動速度 +12%，持續 1.5 秒。觸發冷卻 45 秒。</MX_Neiyu_FeatherLaw_m7.description>
+  <MX_Neiyu_FeatherLaw_m7.levelDescriptions.0>護盾被敵人擊破時，移動速度 +12%，持續 1.5 秒。觸發冷卻 45 秒。</MX_Neiyu_FeatherLaw_m7.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m8.description>三個換形觸發效果的冷卻縮短 15%。</MX_Neiyu_FeatherLaw_m8.description>
+  <MX_Neiyu_FeatherLaw_m8.levelDescriptions.0>三個換形觸發效果的冷卻縮短 15%。</MX_Neiyu_FeatherLaw_m8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m9.description>每場戰鬥第一次被敵人破盾時，若節點冷卻已結束，受到的傷害乘以 0.90，持續 2 秒。觸發冷卻 180 秒。</MX_Neiyu_FeatherLaw_m9.description>
+  <MX_Neiyu_FeatherLaw_m9.levelDescriptions.0>每場戰鬥第一次被敵人破盾時，若節點冷卻已結束，受到的傷害乘以 0.90，持續 2 秒。觸發冷卻 180 秒。</MX_Neiyu_FeatherLaw_m9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k1.description>開啟花陣、劍勢和流羽三條專精路線，是「春息」「迴響」「齊發」的共同前置。</MX_Neiyu_FeatherLaw_k1.description>
+  <MX_Neiyu_FeatherLaw_k1.levelDescriptions.0>開啟花陣、劍勢和流羽三條專精路線，是「春息」「迴響」「齊發」的共同前置。</MX_Neiyu_FeatherLaw_k1.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k2.description>「花陣·祈生」圍繞選定落點的作用半徑 +0.5 格。基礎修行 1／2／3 級分別變為 4.5／5.5／6.5 格。</MX_Neiyu_FeatherLaw_k2.description>
+  <MX_Neiyu_FeatherLaw_k2.levelDescriptions.0>「花陣·祈生」圍繞選定落點的作用半徑 +0.5 格。基礎修行 1／2／3 級分別變為 4.5／5.5／6.5 格。</MX_Neiyu_FeatherLaw_k2.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k3.description>「劍勢·天墜」落地時，以落點為中心追加一次 1.5 格半徑的餘波，對其中敵人造成主擊傷害的 20%。基礎修行 1／2／3 級的餘波傷害分別為 12／18／24 點，進入目標結算前取該值。</MX_Neiyu_FeatherLaw_k3.description>
+  <MX_Neiyu_FeatherLaw_k3.levelDescriptions.0>「劍勢·天墜」落地時，以落點為中心追加一次 1.5 格半徑的餘波，對其中敵人造成主擊傷害的 20%。基礎修行 1／2／3 級的餘波傷害分別為 12／18／24 點，進入目標結算前取該值。</MX_Neiyu_FeatherLaw_k3.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k4.description>「流羽裂界」每輪追加 4 支箭，基礎修行 1／2／3 級共發 24／30／36 支。同一輪裡，追加箭命中同一敵人時，依次按該箭傷害的 100%／50%／25%／12.5% 結算，按目標各自計數。</MX_Neiyu_FeatherLaw_k4.description>
+  <MX_Neiyu_FeatherLaw_k4.levelDescriptions.0>「流羽裂界」每輪追加 4 支箭，基礎修行 1／2／3 級共發 24／30／36 支。同一輪裡，追加箭命中同一敵人時，依次按該箭傷害的 100%／50%／25%／12.5% 結算，按目標各自計數。</MX_Neiyu_FeatherLaw_k4.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k5.description>「祈生」在原作用範圍內留下 3 秒恢復區。每秒為當時在區內的非敵對、非機械單位治療一次，每處傷口恢復該次治療時剩餘傷勢的 25%。</MX_Neiyu_FeatherLaw_k5.description>
+  <MX_Neiyu_FeatherLaw_k5.levelDescriptions.0>「祈生」在原作用範圍內留下 3 秒恢復區。每秒為當時在區內的非敵對、非機械單位治療一次，每處傷口恢復該次治療時剩餘傷勢的 25%。</MX_Neiyu_FeatherLaw_k5.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k6.description>對已經架勢破壞的目標施放「劍勢·斷首」，施法前搖縮短 0.4 秒。即可以在默認處決釋放前使用此技能打斷處決而快速使用一次斷首。</MX_Neiyu_FeatherLaw_k6.description>
+  <MX_Neiyu_FeatherLaw_k6.levelDescriptions.0>對已經架勢破壞的目標施放「劍勢·斷首」，施法前搖縮短 0.4 秒。即可以在默認處決釋放前使用此技能打斷處決而快速使用一次斷首。</MX_Neiyu_FeatherLaw_k6.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k7.description>整輪箭幕最後 6 支箭發射時，在原方向偏差 12°以內、且在射程內，優先瞄準最靠近原落點的未倒地敵人。</MX_Neiyu_FeatherLaw_k7.description>
+  <MX_Neiyu_FeatherLaw_k7.levelDescriptions.0>整輪箭幕最後 6 支箭發射時，在原方向偏差 12°以內、且在射程內，優先瞄準最靠近原落點的未倒地敵人。</MX_Neiyu_FeatherLaw_k7.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k8.description>「花陣·瘴庭」在原範圍留下 2 秒殘留區。新進入的敵人各觸發一次原技能的食物中毒效果和 10% 狂暴判定.</MX_Neiyu_FeatherLaw_k8.description>
+  <MX_Neiyu_FeatherLaw_k8.levelDescriptions.0>「花陣·瘴庭」在原範圍留下 2 秒殘留區。新進入的敵人各觸發一次原技能的食物中毒效果和 10% 狂暴判定.</MX_Neiyu_FeatherLaw_k8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k9.description>「雷鎖印域」標記後，首次落雷提前 0.3 秒，默認等待由 2～3 秒變為 1.7～2.7 秒。</MX_Neiyu_FeatherLaw_k9.description>
+  <MX_Neiyu_FeatherLaw_k9.levelDescriptions.0>「雷鎖印域」標記後，首次落雷提前 0.3 秒，默認等待由 2～3 秒變為 1.7～2.7 秒。</MX_Neiyu_FeatherLaw_k9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k10.description>整輪箭幕最後 6 支箭中，若某支箭直接命中敵人且未被護盾擋下，則對命中點 1.5 格內的其他敵人造成該箭傷害的 15%。追加箭先算同目標遞減，再以該箭傷害計算濺射。</MX_Neiyu_FeatherLaw_k10.description>
+  <MX_Neiyu_FeatherLaw_k10.levelDescriptions.0>整輪箭幕最後 6 支箭中，若某支箭直接命中敵人且未被護盾擋下，則對命中點 1.5 格內的其他敵人造成該箭傷害的 15%。追加箭先算同目標遞減，再以該箭傷害計算濺射。</MX_Neiyu_FeatherLaw_k10.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k11.description>同一場戰鬥中，花組（祈生或瘴庭）、劍組（天墜或斷首）、弓組（流羽裂界或雷鎖印域）各施放一次後，下一次換形獲得 12% 移速，持續 3 秒。觸發冷卻 60 秒，學會「羽律互照」後為 51 秒。</MX_Neiyu_FeatherLaw_k11.description>
+  <MX_Neiyu_FeatherLaw_k11.levelDescriptions.0>同一場戰鬥中，花組（祈生或瘴庭）、劍組（天墜或斷首）、弓組（流羽裂界或雷鎖印域）各施放一次後，下一次換形獲得 12% 移速，持續 3 秒。觸發冷卻 60 秒，學會「羽律互照」後為 51 秒。</MX_Neiyu_FeatherLaw_k11.levelDescriptions.0>
+</LanguageData>

@@ -16,6 +16,7 @@ internal sealed class CultivationView
     private bool fitted, detailOnly;
     private string search = "", lastSelected;
     private float contentHeight = 600;
+    private static string CompleteContents => "MX_Cultivation_CompleteContents".Translate().ToString();
 
     internal bool Draw(Rect rect, CultivationViewModel model)
     {
@@ -83,7 +84,7 @@ internal sealed class CultivationView
     {
         Theme.Label(new Rect(rect.x + 10, rect.y + 10, 140, 24), "修行之路", Muted, GameFont.Tiny);
         float y = rect.y + 45;
-        if (Theme.Button(new Rect(rect.x, y, 144, 42), "完整羽律", !model.Foundation && model.Category == null)) Choose(model, null);
+        if (Theme.Button(new Rect(rect.x, y, 144, 42), CompleteContents, !model.Foundation && model.Category == null)) Choose(model, null);
         y += 52;
         foreach (var category in model.Categories)
         {
@@ -106,9 +107,9 @@ internal sealed class CultivationView
         try
         {
             float toolbar = compact ? 40 : 0;
-            if (compact && Theme.Button(new Rect(8, 0, 150, 32), model.Foundation ? "基础 · " + model.Category.LabelCap : model.Category?.LabelCap ?? "完整羽律", quiet: true))
+            if (compact && Theme.Button(new Rect(8, 0, 150, 32), model.Foundation ? "基础 · " + model.Category.LabelCap : model.Category?.LabelCap ?? CompleteContents, quiet: true))
             {
-                List<FloatMenuOption> options = new() { new("完整羽律", () => Choose(model, null)) };
+                List<FloatMenuOption> options = new() { new(CompleteContents, () => Choose(model, null)) };
                 foreach (var c in model.Categories) options.Add(new(c.LabelCap, () => Choose(model, c)));
                 foreach (var c in model.Foundations) options.Add(new("基础 · " + c.LabelCap, () => Choose(model, c, true)));
                 Find.WindowStack.Add(new FloatMenu(options));
@@ -140,7 +141,7 @@ internal sealed class CultivationView
                 Theme.Symbol(new Rect(10 + i * slot, rect.height - 55, 14, 14), (PerkNodeVisual)i, i < 2 ? Accent : Pink);
                 Theme.Label(new Rect(32 + i * slot, rect.height - 59, slot - 23, 23), labels[i], Muted, GameFont.Tiny);
             }
-            Theme.Label(new Rect(10, rect.height - 28, rect.width - 155, 23), "拖动平移 · 滚轮缩放", Muted, GameFont.Tiny);
+            Theme.Label(new Rect(10, rect.height - 28, rect.width - 155, 23), "MX_Cultivation_PanZoomHint".Translate().ToString(), Muted, GameFont.Tiny);
             if (Theme.Button(new Rect(rect.width - 139, rect.height - 30, 32, 27), "−", quiet: true)) canvas.ZoomAt(.83f, canvas.Size * .5f);
             if (Theme.Button(new Rect(rect.width - 103, rect.height - 30, 62, 27), "适应", quiet: true)) canvas.Fit(model.Nodes.Where(model.InBranch));
             if (Theme.Button(new Rect(rect.width - 37, rect.height - 30, 29, 27), "+", quiet: true)) canvas.ZoomAt(1.2f, canvas.Size * .5f);
@@ -201,8 +202,11 @@ internal sealed class CultivationView
                         color, GameFont.Tiny);
                 }
             }
-            Divider(width, ref y);
-            Theme.TextBlock(width, ref y, node.story ?? "片羽之间，渐有回响。", Muted, GameFont.Tiny);
+            if (!node.story.NullOrEmpty())
+            {
+                Divider(width, ref y);
+                Theme.TextBlock(width, ref y, node.story, Muted, GameFont.Tiny);
+            }
             contentHeight = y + 12;
         }
         finally { Widgets.EndScrollView(); }

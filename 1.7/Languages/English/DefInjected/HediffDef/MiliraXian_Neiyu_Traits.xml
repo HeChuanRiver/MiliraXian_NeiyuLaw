@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_SoulRemnantState.description>Surplus nutrition gradually rebuilds Neiyu's body. Up to 5 nutrition can be stored per day. As she stores nutrition, her base stats rise. This progress resets when she dies.</MX_Neiyu_SoulRemnantState.description>
+  <MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionDescription>Allows Neiyu to eat extra food beyond her usual meals, automatically storing up to 2 nutrition per day. The daily total cannot exceed 5.</MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionDescription>
+  <MX_Neiyu_SoulRecovery.description>Neiyu is rebuilding her body. For 12 hours she is invulnerable, cannot move and cannot be controlled.</MX_Neiyu_SoulRecovery.description>
+</LanguageData>

@@ -3,8 +3,8 @@
     <!-- ==A. == -->
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Neiyu_Form_Flower</defName>
-        <label>霓羽·花形</label>
-        <description>花形兵装，可切换为剑或弓。以花阵治疗友军或侵扰敌人。永不损坏。</description>
+        <label>[霓羽]霓裳花</label>
+        <description>一枝常年盛放的霓裳花，是霓羽常常捏在手中的一枝。在霓羽手中它不仅仅是一枝花，还可以转化成其他的形态来协助作战。&#10;&#10;“人工培育的品种，可以随着我的心意来逐步的塑造我想要的样子。除此之外，这枝是母枝，我愿以我的精力逐步塑炼使其成为我的兵装”&#10;“友人的植物工程与生命法则的极致体现之物，手上持有的时候我一直一直会有ta们还在我身边的感觉。”</description>
         <recipeMaker Inherit="False" IsNull="True" />
         
         <graphicData>
@@ -92,8 +92,8 @@
     
     <ThingDef ParentName="BaseMeleeWeapon">
         <defName>MX_Neiyu_Form_Weapon</defName>
-        <label>霓羽·剑形</label>
-        <description>由花形转化而来的剑形兵装，擅长高速斩击与穿透重甲。可切换为花或弓形态。永不损坏。</description>
+        <label>[霓羽]天使之石</label>
+        <description>天使石（Angelite）是一种非常温柔且充满疗愈气息的矿石，也被称为“蓝天使石”。它通常呈现宁静的灰蓝色或柔和的天蓝色，质地细腻，带有一种沉静的能量感。&#10;在霓羽的润养下，天使石逐渐的沾染了一丝丝其他的颜色，一颗巨大的天使石被霓羽雕刻为这样一柄剑。通体又一颗石头雕刻而成，浑然一体的同时蕴含着别样的能量。&#10;“倘若————师傅她老人家也能看着这柄剑的话也会爱不释手吧，如果有机会找到她的埋骨地的话，我一定会......”</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>
@@ -163,7 +163,7 @@
                 </formIconPaths>
 
                 <commandLabel>切换形态</commandLabel>
-                <commandDesc>点击循环切换：花 → 剑 → 弓 → 花。</commandDesc>
+                <commandDesc>点击切换</commandDesc>
 
                 <destroyOldWeapon>true</destroyOldWeapon>
                 <requirePrimary>true</requirePrimary>
@@ -210,8 +210,8 @@
     
     <ThingDef ParentName="BaseWeapon">
         <defName>MX_Neiyu_Form_Bow</defName>
-        <label>霓羽·弓形</label>
-        <description>射出的主矢会分裂为追踪碎矢，可切换为花或剑形态。永不损坏。</description>
+        <label>[霓羽]天使之角</label>
+        <description>天使石（Angelite）是一种非常温柔且充满疗愈气息的矿石，也被称为“蓝天使石”。它通常呈现宁静的灰蓝色或柔和的天蓝色，质地细腻，带有一种沉静的能量感。&#10;同样由此石雕刻而成的弓身，在霓羽的影响下居然拥有了超越常规的柔韧度。随心而动的弓弦可以凭空上弦续航能量箭矢，并且发射的箭矢也会随心而动对敌人进行持续的打击。&#10;&#10;“一柄远程武器在这颗星球是必要的，我们还太过弱小，我们做不到与那些猛兽近身作战。”&#10;“那让我为你打造一张弓吧，就用你雕下的这些碎屑。”&#10;“那......谢谢你，⬛⬛”</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <techLevel>Archotech</techLevel>        <!--科技时代-->
@@ -279,7 +279,7 @@
                 </formIconPaths>
 
                 <commandLabel>切换形态</commandLabel>
-                <commandDesc>点击循环切换：花 → 剑 → 弓 → 花。</commandDesc>
+                <commandDesc>点击切换</commandDesc>
 
                 <destroyOldWeapon>true</destroyOldWeapon>
                 <requirePrimary>true</requirePrimary>

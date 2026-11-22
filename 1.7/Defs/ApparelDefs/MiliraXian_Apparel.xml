@@ -33,8 +33,8 @@
     <!-- 常服 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MiliraXian_NeiyuNormal</defName>
-        <label>霓羽·常服</label>
-        <description>霓羽惯常穿着的轻盈衣装，护住身体与羽翼。提高防护、负重、移动速度与近战闪避，并降低承伤。永不损坏。</description>
+        <label>[霓羽]霓裳衣装</label>
+        <description>霓羽惯常穿着的轻盈衣装。衣服的设计灵感来源于曾经的挚友，衣服上的每一缕花纹和装饰点缀都有其独特的作用。</description>
         <recipeMaker Inherit="False" IsNull="True" />
     
         <graphicData>
@@ -207,8 +207,8 @@
     <!-- 内衬 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
         <defName>MiliraXian_NeiyuInner</defName>
-        <label>霓羽·内衬</label>
-        <description>霓羽贴身穿着的柔韧内衬，为躯干、颈部与四肢上段提供第二层防护。降低承伤，缩短近战攻击间隔，并提高工作速度。永不损坏。</description>
+        <label>[霓羽]女仆装</label>
+        <description>霓羽贴身穿着的柔韧内衬，是在家里居住的时候褪去外衣时身着的衣物。作为内衬衣物而言舒适度和便捷度都是最适合她自己的。</description>
         <recipeMaker Inherit="False" IsNull="True" />
 
         <graphicData>

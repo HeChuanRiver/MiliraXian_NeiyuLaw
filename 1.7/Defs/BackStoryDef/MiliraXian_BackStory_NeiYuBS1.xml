@@ -35,7 +35,7 @@
         <defName>MiliraXian_BackStoryAdult_Neiyu_BS1</defName>
         <title>无终旅人</title>
         <titleShort>无终旅人</titleShort>
-        <description>“[PAWN_nameDef]”一直在一条没有尽头的道路上不停地旅行着，她在旅途中不断收获着各种各样的人生百态。常言道：旅途的终点在何方呢？在[PAWN_nameDef]的描述中，显然是只能不断前行的道路，因为她一直没能获取她想要得到的东西啊~</description>
+        <description>[PAWN_nameDef]始终行走在一条仿佛没有尽头的道路上。漫长的旅途中，她见过形形色色的人，也领略了世间百态。常有人问，旅途的终点究竟在何方？而在[PAWN_nameDef]的描述中，所谓终点，似乎只是那条不断向前延伸的道路。毕竟，她至今仍未寻得自己真正想要的东西啊~</description>
         <slot>Adulthood</slot>
         <skillGains>
             <Construction>2</Construction>

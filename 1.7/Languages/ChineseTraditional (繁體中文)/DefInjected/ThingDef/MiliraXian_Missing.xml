@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MiliraXian_NeiyuInner.label>霓羽·內襯</MiliraXian_NeiyuInner.label>
-  <MiliraXian_NeiyuInner.description>霓羽貼身穿著的柔韌內襯，為軀干、頸部與四肢上段提供第二層防護。降低承傷，縮短近戰攻擊間隔，并提高工作速度。永不損壞。</MiliraXian_NeiyuInner.description>
+  <MiliraXian_NeiyuInner.label>[霓羽]女僕裝</MiliraXian_NeiyuInner.label>
+  <MiliraXian_NeiyuInner.description>霓羽貼身穿著的柔韌內襯，是在家裡居住的時候褪去外衣時身著的衣物。作為內襯衣物而言舒適度和便捷度都是最適合她自己的。</MiliraXian_NeiyuInner.description>
 
   <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandLabel>切換形態</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandLabel>
   <MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandDesc>點擊切換</MX_Neiyu_Form_Flower.comps.Comp_ModeSwitchWeapon.commandDesc>
   <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandLabel>切換形態</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandLabel>
-  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>點擊循環切換：花 → 劍 → 弓 → 花。</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>
+  <MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>點擊切換</MX_Neiyu_Form_Weapon.comps.Comp_ModeSwitchWeapon.commandDesc>
   <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandLabel>切換形態</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandLabel>
-  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>點擊循環切換：花 → 劍 → 弓 → 花。</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>
+  <MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>點擊切換</MX_Neiyu_Form_Bow.comps.Comp_ModeSwitchWeapon.commandDesc>
 
 
   <MXZL_Mote_GuiyiLinkLine.label>特效</MXZL_Mote_GuiyiLinkLine.label>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MXNL_NeiyuProjectionStart.label>界外羽痕</MXNL_NeiyuProjectionStart.label>
-  <MXNL_NeiyuProjectionStart.description>你是仙人米莉拉投向此界的一道羽影，名為霓羽。你帶著零散的記憶和一部分力量，也帶著對陌生世界的好奇。隨身的專屬武裝是你最可靠的依靠。接下來，找一處落腳之地，搭起住所，再慢慢認識這裡的人。&#10;&#10;警告：該劇本會顯著降低游戲難度，不建議新玩家首次游玩時選擇。</MXNL_NeiyuProjectionStart.description>
-  <MXNL_NeiyuProjectionStart.scenario.summary>一位異界投影霓羽，獨自攜帶專屬武裝開局。</MXNL_NeiyuProjectionStart.scenario.summary>
-  <MXNL_NeiyuProjectionStart.scenario.parts.GameStartDialog.text>你是仙人米莉拉投向此界的一道羽影，名為霓羽。你帶著零散的記憶和一部分力量，也帶著對陌生世界的好奇。隨身的專屬武裝是你最可靠的依靠。接下來，找一處落腳之地，搭起住所，再慢慢認識這裡的人。&#10;&#10;警告：該劇本會顯著降低游戲難度，不建議新玩家首次游玩時選擇。</MXNL_NeiyuProjectionStart.scenario.parts.GameStartDialog.text>
+  <MXNL_NeiyuProjectionStart.label>無終旅人</MXNL_NeiyuProjectionStart.label>
+  <MXNL_NeiyuProjectionStart.description>你是一個為了補全自身的旅人“米莉拉”，名為霓羽。你帶著零散的記憶和一部分力量，也帶著對陌生世界的好奇。隨身的專屬武裝是你最可靠的依靠。接下來，找一處落腳之地，搭起住所，再慢慢認識這裡的人。&#10;&#10;警告：該劇本會顯著降低遊戲難度，不建議新玩家首次遊玩時選擇。</MXNL_NeiyuProjectionStart.description>
+  <MXNL_NeiyuProjectionStart.scenario.summary>一位無終旅人，一個不知終點的旅途。</MXNL_NeiyuProjectionStart.scenario.summary>
+  <MXNL_NeiyuProjectionStart.scenario.parts.GameStartDialog.text>走走停停，你走到了這處看起來還算不錯的地方，經過了漫長的旅途你想要找到一處定居一段時間。&#10;腦海中一直有著斷斷續續的記憶，但是一個最終的目標卻格外的清晰：補全自身，記錄世界。&#10;你不知道這是因為什麼或是為了什麼，但是你本來就是一個隨性的米莉拉。不妨就在旅途中或者生活中成長下去。</MXNL_NeiyuProjectionStart.scenario.parts.GameStartDialog.text>
 </LanguageData>

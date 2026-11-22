@@ -8,9 +8,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_WarpFeather</defName>
-        <label>&lt;color=#79CBFF&gt;折跃引羽&lt;/color&gt;</label>
-        <description>凝聚周围的光羽，施法3秒后，在身旁生成12～24根米莉拉羽毛。
-冷却时间：300秒。</description>
+        <label>折跃引羽</label>
+        <description>使用【物质法则】的能力，经过一段时间的吟唱后，在身旁生成12~24根米莉拉羽毛。&#10;当然也有可能是空间法则或其他什么类似的能力从其他米那里薅下来的毛。&#10;冷却时间：300秒。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_WarpFeather</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -47,16 +46,15 @@
                 <placementSound>MX_Neiyu_WarpFeather_Rustle</placementSound>
                 <featherThingDef>Milira_Feather</featherThingDef>
                 <featherCountRange>12~24</featherCountRange>
+                <noPlacementMessage>【霓羽找不到一个合适的空间来生成白羽，也许需要找到一处合适的区域来释放这招】</noPlacementMessage>
             </li>
         </comps>
     </AbilityDef>
 
     <AbilityDef>
         <defName>MX_Neiyu_ThunderMarkedStorm</defName>
-        <label>&lt;color=#8BD5FF&gt;雷锁印域&lt;/color&gt;</label>
-        <description>施法1.2秒，无视视线标记30格内选定位置周围3格的非同派系单位，不包括自身。
-每个目标的雷击次数为雷击预算除以目标数，向上取整。首次等待2～3秒，后续间隔0.75～1.25秒；每击造成25点无视护甲伤害与15点EMP，并点燃可燃目标。
-范围内无有效目标时不进入冷却。</description>
+        <label>雷锁印域</label>
+        <description>使用【灵能法则】的能力，经过一段时间的吟唱后，无视视野可在30格半径内选定一定范围的非同派系单位。对其增加标记。&#10;对于拥有标记的目标，将会受到雷击。雷击总量固定，标记越多则对单个目标的雷击次数越少。&#10;雷击间隔0.75~1.25秒。雷击单次会造成25点无视护甲的伤害与造成EMP效果。对于可点燃目标则会点燃目标。&#10;&#10;雷霆是大自然的伟力，也可净化邪祟。霓羽小时候最畏惧打雷，现在则对于此招格外钟爱。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -103,8 +101,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Bow_ArrowBarrage</defName>
-        <label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</label>
-        <description>以弓形态蓄力5秒，沿选定方向释放箭幕。每支箭基础伤害30，射程55格。</description>
+        <label>流羽裂界</label>
+        <description>【必须持有弓形态】蓄力一段时间，向指定方向连续释放箭矢弹幕。箭矢的单支伤害为30点。&#10;&#10;初学弓箭的时候便十分笨拙，尝试将霁的力量注入其中后阴差阳错造成了一些失控。但是这招本身也可以作为霓羽倾斜火力的方式。她是这么说的，根本不会是她其实当时失控了根本停不住箭矢的释放。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -148,9 +146,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_BlessingField</defName>
-        <label>&lt;color=#F39AD9&gt;花阵·祈生&lt;/color&gt;</label>
-        <description>需要花形态。施法1.1秒，治愈24格内选区中非敌对血肉目标的伤口与旧伤，并提高心情。
-祝福期间移动速度提高20%，承伤降低10%，免疫增长速度提高70%。</description>
+        <label>花阵·祈生</label>
+        <description>【必须持有花形态】经过一段时间的吟唱后，对指定区域释放后，可以对选区范围内的非敌对的血肉目标进行治愈。本次治愈可以治疗伤口与旧伤，同时提升目标的心情和为其增加祝福。&#10;【祝福】移动速度提升20%，承伤系数降低10%，免疫增长速度提升70%。&#10;&#10;阵法一道是霓羽不擅长的，但是有友人深研此道，加之以【生命法则】的力量，阵法可以对目标进行治愈。这样一来，作为霁储量最多的米莉拉，霓羽就可以在征战中带回更多的族人......</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -196,8 +193,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Flower_ToxinGarden</defName>
-        <label>&lt;color=#D786E8&gt;花阵·瘴庭&lt;/color&gt;</label>
-        <description>以花形态展开毒庭，使范围内敌人食物中毒，并有10%概率使其狂暴。</description>
+        <label>花阵·瘴庭</label>
+        <description>【必须持有花形态】经过一段时间的吟唱后，对指定区域释放后，可以使得选取范围内的敌人陷入食物中毒，并且有10%的概率使其陷入狂暴。&#10;&#10;米莉拉制作的食物向来是禁品，又或者是毒药。名义上是阵法，加之以【时间法则】为调剂，在期间对每个敌人喂上一口”超级大厨“的得意之作。希望他们身体健康。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -241,8 +238,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_Skyfall</defName>
-        <label>&lt;color=#8BD5FF&gt;剑势·天坠&lt;/color&gt;</label>
-        <description>需要剑形态。施法1秒，跃向35格内指定位置，对落点周围敌人造成无视护甲伤害，并使其承伤提高25%。</description>
+        <label>剑势·天坠</label>
+        <description>【必须持有剑形态】经过一段时间的吟唱后，对指定区域释放后，可以使得选取范围内的敌人受到一定的无视护甲的伤害，且获得承伤系数+25%的易伤状态。&#10;&#10;霓羽向师傅学来的剑式三，高速的俯冲可以对敌人造成强烈的威慑的同时，也可以对大范围的敌人造成影响。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconPath>
 
         <category>MX_NeiyuSkill</category>
@@ -315,8 +312,8 @@
 
     <AbilityDef>
         <defName>MX_Neiyu_Sword_ExecuteHead</defName>
-        <label>&lt;color=#C7A2F8&gt;剑势·断首&lt;/color&gt;</label>
-        <description>以剑形态后撤2格后突进，斩去目标头部；没有可移除头部时，造成75点无视护甲伤害。</description>
+        <label>剑势·断首</label>
+        <description>【必须持有剑形态】以剑形态对目标经过一段时间的蓄力后，冲刺到目标身侧斩去对方头部；当敌人不存在头部的时候，则造成大量的无视护甲伤害&#10;&#10;霓羽向师傅学来的剑式一，是师傅的成名之剑招。将锋芒隐没于剑中，一击制敌。在霓羽掌握了【空间法则】后，此剑的威力可以直接斩开空间直取首级。</description>
         <iconPath>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconPath>
 
         <category>MX_NeiyuSkill</category>

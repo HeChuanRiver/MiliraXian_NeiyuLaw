@@ -39,7 +39,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             if (pawn.Faction != Faction.OfPlayer || !pawn.IsColonistPlayerControlled) return "加入殖民地后才能修行。";
             if (!pawn.Spawned || pawn.Map == null) return "返回地图后才能修行。";
             if (pawn.Downed || pawn.InMentalState || pawn.Drafted) return "需要清醒、未征召，且不处于精神崩溃状态。";
-            if (NeiyuPowerBalance.PassivesDisabled) return "观赏模式封印了力量，修行进度仍会保留。";
+            if (NeiyuPowerBalance.PassivesDisabled) return "MX_Cultivation_DecorativeBlocked".Translate().ToString();
             return null;
         }
 

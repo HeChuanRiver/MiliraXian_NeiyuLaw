@@ -27,7 +27,6 @@
     <position>(140, 580)</position>
     <maxLevel>1</maxLevel>
     <description>花、剑、弓三形态修行由此展开。</description>
-    <story>三道微光交汇于指尖。她要做的，是学会如何让这份力量回应选择。</story>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Emblem</iconActive>
     <initiallyLearned>true</initiallyLearned>
     <levelDescriptions>
@@ -42,8 +41,7 @@
     <effect>SwordDamage</effect>
     <position>(365, 160)</position>
     <maxLevel>2</maxLevel>
-    <description>剑形普通攻击伤害累计 +6%。</description>
-    <story>不是更重的剑，而是让每一次挥刃都更准确。</story>
+    <description>对于剑形态，每一级可以提升3%的攻击伤害加成。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Attack</trial>
     <trialTarget>10</trialTarget>
@@ -70,8 +68,7 @@
     <effect>BowDamage</effect>
     <position>(580, 105)</position>
     <maxLevel>2</maxLevel>
-    <description>弓形普通攻击伤害累计 +4%。</description>
-    <story>羽矢的飞行轨迹，逐渐成为了她能预见的线。</story>
+    <description>对于弓形态，每一级可以提升2%的攻击伤害加成。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Attack</trial>
     <trialTarget>30</trialTarget>
@@ -98,8 +95,7 @@
     <effect>MoveSpeed</effect>
     <position>(580, 248)</position>
     <maxLevel>2</maxLevel>
-    <description>移动速度累计 +0.16 格/秒。</description>
-    <story>脚步与羽翼间，轻盈不再只是天赋。</story>
+    <description>移动速度每一级别可以提升0.08格的移动速度</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Switch</trial>
     <trialTarget>8</trialTarget>
@@ -126,8 +122,7 @@
     <effect>SwordPenetration</effect>
     <position>(810, 105)</position>
     <maxLevel>2</maxLevel>
-    <description>剑形护甲穿透累计 +0.04。</description>
-    <story>不求蛮力，只在最薄的缝隙间落下锋芒。</story>
+    <description>对于剑形态，每一级可以提升0.02的护甲穿透</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Attack</trial>
     <trialTarget>60</trialTarget>
@@ -154,8 +149,7 @@
     <effect>ApparelArmor</effect>
     <position>(810, 248)</position>
     <maxLevel>2</maxLevel>
-    <description>专属衣装锐器护甲累计 +0.06。</description>
-    <story>她把光藏在衣料的纹路里。</story>
+    <description>对于装备而言，每一级可以提升0.03的锐器护甲</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Block</trial>
     <trialTarget>12</trialTarget>
@@ -182,8 +176,7 @@
     <effect>BowCooldown</effect>
     <position>(1045, 105)</position>
     <maxLevel>2</maxLevel>
-    <description>弓形射击冷却累计 -4%。</description>
-    <story>急促的弓弦终于找到了自己的节拍。</story>
+    <description>对于弓形态而言，普攻的射击冷却每级-2%</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Attack</trial>
     <trialTarget>100</trialTarget>
@@ -210,8 +203,7 @@
     <effect>DamageReduction</effect>
     <position>(1045, 248)</position>
     <maxLevel>2</maxLevel>
-    <description>受到伤害系数累计 -3%（乘算）。</description>
-    <story>守住呼吸时，疼痛也会迟到半拍。</story>
+    <description>对于受到的伤害会额外乘算，每一级减少1.5%的伤害</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Block</trial>
     <trialTarget>30</trialTarget>
@@ -238,14 +230,13 @@
     <effect>FormDamage</effect>
     <position>(1275, 160)</position>
     <maxLevel>1</maxLevel>
-    <description>三形态普通攻击伤害 +4%；与本树其他加成乘算，不影响技能伤害。</description>
-    <story>三条不同的路，在心中回归同一段旋律。</story>
+    <description>三形态的普攻伤害增加4%，且与其他加成乘算。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Switch</trial>
     <trialTarget>35</trialTarget>
     <value>0.04</value>
     <levelDescriptions>
-      <li>三形态普通攻击伤害 +4%；与本树其他加成乘算，不影响技能伤害。</li>
+      <li>三形态的普攻伤害增加4%，且与其他加成乘算。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -268,15 +259,14 @@
     <effect>FinalDamage</effect>
     <position>(1500, 160)</position>
     <maxLevel>1</maxLevel>
-    <description>剑、弓普通攻击伤害额外 +3%；本树常驻普攻伤害加成乘算，最多 +15%。</description>
-    <story>剑不再迟疑，弦不再颤动。她已知道何时出手。</story>
+    <description>剑、弓普通攻击伤害额外 +3%</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Wing</iconActive>
     <trial>Kills</trial>
     <trialTarget>20</trialTarget>
     <value>0.03</value>
     <secondary>0.15</secondary>
     <levelDescriptions>
-      <li>剑、弓普通攻击伤害额外 +3%；本树常驻普攻伤害加成乘算，最多 +15%。</li>
+      <li>剑、弓普通攻击伤害额外 +3%</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -296,8 +286,7 @@
     <effect>SwitchTempo</effect>
     <position>(365, 530)</position>
     <maxLevel>1</maxLevel>
-    <description>形态切换后 2 秒内，第一次普通攻击命中返还 0.3 秒攻击间隔；4 秒内最多触发一次。</description>
-    <story>形态交替时留下的那一丝余韵，被她握在了手里。</story>
+    <description>实战换形后 2 秒内，首次普攻命中敌人并造成伤害，缩短 0.3 秒攻击间隔。弓箭命中时，霓羽须仍处于对应武器的普攻冷却中才会扣减剩余时间。触发冷却 4 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Switch</trial>
     <trialTarget>5</trialTarget>
@@ -305,7 +294,7 @@
     <durationTicks>120</durationTicks>
     <cooldownTicks>240</cooldownTicks>
     <levelDescriptions>
-      <li>形态切换后 2 秒内，第一次普通攻击命中返还 0.3 秒攻击间隔；4 秒内最多触发一次。</li>
+      <li>实战换形后 2 秒内，首次普攻命中敌人并造成伤害，缩短 0.3 秒攻击间隔。弓箭命中时，霓羽须仍处于对应武器的普攻冷却中才会扣减剩余时间。触发冷却 4 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -325,8 +314,7 @@
     <effect>DodgeStep</effect>
     <position>(580, 458)</position>
     <maxLevel>1</maxLevel>
-    <description>成功闪避后获得 2 秒移动速度 +8%；触发冷却 8 秒。</description>
-    <story>她向后退去，飞羽却仍停留在原处。</story>
+    <description>成功闪避敌人的近战攻击后，移动速度 +8%，持续 2 秒。触发冷却 8 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Dodge</trial>
     <trialTarget>8</trialTarget>
@@ -334,7 +322,7 @@
     <durationTicks>120</durationTicks>
     <cooldownTicks>480</cooldownTicks>
     <levelDescriptions>
-      <li>成功闪避后获得 2 秒移动速度 +8%；触发冷却 8 秒。</li>
+      <li>成功闪避敌人的近战攻击后，移动速度 +8%，持续 2 秒。触发冷却 8 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -354,8 +342,7 @@
     <effect>QuietShield</effect>
     <position>(580, 604)</position>
     <maxLevel>1</maxLevel>
-    <description>非战斗状态下，护盾低于上限 25% 时每 40 秒恢复 1 层；最多恢复至 25%。</description>
-    <story>残缺的光环在无人看见的时候，缓慢合拢。</story>
+    <description>脱战约 40 秒后，二阶段护盾每 40 秒可额外恢复 1 层，补到当前护盾上限的 25% 为止，层数向下取整。比如上限 24 层时，此效果最多补到 6 层。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Block</trial>
     <trialTarget>14</trialTarget>
@@ -363,7 +350,7 @@
     <secondary>0.25</secondary>
     <cooldownTicks>2400</cooldownTicks>
     <levelDescriptions>
-      <li>非战斗状态下，护盾低于上限 25% 时每 40 秒恢复 1 层；最多恢复至 25%。</li>
+      <li>脱战约 40 秒后，二阶段护盾每 40 秒可额外恢复 1 层，补到当前护盾上限的 25% 为止，层数向下取整。比如上限 24 层时，此效果最多补到 6 层。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -383,8 +370,7 @@
     <effect>DodgeCounter</effect>
     <position>(810, 458)</position>
     <maxLevel>1</maxLevel>
-    <description>成功闪避后的首次剑形普通攻击伤害 +10%；3 秒内有效，冷却 12 秒。</description>
-    <story>有时退后一步，正是为了那一道前进的剑光。</story>
+    <description>成功近战闪避后开启 3 秒反击窗口，窗口内首次命中敌人的剑形普攻伤害 +10%。触发冷却 12 秒，从闪避时开始。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Dodge</trial>
     <trialTarget>20</trialTarget>
@@ -392,7 +378,7 @@
     <durationTicks>180</durationTicks>
     <cooldownTicks>720</cooldownTicks>
     <levelDescriptions>
-      <li>成功闪避后的首次剑形普通攻击伤害 +10%；3 秒内有效，冷却 12 秒。</li>
+      <li>成功近战闪避后开启 3 秒反击窗口，窗口内首次命中敌人的剑形普攻伤害 +10%。触发冷却 12 秒，从闪避时开始。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -412,15 +398,14 @@
     <effect>ShieldMemory</effect>
     <position>(810, 604)</position>
     <maxLevel>1</maxLevel>
-    <description>每 15 秒的一次有效护盾承伤，保留受击前已累计的自然恢复等待时间；不提高护盾上限。</description>
-    <story>不是制造更多光环，而是减少每一环的浪费。</story>
+    <description>二阶段护盾承受敌人攻击后若仍处于二阶段，可保留这次受击前已经累计的自然回层等待时间。触发冷却 15 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Block</trial>
     <trialTarget>30</trialTarget>
     <value>1</value>
     <cooldownTicks>900</cooldownTicks>
     <levelDescriptions>
-      <li>每 15 秒的一次有效护盾承伤，保留受击前已累计的自然恢复等待时间；不提高护盾上限。</li>
+      <li>二阶段护盾承受敌人攻击后若仍处于二阶段，可保留这次受击前已经累计的自然回层等待时间。触发冷却 15 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -440,15 +425,14 @@
     <effect>FlowerSword</effect>
     <position>(1045, 458)</position>
     <maxLevel>1</maxLevel>
-    <description>由花形切至剑形后，首次剑击命中额外回复 1 层护盾；10 秒冷却。</description>
-    <story>花瓣散尽之时，锋刃刚好出鞘。</story>
+    <description>实战中直接从花形切到剑形，首次剑形普攻命中敌人并造成伤害时，给二阶段护盾恢复 1 层。触发冷却 10 秒。再次换形会重新判定这次衔接。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Switch</trial>
     <trialTarget>25</trialTarget>
     <value>1</value>
     <cooldownTicks>600</cooldownTicks>
     <levelDescriptions>
-      <li>由花形切至剑形后，首次剑击命中额外回复 1 层护盾；10 秒冷却。</li>
+      <li>实战中直接从花形切到剑形，首次剑形普攻命中敌人并造成伤害时，给二阶段护盾恢复 1 层。触发冷却 10 秒。再次换形会重新判定这次衔接。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -468,8 +452,7 @@
     <effect>BreakStep</effect>
     <position>(1045, 604)</position>
     <maxLevel>1</maxLevel>
-    <description>护盾被击破时获得 1.5 秒移动速度 +12%；每 45 秒触发一次，不提供无敌。</description>
-    <story>光环破碎不意味着落败，反而指明了退路。</story>
+    <description>护盾被敌人击破时，移动速度 +12%，持续 1.5 秒。触发冷却 45 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Block</trial>
     <trialTarget>65</trialTarget>
@@ -477,7 +460,7 @@
     <durationTicks>90</durationTicks>
     <cooldownTicks>2700</cooldownTicks>
     <levelDescriptions>
-      <li>护盾被击破时获得 1.5 秒移动速度 +12%；每 45 秒触发一次，不提供无敌。</li>
+      <li>护盾被敌人击破时，移动速度 +12%，持续 1.5 秒。触发冷却 45 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -497,14 +480,13 @@
     <effect>SwitchRhythm</effect>
     <position>(1275, 530)</position>
     <maxLevel>1</maxLevel>
-    <description>形态切换触发的本树机制冷却时间 -15%；不影响主动技能冷却。</description>
-    <story>她终于能在不同的节奏中找到相同的起点。</story>
+    <description>三个换形触发效果的冷却缩短 15%。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Switch</trial>
     <trialTarget>50</trialTarget>
     <value>0.15</value>
     <levelDescriptions>
-      <li>形态切换触发的本树机制冷却时间 -15%；不影响主动技能冷却。</li>
+      <li>三个换形触发效果的冷却缩短 15%。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -527,8 +509,7 @@
     <effect>LastFeather</effect>
     <position>(1500, 530)</position>
     <maxLevel>1</maxLevel>
-    <description>每场战斗首次护盾破碎时获得 2 秒受伤系数 -10%；180 秒冷却，不叠加。</description>
-    <story>只要还剩一片羽光，她就依然不会停下。</story>
+    <description>每场战斗第一次被敌人破盾时，若节点冷却已结束，受到的伤害乘以 0.90，持续 2 秒。触发冷却 180 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Halo</iconActive>
     <trial>Block</trial>
     <trialTarget>110</trialTarget>
@@ -536,7 +517,7 @@
     <durationTicks>120</durationTicks>
     <cooldownTicks>10800</cooldownTicks>
     <levelDescriptions>
-      <li>每场战斗首次护盾破碎时获得 2 秒受伤系数 -10%；180 秒冷却，不叠加。</li>
+      <li>每场战斗第一次被敌人破盾时，若节点冷却已结束，受到的伤害乘以 0.90，持续 2 秒。触发冷却 180 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -556,13 +537,12 @@
     <effect>SpellRoot</effect>
     <position>(365, 930)</position>
     <maxLevel>1</maxLevel>
-    <description>开启花阵、剑势与流羽的术式专精。</description>
-    <story>术式并非更多，而是学会如何把每一道法令用在恰当之处。</story>
+    <description>开启花阵、剑势和流羽三条专精路线，是「春息」「回响」「齐发」的共同前置。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Arrow</iconActive>
     <trial>Skill</trial>
     <trialTarget>4</trialTarget>
     <levelDescriptions>
-      <li>开启花阵、剑势与流羽的术式专精。</li>
+      <li>开启花阵、剑势和流羽三条专精路线，是「春息」「回响」「齐发」的共同前置。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -582,14 +562,13 @@
     <effect>BlessRadius</effect>
     <position>(580, 800)</position>
     <maxLevel>1</maxLevel>
-    <description>花阵·祈生作用半径 +0.5 格。</description>
-    <story>春息越过花瓣，轻轻落到更远的肩头。</story>
+    <description>「花阵·祈生」围绕选定落点的作用半径 +0.5 格。基础修行 1／2／3 级分别变为 4.5／5.5／6.5 格。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
     <trial>Heal</trial>
     <trialTarget>10</trialTarget>
     <value>0.5</value>
     <levelDescriptions>
-      <li>花阵·祈生作用半径 +0.5 格。</li>
+      <li>「花阵·祈生」围绕选定落点的作用半径 +0.5 格。基础修行 1／2／3 级分别变为 4.5／5.5／6.5 格。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -609,15 +588,14 @@
     <effect>SkyfallEcho</effect>
     <position>(580, 930)</position>
     <maxLevel>1</maxLevel>
-    <description>剑势·天坠命中后产生一次半径 1.5 格的余波，对敌人造成主体伤害的 20%。</description>
-    <story>剑光落下之后，仍有一声轻而长的鸣响。</story>
+    <description>「剑势·天坠」落地时，以落点为中心追加一次 1.5 格半径的余波，对其中敌人造成主击伤害的 20%。基础修行 1／2／3 级的余波伤害分别为 12／18／24 点，进入目标结算前取该值。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_Skyfall</iconActive>
     <trial>Skill</trial>
     <trialTarget>16</trialTarget>
     <value>0.2</value>
     <secondary>1.5</secondary>
     <levelDescriptions>
-      <li>剑势·天坠命中后产生一次半径 1.5 格的余波，对敌人造成主体伤害的 20%。</li>
+      <li>「剑势·天坠」落地时，以落点为中心追加一次 1.5 格半径的余波，对其中敌人造成主击伤害的 20%。基础修行 1／2／3 级的余波伤害分别为 12／18／24 点，进入目标结算前取该值。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -637,15 +615,14 @@
     <effect>BarrageExtra</effect>
     <position>(580, 1060)</position>
     <maxLevel>1</maxLevel>
-    <description>流羽裂界额外发射 4 支箭；额外箭对同一目标的伤害依次减半，原有箭矢不变。</description>
-    <story>箭矢不必满天，只需要在同一瞬间抵达。</story>
+    <description>「流羽裂界」每轮追加 4 支箭，基础修行 1／2／3 级共发 24／30／36 支。同一轮里，追加箭命中同一敌人时，依次按该箭伤害的 100%／50%／25%／12.5% 结算，按目标各自计数。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
     <trial>Attack</trial>
     <trialTarget>35</trialTarget>
     <value>4</value>
     <secondary>0.5</secondary>
     <levelDescriptions>
-      <li>流羽裂界额外发射 4 支箭；额外箭对同一目标的伤害依次减半，原有箭矢不变。</li>
+      <li>「流羽裂界」每轮追加 4 支箭，基础修行 1／2／3 级共发 24／30／36 支。同一轮里，追加箭命中同一敌人时，依次按该箭伤害的 100%／50%／25%／12.5% 结算，按目标各自计数。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -665,15 +642,14 @@
     <effect>BlessAfterglow</effect>
     <position>(810, 800)</position>
     <maxLevel>1</maxLevel>
-    <description>祈生施放处留下 3 秒恢复区，每秒恢复范围内友方当时剩余伤势的 25%。</description>
-    <story>花落了，却还有一些温柔不肯散去。</story>
+    <description>「祈生」在原作用范围内留下 3 秒恢复区。每秒为当时在区内的非敌对、非机械单位治疗一次，每处伤口恢复该次治疗时剩余伤势的 25%。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_BlessingField</iconActive>
     <trial>Heal</trial>
     <trialTarget>35</trialTarget>
     <value>0.25</value>
     <durationTicks>180</durationTicks>
     <levelDescriptions>
-      <li>祈生施放处留下 3 秒恢复区，每秒恢复范围内友方当时剩余伤势的 25%。</li>
+      <li>「祈生」在原作用范围内留下 3 秒恢复区。每秒为当时在区内的非敌对、非机械单位治疗一次，每处伤口恢复该次治疗时剩余伤势的 25%。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -693,14 +669,13 @@
     <effect>ExecuteFocus</effect>
     <position>(810, 930)</position>
     <maxLevel>1</maxLevel>
-    <description>剑势·断首对已处于架势破坏状态的目标缩短 0.4 秒前摇；不降低处决触发门槛。</description>
-    <story>真正的决断，不需要再多一瞬的犹豫。</story>
+    <description>对已经架势破坏的目标施放「剑势·断首」，施法前摇缩短 0.4 秒。即可以在默认处决释放前使用此技能打断处决而快速使用一次断首。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Sword_ExecuteHead</iconActive>
     <trial>Kills</trial>
     <trialTarget>8</trialTarget>
     <value>0.4</value>
     <levelDescriptions>
-      <li>剑势·断首对已处于架势破坏状态的目标缩短 0.4 秒前摇；不降低处决触发门槛。</li>
+      <li>对已经架势破坏的目标施放「剑势·断首」，施法前摇缩短 0.4 秒。即可以在默认处决释放前使用此技能打断处决而快速使用一次断首。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -720,15 +695,14 @@
     <effect>BarrageGuidance</effect>
     <position>(810, 1060)</position>
     <maxLevel>1</maxLevel>
-    <description>流羽裂界末段 6 支箭在发射时向附近敌人校正，最大偏转 12°。</description>
-    <story>她听见了羽矢落下之前，风替它们说出的方向。</story>
+    <description>整轮箭幕最后 6 支箭发射时，在原方向偏差 12°以内、且在射程内，优先瞄准最靠近原落点的未倒地敌人。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
     <trial>Attack</trial>
     <trialTarget>75</trialTarget>
     <value>12</value>
     <secondary>6</secondary>
     <levelDescriptions>
-      <li>流羽裂界末段 6 支箭在发射时向附近敌人校正，最大偏转 12°。</li>
+      <li>整轮箭幕最后 6 支箭发射时，在原方向偏差 12°以内、且在射程内，优先瞄准最靠近原落点的未倒地敌人。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -748,14 +722,13 @@
     <effect>ToxinAfterglow</effect>
     <position>(1045, 800)</position>
     <maxLevel>1</maxLevel>
-    <description>瘴庭施放处留下 2 秒残留区，仅对新进入的敌人施加一次原有效果。</description>
-    <story>芳香的尽头，也可以是一道温柔却难解的禁令。</story>
+    <description>「花阵·瘴庭」在原范围留下 2 秒残留区。新进入的敌人各触发一次原技能的食物中毒效果和 10% 狂暴判定.</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Flower_ToxinGarden</iconActive>
     <trial>Skill</trial>
     <trialTarget>40</trialTarget>
     <durationTicks>120</durationTicks>
     <levelDescriptions>
-      <li>瘴庭施放处留下 2 秒残留区，仅对新进入的敌人施加一次原有效果。</li>
+      <li>「花阵·瘴庭」在原范围留下 2 秒残留区。新进入的敌人各触发一次原技能的食物中毒效果和 10% 狂暴判定.</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -775,14 +748,13 @@
     <effect>ThunderHaste</effect>
     <position>(1045, 930)</position>
     <maxLevel>1</maxLevel>
-    <description>雷锁印域首次雷击标记延迟 -0.3 秒；连击次数与总伤害不变。</description>
-    <story>云还未散开，细碎的雷纹就已锁定归处。</story>
+    <description>「雷锁印域」标记后，首次落雷提前 0.3 秒，默认等待由 2～3 秒变为 1.7～2.7 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_ThunderMarkedStorm</iconActive>
     <trial>Skill</trial>
     <trialTarget>55</trialTarget>
     <value>0.3</value>
     <levelDescriptions>
-      <li>雷锁印域首次雷击标记延迟 -0.3 秒；连击次数与总伤害不变。</li>
+      <li>「雷锁印域」标记后，首次落雷提前 0.3 秒，默认等待由 2～3 秒变为 1.7～2.7 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -802,15 +774,14 @@
     <effect>BarrageSplash</effect>
     <position>(1045, 1060)</position>
     <maxLevel>1</maxLevel>
-    <description>流羽裂界末段 6 支箭命中时，对半径 1.5 格内其他敌人造成单箭伤害的 15%。</description>
-    <story>飞羽落尽，余下一场细雨般的光。</story>
+    <description>整轮箭幕最后 6 支箭中，若某支箭直接命中敌人且未被护盾挡下，则对命中点 1.5 格内的其他敌人造成该箭伤害的 15%。追加箭先算同目标递减，再以该箭伤害计算溅射。</description>
     <iconActive>MiliraXianNeiyu/UI/MX_Neiyu_Bow_ArrowBarrage</iconActive>
     <trial>Kills</trial>
     <trialTarget>15</trialTarget>
     <value>0.15</value>
     <secondary>1.5</secondary>
     <levelDescriptions>
-      <li>流羽裂界末段 6 支箭命中时，对半径 1.5 格内其他敌人造成单箭伤害的 15%。</li>
+      <li>整轮箭幕最后 6 支箭中，若某支箭直接命中敌人且未被护盾挡下，则对命中点 1.5 格内的其他敌人造成该箭伤害的 15%。追加箭先算同目标递减，再以该箭伤害计算溅射。</li>
     </levelDescriptions>
     <prerequisites>
       <li>
@@ -830,8 +801,7 @@
     <effect>Finale</effect>
     <position>(1300, 930)</position>
     <maxLevel>1</maxLevel>
-    <description>同一场战斗中花、剑、弓各使用过一次主动技能后，下一次武器形态切换获得 3 秒 +12% 移速；60 秒冷却。</description>
-    <story>不是所有法术一起绽放，而是在恰好的一刻，将它们连成一曲。</story>
+    <description>同一场战斗中，花组（祈生或瘴庭）、剑组（天坠或断首）、弓组（流羽裂界或雷锁印域）各施放一次后，下一次换形获得 12% 移速，持续 3 秒。触发冷却 60 秒，学会「羽律互照」后为 51 秒。</description>
     <iconActive>MiliraXianNeiyu/UI/Cultivation/Arrow</iconActive>
     <trial>Skill</trial>
     <trialTarget>100</trialTarget>
@@ -839,7 +809,7 @@
     <durationTicks>180</durationTicks>
     <cooldownTicks>3600</cooldownTicks>
     <levelDescriptions>
-      <li>同一场战斗中花、剑、弓各使用过一次主动技能后，下一次武器形态切换获得 3 秒 +12% 移速；60 秒冷却。</li>
+      <li>同一场战斗中，花组（祈生或瘴庭）、剑组（天坠或断首）、弓组（流羽裂界或雷锁印域）各施放一次后，下一次换形获得 12% 移速，持续 3 秒。触发冷却 60 秒，学会「羽律互照」后为 51 秒。</li>
     </levelDescriptions>
     <prerequisites>
       <li>

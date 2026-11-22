@@ -8,8 +8,8 @@
         <thoughtClass>Thought_Memory</thoughtClass>
         <stages>
             <li>
-                <label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</label>
-                <description>沐浴在&lt;color=#79CBFF&gt;霓羽&lt;/color&gt;的&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;之中。</description>
+                <label>花祝福</label>
+                <description>沐浴在霓羽的花祝福之中。</description>
                 <baseMoodEffect>12</baseMoodEffect>
             </li>
         </stages>
@@ -17,7 +17,7 @@
 
     <HediffDef>
         <defName>MX_Neiyu_FlowerBlessed</defName>
-        <label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</label>
+        <label>花祝福</label>
         <description>祈生祝福提高移动速度、免疫增长速度并降低受到的伤害。</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.96, 0.60, 0.92)</defaultLabelColor>
@@ -28,7 +28,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>&lt;color=#F39AD9&gt;花祝福&lt;/color&gt;</label>
+                <label>花祝福</label>
                 <statFactors>
                     <MoveSpeed>1.20</MoveSpeed>
                     <IncomingDamageFactor>0.90</IncomingDamageFactor>
@@ -46,8 +46,8 @@
 
     <HediffDef>
         <defName>MX_Neiyu_SwordVulnerability</defName>
-        <label>&lt;color=#C7A2F8&gt;剑坠易伤&lt;/color&gt;</label>
-        <description>受到天坠影响，承受的伤害提高25%。</description>
+        <label>剑坠易伤</label>
+        <description>受到天坠影响，承受的伤害提高。</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(0.86, 0.52, 0.88)</defaultLabelColor>
         <isBad>true</isBad>
@@ -57,7 +57,7 @@
         <stages>
             <li>
                 <minSeverity>0</minSeverity>
-                <label>&lt;color=#C7A2F8&gt;易伤&lt;/color&gt;</label>
+                <label>易伤</label>
                 <statFactors>
                     <IncomingDamageFactor>1.25</IncomingDamageFactor>
                 </statFactors>

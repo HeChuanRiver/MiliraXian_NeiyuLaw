@@ -3,20 +3,20 @@
   <JobDef>
     <defName>MX_Neiyu_ExtraNutrition</defName>
     <driverClass>RimWorld.JobDriver_Ingest</driverClass>
-    <reportString>正在额外进食TargetA。</reportString>
+    <reportString>霓羽想额外吃一些TargetA</reportString>
     <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
   </JobDef>
   <JobDef>
     <defName>MX_Neiyu_IdleSleep</defName>
     <driverClass>RimWorld.JobDriver_LayDown</driverClass>
-    <reportString>正在睡觉。</reportString>
+    <reportString>霓羽无事可做，正在偷懒睡懒觉Zzz......</reportString>
     <isIdle>true</isIdle>
     <suspendable>false</suspendable>
   </JobDef>
   <JobDef>
     <defName>MX_Neiyu_RecoverSoul</defName>
     <driverClass>MiliraXian.Characters.Neiyu.JobDriver_NeiyuSoulRecovery</driverClass>
-    <reportString>正在休眠，等待肉体重塑。</reportString>
+    <reportString>霓羽的原肉身破碎，残魂正在休眠，等待肉身重塑。</reportString>
     <casualInterruptible>false</casualInterruptible>
     <playerInterruptible>false</playerInterruptible>
     <suspendable>false</suspendable>

@@ -269,7 +269,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             {
                 float Capacity(int r) => 24 + CultivationService.Nodes.Where(n => n.category == selected.category && n.rank <= r).Sum(n => n.shieldCharges);
                 Line(rows, "常态盾层上限", Capacity(rank), Capacity(target));
-                rows.Add(new() { Label = "虚弱期上限24层。领悟只增加容量，不补充当前盾层或刷新循环。" });
+                rows.Add(new() { Label = "MX_Cultivation_ShieldWeakCap".Translate().ToString() });
                 return rows;
             }
             Dictionary<ThingDef, CultivationEquipmentBonus> Projection(int r)

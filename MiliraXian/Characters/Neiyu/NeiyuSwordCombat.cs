@@ -237,7 +237,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
     public override string GetReport()
     {
         if (IsSingle && SceneTick < 0)
-            return $"正在锁定{Victim?.LabelShortCap}，剩余 {(-SceneTick).TicksToSeconds():0.0} 秒。";
+            return "MX_NL_PostureExecutionLocking".Translate(Victim?.LabelShortCap ?? "", (-SceneTick).TicksToSeconds().ToString("0.0")).ToString();
         return base.GetReport();
     }
 

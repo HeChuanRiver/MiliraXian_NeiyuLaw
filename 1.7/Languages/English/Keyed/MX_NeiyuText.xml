@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_NL_PostureExecutionLocking>Neiyu is locking on to {0}. {1} seconds remaining.</MX_NL_PostureExecutionLocking>
+  <MX_Cultivation_DecorativeBlocked>Cultivation is unavailable in decorative mode.</MX_Cultivation_DecorativeBlocked>
+  <MX_Cultivation_CompleteContents>All nodes</MX_Cultivation_CompleteContents>
+  <MX_Cultivation_PanZoomHint>Drag to pan, scroll to zoom</MX_Cultivation_PanZoomHint>
+  <MX_Cultivation_ShieldWeakCap>Shield cap while weakened: 24 layers.</MX_Cultivation_ShieldWeakCap>
+</LanguageData>

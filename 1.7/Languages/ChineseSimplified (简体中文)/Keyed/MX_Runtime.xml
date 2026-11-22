@@ -66,25 +66,25 @@
   <MX_NL_NeiyuAbilityDecorativeNotice>此技能当前无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>当前为观赏模式，霓羽的护身被动不会生效。</MX_NL_NeiyuPassiveSealedDesc>
-  <MX_NL_NeedFlowerForm>需要装备花形态。</MX_NL_NeedFlowerForm>
-  <MX_NL_NeedSwordForm>需要装备剑形态。</MX_NL_NeedSwordForm>
-  <MX_NL_NeedBowForm>需要装备弓形态。</MX_NL_NeedBowForm>
+  <MX_NL_NeedFlowerForm>【此技能需要装备花形态才可以使用~】</MX_NL_NeedFlowerForm>
+  <MX_NL_NeedSwordForm>【此技能需要装备剑形态才可以使用~】</MX_NL_NeedSwordForm>
+  <MX_NL_NeedBowForm>【此技能需要装备弓形态才可以使用~】</MX_NL_NeedBowForm>
   <MX_NL_ProjectileDefMissing>projectileDef 未配置。</MX_NL_ProjectileDefMissing>
-  <MX_NL_NeedTargetCell>需要选择一个目标地点。</MX_NL_NeedTargetCell>
-  <MX_NL_NoMarkTargetsInRange>范围内没有可标记目标。</MX_NL_NoMarkTargetsInRange>
-  <MX_NL_NoValidAllyInRange>范围内没有有效友方目标。</MX_NL_NoValidAllyInRange>
-  <MX_NL_NoHostileInRange>范围内没有敌对目标。</MX_NL_NoHostileInRange>
-  <MX_NL_SkyfallInProgress>天坠正在进行中。</MX_NL_SkyfallInProgress>
-  <MX_NL_MustTargetPawn>必须选择一个角色作为目标。</MX_NL_MustTargetPawn>
-  <MX_NL_TargetMustBeHostile>目标必须为敌对单位。</MX_NL_TargetMustBeHostile>
-  <MX_NL_FlowerToxinMentalStateReason>霓羽的花瘴使其陷入狂乱。</MX_NL_FlowerToxinMentalStateReason>
-  <MX_NL_RecruitLetterTitle>异界羽影</MX_NL_RecruitLetterTitle>
-  <MX_NL_RecruitLetterText>殖民地附近出现了一道羽状投影。来者自称霓羽，是一位米莉拉在此界的分影。她好奇地打量着四周，笑着询问能否在这里住下。若你愿意接纳她，她便留下；若不愿，她也可以自行散去。</MX_NL_RecruitLetterText>
+  <MX_NL_NeedTargetCell>【此技能需要选择一个目标地点才可释放】</MX_NL_NeedTargetCell>
+  <MX_NL_NoMarkTargetsInRange>【所选区域没有可以标记的目标！请尝试重新释放喔】</MX_NL_NoMarkTargetsInRange>
+  <MX_NL_NoValidAllyInRange>【所选区域没有有效的友方目标！请尝试重新释放喔】</MX_NL_NoValidAllyInRange>
+  <MX_NL_NoHostileInRange>【所选区域没有有效的敌对目标！请尝试重新释放喔】</MX_NL_NoHostileInRange>
+  <MX_NL_SkyfallInProgress>【霓羽正在准备对目标地点释放天坠】</MX_NL_SkyfallInProgress>
+  <MX_NL_MustTargetPawn>【霓羽不能对空气释放此剑式喔】</MX_NL_MustTargetPawn>
+  <MX_NL_TargetMustBeHostile>【霓羽不能对朋友们使用此剑式喔】</MX_NL_TargetMustBeHostile>
+  <MX_NL_FlowerToxinMentalStateReason>【霓羽不知道从哪里找来的米莉拉美食对敌人造成了严重的精神污染，其陷入了狂暴】</MX_NL_FlowerToxinMentalStateReason>
+  <MX_NL_RecruitLetterTitle>无终旅人</MX_NL_RecruitLetterTitle>
+  <MX_NL_RecruitLetterText>殖民地附近出现了一位旅人米莉拉，她拥有着蓝色带有桃红色挑染的头发。头上顶着似乎是她自己点缀上去的花环状态的光环。一身的服饰与大家常见的天空精灵有着明显的差异。她自称自己的名字叫做：霓羽。她说明自己是一个旅人，在四处游荡居住，这次想要在你的殖民地度过一个较长的时间。如果你愿意接纳她的话，霓羽承诺将会一直为你提供超出常人的力量。如果不愿意的话她便会继续寻找下一个聚落，继续不知终点的旅途。</MX_NL_RecruitLetterText>
   <MX_NL_RecruitAccept>接纳霓羽</MX_NL_RecruitAccept>
   <MX_NL_RecruitReject>暂不接纳</MX_NL_RecruitReject>
   <MX_NL_NoPlayerHomeMap>没有可用的玩家基地地图。</MX_NL_NoPlayerHomeMap>
-  <MX_NL_RecruitJoined>霓羽决定在此界停留，并正式加入了你的殖民地。</MX_NL_RecruitJoined>
-  <MX_NL_RecruitDeferred>羽影暂时散去。若缘分未尽，她之后仍可能再次出现。</MX_NL_RecruitDeferred>
+  <MX_NL_RecruitJoined>霓羽向你们的殖民地居民们表达了感谢，她承诺会提供自己的力量来尽自己的力量保护各位。</MX_NL_RecruitJoined>
+  <MX_NL_RecruitDeferred>霓羽向你们的殖民地居民们表达了遗憾，在众位的目光中逐渐离开了殖民地。</MX_NL_RecruitDeferred>
   <MX_NL_WeakBadge>虚</MX_NL_WeakBadge>
   <MX_NL_ShieldStage3BuffStarted>[{0}] 护身进入增益阶段：不再蓄伤、也不再无敌。</MX_NL_ShieldStage3BuffStarted>
   <MX_NL_ShieldStage3Ended>[{0}] 护身第三阶段结束，进入虚弱。</MX_NL_ShieldStage3Ended>

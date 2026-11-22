@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-  <MX_Neiyu_WarpFeather.label>&lt;color=#79CBFF&gt;折躍引羽&lt;/color&gt;</MX_Neiyu_WarpFeather.label>
-  <MX_Neiyu_WarpFeather.description>短暫施法後生成12–24根米莉拉羽毛。冷卻300秒。</MX_Neiyu_WarpFeather.description>
-  <MX_Neiyu_ThunderMarkedStorm.label>&lt;color=#8BD5FF&gt;雷鎖印域&lt;/color&gt;</MX_Neiyu_ThunderMarkedStorm.label>
-  <MX_Neiyu_ThunderMarkedStorm.description>標記半徑3格內的敵人。延遲後每個目標受到3次雷擊，每次造成35點基礎傷害，并附加15點EMP效果。冷卻80秒。</MX_Neiyu_ThunderMarkedStorm.description>
-  <MX_Neiyu_Bow_ArrowBarrage.label>&lt;color=#79CBFF&gt;流羽裂界&lt;/color&gt;</MX_Neiyu_Bow_ArrowBarrage.label>
-  <MX_Neiyu_Bow_ArrowBarrage.description>需要弓形態。蓄力5秒，沿選定方向發射32支箭，每支基礎傷害30點，射程55格。冷卻120秒。</MX_Neiyu_Bow_ArrowBarrage.description>
-  <MX_Neiyu_Flower_BlessingField.label>&lt;color=#F39AD9&gt;花陣·祈生&lt;/color&gt;</MX_Neiyu_Flower_BlessingField.label>
-  <MX_Neiyu_Flower_BlessingField.description>需要花形態。治愈半徑6格內非敵對血肉目標的傷口與舊傷，并提高心情。隨後60秒內移動速度提高20%，承傷降低10%，免疫增長速度提高70%。冷卻90秒。</MX_Neiyu_Flower_BlessingField.description>
-  <MX_Neiyu_Flower_ToxinGarden.label>&lt;color=#D786E8&gt;花陣·瘴庭&lt;/color&gt;</MX_Neiyu_Flower_ToxinGarden.label>
-  <MX_Neiyu_Flower_ToxinGarden.description>需要花形態。使半徑7格內敵人食物中毒，并有10%概率使其狂暴。冷卻120秒。</MX_Neiyu_Flower_ToxinGarden.description>
-  <MX_Neiyu_Sword_Skyfall.label>&lt;color=#8BD5FF&gt;劍勢·天墜&lt;/color&gt;</MX_Neiyu_Sword_Skyfall.label>
-  <MX_Neiyu_Sword_Skyfall.description>需要劍形態。躍起并預警落點，對半徑3格內敵人造成120點無視護甲傷害，隨後25秒內使其承傷提高25%。冷卻150秒。</MX_Neiyu_Sword_Skyfall.description>
-  <MX_Neiyu_Sword_ExecuteHead.label>&lt;color=#C7A2F8&gt;劍勢·斷首&lt;/color&gt;</MX_Neiyu_Sword_ExecuteHead.label>
-  <MX_Neiyu_Sword_ExecuteHead.description>需要劍形態。短暫後撤後沖向目標，斬去頭部。目標沒有頭部時，造成75點無視護甲斬擊傷害。冷卻75秒。</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_WarpFeather.label>折躍引羽</MX_Neiyu_WarpFeather.label>
+  <MX_Neiyu_WarpFeather.description>使用【物質法則】的能力，經過一段時間的吟唱後，在身旁生成12~24根米莉拉羽毛。&#10;當然也有可能是空間法則或其他什麼類似的能力從其他米那裡薅下來的毛。&#10;冷卻時間：300秒。</MX_Neiyu_WarpFeather.description>
+  <MX_Neiyu_ThunderMarkedStorm.label>雷鎖印域</MX_Neiyu_ThunderMarkedStorm.label>
+  <MX_Neiyu_ThunderMarkedStorm.description>使用【靈能法則】的能力，經過一段時間的吟唱後，無視視野可在30格半徑內選定一定範圍的非同派系單位。對其增加標記。&#10;對於擁有標記的目標，將會受到雷擊。雷擊總量固定，標記越多則對單個目標的雷擊次數越少。&#10;雷擊間隔0.75~1.25秒。雷擊單次會造成25點無視護甲的傷害與造成EMP效果。對於可點燃目標則會點燃目標。&#10;&#10;雷霆是大自然的偉力，也可淨化邪祟。霓羽小時候最畏懼打雷，現在則對於此招格外鍾愛。</MX_Neiyu_ThunderMarkedStorm.description>
+  <MX_Neiyu_Bow_ArrowBarrage.label>流羽裂界</MX_Neiyu_Bow_ArrowBarrage.label>
+  <MX_Neiyu_Bow_ArrowBarrage.description>【必須持有弓形態】蓄力一段時間，向指定方向連續釋放箭矢彈幕。箭矢的單支傷害為30點。&#10;&#10;初學弓箭的時候便十分笨拙，嘗試將霽的力量注入其中後陰差陽錯造成了一些失控。但是這招本身也可以作為霓羽傾斜火力的方式。她是這麼說的，根本不會是她其實當時失控了根本停不住箭矢的釋放。</MX_Neiyu_Bow_ArrowBarrage.description>
+  <MX_Neiyu_Flower_BlessingField.label>花陣·祈生</MX_Neiyu_Flower_BlessingField.label>
+  <MX_Neiyu_Flower_BlessingField.description>【必須持有花形態】經過一段時間的吟唱後，對指定區域釋放後，可以對選區範圍內的非敵對的血肉目標進行治癒。本次治癒可以治療傷口與舊傷，同時提升目標的心情和為其增加祝福。&#10;【祝福】移動速度提升20%，承傷係數降低10%，免疫增長速度提升70%。&#10;&#10;陣法一道是霓羽不擅長的，但是有友人深研此道，加之以【生命法則】的力量，陣法可以對目標進行治癒。這樣一來，作為霽儲量最多的米莉拉，霓羽就可以在征戰中帶回更多的族人......</MX_Neiyu_Flower_BlessingField.description>
+  <MX_Neiyu_Flower_ToxinGarden.label>花陣·瘴庭</MX_Neiyu_Flower_ToxinGarden.label>
+  <MX_Neiyu_Flower_ToxinGarden.description>【必須持有花形態】經過一段時間的吟唱後，對指定區域釋放後，可以使得選取範圍內的敵人陷入食物中毒，並且有10%的概率使其陷入狂暴。&#10;&#10;米莉拉制作的食物向來是禁品，又或者是毒藥。名義上是陣法，加之以【時間法則】為調劑，在期間對每個敵人喂上一口”超級大廚“的得意之作。希望他們身體健康。</MX_Neiyu_Flower_ToxinGarden.description>
+  <MX_Neiyu_Sword_Skyfall.label>劍勢·天墜</MX_Neiyu_Sword_Skyfall.label>
+  <MX_Neiyu_Sword_Skyfall.description>【必須持有劍形態】經過一段時間的吟唱後，對指定區域釋放後，可以使得選取範圍內的敵人受到一定的無視護甲的傷害，且獲得承傷係數+25%的易傷狀態。&#10;&#10;霓羽向師傅學來的劍式三，高速的俯衝可以對敵人造成強烈的威懾的同時，也可以對大範圍的敵人造成影響。</MX_Neiyu_Sword_Skyfall.description>
+  <MX_Neiyu_Sword_ExecuteHead.label>劍勢·斷首</MX_Neiyu_Sword_ExecuteHead.label>
+  <MX_Neiyu_Sword_ExecuteHead.description>【必須持有劍形態】以劍形態對目標經過一段時間的蓄力後，衝刺到目標身側斬去對方頭部；當敵人不存在頭部的時候，則造成大量的無視護甲傷害&#10;&#10;霓羽向師傅學來的劍式一，是師傅的成名之劍招。將鋒芒隱沒於劍中，一擊制敵。在霓羽掌握了【空間法則】後，此劍的威力可以直接斬開空間直取首級。</MX_Neiyu_Sword_ExecuteHead.description>
+  <MX_Neiyu_WarpFeather.comps.CompAbilityEffect_NeiyuWarpFeather.noPlacementMessage>【霓羽找不到一個合適的空間來生成白羽，也許需要找到一處合適的區域來釋放這招】</MX_Neiyu_WarpFeather.comps.CompAbilityEffect_NeiyuWarpFeather.noPlacementMessage>
 </LanguageData>

@@ -85,7 +85,7 @@
   <JobDef>
     <defName>MX_NeiyuPostureExecution</defName>
     <driverClass>MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureExecution</driverClass>
-    <reportString>正在斩断TargetA的架势。</reportString>
+    <reportString>霓羽抓住了TargetA的破绽，正在准备斩断TargetA的架势。</reportString>
     <allowOpportunisticPrefix>false</allowOpportunisticPrefix>
     <casualInterruptible>false</casualInterruptible>
     <playerInterruptible>true</playerInterruptible>
