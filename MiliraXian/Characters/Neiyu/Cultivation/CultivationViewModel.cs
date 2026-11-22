@@ -14,7 +14,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
     {
         private const int InventoryStacksPerFrame = 24;
         private const float InventoryRefreshInterval = 2f;
-        private const string InventoryPendingText = "正在统计";
+        private const string InventoryPendingKey = "MX_Cultivation_CountingMaterials";
 
         internal readonly record struct NodeState(int Rank, bool CanLearn, string Status, string Reason, Common.UI.PerkNodeVisual Visual);
         private enum MaterialStatus { Ready, Pending, Missing }
@@ -80,7 +80,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         internal string Investment => Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => State?.Tree.GetNodeLevel(n) ?? 0)
             + " / " + Nodes.Where(n => Shown(n) && !n.initiallyLearned).Sum(n => n.maxLevel);
         internal int? Available(ThingDef def) => byMaterial.TryGetValue(def, out var row) ? row.Count : null;
-        internal string InventoryText(int? count) => count?.ToString() ?? (inventoryMap == null ? "—" : InventoryPendingText);
+        internal string InventoryText(int? count) => count?.ToString() ?? (inventoryMap == null ? "—" : InventoryPendingKey.Translate().ToString());
 
         private void InvalidateInventory()
         {
@@ -173,17 +173,33 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 bool eligible = State.Events.CanUnlock(node, out string reason, checkCosts: false);
                 MaterialStatus materials = eligible ? CheckMaterials(node, rank) : MaterialStatus.Ready;
                 bool can = eligible && materials == MaterialStatus.Ready;
-                string status = rank >= node.maxLevel ? "已满级" : can ? rank > 0 ? "可升级" : "可学习" : "条件未满足";
+                string statusKey = rank >= node.maxLevel ? "MX_Cultivation_Mastered"
+                    : !can ? "MX_Cultivation_RequirementsUnmet"
+                    : rank > 0 ? "MX_Cultivation_UpgradeAvailable" : "MX_Cultivation_Available";
                 if (!eligible && rank < node.maxLevel && node.IsExtension)
-                    status = node.trial != CultivationTrial.None && State.Progress(node.trial) < node.trialTarget ? "待试炼"
-                        : node.prerequisites?.Any(p => State.Tree.GetNodeLevel(p.node) < p.minLevel) == true ? "前置不足" : "暂不可学习";
-                if (materials == MaterialStatus.Pending) { status = InventoryPendingText; reason = "正在统计可用材料。"; }
-                if (materials == MaterialStatus.Missing) { status = "材料不足"; reason = "所需材料尚未备齐。"; }
-                if (NeiyuPowerBalance.PassivesDisabled) { status = "已封印"; reason = "已学等级保留，节点效果暂停。"; }
+                    statusKey = node.trial != CultivationTrial.None && State.Progress(node.trial) < node.trialTarget
+                        ? "MX_Cultivation_TrialRequired"
+                        : node.prerequisites?.Any(p => State.Tree.GetNodeLevel(p.node) < p.minLevel) == true
+                            ? "MX_Cultivation_PrerequisiteRequired" : "MX_Cultivation_CannotLearnYet";
+                if (materials == MaterialStatus.Pending)
+                {
+                    statusKey = InventoryPendingKey;
+                    reason = "MX_Cultivation_CountingMaterialsHint".Translate().ToString();
+                }
+                if (materials == MaterialStatus.Missing)
+                {
+                    statusKey = "MX_Cultivation_MaterialsMissing";
+                    reason = "MX_Cultivation_MaterialsMissingHint".Translate().ToString();
+                }
+                if (NeiyuPowerBalance.PassivesDisabled)
+                {
+                    statusKey = "MX_Cultivation_Sealed";
+                    reason = "MX_Cultivation_SealedHint".Translate().ToString();
+                }
                 var visual = NeiyuPowerBalance.PassivesDisabled ? Common.UI.PerkNodeVisual.Locked
                     : rank >= node.maxLevel ? Common.UI.PerkNodeVisual.Mastered : rank > 0 ? Common.UI.PerkNodeVisual.Learned
                     : can ? Common.UI.PerkNodeVisual.Available : Common.UI.PerkNodeVisual.Locked;
-                States[node] = new(rank, can, status, reason, visual);
+                States[node] = new(rank, can, statusKey.Translate(), reason, visual);
             }
         }
 
@@ -210,7 +226,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             string costs = string.Join(" · ", node.CostsAt(level)?.Select(c => c.thingDef.LabelCap + " × " + c.count) ?? System.Array.Empty<string>());
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(node.LabelCap + "  " + level + " → " + (level + 1) + "\n\n" + costs, () =>
             {
-                if (State.Tree.GetNodeLevel(node) != level) { Result = "节点状态已变化，请重新确认。"; return; }
+                if (State.Tree.GetNodeLevel(node) != level) { Result = "MX_Cultivation_NodeChanged".Translate().ToString(); return; }
                 bool success = CultivationService.TryLearn(Pawn, node, out string message);
                 Result = message;
                 InvalidateInventory();
@@ -228,12 +244,15 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
     internal static class CultivationEffectText
     {
-        private static readonly (string field, string label, string suffix, float scale)[] SkillFields =
+        private static readonly (string field, string labelKey, string formatKey, float scale)[] SkillFields =
         {
-            ("radius", "作用半径", "格", 1f), ("range", "射程", "格", 1f),
-            ("damage", "落地伤害", "", 1f), ("durationTicks", "持续时间", "秒", 1f / 60f),
-            ("shotCount", "箭幕箭数", "支", 1f), ("strikeBudget", "雷击预算", "", 1f),
-            ("cooldownTicks", "冷却", "秒", 1f / 60f)
+            ("radius", "MX_Cultivation_Radius", "MX_Cultivation_Tiles", 1f),
+            ("range", "MX_Cultivation_Range", "MX_Cultivation_Tiles", 1f),
+            ("damage", "MX_Cultivation_LandingDamage", null, 1f),
+            ("durationTicks", "MX_Cultivation_Duration", "MX_Cultivation_Seconds", 1f / 60f),
+            ("shotCount", "MX_Cultivation_ArrowCount", "MX_Cultivation_Arrows", 1f),
+            ("strikeBudget", "MX_Cultivation_StrikeBudget", null, 1f),
+            ("cooldownTicks", "MX_Cultivation_Cooldown", "MX_Cultivation_Seconds", 1f / 60f)
         };
         private static float SkillValue(CultivationAbilityValues v, string field) => v == null ? -1f : field switch
         {
@@ -242,16 +261,17 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         };
         internal static string SkillSummary(CultivationAbilityValues values)
         {
-            if (values == null) return "尚未领悟。";
+            if (values == null) return "MX_Cultivation_UnlearnedHint".Translate().ToString();
             return string.Join("\n", SkillFields.Where(f => SkillValue(values, f.field) >= 0)
-                .Select(f => f.label + "：" + (SkillValue(values, f.field) * f.scale).ToString("0.##") + f.suffix));
+                .Select(f => "MX_Cultivation_StatAndValue".Translate(
+                    f.labelKey.Translate(), FormatValue(SkillValue(values, f.field) * f.scale, f.formatKey))));
         }
         public static List<CultivationEffectRow> Build(Pawn pawn, NeiyuCultivationNodeDef selected)
         {
             List<CultivationEffectRow> rows = new();
             if (selected == null) return rows;
             if (NeiyuPowerBalance.PassivesDisabled)
-            { rows.Add(new() { Label = "力量已封印，已领悟的修行仍会保留。" }); return rows; }
+            { rows.Add(new() { Label = "MX_Cultivation_SealedEffects".Translate().ToString() }); return rows; }
             int rank = CultivationService.Rank(pawn, selected.category, selected.ability);
             int target = Math.Max(rank, selected.rank);
             if (selected.ability != null)
@@ -261,14 +281,20 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 foreach (var field in SkillFields)
                 {
                     float b = SkillValue(after, field.field), a = SkillValue(before, field.field);
-                    if (b >= 0) rows.Add(new() { Label = field.label, Before = a < 0 ? "未领悟" : (a * field.scale).ToString("0.##") + field.suffix, After = (b * field.scale).ToString("0.##") + field.suffix });
+                    if (b < 0) continue;
+                    rows.Add(new()
+                    {
+                        Label = field.labelKey.Translate(),
+                        Before = a < 0 ? "MX_Cultivation_Unlearned".Translate().ToString() : FormatValue(a * field.scale, field.formatKey),
+                        After = FormatValue(b * field.scale, field.formatKey)
+                    });
                 }
                 return rows;
             }
             if (selected.category == CultivationDefOf.MX_Neiyu_Cultivation_Halo)
             {
                 float Capacity(int r) => 24 + CultivationService.Nodes.Where(n => n.category == selected.category && n.rank <= r).Sum(n => n.shieldCharges);
-                Line(rows, "常态盾层上限", Capacity(rank), Capacity(target));
+                Line(rows, "MX_Cultivation_ShieldCap".Translate().ToString(), Capacity(rank), Capacity(target));
                 rows.Add(new() { Label = "MX_Cultivation_ShieldWeakCap".Translate().ToString() });
                 return rows;
             }
@@ -293,8 +319,11 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 rows.Add(new() { Label = def.LabelCap, Heading = true });
                 if (def.tools?.Count > 0)
                 {
-                    Line(rows, "基础伤害", def.tools[0].power + a.MeleeDamage, def.tools[0].power + b.MeleeDamage);
-                    Line(rows, "穿透", (def.tools[0].armorPenetration + a.MeleePenetration) * 100f, (def.tools[0].armorPenetration + b.MeleePenetration) * 100f, "%");
+                    Line(rows, "MX_Cultivation_BaseDamage".Translate(),
+                        def.tools[0].power + a.MeleeDamage, def.tools[0].power + b.MeleeDamage);
+                    Line(rows, "MX_Cultivation_ArmorPenetration".Translate(),
+                        (def.tools[0].armorPenetration + a.MeleePenetration) * 100f,
+                        (def.tools[0].armorPenetration + b.MeleePenetration) * 100f, "MX_Cultivation_Percent");
                 }
                 foreach (var stat in b.Stats.Keys)
                     StatLine(rows, stat, def.statBases.GetStatOffsetFromList(stat) + a.Stats.GetValueOrDefault(stat), def.statBases.GetStatOffsetFromList(stat) + b.Stats[stat], false);
@@ -304,20 +333,33 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
                 {
                     int baselineCount = DefDatabase<ThingDef>.GetNamed("MX_Bullet_BigSplitArrow").GetModExtension<SplitArrowExtension>().splitCount;
                     var shard = DefDatabase<ThingDef>.GetNamed("MX_Bullet_HomingShard").projectile;
-                    Line(rows, "普攻碎矢", baselineCount + a.SplitCount, baselineCount + b.SplitCount, "支");
-                    Line(rows, "每支碎矢伤害", shard.GetDamageAmount(1f, null) + a.ProjectileDamage, shard.GetDamageAmount(1f, null) + b.ProjectileDamage);
-                    Line(rows, "碎矢穿透", (shard.GetArmorPenetration(null) + a.ProjectilePenetration) * 100f, (shard.GetArmorPenetration(null) + b.ProjectilePenetration) * 100f, "%");
+                    Line(rows, "MX_Cultivation_SplitArrows".Translate(),
+                        baselineCount + a.SplitCount, baselineCount + b.SplitCount, "MX_Cultivation_Arrows");
+                    float baseDamage = shard.GetDamageAmount(1f, null);
+                    Line(rows, "MX_Cultivation_SplitArrowDamage".Translate(),
+                        baseDamage + a.ProjectileDamage, baseDamage + b.ProjectileDamage);
+                    float basePenetration = shard.GetArmorPenetration(null);
+                    Line(rows, "MX_Cultivation_SplitArrowPenetration".Translate(),
+                        (basePenetration + a.ProjectilePenetration) * 100f,
+                        (basePenetration + b.ProjectilePenetration) * 100f, "MX_Cultivation_Percent");
                 }
             }
             return rows;
         }
         private static void StatLine(List<CultivationEffectRow> rows, StatDef stat, float a, float b, bool equipped)
         {
-            string label = stat.LabelCap + (stat == StatDefOf.MeleeDodgeChance ? "（原始分值）" : "");
+            string label = stat == StatDefOf.MeleeDodgeChance
+                ? "MX_Cultivation_RawStat".Translate(stat.LabelCap).ToString() : stat.LabelCap.ToString();
             var sense = equipped ? ToStringNumberSense.Offset : ToStringNumberSense.Absolute;
             rows.Add(new() { Label = label, Before = a.ToStringByStyle(stat.ToStringStyleUnfinalized, sense), After = b.ToStringByStyle(stat.ToStringStyleUnfinalized, sense) });
         }
-        private static void Line(List<CultivationEffectRow> rows, string label, float a, float b, string suffix = "") =>
-            rows.Add(new() { Label = label, Before = a.ToString("0.##") + suffix, After = b.ToString("0.##") + suffix });
+        private static void Line(List<CultivationEffectRow> rows, string label, float a, float b, string formatKey = null) =>
+            rows.Add(new() { Label = label, Before = FormatValue(a, formatKey), After = FormatValue(b, formatKey) });
+
+        private static string FormatValue(float value, string formatKey)
+        {
+            string number = value.ToString("0.##");
+            return formatKey == null ? number : formatKey.Translate(number).ToString();
+        }
     }
 }

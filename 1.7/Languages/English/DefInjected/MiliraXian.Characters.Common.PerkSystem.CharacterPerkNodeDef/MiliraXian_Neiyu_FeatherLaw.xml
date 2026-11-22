@@ -1,54 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <MX_Neiyu_FeatherLaw_origin.label>First Feather Law</MX_Neiyu_FeatherLaw_origin.label>
+  <MX_Neiyu_FeatherLaw_origin.description>Cultivation in flower, sword and bow forms begins here.</MX_Neiyu_FeatherLaw_origin.description>
+  <MX_Neiyu_FeatherLaw_origin.levelDescriptions.0>Cultivation in flower, sword and bow forms begins here.</MX_Neiyu_FeatherLaw_origin.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s1.label>Waking Edge</MX_Neiyu_FeatherLaw_s1.label>
   <MX_Neiyu_FeatherLaw_s1.description>Each level increases sword-form attack damage by 3%.</MX_Neiyu_FeatherLaw_s1.description>
+  <MX_Neiyu_FeatherLaw_s1.levelDescriptions.0>Sword-form basic attack damage +3%.</MX_Neiyu_FeatherLaw_s1.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s1.levelDescriptions.1>Sword-form basic attack damage +6% total.</MX_Neiyu_FeatherLaw_s1.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s2.label>Trued String</MX_Neiyu_FeatherLaw_s2.label>
   <MX_Neiyu_FeatherLaw_s2.description>Each level increases bow-form attack damage by 2%.</MX_Neiyu_FeatherLaw_s2.description>
+  <MX_Neiyu_FeatherLaw_s2.levelDescriptions.0>Bow-form basic attack damage +2%.</MX_Neiyu_FeatherLaw_s2.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s2.levelDescriptions.1>Bow-form basic attack damage +4% total.</MX_Neiyu_FeatherLaw_s2.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s3.label>Light Step</MX_Neiyu_FeatherLaw_s3.label>
   <MX_Neiyu_FeatherLaw_s3.description>Each level increases movement speed by 0.08 tiles per second.</MX_Neiyu_FeatherLaw_s3.description>
+  <MX_Neiyu_FeatherLaw_s3.levelDescriptions.0>Move speed +0.08 tiles/s.</MX_Neiyu_FeatherLaw_s3.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s3.levelDescriptions.1>Move speed +0.16 tiles/s total.</MX_Neiyu_FeatherLaw_s3.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s4.label>Gleaming Edge</MX_Neiyu_FeatherLaw_s4.label>
   <MX_Neiyu_FeatherLaw_s4.description>Each level increases sword-form armor penetration by 0.02.</MX_Neiyu_FeatherLaw_s4.description>
+  <MX_Neiyu_FeatherLaw_s4.levelDescriptions.0>Sword-form armor penetration +0.02.</MX_Neiyu_FeatherLaw_s4.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s4.levelDescriptions.1>Sword-form armor penetration +0.04 total.</MX_Neiyu_FeatherLaw_s4.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s5.label>Warding Weave</MX_Neiyu_FeatherLaw_s5.label>
   <MX_Neiyu_FeatherLaw_s5.description>Each level adds 0.03 sharp armor to equipment.</MX_Neiyu_FeatherLaw_s5.description>
+  <MX_Neiyu_FeatherLaw_s5.levelDescriptions.0>Neiyu's unique attire gains +0.03 sharp armor when worn.</MX_Neiyu_FeatherLaw_s5.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s5.levelDescriptions.1>Neiyu's unique attire gains +0.06 sharp armor in total.</MX_Neiyu_FeatherLaw_s5.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s6.label>Quick Nock</MX_Neiyu_FeatherLaw_s6.label>
   <MX_Neiyu_FeatherLaw_s6.description>Each level reduces the cooldown of ordinary bow-form shots by 2%.</MX_Neiyu_FeatherLaw_s6.description>
+  <MX_Neiyu_FeatherLaw_s6.levelDescriptions.0>Bow-form shot cooldown −2%.</MX_Neiyu_FeatherLaw_s6.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s6.levelDescriptions.1>Bow-form shot cooldown −4% total.</MX_Neiyu_FeatherLaw_s6.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s7.label>Calm in Ji</MX_Neiyu_FeatherLaw_s7.label>
   <MX_Neiyu_FeatherLaw_s7.description>Each level reduces incoming damage by 1.5%, multiplicatively.</MX_Neiyu_FeatherLaw_s7.description>
+  <MX_Neiyu_FeatherLaw_s7.levelDescriptions.0>Incoming damage factor −1.5% (multiplicative).</MX_Neiyu_FeatherLaw_s7.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s7.levelDescriptions.1>Incoming damage factor −3% in total (multiplicative).</MX_Neiyu_FeatherLaw_s7.levelDescriptions.1>
+  <MX_Neiyu_FeatherLaw_s8.label>Forms in Tune</MX_Neiyu_FeatherLaw_s8.label>
   <MX_Neiyu_FeatherLaw_s8.description>Ordinary attack damage in all three forms increases by 4%, multiplicative with other bonuses.</MX_Neiyu_FeatherLaw_s8.description>
   <MX_Neiyu_FeatherLaw_s8.levelDescriptions.0>Ordinary attack damage in all three forms increases by 4%, multiplicative with other bonuses.</MX_Neiyu_FeatherLaw_s8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_s9.label>Set in Light</MX_Neiyu_FeatherLaw_s9.label>
   <MX_Neiyu_FeatherLaw_s9.description>Ordinary sword and bow attacks deal an additional 3% damage.</MX_Neiyu_FeatherLaw_s9.description>
   <MX_Neiyu_FeatherLaw_s9.levelDescriptions.0>Ordinary sword and bow attacks deal an additional 3% damage.</MX_Neiyu_FeatherLaw_s9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m1.label>Form Afterglow</MX_Neiyu_FeatherLaw_m1.label>
   <MX_Neiyu_FeatherLaw_m1.description>Within 2 seconds of switching forms in combat, the first ordinary attack to hit and damage an enemy reduces the attack interval by 0.3 seconds. When a bow shot hits, Neiyu must still be on that weapon's attack cooldown to reduce the time remaining. Trigger cooldown: 4 seconds.</MX_Neiyu_FeatherLaw_m1.description>
   <MX_Neiyu_FeatherLaw_m1.levelDescriptions.0>Within 2 seconds of switching forms in combat, the first ordinary attack to hit and damage an enemy reduces the attack interval by 0.3 seconds. When a bow shot hits, Neiyu must still be on that weapon's attack cooldown to reduce the time remaining. Trigger cooldown: 4 seconds.</MX_Neiyu_FeatherLaw_m1.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m2.label>Featherstep</MX_Neiyu_FeatherLaw_m2.label>
   <MX_Neiyu_FeatherLaw_m2.description>After dodging an enemy melee attack, movement speed increases by 8% for 2 seconds. Trigger cooldown: 8 seconds.</MX_Neiyu_FeatherLaw_m2.description>
   <MX_Neiyu_FeatherLaw_m2.levelDescriptions.0>After dodging an enemy melee attack, movement speed increases by 8% for 2 seconds. Trigger cooldown: 8 seconds.</MX_Neiyu_FeatherLaw_m2.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m3.label>Halo Mending</MX_Neiyu_FeatherLaw_m3.label>
   <MX_Neiyu_FeatherLaw_m3.description>Roughly 40 seconds after leaving combat, the phase-two shield can regain 1 extra layer every 40 seconds, up to 25% of its current cap, rounded down. A cap of 24 layers, for example, allows this effect to restore up to 6 layers.</MX_Neiyu_FeatherLaw_m3.description>
   <MX_Neiyu_FeatherLaw_m3.levelDescriptions.0>Roughly 40 seconds after leaving combat, the phase-two shield can regain 1 extra layer every 40 seconds, up to 25% of its current cap, rounded down. A cap of 24 layers, for example, allows this effect to restore up to 6 layers.</MX_Neiyu_FeatherLaw_m3.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m4.label>Riposte</MX_Neiyu_FeatherLaw_m4.label>
   <MX_Neiyu_FeatherLaw_m4.description>A successful melee dodge opens a 3-second counterattack window. The first ordinary sword-form attack to hit an enemy in that window deals 10% more damage. Trigger cooldown: 12 seconds from the dodge.</MX_Neiyu_FeatherLaw_m4.description>
   <MX_Neiyu_FeatherLaw_m4.levelDescriptions.0>A successful melee dodge opens a 3-second counterattack window. The first ordinary sword-form attack to hit an enemy in that window deals 10% more damage. Trigger cooldown: 12 seconds from the dodge.</MX_Neiyu_FeatherLaw_m4.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m5.label>Halo Memory</MX_Neiyu_FeatherLaw_m5.label>
   <MX_Neiyu_FeatherLaw_m5.description>If an enemy attack hits the shield and it remains in phase two, keep the time already spent waiting for natural shield recovery. Trigger cooldown: 15 seconds.</MX_Neiyu_FeatherLaw_m5.description>
   <MX_Neiyu_FeatherLaw_m5.levelDescriptions.0>If an enemy attack hits the shield and it remains in phase two, keep the time already spent waiting for natural shield recovery. Trigger cooldown: 15 seconds.</MX_Neiyu_FeatherLaw_m5.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m6.label>Flower to Blade</MX_Neiyu_FeatherLaw_m6.label>
   <MX_Neiyu_FeatherLaw_m6.description>Switch directly from flower to sword form in combat. The first ordinary sword attack that hits and damages an enemy restores 1 layer to the phase-two shield. Trigger cooldown: 10 seconds. Switching forms again checks the transition anew.</MX_Neiyu_FeatherLaw_m6.description>
   <MX_Neiyu_FeatherLaw_m6.levelDescriptions.0>Switch directly from flower to sword form in combat. The first ordinary sword attack that hits and damages an enemy restores 1 layer to the phase-two shield. Trigger cooldown: 10 seconds. Switching forms again checks the transition anew.</MX_Neiyu_FeatherLaw_m6.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m7.label>Breakaway</MX_Neiyu_FeatherLaw_m7.label>
   <MX_Neiyu_FeatherLaw_m7.description>When an enemy breaks the shield, movement speed increases by 12% for 1.5 seconds. Trigger cooldown: 45 seconds.</MX_Neiyu_FeatherLaw_m7.description>
   <MX_Neiyu_FeatherLaw_m7.levelDescriptions.0>When an enemy breaks the shield, movement speed increases by 12% for 1.5 seconds. Trigger cooldown: 45 seconds.</MX_Neiyu_FeatherLaw_m7.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m8.label>Feather Law Resonance</MX_Neiyu_FeatherLaw_m8.label>
   <MX_Neiyu_FeatherLaw_m8.description>The cooldowns of the three effects triggered by switching forms are reduced by 15%.</MX_Neiyu_FeatherLaw_m8.description>
   <MX_Neiyu_FeatherLaw_m8.levelDescriptions.0>The cooldowns of the three effects triggered by switching forms are reduced by 15%.</MX_Neiyu_FeatherLaw_m8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_m9.label>Last Feather</MX_Neiyu_FeatherLaw_m9.label>
   <MX_Neiyu_FeatherLaw_m9.description>The first time an enemy breaks the shield in a fight, take 0.90× damage for 2 seconds if this node is ready. Trigger cooldown: 180 seconds.</MX_Neiyu_FeatherLaw_m9.description>
   <MX_Neiyu_FeatherLaw_m9.levelDescriptions.0>The first time an enemy breaks the shield in a fight, take 0.90× damage for 2 seconds if this node is ready. Trigger cooldown: 180 seconds.</MX_Neiyu_FeatherLaw_m9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k1.label>Feather Arts</MX_Neiyu_FeatherLaw_k1.label>
   <MX_Neiyu_FeatherLaw_k1.description>Opens the flower array, sword art and Flowfeather specializations. Required for Spring Breath, Echo and Volley.</MX_Neiyu_FeatherLaw_k1.description>
   <MX_Neiyu_FeatherLaw_k1.levelDescriptions.0>Opens the flower array, sword art and Flowfeather specializations. Required for Spring Breath, Echo and Volley.</MX_Neiyu_FeatherLaw_k1.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k2.label>Spring Breath</MX_Neiyu_FeatherLaw_k2.label>
   <MX_Neiyu_FeatherLaw_k2.description>Flower Array: Prayer of Life gains 0.5 tiles of radius around the chosen point. At foundation ranks 1/2/3, its radius becomes 4.5/5.5/6.5 tiles.</MX_Neiyu_FeatherLaw_k2.description>
   <MX_Neiyu_FeatherLaw_k2.levelDescriptions.0>Flower Array: Prayer of Life gains 0.5 tiles of radius around the chosen point. At foundation ranks 1/2/3, its radius becomes 4.5/5.5/6.5 tiles.</MX_Neiyu_FeatherLaw_k2.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k3.label>Skyfall Echo</MX_Neiyu_FeatherLaw_k3.label>
   <MX_Neiyu_FeatherLaw_k3.description>When Sword Art: Skyfall lands, it sends out a shockwave 1.5 tiles from the landing point. Enemies inside take 20% of the main strike's damage. At foundation ranks 1/2/3, the shockwave deals 12/18/24 damage before target-specific modifiers.</MX_Neiyu_FeatherLaw_k3.description>
   <MX_Neiyu_FeatherLaw_k3.levelDescriptions.0>When Sword Art: Skyfall lands, it sends out a shockwave 1.5 tiles from the landing point. Enemies inside take 20% of the main strike's damage. At foundation ranks 1/2/3, the shockwave deals 12/18/24 damage before target-specific modifiers.</MX_Neiyu_FeatherLaw_k3.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k4.label>Volley</MX_Neiyu_FeatherLaw_k4.label>
   <MX_Neiyu_FeatherLaw_k4.description>Flowfeather Rend fires 4 extra arrows per barrage, for 24/30/36 arrows at foundation ranks 1/2/3. Within a barrage, successive extra arrows hitting the same enemy deal 100%/50%/25%/12.5% damage. The sequence is tracked separately for each target.</MX_Neiyu_FeatherLaw_k4.description>
   <MX_Neiyu_FeatherLaw_k4.levelDescriptions.0>Flowfeather Rend fires 4 extra arrows per barrage, for 24/30/36 arrows at foundation ranks 1/2/3. Within a barrage, successive extra arrows hitting the same enemy deal 100%/50%/25%/12.5% damage. The sequence is tracked separately for each target.</MX_Neiyu_FeatherLaw_k4.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k5.label>Lingering Prayer</MX_Neiyu_FeatherLaw_k5.label>
   <MX_Neiyu_FeatherLaw_k5.description>Prayer of Life leaves a healing field in its original area for 3 seconds. Each second it heals non-hostile, non-mechanical units in the field, restoring 25% of each wound's remaining severity at the time of healing.</MX_Neiyu_FeatherLaw_k5.description>
   <MX_Neiyu_FeatherLaw_k5.levelDescriptions.0>Prayer of Life leaves a healing field in its original area for 3 seconds. Each second it heals non-hostile, non-mechanical units in the field, restoring 25% of each wound's remaining severity at the time of healing.</MX_Neiyu_FeatherLaw_k5.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k6.label>Focused Beheading</MX_Neiyu_FeatherLaw_k6.label>
   <MX_Neiyu_FeatherLaw_k6.description>Against a target whose posture is already broken, Sword Art: Beheading winds up 0.4 seconds faster. Use it before the default execution goes off to interrupt that execution and perform a quick Beheading instead.</MX_Neiyu_FeatherLaw_k6.description>
   <MX_Neiyu_FeatherLaw_k6.levelDescriptions.0>Against a target whose posture is already broken, Sword Art: Beheading winds up 0.4 seconds faster. Use it before the default execution goes off to interrupt that execution and perform a quick Beheading instead.</MX_Neiyu_FeatherLaw_k6.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k7.label>Star-Seeking Arrows</MX_Neiyu_FeatherLaw_k7.label>
   <MX_Neiyu_FeatherLaw_k7.description>The final 6 arrows in the barrage adjust their aim within 12° of the original direction and within range, favoring the standing enemy closest to the original landing point.</MX_Neiyu_FeatherLaw_k7.description>
   <MX_Neiyu_FeatherLaw_k7.levelDescriptions.0>The final 6 arrows in the barrage adjust their aim within 12° of the original direction and within range, favoring the standing enemy closest to the original landing point.</MX_Neiyu_FeatherLaw_k7.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k8.label>Lingering Miasma</MX_Neiyu_FeatherLaw_k8.label>
   <MX_Neiyu_FeatherLaw_k8.description>Flower Array: Miasma Garden lingers in its original area for 2 seconds. Each enemy newly entering the field gets the original food poisoning effect and rolls once for the 10% chance to go berserk.</MX_Neiyu_FeatherLaw_k8.description>
   <MX_Neiyu_FeatherLaw_k8.levelDescriptions.0>Flower Array: Miasma Garden lingers in its original area for 2 seconds. Each enemy newly entering the field gets the original food poisoning effect and rolls once for the 10% chance to go berserk.</MX_Neiyu_FeatherLaw_k8.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k9.label>Hastened Thunder</MX_Neiyu_FeatherLaw_k9.label>
   <MX_Neiyu_FeatherLaw_k9.description>Thunderseal Domain's first strike lands 0.3 seconds sooner after marking, changing the initial wait from 2–3 seconds to 1.7–2.7 seconds.</MX_Neiyu_FeatherLaw_k9.description>
   <MX_Neiyu_FeatherLaw_k9.levelDescriptions.0>Thunderseal Domain's first strike lands 0.3 seconds sooner after marking, changing the initial wait from 2–3 seconds to 1.7–2.7 seconds.</MX_Neiyu_FeatherLaw_k9.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k10.label>Final Rain</MX_Neiyu_FeatherLaw_k10.label>
   <MX_Neiyu_FeatherLaw_k10.description>When one of the final 6 arrows hits an enemy directly without being blocked by a shield, other enemies within 1.5 tiles of the impact take 15% of that arrow's damage. For extra arrows, apply the same-target damage reduction before calculating splash damage.</MX_Neiyu_FeatherLaw_k10.description>
   <MX_Neiyu_FeatherLaw_k10.levelDescriptions.0>When one of the final 6 arrows hits an enemy directly without being blocked by a shield, other enemies within 1.5 tiles of the impact take 15% of that arrow's damage. For extra arrows, apply the same-target damage reduction before calculating splash damage.</MX_Neiyu_FeatherLaw_k10.levelDescriptions.0>
+  <MX_Neiyu_FeatherLaw_k11.label>Feather Finale</MX_Neiyu_FeatherLaw_k11.label>
   <MX_Neiyu_FeatherLaw_k11.description>In one fight, cast an ability from each group: flower (Prayer of Life or Miasma Garden), sword (Skyfall or Beheading) and bow (Flowfeather Rend or Thunderseal Domain). The next form switch then grants 12% movement speed for 3 seconds. Trigger cooldown: 60 seconds, or 51 seconds after learning Feather Law Resonance.</MX_Neiyu_FeatherLaw_k11.description>
   <MX_Neiyu_FeatherLaw_k11.levelDescriptions.0>In one fight, cast an ability from each group: flower (Prayer of Life or Miasma Garden), sword (Skyfall or Beheading) and bow (Flowfeather Rend or Thunderseal Domain). The next form switch then grants 12% movement speed for 3 seconds. Trigger cooldown: 60 seconds, or 51 seconds after learning Feather Law Resonance.</MX_Neiyu_FeatherLaw_k11.levelDescriptions.0>
 </LanguageData>

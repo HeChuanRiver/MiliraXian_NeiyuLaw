@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_SoulRemnant.degreeDatas.0.label>Soul Remnant</MX_Neiyu_SoulRemnant.degreeDatas.0.label>
+  <MX_Neiyu_SoulRemnant.degreeDatas.0.description>After a normal meal, surplus nutrition goes toward rebuilding Neiyu’s body. At 30, 60, 120 and 300 stored nutrition, her carrying capacity, eating speed, healing factor, move speed, pain shock threshold, rest effectiveness and toxic resistance improve.&#10;Turn on Extra Eating to store up to 2 nutrition automatically per day. With manual feeding, the total daily limit is 5 and resets at local midnight.&#10;If Neiyu dies, she returns to her assigned bed or the nearest available bed. If no bed is available, she recovers where she fell. She returns to normal after 12 hours of forced sleep and loses all stored nutrition.</MX_Neiyu_SoulRemnant.degreeDatas.0.description>
+  <MX_Neiyu_IdleSleeper.degreeDatas.0.label>Sleepyhead</MX_Neiyu_IdleSleeper.degreeDatas.0.label>
+  <MX_Neiyu_IdleSleeper.degreeDatas.0.description>When she has nothing to do, Neiyu goes back to bed and stays asleep even when fully rested. She gets up when she finds something to do.</MX_Neiyu_IdleSleeper.degreeDatas.0.description>
+  <MX_Neiyu_Nishang.degreeDatas.0.label>Raiment</MX_Neiyu_Nishang.degreeDatas.0.label>
+  <MX_Neiyu_Nishang.degreeDatas.0.description>Tend quality is fixed at 200%. Damage dealt to Anomaly entities is multiplied by 150%.</MX_Neiyu_Nishang.degreeDatas.0.description>
+</LanguageData>

@@ -24,7 +24,7 @@ internal sealed class CultivationView
         try
         {
             GUI.color = Color.white; Text.Font = GameFont.Small; Text.Anchor = TextAnchor.UpperLeft; Text.WordWrap = true;
-            if (model.State == null) { Theme.Label(rect.ContractedBy(30), "修行状态尚未就绪。", Ink); return false; }
+            if (model.State == null) { Theme.Label(rect.ContractedBy(30), "MX_Cultivation_NotReady".Translate().ToString(), Ink); return false; }
             canvas ??= new(model.Nodes, n => model.Positions[n],
                 n => new PerkCanvasState(model.States[n].Rank, model.State.Tree.EffectiveNodeLevel(n) > 0,
                     n.LabelCap + "  " + model.States[n].Rank + "/" + n.maxLevel + " · " + model.States[n].Status + "\n" + n.EffectText(Math.Max(1, model.States[n].Rank))),
@@ -42,7 +42,7 @@ internal sealed class CultivationView
             Rect graph = new(body.x + side, body.y, body.width - side - (narrow ? 0 : detail + 16), body.height);
             if (narrow && detailOnly)
             {
-                if (Theme.Button(new Rect(body.x, body.y, 100, 30), "返回图谱", quiet: true)) detailOnly = false;
+                if (Theme.Button(new Rect(body.x, body.y, 100, 30), "MX_Cultivation_BackToTree".Translate().ToString(), quiet: true)) detailOnly = false;
                 Details(new Rect(body.x, body.y + 38, body.width, body.height - 38), model);
             }
             else
@@ -57,7 +57,7 @@ internal sealed class CultivationView
     private bool Header(Rect rect, CultivationViewModel model)
     {
         Theme.Texture(new Rect(rect.x + 22, rect.y + 15, 42, 42), Emblem, Color.white);
-        Theme.Label(new Rect(rect.x + 76, rect.y + 13, 220, 32), "羽律之书", Ink, GameFont.Medium);
+        Theme.Label(new Rect(rect.x + 76, rect.y + 13, 220, 32), "MX_Cultivation_BookTitle".Translate().ToString(), Ink, GameFont.Medium);
         Theme.Label(new Rect(rect.x + 78, rect.y + 46, 220, 22), model.Pawn.LabelShortCap, Muted, GameFont.Tiny);
         if (rect.width > 840)
         {
@@ -68,7 +68,7 @@ internal sealed class CultivationView
                 Theme.Label(new Rect(rect.xMax - 500 + i * 118, rect.y + 25, 116, 25), def.LabelCap + "  " + model.InventoryText(model.Available(def)), i == 0 ? Accent : Muted, GameFont.Tiny);
             }
         }
-        if (Theme.Button(new Rect(rect.xMax - 127, rect.y + 22, 68, 32), "试炼", quiet: true))
+        if (Theme.Button(new Rect(rect.xMax - 127, rect.y + 22, 68, 32), "MX_Cultivation_Trials".Translate().ToString(), quiet: true))
             Find.WindowStack.Add(new Dialog_NeiyuCultivationTrials(model.State));
         bool close = Theme.Button(new Rect(rect.xMax - 47, rect.y + 22, 28, 32), "×", quiet: true);
         Widgets.DrawLine(new(rect.x + 20, rect.yMax), new(rect.xMax - 20, rect.yMax), Rule, .8f);
@@ -82,7 +82,7 @@ internal sealed class CultivationView
     }
     private void Sidebar(Rect rect, CultivationViewModel model)
     {
-        Theme.Label(new Rect(rect.x + 10, rect.y + 10, 140, 24), "修行之路", Muted, GameFont.Tiny);
+        Theme.Label(new Rect(rect.x + 10, rect.y + 10, 140, 24), "MX_Cultivation_Path".Translate().ToString(), Muted, GameFont.Tiny);
         float y = rect.y + 45;
         if (Theme.Button(new Rect(rect.x, y, 144, 42), CompleteContents, !model.Foundation && model.Category == null)) Choose(model, null);
         y += 52;
@@ -93,9 +93,9 @@ internal sealed class CultivationView
         }
         y += 15;
         Widgets.DrawLine(new(rect.x + 12, y), new(rect.x + 134, y), Rule, .6f); y += 16;
-        if (Theme.Button(new Rect(rect.x, y, 144, 42), model.Foundation ? "基础 · " + model.Category.LabelCap : "基础修行", model.Foundation, quiet: true)) FoundationMenu(model);
+        if (Theme.Button(new Rect(rect.x, y, 144, 42), model.Foundation ? "MX_Cultivation_FoundationBranch".Translate(model.Category.LabelCap).ToString() : "MX_Cultivation_Foundation".Translate().ToString(), model.Foundation, quiet: true)) FoundationMenu(model);
         y += 80;
-        Theme.Label(new Rect(rect.x + 12, y, 132, 24), "已投入", Muted, GameFont.Tiny);
+        Theme.Label(new Rect(rect.x + 12, y, 132, 24), "MX_Cultivation_Invested".Translate().ToString(), Muted, GameFont.Tiny);
         Theme.Label(new Rect(rect.x + 12, y + 28, 132, 32), model.Investment, Ink, GameFont.Medium);
         Widgets.DrawLine(new(rect.xMax - 5, rect.y + 5), new(rect.xMax - 5, rect.yMax - 5), Rule, .5f);
     }
@@ -107,15 +107,15 @@ internal sealed class CultivationView
         try
         {
             float toolbar = compact ? 40 : 0;
-            if (compact && Theme.Button(new Rect(8, 0, 150, 32), model.Foundation ? "基础 · " + model.Category.LabelCap : model.Category?.LabelCap ?? CompleteContents, quiet: true))
+            if (compact && Theme.Button(new Rect(8, 0, 150, 32), model.Foundation ? "MX_Cultivation_FoundationBranch".Translate(model.Category.LabelCap).ToString() : model.Category?.LabelCap ?? CompleteContents, quiet: true))
             {
                 List<FloatMenuOption> options = new() { new(CompleteContents, () => Choose(model, null)) };
                 foreach (var c in model.Categories) options.Add(new(c.LabelCap, () => Choose(model, c)));
-                foreach (var c in model.Foundations) options.Add(new("基础 · " + c.LabelCap, () => Choose(model, c, true)));
+                foreach (var c in model.Foundations) options.Add(new("MX_Cultivation_FoundationBranch".Translate(c.LabelCap).ToString(), () => Choose(model, c, true)));
                 Find.WindowStack.Add(new FloatMenu(options));
             }
-            if (compact) Theme.Label(new Rect(175, 6, rect.width - 190, 24), "已投入  " + model.Investment, Muted, GameFont.Tiny);
-            Theme.Label(new Rect(12, toolbar + 3, 46, 25), "查找", Muted, GameFont.Tiny);
+            if (compact) Theme.Label(new Rect(175, 6, rect.width - 190, 24), "MX_Cultivation_Invested".Translate() + "  " + model.Investment, Muted, GameFont.Tiny);
+            Theme.Label(new Rect(12, toolbar + 3, 46, 25), "MX_Cultivation_Search".Translate().ToString(), Muted, GameFont.Tiny);
             string entered = Widgets.TextField(new Rect(58, toolbar, Mathf.Max(70, rect.width - 70), 27), search);
             if (entered != search)
             {
@@ -134,7 +134,10 @@ internal sealed class CultivationView
                 if (clicked != null) { model.Select(clicked); if (narrow) detailOnly = true; }
             }
             finally { GUI.EndGroup(); }
-            string[] labels = { "未解锁", "可学习", "已领悟", "已满级" };
+            string[] labels =
+            {
+                "MX_Cultivation_Locked".Translate().ToString(), "MX_Cultivation_Available".Translate().ToString(), "MX_Cultivation_Learned".Translate().ToString(), "MX_Cultivation_Mastered".Translate().ToString()
+            };
             float slot = Mathf.Min(92, (rect.width - 20) / 4);
             for (int i = 0; i < 4; i++)
             {
@@ -143,7 +146,7 @@ internal sealed class CultivationView
             }
             Theme.Label(new Rect(10, rect.height - 28, rect.width - 155, 23), "MX_Cultivation_PanZoomHint".Translate().ToString(), Muted, GameFont.Tiny);
             if (Theme.Button(new Rect(rect.width - 139, rect.height - 30, 32, 27), "−", quiet: true)) canvas.ZoomAt(.83f, canvas.Size * .5f);
-            if (Theme.Button(new Rect(rect.width - 103, rect.height - 30, 62, 27), "适应", quiet: true)) canvas.Fit(model.Nodes.Where(model.InBranch));
+            if (Theme.Button(new Rect(rect.width - 103, rect.height - 30, 62, 27), "MX_Cultivation_Fit".Translate().ToString(), quiet: true)) canvas.Fit(model.Nodes.Where(model.InBranch));
             if (Theme.Button(new Rect(rect.width - 37, rect.height - 30, 29, 27), "+", quiet: true)) canvas.ZoomAt(1.2f, canvas.Size * .5f);
         }
         finally { GUI.EndGroup(); }
@@ -159,25 +162,27 @@ internal sealed class CultivationView
         try
         {
             float y = 0, width = content.width;
-            Theme.TextBlock(width, ref y, (node.IsExtension ? "" : "基础修行 · ") + node.category.LabelCap, Muted, GameFont.Tiny);
+            Theme.TextBlock(width, ref y, node.IsExtension ? node.category.LabelCap.ToString() : "MX_Cultivation_FoundationCategory".Translate(node.category.LabelCap).ToString(), Muted, GameFont.Tiny);
             y += 5;
             Theme.Texture(new Rect(0, y, 48, 48), Icon(node), Color.white);
             float titleHeight = Theme.Height(node.LabelCap, width - 60, GameFont.Medium);
             Theme.Label(new Rect(60, y, width - 60, titleHeight), node.LabelCap, Ink, GameFont.Medium);
-            Theme.Label(new Rect(60, y + titleHeight + 3, width - 60, 24), "等级  " + state.Rank + " / " + node.maxLevel, Muted, GameFont.Tiny);
+            Theme.Label(new Rect(60, y + titleHeight + 3, width - 60, 24), "MX_Cultivation_Rank".Translate(state.Rank, node.maxLevel).ToString(), Muted, GameFont.Tiny);
             y += Mathf.Max(58, titleHeight + 33) + 14;
             Theme.Symbol(new Rect(0, y + 5, 14, 14), state.Visual, state.CanLearn ? Accent : Pink);
             Theme.Label(new Rect(23, y, width - 23, 26), state.Status, state.CanLearn ? Accent : Ink); y += 32;
             if (!string.IsNullOrEmpty(model.Result)) Theme.TextBlock(width, ref y, model.Result, Accent, GameFont.Tiny);
             else if (!state.CanLearn && state.Rank < node.maxLevel && !string.IsNullOrEmpty(state.Reason)) Theme.TextBlock(width, ref y, state.Reason, Muted, GameFont.Tiny);
             Divider(width, ref y);
-            Theme.TextBlock(width, ref y, "节点效果", Muted, GameFont.Tiny);
+            Theme.TextBlock(width, ref y, "MX_Cultivation_Effects".Translate().ToString(), Muted, GameFont.Tiny);
             if (node.IsExtension)
             {
                 if (node.maxLevel > 1 && state.Rank > 0 && state.Rank < node.maxLevel)
-                    Theme.TextBlock(width, ref y, "当前  " + node.EffectText(state.Rank), Ink);
-                Theme.TextBlock(width, ref y, (node.maxLevel > 1 && state.Rank < node.maxLevel ? "下一级  " : "")
-                    + node.EffectText(Math.Min(node.maxLevel, state.Rank + 1)), Ink);
+                    Theme.TextBlock(width, ref y, "MX_Cultivation_CurrentEffect".Translate(node.EffectText(state.Rank)).ToString(), Ink);
+                string nextEffect = node.EffectText(Math.Min(node.maxLevel, state.Rank + 1));
+                if (node.maxLevel > 1 && state.Rank < node.maxLevel)
+                    nextEffect = "MX_Cultivation_NextEffect".Translate(nextEffect).ToString();
+                Theme.TextBlock(width, ref y, nextEffect, Ink);
             }
             else
             {
@@ -211,7 +216,9 @@ internal sealed class CultivationView
         }
         finally { Widgets.EndScrollView(); }
         Rect button = new(rect.x + 22, rect.yMax - 64, rect.width - 44, 42);
-        if (Theme.Button(button, state.Rank >= node.maxLevel ? "已掌握" : state.Rank > 0 ? "升级节点" : "领悟节点", state.CanLearn, state.CanLearn)) model.ConfirmLearn();
+        string actionKey = state.Rank >= node.maxLevel ? "MX_Cultivation_AlreadyMastered"
+            : state.Rank > 0 ? "MX_Cultivation_Upgrade" : "MX_Cultivation_Learn";
+        if (Theme.Button(button, actionKey.Translate(), state.CanLearn, state.CanLearn)) model.ConfirmLearn();
         if (!state.CanLearn && !string.IsNullOrEmpty(state.Reason)) TooltipHandler.TipRegion(button, state.Reason);
     }
     private static void Divider(float width, ref float y)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MX_Neiyu_SoulRemnant.degreeDatas.0.label>殘魂</MX_Neiyu_SoulRemnant.degreeDatas.0.label>
+  <MX_Neiyu_SoulRemnant.degreeDatas.0.description>正常進食後，多餘營養用於完善肉體。累計儲存30、60、120、300點營養時，逐步提高搬運能力、進食速度、癒合係數、移動速度、疼痛休克閾值、休息效率和毒素抗性。&#10;開啟額外進食後，每天自動儲存至2點營養；手動餵食時，每日總儲存量最多5點，於當地零點重置。&#10;遭遇死亡時回到綁定的床，無綁定床時尋找最近的可用床；沒有可用床則原地恢復。強制睡眠12小時後恢復正常，累計營養清空。</MX_Neiyu_SoulRemnant.degreeDatas.0.description>
+  <MX_Neiyu_IdleSleeper.degreeDatas.0.label>慵懶</MX_Neiyu_IdleSleeper.degreeDatas.0.label>
+  <MX_Neiyu_IdleSleeper.degreeDatas.0.description>無事可做時會回床上睡覺，即使精力充沛也會繼續睡。發現可做的事情後便會起床。</MX_Neiyu_IdleSleeper.degreeDatas.0.description>
+  <MX_Neiyu_Nishang.degreeDatas.0.label>霓裳</MX_Neiyu_Nishang.degreeDatas.0.label>
+  <MX_Neiyu_Nishang.degreeDatas.0.description>治療品質固定為200%，對異象生物造成的傷害×150%。</MX_Neiyu_Nishang.degreeDatas.0.description>
+</LanguageData>

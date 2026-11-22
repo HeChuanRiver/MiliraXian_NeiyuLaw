@@ -57,16 +57,19 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             {
                 text.AppendLine(__instance.def.description);
                 text.AppendLine();
-                text.AppendLine("施法：" + __instance.def.verbProperties.warmupTime.ToString("0.##") + "秒");
+                string warmup = __instance.def.verbProperties.warmupTime.ToString("0.##");
+                text.AppendLine("MX_Cultivation_CastTime".Translate("MX_Cultivation_Seconds".Translate(warmup)));
                 var values = CultivationService.AbilityValues(__instance.pawn, __instance.def);
-                if (__instance.verb.EffectiveRange > 0f && values?.range is not >= 0f)
-                    text.AppendLine("射程：" + __instance.verb.EffectiveRange.ToString("0.##") + "格");
+                float range = __instance.verb.EffectiveRange;
+                if (range > 0f && values?.range is not >= 0f)
+                    text.AppendLine("MX_Cultivation_StatAndValue".Translate(
+                        "MX_Cultivation_Range".Translate(), "MX_Cultivation_Tiles".Translate(range.ToString("0.##"))));
                 foreach (var effect in __instance.EffectComps)
                 {
                     string extra = effect.ExtraTooltipPart();
                     if (!extra.NullOrEmpty()) text.AppendLine(extra);
                 }
-                if (__instance.UsesCharges) text.AppendLine("剩余次数：" + __instance.RemainingCharges);
+                if (__instance.UsesCharges) text.AppendLine("MX_Cultivation_ChargesRemaining".Translate(__instance.RemainingCharges).ToString());
             }
             __result = text.ToString().TrimEnd();
         }

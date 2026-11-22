@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MXNL_NeiyuShield.label>Guarding Ward</MXNL_NeiyuShield.label>
-  <MXNL_NeiyuShield.description>Stage I blocks one attack and enters Stage II; a lethal attack triggers Stage III directly.
-Stage II has 108 charges. Each hit consumes 1 charge per 36 damage, rounded up, with a minimum of 1. Returns to Stage I after 60 seconds without losing charges. Depleting the shield triggers Stage III.
-Stage III grants invulnerability and absorbs damage for 3 hours, then grants buffs based on the amount absorbed for 12 hours. High-absorption bonuses stack up to 5 times. Afterwards, weakness lasts 150 seconds: Stage II has only 24 charges and cannot block when empty or trigger Stage III.</MXNL_NeiyuShield.description>
+  <MXNL_NeiyuShield.description>The first hit is blocked and activates the layered shield. A lethal hit can trigger Stage III immediately. The shield starts with 24 layers and can reach 108 through cultivation.&#10;Hits below 36 damage are blocked without spending a layer. At 36 damage or above, each 36 damage spends one layer, rounded up. First-hit protection returns after 60 seconds without spending a layer.&#10;During Stage III, Neiyu is invulnerable and stores damage for 3 in-game hours. She then gains buffs for 12 in-game hours based on the damage stored, up to 5 stacks. She is weakened for 150 seconds afterward: the shield is capped at 24 layers and Stage III cannot trigger. If a hit needs more layers than remain, it exhausts the shield and is not blocked.</MXNL_NeiyuShield.description>
 </LanguageData>

@@ -3,4 +3,8 @@
   <MX_Neiyu_SoulRemnantState.description>多餘營養逐漸完善肉體。每日最多存儲5點營養。當營養完善的過程中會逐漸提升霓羽的基礎數值。當霓羽死亡時會重置。</MX_Neiyu_SoulRemnantState.description>
   <MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionDescription>允許在日常飲食之外額外進食，每日自動存儲至2點營養。每日總存儲量最多5點。</MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionDescription>
   <MX_Neiyu_SoulRecovery.description>霓羽正在處於肉體重塑期間，持續時間12小時。期間處於無敵與不可移動和操控狀態。</MX_Neiyu_SoulRecovery.description>
+  <MX_Neiyu_SoulRemnantState.label>殘魂化身</MX_Neiyu_SoulRemnantState.label>
+  <MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionLabel>額外進食</MX_Neiyu_SoulRemnantState.modExtensions.0.extraNutritionLabel>
+  <MX_Neiyu_SoulRemnantState.modExtensions.0.nutritionStatusFormat>累計營養：{0}/{1}&#10;今日儲存：{2}/{3}</MX_Neiyu_SoulRemnantState.modExtensions.0.nutritionStatusFormat>
+  <MX_Neiyu_SoulRecovery.label>殘魂休眠</MX_Neiyu_SoulRecovery.label>
 </LanguageData>

@@ -30,7 +30,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         {
             float value = GetStatOffset(stat);
             if (Mathf.Abs(value) > 0.00001f)
-                builder.AppendLine("修行: " + value.ToStringByStyle(stat.ToStringStyleUnfinalized, ToStringNumberSense.Offset));
+                builder.AppendLine("MX_Cultivation_StatAndValue".Translate("MX_Cultivation_Title".Translate(), value.ToStringByStyle(stat.ToStringStyleUnfinalized, ToStringNumberSense.Offset)).ToString());
         }
         public override void PostExposeData()
         {

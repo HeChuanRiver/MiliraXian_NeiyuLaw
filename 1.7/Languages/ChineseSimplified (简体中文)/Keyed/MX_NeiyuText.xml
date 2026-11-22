@@ -5,4 +5,87 @@
   <MX_Cultivation_CompleteContents>完整内容</MX_Cultivation_CompleteContents>
   <MX_Cultivation_PanZoomHint>拖动平移，滚轮缩放</MX_Cultivation_PanZoomHint>
   <MX_Cultivation_ShieldWeakCap>虚弱期上限24层。</MX_Cultivation_ShieldWeakCap>
+  <MX_Cultivation_Title>修行</MX_Cultivation_Title>
+  <MX_Cultivation_OpenDescription>查看修行分支、所需材料与当前力量。</MX_Cultivation_OpenDescription>
+  <MX_Cultivation_DevCompleteAllLabel>DEV：修行全部修满</MX_Cultivation_DevCompleteAllLabel>
+  <MX_Cultivation_DevCompleteAllDescription>立即领悟全部修行，跳过材料与经历要求。进度保存到当前角色，力量封印仍然生效。</MX_Cultivation_DevCompleteAllDescription>
+  <MX_Cultivation_NotReady>修行状态尚未就绪。</MX_Cultivation_NotReady>
+  <MX_Cultivation_BackToTree>返回图谱</MX_Cultivation_BackToTree>
+  <MX_Cultivation_BookTitle>羽律之书</MX_Cultivation_BookTitle>
+  <MX_Cultivation_Trials>试炼</MX_Cultivation_Trials>
+  <MX_Cultivation_Path>修行之路</MX_Cultivation_Path>
+  <MX_Cultivation_Foundation>基础修行</MX_Cultivation_Foundation>
+  <MX_Cultivation_FoundationBranch>基础 · {0}</MX_Cultivation_FoundationBranch>
+  <MX_Cultivation_FoundationCategory>基础修行 · {0}</MX_Cultivation_FoundationCategory>
+  <MX_Cultivation_Invested>已投入</MX_Cultivation_Invested>
+  <MX_Cultivation_Search>查找</MX_Cultivation_Search>
+  <MX_Cultivation_Locked>未解锁</MX_Cultivation_Locked>
+  <MX_Cultivation_Available>可学习</MX_Cultivation_Available>
+  <MX_Cultivation_Learned>已领悟</MX_Cultivation_Learned>
+  <MX_Cultivation_Mastered>已满级</MX_Cultivation_Mastered>
+  <MX_Cultivation_Fit>适应</MX_Cultivation_Fit>
+  <MX_Cultivation_Rank>等级  {0} / {1}</MX_Cultivation_Rank>
+  <MX_Cultivation_Effects>节点效果</MX_Cultivation_Effects>
+  <MX_Cultivation_CurrentEffect>当前  {0}</MX_Cultivation_CurrentEffect>
+  <MX_Cultivation_NextEffect>下一级  {0}</MX_Cultivation_NextEffect>
+  <MX_Cultivation_AlreadyMastered>已掌握</MX_Cultivation_AlreadyMastered>
+  <MX_Cultivation_Upgrade>升级节点</MX_Cultivation_Upgrade>
+  <MX_Cultivation_Learn>领悟节点</MX_Cultivation_Learn>
+  <MX_Cultivation_TrialAttack>实战普攻命中</MX_Cultivation_TrialAttack>
+  <MX_Cultivation_TrialSwitch>实战换形</MX_Cultivation_TrialSwitch>
+  <MX_Cultivation_TrialBlock>护盾承伤</MX_Cultivation_TrialBlock>
+  <MX_Cultivation_TrialDodge>近战闪避</MX_Cultivation_TrialDodge>
+  <MX_Cultivation_TrialKills>击败敌人</MX_Cultivation_TrialKills>
+  <MX_Cultivation_TrialSkill>实战施法</MX_Cultivation_TrialSkill>
+  <MX_Cultivation_TrialHeal>实战恢复伤势</MX_Cultivation_TrialHeal>
+  <MX_Cultivation_TrialNone>无试炼要求</MX_Cultivation_TrialNone>
+  <MX_Cultivation_TrialProgress>{0}：{1} / {2}</MX_Cultivation_TrialProgress>
+  <MX_Cultivation_TrialLog>羽律试炼</MX_Cultivation_TrialLog>
+  <MX_Cultivation_TrialCombatRules>与敌人交战后记录换形、施法和治疗。连续 10 秒没有交战行为，视为脱战。</MX_Cultivation_TrialCombatRules>
+  <MX_Cultivation_TrialCountingRules>普攻命中、护盾承伤、近战闪避和有效治疗，同一时刻各记录一次。换形每 2 秒最多记录一次。</MX_Cultivation_TrialCountingRules>
+  <MX_Cultivation_Unavailable>角色当前无法修行。</MX_Cultivation_Unavailable>
+  <MX_Cultivation_ColonyRequired>加入殖民地后才能修行。</MX_Cultivation_ColonyRequired>
+  <MX_Cultivation_MapRequired>返回地图后才能修行。</MX_Cultivation_MapRequired>
+  <MX_Cultivation_MustBeReady>需要清醒、未征召，且不处于精神崩溃状态。</MX_Cultivation_MustBeReady>
+  <MX_Cultivation_LearnedNode>已领悟 · {0}</MX_Cultivation_LearnedNode>
+  <MX_Cultivation_DevOnly>仅开发者模式可用。</MX_Cultivation_DevOnly>
+  <MX_Cultivation_DevPrerequisiteMissing>有修行前置缺失，无法修满。</MX_Cultivation_DevPrerequisiteMissing>
+  <MX_Cultivation_DevCompleted>已领悟全部修行。</MX_Cultivation_DevCompleted>
+  <MX_Cultivation_CountingMaterials>正在统计</MX_Cultivation_CountingMaterials>
+  <MX_Cultivation_UpgradeAvailable>可升级</MX_Cultivation_UpgradeAvailable>
+  <MX_Cultivation_RequirementsUnmet>条件未满足</MX_Cultivation_RequirementsUnmet>
+  <MX_Cultivation_TrialRequired>待试炼</MX_Cultivation_TrialRequired>
+  <MX_Cultivation_PrerequisiteRequired>前置不足</MX_Cultivation_PrerequisiteRequired>
+  <MX_Cultivation_CannotLearnYet>暂不可学习</MX_Cultivation_CannotLearnYet>
+  <MX_Cultivation_CountingMaterialsHint>正在统计可用材料。</MX_Cultivation_CountingMaterialsHint>
+  <MX_Cultivation_MaterialsMissing>材料不足</MX_Cultivation_MaterialsMissing>
+  <MX_Cultivation_MaterialsMissingHint>所需材料尚未备齐。</MX_Cultivation_MaterialsMissingHint>
+  <MX_Cultivation_Sealed>已封印</MX_Cultivation_Sealed>
+  <MX_Cultivation_SealedHint>已学等级保留，节点效果暂停。</MX_Cultivation_SealedHint>
+  <MX_Cultivation_NodeChanged>节点状态已变化，请重新确认。</MX_Cultivation_NodeChanged>
+  <MX_Cultivation_Radius>作用半径</MX_Cultivation_Radius>
+  <MX_Cultivation_Range>射程</MX_Cultivation_Range>
+  <MX_Cultivation_LandingDamage>落地伤害</MX_Cultivation_LandingDamage>
+  <MX_Cultivation_Duration>持续时间</MX_Cultivation_Duration>
+  <MX_Cultivation_ArrowCount>箭幕箭数</MX_Cultivation_ArrowCount>
+  <MX_Cultivation_StrikeBudget>雷击预算</MX_Cultivation_StrikeBudget>
+  <MX_Cultivation_Cooldown>冷却</MX_Cultivation_Cooldown>
+  <MX_Cultivation_Tiles>{0}格</MX_Cultivation_Tiles>
+  <MX_Cultivation_Seconds>{0}秒</MX_Cultivation_Seconds>
+  <MX_Cultivation_Arrows>{0}支</MX_Cultivation_Arrows>
+  <MX_Cultivation_StatAndValue>{0}：{1}</MX_Cultivation_StatAndValue>
+  <MX_Cultivation_CastTime>施法：{0}</MX_Cultivation_CastTime>
+  <MX_Cultivation_ChargesRemaining>剩余次数：{0}</MX_Cultivation_ChargesRemaining>
+  <MX_Cultivation_Unlearned>未领悟</MX_Cultivation_Unlearned>
+  <MX_Cultivation_UnlearnedHint>尚未领悟。</MX_Cultivation_UnlearnedHint>
+  <MX_Cultivation_SealedEffects>力量已封印，已领悟的修行仍会保留。</MX_Cultivation_SealedEffects>
+  <MX_Cultivation_ShieldCap>常态盾层上限</MX_Cultivation_ShieldCap>
+  <MX_Cultivation_BaseDamage>基础伤害</MX_Cultivation_BaseDamage>
+  <MX_Cultivation_ArmorPenetration>穿透</MX_Cultivation_ArmorPenetration>
+  <MX_Cultivation_SplitArrows>普攻碎矢</MX_Cultivation_SplitArrows>
+  <MX_Cultivation_SplitArrowDamage>每支碎矢伤害</MX_Cultivation_SplitArrowDamage>
+  <MX_Cultivation_SplitArrowPenetration>碎矢穿透</MX_Cultivation_SplitArrowPenetration>
+  <MX_Cultivation_RawStat>{0}（原始分值）</MX_Cultivation_RawStat>
+  <MX_NeiyuDecorativeAbilitiesSealed>观赏模式下无法使用主动技能。</MX_NeiyuDecorativeAbilitiesSealed>
+  <MX_Cultivation_Percent>{0}%</MX_Cultivation_Percent>
 </LanguageData>

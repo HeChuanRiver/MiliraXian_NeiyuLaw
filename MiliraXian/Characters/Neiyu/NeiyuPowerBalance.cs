@@ -25,9 +25,7 @@ namespace MiliraXian.Characters.Neiyu
         public static bool PassivesDisabled => Profile.Sealed;
         public static int BarrageShotCap => AbilitiesDisabled ? 0 : int.MaxValue;
         public static float HungerFloorPercent => PassivesDisabled ? 0f : 0.20f;
-        public static string AbilitiesDisabledReason => "MX_NeiyuDecorativeAbilitiesSealed".CanTranslate()
-            ? "MX_NeiyuDecorativeAbilitiesSealed".Translate().ToString()
-            : "观赏模式下无法使用主动技能。";
+        public static string AbilitiesDisabledReason => "MX_NeiyuDecorativeAbilitiesSealed".Translate().ToString();
 
         public static void SetDecorative(bool decorative) => Profile.SetDecorative(decorative);
 
@@ -188,17 +186,10 @@ namespace MiliraXian.Characters.Neiyu
             AddThoughtMood(DefDatabase<ThoughtDef>.GetNamedSilentFail("MX_Neiyu_RelaxedNearNeiyu"), 0f);
 
             HediffDef shieldDef = HediffDefNamed("MXNL_NeiyuShield");
-            if (shieldDef != null) shieldDef.description = ShieldDescription();
             Add(shieldDef, () => shieldDef.description, value => shieldDef.description = value,
                 "MX_NL_NeiyuPassiveSealedDesc".Translate().ToString());
 
         }
-
-        private static string ShieldDescription() =>
-            "首击被抵消后展开计数护盾，致命攻击可直接触发三阶。常态护盾初始24层，可修行至108层。\n"
-            + "单次伤害低于36点时不消耗盾层；达到36点后，每36点伤害消耗1层，向上取整。60秒未消耗盾层时恢复首击防护。\n"
-            + "盾层耗尽后进入三阶：先无敌并蓄伤3个游戏小时，再根据蓄伤量获得12个游戏小时的增益，最多叠加5层。\n"
-            + "结束后虚弱150秒，护盾上限24层，无法触发三阶；单次消耗超过剩余盾层时，耗尽盾层且无法抵挡本次伤害。";
 
         private static void AddAbilityCooldown(AbilityDef def, int decorativeTicks)
         {

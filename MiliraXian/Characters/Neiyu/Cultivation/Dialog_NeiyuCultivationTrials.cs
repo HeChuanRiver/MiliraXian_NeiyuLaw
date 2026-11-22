@@ -20,7 +20,7 @@ internal sealed class Dialog_NeiyuCultivationTrials : Window
         GUI.DrawTexture(rect, TreeBackdrop, ScaleMode.ScaleAndCrop);
         Widgets.DrawBoxSolid(rect, new Color(.04f, .08f, .14f, .35f));
         Theme.Frame(rect, Color.white, 28, drawCenter: false);
-        Theme.Label(new Rect(25, 22, rect.width - 80, 36), "羽律试炼", Ink, GameFont.Medium);
+        Theme.Label(new Rect(25, 22, rect.width - 80, 36), "MX_Cultivation_TrialLog".Translate().ToString(), Ink, GameFont.Medium);
         if (Theme.Button(new Rect(rect.width - 49, 22, 25, 28), "×", quiet: true)) Close();
         Rect area = new(26, 80, rect.width - 52, rect.height - 106);
         Rect content = new(0, 0, area.width - 16, Mathf.Max(area.height, height));
@@ -42,8 +42,8 @@ internal sealed class Dialog_NeiyuCultivationTrials : Window
                 Widgets.DrawBoxSolid(new Rect(0, y + 40, (content.width - 28) * Mathf.Clamp01((float)value / Math.Max(1, target)), 2), Accent);
                 y += 73;
             }
-            Theme.TextBlock(content.width, ref y, "与敌人交战后记录换形、施法和治疗。连续 10 秒没有交战行为，视为脱战。", Muted, GameFont.Tiny);
-            Theme.TextBlock(content.width, ref y, "普攻命中、护盾承伤、近战闪避和有效治疗，同一时刻各记录一次。换形每 2 秒最多记录一次。", Muted, GameFont.Tiny);
+            Theme.TextBlock(content.width, ref y, "MX_Cultivation_TrialCombatRules".Translate().ToString(), Muted, GameFont.Tiny);
+            Theme.TextBlock(content.width, ref y, "MX_Cultivation_TrialCountingRules".Translate().ToString(), Muted, GameFont.Tiny);
             height = y + 10;
         }
         finally { Widgets.EndScrollView(); }

@@ -35,10 +35,10 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
 
         public static string Eligibility(Pawn pawn)
         {
-            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead) return "角色当前无法修行。";
-            if (pawn.Faction != Faction.OfPlayer || !pawn.IsColonistPlayerControlled) return "加入殖民地后才能修行。";
-            if (!pawn.Spawned || pawn.Map == null) return "返回地图后才能修行。";
-            if (pawn.Downed || pawn.InMentalState || pawn.Drafted) return "需要清醒、未征召，且不处于精神崩溃状态。";
+            if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Destroyed || pawn.Dead) return "MX_Cultivation_Unavailable".Translate().ToString();
+            if (pawn.Faction != Faction.OfPlayer || !pawn.IsColonistPlayerControlled) return "MX_Cultivation_ColonyRequired".Translate().ToString();
+            if (!pawn.Spawned || pawn.Map == null) return "MX_Cultivation_MapRequired".Translate().ToString();
+            if (pawn.Downed || pawn.InMentalState || pawn.Drafted) return "MX_Cultivation_MustBeReady".Translate().ToString();
             if (NeiyuPowerBalance.PassivesDisabled) return "MX_Cultivation_DecorativeBlocked".Translate().ToString();
             return null;
         }
@@ -46,26 +46,26 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public static string Check(Pawn pawn, NeiyuCultivationNodeDef node)
         {
             var events = State(pawn)?.Events;
-            if (events == null) return "修行状态尚未就绪。";
+            if (events == null) return "MX_Cultivation_NotReady".Translate().ToString();
             return events.CanUnlock(node, out string reason, checkCosts: false) ? null : reason;
         }
         public static bool UsableMaterial(Pawn pawn, Thing thing) => PerkCostUtility.UsableMaterial(pawn, thing);
         public static bool TryLearn(Pawn pawn, NeiyuCultivationNodeDef node, out string message)
         {
             var events = State(pawn)?.Events;
-            if (events == null) { message = "修行状态尚未就绪。"; return false; }
+            if (events == null) { message = "MX_Cultivation_NotReady".Translate().ToString(); return false; }
             if (!events.TryUnlock(node, out message)) return false;
-            message = "已领悟 · " + node.LabelCap;
+            message = "MX_Cultivation_LearnedNode".Translate(node.LabelCap).ToString();
             return true;
         }
 
         public static bool TryCompleteAllForDev(Pawn pawn, out string message)
         {
-            message = "角色当前无法修行。";
-            if (!Prefs.DevMode) { message = "仅开发者模式可用。"; return false; }
+            message = "MX_Cultivation_Unavailable".Translate().ToString();
+            if (!Prefs.DevMode) { message = "MX_Cultivation_DevOnly".Translate().ToString(); return false; }
             if (!NeiyuEquipmentUtility.IsNeiyu(pawn) || pawn.Dead || pawn.Destroyed || pawn.Faction != Faction.OfPlayer) return false;
             var state = State(pawn);
-            if (state == null) { message = "修行状态尚未就绪。"; return false; }
+            if (state == null) { message = "MX_Cultivation_NotReady".Translate().ToString(); return false; }
             bool changed;
             do
             {
@@ -76,8 +76,8 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             } while (changed);
             state.Events.RefreshEffects();
             if (state.Tree.RelevantNodes().Exists(n => !n.displayOnly && state.Tree.GetNodeLevel(n) < n.maxLevel))
-            { message = "有修行前置缺失，无法修满。"; return false; }
-            message = "已领悟全部修行。";
+            { message = "MX_Cultivation_DevPrerequisiteMissing".Translate().ToString(); return false; }
+            message = "MX_Cultivation_DevCompleted".Translate().ToString();
             return true;
         }
 

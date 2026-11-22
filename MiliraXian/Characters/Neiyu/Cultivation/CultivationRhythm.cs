@@ -12,10 +12,10 @@ internal static class CultivationTrials
 {
     internal static string Label(CultivationTrial trial) => trial switch
     {
-        CultivationTrial.Attack => "实战普攻命中", CultivationTrial.Switch => "实战换形",
-        CultivationTrial.Block => "护盾承伤", CultivationTrial.Dodge => "近战闪避",
-        CultivationTrial.Kills => "击败敌人", CultivationTrial.Skill => "实战施法",
-        CultivationTrial.Heal => "实战恢复伤势", _ => "无试炼要求"
+        CultivationTrial.Attack => "MX_Cultivation_TrialAttack".Translate().ToString(), CultivationTrial.Switch => "MX_Cultivation_TrialSwitch".Translate().ToString(),
+        CultivationTrial.Block => "MX_Cultivation_TrialBlock".Translate().ToString(), CultivationTrial.Dodge => "MX_Cultivation_TrialDodge".Translate().ToString(),
+        CultivationTrial.Kills => "MX_Cultivation_TrialKills".Translate().ToString(), CultivationTrial.Skill => "MX_Cultivation_TrialSkill".Translate().ToString(),
+        CultivationTrial.Heal => "MX_Cultivation_TrialHeal".Translate().ToString(), _ => "MX_Cultivation_TrialNone".Translate().ToString()
     };
 }
 

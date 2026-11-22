@@ -56,7 +56,7 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
             NeiyuPowerBalance.PassivesDisabled ? 0 : storedLevel;
         public override string PurchaseBlockedReason(Pawn pawn) => CultivationService.Eligibility(pawn)
             ?? (trial != CultivationTrial.None && (CultivationService.State(pawn)?.Progress(trial) ?? 0) < trialTarget
-                ? CultivationTrials.Label(trial) + "：" + (CultivationService.State(pawn)?.Progress(trial) ?? 0) + " / " + trialTarget : null);
+                ? "MX_Cultivation_TrialProgress".Translate(CultivationTrials.Label(trial), CultivationService.State(pawn)?.Progress(trial) ?? 0, trialTarget).ToString() : null);
 
         public override IEnumerable<string> ConfigErrors()
         {
@@ -152,15 +152,5 @@ namespace MiliraXian.Characters.Neiyu.Cultivation
         public static CharacterPerkCategoryDef MX_Neiyu_Cultivation_Apparel;
         public static CharacterPerkCategoryDef MX_Neiyu_Cultivation_Halo;
         static CultivationDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(CultivationDefOf));
-    }
-
-    internal static class CultivationText
-    {
-        public static string Get(string id, string source)
-        {
-            string key = "MX_Cultivation_" + id;
-            return key.CanTranslate() ? key.Translate().ToString() : source;
-        }
-        public static string Title => Get("Title", "修行");
     }
 }
