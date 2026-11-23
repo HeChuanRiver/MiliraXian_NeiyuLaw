@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe.Things.Weapons;
-using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -41,6 +41,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         private bool visualsSpawned;
         private bool flashSpawned;
         private bool trailSpawned;
+        private VfxEmitterHandle vfxHandle;
 
         private const float EndTail = 0.1f;
         // Sounds, shakes and cuts of an event a load has already passed are skipped.
@@ -379,10 +380,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
             if (!visualsSpawned)
             {
                 visualsSpawned = true;
-                if (ZantetsukenVfxRenderer.Find(map, pawn, id) == null)
-                {
-                    MapComponent_QingheVfx.Register(map, new ZantetsukenVfxRenderer(props, pawn, id, lotusCell, aim, gaeshi, StillOn));
-                }
+                vfxHandle = ZantetsukenEmitter.Spawn(map, props, id, lotusCell, gaeshi);
+            }
+            else if (!vfxHandle.IsNone)
+            {
+                vfxHandle.Host?.Maintain(vfxHandle);
             }
             BladeMotionClip c = Clip;
             QingheBladeTrailExtension ext = pawn.equipment.Primary.def.GetModExtension<QingheBladeTrailExtension>();

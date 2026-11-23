@@ -501,4 +501,91 @@
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
 
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_Zantetsuken</defName>
+    <fadeOutSeconds>0.2</fadeOutSeconds>
+    <requireMaintain>true</requireMaintain>
+    <capacity>99</capacity>
+    <emitterClass>MiliraXian.Characters.QingHe.Abilities.Zantetsuken.ZantetsukenEmitter</emitterClass>
+
+    <!-- 红莲斩铁剑特效：地面红莲与抬升光幕 + 落地/燕回返椭圆冲击环 + 落地闪光 -->
+    <passes>
+      <li>
+        <name>lotus</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_Lotus</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomTint>(1, 0.8, 0.9, 1)</bloomTint>
+        <bloomIntensity>1.6</bloomIntensity>
+        <field>
+          <sizeChannel>lotusQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <bindings>
+            <li><uniform>_Lotus</uniform><vecChannel>lotusParams</vecChannel></li>
+            <li><uniform>_Lotus2</uniform><vecChannel>lotusStyle</vecChannel></li>
+            <li><uniform>_RimWidth</uniform><channel>lotusRimWidth</channel></li>
+            <li><uniform>_Glow</uniform><vecChannel>lotusGlow</vecChannel></li>
+            <li><uniform>_White</uniform><vecChannel>lotusWhite</vecChannel></li>
+            <li><uniform>_Fill</uniform><vecChannel>lotusFill</vecChannel></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
+        <name>rings</name>
+        <renderer>Ribbon</renderer>
+        <texture>MiliraXianQinghe/Effect/SakuraDance/Glow</texture>
+        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomTint>(1, 0.8, 0.9, 1)</bloomTint>
+        <bloomIntensity>1.6</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <ribbon>
+          <width>0.24</width>
+          <useParticleSize>false</useParticleSize>
+          <useParticleColor>true</useParticleColor>
+          <uChannel>u</uChannel>
+          <ribbonIdChannel>ribbonId</ribbonIdChannel>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <bindings>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>4</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </ribbon>
+      </li>
+
+      <li>
+        <name>flash</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/SakuraDance/Glow</texture>
+        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomTint>(1, 0.8, 0.9, 1)</bloomTint>
+        <bloomIntensity>1.6</bloomIntensity>
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <quadSize>(1, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <bindings>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>4</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
 </Defs>

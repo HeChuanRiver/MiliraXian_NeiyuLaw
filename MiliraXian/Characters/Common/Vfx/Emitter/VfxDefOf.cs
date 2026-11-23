@@ -14,5 +14,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public static VfxDef MX_Vfx_BellWave;
 
         public static VfxDef MX_Vfx_FrostRetaliation;
+
+        public static VfxDef MX_Vfx_Zantetsuken;
     }
 }

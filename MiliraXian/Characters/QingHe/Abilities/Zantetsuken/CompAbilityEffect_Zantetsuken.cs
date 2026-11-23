@@ -100,9 +100,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
             {
                 yield return "dashBurst, burstDamage, landDamageDef, gaeshiDamageDef and gaeshiNode must be set";
             }
-            if (visuals.markVfx == null || visuals.gaeshiMarkVfx == null || visuals.splitVfx == null || visuals.bloom == null)
+            if (visuals.markVfx == null || visuals.gaeshiMarkVfx == null || visuals.splitVfx == null)
             {
-                yield return "visuals need markVfx, gaeshiMarkVfx, splitVfx and bloom";
+                yield return "visuals need markVfx, gaeshiMarkVfx and splitVfx";
             }
             if (!(takeoffSeconds < apexSeconds && apexSeconds <= fallSeconds && fallSeconds < landSeconds))
             {
@@ -138,9 +138,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         public QingheImpactVfxProps splitVfx;
         public float splitDelay = 0.12f;
         public float splitForward = 0.85f;
-        public string glowTexPath = "MiliraXianQinghe/Effect/SakuraDance/Glow";
         public Color afterimageTint = new(1f, 0.69f, 0.84f, 1f);
-        public ScreenBloomProperties bloom;
     }
 
     public class CompAbilityEffect_Zantetsuken : CompAbilityEffect
