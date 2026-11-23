@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.CombatStance;
 using RimWorld;
 using Verse;
@@ -16,7 +17,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static JobDef MX_QH_SakuraDance;
         public static JobDef MX_QH_Zantetsuken_Guren;
 
-        public static MiliraXian.Characters.Common.SweepDamage.SweepDamageDef MX_QH_SwordSweep;
+        public static SweepDamageDef MX_QH_SwordSweep;
 
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;

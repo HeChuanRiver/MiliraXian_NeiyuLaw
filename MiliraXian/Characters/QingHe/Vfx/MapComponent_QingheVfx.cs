@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -15,7 +16,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
         void Dispose();
     }
 
-    public sealed class MapComponent_QingheVfx : MapComponent, System.IDisposable
+    public sealed class MapComponent_QingheVfx : MapComponent, IDisposable
     {
         private readonly List<IQingheVfxRenderer> renderers = new();
 
@@ -28,7 +29,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             map.GetComponent<MapComponent_QingheVfx>().renderers.Add(renderer);
         }
 
-        public static T Find<T>(Map map, System.Predicate<T> match) where T : class, IQingheVfxRenderer
+        public static T Find<T>(Map map, Predicate<T> match) where T : class, IQingheVfxRenderer
         {
             foreach (IQingheVfxRenderer r in map.GetComponent<MapComponent_QingheVfx>().renderers)
             {
@@ -94,7 +95,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 {
                     renderers[i].Dispose();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Log.Error("[MiliraXian] Failed to release a Qinghe VFX renderer during map teardown: " + ex);
                 }

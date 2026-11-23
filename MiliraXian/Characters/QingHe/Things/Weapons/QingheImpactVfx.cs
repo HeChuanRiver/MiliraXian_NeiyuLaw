@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
@@ -211,7 +212,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 }
                 map.GetComponent<MapComponent_QingheImpactVfx>()?.Add(props, at, toward);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe impact effect failed: " + ex, 0x51c7a4);
             }
@@ -400,7 +401,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     Draw(additiveMesh, mat, AlphaScale, additive: true, c.bloom);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 if (!warned)
                 {
@@ -749,23 +750,23 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             impacts.Clear();
             if (additiveMesh != null)
             {
-                Object.Destroy(additiveMesh);
+                UnityEngine.Object.Destroy(additiveMesh);
             }
             if (alphaMesh != null)
             {
-                Object.Destroy(alphaMesh);
+                UnityEngine.Object.Destroy(alphaMesh);
             }
             if (petalMesh != null)
             {
-                Object.Destroy(petalMesh);
+                UnityEngine.Object.Destroy(petalMesh);
             }
             if (cutMesh != null)
             {
-                Object.Destroy(cutMesh);
+                UnityEngine.Object.Destroy(cutMesh);
             }
             if (distortMesh != null)
             {
-                Object.Destroy(distortMesh);
+                UnityEngine.Object.Destroy(distortMesh);
             }
         }
     }

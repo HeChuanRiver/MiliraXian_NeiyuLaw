@@ -1,3 +1,4 @@
+using System;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.QingHe.Abilities.SakuraDance;
 using MiliraXian.Characters.QingHe.Defs;
@@ -26,13 +27,13 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         private readonly int kickTick;
         private readonly Vector3 centre;
         private readonly bool gaeshi;
-        private readonly System.Func<bool> stillOn;
+        private readonly Func<bool> stillOn;
         private Mesh lotusMesh;
         private Mesh lineMesh;
         private bool active = true;
 
         public ZantetsukenVfxRenderer(CompProperties_AbilityZantetsuken props, Pawn pawn, int kickTick, IntVec3 lotusCell,
-            Vector3 aim, bool gaeshi, System.Func<bool> stillOn)
+            Vector3 aim, bool gaeshi, Func<bool> stillOn)
         {
             this.props = props;
             vis = props.visuals;
@@ -66,8 +67,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
 
         public void Dispose()
         {
-            Object.Destroy(lotusMesh);
-            Object.Destroy(lineMesh);
+            UnityEngine.Object.Destroy(lotusMesh);
+            UnityEngine.Object.Destroy(lineMesh);
         }
 
         private float BlueK(float t) => gaeshi && t >= props.HoldEnd ? Smooth((t - props.HoldEnd) / vis.blueRamp) : 0f;

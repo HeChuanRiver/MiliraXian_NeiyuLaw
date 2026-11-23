@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Verse;
 
@@ -92,7 +93,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
                 else
                 {
-                    System.Array.Clear(Channels, 0, needed * VfxChannels.Capacity);
+                    Array.Clear(Channels, 0, needed * VfxChannels.Capacity);
                 }
             }
 
@@ -102,7 +103,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             else
             {
-                System.Array.Clear(EmitterChannels, 0, EmitterChannels.Length);
+                Array.Clear(EmitterChannels, 0, EmitterChannels.Length);
             }
 
             if (Vectors == null)
@@ -111,7 +112,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             else
             {
-                System.Array.Clear(Vectors, 0, Vectors.Length);
+                Array.Clear(Vectors, 0, Vectors.Length);
             }
 
             if (Textures == null)
@@ -120,7 +121,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             else
             {
-                System.Array.Clear(Textures, 0, Textures.Length);
+                Array.Clear(Textures, 0, Textures.Length);
             }
 
             // Meshes are destroyed on release, so a reused slot always starts from a fresh array.
@@ -256,7 +257,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             if (Channels != null)
             {
-                System.Array.Clear(Channels, index * VfxChannels.Capacity, VfxChannels.Capacity);
+                Array.Clear(Channels, index * VfxChannels.Capacity, VfxChannels.Capacity);
             }
             return index;
         }
@@ -356,7 +357,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             if (Textures != null)
             {
                 // Drop texture references on release so pooled emitters never pin external RenderTextures.
-                System.Array.Clear(Textures, 0, Textures.Length);
+                Array.Clear(Textures, 0, Textures.Length);
             }
         }
     }

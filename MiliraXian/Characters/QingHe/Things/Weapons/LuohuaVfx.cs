@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.QingHe.Abilities.SakuraDance;
@@ -99,7 +100,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution kill effect failed: " + ex, 0x51c7a8);
                 kills.Clear();

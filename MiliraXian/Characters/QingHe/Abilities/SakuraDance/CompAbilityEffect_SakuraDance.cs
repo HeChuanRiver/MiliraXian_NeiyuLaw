@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     public class CompAbilityEffect_SakuraDance : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(1f, 0.62f, 0.75f, 0.6f);
-        private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
+        private readonly List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilitySakuraDance Props => (CompProperties_AbilitySakuraDance)props;
 

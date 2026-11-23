@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters;
 using System.Linq;
@@ -210,7 +211,7 @@ namespace MiliraXian.Characters.QingHe.Things.Buildings
                         reason = targetReport.failReason;
                     }
 
-                    System.Action action = null;
+                    Action action = null;
                     if (reason.NullOrEmpty())
                     {
                         action = delegate { qixiRitual.ShowRitualBeginWindow(clickedThing, null, interactor); };

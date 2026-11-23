@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -47,7 +48,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal List<VfxPass> Passes { get; }
 
         /// <summary>The class each spawn instantiates, from the def's <c>emitterClass</c>.</summary>
-        internal System.Type EmitterType { get; set; }
+        internal Type EmitterType { get; set; }
 
         /// <summary>
         /// Fills this spec from the def: the default reads the def's authored passes and resolves

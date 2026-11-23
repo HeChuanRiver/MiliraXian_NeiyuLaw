@@ -50,52 +50,58 @@
 
   <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
     <defName>MX_Vfx_RainWallStrands</defName>
-    <!-- 每面墙约 500 根雨丝 + 同样数量的落点水花。 -->
-    <capacity>1024</capacity>
+    <!-- 每面墙约 500 根雨丝 + 同样数量的落点水花 + 4 朵荷花及倒影。 -->
+    <capacity>1040</capacity>
     <emitterClass>MiliraXian.Characters.QingHe.Things.RainWallEmitter</emitterClass>
 
-    <!-- 荷雨：雨丝与它的落点水花由同一个 LCG 循环产出，所以水花永远落在雨丝脚下。 -->
+    <!-- 荷雨全部视觉层：地面水痕、水面折射、落点水花、荷花与倒影、雨幕、雨丝。 -->
     <passes>
       <li>
-        <name>strands</name>
-        <renderer>Streak</renderer>
-        <texture>MiliraXianQinghe/Effect/rain_strand</texture>
-        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <name>ground</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_RainWallGround</shaderDef>
         <layer>0</layer>
         <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
-        <bloomIntensity>0.45</bloomIntensity>
-        <particleGroup>0</particleGroup>
-        <streak>
-          <width>0.018</width>
-          <!-- 尾端 = 头端的 1 - 0.75 -->
-          <tailAlpha>0.25</tailAlpha>
-          <useAltitude>false</useAltitude>
+        <bloomIntensity>0.35</bloomIntensity>
+        <field>
+          <sizeChannel>rainWallQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
           <bindings>
-            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
-            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
-            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Glow</uniform><value>(0.60, 0.95, 0.50, 1)</value></li>
+            <li><uniform>_Axis</uniform><vecChannel>rainWallAxis</vecChannel></li>
+            <li><uniform>_Band</uniform><vecChannel>rainWallBand</vecChannel></li>
+            <li><uniform>_LotusA</uniform><vecChannel>rainWallLotusA</vecChannel></li>
+            <li><uniform>_LotusB</uniform><vecChannel>rainWallLotusB</vecChannel></li>
+            <li><uniform>_LotusC</uniform><vecChannel>rainWallLotusC</vecChannel></li>
+            <li><uniform>_LotusD</uniform><vecChannel>rainWallLotusD</vecChannel></li>
           </bindings>
-        </streak>
+        </field>
       </li>
 
       <li>
-        <name>mist</name>
+        <name>water</name>
         <renderer>Field</renderer>
         <texture>White</texture>
-        <shaderDef>MX_QH_RainWall</shaderDef>
+        <shaderDef>MX_QH_RainWallWater</shaderDef>
         <layer>0</layer>
-        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
-        <bloomIntensity>1.1</bloomIntensity>
         <field>
-          <!-- 四边形覆盖整条带子；半宽随墙的朝向变化，所以由发射器写进通道，渲染器再写进 _FieldSize -->
           <sizeChannel>rainWallQuad</sizeChannel>
           <sizeUniform>_FieldSize</sizeUniform>
-          <extraHeight>3.05</extraHeight>
           <useAltitude>true</useAltitude>
-          <altitude>MoteOverhead</altitude>
+          <altitude>MoteLow</altitude>
+          <altitudeOffset>0.01</altitudeOffset>
           <bindings>
             <li><uniform>_Axis</uniform><vecChannel>rainWallAxis</vecChannel></li>
             <li><uniform>_Band</uniform><vecChannel>rainWallBand</vecChannel></li>
+            <li><uniform>_WindA</uniform><vecChannel>rainWallWindA</vecChannel></li>
+            <li><uniform>_WindB</uniform><vecChannel>rainWallWindB</vecChannel></li>
+            <li><uniform>_WindC</uniform><vecChannel>rainWallWindC</vecChannel></li>
+            <li><uniform>_WindD</uniform><vecChannel>rainWallWindD</vecChannel></li>
+            <li><uniform>_WindE</uniform><vecChannel>rainWallWindE</vecChannel></li>
+            <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
           </bindings>
         </field>
       </li>
@@ -121,6 +127,150 @@
             <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
           </bindings>
         </sprite>
+      </li>
+
+      <li>
+        <name>lotus_bloom_reflection</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/lotus_bloom</texture>
+        <shaderDef>MX_QH_RainWallLotus</shaderDef>
+        <layer>0</layer>
+        <particleGroup>2</particleGroup>
+        <sprite>
+          <quadSize>(2, 1.2242647)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <flipV>false</flipV>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <altitudeOffset>0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(0.94, 1, 1.02, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>0.80</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>0</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+
+      <li>
+        <name>lotus_bloom</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/lotus_bloom</texture>
+        <shaderDef>MX_QH_RainWallLotus</shaderDef>
+        <layer>0</layer>
+        <particleGroup>3</particleGroup>
+        <sprite>
+          <quadSize>(2, 1.2242647)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <flipV>true</flipV>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <altitudeOffset>0.02</altitudeOffset>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(0.94, 1, 1.02, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>0.80</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>0</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+
+      <li>
+        <name>lotus_pad_reflection</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/lotus_pad</texture>
+        <shaderDef>MX_QH_RainWallLotus</shaderDef>
+        <layer>0</layer>
+        <particleGroup>4</particleGroup>
+        <sprite>
+          <quadSize>(2, 1.2386059)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <flipV>false</flipV>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <altitudeOffset>0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(0.94, 1, 1.02, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>0.80</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>0</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+
+      <li>
+        <name>lotus_pad</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/lotus_pad</texture>
+        <shaderDef>MX_QH_RainWallLotus</shaderDef>
+        <layer>0</layer>
+        <particleGroup>5</particleGroup>
+        <sprite>
+          <quadSize>(2, 1.2386059)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <flipV>true</flipV>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <altitudeOffset>0.02</altitudeOffset>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(0.94, 1, 1.02, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>0.80</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>0</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+
+      <li>
+        <name>mist</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_RainWall</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>1.1</bloomIntensity>
+        <field>
+          <!-- 四边形覆盖整条带子；半宽随墙的朝向变化，所以由发射器写进通道，渲染器再写进 _FieldSize -->
+          <sizeChannel>rainWallQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <extraHeight>3.05</extraHeight>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <bindings>
+            <li><uniform>_Axis</uniform><vecChannel>rainWallAxis</vecChannel></li>
+            <li><uniform>_Band</uniform><vecChannel>rainWallBand</vecChannel></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
+        <name>strands</name>
+        <renderer>Streak</renderer>
+        <texture>MiliraXianQinghe/Effect/rain_strand</texture>
+        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>0.45</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <streak>
+          <width>0.018</width>
+          <!-- 尾端 = 头端的 1 - 0.75 -->
+          <tailAlpha>0.25</tailAlpha>
+          <useAltitude>false</useAltitude>
+          <bindings>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </streak>
       </li>
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>

@@ -174,7 +174,7 @@ namespace MiliraXian.Characters.QingHe.Things
             caster = newCaster;
             casterFaction = newCaster?.Faction;
             ticksLeft = duration > 0 ? duration : Props.durationTicks;
-            energy = Props.startingEnergy * MiliraXian.Characters.QingHe.MX_QH_PerkUtility.GetSpellEffectFactor(caster);
+            energy = Props.startingEnergy * MX_QH_PerkUtility.GetSpellEffectFactor(caster);
             ageTicks = 0;
         }
 

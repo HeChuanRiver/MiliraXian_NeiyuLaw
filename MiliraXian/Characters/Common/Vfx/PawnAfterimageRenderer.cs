@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace MiliraXian.Characters.Common.Vfx
     /// Ageing runs in <see cref="MapComponentUpdate"/>, which every map executes, so ghosts
     /// expired even when their map is not the one being drawn.
     /// </summary>
-    public class MapComponent_PawnAfterimages : MapComponent, System.IDisposable
+    public class MapComponent_PawnAfterimages : MapComponent, IDisposable
     {
         private const int MaxAfterimages = 96;
         private const float AfterimageCameraZoom = 0.5f;
@@ -124,7 +125,7 @@ namespace MiliraXian.Characters.Common.Vfx
         {
             if (afterimageMesh != null)
             {
-                Object.Destroy(afterimageMesh);
+                UnityEngine.Object.Destroy(afterimageMesh);
                 afterimageMesh = null;
             }
         }

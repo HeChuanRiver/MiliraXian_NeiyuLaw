@@ -8,6 +8,7 @@ using RimWorld;
 using UnityEngine;
 using MiliraXian.Characters.Common.AbnormalSystem;
 using MiliraXian.Characters.Common.AbnormalSystem.Effects;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Things
@@ -38,13 +39,13 @@ namespace MiliraXian.Characters.QingHe.Things
         private int lifetimeTicks;
         private int ageTicks;
         private int ticksToNextAmbientVisual;
-        private Verse.Mote fieldMote;
+        private Mote fieldMote;
 
         /// <summary>
         /// The boundary's emitter. It is maintained every tick while the field is alive and dies with
         /// it: this comp never holds a map-wide renderer, and there is no per-map lookup table.
         /// </summary>
-        private MiliraXian.Characters.Common.Vfx.Emitter.VfxEmitterHandle visual;
+        private VfxEmitterHandle visual;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
         public float CurrentRadius => Props.radius;
@@ -71,8 +72,7 @@ namespace MiliraXian.Characters.QingHe.Things
         private void MaintainVisual()
         {
             Map map = parent?.Map;
-            MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost host =
-                map?.GetComponent<MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost>();
+            MapComponent_VfxEmitterHost host = map?.GetComponent<MapComponent_VfxEmitterHost>();
             if (host == null)
             {
                 return;
@@ -80,8 +80,8 @@ namespace MiliraXian.Characters.QingHe.Things
             if (visual.IsNone)
             {
                 visual = host.Spawn(
-                    MiliraXian.Characters.Common.Vfx.Emitter.VfxDefOf.MX_Vfx_SpringFlow,
-                    MiliraXian.Characters.Common.Vfx.Emitter.VfxAnchor.Attached(parent));
+                    VfxDefOf.MX_Vfx_SpringFlow,
+                    VfxAnchor.Attached(parent));
             }
             if (visual.IsNone)
             {
@@ -89,8 +89,8 @@ namespace MiliraXian.Characters.QingHe.Things
             }
 
             host.Maintain(visual);
-            host.SetChannel(visual, MiliraXian.Characters.Common.Vfx.Emitter.VfxChannels.Radius, CurrentRadius);
-            host.SetChannel(visual, MiliraXian.Characters.Common.Vfx.Emitter.VfxChannels.Strength, VisualAlpha);
+            host.SetChannel(visual, VfxChannels.Radius, CurrentRadius);
+            host.SetChannel(visual, VfxChannels.Strength, VisualAlpha);
         }
 
         public override void CompTick()
@@ -138,7 +138,7 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look<int>(ref lifetimeTicks, "lifetimeTicks", 0, false);
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
-            Scribe_References.Look<Verse.Mote>(ref fieldMote, "fieldMote", false);
+            Scribe_References.Look<Mote>(ref fieldMote, "fieldMote", false);
         }
 
         public override void PostDeSpawn(Map map, DestroyMode mode)

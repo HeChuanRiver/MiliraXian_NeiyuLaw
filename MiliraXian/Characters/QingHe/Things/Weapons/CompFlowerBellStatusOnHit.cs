@@ -92,7 +92,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         public static float ResolveSpellEffectFactor(Pawn caster, CompProperties_FlowerBellStatusOnHit props)
         {
             return props?.scaleWithQingheSpellEffect == true
-                ? MiliraXian.Characters.QingHe.MX_QH_PerkUtility.GetSpellEffectFactor(caster)
+                ? MX_QH_PerkUtility.GetSpellEffectFactor(caster)
                 : 1f;
         }
     }

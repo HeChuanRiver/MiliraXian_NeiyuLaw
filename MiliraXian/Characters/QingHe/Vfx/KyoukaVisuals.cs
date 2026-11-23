@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using MiliraXian.Characters.Common.Vfx;
@@ -143,7 +144,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                 {
                     Capture(inst, driver);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Warn(ex);
                 }
@@ -166,7 +167,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
                         Draw(inst, driver);
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Warn(ex);
                     inst.Release();
@@ -197,7 +198,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             return driver != null && driver.Phase != KyoukaPhase.Done;
         }
 
-        private static void Warn(System.Exception ex)
+        private static void Warn(Exception ex)
         {
             if (!warned)
             {
@@ -708,7 +709,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
             {
                 if (mesh != null)
                 {
-                    Object.Destroy(mesh);
+                    UnityEngine.Object.Destroy(mesh);
                     mesh = null;
                 }
             }

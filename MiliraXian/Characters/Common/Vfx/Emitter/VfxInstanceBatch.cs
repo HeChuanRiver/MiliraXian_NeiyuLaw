@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MiliraXian.Characters.Common.Vfx.Emitter
@@ -18,8 +19,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>How many vec4 one instance may carry at most. Not the stride.</summary>
         internal const int MaxVectors = 16;
 
-        private Matrix4x4[] matrices = System.Array.Empty<Matrix4x4>();
-        private Vector4[] data = System.Array.Empty<Vector4>();
+        private Matrix4x4[] matrices = Array.Empty<Matrix4x4>();
+        private Vector4[] data = Array.Empty<Vector4>();
         private ComputeBuffer buffer;
         private MaterialPropertyBlock block;
 
@@ -109,8 +110,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             buffer?.Release();
             buffer = null;
             block?.Clear();
-            matrices = System.Array.Empty<Matrix4x4>();
-            data = System.Array.Empty<Vector4>();
+            matrices = Array.Empty<Matrix4x4>();
+            data = Array.Empty<Vector4>();
             Count = 0;
         }
 
@@ -141,12 +142,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             int size = Mathf.Max(1, instances);
             if (matrices.Length != size)
             {
-                System.Array.Resize(ref matrices, size);
+                Array.Resize(ref matrices, size);
             }
             int need = size * Mathf.Max(1, Vectors);
             if (data.Length != need)
             {
-                System.Array.Resize(ref data, need);
+                Array.Resize(ref data, need);
             }
         }
     }

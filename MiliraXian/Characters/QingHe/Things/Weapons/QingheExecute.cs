@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
@@ -164,7 +165,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 {
                     landed = Strike(victim);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Log.ErrorOnce("[MiliraXian] Qinghe execution blow failed, the target is released: " + ex, 0x51c7a5);
                     posture?.ReleaseBreak(executed: true);
@@ -225,7 +226,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 // Thrown back the way the blade is drawn out (toward Qinghe), not on through the enemy.
                 QingheImpactVfx.Spawn(map, C.killPetalVfx, at, -KillAim, pawn.Position);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution kill petals failed: " + ex, 0x51c7aa);
             }
@@ -274,7 +275,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     offset, Now, () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheExecute d && d.executionStart == id,
                     Set.Projection);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution thrust flash failed: " + ex, 0x51c7ab);
             }
@@ -344,7 +345,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     SpawnKillPetals(map);
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution kill failed: " + ex, 0x51c7a9);
             }
@@ -466,7 +467,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe execution dash effects failed: " + ex, 0x51c7a6);
             }

@@ -68,7 +68,7 @@ namespace MiliraXian.Characters.QingHe
         }
     }
 
-    [Verse.StaticConstructorOnStartup]
+    [StaticConstructorOnStartup]
     internal static class QinghePowerBalanceBootstrap
     {
         static QinghePowerBalanceBootstrap() => QinghePowerBalance.Initialize();

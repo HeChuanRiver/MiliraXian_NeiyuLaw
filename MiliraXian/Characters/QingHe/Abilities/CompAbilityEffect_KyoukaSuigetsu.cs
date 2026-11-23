@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Vfx;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -44,7 +46,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
         /// <summary>The mirror breaking, at the moment she is hit.</summary>
         public SoundDef shatterSound;
         /// <summary>Water, body, reflection and trail; null = the defaults.</summary>
-        public Vfx.KyoukaVisualProps visuals;
+        public KyoukaVisualProps visuals;
 
         public CompProperties_AbilityKyoukaSuigetsu()
         {
@@ -55,7 +57,7 @@ namespace MiliraXian.Characters.QingHe.Abilities
     public class CompAbilityEffect_KyoukaSuigetsu : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
-        private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
+        private readonly List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilityKyoukaSuigetsu Props => (CompProperties_AbilityKyoukaSuigetsu)props;
 

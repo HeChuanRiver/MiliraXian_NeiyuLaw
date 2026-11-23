@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -164,7 +165,7 @@ namespace MiliraXian.Characters.Common.Vfx
                 Find.PawnCacheRenderer.RenderPawn(pawn, texture, Vector3.zero, SnapshotZoom, 0f, facing,
                     renderHead: true, renderHeadgear: true, renderClothes: true);
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Log.ErrorOnce("[MiliraXian] Pawn capture failed: " + exception, 0x4d0c17);
                 IsCapturing = false;
@@ -204,7 +205,7 @@ namespace MiliraXian.Characters.Common.Vfx
                 // Refresh the age stamp: a stance that keeps re-rendering is not a stale lease.
                 entry.capturedTick = Find.TickManager?.TicksGame ?? entry.capturedTick;
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Log.ErrorOnce("[MiliraXian] Pawn recapture failed: " + exception, 0x4d0c18);
             }

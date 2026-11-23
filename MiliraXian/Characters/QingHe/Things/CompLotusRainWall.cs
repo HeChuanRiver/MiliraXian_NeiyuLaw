@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.AbnormalSystem;
 using MiliraXian.Characters.Common.AbnormalSystem.Effects;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
@@ -149,13 +150,12 @@ namespace MiliraXian.Characters.QingHe.Things
         /// The strands' emitter. Maintained every tick while the wall lives; the emitter class reads
         /// the wall's own axis, size and strength, so nothing is handed across here.
         /// </summary>
-        private MiliraXian.Characters.Common.Vfx.Emitter.VfxEmitterHandle strands;
+        private VfxEmitterHandle strands;
 
         private void MaintainVisual()
         {
             Map map = parent?.Map;
-            MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost host =
-                map?.GetComponent<MiliraXian.Characters.Common.Vfx.Emitter.MapComponent_VfxEmitterHost>();
+            MapComponent_VfxEmitterHost host = map?.GetComponent<MapComponent_VfxEmitterHost>();
             if (host == null)
             {
                 return;
@@ -164,8 +164,8 @@ namespace MiliraXian.Characters.QingHe.Things
             if (strands.IsNone)
             {
                 strands = host.Spawn(
-                    MiliraXian.Characters.Common.Vfx.Emitter.VfxDefOf.MX_Vfx_RainWallStrands,
-                    MiliraXian.Characters.Common.Vfx.Emitter.VfxAnchor.Attached(this));
+                    VfxDefOf.MX_Vfx_RainWallStrands,
+                    VfxAnchor.Attached(this));
             }
             if (strands.IsNone)
             {
@@ -320,21 +320,9 @@ namespace MiliraXian.Characters.QingHe.Things
             return true;
         }
 
-        /// <summary>
-        /// Owner 11-13: the wall registers itself with the renderer here rather than making the
-        /// renderer search the map for it. This also runs when a save is loaded, so a wall already
-        /// standing when the game resumes is drawn again.
-        /// </summary>
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            base.PostSpawnSetup(respawningAfterLoad);
-            RainWallVfx.Add(parent.Map, this);
-        }
-
         public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
             base.PostDestroy(mode, previousMap);
-            RainWallVfx.Remove(previousMap ?? parent.Map, this);
             if (!strands.IsNone)
             {
                 strands.Host.Destroy(strands);

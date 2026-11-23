@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.Combat;
@@ -739,7 +740,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     : defender.Rotation.FacingCell.ToVector3();
                 QingheImpactVfx.Spawn(defender.Map, vfx, at, toward, defender.Position);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe guard effects failed: " + ex, 0x51c7a3);
             }

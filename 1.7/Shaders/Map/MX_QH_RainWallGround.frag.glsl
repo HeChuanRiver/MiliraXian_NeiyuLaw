@@ -32,6 +32,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _LotusB;    // @default = vec4(0.0, 0.0, 0.4, 999.0)
     vec4 _LotusC;    // @default = vec4(0.0, 0.0, 0.4, 999.0)
     vec4 _LotusD;    // @default = vec4(0.0, 0.0, 0.4, 999.0)
+    // xy：四边形覆盖的面积（格），由 Field 渲染器传入
+    vec4 _FieldSize; // @default = vec4(16.0, 6.0, 0.0, 0.0)
     float _BloomIntensity; // @default = 1.0
 } u;
 
@@ -90,10 +92,11 @@ void main()
     vec2 al = u._Axis.xy;
     vec2 ac = u._Axis.zw;
 
-    // 带内坐标：沿墙 a0、跨墙 b0。
-    float a0 = dot(vUv, al);
-    float b0 = dot(vUv, ac);
-    float pxw = max(fwidth(vUv.x), 1e-5);
+    // uv 是 0..1，换算成相对墙心的格偏移再投影到墙的两个轴上。
+    vec2 offset = (vUv - 0.5) * u._FieldSize.xy;
+    float a0 = dot(offset, al);
+    float b0 = dot(offset, ac);
+    float pxw = max(fwidth(offset.x), 1e-5);
 
     // ---------------------------------------------------------------- 水痕
     float mask = softEdge(a0, hl, STAIN_EDGE) * softEdge(b0, ht, STAIN_EDGE) * s;
@@ -119,10 +122,10 @@ void main()
 
     // ---------------------------------------------------------------- 荷花光晕
     // 和花本身同一层、同一位置：花是被这圈光从内部照亮的。
-    light += lotusHalo(u._LotusA, vUv, al, ac, t);
-    light += lotusHalo(u._LotusB, vUv, al, ac, t);
-    light += lotusHalo(u._LotusC, vUv, al, ac, t);
-    light += lotusHalo(u._LotusD, vUv, al, ac, t);
+    light += lotusHalo(u._LotusA, offset, al, ac, t);
+    light += lotusHalo(u._LotusB, offset, al, ac, t);
+    light += lotusHalo(u._LotusC, offset, al, ac, t);
+    light += lotusHalo(u._LotusD, offset, al, ac, t);
 
     // 预乘：(rgb, alpha)。alpha 压暗，rgb 加光。
     // 泛光只取 rgb，所以乘在这部分是让泛光副本按 tint / 强度着色；主绘制时这两个值被复原为白与 1。

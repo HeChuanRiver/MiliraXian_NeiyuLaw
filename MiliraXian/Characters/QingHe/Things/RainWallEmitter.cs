@@ -48,6 +48,13 @@ namespace MiliraXian.Characters.QingHe.Things
         private const float StrandDensity = 300f / 27f;
         private const float StrandGain = 0.48f * 0.48f;
 
+        private const int LotusCount = 4;
+        private const float LotusOpenSeconds = 1.1f;
+        private const float BloomAspect = 333f / 544f;
+        private const float PadAspect = 231f / 373f;
+        private const float ReflectionAlpha = 0.20f;
+        private const int WindCount = 5;
+
         private static readonly Color StrandWhite = new(0.88f, 0.96f, 1f);
 
         /// <summary>How many strands (and therefore landings) one wall carries.</summary>
@@ -59,17 +66,21 @@ namespace MiliraXian.Characters.QingHe.Things
         private CompLotusRainWall wall;
         private int strands;
         private int splashes;
+        private int lotusStart;
+        private readonly Vector4[] lotusBuffer = new Vector4[LotusCount];
 
         internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int nowTick, Vector3 position)
         {
             base.Reset(effect, anchor, version, nowTick, position);
 
             wall = anchor.Kind == VfxAnchorKind.ThingComp ? anchor.Comp as CompLotusRainWall : null;
+            int lotusSlots = LotusCount * 2;
+            int available = Particles == null ? 0 : Mathf.Max(0, Particles.Length - lotusSlots);
             strands = wall == null ? 0 : CountFor(wall.Props);
-            strands = Mathf.Min(strands, Particles.Length / 2);
+            strands = Mathf.Min(strands, available / 2);
             splashes = strands;
 
-            // Group 0: one particle per falling strand. Group 1: one per landing.
+            // Group 0: falling strands. Group 1: landing splashes.
             for (int i = 0; i < strands; i++)
             {
                 Emit(position, 0f, 0f, StrandWhite, 0);
@@ -77,6 +88,15 @@ namespace MiliraXian.Characters.QingHe.Things
             for (int i = 0; i < splashes; i++)
             {
                 Emit(position, 0f, 0f, Color.clear, 1);
+            }
+
+            // Groups 2..5: lotus bloom reflection / bloom / pad reflection / pad.
+            lotusStart = Count;
+            for (int i = 0; i < LotusCount; i++)
+            {
+                bool isBloom = i % 2 == 0;
+                Emit(position, 0f, 0f, Color.clear, isBloom ? 2 : 4);
+                Emit(position, 0f, 0f, Color.clear, isBloom ? 3 : 5);
             }
         }
 
@@ -111,12 +131,14 @@ namespace MiliraXian.Characters.QingHe.Things
             float halfZ = halfLength * Mathf.Abs(along.y) + halfThickness * Mathf.Abs(across.y) + QuadPadding;
             SetVectorChannel(RainWallChannels.Quad, new Vector4(halfX, halfZ, 0f, 0f));
 
+            UpdateLotusAndWindChannels(owner, halfLength, halfThickness);
+
             if (strength <= 0.01f)
             {
-                for (int i = 0; i < strands + splashes; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     VfxParticle p = Particles[i];
-                    p.Color = new Color(StrandWhite.r, StrandWhite.g, StrandWhite.b, 0f);
+                    p.Color = new Color(p.Color.r, p.Color.g, p.Color.b, 0f);
                     Particles[i] = p;
                 }
                 return true;
@@ -154,10 +176,8 @@ namespace MiliraXian.Characters.QingHe.Things
                 strand.Alive = true;
                 Particles[i] = strand;
 
-                // Its landing: same place, same clock. Group 1 carries exactly what the old vertex
-                // colour carried — the raw phase and the normalised speed — because the shader
-                // recomputes the fall cycle itself: cycle = fract(t·speed/SHEET_H + phase). Passing
-                // the current progress instead of the phase would double the period and drift.
+                // Its landing: same place, same clock. Group 1 carries the raw phase and normalised
+                // speed because the shader recomputes cycle = fract(t*speed/SHEET_H + phase).
                 VfxParticle splash = Particles[strands + i];
                 splash.Position = new Vector3(bx, splashY, bz);
                 splash.Size = 1f;
@@ -169,7 +189,92 @@ namespace MiliraXian.Characters.QingHe.Things
                 splash.Alive = true;
                 Particles[strands + i] = splash;
             }
+
+            UpdateLotusParticles(origin, along, across, seconds, strength);
             return true;
+        }
+
+        private void UpdateLotusAndWindChannels(CompLotusRainWall owner, float halfLength, float halfThickness)
+        {
+            uint lotusState = (uint)(owner.parent.thingIDNumber * 64013 + 41);
+            for (int i = 0; i < LotusCount; i++)
+            {
+                float baseAlong = Mathf.Lerp(-halfLength + 0.7f, halfLength - 0.7f, i / (float)(LotusCount - 1));
+                float jitter = NextRand(ref lotusState) * 2f - 1f;
+                float across = NextRand(ref lotusState) * 2f - 1f;
+                float radius = Mathf.Lerp(0.34f, 0.52f, NextRand(ref lotusState));
+                float start = 0.05f + 0.28f * i + NextRand(ref lotusState) * 0.12f;
+                lotusBuffer[i] = new Vector4(baseAlong + jitter * 0.25f, across * 0.7f * halfThickness, radius, start);
+            }
+            SetVectorChannel(RainWallChannels.LotusA, lotusBuffer[0]);
+            SetVectorChannel(RainWallChannels.LotusB, lotusBuffer[1]);
+            SetVectorChannel(RainWallChannels.LotusC, lotusBuffer[2]);
+            SetVectorChannel(RainWallChannels.LotusD, lotusBuffer[3]);
+
+            uint windState = (uint)(owner.parent.thingIDNumber * 777 + 123);
+            for (int i = 0; i < WindCount; i++)
+            {
+                float along = (NextRand(ref windState) * 2f - 1f) * halfLength;
+                float across = (NextRand(ref windState) * 2f - 1f) * halfThickness;
+                float lam = 1.0f + NextRand(ref windState) * 0.8f;
+                float amp = 0.003f + NextRand(ref windState) * 0.002f;
+                Vector4 packet = new(along, across, lam, amp);
+                switch (i)
+                {
+                    case 0: SetVectorChannel(RainWallChannels.WindA, packet); break;
+                    case 1: SetVectorChannel(RainWallChannels.WindB, packet); break;
+                    case 2: SetVectorChannel(RainWallChannels.WindC, packet); break;
+                    case 3: SetVectorChannel(RainWallChannels.WindD, packet); break;
+                    default: SetVectorChannel(RainWallChannels.WindE, packet); break;
+                }
+            }
+        }
+
+        private void UpdateLotusParticles(Vector3 origin, Vector2 along, Vector2 across, float seconds, float strength)
+        {
+            for (int i = 0; i < LotusCount; i++)
+            {
+                int reflIdx = lotusStart + i * 2;
+                int flowerIdx = reflIdx + 1;
+                if (flowerIdx >= Count)
+                {
+                    break;
+                }
+
+                Vector4 f = lotusBuffer[i];
+                float open = Mathf.Clamp01((seconds - f.w) / LotusOpenSeconds);
+                if (open <= 0f)
+                {
+                    VfxParticle r0 = Particles[reflIdx];
+                    r0.Color = Color.clear;
+                    Particles[reflIdx] = r0;
+                    VfxParticle f0 = Particles[flowerIdx];
+                    f0.Color = Color.clear;
+                    Particles[flowerIdx] = f0;
+                    continue;
+                }
+
+                bool isBloom = i % 2 == 0;
+                float halfW = f.z;
+                float halfH = f.z * (isBloom ? BloomAspect : PadAspect);
+                float x = origin.x + along.x * f.x + across.x * f.y;
+                float z = origin.z + along.y * f.x + across.y * f.y;
+                float alpha = Mathf.Min(1f, 0.35f + 0.65f * open) * strength;
+
+                VfxParticle refl = Particles[reflIdx];
+                refl.Position = new Vector3(x, 0f, z - halfH * 0.05f);
+                refl.Size = halfW;
+                refl.Color = new Color(1f, 1f, 1f, alpha * ReflectionAlpha);
+                refl.Alive = true;
+                Particles[reflIdx] = refl;
+
+                VfxParticle flower = Particles[flowerIdx];
+                flower.Position = new Vector3(x, 0f, z);
+                flower.Size = halfW;
+                flower.Color = new Color(1f, 1f, 1f, alpha);
+                flower.Alive = true;
+                Particles[flowerIdx] = flower;
+            }
         }
 
         private static float NextRand(ref uint state)

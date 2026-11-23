@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -36,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     public static class QingheSwordCombatUtility
     {
         /// <summary>Share of the sword pressure gain for the hit now resolving (one strike of a multi-strike motion gives less).</summary>
-        [System.ThreadStatic] public static float swordPressureScaleOverride;
+        [ThreadStatic] public static float swordPressureScaleOverride;
         public static float SwordPressureScale => swordPressureScaleOverride > 0f ? swordPressureScaleOverride : 1f;
 
         public static FlowerBellResonance ResonanceFor(Pawn pawn)

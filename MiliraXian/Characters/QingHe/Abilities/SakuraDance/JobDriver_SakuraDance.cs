@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
@@ -399,7 +400,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// after landing), and the driver's props are gone once the job has ended, so they must not
         /// call back into the driver.
         /// </summary>
-        internal System.Func<float, float> MotionClockFrom(int startTick)
+        internal Func<float, float> MotionClockFrom(int startTick)
         {
             int start = danceStartTick;
             float skip = Motion?.skipSeconds ?? 0f;

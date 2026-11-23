@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using RimWorld;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Verse;
 
 namespace MiliraXian.Characters.Common.Vfx
@@ -142,7 +143,7 @@ namespace MiliraXian.Characters.Common.Vfx
             block.SetColor(BloomTintId, bloom.tint);
             block.SetFloat(BloomIntensityId, bloom.intensity);
             Graphics.DrawMeshInstanced(mesh, 0, material, matrices, count, block,
-                UnityEngine.Rendering.ShadowCastingMode.Off, false, group.layer);
+                ShadowCastingMode.Off, false, group.layer);
             block.SetColor(BloomTintId, Color.white);
             block.SetFloat(BloomIntensityId, 1f);
 

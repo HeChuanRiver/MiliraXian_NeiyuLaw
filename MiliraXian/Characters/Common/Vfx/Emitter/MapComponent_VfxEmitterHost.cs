@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Verse;
 
 namespace MiliraXian.Characters.Common.Vfx.Emitter
@@ -15,7 +17,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     /// It knows nothing about any particular effect. It never decides what to draw, how many
     /// strokes an effect needs or which layer it belongs on — content and renderers do that.
     /// </summary>
-    public sealed class MapComponent_VfxEmitterHost : MapComponent, System.IDisposable
+    public sealed class MapComponent_VfxEmitterHost : MapComponent, IDisposable
     {
         private readonly List<VfxEmitter> slots = new();
         private readonly List<int> freeSlots = new();
@@ -69,7 +71,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     effect = VfxDefCompiler.EffectOf(def);
                 }
-                catch (System.Exception exception)
+                catch (Exception exception)
                 {
                     Log.ErrorOnce("[MiliraXian] VFX '" + def.defName + "' failed to compile: " + exception,
                         GenText.StableStringHash("MX_Vfx_Compile_" + def.defName));
@@ -182,16 +184,16 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>The instance class the def named, or the plain emitter.</summary>
         private static VfxEmitter CreateEmitter(VfxEffect effect)
         {
-            System.Type type = effect.EmitterType ?? typeof(VfxEmitter);
+            Type type = effect.EmitterType ?? typeof(VfxEmitter);
             if (type == typeof(VfxEmitter))
             {
                 return new VfxEmitter();
             }
             try
             {
-                return (VfxEmitter)System.Activator.CreateInstance(type);
+                return (VfxEmitter)Activator.CreateInstance(type);
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Log.ErrorOnce("[MiliraXian] VFX emitter class '" + type.Name + "' could not be created for '"
                     + effect.Name + "': " + exception, GenText.StableStringHash("MX_Vfx_Emitter_" + type.Name));
@@ -326,7 +328,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     {
                         pass.Renderer.Render(emitter, pass, p, context);
                     }
-                    catch (System.Exception exception)
+                    catch (Exception exception)
                     {
                         Log.ErrorOnce("[MiliraXian] VFX '" + effect.Name + "' stroke '" + pass.Name + "' failed to draw: " + exception,
                             GenText.StableStringHash("MX_Vfx_Draw_" + effect.Name + "_" + pass.Name));
@@ -417,7 +419,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
 
                 Graphics.DrawMeshInstanced(pass.Mesh, 0, material, batch.Matrices, batch.Count, block,
-                    UnityEngine.Rendering.ShadowCastingMode.Off, false, pass.Layer);
+                    ShadowCastingMode.Off, false, pass.Layer);
             }
         }
 
@@ -513,7 +515,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     {
                         if (meshesOf[m] != null)
                         {
-                            Object.Destroy(meshesOf[m]);
+                            UnityEngine.Object.Destroy(meshesOf[m]);
                             meshesOf[m] = null;
                         }
                     }

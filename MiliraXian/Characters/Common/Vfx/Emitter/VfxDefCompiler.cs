@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using HarmonyLib;
 using Verse;
 
@@ -87,7 +89,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     effect?.Release();
                 }
-                catch (System.Exception exception)
+                catch (Exception exception)
                 {
                     Log.ErrorOnce("[MiliraXian] A VFX effect failed to release: " + exception,
                         GenText.StableStringHash("MX_Vfx_Release_" + effect?.Name));
@@ -100,21 +102,21 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         private static VfxEffect NewEffect(VfxDef def)
         {
-            System.Type type = ResolveType(def.vfxClass, typeof(VfxEffect));
+            Type type = ResolveType(def.vfxClass, typeof(VfxEffect));
             try
             {
                 // With arguments, Activator only looks at public constructors by default; ours are
                 // internal, so ask for non-public ones explicitly.
-                return (VfxEffect)System.Activator.CreateInstance(
+                return (VfxEffect)Activator.CreateInstance(
                     type,
-                    System.Reflection.BindingFlags.Instance
-                        | System.Reflection.BindingFlags.Public
-                        | System.Reflection.BindingFlags.NonPublic,
+                    BindingFlags.Instance
+                        | BindingFlags.Public
+                        | BindingFlags.NonPublic,
                     null,
                     new object[] { def },
                     null);
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 string what = def.vfxClass.NullOrEmpty() ? type.Name : def.vfxClass;
                 Log.ErrorOnce("[MiliraXian] VFX class '" + what + "' could not be built for '"
@@ -146,7 +148,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     EffectOf(def);
                 }
-                catch (System.Exception exception)
+                catch (Exception exception)
                 {
                     Log.ErrorOnce("[MiliraXian] VFX '" + def.defName + "' failed to prewarm: " + exception,
                         GenText.StableStringHash("MX_Vfx_Prewarm_" + def.defName));
@@ -155,13 +157,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         }
 
         /// <summary>A type named by a def, or the base type when the name is empty or unusable.</summary>
-        private static System.Type ResolveType(string name, System.Type baseType)
+        private static Type ResolveType(string name, Type baseType)
         {
             if (name.NullOrEmpty())
             {
                 return baseType;
             }
-            System.Type type = AccessTools.TypeByName(name);
+            Type type = AccessTools.TypeByName(name);
             return type != null && baseType.IsAssignableFrom(type) ? type : baseType;
         }
 
@@ -175,13 +177,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return IsValidDerived(name, typeof(VfxEmitter));
         }
 
-        private static bool IsValidDerived(string name, System.Type baseType)
+        private static bool IsValidDerived(string name, Type baseType)
         {
             if (name.NullOrEmpty())
             {
                 return false;
             }
-            System.Type type = AccessTools.TypeByName(name);
+            Type type = AccessTools.TypeByName(name);
             return type != null && baseType.IsAssignableFrom(type);
         }
     }

@@ -1,4 +1,5 @@
 using MiliraXian.Characters.QingHe.Things.Weapons;
+using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.QingHe.Verbs
@@ -60,7 +61,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
 
         internal static int ChargeTicksLeft(CompFlowerBellCharge comp)
         {
-            return UnityEngine.Mathf.Max(1, UnityEngine.Mathf.CeilToInt((comp.FullSeconds - comp.Charge) * 60f));
+            return Mathf.Max(1, Mathf.CeilToInt((comp.FullSeconds - comp.Charge) * 60f));
         }
     }
 }
