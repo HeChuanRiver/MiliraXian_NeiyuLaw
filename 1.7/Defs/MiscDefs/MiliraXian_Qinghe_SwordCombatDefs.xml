@@ -358,34 +358,8 @@
             <petalSway>0.18</petalSway>
             <petalSize>0.2~0.32</petalSize>
         </killPetalVfx>
-        <!-- 击杀时（抽刀那一刻）起：被杀单位位置的竖排白字「落华」和周围压暗一起缓缓淡入，
-             停留后文字按噪声溶解、压暗同步淡出；文字带粉色泛光 -->
-        <killVfx>
-            <texPath>MiliraXianQinghe/Effect/Luohua/Luohua</texPath>
-            <!-- 贴图高度（格），固定大小，不随敌人体型变化。贴图上下各留 48 像素边距（共 1144 像素），
-                 1.2 格时两个字连同字距正好约 1.1 格 -->
-            <height>1.2</height>
-            <offset>(0, 0.2)</offset>
-            <color>(1, 1, 1, 1)</color>
-            <brightness>1</brightness>
-            <bloom>
-                <group>MX_ScreenBloom_Glow</group>
-                <tint>(1, 0.55, 0.75, 1)</tint>
-                <intensity>1.6</intensity>
-            </bloom>
-            <!-- 淡入 0.7 秒，盖过振刀甩血（抽刀后约 1.1 秒回到待机） -->
-            <fadeInSeconds>0.7</fadeInSeconds>
-            <holdSeconds>1.2</holdSeconds>
-            <dissolveSeconds>0.8</dissolveSeconds>
-            <noiseTexPath>MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</noiseTexPath>
-            <noiseScale>1</noiseScale>
-            <edgeWidth>0.08</edgeWidth>
-            <edgeColor>(1, 0.6, 0.7, 1)</edgeColor>
-            <!-- 压暗：半径 4 格的软边黑圆，中心最暗 65%；flatness 把全暗的中心区扩大，只留外圈渐变 -->
-            <darkenRadius>4</darkenRadius>
-            <darkenAlpha>0.65</darkenAlpha>
-            <darkenFlatness>3</darkenFlatness>
-        </killVfx>
+        <!-- 击杀时（抽刀那一刻）起：被杀单位位置的竖排白字「落华」和周围压暗（定义见 MX_Vfx_Luohua） -->
+        <killVfx>MX_Vfx_Luohua</killVfx>
         <executionSwordPressure>1</executionSwordPressure>
         <executionArmorPenetration>2</executionArmorPenetration>
         <executionDrawSound>MX_QH_Zanshin_Draw</executionDrawSound>

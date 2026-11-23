@@ -24,6 +24,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Material = null;
             Layer = 0;
             BloomGroup = null;
+            BloomTint = Color.white;
             BloomIntensity = 1f;
             ParticleGroup = -1;
             Mesh = null;
@@ -64,6 +65,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>A ScreenBloomGroupDef defName, or null for no bloom on this stroke.</summary>
         internal string BloomGroup;
+
+        internal Color BloomTint;
 
         internal float BloomIntensity;
 

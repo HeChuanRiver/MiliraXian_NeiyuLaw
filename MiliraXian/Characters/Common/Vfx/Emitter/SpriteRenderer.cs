@@ -52,6 +52,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
 
             writer.Clear();
+            Vector2 baseSize = ResolveQuadSize(sprite.QuadSize, material);
             float alpha = emitter.Alpha;
             for (int i = 0; i < emitter.Count; i++)
             {
@@ -65,7 +66,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     continue;
                 }
 
-                Vector2 size = sprite.QuadSize;
+                Vector2 size = baseSize;
                 if (sprite.UseParticleSize)
                 {
                     size *= particle.Size;
@@ -131,8 +132,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
 
             constants.Clear();
-            float aspect = sprite.QuadSize.x > 1e-4f ? sprite.QuadSize.y / sprite.QuadSize.x : 1f;
-            constants.SetVector(VfxShaderIds.QuadSize, new Vector4(sprite.QuadSize.x, sprite.QuadSize.y, aspect, 0f));
+            Vector2 baseSize = ResolveQuadSize(sprite.QuadSize, material);
+            float aspect = baseSize.x > 1e-4f ? baseSize.y / baseSize.x : 1f;
+            constants.SetVector(VfxShaderIds.QuadSize, new Vector4(baseSize.x, baseSize.y, aspect, 0f));
             for (int i = 0; i < sprite.Bindings.Count; i++)
             {
                 VfxUniformBinding.Apply(constants, emitter, sprite.Bindings[i], context.Engine.Frame);
@@ -154,7 +156,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     continue;
                 }
 
-                float size = sprite.QuadSize.x * (sprite.UseParticleSize ? particle.Size : 1f);
+                float size = baseSize.x * (sprite.UseParticleSize ? particle.Size : 1f);
                 if (size <= 0.001f)
                 {
                     continue;
@@ -181,6 +183,25 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
                 context.Engine.AddInstance(pass, Matrix4x4.identity, instanceRow, 0);
             }
+        }
+
+        /// <summary>Fills in a zero width or height from the material's main texture aspect ratio.</summary>
+        private static Vector2 ResolveQuadSize(Vector2 quadSize, Material material)
+        {
+            Texture tex = material?.mainTexture;
+            if (tex == null || tex.width <= 0 || tex.height <= 0)
+            {
+                return quadSize;
+            }
+            if (quadSize.x <= 0f && quadSize.y > 0f)
+            {
+                return new Vector2(quadSize.y * tex.width / tex.height, quadSize.y);
+            }
+            if (quadSize.y <= 0f && quadSize.x > 0f)
+            {
+                return new Vector2(quadSize.x, quadSize.x * tex.height / tex.width);
+            }
+            return quadSize;
         }
 
         /// <summary>The uv rect of the particle's atlas frame, or the whole texture when there is no atlas.</summary>

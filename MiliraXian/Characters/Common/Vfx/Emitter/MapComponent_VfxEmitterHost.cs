@@ -213,39 +213,30 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             emitter.FadeSeconds = 0f;
         }
 
-        internal void SetChannel(VfxEmitterHandle handle, int channel, float value)
+        internal bool TryGetEmitter<T>(VfxEmitterHandle handle, out T typed) where T : VfxEmitter
         {
-            VfxEmitter emitter = Resolve(handle);
-            if (emitter == null)
-            {
-                return;
-            }
-            emitter.SetEmitterChannel(channel, value);
+            typed = Resolve(handle) as T;
+            return typed != null;
+        }
+
+        internal void SetChannel(VfxEmitterHandle handle, string channel, float value)
+        {
+            Resolve(handle)?.SetEmitterChannel(channel, value);
         }
 
         /// <summary>Writes one emitter-level vec4 channel (a wall's axis, a field's band).</summary>
-        internal void SetVectorChannel(VfxEmitterHandle handle, int channel, Vector4 value)
+        internal void SetVectorChannel(VfxEmitterHandle handle, string channel, Vector4 value)
         {
-            VfxEmitter emitter = Resolve(handle);
-            if (emitter == null)
-            {
-                return;
-            }
-            emitter.SetVectorChannel(channel, value);
+            Resolve(handle)?.SetVectorChannel(channel, value);
         }
 
         /// <summary>Writes one emitter-level dynamic texture channel (e.g. a captured RenderTexture).</summary>
-        internal void SetTextureChannel(VfxEmitterHandle handle, int channel, Texture texture)
+        internal void SetTextureChannel(VfxEmitterHandle handle, string channel, Texture texture)
         {
-            VfxEmitter emitter = Resolve(handle);
-            if (emitter == null)
-            {
-                return;
-            }
-            emitter.SetTextureChannel(channel, texture);
+            Resolve(handle)?.SetTextureChannel(channel, texture);
         }
 
-        internal float GetChannel(VfxEmitterHandle handle, int channel)
+        internal float GetChannel(VfxEmitterHandle handle, string channel)
         {
             VfxEmitter emitter = Resolve(handle);
             return emitter == null ? 0f : emitter.EmitterChannel(channel);
@@ -449,7 +440,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             ScreenBloomProperties bloom = new ScreenBloomProperties
             {
                 group = group,
-                tint = Color.white,
+                tint = pass.BloomTint,
                 intensity = pass.BloomIntensity,
             };
             blooms[pass] = bloom;

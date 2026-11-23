@@ -28,16 +28,18 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// </summary>
         internal Mesh[] Meshes;
 
-        /// <summary>Flat per-particle store: <c>particle * VfxChannels.Capacity + channel</c>.</summary>
+        /// <summary>Flat per-particle store: <c>particle * ParticleChannelStride + channel</c>.</summary>
         internal float[] Channels;
 
-        /// <summary>Emitter-level float channels, indexed by float channel id.</summary>
+        internal int ParticleChannelStride;
+
+        /// <summary>Emitter-level float channels, indexed by this effect's local slot id.</summary>
         internal float[] EmitterChannels;
 
-        /// <summary>Emitter-level vec4 channels, indexed by vec4 channel id.</summary>
+        /// <summary>Emitter-level vec4 channels, indexed by this effect's local slot id.</summary>
         internal Vector4[] Vectors;
 
-        /// <summary>Emitter-level dynamic texture channels (e.g. RenderTextures), indexed by texture channel id.</summary>
+        /// <summary>Emitter-level dynamic texture channels (e.g. RenderTextures), indexed by this effect's local slot id.</summary>
         internal Texture[] Textures;
 
         /// <summary>How many particles of the array are in use.</summary>
@@ -84,44 +86,64 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Count = 0;
 
             int needed = Mathf.Max(0, effect.Capacity);
+            ParticleChannelStride = effect.ParticleFloatChannelCount;
             if (needed > 0)
             {
                 if (Particles == null || Particles.Length < needed)
                 {
                     Particles = new VfxParticle[needed];
-                    Channels = new float[needed * VfxChannels.Capacity];
+                }
+                int neededChannels = needed * ParticleChannelStride;
+                if (neededChannels > 0)
+                {
+                    if (Channels == null || Channels.Length < neededChannels)
+                    {
+                        Channels = new float[neededChannels];
+                    }
+                    else
+                    {
+                        Array.Clear(Channels, 0, neededChannels);
+                    }
+                }
+            }
+
+            int emitterFloats = effect.EmitterFloatChannelCount;
+            if (emitterFloats > 0)
+            {
+                if (EmitterChannels == null || EmitterChannels.Length < emitterFloats)
+                {
+                    EmitterChannels = new float[emitterFloats];
                 }
                 else
                 {
-                    Array.Clear(Channels, 0, needed * VfxChannels.Capacity);
+                    Array.Clear(EmitterChannels, 0, emitterFloats);
                 }
             }
 
-            if (EmitterChannels == null)
+            int vectorCount = effect.VectorChannelCount;
+            if (vectorCount > 0)
             {
-                EmitterChannels = new float[VfxChannels.Capacity];
-            }
-            else
-            {
-                Array.Clear(EmitterChannels, 0, EmitterChannels.Length);
-            }
-
-            if (Vectors == null)
-            {
-                Vectors = new Vector4[VfxChannels.VectorCapacity];
-            }
-            else
-            {
-                Array.Clear(Vectors, 0, Vectors.Length);
+                if (Vectors == null || Vectors.Length < vectorCount)
+                {
+                    Vectors = new Vector4[vectorCount];
+                }
+                else
+                {
+                    Array.Clear(Vectors, 0, vectorCount);
+                }
             }
 
-            if (Textures == null)
+            int texCount = effect.TextureChannelCount;
+            if (texCount > 0)
             {
-                Textures = new Texture[VfxChannels.TextureCapacity];
-            }
-            else
-            {
-                Array.Clear(Textures, 0, Textures.Length);
+                if (Textures == null || Textures.Length < texCount)
+                {
+                    Textures = new Texture[texCount];
+                }
+                else
+                {
+                    Array.Clear(Textures, 0, texCount);
+                }
             }
 
             // Meshes are destroyed on release, so a reused slot always starts from a fresh array.
@@ -255,9 +277,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Side = Vector3.zero,
             };
 
-            if (Channels != null)
+            if (Channels != null && ParticleChannelStride > 0)
             {
-                Array.Clear(Channels, index * VfxChannels.Capacity, VfxChannels.Capacity);
+                Array.Clear(Channels, index * ParticleChannelStride, ParticleChannelStride);
             }
             return index;
         }
@@ -269,11 +291,24 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 : 0f;
         }
 
+        internal float EmitterChannel(string name)
+        {
+            return Effect == null ? 0f : EmitterChannel(Effect.EmitterFloatSlot(name));
+        }
+
         internal void SetEmitterChannel(int channel, float value)
         {
             if (EmitterChannels != null && channel >= 0 && channel < EmitterChannels.Length)
             {
                 EmitterChannels[channel] = value;
+            }
+        }
+
+        internal void SetEmitterChannel(string name, float value)
+        {
+            if (Effect != null)
+            {
+                SetEmitterChannel(Effect.EmitterFloatSlot(name), value);
             }
         }
 
@@ -290,6 +325,14 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
         }
 
+        internal void SetVectorChannel(string name, Vector4 value)
+        {
+            if (Effect != null)
+            {
+                SetVectorChannel(Effect.VectorSlot(name), value);
+            }
+        }
+
         internal Texture TextureChannel(int channel)
         {
             return Textures != null && channel >= 0 && channel < Textures.Length ? Textures[channel] : null;
@@ -303,23 +346,31 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
         }
 
+        internal void SetTextureChannel(string name, Texture texture)
+        {
+            if (Effect != null)
+            {
+                SetTextureChannel(Effect.TextureSlot(name), texture);
+            }
+        }
+
         internal float Channel(int particleIndex, int channel)
         {
-            if (Channels == null || channel < 0 || channel >= VfxChannels.Capacity)
+            if (Channels == null || ParticleChannelStride <= 0 || channel < 0 || channel >= ParticleChannelStride)
             {
                 return 0f;
             }
-            int index = particleIndex * VfxChannels.Capacity + channel;
+            int index = particleIndex * ParticleChannelStride + channel;
             return index >= 0 && index < Channels.Length ? Channels[index] : 0f;
         }
 
         internal void SetChannel(int particleIndex, int channel, float value)
         {
-            if (Channels == null || channel < 0 || channel >= VfxChannels.Capacity)
+            if (Channels == null || ParticleChannelStride <= 0 || channel < 0 || channel >= ParticleChannelStride)
             {
                 return;
             }
-            int index = particleIndex * VfxChannels.Capacity + channel;
+            int index = particleIndex * ParticleChannelStride + channel;
             if (index >= 0 && index < Channels.Length)
             {
                 Channels[index] = value;

@@ -5,6 +5,7 @@ using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Jobs;
@@ -127,7 +128,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>The flash at the scabbard mouth of the sheathe the blow lands with, instead of the weapon's. Null = the weapon's.</summary>
         public QingheSheatheFlashProps executionHitFlash;
         /// <summary>The word over the killed enemy and the darkening around it.</summary>
-        public LuohuaVfxProps killVfx;
+        public VfxDef killVfx;
 
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 

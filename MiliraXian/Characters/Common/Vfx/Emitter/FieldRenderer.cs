@@ -44,17 +44,27 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 : emitter.Position;
 
             Vector2 size = field.QuadSize;
+            float extraHeight = field.ExtraHeight;
             if (field.SizeChannel >= 0)
             {
-                // The quad only has to cover an oriented band, so its extents come from the emitter.
+                // The quad only has to cover an oriented band or dynamic dome, so its extents come from the emitter.
+                // Zero width or height lets an emitter skip drawing for this frame without an empty submission.
                 Vector4 half = emitter.VectorChannel(field.SizeChannel);
+                if (half.x <= 0f || half.y <= 0f)
+                {
+                    return;
+                }
                 size = new Vector2(half.x * 2f, half.y * 2f);
+                if (half.z > 0f)
+                {
+                    extraHeight += half.z;
+                }
             }
             else if (field.SizeFromRadius)
             {
                 // Cell coverage is integral: the field occupies whole cells, so the quad must be
                 // sized from the ceiling of the radius, exactly as the old renderer did.
-                float side = Mathf.Ceil(emitter.EmitterChannel(VfxChannels.Radius)) * 2f + field.RadiusPadding;
+                float side = Mathf.Ceil(emitter.EmitterChannel(field.RadiusChannel)) * 2f + field.RadiusPadding;
                 size = new Vector2(side, side);
             }
             size.x = Mathf.Max(0.01f, size.x);
@@ -62,7 +72,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             // The shader rebuilds its geometry from the centre and the extents, so the quad has
             // to line up with that formula: the extra curtain height spills north of the field.
-            float height = size.y + field.ExtraHeight;
+            float height = size.y + extraHeight;
 
             float y = field.UseAltitude ? field.Altitude : center.y + field.AltitudeOffset;
 
@@ -74,7 +84,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 float strength = (field.StrengthChannel >= 0 ? emitter.EmitterChannel(field.StrengthChannel) : 1f)
                     * emitter.Alpha;
 
-                instanceRow[0] = new Vector4(center.x, center.z, size.x, field.ExtraHeight);
+                instanceRow[0] = new Vector4(center.x, center.z, size.x, extraHeight);
                 instanceRow[1] = new Vector4(radius, strength, y, size.y);
 
                 MaterialPropertyBlock constants = context.Engine.BlockFor(pass);
@@ -83,7 +93,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     constants.Clear();
                     if (field.SizeUniform != 0)
                     {
-                        constants.SetVector(field.SizeUniform, new Vector4(size.x, height, 0f, 0f));
+                        constants.SetVector(field.SizeUniform, new Vector4(size.x, height, extraHeight, 0f));
                     }
                     for (int i = 0; i < field.Bindings.Count; i++)
                     {
@@ -98,7 +108,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Vector3 quadCenter = new Vector3(
                 center.x,
                 y,
-                center.z + field.ExtraHeight * 0.5f);
+                center.z + extraHeight * 0.5f);
 
             VfxQuadOptions options = VfxQuadOptions.Of(new Vector2(size.x, height));
             options.Color = new Color(1f, 1f, 1f, emitter.Alpha);
@@ -122,7 +132,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             if (field.SizeUniform != 0)
             {
-                block.SetVector(field.SizeUniform, new Vector4(size.x, height, 0f, 0f));
+                block.SetVector(field.SizeUniform, new Vector4(size.x, height, extraHeight, 0f));
             }
             for (int i = 0; i < field.Bindings.Count; i++)
             {

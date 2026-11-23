@@ -205,12 +205,12 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 | 字段 | 默认值 | 说明 |
 |---|---|---|
 | `quadSize` | `(1, 1)` | 固定长宽（格）；开启 `sizeChannel` 或 `sizeFromRadius` 时不使用 |
-| `sizeChannel` | 空 | `vec4` 通道名，读取 `(halfX, halfZ, _, _)` 作为半长半宽（优先级最高，适合朝向会变的矩形场） |
+| `sizeChannel` | 空 | `vec4` 通道名，读取 `(halfX, halfZ, extraHeight, _)` 作为半长半宽与动态北向延伸（优先级最高；`halfX` 或 `halfZ <= 0` 时本帧跳过绘制） |
 | `sizeFromRadius` | `false` | 开启后边长按 `ceil(radius) * 2 + radiusPadding` 计算 |
 | `radiusPadding` | `3` | `sizeFromRadius` 的额外余量（格） |
 | `extraHeight` | `0` | 向北（+Z）额外延伸的高度（格），给上升光幕/雨幕留出绘制区域 |
 | `useAltitude` / `altitude` / `altitudeOffset` | `true` / `MoteLow` / `0` | 高度层及微调偏移；关闭 `useAltitude` 时在锚点 `y` 上加 `altitudeOffset` |
-| `centerUniform` / `sizeUniform` | 空 | 非实例化时自动写入的 uniform：`centerUniform` 写 `(center.x, center.z, 0, 0)`，`sizeUniform` 写 `(sizeX, sizeZ + extraHeight, 0, 0)` |
+| `centerUniform` / `sizeUniform` | 空 | 非实例化时自动写入的 uniform：`centerUniform` 写 `(center.x, center.z, 0, 0)`，`sizeUniform` 写 `(sizeX, sizeZ + extraHeight, extraHeight, 0)` |
 | `radiusChannel` / `strengthChannel` | 空 | 实例化路径读取的发射器级浮点通道（`strength` 会自动乘上 `emitter.Alpha`） |
 | `bindings` | 空 | 传递给 Shader 的额外 uniform |
 
@@ -219,7 +219,7 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 
 | 字段 | 默认值 | 说明 |
 |---|---|---|
-| `quadSize` | `(1, 1)` | 基础宽高（格） |
+| `quadSize` | `(1, 1)` | 基础宽高（格）；宽或高填 `0` 时自动按主贴图宽高比算出另一边 |
 | `useParticleSize` | `true` | 是否乘上粒子的 `Size` |
 | `useParticleRotation` | `true` | 是否使用粒子的 `RotationDegrees` |
 | `useParticleColor` | `true` | 是否使用粒子的 `Color`（关闭时视作纯白） |
@@ -288,28 +288,24 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 </bindings>
 ```
 
-#### 通道注册
+#### 通道分配（按特效独立）
 
-框架内置了 5 个常用的浮点通道（在 `VfxChannels` 中已注册，XML 直接写名字即可）：
+每个 `VfxEffect` 在编译自己的 Pass 时，会按 XML 中实际写到的名字自动分配局部槽位（发射器级浮点、逐粒子浮点、发射器级 `vec4`、发射器级贴图四张表各自独立）。**不同特效之间互不挤占，不需要事先在静态类里全局注册**，不用逐粒子通道的特效也不会浪费粒子通道内存。
+
+`VfxChannels` 提供 5 个常用通道名常量，方便和内置参数保持一致：
 - `"radius"`（`VfxChannels.Radius`）
 - `"strength"`（`VfxChannels.Strength`）
 - `"progress"`（`VfxChannels.Progress`）
 - `"alpha"`（`VfxChannels.Alpha`）
 - `"angle"`（`VfxChannels.Angle`）
 
-自定义通道（浮点上限 16、`vec4` 上限 16、贴图上限 8）需要放在 `[StaticConstructorOnStartup]` 静态类里提前注册，确保在进入游戏编译/预热 `VfxEffect` 之前可用：
+在外部直接用 `host.SetChannel(handle, "radius", value)` 按名写入即可；高频更新的 `VfxEmitter` 子类可以在 `Reset` 里向 `effect.RequireVectorSlot("rainWallAxis")` 等方法取一次局部下标缓存下来，每帧直接下标写入：
 
 ```csharp
-[StaticConstructorOnStartup]
-internal static class RainWallChannels
-{
-    internal static readonly int Axis = VfxChannels.RegisterVector("rainWallAxis");
-    internal static readonly int Band = VfxChannels.RegisterVector("rainWallBand");
-    internal static readonly int Quad = VfxChannels.RegisterVector("rainWallQuad");
-}
+axisSlot = effect.RequireVectorSlot("rainWallAxis");
 ```
 
-如果 XML 里写了未注册的通道名，`VfxEffect` 在进入游戏预热时会打 `Log.ErrorOnce` 提示具体的 `defName/passName` 和通道名。
+如果 C# 侧请求的通道名在当前特效的 XML 里没有绑定，`Require*Slot` 会打一条 `Log.WarningOnce` 提醒拼写不一致。
 
 ---
 
@@ -324,6 +320,7 @@ internal static class RainWallChannels
 | `<materialDef>` | 直接引用 XML `MaterialDef`，配置后会忽略 `shaderDef` 和 `texture` |
 | `<layer>` | 渲染层，默认 `0` |
 | `<bloomGroup>` | 泛光组 `ScreenBloomGroupDef` 名称；不填则不进泛光 |
+| `<bloomTint>` | 泛光染色，默认纯白 `(1, 1, 1, 1)` |
 | `<bloomIntensity>` | 泛光强度，默认 `1` |
 
 #### 接入泛光
@@ -481,5 +478,5 @@ GLSL 源码放在 `1.7/Shaders/Map/`，在 `*Shaders.xml` 里声明 `ShaderDef` 
 | 贴图绑定（静态额外贴图 + 动态贴图通道）、高度偏移与贴图翻转 | 已实现 |
 | 实例化支持 | `Field`（支持长方形与自动淡出）、`Sprite`（支持 `altitude`、长方形与 Shader 动画）已实现；`Streak` / `Ribbon` 尚未 |
 | 扩展渲染器（`Mesh`）、曲线参数（`SimpleCurve`） | 尚未 |
-| 已迁移特效 | 春泉边界光幕、荷雨（全部视觉层：地面水痕、水面折射、落点水花、荷花与倒影、雨幕、雨丝） |
-| 仍为旧实现 | 清荷其余特效（落花、霜月反击、斩铁剑、花铃、拔刀/受击、樱舞、镜花水月等） |
+| 已迁移特效 | 春泉边界光幕、荷雨（全部视觉层）、落华处决击杀、花铃冲击波与霜月镜反击 |
+| 仍为旧实现 | 清荷其余特效（斩铁剑、花铃弹道/蓄力/闪避、拔刀/受击、樱舞、镜花水月等） |

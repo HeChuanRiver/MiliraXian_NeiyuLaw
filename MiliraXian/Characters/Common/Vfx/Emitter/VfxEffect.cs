@@ -20,6 +20,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// </summary>
         internal VfxEffect(VfxDef def)
         {
+            Def = def;
             Name = def?.defName ?? "vfx";
             FadeOutSeconds = 0.35f;
             LifetimeSeconds = 0f;
@@ -29,6 +30,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             EmitterType = typeof(VfxEmitter);
             Build(def);
         }
+
+        internal VfxDef Def { get; }
 
         /// <summary>Diagnostics only; never used to find anything.</summary>
         internal string Name { get; }
@@ -46,6 +49,26 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>The strokes, drawn in order. Add new ones on the end; never rewrite the old ones.</summary>
         internal List<VfxPass> Passes { get; }
+
+        private readonly Dictionary<string, int> emitterFloatSlots = new();
+        private readonly Dictionary<string, int> particleFloatSlots = new();
+        private readonly Dictionary<string, int> vectorSlots = new();
+        private readonly Dictionary<string, int> textureSlots = new();
+
+        internal int EmitterFloatChannelCount => emitterFloatSlots.Count;
+        internal int ParticleFloatChannelCount => particleFloatSlots.Count;
+        internal int VectorChannelCount => vectorSlots.Count;
+        internal int TextureChannelCount => textureSlots.Count;
+
+        internal int EmitterFloatSlot(string name) => FindSlot(emitterFloatSlots, name);
+        internal int ParticleFloatSlot(string name) => FindSlot(particleFloatSlots, name);
+        internal int VectorSlot(string name) => FindSlot(vectorSlots, name);
+        internal int TextureSlot(string name) => FindSlot(textureSlots, name);
+
+        internal int RequireEmitterFloatSlot(string name) => RequireSlot(emitterFloatSlots, "channel", name);
+        internal int RequireParticleFloatSlot(string name) => RequireSlot(particleFloatSlots, "particle channel", name);
+        internal int RequireVectorSlot(string name) => RequireSlot(vectorSlots, "vec4 channel", name);
+        internal int RequireTextureSlot(string name) => RequireSlot(textureSlots, "texture channel", name);
 
         /// <summary>The class each spawn instantiates, from the def's <c>emitterClass</c>.</summary>
         internal Type EmitterType { get; set; }
@@ -74,7 +97,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             for (int i = 0; i < def.passes.Count; i++)
             {
-                VfxPass pass = BuildPass(Name, def.passes[i]);
+                VfxPass pass = BuildPass(def.passes[i]);
                 if (pass != null)
                 {
                     Passes.Add(pass);
@@ -82,14 +105,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
         }
 
-        private static VfxPass BuildPass(string effectName, VfxPassDef source)
+        private VfxPass BuildPass(VfxPassDef source)
         {
             if (source == null || !VfxRenderers.TryGet(source.renderer, out IVfxRenderer renderer))
             {
                 return null;
             }
 
-            string owner = effectName + "/" + source.name;
             VfxPass pass = new VfxPass
             {
                 Name = source.name,
@@ -101,6 +123,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Material = ResolveMaterial(source),
                 Layer = source.layer,
                 BloomGroup = source.bloomGroup.NullOrEmpty() ? null : source.bloomGroup,
+                BloomTint = source.bloomTint,
                 BloomIntensity = source.bloomIntensity,
                 ParticleGroup = source.particleGroup,
                 Mesh = InstanceMesh(source.instanceMesh),
@@ -109,24 +132,24 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             if (source.field != null)
             {
-                pass.Field = BuildField(owner, source.field);
+                pass.Field = BuildField(source.field);
             }
             if (source.sprite != null)
             {
-                pass.Sprite = BuildSprite(owner, source.sprite);
+                pass.Sprite = BuildSprite(source.sprite);
             }
             if (source.streak != null)
             {
-                pass.Streak = BuildStreak(owner, source.streak);
+                pass.Streak = BuildStreak(source.streak);
             }
             if (source.ribbon != null)
             {
-                pass.Ribbon = BuildRibbon(owner, source.ribbon);
+                pass.Ribbon = BuildRibbon(source.ribbon);
             }
             return pass;
         }
 
-        private static VfxRibbonParams BuildRibbon(string owner, VfxRibbonDef source)
+        private VfxRibbonParams BuildRibbon(VfxRibbonDef source)
         {
             VfxRibbonParams ribbon = new VfxRibbonParams
             {
@@ -137,20 +160,20 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 VMin = source.vMin,
                 VMax = source.vMax,
                 VFrames = Mathf.Max(1, source.vFrames),
-                FrameChannel = ChannelOf(owner, source.frameChannel),
+                FrameChannel = InternEmitterFloat(source.frameChannel),
                 NormalizeU = source.normalizeU,
                 UScale = source.uScale,
-                UChannel = ChannelOf(owner, source.uChannel),
-                RibbonIdChannel = ChannelOf(owner, source.ribbonIdChannel),
+                UChannel = InternParticleFloat(source.uChannel),
+                RibbonIdChannel = InternParticleFloat(source.ribbonIdChannel),
                 UseAltitude = source.useAltitude,
                 Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
                 AltitudeOffset = source.altitudeOffset,
             };
-            AddBindings(owner, ribbon.Bindings, source.bindings);
+            AddBindings(ribbon.Bindings, source.bindings);
             return ribbon;
         }
 
-        private static VfxStreakParams BuildStreak(string owner, VfxStreakDef source)
+        private VfxStreakParams BuildStreak(VfxStreakDef source)
         {
             VfxStreakParams streak = new VfxStreakParams
             {
@@ -160,11 +183,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
                 AltitudeOffset = source.altitudeOffset,
             };
-            AddBindings(owner, streak.Bindings, source.bindings);
+            AddBindings(streak.Bindings, source.bindings);
             return streak;
         }
 
-        private static VfxSpriteParams BuildSprite(string owner, VfxSpriteDef source)
+        private VfxSpriteParams BuildSprite(VfxSpriteDef source)
         {
             VfxSpriteParams sprite = new VfxSpriteParams
             {
@@ -176,7 +199,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 AtlasColumns = Mathf.Max(1, source.atlasColumns),
                 AtlasRows = Mathf.Max(1, source.atlasRows),
                 RotationRate = source.rotationRate,
-                FrameChannel = ChannelOf(owner, source.frameChannel),
+                FrameChannel = InternParticleFloat(source.frameChannel),
                 UseUvRect = source.useUvRect,
                 UvMin = source.uvMin,
                 UvMax = source.uvMax,
@@ -187,7 +210,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 AltitudeOffset = source.altitudeOffset,
             };
 
-            AddBindings(owner, sprite.Bindings, source.bindings);
+            AddBindings(sprite.Bindings, source.bindings);
             return sprite;
         }
 
@@ -208,8 +231,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return VfxMaterialCache.FromTexture(source.texture, source.shaderDef);
         }
 
-        private static VfxFieldParams BuildField(string owner, VfxFieldDef source)
+        private VfxFieldParams BuildField(VfxFieldDef source)
         {
+            string radiusName = source.radiusChannel.NullOrEmpty() && source.sizeFromRadius
+                ? VfxChannels.Radius
+                : source.radiusChannel;
             VfxFieldParams field = new VfxFieldParams
             {
                 QuadSize = source.quadSize,
@@ -221,17 +247,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 AltitudeOffset = source.altitudeOffset,
                 CenterUniform = UniformOf(source.centerUniform),
                 SizeUniform = UniformOf(source.sizeUniform),
-                RadiusChannel = ChannelOf(owner, source.radiusChannel),
-                StrengthChannel = ChannelOf(owner, source.strengthChannel),
-                SizeChannel = VectorChannelOf(owner, source.sizeChannel),
+                RadiusChannel = InternEmitterFloat(radiusName),
+                StrengthChannel = InternEmitterFloat(source.strengthChannel),
+                SizeChannel = InternVector(source.sizeChannel),
             };
 
-            AddBindings(owner, field.Bindings, source.bindings);
+            AddBindings(field.Bindings, source.bindings);
             return field;
         }
 
-        /// <summary>Turns authored bindings into resolved ones; unknown channel names log an error once.</summary>
-        private static void AddBindings(string owner, List<VfxUniformBinding> target, List<VfxBindingDef> source)
+        /// <summary>Turns authored bindings into resolved ones, allocating local channel slots on this effect.</summary>
+        private void AddBindings(List<VfxUniformBinding> target, List<VfxBindingDef> source)
         {
             if (source == null)
             {
@@ -252,7 +278,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
                 if (!binding.texChannel.NullOrEmpty())
                 {
-                    int texChannel = TextureChannelOf(owner, binding.texChannel);
+                    int texChannel = InternTexture(binding.texChannel);
                     if (texChannel >= 0)
                     {
                         target.Add(VfxUniformBinding.FromTextureChannel(uniform, texChannel));
@@ -274,7 +300,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
                 if (!binding.vecChannel.NullOrEmpty())
                 {
-                    int vecChannel = VectorChannelOf(owner, binding.vecChannel);
+                    int vecChannel = InternVector(binding.vecChannel);
                     if (vecChannel >= 0)
                     {
                         target.Add(VfxUniformBinding.FromVectorChannel(uniform, vecChannel));
@@ -299,7 +325,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                         : VfxUniformBinding.Vector(uniform, binding.value));
                     continue;
                 }
-                int channel = ChannelOf(owner, binding.channel);
+                int channel = InternEmitterFloat(binding.channel);
                 if (channel < 0)
                 {
                     continue;
@@ -315,49 +341,39 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return name.NullOrEmpty() ? 0 : Shader.PropertyToID(name);
         }
 
-        private static int ChannelOf(string owner, string name)
+        private int InternEmitterFloat(string name) => InternSlot(emitterFloatSlots, name);
+        private int InternParticleFloat(string name) => InternSlot(particleFloatSlots, name);
+        private int InternVector(string name) => InternSlot(vectorSlots, name);
+        private int InternTexture(string name) => InternSlot(textureSlots, name);
+
+        private static int InternSlot(Dictionary<string, int> table, string name)
         {
             if (name.NullOrEmpty())
             {
                 return -1;
             }
-            if (VfxChannels.TryFind(name, out int channel))
+            if (!table.TryGetValue(name, out int slot))
             {
-                return channel;
+                slot = table.Count;
+                table[name] = slot;
             }
-            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown channel '" + name + "'.",
-                GenText.StableStringHash("MX_Vfx_UnknownChannel_" + owner + "_" + name));
-            return -1;
+            return slot;
         }
 
-        private static int VectorChannelOf(string owner, string name)
+        private static int FindSlot(Dictionary<string, int> table, string name)
         {
-            if (name.NullOrEmpty())
-            {
-                return -1;
-            }
-            if (VfxChannels.TryFindVector(name, out int channel))
-            {
-                return channel;
-            }
-            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown vec4 channel '" + name + "'.",
-                GenText.StableStringHash("MX_Vfx_UnknownVecChannel_" + owner + "_" + name));
-            return -1;
+            return !name.NullOrEmpty() && table.TryGetValue(name, out int slot) ? slot : -1;
         }
 
-        private static int TextureChannelOf(string owner, string name)
+        private int RequireSlot(Dictionary<string, int> table, string kind, string name)
         {
-            if (name.NullOrEmpty())
+            int slot = FindSlot(table, name);
+            if (slot < 0 && !name.NullOrEmpty())
             {
-                return -1;
+                Log.WarningOnce("[MiliraXian] VFX '" + Name + "' has no " + kind + " named '" + name + "'.",
+                    GenText.StableStringHash("MX_Vfx_MissingSlot_" + Name + "_" + kind + "_" + name));
             }
-            if (VfxChannels.TryFindTexture(name, out int channel))
-            {
-                return channel;
-            }
-            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown texture channel '" + name + "'.",
-                GenText.StableStringHash("MX_Vfx_UnknownTexChannel_" + owner + "_" + name));
-            return -1;
+            return slot;
         }
 
         /// <summary>The frame-uniform id named by a def, or 0 for none/unknown.</summary>

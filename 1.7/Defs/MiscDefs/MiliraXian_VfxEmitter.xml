@@ -275,4 +275,230 @@
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
 
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_Luohua</defName>
+    <lifetimeSeconds>2.7</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>1</capacity>
+    <emitterClass>MiliraXian.Characters.QingHe.Things.Weapons.LuohuaEmitter</emitterClass>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Weapons.LuohuaVfxExtension">
+        <offset>(0, 0.2)</offset>
+        <!-- 淡入 0.7 秒，盖过振刀甩血（抽刀后约 1.1 秒回到待机） -->
+        <fadeInSeconds>0.7</fadeInSeconds>
+        <holdSeconds>1.2</holdSeconds>
+        <dissolveSeconds>0.8</dissolveSeconds>
+        <darkenAlpha>0.65</darkenAlpha>
+      </li>
+    </modExtensions>
+
+    <!-- 落华处决击杀特效：周围软边压暗黑圆 + 竖排白字噪声溶解与粉色泛光 -->
+    <passes>
+      <li>
+        <name>darken</name>
+        <renderer>Field</renderer>
+        <texture>MiliraXianQinghe/Effect/SakuraDance/Glow</texture>
+        <shaderDef>MX_QH_SakuraTrailAlpha</shaderDef>
+        <layer>0</layer>
+        <field>
+          <!-- 半径 4 格的软边黑圆（直径 8）；_AlphaScale = 3 扩大全暗核心区，只留外圈渐变 -->
+          <quadSize>(8, 8)</quadSize>
+          <useAltitude>true</useAltitude>
+          <altitude>MetaOverlays</altitude>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(0, 0, 0, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>3</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>0</floatValue></li>
+            <li><uniform>_AlphaMax</uniform><channel>alpha</channel></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
+        <name>text</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/Luohua/Luohua</texture>
+        <shaderDef>MX_QH_LuohuaText</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomTint>(1, 0.55, 0.75, 1)</bloomTint>
+        <bloomIntensity>1.6</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <!-- 高度固定 1.2 格，宽填 0 由渲染器按主贴图宽高比自动算出 -->
+          <quadSize>(0, 1.2)</quadSize>
+          <useParticleSize>false</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <flipV>true</flipV>
+          <useAltitude>true</useAltitude>
+          <altitude>MetaOverlays</altitude>
+          <altitudeOffset>0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Color</uniform><value>(1, 1, 1, 1)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Dissolve</uniform><channel>progress</channel></li>
+            <li><uniform>_NoiseScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_EdgeWidth</uniform><floatValue>0.08</floatValue></li>
+            <li><uniform>_EdgeColor</uniform><value>(1, 0.6, 0.7, 1)</value></li>
+            <li><uniform>_NoiseTex</uniform><texture>MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</texture></li>
+          </bindings>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_BellWave</defName>
+    <lifetimeSeconds>1.08</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>0</capacity>
+    <emitterClass>MiliraXian.Characters.QingHe.Things.Projectiles.BellWaveEmitter</emitterClass>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.BellWaveVfxExtension">
+        <ringSeconds>0.9</ringSeconds>
+        <emitFlash>false</emitFlash>
+      </li>
+    </modExtensions>
+
+    <!-- 花铃音符冲击波：穹顶光幕与地面环 + 空气折射透镜 -->
+    <passes>
+      <li>
+        <name>wave</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_BellWave</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>1.35</bloomIntensity>
+        <field>
+          <sizeChannel>bellWaveQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>-0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Wave</uniform><vecChannel>bellWaveWave</vecChannel></li>
+            <li><uniform>_Shell</uniform><value>(0.05, 4, 0.5, 0.56)</value></li>
+            <li><uniform>_Foot</uniform><value>(0.02, 0.53, 0.058, 0.164)</value></li>
+            <li><uniform>_Glow</uniform><vecChannel>bellWaveGlow</vecChannel></li>
+            <li><uniform>_Core</uniform><vecChannel>bellWaveCore</vecChannel></li>
+            <li><uniform>_FadePow</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
+        <name>distort</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_BellWaveDistort</shaderDef>
+        <layer>0</layer>
+        <field>
+          <sizeChannel>bellWaveQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>-0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Wave</uniform><vecChannel>bellWaveDistortWave</vecChannel></li>
+            <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
+            <li><uniform>_DistortParams</uniform><value>(1.5, 0.05, 0, 0)</value></li>
+          </bindings>
+        </field>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_Vfx_FrostRetaliation</defName>
+    <lifetimeSeconds>0.68</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>2</capacity>
+    <emitterClass>MiliraXian.Characters.QingHe.Things.Projectiles.BellWaveEmitter</emitterClass>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.QingHe.Things.Projectiles.BellWaveVfxExtension">
+        <ringSeconds>0.5</ringSeconds>
+        <emitFlash>true</emitFlash>
+      </li>
+    </modExtensions>
+
+    <!-- 霜月镜反击撞击特效：两层高斯闪光 + 霜色穹顶波纹 + 空气折射 -->
+    <passes>
+      <li>
+        <name>flash</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianQinghe/Effect/SakuraDance/Glow</texture>
+        <shaderDef>MX_QH_SakuraTrailAdd</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>1.35</bloomIntensity>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <quadSize>(1, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.03</altitudeOffset>
+          <bindings>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>4</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </sprite>
+      </li>
+
+      <li>
+        <name>wave</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_BellWave</shaderDef>
+        <layer>0</layer>
+        <bloomGroup>MX_ScreenBloom_Glow</bloomGroup>
+        <bloomIntensity>1.35</bloomIntensity>
+        <field>
+          <sizeChannel>bellWaveQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>-0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Wave</uniform><vecChannel>bellWaveWave</vecChannel></li>
+            <li><uniform>_Shell</uniform><value>(0.05, 4, 0.5, 0.56)</value></li>
+            <li><uniform>_Foot</uniform><value>(0.02, 0.53, 0.058, 0.164)</value></li>
+            <li><uniform>_Glow</uniform><vecChannel>bellWaveGlow</vecChannel></li>
+            <li><uniform>_Core</uniform><vecChannel>bellWaveCore</vecChannel></li>
+            <li><uniform>_FadePow</uniform><floatValue>1</floatValue></li>
+          </bindings>
+        </field>
+      </li>
+
+      <li>
+        <name>distort</name>
+        <renderer>Field</renderer>
+        <texture>White</texture>
+        <shaderDef>MX_QH_BellWaveDistort</shaderDef>
+        <layer>0</layer>
+        <field>
+          <sizeChannel>bellWaveQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>-0.01</altitudeOffset>
+          <bindings>
+            <li><uniform>_Wave</uniform><vecChannel>bellWaveDistortWave</vecChannel></li>
+            <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
+            <li><uniform>_DistortParams</uniform><value>(1.5, 0.05, 0, 0)</value></li>
+          </bindings>
+        </field>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+
 </Defs>

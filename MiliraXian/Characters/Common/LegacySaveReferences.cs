@@ -24,9 +24,8 @@ namespace MiliraXian.Characters.Common
             // Qinghe's posture moved to the shared combat posture (Common/Combat).
             { "MiliraXian.Characters.Neiyu.Hediff_NeiyuPosture", typeof(Combat.Hediff_CombatPosture) },
             { "MiliraXian.Characters.Neiyu.JobDriver_NeiyuPostureBroken", typeof(Combat.JobDriver_CombatPostureBroken) },
-            // Qinghe's per-map VFX components, renamed with the Kyouka Suigetsu / Luohua moves.
-            { "MiliraXian.Characters.QingHe.Vfx.MapComponent_MirrorVisuals", typeof(MiliraXian.Characters.QingHe.Vfx.MapComponent_KyoukaVisuals) },
-            { "MiliraXian.Characters.QingHe.Things.Weapons.MapComponent_QingheKillVfx", typeof(MiliraXian.Characters.QingHe.Things.Weapons.MapComponent_LuohuaVfx) }
+            // Qinghe's per-map VFX component, renamed with the Kyouka Suigetsu move.
+            { "MiliraXian.Characters.QingHe.Vfx.MapComponent_MirrorVisuals", typeof(MiliraXian.Characters.QingHe.Vfx.MapComponent_KyoukaVisuals) }
         };
 
         // Defs renamed in place; the saved data keeps its meaning under the new name.

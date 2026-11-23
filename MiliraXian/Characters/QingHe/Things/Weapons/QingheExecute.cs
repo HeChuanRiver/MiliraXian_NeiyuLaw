@@ -341,7 +341,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 else
                 {
                     // The word and the darkening start fading in with the death; petals burst from the wound.
-                    MapComponent_LuohuaVfx.Spawn(map, C.killVfx, at);
+                    LuohuaEmitter.Spawn(map, C.killVfx, at);
                     SpawnKillPetals(map);
                 }
             }

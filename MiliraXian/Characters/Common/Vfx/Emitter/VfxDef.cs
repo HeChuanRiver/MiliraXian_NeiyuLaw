@@ -226,6 +226,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         public string bloomGroup;
 
+        public Color bloomTint = Color.white;
+
         public float bloomIntensity = 1f;
 
         /// <summary>Which particle group this stroke draws, or -1 for every particle.</summary>

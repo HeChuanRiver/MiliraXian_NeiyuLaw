@@ -69,13 +69,32 @@ namespace MiliraXian.Characters.QingHe.Things
         private int lotusStart;
         private readonly Vector4[] lotusBuffer = new Vector4[LotusCount];
 
+        private int axisSlot;
+        private int bandSlot;
+        private int quadSlot;
+        private readonly int[] lotusSlots = new int[LotusCount];
+        private readonly int[] windSlots = new int[WindCount];
+
         internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int nowTick, Vector3 position)
         {
             base.Reset(effect, anchor, version, nowTick, position);
 
+            axisSlot = effect.RequireVectorSlot("rainWallAxis");
+            bandSlot = effect.RequireVectorSlot("rainWallBand");
+            quadSlot = effect.RequireVectorSlot("rainWallQuad");
+            lotusSlots[0] = effect.RequireVectorSlot("rainWallLotusA");
+            lotusSlots[1] = effect.RequireVectorSlot("rainWallLotusB");
+            lotusSlots[2] = effect.RequireVectorSlot("rainWallLotusC");
+            lotusSlots[3] = effect.RequireVectorSlot("rainWallLotusD");
+            windSlots[0] = effect.RequireVectorSlot("rainWallWindA");
+            windSlots[1] = effect.RequireVectorSlot("rainWallWindB");
+            windSlots[2] = effect.RequireVectorSlot("rainWallWindC");
+            windSlots[3] = effect.RequireVectorSlot("rainWallWindD");
+            windSlots[4] = effect.RequireVectorSlot("rainWallWindE");
+
             wall = anchor.Kind == VfxAnchorKind.ThingComp ? anchor.Comp as CompLotusRainWall : null;
-            int lotusSlots = LotusCount * 2;
-            int available = Particles == null ? 0 : Mathf.Max(0, Particles.Length - lotusSlots);
+            int lotusParticleCount = LotusCount * 2;
+            int available = Particles == null ? 0 : Mathf.Max(0, Particles.Length - lotusParticleCount);
             strands = wall == null ? 0 : CountFor(wall.Props);
             strands = Mathf.Min(strands, available / 2);
             splashes = strands;
@@ -122,14 +141,14 @@ namespace MiliraXian.Characters.QingHe.Things
             Vector3 origin = new(owner.parent.Position.x + 0.5f, 0f, owner.parent.Position.z + 0.5f);
 
             // The strokes read these as uniforms; they are the wall's own geometry, not per particle.
-            SetVectorChannel(RainWallChannels.Axis, new Vector4(along.x, along.y, across.x, across.y));
-            SetVectorChannel(RainWallChannels.Band, new Vector4(halfLength, halfThickness, seconds, strength));
+            SetVectorChannel(axisSlot, new Vector4(along.x, along.y, across.x, across.y));
+            SetVectorChannel(bandSlot, new Vector4(halfLength, halfThickness, seconds, strength));
 
             // The axis-aligned quad that covers the band, padding included: the band is rotated, so
             // its footprint depends on the wall's direction and cannot be a pass constant.
             float halfX = halfLength * Mathf.Abs(along.x) + halfThickness * Mathf.Abs(across.x) + QuadPadding;
             float halfZ = halfLength * Mathf.Abs(along.y) + halfThickness * Mathf.Abs(across.y) + QuadPadding;
-            SetVectorChannel(RainWallChannels.Quad, new Vector4(halfX, halfZ, 0f, 0f));
+            SetVectorChannel(quadSlot, new Vector4(halfX, halfZ, 0f, 0f));
 
             UpdateLotusAndWindChannels(owner, halfLength, halfThickness);
 
@@ -206,10 +225,10 @@ namespace MiliraXian.Characters.QingHe.Things
                 float start = 0.05f + 0.28f * i + NextRand(ref lotusState) * 0.12f;
                 lotusBuffer[i] = new Vector4(baseAlong + jitter * 0.25f, across * 0.7f * halfThickness, radius, start);
             }
-            SetVectorChannel(RainWallChannels.LotusA, lotusBuffer[0]);
-            SetVectorChannel(RainWallChannels.LotusB, lotusBuffer[1]);
-            SetVectorChannel(RainWallChannels.LotusC, lotusBuffer[2]);
-            SetVectorChannel(RainWallChannels.LotusD, lotusBuffer[3]);
+            for (int i = 0; i < LotusCount; i++)
+            {
+                SetVectorChannel(lotusSlots[i], lotusBuffer[i]);
+            }
 
             uint windState = (uint)(owner.parent.thingIDNumber * 777 + 123);
             for (int i = 0; i < WindCount; i++)
@@ -218,15 +237,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 float across = (NextRand(ref windState) * 2f - 1f) * halfThickness;
                 float lam = 1.0f + NextRand(ref windState) * 0.8f;
                 float amp = 0.003f + NextRand(ref windState) * 0.002f;
-                Vector4 packet = new(along, across, lam, amp);
-                switch (i)
-                {
-                    case 0: SetVectorChannel(RainWallChannels.WindA, packet); break;
-                    case 1: SetVectorChannel(RainWallChannels.WindB, packet); break;
-                    case 2: SetVectorChannel(RainWallChannels.WindC, packet); break;
-                    case 3: SetVectorChannel(RainWallChannels.WindD, packet); break;
-                    default: SetVectorChannel(RainWallChannels.WindE, packet); break;
-                }
+                SetVectorChannel(windSlots[i], new Vector4(along, across, lam, amp));
             }
         }
 

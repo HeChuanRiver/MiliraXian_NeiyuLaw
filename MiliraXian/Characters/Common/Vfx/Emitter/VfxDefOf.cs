@@ -10,5 +10,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public static VfxDef MX_Vfx_SpringFlow;
 
         public static VfxDef MX_Vfx_RainWallStrands;
+
+        public static VfxDef MX_Vfx_BellWave;
+
+        public static VfxDef MX_Vfx_FrostRetaliation;
     }
 }
