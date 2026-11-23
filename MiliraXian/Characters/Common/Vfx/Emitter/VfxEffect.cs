@@ -69,7 +69,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             for (int i = 0; i < def.passes.Count; i++)
             {
-                VfxPass pass = BuildPass(def.passes[i]);
+                VfxPass pass = BuildPass(Name, def.passes[i]);
                 if (pass != null)
                 {
                     Passes.Add(pass);
@@ -77,13 +77,14 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
         }
 
-        private static VfxPass BuildPass(VfxPassDef source)
+        private static VfxPass BuildPass(string effectName, VfxPassDef source)
         {
             if (source == null || !VfxRenderers.TryGet(source.renderer, out IVfxRenderer renderer))
             {
                 return null;
             }
 
+            string owner = effectName + "/" + source.name;
             VfxPass pass = new VfxPass
             {
                 Name = source.name,
@@ -103,19 +104,20 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             if (source.field != null)
             {
-                pass.Field = BuildField(source.field);
-            }            if (source.sprite != null)
+                pass.Field = BuildField(owner, source.field);
+            }
+            if (source.sprite != null)
             {
-                pass.Sprite = BuildSprite(source.sprite);
+                pass.Sprite = BuildSprite(owner, source.sprite);
             }
             if (source.streak != null)
             {
-                pass.Streak = BuildStreak(source.streak);
+                pass.Streak = BuildStreak(owner, source.streak);
             }
             return pass;
         }
 
-        private static VfxStreakParams BuildStreak(VfxStreakDef source)
+        private static VfxStreakParams BuildStreak(string owner, VfxStreakDef source)
         {
             VfxStreakParams streak = new VfxStreakParams
             {
@@ -123,11 +125,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 TailAlpha = Mathf.Clamp01(source.tailAlpha),
                 Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
             };
-            AddBindings(streak.Bindings, source.bindings);
+            AddBindings(owner, streak.Bindings, source.bindings);
             return streak;
         }
 
-        private static VfxSpriteParams BuildSprite(VfxSpriteDef source)
+        private static VfxSpriteParams BuildSprite(string owner, VfxSpriteDef source)
         {
             VfxSpriteParams sprite = new VfxSpriteParams
             {
@@ -139,16 +141,14 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 AtlasColumns = Mathf.Max(1, source.atlasColumns),
                 AtlasRows = Mathf.Max(1, source.atlasRows),
                 RotationRate = source.rotationRate,
-                FrameChannel = source.frameChannel.NullOrEmpty()
-                    ? -1
-                    : VfxChannels.TryFind(source.frameChannel, out int frame) ? frame : -1,
+                FrameChannel = ChannelOf(owner, source.frameChannel),
                 UseUvRect = source.useUvRect,
                 UvMin = source.uvMin,
                 UvMax = source.uvMax,
                 Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
             };
 
-            AddBindings(sprite.Bindings, source.bindings);
+            AddBindings(owner, sprite.Bindings, source.bindings);
             return sprite;
         }
 
@@ -169,7 +169,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return VfxMaterialCache.FromTexture(source.texture, source.shaderDef);
         }
 
-        private static VfxFieldParams BuildField(VfxFieldDef source)
+        private static VfxFieldParams BuildField(string owner, VfxFieldDef source)
         {
             VfxFieldParams field = new VfxFieldParams
             {
@@ -180,19 +180,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
                 CenterUniform = UniformOf(source.centerUniform),
                 SizeUniform = UniformOf(source.sizeUniform),
-                RadiusChannel = ChannelOf(source.radiusChannel),
-                StrengthChannel = ChannelOf(source.strengthChannel),
-                SizeChannel = source.sizeChannel.NullOrEmpty()
-                    ? -1
-                    : VfxChannels.TryFindVector(source.sizeChannel, out int size) ? size : -1,
+                RadiusChannel = ChannelOf(owner, source.radiusChannel),
+                StrengthChannel = ChannelOf(owner, source.strengthChannel),
+                SizeChannel = VectorChannelOf(owner, source.sizeChannel),
             };
 
-            AddBindings(field.Bindings, source.bindings);
+            AddBindings(owner, field.Bindings, source.bindings);
             return field;
         }
 
-        /// <summary>Turns authored bindings into resolved ones; a name that resolves to nothing is skipped.</summary>
-        private static void AddBindings(List<VfxUniformBinding> target, List<VfxBindingDef> source)
+        /// <summary>Turns authored bindings into resolved ones; unknown channel names log an error once.</summary>
+        private static void AddBindings(string owner, List<VfxUniformBinding> target, List<VfxBindingDef> source)
         {
             if (source == null)
             {
@@ -213,7 +211,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
                 if (!binding.vecChannel.NullOrEmpty())
                 {
-                    if (VfxChannels.TryFindVector(binding.vecChannel, out int vecChannel))
+                    int vecChannel = VectorChannelOf(owner, binding.vecChannel);
+                    if (vecChannel >= 0)
                     {
                         target.Add(VfxUniformBinding.FromVectorChannel(uniform, vecChannel));
                     }
@@ -232,12 +231,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
                 if (binding.channel.NullOrEmpty())
                 {
-                    target.Add(binding.component < 0
-                        ? VfxUniformBinding.FloatConstant(uniform, binding.value.x)
+                    target.Add(!float.IsNaN(binding.floatValue)
+                        ? VfxUniformBinding.FloatConstant(uniform, binding.floatValue)
                         : VfxUniformBinding.Vector(uniform, binding.value));
                     continue;
                 }
-                if (!VfxChannels.TryFind(binding.channel, out int channel))
+                int channel = ChannelOf(owner, binding.channel);
+                if (channel < 0)
                 {
                     continue;
                 }
@@ -252,10 +252,34 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return name.NullOrEmpty() ? 0 : Shader.PropertyToID(name);
         }
 
-        /// <summary>A channel id from an authored name, or -1 when the name is empty or unknown.</summary>
-        private static int ChannelOf(string name)
+        private static int ChannelOf(string owner, string name)
         {
-            return name.NullOrEmpty() || !VfxChannels.TryFind(name, out int channel) ? -1 : channel;
+            if (name.NullOrEmpty())
+            {
+                return -1;
+            }
+            if (VfxChannels.TryFind(name, out int channel))
+            {
+                return channel;
+            }
+            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown channel '" + name + "'.",
+                GenText.StableStringHash("MX_Vfx_UnknownChannel_" + owner + "_" + name));
+            return -1;
+        }
+
+        private static int VectorChannelOf(string owner, string name)
+        {
+            if (name.NullOrEmpty())
+            {
+                return -1;
+            }
+            if (VfxChannels.TryFindVector(name, out int channel))
+            {
+                return channel;
+            }
+            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown vec4 channel '" + name + "'.",
+                GenText.StableStringHash("MX_Vfx_UnknownVecChannel_" + owner + "_" + name));
+            return -1;
         }
 
         /// <summary>The frame-uniform id named by a def, or 0 for none/unknown.</summary>

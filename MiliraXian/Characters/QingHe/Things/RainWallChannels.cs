@@ -4,8 +4,8 @@ using Verse;
 namespace MiliraXian.Characters.QingHe.Things
 {
     /// <summary>
-    /// The rain wall's vec4 channels. They must be registered before any <c>VfxDef</c>'s
-    /// <c>ConfigErrors</c> runs, which is why this is a startup class rather than a lazy field.
+    /// The rain wall's vec4 channels. Registered at startup so they are ready before
+    /// <c>VfxDefCompiler</c> compiles and prewarms effects.
     /// </summary>
     [StaticConstructorOnStartup]
     internal static class RainWallChannels

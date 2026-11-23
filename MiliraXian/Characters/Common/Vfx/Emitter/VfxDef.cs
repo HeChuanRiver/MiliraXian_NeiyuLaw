@@ -120,30 +120,34 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     yield return prefix + "the Streak renderer needs a <streak> block";
                 }
 
-                ValidateBindings(pass.field?.bindings, prefix + "field");
-                ValidateBindings(pass.sprite?.bindings, prefix + "sprite");
-                ValidateBindings(pass.streak?.bindings, prefix + "streak");
+                foreach (string error in ValidateBindings(pass.field?.bindings, prefix + "field"))
+                {
+                    yield return error;
+                }
+                foreach (string error in ValidateBindings(pass.sprite?.bindings, prefix + "sprite"))
+                {
+                    yield return error;
+                }
+                foreach (string error in ValidateBindings(pass.streak?.bindings, prefix + "streak"))
+                {
+                    yield return error;
+                }
 
                 if (pass.field != null && pass.field.sizeFromRadius && pass.field.radiusPadding < 0f)
                 {
                     yield return prefix + "field.radiusPadding must not be negative";
                 }
-                if (pass.sprite != null)
+                if (pass.sprite != null && (pass.sprite.atlasColumns < 1 || pass.sprite.atlasRows < 1))
                 {
-                    if (pass.sprite.atlasColumns < 1 || pass.sprite.atlasRows < 1)
-                    {
-                        yield return prefix + "sprite.atlasColumns/atlasRows must be at least 1";
-                    }
-                    if (!pass.sprite.frameChannel.NullOrEmpty()
-                        && !VfxChannels.TryFind(pass.sprite.frameChannel, out _))
-                    {
-                        yield return prefix + "sprite.frameChannel uses unknown channel '" + pass.sprite.frameChannel + "'";
-                    }
+                    yield return prefix + "sprite.atlasColumns/atlasRows must be at least 1";
                 }
             }
         }
 
-        /// <summary>Shared checks for a pass's uniform bindings, whichever renderer reads them.</summary>
+        /// <summary>
+        /// Shared syntax checks for a pass's uniform bindings. Channel existence is checked later in
+        /// <see cref="VfxEffect"/> because <c>ConfigErrors</c> runs before <c>[StaticConstructorOnStartup]</c>.
+        /// </summary>
         private static IEnumerable<string> ValidateBindings(List<VfxBindingDef> bindings, string label)
         {
             if (bindings == null)
@@ -167,13 +171,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     yield return label + ".bindings[" + b + "].component must be -1..3";
                 }
-                if (!binding.channel.NullOrEmpty() && !VfxChannels.TryFind(binding.channel, out _))
+                if (!binding.frame.NullOrEmpty())
                 {
-                    yield return label + ".bindings[" + b + "] uses unknown channel '" + binding.channel + "'";
-                }
-                if (!binding.vecChannel.NullOrEmpty() && !VfxChannels.TryFindVector(binding.vecChannel, out _))
-                {
-                    yield return label + ".bindings[" + b + "] uses unknown vec4 channel '" + binding.vecChannel + "'";
+                    string frame = binding.frame.Trim();
+                    if (frame != "screenPerCell" && frame != "time")
+                    {
+                        yield return label + ".bindings[" + b + "] uses unknown frame uniform '" + binding.frame + "'";
+                    }
                 }
             }
         }
@@ -320,22 +324,25 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public List<VfxBindingDef> bindings = new();
     }
 
-    /// <summary>One uniform write: a constant, or a slot filled from a particle channel.</summary>
+    /// <summary>One uniform write: a constant, a frame value, or a slot filled from a channel.</summary>
     public class VfxBindingDef
     {
         public string uniform;
 
-        /// <summary>-1 writes a float uniform; 0..3 fills that slot of a vec4.</summary>
+        /// <summary>With <see cref="channel"/>: -1 writes a float uniform; 0..3 fills that slot of <see cref="value"/>.</summary>
         public int component = -1;
 
-        /// <summary>A channel name, or empty to write <see cref="value"/> as-is.</summary>
+        /// <summary>A channel name, or empty to write a constant.</summary>
         public string channel;
 
         /// <summary>A vec4 channel name; when set it replaces the whole uniform with that vector.</summary>
         public string vecChannel;
 
-        /// <summary>A camera-derived frame value: <c>screenPerCell</c>. Same for every stroke, per frame.</summary>
+        /// <summary>A frame-wide value (<c>screenPerCell</c> or <c>time</c>). Same for every stroke, per frame.</summary>
         public string frame;
+
+        /// <summary>Float constant when set; otherwise constant bindings write <see cref="value"/> as a vec4.</summary>
+        public float floatValue = float.NaN;
 
         public Vector4 value;
     }

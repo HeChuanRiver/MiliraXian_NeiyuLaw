@@ -71,9 +71,9 @@
           <tailAlpha>0.25</tailAlpha>
           <useAltitude>false</useAltitude>
           <bindings>
-            <li><uniform>_Brightness</uniform><value>(1, 0, 0, 0)</value></li>
-            <li><uniform>_AlphaScale</uniform><value>(1, 0, 0, 0)</value></li>
-            <li><uniform>_Additive</uniform><value>(1, 0, 0, 0)</value></li>
+            <li><uniform>_Brightness</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_AlphaScale</uniform><floatValue>1</floatValue></li>
+            <li><uniform>_Additive</uniform><floatValue>1</floatValue></li>
           </bindings>
         </streak>
       </li>
