@@ -48,7 +48,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             block.Clear();
             for (int i = 0; i < sprite.Bindings.Count; i++)
             {
-                VfxUniformBinding.Apply(block, emitter, sprite.Bindings[i], 0, context.Engine.Frame);
+                VfxUniformBinding.Apply(block, emitter, sprite.Bindings[i], context.Engine.Frame);
             }
 
             writer.Clear();
@@ -83,7 +83,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 options.Color.g *= sprite.Tint.g;
                 options.Color.b *= sprite.Tint.b;
 
-                AtlasUv(emitter, sprite, out Vector2 uvMin, out Vector2 uvMax);
+                AtlasUv(emitter, i, sprite, out Vector2 uvMin, out Vector2 uvMax);
                 options.UvMin = uvMin;
                 options.UvMax = uvMax;
                 Vector3 center = particle.Position;
@@ -132,9 +132,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
 
             constants.Clear();
+            float aspect = sprite.QuadSize.x > 1e-4f ? sprite.QuadSize.y / sprite.QuadSize.x : 1f;
+            constants.SetVector(VfxShaderIds.QuadSize, new Vector4(sprite.QuadSize.x, sprite.QuadSize.y, aspect, 0f));
             for (int i = 0; i < sprite.Bindings.Count; i++)
             {
-                VfxUniformBinding.Apply(constants, emitter, sprite.Bindings[i], 0, context.Engine.Frame);
+                VfxUniformBinding.Apply(constants, emitter, sprite.Bindings[i], context.Engine.Frame);
             }
 
             float alpha = emitter.Alpha;
@@ -159,10 +161,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     continue;
                 }
 
+                float y = sprite.Altitude > 0f ? sprite.Altitude : particle.Position.y;
                 instanceRow[0] = new Vector4(
                     particle.Position.x, particle.Position.z, size * 0.5f, particle.SpawnSeconds);
                 instanceRow[1] = new Vector4(
-                    particle.Position.y,
+                    y,
                     sprite.UseParticleRotation ? particle.RotationDegrees : 0f,
                     rotationRate,
                     sprite.FrameChannel >= 0 ? Mathf.FloorToInt(emitter.Channel(i, sprite.FrameChannel)) : 0f);
@@ -182,7 +185,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         }
 
         /// <summary>The uv rect of the particle's atlas frame, or the whole texture when there is no atlas.</summary>
-        private static void AtlasUv(VfxEmitter emitter, VfxSpriteParams sprite, out Vector2 uvMin, out Vector2 uvMax)
+        private static void AtlasUv(VfxEmitter emitter, int particleIndex, VfxSpriteParams sprite,
+            out Vector2 uvMin, out Vector2 uvMax)
         {
             if (sprite.UseUvRect)
             {
@@ -201,7 +205,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 return;
             }
 
-            int frame = sprite.FrameChannel >= 0 ? Mathf.FloorToInt(emitter.Channel(0, sprite.FrameChannel)) : 0;
+            int frame = sprite.FrameChannel >= 0 ? Mathf.FloorToInt(emitter.Channel(particleIndex, sprite.FrameChannel)) : 0;
             frame = ((frame % (columns * rows)) + columns * rows) % (columns * rows);
 
             int column = frame % columns;

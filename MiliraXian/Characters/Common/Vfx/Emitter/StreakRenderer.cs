@@ -33,7 +33,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             block.Clear();
             for (int i = 0; i < streak.Bindings.Count; i++)
             {
-                VfxUniformBinding.Apply(block, emitter, streak.Bindings[i], 0, context.Engine.Frame);
+                VfxUniformBinding.Apply(block, emitter, streak.Bindings[i], context.Engine.Frame);
             }
 
             writer.Clear();

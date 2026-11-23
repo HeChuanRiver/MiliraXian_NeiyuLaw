@@ -98,9 +98,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             };
         }
 
-        /// <summary>Writes this binding into the block, reading <paramref name="particleIndex"/>'s channel.</summary>
+        /// <summary>Writes this binding into the block, reading emitter-level channels.</summary>
         internal static void Apply(MaterialPropertyBlock block, VfxEmitter emitter, in VfxUniformBinding binding,
-            int particleIndex, VfxFrameUniforms frame)
+            VfxFrameUniforms frame)
         {
             if (binding.Frame > 0)
             {
@@ -134,7 +134,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 return;
             }
 
-            float value = emitter.Channel(particleIndex, binding.Channel);
+            float value = emitter.EmitterChannel(binding.Channel);
             if (binding.Component < 0)
             {
                 block.SetFloat(binding.Uniform, value);

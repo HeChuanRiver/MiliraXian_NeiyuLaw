@@ -14,14 +14,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
     /// </summary>
     public class VfxDef : Def
     {
-        /// <summary>How long the emitter takes to fade once <c>Maintain</c> stops.</summary>
+        /// <summary>How long the emitter takes to fade once <c>Maintain</c> stops or lifetime ends.</summary>
         public float fadeOutSeconds = 0.35f;
 
         /// <summary>Total life; zero or less means "until <c>Maintain</c> stops".</summary>
         public float lifetimeSeconds;
 
-        /// <summary>Upper bound on simultaneous particles; the emitter allocates for this once.</summary>
-        public int capacity = 1;
+        /// <summary>When false, the emitter lives for <see cref="lifetimeSeconds"/> without per-tick Maintain calls.</summary>
+        public bool requireMaintain = true;
+
+        /// <summary>Upper bound on simultaneous particles; 0 is valid for pure Field effects.</summary>
+        public int capacity;
 
         /// <summary>The strokes, drawn in order. Add new ones on the end; never rewrite the old ones.</summary>
         public List<VfxPassDef> passes = new();
@@ -46,9 +49,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 yield return error;
             }
 
-            if (capacity < 1)
+            if (capacity < 0)
             {
-                yield return "capacity must be at least 1";
+                yield return "capacity must not be negative";
             }
             if (fadeOutSeconds < 0f)
             {
@@ -57,6 +60,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             if (lifetimeSeconds < 0f)
             {
                 yield return "lifetimeSeconds must not be negative";
+            }
+            if (!requireMaintain && lifetimeSeconds <= 0f)
+            {
+                yield return "requireMaintain is false, so lifetimeSeconds must be positive";
             }
             if (!vfxClass.NullOrEmpty() && !VfxDefCompiler.IsValidVfxClass(vfxClass))
             {

@@ -3,12 +3,12 @@
 // 春泉边界（实例化版）：一块共享四边形，逐实例的数据从 _InstanceData 读。
 //
 // 实例布局：每实例 <instanceVectors> 个 vec4（本项为 2），缓冲步长就等于它。
-//   row0 = (center.x, center.z, size, extraHeight)
-//   row1 = (radius, strength, altitude, 0)
+//   row0 = (center.x, center.z, sizeX, extraHeight)
+//   row1 = (radius, strength, altitude, sizeZ)
 //
-// 顶点只提供 uv（0..1）；世界坐标由 uv 与实例数据算出，和旧实现同一条公式：
-//   worldX = center.x - size/2 + uv.x * size
-//   worldZ = center.z - size/2 + uv.y * (size + extraHeight)
+// 顶点只提供 uv（0..1）；世界坐标由 uv 与实例数据算出：
+//   worldX = center.x - sizeX/2 + uv.x * sizeX
+//   worldZ = center.z - sizeZ/2 + uv.y * (sizeZ + extraHeight)
 
 layout(location = 0) in vec3 inPosition; // @vertex Position required
 layout(location = 3) in vec4 inUv0; // @vertex TexCoord0 optional @default = vec4(0.0)
@@ -39,11 +39,12 @@ void main()
     vec4 row1 = uInst.data[base + 1];
 
     vec2 center = row0.xy;
-    float size = row0.z;
+    float sizeX = row0.z;
+    float sizeZ = row1.w;
     float extra = row0.w;
 
-    float worldX = center.x - size * 0.5 + inUv0.x * size;
-    float worldZ = center.y - size * 0.5 + inUv0.y * (size + extra);
+    float worldX = center.x - sizeX * 0.5 + inUv0.x * sizeX;
+    float worldZ = center.y - sizeZ * 0.5 + inUv0.y * (sizeZ + extra);
 
     gl_Position = uVertex.ViewProj * vec4(worldX, row1.z, worldZ, 1.0);
 

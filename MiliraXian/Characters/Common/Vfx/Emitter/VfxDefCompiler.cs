@@ -90,6 +90,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
             }
             Cache.Clear();
+            VfxFrameUniforms.ResetClock();
             PrewarmPending = true;
         }
 

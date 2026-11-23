@@ -26,7 +26,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public void Render(VfxEmitter emitter, VfxPass pass, int passIndex, in VfxRenderContext context)
         {
             VfxFieldParams field = pass?.Field;
-            if (field == null || emitter.Count <= 0)
+            if (field == null)
             {
                 return;
             }
@@ -37,18 +37,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 return;
             }
 
-            // The field is one particle: pick the one this stroke claims.
-            int particleIndex = emitter.FirstParticleOfGroup(pass.ParticleGroup);
-            if (particleIndex < 0)
-            {
-                return;
-            }
-
             // Resolve the anchor now rather than reusing the tick-pass position: the draw pass runs
             // before the update pass, so a followed pawn would otherwise trail one frame behind.
             Vector3 center = emitter.Anchor.TryResolve(context.Engine.Map, out Vector3 resolved)
                 ? resolved
-                : emitter.Particles[particleIndex].Position;
+                : emitter.Position;
 
             Vector2 size = field.QuadSize;
             if (field.SizeChannel >= 0)
@@ -61,13 +54,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 // Cell coverage is integral: the field occupies whole cells, so the quad must be
                 // sized from the ceiling of the radius, exactly as the old renderer did.
-                float side = Mathf.Ceil(emitter.Channel(particleIndex, VfxChannels.Radius)) * 2f + field.RadiusPadding;
+                float side = Mathf.Ceil(emitter.EmitterChannel(VfxChannels.Radius)) * 2f + field.RadiusPadding;
                 size = new Vector2(side, side);
             }
             size.x = Mathf.Max(0.01f, size.x);
             size.y = Mathf.Max(0.01f, size.y);
 
-            // The shader rebuilds its geometry from the centre and the edge length, so the quad has
+            // The shader rebuilds its geometry from the centre and the extents, so the quad has
             // to line up with that formula: the extra curtain height spills north of the field.
             float height = size.y + field.ExtraHeight;
 
@@ -75,12 +68,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             // travel in the instance row, which is what lets every field of this kind batch.
             if (pass.InstanceVectors > 0 && pass.Mesh != null)
             {
+                float radius = field.RadiusChannel >= 0 ? emitter.EmitterChannel(field.RadiusChannel) : 0f;
+                float strength = (field.StrengthChannel >= 0 ? emitter.EmitterChannel(field.StrengthChannel) : 1f)
+                    * emitter.Alpha;
+
                 instanceRow[0] = new Vector4(center.x, center.z, size.x, field.ExtraHeight);
-                instanceRow[1] = new Vector4(
-                    field.RadiusChannel >= 0 ? emitter.Channel(particleIndex, field.RadiusChannel) : 0f,
-                    field.StrengthChannel >= 0 ? emitter.Channel(particleIndex, field.StrengthChannel) : 1f,
-                    field.Altitude,
-                    0f);
+                instanceRow[1] = new Vector4(radius, strength, field.Altitude, size.y);
 
                 MaterialPropertyBlock constants = context.Engine.BlockFor(pass);
                 if (constants != null)
@@ -92,8 +85,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     }
                     for (int i = 0; i < field.Bindings.Count; i++)
                     {
-                        VfxUniformBinding.Apply(constants, emitter, field.Bindings[i], particleIndex,
-                            context.Engine.Frame);
+                        VfxUniformBinding.Apply(constants, emitter, field.Bindings[i], context.Engine.Frame);
                     }
                 }
 
@@ -107,6 +99,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 center.z + field.ExtraHeight * 0.5f);
 
             VfxQuadOptions options = VfxQuadOptions.Of(new Vector2(size.x, height));
+            options.Color = new Color(1f, 1f, 1f, emitter.Alpha);
             writer.Clear();
             VfxQuad.Add(writer, quadCenter, options);
 
@@ -131,8 +124,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             for (int i = 0; i < field.Bindings.Count; i++)
             {
-                VfxUniformBinding.Apply(block, emitter, field.Bindings[i], particleIndex,
-                    context.Engine.Frame);
+                VfxUniformBinding.Apply(block, emitter, field.Bindings[i], context.Engine.Frame);
             }
 
             ScreenBloomProperties bloom = context.Assets.Bloom(pass);

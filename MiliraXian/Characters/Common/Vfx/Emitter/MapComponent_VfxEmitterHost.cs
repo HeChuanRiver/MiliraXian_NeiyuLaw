@@ -203,7 +203,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal void Maintain(VfxEmitterHandle handle)
         {
             VfxEmitter emitter = Resolve(handle);
-            if (emitter == null)
+            if (emitter == null || (emitter.Effect != null && !emitter.Effect.RequireMaintain))
             {
                 return;
             }
@@ -218,7 +218,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 return;
             }
-            emitter.SetChannel(0, channel, value);
+            emitter.SetEmitterChannel(channel, value);
         }
 
         /// <summary>Writes one emitter-level vec4 channel (a wall's axis, a field's band).</summary>
@@ -235,7 +235,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal float GetChannel(VfxEmitterHandle handle, int channel)
         {
             VfxEmitter emitter = Resolve(handle);
-            return emitter == null ? 0f : emitter.Channel(0, channel);
+            return emitter == null ? 0f : emitter.EmitterChannel(channel);
         }
 
         /// <summary>Releases an emitter now, without waiting for its fade.</summary>

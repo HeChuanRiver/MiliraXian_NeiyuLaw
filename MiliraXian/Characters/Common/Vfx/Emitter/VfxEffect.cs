@@ -22,7 +22,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Name = def?.defName ?? "vfx";
             FadeOutSeconds = 0.35f;
             LifetimeSeconds = 0f;
-            Capacity = 1;
+            RequireMaintain = true;
+            Capacity = 0;
             Passes = new List<VfxPass>();
             EmitterType = typeof(VfxEmitter);
             Build(def);
@@ -31,11 +32,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Diagnostics only; never used to find anything.</summary>
         internal string Name { get; }
 
-        /// <summary>How long the emitter takes to fade once <c>Maintain</c> stops.</summary>
+        /// <summary>How long the emitter takes to fade once <c>Maintain</c> stops or lifetime ends.</summary>
         internal float FadeOutSeconds { get; set; }
 
         /// <summary>Total life; zero or less means "until <c>Maintain</c> stops".</summary>
         internal float LifetimeSeconds { get; set; }
+
+        internal bool RequireMaintain { get; set; }
 
         /// <summary>Upper bound on simultaneous particles; the emitter allocates for this once.</summary>
         internal int Capacity { get; set; }
@@ -61,7 +64,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             FadeOutSeconds = Mathf.Max(0f, def.fadeOutSeconds);
             LifetimeSeconds = Mathf.Max(0f, def.lifetimeSeconds);
-            Capacity = Mathf.Max(1, def.capacity);
+            RequireMaintain = def.requireMaintain;
+            Capacity = Mathf.Max(0, def.capacity);
 
             if (def.passes == null)
             {

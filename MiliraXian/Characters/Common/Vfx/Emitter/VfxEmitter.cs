@@ -15,6 +15,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         internal VfxAnchor Anchor;
 
+        /// <summary>Resolved world position of the emitter's anchor.</summary>
+        internal Vector3 Position;
+
         internal VfxParticle[] Particles;
 
         /// <summary>
@@ -24,8 +27,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// </summary>
         internal Mesh[] Meshes;
 
-        /// <summary>Flat store: <c>particle * VfxChannels.Capacity + channel</c>.</summary>
+        /// <summary>Flat per-particle store: <c>particle * VfxChannels.Capacity + channel</c>.</summary>
         internal float[] Channels;
+
+        /// <summary>Emitter-level float channels, indexed by float channel id.</summary>
+        internal float[] EmitterChannels;
 
         /// <summary>Emitter-level vec4 channels, indexed by vec4 channel id.</summary>
         internal Vector4[] Vectors;
@@ -65,22 +71,35 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             Effect = effect;
             Anchor = anchor;
+            Position = position;
             Version = version;
             Released = false;
             AgeSeconds = 0f;
             FadeSeconds = 0f;
             LastMaintainTick = nowTick;
-            Count = 1;
+            Count = 0;
 
-            int needed = Mathf.Max(1, effect.Capacity);
-            if (Particles == null || Particles.Length < needed)
+            int needed = Mathf.Max(0, effect.Capacity);
+            if (needed > 0)
             {
-                Particles = new VfxParticle[needed];
-                Channels = new float[needed * VfxChannels.Capacity];
+                if (Particles == null || Particles.Length < needed)
+                {
+                    Particles = new VfxParticle[needed];
+                    Channels = new float[needed * VfxChannels.Capacity];
+                }
+                else
+                {
+                    System.Array.Clear(Channels, 0, needed * VfxChannels.Capacity);
+                }
+            }
+
+            if (EmitterChannels == null)
+            {
+                EmitterChannels = new float[VfxChannels.Capacity];
             }
             else
             {
-                System.Array.Clear(Channels, 0, needed * VfxChannels.Capacity);
+                System.Array.Clear(EmitterChannels, 0, EmitterChannels.Length);
             }
 
             if (Vectors == null)
@@ -98,17 +117,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 Meshes = passes > 0 ? new Mesh[passes] : null;
             }
-
-            VfxParticle particle = Particles[0];
-            particle.Position = position;
-            particle.Velocity = Vector3.zero;
-            particle.AgeSeconds = 0f;
-            particle.LifetimeSeconds = 0f;
-            particle.Size = 1f;
-            particle.RotationDegrees = 0f;
-            particle.Color = Color.white;
-            particle.Alive = true;
-            Particles[0] = particle;
         }
 
         /// <summary>
@@ -127,8 +135,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             AgeSeconds += deltaSeconds;
 
-            // A tick without Maintain means the source stopped asking for this effect.
-            bool maintained = nowTick - LastMaintainTick <= 0;
+            bool maintained = !Effect.RequireMaintain || nowTick - LastMaintainTick <= 0;
             bool outlived = Effect.LifetimeSeconds > 0f && AgeSeconds >= Effect.LifetimeSeconds;
 
             if (maintained && !outlived)
@@ -148,8 +155,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
             }
 
-            Vector3 position;
-            bool anchored = Anchor.TryResolve(map, out position);
+            if (Anchor.TryResolve(map, out Vector3 position))
+            {
+                Position = position;
+            }
+            else if (Anchor.Kind == VfxAnchorKind.Pawn
+                || Anchor.Kind == VfxAnchorKind.Thing
+                || Anchor.Kind == VfxAnchorKind.ThingComp)
+            {
+                // The source went away: drop the emitter.
+                return false;
+            }
 
             for (int i = 0; i < Count; i++)
             {
@@ -167,23 +183,6 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     continue;
                 }
 
-                // Only the first particle follows the anchor; the rest are placed by whoever
-                // emitted them (that is what makes a swarm of ghosts anchored to one pawn possible).
-                if (i == 0)
-                {
-                    if (anchored)
-                    {
-                        particle.Position = position;
-                    }
-                    else if (Anchor.Kind == VfxAnchorKind.Pawn
-                        || Anchor.Kind == VfxAnchorKind.Thing
-                        || Anchor.Kind == VfxAnchorKind.ThingComp)
-                    {
-                        // The source went away even though it kept maintaining: drop the emitter.
-                        return false;
-                    }
-                }
-
                 particle.Position += particle.Velocity * deltaSeconds;
                 Particles[i] = particle;
             }
@@ -193,16 +192,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>
         /// Appends one particle at <paramref name="position"/> and returns its index, or -1 when the
-        /// emitter is full. This is how an <c>emitterClass</c> emits over time (petals along a path,
-        /// droplets, ghosts); the emitter owns the array, so the caller never allocates.
-        ///
-        /// A dead particle's slot is reused: the array is its own free list, so there is no second
-        /// bookkeeping that could disagree with the <c>Alive</c> flag. Index 0 is the particle that
-        /// follows the anchor and is never recycled.
+        /// emitter is full. Dead particle slots are reused automatically.
         /// </summary>
         internal int Emit(Vector3 position, float lifetimeSeconds, float size, Color color, int particleGroup = 0)
         {
-            if (Particles == null)
+            if (Particles == null || Particles.Length == 0)
             {
                 return -1;
             }
@@ -210,14 +204,13 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             int index;
             if (Count < Particles.Length)
             {
-                // Nothing has been emitted past the high-water mark yet.
                 index = Count;
                 Count = index + 1;
             }
             else
             {
                 index = -1;
-                for (int i = 1; i < Particles.Length; i++)
+                for (int i = 0; i < Particles.Length; i++)
                 {
                     if (!Particles[i].Alive)
                     {
@@ -245,7 +238,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Color = color,
                 Alive = true,
                 ParticleGroup = particleGroup,
-                SpawnSeconds = UnityEngine.Time.time,
+                SpawnSeconds = VfxFrameUniforms.CurrentTimeSeconds(),
             };
 
             if (Channels != null)
@@ -255,29 +248,19 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             return index;
         }
 
-        /// <summary>
-        /// The first live particle of <paramref name="particleGroup"/>, or of any group when it is
-        /// negative. Returns -1 when there is none; single-particle strokes use it to pick the one
-        /// particle they draw.
-        /// </summary>
-        internal int FirstParticleOfGroup(int particleGroup)
+        internal float EmitterChannel(int channel)
         {
-            if (Particles == null)
+            return EmitterChannels != null && channel >= 0 && channel < EmitterChannels.Length
+                ? EmitterChannels[channel]
+                : 0f;
+        }
+
+        internal void SetEmitterChannel(int channel, float value)
+        {
+            if (EmitterChannels != null && channel >= 0 && channel < EmitterChannels.Length)
             {
-                return -1;
+                EmitterChannels[channel] = value;
             }
-            for (int i = 0; i < Count; i++)
-            {
-                if (!Particles[i].Alive)
-                {
-                    continue;
-                }
-                if (particleGroup < 0 || Particles[i].ParticleGroup == particleGroup)
-                {
-                    return i;
-                }
-            }
-            return -1;
         }
 
         internal Vector4 VectorChannel(int channel)
@@ -339,11 +322,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Released = true;
             Effect = null;
             Anchor = default;
+            Position = default;
             Count = 0;
             AgeSeconds = 0f;
             FadeSeconds = 0f;
             Meshes = null;
-            Vectors = null;
         }
     }
 }

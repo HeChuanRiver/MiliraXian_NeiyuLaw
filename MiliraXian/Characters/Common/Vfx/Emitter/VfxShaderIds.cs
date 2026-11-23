@@ -37,5 +37,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>The generic vec4 an effect packs its own tuning into.</summary>
         public static readonly int Parameters = Shader.PropertyToID("_Params");
+
+        /// <summary>Pass-level quad extents: (quadSize.x, quadSize.y, quadSize.y / quadSize.x, 0).</summary>
+        public static readonly int QuadSize = Shader.PropertyToID("_QuadSize");
     }
 }
