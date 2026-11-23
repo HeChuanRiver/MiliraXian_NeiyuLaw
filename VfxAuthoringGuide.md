@@ -168,7 +168,8 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 | `Emit(pos, lifetime, size, color, group = 0)` | 发射一颗粒子并返回下标；数组满了返回 `-1` 并警告一次。死粒子的槽位会自动复用 |
 | `SetEmitterChannel(ch, val)` / `EmitterChannel(ch)` | 读写发射器级浮点通道（给 uniform 和 `Field` 用） |
 | `SetVectorChannel(ch, vec4)` / `VectorChannel(ch)` | 读写发射器级 `vec4` 通道 |
-| `SetChannel(i, ch, val)` / `Channel(i, ch)` | 读写第 `i` 颗粒子的逐粒子浮点通道（如每颗粒子独立的图集帧号） |
+| `SetTextureChannel(ch, tex)` / `TextureChannel(ch)` | 读写发射器级动态贴图通道（如外部抓拍的 `RenderTexture`） |
+| `SetChannel(i, ch, val)` / `Channel(i, ch)` | 读写第 `i` 颗粒子的逐粒子浮点通道（如每颗粒子独立的图集帧号或条带 U 坐标） |
 
 ---
 
@@ -194,7 +195,7 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 
 ---
 
-### 2. 三个内置渲染器
+### 2. 四个内置渲染器
 
 > **关于坐标系**：RimWorld 地图镜头是固定俯视的正交投影，沿世界 Y 轴立起的竖直面在镜头里会被压成一条看不见的细线。因此所有四边形一律平铺在地面（XZ 平面）上；要做出“向上升起的光幕/雨幕”，做法是把四边形沿 +Z（北）方向拉长（例如 `Field` 的 `extraHeight`）。
 
@@ -208,7 +209,7 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 | `sizeFromRadius` | `false` | 开启后边长按 `ceil(radius) * 2 + radiusPadding` 计算 |
 | `radiusPadding` | `3` | `sizeFromRadius` 的额外余量（格） |
 | `extraHeight` | `0` | 向北（+Z）额外延伸的高度（格），给上升光幕/雨幕留出绘制区域 |
-| `useAltitude` / `altitude` | `true` / `MoteLow` | 高度层；关闭时使用锚点本身的 `y` |
+| `useAltitude` / `altitude` / `altitudeOffset` | `true` / `MoteLow` / `0` | 高度层及微调偏移；关闭 `useAltitude` 时在锚点 `y` 上加 `altitudeOffset` |
 | `centerUniform` / `sizeUniform` | 空 | 非实例化时自动写入的 uniform：`centerUniform` 写 `(center.x, center.z, 0, 0)`，`sizeUniform` 写 `(sizeX, sizeZ + extraHeight, 0, 0)` |
 | `radiusChannel` / `strengthChannel` | 空 | 实例化路径读取的发射器级浮点通道（`strength` 会自动乘上 `emitter.Alpha`） |
 | `bindings` | 空 | 传递给 Shader 的额外 uniform |
@@ -225,8 +226,9 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 | `tint` | 白色 | 叠乘在粒子颜色上的色调 |
 | `atlasColumns` / `atlasRows` | `1` / `1` | 图集行列数；`frameChannel` 指定读取帧号的逐粒子浮点通道 |
 | `useUvRect` / `uvMin` / `uvMax` | `false` / `(0,0)` / `(1,1)` | 跳过图集切分，直接把指定 UV 范围交给 Shader（例如荷雨水花用 UV 传相对落点的格偏移 `±0.45`） |
+| `flipU` / `flipV` | `false` / `false` | 水平或垂直翻转贴图 UV（非实例化生效，适合倒影或倒置贴图） |
 | `rotationRate` | `0` | 实例化模式下的自转角速度（度/秒），交给 Shader 按时间计算 |
-| `useAltitude` / `altitude` | `false` / `MoteLow` | 高度层；关闭时使用粒子自身的 `Position.y` |
+| `useAltitude` / `altitude` / `altitudeOffset` | `false` / `MoteLow` / `0` | 高度层及微调偏移；关闭 `useAltitude` 时在粒子 `Position.y` 上加 `altitudeOffset` |
 | `bindings` | 空 | 传递给 Shader 的额外 uniform |
 
 #### `Streak`（线条/拖尾渲染器）
@@ -236,14 +238,28 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 |---|---|---|
 | `width` | `0.02` | 线条横截面宽度（格） |
 | `tailAlpha` | `0.25` | 尾端透明度占头端的比例（0..1） |
-| `useAltitude` / `altitude` | `false` / `MoteOverhead` | 高度层；关闭时使用粒子自身的 `Position.y` |
+| `useAltitude` / `altitude` / `altitudeOffset` | `false` / `MoteOverhead` / `0` | 高度层及微调偏移；关闭 `useAltitude` 时在粒子 `Position.y` 上加 `altitudeOffset` |
+| `bindings` | 空 | 传递给 Shader 的额外 uniform |
+
+#### `Ribbon`（条带渲染器）
+把同一分组里连续排列的存活粒子首尾相连成一条或多条平滑条带（适合刀光、拔刀拖尾、花铃轨迹、闪电折线）。遇到死粒子或 `ribbonIdChannel` 变化时自动断开起一条新带；如果粒子填了非零的 `Side` 向量就直接拿它当半宽侧向（适合 3D 倾斜刀光投影），留零则由渲染器自动按相邻点切线算垂直宽度。
+
+| 字段 | 默认值 | 说明 |
+|---|---|---|
+| `width` | `0.2` | 基础宽度（格），`useParticleSize` 开启时再乘粒子 `Size`（粒子自带 `Side` 时优先用 `Side`） |
+| `useParticleSize` / `useParticleColor` / `tint` | `true` / `true` / 白色 | 宽度、颜色与色调控制 |
+| `vMin` / `vMax` | `0` / `1` | 跨宽度方向的 V 范围 |
+| `vFrames` / `frameChannel` | `1` / 空 | 水平条带帧动画行数，大于 `1` 时按发射器级通道 `frameChannel` 切换 V 区间 |
+| `normalizeU` / `uScale` / `uChannel` | `false` / `1` / 空 | 沿条带方向的 U 坐标：优先读逐粒子 `uChannel`；否则按累积世界长度（或开启 `normalizeU` 按 `0..1`）乘 `uScale` |
+| `ribbonIdChannel` | 空 | 可选逐粒子通道，相邻粒子 ID 不同时自动断带 |
+| `useAltitude` / `altitude` / `altitudeOffset` | `false` / `MoteOverhead` / `0` | 高度层及微调偏移 |
 | `bindings` | 空 | 传递给 Shader 的额外 uniform |
 
 ---
 
 ### 3. Uniform 绑定（`<bindings>`）与通道
 
-每个渲染器块里都可以配 `<bindings>`，把数据传给 Shader 的 `MaterialUniforms`。共支持 5 种写法：
+每个渲染器块里都可以配 `<bindings>`，把数据传给 Shader 的 `MaterialUniforms`。共支持 7 种写法：
 
 ```xml
 <bindings>
@@ -263,6 +279,12 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
   <!-- 5. 引擎帧级变量：time（VisualClock 游戏秒数）或 screenPerCell（屏幕 UV 换算系数，供折射用） -->
   <li><uniform>_Time</uniform><frame>time</frame></li>
   <li><uniform>_DistortScale</uniform><frame>screenPerCell</frame></li>
+
+  <!-- 6. 静态额外贴图（如溶解噪声图、扭曲法线图） -->
+  <li><uniform>_NoiseTex</uniform><texture>MiliraXianQinghe/Effect/lotus_shield_dissolve_noise</texture></li>
+
+  <!-- 7. 动态贴图通道（如外部抓拍组件产出的 RenderTexture） -->
+  <li><uniform>_MainTex</uniform><texChannel>snapshotTex</texChannel></li>
 </bindings>
 ```
 
@@ -275,7 +297,7 @@ Emit(landingPoint, 0f, 1f, splashColor(phase, speed), particleGroup: 1);
 - `"alpha"`（`VfxChannels.Alpha`）
 - `"angle"`（`VfxChannels.Angle`）
 
-自定义浮点通道和 `vec4` 通道上限各 16 个，需要放在 `[StaticConstructorOnStartup]` 静态类里提前注册，确保在进入游戏编译/预热 `VfxEffect` 之前可用：
+自定义通道（浮点上限 16、`vec4` 上限 16、贴图上限 8）需要放在 `[StaticConstructorOnStartup]` 静态类里提前注册，确保在进入游戏编译/预热 `VfxEffect` 之前可用：
 
 ```csharp
 [StaticConstructorOnStartup]
@@ -455,8 +477,9 @@ GLSL 源码放在 `1.7/Shaders/Map/`，在 `*Shaders.xml` 里声明 `ShaderDef` 
 |---|---|
 | 核心管线（`VfxDef` / `VfxEffect` / `VfxEmitter` / `Host` / 预热 / `VisualClock` 统一时钟） | 已实现 |
 | 持续保活（`requireMaintain = true`）与一次性自动播完（`requireMaintain = false`） | 已实现 |
-| 内置渲染器：`Field`、`Sprite`、`Streak` | 已实现 |
-| 实例化支持 | `Field`（支持长方形与自动淡出）、`Sprite`（支持 `altitude`、长方形与 Shader 动画）已实现；`Streak` 尚未 |
-| 扩展渲染器（`Ribbon`、`Mesh`）、曲线参数（`SimpleCurve`） | 尚未 |
+| 内置渲染器：`Field`、`Sprite`、`Streak`、`Ribbon` | 已实现 |
+| 贴图绑定（静态额外贴图 + 动态贴图通道）、高度偏移与贴图翻转 | 已实现 |
+| 实例化支持 | `Field`（支持长方形与自动淡出）、`Sprite`（支持 `altitude`、长方形与 Shader 动画）已实现；`Streak` / `Ribbon` 尚未 |
+| 扩展渲染器（`Mesh`）、曲线参数（`SimpleCurve`） | 尚未 |
 | 已迁移特效 | 春泉边界光幕；荷雨的雨丝、雨幕、落点水花 |
 | 仍为旧实现 | 荷雨的地面水痕、水面折射、荷花 |

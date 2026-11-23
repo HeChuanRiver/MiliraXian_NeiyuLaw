@@ -69,6 +69,29 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             triangles.Add(b + 3);
         }
 
+        /// <summary>
+        /// Appends one edge pair of a ribbon strip and links it to the previous pair when <paramref name="link"/> is true.
+        /// </summary>
+        internal void AddStripPair(Vector3 left, Vector3 right, float u, float vMin, float vMax, Color color, bool link)
+        {
+            int n = vertices.Count;
+            vertices.Add(left);
+            vertices.Add(right);
+            uvs.Add(new Vector2(u, vMin));
+            uvs.Add(new Vector2(u, vMax));
+            colors.Add(color);
+            colors.Add(color);
+            if (link)
+            {
+                triangles.Add(n - 2);
+                triangles.Add(n);
+                triangles.Add(n - 1);
+                triangles.Add(n - 1);
+                triangles.Add(n);
+                triangles.Add(n + 1);
+            }
+        }
+
         /// <summary>Pushes the buffered geometry into a mesh, replacing what the mesh held before.</summary>
         internal void Upload(Mesh mesh)
         {

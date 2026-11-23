@@ -64,6 +64,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             // to line up with that formula: the extra curtain height spills north of the field.
             float height = size.y + field.ExtraHeight;
 
+            float y = field.UseAltitude ? field.Altitude : center.y + field.AltitudeOffset;
+
             // Instanced strokes share one built-in quad; the centre, extents, radius and strength
             // travel in the instance row, which is what lets every field of this kind batch.
             if (pass.InstanceVectors > 0 && pass.Mesh != null)
@@ -73,7 +75,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     * emitter.Alpha;
 
                 instanceRow[0] = new Vector4(center.x, center.z, size.x, field.ExtraHeight);
-                instanceRow[1] = new Vector4(radius, strength, field.Altitude, size.y);
+                instanceRow[1] = new Vector4(radius, strength, y, size.y);
 
                 MaterialPropertyBlock constants = context.Engine.BlockFor(pass);
                 if (constants != null)
@@ -95,7 +97,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
             Vector3 quadCenter = new Vector3(
                 center.x,
-                field.Altitude > 0f ? field.Altitude : center.y,
+                y,
                 center.z + field.ExtraHeight * 0.5f);
 
             VfxQuadOptions options = VfxQuadOptions.Of(new Vector2(size.x, height));

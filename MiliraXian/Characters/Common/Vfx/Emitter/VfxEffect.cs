@@ -118,7 +118,35 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 pass.Streak = BuildStreak(owner, source.streak);
             }
+            if (source.ribbon != null)
+            {
+                pass.Ribbon = BuildRibbon(owner, source.ribbon);
+            }
             return pass;
+        }
+
+        private static VfxRibbonParams BuildRibbon(string owner, VfxRibbonDef source)
+        {
+            VfxRibbonParams ribbon = new VfxRibbonParams
+            {
+                Width = source.width,
+                UseParticleSize = source.useParticleSize,
+                UseParticleColor = source.useParticleColor,
+                Tint = source.tint,
+                VMin = source.vMin,
+                VMax = source.vMax,
+                VFrames = Mathf.Max(1, source.vFrames),
+                FrameChannel = ChannelOf(owner, source.frameChannel),
+                NormalizeU = source.normalizeU,
+                UScale = source.uScale,
+                UChannel = ChannelOf(owner, source.uChannel),
+                RibbonIdChannel = ChannelOf(owner, source.ribbonIdChannel),
+                UseAltitude = source.useAltitude,
+                Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
+                AltitudeOffset = source.altitudeOffset,
+            };
+            AddBindings(owner, ribbon.Bindings, source.bindings);
+            return ribbon;
         }
 
         private static VfxStreakParams BuildStreak(string owner, VfxStreakDef source)
@@ -127,7 +155,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             {
                 Width = source.width,
                 TailAlpha = Mathf.Clamp01(source.tailAlpha),
-                Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
+                UseAltitude = source.useAltitude,
+                Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
+                AltitudeOffset = source.altitudeOffset,
             };
             AddBindings(owner, streak.Bindings, source.bindings);
             return streak;
@@ -149,7 +179,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 UseUvRect = source.useUvRect,
                 UvMin = source.uvMin,
                 UvMax = source.uvMax,
-                Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
+                FlipU = source.flipU,
+                FlipV = source.flipV,
+                UseAltitude = source.useAltitude,
+                Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
+                AltitudeOffset = source.altitudeOffset,
             };
 
             AddBindings(owner, sprite.Bindings, source.bindings);
@@ -181,7 +215,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 ExtraHeight = source.extraHeight,
                 SizeFromRadius = source.sizeFromRadius,
                 RadiusPadding = source.radiusPadding,
-                Altitude = source.useAltitude ? source.altitude.AltitudeFor() : 0f,
+                UseAltitude = source.useAltitude,
+                Altitude = source.useAltitude ? source.altitude.AltitudeFor() + source.altitudeOffset : 0f,
+                AltitudeOffset = source.altitudeOffset,
                 CenterUniform = UniformOf(source.centerUniform),
                 SizeUniform = UniformOf(source.sizeUniform),
                 RadiusChannel = ChannelOf(owner, source.radiusChannel),
@@ -210,6 +246,28 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 int uniform = UniformOf(binding.uniform);
                 if (uniform == 0)
                 {
+                    continue;
+                }
+
+                if (!binding.texChannel.NullOrEmpty())
+                {
+                    int texChannel = TextureChannelOf(owner, binding.texChannel);
+                    if (texChannel >= 0)
+                    {
+                        target.Add(VfxUniformBinding.FromTextureChannel(uniform, texChannel));
+                    }
+                    continue;
+                }
+
+                if (!binding.texture.NullOrEmpty())
+                {
+                    Texture2D tex = binding.texture == "White"
+                        ? BaseContent.WhiteTex
+                        : VfxMaterialCache.TextureOf(binding.texture);
+                    if (tex != null)
+                    {
+                        target.Add(VfxUniformBinding.FromTexture(uniform, tex));
+                    }
                     continue;
                 }
 
@@ -283,6 +341,21 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             }
             Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown vec4 channel '" + name + "'.",
                 GenText.StableStringHash("MX_Vfx_UnknownVecChannel_" + owner + "_" + name));
+            return -1;
+        }
+
+        private static int TextureChannelOf(string owner, string name)
+        {
+            if (name.NullOrEmpty())
+            {
+                return -1;
+            }
+            if (VfxChannels.TryFindTexture(name, out int channel))
+            {
+                return channel;
+            }
+            Log.ErrorOnce("[MiliraXian] VFX '" + owner + "' uses unknown texture channel '" + name + "'.",
+                GenText.StableStringHash("MX_Vfx_UnknownTexChannel_" + owner + "_" + name));
             return -1;
         }
 

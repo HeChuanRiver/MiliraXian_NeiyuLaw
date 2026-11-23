@@ -36,6 +36,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Emitter-level vec4 channels, indexed by vec4 channel id.</summary>
         internal Vector4[] Vectors;
 
+        /// <summary>Emitter-level dynamic texture channels (e.g. RenderTextures), indexed by texture channel id.</summary>
+        internal Texture[] Textures;
+
         /// <summary>How many particles of the array are in use.</summary>
         internal int Count;
 
@@ -109,6 +112,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             else
             {
                 System.Array.Clear(Vectors, 0, Vectors.Length);
+            }
+
+            if (Textures == null)
+            {
+                Textures = new Texture[VfxChannels.TextureCapacity];
+            }
+            else
+            {
+                System.Array.Clear(Textures, 0, Textures.Length);
             }
 
             // Meshes are destroyed on release, so a reused slot always starts from a fresh array.
@@ -239,6 +251,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Alive = true,
                 ParticleGroup = particleGroup,
                 SpawnSeconds = VfxFrameUniforms.CurrentTimeSeconds(),
+                Side = Vector3.zero,
             };
 
             if (Channels != null)
@@ -273,6 +286,19 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             if (Vectors != null && channel >= 0 && channel < Vectors.Length)
             {
                 Vectors[channel] = value;
+            }
+        }
+
+        internal Texture TextureChannel(int channel)
+        {
+            return Textures != null && channel >= 0 && channel < Textures.Length ? Textures[channel] : null;
+        }
+
+        internal void SetTextureChannel(int channel, Texture texture)
+        {
+            if (Textures != null && channel >= 0 && channel < Textures.Length)
+            {
+                Textures[channel] = texture;
             }
         }
 
@@ -327,6 +353,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             AgeSeconds = 0f;
             FadeSeconds = 0f;
             Meshes = null;
+            if (Textures != null)
+            {
+                // Drop texture references on release so pooled emitters never pin external RenderTextures.
+                System.Array.Clear(Textures, 0, Textures.Length);
+            }
         }
     }
 }

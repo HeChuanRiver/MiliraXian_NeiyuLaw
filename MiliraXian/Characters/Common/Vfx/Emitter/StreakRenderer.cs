@@ -60,10 +60,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 }
 
                 Vector3 a = particle.Position;
-                if (streak.Altitude > 0f)
-                {
-                    a.y = streak.Altitude;
-                }
+                a.y = streak.UseAltitude ? streak.Altitude : a.y + streak.AltitudeOffset;
 
                 Vector3 direction = particle.Velocity;
                 if (direction.sqrMagnitude < 1e-8f)

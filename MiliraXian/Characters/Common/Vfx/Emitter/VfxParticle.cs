@@ -38,5 +38,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// lockstep.
         /// </summary>
         internal float SpawnSeconds;
+
+        /// <summary>
+        /// Optional half-width lateral vector for Ribbon points (used directly when non-zero;
+        /// otherwise RibbonRenderer derives a perpendicular vector from adjacent points).
+        /// </summary>
+        internal Vector3 Side;
     }
 }

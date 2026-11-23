@@ -19,7 +19,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             ExtraHeight = 0f;
             SizeFromRadius = false;
             RadiusPadding = 3f;
+            UseAltitude = true;
             Altitude = 0f;
+            AltitudeOffset = 0f;
             CenterUniform = 0;
             SizeUniform = 0;
             RadiusChannel = -1;
@@ -39,8 +41,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         internal float RadiusPadding;
 
-        /// <summary>World height of the quad; zero or less keeps the particle's own height.</summary>
+        internal bool UseAltitude;
+
+        /// <summary>World height of the quad when <see cref="UseAltitude"/> is true (includes <see cref="AltitudeOffset"/>).</summary>
         internal float Altitude;
+
+        internal float AltitudeOffset;
 
         /// <summary>
         /// Uniform the renderer writes the quad's centre into as a vec4, for shaders that rebuild
@@ -96,7 +102,11 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             UseUvRect = false;
             UvMin = Vector2.zero;
             UvMax = Vector2.one;
+            FlipU = false;
+            FlipV = false;
+            UseAltitude = false;
             Altitude = 0f;
+            AltitudeOffset = 0f;
             Bindings = new List<VfxUniformBinding>();
         }
 
@@ -134,8 +144,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal Vector2 UvMin;
         internal Vector2 UvMax;
 
-        /// <summary>World height of every quad; zero or less keeps the particle's own height.</summary>
+        internal bool FlipU;
+        internal bool FlipV;
+
+        internal bool UseAltitude;
+
+        /// <summary>World height of every quad when <see cref="UseAltitude"/> is true (includes <see cref="AltitudeOffset"/>).</summary>
         internal float Altitude;
+
+        internal float AltitudeOffset;
 
         internal List<VfxUniformBinding> Bindings;
     }

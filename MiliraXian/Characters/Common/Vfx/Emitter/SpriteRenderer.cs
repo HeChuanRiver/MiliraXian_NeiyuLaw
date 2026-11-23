@@ -86,11 +86,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 AtlasUv(emitter, i, sprite, out Vector2 uvMin, out Vector2 uvMax);
                 options.UvMin = uvMin;
                 options.UvMax = uvMax;
+                options.FlipU = sprite.FlipU;
+                options.FlipV = sprite.FlipV;
                 Vector3 center = particle.Position;
-                if (sprite.Altitude > 0f)
-                {
-                    center.y = sprite.Altitude;
-                }
+                center.y = sprite.UseAltitude ? sprite.Altitude : center.y + sprite.AltitudeOffset;
 
                 VfxQuad.Add(writer, center, options);
             }
@@ -161,7 +160,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     continue;
                 }
 
-                float y = sprite.Altitude > 0f ? sprite.Altitude : particle.Position.y;
+                float y = sprite.UseAltitude ? sprite.Altitude : particle.Position.y + sprite.AltitudeOffset;
                 instanceRow[0] = new Vector4(
                     particle.Position.x, particle.Position.z, size * 0.5f, particle.SpawnSeconds);
                 instanceRow[1] = new Vector4(

@@ -232,6 +232,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             emitter.SetVectorChannel(channel, value);
         }
 
+        /// <summary>Writes one emitter-level dynamic texture channel (e.g. a captured RenderTexture).</summary>
+        internal void SetTextureChannel(VfxEmitterHandle handle, int channel, Texture texture)
+        {
+            VfxEmitter emitter = Resolve(handle);
+            if (emitter == null)
+            {
+                return;
+            }
+            emitter.SetTextureChannel(channel, texture);
+        }
+
         internal float GetChannel(VfxEmitterHandle handle, int channel)
         {
             VfxEmitter emitter = Resolve(handle);

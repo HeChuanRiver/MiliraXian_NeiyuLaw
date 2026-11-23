@@ -16,6 +16,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal const string Field = "Field";
         internal const string Sprite = "Sprite";
         internal const string Streak = "Streak";
+        internal const string Ribbon = "Ribbon";
 
         internal static bool TryGet(string name, out IVfxRenderer renderer)
         {
@@ -34,6 +35,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     return true;
                 case Streak:
                     renderer = StreakRenderer.Instance;
+                    return true;
+                case Ribbon:
+                    renderer = RibbonRenderer.Instance;
                     return true;
                 default:
                     return false;

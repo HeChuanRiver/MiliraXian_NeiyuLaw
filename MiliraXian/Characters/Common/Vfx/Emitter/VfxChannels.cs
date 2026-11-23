@@ -108,5 +108,45 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             channel = VectorNames.IndexOf(name);
             return channel >= 0;
         }
+
+        // ---------------------------------------------------------------- texture channels
+
+        internal const int TextureCapacity = 8;
+
+        private static readonly List<string> TextureNames = new();
+
+        internal static int TextureCount => TextureNames.Count;
+
+        internal static int RegisterTexture(string name)
+        {
+            if (name.NullOrEmpty())
+            {
+                return 0;
+            }
+            int existing = TextureNames.IndexOf(name);
+            if (existing >= 0)
+            {
+                return existing;
+            }
+            if (TextureNames.Count >= TextureCapacity)
+            {
+                Log.ErrorOnce("[MiliraXian] Too many VFX texture channels; '" + name + "' was ignored.",
+                    GenText.StableStringHash("MX_Vfx_TexChannelOverflow_" + name));
+                return TextureCapacity - 1;
+            }
+            TextureNames.Add(name);
+            return TextureNames.Count - 1;
+        }
+
+        internal static bool TryFindTexture(string name, out int channel)
+        {
+            channel = -1;
+            if (name.NullOrEmpty())
+            {
+                return false;
+            }
+            channel = TextureNames.IndexOf(name);
+            return channel >= 0;
+        }
     }
 }

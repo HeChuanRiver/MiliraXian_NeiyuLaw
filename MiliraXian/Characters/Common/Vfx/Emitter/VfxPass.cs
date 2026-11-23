@@ -31,6 +31,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
             Field = null;
             Sprite = null;
             Streak = null;
+            Ribbon = null;
             Name = "pass";
         }
 
@@ -93,6 +94,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>Parameters read by <see cref="StreakRenderer"/>; null for other renderer kinds.</summary>
         internal VfxStreakParams Streak;
+
+        /// <summary>Parameters read by <see cref="RibbonRenderer"/>; null for other renderer kinds.</summary>
+        internal VfxRibbonParams Ribbon;
 
         /// <summary>Diagnostics only.</summary>
         internal string Name;

@@ -30,11 +30,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>A frame uniform (see <see cref="VfxFrameUniforms"/>), or 0 for none.</summary>
         internal int Frame;
 
+        /// <summary>A dynamic texture channel id, or -1.</summary>
+        internal int TextureChannel;
+
+        /// <summary>A static extra texture (normal map, noise map), or null.</summary>
+        internal Texture Texture;
+
         internal Vector4 Constant;
 
         internal static VfxUniformBinding Float(int uniform, int channel)
         {
-            return new VfxUniformBinding { Uniform = uniform, Component = -1, Channel = channel, VecChannel = -1, Frame = 0 };
+            return new VfxUniformBinding { Uniform = uniform, Component = -1, Channel = channel, VecChannel = -1, TextureChannel = -1, Frame = 0 };
         }
 
         internal static VfxUniformBinding FloatConstant(int uniform, float value)
@@ -45,6 +51,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Component = -1,
                 Channel = -1,
                 VecChannel = -1,
+                TextureChannel = -1,
                 Constant = new Vector4(value, 0f, 0f, 0f),
             };
         }
@@ -57,6 +64,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Component = 0,
                 Channel = -1,
                 VecChannel = -1,
+                TextureChannel = -1,
                 Constant = constant,
             };
         }
@@ -69,6 +77,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Component = component,
                 Channel = channel,
                 VecChannel = -1,
+                TextureChannel = -1,
                 Constant = constant,
             };
         }
@@ -82,6 +91,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Component = 0,
                 Channel = -1,
                 VecChannel = vecChannel,
+                TextureChannel = -1,
             };
         }
 
@@ -94,7 +104,33 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 Component = 0,
                 Channel = -1,
                 VecChannel = -1,
+                TextureChannel = -1,
                 Frame = frame,
+            };
+        }
+
+        internal static VfxUniformBinding FromTexture(int uniform, Texture texture)
+        {
+            return new VfxUniformBinding
+            {
+                Uniform = uniform,
+                Component = -1,
+                Channel = -1,
+                VecChannel = -1,
+                TextureChannel = -1,
+                Texture = texture,
+            };
+        }
+
+        internal static VfxUniformBinding FromTextureChannel(int uniform, int texChannel)
+        {
+            return new VfxUniformBinding
+            {
+                Uniform = uniform,
+                Component = -1,
+                Channel = -1,
+                VecChannel = -1,
+                TextureChannel = texChannel,
             };
         }
 
@@ -102,6 +138,22 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         internal static void Apply(MaterialPropertyBlock block, VfxEmitter emitter, in VfxUniformBinding binding,
             VfxFrameUniforms frame)
         {
+            if (binding.TextureChannel >= 0)
+            {
+                Texture dynamicTex = emitter.TextureChannel(binding.TextureChannel);
+                if (dynamicTex != null)
+                {
+                    block.SetTexture(binding.Uniform, dynamicTex);
+                }
+                return;
+            }
+
+            if (binding.Texture != null)
+            {
+                block.SetTexture(binding.Uniform, binding.Texture);
+                return;
+            }
+
             if (binding.Frame > 0)
             {
                 switch (binding.Frame)

@@ -126,6 +126,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     yield return prefix + "the Streak renderer needs a <streak> block";
                 }
+                if (pass.renderer == VfxRenderers.Ribbon && pass.ribbon == null)
+                {
+                    yield return prefix + "the Ribbon renderer needs a <ribbon> block";
+                }
 
                 foreach (string error in ValidateBindings(pass.field?.bindings, prefix + "field"))
                 {
@@ -139,6 +143,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 {
                     yield return error;
                 }
+                foreach (string error in ValidateBindings(pass.ribbon?.bindings, prefix + "ribbon"))
+                {
+                    yield return error;
+                }
 
                 if (pass.field != null && pass.field.sizeFromRadius && pass.field.radiusPadding < 0f)
                 {
@@ -147,6 +155,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 if (pass.sprite != null && (pass.sprite.atlasColumns < 1 || pass.sprite.atlasRows < 1))
                 {
                     yield return prefix + "sprite.atlasColumns/atlasRows must be at least 1";
+                }
+                if (pass.ribbon != null && pass.ribbon.vFrames < 1)
+                {
+                    yield return prefix + "ribbon.vFrames must be at least 1";
                 }
             }
         }
@@ -185,6 +197,10 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                     {
                         yield return label + ".bindings[" + b + "] uses unknown frame uniform '" + binding.frame + "'";
                     }
+                }
+                if (!binding.texture.NullOrEmpty() && binding.texture != "White" && binding.texture.Contains("\\"))
+                {
+                    yield return label + ".bindings[" + b + "] texture path must use '/' separators: '" + binding.texture + "'";
                 }
             }
         }
@@ -233,6 +249,51 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>Parameters read by the Streak renderer; required for that kind.</summary>
         public VfxStreakDef streak;
+
+        /// <summary>Parameters read by the Ribbon renderer; required for that kind.</summary>
+        public VfxRibbonDef ribbon;
+    }
+
+    /// <summary>How a Ribbon stroke connects ordered particles into one or more strips.</summary>
+    public class VfxRibbonDef
+    {
+        /// <summary>Base strip width in cells (multiplied by particle size when <see cref="useParticleSize"/> is on).</summary>
+        public float width = 0.2f;
+
+        public bool useParticleSize = true;
+
+        public bool useParticleColor = true;
+
+        public Color tint = Color.white;
+
+        public float vMin;
+
+        public float vMax = 1f;
+
+        /// <summary>Horizontal strip frame count for animated ribbons; 1 uses <see cref="vMin"/>..<see cref="vMax"/>.</summary>
+        public int vFrames = 1;
+
+        /// <summary>Emitter-level float channel supplying the current frame index when <see cref="vFrames"/> &gt; 1.</summary>
+        public string frameChannel;
+
+        /// <summary>When true, automatic U runs 0..1 across each strip instead of accumulating world length.</summary>
+        public bool normalizeU;
+
+        public float uScale = 1f;
+
+        /// <summary>Optional per-particle float channel supplying explicit U coordinates.</summary>
+        public string uChannel;
+
+        /// <summary>Optional per-particle float channel; adjacent particles with different IDs start a new strip.</summary>
+        public string ribbonIdChannel;
+
+        public bool useAltitude;
+
+        public AltitudeLayer altitude = AltitudeLayer.MoteOverhead;
+
+        public float altitudeOffset;
+
+        public List<VfxBindingDef> bindings = new();
     }
 
     /// <summary>How a Streak stroke turns each particle into a thin quad.</summary>
@@ -247,6 +308,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public bool useAltitude;
 
         public AltitudeLayer altitude = AltitudeLayer.MoteOverhead;
+
+        public float altitudeOffset;
 
         public List<VfxBindingDef> bindings = new();
     }
@@ -286,9 +349,15 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         public Vector2 uvMax = Vector2.one;
 
+        public bool flipU;
+
+        public bool flipV;
+
         public bool useAltitude;
 
         public AltitudeLayer altitude = AltitudeLayer.MoteLow;
+
+        public float altitudeOffset;
 
         public List<VfxBindingDef> bindings = new();
     }
@@ -313,6 +382,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         public AltitudeLayer altitude = AltitudeLayer.MoteLow;
 
+        public float altitudeOffset;
+
         /// <summary>Uniform for the quad's centre (vec4), or empty for none.</summary>
         public string centerUniform;
 
@@ -331,7 +402,7 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         public List<VfxBindingDef> bindings = new();
     }
 
-    /// <summary>One uniform write: a constant, a frame value, or a slot filled from a channel.</summary>
+    /// <summary>One uniform write: a constant, a frame value, a texture, or a channel.</summary>
     public class VfxBindingDef
     {
         public string uniform;
@@ -347,6 +418,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
 
         /// <summary>A frame-wide value (<c>screenPerCell</c> or <c>time</c>). Same for every stroke, per frame.</summary>
         public string frame;
+
+        /// <summary>Static extra texture path (or <c>White</c>) bound to <see cref="uniform"/>.</summary>
+        public string texture;
+
+        /// <summary>Emitter-level dynamic texture channel name bound to <see cref="uniform"/>.</summary>
+        public string texChannel;
 
         /// <summary>Float constant when set; otherwise constant bindings write <see cref="value"/> as a vec4.</summary>
         public float floatValue = float.NaN;

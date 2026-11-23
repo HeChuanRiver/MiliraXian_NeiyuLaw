@@ -15,7 +15,9 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         {
             Width = 0.02f;
             TailAlpha = 0.25f;
+            UseAltitude = false;
             Altitude = 0f;
+            AltitudeOffset = 0f;
             Bindings = new List<VfxUniformBinding>();
         }
 
@@ -25,8 +27,12 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         /// <summary>Alpha at the tail, as a share of the head's alpha.</summary>
         internal float TailAlpha;
 
-        /// <summary>World height of the streak; zero or less keeps the particle's own height.</summary>
+        internal bool UseAltitude;
+
+        /// <summary>World height of the streak when <see cref="UseAltitude"/> is true (includes <see cref="AltitudeOffset"/>).</summary>
         internal float Altitude;
+
+        internal float AltitudeOffset;
 
         internal List<VfxUniformBinding> Bindings;
     }
