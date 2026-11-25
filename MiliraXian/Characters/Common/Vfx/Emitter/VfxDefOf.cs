@@ -1,0 +1,20 @@
+using RimWorld;
+using Verse;
+
+namespace MiliraXian.Characters.Common.Vfx.Emitter
+{
+    /// <summary>Defs the C# side reaches for by name.</summary>
+    [DefOf]
+    public static class VfxDefOf
+    {
+        public static VfxDef MX_Vfx_SpringFlow;
+
+        public static VfxDef MX_Vfx_RainWallStrands;
+
+        public static VfxDef MX_Vfx_BellWave;
+
+        public static VfxDef MX_Vfx_FrostRetaliation;
+
+        public static VfxDef MX_Vfx_Zantetsuken;
+    }
+}

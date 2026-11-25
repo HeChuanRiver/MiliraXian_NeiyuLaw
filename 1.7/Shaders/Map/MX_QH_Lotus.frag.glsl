@@ -1,9 +1,9 @@
 #version 450
 
-// Zantetsuken: Guren's lotus, computed per pixel. vUv is the map offset from the
-// lotus centre in cells (x east, y north on screen); the ground is squashed north-south by the
-// depth factor, so a circle on the ground is an ellipse on screen. The light bars (curtain) are
-// copies of the rim stacked up the screen, fading with height. Additive blend.
+// Zantetsuken: Guren's lotus, computed per pixel. vUv is reconstructed into the map offset from
+// the lotus centre in cells via _FieldSize (x east, y north on screen); the ground is squashed
+// north-south by the depth factor, so a circle on the ground is an ellipse on screen. The light
+// bars (curtain) are copies of the rim stacked up the screen, fading with height. Additive blend.
 layout(location = 0) in vec4 vColor;
 layout(location = 1) in vec2 vUv;
 
@@ -19,6 +19,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Glow;      // @color @default = vec4(1.0, 0.62, 0.8, 1.0)
     vec4 _White;     // @color @default = vec4(1.0, 0.95, 0.98, 1.0)
     vec4 _Fill;      // @color @default = vec4(1.0, 0.36, 0.52, 1.0)
+    // xy: quad extents (cells), z: north extra height (cells), set by FieldRenderer
+    vec4 _FieldSize; // @default = vec4(2.0, 2.0, 0.0, 0.0)
     // Set by ScreenBloom for its own submission only.
     vec4 _BloomTint; // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     float _BloomIntensity; // @default = 1.0
@@ -79,7 +81,9 @@ void main()
     float R = u._Lotus.w * u._Lotus.y;
     float top = u._Lotus.z;
     float depth = max(u._Lotus2.x, 0.05);
-    vec2 m = vUv;
+    vec2 m = vec2(
+        (vUv.x - 0.5) * u._FieldSize.x,
+        vUv.y * u._FieldSize.y - 0.5 * (u._FieldSize.y - u._FieldSize.z));
 
     float rim, fill;
     lotus(vec2(m.x, m.y / depth), R, rim, fill);

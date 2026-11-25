@@ -24,6 +24,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Axis;      // @default = vec4(0.0, 1.0, 1.0, 0.0)
     // x：半长，y：半厚，z：秒，w：强度 0..1
     vec4 _Band;      // @default = vec4(7.5, 1.5, 0.0, 1.0)
+    // xy：四边形覆盖的面积（格），由渲染器按墙的朝向算好传进来
+    vec4 _FieldSize; // @default = vec4(16.0, 6.0, 0.0, 0.0)
     float _BloomIntensity; // @default = 1.0
 } u;
 
@@ -59,8 +61,9 @@ void main()
     vec2 al = u._Axis.xy;
     vec2 ac = u._Axis.zw;
 
-    float X = vUv.x;
-    float Y = vUv.y;
+    // uv 是 0..1，覆盖整块四边形；先换算成"到墙心的格偏移"，再投影到墙的两个轴上。
+    float X = (vUv.x - 0.5) * u._FieldSize.x;
+    float Y = (vUv.y - 0.5) * u._FieldSize.y;
 
     // ---------------------------------------------------------------- 雨幕
     // 视线沿高度走：高度 h 处看到的是地面点 (X, Y - h)。把它落在墙带里的部分按高度加权累加，

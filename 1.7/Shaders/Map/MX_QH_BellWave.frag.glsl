@@ -27,6 +27,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Shell;     // @default = vec4(0.05, 4.0, 0.5, 0.35)
     // x: ring core sigma (cells), y: core peak, z: halo sigma (cells), w: halo peak
     vec4 _Foot;      // @default = vec4(0.02, 0.55, 0.06, 0.165)
+    // xy: quad extents (cells), z: north extra height (cells), set by FieldRenderer
+    vec4 _FieldSize; // @default = vec4(2.0, 2.0, 0.0, 0.0)
     // Power of the fade with height (1 = linear to the curtain top).
     float _FadePow;  // @default = 1.0
     float _BloomIntensity; // @default = 1.0
@@ -66,8 +68,11 @@ void main()
     float hc = max(u._Wave.z * k * r, 1e-4);
     float bright = u._Wave.w;
     float T = max(u._Shell.x, 1e-4);
-    float X = vUv.x;
-    float Y = vUv.y;
+    vec2 p = vec2(
+        (vUv.x - 0.5) * u._FieldSize.x,
+        vUv.y * u._FieldSize.y - 0.5 * (u._FieldSize.y - u._FieldSize.z));
+    float X = p.x;
+    float Y = p.y;
 
     vec3 col = vec3(0.0);
     float a1, a2u, a2, b1, b2u, b2;
@@ -89,7 +94,7 @@ void main()
     }
 
     // the ground ring: a bright core and a season halo
-    float d = abs(length(vUv) - r);
+    float d = abs(length(p) - r);
     float core = exp(-0.5 * (d * d) / max(u._Foot.x * u._Foot.x, 1e-8)) * u._Foot.y;
     float halo = exp(-0.5 * (d * d) / max(u._Foot.z * u._Foot.z, 1e-8)) * u._Foot.w;
     col += (u._Core.rgb * core + u._Glow.rgb * halo) * bright;

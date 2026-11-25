@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using UnityEngine;
@@ -57,7 +58,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
 
         /// <param name="clock">Seconds since the cut started at a visual tick count; null = real time from <paramref name="startTick"/>.</param>
         public void AddCut(CompProperties_AbilitySakuraDance props, SakuraCutProps cut, SakuraRingFrame frame, int startTick, bool thunder, float radiusScale,
-            System.Func<float, float> clock = null)
+            Func<float, float> clock = null)
         {
             CutVisual v = new()
             {
@@ -91,7 +92,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// <param name="bodyCenter">World position (x east, y height, z north) of the body centre at the spawn.</param>
         /// <param name="clock">Seconds since the spawn at a visual tick count (the dance's motion clock); null = real time.</param>
         public void AddUpdraft(CompProperties_AbilitySakuraDance props, SakuraUpdraftProps up, Vector3 bodyCenter, Vector3 aim, int startTick,
-            System.Func<float, float> clock = null)
+            Func<float, float> clock = null)
         {
             UpdraftVisual v = new()
             {
@@ -195,7 +196,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     DrawStrips(v, t, distortScale, minWidth);
                     v.DrawExtra(t, dt);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Warn(ex);
                     v.Dispose();
@@ -213,7 +214,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                         charged.RemoveAt(i);
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Warn(ex);
                     charged[i].Dispose();
@@ -222,7 +223,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             }
         }
 
-        private static void Warn(System.Exception ex)
+        private static void Warn(Exception ex)
         {
             if (!warned)
             {
@@ -526,7 +527,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             public CompProperties_AbilitySakuraDance props;
             public int startTick;
             /// <summary>Seconds since the start at a visual tick count (the dance's slowed motion clock); null = real time.</summary>
-            public System.Func<float, float> clock;
+            public Func<float, float> clock;
             public float lifeSeconds;
 
             public float Seconds(float ticks) => clock?.Invoke(ticks) ?? (ticks - startTick) / 60f;
@@ -588,7 +589,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                     {
                         if (m != null)
                         {
-                            Object.Destroy(m);
+                            UnityEngine.Object.Destroy(m);
                         }
                     }
                 }
@@ -621,7 +622,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 base.Dispose();
                 if (petalMesh != null)
                 {
-                    Object.Destroy(petalMesh);
+                    UnityEngine.Object.Destroy(petalMesh);
                 }
             }
         }
@@ -720,7 +721,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 base.Dispose();
                 if (dustMesh != null)
                 {
-                    Object.Destroy(dustMesh);
+                    UnityEngine.Object.Destroy(dustMesh);
                 }
             }
         }

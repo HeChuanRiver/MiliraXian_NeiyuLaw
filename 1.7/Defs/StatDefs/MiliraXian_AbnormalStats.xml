@@ -120,7 +120,7 @@
     </StatDef>
 
     <StatDef ParentName="MX_AbnormalFactorBase">
-        <defName>MX_AbnormalFearLimitFactor</defName>
+        <defName>MX_AbnormalConfusionLimitFactor</defName>
         <label>恐惧积累上限乘数</label>
         <description>触发恐惧效果所需异常积累量的乘数。数值为0时，恐惧异常无效。</description>
         <parts>
@@ -140,7 +140,7 @@
     </StatDef>
 
     <StatDef ParentName="MX_AbnormalFactorBase">
-        <defName>MX_AbnormalFearEfficiencyFactor</defName>
+        <defName>MX_AbnormalConfusionEfficiencyFactor</defName>
         <label>恐惧附加效率乘数</label>
         <description>该角色施加恐惧异常积累量时使用的效率乘数。</description>
     </StatDef>

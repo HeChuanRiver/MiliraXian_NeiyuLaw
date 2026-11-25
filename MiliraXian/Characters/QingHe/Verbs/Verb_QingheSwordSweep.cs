@@ -33,7 +33,7 @@ namespace MiliraXian.Characters.QingHe.Verbs
             BladeMotionPlayer.RegisterIdleGate(pawn =>
                 !QinghePowerBalance.Sealed
                 && MX_QHCharacterUtility.IsQinghe(pawn)
-                && pawn.jobs?.curDriver is not Jobs.JobDriver_IllusoryReflectionStance { WeaponOpacity: <= 0f }
+                && pawn.jobs?.curDriver is not Jobs.JobDriver_KyoukaSuigetsuStance { WeaponOpacity: <= 0f }
                 && MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance == MX_QHDefOf.MX_QH_Stance_Sword);
         }
     }

@@ -6,7 +6,21 @@
 //   - 线段内部，等距线是直线  ⇒ 格子边界的直线段严格笔直
 //   - 顶点处，等距线是以顶点为圆心的圆弧 ⇒ 拐角自然圆滑，无 90° 叠、无 270° 缺角
 //   line = exp(-(d/σ)^2) 就是「零厚度边界 + 高斯模糊」的闭式解。
-// 与 .cache/spring_proto/spring_flow_preview.py 同一套公式、同一组常量。
+//
+// 格集合由 _FieldRadius 给出：格子 (dx, dz) 在范围内 ⟺ dx² + dz² ≤ radius²，
+// 与玩法（CompSpringFlowField 的距离判定、GenRadial.NumCellsInRadius 的截断）
+// 是同一条判据。
+//
+// 形状的解析写法：场是按行的半宽 w(k) = floor(sqrt(R² - k²)) 铺开的，所以每一层
+// （z = k + 0.5 的水平格边、x = k + 0.5 的垂直格边）都能先算成一个只跟 X 有关的
+// 「层项」：水平层给出 (层高, 到该层 x 区间的平方距离)，垂直层给出 (到该层竖线的
+// 平方距离, 该层的 z 区间)。逐层取最小即可——这正是原来 3×3 邻域穷举的结果
+// （离线对拍在可见带内误差 1e-15）。
+//
+// 于是一个像素只做两件事：预处理 5+5 个层项；之后每帧的 24 步光幕，每步只是
+// 5 次 (dz² + c) 和 5 次 clamp，不再每步重算隶属与线段距离。
+// 光幕的取样点最多比本像素近 height，所以平方距离超过 (height + 4σ) 的像素直接丢弃，
+// 只有贴着边界的一圈才跑那 24 步。距离比较全程用平方，只在最后做一次 exp。
 
 layout(location = 0) in vec4 vColor;
 layout(location = 1) in vec2 vUv;
@@ -21,75 +35,90 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Params;    // @default = vec4(0.4, 1.0, 0.024, 4.23)
     vec4 _BloomTint; // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     float _BloomIntensity; // @default = 1.0
-    // x, z: 场地中心（地图格坐标）
+    // x, y: 场地中心（地图格坐标，y 即世界 z；格子中心 +0.5）
     vec4 _FieldCenter; // @default = vec4(0.0, 0.0, 0.0, 0.0)
-    float _FieldSize;  // mask 边长（格）= 2R + 3
+    float _FieldSize;  // 场地边长（格）= 2R + 3
+    float _FieldRadius; // CompProperties_SpringFlowField.radius，格
 } u;
 
-layout(set = 2, binding = 1) uniform sampler2D _MainTex;
-
 const int CURTAIN_STEPS = 24;
+const int LEVELS = 5;
 
-// 缓存：以当前像素所在格为原点，列 -2..2、行 -3..3 的「是否在范围内」
-float gCell[7][5];
-int gSize;
+// 预计算的层项（每像素一次）。索引 i 对应层 k = kz - 2 + i 或 kx - 2 + i。
+float gHz[LEVELS];      // 水平层的 z
+float gHdu[LEVELS];     // 该水平层到 X 的平方距离（无该层时为 1e9）
+float gVdu[LEVELS];     // 该垂直层竖线到 X 的平方距离
+vec2 gVspan[LEVELS];    // 该垂直层的 z 区间（无该层时为 (1e9, 1e9)）
+float gR2;
 
-float cellRaw(ivec2 c)
+// 第 k 行（列）的半宽，以格计；空行返回 -1。
+float wOf(int k)
 {
-    if (c.x < 0 || c.y < 0 || c.x >= gSize || c.y >= gSize)
+    float kk = float(k);
+    float v = gR2 - kk * kk;
+    return v < 0.0 ? -1.0 : floor(sqrt(v) + 1.0e-4);
+}
+
+void buildLevels(float X, float Z)
+{
+    int kz = int(floor(Z));
+    int kx = int(floor(X));
+    for (int i = 0; i < LEVELS; i++)
     {
-        return 0.0;
-    }
-    return texelFetch(_MainTex, c, 0).a;
-}
-
-// 局部坐标 p（格内 [0,1)）到水平线段（z = zs，x ∈ [x0,x1]）的距离
-float segH(vec2 p, float x0, float x1, float zs)
-{
-    float du = p.x - clamp(p.x, x0, x1);
-    float dv = p.y - zs;
-    return sqrt(du * du + dv * dv);
-}
-
-// 垂直线段（x = xs，z ∈ [z0,z1]）
-float segV(vec2 p, float xs, float z0, float z1)
-{
-    float dv = p.y - clamp(p.y, z0, z1);
-    float du = p.x - xs;
-    return sqrt(du * du + dv * dv);
-}
-
-// rowShift：地面上为 0；被光幕下移一格时为 -1
-float lineAt(int rowShift, vec2 p, float sigma)
-{
-    float d = 1.0e9;
-    for (int dz = -1; dz <= 1; dz++)
-    {
-        for (int dx = -1; dx <= 1; dx++)
+        int k = kz - 2 + i;
+        float lo = wOf(k);
+        float hi = wOf(k + 1);
+        gHz[i] = float(k) + 0.5;
+        if ((lo < 0.0 && hi < 0.0) || lo == hi)
         {
-            int r = dz + 3 + rowShift;
-            int c = dx + 2;
-            float here = gCell[r][c];
-            if (here != gCell[r + 1][c])
-            {
-                d = min(d, segH(p, float(dx), float(dx) + 1.0, float(dz) + 1.0));
-            }
-            if (here != gCell[r - 1][c])
-            {
-                d = min(d, segH(p, float(dx), float(dx) + 1.0, float(dz)));
-            }
-            if (here != gCell[r][c + 1])
-            {
-                d = min(d, segV(p, float(dx) + 1.0, float(dz), float(dz) + 1.0));
-            }
-            if (here != gCell[r][c - 1])
-            {
-                d = min(d, segV(p, float(dx), float(dz), float(dz) + 1.0));
-            }
+            gHdu[i] = 1.0e9;
+        }
+        else
+        {
+            float a = min(lo, hi) + 0.5;
+            float b = max(lo, hi) + 0.5;
+            float du = max(0.0, max(a - abs(X), abs(X) - b));
+            gHdu[i] = du * du;
+        }
+
+        int k2 = kx - 2 + i;
+        float lo2 = wOf(k2);
+        float hi2 = wOf(k2 + 1);
+        float du2 = X - (float(k2) + 0.5);
+        if ((lo2 < 0.0 && hi2 < 0.0) || lo2 == hi2)
+        {
+            gVdu[i] = 1.0e9;
+            gVspan[i] = vec2(1.0e9, 1.0e9);
+        }
+        else
+        {
+            gVdu[i] = du2 * du2;
+            gVspan[i] = vec2(min(lo2, hi2) + 0.5, max(lo2, hi2) + 0.5);
         }
     }
-    float t = d / max(sigma, 0.001);
-    return exp(-t * t);
+}
+
+// 到最近格边的平方距离（Z 是当前的取样高度，光幕每一步都在变）
+float dist2At(float Z)
+{
+    float best = 1.0e9;
+    float az = abs(Z);
+    for (int i = 0; i < LEVELS; i++)
+    {
+        float dz = Z - gHz[i];
+        best = min(best, gHdu[i] + dz * dz);
+
+        float dv = max(0.0, max(gVspan[i].x - az, az - gVspan[i].y));
+        best = min(best, gVdu[i] + dv * dv);
+    }
+    return best;
+}
+
+// exp(-(d/σ)^2)，输入是平方距离，免掉 sqrt
+float lineFromSquared(float d2, float sigma)
+{
+    float s2 = max(sigma * sigma, 1.0e-6);
+    return exp(-d2 / s2);
 }
 
 void main()
@@ -104,45 +133,39 @@ void main()
     float sigma = u._Params.z;
     float gain = u._Params.w;
 
-    gSize = int(u._FieldSize);
-    float size = float(gSize);
+    float size = u._FieldSize;
+    gR2 = u._FieldRadius * u._FieldRadius;
 
-    // quad：x ∈ [中心 - size/2, 中心 + size/2]，z ∈ [同上] + 向上 height
+    // quad：x ∈ [中心 - size/2, 中心 + size/2]，
+    //       z ∈ [同上] 再向北多出 height（光幕向上溢出的那一截）
     vec2 origin = vec2(u._FieldCenter.x - size * 0.5, u._FieldCenter.y - size * 0.5);
     float worldX = origin.x + vUv.x * size;
     float worldZ = origin.y + vUv.y * (size + height);
 
-    // 地面像素所在的格与格内局部坐标
-    vec2 q = vec2(worldX, worldZ) - origin;
-    ivec2 c0 = ivec2(floor(q));
-    vec2 local = q - vec2(c0);
+    // 以场地中心为原点的格坐标：格心在整数上，格 (i, j) 占 [i-0.5, i+0.5]
+    float X = worldX - u._FieldCenter.x;
+    float Z = worldZ - u._FieldCenter.y;
 
-    // 填充缓存（一次），光幕各步都复用
-    for (int r = 0; r < 7; r++)
+    buildLevels(X, Z);
+    float ground2 = dist2At(Z);
+
+    // 贴着边界的一圈之外什么都没有：光幕的取样点最多比本像素近 height，
+    // 平方距离再小也不可能低于 (height + 4σ)，到此为止全部丢掉。
+    float horizon = height + 4.0 * sigma;
+    if (ground2 > horizon * horizon)
     {
-        for (int c = 0; c < 5; c++)
-        {
-            gCell[r][c] = cellRaw(ivec2(c0.x + c - 2, c0.y + r - 3));
-        }
+        discard;
     }
 
     // 地面那条线
-    float line = lineAt(0, local, sigma);
+    float line = lineFromSquared(ground2, sigma);
 
-    // 光幕：把地面线沿 +z 堆叠（屏幕上就是往上）
+    // 光幕：把地面线沿 +z 逐层堆叠（每一层都是「下移 h 之后的同一条边界」）
     float curtain = 0.0;
     for (int i = 0; i < CURTAIN_STEPS; i++)
     {
         float h = height * (float(i) + 0.5) / float(CURTAIN_STEPS);
-        float v = local.y - h;
-        int rowShift = 0;
-        if (v < 0.0)
-        {
-            v += 1.0;
-            rowShift = -1;
-        }
-        curtain += lineAt(rowShift, vec2(local.x, v), sigma)
-                  * pow(1.0 - h / height, 1.4);
+        curtain += lineFromSquared(dist2At(Z - h), sigma) * pow(1.0 - h / height, 1.4);
     }
     curtain *= (height / float(CURTAIN_STEPS)) * gain;
 

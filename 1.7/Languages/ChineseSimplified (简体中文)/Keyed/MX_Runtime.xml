@@ -57,12 +57,9 @@
   <MX_NL_NeiyuPowerLevelLabel>霓羽强度档位（仅影响霓羽）</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>第一档：原始强度（默认）</MX_NL_NeiyuPowerLevelOriginalLabel>
   <MX_NL_NeiyuPowerLevelOriginalDesc>霓羽的完整技能、武器、护盾与穿戴加成，以及饥饿保护和意识保底。</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>第二档：适度强度</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>完整的武器形态、斩首、群体治疗与多阶段护盾，搭配适中的伤害、增益和技能冷却。</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>第三档：观赏模式</MX_NL_NeiyuPowerLevelDecorativeLabel>
   <MX_NL_NeiyuPowerLevelDecorativeDesc>以陪伴、外观和剧情为主。主动技能、护盾、饥饿保护、意识保底与专属装备加成停用，装备提供基础战斗能力。</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>当前强度档位已封禁霓羽的主动技能。</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>技能效果见说明，属性与冷却见信息面板。</MX_NL_NeiyuAbilityBalancedNotice>
   <MX_NL_NeiyuAbilityDecorativeNotice>此技能当前无法施放。</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>已封禁</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>当前为观赏模式，霓羽的护身被动不会生效。</MX_NL_NeiyuPassiveSealedDesc>
@@ -139,7 +136,7 @@
   <MX_ZL_LinkTargetTipNamed>该目标正与{0}保持因果链接。</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>定数无法对昭离自己使用。</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>定数无法在袭击状态下使用。</MX_ZL_DingshuCannotUseDuringRaid>
-  <MX_ZL_NotEnoughKarmaDingshu>因果不足，无法施放定数。</MX_ZL_NotEnoughKarmaDingshu>
+  <MXZL_ZhaoliKarmaNotEnough>因果不足（需要 {0} 点，当前可用 {1} 点）。</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>目标在定数标记期间死亡，无法再次被复活。</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>定数未能完成复活。</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>定数</MX_ZL_DingshuMote>
@@ -148,12 +145,10 @@
   <MX_ZL_ReportDingshu>施放定数</MX_ZL_ReportDingshu>
   <MX_ZL_DuanzhanInvalidTargetCell>断斩的目标位置无效。</MX_ZL_DuanzhanInvalidTargetCell>
   <MX_ZL_DuanzhanNeedWeapon>断斩只能由昭离装备离断时施放。</MX_ZL_DuanzhanNeedWeapon>
-  <MX_ZL_NotEnoughKarmaGuiyi>因果不足，无法施放诡医。</MX_ZL_NotEnoughKarmaGuiyi>
   <MX_ZL_GuiyiMote>诡医</MX_ZL_GuiyiMote>
   <MX_ZL_GuiyiCannotTargetSelf>诡医无法对昭离自己使用。</MX_ZL_GuiyiCannotTargetSelf>
   <MX_ZL_GuiyiCannotTargetHostile>诡医无法对敌对目标使用。</MX_ZL_GuiyiCannotTargetHostile>
   <MX_ZL_GuiyiNoTreatableInjuries>目标没有需要诡医处理的伤病。</MX_ZL_GuiyiNoTreatableInjuries>
-  <MX_ZL_NotEnoughKarmaMinghuo>因果不足，无法施放冥火。</MX_ZL_NotEnoughKarmaMinghuo>
   <MX_ZL_MinghuoMote>冥火</MX_ZL_MinghuoMote>
   <MX_ZL_MinghuoAttached>冥火已附着于当前主武器：伤害/破甲/命中/攻速 x1.5，攻击距离 +2，并附加额外火焰伤害。</MX_ZL_MinghuoAttached>
   <MX_ZL_MinghuoSelfOnly>冥火只能由昭离对自己施放。</MX_ZL_MinghuoSelfOnly>
@@ -166,7 +161,6 @@
   <MX_ZL_MinghuoAttackSpeedMultiplier>攻速：x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
   <MX_ZL_MinghuoRangeOffset>攻击距离：+{0}</MX_ZL_MinghuoRangeOffset>
   <MX_ZL_MinghuoExtraFireDamageEnabled>额外火焰伤害：已启用</MX_ZL_MinghuoExtraFireDamageEnabled>
-  <MX_ZL_NotEnoughKarmaMinshen>因果不足，无法施放泯神。</MX_ZL_NotEnoughKarmaMinshen>
   <MX_ZL_MinshenMote>泯神</MX_ZL_MinshenMote>
   <MX_ZL_MinshenMentalStateReason>昭离的泯神使其失神。</MX_ZL_MinshenMentalStateReason>
   <MX_ZL_RebirthAccepted>昭离被死亡接纳，十日后将于玩家基地归来。</MX_ZL_RebirthAccepted>

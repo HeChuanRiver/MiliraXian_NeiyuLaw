@@ -1,0 +1,29 @@
+using RimWorld;
+using Verse;
+using Verse.AI;
+using MiliraXian.Characters.Common.AbnormalSystem;
+
+namespace MiliraXian.Characters.Common.AbnormalSystem.Effects.MentalStates
+{
+    public class MentalState_AbnormalConfused : MentalState
+    {
+        public IntVec3 wanderRoot = IntVec3.Invalid;
+
+        public override void PreStart()
+        {
+            base.PreStart();
+            wanderRoot = pawn?.Position ?? IntVec3.Invalid;
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref wanderRoot, "wanderRoot");
+        }
+
+        public override RandomSocialMode SocialModeMax()
+        {
+            return RandomSocialMode.Off;
+        }
+    }
+}

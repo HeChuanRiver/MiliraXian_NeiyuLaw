@@ -283,38 +283,6 @@
     </comps>
   </HediffDef>
   <HediffDef>
-    <defName>MX_QH_SwordPressureAfterglow</defName>
-    <label>剑势余韵</label>
-    <description>落樱命中后的余韵，持续回复剑压。</description>
-    <hediffClass>Verse.HediffWithComps</hediffClass>
-    <defaultLabelColor>(0.30, 0.78, 0.92)</defaultLabelColor>
-    <isBad>false</isBad>
-    <scenarioCanAdd>false</scenarioCanAdd>
-    <everCurableByItem>false</everCurableByItem>
-    <initialSeverity>1</initialSeverity>
-    <minSeverity>1</minSeverity>
-    <maxSeverity>2</maxSeverity>
-    <stages>
-      <li>
-        <minSeverity>1</minSeverity>
-        <statOffsets>
-          <MX_QH_SwordPressureRecovery>0.1</MX_QH_SwordPressureRecovery>
-        </statOffsets>
-      </li>
-      <li>
-        <minSeverity>2</minSeverity>
-        <statOffsets>
-          <MX_QH_SwordPressureRecovery>0.2</MX_QH_SwordPressureRecovery>
-        </statOffsets>
-      </li>
-    </stages>
-    <comps>
-      <li Class="HediffCompProperties_Disappears">
-        <disappearsAfterTicks>300</disappearsAfterTicks>
-      </li>
-    </comps>
-  </HediffDef>
-  <HediffDef>
     <defName>MX_QH_StillnessGathering</defName>
     <label>静思凝神</label>
     <description>隐藏Hediff：当前活动带来的静思积累速度。</description>

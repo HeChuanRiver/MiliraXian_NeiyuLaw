@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
@@ -56,7 +57,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
                 {
                     return null;
                 }
-                return airborne && props.airMotion != null ? props.airMotion : props.groundMotion;
+                return airborne && props.airMotion != null ? props.airMotion.Motion : props.groundMotion?.Motion;
             }
         }
 
@@ -160,9 +161,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 pawn.Map.GetComponent<MapComponent_SakuraDanceVisuals>()?.EnsureCharged(pawn);
             }
-            for (int i = 0; i < props.cuts.Count && i < 31; i++)
+            for (int i = 0; i < props.Cuts.Count && i < 31; i++)
             {
-                SakuraCutProps cut = props.cuts[i];
+                SakuraCutProps cut = props.Cuts[i];
                 // Real ticks after the start: the thunder slow-down pushes later cuts back.
                 int cutTick = RealTicks(motion.CutTime(cut, i));
                 if (cut.updraft != null && (updraftMask & (1 << i)) == 0
@@ -281,11 +282,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             {
                 return false;
             }
-            if (thunderReleaseTick < 0 || thunderReleaseIndex < 0 || thunderReleaseIndex >= props.cuts.Count)
+            if (thunderReleaseTick < 0 || thunderReleaseIndex < 0 || thunderReleaseIndex >= props.Cuts.Count)
             {
                 return true;
             }
-            float end = props.cuts[thunderReleaseIndex].spinSeconds + props.thunderSparkAfterRelease;
+            float end = props.Cuts[thunderReleaseIndex].spinSeconds + props.thunderSparkAfterRelease;
             return (visualTicks - thunderReleaseTick) / 60f <= end;
         }
 
@@ -399,7 +400,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         /// after landing), and the driver's props are gone once the job has ended, so they must not
         /// call back into the driver.
         /// </summary>
-        internal System.Func<float, float> MotionClockFrom(int startTick)
+        internal Func<float, float> MotionClockFrom(int startTick)
         {
             int start = danceStartTick;
             float skip = Motion?.skipSeconds ?? 0f;

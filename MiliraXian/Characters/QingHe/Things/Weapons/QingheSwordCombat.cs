@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
@@ -36,7 +37,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
     public static class QingheSwordCombatUtility
     {
         /// <summary>Share of the sword pressure gain for the hit now resolving (one strike of a multi-strike motion gives less).</summary>
-        [System.ThreadStatic] public static float swordPressureScaleOverride;
+        [ThreadStatic] public static float swordPressureScaleOverride;
         public static float SwordPressureScale => swordPressureScaleOverride > 0f ? swordPressureScaleOverride : 1f;
 
         public static FlowerBellResonance ResonanceFor(Pawn pawn)
@@ -260,12 +261,12 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private static void ApplySpringBlessing(Pawn caster)
         {
-            if (caster.health?.hediffSet == null || MX_QHDefOf.MX_QH_SpringFlow == null)
+            if (caster.health?.hediffSet == null || MX_QHDefOf.MX_QH_SpringFlowHealing == null)
             {
                 return;
             }
 
-            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlow);
+            Hediff hediff = caster.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlowHealing) ?? caster.health.AddHediff(MX_QHDefOf.MX_QH_SpringFlowHealing);
             hediff?.TryGetComp<HediffComp_Disappears>()?.ResetElapsedTicks();
         }
     }

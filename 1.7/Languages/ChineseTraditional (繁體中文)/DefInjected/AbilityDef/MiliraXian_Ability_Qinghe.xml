@@ -2,12 +2,12 @@
 <LanguageData>
   <MX_QH_SpringFlow.label>春泉涌流</MX_QH_SpringFlow.label>
   <MX_QH_SpringFlow.description>消耗2點花令，在目標地點召喚出春泉，短時間內治療范圍內的友方單位并附加春泉洗禮效果，提升近戰攻擊造成的傷害、降低受到的傷害并凈化部分負面效果。效果持續15秒。&#10;&#10;習得“四時和鳴”後，每秒為泉水中的血肉敵人積累20點流血；若已處于流血狀態，則改為積累15點毒素。機械敵人先積累15點腐蝕；若已處于腐蝕狀態，則改為積累20點漏電。積累量受法術效果系數與對應異常附加效率影響。&#10;&#10;此效果可以驅散由告死流場施加的死亡宣告。</MX_QH_SpringFlow.description>
-  <MX_QH_SummerRain.label>荷雨</MX_QH_SummerRain.label>
-  <MX_QH_SummerRain.description>消耗2點花令，在目標地點召來一道雨幕。雨幕垂直於你的視線橫陳，長15格、寬3格，持續15秒，不阻擋通行。&#10;&#10;踏入雨幕的敵人會被淋透，移動速度減半；離開雨幕6秒後才會乾透。血肉敵人每秒積累30點毒素，機械敵人每秒積累30點腐蝕。積累量受法術效果係數與對應異常附加效率影響。&#10;&#10;雨水在起手時就開始落下，雨幕落下時才正式生效；結束時雨先停，積水再慢慢淡去。友方不受影響。</MX_QH_SummerRain.description>
+  <MX_QH_LotusRain.label>荷雨</MX_QH_LotusRain.label>
+  <MX_QH_LotusRain.description>消耗2點花令，在目標地點召來一道雨幕。雨幕垂直於你的視線橫陳，長15格、寬3格，持續15秒，不阻擋通行。&#10;&#10;踏入雨幕的敵人會被淋透，移動速度減半；離開雨幕6秒後才會乾透。血肉敵人每秒積累30點毒素，機械敵人每秒積累30點腐蝕。積累量受法術效果係數與對應異常附加效率影響。&#10;&#10;雨水在起手時就開始落下，雨幕落下時才正式生效；結束時雨先停，積水再慢慢淡去。友方不受影響。</MX_QH_LotusRain.description>
   <MX_QH_LunarMirror.label>霜月鏡</MX_QH_LunarMirror.label>
   <MX_QH_LunarMirror.description>消耗2點花令，在目標地點召喚出冰雪般的護盾，短時間內攔截穿過范圍邊界的敵方投射物，每次攔截都會以冰霜子彈還擊攻擊者。護盾持續20秒，吸收一定量傷害後將會破碎。&#10;&#10;習得“四時和鳴”後，每秒為護盾內的非機械敵人積累15點恐懼，為機械敵人積累15點過載；冰霜子彈命中時僅積累寒冷，達到上限後觸發凍結。積累量受法術效果系數與對應異常附加效率影響。</MX_QH_LunarMirror.description>
-  <MX_QH_IllusoryReflection.label>鏡花水月</MX_QH_IllusoryReflection.label>
-  <MX_QH_IllusoryReflection.description>收刀立於水月之上，維持最長5秒的架勢。期間受到攻擊時，敵人打中的只是鏡中幻影：清荷與水面一同碎去，隨即一道圓斬掃過四周4.5格內的所有敵人，命中時積累劍壓，之後從水中重新顯形。&#10;&#10;從起手到收勢全程無敵；只反擊一次。冷卻在收勢後開始計算。&#10;&#10;——鏡花水月，如夢似幻。</MX_QH_IllusoryReflection.description>
+  <MX_QH_Kyouka_Suigetsu.label>鏡花水月</MX_QH_Kyouka_Suigetsu.label>
+  <MX_QH_Kyouka_Suigetsu.description>收刀立於水月之上，維持最長5秒的架勢。期間受到攻擊時，敵人打中的只是鏡中幻影：清荷與水面一同碎去，隨即一道圓斬掃過四周4.5格內的所有敵人，命中時積累劍壓，之後從水中重新顯形。&#10;&#10;從起手到收勢全程無敵；只反擊一次。冷卻在收勢後開始計算。&#10;&#10;——鏡花水月，如夢似幻。</MX_QH_Kyouka_Suigetsu.description>
   <MX_QH_Zantetsuken_Guren.label>斬鐵劍【紅蓮】</MX_QH_Zantetsuken_Guren.label>
   <MX_QH_Zantetsuken_Guren.description>需要至少1層劍壓。向指定方向高速衝刺，踢中撞上的第一個敵人或建築，並擊暈落點荷花（6格）內的所有敵人5秒；隨後花光全部劍壓高高躍起，平舉刀身豎直劈落，落地後對荷花內的所有敵人連續造成5次傷害。沒有踢中任何目標時只衝刺，不消耗劍壓。&#10;&#10;從衝刺到收勢全程無敵。&#10;&#10;習得「燕回返【月華】」後，擊暈延長至8秒，落地後不收刀，翻刃上撈躍回低空，空中居合收刀，合鞘時對荷花內的所有敵人再造成一次高額傷害。</MX_QH_Zantetsuken_Guren.description>
 </LanguageData>

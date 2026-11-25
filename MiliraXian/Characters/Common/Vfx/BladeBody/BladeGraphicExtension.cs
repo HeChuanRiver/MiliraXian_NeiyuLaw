@@ -36,14 +36,32 @@ namespace MiliraXian.Characters.Common.Vfx.BladeBody
         public Vector3 scabbardRestEnd;
         /// <summary>Scabbard tint; it is drawn with the blade texture (from the grip to the tip), darkened.</summary>
         public Color scabbardColor = new(0.24f, 0.16f, 0.14f, 1f);
+        /// <summary>
+        /// Optional separate scabbard texture. When set, the scabbard is drawn from it instead of the
+        /// (darkened) blade texture; it is laid from the scabbard mouth to its end over
+        /// <see cref="scabbardMouthUV"/>–<see cref="scabbardTipUV"/> (v up, as the blade UVs).
+        /// </summary>
+        public string scabbardTexPath;
+        /// <summary>The scabbard mouth (opening) in the scabbard texture.</summary>
+        public Vector2 scabbardMouthUV = new(0.5f, 0f);
+        /// <summary>The scabbard tip (closed end) in the scabbard texture.</summary>
+        public Vector2 scabbardTipUV = new(0.5f, 1f);
+        /// <summary>Part of the scabbard texture that holds the scabbard; only this area is drawn.</summary>
+        public Vector2 scabbardUvMin = Vector2.zero;
+        public Vector2 scabbardUvMax = Vector2.one;
 
         /// <summary>Texture of a default calibration (the weapon's own map graphic).</summary>
         private Texture2D texture;
+        private Texture2D scabbardTexture;
 
         private static readonly Dictionary<ThingDef, BladeGraphicExtension> Defaults = new();
 
         /// <summary>The blade texture; null when it cannot be found.</summary>
         public Texture2D Texture => texture ??= texPath.NullOrEmpty() ? null : ContentFinder<Texture2D>.Get(texPath, reportFailure: false);
+
+        /// <summary>The separate scabbard texture, or null to draw the scabbard from the blade texture.</summary>
+        public Texture2D ScabbardTexture => scabbardTexPath.NullOrEmpty() ? null
+            : (scabbardTexture ??= ContentFinder<Texture2D>.Get(scabbardTexPath, reportFailure: false));
 
         /// <summary>The weapon's calibration, or its startup default; null for a def that is not a melee weapon.</summary>
         public static BladeGraphicExtension For(ThingDef def)

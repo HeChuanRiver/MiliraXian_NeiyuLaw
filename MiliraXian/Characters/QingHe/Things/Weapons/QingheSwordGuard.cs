@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe.Defs;
 using MiliraXian.Characters.QingHe.Hediffs;
 using MiliraXian.Characters.QingHe.Jobs;
@@ -105,7 +107,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// return, toward the enemy; at clip second <see cref="killAtSeconds"/> the blade is drawn out
         /// and the enemy dies. Null = no thrust.
         /// </summary>
-        public BladeMotionClip killMotion;
+        public BladeMotionClipDef killMotion;
         /// <summary>
         /// Petals burst from the wound as the blade is drawn out (the kill): at <see cref="killPetalShare"/>
         /// of the blade from the grip, where it runs through the enemy, thrown the way the blade is drawn. Null = none.
@@ -126,7 +128,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>The flash at the scabbard mouth of the sheathe the blow lands with, instead of the weapon's. Null = the weapon's.</summary>
         public QingheSheatheFlashProps executionHitFlash;
         /// <summary>The word over the killed enemy and the darkening around it.</summary>
-        public QingheKillVfxProps killVfx;
+        public VfxDef killVfx;
 
         public int ExecutionTicks => Mathf.Max(12, Mathf.RoundToInt(executionSeconds * 60f));
 
@@ -146,12 +148,13 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             {
                 yield return "MX_QH_ConfigError_ExecutionTiming".Translate();
             }
-            if (killMotion != null && (killMotion.blade == null || killMotion.durationSeconds <= 0f
-                || killAtSeconds < 0f || killAtSeconds > killMotion.durationSeconds || killStartSeconds < executionHitSeconds))
+            BladeMotionClip kill = killMotion?.Clip;
+            if (killMotion != null && (kill == null || kill.blade == null || kill.durationSeconds <= 0f
+                || killAtSeconds < 0f || killAtSeconds > kill.durationSeconds || killStartSeconds < executionHitSeconds))
             {
                 yield return "MX_QH_ConfigError_KillMotion".Translate();
             }
-            if (guardMotion?.guard?.blade == null)
+            if (guardMotion?.guard?.Clip?.blade == null)
             {
                 yield return "MX_QH_ConfigError_GuardMotion".Translate();
             }
@@ -244,7 +247,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             playback = default;
             // The guard is the sword stance's own motion: the same with any weapon.
             BladeMotionSetExtension set = QingheSwordGuard.Config.guardMotion;
-            BladeMotionClip guard = set?.guard;
+            BladeMotionClip guard = set?.guard?.Clip;
             if (guard?.blade == null)
             {
                 return false;
@@ -253,7 +256,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             BladeMotionClip clip = guard;
             float seconds = Mathf.Min((now - startedTick) / 60f, guard.durationSeconds);
             int id = startedTick;
-            BladeMotionClip recoil = set.guardHit;
+            BladeMotionClip recoil = set.guardHit?.Clip;
             if (recoil?.blade != null && lastHitTick >= 0)
             {
                 float since = (now - lastHitTick) / 60f;
@@ -325,7 +328,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         {
             playback = default;
             // The deflect leads into the cross slash's counter: the weapon's own clip, drawn in the weapon's projection.
-            BladeMotionClip clip = set?.parry;
+            BladeMotionClip clip = set?.parry?.Clip;
             if (clip?.blade == null)
             {
                 return false;
@@ -419,7 +422,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             }
             QingheSwordGuardDef c = QingheSwordGuard.Config;
             object stance = defender.stances.curStance;
-            if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
+            if (defender.jobs?.curDriver is JobDriver_QingheExecute)
             {
                 // Executing: invulnerable (SakuraDanceInvulnerability), the blow simply does nothing.
                 return false;
@@ -486,7 +489,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             QingheSwordGuardDef c = QingheSwordGuard.Config;
             object stance = defender.stances.curStance;
             bool parry;
-            if (defender.jobs?.curDriver is JobDriver_QingheSwordExecution)
+            if (defender.jobs?.curDriver is JobDriver_QingheExecute)
             {
                 // Executing: invulnerable, the shot lands and does nothing.
                 return false;
@@ -577,7 +580,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                 || pawn.IsBurning() || pawn.stances?.stunner?.Stunned != false
                 || pawn.WorkTagIsDisabled(WorkTags.Violent)
                 || MX_QH_HediffUtility.GetCombatStance(pawn)?.CurrentStance != MX_QHDefOf.MX_QH_Stance_Sword
-                || pawn.jobs?.curDriver is JobDriver_IllusoryReflectionStance
+                || pawn.jobs?.curDriver is JobDriver_KyoukaSuigetsuStance
                 || pawn.CurJobDef == MX_QHDefOf.MX_QH_SakuraDance
                 || pawn.jobs?.curDriver is Abilities.Zantetsuken.JobDriver_Zantetsuken
                 || CombatPosture.Get(pawn)?.Broken == true)
@@ -738,7 +741,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                     : defender.Rotation.FacingCell.ToVector3();
                 QingheImpactVfx.Spawn(defender.Map, vfx, at, toward, defender.Position);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Log.ErrorOnce("[MiliraXian] Qinghe guard effects failed: " + ex, 0x51c7a3);
             }

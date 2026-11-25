@@ -57,7 +57,6 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         public float gaeshiExtraPosture = 30f;
         public int stunTicks = 300;
         public int gaeshiStunTicks = 480;
-        public float minSwordPressure = 1f;
         public CharacterPerkNodeDef gaeshiNode;
 
         public float heightToScreen = 0.35f;
@@ -101,9 +100,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
             {
                 yield return "dashBurst, burstDamage, landDamageDef, gaeshiDamageDef and gaeshiNode must be set";
             }
-            if (visuals.markVfx == null || visuals.gaeshiMarkVfx == null || visuals.splitVfx == null || visuals.bloom == null)
+            if (visuals.markVfx == null || visuals.gaeshiMarkVfx == null || visuals.splitVfx == null)
             {
-                yield return "visuals need markVfx, gaeshiMarkVfx, splitVfx and bloom";
+                yield return "visuals need markVfx, gaeshiMarkVfx and splitVfx";
             }
             if (!(takeoffSeconds < apexSeconds && apexSeconds <= fallSeconds && fallSeconds < landSeconds))
             {
@@ -139,9 +138,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
         public QingheImpactVfxProps splitVfx;
         public float splitDelay = 0.12f;
         public float splitForward = 0.85f;
-        public string glowTexPath = "MiliraXianQinghe/Effect/SakuraDance/Glow";
         public Color afterimageTint = new(1f, 0.69f, 0.84f, 1f);
-        public ScreenBloomProperties bloom;
     }
 
     public class CompAbilityEffect_Zantetsuken : CompAbilityEffect
@@ -150,23 +147,10 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
 
         public new CompProperties_AbilityZantetsuken Props => (CompProperties_AbilityZantetsuken)props;
 
-        private bool LacksPressure =>
-            Hediffs.MX_QH_HediffUtility.GetSwordPressure(parent.pawn).CurrentValue < Props.minSwordPressure - 1e-4f;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (LacksPressure)
-            {
-                reason = "MX_QH_SwordPressureNotEnough".Translate(Props.minSwordPressure.ToString("0.#"));
-                return true;
-            }
-            return base.GizmoDisabled(out reason);
-        }
-
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
             Pawn caster = parent.pawn;
-            return target.Cell != caster.Position && !LacksPressure
+            return target.Cell != caster.Position
                 && (target.HasThing || target.Cell.Standable(caster.Map))
                 && base.Valid(target, throwMessages);
         }

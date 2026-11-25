@@ -9,7 +9,6 @@ namespace MiliraXian.Characters.Zhaoli
 {
     public class CompProperties_AbilityZhaoliMinshen : CompProperties_AbilityEffect
     {
-        public float karmaCost = 3f;
         public int areaWidth = 13;
         public int areaHeight = 13;
         public float dazeChance = 0.1f;
@@ -35,14 +34,6 @@ namespace MiliraXian.Characters.Zhaoli
         private readonly List<IntVec3> tmpPreviewCells = new();
 
         private new CompProperties_AbilityZhaoliMinshen Props => (CompProperties_AbilityZhaoliMinshen)props;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (base.GizmoDisabled(out reason)) return true;
-            ZhaoliKarmaUtility.ResetNoCooldownAbilityLock(parent);
-            reason = null;
-            return false;
-        }
 
         public override IEnumerable<PreCastAction> GetPreCastActions()
         {
@@ -137,16 +128,6 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (!ZhaoliKarmaUtility.TryConsumeKarma(caster, Props.karmaCost))
-            {
-                if (caster.Faction == Faction.OfPlayer)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaMinshen".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
-                return;
-            }
-
             tmpTargets.Clear();
             CellRect area = CellRect.CenteredOn(target.Cell, Props.areaWidth, Props.areaHeight).ClipInsideMap(caster.Map);
             foreach (IntVec3 cell in area)
@@ -213,16 +194,6 @@ namespace MiliraXian.Characters.Zhaoli
             Pawn caster = parent?.pawn;
             if (caster == null || !target.IsValid)
             {
-                return false;
-            }
-
-            if (ZhaoliKarmaUtility.GetCurrentKarma(caster) < Props.karmaCost)
-            {
-                if (throwMessages)
-                {
-                    Messages.Message("MX_ZL_NotEnoughKarmaMinshen".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
-                }
-
                 return false;
             }
 

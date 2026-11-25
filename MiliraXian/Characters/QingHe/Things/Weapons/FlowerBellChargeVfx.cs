@@ -62,8 +62,24 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>Bell quad side: as the flying note (FlowerBellVfx.BellQuad).</summary>
         private const float BellQuad = 0.1375f * 0.8926f / 0.7031f;
 
-        private const string PetalTexPath = "MiliraXianQinghe/Effect/FlowerBell/PeachPetal";
-        private const string CenterTexPath = "MiliraXianQinghe/Effect/FlowerBell/PeachCenter";
+        // 五瓣各一张灰度贴图，图里已按整花方位摆好（叠加即整花）。
+        // 贴图里各瓣的真实方位（从北顺时针）：a=330.6° b=35.6° c=104° d=181.6° e=260.6°；
+        // 游戏第 i 瓣在 FirstPetal(180°, 正南) + 72i，故索引顺序是 d,e,a,b,c。
+        private static readonly string[] PetalTexPaths =
+        {
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣d_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣e_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣a_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣b_Gray",
+            "MiliraXianQinghe/Effect/FlowerBell/花瓣c_Gray",
+        };
+        private const string OutlineTexPath = "MiliraXianQinghe/Effect/FlowerBell/描边_Gray";
+        // 花心用新贴图（灰度，红黄细节在亮度里），不随季节染色，乘固定暖金。
+        private const string CenterTexPath = "MiliraXianQinghe/Effect/FlowerBell/花心_Gray";
+        /// <summary>整朵花 quad 边长 = FlowerR × 此系数（贴图里各元素相对位置/比例已正确）。</summary>
+        private const float FlowerQuadShare = 1.9f;
+        /// <summary>描边的基础亮度；蓄满时再叠一份与花瓣同口径的爆亮（见 <see cref="BloomSpike"/>）。</summary>
+        private const float OutlineBright = 0.9f;
         private const string BellTexPath = "MiliraXianQinghe/Effect/FlowerBell/BellNote";
         private const string GlowTexPath = "MiliraXianQinghe/Effect/SakuraDance/Glow";
         private const string FallTexPath = "MiliraXianQinghe/Effect/SakuraDance/SakuraPetals";
@@ -119,7 +135,8 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         private readonly Map map;
         private readonly Dictionary<CompFlowerBellCharge, State> states = new();
         private readonly List<CompFlowerBellCharge> removeBuffer = new();
-        private Mesh groundMesh;
+        private Mesh[] petalMeshes;
+        private Mesh outlineMesh;
         private Mesh centerMesh;
         private Mesh bellMesh;
         private Mesh bellBloomMesh;
@@ -356,7 +373,15 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         public void Dispose()
         {
-            Object.Destroy(groundMesh);
+            if (petalMeshes != null)
+            {
+                foreach (Mesh m in petalMeshes)
+                {
+                    Object.Destroy(m);
+                }
+                petalMeshes = null;
+            }
+            Object.Destroy(outlineMesh);
             Object.Destroy(centerMesh);
             Object.Destroy(bellMesh);
             Object.Destroy(bellBloomMesh);
@@ -410,15 +435,48 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         private void DrawGround(float vt)
         {
-            Material petalMat = MapComponent_SakuraDanceVisuals.Material(PetalTexPath, "MX_QH_SakuraTrailAdd");
-            Material centerMat = MapComponent_SakuraDanceVisuals.Material(CenterTexPath, "MX_QH_SakuraTrailAdd");
-            if (petalMat == null || centerMat == null)
+            Material[] petalMats = new Material[Tiers];
+            for (int i = 0; i < Tiers; i++)
             {
-                return;
+                petalMats[i] = MapComponent_SakuraDanceVisuals.Material(PetalTexPaths[i], "MX_QH_SakuraTrailAdd");
+                if (petalMats[i] == null)
+                {
+                    return;
+                }
             }
+            Material outlineMat = MapComponent_SakuraDanceVisuals.Material(OutlineTexPath, "MX_QH_SakuraTrailAdd");
+            Material centerMat = MapComponent_SakuraDanceVisuals.Material(CenterTexPath, "MX_QH_SakuraTrailAdd");
             float y = AltitudeLayer.FloorEmplacement.AltitudeFor() + 0.02f;
-            // Pass 0: the five petals; pass 1: the stamens (another texture).
-            for (int pass = 0; pass < 2; pass++)
+            float quad = FlowerR * FlowerQuadShare;
+
+            // 五瓣：一瓣一张贴图、一瓣一个独立 mesh、一次绘制，每瓣自己的顶点色。
+            // 独立 mesh 是关键：Graphics.DrawMesh 延迟到帧末，共用 mesh 会被最后一次 Upload 覆盖。
+            petalMeshes ??= new Mesh[Tiers];
+            for (int i = 0; i < Tiers; i++)
+            {
+                MapComponent_SakuraDanceVisuals.ClearBuffers();
+                foreach (State s in states.Values)
+                {
+                    if (!PetalGain(s, i, vt, out float g))
+                    {
+                        continue;
+                    }
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
+                    c.y = y;
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(decayingColor(s), g), Depth);
+                }
+                if (MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                {
+                    continue;
+                }
+                Mesh mesh = petalMeshes[i] ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                MapComponent_SakuraDanceVisuals.Upload(mesh);
+                DrawAdditive(mesh, petalMats[i], GroundBloom);
+            }
+
+            // 描边：整朵五瓣轮廓，垫在花瓣下；蓄满时与花瓣叠同一份爆亮。
+            if (outlineMat != null)
             {
                 MapComponent_SakuraDanceVisuals.ClearBuffers();
                 foreach (State s in states.Values)
@@ -429,68 +487,114 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
                         continue;
                     }
                     bool decaying = s.releaseTick < 0 && s.comp.Decaying;
-                    int lit = LitCount(s);
-                    float progress = s.releaseTick >= 0 ? 0f : s.comp.TierProgress;
-                    float bloom = 0f;
-                    if (lit >= Tiers && s.onTick[Tiers - 1] > int.MinValue)
+                    float spike = BloomSpike(s, LitCount(s), vt);
+                    Vector3 c = Centre(s.pawn, FlowerDrop);
+                    c.y = y - 0.001f;
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(decayingColor(s), (OutlineBright + spike) * fade * (decaying ? DecayDim : 1f)), Depth);
+                }
+                if (!MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                {
+                    outlineMesh ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                    MapComponent_SakuraDanceVisuals.Upload(outlineMesh);
+                    DrawAdditive(outlineMesh, outlineMat, GroundBloom);
+                }
+            }
+
+            // 花心：固定的暖金色，随季节不染色；蓄满时与花瓣叠同一份爆亮。
+            if (centerMat != null)
+            {
+                MapComponent_SakuraDanceVisuals.ClearBuffers();
+                foreach (State s in states.Values)
+                {
+                    float fade = FlowerFade(s, vt);
+                    if (fade <= 0f)
                     {
-                        bloom = BloomFlash * Mathf.Exp(-Mathf.Max(0f, vt - s.onTick[Tiers - 1]) / 60f / BloomFlashDecay);
+                        continue;
                     }
-                    Color col = decaying ? Grey(s.color, DecayGrey) : s.color;
+                    bool decaying = s.releaseTick < 0 && s.comp.Decaying;
+                    float spike = BloomSpike(s, LitCount(s), vt);
                     Vector3 c = Centre(s.pawn, FlowerDrop);
                     c.y = y;
-                    if (pass == 0)
-                    {
-                        for (int i = 0; i < Tiers; i++)
-                        {
-                            float g;
-                            if (i < lit)
-                            {
-                                g = 1f;
-                                if (s.onTick[i] > int.MinValue && vt >= s.onTick[i])
-                                {
-                                    g += LitFlash * Mathf.Exp(-(vt - s.onTick[i]) / 60f / LitFlashDecay);
-                                }
-                            }
-                            else if (i == lit && !decaying && s.releaseTick < 0)
-                            {
-                                g = PetalDim + (PetalCharging - PetalDim) * progress;
-                            }
-                            else
-                            {
-                                g = PetalDim;
-                                float off = s.offTick[i] >= 0 ? (vt - s.offTick[i]) / 60f : -1f;
-                                if (off >= 0f && off < 0.15f)
-                                {
-                                    g = 1f + 0.6f * (1f - off / 0.15f);
-                                }
-                            }
-                            if (decaying)
-                            {
-                                g *= DecayDim;
-                            }
-                            g = (g + bloom) * fade * GroundGain;
-                            float angle = FirstPetal + 72f * i;
-                            float a = angle * Mathf.Deg2Rad;
-                            Vector3 pc = c + new Vector3(Mathf.Sin(a), 0f, Mathf.Cos(a) * Depth) * (FlowerR * 0.5f);
-                            // AddQuad turns counter-clockwise; the petal texture points north at 0.
-                            MapComponent_SakuraDanceVisuals.AddQuad(pc, FlowerR, -angle, FlipV0, FlipV1, Light(col, g), Depth);
-                        }
-                    }
-                    else
-                    {
-                        float cg = (0.35f + 0.65f * lit / Tiers + bloom) * fade * (decaying ? DecayDim : 1f) * GroundGain;
-                        MapComponent_SakuraDanceVisuals.AddQuad(c, FlowerR * 0.42f, 0f, Vector2.zero, Vector2.one, Light(Warm, cg), Depth);
-                    }
+                    MapComponent_SakuraDanceVisuals.AddQuad(c, quad, 0f, FlipV0, FlipV1,
+                        Light(Warm, (1f + spike) * fade * (decaying ? DecayDim : 1f) * GroundGain), Depth);
                 }
-                if (MapComponent_SakuraDanceVisuals.BuffersEmpty)
+                if (!MapComponent_SakuraDanceVisuals.BuffersEmpty)
                 {
-                    continue;
+                    centerMesh ??= MapComponent_SakuraDanceVisuals.NewMesh();
+                    MapComponent_SakuraDanceVisuals.Upload(centerMesh);
+                    DrawAdditive(centerMesh, centerMat, GroundBloom);
                 }
-                Mesh mesh = pass == 0 ? (groundMesh ??= MapComponent_SakuraDanceVisuals.NewMesh()) : (centerMesh ??= MapComponent_SakuraDanceVisuals.NewMesh());
-                MapComponent_SakuraDanceVisuals.Upload(mesh);
-                DrawAdditive(mesh, pass == 0 ? petalMat : centerMat, GroundBloom);
             }
+        }
+
+        /// <summary>衰减时整朵变灰的染色。</summary>
+        private static Color decayingColor(State s)
+        {
+            bool decaying = s.releaseTick < 0 && s.comp.Decaying;
+            return decaying ? Grey(s.color, DecayGrey) : s.color;
+        }
+
+        /// <summary>
+        /// 整朵花蓄满那一下的爆亮：第 <see cref="Tiers"/> 瓣点亮的时刻取
+        /// <see cref="BloomFlash"/>，之后按 <see cref="BloomFlashDecay"/> 衰减。花瓣、花心、
+        /// 描边共用这一份，口径一致。
+        /// </summary>
+        private static float BloomSpike(State s, int lit, float vt)
+        {
+            if (lit < Tiers || s.onTick[Tiers - 1] <= int.MinValue)
+            {
+                return 0f;
+            }
+            return BloomFlash * Mathf.Exp(-Mathf.Max(0f, vt - s.onTick[Tiers - 1]) / 60f / BloomFlashDecay);
+        }
+
+        /// <summary>
+        /// 花瓣 <paramref name="i"/> 此刻的增益：已点亮的瓣恒定全亮，只在它自己点亮的那一刻叠一个
+        /// <see cref="LitFlash"/> 闪光；正在蓄的瓣由 PetalDim 升到 PetalCharging；未亮的瓣保持
+        /// PetalDim。蓄满时整朵花的爆亮由 <see cref="BloomSpike"/> 给出。
+        /// </summary>
+        private static bool PetalGain(State s, int i, float vt, out float gain)
+        {
+            gain = 0f;
+            float fade = FlowerFade(s, vt);
+            if (fade <= 0f)
+            {
+                return false;
+            }
+            bool decaying = s.releaseTick < 0 && s.comp.Decaying;
+            int lit = LitCount(s);
+            float progress = s.releaseTick >= 0 ? 0f : s.comp.TierProgress;
+            float bloom = BloomSpike(s, lit, vt);
+            float g;
+            if (i < lit)
+            {
+                // 已点亮的瓣：恒定全亮，只在刚点亮那一下加个 LitFlash 闪光（与旧代码一致）。
+                g = 1f;
+                if (s.onTick[i] > int.MinValue && vt >= s.onTick[i])
+                {
+                    g += LitFlash * Mathf.Exp(-(vt - s.onTick[i]) / 60f / LitFlashDecay);
+                }
+            }
+            else if (i == lit && !decaying && s.releaseTick < 0)
+            {
+                g = PetalDim + (PetalCharging - PetalDim) * progress;
+            }
+            else
+            {
+                g = PetalDim;
+                float off = s.offTick[i] >= 0 ? (vt - s.offTick[i]) / 60f : -1f;
+                if (off >= 0f && off < 0.15f)
+                {
+                    g = 1f + 0.6f * (1f - off / 0.15f);
+                }
+            }
+            if (decaying)
+            {
+                g *= DecayDim;
+            }
+            gain = (g + bloom) * fade * GroundGain;
+            return true;
         }
 
         private void DrawNotes(float vt)

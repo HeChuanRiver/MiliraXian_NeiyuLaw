@@ -15,8 +15,12 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Color;        // @color @default = vec4(1.0, 1.0, 1.0, 1.0)
     // x: radius (cells), y: k, z: c, w: offset at saturation (cells, already faded)
     vec4 _Wave;         // @default = vec4(1.0, 0.5, 0.6, 0.0)
-    // xy: screen UV per cell (y signed for the grab image's orientation), z: gain, w: difference step (cells)
-    vec4 _DistortScale; // @default = vec4(0.0, 0.0, 1.5, 0.025)
+    // xy: screen UV per cell (y signed for the grab image's orientation)
+    vec4 _DistortScale;  // @default = vec4(0.0, 0.0, 0.25, 0.05)
+    // x: gain, y: central difference step (cells)
+    vec4 _DistortParams; // @default = vec4(1.5, 0.05, 0.0, 0.0)
+    // xy: quad extents (cells), z: north extra height (cells), set by FieldRenderer
+    vec4 _FieldSize;     // @default = vec4(2.0, 2.0, 0.0, 0.0)
 } u;
 
 layout(set = 2, binding = 1) uniform sampler2D _MainTex;
@@ -49,11 +53,14 @@ float chord(vec2 p)
 
 void main()
 {
-    float s = max(u._DistortScale.w, 1e-4);
-    float lx0 = chord(vUv - vec2(s, 0.0));
-    float lx1 = chord(vUv + vec2(s, 0.0));
-    float ly0 = chord(vUv - vec2(0.0, s));
-    float ly1 = chord(vUv + vec2(0.0, s));
+    vec2 p = vec2(
+        (vUv.x - 0.5) * u._FieldSize.x,
+        vUv.y * u._FieldSize.y - 0.5 * (u._FieldSize.y - u._FieldSize.z));
+    float s = max(u._DistortParams.y, 1e-4);
+    float lx0 = chord(p - vec2(s, 0.0));
+    float lx1 = chord(p + vec2(s, 0.0));
+    float ly0 = chord(p - vec2(0.0, s));
+    float ly1 = chord(p + vec2(0.0, s));
     if (lx0 + lx1 + ly0 + ly1 <= 0.0)
     {
         discard;
@@ -61,7 +68,7 @@ void main()
     vec2 dir = -vec2(lx1 - lx0, ly1 - ly0) / (2.0 * s);
     float mag = length(dir) + 1e-6;
     // Saturating: at most the full offset.
-    vec2 off = dir * (min(mag * u._DistortScale.z, 1.0) / mag) * u._Wave.w;
+    vec2 off = dir * (min(mag * u._DistortParams.x, 1.0) / mag) * u._Wave.w;
     vec2 grabUv = gl_FragCoord.xy / vec2(textureSize(_GrabDistortionBackground, 0));
     // The picture at a point is taken from nearer the centre, so the inside swells outwards.
     vec3 bg = texture(_GrabDistortionBackground, grabUv - off * u._DistortScale.xy).rgb;

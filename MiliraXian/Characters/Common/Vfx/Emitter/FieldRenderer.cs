@@ -1,0 +1,151 @@
+using UnityEngine;
+
+namespace MiliraXian.Characters.Common.Vfx.Emitter
+{
+    /// <summary>
+    /// Draws a "field" stroke: one quad whose pixels a shader computes (edge curtains, water
+    /// stains, refraction, aura washes).
+    ///
+    /// The renderer knows none of those effects. It supplies the quad's geometry, its centre and
+    /// edge length if the shader asks for them, and then applies the uniforms the stroke declared
+    /// in its <see cref="VfxFieldParams"/>. Whether the result looks like a spring, a rain wall or
+    /// a shield is entirely the shader's and the texture's business.
+    ///
+    /// It draws exactly one stroke: an effect that grows more strokes gets more passes, not a
+    /// smarter renderer.
+    /// </summary>
+    internal sealed class FieldRenderer : IVfxRenderer
+    {
+        internal static readonly FieldRenderer Instance = new();
+
+        private readonly VfxMeshWriter writer = new();
+
+        /// <summary>Reused per-instance row; the draw pass runs every frame and must not allocate.</summary>
+        private readonly Vector4[] instanceRow = new Vector4[VfxInstanceBatch.MaxVectors];
+
+        public void Render(VfxEmitter emitter, VfxPass pass, int passIndex, in VfxRenderContext context)
+        {
+            VfxFieldParams field = pass?.Field;
+            if (field == null)
+            {
+                return;
+            }
+
+            Material material = context.Assets.Material(pass);
+            if (material == null)
+            {
+                return;
+            }
+
+            // Resolve the anchor now rather than reusing the tick-pass position: the draw pass runs
+            // before the update pass, so a followed pawn would otherwise trail one frame behind.
+            Vector3 center = emitter.Anchor.TryResolve(context.Engine.Map, out Vector3 resolved)
+                ? resolved
+                : emitter.Position;
+
+            Vector2 size = field.QuadSize;
+            float extraHeight = field.ExtraHeight;
+            if (field.SizeChannel >= 0)
+            {
+                // The quad only has to cover an oriented band or dynamic dome, so its extents come from the emitter.
+                // Zero width or height lets an emitter skip drawing for this frame without an empty submission.
+                Vector4 half = emitter.VectorChannel(field.SizeChannel);
+                if (half.x <= 0f || half.y <= 0f)
+                {
+                    return;
+                }
+                size = new Vector2(half.x * 2f, half.y * 2f);
+                if (half.z > 0f)
+                {
+                    extraHeight += half.z;
+                }
+            }
+            else if (field.SizeFromRadius)
+            {
+                // Cell coverage is integral: the field occupies whole cells, so the quad must be
+                // sized from the ceiling of the radius, exactly as the old renderer did.
+                float side = Mathf.Ceil(emitter.EmitterChannel(field.RadiusChannel)) * 2f + field.RadiusPadding;
+                size = new Vector2(side, side);
+            }
+            size.x = Mathf.Max(0.01f, size.x);
+            size.y = Mathf.Max(0.01f, size.y);
+
+            // The shader rebuilds its geometry from the centre and the extents, so the quad has
+            // to line up with that formula: the extra curtain height spills north of the field.
+            float height = size.y + extraHeight;
+
+            float y = field.UseAltitude ? field.Altitude : center.y + field.AltitudeOffset;
+
+            // Instanced strokes share one built-in quad; the centre, extents, radius and strength
+            // travel in the instance row, which is what lets every field of this kind batch.
+            if (pass.InstanceVectors > 0 && pass.Mesh != null)
+            {
+                float radius = field.RadiusChannel >= 0 ? emitter.EmitterChannel(field.RadiusChannel) : 0f;
+                float strength = (field.StrengthChannel >= 0 ? emitter.EmitterChannel(field.StrengthChannel) : 1f)
+                    * emitter.Alpha;
+
+                instanceRow[0] = new Vector4(center.x, center.z, size.x, extraHeight);
+                instanceRow[1] = new Vector4(radius, strength, y, size.y);
+
+                MaterialPropertyBlock constants = context.Engine.BlockFor(pass);
+                if (constants != null)
+                {
+                    constants.Clear();
+                    if (field.SizeUniform != 0)
+                    {
+                        constants.SetVector(field.SizeUniform, new Vector4(size.x, height, extraHeight, 0f));
+                    }
+                    for (int i = 0; i < field.Bindings.Count; i++)
+                    {
+                        VfxUniformBinding.Apply(constants, emitter, field.Bindings[i], context.Engine.Frame);
+                    }
+                }
+
+                context.Engine.AddInstance(pass, Matrix4x4.identity, instanceRow, 0);
+                return;
+            }
+
+            Vector3 quadCenter = new Vector3(
+                center.x,
+                y,
+                center.z + extraHeight * 0.5f);
+
+            VfxQuadOptions options = VfxQuadOptions.Of(new Vector2(size.x, height));
+            options.Color = new Color(1f, 1f, 1f, emitter.Alpha);
+            writer.Clear();
+            VfxQuad.Add(writer, quadCenter, options);
+
+            // One mesh per (emitter, stroke): drawing is deferred to the frame's end, so a mesh
+            // shared between two strokes would show only the last one's vertices.
+            Mesh mesh = emitter.MeshAt(passIndex);
+            if (mesh == null)
+            {
+                return;
+            }
+            writer.Upload(mesh);
+
+            MaterialPropertyBlock block = context.Engine.Block;
+            block.Clear();
+            if (field.CenterUniform != 0)
+            {
+                block.SetVector(field.CenterUniform, new Vector4(center.x, center.z, 0f, 0f));
+            }
+            if (field.SizeUniform != 0)
+            {
+                block.SetVector(field.SizeUniform, new Vector4(size.x, height, extraHeight, 0f));
+            }
+            for (int i = 0; i < field.Bindings.Count; i++)
+            {
+                VfxUniformBinding.Apply(block, emitter, field.Bindings[i], context.Engine.Frame);
+            }
+
+            ScreenBloomProperties bloom = context.Assets.Bloom(pass);
+            if (bloom != null)
+            {
+                context.Engine.Bloom(bloom, mesh, material);
+            }
+            context.Engine.Draw(mesh, material, pass.Layer);
+            block.Clear();
+        }
+    }
+}

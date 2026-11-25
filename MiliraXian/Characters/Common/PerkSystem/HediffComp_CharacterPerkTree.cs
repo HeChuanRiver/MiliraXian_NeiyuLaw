@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
 using UnityEngine;
@@ -111,6 +111,10 @@ namespace MiliraXian.Characters.Common.PerkSystem
                             valid[pair.Key] = Mathf.Min(pair.Value, Mathf.Max(1, pair.Key.maxLevel));
                 nodeLevels = valid;
                 Revision++;
+                // Node levels survive a rename, but the abilities they granted are separate pawn state:
+                // a grant whose AbilityDef was renamed fails to load and is dropped silently. Rebuild it
+                // from the levels we just validated. Harmless when the abilities are all present.
+                parent.TryGetComp<HediffComp_PerkEventHandler>()?.RestoreGrantedContent();
             }
         }
     }

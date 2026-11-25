@@ -83,8 +83,21 @@
         </verbProperties>
 
         <comps>
+            <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+                <requirements>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <minAmount>3</minAmount>
+                    </li>
+                </requirements>
+                <onCast>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <amount>-3</amount>
+                    </li>
+                </onCast>
+            </li>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliGuiyi">
-                <karmaCost>3</karmaCost>
                 <overlayScale>1.5</overlayScale>
             </li>
         </comps>
@@ -112,6 +125,7 @@
             <verbClass>Verb_CastAbility</verbClass>
             <targetable>true</targetable>
             <range>30</range>
+            <warmupTime>34.7167</warmupTime>
             <targetParams>
                 <canTargetSelf>false</canTargetSelf>
                 <canTargetPawns>false</canTargetPawns>
@@ -127,12 +141,23 @@
         </verbProperties>
 
         <comps>
+            <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+                <requirements>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <minAmount>8</minAmount>
+                    </li>
+                </requirements>
+                <onCast>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <amount>-8</amount>
+                    </li>
+                </onCast>
+            </li>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliDingshu">
-                <karmaCost>8</karmaCost>
                 <markDurationTicks>180000</markDurationTicks>
-                <channelDurationTicks>2083</channelDurationTicks>
                 <overlayScale>1.75</overlayScale>
-                <lineMoteIntervalTicks>30</lineMoteIntervalTicks>
                 <pulseMoteIntervalTicks>120</pulseMoteIntervalTicks>
             </li>
         </comps>
@@ -172,8 +197,21 @@
         </verbProperties>
 
         <comps>
+            <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+                <requirements>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <minAmount>3</minAmount>
+                    </li>
+                </requirements>
+                <onCast>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <amount>-3</amount>
+                    </li>
+                </onCast>
+            </li>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliMinghuo">
-                <karmaCost>3</karmaCost>
                 <durationTicks>3600</durationTicks>
                 <overlayScale>1.8</overlayScale>
             </li>
@@ -214,8 +252,21 @@
         </verbProperties>
 
         <comps>
+            <li Class="MiliraXian.Characters.Common.CompProperties_CastResource">
+                <requirements>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <minAmount>3</minAmount>
+                    </li>
+                </requirements>
+                <onCast>
+                    <li>
+                        <resourceDef>MXZL_ZhaoliKarma</resourceDef>
+                        <amount>-3</amount>
+                    </li>
+                </onCast>
+            </li>
             <li Class="MiliraXian.Characters.Zhaoli.CompProperties_AbilityZhaoliMinshen">
-                <karmaCost>3</karmaCost>
                 <areaWidth>13</areaWidth>
                 <areaHeight>13</areaHeight>
                 <dazeChance>0.1</dazeChance>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
     <SoundDef>
-        <defName>MX_QH_MirrorSlash_Stance</defName>
+        <defName>MX_QH_Kyouka_Suigetsu_Stance</defName>
         <context>MapOnly</context>
         <subSounds>
             <li>
                 <grains>
                     <li Class="AudioGrain_Clip">
-                        <clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_stance</clipPath>
+                        <clipPath>MiliraXianQinghe/KyoukaSuigetsu/kyoukasuigetsu_stance</clipPath>
                     </li>
                 </grains>
                 <volumeRange>35~35</volumeRange>
@@ -18,13 +18,13 @@
 
     <!-- 镜花水月受击碎镜：Freesound #784151 "Glass break hammer"（loganzsound，CC0） -->
     <SoundDef>
-        <defName>MX_QH_MirrorSlash_Shatter</defName>
+        <defName>MX_QH_Kyouka_Suigetsu_Shatter</defName>
         <context>MapOnly</context>
         <subSounds>
             <li>
                 <grains>
                     <li Class="AudioGrain_Clip">
-                        <clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_shatter</clipPath>
+                        <clipPath>MiliraXianQinghe/KyoukaSuigetsu/kyoukasuigetsu_shatter</clipPath>
                     </li>
                 </grains>
                 <volumeRange>60~60</volumeRange>
@@ -34,13 +34,13 @@
     </SoundDef>
 
     <SoundDef>
-        <defName>MX_QH_MirrorSlash_Slash</defName>
+        <defName>MX_QH_Kyouka_Suigetsu_Slash</defName>
         <context>MapOnly</context>
         <subSounds>
             <li>
                 <grains>
                     <li Class="AudioGrain_Clip">
-                        <clipPath>MiliraXianQinghe/MirrorSlash/mirrorslash_slash</clipPath>
+                        <clipPath>MiliraXianQinghe/KyoukaSuigetsu/kyoukasuigetsu_slash</clipPath>
                     </li>
                 </grains>
                 <volumeRange>35~35</volumeRange>
@@ -91,7 +91,7 @@
         <subSounds>
             <li>
                 <grains>
-                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/MirrorSlash/zantetsuken_glass</clipPath></li>
+                    <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/KyoukaSuigetsu/zantetsuken_glass</clipPath></li>
                 </grains>
                 <volumeRange>85~85</volumeRange>
                 <pitchRange>1~1</pitchRange>
@@ -143,22 +143,6 @@
                     <li Class="AudioGrain_Clip"><clipPath>MiliraXianQinghe/FlowerBell/bell_dull</clipPath></li>
                 </grains>
                 <volumeRange>30~30</volumeRange>
-                <pitchRange>1~1</pitchRange>
-            </li>
-        </subSounds>
-    </SoundDef>
-
-    <SoundDef>
-        <defName>MX_QH_AscentSlash_Drop</defName>
-        <context>MapOnly</context>
-        <subSounds>
-            <li>
-                <grains>
-                    <li Class="AudioGrain_Clip">
-                        <clipPath>MiliraXianQinghe/AscentSlash/ascendslash_drop</clipPath>
-                    </li>
-                </grains>
-                <volumeRange>35~35</volumeRange>
                 <pitchRange>1~1</pitchRange>
             </li>
         </subSounds>

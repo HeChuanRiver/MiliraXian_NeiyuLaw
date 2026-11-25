@@ -2,7 +2,7 @@
 <Defs>
     <!-- 清荷：常服 -->
     <ThingDef ParentName="Milira_OnSkinBase_Neiyu">
-        <defName>MX_QingheNormal</defName>
+        <defName>MX_QH_Apparel_Normal</defName>
         <label>花仙子襦裙</label>
         <description>清荷日常穿着的常服。印有荷花图案，散发着淡淡的花香，材质和工艺都经过本人的精心设计，不过不太适合用于战斗。</description>
         <useHitPoints>true</useHitPoints>
@@ -57,7 +57,7 @@
             </bodyPartGroups>
             <wornGraphicPath>MiliraXianQinghe/Apparel/apparel_qinghe_normal</wornGraphicPath>
             <tags>
-                <li>MX_QingheNormal</li>
+                <li>MX_QH_Apparel_Normal</li>
             </tags>
             <layers>
                 <li>Shell</li>
@@ -79,7 +79,7 @@
 
     <!-- 清荷：头饰 -->
     <ThingDef ParentName="Milira_OverheadBase">
-        <defName>MX_QingheHeaddress</defName>
+        <defName>MX_QH_Apparel_Headdress</defName>
         <label>荷花头饰</label>
         <description>清荷日常佩戴的花饰。典雅而不失清新，散发出一缕让人安心的清香。</description>
         <smeltable>false</smeltable>
@@ -134,7 +134,7 @@
 
             <wornGraphicPath>MiliraXianQinghe/Apparel/apparel_qinghe_headflower_Female</wornGraphicPath>
             <tags>
-                <li>MX_QingheHeaddress</li>
+                <li>MX_QH_Apparel_Headdress</li>
             </tags>
 
             <drawData>

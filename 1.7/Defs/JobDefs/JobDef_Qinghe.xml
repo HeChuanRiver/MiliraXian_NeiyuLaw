@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <JobDef>
-    <defName>MX_QH_IllusoryReflection</defName>
-    <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_IllusoryReflectionStance</driverClass>
+    <defName>MX_QH_Kyouka_Suigetsu_Job</defName>
+    <driverClass>MiliraXian.Characters.QingHe.Jobs.JobDriver_KyoukaSuigetsuStance</driverClass>
     <reportString>正隐入幻象之中。</reportString>
     <playerInterruptible>false</playerInterruptible>
     <forceCompleteBeforeNextJob>true</forceCompleteBeforeNextJob>

@@ -8,6 +8,7 @@ using RimWorld;
 using UnityEngine;
 using MiliraXian.Characters.Common.AbnormalSystem;
 using MiliraXian.Characters.Common.AbnormalSystem.Effects;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using MiliraXian.Characters.QingHe;
 
 namespace MiliraXian.Characters.QingHe.Things
@@ -38,7 +39,13 @@ namespace MiliraXian.Characters.QingHe.Things
         private int lifetimeTicks;
         private int ageTicks;
         private int ticksToNextAmbientVisual;
-        private Verse.Mote fieldMote;
+        private Mote fieldMote;
+
+        /// <summary>
+        /// The boundary's emitter. It is maintained every tick while the field is alive and dies with
+        /// it: this comp never holds a map-wide renderer, and there is no per-map lookup table.
+        /// </summary>
+        private VfxEmitterHandle visual;
         
         public CompProperties_SpringFlowField Props => (CompProperties_SpringFlowField)props;
         public float CurrentRadius => Props.radius;
@@ -55,7 +62,35 @@ namespace MiliraXian.Characters.QingHe.Things
         public override void PostDraw()
         {
             base.PostDraw();
-            // The boundary is drawn by SpringFlowVfx, not here.
+            // The boundary is drawn by the emitter system, not here.
+        }
+
+        /// <summary>
+        /// Keeps the boundary alive: one <c>Maintain</c> per tick is the only lifetime signal the
+        /// emitter needs, and the two numbers it reads are written as channels.
+        /// </summary>
+        private void MaintainVisual()
+        {
+            Map map = parent?.Map;
+            MapComponent_VfxEmitterHost host = map?.GetComponent<MapComponent_VfxEmitterHost>();
+            if (host == null)
+            {
+                return;
+            }
+            if (visual.IsNone)
+            {
+                visual = host.Spawn(
+                    VfxDefOf.MX_Vfx_SpringFlow,
+                    VfxAnchor.Attached(parent));
+            }
+            if (visual.IsNone)
+            {
+                return;
+            }
+
+            host.Maintain(visual);
+            host.SetChannel(visual, VfxChannels.Radius, CurrentRadius);
+            host.SetChannel(visual, VfxChannels.Strength, VisualAlpha);
         }
 
         public override void CompTick()
@@ -67,6 +102,7 @@ namespace MiliraXian.Characters.QingHe.Things
             }
             ageTicks++;
             MaintainFieldMote();
+            MaintainVisual();
             lifetimeTicks--;
             if (lifetimeTicks <= 0)
             {
@@ -102,13 +138,17 @@ namespace MiliraXian.Characters.QingHe.Things
             Scribe_Values.Look<int>(ref lifetimeTicks, "lifetimeTicks", 0, false);
             Scribe_Values.Look<int>(ref ageTicks, "ageTicks", 0, false);
             Scribe_Values.Look<int>(ref ticksToNextAmbientVisual, "ticksToNextAmbientVisual", 0, false);
-            Scribe_References.Look<Verse.Mote>(ref fieldMote, "fieldMote", false);
+            Scribe_References.Look<Mote>(ref fieldMote, "fieldMote", false);
         }
 
         public override void PostDeSpawn(Map map, DestroyMode mode)
         {
             base.PostDeSpawn(map, mode);
-            SpringFlowVfx.Remove(map, this);
+            if (!visual.IsNone)
+            {
+                visual.Host.Destroy(visual);
+                visual = default;
+            }
         }
 
         public void Init(Pawn newCaster)
@@ -128,11 +168,8 @@ namespace MiliraXian.Characters.QingHe.Things
             ageTicks = 0;
             ticksToNextAmbientVisual = Rand.RangeInclusive(10, 30);
             SpawnFieldMote();
-            // Register with the VFX renderer immediately
-            if (parent?.Map != null)
-            {
-                SpringFlowVfx.Add(parent.Map, this);
-            }
+            // The emitter is created on the first tick by MaintainVisual, so nothing has to be
+            // registered here and no map-wide table is touched.
         }
 
         public override bool DontDrawParent()
@@ -176,7 +213,7 @@ namespace MiliraXian.Characters.QingHe.Things
 
         private static void ApplySpringFlow(Pawn pawn, float effectFactor)
         {
-            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlow);
+            Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(MX_QHDefOf.MX_QH_SpringFlowHealing);
             if (hediff != null)
             {
                 hediff.Severity = Mathf.Max(hediff.Severity, effectFactor);
@@ -184,7 +221,7 @@ namespace MiliraXian.Characters.QingHe.Things
                 return;
             }
 
-            hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlow, pawn);
+            hediff = HediffMaker.MakeHediff(MX_QHDefOf.MX_QH_SpringFlowHealing, pawn);
             hediff.Severity = effectFactor;
             pawn.health.AddHediff(hediff);
         }

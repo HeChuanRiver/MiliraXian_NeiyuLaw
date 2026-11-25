@@ -1,5 +1,7 @@
 using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.SweepDamage;
+using MiliraXian.Characters.QingHe.Things.Weapons;
+using MiliraXian.Characters.QingHe.Verbs;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -115,9 +117,9 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             Thing equipment = null,
             ThingDef targetCoverDef = null)
         {
-            degree = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingDegree;
-            var charge = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingCharge;
-            int tier = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingTier;
+            degree = Verb_ShootFlowerBell.CastingDegree;
+            var charge = Verb_ShootFlowerBell.CastingCharge;
+            int tier = Verb_ShootFlowerBell.CastingTier;
             if (charge != null && tier >= 1)
             {
                 noteDamage = charge.NoteDamage(launcher as Pawn, tier);
@@ -125,10 +127,10 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                 noteRadius = charge.NoteRadius(tier);
                 noteAbnormalFactor = charge.NoteAbnormalFactor(tier);
             }
-            if (MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingOrigin is Vector3 hover)
+            if (Verb_ShootFlowerBell.CastingOrigin is Vector3 hover)
             {
                 origin = new Vector3(hover.x, origin.y, hover.z);
-                liftStart = MiliraXian.Characters.QingHe.Verbs.Verb_ShootFlowerBell.CastingLift;
+                liftStart = Verb_ShootFlowerBell.CastingLift;
             }
             launchTick = Find.TickManager.TicksGame;
             base.Launch(launcher, origin, usedTarget, intendedTarget, hitFlags, preventFriendlyFire, equipment, targetCoverDef);
@@ -173,7 +175,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             if (map != null && degree >= 0)
             {
                 // Each note rings its own degree on impact.
-                MiliraXian.Characters.QingHe.Things.Weapons.FlowerBellChimes.Ring(map, impactPos.ToIntVec3(), degree, 0.7f);
+                FlowerBellChimes.Ring(map, impactPos.ToIntVec3(), degree, 0.7f);
             }
 
             if (map != null && !blockedByShield)

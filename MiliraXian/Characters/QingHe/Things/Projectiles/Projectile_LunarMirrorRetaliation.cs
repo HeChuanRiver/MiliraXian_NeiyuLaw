@@ -54,7 +54,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                         // The attacked thing is hit whatever its side, as with the notes.
                         primaryTarget = intendedTarget.Thing,
                     });
-                    FrostRetaliationVfx.Notify(map, waveCentre, WaveRadius, now);
+                    BellWaveEmitter.SpawnFrostRetaliation(map, waveCentre, WaveRadius);
                 }
             }
 

@@ -3,7 +3,7 @@
 
   <JobDef>
     <defName>MX_Zhaoli_CastAbility_Uninterruptible</defName>
-    <driverClass>MiliraXian.Characters.Zhaoli.JobDriver_MX_ZhaoliCastAbility</driverClass>
+    <driverClass>Verse.AI.JobDriver_CastAbility</driverClass>
     <reportString>施放昭离技能</reportString>
     <abilityCasting>true</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
@@ -20,7 +20,7 @@
     <defName>MX_Zhaoli_CastAbility_Dingshu</defName>
     <driverClass>MiliraXian.Characters.Zhaoli.JobDriver_MX_Dingshu</driverClass>
     <reportString>施放定数</reportString>
-    <abilityCasting>true</abilityCasting>
+    <abilityCasting>false</abilityCasting>
     <playerInterruptible>false</playerInterruptible>
     <casualInterruptible>false</casualInterruptible>
     <suspendable>false</suspendable>

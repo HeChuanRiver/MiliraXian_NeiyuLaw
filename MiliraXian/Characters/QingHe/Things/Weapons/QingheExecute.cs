@@ -1,0 +1,673 @@
+using System;
+using System.Collections.Generic;
+using MiliraXian.Characters.Common.Combat;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
+using RimWorld;
+using UnityEngine;
+using Verse;
+using Verse.AI;
+using Verse.Sound;
+
+namespace MiliraXian.Characters.QingHe.Things.Weapons
+{
+    /// <summary>
+    /// Qinghe's execution of an enemy whose posture she broke: an iaido in place. She sheathes and
+    /// gathers, draws in one flash, follows through and returns, turns aside as she sheathes again, and
+    /// when the blade clicks home the enemy takes the blow (one hit on its core part). The motion is the
+    /// sword's attack clip replayed piece by piece (<see cref="QingheSwordGuardDef.executionMotion"/>).
+    /// Blows meanwhile are parried (see <see cref="QingheSwordBlocker"/>).
+    /// </summary>
+    public sealed class JobDriver_QingheExecute : JobDriver, IPostureExecutionDriver, IMotionPlaybackSource
+    {
+        private int executionStart = -1;
+        private Vector3 aim = Vector3.right;
+        private bool drawPlayed;
+        private bool hitDone;
+        // The dash through the enemy: Position moves to dashCell at once, the body is drawn back
+        // along the way (MotionPlayback.travel) and catches up over the dash piece.
+        private bool dashed;
+        private IntVec3 dashOrigin = IntVec3.Invalid;
+        private IntVec3 dashCell = IntVec3.Invalid;
+        // Aim of the pieces after the dash, fixed when it lands (the enemy may die meanwhile).
+        private Vector3 backAim = Vector3.left;
+        // Visual only, not saved: pieces whose trail and flash have been spawned (after a load the
+        // piece in progress spawns again).
+        private int visualMask;
+        // Visual only, not saved: the hit effect was added ahead of the blow (its cuts show first).
+        private bool hitVfxShown;
+        // The blow landed and left the enemy alive: the killing thrust follows instead of the return.
+        private bool killing;
+        private bool killDone;
+        // Sound only, not saved: the thrust's sound played (after a load past it, it does not play again).
+        private bool thrustPlayed;
+
+        private static QingheSwordGuardDef C => QingheSwordGuard.Config;
+        private static int Now => Find.TickManager.TicksGame;
+
+        public Pawn Victim => job?.targetA.Pawn;
+        private float Elapsed => (Now - executionStart) / 60f;
+
+        public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
+
+        // The execution is always the sword's iaido, drawn with the sword, whatever Qinghe holds:
+        // its damage is fixed, so the weapon in hand changes nothing about it.
+        private static ThingDef Weapon => C.executionWeapon;
+        private static BladeMotionSetExtension Set => Weapon?.GetModExtension<BladeMotionSetExtension>();
+        private static BladeMotionClip Clip => Set?.Attack(C.executionAttack);
+
+        public override void Notify_Starting()
+        {
+            base.Notify_Starting();
+            executionStart = Now;
+            Vector3 d = (Victim?.DrawPos ?? pawn.DrawPos + pawn.Rotation.FacingCell.ToVector3()) - pawn.DrawPos;
+            d.y = 0f;
+            aim = d.sqrMagnitude > 0.001f ? d.normalized : pawn.Rotation.FacingCell.ToVector3();
+        }
+
+        public override void ExposeData()
+        {
+            Scribe_Values.Look(ref executionStart, "mxExecutionStart", -1);
+            Scribe_Values.Look(ref aim, "mxExecutionAim", Vector3.right);
+            Scribe_Values.Look(ref drawPlayed, "mxExecutionDrawn");
+            Scribe_Values.Look(ref hitDone, "mxExecutionHit");
+            Scribe_Values.Look(ref dashed, "mxExecutionDashed");
+            Scribe_Values.Look(ref dashOrigin, "mxExecutionDashOrigin", IntVec3.Invalid);
+            Scribe_Values.Look(ref dashCell, "mxExecutionDashCell", IntVec3.Invalid);
+            Scribe_Values.Look(ref backAim, "mxExecutionBackAim", -aim);
+            Scribe_Values.Look(ref killing, "mxExecutionKilling");
+            Scribe_Values.Look(ref killDone, "mxExecutionKillDone");
+            base.ExposeData();
+        }
+
+        protected override IEnumerable<Toil> MakeNewToils()
+        {
+            AddFinishAction(Finish);
+            Toil execution = ToilMaker.MakeToil("QingheExecute");
+            execution.defaultCompleteMode = ToilCompleteMode.Never;
+            execution.handlingFacing = true;
+            execution.tickAction = TickExecution;
+            yield return execution;
+        }
+
+        private bool Valid()
+        {
+            if (executionStart < 0 || Clip == null || !pawn.Spawned || pawn.Downed)
+            {
+                return false;
+            }
+            if (hitDone)
+            {
+                // After the blow the motion plays out; the thrust only needs its target when it kills.
+                return true;
+            }
+            Pawn victim = Victim;
+            return QingheSwordGuard.CanGuard(pawn, out _) && QingheSwordGuard.ExecutionPair(pawn, victim)
+                && (victim.Downed || victim.CurJobDef == CombatPosture.Config.brokenJob)
+                && CombatPosture.Get(victim)?.Owns(pawn) == true;
+        }
+
+        private void TickExecution()
+        {
+            if (!Valid())
+            {
+                EndJobWith(JobCondition.Incompletable);
+                return;
+            }
+            pawn.pather.StopDead();
+            float t = Elapsed;
+            if (!drawPlayed && t >= C.executionCutSeconds)
+            {
+                drawPlayed = true;
+                C.executionDrawSound?.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
+            }
+            if (!dashed && DashSegment is { } dash && t >= dash.start)
+            {
+                dashed = true;
+                if (!Dash())
+                {
+                    return;
+                }
+            }
+            // Each piece's trail and flash when it starts: its aim is known only then (after the dash).
+            List<QingheExecutionSegment> m = C.executionMotion;
+            for (int i = 0; i < m.Count && i < 32; i++)
+            {
+                if ((visualMask & (1 << i)) == 0 && t >= m[i].start)
+                {
+                    visualMask |= 1 << i;
+                    if (t < m[i].end)
+                    {
+                        SpawnVisuals(m[i]);
+                    }
+                }
+            }
+            // The crossing cuts show on the enemy before the click, the burst lands with it.
+            if (!hitDone && !hitVfxShown && C.executionVfx != null && t >= C.executionHitSeconds - C.executionVfx.burstDelay)
+            {
+                hitVfxShown = true;
+                Pawn victim = Victim;
+                QingheImpactVfx.Spawn(victim.Map, C.executionVfx, victim.DrawPos, victim.DrawPos - pawn.DrawPos, victim.Position, sound: false);
+            }
+            if (!hitDone && t >= C.executionHitSeconds)
+            {
+                Pawn victim = Victim;
+                HediffComp_CombatPosture posture = CombatPosture.Get(victim);
+                // Saved before the damage: a death callback may save, throw or end this job.
+                hitDone = true;
+                Shake(C.executionShake);
+                bool landed = false;
+                // The blow resets Qinghe's own posture, whether it lands or a guard (Flowing Form) takes it.
+                if (CombatPosture.Get(pawn) is { Broken: false } own)
+                {
+                    own.SetValue(0f);
+                }
+                try
+                {
+                    landed = Strike(victim);
+                }
+                catch (Exception ex)
+                {
+                    Log.ErrorOnce("[MiliraXian] Qinghe execution blow failed, the target is released: " + ex, 0x51c7a5);
+                    posture?.ReleaseBreak(executed: true);
+                    EndJobWith(JobCondition.Errored);
+                    return;
+                }
+                // A blow that landed and left the enemy alive (and mortal) is followed by the killing
+                // thrust: the enemy stays broken until it. Otherwise the break ends with the blow.
+                killing = landed && C.killMotion?.Clip?.blade != null && Alive(victim) && posture?.Owns(pawn) == true;
+                if (killing)
+                {
+                    posture.HoldThrough(pawn, Now + Mathf.CeilToInt((KillEnd - t) * 60f) + 30);
+                }
+                else
+                {
+                    posture?.ReleaseBreak(executed: true);
+                }
+            }
+            if (killing && !killDone && !thrustPlayed && t >= C.killStartSeconds + C.killThrustSeconds)
+            {
+                thrustPlayed = true;
+                if (t < C.killStartSeconds + C.killThrustSeconds + 0.2f)
+                {
+                    C.killThrustSound?.PlayOneShot(new TargetInfo(Victim?.Position ?? pawn.Position, pawn.Map));
+                    SpawnThrustFlash();
+                }
+            }
+            if (killing && !killDone && t >= C.killStartSeconds + C.killAtSeconds)
+            {
+                killDone = true;
+                Shake(C.killShake);
+                Kill(Victim);
+            }
+            if (t >= (killing ? KillEnd : C.executionSeconds))
+            {
+                EndJobWith(JobCondition.Succeeded);
+            }
+        }
+
+        /// <summary>
+        /// Petals burst from the wound as the blade is drawn out: at <see cref="QingheSwordGuardDef.killPetalShare"/>
+        /// of the blade from the grip, where it still runs through the enemy just before the draw, thrown the way the blade is drawn.
+        /// </summary>
+        private void SpawnKillPetals(Map map)
+        {
+            BladeMotionClip clip = C.killMotion?.Clip;
+            if (C.killPetalVfx == null || clip?.blade == null || map == null)
+            {
+                return;
+            }
+            try
+            {
+                // The blade still fully in the wound, as the draw begins (half the draw before the kill).
+                Vector3 offset = KillBladePoint(C.killAtSeconds - 0.05f, C.killPetalShare, out Common.Vfx.BladeBody.BladePose pose);
+                // The pawn's place on the ground; the clip's own body shift and lift are added in world metres.
+                Vector3 ground = pawn.DrawPos - BladeMotionPlayer.BodyOffset(pawn);
+                Vector3 at = Common.Vfx.BladeBody.BladeRenderer.BodyOffsetToMap(ground, offset, pose);
+                // Thrown back the way the blade is drawn out (toward Qinghe), not on through the enemy.
+                QingheImpactVfx.Spawn(map, C.killPetalVfx, at, -KillAim, pawn.Position);
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution kill petals failed: " + ex, 0x51c7aa);
+            }
+        }
+
+        private void Shake(float magnitude)
+        {
+            if (pawn.Map == Find.CurrentMap)
+            {
+                Find.CameraDriver.shaker.DoShake(magnitude);
+            }
+        }
+
+        private Vector3 KillAim => Past ? backAim : aim;
+
+        /// <summary>
+        /// A point <paramref name="share"/> of the blade from the grip at kill clip second
+        /// <paramref name="seconds"/>, in world metres from the pawn's place on the ground, the
+        /// clip's ground shift given unscaled (as the sheathe flash takes it).
+        /// </summary>
+        private Vector3 KillBladePoint(float seconds, float share, out Common.Vfx.BladeBody.BladePose pose)
+        {
+            BladeMotionClip clip = C.killMotion?.Clip;
+            Common.Vfx.BladeBody.BladeGraphicExtension ext = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>();
+            float length = (ext?.length ?? 1.1f) * share;
+            float s = Mathf.Clamp(seconds, 0f, clip.durationSeconds);
+            pose = BladeMotionUtility.Pose(clip, s, KillAim, Set.Projection, null);
+            // The ground shift is a map offset: undo the depth scale the map conversion applies (as the sheathe flash does).
+            Vector3 body = BladeMotionUtility.BodyOffsetWorld(clip, s, KillAim);
+            body.z /= Mathf.Max(1e-3f, Set.Projection.depthToScreen);
+            return body + pose.grip + pose.dir.normalized * length;
+        }
+
+        /// <summary>The flash on the blade as the thrust runs the enemy through.</summary>
+        private void SpawnThrustFlash()
+        {
+            if (C.killThrustFlash == null || C.killMotion?.Clip?.blade == null || pawn.Map == null)
+            {
+                return;
+            }
+            try
+            {
+                Vector3 offset = KillBladePoint(C.killThrustSeconds, C.killThrustFlashShare, out _);
+                int id = executionStart;
+                QingheBladeTrail.SpawnFlashAt(pawn, C.killThrustFlash, Weapon.GetModExtension<QingheBladeTrailExtension>()?.bloom,
+                    offset, Now, () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheExecute d && d.executionStart == id,
+                    Set.Projection);
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution thrust flash failed: " + ex, 0x51c7ab);
+            }
+        }
+
+        private static float KillEnd => C.killStartSeconds + (C.killMotion?.Clip?.durationSeconds ?? 0f);
+
+        private static bool Alive(Pawn victim) =>
+            victim is { Spawned: true, Dead: false, Destroyed: false } && victim.health != null && !victim.health.isBeingKilled;
+
+        /// <summary>
+        /// Alive and mortal: no deathless gene and no hediff that prevents death (as Neiyu's
+        /// execution, the killing thrust never overrides them: such a target is only wounded).
+        /// </summary>
+        private static bool Killable(Pawn victim)
+        {
+            if (!Alive(victim))
+            {
+                return false;
+            }
+            if (ModsConfig.BiotechActive && victim.genes?.HasActiveGene(GeneDefOf.Deathless) == true)
+            {
+                return false;
+            }
+            foreach (Hediff hediff in victim.health.hediffSet.hediffs)
+            {
+                if (hediff.def.preventsDeath)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// The thrust is drawn out: the enemy dies, and the word shows where it fell. A target that
+        /// cannot die (deathless, a hediff that prevents death) takes a heavy wound instead.
+        /// </summary>
+        private void Kill(Pawn victim)
+        {
+            HediffComp_CombatPosture posture = CombatPosture.Get(victim);
+            try
+            {
+                if (!Alive(victim) || victim.Map != pawn.Map)
+                {
+                    return;
+                }
+                Map map = victim.Map;
+                Vector3 at = victim.DrawPos;
+                C.killDrawSound?.PlayOneShot(new TargetInfo(victim.Position, map));
+                if (Killable(victim))
+                {
+                    victim.Kill(new DamageInfo(DamageDefOf.ExecutionCut, 1f, 0f, -1f, pawn, null, Weapon));
+                }
+                else
+                {
+                    Wound(victim);
+                }
+                if (!victim.Dead)
+                {
+                    SpawnKillPetals(map);
+                }
+                else
+                {
+                    // The word and the darkening start fading in with the death; petals burst from the wound.
+                    LuohuaEmitter.Spawn(map, C.killVfx, at);
+                    SpawnKillPetals(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution kill failed: " + ex, 0x51c7a9);
+            }
+            finally
+            {
+                posture?.ReleaseBreak(executed: true);
+            }
+        }
+
+        private static QingheExecutionSegment DashSegment => C.executionMotion.Find(s => s.dash);
+
+        /// <summary>True once the dash has carried Qinghe past the enemy (pieces marked aimBack face it again).</summary>
+        private bool Past => dashed && dashCell.IsValid && dashCell != dashOrigin;
+
+        /// <summary>
+        /// Pieces marked aimBack face the enemy again from where the dash landed: behind it that is the
+        /// way back, from a lunge that landed beside it (the cell behind was taken) it is toward it.
+        /// </summary>
+        private Vector3 AimFor(QingheExecutionSegment s) => s.aimBack && Past ? backAim : aim;
+
+        /// <summary>
+        /// Where the dash lands. The cell just behind the enemy along the cut wins; if there is none, she
+        /// cuts in place when she already stands next to it, else lands on any free cell next to it (the
+        /// execution reaches up to <see cref="QingheSwordGuardDef.executionRange"/>, so the dash is the
+        /// lunge that closes the distance). Invalid when no cell next to the enemy is free.
+        /// </summary>
+        private IntVec3 FindDashCell(Pawn victim)
+        {
+            IntVec3 behind = FindAdjacentCell(victim, 0.3f);
+            if (behind.IsValid)
+            {
+                return behind;
+            }
+            if (pawn.Position.AdjacentTo8WayOrInside(victim.Position))
+            {
+                return pawn.Position;
+            }
+            return FindAdjacentCell(victim, float.NegativeInfinity);
+        }
+
+        /// <summary>
+        /// The cell next to the enemy most directly behind it along the cut, scoring above
+        /// <paramref name="minScore"/>: standable, free, not a door, not Qinghe's own, in her sight.
+        /// </summary>
+        private IntVec3 FindAdjacentCell(Pawn victim, float minScore)
+        {
+            Map map = pawn.Map;
+            IntVec3 best = IntVec3.Invalid;
+            float bestScore = minScore;
+            for (int i = 0; i < 8; i++)
+            {
+                IntVec3 c = victim.Position + GenAdj.AdjacentCells[i];
+                if (!c.InBounds(map) || !c.Standable(map) || c.GetDoor(map) != null || c == pawn.Position)
+                {
+                    continue;
+                }
+                Pawn other = c.GetFirstPawn(map);
+                if (other != null && other != pawn)
+                {
+                    continue;
+                }
+                Vector3 d = c.ToVector3Shifted() - victim.Position.ToVector3Shifted();
+                float score = Vector3.Dot(d.normalized, aim);
+                if (score > bestScore && GenSight.LineOfSight(pawn.Position, c, map))
+                {
+                    bestScore = score;
+                    best = c;
+                }
+            }
+            return best;
+        }
+
+        /// <summary>
+        /// The draw: Qinghe is through the enemy and behind it. Position moves now, the drawn body follows.
+        /// False: the execution ended here.
+        /// </summary>
+        private bool Dash()
+        {
+            Pawn victim = Victim;
+            dashOrigin = pawn.Position;
+            dashCell = victim != null ? FindDashCell(victim) : IntVec3.Invalid;
+            if (!dashCell.IsValid)
+            {
+                // Out of reach with no free cell beside the enemy: no cut into the air. The break is
+                // released by Finish (this job owns it).
+                dashCell = dashOrigin;
+                EndJobWith(JobCondition.Incompletable);
+                return false;
+            }
+            Map map = pawn.Map;
+            Vector3 startDraw = pawn.DrawPos;
+            // Behind the enemy this is the way back; landed beside it (the cell behind was taken) it
+            // faces the enemy.
+            Vector3 back = victim.Position.ToVector3Shifted() - dashCell.ToVector3Shifted();
+            back.y = 0f;
+            backAim = back.sqrMagnitude > 0.001f ? back.normalized : -aim;
+            if (dashCell != dashOrigin)
+            {
+                pawn.Position = dashCell;
+                pawn.Notify_Teleported(endCurrentJob: false, resetTweenedPos: true);
+            }
+            try
+            {
+                if (victim != null && C.executionDashVfx != null)
+                {
+                    QingheImpactVfx.Spawn(map, C.executionDashVfx, victim.DrawPos, aim, victim.Position);
+                }
+                Common.Vfx.MapComponent_PawnAfterimages ghosts = map.GetComponent<Common.Vfx.MapComponent_PawnAfterimages>();
+                if (Past && ghosts != null)
+                {
+                    Vector3 end = dashCell.ToVector3Shifted();
+                    end.y = startDraw.y;
+                    int n = Mathf.Max(0, C.executionAfterimages);
+                    for (int i = 0; i < n; i++)
+                    {
+                        float k = (i + 0.5f) / n;
+                        ghosts.AddAfterimage(pawn, Vector3.Lerp(startDraw, end, k), pawn.Rotation, 14 + i * 3, 0.22f + 0.1f * k,
+                            new Color(0.85f, 0.92f, 1f, 1f));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorOnce("[MiliraXian] Qinghe execution dash effects failed: " + ex, 0x51c7a6);
+            }
+            return true;
+        }
+
+        /// <summary>The blow: one hit of the execution damage on the target's core part (the torso of a human).</summary>
+        /// <returns>False when a guard (Flowing Form) negated the whole execution.</returns>
+        private bool Strike(Pawn victim)
+        {
+            Vector3 toward = victim.DrawPos - pawn.DrawPos;
+            if (hitVfxShown)
+            {
+                C.executionVfx?.sound?.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
+            }
+            else
+            {
+                // After a load past the early effect: all of it now.
+                QingheImpactVfx.Spawn(victim.Map, C.executionVfx, victim.DrawPos, toward, victim.Position);
+            }
+            BodyPartRecord core = victim.RaceProps?.body?.corePart;
+            if (core != null && victim.health.hediffSet.PartIsMissing(core))
+            {
+                core = null;
+            }
+            DamageInfo blow = new(C.executionDamageDef, C.executionDamage, C.executionArmorPenetration,
+                toward.AngleFlat(), pawn, core, pawn.equipment?.Primary?.def);
+            blow.SetTool(TechniqueDamage.ToolFor(C.executionDamageDef));
+            // The pressure first, fixed: the blow's own damage def gains none, so a kill or a
+            // death callback that ends this job cannot drop or scale it. A negated blow still gives it.
+            if (C.executionSwordPressure > 0f)
+            {
+                Hediffs.MX_QH_HediffUtility.GetSwordPressure(pawn)?.AddValue(C.executionSwordPressure);
+            }
+            // The vanilla execution cut under the hit effect's own sound.
+            SoundDefOf.Execute_Cut.PlayOneShot(new TargetInfo(victim.Position, victim.Map));
+            // The one exception: a life-like charge (Qinghe's Flowing Form) takes the whole execution.
+            if (ExecutionGuard.TryNegate(victim, blow))
+            {
+                return false;
+            }
+            if (Hediff_QingheExecutionSettings.Get(pawn)?.nonLethal == true)
+            {
+                KnockDown(victim);
+                return false;
+            }
+            ApplyBlow(victim, blow);
+            return true;
+        }
+
+        /// <summary>A flesh target takes the mortal wound (no injury, out for a day); any other is hurt until downed.</summary>
+        private void KnockDown(Pawn victim)
+        {
+            if (!victim.RaceProps.IsFlesh)
+            {
+                HealthUtility.DamageUntilDowned(victim, allowBleedingWounds: false, sourceDef: Weapon);
+                return;
+            }
+            victim.health.forceDowned = true;
+            victim.health.AddHediff(Defs.MX_QHDefOf.MX_QH_MortalWound);
+            victim.health.forceDowned = false;
+        }
+
+        /// <summary>The killing thrust on a target that cannot die: one heavy hit on its core part instead.</summary>
+        private void Wound(Pawn victim)
+        {
+            DamageInfo blow = new(C.executionDamageDef, C.killWoundDamage, C.executionArmorPenetration,
+                KillAim.AngleFlat(), pawn, CorePart(victim), pawn.equipment?.Primary?.def);
+            blow.SetTool(TechniqueDamage.ToolFor(C.executionDamageDef));
+            ApplyBlow(victim, blow);
+        }
+
+        private static BodyPartRecord CorePart(Pawn victim)
+        {
+            BodyPartRecord core = victim.RaceProps?.body?.corePart;
+            return core != null && victim.health.hediffSet.PartIsMissing(core) ? null : core;
+        }
+
+        private void ApplyBlow(Pawn victim, DamageInfo blow)
+        {
+            BattleLogEntry_MeleeCombat entry = TechniqueDamage.CreateLog(pawn, victim, C.executionDamageDef, blow.Weapon);
+            // Past every shield, guard and damage reduction, and through armour: the execution lands as dealt.
+            DamageWorker.DamageResult result = DirectDamage.Apply(victim, blow);
+            TechniqueDamage.FinishLog(entry, result, C.executionDamageDef);
+        }
+
+        /// <summary>The scabbard flash and blade trail of one forward piece, where it passes the clip's flash or cut.</summary>
+        private void SpawnVisuals(QingheExecutionSegment s)
+        {
+            BladeMotionClip clip = Clip;
+            QingheBladeTrailExtension ext = Weapon?.GetModExtension<QingheBladeTrailExtension>();
+            if (clip == null || pawn.Map == null || ext == null || s.clipTo <= s.clipFrom)
+            {
+                return;
+            }
+            int id = executionStart;
+            Vector3 pieceAim = AimFor(s);
+            float speed = (s.clipTo - s.clipFrom) / (s.end - s.start);
+            if (clip.flashTime > s.clipFrom && clip.flashTime <= s.clipTo)
+            {
+                float at = executionStart + (s.start + (clip.flashTime - s.clipFrom) / speed) * 60f;
+                if (at >= Now)
+                {
+                    // The sheathe the blow lands with has the execution's own flash (pink); the others the weapon's.
+                    float flashSeconds = (at - executionStart) / 60f;
+                    QingheSheatheFlashProps flash = Mathf.Abs(flashSeconds - C.executionHitSeconds) < 0.05f ? C.executionHitFlash : null;
+                    QingheBladeTrail.SpawnFlash(pawn, ext, clip, pieceAim, at,
+                        () => pawn.Spawned && pawn.jobs?.curDriver is JobDriver_QingheExecute d && d.executionStart == id,
+                        Set.Projection, flash);
+                }
+            }
+            // The trail is drawn on the moving body, so the dash itself has the slash mark instead.
+            if (!s.dash && clip.HasTrail && s.clipFrom < clip.trailEnd && s.clipTo > clip.trailStart)
+            {
+                float from = Mathf.Max(clip.trailStart, s.clipFrom);
+                int trailTick = Mathf.RoundToInt(executionStart + (s.start + (from - s.clipFrom) / speed) * 60f);
+                QingheBladeTrail.SpawnTrail(pawn, ext, clip, pieceAim, trailTick, speed,
+                    QingheSwordCombatUtility.ResonanceFor(pawn), from, s.clipTo, Set.Projection);
+            }
+        }
+
+        public bool TryGetPlayback(out MotionPlayback playback)
+        {
+            playback = default;
+            BladeMotionSetExtension set = Set;
+            BladeMotionClip clip = set?.Attack(C.executionAttack);
+            if (clip?.blade == null || executionStart < 0 || C.executionMotion.NullOrEmpty())
+            {
+                return false;
+            }
+            float t = Mathf.Max(0f, (Common.Vfx.VisualClock.Ticks - executionStart) / 60f);
+            if (killing && t >= C.killStartSeconds && C.killMotion?.Clip?.blade != null)
+            {
+                BladeMotionClip killClip = C.killMotion.Clip;
+                // The killing thrust, toward the enemy from where the dash landed.
+                playback = new MotionPlayback
+                {
+                    clip = killClip,
+                    seconds = Mathf.Min(t - C.killStartSeconds, killClip.durationSeconds),
+                    aim = Past ? backAim : aim,
+                    projection = set.Projection,
+                    scabbard = true,
+                    blade = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>(),
+                    blendSeconds = C.killBlendSeconds,
+                    source = killClip,
+                    sourceId = executionStart,
+                };
+                return true;
+            }
+            List<QingheExecutionSegment> m = C.executionMotion;
+            QingheExecutionSegment seg = m[m.Count - 1];
+            for (int i = 0; i < m.Count; i++)
+            {
+                if (t < m[i].end)
+                {
+                    seg = m[i];
+                    break;
+                }
+            }
+            // During the dash Position is already behind the enemy: draw the body back along the way.
+            Vector3 travel = Vector3.zero;
+            if (seg.dash && dashed && Past && t < seg.end)
+            {
+                float k = Mathf.InverseLerp(seg.start, seg.end, t);
+                float ease = 1f - (1f - k) * (1f - k) * (1f - k);
+                travel = (dashOrigin.ToVector3Shifted() - dashCell.ToVector3Shifted()) * (1f - ease);
+                travel.y = 0f;
+            }
+            playback = new MotionPlayback
+            {
+                clip = clip,
+                seconds = seg.ClipAt(t),
+                aim = AimFor(seg),
+                projection = set.Projection,
+                scabbard = true,
+                blade = Weapon.GetModExtension<Common.Vfx.BladeBody.BladeGraphicExtension>(),
+                blendSeconds = seg.blend > 0f ? seg.blend : set.blendSeconds,
+                source = seg,
+                sourceId = executionStart,
+                travel = travel,
+            };
+            return true;
+        }
+
+        private void Finish(JobCondition condition)
+        {
+            HediffComp_CombatPosture posture = CombatPosture.Get(Victim);
+            if (posture?.Executioner != pawn)
+            {
+                return;
+            }
+            // Before the blow it is given up and the break runs on; after it the break is done.
+            if (hitDone)
+            {
+                posture.ReleaseBreak();
+            }
+            else
+            {
+                posture.AbandonExecution(pawn);
+            }
+        }
+    }
+}

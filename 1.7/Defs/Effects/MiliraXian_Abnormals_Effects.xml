@@ -196,7 +196,7 @@
     </modExtensions>
   </ThingDef>
   <ThingDef ParentName="MoteBase">
-    <defName>MX_Mote_AbnormalFearBar</defName>
+    <defName>MX_Mote_AbnormalConfusionBar</defName>
     <label>异常特效</label>
     <thingClass>MiliraXian.Characters.Common.AbnormalSystem.Mote_AbnormalBar</thingClass>
     <graphicData>
@@ -220,7 +220,7 @@
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
         <fillColor>(0.92, 0.74, 1.00, 0.58)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</iconTexPath>
+        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_confusion</iconTexPath>
         <iconShaderType>MoteGlow</iconShaderType>
         <iconColor>(0.98, 0.82, 1.00, 0.90)</iconColor>
         <size>(1.04, 0.09)</size>
@@ -322,7 +322,7 @@
         <fillShaderType>MetaOverlay</fillShaderType>
         <backgroundColor>(0.68, 0.70, 0.72, 0.36)</backgroundColor>
         <fillColor>(0.36, 0.08, 0.52, 0.68)</fillColor>
-        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</iconTexPath>
+        <iconTexPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_confusion</iconTexPath>
         <iconShaderType>MoteGlow</iconShaderType>
         <iconColor>(0.58, 0.22, 0.78, 0.95)</iconColor>
         <size>(1.04, 0.09)</size>
@@ -386,16 +386,16 @@
     </graphicData>
   </ThingDef>
   <ThingDef ParentName="MX_Mote_AbnormalBurstIconBase">
-    <defName>MX_Mote_AbnormalFearBurstIcon</defName>
+    <defName>MX_Mote_AbnormalConfusionBurstIcon</defName>
     <graphicData>
-      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_confusion</texPath>
       <color>(0.98, 0.82, 1.00, 0.90)</color>
     </graphicData>
   </ThingDef>
   <ThingDef ParentName="MX_Mote_AbnormalBurstIconBase">
     <defName>MX_Mote_AbnormalDeathSentenceBurstIcon</defName>
     <graphicData>
-      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_confusion</texPath>
       <color>(0.58, 0.22, 0.78, 0.95)</color>
     </graphicData>
   </ThingDef>
@@ -414,13 +414,13 @@
     </graphicData>
   </ThingDef>
   <ThingDef ParentName="MoteBase">
-    <defName>MX_Mote_AbnormalFearedIcon</defName>
+    <defName>MX_Mote_AbnormalConfusedIcon</defName>
     <label>异常特效</label>
     <thingClass>MoteAttached</thingClass>
     <graphicData>
       <graphicClass>Graphic_Mote</graphicClass>
       <shaderType>MoteGlow</shaderType>
-      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_fear</texPath>
+      <texPath>MiliraXianQinghe/Effect/Icon/abnormal_icon_confusion</texPath>
       <drawSize>(0.42, 0.42)</drawSize>
       <color>(0.92, 0.74, 1.00, 0.90)</color>
     </graphicData>

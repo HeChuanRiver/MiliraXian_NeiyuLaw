@@ -30,6 +30,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _WindE;        // @default = vec4(0.0, 0.0, 1.0, 0.0)
     // xy：屏幕 UV 每格（x 正、y 负），z：扭曲增益，w：差分步长
     vec4 _DistortScale; // @default = vec4(0.0, 0.0, 1.5, 0.05)
+    // xy：四边形覆盖的面积（格），由 Field 渲染器传入
+    vec4 _FieldSize;    // @default = vec4(16.0, 6.0, 0.0, 0.0)
     float _BloomIntensity; // @default = 1.0
 } u;
 
@@ -99,7 +101,8 @@ void main()
     vec2 al = u._Axis.xy;
     vec2 ac = u._Axis.zw;
 
-    vec2 p = bandCoord(vUv, al, ac);
+    vec2 pos = (vUv - 0.5) * u._FieldSize.xy;
+    vec2 p = bandCoord(pos, al, ac);
     float a0 = p.x;
     float b0 = p.y;
 

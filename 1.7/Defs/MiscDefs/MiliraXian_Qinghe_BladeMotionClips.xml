@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--
+    刀剑动作片段（BladeMotionClip）的 Def。Def 只给名字，关键帧数据在 dataPath 指向的 JSON
+    （相对 Mod 根目录），游戏内用 debug 动作 "Reload JSON assets (meshes, skeletal/blade clips)" 热重载，
+    重载失败保留旧数据。JSON 是纯美术资产：自洽的数值，没有交叉引用；Def 接线（damageDef 等）
+    留在 XML，由 RimWorld 加载器照常校验。JSON 结构见 BladeMotionClipDef 的类注释：
+    曲线是 [[秒, 值], ...]，刀关键帧是 { time, yaw, pitch, roll, reach, offset: [x, y, z] }，
+    缺省字段沿用 BladeMotionClip 的默认值（trailStart/flashTime/counterFrom 等缺省 -1 = 无）。
+    樱舞的地面/空中片段用 SakuraDanceClipDef，多 skipSeconds/cutTimes/thunderCatchTimes 等字段。
+  -->
+
+  <!-- 征召静止待机：双手持刀前举，刀身在右侧、往左前略倾（不那么标准的中段架势），2 秒一次轻微呼吸 -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_Idle</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Idle.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!--
+    化解（手写初值）：收刀途中以刀横架弹开来招，刀被震向外上方，借势后撤蓄力，
+    转身接到十字斩第二刀的起手（攻击片段 counterFrom 1.64 秒的姿势：刀、转身、高度、前冲都对齐）。
+    按 parryTicks 拉伸播放。
+  -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_Parry</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Parry.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!--
+    十字斩（8 字斩）。
+    0–0.15 秒离开待机；收刀入鞘（0.783 秒完全入鞘，鞘口闪光）；入鞘蓄势；
+    1.45 秒拔刀：斜撩 → 往右下摆 → 向左横斩；停刀、慢速回挥；最后 0.3 秒回到待机。
+    举刀（原版施法预热）到 1.45 秒；之后的 1.72 秒走冷却，冷却比动作短时按比例加速。
+    每斩 2.3 倍伤害（整套周期从 0.75 秒拉长到 3.17 秒，秒伤不变的初值），剑压每斩 0.5。
+    判定按刀尖相对清荷站位的方位扫过（刀握在身体左侧，按刀身方向算会偏到一边）。
+    第二斩（右往左横斩）从 1.6665 秒算起：刀尖从右前约 60° 扫过正前方到左后约 115°；
+    原来从 1.7 秒算起时刀尖已到正前偏左，只有左侧一窄条。
+    刀光跟刀身走：从拔刀到横斩结束；拔刀那一下刀尖还在鞘里，刀光外缘按出鞘后的半径画。
+    收刀和蓄势中弹开时的反击追斩（counterFrom 1.64）：从第一斩结束后往右下摆的那一下接入，只打第二刀（右往左横斩）。
+    小人转向（度，相对瞄准方向，负为左）：收刀面向左，斜撩转到右，横斩转回左，收势回正。刀和刀鞘不跟着转。
+    身体：前冲（米，沿瞄准方向）按方案手写：蓄力后坐、拔刀前冲、第二斩保持、收势回位；高度和倾角取骨骼骨盆和
+    Spine1（高度 ×0.5，倾角 ×0.25、上限 12°），开头和收势与待机插帧。倾角按瞄准方向记录：东西向出刀画前倾，南北向出刀画左右倾。
+    刀鞘（鞘口、鞘尾，身体坐标）：左手骨骼，开头和收势与挂腰姿势插帧；刀在鞘里时贴到刀身线上。
+  -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_CrossSlash</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_CrossSlash.json</dataPath>
+    <!-- 伤口和战斗日志里的招式名：两斩为拔刀十字斩，收刀途中化解后的反击为拔刀斩·化解 -->
+    <damageDef>MX_QH_CrossSlash</damageDef>
+    <counterDamageDef>MX_QH_CounterSlash</counterDamageDef>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!-- 防御：右手持刀横架在身前，刀尖朝左略上挑，刃口朝外；举到位后保持 -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_Guard</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Guard.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!-- 防御受击：刀被压回半寸、身体后仰一下，0.15 秒回到防御姿势 -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_GuardHit</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_GuardHit.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!--
+    致命一击（手写初值，实机再调）：居合中刀且没被拦截（流水之形等）、敌人仍活着且没有免死保护时，
+    不再残心收势，而是从 killStartSeconds（执行秒，即中刀那一刻）起播放这段：
+    中刀后先残心 0.3 秒（2.1–2.4，刀在鞘里静止），再接：
+    0–0.25 拔刀，刀尖朝前收到腰侧；0.25–0.7 前摇：后坐蓄力、刀往后拉；0.7–0.82 踏前平刺贯穿；
+    0.82–1.62 刺入后停顿 0.8 秒（身体前压、刀不动）；1.62–1.74 猛地抽刀（1.68 秒刀出体外的瞬间敌人死亡，
+    伤口处爆出花瓣，压暗、显示「落华」）；1.74–2.07 振刀甩血；2.82 秒回到待机。
+    朝向是冲刺落点面向敌人（全程面向敌人，转向 0 = 朝瞄准方向；没有这条时小人保持冲刺后的朝向）。
+    刀从鞘里拔出：开头还有一截在鞘内。前摇后坐，刺出前冲，停顿时再压半步，抽刀时退回。
+  -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SwordClip_Luohua</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SwordClip_Luohua.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!--
+    瞄准前摇（原版施法预热：旋身下蹲、把刀横架到脑后）。动作 0.4 秒，按实际预热时长拉伸；
+    结束姿势就是樱舞动作的第一帧，转身曲线终点与樱舞 turn 的起点一致。
+  -->
+  <MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+    <defName>MX_QH_SakuraClip_Warmup</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SakuraClip_Warmup.json</dataPath>
+  </MiliraXian.Characters.Common.Vfx.BladeMotion.BladeMotionClipDef>
+
+  <!--
+    地面施放：蹲身蓄力，第一刀贴地撩起并起跳，第二刀在上升中，第三刀再蓄一次力飞到最高。
+    开头 0.26 秒是蹲姿定格（刀和转身都没有数据），由瞄准前摇代替，樱舞直接从发力前一刻开始。
+    雷返：第一刀转完（0.3 + 0.167）之后、第二刀之前接雷。thunderCatchTimes 每次施放随机取一个接雷时刻：
+    樱舞开始、第一刀发力时（三刀都带雷），或第三刀准备出刀时（只有第三刀带雷）。
+    第三刀的接雷选在出刀前约 0.11 秒：身体已经从背对转回来、刚过侧身（相对目标约 −75°），
+    定格后接着转向目标出刀；再早（第二刀末尾）人还背对目标。
+    接雷时定格（thunderSlowSeconds/Power），刀光和出伤跟着同一个时钟放慢：
+    雷劈中刀的一刻动作完全停住，再缓缓加速回正常速度。之后 0.1 秒的动作拉长到 5 倍（实际 0.5 秒），
+    其中前一半时间动作只走了约 3%，基本是静止的；结束时速度正好接回正常，不会顿一下。后面整体顺延 0.4 秒。
+    刀：相对转身后的身体。手在手臂末端：握点 = 肩 + 手臂方向 × armLength × reach，
+    手臂朝刀的方向，只跟一半俯仰（其余由手腕承担）。shoulder 单位米（右, 上, 前，相对身体绘制中心）。
+    第 0 帧是瞄准前摇的结束姿势（刀横在脑后，刀尖向左略低），一直保持到发力。之后直到第三刀收势，每 1/30 秒一帧，
+    握点相对骨盆，写成 reach 0 + offset。只定刀的位置和朝向，不做手部动作。
+  -->
+  <MiliraXian.Characters.QingHe.Abilities.SakuraDance.SakuraDanceClipDef>
+    <defName>MX_QH_SakuraClip_Ground</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SakuraClip_Ground.json</dataPath>
+  </MiliraXian.Characters.QingHe.Abilities.SakuraDance.SakuraDanceClipDef>
+
+  <!--
+    空中施放：保持飞行高度（1.2 米 = 原版飞行抬升 0.6 格 ÷ heightToScreen）出前两刀，
+    向下一沉蓄力，第三刀飞得比地面版更高，最后回到飞行高度、不结束飞行（landTime -1）。
+    刀同样取自骨骼（空中版动画 316200），按空中版的出刀时刻对齐。
+  -->
+  <MiliraXian.Characters.QingHe.Abilities.SakuraDance.SakuraDanceClipDef>
+    <defName>MX_QH_SakuraClip_Air</defName>
+    <dataPath>1.7/Assets/QingHe/Clips/BladeMotion/MX_QH_SakuraClip_Air.json</dataPath>
+  </MiliraXian.Characters.QingHe.Abilities.SakuraDance.SakuraDanceClipDef>
+</Defs>

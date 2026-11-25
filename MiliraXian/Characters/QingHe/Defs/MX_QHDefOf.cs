@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.QingHe.CombatStance;
 using RimWorld;
 using Verse;
@@ -10,12 +11,13 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static CombatStanceDef MX_QH_Stance_Sword;
         public static CombatStanceDef MX_QH_Stance_Bell;
 
-        public static JobDef MX_QH_IllusoryReflection;
+        public static JobDef MX_QH_Kyouka_Suigetsu_Job;
+        public static JobDef MX_QH_Execute;
         public static JobDef MX_QH_TuneResonance;
         public static JobDef MX_QH_SakuraDance;
         public static JobDef MX_QH_Zantetsuken_Guren;
 
-        public static MiliraXian.Characters.Common.SweepDamage.SweepDamageDef MX_QH_SwordSweep;
+        public static SweepDamageDef MX_QH_SwordSweep;
 
         public static IncidentDef MX_QH_FlowerCourtQuest;
         public static QuestScriptDef MX_QH_FlowerCourtQuestScript;
@@ -27,12 +29,12 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static PawnKindDef MiliraXian_Qinghe;
         public static PawnKindDef MiliraXian_Neiyu;
 
-        public static ThingDef SpringFlowField;
-        public static ThingDef MX_QH_SummerRainWall;
-        public static ThingDef MX_QH_LunarMirror;
+        public static ThingDef MX_QH_SpringFlowField;
+        public static ThingDef MX_QH_LotusRainWall;
+        public static ThingDef MX_QH_LunarMirrorShield;
         public static ThingDef MX_QH_LotusPond;
-        public static ThingDef MX_QingheNormal;
-        public static ThingDef MX_QingheHeaddress;
+        public static ThingDef MX_QH_Apparel_Normal;
+        public static ThingDef MX_QH_Apparel_Headdress;
 
         public static ShaderDef MX_QH_Lotus;
 
@@ -51,7 +53,7 @@ namespace MiliraXian.Characters.QingHe.Defs
         public static StatDef MX_QH_ParryChance;
         public static StatDef MX_QH_RangedEvadeChance;
 
-        public static HediffDef MX_QH_SpringFlow;
+        public static HediffDef MX_QH_SpringFlowHealing;
         public static HediffDef MX_QH_RainDrenched;
         public static HediffDef MX_QH_FlowingForm;
         public static HediffDef MX_QH_FlowingFormImmunity;

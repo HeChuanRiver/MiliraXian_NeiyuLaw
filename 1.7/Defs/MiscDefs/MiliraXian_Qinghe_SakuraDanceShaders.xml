@@ -68,10 +68,10 @@
   <!-- 处决击杀后的「落华」文字：预乘透明，按噪声溶解、溶解边缘发光；排在压暗（3152）之后。
        画在原版平面网格上，保留 flipTextureST 默认值（同 3D 刀身），贴图才不会上下颠倒。 -->
   <ShaderDef>
-    <defName>MX_QH_ExecutionText</defName>
+    <defName>MX_QH_LuohuaText</defName>
     <shaderProgram>
       <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
-      <fragmentShaderFileName>MX_QH_ExecutionText.frag.glsl</fragmentShaderFileName>
+      <fragmentShaderFileName>MX_QH_LuohuaText.frag.glsl</fragmentShaderFileName>
       <!-- 原版平面网格的 UV 已是正向，不再翻转（翻转后字上下颠倒） -->
       <flipTextureST>false</flipTextureST>
       <transparent>true</transparent>
@@ -204,7 +204,7 @@
     </shaderProgram>
   </ShaderDef>
   <!-- 春泉涌流的边界光幕：格子边界 + 光幕，加法混合，进泛光。
-       边界形状由 _MainTex 提供（CPU 计算的格子边界距离场）。 -->
+       边界形状由 _FieldRadiusSquared 给出（格集合 = 半径阈值内的格子），不再读贴图。 -->
   <ShaderDef>
     <defName>MX_QH_SpringFlowBoundary</defName>
     <shaderProgram>
@@ -215,12 +215,6 @@
       <depthWrite>false</depthWrite>
       <cullMode>None</cullMode>
       <renderQueue>3153</renderQueue>
-      <textureWrapOverrides>
-        <li>
-          <key>_MainTex</key>
-          <value>Clamp</value>
-        </li>
-      </textureWrapOverrides>
     </shaderProgram>
   </ShaderDef>
   <!-- 荷雨的荷花：贴图裁切后按 alpha 混合，不做加法（花是要有实体的）。

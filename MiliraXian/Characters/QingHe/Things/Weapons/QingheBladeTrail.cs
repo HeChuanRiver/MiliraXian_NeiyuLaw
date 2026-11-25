@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
@@ -124,7 +125,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <param name="projection">The motion's projection; null = the held weapon's.</param>
         /// <param name="flash">Replaces the weapon's sheathe flash (another colour); null = the weapon's.</param>
         public static void SpawnFlash(Pawn pawn, QingheBladeTrailExtension ext, BladeMotionClip clip, Vector3 aim, float flashTick,
-            System.Func<bool> stillOn, BladeProjection? projection = null, QingheSheatheFlashProps flash = null)
+            Func<bool> stillOn, BladeProjection? projection = null, QingheSheatheFlashProps flash = null)
         {
             QingheSheatheFlashProps f = flash ?? ext?.sheatheFlash;
             if (ext == null || f == null || clip == null || clip.flashTime < 0f
@@ -140,7 +141,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
 
         /// <summary>The same flash anywhere on the motion: <paramref name="offset"/> in world metres from the pawn's place on the ground (north-south unscaled).</summary>
         public static void SpawnFlashAt(Pawn pawn, QingheSheatheFlashProps f, ScreenBloomProperties bloom, Vector3 offset, float flashTick,
-            System.Func<bool> stillOn, BladeProjection proj)
+            Func<bool> stillOn, BladeProjection proj)
         {
             MapComponent_SakuraDanceVisuals visuals = pawn?.Map?.GetComponent<MapComponent_SakuraDanceVisuals>();
             if (visuals == null || f == null)
@@ -238,7 +239,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
         /// <summary>Scabbard mouth relative to the pawn's place on the ground.</summary>
         public Vector3 offset;
         public Vector3 at;
-        public System.Func<bool> stillOn;
+        public Func<bool> stillOn;
         public Pawn pawn;
         public bool played;
         private Mesh mesh;
@@ -357,7 +358,7 @@ namespace MiliraXian.Characters.QingHe.Things.Weapons
             base.Dispose();
             if (mesh != null)
             {
-                Object.Destroy(mesh);
+                UnityEngine.Object.Destroy(mesh);
             }
         }
     }

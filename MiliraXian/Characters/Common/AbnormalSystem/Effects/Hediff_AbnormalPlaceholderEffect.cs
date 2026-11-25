@@ -8,7 +8,7 @@ namespace MiliraXian.Characters.Common.AbnormalSystem.Effects
         public override void Notify_Downed()
         {
             base.Notify_Downed();
-            GetComp<HediffComp_AbnormalFeared>()?.NotifyPawnDowned();
+            GetComp<HediffComp_AbnormalConfused>()?.NotifyPawnDowned();
             GetComp<HediffComp_AbnormalOverloaded>()?.NotifyPawnDowned();
         }
     }

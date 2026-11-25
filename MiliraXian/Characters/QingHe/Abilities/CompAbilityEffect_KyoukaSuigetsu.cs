@@ -1,0 +1,116 @@
+using System.Collections.Generic;
+using MiliraXian.Characters.Common.SweepDamage;
+using MiliraXian.Characters.QingHe.Defs;
+using MiliraXian.Characters.QingHe.Vfx;
+using RimWorld;
+using UnityEngine;
+using Verse;
+using Verse.AI;
+
+namespace MiliraXian.Characters.QingHe.Abilities
+{
+    /// <summary>
+    /// Mirror Flower, Water Moon. Times are game ticks (60 = 1 s).
+    /// </summary>
+    public class CompProperties_AbilityKyoukaSuigetsu : CompProperties_AbilityEffect
+    {
+        /// <summary>Windup plus stance, the longest she waits for a hit.</summary>
+        public int durationTicks = 300;
+        public int windupTicks = 30;
+        public int shatterTicks = 30;
+        public int cutDelayTicks = 12;
+        public int cutTicks = 24;
+        public int reformDelayTicks = 30;
+        public int recoverTicks = 30;
+        /// <summary>Last part of the recovery in which the weapon comes back.</summary>
+        public int weaponBackTicks = 9;
+        /// <summary>No hit: the water drains and the weapon returns over this long.</summary>
+        public int exitTicks = 30;
+
+        public SweepDamageDef sweepDamage;
+        /// <summary>Wound and combat log name of the cut.</summary>
+        public DamageDef cutDamageDef;
+        public float damage = 96f;
+        public float armorPenetration = 1.25f;
+        /// <summary>Damage reach: the whole disc, near targets included (the trail is drawn as its outer band).</summary>
+        public float cutRadius = 4.5f;
+        /// <summary>Aim-relative yaw the trail starts at (+ = right); −135 = back-left, the ring's low side.</summary>
+        public float cutStartYaw = -135f;
+        /// <summary>Posture each struck pawn takes.</summary>
+        public float posture = 15f;
+        /// <summary>Sword pressure when the cut strikes anything.</summary>
+        public float swordPressureGain = 1f;
+
+        public SoundDef stanceSound;
+        public SoundDef slashSound;
+        /// <summary>The mirror breaking, at the moment she is hit.</summary>
+        public SoundDef shatterSound;
+        /// <summary>Water, body, reflection and trail; null = the defaults.</summary>
+        public KyoukaVisualProps visuals;
+
+        public CompProperties_AbilityKyoukaSuigetsu()
+        {
+            compClass = typeof(CompAbilityEffect_KyoukaSuigetsu);
+        }
+    }
+
+    public class CompAbilityEffect_KyoukaSuigetsu : CompAbilityEffect
+    {
+        private static readonly Color PreviewColor = new(0.72f, 0.9f, 1f, 0.7f);
+        private readonly List<IntVec3> previewCells = new();
+
+        public new CompProperties_AbilityKyoukaSuigetsu Props => (CompProperties_AbilityKyoukaSuigetsu)props;
+
+        public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
+        {
+            Pawn caster = parent?.pawn;
+            return caster != null
+                && target.IsValid
+                && target.Cell != caster.Position
+                && base.Valid(target, throwMessages);
+        }
+
+        public override void DrawEffectPreview(LocalTargetInfo target)
+        {
+            Pawn caster = parent?.pawn;
+            if (caster == null || !caster.Spawned)
+            {
+                return;
+            }
+            previewCells.Clear();
+            previewCells.AddRange(GenRadial.RadialCellsAround(caster.Position, Props.cutRadius, useCenter: true));
+            GenDraw.DrawFieldEdges(previewCells, PreviewColor);
+        }
+
+        /// <summary>
+        /// Only reached when something activates the ability directly (the player's cast runs the
+        /// job straight from the ability's jobDef): the cooldown vanilla just started is dropped,
+        /// it starts when the stance ends.
+        /// </summary>
+        public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
+        {
+            base.Apply(target, dest);
+            Pawn caster = parent?.pawn;
+            if (caster?.jobs == null
+                || MX_QHDefOf.MX_QH_Kyouka_Suigetsu_Job == null
+                || !target.IsValid
+                || target.Cell == caster.Position)
+            {
+                return;
+            }
+
+            parent.ResetCooldown();
+            caster.rotationTracker?.FaceCell(target.Cell);
+            Job stanceJob = JobMaker.MakeJob(MX_QHDefOf.MX_QH_Kyouka_Suigetsu_Job);
+            stanceJob.ability = parent;
+            stanceJob.verbToUse = parent.verb;
+            stanceJob.SetTarget(TargetIndex.A, target.Cell);
+            stanceJob.playerForced = true;
+            caster.jobs.StartJob(
+                stanceJob,
+                JobCondition.InterruptForced,
+                cancelBusyStances: false,
+                tag: JobTag.Misc);
+        }
+    }
+}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
 using MiliraXian.Characters.Common.Vfx.BladeMotion;
@@ -134,7 +135,7 @@ namespace MiliraXian.Characters.QingHe.Abilities.Zantetsuken
             clip.scabbardKeys.Add(new BladeScabbardKey { time = time, mouth = mouth, end = end });
         }
 
-        private static SimpleCurve Sample(float end, System.Func<float, float> f)
+        private static SimpleCurve Sample(float end, Func<float, float> f)
         {
             SimpleCurve c = new();
             const float step = 1f / 60f;

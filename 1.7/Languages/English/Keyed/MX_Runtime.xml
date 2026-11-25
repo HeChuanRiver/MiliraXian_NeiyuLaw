@@ -55,12 +55,9 @@
   <MX_NL_NeiyuPowerLevelLabel>Neiyu power level (Neiyu only)</MX_NL_NeiyuPowerLevelLabel>
   <MX_NL_NeiyuPowerLevelOriginalLabel>Level 1: Original (default)</MX_NL_NeiyuPowerLevelOriginalLabel>
   <MX_NL_NeiyuPowerLevelOriginalDesc>Neiyu's full abilities, weapons, shield and equipment bonuses, with hunger protection and a consciousness floor.</MX_NL_NeiyuPowerLevelOriginalDesc>
-  <MX_NL_NeiyuPowerLevelBalancedLabel>Tier 2: moderate power</MX_NL_NeiyuPowerLevelBalancedLabel>
-  <MX_NL_NeiyuPowerLevelBalancedDesc>All weapon forms, decapitation, group healing and shield phases, with moderate damage, bonuses and cooldowns.</MX_NL_NeiyuPowerLevelBalancedDesc>
   <MX_NL_NeiyuPowerLevelDecorativeLabel>Level 3: Decorative</MX_NL_NeiyuPowerLevelDecorativeLabel>
   <MX_NL_NeiyuPowerLevelDecorativeDesc>Focused on companionship, appearance and story. Abilities, shield, hunger protection, consciousness floor and special equipment bonuses are inactive. Equipment provides basic combat capability.</MX_NL_NeiyuPowerLevelDecorativeDesc>
   <MX_NL_NeiyuAbilitiesSealed>Neiyu's active abilities are sealed at the current power level.</MX_NL_NeiyuAbilitiesSealed>
-  <MX_NL_NeiyuAbilityBalancedNotice>See the description for effects and the information panel for stats and cooldowns.</MX_NL_NeiyuAbilityBalancedNotice>
   <MX_NL_NeiyuAbilityDecorativeNotice>This ability is unavailable.</MX_NL_NeiyuAbilityDecorativeNotice>
   <MX_NL_NeiyuPassiveSealedLabel>sealed</MX_NL_NeiyuPassiveSealedLabel>
   <MX_NL_NeiyuPassiveSealedDesc>Decorative mode is active, so Neiyu's shield passive has no effect.</MX_NL_NeiyuPassiveSealedDesc>
@@ -149,8 +146,8 @@
   <MX_QH_FlowerCourtNodeLevel>Lv.{0}</MX_QH_FlowerCourtNodeLevel>
   <MX_QH_FlowerCourtNodeLearned>learned</MX_QH_FlowerCourtNodeLearned>
   <MX_QH_FlowerCourtNodeLocked>Requires grace level {0}</MX_QH_FlowerCourtNodeLocked>
-  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree.</MX_QH_FlowerDecreeNotEnough>
-  <MX_QH_SwordPressureNotEnough>Not enough Sword Pressure (needs {0}).</MX_QH_SwordPressureNotEnough>
+  <MX_QH_FlowerDecreeNotEnough>Not enough Flower Decree (needs {0}, {1} available).</MX_QH_FlowerDecreeNotEnough>
+  <MX_QH_SwordPressureNotEnough>Not enough Sword Pressure (needs {0}, {1} available).</MX_QH_SwordPressureNotEnough>
   <MX_QH_SpringFlowMissingResource>Not enough Flower Decree to cast Spring Flow.</MX_QH_SpringFlowMissingResource>
   <MX_QH_LunarMirrorMissingResource>Not enough Flower Decree to cast Lunar Mirror.</MX_QH_LunarMirrorMissingResource>
   <MX_QH_RequiresStance>Requires stance: {0}.</MX_QH_RequiresStance>
@@ -257,7 +254,7 @@
   <MX_ZL_LinkTargetTipNamed>This target is maintaining a karmic link with {0}.</MX_ZL_LinkTargetTipNamed>
   <MX_ZL_DingshuCannotTargetSelf>Fixed Fate cannot be used on Zhaoli herself.</MX_ZL_DingshuCannotTargetSelf>
   <MX_ZL_DingshuCannotUseDuringRaid>Fixed Fate cannot be used during a raid state.</MX_ZL_DingshuCannotUseDuringRaid>
-  <MX_ZL_NotEnoughKarmaDingshu>Not enough Karma to cast Fixed Fate.</MX_ZL_NotEnoughKarmaDingshu>
+  <MXZL_ZhaoliKarmaNotEnough>Not enough Karma (needs {0}, {1} available).</MXZL_ZhaoliKarmaNotEnough>
   <MX_ZL_DingshuMarkedTargetCannotRevive>The target died while marked by Fixed Fate and cannot be resurrected again.</MX_ZL_DingshuMarkedTargetCannotRevive>
   <MX_ZL_DingshuReviveFailed>Fixed Fate failed to complete the resurrection.</MX_ZL_DingshuReviveFailed>
   <MX_ZL_DingshuMote>Fixed Fate</MX_ZL_DingshuMote>
@@ -266,12 +263,10 @@
   <MX_ZL_ReportDingshu>casting Fixed Fate</MX_ZL_ReportDingshu>
   <MX_ZL_DuanzhanInvalidTargetCell>Severing Slash target location is invalid.</MX_ZL_DuanzhanInvalidTargetCell>
   <MX_ZL_DuanzhanNeedWeapon>Severing Slash can only be cast by Zhaoli while Severance is equipped.</MX_ZL_DuanzhanNeedWeapon>
-  <MX_ZL_NotEnoughKarmaGuiyi>Not enough Karma to cast Strange Medicine.</MX_ZL_NotEnoughKarmaGuiyi>
   <MX_ZL_GuiyiMote>Strange Medicine</MX_ZL_GuiyiMote>
   <MX_ZL_GuiyiCannotTargetSelf>Strange Medicine cannot be used on Zhaoli herself.</MX_ZL_GuiyiCannotTargetSelf>
   <MX_ZL_GuiyiCannotTargetHostile>Strange Medicine cannot be used on hostile targets.</MX_ZL_GuiyiCannotTargetHostile>
   <MX_ZL_GuiyiNoTreatableInjuries>The target has no injuries or conditions for Strange Medicine to treat.</MX_ZL_GuiyiNoTreatableInjuries>
-  <MX_ZL_NotEnoughKarmaMinghuo>Not enough Karma to cast Netherfire.</MX_ZL_NotEnoughKarmaMinghuo>
   <MX_ZL_MinghuoMote>Netherfire</MX_ZL_MinghuoMote>
   <MX_ZL_MinghuoAttached>Netherfire has attached to the current primary weapon: damage, armor penetration, hit chance, and attack speed x1.5, range +2, and extra fire damage enabled.</MX_ZL_MinghuoAttached>
   <MX_ZL_MinghuoSelfOnly>Netherfire can only be cast by Zhaoli on herself.</MX_ZL_MinghuoSelfOnly>
@@ -284,7 +279,6 @@
   <MX_ZL_MinghuoAttackSpeedMultiplier>Attack speed: x{0}</MX_ZL_MinghuoAttackSpeedMultiplier>
   <MX_ZL_MinghuoRangeOffset>Attack range: +{0}</MX_ZL_MinghuoRangeOffset>
   <MX_ZL_MinghuoExtraFireDamageEnabled>Extra fire damage: enabled</MX_ZL_MinghuoExtraFireDamageEnabled>
-  <MX_ZL_NotEnoughKarmaMinshen>Not enough Karma to cast Mindbreak.</MX_ZL_NotEnoughKarmaMinshen>
   <MX_ZL_MinshenMote>Mindbreak</MX_ZL_MinshenMote>
   <MX_ZL_MinshenMentalStateReason>Zhaoli's Mindbreak left them dazed.</MX_ZL_MinshenMentalStateReason>
   <MX_ZL_RebirthAccepted>Zhaoli has been accepted by death. She will return to a player base in ten days.</MX_ZL_RebirthAccepted>

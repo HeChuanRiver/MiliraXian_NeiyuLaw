@@ -154,7 +154,7 @@ namespace MiliraXian.Characters.QingHe.Vfx
 
             // Mirror Flower, Water Moon fades the shield out over its windup and back over its recovery;
             // multiplied onto the shield's own visibility, so it never shows a shield that was hidden.
-            float skillFactor = owner.jobs?.curDriver is Jobs.JobDriver_IllusoryReflectionStance mirror ? mirror.ShieldOpacity : 1f;
+            float skillFactor = owner.jobs?.curDriver is Jobs.JobDriver_KyoukaSuigetsuStance mirror ? mirror.ShieldOpacity : 1f;
             float drawAlpha = Mathf.Clamp01(Visual.alpha * (0.35f + 0.65f * shieldFactor) * fullFadeFactor * skillFactor);
             if (Visual.texPath.NullOrEmpty())
             {

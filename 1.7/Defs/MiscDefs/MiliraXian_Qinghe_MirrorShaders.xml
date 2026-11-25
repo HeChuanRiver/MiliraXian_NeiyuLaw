@@ -3,10 +3,10 @@
   <!-- 镜花水月的水面：逐像素画波浪、打光、月影和碎镜。加法混合，不写深度；
        队列在樱舞刀光（3151 扭曲 / 3152 / 3153）之前，斩击的扭曲会把水面一起扭进去。 -->
   <ShaderDef>
-    <defName>MX_QH_MirrorWater</defName>
+    <defName>MX_QH_Kyouka_SuigetsuWater</defName>
     <shaderProgram>
       <vertexShaderFileName>MX_QH_SakuraTrail.vert.glsl</vertexShaderFileName>
-      <fragmentShaderFileName>MX_QH_MirrorWater.frag.glsl</fragmentShaderFileName>
+      <fragmentShaderFileName>MX_QH_Kyouka_SuigetsuWater.frag.glsl</fragmentShaderFileName>
       <flipTextureST>false</flipTextureST>
       <blendMode>Additive</blendMode>
       <depthWrite>false</depthWrite>

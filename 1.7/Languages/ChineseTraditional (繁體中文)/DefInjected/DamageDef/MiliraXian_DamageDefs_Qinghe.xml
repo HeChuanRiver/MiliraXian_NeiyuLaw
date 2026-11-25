@@ -14,10 +14,10 @@
   <MX_QH_SakuraDanceSlash.deathMessage>{0}倒在了清荷櫻舞的刀光之中。</MX_QH_SakuraDanceSlash.deathMessage>
   <MX_QH_SakuraThunderSlash.label>櫻舞·雷返</MX_QH_SakuraThunderSlash.label>
   <MX_QH_SakuraThunderSlash.deathMessage>{0}被清荷刀上奉還的落雷擊倒了。</MX_QH_SakuraThunderSlash.deathMessage>
-  <MX_QH_MirrorSlash.label>鏡花水月</MX_QH_MirrorSlash.label>
-  <MX_QH_MirrorSlash.deathMessage>{0}斬向了水中的倒影，倒在了清荷的鏡花水月之下。</MX_QH_MirrorSlash.deathMessage>
-  <MX_QH_ExecutionSlash.label>殘心</MX_QH_ExecutionSlash.label>
-  <MX_QH_ExecutionSlash.deathMessage>{0}在清荷收刀的一聲輕響中倒下了。</MX_QH_ExecutionSlash.deathMessage>
+  <MX_QH_Kyouka_SuigetsuSlash.label>鏡花水月</MX_QH_Kyouka_SuigetsuSlash.label>
+  <MX_QH_Kyouka_SuigetsuSlash.deathMessage>{0}斬向了水中的倒影，倒在了清荷的鏡花水月之下。</MX_QH_Kyouka_SuigetsuSlash.deathMessage>
+  <MX_QH_Zanshin.label>必殺劍·殘心</MX_QH_Zanshin.label>
+  <MX_QH_Zanshin.deathMessage>{0}在清荷收刀的一聲輕響中倒下了。</MX_QH_Zanshin.deathMessage>
   <MX_QH_Zantetsuken_Guren.label>斬鐵劍【紅蓮】</MX_QH_Zantetsuken_Guren.label>
   <MX_QH_Zantetsuken_Guren.deathMessage>{0}被清荷從天而降的斬鐵劍【紅蓮】劈倒了。</MX_QH_Zantetsuken_Guren.deathMessage>
   <MX_QH_Gaeshi_Gekka.label>燕回返【月華】</MX_QH_Gaeshi_Gekka.label>

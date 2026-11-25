@@ -16,12 +16,12 @@
   <MX_AbnormalVenom.description>The target's body is being steadily consumed by toxins from the Flower-Tiding Bell's summer resonance.</MX_AbnormalVenom.description>
   <MX_AbnormalCorroded.label>corrosion</MX_AbnormalCorroded.label>
   <MX_AbnormalCorroded.description>The mechanoid's structure and armor are steadily corroding under the Flower-Tiding Bell's summer resonance.</MX_AbnormalCorroded.description>
-  <MX_AbnormalFear.label>fear buildup</MX_AbnormalFear.label>
-  <MX_AbnormalFear.description>The Flower-Tiding Bell's autumn resonance disturbs the target's mind. Reaching the buildup limit triggers fear.</MX_AbnormalFear.description>
+  <MX_AbnormalConfusion.label>confusion buildup</MX_AbnormalConfusion.label>
+  <MX_AbnormalConfusion.description>The Flower-Tiding Bell's autumn resonance disturbs the target's mind. Reaching the buildup limit triggers confusion.</MX_AbnormalConfusion.description>
   <MX_AbnormalOverload.label>overload buildup</MX_AbnormalOverload.label>
   <MX_AbnormalOverload.description>The Flower-Tiding Bell's autumn resonance strains the mechanical control core. Reaching the buildup limit triggers overload.</MX_AbnormalOverload.description>
-  <MX_AbnormalFeared.label>fear</MX_AbnormalFeared.label>
-  <MX_AbnormalFeared.description>The target has fallen into uncontrollable fear under the Flower-Tiding Bell's autumn resonance.</MX_AbnormalFeared.description>
+  <MX_AbnormalConfused.label>confusion</MX_AbnormalConfused.label>
+  <MX_AbnormalConfused.description>The target has fallen into uncontrollable confusion under the Flower-Tiding Bell's autumn resonance.</MX_AbnormalConfused.description>
   <MX_AbnormalOverloaded.label>overload</MX_AbnormalOverloaded.label>
   <MX_AbnormalOverloaded.description>The mechanoid's control core is overloaded by the Flower-Tiding Bell's autumn resonance.</MX_AbnormalOverloaded.description>
   <MX_AbnormalCold.label>cold buildup</MX_AbnormalCold.label>
@@ -32,7 +32,7 @@
   <MX_AbnormalElectricLeak.triggerText>short circuit</MX_AbnormalElectricLeak.triggerText>
   <MX_AbnormalToxin.triggerText>poisoned</MX_AbnormalToxin.triggerText>
   <MX_AbnormalCorrosion.triggerText>corrosion</MX_AbnormalCorrosion.triggerText>
-  <MX_AbnormalFear.triggerText>fear</MX_AbnormalFear.triggerText>
+  <MX_AbnormalConfusion.triggerText>confusion</MX_AbnormalConfusion.triggerText>
   <MX_AbnormalOverload.triggerText>overload</MX_AbnormalOverload.triggerText>
   <MX_AbnormalCold.triggerText>frozen</MX_AbnormalCold.triggerText>
 </LanguageData>

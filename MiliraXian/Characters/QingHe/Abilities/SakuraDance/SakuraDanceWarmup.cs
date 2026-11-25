@@ -25,7 +25,8 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             playback = default;
             if (pawn.stances?.curStance is not Stance_Warmup warmup
                 || warmup.verb is not Verb_CastAbility cast
-                || cast.Ability?.CompOfType<CompAbilityEffect_SakuraDance>()?.Props is not { warmup: not null } props)
+                || cast.Ability?.CompOfType<CompAbilityEffect_SakuraDance>()?.Props is not { warmup: { } warmupDef } props
+                || warmupDef.Clip is not { } warmupClip)
             {
                 return false;
             }
@@ -37,11 +38,11 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
             float done = Mathf.Clamp(VisualClock.Ticks - warmup.startedTick, 0f, total);
             playback = new MotionPlayback
             {
-                clip = props.warmup,
-                seconds = done / total * props.warmup.durationSeconds,
+                clip = warmupClip,
+                seconds = done / total * warmupClip.durationSeconds,
                 aim = dir.sqrMagnitude > 0.001f ? dir.normalized : pawn.Rotation.FacingCell.ToVector3(),
                 projection = props.Projection,
-                source = props.warmup,
+                source = warmupClip,
                 sourceId = warmup.startedTick,
             };
             return true;

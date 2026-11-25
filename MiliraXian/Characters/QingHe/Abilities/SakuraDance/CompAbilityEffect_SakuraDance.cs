@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MiliraXian.Characters.QingHe.Defs;
 using RimWorld;
 using UnityEngine;
@@ -10,23 +11,9 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
     public class CompAbilityEffect_SakuraDance : CompAbilityEffect
     {
         private static readonly Color PreviewColor = new(1f, 0.62f, 0.75f, 0.6f);
-        private readonly System.Collections.Generic.List<IntVec3> previewCells = new();
+        private readonly List<IntVec3> previewCells = new();
 
         public new CompProperties_AbilitySakuraDance Props => (CompProperties_AbilitySakuraDance)props;
-
-        private bool LacksPressure =>
-            Props.swordPressureCost > 0f
-            && (Hediffs.MX_QH_HediffUtility.GetSwordPressure(parent.pawn)?.CurrentValue ?? 0f) < Props.swordPressureCost - 1e-4f;
-
-        public override bool GizmoDisabled(out string reason)
-        {
-            if (LacksPressure)
-            {
-                reason = "MX_QH_SwordPressureNotEnough".Translate(Props.swordPressureCost.ToString("0.#"));
-                return true;
-            }
-            return base.GizmoDisabled(out reason);
-        }
 
         public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
         {
@@ -40,12 +27,12 @@ namespace MiliraXian.Characters.QingHe.Abilities.SakuraDance
         public override void DrawEffectPreview(LocalTargetInfo target)
         {
             Pawn caster = parent?.pawn;
-            if (caster == null || !caster.Spawned || Props.cuts.NullOrEmpty())
+            if (caster == null || !caster.Spawned || Props.Cuts.NullOrEmpty())
             {
                 return;
             }
             float r = 0f;
-            foreach (SakuraCutProps cut in Props.cuts)
+            foreach (SakuraCutProps cut in Props.Cuts)
             {
                 r = Mathf.Max(r, cut.radius);
             }

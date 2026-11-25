@@ -50,10 +50,16 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
         private const int PetalAtlasFrames = 64;
 
         private static readonly Color White = new(1f, 0.95f, 0.98f, 1f);
-        private static readonly ScreenBloomProperties Bloom = FlowerBellWaveDrawer.Bloom;
+        private static readonly ScreenBloomProperties Bloom = new()
+        {
+            group = DefDatabase<ScreenBloomGroupDef>.GetNamedSilentFail("MX_ScreenBloom_Glow"),
+            tint = Color.white,
+            intensity = 1.35f,
+        };
 
         internal sealed class Note
         {
+            public Map map;
             public Projectile proj;
             public Color color;
             public int seed;
@@ -138,6 +144,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                 impactTick = tick;
                 impactAt = at;
                 waveCentre = waveAt;
+                BellWaveEmitter.SpawnNoteWave(map, waveAt, waveRadius, color);
                 const int n = 6;
                 float s = (tick - startTick) / 60f;
                 for (int k = 0; k < n; k++)
@@ -174,7 +181,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
                 }
                 if (impactTick >= 0)
                 {
-                    end = Mathf.Max(end, (impactTick - startTick) / 60f + Mathf.Max(FlowerBellWave.LifeSeconds, FlashRise + FlashHold + FlashFall));
+                    end = Mathf.Max(end, (impactTick - startTick) / 60f + FlashRise + FlashHold + FlashFall);
                 }
                 return end;
             }
@@ -198,7 +205,6 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
 
         private readonly Map map;
         private readonly List<Note> notes = new();
-        private readonly FlowerBellWaveDrawer waveDrawer = new();
         private Mesh trailMesh;
         private Mesh bellMesh;
         private Mesh bellBloomMesh;
@@ -229,6 +235,7 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             int now = Find.TickManager.TicksGame;
             Note note = new()
             {
+                map = map,
                 proj = proj,
                 color = proj.def.GetModExtension<FlowerBellNoteExtension>()?.color ?? new Color(0.95f, 0.92f, 0.95f),
                 seed = Gen.HashCombineInt(proj.thingIDNumber, now),
@@ -270,7 +277,6 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             Object.Destroy(bellBloomMesh);
             Object.Destroy(petalMesh);
             Object.Destroy(flashMesh);
-            waveDrawer.Dispose();
         }
 
         public void Draw(Map map)
@@ -284,7 +290,6 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             DrawBells(vt);
             DrawPetals(vt);
             DrawFlashes(vt);
-            DrawWaves(vt);
         }
 
         private static bool Flying(Note n) => n.impactTick < 0 && !n.ended;
@@ -596,20 +601,6 @@ namespace MiliraXian.Characters.QingHe.Things.Projectiles
             ScreenBloom.Submit(Bloom, mesh, Matrix4x4.identity, mat, block);
             Graphics.DrawMesh(mesh, Matrix4x4.identity, mat, 0, null, 0, block);
             block.Clear();
-        }
-
-        // --- the shock wave: drawn by the shared drawer, one entry per note that has landed
-        private void DrawWaves(float vt)
-        {
-            waveDrawer.Begin();
-            foreach (Note n in notes)
-            {
-                if (n.impactTick < 0)
-                {
-                    continue;
-                }
-                waveDrawer.Draw(n.waveCentre, n.waveRadius, n.color, (vt - n.impactTick) / 60f, FlowerBellWave.RingSeconds);
-            }
         }
     }
 }
