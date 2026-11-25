@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef Name="MX_ZL_ClipBase" Abstract="True">
+    <vfxClass>MiliraXian.Characters.Zhaoli.ZhaoliVisualEffect</vfxClass>
+    <emitterClass>MiliraXian.Characters.Zhaoli.ZhaoliClipEmitter</emitterClass>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <passes>
+      <li>
+        <name>Surface</name>
+        <renderer>Ribbon</renderer>
+        <texture>White</texture>
+        <shaderDef>Transparent</shaderDef>
+        <ribbon>
+          <ribbonIdChannel>strip</ribbonIdChannel>
+          <normalizeU>true</normalizeU>
+          <vMin>1</vMin>
+          <vMax>0</vMax>
+        </ribbon>
+      </li>
+      <li>
+        <name>Glow</name>
+        <renderer>Ribbon</renderer>
+        <texture>White</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <ribbon>
+          <ribbonIdChannel>strip</ribbonIdChannel>
+          <normalizeU>true</normalizeU>
+          <vMin>1</vMin>
+          <vMax>0</vMax>
+        </ribbon>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_ZL_ClipBase">
+    <defName>MX_ZL_Minghuo</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Zhaoli.ZhaoliAnimationClip">
+        <clip>MX_Vfx_zhaoli_minghuo_vfx</clip>
+      </li>
+    </modExtensions>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_ZL_ClipBase">
+    <defName>MX_ZL_Guiyi</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Zhaoli.ZhaoliAnimationClip">
+        <clip>MX_Vfx_zhaoli_guiyi_vfx</clip>
+      </li>
+    </modExtensions>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_ZL_ClipBase">
+    <defName>MX_ZL_DeathField</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Zhaoli.ZhaoliAnimationClip">
+        <clip>MX_Vfx_zhaoli_deathfield_vfx</clip>
+      </li>
+    </modExtensions>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_ZL_ClipBase">
+    <defName>MX_ZL_MinshenWarmup</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Zhaoli.ZhaoliAnimationClip">
+        <clip>MX_Vfx_zhaoli_minshen_vfx</clip>
+      </li>
+    </modExtensions>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_ZL_ClipBase">
+    <defName>MX_ZL_MinshenImpact</defName>
+    <modExtensions>
+      <li Class="MiliraXian.Characters.Zhaoli.ZhaoliAnimationClip">
+        <clip>MX_Vfx_zhaoli_minshen_impact_vfx</clip>
+      </li>
+    </modExtensions>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_ZL_DuanzhanTrail</defName>
+    <vfxClass>MiliraXian.Characters.Zhaoli.ZhaoliVisualEffect</vfxClass>
+    <emitterClass>MiliraXian.Characters.Zhaoli.ZhaoliDuanzhanTrail</emitterClass>
+    <capacity>70</capacity>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <passes>
+      <li>
+        <name>BladeGlow</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianZhaoli/Effect/Duanzhan/Zhaoli_DuanzhanTrailGlow</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <sprite>
+          <quadSize>(0,1)</quadSize>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+</Defs>

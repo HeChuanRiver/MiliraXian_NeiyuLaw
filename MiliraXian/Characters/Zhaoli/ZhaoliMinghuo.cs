@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -137,6 +138,7 @@ namespace MiliraXian.Characters.Zhaoli
         private const int AuraFrameIntervalTicks = 6;
 
         private ThingWithComps boundWeapon;
+        private ZhaoliClipHandle aura;
 
         public HediffCompProperties_ZhaoliMinghuo PropsMinghuo => (HediffCompProperties_ZhaoliMinghuo)props;
 
@@ -186,11 +188,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryMaintainAttached(
-                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinghuo,
-                    Pawn,
-                    1f,
-                    AuraFrameCount * AuraFrameIntervalTicks))
+            if (MaintainAura())
             {
                 return;
             }
@@ -203,6 +201,16 @@ namespace MiliraXian.Characters.Zhaoli
 
             int frameIndex = (ticksGame / AuraFrameIntervalTicks) % AuraFrameCount;
             ZhaoliVisualUtility.SpawnMinghuoAuraFrame(Pawn, frameIndex, 1f);
+        }
+
+        private bool MaintainAura() => ZhaoliClipEmitter.Maintain(ref aura, ZhaoliVisualDefOf.MX_ZL_Minghuo,
+            Pawn.Map, VfxAnchor.Follow(Pawn), Find.TickManager.TicksGame - parent.ageTicks,
+            AuraFrameCount * AuraFrameIntervalTicks, 1f);
+
+        public override void CompPostPostRemoved()
+        {
+            aura.End();
+            base.CompPostPostRemoved();
         }
 
         public override string CompTipStringExtra
@@ -229,6 +237,12 @@ namespace MiliraXian.Characters.Zhaoli
         public override void CompExposeData()
         {
             Scribe_References.Look(ref boundWeapon, "boundWeapon");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+                LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (boundWeapon != null && Pawn?.Spawned == true && !Pawn.Dead && !ZhaoliPowerBalance.Sealed
+                        && Pawn.health.hediffSet.hediffs.Contains(parent)) MaintainAura();
+                });
         }
 
         private string GetPanelSummary()

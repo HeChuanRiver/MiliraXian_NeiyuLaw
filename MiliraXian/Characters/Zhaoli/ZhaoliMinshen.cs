@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -30,6 +31,7 @@ namespace MiliraXian.Characters.Zhaoli
         private const string DazedMentalStateDefName = "WanderConfused";
         private static readonly Color PreviewColor = new(0.44f, 0.12f, 0.16f);
 
+        private ZhaoliClipHandle warmupVisual;
         private readonly HashSet<Pawn> tmpTargets = new();
         private readonly List<IntVec3> tmpPreviewCells = new();
 
@@ -55,13 +57,7 @@ namespace MiliraXian.Characters.Zhaoli
                     }
 
                     float areaScale = Mathf.Max(2.2f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.34f);
-                    bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
-                        MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen,
-                        caster.Map,
-                        target.Cell,
-                        1f,
-                        Mathf.Max(1, warmupTicks));
-                    if (!usingUnityVfx)
+                    if (!BindWarmup(target.Cell, warmupTicks))
                     {
                         SpawnMinshenAreaPulse(target.Cell, caster.Map);
                         FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);
@@ -84,8 +80,7 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
-                                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen))
+                        if (!HasWarmupVisual)
                         {
                             SpawnMinshenAreaPulse(target.Cell, caster.Map);
                         }
@@ -107,8 +102,7 @@ namespace MiliraXian.Characters.Zhaoli
                             return;
                         }
 
-                        if (!MiliraXian.Characters.Common.CharacterUnityVfxRuntime.IsAvailable(
-                                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshen))
+                        if (!HasWarmupVisual)
                         {
                             SpawnMinshenParticles(target.Cell, caster.Map, 7);
                         }
@@ -117,9 +111,27 @@ namespace MiliraXian.Characters.Zhaoli
             }
         }
 
+        private bool HasWarmupVisual => warmupVisual.Live;
+
+        private bool BindWarmup(IntVec3 center, int ticks) => parent.verb.WarmupStance is { } stance
+            && ZhaoliClipEmitter.Maintain(ref warmupVisual, ZhaoliVisualDefOf.MX_ZL_MinshenWarmup, parent.pawn.Map,
+                VfxAnchor.At(center), stance.startedTick, ticks, 1f, stance);
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+                LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (parent?.pawn?.Spawned == true && parent.verb.WarmupStance is { } stance && stance.focusTarg.IsValid)
+                        BindWarmup(stance.focusTarg.Cell, GetWarmupTicks());
+                });
+        }
+
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
             if (ZhaoliPowerBalance.Sealed) return;
+            warmupVisual.End();
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;
@@ -144,13 +156,7 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (caster.Spawned)
             {
-                bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayWorld(
-                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliMinshenImpact,
-                    caster.Map,
-                    target.Cell,
-                    1f,
-                    36);
-                if (!usingUnityVfx)
+                if (!ZhaoliClipEmitter.Play(ZhaoliVisualDefOf.MX_ZL_MinshenImpact, caster.Map, VfxAnchor.At(target.Cell), 36))
                 {
                     float areaScale = Mathf.Max(2.5f, Mathf.Max(Props.areaWidth, Props.areaHeight) * 0.35f);
                     FleckMaker.Static(target.Cell, caster.Map, FleckDefOf.PsycastAreaEffect, areaScale);

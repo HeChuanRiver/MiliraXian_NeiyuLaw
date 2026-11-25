@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -151,11 +152,8 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            if (MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryPlayAttached(
-                    MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliGuiyi,
-                    target,
-                    Mathf.Max(0.1f, scale),
-                    18))
+            if (ZhaoliClipEmitter.Play(ZhaoliVisualDefOf.MX_ZL_Guiyi, target.Map,
+                    VfxAnchor.Follow(target), 18, Mathf.Max(0.1f, scale)))
             {
                 return;
             }

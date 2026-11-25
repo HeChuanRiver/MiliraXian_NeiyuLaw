@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MiliraXian.Characters.Neiyu;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -16,7 +17,7 @@ namespace MiliraXian.Characters.Zhaoli
         Recovering
     }
 
-    internal struct DuanzhanVisualState
+    internal sealed class DuanzhanVisualState
     {
         public int weaponThingId;
         public int sequenceStartTick;
@@ -30,7 +31,74 @@ namespace MiliraXian.Characters.Zhaoli
         public float slashStartAngleOffset;
         public float slashEndAngleOffset;
         public float lungeDistanceCells;
+
+        internal VfxEmitterHandle trail;
+        internal bool restoreTrail;
+
+        internal void EndTrail()
+        {
+            if (trail.Host?.Resolve(trail) is ZhaoliDuanzhanTrail live && live.Owner == this)
+            {
+                live.Owner = null;
+                trail.Host.Destroy(trail);
+            }
+            trail = default;
+        }
+
+        internal bool Pose(int now, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages)
+        {
+            weaponScale = 1f;
+            drawAimAngle = 0f;
+            drawOffset = Vector3.zero;
+            drawAfterimages = false;
+            int chargeEndTick = sequenceStartTick + chargeTicks;
+            int sweepEndTick = chargeEndTick + sweepTicks;
+            int recoverEndTick = sequenceEndTick;
+            Vector3 forward = ForwardFromAimAngle(baseAimAngle);
+
+            if (now < sequenceStartTick || now >= recoverEndTick)
+            {
+                return false;
+            }
+
+            if (now < chargeEndTick)
+            {
+                float progress = Mathf.Clamp01((now - sequenceStartTick) / (float)chargeTicks);
+                weaponScale = Mathf.Lerp(1f, readyWeaponScale, progress);
+                drawAimAngle = baseAimAngle + slashStartAngleOffset;
+                drawOffset = -forward * (lungeDistanceCells * 0.25f * progress);
+                return true;
+            }
+
+            if (now < sweepEndTick)
+            {
+                float progress = Mathf.Clamp01((now - chargeEndTick) / (float)sweepTicks);
+                weaponScale = slashWeaponScale;
+                drawAimAngle = baseAimAngle + Mathf.Lerp(slashStartAngleOffset, slashEndAngleOffset, progress);
+                drawOffset = forward * (Mathf.Sin(progress * Mathf.PI) * lungeDistanceCells);
+                drawAfterimages = true;
+                return true;
+            }
+
+            if (recoverTicks <= 0)
+            {
+                return false;
+            }
+
+            float recoverProgress = Mathf.Clamp01((now - sweepEndTick) / (float)recoverTicks);
+            weaponScale = Mathf.Lerp(slashWeaponScale, readyWeaponScale, recoverProgress);
+            drawAimAngle = baseAimAngle + slashEndAngleOffset;
+            drawOffset = forward * (lungeDistanceCells * (1f - recoverProgress) * 0.35f);
+            return true;
+        }
+
+        private static Vector3 ForwardFromAimAngle(float aimAngle)
+        {
+            float radians = aimAngle * 0.0174532924f;
+            return new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
+        }
     }
+
 
     internal static class DuanzhanVisualTracker
     {
@@ -38,8 +106,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         internal static void ClearRuntimeState()
         {
+            foreach (DuanzhanVisualState state in States.Values) state.EndTrail();
             States.Clear();
-            Patch_ZhaoliDuanzhan_DrawEquipmentAiming.ClearRuntimeState();
         }
 
         public static void SetState(
@@ -54,19 +122,26 @@ namespace MiliraXian.Characters.Zhaoli
             float slashWeaponScale,
             float slashStartAngleOffset,
             float slashEndAngleOffset,
-            float lungeDistanceCells)
+            float lungeDistanceCells,
+            bool restored)
         {
             if (pawn == null || weapon == null)
             {
                 return;
             }
 
+            if (States.TryGetValue(pawn.thingIDNumber, out var existing))
+            {
+                if (existing.sequenceStartTick == sequenceStartTick && existing.weaponThingId == weapon.thingIDNumber) return;
+                existing.EndTrail();
+            }
             int safeChargeTicks = Mathf.Max(1, chargeTicks);
             int safeSweepTicks = Mathf.Max(1, sweepTicks);
             int safeRecoverTicks = Mathf.Max(0, recoverTicks);
             States[pawn.thingIDNumber] = new DuanzhanVisualState
             {
                 weaponThingId = weapon.thingIDNumber,
+                restoreTrail = restored,
                 sequenceStartTick = sequenceStartTick,
                 chargeTicks = safeChargeTicks,
                 sweepTicks = safeSweepTicks,
@@ -90,77 +165,16 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (States.TryGetValue(pawn.thingIDNumber, out DuanzhanVisualState state))
             {
-                Patch_ZhaoliDuanzhan_DrawEquipmentAiming.ClearTrail(state.weaponThingId);
+                state.EndTrail();
                 States.Remove(pawn.thingIDNumber);
             }
         }
 
-        public static bool TryGetWeaponVisual(Thing eq, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages)
+        internal static bool TryGet(Thing weapon, out DuanzhanVisualState state, out Pawn pawn)
         {
-            weaponScale = 1f;
-            drawAimAngle = 0f;
-            drawOffset = Vector3.zero;
-            drawAfterimages = false;
-
-            Pawn_EquipmentTracker equipmentTracker = eq?.ParentHolder as Pawn_EquipmentTracker;
-            Pawn pawn = equipmentTracker?.pawn;
-            if (pawn == null || !States.TryGetValue(pawn.thingIDNumber, out DuanzhanVisualState state))
-            {
-                return false;
-            }
-
-            if (eq.thingIDNumber != state.weaponThingId)
-            {
-                return false;
-            }
-
-            int now = Find.TickManager != null ? Find.TickManager.TicksGame : state.sequenceEndTick;
-            int chargeEndTick = state.sequenceStartTick + state.chargeTicks;
-            int sweepEndTick = chargeEndTick + state.sweepTicks;
-            int recoverEndTick = state.sequenceEndTick;
-            Vector3 forward = ForwardFromAimAngle(state.baseAimAngle);
-
-            if (now < state.sequenceStartTick || now >= recoverEndTick)
-            {
-                Clear(pawn);
-                return false;
-            }
-
-            if (now < chargeEndTick)
-            {
-                float progress = Mathf.Clamp01((now - state.sequenceStartTick) / (float)state.chargeTicks);
-                weaponScale = Mathf.Lerp(1f, state.readyWeaponScale, progress);
-                drawAimAngle = state.baseAimAngle + state.slashStartAngleOffset;
-                drawOffset = -forward * (state.lungeDistanceCells * 0.25f * progress);
-                return true;
-            }
-
-            if (now < sweepEndTick)
-            {
-                float progress = Mathf.Clamp01((now - chargeEndTick) / (float)state.sweepTicks);
-                weaponScale = state.slashWeaponScale;
-                drawAimAngle = state.baseAimAngle + Mathf.Lerp(state.slashStartAngleOffset, state.slashEndAngleOffset, progress);
-                drawOffset = forward * (Mathf.Sin(progress * Mathf.PI) * state.lungeDistanceCells);
-                drawAfterimages = true;
-                return true;
-            }
-
-            if (state.recoverTicks <= 0)
-            {
-                return false;
-            }
-
-            float recoverProgress = Mathf.Clamp01((now - sweepEndTick) / (float)state.recoverTicks);
-            weaponScale = Mathf.Lerp(state.slashWeaponScale, state.readyWeaponScale, recoverProgress);
-            drawAimAngle = state.baseAimAngle + state.slashEndAngleOffset;
-            drawOffset = forward * (state.lungeDistanceCells * (1f - recoverProgress) * 0.35f);
-            return true;
-        }
-
-        private static Vector3 ForwardFromAimAngle(float aimAngle)
-        {
-            float radians = aimAngle * 0.0174532924f;
-            return new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
+            pawn = (weapon?.ParentHolder as Pawn_EquipmentTracker)?.pawn;
+            state = null;
+            return pawn != null && States.TryGetValue(pawn.thingIDNumber, out state) && state.weaponThingId == weapon.thingIDNumber;
         }
     }
 
@@ -378,9 +392,15 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref sweepFxPlayed, "mxnl_zhaoli_duanzhan_sweepFxPlayed", false);
             Scribe_Values.Look(ref finishFxPlayed, "mxnl_zhaoli_duanzhan_finishFxPlayed", false);
             stage = (DuanzhanSequenceStage)stageInt;
+            if (stage != DuanzhanSequenceStage.None && Scribe.mode == LoadSaveMode.PostLoadInit)
+                LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (parent?.pawn?.Spawned == true && stage != DuanzhanSequenceStage.None)
+                        RefreshVisualState(parent.pawn, restored: parent.pawn.Position == originCell);
+                });
         }
 
-        private void RefreshVisualState(Pawn caster)
+        private void RefreshVisualState(Pawn caster, bool restored = false)
         {
             ThingWithComps weapon = caster?.equipment?.Primary;
             if (caster == null || weapon == null || stage == DuanzhanSequenceStage.None)
@@ -401,7 +421,7 @@ namespace MiliraXian.Characters.Zhaoli
                 Props.slashWeaponScale,
                 Props.slashStartAngleOffset,
                 Props.slashEndAngleOffset,
-                Props.lungeDistanceCells);
+                Props.lungeDistanceCells, restored);
         }
 
         private void ClearSequence(Pawn caster)
@@ -622,237 +642,25 @@ namespace MiliraXian.Characters.Zhaoli
     [StaticConstructorOnStartup]
     internal static class Patch_ZhaoliDuanzhan_DrawEquipmentAiming
     {
-        private const string SlashTexturePath = "MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade_OnHand";
-        private const string SlashGlowTexturePath = "MiliraXianZhaoli/Effect/Duanzhan/Zhaoli_DuanzhanTrailGlow";
-        private const float SlashTextureScaleFactor = 3f;
-        private const int TrailLifetimeTicks = 22;
-        private const int TrailMaxSamples = 18;
-        private const int TrailInterpolationSubdivisions = 3;
-        private const float TrailMinPointDistance = 0.012f;
-        private const float TrailMinAngleDelta = 1.75f;
-        private const float CurrentGlowAlpha = 0.88f;
-        private const float CurrentGlowScaleMultiplier = 1.06f;
-        private const float TrailGlowScaleStart = 1.04f;
-        private const float TrailGlowScaleStep = 0.035f;
-        private const float TrailGlowBackOffsetStep = 0.045f;
-        private const float TrailGlowAltitudeStep = 0.006f;
-
-        private struct SlashTrailSample
-        {
-            public Vector3 drawLoc;
-            public float aimAngle;
-            public float scaleMultiplier;
-            public int tick;
-        }
-
-        private static readonly Dictionary<int, List<SlashTrailSample>> TrailSamplesByWeapon = new();
-
-        internal static void ClearRuntimeState()
-        {
-            TrailSamplesByWeapon.Clear();
-        }
-
-        internal static void ClearTrail(int weaponThingId)
-        {
-            TrailSamplesByWeapon.Remove(weaponThingId);
-        }
-        private static Material slashMaterial;
-        private static Material slashGlowMaterial;
-        private static Vector2 slashBaseDrawSize = Vector2.one;
-        private static Vector2 slashGlowBaseDrawSize = Vector2.one;
-        private static bool triedLoadMaterials;
+        private const string BladePath = "MiliraXianZhaoli/Items/Zhaoli_DuanzhanBlade_OnHand";
+        internal const float BladeScale = 3f;
+        private static readonly Material blade = VfxMaterialCache.FromTexture(BladePath, "Cutout");
 
         internal static bool DrawWeapon(Thing eq, Vector3 drawLoc, float aimAngle)
         {
-            if (eq == null || !DuanzhanVisualTracker.TryGetWeaponVisual(eq, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages))
-            {
-                return true;
-            }
-
-            int now = Find.TickManager != null ? Find.TickManager.TicksGame : 0;
-            Vector3 weaponDrawLoc = drawLoc + drawOffset;
-            TrimExpiredTrailSamples(eq.thingIDNumber, now);
-            if (drawAfterimages)
-            {
-                RecordTrailSample(eq.thingIDNumber, weaponDrawLoc, drawAimAngle, weaponScale * SlashTextureScaleFactor, now);
-            }
-
-            return !DrawScaledEquipment(eq.thingIDNumber, weaponDrawLoc, drawAimAngle, weaponScale * SlashTextureScaleFactor, drawAfterimages, now);
-        }
-
-        private static void EnsureMaterialsLoaded()
-        {
-            if (triedLoadMaterials)
-            {
-                return;
-            }
-
-            triedLoadMaterials = true;
-
-            Texture2D slashTexture = ContentFinder<Texture2D>.Get(SlashTexturePath, reportFailure: false);
-            if (slashTexture != null)
-            {
-                slashMaterial = MaterialPool.MatFrom(slashTexture, ShaderDatabase.Cutout, Color.white);
-                slashBaseDrawSize = new Vector2(Mathf.Max(0.01f, slashTexture.width / (float)Mathf.Max(1, slashTexture.height)), 1f);
-            }
-
-            Texture2D glowTexture = ContentFinder<Texture2D>.Get(SlashGlowTexturePath, reportFailure: false);
-            if (glowTexture != null)
-            {
-                slashGlowMaterial = MaterialPool.MatFrom(glowTexture, ShaderDatabase.MoteGlow, Color.white);
-                slashGlowBaseDrawSize = new Vector2(Mathf.Max(0.01f, glowTexture.width / (float)Mathf.Max(1, glowTexture.height)), 1f);
-            }
-        }
-
-        private static bool DrawScaledEquipment(int weaponThingId, Vector3 drawLoc, float aimAngle, float scaleMultiplier, bool drawAfterimages, int now)
-        {
-            EnsureMaterialsLoaded();
-            if (slashMaterial == null)
-            {
-                return false;
-            }
-
-            DrawTrailSamples(weaponThingId, now);
-
-            if (drawAfterimages && slashGlowMaterial != null)
-            {
-                Material activeGlowMaterial = FadedMaterialPool.FadedVersionOf(slashGlowMaterial, CurrentGlowAlpha);
-                DrawMesh(drawLoc + Altitudes.AltIncVect * 0.015f, aimAngle, scaleMultiplier * CurrentGlowScaleMultiplier, activeGlowMaterial, slashGlowBaseDrawSize);
-            }
-
-            DrawMesh(drawLoc, aimAngle, scaleMultiplier, slashMaterial, slashBaseDrawSize);
-            return true;
-        }
-
-        private static void RecordTrailSample(int weaponThingId, Vector3 drawLoc, float aimAngle, float scaleMultiplier, int now)
-        {
-            if (!TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples))
-            {
-                samples = new List<SlashTrailSample>();
-                TrailSamplesByWeapon.Add(weaponThingId, samples);
-            }
-
-            if (samples.Count > 0)
-            {
-                SlashTrailSample last = samples[samples.Count - 1];
-                Vector3 delta = drawLoc - last.drawLoc;
-                float angleDelta = Mathf.Abs(Mathf.DeltaAngle(last.aimAngle, aimAngle));
-                if (delta.sqrMagnitude < TrailMinPointDistance * TrailMinPointDistance && angleDelta < TrailMinAngleDelta)
-                {
-                    return;
-                }
-            }
-
-            samples.Add(new SlashTrailSample
-            {
-                drawLoc = drawLoc,
-                aimAngle = aimAngle,
-                scaleMultiplier = scaleMultiplier,
-                tick = now
-            });
-
-            if (samples.Count > TrailMaxSamples)
-            {
-                samples.RemoveAt(0);
-            }
-        }
-
-        private static void TrimExpiredTrailSamples(int weaponThingId, int now)
-        {
-            if (!TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples))
-            {
-                return;
-            }
-
-            for (int i = samples.Count - 1; i >= 0; i--)
-            {
-                if (now - samples[i].tick > TrailLifetimeTicks)
-                {
-                    samples.RemoveAt(i);
-                }
-            }
-
-            if (samples.Count == 0)
-            {
-                TrailSamplesByWeapon.Remove(weaponThingId);
-            }
-        }
-
-        private static void DrawTrailSamples(int weaponThingId, int now)
-        {
-            if (slashGlowMaterial == null || !TrailSamplesByWeapon.TryGetValue(weaponThingId, out List<SlashTrailSample> samples) || samples.Count == 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < samples.Count; i++)
-            {
-                DrawTrailSample(samples[i], samples.Count - i, now);
-
-                if (i >= samples.Count - 1)
-                {
-                    continue;
-                }
-
-                SlashTrailSample from = samples[i];
-                SlashTrailSample to = samples[i + 1];
-                for (int subdivision = 1; subdivision <= TrailInterpolationSubdivisions; subdivision++)
-                {
-                    float t = subdivision / (float)(TrailInterpolationSubdivisions + 1);
-                    SlashTrailSample interpolated = new()
-                    {
-                        drawLoc = Vector3.Lerp(from.drawLoc, to.drawLoc, t),
-                        aimAngle = Mathf.LerpAngle(from.aimAngle, to.aimAngle, t),
-                        scaleMultiplier = Mathf.Lerp(from.scaleMultiplier, to.scaleMultiplier, t),
-                        tick = Mathf.RoundToInt(Mathf.Lerp(from.tick, to.tick, t))
-                    };
-                    DrawTrailSample(interpolated, samples.Count - i, now);
-                }
-            }
-        }
-
-        private static void DrawTrailSample(SlashTrailSample sample, int trailIndex, int now)
-        {
-            int ageTicks = now - sample.tick;
-            if (ageTicks < 0 || ageTicks > TrailLifetimeTicks)
-            {
-                return;
-            }
-
-            float ageRatio = ageTicks / (float)Mathf.Max(1, TrailLifetimeTicks);
-            float alpha = Mathf.Lerp(0.72f, 0.04f, ageRatio);
-            if (alpha <= 0.01f)
-            {
-                return;
-            }
-
-            float scale = sample.scaleMultiplier * (TrailGlowScaleStart + TrailGlowScaleStep * trailIndex);
-            Vector3 backOffset = -AimOffset(sample.aimAngle) * (TrailGlowBackOffsetStep * trailIndex);
-            Vector3 altitudeOffset = Altitudes.AltIncVect * (TrailGlowAltitudeStep * trailIndex);
-            Material fadedGlow = FadedMaterialPool.FadedVersionOf(slashGlowMaterial, alpha);
-            DrawMesh(sample.drawLoc + backOffset + altitudeOffset, sample.aimAngle, scale, fadedGlow, slashGlowBaseDrawSize);
-        }
-
-        private static void DrawMesh(Vector3 drawLoc, float aimAngle, float scaleMultiplier, Material material, Vector2 baseDrawSize)
-        {
-            if (material == null)
-            {
-                return;
-            }
-
-            float rotation = aimAngle % 360f;
-            Vector2 drawSize = baseDrawSize * Mathf.Max(0.01f, scaleMultiplier);
-            Quaternion quaternion = Quaternion.AngleAxis(rotation, Vector3.up);
-            Vector3 pivotToCenter = quaternion * new Vector3(0f, 0f, drawSize.y * 0.5f);
-            Vector3 meshCenter = drawLoc + pivotToCenter;
-            Matrix4x4 matrix = Matrix4x4.TRS(meshCenter, quaternion, new Vector3(drawSize.x, 0f, drawSize.y));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
-        }
-
-        private static Vector3 AimOffset(float aimAngle)
-        {
-            float radians = aimAngle * 0.0174532924f;
-            return new Vector3(Mathf.Sin(radians), 0f, Mathf.Cos(radians));
+            if (!DuanzhanVisualTracker.TryGet(eq, out var state, out Pawn pawn) || blade?.mainTexture == null) return true;
+            int now = Find.TickManager.TicksGame;
+            if (!state.Pose(now, out float scale, out float angle, out Vector3 offset, out bool sweeping)) return true;
+            // The equipment callback supplies the actual hand pivot. Only the held blade draws here.
+            scale *= BladeScale;
+            Vector3 grip = drawLoc + offset;
+            if (sweeping || !state.trail.IsNone || state.restoreTrail)
+                ZhaoliDuanzhanTrail.Capture(state, pawn, drawLoc, grip, angle, scale, sweeping, now);
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
+            Vector3 center = grip + rotation * Vector3.forward * (.5f * scale);
+            float aspect = blade.mainTexture.width / (float)Mathf.Max(1, blade.mainTexture.height);
+            Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(center, rotation, new Vector3(aspect * scale, 0f, scale)), blade, 0);
+            return false;
         }
     }
 }

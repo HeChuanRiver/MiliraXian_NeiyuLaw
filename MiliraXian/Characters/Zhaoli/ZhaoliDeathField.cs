@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using MiliraXian.Characters;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -125,6 +126,7 @@ namespace MiliraXian.Characters.Zhaoli
         private const float FieldAreaRotationRate = 360f;
 
         private Mote fieldAreaMote;
+        private ZhaoliClipHandle fieldVisual;
         private int fieldCenterX;
         private int fieldCenterZ;
         private float activeRadius;
@@ -158,6 +160,12 @@ namespace MiliraXian.Characters.Zhaoli
             Scribe_Values.Look(ref fieldCenterZ, "fieldCenterZ", 0);
             Scribe_Values.Look(ref activeRadius, "activeRadius", 0f);
             Scribe_Values.Look(ref active, "active", false);
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+                LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (active && !ZhaoliPowerBalance.Sealed && Pawn is { Dead: false, MapHeld: { } map }
+                        && FieldCenter.InBounds(map) && Pawn.health.hediffSet.hediffs.Contains(parent)) MaintainAnimation(map, FieldCenter);
+                });
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -175,14 +183,7 @@ namespace MiliraXian.Characters.Zhaoli
                 return;
             }
 
-            bool usingUnityVfx = MiliraXian.Characters.Common.CharacterUnityVfxRuntime.TryMaintainWorld(
-                MiliraXian.Characters.Common.CharacterUnityVfxKind.ZhaoliDeathField,
-                Pawn,
-                map,
-                center,
-                CurrentRadius / 9f,
-                360);
-            if (!usingUnityVfx)
+            if (!MaintainAnimation(map, center))
             {
                 MaintainFieldArea(map, center);
                 MaintainFieldParticles(map, center);
@@ -227,6 +228,16 @@ namespace MiliraXian.Characters.Zhaoli
             {
                 CombatTargetSnapshot.Return(allPawnsSpawned);
             }
+        }
+
+        private bool MaintainAnimation(Map map, IntVec3 center) =>
+            ZhaoliClipEmitter.Maintain(ref fieldVisual, ZhaoliVisualDefOf.MX_ZL_DeathField, map, VfxAnchor.At(center),
+                Find.TickManager.TicksGame - parent.ageTicks, 360, CurrentRadius / 9f);
+
+        public override void CompPostPostRemoved()
+        {
+            fieldVisual.End();
+            base.CompPostPostRemoved();
         }
 
         private void MaintainFieldArea(Map map, IntVec3 center)
