@@ -8,7 +8,6 @@ namespace MiliraXian.Characters.Neiyu;
 public class CompProperties_AbilityNeiyuWarpFeather : CompProperties_AbilityEffect
 {
     public ThingDef featherThingDef;
-    public ThingDef warmupMoteDef;
     public SoundDef placementSound;
     public IntRange featherCountRange = new(12, 24);
 
@@ -27,7 +26,7 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
     private Thing preparedFeathers;
     private IntVec3 landingCell = IntVec3.Invalid;
     private int preparedJobId = -1;
-    private Mote_NeiyuWarpFeather warmupMote;
+    private NeiyuWarpFeatherVisual warmupVisual;
 
     public new CompProperties_AbilityNeiyuWarpFeather Props => (CompProperties_AbilityNeiyuWarpFeather)props;
     internal IntVec3 LandingCell => landingCell;
@@ -68,13 +67,8 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
             PrepareFeathers();
             preparedJobId = jobId;
         }
-        if (preparedFeathers == null || Props.warmupMoteDef == null) yield break;
-
-        warmupMote = MoteMaker.MakeStaticMote(parent.pawn.DrawPos, parent.pawn.Map,
-            Props.warmupMoteDef, 1f, makeOffscreen: true) as Mote_NeiyuWarpFeather;
-        if (warmupMote == null) yield break;
-        warmupMote.Bind(this);
-        yield return warmupMote;
+        if (preparedFeathers != null) warmupVisual ??= new NeiyuWarpFeatherVisual(this);
+        yield break;
     }
 
     public override void CompTick()
@@ -114,8 +108,8 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
         }
 
         preparedFeathers = null;
-        warmupMote?.Complete(resultingThing);
-        warmupMote = null;
+        warmupVisual?.Complete(resultingThing);
+        warmupVisual = null;
         landingCell = IntVec3.Invalid;
         preparedJobId = -1;
         Props.placementSound?.PlayOneShot(new TargetInfo(resultingThing.Position, caster.Map));
@@ -127,6 +121,12 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
         Scribe_Deep.Look(ref preparedFeathers, "warpFeatherPreparedStack");
         Scribe_Values.Look(ref landingCell, "warpFeatherLandingCell", IntVec3.Invalid);
         Scribe_Values.Look(ref preparedJobId, "warpFeatherJobId", -1);
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            LongEventHandler.ExecuteWhenFinished(() =>
+            {
+                if (preparedFeathers != null && CastActive && parent.verb.WarmingUp)
+                    warmupVisual ??= new NeiyuWarpFeatherVisual(this);
+            });
     }
 
     internal Thing PreviewThing
@@ -209,8 +209,8 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
 
     private void ClearPreparation()
     {
-        warmupMote?.Cancel();
-        warmupMote = null;
+        warmupVisual?.Cancel();
+        warmupVisual = null;
         if (preparedFeathers is { Destroyed: false, Spawned: false }) preparedFeathers.Destroy(DestroyMode.Vanish);
         preparedFeathers = null;
         landingCell = IntVec3.Invalid;

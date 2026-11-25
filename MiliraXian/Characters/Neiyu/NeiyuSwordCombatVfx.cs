@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using MiliraXian.Characters.Common.Vfx;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -218,20 +219,20 @@ internal static class NeiyuSwordCombatVfx
 }
 
 // Visual events only. Saved gameplay lives in the shared posture comp and native Job.
-// Two snapshots can overlap; this bounded batch uses the existing Waylith mesh path.
-public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
+// Overlapping flashes share one host pass and its bounded billboard geometry.
+public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INeiyuVisualSource
 {
     private readonly record struct Flash(Pawn Pawn, Vector3 Position, Vector3 Direction, int Kind, int Tick, int Duration);
     private readonly List<Flash> flashes = new(32);
-    private readonly HashSet<JobDriver_NeiyuPostureExecution> volleys = new();
-    private ArcaneParticleBatch batch;
+    private NeiyuVisualBinding binding;
+    private readonly NeiyuQuadBatch batch = new();
     private int geometryTick = -1;
     private Vector3 geometryRight, geometryUp;
+    private CellRect geometryView;
     private float geometryIntensity = -1f;
 
-    internal void TrackVolley(JobDriver_NeiyuPostureExecution execution) => volleys.Add(execution);
-    internal void UntrackVolley(JobDriver_NeiyuPostureExecution execution) => volleys.Remove(execution);
-
+    bool INeiyuVisualSource.ActiveOn(Map current) => current == map && flashes.Count > 0;
+    NeiyuQuadBatch INeiyuVisualSource.CachedLayer(NeiyuLayer layer) => batch;
     internal void Add(Pawn pawn, Vector3 position, Vector3 direction, int kind)
     {
         int duration = kind switch { 2 => 22, 3 => 22, 4 => 18, 5 => 25, 7 => 35, _ => 15 };
@@ -244,37 +245,37 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
         if (flashes.Count >= Mathf.Clamp(NeiyuSwordCombat.Config.maxVisuals, 1, 128)) flashes.RemoveAt(0);
         flashes.Add(new Flash(pawn, position, direction, kind, tick, duration));
         geometryTick = -1;
+        binding.Bind(this, map, NeiyuVisualDefOf.MX_NY_SwordFlashes, VfxAnchor.At(position));
     }
 
     public override void MapComponentTick()
     {
+        if (flashes.Count == 0) return;
         int now = NeiyuSwordCombat.Now;
         for (int i = flashes.Count - 1; i >= 0; i--)
             if (now - flashes[i].Tick >= flashes[i].Duration) flashes.RemoveAt(i);
-        if (flashes.Count == 0 && batch != null) { batch.Dispose(); batch = null; geometryTick = -1; }
+        if (flashes.Count == 0)
+        {
+            binding.End(this);
+            batch.Begin();
+        }
     }
 
-    public override void MapComponentDraw()
+    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
     {
-        if (Find.CurrentMap != map || !NeiyuSwordCombatVfx.Enabled || (flashes.Count == 0 && volleys.Count == 0)
-            || Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active || Find.Camera == null) return;
-        foreach (JobDriver_NeiyuPostureExecution execution in volleys)
-            execution.DrawSingleVolley();
-        if (flashes.Count == 0) return;
-        batch ??= new ArcaneParticleBatch(MaterialPool.MatFrom(
-            "Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow", ShaderDatabase.MoteGlow, Color.white));
+        if (!NeiyuSwordCombatVfx.Enabled) { batch.Begin(); geometryTick = -1; return; }
         int now = NeiyuSwordCombat.Now;
         Vector3 right = Find.Camera.transform.right, up = Find.Camera.transform.up;
-        if (geometryTick != now || right != geometryRight || up != geometryUp || geometryIntensity != NeiyuSwordCombatVfx.Intensity)
+        CellRect view = Find.CameraDriver.CurrentViewRect.ExpandedBy(3);
+        if (geometryTick != now || !view.Equals(geometryView) || right != geometryRight || up != geometryUp || geometryIntensity != NeiyuSwordCombatVfx.Intensity)
         {
             batch.Begin();
             // Latest impacts retain the clearest feedback if the shared mesh budget is full.
             for (int i = flashes.Count - 1; i >= 0; i--) Build(flashes[i], now, right, up);
-            batch.Upload();
+            geometryView = view;
             geometryTick = now; geometryRight = right; geometryUp = up;
             geometryIntensity = NeiyuSwordCombatVfx.Intensity;
         }
-        batch.Draw(now / 60f, 0, Find.Camera);
     }
 
     private void Line(Vector3 a, Vector3 b, float width, Color color)
@@ -368,8 +369,9 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 
     public override void MapRemoved()
     {
-        volleys.Clear();
-        flashes.Clear(); batch?.Dispose(); batch = null;
+        binding.End(this);
+        batch.Begin();
+        flashes.Clear();
         base.MapRemoved();
     }
 }

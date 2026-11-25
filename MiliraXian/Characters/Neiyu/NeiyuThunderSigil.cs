@@ -1,6 +1,7 @@
 using MiliraXian.Characters.Neiyu.Cultivation;
 using System.Collections.Generic;
 using HarmonyLib;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -17,7 +18,6 @@ public class CompProperties_AbilityNeiyuThunderSigil : CompProperties_AbilityEff
     public int empDamageAmount = 15;
     public float fireSize = 0.3f;
     public HediffDef markerHediff;
-    public ThingDef warmupMote;
 
     public CompProperties_AbilityNeiyuThunderSigil() => compClass = typeof(CompAbilityEffect_NeiyuThunderSigil);
 }
@@ -43,16 +43,20 @@ public class Verb_CastAbilityNeiyuThunderSigil : Verb_CastAbility
         bool surpriseAttack = false, bool canHitNonTargetPawns = true,
         bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
     {
-        if (!ValidateTarget(castTarg)
-            || !ability.CompOfType<CompAbilityEffect_NeiyuThunderSigil>().HasTargets(castTarg)) return false;
+        CompAbilityEffect_NeiyuThunderSigil effect = ability.CompOfType<CompAbilityEffect_NeiyuThunderSigil>();
+        if (!ValidateTarget(castTarg) || !effect.HasTargets(castTarg)) return false;
         bool started = base.TryStartCastOn(castTarg, destTarg, surpriseAttack,
             canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast);
-        if (started && WarmupStance is { } stance) stance.ticksLeft = WarmupTime.SecondsToTicks();
+        if (started && WarmupStance is { } stance)
+        {
+            stance.ticksLeft = WarmupTime.SecondsToTicks();
+            effect.BindWarmup();
+        }
         return started;
     }
 }
 
-public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect
+public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisualSource
 {
     private readonly List<Pawn> previewTargets = new();
     private IntVec3 previewCell = IntVec3.Invalid;
@@ -108,15 +112,29 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect
     private void NoTargets() => Messages.Message("MX_NL_NoMarkTargetsInRange".Translate(),
         parent.pawn, MessageTypeDefOf.RejectInput, false);
 
-    public override IEnumerable<Mote> CustomWarmupMotes(LocalTargetInfo target)
+    private NeiyuVisualBinding warmup;
+
+    private bool WarmingUp => parent.pawn is { Spawned: true, Dead: false, Downed: false } pawn
+        && pawn.CurJob?.ability == parent && parent.verb.WarmingUp && !NeiyuPowerBalance.AbilitiesDisabled;
+
+    bool INeiyuVisualSource.ActiveOn(Map map) => WarmingUp && parent.pawn.Map == map;
+
+    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
     {
-        if (Props.warmupMote == null) yield break;
-        if (MoteMaker.MakeStaticMote(parent.pawn.DrawPos, parent.pawn.Map, Props.warmupMote,
-            1f, makeOffscreen: true) is Mote_NeiyuThunderWarmup mote)
-        {
-            mote.Bind(parent);
-            yield return mote;
-        }
+        Pawn pawn = parent.pawn;
+        if (DebugViewSettings.drawThingsDynamic && !pawn.Position.Fogged(pawn.Map)
+            && Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Contains(pawn.Position))
+            NeiyuThunderVfx.DrawWarmup(emitter, pawn.DrawPos, parent.verb.WarmupProgress, pawn.thingIDNumber);
+    }
+
+    internal void BindWarmup() => warmup.Bind(this, parent.pawn.Map, NeiyuVisualDefOf.MX_NY_ThunderWarmup,
+        VfxAnchor.Follow(parent.pawn));
+
+    public override void PostExposeData()
+    {
+        base.PostExposeData();
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            LongEventHandler.ExecuteWhenFinished(() => { if (WarmingUp) BindWarmup(); });
     }
 
     public override void DrawEffectPreview(LocalTargetInfo target)
@@ -134,7 +152,7 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect
     }
 }
 
-public partial class NeiyuCombatMapComponent
+public partial class NeiyuCombatMapComponent : INeiyuVisualSource
 {
     // Keep the serialized type and keys so in-flight tasks survive old saves.
     private sealed class ThunderTask : IExposable
@@ -167,7 +185,13 @@ public partial class NeiyuCombatMapComponent
     private List<ThunderTask> thunderTasks = new();
     private readonly Dictionary<(Pawn, HediffDef), int> thunderMarkerOwners = new();
     private readonly Dictionary<Pawn, ThunderMarkFrame> thunderFrames = new();
+    private NeiyuVisualBinding thunderBinding;
     private NeiyuThunderVfx thunderVfx;
+    private void BindThunder() => thunderBinding.Bind(this, map, NeiyuVisualDefOf.MX_NY_Thunder, VfxAnchor.At(Vector3.zero));
+    bool INeiyuVisualSource.ActiveOn(Map current) => current == map && (thunderTasks.Count > 0 || thunderVfx?.Idle == false);
+    NeiyuQuadBatch INeiyuVisualSource.CachedLayer(NeiyuLayer layer) =>
+        layer == NeiyuLayer.Energy ? thunderVfx?.Ribbons : thunderVfx?.Particles;
+
     private NeiyuThunderVfx ThunderVfx => thunderVfx ??= new NeiyuThunderVfx(map);
 
     private void ExposeThunderData()
@@ -202,6 +226,8 @@ public partial class NeiyuCombatMapComponent
             task.intervalMax = Mathf.Max(task.intervalMin, task.intervalMax);
         }
         foreach (ThunderTask task in thunderTasks) OwnThunderMarker(task);
+        if (thunderTasks.Count > 0)
+            LongEventHandler.ExecuteWhenFinished(() => { if (thunderTasks.Count > 0) BindThunder(); });
         // Once on load, reconcile old orphan marks. Never scan the map in the tick loop.
         HediffDef marker = DefDatabase<HediffDef>.GetNamedSilentFail("MX_Neiyu_ThunderMark");
         foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
@@ -261,6 +287,7 @@ public partial class NeiyuCombatMapComponent
             }
             // Visual failures must never turn a committed gameplay cast into a failed shot.
             ThunderVfx.CastPulse(caster.Position.ToVector3Shifted(), now);
+            BindThunder();
             return count;
         }
         finally { targets.Clear(); SimplePool<List<Pawn>>.Return(targets); }
@@ -303,7 +330,7 @@ public partial class NeiyuCombatMapComponent
         if (thunderTasks.Count == 0) thunderFrames.Clear();
         if (thunderTasks.Count == 0 && thunderVfx?.Idle == true)
         {
-            thunderVfx.Dispose();
+            thunderBinding.End(this);
             thunderVfx = null;
         }
     }
@@ -346,7 +373,7 @@ public partial class NeiyuCombatMapComponent
         thunderTasks.Clear();
         thunderMarkerOwners.Clear();
         thunderFrames.Clear();
-        thunderVfx?.Dispose();
+        thunderBinding.End(this);
         thunderVfx = null;
     }
 
@@ -356,10 +383,8 @@ public partial class NeiyuCombatMapComponent
         base.MapRemoved();
     }
 
-    public override void MapComponentDraw()
+    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
     {
-        base.MapComponentDraw();
-        if (Find.CurrentMap != map || Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active) return;
         thunderFrames.Clear();
         foreach (ThunderTask task in thunderTasks)
         {
@@ -378,6 +403,6 @@ public partial class NeiyuCombatMapComponent
             }
             thunderFrames[task.target] = frame;
         }
-        if (thunderFrames.Count > 0 || thunderVfx != null) ThunderVfx.Draw(thunderFrames, Find.TickManager.TicksGame);
+        if (thunderFrames.Count > 0 || thunderVfx != null) ThunderVfx.Draw(emitter, thunderFrames, Find.TickManager.TicksGame);
     }
 }

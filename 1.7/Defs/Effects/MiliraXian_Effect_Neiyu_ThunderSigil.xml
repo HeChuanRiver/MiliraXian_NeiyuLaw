@@ -9,7 +9,7 @@
   <ShaderDef>
     <defName>MX_NeiyuThunderSigil</defName>
     <shaderProgram>
-      <vertexShaderFileName>WorldArcaneStrike/Arcane.vert.glsl</vertexShaderFileName>
+      <vertexShaderFileName>NeiyuThunder/ThunderSigil.vert.glsl</vertexShaderFileName>
       <fragmentShaderFileName>NeiyuThunder/ThunderSigil.frag.glsl</fragmentShaderFileName>
       <blendMode>Custom</blendMode>
       <blendSrcFactor>One</blendSrcFactor>
@@ -48,18 +48,4 @@
     <shader>MX_NeiyuThunderEnergy</shader>
     <floats><li><name>_Kind</name><value>1</value></li></floats>
   </MaterialDef>
-
-  <ThingDef ParentName="MoteBase">
-    <defName>MX_Mote_NeiyuThunderWarmup</defName>
-    <label>聚雷术式</label>
-    <thingClass>MiliraXian.Characters.Neiyu.Mote_NeiyuThunderWarmup</thingClass>
-    <altitudeLayer>MoteOverheadLow</altitudeLayer>
-    <tickerType>Normal</tickerType>
-    <isSaveable>false</isSaveable>
-    <graphicData>
-      <texPath>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texPath>
-      <shaderType>MoteGlow</shaderType>
-    </graphicData>
-    <mote><realTime>false</realTime><needsMaintenance>false</needsMaintenance></mote>
-  </ThingDef>
 </Defs>

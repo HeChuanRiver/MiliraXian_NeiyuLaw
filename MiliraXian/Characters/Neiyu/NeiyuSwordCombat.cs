@@ -285,6 +285,8 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         ExposeSingle();
         ExposeMulti();
         base.ExposeData();
+        if (HasScene && Scribe.mode == LoadSaveMode.PostLoadInit)
+            LongEventHandler.ExecuteWhenFinished(() => { if (pawn?.jobs?.curDriver == this && pawn.Spawned) BindScene(); });
     }
 
     protected override IEnumerable<Toil> MakeNewToils()

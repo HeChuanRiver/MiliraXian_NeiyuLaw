@@ -42,7 +42,6 @@
 
         <comps>
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuWarpFeather">
-                <warmupMoteDef>MX_Mote_NeiyuWarpFeather</warmupMoteDef>
                 <placementSound>MX_Neiyu_WarpFeather_Rustle</placementSound>
                 <featherThingDef>Milira_Feather</featherThingDef>
                 <featherCountRange>12~24</featherCountRange>
@@ -87,7 +86,6 @@
             <li Class="MiliraXian.Characters.Neiyu.CompProperties_AbilityNeiyuThunderSigil">
                 <radius>3</radius>
                 <strikeBudget>72</strikeBudget>
-                <warmupMote>MX_Mote_NeiyuThunderWarmup</warmupMote>
                 <firstDelayTicksRange>120~180</firstDelayTicksRange>
                 <strikeIntervalTicksRange>45~75</strikeIntervalTicksRange>
                 <damageAmount>25</damageAmount>

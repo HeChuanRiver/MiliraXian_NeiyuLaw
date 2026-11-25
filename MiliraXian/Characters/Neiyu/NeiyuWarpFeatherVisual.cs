@@ -1,12 +1,12 @@
 using System;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.Neiyu;
 
-// One native, unsaved Mote owns the visual only; the ability owns the stack and landing cell.
-[StaticConstructorOnStartup]
-public class Mote_NeiyuWarpFeather : Mote
+// The ability owns the real stack and its landing cell. The visual can outlive the cast for its short fade.
+internal sealed class NeiyuWarpFeatherVisual : INeiyuVisualSource
 {
     private const int ParticleCount = 32;
     private const int FinishTicks = 24;
@@ -14,10 +14,10 @@ public class Mote_NeiyuWarpFeather : Mote
     private static readonly Color Ice = new(0.62f, 0.86f, 1f);
     private static readonly Color Pink = new(1f, 0.76f, 0.87f);
     private static readonly ParticleSeed[] Particles = CreateParticles();
-    private readonly DrawBatch batch = new();
+    private readonly Map map;
+    private NeiyuVisualBinding binding;
     private CompAbilityEffect_NeiyuWarpFeather owner;
-    private Material featherMaterial;
-    private Material glowMaterial;
+    private Texture featherTexture;
     private Vector2 featherSize;
     private Vector3 sourcePosition;
     private Vector3 landingPosition;
@@ -27,43 +27,37 @@ public class Mote_NeiyuWarpFeather : Mote
     private int endingTick = -1;
     private bool completed;
 
-    protected override bool EndOfLife => endingTick >= 0
-        && Find.TickManager.TicksGame - endingTick >= (completed ? FinishTicks : CancelTicks);
-
-    internal void Bind(CompAbilityEffect_NeiyuWarpFeather comp)
+    internal NeiyuWarpFeatherVisual(CompAbilityEffect_NeiyuWarpFeather comp)
     {
         owner = comp;
-        glowMaterial = def.graphicData.Graphic.MatSingle;
+        map = comp.parent.pawn.Map;
         ResolveFeatherGraphic(comp.PreviewThing, comp.PreparedFeathers.stackCount);
         UpdatePose();
+        binding.Bind(this, map, NeiyuVisualDefOf.MX_NY_WarpFeather, VfxAnchor.At(sourcePosition));
+    }
+
+    bool INeiyuVisualSource.ActiveOn(Map current)
+    {
+        if (current != map) return false;
+        if (endingTick < 0 && (owner?.CastActive != true || owner.parent.pawn.Map != map)) Cancel();
+        return endingTick < 0 || Find.TickManager.TicksGame - endingTick < (completed ? FinishTicks : CancelTicks);
     }
 
     internal void Complete(Thing placedFeathers)
     {
-        if (Destroyed || endingTick >= 0) return;
+        if (endingTick >= 0) return;
         completed = true;
         progress = 1f;
         landingPosition = placedFeathers.DrawPos;
         endingTick = Find.TickManager.TicksGame;
         owner = null;
-        SetMapPosition(landingPosition);
     }
 
     internal void Cancel()
     {
-        if (Destroyed || endingTick >= 0) return;
+        if (endingTick >= 0) return;
         endingTick = Find.TickManager.TicksGame;
         owner = null;
-    }
-
-    protected override void TimeInterval(float deltaTime)
-    {
-        if (endingTick < 0)
-        {
-            if (owner?.CastActive != true || owner.parent.pawn.Map != Map) Cancel();
-            else UpdatePose();
-        }
-        base.TimeInterval(deltaTime);
     }
 
     private void UpdatePose()
@@ -72,14 +66,6 @@ public class Mote_NeiyuWarpFeather : Mote
         sourcePosition = caster.DrawPos;
         landingPosition = owner.LandingCell.ToVector3Shifted();
         progress = owner.parent.verb.WarmingUp ? Mathf.Clamp01(owner.parent.verb.WarmupProgress) : 0f;
-        SetMapPosition(sourcePosition);
-    }
-
-    private void SetMapPosition(Vector3 position)
-    {
-        exactPosition = position;
-        IntVec3 cell = position.ToIntVec3();
-        if (Spawned && cell.InBounds(Map) && cell != Position) Position = cell;
     }
 
     private void ResolveFeatherGraphic(Thing feather, int addedCount)
@@ -88,7 +74,7 @@ public class Mote_NeiyuWarpFeather : Mote
         if (graphic is Graphic_RandomRotated rotated) graphic = rotated.SubGraphic;
         int count = feather == owner.PreparedFeathers ? addedCount : feather.stackCount + addedCount;
         if (graphic is Graphic_StackCount stack) graphic = stack.SubGraphicForStackCount(count, feather.def);
-        featherMaterial = MaterialPool.MatFrom((Texture2D)graphic.MatSingle.mainTexture, ShaderDatabase.Mote, Color.white);
+        featherTexture = graphic.MatSingle.mainTexture;
         featherColor = graphic.Color;
         featherSize = feather.def.graphicData.drawSize;
         float maxAngle = feather.def.graphicData.onGroundRandomRotateAngle;
@@ -98,10 +84,13 @@ public class Mote_NeiyuWarpFeather : Mote
             : feather.Rotation.AsAngle;
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
     {
-        if (glowMaterial == null || featherMaterial == null || Find.UIRoot.HideMotes
-            || Find.ScreenshotModeHandler.Active || Find.CurrentMap != Map) return;
+        if (endingTick < 0) UpdatePose();
+        IntVec3 cell = (completed ? landingPosition : sourcePosition).ToIntVec3();
+        if (featherTexture == null || !DebugViewSettings.drawThingsDynamic || !cell.InBounds(map) || cell.Fogged(map)
+            || !Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Contains(cell)) return;
+        emitter.SetTextureChannel("featherTexture", featherTexture);
 
         float elapsed = progress * 3f;
         float tail = endingTick < 0 ? 0f : Mathf.Clamp01((Find.TickManager.TicksGame - endingTick)
@@ -110,7 +99,7 @@ public class Mote_NeiyuWarpFeather : Mote
         float gather = SmoothRange(elapsed, 0.8f, 1.9f);
         float shape = SmoothRange(elapsed, 1.9f, 2.7f);
         float settle = SmoothRange(elapsed, 2.7f, 3f);
-        float altitude = def.altitudeLayer.AltitudeFor();
+        float altitude = AltitudeLayer.MoteOverheadLow.AltitudeFor();
         Vector3 center = landingPosition;
         center.y = altitude;
         center.z += 0.42f * (1f - settle);
@@ -134,14 +123,14 @@ public class Mote_NeiyuWarpFeather : Mote
                 Color color = particle.Color;
                 color.a *= particleAlpha;
                 float size = particle.Size * Mathf.Lerp(1f, 0.65f, shape);
-                DrawQuad(glowMaterial, position, new Vector2(size, size), 0f, color);
+                emitter.Emit(position, 0f, size, color, (int)NeiyuLayer.Glow);
             }
         }
 
         Color glow = Color.Lerp(Ice, Pink, 0.18f);
         glow.a = (0.04f + gather * 0.16f) * SmoothRange(elapsed, 0.2f, 1f) * opacity;
         float glowSize = Mathf.Lerp(0.7f, 0.38f, shape);
-        DrawQuad(glowMaterial, center, new Vector2(glowSize, glowSize), 0f, glow);
+        emitter.Emit(center, 0f, glowSize, glow, (int)NeiyuLayer.Glow);
 
         if (!completed)
         {
@@ -149,17 +138,10 @@ public class Mote_NeiyuWarpFeather : Mote
             color.a = shape * opacity;
             Vector2 size = featherSize * Mathf.Lerp(1.12f, 1f, settle);
             center.y += 0.002f;
-            DrawQuad(featherMaterial, center, size, featherRotation, color);
+            Matrix4x4 matrix = Matrix4x4.TRS(center, Quaternion.AngleAxis(featherRotation, Vector3.up),
+                new Vector3(size.x, 1f, size.y));
+            emitter.Quad(NeiyuLayer.Feather, matrix, color);
         }
-        batch.Flush();
-    }
-
-    private void DrawQuad(Material material, Vector3 position, Vector2 size, float rotation, Color color)
-    {
-        if (color.a <= 0.001f) return;
-        Matrix4x4 matrix = Matrix4x4.TRS(position, rotation == 0f ? Quaternion.identity : Quaternion.AngleAxis(rotation, Vector3.up),
-            new Vector3(size.x, 1f, size.y));
-        batch.DrawMesh(MeshPool.plane10, matrix, material, 0, color, renderInstanced: true);
     }
 
     private readonly record struct ParticleSeed(float Phase, float Speed, float Radius,

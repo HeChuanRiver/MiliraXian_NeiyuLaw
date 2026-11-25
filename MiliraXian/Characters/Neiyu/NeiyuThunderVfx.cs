@@ -21,38 +21,8 @@ internal struct ThunderMarkFrame(int applied, int next, int last, int seed, bool
     internal bool final = final;
 }
 
-// Samples the existing warmup stance; it owns no cast clock or gameplay state.
-public sealed class Mote_NeiyuThunderWarmup : Mote
-{
-    private Ability owner;
-    private bool Active => owner?.pawn is { Spawned: true, Dead: false, Downed: false }
-        && owner.pawn.Map == Map && owner.pawn.CurJob?.ability == owner
-        && owner.verb.WarmingUp && !NeiyuPowerBalance.AbilitiesDisabled;
-    protected override bool EndOfLife => !Active;
-    internal void Bind(Ability ability) => owner = ability;
-
-    protected override void TimeInterval(float deltaTime)
-    {
-        if (Active)
-        {
-            exactPosition = owner.pawn.DrawPos;
-            if (exactPosition.ToIntVec3() != Position) Position = exactPosition.ToIntVec3();
-        }
-        base.TimeInterval(deltaTime);
-    }
-
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
-    {
-        if (Active && Find.CurrentMap == Map && !Find.UIRoot.HideMotes && !Find.ScreenshotModeHandler.Active)
-            NeiyuThunderVfx.DrawWarmup(owner.pawn.DrawPos, owner.verb.WarmupProgress,
-                owner.pawn.thingIDNumber);
-    }
-}
-
-// Shared Def materials + two bounded native mesh batches per map. Transients are
-// reconstructed from saved task deadlines, and never serialize damage or cast state.
 [StaticConstructorOnStartup]
-internal sealed class NeiyuThunderVfx : IDisposable
+internal sealed class NeiyuThunderVfx
 {
     private readonly struct Flash(Vector3 position, int tick, int seed, int kind, bool final)
     {
@@ -66,12 +36,12 @@ internal sealed class NeiyuThunderVfx : IDisposable
     private static readonly Color Pink = new(0.95f, 0.72f, 0.96f);
     private static readonly Color Hot = new(1f, 0.94f, 0.80f);
     private static readonly MaterialPropertyBlock Properties = new();
-    private static Material sigil, ribbon, particle;
+    private static Material sigil;
     private static NeiyuThunderVfxDef tuning;
     private static bool attempted;
     private readonly Map map;
     private readonly List<Flash> flashes = new(64);
-    private ArcaneParticleBatch ribbons, particles;
+    internal readonly NeiyuQuadBatch Ribbons = new(), Particles = new();
     private int lastSoundTick = -100, geometryTick = -1;
     private Vector3 geometryRight, geometryUp;
     private bool disabled;
@@ -79,6 +49,11 @@ internal sealed class NeiyuThunderVfx : IDisposable
     internal NeiyuThunderVfx(Map map) => this.map = map;
     internal bool Idle => flashes.Count == 0;
     private static int Quality => (int)ArcaneVfxStyle.Quality;
+
+    internal static bool ShadersReady
+    {
+        get { Ready(); return sigil != null; }
+    }
 
     private static void Ready()
     {
@@ -91,22 +66,18 @@ internal sealed class NeiyuThunderVfx : IDisposable
                 || !ShaderRegistry.TryResolve("MX_NeiyuThunderEnergy", out _))
                 throw new InvalidOperationException("雷锁印域 GLSL 未注册，请检查 ShaderDef 与 Content/ShaderSources/NeiyuThunder。请同时检查引擎的着色器编译日志。");
             sigil = DefDatabase<MaterialDef>.GetNamed("MX_NeiyuThunderSigil").Material;
-            ribbon = DefDatabase<MaterialDef>.GetNamed("MX_NeiyuThunderRibbon").Material;
-            particle = DefDatabase<MaterialDef>.GetNamed("MX_NeiyuThunderParticle").Material;
         }
         catch (Exception ex)
         {
             sigil = null;
-            ribbon = particle = MaterialPool.MatFrom(
-                "Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow", ShaderDatabase.MoteGlow, Color.white);
             Log.ErrorOnce($"[雷锁印域] 自定义特效不可用，使用基础光效；雷击结算保持运行。{ex}", 197631242);
         }
     }
 
     // Shader geometry is procedural and uses no sampled textures, so no UV flip
-    // or per-effect render target is needed. The shared vertex stage supplies ViewProj.
+    // or per-effect render target is needed. Only the cursor preview uses a per-draw block.
     private static void Plate(Vector3 position, Vector2 size, bool billboard, float seconds,
-        int mode, float seed, float charge, float reveal, float intensity, bool final = false)
+        int mode, float seed, float charge, float reveal, float intensity, bool final = false, NeiyuVisualEmitter emitter = null)
     {
         Ready();
         if (sigil == null)
@@ -118,12 +89,21 @@ internal sealed class NeiyuThunderVfx : IDisposable
         if (camera == null) return;
         Quaternion rotation = billboard
             ? Quaternion.LookRotation(camera.transform.up, -camera.transform.forward) : Quaternion.identity;
+        Matrix4x4 matrix = Matrix4x4.TRS(position, rotation, new Vector3(size.x, 1f, size.y));
+        Vector4 clock = new(seconds, mode, seed % 4096, Quality);
+        Vector4 state = new(charge, reveal, intensity, final ? 1f : 0f);
+        if (emitter != null)
+        {
+            emitter.Plate(matrix, clock, state);
+            return;
+        }
+        // The targeting overlay is synchronous with the mouse, including while paused.
         Properties.Clear();
         Properties.SetColor("_Color", Ice);
         Properties.SetColor("_SecondaryColor", Violet);
-        Properties.SetVector("_Clock", new Vector4(seconds, mode, seed % 4096, Quality));
-        Properties.SetVector("_State", new Vector4(charge, reveal, intensity, final ? 1f : 0f));
-        Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(position, rotation, new Vector3(size.x, 1f, size.y)),
+        Properties.SetVector("_Clock", clock);
+        Properties.SetVector("_State", state);
+        Graphics.DrawMesh(MeshPool.plane10, matrix,
             sigil, 0, camera, 0, Properties);
     }
 
@@ -140,12 +120,12 @@ internal sealed class NeiyuThunderVfx : IDisposable
         }
     }
 
-    internal static void DrawWarmup(Vector3 position, float progress, int seed)
+    internal static void DrawWarmup(NeiyuVisualEmitter emitter, Vector3 position, float progress, int seed)
     {
         position.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
         progress = Mathf.Clamp01(progress);
         Plate(position, new Vector2(3.2f, 3.2f), false, progress * 1.2f,
-            1, seed, progress * progress, progress, 0.55f);
+            1, seed, progress * progress, progress, 0.55f, emitter: emitter);
     }
 
     internal void CastPulse(Vector3 position, int now) => Add(new Flash(position, now, now, 2, false));
@@ -185,40 +165,38 @@ internal sealed class NeiyuThunderVfx : IDisposable
             if (now - flashes[i].tick >= (flashes[i].kind == 0 ? 60 : 30)) flashes.RemoveAt(i);
     }
 
-    internal void Draw(Dictionary<Pawn, ThunderMarkFrame> marks, int now)
+    internal void Draw(NeiyuVisualEmitter emitter, Dictionary<Pawn, ThunderMarkFrame> marks, int now)
     {
         if (disabled || Find.Camera == null) return;
-        try { DrawCore(marks, now); }
+        try { DrawCore(emitter, marks, now); }
         catch (Exception ex)
         {
             disabled = true;
-            Dispose();
+            Ribbons.Begin();
+            Particles.Begin();
             Log.ErrorOnce($"[雷锁印域] 已停用本地图异常视觉，雷击结算保持运行。{ex}", 197631244);
         }
     }
 
-    private void DrawCore(Dictionary<Pawn, ThunderMarkFrame> marks, int now)
+    private void DrawCore(NeiyuVisualEmitter emitter, Dictionary<Pawn, ThunderMarkFrame> marks, int now)
     {
         Ready();
         if (flashes.Count == 0 && marks.Count == 0) return;
-        ribbons ??= new ArcaneParticleBatch(ribbon);
-        particles ??= new ArcaneParticleBatch(particle);
         Camera camera = Find.Camera;
         Vector3 right = camera.transform.right, up = camera.transform.up;
         // Pause renders the same geometry; zoom submits it through the current camera.
         bool rebuild = geometryTick != now || right != geometryRight || up != geometryUp;
         if (rebuild)
         {
-            ribbons.Begin(); particles.Begin();
+            Ribbons.Begin(); Particles.Begin();
             foreach (var pair in marks) BuildMarkEnergy(pair.Key, pair.Value, now, right, up, marks.Count);
             int density = Mathf.Min(tuning?.particlesPerStrike ?? 22,
                 ArcaneVfxStyle.ParticleBudget / Mathf.Max(1, flashes.Count));
             density = Mathf.Min(density, Quality == 0 ? 4 : Quality == 1 ? 12 : 32);
             foreach (Flash flash in flashes) BuildParticles(flash, now, right, up, density);
-            ribbons.Upload(); particles.Upload();
             geometryTick = now; geometryRight = right; geometryUp = up;
         }
-        foreach (var pair in marks) DrawMark(pair.Key, pair.Value, now, up, marks.Count);
+        foreach (var pair in marks) DrawMark(emitter, pair.Key, pair.Value, now, up, marks.Count);
         foreach (Flash flash in flashes)
         {
             float age = (now - flash.tick) / 60f;
@@ -227,24 +205,22 @@ internal sealed class NeiyuThunderVfx : IDisposable
             {
                 float size = flash.final ? 3.5f : 2.8f;
                 Plate(at, new Vector2(size, size), false, age, 5, flash.seed, 0,
-                    Mathf.Clamp01(age), 0.85f, flash.final);
+                    Mathf.Clamp01(age), 0.85f, flash.final, emitter);
             }
             else
             {
                 float size = flash.kind == 1 ? 1.5f : 2.5f;
                 if (flash.kind == 1) at += up * 0.35f;
                 Plate(at, new Vector2(size, size), flash.kind == 1, age, 6, flash.seed,
-                    0, Mathf.Clamp01(age * 2f), flash.kind == 1 ? 0.6f : 0.28f);
+                    0, Mathf.Clamp01(age * 2f), flash.kind == 1 ? 0.6f : 0.28f, emitter: emitter);
             }
         }
-        ribbons.Draw(now / 60f, 0, camera);
-        particles.Draw(now / 60f, 0, camera);
     }
 
     private static float Charge(ThunderMarkFrame frame, int now) =>
         1f - Mathf.Clamp01((frame.nextStrikeTick - now) / 45f);
 
-    private static void DrawMark(Pawn pawn, ThunderMarkFrame frame, int now, Vector3 up, int count)
+    private static void DrawMark(NeiyuVisualEmitter emitter, Pawn pawn, ThunderMarkFrame frame, int now, Vector3 up, int count)
     {
         float age = Mathf.Max(0, now - frame.appliedTick) / 60f;
         float charge = Charge(frame, now);
@@ -256,16 +232,16 @@ internal sealed class NeiyuThunderVfx : IDisposable
         float size = 0.86f * (1f - Mathf.InverseLerp(0.76f, 1f, charge) * 0.14f);
         float appear = Mathf.SmoothStep(0, 1, Mathf.Clamp01((age - 0.25f) / 0.55f));
         Plate(seal, new Vector2(size, size), true, age, 3, frame.seed,
-            charge, 1, (0.44f + charge * 0.38f) * appear * recovery, frame.final);
+            charge, 1, (0.44f + charge * 0.38f) * appear * recovery, frame.final, emitter);
         if (age < 0.8f)
         {
             Vector3 ripple = body + up * Mathf.Lerp(0.95f, 0.43f, age / 0.8f);
             Plate(ripple, new Vector2(1.35f, 0.60f), true, age, 2, frame.seed,
-                charge, age / 0.8f, Quality == 0 ? 0.30f : 0.65f);
+                charge, age / 0.8f, Quality == 0 ? 0.30f : 0.65f, emitter: emitter);
         }
         if (Quality > 0 && count <= 48)
             Plate(ground, new Vector2(1.65f, 1.65f), false, age, 4, frame.seed,
-                charge, 1, 0.18f + charge * 0.18f, frame.final);
+                charge, 1, 0.18f + charge * 0.18f, frame.final, emitter);
     }
 
     private void BuildMarkEnergy(Pawn pawn, ThunderMarkFrame frame, int now, Vector3 right, Vector3 up, int count)
@@ -313,10 +289,10 @@ internal sealed class NeiyuThunderVfx : IDisposable
                     WithAlpha(Color.Lerp(Violet, Ice, charge), charge * 0.55f), up);
                 previous = point;
             }
-            particles.Add(end, right, up, 0.10f, 0.10f, WithAlpha(Ice, charge * 0.7f));
+            Particles.Add(end, right, up, 0.10f, 0.10f, WithAlpha(Ice, charge * 0.7f));
         }
         if (frame.nextStrikeTick - now <= 12)
-            particles.Add(seal + up * 0.48f, right, up, 0.20f + charge * 0.12f,
+            Particles.Add(seal + up * 0.48f, right, up, 0.20f + charge * 0.12f,
                 0.20f + charge * 0.12f, WithAlpha(Hot, charge));
     }
 
@@ -335,7 +311,7 @@ internal sealed class NeiyuThunderVfx : IDisposable
             Vector3 position = at + direction * distance + up * (p * 0.25f);
             float size = (0.045f + h * 0.09f) * (1f - p * 0.7f);
             Color color = i % 7 == 0 ? Hot : i % 4 == 0 ? Pink : Ice;
-            particles.Add(position, right, up, size, size * (i % 3 == 0 ? 2f : 1f),
+            Particles.Add(position, right, up, size, size * (i % 3 == 0 ? 2f : 1f),
                 WithAlpha(color, (1f - p) * (1f - p) * 0.9f));
             if (Quality > 0 && flash.kind == 0 && p < 0.3f && i < 6)
                 Line(at, at + direction * (0.4f + distance), 0.09f,
@@ -352,7 +328,7 @@ internal sealed class NeiyuThunderVfx : IDisposable
         Vector3 perpendicular = Vector3.Cross(-Find.Camera.transform.forward, direction).normalized;
         if (perpendicular.sqrMagnitude < 0.1f) perpendicular = up;
         // Slight overlap hides joins without an opaque tube or cracks at bends.
-        ribbons.Add((a + b) * 0.5f, direction, perpendicular, length * 1.18f, width, color);
+        Ribbons.Add((a + b) * 0.5f, direction, perpendicular, length * 1.18f, width, color);
     }
 
     private static Color WithAlpha(Color color, float alpha) { color.a = alpha; return color; }
@@ -361,14 +337,6 @@ internal sealed class NeiyuThunderVfx : IDisposable
         uint x = unchecked((uint)seed);
         x ^= x >> 16; x *= 0x7feb352d; x ^= x >> 15; x *= 0x846ca68b; x ^= x >> 16;
         return (x & 0x00ffffff) / 16777215f;
-    }
-
-    public void Dispose()
-    {
-        ribbons?.Dispose(); particles?.Dispose();
-        ribbons = particles = null;
-        flashes.Clear();
-        geometryTick = -1;
     }
 }
 

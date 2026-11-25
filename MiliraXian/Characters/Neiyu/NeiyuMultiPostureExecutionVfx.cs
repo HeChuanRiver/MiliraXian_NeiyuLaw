@@ -27,15 +27,8 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         (new(294, 183), new(354, 155))
     ];
 
-    private Mesh multiRing;
-    private Vector3[] multiRingVertices;
-    private Vector2[] multiRingUvs;
-    private Color[] multiRingColors;
-
-    internal void DrawMultiVfx(Vector3 body)
+    private void PopulateMulti(Vector3 body)
     {
-        if (!NeiyuSwordCombatVfx.Enabled || NeiyuSwordCombatVfx.Intensity <= 0f || pawn.IsHiddenFromPlayer()
-            || Find.UIRoot.HideMotes || Find.ScreenshotModeHandler.Active) return;
         try
         {
             float tick = SceneFrame;
@@ -62,7 +55,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
                 // Each flash crosses its own airborne contact and then fades at that location.
                 Vector3 at = MultiCutContact(cut, tick) + Forward(yaw) * (p * .68f - length * .52f);
                 at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f + cut * .0002f;
-                DrawSlashArtwork(at, yaw, width, length, fade, NeiyuExecutionMaterials.MultiWave);
+                DrawSlashArtwork(at, yaw, width, length, fade, NeiyuLayer.MultiWave);
             }
             if (strikeCommitted && tick >= MultiHitAt - 1f && tick < MultiHitAt + MultiSlashFadeTicks)
             {
@@ -81,7 +74,12 @@ public sealed partial class JobDriver_NeiyuPostureExecution
     private void DrawMultiRing(Vector3 center, float startYaw, float sweep, float radius, float fade, bool closed)
     {
         if (sweep < .5f || fade <= .001f) return;
-        if (multiRing == null) CreateMultiRing();
+        var writer = (scene.Ring ??= new NeiyuQuadBatch()).Writer;
+        center.y = AltitudeLayer.MoteLow.AltitudeFor();
+        Vector3 prevInner = default, prevOuter = default;
+        Vector2 prevInnerUv = default, prevOuterUv = default;
+        Color prevTint = default;
+        float opacity = Mathf.Clamp01(fade * NeiyuSwordCombatVfx.Intensity);
         for (int i = 0; i <= MultiRingSegments; i++)
         {
             float u = i / (float)MultiRingSegments;
@@ -92,38 +90,20 @@ public sealed partial class JobDriver_NeiyuPostureExecution
             float brush = closed ? .5f - .5f * Mathf.Cos(u * 2f * Mathf.PI) : u;
             float sample = brush * (MultiBrush.Length - 1);
             int section = Mathf.Min((int)sample, MultiBrush.Length - 2);
-            int vertex = i * 2;
-            multiRingVertices[vertex] = radial * (radius - width);
-            multiRingVertices[vertex + 1] = radial * radius;
-            multiRingUvs[vertex] = MultiBrushUv(Vector2.Lerp(MultiBrush[section].inner,
-                MultiBrush[section + 1].inner, sample - section));
-            multiRingUvs[vertex + 1] = MultiBrushUv(Vector2.Lerp(MultiBrush[section].outer,
-                MultiBrush[section + 1].outer, sample - section));
-            multiRingColors[vertex] = multiRingColors[vertex + 1] = Color.white.WithAlpha(alpha);
+            Vector3 inner = center + radial * (radius - width), outer = center + radial * radius;
+            Vector2 innerUv = MultiBrushUv(Vector2.Lerp(MultiBrush[section].inner, MultiBrush[section + 1].inner, sample - section));
+            Vector2 outerUv = MultiBrushUv(Vector2.Lerp(MultiBrush[section].outer, MultiBrush[section + 1].outer, sample - section));
+            Color tint = Color.white.WithAlpha(alpha * opacity);
+            if (i > 0)
+                writer.AddQuad(prevInner, prevOuter, outer, inner, prevInnerUv, prevOuterUv, outerUv, innerUv,
+                    prevTint, prevTint, tint, tint);
+            prevInner = inner;
+            prevOuter = outer;
+            prevInnerUv = innerUv;
+            prevOuterUv = outerUv;
+            prevTint = tint;
         }
-        multiRing.vertices = multiRingVertices;
-        multiRing.uv = multiRingUvs;
-        multiRing.colors = multiRingColors;
-        multiRing.RecalculateBounds();
-        center.y = AltitudeLayer.MoteLow.AltitudeFor();
-        DrawMesh(multiRing, Matrix4x4.Translate(center), NeiyuExecutionMaterials.MultiWave, Color.white, fade);
     }
 
     private static Vector2 MultiBrushUv(Vector2 pixel) => new(pixel.x / 512f, 1f - pixel.y / 512f);
-
-    private void CreateMultiRing()
-    {
-        int count = (MultiRingSegments + 1) * 2;
-        multiRingVertices = new Vector3[count];
-        multiRingUvs = new Vector2[count];
-        multiRingColors = new Color[count];
-        int[] triangles = new int[MultiRingSegments * 6];
-        for (int i = 0; i < MultiRingSegments; i++)
-        {
-            int v = i * 2, t = i * 6;
-            triangles[t] = v; triangles[t + 1] = v + 1; triangles[t + 2] = v + 3;
-            triangles[t + 3] = v; triangles[t + 4] = v + 3; triangles[t + 5] = v + 2;
-        }
-        multiRing = new Mesh { name = "MX_NeiyuExecutionRing", vertices = multiRingVertices, triangles = triangles };
-    }
 }

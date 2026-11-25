@@ -1,4 +1,11 @@
 #version 450
+#ifdef INSTANCED
+#include "InstanceTransforms.glsl"
+layout(set = 2, binding = 3) readonly buffer _InstanceData { vec4 data[]; } plates;
+#endif
+
+layout(location = 2) flat in vec4 vClock;
+layout(location = 3) flat in vec4 vState;
 layout(location = 0) in vec4 vColor;
 layout(location = 1) in vec2 vUv;
 layout(location = 0) out vec4 outColor;
@@ -30,7 +37,7 @@ float runes(vec2 p, float r, float a, float rotation, float radius, float count)
     float angle = a + rotation;
     float cell = floor((angle / TAU + 0.5) * count);
     float local = fract((angle / TAU + 0.5) * count) - 0.5;
-    float h = hash(cell + floor(uMaterial._Clock.z));
+    float h = hash(cell + floor(vClock.z));
     // Each angular cell has its own unequal stem, crossbar and slanted branch.
     vec2 q = vec2(local * 0.26, r - radius);
     float glyph = segment(q, vec2(-0.027, -0.045), vec2(0.015, 0.045 + h * 0.025), 0.006);
@@ -42,11 +49,11 @@ void main()
 {
     vec2 p = vUv * 2.0 - 1.0;
     float r = length(p), a = atan(p.y, p.x);
-    float t = uMaterial._Clock.x, mode = uMaterial._Clock.y;
-    float seed = uMaterial._Clock.z;
-    float quality = uMaterial._Clock.w;
-    float charge = uMaterial._State.x, reveal = uMaterial._State.y;
-    float intensity = uMaterial._State.z, finalHit = uMaterial._State.w;
+    float t = vClock.x, mode = vClock.y;
+    float seed = vClock.z;
+    float quality = vClock.w;
+    float charge = vState.x, reveal = vState.y;
+    float intensity = vState.z, finalHit = vState.w;
     float speed = 0.16 + charge * 0.9 + finalHit * charge * 0.55;
     float spin = t * speed + seed;
     float core = 0.0, glow = 0.0, accents = 0.0;

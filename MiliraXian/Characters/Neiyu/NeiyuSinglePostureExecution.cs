@@ -120,6 +120,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private void BeginSceneMotion()
     {
+        BindScene();
         actorCell = origin;
         targetCell = hitCell;
         previousActorDraw = actorDraw = origin.ToVector3Shifted().Yto0();
@@ -153,9 +154,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         Scribe_Values.Look(ref approachCell, "singleExecutionApproachCell");
         Scribe_Values.Look(ref grabStartCell, "singleExecutionGrabCell", IntVec3.Invalid);
         Scribe_Values.Look(ref curvedApproach, "singleExecutionCurvedApproach");
-        if (Scribe.mode == LoadSaveMode.PostLoadInit
-            && (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery))
-            executionMap?.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
     }
 
     private void ExposeSceneMotion()
@@ -408,7 +406,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
         else
             PlanSavedThrow(target, tangent);
-        executionMap.GetComponent<MapComponent_NeiyuSwordVfx>()?.TrackVolley(this);
     }
 
     private void PlanSavedThrow(Pawn target, Vector3 tangent)
