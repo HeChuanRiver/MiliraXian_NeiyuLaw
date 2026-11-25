@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
@@ -11,16 +10,9 @@ using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan;
 
-public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttackTargetSearcher, IMingyuanVisualSource
+public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttackTargetSearcher
 {
     private MingyuanVisualBinding visualBinding;
-    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-    public override void SpawnSetup(Map map, bool respawningAfterLoad)
-    {
-        base.SpawnSetup(map, respawningAfterLoad);
-        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
-    }
 
     internal CompMingyuanBurningPillarTornado Tornado => GetComp<CompMingyuanBurningPillarTornado>();
     Thing IAttackTarget.Thing => this;
@@ -33,9 +25,12 @@ public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttack
     public bool ThreatDisabled(IAttackTargetSearcher disabledFor) => !Tornado.Active;
     public override Vector3 DrawPos => Tornado?.Center ?? base.DrawPos;
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
-
-    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers) => Tornado.DrawTornado(layers, DrawPos);
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+    {
+        var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Fire);
+        if (layers == null) return;
+        Tornado.DrawTornado(layers, DrawPos);
+    }
 }
 
 public class CompProperties_MingyuanBurningPillarTornado : CompProperties

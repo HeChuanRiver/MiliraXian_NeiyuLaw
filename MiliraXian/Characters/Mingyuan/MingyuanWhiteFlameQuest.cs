@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -388,10 +387,9 @@ namespace MiliraXian.Characters.Mingyuan
         public override string ExplanationPart(StatRequest req) => null;
     }
 
-    public class Thing_MingyuanQuestRebirthFlame : Building, IMingyuanVisualSource
+    public class Thing_MingyuanQuestRebirthFlame : Building
     {
         private MingyuanVisualBinding visualBinding;
-        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
 
         private int savedMaxHitPoints;
 
@@ -404,7 +402,6 @@ namespace MiliraXian.Characters.Mingyuan
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
-            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_WhiteFlame);
             int max = MaxHitPoints;
             if (savedMaxHitPoints > 0 && savedMaxHitPoints != max)
                 HitPoints = Mathf.Clamp(HitPoints + max - savedMaxHitPoints, 1, max);
@@ -424,8 +421,11 @@ namespace MiliraXian.Characters.Mingyuan
             MingyuanWhiteFlameVfx.TickMarker(this, component?.GetMarkerVisualIntensity(this) ?? 1f);
         }
 
-        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
+            base.DrawAt(drawLoc, flip);
+            var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_WhiteFlame);
+            if (layers == null) return;
             GameComponent_MingyuanWhiteFlameQuest component =
                 Current.Game?.GetComponent<GameComponent_MingyuanWhiteFlameQuest>();
             MingyuanWhiteFlameVfx.DrawMarker(layers,

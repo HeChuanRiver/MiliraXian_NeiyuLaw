@@ -120,7 +120,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution
 
     private void BeginSceneMotion()
     {
-        BindScene();
         actorCell = origin;
         targetCell = hitCell;
         previousActorDraw = actorDraw = origin.ToVector3Shifted().Yto0();

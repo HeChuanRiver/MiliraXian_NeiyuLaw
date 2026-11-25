@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using Verse;
 using Verse.Sound;
@@ -27,11 +28,10 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
     private IntVec3 landingCell = IntVec3.Invalid;
     private int preparedJobId = -1;
     private NeiyuWarpFeatherVisual warmupVisual;
+    private NeiyuVisualBinding featherBinding;
 
     public new CompProperties_AbilityNeiyuWarpFeather Props => (CompProperties_AbilityNeiyuWarpFeather)props;
-    internal IntVec3 LandingCell => landingCell;
-    internal Thing PreparedFeathers => preparedFeathers;
-    internal bool CastActive => !NeiyuPowerBalance.AbilitiesDisabled
+    private bool CastActive => !NeiyuPowerBalance.AbilitiesDisabled
         && parent.pawn is { Spawned: true, Dead: false, Downed: false }
         && parent.pawn.CurJob?.ability == parent;
 
@@ -67,7 +67,7 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
             PrepareFeathers();
             preparedJobId = jobId;
         }
-        if (preparedFeathers != null) warmupVisual ??= new NeiyuWarpFeatherVisual(this);
+        if (preparedFeathers != null) StartVisual();
         yield break;
     }
 
@@ -75,7 +75,37 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
     {
         base.CompTick();
         // Only an in-flight cast owns an unspawned stack. No map or pawn scans.
-        if (preparedFeathers != null && !CastActive) ClearPreparation();
+        if (preparedFeathers == null) return;
+        if (!CastActive) ClearPreparation();
+        else if (warmupVisual != null) PushPose();
+    }
+
+    private void StartVisual()
+    {
+        if (warmupVisual != null) return;
+        var visual = new NeiyuWarpFeatherVisual(PreviewThing, preparedFeathers);
+        warmupVisual = visual;
+        parent.pawn.jobs?.curDriver?.AddFinishAction(_ =>
+        {
+            if (warmupVisual == visual) CancelVisual();
+        });
+        PushPose();
+    }
+
+    private void PushPose()
+    {
+        Pawn pawn = parent.pawn;
+        warmupVisual.PushPose(pawn.DrawPos, landingCell, parent.verb.WarmingUp ? parent.verb.WarmupProgress : 0f);
+        if (featherBinding.Get(pawn.Map, NeiyuVisualDefOf.MX_NY_WarpFeather, VfxAnchor.At(pawn.DrawPos)) is { } emitter)
+            emitter.Feather = warmupVisual;
+    }
+
+    private void CancelVisual()
+    {
+        warmupVisual?.Cancel();
+        warmupVisual = null;
+        // The emitter owns the short visual tail after the cast releases its handle.
+        featherBinding = default;
     }
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -108,7 +138,8 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
         }
 
         preparedFeathers = null;
-        warmupVisual?.Complete(resultingThing);
+        warmupVisual?.Complete(resultingThing.DrawPos);
+        featherBinding = default;
         warmupVisual = null;
         landingCell = IntVec3.Invalid;
         preparedJobId = -1;
@@ -125,11 +156,11 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
             LongEventHandler.ExecuteWhenFinished(() =>
             {
                 if (preparedFeathers != null && CastActive && parent.verb.WarmingUp)
-                    warmupVisual ??= new NeiyuWarpFeatherVisual(this);
+                    StartVisual();
             });
     }
 
-    internal Thing PreviewThing
+    private Thing PreviewThing
     {
         get
         {
@@ -209,8 +240,7 @@ public class CompAbilityEffect_NeiyuWarpFeather : CompAbilityEffect
 
     private void ClearPreparation()
     {
-        warmupVisual?.Cancel();
-        warmupVisual = null;
+        CancelVisual();
         if (preparedFeathers is { Destroyed: false, Spawned: false }) preparedFeathers.Destroy(DestroyMode.Vanish);
         preparedFeathers = null;
         landingCell = IntVec3.Invalid;

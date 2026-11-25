@@ -286,7 +286,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         ExposeMulti();
         base.ExposeData();
         if (HasScene && Scribe.mode == LoadSaveMode.PostLoadInit)
-            LongEventHandler.ExecuteWhenFinished(() => { if (pawn?.jobs?.curDriver == this && pawn.Spawned) BindScene(); });
+            LongEventHandler.ExecuteWhenFinished(() => { if (pawn?.jobs?.curDriver == this && pawn.Spawned) PushVolley(); });
     }
 
     protected override IEnumerable<Toil> MakeNewToils()
@@ -313,7 +313,11 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
             EndJobWith(JobCondition.Incompletable);
             return;
         }
-        if (IsSingle) TickSingle();
+        if (IsSingle)
+        {
+            TickSingle();
+            PushVolley();
+        }
         else if (IsMulti) TickMulti();
         else TickCompatibility();
     }

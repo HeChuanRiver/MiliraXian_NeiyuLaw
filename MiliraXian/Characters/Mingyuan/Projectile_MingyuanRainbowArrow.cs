@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters;
 using RimWorld;
@@ -26,16 +25,9 @@ namespace MiliraXian.Characters.Mingyuan
     }
 
     [StaticConstructorOnStartup]
-    public class Projectile_MingyuanRainbowArrow : ProjectileHomingCurveBase, IProjectileVisualPositionProvider, IMingyuanVisualSource
+    public class Projectile_MingyuanRainbowArrow : ProjectileHomingCurveBase, IProjectileVisualPositionProvider
     {
         private MingyuanVisualBinding visualBinding;
-        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-        public override void SpawnSetup(Map map, bool respawningAfterLoad)
-        {
-            base.SpawnSetup(map, respawningAfterLoad);
-            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Bow);
-        }
 
         private static readonly List<Pawn> CandidatePawns = new(32);
 
@@ -105,6 +97,7 @@ namespace MiliraXian.Characters.Mingyuan
         {
             Vector3 visualLoc = drawLoc + Vector3.forward * VisualArcOffset;
             base.DrawAt(visualLoc, flip);
+            PushVisual();
         }
 
         protected override void Impact(Thing hitThing, bool blockedByShield = false)
@@ -342,8 +335,10 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+        private void PushVisual()
         {
+            var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Bow);
+            if (layers == null) return;
             Texture2D texture = def.graphic?.MatSingle?.mainTexture as Texture2D;
             if (texture == null)
             {

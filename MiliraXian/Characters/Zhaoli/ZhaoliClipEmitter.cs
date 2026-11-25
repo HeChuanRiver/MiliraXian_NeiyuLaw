@@ -142,7 +142,6 @@ internal struct ZhaoliClipHandle
     {
         if (Live)
         {
-            Emitter.DetachWarmup();
             Handle.Host.Destroy(Handle);
         }
         this = default;
@@ -153,11 +152,11 @@ internal sealed class ZhaoliClipEmitter : VfxEmitter
 {
     private int start, duration, stripSlot;
     private bool loop;
-    private Stance_Warmup warmup;
+    private float? warmupProgress;
     internal float Scale;
 
     private static bool Start(VfxDef def, Map map, VfxAnchor anchor, int start, int ticks, float scale,
-        bool loop, Stance_Warmup stance, out ZhaoliClipHandle binding)
+        bool loop, float? progress, out ZhaoliClipHandle binding)
     {
         binding = default;
         if (map == null || def == null || VfxDefCompiler.EffectOf(def) is not ZhaoliVisualEffect { Ready: true }) return false;
@@ -169,7 +168,7 @@ internal sealed class ZhaoliClipEmitter : VfxEmitter
         emitter.duration = Mathf.Max(1, ticks);
         emitter.Scale = Mathf.Max(.01f, scale);
         emitter.loop = loop;
-        emitter.warmup = stance;
+        emitter.warmupProgress = progress;
         emitter.stripSlot = emitter.Effect.ParticleFloatSlot("strip");
         return true;
     }
@@ -179,36 +178,29 @@ internal sealed class ZhaoliClipEmitter : VfxEmitter
 
     // The owning comp retains the handle; a stale slot or an anchor on another map cannot be reused.
     internal static bool Maintain(ref ZhaoliClipHandle binding, VfxDef def, Map map, VfxAnchor anchor,
-        int start, int ticks, float scale, Stance_Warmup stance = null)
+        int start, int ticks, float scale, float? progress = null)
     {
         ZhaoliClipEmitter current = binding.Emitter;
         if (binding.Live && binding.Handle.Host.Map == map && current.Effect.Def == def
-            && current.warmup == stance && current.Anchor.Pawn == anchor.Pawn)
+            && current.warmupProgress.HasValue == progress.HasValue && current.Anchor.Pawn == anchor.Pawn)
         {
             current.Anchor = anchor;
+            current.warmupProgress = progress;
             current.Scale = Mathf.Max(.01f, scale);
             binding.Handle.Host.Maintain(binding.Handle);
             return true;
         }
         binding.End();
-        return Start(def, map, anchor, start, ticks, scale, stance == null, stance, out binding);
+        return Start(def, map, anchor, start, ticks, scale, !progress.HasValue, progress, out binding);
     }
 
-    internal void DetachWarmup() => warmup = null;
-
-    private bool Playing(int now)
-    {
-        if (warmup != null) return warmup.verb?.CasterPawn?.stances?.curStance == warmup;
-        return loop || now - start <= duration;
-    }
+    private bool Playing(int now) => loop || warmupProgress.HasValue || now - start <= duration;
 
     internal override bool Advance(float deltaSeconds, int nowTick, Map map)
     {
         Count = 0;
-        if (!loop) LastMaintainTick = nowTick;
-        if (Playing(nowTick) && base.Advance(deltaSeconds, nowTick, map)) return true;
-        warmup = null;
-        return false;
+        if (!loop && !warmupProgress.HasValue) LastMaintainTick = nowTick;
+        return Playing(nowTick) && base.Advance(deltaSeconds, nowTick, map);
     }
 
     internal bool TryFrame(Map map, out Vector3 position, out float phase)
@@ -216,8 +208,8 @@ internal sealed class ZhaoliClipEmitter : VfxEmitter
         int now = Find.TickManager.TicksGame;
         phase = 0f;
         if (!Anchor.TryResolve(map, out position) || !Playing(now) || Anchor.Pawn?.Dead == true) return false;
-        phase = warmup != null ? warmup.verb.WarmupProgress : loop
-            ? Mathf.Repeat((now - start) / (float)duration, 1f) : Mathf.Clamp01((now - start) / (float)duration);
+        phase = warmupProgress ?? (loop
+            ? Mathf.Repeat((now - start) / (float)duration, 1f) : Mathf.Clamp01((now - start) / (float)duration));
         return true;
     }
 

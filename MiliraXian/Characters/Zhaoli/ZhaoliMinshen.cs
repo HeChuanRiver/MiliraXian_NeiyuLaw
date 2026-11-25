@@ -32,6 +32,7 @@ namespace MiliraXian.Characters.Zhaoli
         private static readonly Color PreviewColor = new(0.44f, 0.12f, 0.16f);
 
         private ZhaoliClipHandle warmupVisual;
+        private Stance_Warmup visualStance;
         private readonly HashSet<Pawn> tmpTargets = new();
         private readonly List<IntVec3> tmpPreviewCells = new();
 
@@ -113,9 +114,36 @@ namespace MiliraXian.Characters.Zhaoli
 
         private bool HasWarmupVisual => warmupVisual.Live;
 
-        private bool BindWarmup(IntVec3 center, int ticks) => parent.verb.WarmupStance is { } stance
-            && ZhaoliClipEmitter.Maintain(ref warmupVisual, ZhaoliVisualDefOf.MX_ZL_MinshenWarmup, parent.pawn.Map,
-                VfxAnchor.At(center), stance.startedTick, ticks, 1f, stance);
+        private bool BindWarmup(IntVec3 center, int ticks)
+        {
+            if (parent.verb.WarmupStance is not { } stance) return false;
+            if (visualStance != stance)
+            {
+                visualStance = stance;
+                parent.pawn.jobs?.curDriver?.AddFinishAction(_ => EndWarmup());
+            }
+            return ZhaoliClipEmitter.Maintain(ref warmupVisual,
+                ZhaoliVisualDefOf.MX_ZL_MinshenWarmup, parent.pawn.Map, VfxAnchor.At(center),
+                visualStance.startedTick, ticks, 1f, parent.verb.WarmupProgress);
+        }
+
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (visualStance == null) return;
+            if (parent.pawn.Spawned && parent.verb.WarmupStance == visualStance)
+            {
+                BindWarmup(visualStance.focusTarg.Cell, GetWarmupTicks());
+                return;
+            }
+            EndWarmup();
+        }
+
+        private void EndWarmup()
+        {
+            visualStance = null;
+            warmupVisual.End();
+        }
 
         public override void PostExposeData()
         {
@@ -130,8 +158,8 @@ namespace MiliraXian.Characters.Zhaoli
 
         public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
         {
+            EndWarmup();
             if (ZhaoliPowerBalance.Sealed) return;
-            warmupVisual.End();
             base.Apply(target, dest);
 
             Pawn caster = parent?.pawn;

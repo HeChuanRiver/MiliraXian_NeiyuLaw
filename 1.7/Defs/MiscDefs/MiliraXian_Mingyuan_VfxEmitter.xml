@@ -42,6 +42,7 @@
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
   <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_MY_VisualBase">
     <defName>MX_MY_RebirthRings</defName>
+    <emitterClass>MiliraXian.Characters.Mingyuan.MingyuanRebirthEmitter</emitterClass>
     <capacity>156</capacity>
     <passes>
       <li>

@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
@@ -64,16 +63,9 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
     }
 }
 
-public sealed class Thing_MingyuanCombustionVolley : Thing, IMingyuanVisualSource
+public sealed class Thing_MingyuanCombustionVolley : Thing
 {
     private MingyuanVisualBinding visualBinding;
-    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-    public override void SpawnSetup(Map map, bool respawningAfterLoad)
-    {
-        base.SpawnSetup(map, respawningAfterLoad);
-        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
-    }
 
     private Pawn caster;
     private AbilityDef ability;
@@ -188,10 +180,10 @@ public sealed class Thing_MingyuanCombustionVolley : Thing, IMingyuanVisualSourc
         }
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
-
-    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
     {
+        var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Fire);
+        if (layers == null) return;
         if (Props is { } settings && landings is { Count: > 0 } && CasterCanSustain)
         {
             visual ??= new MingyuanCombustionVfx(Position, landings, settings, caster.thingIDNumber);

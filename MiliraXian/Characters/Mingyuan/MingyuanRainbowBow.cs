@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -265,16 +264,9 @@ namespace MiliraXian.Characters.Mingyuan
         RadiationHit
     }
 
-    public class Thing_MingyuanBowVisual : Thing, IMingyuanVisualSource
+    public class Thing_MingyuanBowVisual : Thing
     {
         private MingyuanVisualBinding visualBinding;
-        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-        public override void SpawnSetup(Map map, bool respawningAfterLoad)
-        {
-            base.SpawnSetup(map, respawningAfterLoad);
-            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Bow);
-        }
 
         private Pawn source;
         private Verb sourceVerb;
@@ -330,10 +322,10 @@ namespace MiliraXian.Characters.Mingyuan
                 Destroy(DestroyMode.Vanish);
         }
 
-        protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
-
-        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
+            var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Bow);
+            if (layers == null) return;
             float progress = Mathf.Clamp01(Age / (float)Mathf.Max(1, durationTicks));
             if (kind == MingyuanBowVisualKind.FocusShot)
             {

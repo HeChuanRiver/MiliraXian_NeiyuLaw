@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -385,16 +384,9 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class Skyfaller_MingyuanQuestRebirthFlame : Skyfaller, IMingyuanVisualSource
+    public class Skyfaller_MingyuanQuestRebirthFlame : Skyfaller
     {
         private MingyuanVisualBinding visualBinding;
-        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-        public override void SpawnSetup(Map map, bool respawningAfterLoad)
-        {
-            base.SpawnSetup(map, respawningAfterLoad);
-            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_WhiteFlame);
-        }
 
         protected override void Tick()
         {
@@ -405,8 +397,11 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
+            base.DrawAt(drawLoc, flip);
+            var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_WhiteFlame);
+            if (layers == null) return;
             MingyuanWhiteFlameVfx.DrawIncoming(layers, DrawPos, angle, ageTicks);
         }
 

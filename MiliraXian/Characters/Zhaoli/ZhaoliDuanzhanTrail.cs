@@ -8,44 +8,34 @@ namespace MiliraXian.Characters.Zhaoli;
 
 internal sealed class ZhaoliDuanzhanTrail : VfxEmitter
 {
-    private const int LifetimeTicks = 22;
+    internal const int LifetimeTicks = 22;
     private const int MaxSamples = 18;
     private const int Subdivisions = 3;
     private readonly record struct Sample(Vector3 Grip, float Angle, float Scale, int Tick);
     private readonly List<Sample> samples = new(MaxSamples);
-    internal DuanzhanVisualState Owner;
     private int observedFrame;
-    private Vector3 handOffset;
+    private int endTick;
+    private bool sweeping;
+    private Sample current;
 
-    internal static void Capture(DuanzhanVisualState state, Pawn pawn, Vector3 hand, Vector3 grip,
-        float angle, float scale, bool sweeping, int now)
+    internal static ZhaoliDuanzhanTrail Start(Pawn pawn, int endTick, out VfxEmitterHandle handle)
     {
-        var trail = state.trail.Host?.Resolve(state.trail) as ZhaoliDuanzhanTrail;
-        if (trail == null || trail.Owner != state || state.trail.Host.Map != pawn.Map)
-        {
-            state.EndTrail();
-            var host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
-            state.trail = host.Spawn(ZhaoliVisualDefOf.MX_ZL_DuanzhanTrail, VfxAnchor.Follow(pawn));
-            if (!host.TryGetEmitter(state.trail, out trail)) return;
-            trail.Owner = state;
-            trail.samples.Clear();
-        }
-        trail.observedFrame = Time.frameCount;
-        trail.handOffset = hand - pawn.DrawPos;
-        trail.Trim(now);
-        if (state.restoreTrail)
-        {
-            // While the caster is still on the saved cast cell, the previous sweep poses
-            // are determined by the same deadlines and fixed equipment pivot as the live attack.
-            int sweep = state.sequenceStartTick + state.chargeTicks;
-            for (int t = Mathf.Max(sweep, now - LifetimeTicks); t < Mathf.Min(now, sweep + state.sweepTicks); t++)
-            {
-                state.Pose(t, out float pastScale, out float pastAngle, out Vector3 offset, out _);
-                trail.Record(new Sample(hand + offset, pastAngle, pastScale * Patch_ZhaoliDuanzhan_DrawEquipmentAiming.BladeScale, t));
-            }
-            state.restoreTrail = false;
-        }
-        if (sweeping) trail.Record(new Sample(grip, angle, scale, now));
+        var host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        handle = host.Spawn(ZhaoliVisualDefOf.MX_ZL_DuanzhanTrail, VfxAnchor.Follow(pawn));
+        if (!host.TryGetEmitter(handle, out ZhaoliDuanzhanTrail trail)) return null;
+        trail.endTick = endTick;
+        trail.samples.Clear();
+        trail.sweeping = false;
+        return trail;
+    }
+
+    internal void Capture(Vector3 grip, float angle, float scale, int now, bool inSweep)
+    {
+        observedFrame = Time.frameCount;
+        sweeping = inSweep;
+        current = new Sample(grip, angle, scale, now);
+        Trim(now);
+        if (inSweep) Record(current);
     }
 
     private void Record(Sample sample)
@@ -68,22 +58,17 @@ internal sealed class ZhaoliDuanzhanTrail : VfxEmitter
     internal override bool Advance(float deltaSeconds, int nowTick, Map map)
     {
         Count = 0;
-        LastMaintainTick = nowTick;
-        if (Owner != null && nowTick < Owner.sequenceEndTick && Anchor.Pawn is { Dead: false } pawn
-            && pawn.equipment?.Primary?.thingIDNumber == Owner.weaponThingId && base.Advance(deltaSeconds, nowTick, map)) return true;
-        Owner = null;
-        return false;
+        return nowTick < endTick && base.Advance(deltaSeconds, nowTick, map);
     }
 
     internal void Populate(Map map)
     {
         Count = 0;
         Pawn pawn = Anchor.Pawn;
-        if (Owner == null || pawn == null || !pawn.Spawned || pawn.Map != map || pawn.Dead
-            || pawn.equipment?.Primary?.thingIDNumber != Owner.weaponThingId || Time.frameCount - observedFrame > 1
+        if (pawn == null || !pawn.Spawned || pawn.Map != map || pawn.Dead || Time.frameCount - observedFrame > 1
             || !DebugViewSettings.drawThingsDynamic || pawn.IsHiddenFromPlayer()) return;
         int now = Find.TickManager.TicksGame;
-        if (!Owner.Pose(now, out float scale, out float angle, out Vector3 offset, out bool sweeping)) return;
+        if (now >= endTick) return;
         Trim(now);
         for (int i = 0; i < samples.Count; i++)
         {
@@ -100,8 +85,7 @@ internal sealed class ZhaoliDuanzhanTrail : VfxEmitter
             }
         }
         if (sweeping)
-            Glow(pawn.DrawPos + handOffset + offset + Altitudes.AltIncVect * .015f, angle,
-                scale * Patch_ZhaoliDuanzhan_DrawEquipmentAiming.BladeScale * 1.06f, .88f);
+            Glow(current.Grip + Altitudes.AltIncVect * .015f, current.Angle, current.Scale * 1.06f, .88f);
     }
 
     private void Ghost(Sample sample, int depth, int now)

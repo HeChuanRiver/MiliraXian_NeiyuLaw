@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common;
 using RimWorld;
@@ -7,21 +6,14 @@ using Verse;
 
 namespace MiliraXian.Characters.Mingyuan;
 
-public class Thing_MingyuanAshesField : ThingWithComps, IMingyuanVisualSource
+public class Thing_MingyuanAshesField : ThingWithComps
 {
     private MingyuanVisualBinding visualBinding;
-    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
 
-    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
     {
-        base.SpawnSetup(map, respawningAfterLoad);
-        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
-    }
-
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
-
-    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
-    {
+        var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Fire);
+        if (layers == null) return;
         var field = GetComp<CompMingyuanBurningField>();
         if (field.Active)
             MingyuanFireVfx.DrawAshesField(layers, field.Caster.DrawPos, field.Radius, field.RemainingTicks);

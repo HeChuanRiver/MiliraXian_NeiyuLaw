@@ -220,7 +220,7 @@ internal static class NeiyuSwordCombatVfx
 
 // Visual events only. Saved gameplay lives in the shared posture comp and native Job.
 // Overlapping flashes share one host pass and its bounded billboard geometry.
-public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INeiyuVisualSource
+public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
 {
     private readonly record struct Flash(Pawn Pawn, Vector3 Position, Vector3 Direction, int Kind, int Tick, int Duration);
     private readonly List<Flash> flashes = new(32);
@@ -231,8 +231,6 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INe
     private CellRect geometryView;
     private float geometryIntensity = -1f;
 
-    bool INeiyuVisualSource.ActiveOn(Map current) => current == map && flashes.Count > 0;
-    NeiyuQuadBatch INeiyuVisualSource.CachedLayer(NeiyuLayer layer) => batch;
     internal void Add(Pawn pawn, Vector3 position, Vector3 direction, int kind)
     {
         int duration = kind switch { 2 => 22, 3 => 22, 4 => 18, 5 => 25, 7 => 35, _ => 15 };
@@ -245,7 +243,6 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INe
         if (flashes.Count >= Mathf.Clamp(NeiyuSwordCombat.Config.maxVisuals, 1, 128)) flashes.RemoveAt(0);
         flashes.Add(new Flash(pawn, position, direction, kind, tick, duration));
         geometryTick = -1;
-        binding.Bind(this, map, NeiyuVisualDefOf.MX_NY_SwordFlashes, VfxAnchor.At(position));
     }
 
     public override void MapComponentTick()
@@ -256,13 +253,22 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INe
             if (now - flashes[i].Tick >= flashes[i].Duration) flashes.RemoveAt(i);
         if (flashes.Count == 0)
         {
-            binding.End(this);
+            binding.End();
             batch.Begin();
         }
+        else binding.Maintain();
     }
 
-    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
+    public override void MapComponentUpdate()
     {
+        if (flashes.Count > 0) PushFlashes();
+    }
+
+    private void PushFlashes()
+    {
+        if (Find.CurrentMap != map || Find.Camera == null) return;
+        if (binding.Get(map, NeiyuVisualDefOf.MX_NY_SwordFlashes, VfxAnchor.At(flashes[0].Position)) is not { } emitter) return;
+        emitter.Flashes = batch;
         if (!NeiyuSwordCombatVfx.Enabled) { batch.Begin(); geometryTick = -1; return; }
         int now = NeiyuSwordCombat.Now;
         Vector3 right = Find.Camera.transform.right, up = Find.Camera.transform.up;
@@ -369,7 +375,7 @@ public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map), INe
 
     public override void MapRemoved()
     {
-        binding.End(this);
+        binding.End();
         batch.Begin();
         flashes.Clear();
         base.MapRemoved();

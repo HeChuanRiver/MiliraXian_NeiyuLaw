@@ -19,6 +19,7 @@ internal struct ThunderMarkFrame(int applied, int next, int last, int seed, bool
 {
     internal int appliedTick = applied, nextStrikeTick = next, lastStrikeTick = last, seed = seed;
     internal bool final = final;
+    internal Vector3 position;
 }
 
 [StaticConstructorOnStartup]
@@ -39,14 +40,12 @@ internal sealed class NeiyuThunderVfx
     private static Material sigil;
     private static NeiyuThunderVfxDef tuning;
     private static bool attempted;
-    private readonly Map map;
     private readonly List<Flash> flashes = new(64);
     internal readonly NeiyuQuadBatch Ribbons = new(), Particles = new();
     private int lastSoundTick = -100, geometryTick = -1;
     private Vector3 geometryRight, geometryUp;
     private bool disabled;
 
-    internal NeiyuThunderVfx(Map map) => this.map = map;
     internal bool Idle => flashes.Count == 0;
     private static int Quality => (int)ArcaneVfxStyle.Quality;
 
@@ -131,7 +130,7 @@ internal sealed class NeiyuThunderVfx
     internal void CastPulse(Vector3 position, int now) => Add(new Flash(position, now, now, 2, false));
     internal void Release(Vector3 position, int now, int seed) => Add(new Flash(position, now, seed, 1, false));
 
-    internal void Strike(IntVec3 cell, int now, int seed, bool final)
+    internal void Strike(Map map, IntVec3 cell, int now, int seed, bool final)
     {
         Add(new Flash(cell.ToVector3Shifted(), now, seed, 0, final));
         // The native bolt is visual only. WeatherEvent_LightningStrike.DoStrike
@@ -165,10 +164,19 @@ internal sealed class NeiyuThunderVfx
             if (now - flashes[i].tick >= (flashes[i].kind == 0 ? 60 : 30)) flashes.RemoveAt(i);
     }
 
-    internal void Draw(NeiyuVisualEmitter emitter, Dictionary<Pawn, ThunderMarkFrame> marks, int now)
+    private readonly List<ThunderMarkFrame> marks = new();
+
+    internal void SetMarks(ICollection<ThunderMarkFrame> frames)
+    {
+        marks.Clear();
+        marks.AddRange(frames);
+        geometryTick = -1;
+    }
+
+    internal void Draw(NeiyuVisualEmitter emitter, int now)
     {
         if (disabled || Find.Camera == null) return;
-        try { DrawCore(emitter, marks, now); }
+        try { DrawCore(emitter, now); }
         catch (Exception ex)
         {
             disabled = true;
@@ -178,7 +186,7 @@ internal sealed class NeiyuThunderVfx
         }
     }
 
-    private void DrawCore(NeiyuVisualEmitter emitter, Dictionary<Pawn, ThunderMarkFrame> marks, int now)
+    private void DrawCore(NeiyuVisualEmitter emitter, int now)
     {
         Ready();
         if (flashes.Count == 0 && marks.Count == 0) return;
@@ -189,14 +197,14 @@ internal sealed class NeiyuThunderVfx
         if (rebuild)
         {
             Ribbons.Begin(); Particles.Begin();
-            foreach (var pair in marks) BuildMarkEnergy(pair.Key, pair.Value, now, right, up, marks.Count);
+            foreach (var mark in marks) BuildMarkEnergy(mark, now, right, up, marks.Count);
             int density = Mathf.Min(tuning?.particlesPerStrike ?? 22,
                 ArcaneVfxStyle.ParticleBudget / Mathf.Max(1, flashes.Count));
             density = Mathf.Min(density, Quality == 0 ? 4 : Quality == 1 ? 12 : 32);
             foreach (Flash flash in flashes) BuildParticles(flash, now, right, up, density);
             geometryTick = now; geometryRight = right; geometryUp = up;
         }
-        foreach (var pair in marks) DrawMark(emitter, pair.Key, pair.Value, now, up, marks.Count);
+        foreach (var mark in marks) DrawMark(emitter, mark, now, up, marks.Count);
         foreach (Flash flash in flashes)
         {
             float age = (now - flash.tick) / 60f;
@@ -220,13 +228,13 @@ internal sealed class NeiyuThunderVfx
     private static float Charge(ThunderMarkFrame frame, int now) =>
         1f - Mathf.Clamp01((frame.nextStrikeTick - now) / 45f);
 
-    private static void DrawMark(NeiyuVisualEmitter emitter, Pawn pawn, ThunderMarkFrame frame, int now, Vector3 up, int count)
+    private static void DrawMark(NeiyuVisualEmitter emitter, ThunderMarkFrame frame, int now, Vector3 up, int count)
     {
         float age = Mathf.Max(0, now - frame.appliedTick) / 60f;
         float charge = Charge(frame, now);
         float recovery = frame.lastStrikeTick < 0 ? 1f : Mathf.Lerp(0.35f, 1f,
             Mathf.Clamp01((now - frame.lastStrikeTick) / 22f));
-        Vector3 ground = pawn.DrawPos; ground.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
+        Vector3 ground = frame.position; ground.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
         Vector3 body = ground; body.y = AltitudeLayer.MoteOverhead.AltitudeFor();
         Vector3 seal = body + up * 0.42f;
         float size = 0.86f * (1f - Mathf.InverseLerp(0.76f, 1f, charge) * 0.14f);
@@ -244,11 +252,11 @@ internal sealed class NeiyuThunderVfx
                 charge, 1, 0.18f + charge * 0.18f, frame.final, emitter);
     }
 
-    private void BuildMarkEnergy(Pawn pawn, ThunderMarkFrame frame, int now, Vector3 right, Vector3 up, int count)
+    private void BuildMarkEnergy(ThunderMarkFrame frame, int now, Vector3 right, Vector3 up, int count)
     {
         if (Quality == 0 || count > 48) return;
         float age = (now - frame.appliedTick) / 60f, charge = Charge(frame, now);
-        Vector3 body = pawn.DrawPos; body.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+        Vector3 body = frame.position; body.y = AltitudeLayer.MoteOverhead.AltitudeFor();
         Vector3 seal = body + up * 0.42f;
         if (age is > 0.13f and < 0.8f)
         {

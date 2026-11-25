@@ -1,4 +1,3 @@
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -371,16 +370,9 @@ internal static class MingyuanFireVfx
     }
 }
 
-public class Thing_MingyuanFireCastVisual : Thing, IMingyuanVisualSource
+public class Thing_MingyuanFireCastVisual : Thing
 {
     private MingyuanVisualBinding visualBinding;
-    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
-
-    public override void SpawnSetup(Map map, bool respawningAfterLoad)
-    {
-        base.SpawnSetup(map, respawningAfterLoad);
-        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
-    }
 
     private Pawn caster;
     private AbilityDef ability;
@@ -474,10 +466,10 @@ public class Thing_MingyuanFireCastVisual : Thing, IMingyuanVisualSource
         }
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
-
-    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
     {
+        var layers = visualBinding.BeginFrame(this, MingyuanVisualDefOf.MX_MY_Fire);
+        if (layers == null) return;
         float remaining = endTick > 0 ? Mathf.Clamp01((endTick - Find.TickManager.TicksGame) / (float)duration) : 1f;
         if (burst) MingyuanFireVfx.DrawBurst(layers, origin, radius, 1f - remaining, sigil);
         else if (Verb is Verb_MingyuanTimeBurn { Props: { } props } timeBurn)

@@ -56,7 +56,7 @@ public class Verb_CastAbilityNeiyuThunderSigil : Verb_CastAbility
     }
 }
 
-public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisualSource
+public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect
 {
     private readonly List<Pawn> previewTargets = new();
     private IntVec3 previewCell = IntVec3.Invalid;
@@ -96,6 +96,11 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisu
     public override void CompTick()
     {
         base.CompTick();
+        if (visualStance != null)
+        {
+            if (WarmingUp && visualStance == parent.verb.WarmupStance) PushWarmup();
+            else EndWarmup();
+        }
         if (previewTargets.Count == 0 || Find.TickManager.TicksGame - previewTick <= 30) return;
         previewTargets.Clear();
         previewCell = IntVec3.Invalid;
@@ -103,6 +108,7 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisu
 
     internal bool TrySchedule(LocalTargetInfo target)
     {
+        EndWarmup();
         int count = parent.pawn.Map.GetComponent<NeiyuCombatMapComponent>()
             .ScheduleThunderMarks(parent.pawn, target.Cell, Props);
         if (count == 0) NoTargets();
@@ -113,22 +119,37 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisu
         parent.pawn, MessageTypeDefOf.RejectInput, false);
 
     private NeiyuVisualBinding warmup;
+    private Stance_Warmup visualStance;
 
     private bool WarmingUp => parent.pawn is { Spawned: true, Dead: false, Downed: false } pawn
         && pawn.CurJob?.ability == parent && parent.verb.WarmingUp && !NeiyuPowerBalance.AbilitiesDisabled;
 
-    bool INeiyuVisualSource.ActiveOn(Map map) => WarmingUp && parent.pawn.Map == map;
-
-    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
+    internal void BindWarmup()
     {
-        Pawn pawn = parent.pawn;
-        if (DebugViewSettings.drawThingsDynamic && !pawn.Position.Fogged(pawn.Map)
-            && Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Contains(pawn.Position))
-            NeiyuThunderVfx.DrawWarmup(emitter, pawn.DrawPos, parent.verb.WarmupProgress, pawn.thingIDNumber);
+        if (parent.verb.WarmupStance is not { } stance) return;
+        if (visualStance != stance)
+        {
+            visualStance = stance;
+            parent.pawn.jobs?.curDriver?.AddFinishAction(_ => EndWarmup());
+        }
+        PushWarmup();
     }
 
-    internal void BindWarmup() => warmup.Bind(this, parent.pawn.Map, NeiyuVisualDefOf.MX_NY_ThunderWarmup,
-        VfxAnchor.Follow(parent.pawn));
+    private void EndWarmup()
+    {
+        visualStance = null;
+        warmup.End();
+    }
+
+    private void PushWarmup()
+    {
+        Pawn pawn = parent.pawn;
+        if (warmup.Get(pawn.Map, NeiyuVisualDefOf.MX_NY_ThunderWarmup, VfxAnchor.Follow(pawn)) is { } visual)
+        {
+            visual.WarmupProgress = parent.verb.WarmupProgress;
+            visual.WarmupSeed = pawn.thingIDNumber;
+        }
+    }
 
     public override void PostExposeData()
     {
@@ -152,7 +173,7 @@ public class CompAbilityEffect_NeiyuThunderSigil : CompAbilityEffect, INeiyuVisu
     }
 }
 
-public partial class NeiyuCombatMapComponent : INeiyuVisualSource
+public partial class NeiyuCombatMapComponent
 {
     // Keep the serialized type and keys so in-flight tasks survive old saves.
     private sealed class ThunderTask : IExposable
@@ -187,12 +208,7 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
     private readonly Dictionary<Pawn, ThunderMarkFrame> thunderFrames = new();
     private NeiyuVisualBinding thunderBinding;
     private NeiyuThunderVfx thunderVfx;
-    private void BindThunder() => thunderBinding.Bind(this, map, NeiyuVisualDefOf.MX_NY_Thunder, VfxAnchor.At(Vector3.zero));
-    bool INeiyuVisualSource.ActiveOn(Map current) => current == map && (thunderTasks.Count > 0 || thunderVfx?.Idle == false);
-    NeiyuQuadBatch INeiyuVisualSource.CachedLayer(NeiyuLayer layer) =>
-        layer == NeiyuLayer.Energy ? thunderVfx?.Ribbons : thunderVfx?.Particles;
-
-    private NeiyuThunderVfx ThunderVfx => thunderVfx ??= new NeiyuThunderVfx(map);
+    private NeiyuThunderVfx ThunderVfx => thunderVfx ??= new NeiyuThunderVfx();
 
     private void ExposeThunderData()
     {
@@ -227,7 +243,7 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
         }
         foreach (ThunderTask task in thunderTasks) OwnThunderMarker(task);
         if (thunderTasks.Count > 0)
-            LongEventHandler.ExecuteWhenFinished(() => { if (thunderTasks.Count > 0) BindThunder(); });
+            LongEventHandler.ExecuteWhenFinished(() => { if (thunderTasks.Count > 0) PushThunder(); });
         // Once on load, reconcile old orphan marks. Never scan the map in the tick loop.
         HediffDef marker = DefDatabase<HediffDef>.GetNamedSilentFail("MX_Neiyu_ThunderMark");
         foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
@@ -287,7 +303,7 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
             }
             // Visual failures must never turn a committed gameplay cast into a failed shot.
             ThunderVfx.CastPulse(caster.Position.ToVector3Shifted(), now);
-            BindThunder();
+            PushThunder();
             return count;
         }
         finally { targets.Clear(); SimplePool<List<Pawn>>.Return(targets); }
@@ -307,7 +323,7 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
             {
                 Pawn target = task.target;
                 IntVec3 hit = target.Position;
-                ThunderVfx.Strike(hit, now, unchecked(task.seed + task.remainingStrikes * 7919), task.remainingStrikes == 1);
+                ThunderVfx.Strike(map, hit, now, unchecked(task.seed + task.remainingStrikes * 7919), task.remainingStrikes == 1);
                 if (task.damageAmount > 0)
                 {
                     DamageInfo damage = new(DamageDefOf.Burn, task.damageAmount, 0f, -1f, task.caster);
@@ -327,10 +343,11 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
             if (task != null) ReleaseThunderMarker(task, now);
         }
         thunderVfx?.Tick(now);
-        if (thunderTasks.Count == 0) thunderFrames.Clear();
+        if (thunderTasks.Count > 0 || thunderVfx?.Idle == false) PushThunder();
         if (thunderTasks.Count == 0 && thunderVfx?.Idle == true)
         {
-            thunderBinding.End(this);
+            thunderBinding.End();
+            thunderFrames.Clear();
             thunderVfx = null;
         }
     }
@@ -373,7 +390,7 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
         thunderTasks.Clear();
         thunderMarkerOwners.Clear();
         thunderFrames.Clear();
-        thunderBinding.End(this);
+        thunderBinding.End();
         thunderVfx = null;
     }
 
@@ -383,14 +400,17 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
         base.MapRemoved();
     }
 
-    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
+    private void PushThunder()
     {
         thunderFrames.Clear();
         foreach (ThunderTask task in thunderTasks)
         {
             if (task == null || !ThunderTargetValid(task.target)) continue;
             if (!thunderFrames.TryGetValue(task.target, out ThunderMarkFrame frame))
-                frame = new ThunderMarkFrame(task.appliedTick, task.nextStrikeTick, task.lastStrikeTick, task.seed, task.remainingStrikes == 1);
+                frame = new ThunderMarkFrame(task.appliedTick, task.nextStrikeTick, task.lastStrikeTick, task.seed, task.remainingStrikes == 1)
+                {
+                    position = task.target.DrawPos
+                };
             else
             {
                 frame.appliedTick = Mathf.Min(frame.appliedTick, task.appliedTick);
@@ -403,6 +423,9 @@ public partial class NeiyuCombatMapComponent : INeiyuVisualSource
             }
             thunderFrames[task.target] = frame;
         }
-        if (thunderFrames.Count > 0 || thunderVfx != null) ThunderVfx.Draw(emitter, thunderFrames, Find.TickManager.TicksGame);
+        var visual = ThunderVfx;
+        visual.SetMarks(thunderFrames.Values);
+        if (thunderBinding.Get(map, NeiyuVisualDefOf.MX_NY_Thunder, VfxAnchor.At(Vector3.zero)) is { } emitter)
+            emitter.Thunder = visual;
     }
 }

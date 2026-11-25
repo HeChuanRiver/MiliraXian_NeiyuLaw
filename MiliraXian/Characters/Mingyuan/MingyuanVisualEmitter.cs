@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
@@ -16,41 +17,35 @@ public static class MingyuanVisualDefOf
     public static VfxDef MX_MY_Fire;
 }
 
-internal interface IMingyuanVisualSource
-{
-    void AttachVisual(VfxDef def);
-    void PopulateVisual(MingyuanVisualEmitter emitter);
-}
-
-// The owner keeps this transient handle. Its saved simulation clock remains authoritative.
+// Handles are transient. Each owner writes its visual data on the main thread.
 internal struct MingyuanVisualBinding
 {
     private VfxEmitterHandle handle;
 
-    internal static void AfterSpawn(Thing owner, VfxDef def)
+    internal MingyuanVisualEmitter Get(Thing owner, VfxDef def)
     {
-        // Restored things may be spawned by the loading thread before map initialization finishes.
-        LongEventHandler.ExecuteWhenFinished(() =>
+        if (!owner.Spawned) return null;
+        var host = owner.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (handle.Host != host || !host.TryGetEmitter(handle, out MingyuanVisualEmitter live))
         {
-            if (owner.Spawned) ((IMingyuanVisualSource)owner).AttachVisual(def);
-        });
-    }
-
-    internal void Maintain(Thing owner, VfxDef def)
-    {
-        if (!owner.Spawned) return;
-        if (handle.Host?.Resolve(handle) is { } live && live.Anchor.Thing == owner && handle.Host.Map == owner.Map)
-        {
-            handle.Host.Maintain(handle);
-            return;
+            handle.Host?.Destroy(handle);
+            handle = host.Spawn(def, VfxAnchor.Attached(owner));
+            return host.TryGetEmitter(handle, out live) ? live : null;
         }
-        handle = owner.Map.GetComponent<MapComponent_VfxEmitterHost>().Spawn(def, VfxAnchor.Attached(owner));
+        host.Maintain(handle);
+        return live;
     }
 
-    internal void End(Thing owner)
+    internal MingyuanVisualEmitter BeginFrame(Thing owner, VfxDef def)
     {
-        if (handle.Host?.Resolve(handle)?.Anchor.Thing == owner)
-            handle.Host.Destroy(handle);
+        var emitter = Get(owner, def);
+        emitter?.BeginFrame();
+        return emitter;
+    }
+
+    internal void End()
+    {
+        handle.Host?.Destroy(handle);
         handle = default;
     }
 }
@@ -75,7 +70,7 @@ internal sealed class MingyuanVisualEffect : VfxEffect
             else
             {
                 if (layer == MingyuanFireLayer.Sparks) pass.Mesh = MingyuanFireVfx.Particles;
-                // Submitted to the host's shared instance batch while the owner prepares its frame.
+                // Submitted to the host's shared instance batch during the host's prepare pass.
                 pass.Renderer = null;
             }
         }
@@ -86,7 +81,7 @@ internal sealed class MingyuanVisualEffect : VfxEffect
     {
         internal static readonly Prepare Instance = new();
         public void Render(VfxEmitter emitter, VfxPass pass, int passIndex, in VfxRenderContext context) =>
-            ((MingyuanVisualEmitter)emitter).Populate(context.Engine);
+            ((MingyuanVisualEmitter)emitter).PrepareFrame(context.Engine);
     }
 }
 
@@ -98,61 +93,64 @@ internal class MingyuanVisualEmitter : VfxEmitter
     private int stripId;
     private readonly MingyuanFireBatch[] batches = new MingyuanFireBatch[(int)MingyuanFireLayer.Count - (int)MingyuanFireLayer.CombustionSigil];
 
-    internal override bool Advance(float deltaSeconds, int nowTick, Map map)
-    {
-        // Geometry is regenerated from the owner's tick state; there are no simulated particles to advance.
-        Count = 0;
-        if (Anchor.Thing is { } owner && owner is not Thing_MingyuanRebirthMarker && owner.Spawned && owner.Map == map)
-            LastMaintainTick = nowTick;
-        return base.Advance(deltaSeconds, nowTick, map);
-    }
+    private readonly record struct Instance(MingyuanFireLayer Layer, Matrix4x4 Matrix, Vector4 Frame, Vector4 Shape);
+    private List<Instance> instances;
+    private readonly Vector4[] instanceRow = new Vector4[2];
+    private int pushedFrame = -1;
 
     internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int nowTick, Vector3 position)
     {
         base.Reset(effect, anchor, version, nowTick, position);
         stripSlot = effect.ParticleFloatSlot("strip");
+        pushedFrame = -1;
+        ClearGeometry();
     }
 
-    private VfxEngine engine;
-    private readonly Vector4[] instanceRow = new Vector4[2];
-
-    internal void AddInstance(MingyuanFireLayer layer, Matrix4x4 matrix, Vector4 frame, Vector4 shape)
+    internal override bool Advance(float deltaSeconds, int nowTick, Map map)
     {
-        var pass = ((MingyuanVisualEffect)Effect).FirePasses[(int)layer];
-        instanceRow[0] = frame;
-        instanceRow[1] = shape;
-        engine.AddInstance(pass, matrix, instanceRow, 0);
-    }
-
-    internal void Populate(VfxEngine drawEngine)
-    {
-        Map map = drawEngine.Map;
+        // Owner-supplied ribbon edges and sprites already have final positions for this frame.
+        int count = Count;
         Count = 0;
-        stripId = 0;
-        foreach (var batch in batches) batch?.Clear();
-        if (!DebugViewSettings.drawThingsDynamic) return;
-        var view = Find.CameraDriver.CurrentViewRect.ExpandedBy(1);
-        if (WorldComponent_GravshipController.GravshipRenderInProgess)
-            view = view.Encapsulate(WorldComponent_GravshipController.GravshipRenderBounds);
-        if (Anchor.Thing is { } owner)
-        {
-            if (!owner.Spawned || owner.Map != map || owner.Destroyed) return;
-            if (!owner.Position.InBounds(map) || (!owner.def.seeThroughFog && owner.Position.Fogged(map))) return;
-            if (owner.def.hideAtSnowOrSandDepth < 1f && map.snowGrid.GetDepth(owner.Position) > owner.def.hideAtSnowOrSandDepth) return;
-            if (!owner.def.drawOffscreen && !view.Overlaps(owner.OccupiedDrawRect())) return;
-            engine = drawEngine;
-            try { ((IMingyuanVisualSource)owner).PopulateVisual(this); }
-            finally { engine = null; }
-        }
-        else
-        {
-            var cell = Position.ToIntVec3();
-            if (cell.InBounds(map) && !cell.Fogged(map) && view.Contains(cell))
-                PopulateBurst();
-        }
+        bool alive = base.Advance(deltaSeconds, nowTick, map);
+        Count = count;
+        return alive;
     }
 
-    protected virtual void PopulateBurst() { }
+    private void ClearGeometry()
+    {
+        Count = stripId = 0;
+        instances?.Clear();
+        foreach (var batch in batches) batch?.Clear();
+    }
+
+    internal void BeginFrame()
+    {
+        ClearGeometry();
+        pushedFrame = Time.frameCount;
+    }
+
+    internal void AddInstance(MingyuanFireLayer layer, Matrix4x4 matrix, Vector4 frame, Vector4 shape) =>
+        (instances ??= new()).Add(new Instance(layer, matrix, frame, shape));
+
+    internal virtual void PrepareFrame(VfxEngine engine)
+    {
+        // MapInterface may draw before this frame's dynamic things. Consume the latest
+        // completed owner sample and discard it when the owner stops being drawn.
+        if (pushedFrame < 0 || Time.frameCount - pushedFrame > 1 || !DebugViewSettings.drawThingsDynamic
+            || !Anchor.TryResolve(engine.Map, out _))
+        {
+            ClearGeometry();
+            return;
+        }
+        if (instances == null) return;
+        var passes = ((MingyuanVisualEffect)Effect).FirePasses;
+        foreach (var item in instances)
+        {
+            instanceRow[0] = item.Frame;
+            instanceRow[1] = item.Shape;
+            engine.AddInstance(passes[(int)item.Layer], item.Matrix, instanceRow, 0);
+        }
+    }
 
     internal MingyuanFireBatch Batch(MingyuanFireLayer layer) =>
         batches[(int)layer - (int)MingyuanFireLayer.CombustionSigil] ??= new MingyuanFireBatch();
@@ -190,4 +188,20 @@ internal class MingyuanVisualEmitter : VfxEmitter
         int i = Emit(position, 0f, size, tint, (int)group);
         if (i >= 0) Particles[i].RotationDegrees = -rotation;
     }
+}
+
+internal abstract class MingyuanTimedEmitter : MingyuanVisualEmitter
+{
+    internal override void PrepareFrame(VfxEngine engine)
+    {
+        BeginFrame();
+        var cell = Position.ToIntVec3();
+        if (!DebugViewSettings.drawThingsDynamic || !cell.InBounds(engine.Map) || cell.Fogged(engine.Map)) return;
+        var view = Find.CameraDriver.CurrentViewRect.ExpandedBy(1);
+        if (WorldComponent_GravshipController.GravshipRenderInProgess)
+            view = view.Encapsulate(WorldComponent_GravshipController.GravshipRenderBounds);
+        if (view.Contains(cell)) PopulateBurst();
+    }
+
+    protected abstract void PopulateBurst();
 }

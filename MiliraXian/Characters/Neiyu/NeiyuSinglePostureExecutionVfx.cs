@@ -9,7 +9,7 @@ using Verse;
 
 namespace MiliraXian.Characters.Neiyu;
 
-public sealed partial class JobDriver_NeiyuPostureExecution : INeiyuVisualSource
+public sealed partial class JobDriver_NeiyuPostureExecution
 {
     private static readonly Color ExecutionPink = new(1f, .64f, .84f);
     // Turn the diagonal artwork to face forward and center its visible arc.
@@ -20,36 +20,45 @@ public sealed partial class JobDriver_NeiyuPostureExecution : INeiyuVisualSource
     private void FinishScene()
     {
         executionMap?.GetComponent<MapComponent_PawnAfterimages>()?.RemoveOwnedBy(this);
-        sceneBinding.End(this);
+        sceneBinding.End();
     }
 
     private NeiyuVisualBinding sceneBinding;
     private NeiyuVisualEmitter scene;
 
-    private void BindScene() => sceneBinding.Bind(this, pawn?.Map, NeiyuVisualDefOf.MX_NY_Execution, VfxAnchor.Follow(pawn));
+    private bool InVolley => IsSingle && singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery;
 
-    // The shared blade hook can see a restored job before its first tick.
-    // It only attaches the handle. All scene geometry is emitted in the map host's draw phase.
-    internal void DrawSingleVfx(BladeGraphicExtension ext, in BladePose pose, Vector3 body) => BindScene();
-    internal void DrawMultiVfx(Vector3 body) => BindScene();
+    private NeiyuVisualEmitter SceneEmitter() =>
+        sceneBinding.Get(pawn.Map, NeiyuVisualDefOf.MX_NY_Execution, VfxAnchor.Follow(pawn));
 
-    bool INeiyuVisualSource.ActiveOn(Map map) => pawn?.Spawned == true && pawn.Map == map && pawn.jobs?.curDriver == this;
-
-    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
+    private void PushVolley()
     {
-        if (!NeiyuSwordCombatVfx.Enabled || NeiyuSwordCombatVfx.Intensity <= 0f || pawn.IsHiddenFromPlayer()) return;
+        if (!InVolley || pawn.jobs?.curDriver != this || SceneEmitter() is not { } emitter) return;
+        emitter.Volley = new VolleyFrame(sceneStart, previousTargetDraw, aimPoint, throwYaw, singleAirVolley,
+            swordCount, impacts, ReleaseAt, AimAt, VolleyAt, VolleyStagger, SwordImpactAt(0) - SwordLaunchAt(0),
+            FinalImpactAt, pawn.thingIDNumber);
+    }
+
+    private bool BeginWeaponPose()
+    {
+        if (InVolley || !NeiyuSwordCombatVfx.Enabled || NeiyuSwordCombatVfx.Intensity <= 0f
+            || pawn.IsHiddenFromPlayer() || SceneEmitter() is not { } emitter) return false;
         scene = emitter;
-        try
-        {
-            if (IsSingle && (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery))
-                DrawSingleVolley();
-            if (!DebugViewSettings.drawThingsDynamic || pawn.CurJob?.def?.neverShowWeapon != false
-                || pawn.Position.Fogged(pawn.Map) || !Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Overlaps(pawn.OccupiedDrawRect())) return;
-            BladeGraphicExtension ext = BladeMotionPlayer.DrawnBlade(pawn);
-            if (ext == null || (!TryGetBladePose(out BladePose pose) && !BladeMotionPlayer.TryGetBladePose(pawn, out pose))) return;
-            if (IsSingle) PopulateSingle(ext, pose, pawn.DrawPos);
-            else if (IsMulti) PopulateMulti(pawn.DrawPos);
-        }
+        scene.BeginPose();
+        return true;
+    }
+
+    internal void DrawSingleVfx(BladeGraphicExtension ext, in BladePose pose, Vector3 body)
+    {
+        if (!BeginWeaponPose()) return;
+        try { PopulateSingle(ext, pose, body); }
+        finally { scene = null; }
+    }
+
+    internal void DrawMultiVfx(Vector3 body)
+    {
+        if (!BeginWeaponPose()) return;
+        try { PopulateMulti(body); }
         finally { scene = null; }
     }
 
@@ -71,19 +80,6 @@ public sealed partial class JobDriver_NeiyuPostureExecution : INeiyuVisualSource
         catch (Exception exception)
         {
             Log.ErrorOnce($"[霓羽弹刀] 单体处决绘制失败：{exception}", 197632105);
-        }
-    }
-
-    private void DrawSingleVolley()
-    {
-        if (pawn?.jobs?.curDriver != this || pawn.IsHiddenFromPlayer()
-            || NeiyuSwordCombatVfx.Intensity <= 0f) return;
-        float tick = SceneFrame;
-        if (tick < ReleaseAt) return;
-        try { DrawVolley(tick, pawn.DrawPos); }
-        catch (Exception exception)
-        {
-            Log.ErrorOnce($"[霓羽弹刀] 飞剑绘制失败：{exception}", 197632106);
         }
     }
 
@@ -143,89 +139,103 @@ public sealed partial class JobDriver_NeiyuPostureExecution : INeiyuVisualSource
         EmitQuad(layer, matrix * SlashArtwork, Color.white, fade);
     }
 
-    private void DrawVolley(float tick, Vector3 body)
+    internal readonly record struct VolleyFrame(int sceneStart, Vector3 previousTargetDraw, Vector3 aimPoint,
+        float throwYaw, bool singleAirVolley, int swordCount, int impacts, int ReleaseAt, int AimAt,
+        int VolleyAt, int stagger, int travel, int FinalImpactAt, int pawnId)
     {
-        Vector3 aim = Vector3.Lerp(previousTargetDraw, aimPoint, FrameLerp);
-        Vector3 forward = Forward(throwYaw);
-        Vector3 side = Vector3.Cross(Vector3.up, forward);
-        float swordScale = Single.spiritSwordScale;
-        float tipOffset = .70f * swordScale;
-        float swordWidth = .85f * swordScale, swordLength = 1.5f * swordScale;
-        float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
-        float glyphAge = tick - (singleAirVolley ? AimAt : VolleyAt);
-        if (glyphAge >= 0f && glyphAge < Single.glyphHoldTicks + Single.glyphFadeTicks)
+        internal void Draw(NeiyuVisualEmitter emitter, Vector3 body)
         {
-            Vector3 at = body + side * 1.16f + Vector3.forward * .57f;
-            float fade = 1f - Mathf.Clamp01((glyphAge - Single.glyphHoldTicks) / Single.glyphFadeTicks);
-            Sprite(NeiyuLayer.Glyph, at, 0f, 1.28f, 1.28f, Color.white, fade);
-        }
-        for (int i = 0; i < swordCount; i++)
-        {
-            int launch = SwordLaunchAt(i), impact = SwordImpactAt(i);
-            bool terminal = i == swordCount - 1;
-            float slot = i == 0 ? 0f : ((i + 1) / 2) * (i % 2 == 1 ? -1f : 1f);
-            Vector3 seat = body.Yto0() + side * (slotSpacing * slot) - forward * (.72f + .16f * Mathf.Abs(slot))
-                + Vector3.forward * (.42f + .11f * Mathf.Abs(slot));
-            Vector3 contact = terminal ? aim : aim + side * (.13f * slot)
-                + Vector3.forward * (.13f - .065f * Mathf.Abs(slot));
-            Vector3 toContact = (contact - seat).Yto0();
-            float distance = toContact.magnitude;
-            Vector3 direction = distance > .001f ? toContact / distance : forward;
-            float yaw = direction.AngleFlat();
-            if (tick < impact)
+            float tick = VisualClock.TicksSince(sceneStart);
+            if (tick < ReleaseAt || NeiyuSwordCombatVfx.Intensity <= 0f) return;
+            float lerp = Mathf.Clamp01(VisualClock.TicksSince(NeiyuSwordCombat.Now) + 1f);
+            Vector3 aim = Vector3.Lerp(previousTargetDraw, aimPoint, lerp);
+            var config = NeiyuSwordCombat.Config.single;
+            Vector3 forward = Forward(throwYaw);
+            Vector3 side = Vector3.Cross(Vector3.up, forward);
+            float swordScale = config.spiritSwordScale;
+            float tipOffset = .70f * swordScale;
+            float swordWidth = .85f * swordScale, swordLength = 1.5f * swordScale;
+            float slotSpacing = Mathf.Lerp(.52f, .52f * swordScale, .65f);
+            float glyphAge = tick - (singleAirVolley ? AimAt : VolleyAt);
+            if (glyphAge >= 0f && glyphAge < config.glyphHoldTicks + config.glyphFadeTicks)
             {
-                float p = ProgressBetween(tick, launch, impact);
-                float appear = singleAirVolley ? 1f : ProgressBetween(tick, ReleaseAt, AimAt);
-                // Keep the enlarged tip on the same contact point, including short throws into walls.
-                Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
-                Vector3 tip = Vector3.Lerp(startTip, contact, p * (.72f + .28f * p));
-                Vector3 center = tip - direction * tipOffset;
-                Sprite(NeiyuLayer.Sword, center, yaw, swordWidth, swordLength, Color.white, appear);
-                if (p > 0f)
-                    Sprite(NeiyuLayer.Glow, center - direction * (.53f * swordScale),
-                        yaw, .18f * swordScale, 1.55f * swordScale,
-                        Color.Lerp(ExecutionIce, ExecutionPink, Mathf.Abs(slot) / 4f), .73f);
+                Vector3 at = body + side * 1.16f + Vector3.forward * .57f;
+                float fade = 1f - Mathf.Clamp01((glyphAge - config.glyphHoldTicks) / config.glyphFadeTicks);
+                Sprite(emitter, NeiyuLayer.Glyph, at, 0f, 1.28f, 1.28f, Color.white, fade);
             }
-            else if (impacts > i)
+            for (int i = 0; i < swordCount; i++)
             {
-                float age = tick - impact;
-                if (!terminal)
+                int launch = VolleyAt + i * stagger, impact = launch + travel;
+                bool terminal = i == swordCount - 1;
+                float slot = i == 0 ? 0f : ((i + 1) / 2) * (i % 2 == 1 ? -1f : 1f);
+                Vector3 seat = body.Yto0() + side * (slotSpacing * slot) - forward * (.72f + .16f * Mathf.Abs(slot))
+                    + Vector3.forward * (.42f + .11f * Mathf.Abs(slot));
+                Vector3 contact = terminal ? aim : aim + side * (.13f * slot)
+                    + Vector3.forward * (.13f - .065f * Mathf.Abs(slot));
+                Vector3 toContact = (contact - seat).Yto0();
+                float distance = toContact.magnitude;
+                Vector3 direction = distance > .001f ? toContact / distance : forward;
+                float yaw = direction.AngleFlat();
+                if (tick < impact)
                 {
-                    float settle = Mathf.Clamp01(age / 6f);
-                    float pinYaw = yaw + slot * 8f * settle;
-                    Vector3 center = contact - Forward(pinYaw) * (tipOffset * Mathf.Lerp(1f, .68f, settle));
-                    float fade = 1f - ProgressBetween(tick, FinalImpactAt, FinalImpactAt + Single.pierceTicks);
-                    Sprite(NeiyuLayer.Sword, center, pinYaw, swordWidth, swordLength, Color.white, .92f * fade);
+                    float p = ProgressBetween(tick, launch, impact);
+                    float appear = singleAirVolley ? 1f : ProgressBetween(tick, ReleaseAt, AimAt);
+                    // Keep the enlarged tip on the same contact point, including short throws into walls.
+                    Vector3 startTip = seat + direction * Mathf.Min(tipOffset, distance * .8f);
+                    Vector3 tip = Vector3.Lerp(startTip, contact, p * (.72f + .28f * p));
+                    Vector3 center = tip - direction * tipOffset;
+                    Sprite(emitter, NeiyuLayer.Sword, center, yaw, swordWidth, swordLength, Color.white, appear);
+                    if (p > 0f)
+                        Sprite(emitter, NeiyuLayer.Glow, center - direction * (.53f * swordScale),
+                            yaw, .18f * swordScale, 1.55f * swordScale,
+                            Color.Lerp(ExecutionIce, ExecutionPink, Mathf.Abs(slot) / 4f), .73f);
                 }
-                DrawPierce(contact, forward, side, i, terminal, age);
+                else if (impacts > i)
+                {
+                    float age = tick - impact;
+                    if (!terminal)
+                    {
+                        float settle = Mathf.Clamp01(age / 6f);
+                        float pinYaw = yaw + slot * 8f * settle;
+                        Vector3 center = contact - Forward(pinYaw) * (tipOffset * Mathf.Lerp(1f, .68f, settle));
+                        float fade = 1f - ProgressBetween(tick, FinalImpactAt, FinalImpactAt + config.pierceTicks);
+                        Sprite(emitter, NeiyuLayer.Sword, center, pinYaw, swordWidth, swordLength, Color.white, .92f * fade);
+                    }
+                    DrawPierce(emitter, contact, forward, side, i, terminal, age);
+                }
+            }
+        }
+
+        private void DrawPierce(NeiyuVisualEmitter emitter, Vector3 at, Vector3 forward, Vector3 side, int blade, bool terminal, float age)
+        {
+            var config = NeiyuSwordCombat.Config.single;
+            if (age >= config.pierceTicks) return;
+            float p = age / config.pierceTicks;
+            float fade = (1f - p) * (1f - p);
+            float size = terminal ? 1.65f : .75f;
+            Sprite(emitter, NeiyuLayer.Cut, at, terminal ? -10f : 16f * (blade - 2), size * 1.3f, size,
+                terminal ? Color.white : Color.Lerp(Color.white, ExecutionIce, .44f), fade);
+            int count = Mathf.Clamp(Mathf.RoundToInt(7f * NeiyuSwordCombatVfx.Intensity), 1, 10);
+            for (int i = 0; i < count; i++)
+            {
+                int seed = pawnId + blade * 593 + i * 97;
+                float spread = NeiyuSwordCombatVfx.Hash(seed);
+                Vector3 drift = forward * (.22f + NeiyuSwordCombatVfx.Hash(seed + 37)) + side * (spread - .5f);
+                Sprite(emitter, NeiyuLayer.Glow, at + drift * p, drift.AngleFlat(), .11f, .21f,
+                    Color.Lerp(ExecutionIce, ExecutionPink, spread), fade);
             }
         }
     }
 
-    private void DrawPierce(Vector3 at, Vector3 forward, Vector3 side, int blade, bool terminal, float age)
-    {
-        if (age >= Single.pierceTicks) return;
-        float p = age / Single.pierceTicks;
-        float fade = (1f - p) * (1f - p);
-        float size = terminal ? 1.65f : .75f;
-        Sprite(NeiyuLayer.Cut, at, terminal ? -10f : 16f * (blade - 2), size * 1.3f, size,
-            terminal ? Color.white : Color.Lerp(Color.white, ExecutionIce, .44f), fade);
-        int count = Mathf.Clamp(Mathf.RoundToInt(7f * NeiyuSwordCombatVfx.Intensity), 1, 10);
-        for (int i = 0; i < count; i++)
-        {
-            int seed = pawn.thingIDNumber + blade * 593 + i * 97;
-            float spread = NeiyuSwordCombatVfx.Hash(seed);
-            Vector3 drift = forward * (.22f + NeiyuSwordCombatVfx.Hash(seed + 37)) + side * (spread - .5f);
-            Sprite(NeiyuLayer.Glow, at + drift * p, drift.AngleFlat(), .11f, .21f,
-                Color.Lerp(ExecutionIce, ExecutionPink, spread), fade);
-        }
-    }
+    private void Sprite(NeiyuLayer layer, Vector3 at, float angle, float width, float length, Color tint, float alpha) =>
+        Sprite(scene, layer, at, angle, width, length, tint, alpha);
 
-    private void Sprite(NeiyuLayer layer, Vector3 at, float angle, float width, float length, Color tint, float alpha)
+    private static void Sprite(NeiyuVisualEmitter emitter, NeiyuLayer layer, Vector3 at, float angle, float width,
+        float length, Color tint, float alpha)
     {
         at.y = AltitudeLayer.MoteOverhead.AltitudeFor() + .015f;
         Matrix4x4 matrix = Matrix4x4.TRS(at, Quaternion.AngleAxis(angle, Vector3.up), new Vector3(width, 1f, length));
-        EmitQuad(layer, matrix, tint, alpha);
+        emitter.Quad(layer, matrix, tint.WithAlpha(Mathf.Clamp01(alpha * NeiyuSwordCombatVfx.Intensity)));
     }
 
     private void EmitQuad(NeiyuLayer layer, Matrix4x4 matrix, Color tint, float alpha) =>

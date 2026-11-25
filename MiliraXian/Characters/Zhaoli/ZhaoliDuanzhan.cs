@@ -37,12 +37,30 @@ namespace MiliraXian.Characters.Zhaoli
 
         internal void EndTrail()
         {
-            if (trail.Host?.Resolve(trail) is ZhaoliDuanzhanTrail live && live.Owner == this)
-            {
-                live.Owner = null;
-                trail.Host.Destroy(trail);
-            }
+            trail.Host?.Destroy(trail);
             trail = default;
+        }
+
+        internal void PushTrail(Pawn pawn, Vector3 hand, Vector3 grip, float angle, float scale, bool sweeping, int now)
+        {
+            var visual = trail.Host?.Resolve(trail) as ZhaoliDuanzhanTrail;
+            if (visual == null || trail.Host.Map != pawn.Map)
+            {
+                EndTrail();
+                visual = ZhaoliDuanzhanTrail.Start(pawn, sequenceEndTick, out trail);
+                if (visual == null) return;
+            }
+            if (restoreTrail)
+            {
+                int sweep = sequenceStartTick + chargeTicks;
+                for (int tick = Mathf.Max(sweep, now - ZhaoliDuanzhanTrail.LifetimeTicks); tick < Mathf.Min(now, sweep + sweepTicks); tick++)
+                {
+                    Pose(tick, out float pastScale, out float pastAngle, out Vector3 offset, out _);
+                    visual.Capture(hand + offset, pastAngle, pastScale * Patch_ZhaoliDuanzhan_DrawEquipmentAiming.BladeScale, tick, true);
+                }
+                restoreTrail = false;
+            }
+            visual.Capture(grip, angle, scale, now, sweeping);
         }
 
         internal bool Pose(int now, out float weaponScale, out float drawAimAngle, out Vector3 drawOffset, out bool drawAfterimages)
@@ -132,7 +150,11 @@ namespace MiliraXian.Characters.Zhaoli
 
             if (States.TryGetValue(pawn.thingIDNumber, out var existing))
             {
-                if (existing.sequenceStartTick == sequenceStartTick && existing.weaponThingId == weapon.thingIDNumber) return;
+                if (existing.sequenceStartTick == sequenceStartTick && existing.weaponThingId == weapon.thingIDNumber)
+                {
+                    existing.trail.Host?.Maintain(existing.trail);
+                    return;
+                }
                 existing.EndTrail();
             }
             int safeChargeTicks = Mathf.Max(1, chargeTicks);
@@ -655,7 +677,7 @@ namespace MiliraXian.Characters.Zhaoli
             scale *= BladeScale;
             Vector3 grip = drawLoc + offset;
             if (sweeping || !state.trail.IsNone || state.restoreTrail)
-                ZhaoliDuanzhanTrail.Capture(state, pawn, drawLoc, grip, angle, scale, sweeping, now);
+                state.PushTrail(pawn, drawLoc, grip, angle, scale, sweeping, now);
             Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.up);
             Vector3 center = grip + rotation * Vector3.forward * (.5f * scale);
             float aspect = blade.mainTexture.width / (float)Mathf.Max(1, blade.mainTexture.height);

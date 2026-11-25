@@ -19,44 +19,39 @@ public static class NeiyuVisualDefOf
     static NeiyuVisualDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(NeiyuVisualDefOf));
 }
 
-internal interface INeiyuVisualSource
-{
-    bool ActiveOn(Map map);
-    void Populate(NeiyuVisualEmitter emitter);
-    NeiyuQuadBatch CachedLayer(NeiyuLayer layer) => null;
-}
-
 internal enum NeiyuLayer { Glow, Cross, Sword, Glyph, Cut, Wave, MultiWave, Feather, Ring, Flashes, Energy, Sparks, Plate }
 
 internal struct NeiyuVisualBinding
 {
     private VfxEmitterHandle handle;
 
-    internal void Bind(INeiyuVisualSource owner, Map map, VfxDef def, VfxAnchor anchor)
+    internal NeiyuVisualEmitter Get(Map map, VfxDef def, VfxAnchor anchor)
     {
-        if (map == null || def == null) return;
-        if (handle.Host?.Resolve(handle) is NeiyuVisualEmitter live && live.Source == owner && handle.Host.Map == map) return;
-        End(owner);
+        if (map == null || def == null) return null;
+        var host = map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (handle.Host == host && host.TryGetEmitter(handle, out NeiyuVisualEmitter live))
+        {
+            host.Maintain(handle);
+            return live;
+        }
+        End();
         try
         {
-            handle = map.GetComponent<MapComponent_VfxEmitterHost>().Spawn(def, anchor);
-            if (handle.Host?.Resolve(handle) is NeiyuVisualEmitter visual) visual.Source = owner;
+            handle = host.Spawn(def, anchor);
+            return host.TryGetEmitter(handle, out live) ? live : null;
         }
         catch (Exception ex)
         {
-            // A render asset failure must not cancel the job or replay a committed strike.
             Log.ErrorOnce($"[霓羽] 无法创建特效 {def.defName}。{ex}", GenText.StableStringHash(def.defName));
+            return null;
         }
     }
 
-    internal void End(INeiyuVisualSource owner)
+    internal void Maintain() => handle.Host?.Maintain(handle);
+
+    internal void End()
     {
-        if (handle.Host?.Resolve(handle) is NeiyuVisualEmitter live && live.Source == owner)
-        {
-            live.Ring?.Begin();
-            live.Source = null;
-            handle.Host.Destroy(handle);
-        }
+        handle.Host?.Destroy(handle);
         handle = default;
     }
 }
@@ -100,7 +95,14 @@ internal sealed class NeiyuVisualEffect : VfxEffect
         {
             var visual = (NeiyuVisualEmitter)emitter;
             if (!visual.Visible) return;
-            NeiyuQuadBatch batch = layer == NeiyuLayer.Ring ? visual.Ring : visual.Source?.CachedLayer(layer);
+            NeiyuQuadBatch batch = layer switch
+            {
+                NeiyuLayer.Ring => visual.Ring,
+                NeiyuLayer.Flashes => visual.Flashes,
+                NeiyuLayer.Energy => visual.Thunder?.Ribbons,
+                NeiyuLayer.Sparks => visual.Thunder?.Particles,
+                _ => null
+            };
             if (batch == null || batch.Writer.IsEmpty || pass.Material == null) return;
             Mesh mesh = emitter.MeshAt(index);
             batch.UploadIfNeeded(mesh);
@@ -147,7 +149,13 @@ internal sealed class NeiyuQuadBatch
 
 internal sealed class NeiyuVisualEmitter : VfxEmitter
 {
-    internal INeiyuVisualSource Source;
+    internal NeiyuQuadBatch Flashes;
+    internal NeiyuThunderVfx Thunder;
+    internal NeiyuWarpFeatherVisual Feather;
+    internal float WarmupProgress;
+    internal int WarmupSeed;
+    private int poseFrame;
+    internal JobDriver_NeiyuPostureExecution.VolleyFrame? Volley;
     internal NeiyuQuadBatch Ring;
     internal bool Visible;
     private VfxEngine engine;
@@ -157,30 +165,70 @@ internal sealed class NeiyuVisualEmitter : VfxEmitter
     internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int now, Vector3 position)
     {
         base.Reset(effect, anchor, version, now, position);
-        Source = null;
+        Flashes = null;
+        Thunder = null;
+        Feather = null;
+        Ring?.Begin();
+        poseFrame = -1;
+        Volley = null;
         Visible = false;
         stripSlot = effect.ParticleFloatSlot("strip");
     }
 
     internal override bool Advance(float deltaSeconds, int nowTick, Map map)
     {
+        if (Feather is { Ending: true } feather)
+        {
+            if (!feather.Alive(nowTick)) { Feather = null; return false; }
+            LastMaintainTick = nowTick;
+        }
+        // Pushed geometry has no particle simulation. Retain it across frames and pause.
+        int count = Count;
         Count = 0;
-        LastMaintainTick = nowTick;
-        if (Source?.ActiveOn(map) == true && base.Advance(deltaSeconds, nowTick, map)) return true;
+        bool alive = base.Advance(deltaSeconds, nowTick, map);
+        Count = count;
+        return alive;
+    }
+
+    internal void BeginPose()
+    {
+        Count = stripId = 0;
         Ring?.Begin();
-        Source = null;
-        return false;
+        Volley = null;
+        poseFrame = Time.frameCount;
     }
 
     internal void Prepare(VfxEngine drawEngine)
     {
+        Visible = !Find.UIRoot.HideMotes && !Find.ScreenshotModeHandler.Active && Find.Camera != null;
+        if (Effect.Def == NeiyuVisualDefOf.MX_NY_Execution)
+        {
+            if (Volley is { } flight)
+            {
+                Count = stripId = 0;
+                Ring?.Begin();
+                if (Visible && NeiyuSwordCombatVfx.Enabled && Anchor.TryResolve(drawEngine.Map, out Vector3 at)
+                    && Anchor.Pawn?.IsHiddenFromPlayer() == false) flight.Draw(this, at);
+            }
+            else
+            {
+                Visible &= poseFrame >= 0 && Time.frameCount - poseFrame <= 1;
+                if (!Visible) Count = 0;
+            }
+            return;
+        }
         Count = stripId = 0;
-        Ring?.Begin();
-        Visible = !Find.UIRoot.HideMotes && !Find.ScreenshotModeHandler.Active && Find.Camera != null
-            && Source?.ActiveOn(drawEngine.Map) == true;
         if (!Visible) return;
         engine = drawEngine;
-        try { Source.Populate(this); }
+        try
+        {
+            if (Feather != null) Feather.Draw(this, drawEngine.Map);
+            else if (Thunder != null) Thunder.Draw(this, Find.TickManager.TicksGame);
+            else if (Effect.Def == NeiyuVisualDefOf.MX_NY_ThunderWarmup && DebugViewSettings.drawThingsDynamic
+                && Anchor.TryResolve(drawEngine.Map, out Vector3 at) && at.ToIntVec3().InBounds(drawEngine.Map)
+                && !at.ToIntVec3().Fogged(drawEngine.Map) && Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Contains(at.ToIntVec3()))
+                NeiyuThunderVfx.DrawWarmup(this, at, WarmupProgress, WarmupSeed);
+        }
         finally { engine = null; }
     }
 

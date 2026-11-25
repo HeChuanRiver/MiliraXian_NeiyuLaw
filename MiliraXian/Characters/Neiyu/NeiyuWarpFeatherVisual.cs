@@ -1,12 +1,11 @@
 using System;
-using MiliraXian.Characters.Common.Vfx.Emitter;
 using UnityEngine;
 using Verse;
 
 namespace MiliraXian.Characters.Neiyu;
 
 // The ability owns the real stack and its landing cell. The visual can outlive the cast for its short fade.
-internal sealed class NeiyuWarpFeatherVisual : INeiyuVisualSource
+internal sealed class NeiyuWarpFeatherVisual
 {
     private const int ParticleCount = 32;
     private const int FinishTicks = 24;
@@ -14,9 +13,6 @@ internal sealed class NeiyuWarpFeatherVisual : INeiyuVisualSource
     private static readonly Color Ice = new(0.62f, 0.86f, 1f);
     private static readonly Color Pink = new(1f, 0.76f, 0.87f);
     private static readonly ParticleSeed[] Particles = CreateParticles();
-    private readonly Map map;
-    private NeiyuVisualBinding binding;
-    private CompAbilityEffect_NeiyuWarpFeather owner;
     private Texture featherTexture;
     private Vector2 featherSize;
     private Vector3 sourcePosition;
@@ -27,52 +23,38 @@ internal sealed class NeiyuWarpFeatherVisual : INeiyuVisualSource
     private int endingTick = -1;
     private bool completed;
 
-    internal NeiyuWarpFeatherVisual(CompAbilityEffect_NeiyuWarpFeather comp)
+    internal NeiyuWarpFeatherVisual(Thing preview, Thing prepared) => ResolveFeatherGraphic(preview, prepared);
+
+    internal bool Ending => endingTick >= 0;
+    internal bool Alive(int now) => !Ending || now - endingTick < (completed ? FinishTicks : CancelTicks);
+
+    internal void PushPose(Vector3 source, IntVec3 landing, float phase)
     {
-        owner = comp;
-        map = comp.parent.pawn.Map;
-        ResolveFeatherGraphic(comp.PreviewThing, comp.PreparedFeathers.stackCount);
-        UpdatePose();
-        binding.Bind(this, map, NeiyuVisualDefOf.MX_NY_WarpFeather, VfxAnchor.At(sourcePosition));
+        sourcePosition = source;
+        landingPosition = landing.ToVector3Shifted();
+        progress = Mathf.Clamp01(phase);
     }
 
-    bool INeiyuVisualSource.ActiveOn(Map current)
-    {
-        if (current != map) return false;
-        if (endingTick < 0 && (owner?.CastActive != true || owner.parent.pawn.Map != map)) Cancel();
-        return endingTick < 0 || Find.TickManager.TicksGame - endingTick < (completed ? FinishTicks : CancelTicks);
-    }
-
-    internal void Complete(Thing placedFeathers)
+    internal void Complete(Vector3 placedPosition)
     {
         if (endingTick >= 0) return;
         completed = true;
         progress = 1f;
-        landingPosition = placedFeathers.DrawPos;
+        landingPosition = placedPosition;
         endingTick = Find.TickManager.TicksGame;
-        owner = null;
     }
 
     internal void Cancel()
     {
         if (endingTick >= 0) return;
         endingTick = Find.TickManager.TicksGame;
-        owner = null;
     }
 
-    private void UpdatePose()
-    {
-        Pawn caster = owner.parent.pawn;
-        sourcePosition = caster.DrawPos;
-        landingPosition = owner.LandingCell.ToVector3Shifted();
-        progress = owner.parent.verb.WarmingUp ? Mathf.Clamp01(owner.parent.verb.WarmupProgress) : 0f;
-    }
-
-    private void ResolveFeatherGraphic(Thing feather, int addedCount)
+    private void ResolveFeatherGraphic(Thing feather, Thing prepared)
     {
         Graphic graphic = feather.Graphic;
         if (graphic is Graphic_RandomRotated rotated) graphic = rotated.SubGraphic;
-        int count = feather == owner.PreparedFeathers ? addedCount : feather.stackCount + addedCount;
+        int count = feather == prepared ? prepared.stackCount : feather.stackCount + prepared.stackCount;
         if (graphic is Graphic_StackCount stack) graphic = stack.SubGraphicForStackCount(count, feather.def);
         featherTexture = graphic.MatSingle.mainTexture;
         featherColor = graphic.Color;
@@ -84,9 +66,8 @@ internal sealed class NeiyuWarpFeatherVisual : INeiyuVisualSource
             : feather.Rotation.AsAngle;
     }
 
-    void INeiyuVisualSource.Populate(NeiyuVisualEmitter emitter)
+    internal void Draw(NeiyuVisualEmitter emitter, Map map)
     {
-        if (endingTick < 0) UpdatePose();
         IntVec3 cell = (completed ? landingPosition : sourcePosition).ToIntVec3();
         if (featherTexture == null || !DebugViewSettings.drawThingsDynamic || !cell.InBounds(map) || cell.Fogged(map)
             || !Find.CameraDriver.CurrentViewRect.ExpandedBy(1).Contains(cell)) return;
