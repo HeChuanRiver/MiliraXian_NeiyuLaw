@@ -1,4 +1,7 @@
 #version 450
+layout(location = 4) flat in vec4 vFrame;
+layout(location = 5) flat in vec4 vShape;
+layout(location = 6) flat in float vGlow;
 layout(location=0) in vec2 vUv;
 layout(location=0) out vec4 outColor;
 layout(set=2,binding=0) uniform MaterialUniforms {
@@ -7,6 +10,7 @@ layout(set=2,binding=0) uniform MaterialUniforms {
     vec4 _BloomTint; // @color @default = vec4(1.0,1.0,1.0,1.0)
     float _BloomIntensity; // @default = 1.0
     float _CombustionCapture; // @default = 0.0
+    float _MxBatched; // @default = 0.0
 } u;
 float hash(vec2 p) {
     vec3 q=fract(vec3(p.xyx)*0.1031);
@@ -28,9 +32,10 @@ float fbm(vec2 p) {
     return n;
 }
 void main() {
+    if (u._CombustionCapture > 0.5 && vGlow <= 0.0) discard;
     vec2 p=vUv*2.0-1.0;
-    float t=u._CombustionFrame.x,seed=u._CombustionFrame.z;
-    float mode=u._CombustionShape.x,core=u._CombustionShape.y;
+    float t=vFrame.x,seed=vFrame.z;
+    float mode=vShape.x,core=vShape.y;
     float r=length(p);
     float along=mode<1.5?1.0-vUv.y:vUv.y;
     float spin=t*(0.65+core*0.45)+r*(1.3+core*1.7);
@@ -63,7 +68,7 @@ void main() {
         heat=clamp(0.48-stream*0.4+fuel*0.60+filaments*0.17-along*0.36,0.0,1.0);
     }
     float aa=max(fwidth(distance)*1.3,0.009);
-    float alpha=(1.0-smoothstep(-aa,aa,distance))*u._CombustionFrame.w;
+    float alpha=(1.0-smoothstep(-aa,aa,distance))*vFrame.w;
     alpha*=1.0-smoothstep(0.91,1.0,max(abs(p.x),abs(p.y)));
     vec3 color=mix(vec3(0.388,0.125,0.157),vec3(0.871,0.239,0.145),smoothstep(0.15,0.43,heat));
     color=mix(color,vec3(1.0,0.545,0.208),smoothstep(0.39,0.68,heat));
@@ -71,5 +76,5 @@ void main() {
     color=mix(color,vec3(1.0,0.965,0.82),smoothstep(0.88,0.99,heat));
     if(u._CombustionCapture>0.5) alpha*=smoothstep(0.76,0.98,heat);
     alpha=clamp(alpha,0.0,1.0);
-    outColor=vec4(color*u._BloomTint.rgb*u._BloomIntensity*alpha,alpha);
+    outColor=vec4(color*u._BloomTint.rgb*(u._BloomIntensity * (u._CombustionCapture > 0.5 ? vGlow : 1.0))*alpha,alpha);
 }

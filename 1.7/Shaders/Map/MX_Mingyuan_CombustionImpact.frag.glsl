@@ -1,4 +1,7 @@
 #version 450
+layout(location = 4) flat in vec4 vFrame;
+layout(location = 5) flat in vec4 vShape;
+layout(location = 6) flat in float vGlow;
 layout(location=0) in vec2 vUv;
 layout(location=0) out vec4 outColor;
 layout(set=2,binding=0) uniform MaterialUniforms {
@@ -7,6 +10,7 @@ layout(set=2,binding=0) uniform MaterialUniforms {
     vec4 _BloomTint; // @color @default = vec4(1.0,1.0,1.0,1.0)
     float _BloomIntensity; // @default = 1.0
     float _CombustionCapture; // @default = 0.0
+    float _MxBatched; // @default = 0.0
 } u;
 float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
 float noise(vec2 p) {
@@ -15,18 +19,19 @@ float noise(vec2 p) {
         mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);
 }
 void main() {
+    if (u._CombustionCapture > 0.5 && vGlow <= 0.0) discard;
     vec2 p=vUv*2.0-1.0;
-    float t=u._CombustionFrame.x,age=clamp(u._CombustionFrame.y,0.0,1.0);
-    float seed=u._CombustionFrame.z,r=length(p);
+    float t=vFrame.x,age=clamp(vFrame.y,0.0,1.0);
+    float seed=vFrame.z,r=length(p);
     if(r>=1.0) discard;
     float angle=atan(p.y,abs(p.x)<0.00001?0.00001:p.x);
-    float mode=u._CombustionShape.x;
+    float mode=vShape.x;
     vec2 drift=vec2(noise(p*2.7+seed-t),noise(p*2.7-seed+t))-0.5;
     float n=noise(p*5.0+drift*1.5+seed-t*0.6);
     float alpha,hot;
     vec3 color;
     if(mode<0.5) {
-        float layer=u._CombustionShape.y;
+        float layer=vShape.y;
         float front=mix(0.10,0.92,1.0-pow(1.0-age,2.55-layer*0.43));
         float ripples=noise(vec2(cos(angle),sin(angle))*5.0+seed+t);
         float d=abs(r-front-(ripples-0.5)*mix(0.15,0.02,age));
@@ -35,7 +40,7 @@ void main() {
         alpha=(1.0-smoothstep(width-aa,width+aa,d))*smoothstep(0.22,0.48,n);
         hot=1.0-smoothstep(0.0,width+aa,d);
         color=mix(vec3(0.87,0.24,0.145),vec3(1.0,0.82,0.42),hot);
-        color=mix(color,vec3(0.65,0.25,0.12),clamp(u._CombustionShape.y*0.3,0.0,0.6));
+        color=mix(color,vec3(0.65,0.25,0.12),clamp(vShape.y*0.3,0.0,0.6));
     } else if(mode<1.5) {
         float cracks=1.0-smoothstep(0.025,0.105,abs(n-0.5));
         float edge=1.0-smoothstep(0.36,0.85,r+(n-0.5)*0.22);
@@ -64,8 +69,8 @@ void main() {
         hot=radialGlow*0.55+rays*0.30;
         color=mix(vec3(0.79,0.14,0.028),vec3(1.0,0.70,0.27),radialGlow);
     }
-    alpha*=u._CombustionFrame.w*(1.0-smoothstep(0.91,1.0,r));
+    alpha*=vFrame.w*(1.0-smoothstep(0.91,1.0,r));
     if(u._CombustionCapture>0.5) alpha*=hot;
     alpha=clamp(alpha,0.0,1.0);
-    outColor=vec4(color*u._BloomTint.rgb*u._BloomIntensity*alpha,alpha);
+    outColor=vec4(color*u._BloomTint.rgb*(u._BloomIntensity * (u._CombustionCapture > 0.5 ? vGlow : 1.0))*alpha,alpha);
 }

@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
@@ -10,8 +11,17 @@ using MiliraXian.Characters.Common;
 
 namespace MiliraXian.Characters.Mingyuan;
 
-public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttackTargetSearcher
+public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttackTargetSearcher, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
+    }
+
     internal CompMingyuanBurningPillarTornado Tornado => GetComp<CompMingyuanBurningPillarTornado>();
     Thing IAttackTarget.Thing => this;
     Thing IAttackTargetSearcher.Thing => this;
@@ -23,7 +33,9 @@ public class Thing_MingyuanBurningPillarField : Building, IAttackTarget, IAttack
     public bool ThreatDisabled(IAttackTargetSearcher disabledFor) => !Tornado.Active;
     public override Vector3 DrawPos => Tornado?.Center ?? base.DrawPos;
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) => Tornado.DrawTornado(drawLoc);
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers) => Tornado.DrawTornado(layers, DrawPos);
 }
 
 public class CompProperties_MingyuanBurningPillarTornado : CompProperties
@@ -399,13 +411,13 @@ public class CompMingyuanBurningPillarTornado : ThingComp
         sustainer = null;
     }
 
-    internal void DrawTornado(Vector3 drawLoc)
+    internal void DrawTornado(MingyuanVisualEmitter layers, Vector3 drawLoc)
     {
         float fade = fadeStart < 0 ? 1f : Mathf.Clamp01(1f - (Find.TickManager.TicksGame - fadeStart) / (float)Mathf.Max(1, Props.visualFadeTicks));
-        MingyuanFireVfx.DrawTornado(drawLoc, Radius, Growth, Age, fade, Props.particleLimit);
+        MingyuanFireVfx.DrawTornado(layers, drawLoc, Radius, Growth, Age, fade, Props.particleLimit);
         if (caster is { Spawned: true } && caster.Map == parent.Map && caster.CurJob?.targetA.Thing == parent
             && caster.jobs.curDriver is JobDriver_MingyuanControlPillar gesture)
-            MingyuanFireVfx.DrawGesture(caster.DrawPos, caster.Rotation, gesture.GestureProgress);
+            MingyuanFireVfx.DrawGesture(layers, caster.DrawPos, caster.Rotation, gesture.GestureProgress);
     }
 
     public override string CompInspectStringExtra()
@@ -435,7 +447,7 @@ public class CompMingyuanBurningPillarTornado : ThingComp
             {
                 if (target.IsValid && target.Cell.InBounds(parent.Map))
                 {
-                    MingyuanFireVfx.DrawWarning(target.Cell.ToVector3Shifted(), 0.85f);
+                    MingyuanFireVfx.DrawWarning(null, target.Cell.ToVector3Shifted(), 0.85f);
                     GenDraw.DrawLineBetween(Center, target.Cell.ToVector3Shifted(), SimpleColor.Yellow, 0.10f);
                 }
             }

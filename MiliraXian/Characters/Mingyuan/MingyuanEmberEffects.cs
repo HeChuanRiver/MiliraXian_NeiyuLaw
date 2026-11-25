@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common;
 using MiliraXian.Characters.Common.Abilities;
@@ -48,8 +49,17 @@ public sealed class Verb_MingyuanEmberArt : Verb_CastAbility
     protected override bool TryCastShot() => false;
 }
 
-public sealed class Thing_MingyuanEmberGround : Thing
+public sealed class Thing_MingyuanEmberGround : Thing, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
+    }
+
     private Pawn caster;
     private MingyuanEmberNodeDef node;
     private int expires, nextPulse;
@@ -90,10 +100,11 @@ public sealed class Thing_MingyuanEmberGround : Thing
         }
         finally { CombatTargetSnapshot.Return(targets); }
     }
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
     {
         if (node == null || MingyuanPowerBalance.Sealed) return;
-        // Reuse the character's existing native fire renderer; the game tick freezes on pause.
-        MingyuanFireVfx.DrawWarning(drawLoc, node.radius);
+        MingyuanFireVfx.DrawWarning(layers, DrawPos, node.radius);
     }
 }

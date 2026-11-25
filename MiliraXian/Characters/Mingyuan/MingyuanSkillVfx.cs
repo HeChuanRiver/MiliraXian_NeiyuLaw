@@ -1,4 +1,4 @@
-using RimWorld;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using UnityEngine;
 using Verse;
 
@@ -6,69 +6,65 @@ namespace MiliraXian.Characters.Mingyuan
 {
     public enum MingyuanSkillVisualKind : byte { OverburnRelease, TimeErosion, Absorb, Rebirth }
 
-    [StaticConstructorOnStartup]
     public static class MingyuanSkillVfx
     {
-        private static readonly Material[] Gold = new Material[12];
-        private static readonly Material[] Red = new Material[12];
-        static MingyuanSkillVfx()
-        {
-            for (int i = 0; i < Gold.Length; i++)
-            {
-                float alpha = (i + 1f) / Gold.Length;
-                Gold[i] = MaterialPool.MatFrom("UI/Overlays/ThingLine", ShaderDatabase.MoteGlow, new Color(1f, 0.88f, 0.5f, alpha));
-                Red[i] = MaterialPool.MatFrom("UI/Overlays/ThingLine", ShaderDatabase.Transparent, new Color(0.85f, 0.16f, 0.045f, alpha));
-            }
-        }
-
         public static void Play(Map map, Vector3 origin, MingyuanSkillVisualKind kind, float radius, Vector3 end = default)
         {
-            if (map == null || MX_MingyuanDefOf.MX_Mingyuan_SkillVisual == null || !origin.ToIntVec3().InBounds(map)) return;
-            var visual = (Thing_MingyuanSkillVisual)ThingMaker.MakeThing(MX_MingyuanDefOf.MX_Mingyuan_SkillVisual);
-            visual.Init(origin, end, kind, radius);
-            GenSpawn.Spawn(visual, origin.ToIntVec3(), map);
+            if (map == null || !origin.ToIntVec3().InBounds(map)) return;
+            var host = map.GetComponent<MapComponent_VfxEmitterHost>();
+            var handle = host.Spawn(MingyuanVisualDefOf.MX_MY_SkillBurst, VfxAnchor.At(origin));
+            if (host.TryGetEmitter(handle, out MingyuanSkillEmitter visual))
+                visual.Init(end, kind, radius);
         }
 
-        public static void Line(Vector3 a, Vector3 b, float width, float alpha, bool gold = true)
+        internal static void Line(MingyuanVisualEmitter layers, Vector3 a, Vector3 b, float width, float alpha, bool gold = true)
         {
             if (alpha <= 0.01f || (a - b).sqrMagnitude < 0.0001f) return;
             a.y = b.y = AltitudeLayer.MoteOverheadLow.AltitudeFor() + (gold ? 0.02f : 0f);
             int index = Mathf.Clamp(Mathf.CeilToInt(alpha * 12f) - 1, 0, 11);
-            GenDraw.DrawLineBetween(a, b, (gold ? Gold : Red)[index], width);
+            Color tint = gold ? new Color(1f, 0.88f, 0.5f) : new Color(0.85f, 0.16f, 0.045f);
+            tint.a = (index + 1) / 12f;
+            layers.Line(gold ? MingyuanSprite.GoldLine : MingyuanSprite.RedLine, a, b, width, tint);
         }
 
         public static Vector3 Radial(float angle) => new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle));
 
-        public static void Ring(Vector3 origin, float radius, float phase, float alpha, float fraction = 1f)
+        internal static void Ring(MingyuanVisualEmitter layers, Vector3 origin, float radius, float phase, float alpha, float fraction = 1f)
         {
             for (int i = 0; i < 36; i++)
             {
                 if (i / 36f >= fraction) break;
                 float a = phase + i * Mathf.PI / 18f;
                 float b = phase + Mathf.Min((i + 1) / 36f, fraction) * Mathf.PI * 2f;
-                Line(origin + Radial(a) * radius, origin + Radial(b) * radius, 0.08f, alpha);
+                Line(layers, origin + Radial(a) * radius, origin + Radial(b) * radius, 0.08f, alpha);
             }
         }
     }
 
-    public class Thing_MingyuanSkillVisual : Thing
+    internal sealed class MingyuanSkillEmitter : MingyuanVisualEmitter
     {
-        private Vector3 origin, end;
+        private Vector3 end;
         private MingyuanSkillVisualKind kind;
         private float radius;
         private int startTick;
         private const int Duration = 42;
-        public void Init(Vector3 origin, Vector3 end, MingyuanSkillVisualKind kind, float radius)
+        internal void Init(Vector3 end, MingyuanSkillVisualKind kind, float radius)
         {
-            this.origin = origin; this.end = end; this.kind = kind; this.radius = radius;
+            this.end = end;
+            this.kind = kind;
+            this.radius = radius;
             startTick = Find.TickManager.TicksGame;
         }
-        protected override void Tick()
+        internal override bool Advance(float deltaSeconds, int nowTick, Map map)
         {
-            if (Find.TickManager.TicksGame - startTick >= Duration) Destroy();
+            int age = nowTick - startTick;
+            AgeSeconds = age / 60f - deltaSeconds;
+            return age < Duration && base.Advance(deltaSeconds, nowTick, map);
         }
-        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+
+        protected override void PopulateBurst()
         {
+            Vector3 origin = Position;
             float t = Mathf.Clamp01((Find.TickManager.TicksGame - startTick) / (float)Duration);
             float fade = 1f - Mathf.SmoothStep(0.35f, 1f, t);
             if (kind == MingyuanSkillVisualKind.Absorb)
@@ -83,28 +79,50 @@ namespace MiliraXian.Characters.Mingyuan
                     {
                         float u = Mathf.Lerp(Mathf.Max(0f, head - 0.28f), head, i / 8f);
                         Vector3 point = Vector3.Lerp(origin, end, u) + side * (Mathf.Sin(u * Mathf.PI) * Mathf.Sin(u * 5f + stream * 2f) * 0.6f);
-                        if (i > 0) MingyuanSkillVfx.Line(previous, point, 0.045f + i * 0.009f, fade * i / 8f);
+                        if (i > 0) MingyuanSkillVfx.Line(this, previous, point, 0.045f + i * 0.009f, fade * i / 8f);
                         previous = point;
                     }
                 }
-                MingyuanSkillVfx.Ring(end, 0.25f + t * 0.45f, t * 3f, fade);
+                MingyuanSkillVfx.Ring(this, end, 0.25f + t * 0.45f, t * 3f, fade);
                 return;
             }
             bool inward = kind == MingyuanSkillVisualKind.TimeErosion;
             float front = inward ? radius * (1f - t * 0.8f) : radius * Mathf.Sin(t * Mathf.PI * 0.5f);
-            MingyuanSkillVfx.Ring(origin, front, t * 2f, fade, inward ? 0.78f : 1f);
+            MingyuanSkillVfx.Ring(this, origin, front, t * 2f, fade, inward ? 0.78f : 1f);
             for (int i = 0; i < 16; i++)
             {
                 Vector3 ray = MingyuanSkillVfx.Radial(i * Mathf.PI / 8f + t * (inward ? -2f : 0.3f));
                 Vector3 point = origin + ray * front;
-                MingyuanSkillVfx.Line(point - ray * (0.1f + fade * 0.25f), point, 0.12f * fade, fade, false);
-                MingyuanSkillVfx.Line(point, point + ray * 0.09f, 0.055f, fade);
+                MingyuanSkillVfx.Line(this, point - ray * (0.1f + fade * 0.25f), point, 0.12f * fade, fade, false);
+                MingyuanSkillVfx.Line(this, point, point + ray * 0.09f, 0.055f, fade);
             }
         }
     }
 
-    public class Thing_MingyuanRebirthMarker : Thing
+    public class Thing_MingyuanRebirthMarker : Thing, IMingyuanVisualSource
     {
+        private MingyuanVisualBinding visual;
+
+        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        {
+            base.SpawnSetup(map, respawningAfterLoad);
+            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_RebirthRings);
+        }
+
+        protected override void Tick()
+        {
+            base.Tick();
+            visual.Maintain(this, MingyuanVisualDefOf.MX_MY_RebirthRings);
+        }
+
+        public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
+        {
+            visual.End(this);
+            base.DeSpawn(mode);
+        }
+
+        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visual.Maintain(this, def);
+
         private int returnTick;
         private int startTick;
         public void SetReturnTick(int tick)
@@ -119,19 +137,19 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Values.Look(ref startTick, "startTick");
         }
         public override string GetInspectString() => "MX_Mingyuan_Rebirth_Countdown".Translate(Mathf.Max(0, Mathf.CeilToInt((returnTick - Find.TickManager.TicksGame) / 60f)));
-        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
         {
-            base.DrawAt(drawLoc, flip);
+            Vector3 drawLoc = DrawPos;
             int tick = Find.TickManager.TicksGame;
             float phase = (tick - startTick) / 60f;
             float remaining = Mathf.Clamp01((returnTick - tick) / (float)Mathf.Max(1, returnTick - startTick));
-            MingyuanSkillVfx.Ring(drawLoc, 1.05f + Mathf.Sin(phase * 3f) * 0.08f, phase, 0.85f);
-            MingyuanSkillVfx.Ring(drawLoc, 1.4f, 0f, 0.95f, remaining);
+            MingyuanSkillVfx.Ring(layers, drawLoc, 1.05f + Mathf.Sin(phase * 3f) * 0.08f, phase, 0.85f);
+            MingyuanSkillVfx.Ring(layers, drawLoc, 1.4f, 0f, 0.95f, remaining);
             for (int i = 0; i < 6; i++)
             {
                 Vector3 ray = MingyuanSkillVfx.Radial(phase * 1.4f + i * Mathf.PI / 3f);
                 Vector3 point = drawLoc + ray * (0.65f + Mathf.Sin(phase * 2f + i) * 0.12f);
-                MingyuanSkillVfx.Line(point - ray * 0.16f, point + ray * 0.16f, 0.1f, 0.9f);
+                MingyuanSkillVfx.Line(layers, point - ray * 0.16f, point + ray * 0.16f, 0.1f, 0.9f);
             }
         }
     }

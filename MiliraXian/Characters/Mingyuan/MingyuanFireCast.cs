@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -159,7 +160,7 @@ public class CompAbilityEffect_MingyuanBurningPillar : CompAbilityEffect_Mingyua
 
     public override void DrawEffectPreview(LocalTargetInfo target)
     {
-        if (Valid(target)) MingyuanFireVfx.DrawWarning(target.Cell.ToVector3Shifted(), 1f);
+        if (Valid(target)) MingyuanFireVfx.DrawWarning(null, target.Cell.ToVector3Shifted(), 1f);
     }
 
     public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
@@ -209,8 +210,17 @@ internal static class Patch_MingyuanPillarCrystal_CanHit
     }
 }
 
-public class Projectile_MingyuanPillarCrystal : Projectile
+public class Projectile_MingyuanPillarCrystal : Projectile, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
+    }
+
     public override int UpdateRateTicks => 1;
 
     protected override void TickInterval(int delta)
@@ -231,8 +241,10 @@ public class Projectile_MingyuanPillarCrystal : Projectile
         base.TickInterval(delta);
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) =>
-        MingyuanFireVfx.DrawProjectile(drawLoc, ExactRotation, DistanceCoveredFraction);
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers) =>
+        MingyuanFireVfx.DrawProjectile(layers, DrawPos, ExactRotation, DistanceCoveredFraction);
 
     protected override void Impact(Thing hitThing, bool blockedByShield = false)
     {

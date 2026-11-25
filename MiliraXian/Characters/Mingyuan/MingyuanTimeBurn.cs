@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common;
@@ -96,8 +97,17 @@ internal static class MingyuanTimeBurnUtility
             ?.CompOfType<CompAbilityEffect_MingyuanTimeBurn>()?.Props;
 }
 
-public class Projectile_MingyuanTimeBurnWave : Projectile
+public class Projectile_MingyuanTimeBurnWave : Projectile, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
+    }
+
     internal const float HalfWidth = 1.05f;
     internal const float ArcDepth = 0.52f;
     private const float HitTolerance = 0.28f;
@@ -222,8 +232,10 @@ public class Projectile_MingyuanTimeBurnWave : Projectile
         }
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false) =>
-        MingyuanFireVfx.DrawTimeBurnWave(drawLoc, Direction, DistanceCoveredFraction);
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers) =>
+        MingyuanFireVfx.DrawTimeBurnWave(layers, DrawPos, Direction, DistanceCoveredFraction);
 }
 
 public class MingyuanTimeBurnRecord : IExposable

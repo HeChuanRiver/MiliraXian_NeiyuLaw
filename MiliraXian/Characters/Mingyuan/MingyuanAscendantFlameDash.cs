@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -76,8 +77,11 @@ public class CompAbilityEffect_MingyuanAscendantFlameDash : CompAbilityEffect_Mi
     }
 }
 
-public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
+public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
     private AbilityDef abilityDef;
     private IntVec3 target = IntVec3.Invalid;
     private HashSet<Pawn> hit = new();
@@ -105,6 +109,7 @@ public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
     public override void SpawnSetup(Map map, bool respawningAfterLoad)
     {
         base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
         if (Props == null) return; // A flyer saved with the former vanilla class finishes via the base implementation.
         ticksFlightTime = DiveStart + diveTicks;
         Vector3 origin = startVec.Yto0();
@@ -177,8 +182,12 @@ public class PawnFlyer_MingyuanAscendantFlameDash : PawnFlyer
 
         bool hidden = ticksFlying >= DiveStart - Props.hiddenTicks && ticksFlying < DiveStart;
         if (!hidden) FlyingThing?.DynamicDrawPhaseAt(phase, drawLoc);
-        if (phase == DrawPhase.Draw && !hidden)
-            MingyuanFireVfx.DrawDash(Ground, drawLoc, Rotation, (target.ToVector3Shifted() - startVec).Yto0(),
+    }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
+    {
+        if (Props != null && (ticksFlying < DiveStart - Props.hiddenTicks || ticksFlying >= DiveStart))
+            MingyuanFireVfx.DrawDash(layers, Ground, DrawPos, Rotation, (target.ToVector3Shifted() - startVec).Yto0(),
                 ticksFlying, DiveStart, DiveProgress, Props.featherLimit);
     }
 

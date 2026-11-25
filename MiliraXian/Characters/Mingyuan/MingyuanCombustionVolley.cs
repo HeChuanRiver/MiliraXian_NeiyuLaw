@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters.Common.SweepDamage;
 using MiliraXian.Characters.Common.Vfx;
@@ -63,8 +64,17 @@ public sealed class SweepDamageWorker_MingyuanCombustion : SweepDamageWorker
     }
 }
 
-public sealed class Thing_MingyuanCombustionVolley : Thing
+public sealed class Thing_MingyuanCombustionVolley : Thing, IMingyuanVisualSource
 {
+    private MingyuanVisualBinding visualBinding;
+    void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+    public override void SpawnSetup(Map map, bool respawningAfterLoad)
+    {
+        base.SpawnSetup(map, respawningAfterLoad);
+        MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Fire);
+    }
+
     private Pawn caster;
     private AbilityDef ability;
     private CompProperties_AbilityMingyuanInstantCombustion props;
@@ -178,12 +188,14 @@ public sealed class Thing_MingyuanCombustionVolley : Thing
         }
     }
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
+
+    void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
     {
         if (Props is { } settings && landings is { Count: > 0 } && CasterCanSustain)
         {
             visual ??= new MingyuanCombustionVfx(Position, landings, settings, caster.thingIDNumber);
-            visual.Draw(Map, VisualClock.TicksSince(startTick), nextImpact);
+            visual.Draw(layers, Map, VisualClock.TicksSince(startTick), nextImpact);
         }
     }
 

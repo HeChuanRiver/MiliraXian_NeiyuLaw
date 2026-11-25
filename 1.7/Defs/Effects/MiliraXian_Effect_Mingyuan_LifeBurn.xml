@@ -78,7 +78,7 @@
     <label>明渊·重生之焰</label>
     <thingClass>MiliraXian.Characters.Mingyuan.Thing_MingyuanRebirthMarker</thingClass>
     <selectable>true</selectable>
-    <tickerType>Never</tickerType>
+    <tickerType>Normal</tickerType>
     <drawerType>RealtimeOnly</drawerType>
     <altitudeLayer>MoteLow</altitudeLayer>
     <passability>Standable</passability>

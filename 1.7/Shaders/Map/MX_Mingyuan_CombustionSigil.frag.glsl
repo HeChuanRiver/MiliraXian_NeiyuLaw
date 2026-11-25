@@ -1,4 +1,7 @@
 #version 450
+layout(location = 4) flat in vec4 vFrame;
+layout(location = 5) flat in vec4 vShape;
+layout(location = 6) flat in float vGlow;
 layout(location=0) in vec2 vUv;
 layout(location=0) out vec4 outColor;
 layout(set=2,binding=0) uniform MaterialUniforms {
@@ -7,18 +10,20 @@ layout(set=2,binding=0) uniform MaterialUniforms {
     vec4 _BloomTint; // @color @default = vec4(1.0,1.0,1.0,1.0)
     float _BloomIntensity; // @default = 1.0
     float _CombustionCapture; // @default = 0.0
+    float _MxBatched; // @default = 0.0
 } u;
 float line(float d,float w) {
     float aa=max(fwidth(d),0.0015);
     return 1.0-smoothstep(w-aa,w+aa,abs(d));
 }
 void main() {
+    if (u._CombustionCapture > 0.5 && vGlow <= 0.0) discard;
     vec2 p=vUv*2.0-1.0;
     float r=length(p);
     if(r>=1.0) discard;
-    float a=atan(p.y,abs(p.x)<0.00001?0.00001:p.x),t=u._CombustionFrame.x;
-    float draw=u._CombustionFrame.y;
-    float charge=u._CombustionShape.y;
+    float a=atan(p.y,abs(p.x)<0.00001?0.00001:p.x),t=vFrame.x;
+    float draw=vFrame.y;
+    float charge=vShape.y;
     float outer=line(r-0.93,0.005)*smoothstep(0.0,0.035,draw-fract(a/6.2831853+0.5));
     float inner=line(r-0.76,0.004)*(0.55+0.45*smoothstep(0.2,0.7,cos(a*6.0+t*0.6)));
     float sector=mod(a-t*0.12+0.1309,0.2618)-0.1309;
@@ -32,7 +37,7 @@ void main() {
         *smoothstep(0.55,0.96,arcPhase)*charge;
     float alpha=max(outer,max(inner,max(glyph,triangle*0.4)))*draw+(spark+arc)*draw;
     if(u._CombustionCapture>0.5) alpha*=max(outer*0.32,max(spark,arc));
-    alpha=clamp(alpha*u._CombustionFrame.w,0.0,0.8);
+    alpha=clamp(alpha*vFrame.w,0.0,0.8);
     vec3 color=mix(vec3(0.87,0.24,0.145),vec3(1.0,0.82,0.42),0.55+0.45*spark);
-    outColor=vec4(color*u._BloomTint.rgb*u._BloomIntensity*alpha,alpha);
+    outColor=vec4(color*u._BloomTint.rgb*(u._BloomIntensity * (u._CombustionCapture > 0.5 ? vGlow : 1.0))*alpha,alpha);
 }

@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
@@ -18,26 +19,6 @@ namespace MiliraXian.Characters.Mingyuan
         private const string LifeBurnBurstDefName = "MX_Mingyuan_Mote_LifeBurnBurst";
         private const string CombustionFlashDefName = "MX_Mingyuan_Mote_InstantCombustionFlash";
         private const string TransferLineDefName = "MX_Mingyuan_Fleck_LifeBurnTransferLine";
-
-        private static readonly Material CoreMaterial = MaterialPool.MatFrom(
-            "MiliraXianMingyuan/Effect/LifeBurnMark",
-            ShaderDatabase.MoteGlow,
-            new Color(1f, 0.72f, 0.34f, 0.90f));
-
-        private static readonly Material HaloMaterial = MaterialPool.MatFrom(
-            "MiliraXianMingyuan/Effect/AshesPulse",
-            ShaderDatabase.MoteGlow,
-            new Color(0.96f, 0.93f, 0.78f, 0.62f));
-
-        private static readonly Material InnerMaterial = MaterialPool.MatFrom(
-            "MiliraXianMingyuan/Effect/BurningPillarCore",
-            ShaderDatabase.MoteGlow,
-            new Color(1f, 0.50f, 0.22f, 0.88f));
-
-        private static readonly Material IncomingMaterial = MaterialPool.MatFrom(
-            "MiliraXianMingyuan/Effect/LifeBurnBurst",
-            ShaderDatabase.MoteGlow,
-            new Color(1f, 0.88f, 0.61f, 0.78f));
 
         public static void PlayOmen(Map map, IntVec3 center, bool intense)
         {
@@ -82,7 +63,7 @@ namespace MiliraXian.Characters.Mingyuan
             Shake(map, 0.24f, 210);
         }
 
-        public static void DrawIncoming(Vector3 drawPos, float angle, int ageTicks)
+        internal static void DrawIncoming(MingyuanVisualEmitter layers, Vector3 drawPos, float angle, int ageTicks)
         {
             float radians = angle * Mathf.Deg2Rad;
             Vector3 trailDirection = new Vector3(-Mathf.Sin(radians), 0f, -Mathf.Cos(radians));
@@ -92,7 +73,7 @@ namespace MiliraXian.Characters.Mingyuan
                 Vector3 position = drawPos + trailDirection * (0.48f + index * 0.56f);
                 position.y = AltitudeLayer.MoteOverhead.AltitudeFor() + index * 0.001f;
                 float size = (3.2f - index * 0.43f) * pulse;
-                DrawPlane(IncomingMaterial, position, size, ageTicks * 3.6f + index * 27f);
+                layers.Sprite(MingyuanSprite.Incoming, position, size, ageTicks * 3.6f + index * 27f, new Color(1f, 0.88f, 0.61f, 0.78f));
             }
         }
 
@@ -141,7 +122,7 @@ namespace MiliraXian.Characters.Mingyuan
             Shake(map, 1.7f, 90);
         }
 
-        public static void DrawMarker(Vector3 drawPos, int tick, float intensity)
+        internal static void DrawMarker(MingyuanVisualEmitter layers, Vector3 drawPos, int tick, float intensity)
         {
             intensity = Mathf.Clamp(intensity, 0.65f, 2f);
             float slowPulse = 0.94f + Mathf.Sin(tick * 0.045f) * 0.09f;
@@ -149,11 +130,11 @@ namespace MiliraXian.Characters.Mingyuan
             Vector3 position = drawPos;
             position.y = AltitudeLayer.MoteOverheadLow.AltitudeFor();
 
-            DrawPlane(HaloMaterial, position, 4.25f * slowPulse * Mathf.Lerp(0.92f, 1.12f, intensity - 0.65f), tick * 0.36f);
+            layers.Sprite(MingyuanSprite.Halo, position, 4.25f * slowPulse * Mathf.Lerp(0.92f, 1.12f, intensity - 0.65f), tick * 0.36f, new Color(0.96f, 0.93f, 0.78f, 0.62f));
             position.y += 0.002f;
-            DrawPlane(CoreMaterial, position, 3.05f * fastPulse, -tick * 0.62f);
+            layers.Sprite(MingyuanSprite.Core, position, 3.05f * fastPulse, -tick * 0.62f, new Color(1f, 0.72f, 0.34f, 0.90f));
             position.y += 0.002f;
-            DrawPlane(InnerMaterial, position, 2.05f * slowPulse, tick * 0.93f);
+            layers.Sprite(MingyuanSprite.Inner, position, 2.05f * slowPulse, tick * 0.93f, new Color(1f, 0.50f, 0.22f, 0.88f));
         }
 
         public static void TickMarker(Thing marker, float intensity)
@@ -379,20 +360,6 @@ namespace MiliraXian.Characters.Mingyuan
             return mote;
         }
 
-        private static void DrawPlane(Material material, Vector3 position, float size, float rotation)
-        {
-            if (material == null || size <= 0.01f)
-            {
-                return;
-            }
-
-            Matrix4x4 matrix = Matrix4x4.TRS(
-                position,
-                Quaternion.AngleAxis(rotation, Vector3.up),
-                new Vector3(size, 1f, size));
-            Graphics.DrawMesh(MeshPool.plane10, matrix, material, 0);
-        }
-
         private static void PlaySound(string defName, Map map, IntVec3 cell)
         {
             DefDatabase<SoundDef>.GetNamedSilentFail(defName)?.PlayOneShot(new TargetInfo(cell, map));
@@ -418,8 +385,17 @@ namespace MiliraXian.Characters.Mingyuan
         }
     }
 
-    public class Skyfaller_MingyuanQuestRebirthFlame : Skyfaller
+    public class Skyfaller_MingyuanQuestRebirthFlame : Skyfaller, IMingyuanVisualSource
     {
+        private MingyuanVisualBinding visualBinding;
+        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        {
+            base.SpawnSetup(map, respawningAfterLoad);
+            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_WhiteFlame);
+        }
+
         protected override void Tick()
         {
             base.Tick();
@@ -429,10 +405,9 @@ namespace MiliraXian.Characters.Mingyuan
             }
         }
 
-        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
+        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
         {
-            base.DrawAt(drawLoc, flip);
-            MingyuanWhiteFlameVfx.DrawIncoming(DrawPos, angle, ageTicks);
+            MingyuanWhiteFlameVfx.DrawIncoming(layers, DrawPos, angle, ageTicks);
         }
 
         protected override void Impact()

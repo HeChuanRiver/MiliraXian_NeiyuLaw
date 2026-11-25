@@ -1,3 +1,4 @@
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using System.Collections.Generic;
 using MiliraXian.Characters;
 using RimWorld;
@@ -25,11 +26,18 @@ namespace MiliraXian.Characters.Mingyuan
     }
 
     [StaticConstructorOnStartup]
-    public class Projectile_MingyuanRainbowArrow : ProjectileHomingCurveBase, IProjectileVisualPositionProvider
+    public class Projectile_MingyuanRainbowArrow : ProjectileHomingCurveBase, IProjectileVisualPositionProvider, IMingyuanVisualSource
     {
+        private MingyuanVisualBinding visualBinding;
+        void IMingyuanVisualSource.AttachVisual(VfxDef def) => visualBinding.Maintain(this, def);
+
+        public override void SpawnSetup(Map map, bool respawningAfterLoad)
+        {
+            base.SpawnSetup(map, respawningAfterLoad);
+            MingyuanVisualBinding.AfterSpawn(this, MingyuanVisualDefOf.MX_MY_Bow);
+        }
+
         private static readonly List<Pawn> CandidatePawns = new(32);
-        private static Texture2D cachedGlowTexture;
-        private static Material cachedGlowMaterial;
 
         private int remainingBounces = -1;
         private List<Pawn> hitPawns = new(8);
@@ -51,8 +59,9 @@ namespace MiliraXian.Characters.Mingyuan
             Scribe_Collections.Look(ref hitCounts, "hitCounts", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                if (visualArcDurationTicks <= 0)
+                    visualArcDurationTicks = Mathf.Max(1, Mathf.Max(lifetime, ticksToImpact));
                 hitPawns ??= new(8);
-
                 hitCounts ??= new(hitPawns.Count);
             }
         }
@@ -95,7 +104,6 @@ namespace MiliraXian.Characters.Mingyuan
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
             Vector3 visualLoc = drawLoc + Vector3.forward * VisualArcOffset;
-            DrawGlow(visualLoc);
             base.DrawAt(visualLoc, flip);
         }
 
@@ -329,17 +337,12 @@ namespace MiliraXian.Characters.Mingyuan
         {
             get
             {
-                if (visualArcDurationTicks <= 0)
-                {
-                    visualArcDurationTicks = Mathf.Max(1, Mathf.Max(lifetime, ticksToImpact));
-                }
-
-                float progress = Mathf.Clamp01(visualArcElapsedTicks / (float)visualArcDurationTicks);
+                float progress = Mathf.Clamp01(visualArcElapsedTicks / (float)Mathf.Max(1, visualArcDurationTicks));
                 return Mathf.Max(0f, Ext?.visualArcHeight ?? 0.9f) * GenMath.InverseParabola(progress);
             }
         }
 
-        private void DrawGlow(Vector3 drawLoc)
+        void IMingyuanVisualSource.PopulateVisual(MingyuanVisualEmitter layers)
         {
             Texture2D texture = def.graphic?.MatSingle?.mainTexture as Texture2D;
             if (texture == null)
@@ -348,20 +351,12 @@ namespace MiliraXian.Characters.Mingyuan
             }
 
             Color glowColor = Ext?.glowColor ?? new Color(1f, 0.62f, 0.24f, 0.58f);
-            if (cachedGlowMaterial == null || cachedGlowTexture != texture)
-            {
-                cachedGlowTexture = texture;
-                cachedGlowMaterial = MaterialPool.MatFrom(texture, ShaderDatabase.MoteGlow, glowColor);
-            }
+            layers.SetTextureChannel("arrowTexture", texture);
 
             float scale = Mathf.Max(1f, Ext?.glowScale ?? 1.28f);
             Vector2 size = def.graphicData.drawSize * scale;
-            Graphics.DrawMesh(
-                MeshPool.GridPlane(size),
-                drawLoc - Altitudes.AltIncVect * 0.1f,
-                ExactRotation,
-                cachedGlowMaterial,
-                0);
+            layers.Quad(MingyuanSprite.ArrowGlow, DrawPos + Vector3.forward * VisualArcOffset - Altitudes.AltIncVect * 0.1f,
+                ExactRotation * Vector3.right * (size.x * 0.5f), ExactRotation * Vector3.forward * (size.y * 0.5f), glowColor);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace MiliraXian.Characters.Mingyuan
         public static AbilityDef MX_Mingyuan_TimeBurn;
         public static ThingDef MX_Mingyuan_CinderSword;
         public static AbilityDef MX_Mingyuan_Absorb;
-        public static ThingDef MX_Mingyuan_SkillVisual;
         public static HediffDef MX_Mingyuan_LifeBurn;
         public static HediffDef MX_Mingyuan_SelfBurn;
         public static HediffDef MX_Mingyuan_BurningBody;

@@ -1,4 +1,15 @@
 #version 450
+
+#ifdef INSTANCED
+#include "InstanceTransforms.glsl"
+layout(set = 2, binding = 3) readonly buffer _InstanceData
+{
+    vec4 data[];
+} fireInstances;
+#endif
+
+layout(location = 4) flat in vec4 vFrame;
+layout(location = 5) flat in vec4 vShape;
 layout(location = 0) in vec2 vUv;
 layout(location = 1) in vec2 vWorld;
 layout(location = 2) flat in vec2 vCell;
@@ -44,18 +55,18 @@ float flecks(vec2 p)
 void main()
 {
     vec2 p = vUv * 2.0 - 1.0;
-    float t = u._FireParams.y;
-    float f = u._FireParams.z;
+    float t = vFrame.y;
+    float f = vFrame.z;
     float r = length(p);
     float angle = atan(p.x, p.y + 0.00001);
     float cycle = fract(angle / TAU + 1.0);
-    int shape = int(u._FireParams.x);
+    int shape = int(vFrame.x);
     vec3 color = Orange;
     float alpha = 0.0;
 
     if (shape == 0)
     {
-        float life = clamp((vCell.y - u._FireShape.x) / max(1.0, f), 0.0, 1.0);
+        float life = clamp((vCell.y - vShape.x) / max(1.0, f), 0.0, 1.0);
         int edge = int(vCell.x + 0.5);
         vec2 pos = vWorld;
         float weave = sin(pos.x * 5.7 + pos.y * 3.1 + t * 3.8 + sin(pos.y * 5.3 - t * 1.8));
@@ -72,7 +83,7 @@ void main()
     }
     else if (shape == 1)
     {
-        float warning = u._FireShape.x;
+        float warning = vShape.x;
         float reveal = f >= 0.999 ? 1.0 : (1.0 - smoothstep(f - 0.008, f, cycle)) * step(0.002, f);
         float outer = band(r - 0.971, 0.011) + 0.54 * band(r - 0.925, 0.006);
         float inner = 0.76 * band(r - 0.786, 0.008) + 0.36 * band(r - 0.745, 0.005);
@@ -116,7 +127,7 @@ void main()
     {
         float h = vUv.y;
         float a = vUv.x * TAU;
-        float inner = u._FireShape.y;
+        float inner = vShape.y;
         float curl = sin(a * 4.0 - h * 23.0 + t * 4.2 + sin(a * 6.0 + h * 8.0 - t * 3.2));
         float wisp = sin(a * 7.0 - h * 38.0 + t * 6.8);
         float sheet = smoothstep(-0.08, 0.93, curl * 0.78 + wisp * 0.22);
@@ -184,7 +195,7 @@ void main()
     {
         vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
         vec4 sword = texture(_MainTex, uv);
-        float charge = u._FireShape.x;
+        float charge = vShape.x;
         float rise = 1.0 - smoothstep(f, f + 0.10, (vUv.y - 0.19) / 0.78);
         rise *= smoothstep(0.0, 0.12, f) * smoothstep(0.18, 0.24, vUv.y);
         float drift = sin(p.y * 41.0 - t * (16.0 + 14.0 * charge));
@@ -202,7 +213,7 @@ void main()
     }
     else if (shape == 12)
     {
-        float d = p.y * u._FireShape.y - u._FireShape.z + u._FireShape.x * p.x * p.x;
+        float d = p.y * vShape.y - vShape.z + vShape.x * p.x * p.x;
         float taper = 1.0 - smoothstep(0.65, 1.0, abs(p.x));
         float core = band(d, 0.067 * (0.4 + 0.6 * taper));
         float flow = sin(p.x * 31.0 - t * 23.0 + sin(p.x * 13.0 + t * 9.0));
@@ -225,6 +236,6 @@ void main()
         }
     }
 
-    alpha = clamp(alpha * u._FireParams.w, 0.0, 1.0);
+    alpha = clamp(alpha * vFrame.w, 0.0, 1.0);
     outColor = vec4(color * u._BloomTint.rgb * u._BloomIntensity * alpha, alpha);
 }
