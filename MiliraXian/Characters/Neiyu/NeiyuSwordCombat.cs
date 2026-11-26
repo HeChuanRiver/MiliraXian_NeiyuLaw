@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using MiliraXian.Characters.Common.Combat;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -218,6 +219,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
     private int startedAt = -1, duration, dashTick, strikeTick, recoverTick;
     private bool prepared, dashed, strikeCommitted, endedVisual;
     private bool visualsRebound;
+    private VfxEmitterHandle compatStartFlash;
     private Map executionMap;
     private ThingWithComps executionWeapon;
     private IntVec3 origin = IntVec3.Invalid, hitCell = IntVec3.Invalid;
@@ -338,7 +340,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         if (!visualsRebound)
         {
             visualsRebound = true;
-            if (prepared) NeiyuSwordCombatVfx.Resume(pawn, hitCell, startedAt, dashTick, strikeTick, recoverTick,
+            if (prepared) compatStartFlash = NeiyuSwordCombatVfx.Resume(pawn, hitCell, startedAt, dashTick, strikeTick, recoverTick,
                 dashed, strikeCommitted, endedVisual);
         }
         if (!strikeCommitted) hitCell = Victim.Position;
@@ -346,7 +348,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         if (!prepared)
         {
             prepared = true;
-            NeiyuSwordCombatVfx.Execution(pawn, hitCell, NeiyuExecutionPhase.ExecutionStart);
+            compatStartFlash = NeiyuSwordCombatVfx.Execution(pawn, hitCell, NeiyuExecutionPhase.ExecutionStart);
         }
         if (!dashed && Elapsed >= dashTick)
         {
@@ -370,6 +372,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         // Write the event before death callbacks, including callbacks that save,
         // resurrect, move the victim, or replace this job.
         strikeCommitted = true;
+        EndCompatStartFlash();
         bool multi = IsMulti;
         int jobId = job.loadID;
         try
@@ -408,9 +411,16 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         if (posture?.Executioner == pawn) posture.ReleaseBreak();
     }
 
+    private void EndCompatStartFlash()
+    {
+        compatStartFlash.Host?.Destroy(compatStartFlash);
+        compatStartFlash = default;
+    }
+
     private void Finish(JobCondition condition)
     {
         ReleaseVictim(Victim);
+        EndCompatStartFlash();
         if (HasScene) FinishScene();
         // The execution does not resume the interrupted job (see CombatPosture): the AI or the
         // draft picks anew. Never clear the player's queue or revive a saved reference to a

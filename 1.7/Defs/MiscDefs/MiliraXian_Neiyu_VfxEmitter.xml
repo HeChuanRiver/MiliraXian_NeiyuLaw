@@ -109,16 +109,43 @@
       </li>
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
-  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_NY_VisualBase">
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
     <defName>MX_NY_SwordFlashes</defName>
-    <capacity>0</capacity>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuSwordFlashEmitter</emitterClass>
+    <lifetimeSeconds>1.5</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>40</capacity>
     <passes>
       <li>
-        <name>Flashes</name>
+        <name>lines</name>
+        <renderer>Ribbon</renderer>
+        <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <particleGroup>0</particleGroup>
+        <ribbon>
+          <ribbonIdChannel>strip</ribbonIdChannel>
+          <normalizeU>true</normalizeU>
+          <vMin>1</vMin>
+          <vMax>0</vMax>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+        </ribbon>
+      </li>
+      <li>
+        <name>dots</name>
         <renderer>Sprite</renderer>
         <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
         <shaderDef>MoteGlow</shaderDef>
-        <sprite />
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <quadSize>(1, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+        </sprite>
       </li>
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>

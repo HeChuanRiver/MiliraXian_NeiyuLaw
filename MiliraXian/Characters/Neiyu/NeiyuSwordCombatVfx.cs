@@ -46,9 +46,9 @@ internal static class NeiyuSwordCombatVfx
         drawLoc += direction * (p < c.dashFraction ? -.12f : .18f * (1f - p));
     }
 
-    private static void Emit(Pawn pawn, Vector3 position, int kind, SoundDef sound, Vector3 direction)
+    private static VfxEmitterHandle Emit(Pawn pawn, Vector3 position, int kind, SoundDef sound, Vector3 direction)
     {
-        if (pawn?.Spawned != true) return;
+        if (pawn?.Spawned != true) return default;
         try
         {
             sound?.PlayOneShot(new TargetInfo(position.ToIntVec3(), pawn.Map));
@@ -60,9 +60,10 @@ internal static class NeiyuSwordCombatVfx
         try
         {
             if (!Enabled || Intensity <= 0f || pawn.IsHiddenFromPlayer()
-                || Find.CameraDriver?.CurrentViewRect.ExpandedBy(3).Contains(position.ToIntVec3()) == false) return;
-            if (kind is not (0 or 1))
-                pawn.Map.GetComponent<MapComponent_NeiyuSwordVfx>().Add(pawn, position, direction, kind);
+                || Find.CameraDriver?.CurrentViewRect.ExpandedBy(3).Contains(position.ToIntVec3()) == false) return default;
+            VfxEmitterHandle handle = kind is not (0 or 1)
+                ? NeiyuSwordFlashEmitter.Spawn(pawn, position, direction, kind)
+                : default;
             // Native flecks own the whole parry burst; no parallel procedural parry flash.
             Rand.PushState(unchecked(pawn.thingIDNumber * 397 ^ NeiyuSwordCombat.Now));
             try
@@ -85,10 +86,12 @@ internal static class NeiyuSwordCombatVfx
                 }
             }
             finally { Rand.PopState(); }
+            return handle;
         }
         catch (Exception exception)
         {
             Log.ErrorOnce($"[霓羽弹刀] 事件特效不可用：{exception}", 197632101);
+            return default;
         }
     }
 
@@ -170,19 +173,24 @@ internal static class NeiyuSwordCombatVfx
         NeiyuWeaponVisualHooks.Notify(defender, "SwordDeflect_Projectile", contact.ToIntVec3(), 1.2f, returnDirection.AngleFlat());
     });
 
-    internal static void Execution(Pawn executor, IntVec3 target, NeiyuExecutionPhase phase) => Safely(() =>
+    internal static VfxEmitterHandle Execution(Pawn executor, IntVec3 target, NeiyuExecutionPhase phase)
     {
-        NeiyuSwordCombatDef c = NeiyuSwordCombat.Config;
-        int kind = phase == NeiyuExecutionPhase.ExecutionStart ? 3 : phase == NeiyuExecutionPhase.ExecutionStrike ? 4 : 5;
-        Emit(executor, kind == 3 ? executor.DrawPos : target.ToVector3Shifted(), kind,
-            kind == 3 ? c.prepareSound : kind == 4 ? c.strikeSound : c.endSound,
-            target.ToVector3Shifted() - executor.DrawPos);
-        NeiyuWeaponVisualHooks.Notify(executor, "SwordPosture_" + phase, target, 1.5f,
-            (target.ToVector3Shifted() - executor.DrawPos).AngleFlat());
-        if (kind == 4 && Enabled)
-            Patch_MXNL_MeleeSlashGhost_TryCastShot.SpawnDirectionalFleck(executor.Map,
-                target.ToVector3Shifted(), Slash, 2f, 35f);
-    });
+        VfxEmitterHandle handle = default;
+        Safely(() =>
+        {
+            NeiyuSwordCombatDef c = NeiyuSwordCombat.Config;
+            int kind = phase == NeiyuExecutionPhase.ExecutionStart ? 3 : phase == NeiyuExecutionPhase.ExecutionStrike ? 4 : 5;
+            handle = Emit(executor, kind == 3 ? executor.DrawPos : target.ToVector3Shifted(), kind,
+                kind == 3 ? c.prepareSound : kind == 4 ? c.strikeSound : c.endSound,
+                target.ToVector3Shifted() - executor.DrawPos);
+            NeiyuWeaponVisualHooks.Notify(executor, "SwordPosture_" + phase, target, 1.5f,
+                (target.ToVector3Shifted() - executor.DrawPos).AngleFlat());
+            if (kind == 4 && Enabled)
+                Patch_MXNL_MeleeSlashGhost_TryCastShot.SpawnDirectionalFleck(executor.Map,
+                    target.ToVector3Shifted(), Slash, 2f, 35f);
+        });
+        return handle;
+    }
 
     internal static void Dash(Pawn executor, Pawn victim) => Safely(() =>
     {
@@ -198,17 +206,22 @@ internal static class NeiyuSwordCombatVfx
 
     // Reconstruct remaining light geometry from the saved job clock. Audio and
     // hit callbacks are deliberately absent; their saved flags stay authoritative.
-    internal static void Resume(Pawn pawn, IntVec3 target, int start, int dash, int strike, int recover,
-        bool dashed, bool committed, bool ended) => Safely(() =>
+    internal static VfxEmitterHandle Resume(Pawn pawn, IntVec3 target, int start, int dash, int strike, int recover,
+        bool dashed, bool committed, bool ended)
     {
-        if (!Enabled || !pawn.Spawned) return;
-        MapComponent_NeiyuSwordVfx visuals = pawn.Map.GetComponent<MapComponent_NeiyuSwordVfx>();
-        Vector3 at = target.ToVector3Shifted(), direction = at - pawn.DrawPos;
-        visuals.AddAt(pawn, pawn.DrawPos, direction, 3, start, dash);
-        if (dashed) visuals.AddAt(pawn, at, direction, 6, start + dash, 15);
-        if (committed) visuals.AddAt(pawn, at, direction, 4, start + strike, 18);
-        if (ended) visuals.AddAt(pawn, at, direction, 5, start + recover, 25);
-    });
+        VfxEmitterHandle startFlash = default;
+        Safely(() =>
+        {
+            if (!Enabled || !pawn.Spawned) return;
+            Vector3 at = target.ToVector3Shifted(), direction = at - pawn.DrawPos;
+            if (!committed)
+                startFlash = NeiyuSwordFlashEmitter.SpawnAt(pawn, pawn.DrawPos, direction, 3, start, dash);
+            if (dashed) NeiyuSwordFlashEmitter.SpawnAt(pawn, at, direction, 6, start + dash, 15);
+            if (committed) NeiyuSwordFlashEmitter.SpawnAt(pawn, at, direction, 4, start + strike, 18);
+            if (ended) NeiyuSwordFlashEmitter.SpawnAt(pawn, at, direction, 5, start + recover, 25);
+        });
+        return startFlash;
+    }
 
     internal static float Hash(int seed)
     {
@@ -218,166 +231,213 @@ internal static class NeiyuSwordCombatVfx
     }
 }
 
-// Visual events only. Saved gameplay lives in the shared posture comp and native Job.
-// Overlapping flashes share one host pass and its bounded billboard geometry.
-public sealed class MapComponent_NeiyuSwordVfx(Map map) : MapComponent(map)
+/// <summary>
+/// Short-lived procedural sword combat flash (break ring, execution cue, cross slash,
+/// recovery sparks, dash slash, or perfect-deflect opening mark) rendered via standard
+/// Ribbon and Sprite passes without a dedicated map component.
+/// </summary>
+internal sealed class NeiyuSwordFlashEmitter : VfxEmitter
 {
-    private readonly record struct Flash(Pawn Pawn, Vector3 Position, Vector3 Direction, int Kind, int Tick, int Duration);
-    private readonly List<Flash> flashes = new(32);
-    private NeiyuVisualBinding binding;
-    private readonly NeiyuQuadBatch batch = new();
-    private int geometryTick = -1;
-    private Vector3 geometryRight, geometryUp;
-    private CellRect geometryView;
-    private float geometryIntensity = -1f;
+    private int kind;
+    private Vector3 direction;
+    private int startTick;
+    private int durationTicks;
+    private int stripSlot;
+    private int stripId;
 
-    internal void Add(Pawn pawn, Vector3 position, Vector3 direction, int kind)
+    public NeiyuSwordFlashEmitter()
+    {
+    }
+
+    internal static VfxEmitterHandle Spawn(Pawn pawn, Vector3 position, Vector3 direction, int kind)
     {
         int duration = kind switch { 2 => 22, 3 => 22, 4 => 18, 5 => 25, 7 => 35, _ => 15 };
-        AddAt(pawn, position, direction, kind, NeiyuSwordCombat.Now, duration);
+        return SpawnAt(pawn, position, direction, kind, NeiyuSwordCombat.Now, duration);
     }
 
-    internal void AddAt(Pawn pawn, Vector3 position, Vector3 direction, int kind, int tick, int duration)
+    internal static VfxEmitterHandle SpawnAt(Pawn pawn, Vector3 position, Vector3 direction, int kind, int tick, int duration)
     {
-        if (NeiyuSwordCombat.Now - tick >= duration) return;
-        if (flashes.Count >= Mathf.Clamp(NeiyuSwordCombat.Config.maxVisuals, 1, 128)) flashes.RemoveAt(0);
-        flashes.Add(new Flash(pawn, position, direction, kind, tick, duration));
-        geometryTick = -1;
-    }
+        if (pawn?.Map == null || NeiyuVisualDefOf.MX_NY_SwordFlashes == null) return default;
+        if (duration <= 0 || NeiyuSwordCombat.Now - tick >= duration) return default;
 
-    public override void MapComponentTick()
-    {
-        if (flashes.Count == 0) return;
-        int now = NeiyuSwordCombat.Now;
-        for (int i = flashes.Count - 1; i >= 0; i--)
-            if (now - flashes[i].Tick >= flashes[i].Duration) flashes.RemoveAt(i);
-        if (flashes.Count == 0)
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return default;
+
+        VfxAnchor anchor = kind is 3 or 7 ? VfxAnchor.Follow(pawn) : VfxAnchor.At(position);
+        VfxEmitterHandle handle = host.Spawn(NeiyuVisualDefOf.MX_NY_SwordFlashes, anchor);
+        if (host.TryGetEmitter(handle, out NeiyuSwordFlashEmitter emitter))
         {
-            binding.End();
-            batch.Begin();
+            emitter.Configure(kind, direction, tick, duration);
         }
-        else binding.Maintain();
+        return handle;
     }
 
-    public override void MapComponentUpdate()
+    internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int nowTick, Vector3 position)
     {
-        if (flashes.Count > 0) PushFlashes();
+        base.Reset(effect, anchor, version, nowTick, position);
+        kind = 0;
+        direction = Vector3.forward;
+        startTick = nowTick;
+        durationTicks = 0;
+        stripId = 0;
+        stripSlot = effect.RequireParticleFloatSlot("strip");
     }
 
-    private void PushFlashes()
+    private void Configure(int flashKind, Vector3 flashDirection, int flashStartTick, int flashDurationTicks)
     {
-        if (Find.CurrentMap != map || Find.Camera == null) return;
-        if (binding.Get(map, NeiyuVisualDefOf.MX_NY_SwordFlashes, VfxAnchor.At(flashes[0].Position)) is not { } emitter) return;
-        emitter.Flashes = batch;
-        if (!NeiyuSwordCombatVfx.Enabled) { batch.Begin(); geometryTick = -1; return; }
-        int now = NeiyuSwordCombat.Now;
-        Vector3 right = Find.Camera.transform.right, up = Find.Camera.transform.up;
-        CellRect view = Find.CameraDriver.CurrentViewRect.ExpandedBy(3);
-        if (geometryTick != now || !view.Equals(geometryView) || right != geometryRight || up != geometryUp || geometryIntensity != NeiyuSwordCombatVfx.Intensity)
+        kind = flashKind;
+        direction = flashDirection;
+        startTick = flashStartTick;
+        durationTicks = flashDurationTicks;
+        Sync(NeiyuSwordCombat.Now);
+    }
+
+    internal override bool Advance(float deltaSeconds, int nowTick, Map map)
+    {
+        Count = 0;
+        if (!base.Advance(deltaSeconds, nowTick, map))
         {
-            batch.Begin();
-            // Latest impacts retain the clearest feedback if the shared mesh budget is full.
-            for (int i = flashes.Count - 1; i >= 0; i--) Build(flashes[i], now, right, up);
-            geometryView = view;
-            geometryTick = now; geometryRight = right; geometryUp = up;
-            geometryIntensity = NeiyuSwordCombatVfx.Intensity;
+            return false;
         }
-    }
-
-    private void Line(Vector3 a, Vector3 b, float width, Color color)
-    {
-        Vector3 direction = b - a;
-        float length = direction.magnitude;
-        if (length <= .001f) return;
-        direction /= length;
-        Vector3 perpendicular = Vector3.Cross(-Find.Camera.transform.forward, direction).normalized;
-        batch.Add((a + b) * .5f, direction, perpendicular, length, width, color);
-    }
-
-    private static Color Alpha(Color color, float alpha)
-    {
-        color.a = Mathf.Clamp01(alpha * NeiyuSwordCombatVfx.Intensity);
-        return color;
-    }
-
-    private void Build(Flash f, int now, Vector3 right, Vector3 up)
-    {
-        if (!Find.CameraDriver.CurrentViewRect.ExpandedBy(3).Contains(f.Position.ToIntVec3())) return;
-        float p = Mathf.Clamp01((now - f.Tick) / (float)f.Duration), fade = (1f - p) * (1f - p);
-        Vector3 at = f.Position; at.y = AltitudeLayer.MoteOverhead.AltitudeFor();
-        Color gold = NeiyuSwordCombatVfx.Gold, hot = NeiyuSwordCombatVfx.Hot;
-        Color red = NeiyuSwordCombatVfx.Red, ice = NeiyuSwordCombatVfx.Ice;
-        if (f.Kind == 3)
+        if (durationTicks <= 0 || nowTick - startTick >= durationTicks)
         {
-            if (f.Pawn?.jobs?.curDriver is not JobDriver_NeiyuPostureExecution driver || driver.Phase != NeiyuExecutionPhase.ExecutionStart) return;
-            at = f.Pawn.DrawPos; at.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+            return false;
+        }
+        Sync(nowTick);
+        return true;
+    }
+
+    private void Sync(int now)
+    {
+        Count = 0;
+        stripId = 0;
+        if (!NeiyuSwordCombatVfx.Enabled || NeiyuSwordCombatVfx.Intensity <= 0f)
+        {
+            return;
+        }
+        Camera camera = Find.Camera;
+        if (camera == null)
+        {
+            return;
+        }
+        if (Find.CameraDriver != null && !Find.CameraDriver.CurrentViewRect.ExpandedBy(3).Contains(Position.ToIntVec3()))
+        {
+            return;
+        }
+
+        Vector3 right = camera.transform.right;
+        Vector3 up = camera.transform.up;
+        Vector3 normal = -camera.transform.forward;
+
+        float p = Mathf.Clamp01((now - startTick) / (float)durationTicks);
+        float fade = (1f - p) * (1f - p);
+        Vector3 at = Position;
+        Color gold = NeiyuSwordCombatVfx.Gold;
+        Color hot = NeiyuSwordCombatVfx.Hot;
+        Color red = NeiyuSwordCombatVfx.Red;
+        Color ice = NeiyuSwordCombatVfx.Ice;
+
+        if (kind == 3)
+        {
             float charge = Mathf.Sin(p * Mathf.PI);
-            Line(at - right * .32f - up * .12f, at + right * .32f + up * .68f, .09f, Alpha(ice, charge * .7f));
+            Line(at - right * .32f - up * .12f, at + right * .32f + up * .68f, .09f, Tint(ice, charge * .7f), normal);
             for (int i = 0; i < 5; i++)
             {
                 float t = (p + i / 5f) % 1f;
-                batch.Add(at + right * Mathf.Sin(i * 2.4f) * .16f + up * t * .7f,
-                    right, up, .055f, .055f, Alpha(Color.Lerp(ice, gold, t), charge));
+                Dot(at + right * Mathf.Sin(i * 2.4f) * .16f + up * t * .7f, .055f, Tint(Color.Lerp(ice, gold, t), charge));
             }
             return;
         }
-        if (f.Kind == 5)
+
+        if (kind == 5)
         {
             for (int i = 0; i < 6; i++)
-                batch.Add(at + right * (NeiyuSwordCombatVfx.Hash(i + f.Tick) - .5f) + up * p * .5f,
-                    right, up, .055f * (1f - p), .055f * (1f - p), Alpha(gold, fade * .7f));
+            {
+                Dot(at + right * (NeiyuSwordCombatVfx.Hash(i + startTick) - .5f) + up * p * .5f,
+                    .055f * (1f - p), Tint(gold, fade * .7f));
+            }
             return;
         }
-        if (f.Kind == 7)
+
+        if (kind == 7)
         {
-            if (f.Pawn?.Spawned != true || NeiyuSwordCombat.Posture(f.Pawn)?.HasOpening != true) return;
-            at = f.Pawn.DrawPos + up * .6f; at.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+            at += up * .6f;
             for (int i = 0; i < 4; i++)
             {
                 float a = (i * .5f + .25f) * Mathf.PI;
                 float b = a + Mathf.PI * .5f;
                 Line(at + (right * Mathf.Cos(a) + up * Mathf.Sin(a)) * .23f,
-                    at + (right * Mathf.Cos(b) + up * Mathf.Sin(b)) * .23f, .045f, Alpha(red, fade));
+                    at + (right * Mathf.Cos(b) + up * Mathf.Sin(b)) * .23f, .045f, Tint(red, fade), normal);
             }
             return;
         }
-        if (f.Kind != 6)
+
+        if (kind != 6)
         {
             float glow = Mathf.Max(0f, 1f - p * 4f);
-            batch.Add(at, right, up, .72f, .72f, Alpha(hot, glow));
+            Dot(at, .72f, Tint(hot, glow));
         }
-        if (f.Kind is 4 or 6)
+
+        if (kind is 4 or 6)
         {
-            float reach = f.Kind == 4 ? 1.25f : .95f;
+            float reach = kind == 4 ? 1.25f : .95f;
             Vector3 slash = (right + up * .65f).normalized * reach;
-            Line(at - slash, at + slash, .055f * (1f - p) + .015f, Alpha(f.Kind == 4 ? red : hot, fade));
-            if (f.Kind != 6)
+            Line(at - slash, at + slash, .055f * (1f - p) + .015f, Tint(kind == 4 ? red : hot, fade), normal);
+            if (kind != 6)
             {
                 slash = (right - up * .8f).normalized * reach * .8f;
-                Line(at - slash, at + slash, .04f, Alpha(gold, fade));
+                Line(at - slash, at + slash, .04f, Tint(gold, fade), normal);
             }
         }
-        if (f.Kind is 2 or 4)
+
+        if (kind is 2 or 4)
         {
             const int segments = 16;
             const float sweep = Mathf.PI * 2f;
-            float start = Mathf.Atan2(Vector3.Dot(f.Direction, up), Vector3.Dot(f.Direction, right)) - sweep * .5f;
-            float radius = f.Kind == 2 ? Mathf.Lerp(.8f, .12f, p) : Mathf.Lerp(.15f, 1.05f, p);
+            float start = Mathf.Atan2(Vector3.Dot(direction, up), Vector3.Dot(direction, right)) - sweep * .5f;
+            float radius = kind == 2 ? Mathf.Lerp(.8f, .12f, p) : Mathf.Lerp(.15f, 1.05f, p);
             for (int i = 0; i < segments; i++)
             {
-                float a = start + sweep * i / segments, b = start + sweep * (i + .88f) / segments;
+                float a = start + sweep * i / segments;
+                float b = start + sweep * (i + .88f) / segments;
                 Line(at + (right * Mathf.Cos(a) + up * Mathf.Sin(a)) * radius,
                     at + (right * Mathf.Cos(b) + up * Mathf.Sin(b)) * radius,
-                    f.Kind == 2 ? .045f : .025f, Alpha(f.Kind == 2 ? red : gold, fade * .8f));
+                    kind == 2 ? .045f : .025f, Tint(kind == 2 ? red : gold, fade * .8f), normal);
             }
         }
     }
 
-    public override void MapRemoved()
+    private void Line(Vector3 a, Vector3 b, float width, Color color, Vector3 viewNormal)
     {
-        binding.End();
-        batch.Begin();
-        flashes.Clear();
-        base.MapRemoved();
+        if (width <= .001f || color.a <= .001f) return;
+        Vector3 dir = b - a;
+        float length = dir.magnitude;
+        if (length <= .001f) return;
+        Vector3 side = Vector3.Cross(viewNormal, dir / length).normalized * (width * .5f);
+        int id = ++stripId;
+        int i0 = Emit(a, 0f, 1f, color, particleGroup: 0);
+        if (i0 >= 0)
+        {
+            Particles[i0].Side = side;
+            SetChannel(i0, stripSlot, id);
+        }
+        int i1 = Emit(b, 0f, 1f, color, particleGroup: 0);
+        if (i1 >= 0)
+        {
+            Particles[i1].Side = side;
+            SetChannel(i1, stripSlot, id);
+        }
+    }
+
+    private void Dot(Vector3 center, float size, Color color)
+    {
+        if (size <= .001f || color.a <= .001f) return;
+        Emit(center, 0f, size, color, particleGroup: 1);
+    }
+
+    private static Color Tint(Color color, float alpha)
+    {
+        color.a = Mathf.Clamp01(alpha * NeiyuSwordCombatVfx.Intensity);
+        return color;
     }
 }

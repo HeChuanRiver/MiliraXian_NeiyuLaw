@@ -19,7 +19,7 @@ public static class NeiyuVisualDefOf
     static NeiyuVisualDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(NeiyuVisualDefOf));
 }
 
-internal enum NeiyuLayer { Glow, Cross, Sword, Glyph, Cut, Wave, MultiWave, Feather, Ring, Flashes, Energy, Sparks, Plate }
+internal enum NeiyuLayer { Glow, Cross, Sword, Glyph, Cut, Wave, MultiWave, Feather, Ring, Energy, Sparks, Plate }
 
 internal struct NeiyuVisualBinding
 {
@@ -76,7 +76,7 @@ internal sealed class NeiyuVisualEffect : VfxEffect
                 Plate = pass;
                 pass.Renderer = null; // Instances are queued while preparing, then flushed by the host.
             }
-            else if (layer is NeiyuLayer.Ring or NeiyuLayer.Flashes or NeiyuLayer.Energy or NeiyuLayer.Sparks)
+            else if (layer is NeiyuLayer.Ring or NeiyuLayer.Energy or NeiyuLayer.Sparks)
                 pass.Renderer = new BatchPass(layer);
         }
         Passes.Insert(0, new VfxPass { Name = "prepare", Renderer = Prepare.Instance });
@@ -98,7 +98,6 @@ internal sealed class NeiyuVisualEffect : VfxEffect
             NeiyuQuadBatch batch = layer switch
             {
                 NeiyuLayer.Ring => visual.Ring,
-                NeiyuLayer.Flashes => visual.Flashes,
                 NeiyuLayer.Energy => visual.Thunder?.Ribbons,
                 NeiyuLayer.Sparks => visual.Thunder?.Particles,
                 _ => null
@@ -149,7 +148,6 @@ internal sealed class NeiyuQuadBatch
 
 internal sealed class NeiyuVisualEmitter : VfxEmitter
 {
-    internal NeiyuQuadBatch Flashes;
     internal NeiyuThunderVfx Thunder;
     internal NeiyuWarpFeatherVisual Feather;
     internal float WarmupProgress;
@@ -165,7 +163,6 @@ internal sealed class NeiyuVisualEmitter : VfxEmitter
     internal override void Reset(VfxEffect effect, VfxAnchor anchor, int version, int now, Vector3 position)
     {
         base.Reset(effect, anchor, version, now, position);
-        Flashes = null;
         Thunder = null;
         Feather = null;
         Ring?.Begin();
