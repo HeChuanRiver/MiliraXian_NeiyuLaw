@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RimWorld.Planet;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Verse;
@@ -103,15 +104,17 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
                 ReserveInstanceBatches();
             }
 
-            // Frame start: step ages, expire emitters whose source stopped maintaining them, then
-            // destroy the meshes queued on an earlier frame. Every map runs this every frame.
+            // Step ages, expire emitters whose source stopped maintaining them, then destroy meshes
+            // queued on earlier frames. Every map runs this every frame.
             TickFrame();
-        }
 
-        public override void MapComponentDraw()
-        {
-            // Only the current map gets a draw pass; that is the hook's own contract.
-            DrawFrame();
+            // Draw here rather than in MapComponentDraw: MapComponentDraw runs in UIRootUpdate
+            // before TickManagerUpdate and DrawDynamicThings, leaving attached or DrawAt-pushed
+            // visuals one frame behind the bodies they follow.
+            if (Find.CurrentMap == map && WorldRendererUtility.DrawingMap)
+            {
+                DrawFrame();
+            }
         }
 
         public override void MapRemoved()
@@ -272,8 +275,8 @@ namespace MiliraXian.Characters.Common.Vfx.Emitter
         }
 
         /// <summary>
-        /// Draws every live emitter, stroke by stroke. Called from the map component's draw pass,
-        /// which only runs for the current map.
+        /// Draws every live emitter, stroke by stroke. Runs from <see cref="MapComponentUpdate"/>
+        /// for the current map after ticks and dynamic things have updated.
         /// </summary>
         internal void DrawFrame()
         {

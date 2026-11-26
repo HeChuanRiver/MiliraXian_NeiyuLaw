@@ -434,8 +434,8 @@ GLSL 源码放在 `1.7/Shaders/Map/`，在 `*Shaders.xml` 里声明 `ShaderDef` 
 
 ### A. 帧内顺序与资源规则
 
-1. **帧内执行顺序**：RimWorld 一帧里先跑当前地图的 `MapComponentDraw`（提交绘制命令），再跑所有地图的 `MapComponentUpdate`（推进 `Advance` 并清理过期网格），帧末再由引擎统一消费 `Graphics.DrawMesh` 队列。
-   - 因此渲染器需要锚点坐标时应现场解析 `Anchor.TryResolve`，不要只依赖上一帧缓存；
+1. **帧内执行顺序**：RimWorld 一帧里先跑 `TickManagerUpdate` 与 `DrawDynamicThings`，再跑各张地图的 `MapComponentUpdate`；宿主在这里先推进所有地图的 `TickFrame`（执行 `Advance` 并清理早于当前帧的网格），再仅对当前正在绘制的地图执行 `DrawFrame` 提交绘制命令，最后在帧末由引擎统一消费 `Graphics.DrawMesh` 队列。
+   - 这样视觉时钟、锚点位置和动态实体处于同一轮 tick 快照，避免贴身特效落后本体一帧；
    - `Graphics.DrawMesh` 只是入队、不拷贝顶点，同一帧内不能销毁或覆写已经提交的网格。宿主通过 `VfxMeshPool` 按帧号延迟一帧销毁（`Retire` → 下一帧 `Sweep`）。
 2. **主线程资源约束**：材质、贴图、GPU 缓冲只能在主线程创建。`VfxDef.ConfigErrors` 跑在 DevMode 的并行加载阶段且早于 `[StaticConstructorOnStartup]`，因此只做纯数据语法校验，绝不访问 `ContentFinder`，通道存在性检查统一留在主线程编译/预热 `VfxEffect` 时执行。
 3. **预热时机**：地图生成期间的 `FinalizeInit` 可能跑在后台线程，所以预热挂在 `MapComponentUpdate` 的第一帧执行，提前编译所有 `VfxEffect` 并为实例化 Pass 预留 `ComputeBuffer`。
