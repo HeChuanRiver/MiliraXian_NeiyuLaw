@@ -127,6 +127,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         {
             int cut = multiCutContacts.Count;
             multiCutContacts.Add(aimPoint);
+            SpawnMultiCutSlash(cut, aimPoint);
             if (cut == MultiLastCut)
             {
                 multiStage = MultiStage.Recovery;

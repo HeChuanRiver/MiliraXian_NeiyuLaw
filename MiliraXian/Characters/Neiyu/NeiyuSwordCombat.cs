@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using MiliraXian.Characters.Common.Combat;
+using MiliraXian.Characters.Common.Vfx;
 using MiliraXian.Characters.Common.Vfx.BladeBody;
+using MiliraXian.Characters.Common.Vfx.BladeMotion;
 using MiliraXian.Characters.Common.Vfx.Emitter;
 using RimWorld;
 using UnityEngine;
@@ -219,7 +221,9 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
     private int startedAt = -1, duration, dashTick, strikeTick, recoverTick;
     private bool prepared, dashed, strikeCommitted, endedVisual;
     private bool visualsRebound;
+    private bool glyphSpawned;
     private VfxEmitterHandle compatStartFlash;
+    private VfxEmitterHandle sceneHandle;
     private Map executionMap;
     private ThingWithComps executionWeapon;
     private IntVec3 origin = IntVec3.Invalid, hitCell = IntVec3.Invalid;
@@ -288,7 +292,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         ExposeMulti();
         base.ExposeData();
         if (HasScene && Scribe.mode == LoadSaveMode.PostLoadInit)
-            LongEventHandler.ExecuteWhenFinished(() => { if (pawn?.jobs?.curDriver == this && pawn.Spawned) PushVolley(); });
+            LongEventHandler.ExecuteWhenFinished(() => { if (pawn?.jobs?.curDriver == this && pawn.Spawned) PushScene(); });
     }
 
     protected override IEnumerable<Toil> MakeNewToils()
@@ -318,9 +322,13 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
         if (IsSingle)
         {
             TickSingle();
-            PushVolley();
+            PushScene();
         }
-        else if (IsMulti) TickMulti();
+        else if (IsMulti)
+        {
+            TickMulti();
+            PushScene();
+        }
         else TickCompatibility();
     }
 
@@ -409,6 +417,197 @@ public sealed partial class JobDriver_NeiyuPostureExecution : JobDriver, IPostur
     {
         HediffComp_CombatPosture posture = NeiyuSwordCombat.Posture(victim);
         if (posture?.Executioner == pawn) posture.ReleaseBreak();
+    }
+
+    private T EnsureSceneEmitter<T>(VfxDef def) where T : VfxEmitter
+    {
+        if (pawn?.Map == null || def == null) return null;
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return null;
+        if (sceneHandle.Host == host && host.TryGetEmitter(sceneHandle, out T live))
+        {
+            host.Maintain(sceneHandle);
+            return live;
+        }
+        sceneHandle.Host?.Destroy(sceneHandle);
+        sceneHandle = host.Spawn(def, VfxAnchor.Follow(pawn));
+        return host.TryGetEmitter(sceneHandle, out live) ? live : null;
+    }
+
+    private void EndSceneEmitter()
+    {
+        sceneHandle.Host?.Destroy(sceneHandle);
+        sceneHandle = default;
+    }
+
+    private void PushScene()
+    {
+        if (pawn?.jobs?.curDriver != this || !pawn.Spawned || pawn.Map == null) return;
+        if (IsSingle)
+        {
+            PushSingleScene();
+            return;
+        }
+        if (IsMulti) PushMultiScene();
+    }
+
+    private void PushSingleScene()
+    {
+        if (singleStage == SingleStage.Lock) return;
+        int tick = SceneTick;
+
+        if (singleStage is SingleStage.Flight or SingleStage.Volley or SingleStage.Recovery)
+        {
+            MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+            bool freshVolley = host == null || sceneHandle.Host != host
+                || !host.TryGetEmitter(sceneHandle, out NeiyuVolleyEmitter _);
+            NeiyuVolleyEmitter volley = EnsureSceneEmitter<NeiyuVolleyEmitter>(NeiyuVisualDefOf.MX_NY_ExecVolley);
+            if (volley != null)
+            {
+                if (freshVolley)
+                {
+                    volley.Configure(new NeiyuVolleyConfig
+                    {
+                        SceneStart = sceneStart,
+                        ThrowYaw = throwYaw,
+                        AirVolley = singleAirVolley,
+                        SwordCount = swordCount,
+                        ReleaseAt = ReleaseAt,
+                        AimAt = AimAt,
+                        VolleyAt = VolleyAt,
+                        Stagger = VolleyStagger,
+                        Travel = SwordImpactAt(0) - SwordLaunchAt(0),
+                        FinalImpactAt = FinalImpactAt
+                    });
+                }
+                volley.SetTarget(previousTargetDraw, aimPoint, impacts);
+            }
+
+            int glyphTick = singleAirVolley ? AimAt : VolleyAt;
+            if (!glyphSpawned && tick >= glyphTick && tick < glyphTick + Single.glyphHoldTicks + Single.glyphFadeTicks)
+            {
+                glyphSpawned = true;
+                SpawnSingleGlyph();
+            }
+            return;
+        }
+
+        if (tick >= Single.readyTicks && tick < KnockbackAt && pawn.CurJob?.def?.neverShowWeapon == false)
+        {
+            BladeGraphicExtension ext = BladeMotionPlayer.DrawnBlade(pawn);
+            if (ext != null && TryGetBladePose(out BladePose pose))
+            {
+                NeiyuBladeChargeEmitter blade = EnsureSceneEmitter<NeiyuBladeChargeEmitter>(NeiyuVisualDefOf.MX_NY_ExecBlade);
+                if (blade != null)
+                {
+                    BladeRenderer.GetGripAndTip(ext, pose, pawn.DrawPos, out Vector3 grip, out Vector3 tip);
+                    bool swinging = tick >= SwingAt;
+                    float crossFade = !swinging && tick >= FlashAt ? 1f - ProgressBetween(tick, FlashAt, SwingAt) : 0f;
+                    float trailFade = swinging ? 1f - ProgressBetween(tick, FirstCutAt + hitStopTicks, KnockbackAt) : 0f;
+                    blade.PushBlade(grip, tip, pose.reveal, tick - Single.readyTicks, crossFade, swinging, trailFade);
+                }
+            }
+            return;
+        }
+
+        EndSceneEmitter();
+    }
+
+    private void PushMultiScene()
+    {
+        int tick = SceneTick;
+        const float waveRadius = 9.5f;
+        const int ringTrailTicks = 27;
+        const int ringFadeTicks = 10;
+        const int slashFadeTicks = 15;
+
+        if (tick >= MultiPinAt && tick < MultiReleaseAt + ringFadeTicks)
+        {
+            NeiyuExecutionRingEmitter ring = EnsureSceneEmitter<NeiyuExecutionRingEmitter>(NeiyuVisualDefOf.MX_NY_ExecRing);
+            if (ring != null)
+            {
+                float tail = MultiYaw(tick - ringTrailTicks);
+                float front = MultiYaw(tick);
+                float fade = 1f - ProgressBetween(tick, MultiReleaseAt, MultiReleaseAt + ringFadeTicks);
+                ring.SetArc(origin.ToVector3Shifted(), tail, front - tail, waveRadius, fade, isClosed: false);
+            }
+            return;
+        }
+
+        if (strikeCommitted && tick >= MultiHitAt && tick < MultiHitAt + slashFadeTicks)
+        {
+            NeiyuExecutionRingEmitter ring = EnsureSceneEmitter<NeiyuExecutionRingEmitter>(NeiyuVisualDefOf.MX_NY_ExecRing);
+            if (ring != null)
+            {
+                float p = ProgressBetween(tick, MultiHitAt, MultiHitAt + slashFadeTicks);
+                float expand = Mathf.SmoothStep(0f, 1f, ProgressBetween(tick, MultiHitAt, MultiHitAt + 6));
+                ring.SetArc(pawn.DrawPos, MultiCutYaw(MultiLastCut) - 90f, 360f,
+                    Mathf.Lerp(3.5f, waveRadius, expand), .94f * (1f - p), isClosed: true);
+            }
+            return;
+        }
+
+        EndSceneEmitter();
+    }
+
+    private void SpawnSingleGlyph()
+    {
+        if (pawn?.Map == null || NeiyuVisualDefOf.MX_NY_ExecGlyph == null) return;
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return;
+        VfxEmitterHandle h = host.Spawn(NeiyuVisualDefOf.MX_NY_ExecGlyph, VfxAnchor.Follow(pawn));
+        if (host.TryGetEmitter(h, out NeiyuExecGlyphEmitter glyph))
+        {
+            Vector3 side = Vector3.Cross(Vector3.up, Forward(throwYaw));
+            glyph.Configure(side * 1.16f + Vector3.forward * .57f, Single.glyphHoldTicks, Single.glyphFadeTicks);
+        }
+    }
+
+    private void SpawnSingleSlashWave()
+    {
+        if (pawn?.Map == null || NeiyuVisualDefOf.MX_NY_ExecSlash == null) return;
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return;
+        VfxEmitterHandle h = host.Spawn(NeiyuVisualDefOf.MX_NY_ExecSlash, VfxAnchor.At(origin.ToVector3Shifted()));
+        if (host.TryGetEmitter(h, out NeiyuExecSlashEmitter slash))
+        {
+            slash.ConfigureSingleWave(initialYaw, Single.slashWidth, Single.waveTicks);
+        }
+    }
+
+    private void SpawnSinglePierce(int bladeIndex, bool terminal)
+    {
+        if (pawn?.Map == null || NeiyuVisualDefOf.MX_NY_ExecPierce == null) return;
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return;
+        Vector3 forward = Forward(throwYaw);
+        Vector3 side = Vector3.Cross(Vector3.up, forward);
+        float slot = bladeIndex == 0 ? 0f : ((bladeIndex + 1) / 2) * (bladeIndex % 2 == 1 ? -1f : 1f);
+        Vector3 contact = terminal ? aimPoint : aimPoint + side * (.13f * slot) + Vector3.forward * (.13f - .065f * Mathf.Abs(slot));
+        VfxEmitterHandle h = host.Spawn(NeiyuVisualDefOf.MX_NY_ExecPierce, VfxAnchor.At(contact));
+        if (host.TryGetEmitter(h, out NeiyuExecPierceEmitter pierce))
+        {
+            pierce.Configure(forward, side, bladeIndex, terminal, Single.pierceTicks, pawn.thingIDNumber);
+        }
+    }
+
+    private void SpawnMultiCutSlash(int cut, Vector3 contact)
+    {
+        if (pawn?.Map == null || NeiyuVisualDefOf.MX_NY_ExecMultiSlash == null) return;
+        MapComponent_VfxEmitterHost host = pawn.Map.GetComponent<MapComponent_VfxEmitterHost>();
+        if (host == null) return;
+        bool final = cut == MultiLastCut;
+        VfxEmitterHandle h = host.Spawn(NeiyuVisualDefOf.MX_NY_ExecMultiSlash, VfxAnchor.At(contact));
+        if (host.TryGetEmitter(h, out NeiyuExecSlashEmitter slash))
+        {
+            slash.ConfigureMultiCut(MultiCutYaw(cut), final, final ? 15 : 10, cut);
+        }
+    }
+
+    private void FinishScene()
+    {
+        executionMap?.GetComponent<MapComponent_PawnAfterimages>()?.RemoveOwnedBy(this);
+        EndSceneEmitter();
     }
 
     private void EndCompatStartFlash()

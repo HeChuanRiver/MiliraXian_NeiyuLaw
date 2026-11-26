@@ -10,7 +10,13 @@ namespace MiliraXian.Characters.Neiyu;
 [DefOf]
 public static class NeiyuVisualDefOf
 {
-    public static VfxDef MX_NY_Execution;
+    public static VfxDef MX_NY_ExecBlade;
+    public static VfxDef MX_NY_ExecVolley;
+    public static VfxDef MX_NY_ExecGlyph;
+    public static VfxDef MX_NY_ExecSlash;
+    public static VfxDef MX_NY_ExecMultiSlash;
+    public static VfxDef MX_NY_ExecPierce;
+    public static VfxDef MX_NY_ExecRing;
     public static VfxDef MX_NY_Thunder;
     public static VfxDef MX_NY_ThunderWarmup;
     public static VfxDef MX_NY_SwordFlashes;
@@ -19,7 +25,7 @@ public static class NeiyuVisualDefOf
     static NeiyuVisualDefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(NeiyuVisualDefOf));
 }
 
-internal enum NeiyuLayer { Glow, Cross, Sword, Glyph, Cut, Wave, MultiWave, Feather, Ring, Energy, Sparks, Plate }
+internal enum NeiyuLayer { Glow = 0, Feather = 7, Energy = 8, Sparks = 9, Plate = 10 }
 
 internal struct NeiyuVisualBinding
 {
@@ -67,8 +73,6 @@ internal sealed class NeiyuVisualEffect : VfxEffect
         foreach (VfxPass pass in Passes)
         {
             NeiyuLayer layer = Enum.Parse<NeiyuLayer>(pass.Name);
-            if (layer is NeiyuLayer.MultiWave or NeiyuLayer.Ring)
-                pass.Material ??= VfxMaterialCache.FromTexture(pass.TexturePath, "Transparent");
             if ((layer is NeiyuLayer.Energy or NeiyuLayer.Sparks) && !NeiyuThunderVfx.ShadersReady)
                 pass.Material = VfxMaterialCache.FromTexture("Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow", "MoteGlow");
             if (layer == NeiyuLayer.Plate)
@@ -76,7 +80,7 @@ internal sealed class NeiyuVisualEffect : VfxEffect
                 Plate = pass;
                 pass.Renderer = null; // Instances are queued while preparing, then flushed by the host.
             }
-            else if (layer is NeiyuLayer.Ring or NeiyuLayer.Energy or NeiyuLayer.Sparks)
+            else if (layer is NeiyuLayer.Energy or NeiyuLayer.Sparks)
                 pass.Renderer = new BatchPass(layer);
         }
         Passes.Insert(0, new VfxPass { Name = "prepare", Renderer = Prepare.Instance });
@@ -97,7 +101,6 @@ internal sealed class NeiyuVisualEffect : VfxEffect
             if (!visual.Visible) return;
             NeiyuQuadBatch batch = layer switch
             {
-                NeiyuLayer.Ring => visual.Ring,
                 NeiyuLayer.Energy => visual.Thunder?.Ribbons,
                 NeiyuLayer.Sparks => visual.Thunder?.Particles,
                 _ => null
@@ -107,8 +110,7 @@ internal sealed class NeiyuVisualEffect : VfxEffect
             batch.UploadIfNeeded(mesh);
             MaterialPropertyBlock block = context.Engine.Block;
             block.Clear();
-            if (layer != NeiyuLayer.Ring)
-                ArcaneVfxStyle.Properties(block, Find.TickManager.TicksGame / 60f, profile: 3f);
+            ArcaneVfxStyle.Properties(block, Find.TickManager.TicksGame / 60f, profile: 3f);
             block.SetColor(ShaderPropertyIDs.Color, Color.white);
             context.Engine.Draw(mesh, pass.Material, pass.Layer);
             block.Clear();
@@ -152,9 +154,6 @@ internal sealed class NeiyuVisualEmitter : VfxEmitter
     internal NeiyuWarpFeatherVisual Feather;
     internal float WarmupProgress;
     internal int WarmupSeed;
-    private int poseFrame;
-    internal JobDriver_NeiyuPostureExecution.VolleyFrame? Volley;
-    internal NeiyuQuadBatch Ring;
     internal bool Visible;
     private VfxEngine engine;
     private int stripSlot, stripId;
@@ -165,9 +164,6 @@ internal sealed class NeiyuVisualEmitter : VfxEmitter
         base.Reset(effect, anchor, version, now, position);
         Thunder = null;
         Feather = null;
-        Ring?.Begin();
-        poseFrame = -1;
-        Volley = null;
         Visible = false;
         stripSlot = effect.ParticleFloatSlot("strip");
     }
@@ -187,33 +183,9 @@ internal sealed class NeiyuVisualEmitter : VfxEmitter
         return alive;
     }
 
-    internal void BeginPose()
-    {
-        Count = stripId = 0;
-        Ring?.Begin();
-        Volley = null;
-        poseFrame = Time.frameCount;
-    }
-
     internal void Prepare(VfxEngine drawEngine)
     {
         Visible = !Find.UIRoot.HideMotes && !Find.ScreenshotModeHandler.Active && Find.Camera != null;
-        if (Effect.Def == NeiyuVisualDefOf.MX_NY_Execution)
-        {
-            if (Volley is { } flight)
-            {
-                Count = stripId = 0;
-                Ring?.Begin();
-                if (Visible && NeiyuSwordCombatVfx.Enabled && Anchor.TryResolve(drawEngine.Map, out Vector3 at)
-                    && Anchor.Pawn?.IsHiddenFromPlayer() == false) flight.Draw(this, at);
-            }
-            else
-            {
-                Visible &= poseFrame >= 0 && Time.frameCount - poseFrame <= 1;
-                if (!Visible) Count = 0;
-            }
-            return;
-        }
         Count = stripId = 0;
         if (!Visible) return;
         engine = drawEngine;

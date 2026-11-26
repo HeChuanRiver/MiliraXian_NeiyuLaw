@@ -14,4 +14,19 @@
       </textureWrapOverrides>
     </shaderProgram>
   </ShaderDef>
+
+  <ShaderDef>
+    <defName>MX_NeiyuExecutionRing</defName>
+    <shaderProgram>
+      <vertexShaderFileName>Transparent.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>MX_NeiyuExecutionRing.frag.glsl</fragmentShaderFileName>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>2900</renderQueue>
+      <textureWrapOverrides>
+        <li><key>_MainTex</key><value>Clamp</value></li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
 </Defs>

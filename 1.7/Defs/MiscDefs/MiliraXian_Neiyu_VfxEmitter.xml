@@ -5,15 +5,141 @@
     <emitterClass>MiliraXian.Characters.Neiyu.NeiyuVisualEmitter</emitterClass>
     <fadeOutSeconds>0</fadeOutSeconds>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
-  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef ParentName="MX_NY_VisualBase">
-    <defName>MX_NY_Execution</defName>
-    <capacity>512</capacity>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecBlade</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuBladeChargeEmitter</emitterClass>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <capacity>40</capacity>
     <passes>
       <li>
-        <name>Glow</name>
+        <name>dots</name>
+        <renderer>Sprite</renderer>
+        <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <quadSize>(1, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
+      </li>
+      <li>
+        <name>cross</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionCross</texture>
+        <shaderDef>Transparent</shaderDef>
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <quadSize>(1, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>true</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
+      </li>
+      <li>
+        <name>trail</name>
         <renderer>Ribbon</renderer>
         <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
         <shaderDef>MoteGlow</shaderDef>
+        <particleGroup>2</particleGroup>
+        <ribbon>
+          <ribbonIdChannel>strip</ribbonIdChannel>
+          <normalizeU>true</normalizeU>
+          <vMin>1</vMin>
+          <vMax>0</vMax>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </ribbon>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecVolley</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuVolleyEmitter</emitterClass>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <capacity>32</capacity>
+    <passes>
+      <li>
+        <name>swords</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionSpiritSword</texture>
+        <shaderDef>Transparent</shaderDef>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <quadSize>(0.85, 1.5)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>true</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
+      </li>
+      <li>
+        <name>glows</name>
+        <renderer>Sprite</renderer>
+        <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <quadSize>(0.18, 1.55)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>true</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecGlyph</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuExecGlyphEmitter</emitterClass>
+    <lifetimeSeconds>2</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>1</capacity>
+    <passes>
+      <li>
+        <name>glyph</name>
+        <renderer>Sprite</renderer>
+        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionDuan</texture>
+        <shaderDef>Transparent</shaderDef>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <quadSize>(1.28, 1.28)</quadSize>
+          <useParticleSize>false</useParticleSize>
+          <useParticleRotation>false</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
+      </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecSlash</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuExecSlashEmitter</emitterClass>
+    <lifetimeSeconds>2</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>4</capacity>
+    <passes>
+      <li>
+        <name>wave</name>
+        <renderer>Ribbon</renderer>
+        <texture>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texture>
+        <shaderDef>Transparent</shaderDef>
         <particleGroup>0</particleGroup>
         <ribbon>
           <ribbonIdChannel>strip</ribbonIdChannel>
@@ -22,12 +148,22 @@
           <vMax>0</vMax>
         </ribbon>
       </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecMultiSlash</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuExecSlashEmitter</emitterClass>
+    <lifetimeSeconds>1</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>4</capacity>
+    <passes>
       <li>
-        <name>Cross</name>
+        <name>wave</name>
         <renderer>Ribbon</renderer>
-        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionCross</texture>
-        <shaderDef>Transparent</shaderDef>
-        <particleGroup>1</particleGroup>
+        <texture>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texture>
+        <shaderDef>MX_NeiyuExecutionWave</shaderDef>
+        <particleGroup>0</particleGroup>
         <ribbon>
           <ribbonIdChannel>strip</ribbonIdChannel>
           <normalizeU>true</normalizeU>
@@ -35,77 +171,71 @@
           <vMax>0</vMax>
         </ribbon>
       </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecPierce</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuExecPierceEmitter</emitterClass>
+    <lifetimeSeconds>1</lifetimeSeconds>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <requireMaintain>false</requireMaintain>
+    <capacity>16</capacity>
+    <passes>
       <li>
-        <name>Sword</name>
-        <renderer>Ribbon</renderer>
-        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionSpiritSword</texture>
-        <shaderDef>Transparent</shaderDef>
-        <particleGroup>2</particleGroup>
-        <ribbon>
-          <ribbonIdChannel>strip</ribbonIdChannel>
-          <normalizeU>true</normalizeU>
-          <vMin>1</vMin>
-          <vMax>0</vMax>
-        </ribbon>
-      </li>
-      <li>
-        <name>Glyph</name>
-        <renderer>Ribbon</renderer>
-        <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionDuan</texture>
-        <shaderDef>Transparent</shaderDef>
-        <particleGroup>3</particleGroup>
-        <ribbon>
-          <ribbonIdChannel>strip</ribbonIdChannel>
-          <normalizeU>true</normalizeU>
-          <vMin>1</vMin>
-          <vMax>0</vMax>
-        </ribbon>
-      </li>
-      <li>
-        <name>Cut</name>
-        <renderer>Ribbon</renderer>
+        <name>cut</name>
+        <renderer>Sprite</renderer>
         <texture>MiliraXianNeiyu/Effect/SwordFight/ExecutionCut</texture>
         <shaderDef>Transparent</shaderDef>
-        <particleGroup>4</particleGroup>
-        <ribbon>
-          <ribbonIdChannel>strip</ribbonIdChannel>
-          <normalizeU>true</normalizeU>
-          <vMin>1</vMin>
-          <vMax>0</vMax>
-        </ribbon>
+        <particleGroup>0</particleGroup>
+        <sprite>
+          <quadSize>(1.3, 1)</quadSize>
+          <useParticleSize>true</useParticleSize>
+          <useParticleRotation>true</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
       </li>
       <li>
-        <name>Wave</name>
-        <renderer>Ribbon</renderer>
-        <texture>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texture>
-        <shaderDef>Transparent</shaderDef>
-        <particleGroup>5</particleGroup>
-        <ribbon>
-          <ribbonIdChannel>strip</ribbonIdChannel>
-          <normalizeU>true</normalizeU>
-          <vMin>1</vMin>
-          <vMax>0</vMax>
-        </ribbon>
+        <name>sparks</name>
+        <renderer>Sprite</renderer>
+        <texture>Common/WorldArcaneStrike/neiyu_halo_vfx/SoftGlow</texture>
+        <shaderDef>MoteGlow</shaderDef>
+        <particleGroup>1</particleGroup>
+        <sprite>
+          <quadSize>(0.11, 0.21)</quadSize>
+          <useParticleSize>false</useParticleSize>
+          <useParticleRotation>true</useParticleRotation>
+          <useParticleColor>true</useParticleColor>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteOverhead</altitude>
+          <altitudeOffset>0.015</altitudeOffset>
+        </sprite>
       </li>
+    </passes>
+  </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+  <MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>
+    <defName>MX_NY_ExecRing</defName>
+    <emitterClass>MiliraXian.Characters.Neiyu.NeiyuExecutionRingEmitter</emitterClass>
+    <fadeOutSeconds>0</fadeOutSeconds>
+    <capacity>0</capacity>
+    <passes>
       <li>
-        <name>MultiWave</name>
-        <renderer>Ribbon</renderer>
+        <name>ring</name>
+        <renderer>Field</renderer>
         <texture>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texture>
-        <shaderDef>MX_NeiyuExecutionWave</shaderDef>
-        <particleGroup>6</particleGroup>
-        <ribbon>
-          <ribbonIdChannel>strip</ribbonIdChannel>
-          <normalizeU>true</normalizeU>
-          <vMin>1</vMin>
-          <vMax>0</vMax>
-        </ribbon>
-      </li>
-      <li>
-        <name>Ring</name>
-        <renderer>Ribbon</renderer>
-        <texture>MiliraXianNeiyu/Effect/BladeLight_Neiyu/BladeLight_Neiyu_E</texture>
-        <shaderDef>MX_NeiyuExecutionWave</shaderDef>
-        <ribbon />
+        <shaderDef>MX_NeiyuExecutionRing</shaderDef>
+        <field>
+          <sizeChannel>ringQuad</sizeChannel>
+          <sizeUniform>_FieldSize</sizeUniform>
+          <useAltitude>true</useAltitude>
+          <altitude>MoteLow</altitude>
+          <bindings>
+            <li><uniform>_RingArc</uniform><vecChannel>ringArc</vecChannel></li>
+            <li><uniform>_RingMeta</uniform><vecChannel>ringMeta</vecChannel></li>
+          </bindings>
+        </field>
       </li>
     </passes>
   </MiliraXian.Characters.Common.Vfx.Emitter.VfxDef>

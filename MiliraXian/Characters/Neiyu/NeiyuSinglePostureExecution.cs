@@ -200,6 +200,7 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         {
             singleStage = SingleStage.FirstCut;
             NeiyuSwordCombatVfx.SingleSound(pawn, targetDraw, Single.firstCutSound ?? NeiyuSwordCombat.Config.strikeSound);
+            SpawnSingleSlashWave();
         }
         if (tick >= KnockbackAt && singleStage == SingleStage.FirstCut && knockbackTicks > 0)
         {
@@ -285,7 +286,8 @@ public sealed partial class JobDriver_NeiyuPostureExecution
         }
         while (impacts < swordCount && tick >= SwordImpactAt(impacts))
         {
-            impacts++;
+            int hitIndex = impacts++;
+            SpawnSinglePierce(hitIndex, hitIndex == swordCount - 1);
             if (impacts < swordCount)
                 NeiyuSwordCombatVfx.SingleSound(pawn, aimPoint, Single.pierceSound);
             else if (!strikeCommitted)
